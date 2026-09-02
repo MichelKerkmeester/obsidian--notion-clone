@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T12:00:00Z"
-    last_updated_by: "delegation-policy"
-    recent_action: "Recorded the external-delegation policy as D14"
+    last_updated_at: "2026-09-02T21:10:00Z"
+    last_updated_by: "spec-doc-recorder"
+    recent_action: "DONE row 7: shared-validator amendment is the last option"
     next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
       - "Every fix is measured on a bench; 1 of 27 reports is confirmed on the operator device"
@@ -339,4 +339,19 @@ Public root the result was worse still — `Errors: 1 Warnings: 1` against the r
 `Errors: 1 Warnings: 0` — the extra warning being `GRAPH_METADATA_CHILD_DRIFT`, since `children_ids`
 are stored under the unprefixed id. The change was reverted; the pointers read as before. Row 7 stays
 unticked and its disposition remains the operator's, per `repo-rules/spec-tree-layout.md` §4.
+
+**2026-09-02, the disposition narrowed to one and it is not this program's to take.** The two-segment
+`obsidian/…` pointer was tested today from both repository roots, this one and the Public monorepo, and
+`METADATA_DISK_PATH_CONSISTENCY` failed in both: the rule derives the expected id from the folder leaf
+and never resolves the symlink, so `obsidian/005-component-surface-system` can never equal
+`005-component-surface-system`. That closes the fourth disposition for good. Of the three
+`repo-rules/spec-tree-layout.md` §4 records, the second undoes the flattening and the third leaves row 7
+permanently unticked as an accepted divergence, so **the only one that closes row 7 without reversing
+the flattening is the first: amend `SPECDOC_FRONTMATTER_004` to accept a single-segment
+`packet_pointer`.** That rule lives in the shared kit at
+`system-spec-kit/mcp-server/lib/validation/spec-doc-structure.ts`, which is symlinked from the Public
+monorepo and read by every repository that uses it, so the edit is not local and no one here may make
+it. **It awaits the operator.** Until then row 7 stays unticked, `npm run gate` remains this
+repository's authority, and a program root reporting `SPECDOC_FRONTMATTER_004` is expected rather than
+a regression to chase.
 <!-- /ANCHOR:log -->

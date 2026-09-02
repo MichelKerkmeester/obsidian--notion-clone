@@ -469,13 +469,14 @@ done | sort -n
 | `032-cover-target-scheme-safety` | **100%** — 4/4 | 0 | 0 | 0 |
 | `033-list-virtualisation` | **83%** — 5/6 | 1 | 1 | 0 |
 | `034-packet-doc-truth` | **100%** — 4/4 | 0 | 0 | 0 |
-| `035-visual-pass-product-defects` | **78%** — 14/18 | 4 | 1 | 3 |
+| `035-visual-pass-product-defects` | **83%** — 15/18 | 3 | 1 | 2 |
 
-**Program: 239/299 = 80%.** 60 rows open — 31 closable only by the operator's device, 29 still reachable here.
+**Program: 240/299 = 80%.** 59 rows open — 31 closable only by the operator's device, 28 still reachable here.
 
 *The `035` row was added on 2026-09-02, after the 2026-09-01 computation above, and its figure moved
-the same day: 14 of its 18 rows are ticked, derived from its own `goal.md` checklist. The program
-totals are re-added to include it. Every other row still carries its 2026-09-01 value, so re-run the
+twice the same day: 15 of its 18 rows are ticked, derived from its own `goal.md` checklist, the
+fifteenth being the uncoloured-badge boundary its second round closed at 3.62:1 and 4.29:1. The
+program totals are re-added to include it. Every other row still carries its 2026-09-01 value, so re-run the
 command above rather than trusting the mixture of two dates.*
 
 **The two columns after "Open" are the ones worth reading.** A row only the operator can close is not
@@ -512,7 +513,7 @@ command above is how to disbelieve them.
 | `017` ⚠ | absent | **95%** | 12 checks, six negative controls |
 | `018` | absent | **Opened today** | Code shipped under `004`'s lane hold; unverified |
 | `019` | absent | **Opened today** | Code shipped; no test exists |
-| `020` | absent | **Shipped + verified, awaiting device — 12 of 13** | Its own `spec.md` read *Complete* against a `completion_pct` of 80; D3 reserves Complete for operator-confirmed and the one open criterion is the operator's fixture sign-off. Grab-band arithmetic corrected (42→48px add-view, 38→44px owned-menu, both over the 44px floor); test shim, evidence-freshness and in-harness checks repaired alongside it. Lane journal acquire→edit→release 12:05-12:53; commits `9d4f569`, `780a736`, `0a38723`, `1e6397d`, `56ba94e` |
+| `020` | absent | **Shipped + verified, awaiting device — 95%, 21 of 22** | **Two derivations, reconciled 2026-09-02, and neither count is deleted.** The **21 of 22 (95%)** here is §3.2's rule run against the packet's `goal.md` completion checklist as it stands today, and it is the figure all four of `020`'s documents carry in `completion_pct`. The **12 of 13 (92%)** that §5.0's derived board and this row previously showed is the *same* rule run against the *same* checklist on **2026-09-01**, when it held 13 rows: verified with `git show fa15cb4:…/020-harness-fidelity-repair/goal.md`, the commit that wrote 12/13 into §5.0, which counts 12 ticked of 13. The list has since grown to 22 rows, 21 ticked. So this is one board figure gone stale against a growing list, not two competing measurements. §5.0's row is left at 12/13 as the dated 2026-09-01 snapshot it declares itself to be, per that section's own instruction to re-run the command rather than trust a mixture of dates. **§3.2's one-number rule binds `completion_pct` in the phase folder's continuity blocks, and the number it binds is 95** — it does not bind this board's cells, which are dated computations. Its own `spec.md` read *Complete* against a `completion_pct` of 80; D3 reserves Complete for operator-confirmed and the one open criterion is the operator's fixture sign-off. Grab-band arithmetic corrected (42→48px add-view, 38→44px owned-menu, both over the 44px floor); test shim, evidence-freshness and in-harness checks repaired alongside it. Lane journal acquire→edit→release 12:05-12:53; commits `9d4f569`, `780a736`, `0a38723`, `1e6397d`, `56ba94e` |
 | `021` | absent | **Shipped; 4 of 5 editors verified, 1 still off** | Lane journal, two full acquire→release cycles, 13:19-13:42, "Not committed" at release. Commit `0ff9f9a` centres the number/currency inline editor on its row (7.6px→1.0px claimed). A fresh review, commit `3d4d2f2`, found the fix also reaches a fifth, previously uncounted editor sharing the same popover class — the title's inline rename editor — which improves 9.0px→2.4px off-centre and is still wrong: "left open rather than quietly claimed" |
 | `022` | absent | **Shipped + verified, awaiting device — 6 of 8** | This row and the phase's own `spec.md` both read *Planned* after the code landed. `styles.css:2436` docks the bar on `--db-keyboard-inset`, published by `publishKeyboardInset` in `src/views/popover-position.ts`; commit `a0d42a1` precedes the 1.3.9 cut `9e12fe1`, so it is in the build the operator is running. Open: which host shape the phone is, and the operator seeing a usable bar |
 | `023` | absent | **Planned, not startable** | Own `spec.md` declares itself Planned and "deliberately not startable" pending an operator choice between a display-only and an editable note body |

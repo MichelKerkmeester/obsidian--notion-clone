@@ -10,8 +10,8 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
+    last_updated_at: "2026-09-02T21:10:00Z"
+    last_updated_by: "spec-doc-recorder"
     recent_action: "Goal audit: the log's 55 corrected to the frontmatter 75"
     next_safe_action: "Operator opens the keyboard on device and confirms the bar is reachable"
     blockers: []
@@ -26,6 +26,7 @@ _memory:
     completion_pct: 75
     open_questions:
       - "Which host shape is the operator's phone: visualViewport shrink or window resize"
+      - "Keep D2's scroll lane, or wrap the actions and retarget the placement check (035 P6)"
     answered_questions:
       - "Both reported defects are fixed and each carries a browser-produced number"
       - "The bar no longer depends on a host variable: the plugin publishes the inset itself"
@@ -150,4 +151,21 @@ the defect became visible second.
 | The documents lagged the code | Spec, plan and tasks were written, the rule shipped, and the folder then sat at `completion_pct: 75` with no criteria and no summary — the same drift eight other phases in this packet carry. The numbers here were recovered from the harness afterwards, not recorded as the work happened |
 | ~~`completion_pct` held at 55~~ | **Stale, corrected 2026-09-02.** The reasoning holds and the number does not: the operator row is still what moves this figure and the device is still untouched, but no document in this folder reads 55. `goal.md`, `spec.md`, `acceptance-criteria.md` and `implementation-summary.md` all carry **75**, which is what stands and what satisfies `roadmap.md` §3.2's one-number rule. 55 was this row describing a figure the frontmatter beside it had already moved past — the divergence between prose and frontmatter that the one-number rule exists to catch, reproduced inside the row written to record it |
 | `tasks.md` is 0 of 17 | Measured 2026-09-02. Six criteria are ticked with browser-produced numbers and every task box is empty, so `roadmap.md` §3's mandatory *In progress — N of M tasks* fraction cannot be derived for this phase at all. **Recorded, not cleared:** ticking seventeen boxes to make the fraction computable would assert per-task evidence nobody gathered. This is the same shape as the six task lists the parent's ledger already names, and it is a seventh — not on that list, which counted phases whose goal checklist was 86-90% complete |
+
+### 2026-09-02: `035` reads the fourth criterion as a contradiction, and it is the operator's to settle
+
+The fourth criterion above pins the scroll lane: **scrollWidth 558px against clientWidth 356px**,
+`overflow-x: auto`, a visible thin scrollbar, and `tools/storybook/verify-placement.mjs:903` asserts
+exactly that triple. `035-visual-pass-product-defects` P6 measured the same bar on the phone capture
+and reads the lane as a defect: the box is capped at `calc(100vw - 32px)` = **370px** against
+**416px** of actions, so "Copy CSV" sits **55px** outside the port and no capture can scroll to it.
+Nothing truncates, so this is the scroll container working as D2 asked. `035` built a wrapping bar,
+measured it green at **5 of 5 actions inside a 102px bar**, then reverted it because `:903` went red.
+
+Two shipped decisions contradict, so neither packet may take it alone. The options, with no side
+taken here: **(a) wrap the actions and retarget `verify-placement.mjs:903`** to assert the wrapped
+shape instead of the overflow triple, which amends D2; or **(b) keep the scroll lane** and accept
+that the phone capture shows the clip, which leaves `035` P6 open by decision rather than by defect.
+Recorded, not resolved. See `../035-visual-pass-product-defects/goal.md` P6 and its
+`implementation-summary.md` Known Limitation 1.
 <!-- /ANCHOR:log -->
