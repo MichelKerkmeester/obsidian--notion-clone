@@ -199,9 +199,12 @@ tasks in their own right and carry the run that made them fail.
 
 ## ADDED FROM THE SESSION AUDIT
 
-- [ ] **T-TABLE** Give the table scenario a layout-read bound, or record why it cannot have one.
-      *Evidence to close:* either the table asserts `layoutReads` like the other five, or the reason
-      it is exempt is written where the next reader will look.
+- [x] **T-TABLE** Give the table scenario a layout-read bound, or record why it cannot have one.
+      *Evidence:* the table now asserts its TOTAL reads against the same bound of 8 the other five
+      scenarios use — measured 3 (touch probe + width question), `render-assertion-harness.ts:1175-1182`
+      ("no per-row layout read"); the shared `RENDER_READ_CONTROL=per-item` control arms one read per
+      row through the bag (`:1131`), red at ~2003 over the bound. The connected-read bound that
+      predates this row is unchanged.
       **Why:** the table asks the touch question once per row at two sites — the shape hoisted out
       of every other view — and it is the only one of the six covered renderers with no
       `MAX_LAYOUT_READS` assertion. It is safe today because the body is built off-document, and

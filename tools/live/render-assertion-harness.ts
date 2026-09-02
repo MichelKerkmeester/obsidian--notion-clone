@@ -25,6 +25,21 @@
 // is constructed, no device is involved, and App is undefined here, so
 // vault-resolving fields render unresolved — a real database pays more per
 // field, never less.
+//
+// NEGATIVE CONTROLS. Every bound below must have been observed failing before
+// it counts as evidence, and a bound that was never seen failing is not
+// evidence. The list, calendar and timeline bounds reddened on the trees that
+// shipped their defects; board and gallery read 1 against the same bound of 8
+// with no red on this tree, and the table's per-row bound is new here, so all
+// three own a switch that reintroduces the shape the bound exists to catch.
+//
+// `RENDER_READ_CONTROL=per-item`, read by the runner and passed into
+// `runRenderAssertions`, arms it: the card and row renderers call the bag's
+// `applyConditionalFormat` once per item with no target field — field-level
+// calls always name the field — and the armed wrapper reads the item's box at
+// that call. Board and gallery then read one per card plus the touch probe,
+// the table one per row plus its O(1) reads, and the check fails naming the
+// scenario; disarmed, each reads its O(1) count.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -98,6 +113,13 @@ export const ALIGNMENT_GRID_COLUMN = "18";
 // A render that forces layout more than a small constant times has something
 // per-row in it. The legitimate reads are O(1) in the row count and decided
 // once per render: the touch-mode probe and the reservation decision.
+//
+// The table carries the same constant over its TOTAL reads — the touch probe
+// and the width question are its legitimate O(1) reads, measured 3. Its
+// connected reads are separately bounded below, because a geometry read on the
+// detached body costs no layout and the two populations answer different
+// questions; the total bound is the per-item guard, the connected one the
+// layout-cost guard.
 export const MAX_LAYOUT_READS = 8;
 
 // The two date-driven views, at the row count their freeze was reported at. Both draw a window
@@ -948,7 +970,24 @@ function timelineAssertions(container: HTMLElement): AssertionResult[] {
 // 7. SCENARIO RUNNER
 // ───────────────────────────────────────────────────────────────────
 
-export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): ScenarioOutcome {
+// The armed control's seam. Every card and row renderer calls
+// `applyConditionalFormat` once per item with the item's element and no target
+// field, while field-level calls always name the field — so a wrapper that
+// reads the box only when the field is unnamed adds exactly one geometry read
+// per item, at the call the bound exists to police. Wrapping the bag member
+// rather than a renderer method keeps the seam on harness-owned data, and the
+// bag census pins the member's existence every run.
+function armPerItemRead(bag: {
+  applyConditionalFormat?: (element: HTMLElement, row: RowData, config: ViewConfig, targetField?: string) => void;
+}): void {
+  const original = bag.applyConditionalFormat;
+  bag.applyConditionalFormat = (element, row, config, targetField) => {
+    if (targetField === undefined) element.getBoundingClientRect();
+    original?.(element, row, config, targetField);
+  };
+}
+
+export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec, control = ""): ScenarioOutcome {
   const results: AssertionResult[] = [];
   const container = host.createDiv({ cls: "note-database-container" });
   const app = undefined as unknown as App;
@@ -988,6 +1027,7 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
     const config = makeBoardConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewBoardBag(columns) : embedBoardBag(columns);
     bagKeys = Object.keys(bag).sort();
+    if (control === "per-item") armPerItemRead(bag);
     const renderer = new BoardRenderer(app, bag);
 
     const stopCounting = countLayoutReads();
@@ -1012,6 +1052,7 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
     const config = makeGalleryConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewGalleryBag(columns) : embedGalleryBag(columns);
     bagKeys = Object.keys(bag).sort();
+    if (control === "per-item") armPerItemRead(bag);
     const renderer = new GalleryRenderer(app, bag);
 
     const stopCounting = countLayoutReads();
@@ -1087,6 +1128,7 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
     const config = makeTableConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewTableBag(columns) : embedTableBag(columns);
     bagKeys = Object.keys(bag).sort();
+    if (control === "per-item") armPerItemRead(bag);
     const renderer = new TableRenderer(bag);
 
     const stopCounting = countRowAppendsToConnectedNodes();
@@ -1124,6 +1166,19 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
                 + " why the total is allowed to grow and this number is not"
               : ". Both numbers are O(1): the questions that need a box are asked once per render"
                 + " rather than once per row"),
+      });
+      // The connected bound above is the layout-cost guard; this one is the per-item guard, the
+      // same contract the other five renderers carry. A per-row read that lands on the detached
+      // body costs no layout today, but it is the exact shape that went quadratic the moment the
+      // body was attached before the loop — and the count moving with rows is the signal, on the
+      // detached body or off it.
+      results.push({
+        name: "no per-row layout read",
+        pass: reads.total <= MAX_LAYOUT_READS,
+        detail: `${reads.total} layout reads during render, bound ${MAX_LAYOUT_READS}, over ${rows.length} rows`
+          + (reads.total > MAX_LAYOUT_READS
+            ? " — reads scale with rows, which is the quadratic shape that froze the app"
+            : " (the touch probe and the width question are the legitimate O(1) reads)"),
       });
     }
   }

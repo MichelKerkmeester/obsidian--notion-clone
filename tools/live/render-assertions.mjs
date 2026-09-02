@@ -29,6 +29,14 @@
 // absence), no device is involved, and App is undefined here, so vault-resolving
 // fields render unresolved — a real database pays more per field, never less.
 //
+// `RENDER_READ_CONTROL=per-item` arms the owned negative control for the card
+// and row renderers: the harness reintroduces one forced layout read per item,
+// so each scenario's count exceeds its bound and this check fails naming the
+// scenario. Board and gallery read 1 against a bound of 8 and have no shipped
+// defect on this tree — a bound that was never observed failing is not
+// evidence — and the table's per-row bound (measured 3, same bound of 8) has
+// the same need. Disarmed is the default; the gate never arms it.
+//
 // Usage: node tools/live/render-assertions.mjs
 
 // ───────────────────────────────────────────────────────────────────
@@ -176,6 +184,12 @@ const FILE_VIEW_ONLY = [
 
 const STAMP_PATH = "tools/live/renderer-coverage.json";
 
+// Read in the runner and passed into the bundle, matching the other controls in
+// this lane (SELECTION_BAR_CONTROL, PLACEMENT_SECTION_CONTROL): an armed value
+// makes the harness reintroduce one per-item layout read, and the bound failing
+// names the scenario.
+const READ_CONTROL = process.env.RENDER_READ_CONTROL || "";
+
 // ───────────────────────────────────────────────────────────────────
 // 3. BUNDLE
 // ───────────────────────────────────────────────────────────────────
@@ -198,7 +212,7 @@ import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-d
 import { runRenderAssertions } from "${resolve(HERE, "render-assertion-harness")}";
 
 installObsidianDomShim(window);
-window.__renderAssertions = (scenario) => runRenderAssertions(document.body, scenario);
+window.__renderAssertions = (scenario) => runRenderAssertions(document.body, scenario, ${JSON.stringify(READ_CONTROL)});
 `);
 
 const built = await esbuild.build({
@@ -274,6 +288,7 @@ try {
       || result.name === "no forced layout inside the card loop"
       || result.name === "no forced layout inside the segment loop"
       || result.name === "no forced layout inside the event loop"
+      || result.name === "no per-row layout read"
       || result.name === "no row appended to a connected table");
     for (const shape of shapes) {
       console.log(`  shape  ${`${outcome.scenario.renderer}/${outcome.scenario.bag}`.padEnd(20)} ${shape.detail}`);
