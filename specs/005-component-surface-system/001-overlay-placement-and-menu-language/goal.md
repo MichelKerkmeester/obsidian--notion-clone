@@ -159,6 +159,9 @@ have a number are still open.*
       the menu from 14 rows to 16 — its contents depend on which actions exist, which a guessed bag
       silently understates.
 
+- [x] **The check for report 30 goes red then green.** Fresh verifier, 2026-09-02, `00e2aa2`.
+      Red: 5 controls per row on 8 rows, shortest row 30px, menu 0 rows. Green: 1 per row, 44px
+      floor, 5 menu rows, desktop unchanged at 5 icons.
 - [ ] The operator opens three different dropdowns and they look like one family. **Only the
       operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown.** Two acceptance bullets are
@@ -205,4 +208,12 @@ row per action instead of calling `createMenuRow` — one of the exact "8 `rende
 row-class grammars in `toolbar-renderer.ts`" this phase's own `spec.md` §3 already scopes for
 retirement onto the shared factory. `027`'s inventory only covers rows already built through
 `createMenuRow`/`db-menu-item`; this row carries neither class. Not investigated.
+
+**2026-09-02: report 30 fixed in `00e2aa2`.** One action list is now spent as five icons on
+desktop and as one trailing control opening an owned menu on touch. Red: 5 controls per row on 8
+rows, shortest row 30px, menu 0 rows. Green: 1 per row, 44px floor, 5 menu rows, desktop unchanged
+at 5 icons. Release 1.4.2 is pending; not operator-confirmed. **Title truncation stays open,
+device-only:** the harness renders the "All views" hub as a popover where the device gives a
+sheet, so the truncation this report photographs is not reproduced on the bench — the hub is an
+unregistered surface with no scenario, recorded as an adjacent finding rather than a tick.
 <!-- /ANCHOR:log -->

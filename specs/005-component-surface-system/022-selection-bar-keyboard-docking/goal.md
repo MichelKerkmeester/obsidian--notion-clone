@@ -10,12 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
-    last_updated_at: "2026-09-02T23:56:00Z"
-    last_updated_by: "device-reports-31-32"
-    recent_action: "Recorded reports 31-32 (iOS): docking clip and a singular string"
+    last_updated_at: "2026-09-02T23:15:00Z"
+    last_updated_by: "reports-30-33-landed"
+    recent_action: "Reports 31-32 fixed in 00e2aa2; 1.4.2 release pending"
     next_safe_action: "Operator opens the keyboard on device and confirms the bar is reachable"
     blockers:
-      - "Reports 31-32 (iOS, 2026-09-02 21:21): bar stays docked over/under the sheet and the add button; an inline numeric editor clips the count and stacks a second row; \"1 cells selected\" has no singular — neither investigated"
+      - "Reports 31-32 (iOS, 2026-09-02 21:21): fixed in 00e2aa2, release 1.4.2 pending, not operator-confirmed"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-022"
       parent_session_id: null
-    completion_pct: 75
+    completion_pct: 80
     open_questions:
       - "Which host shape is the operator's phone: visualViewport shrink or window resize"
     answered_questions:
@@ -93,6 +93,12 @@ it. Desktop is out of scope: it has room and no keyboard.
 - [x] The embedded bar is untouched in both keyboard states. **828px** standalone and embedded,
       before and after a keyboard opens.
 - [x] The bar is photographed for real, not as an empty region.
+- [x] **The check for report 31 goes red then green.** Fresh verifier, 2026-09-02, `00e2aa2`.
+      Red: bar under an open sheet 35084px², editor∩bar 7666px², FAB∩bar 2704px². Green: 0px² all
+      three, bar restored on close.
+- [x] **The check for report 32 goes red then green.** Fresh verifier, 2026-09-02, `00e2aa2`.
+      Red: `TypeError: tSelectedCells is not a function` (3 failed). Green: 3 passed. Chinese
+      locales deliberately do not inflect.
 - [ ] Which host shape the operator's phone is — `visualViewport` shrink or window resize. A fact
       about their hardware; no harness answers it. The published inset combines both, so this is
       unresolved, not blocking.
@@ -207,4 +213,16 @@ sheet, bar, editor and floating button. Screenshot:
 `../scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. **Row 32** — `"1 cells
 selected"` has no singular form: `src/i18n.ts:287`, `"toolbar.selectedCells": "{count} cells
 selected"`, interpolated at every count including 1. Neither row is investigated yet.
+
+**2026-09-02: reports 31-32 fixed in `00e2aa2`.** A named claim set toggles
+`db-bottom-dock-taken`; sheets claim at mount and release at unmount or on the removal watcher,
+the inline cell editor claims while it is open, and the bar and the mobile add control yield to
+either. Red: bar 35084px² inside an open sheet, editor∩bar 7666px², add-control∩bar 2704px².
+Green: 0px² on all three, bar restored on close. Report 32: `src/i18n-plural.test.ts` observed
+red (`TypeError: tSelectedCells is not a function`, 3 failed) then green with a singular form
+added; Chinese locales deliberately do not inflect. Release 1.4.2 is pending; not
+operator-confirmed. **Adjacent findings, recorded, not ticked:** the cell-editor dock claim has
+no removal fallback — `cell-renderer.ts` releases only in `close()` — and `db-bottom-dock-taken`
+is a body class rather than phone-scoped, so a tablet split pane could in principle hide the
+other pane's bar. Both are inferred from the source, not observed.
 <!-- /ANCHOR:log -->

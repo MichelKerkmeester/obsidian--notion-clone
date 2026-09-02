@@ -17,7 +17,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Every harness number agrees with `009`'s live number or is listed uncorroborated with a reason. The second half is met and the first is unreachable. Every packet now carries a harness-dependence audit naming which of its numbers survive the question *would this still fail on a device* — and `009`'s probe does not exist, so there is no live number to agree with.
 - [ ] The operator confirms on device. Only the operator closes this. `AC-016`'s checker
 
-## 001-overlay-placement-and-menu-language — 7/8
+## 001-overlay-placement-and-menu-language — 8/9
 
 - [ ] The operator opens three different dropdowns and they look like one family. Only the operator closes this.
 
@@ -55,7 +55,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `000` receives both cross-check artefacts. Nothing to receive until the probe exists.
 - [ ] Any phase can ask the real app a question and get a number back — and `000` can no longer certify its own instrument. Only the operator's device closes this, and until it does, every other packet's audit is the honest substitute rather than the answer.
 
-## 010-sheet-reading-and-keyboard — 10/11
+## 010-sheet-reading-and-keyboard — 11/12
 
 - [ ] The operator opens a record on the phone, reads every row as one line, taps a field, and still sees it.
 
@@ -105,7 +105,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator taps a value and the title on device and sees each editor where it started.
 
-## 022-selection-bar-keyboard-docking — 6/8
+## 022-selection-bar-keyboard-docking — 8/10
 
 - [ ] Which host shape the operator's phone is — `visualViewport` shrink or window resize. A fact about their hardware; no harness answers it. The published inset combines both, so this is unresolved, not blocking.
 - [ ] The operator selects cells, opens the keyboard, and sees a usable bar.

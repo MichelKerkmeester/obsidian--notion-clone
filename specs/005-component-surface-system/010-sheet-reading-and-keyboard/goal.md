@@ -10,14 +10,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/010-sheet-reading-and-keyboard"
-    last_updated_at: "2026-09-02T23:57:00Z"
-    last_updated_by: "device-report-33"
-    recent_action: "Recorded report 33 (iOS): sheet overflow past 100vh, not investigated"
+    last_updated_at: "2026-09-02T23:15:00Z"
+    last_updated_by: "reports-30-33-landed"
+    recent_action: "Report 33 fixed in 00e2aa2; 1.4.2 release pending"
     next_safe_action: "Operator reads a record on the phone and taps a field"
     blockers:
       - "Only the operator's phone closes the last row; no harness here opens a keyboard"
       - "The resize path is a declared red: onResize closes the record sheet outright"
-      - "Report 33 (iOS, 2026-09-02 21:24): sheet doesn't fit content inside 100vh when it overflows, no screenshot yet, not investigated"
+      - "Report 33 (iOS, 2026-09-02 21:24): fixed in 00e2aa2, release 1.4.2 pending, not operator-confirmed"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010-goal"
       parent_session_id: null
-    completion_pct: 91
+    completion_pct: 92
     open_questions:
       - "Does the operator's handset shrink visualViewport or resize the window"
     answered_questions:
@@ -256,6 +256,10 @@ settle it and **no number**, because none ran.
       cycle and a close … 0 panel or scrim node(s) remain`.
       **Named rather than swept:** the same lazy shape exists on the other anchored surfaces. They
       were not in this phase's scope, and what they need is now a function rather than a design.
+- [x] **The check for report 33 goes red then green.** Fresh verifier, 2026-09-02, `00e2aa2`.
+      Red: handle -1148px from the sheet's top, reachable=false, `db-record-detail-panel` owned
+      the scroll. Green: `db-record-detail-scroll` owns it, 1173px overflow, handle 25px,
+      reachable=true.
 - [ ] The operator opens a record on the phone, reads every row as one line, taps a field, and still
       sees it.
       **Operator criterion. Stays open regardless of the numbers, per D3.** No harness check can close
@@ -360,4 +364,16 @@ Routed here rather than `023-record-note-body`: this phase already owns the phon
 reading layout and scroll behaviour, while `023` is deliberately not startable per `roadmap.md` §5
 — the operator has not chosen display-only vs editable, and no note-body code has shipped — so a
 bug against the sheet as it currently exists cannot be `023`'s to hold. Not investigated.
+
+**2026-09-02: report 33 fixed in `00e2aa2`.** The record detail sheet lost its chrome, not its
+scroll — the grab bar and the header were children of the scrolling panel, so a record taller than
+the 90svh cap carried both off the top. Properties and body now sit in a `.db-record-detail-scroll`
+region and the panel is a flex column. Red: handle -1148px from the sheet's top, reachable=false,
+`db-record-detail-panel` owned the scroll. Green: `db-record-detail-scroll` owns the scroll,
+1173px of overflow, handle 25px from the top, reachable=true. Both halves load-bearing:
+`record-detail-panel.ts`'s wrapper and `styles.css`'s flex column with `overflow-y hidden
+!important` against `popover-position.ts`'s inline `auto`. Release 1.4.2 is pending; not
+operator-confirmed. **Adjacent, not this phase's to fix:** `styles.css` now carries two adjacent
+`.db-record-detail-panel.db-mobile-bottom-sheet` blocks (design-conformance duplicate counter
+125→126).
 <!-- /ANCHOR:log -->

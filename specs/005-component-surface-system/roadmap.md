@@ -80,14 +80,13 @@ Every row in §4 and §5 uses one of these. Collapsing them is how 1.3.1 happene
 reached a partial, which under the table above is not a state.
 
 **One further caveat that applies to every row.** Re-derived rather than carried, 2026-09-02:
-`HEAD` and `origin/main` are both at `e13c7b8`, `manifest.json` and `package.json` both declare
-**1.4.1**, and `git status --porcelain` is **not** empty. The working tree carries an uncommitted
-code phase for reports 30 to 33, in-flight lane edits under `src/`, `styles.css` and `tools/`, and
-an untracked `036/research/` that is residue from a rejected launch. So the rows below describe a
-committed tree plus work that is real and not shipped, and the two must not be read as one. This
-sentence previously read `4228370` / 1.3.9 / clean, and before that `4830275` / 1.3.1 / 1.3.3. A
-version number in prose is a number nothing recomputes, so read it off the tree before believing
-it.
+`HEAD` is at `00e2aa2`, `manifest.json` and `package.json` still declare **1.4.1** pending the
+1.4.2 cut, and `git status --porcelain` carries only an untracked `036/research/` that is residue
+from a rejected launch. The code phase for reports 30 to 33 landed in `00e2aa2` and is committed,
+not shipped as a release — the two must not be read as one until 1.4.2 is cut and installed. This
+sentence previously read `e13c7b8` / 1.4.1 / dirty, and before that `4228370` / 1.3.9 / clean, and
+before that `4830275` / 1.3.1 / 1.3.3. A version number in prose is a number nothing recomputes, so
+read it off the tree before believing it.
 
 ### 3.1 The status vocabulary, because "In Progress" was carrying too much
 
@@ -237,19 +236,19 @@ yet fixed would be filing them where I expect the answer to be rather than where
 When `031` T1's parity check runs, it will say which of these surfaces leak — and that measurement,
 not this note, is what should move them.
 
-| 30 | The "All views" bottom sheet renders five action icons per row (rename, duplicate, reorder, delete, icon) on a 393px phone; titles truncate (*"Calendar vi…"*) and each row is a wall of glyphs. Expected on a phone: one overflow control per row | `001-overlay-placement-and-menu-language` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/view-switcher-sheet-ios.png`. **Owner picked by scope, not by symptom:** `showAllViewsHub`/`renderInlineViewAction` (`toolbar-renderer.ts:1037-1111`) hand-build a bare-button row per action rather than calling `createMenuRow` — one of the exact "8 `render*Row` methods and 14 row-class grammars in `toolbar-renderer.ts`" `001/spec.md` §3 already names in scope for retirement onto the shared factory. `027`'s inventory covers rows already built through `createMenuRow`/`db-menu-item` (motion, z-index, overflow-x); this row carries neither class, so it is a menu-language gap, not a sheet-chrome one |
-| 31 | The selection status bar (*"× Esc · 1 cells selected · Copy TSV · Copy Markdown"*) stays docked while a bottom sheet is open, sits over/under the floating "+" add button, and when a numeric cell is edited the inline editor lands on top of the bar, clipping "1 cells selected" and stacking a second action row (Copy CSV · Paste · Income · Clear · Undo) above the keyboard | `022-selection-bar-keyboard-docking` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. One docking owner is missing among sheet, bar, editor and floating button |
-| 32 | *"1 cells selected"* has no singular form | `022-selection-bar-keyboard-docking` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:21, bundled with row 31. `src/i18n.ts:287` — `"toolbar.selectedCells": "{count} cells selected"` — is interpolated at every count, including 1 |
-| 33 | *"Open details sheet is buggy when overflow is present (content doesnt fit 100vh)"* | `010-sheet-reading-and-keyboard` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:24. No screenshot yet. Meaning: the record detail bottom sheet, when its properties and note body exceed the viewport height, does not behave — content does not fit 100vh and the sheet presumably neither scrolls inside its own box nor keeps its handle reachable. **Owner picked by scope, not by feature-readiness:** `010/spec.md`'s own title is "Sheet Reading Rhythm and Keyboard Avoidance" and it already owns the phone record sheet's reading layout and scroll behaviour; `023-record-note-body` owns rendering the note body itself but is "deliberately not startable" per `roadmap.md` §5 — the operator has not chosen display-only vs editable, and no note-body code has shipped, so an overflow bug on the sheet as it exists today cannot be `023`'s to hold |
+| 30 | The "All views" bottom sheet renders five action icons per row (rename, duplicate, reorder, delete, icon) on a 393px phone; titles truncate (*"Calendar vi…"*) and each row is a wall of glyphs. Expected on a phone: one overflow control per row | `001-overlay-placement-and-menu-language` | **Fixed in `00e2aa2`; release 1.4.2 pending. Not operator-confirmed.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/view-switcher-sheet-ios.png`. **Owner picked by scope, not by symptom:** `showAllViewsHub`/`renderInlineViewAction` (`toolbar-renderer.ts:1037-1111`) hand-build a bare-button row per action rather than calling `createMenuRow` — one of the exact "8 `render*Row` methods and 14 row-class grammars in `toolbar-renderer.ts`" `001/spec.md` §3 already names in scope for retirement onto the shared factory. `027`'s inventory covers rows already built through `createMenuRow`/`db-menu-item` (motion, z-index, overflow-x); this row carries neither class, so it is a menu-language gap, not a sheet-chrome one. **2026-09-02, `00e2aa2`:** one action list is now spent as five icons on desktop and as one trailing control opening an owned menu on touch. Red: 5 controls per row on 8 rows, shortest row 30px, menu 0 rows. Green: 1 per row, 44px floor, 5 menu rows, desktop unchanged at 5 icons. Title truncation is not reproduced on the bench, which places the "All views" hub as a popover where the device gives a sheet; the hub is an unregistered surface with no scenario, recorded as an adjacent finding, not a tick |
+| 31 | The selection status bar (*"× Esc · 1 cells selected · Copy TSV · Copy Markdown"*) stays docked while a bottom sheet is open, sits over/under the floating "+" add button, and when a numeric cell is edited the inline editor lands on top of the bar, clipping "1 cells selected" and stacking a second action row (Copy CSV · Paste · Income · Clear · Undo) above the keyboard | `022-selection-bar-keyboard-docking` | **Fixed in `00e2aa2`; release 1.4.2 pending. Not operator-confirmed.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. One docking owner is missing among sheet, bar, editor and floating button. **2026-09-02, `00e2aa2`:** a named claim set toggles `db-bottom-dock-taken`; sheets claim at mount and release at unmount or on the removal watcher, the inline cell editor claims while it is open, and the bar and the mobile add control yield to either. Red: bar 35084px² inside an open sheet, editor∩bar 7666px², add-control∩bar 2704px². Green: 0px² on all three, and the bar is restored when the sheet closes. Adjacent, not ticked: the cell-editor dock claim has no removal fallback (`cell-renderer.ts` releases only in `close()`), and `db-bottom-dock-taken` is a body class rather than phone-scoped, so a tablet split pane could in principle hide the other pane's bar — both inferred from the source, not observed |
+| 32 | *"1 cells selected"* has no singular form | `022-selection-bar-keyboard-docking` | **Fixed in `00e2aa2`; release 1.4.2 pending. Not operator-confirmed.** | Operator report, iOS, 2026-09-02 21:21, bundled with row 31. `src/i18n.ts:287` — `"toolbar.selectedCells": "{count} cells selected"` — is interpolated at every count, including 1. **2026-09-02, `00e2aa2`:** `src/i18n-plural.test.ts` observed red — `TypeError: tSelectedCells is not a function` (3 failed) — then green with a singular form added. Chinese locales deliberately do not inflect |
+| 33 | *"Open details sheet is buggy when overflow is present (content doesnt fit 100vh)"* | `010-sheet-reading-and-keyboard` | **Fixed in `00e2aa2`; release 1.4.2 pending. Not operator-confirmed.** | Operator report, iOS, 2026-09-02 21:24. No screenshot yet. Meaning: the record detail bottom sheet, when its properties and note body exceed the viewport height, does not behave — content does not fit 100vh and the sheet presumably neither scrolls inside its own box nor keeps its handle reachable. **Owner picked by scope, not by feature-readiness:** `010/spec.md`'s own title is "Sheet Reading Rhythm and Keyboard Avoidance" and it already owns the phone record sheet's reading layout and scroll behaviour; `023-record-note-body` owns rendering the note body itself but is "deliberately not startable" per `roadmap.md` §5 — the operator has not chosen display-only vs editable, and no note-body code has shipped, so an overflow bug on the sheet as it exists today cannot be `023`'s to hold. **2026-09-02, `00e2aa2`:** the sheet lost its chrome, not its scroll — the grab bar and header were children of the scrolling panel, so a record taller than the 90svh cap carried both off the top. Red: handle -1148px from the sheet's top, `db-record-detail-panel` owned the scroll, reachable=false. Green: properties and body sit in a `.db-record-detail-scroll` region, the panel is a flex column, 1173px of overflow, handle 25px from the top, reachable=true. Both halves load-bearing: `record-detail-panel.ts`'s wrapper and `styles.css`'s flex column with `overflow-y hidden !important` against `popover-position.ts`'s inline `auto`. Adjacent: `styles.css` now carries two adjacent `.db-record-detail-panel.db-mobile-bottom-sheet` blocks (design-conformance duplicate counter 125→126) |
 
 ### What the table says as a whole
 
 **All thirty-two reports now have a named phase**, and fifteen of the original sixteen have
 shipped code — report 13 remains the exception, deliberately not a phase. *2026-09-02: of the
-sixteen rows added later (18-33), exactly one has shipped code under the phase it names. Row 29's
-fix landed in `98da630` and `0c92f4d` under `031` and went out in 1.4.1. Rows 30 to 33 are recorded
-in `62c4fe7` and their fix sits uncommitted in the working tree, which is not a shipped state. The
-rest still route to `027`, `028` or `031` and are still being investigated.* Row 18 is the one worth naming apart from the rest: the phase
+sixteen rows added later (18-33), five now have shipped code under the phase they name. Row 29's
+fix landed in `98da630` and `0c92f4d` under `031` and went out in 1.4.1. Rows 30 to 33 were recorded
+in `62c4fe7` and their fix landed in `00e2aa2`, with release 1.4.2 pending — not operator-confirmed.
+The rest still route to `027`, `028` or `031` and are still being investigated.* Row 18 is the one worth naming apart from the rest: the phase
 it succeeds, `024`, did ship and rigorously verify a fix for the same symptom, and this report is
 that fix not holding on the operator's device.
 
@@ -589,8 +588,9 @@ not evidence of anything.
 ### 5.3 Release cadence
 
 Each verified milestone is pushed to `origin main` and cut as a GitHub release, so the operator can
-install it on the phone. **1.4.0 and 1.4.1 are shipped.** **1.4.2 is planned**, carrying the fix for
-reports 30 to 33 once that code phase is committed and verified.
+install it on the phone. **1.4.0 and 1.4.1 are shipped.** **1.4.2 is pending** — the fix for
+reports 30 to 33 landed in `00e2aa2` and is verified in-runtime, but the release has not yet been
+cut, so it is not operator-confirmed.
 
 ---
 
