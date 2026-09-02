@@ -23,6 +23,7 @@ import { DatabaseViewState } from "./view-state-store";
 import { createMenuRow, createMenuSection, createMenuSeparator } from "./menu-row";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
 import { applySheetChrome } from "./mobile-bottom-sheet";
+import { createOwnedMenu } from "./owned-menu";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { getEffectiveFilterRules } from "../data/filter-rules";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -1076,14 +1077,57 @@ export class ToolbarRenderer {
 
         if (!actions.isReadOnlyViews) {
           const controls = row.createDiv({ cls: "db-all-view-actions" });
-          this.renderInlineViewAction(controls, t("toolbar.rename"), "pencil", () => this.renameAllView(row, label, index, actions));
-          if (actions.copyCurrentView) this.renderInlineViewAction(controls, t("toolbar.copyCurrentView"), "copy", () => actions.copyCurrentView?.(index));
-          this.renderInlineViewAction(controls, t("toolbar.changeLayout"), "replace", () => {
-            this.closeViewTabPopover();
-            this.showViewTypeChangeMenu(anchor, index, view.viewType || "table", actions);
+          // One action per entry, built once and spent either as five inline icons or as five rows
+          // behind one control. Two lists would be two places to add the next action to, and the
+          // phone would be the one that quietly missed it.
+          const rowActions: { label: string; icon: string; run: () => void; danger?: boolean }[] = [
+            { label: t("toolbar.rename"), icon: "pencil", run: () => this.renameAllView(row, label, index, actions) },
+          ];
+          if (actions.copyCurrentView) {
+            rowActions.push({ label: t("toolbar.copyCurrentView"), icon: "copy", run: () => actions.copyCurrentView?.(index) });
+          }
+          rowActions.push({
+            label: t("toolbar.changeLayout"),
+            icon: "replace",
+            run: () => {
+              this.closeViewTabPopover();
+              this.showViewTypeChangeMenu(anchor, index, view.viewType || "table", actions);
+            },
           });
-          if (db.views.length > 1) this.renderInlineViewAction(controls, t("toolbar.deleteView"), "trash", () => actions.deleteView(index), "is-danger");
-          if (actions.editViewIcon) this.renderInlineViewAction(controls, t("toolbar.setViewIcon"), "smile", () => actions.editViewIcon?.(index, controls));
+          if (db.views.length > 1) {
+            rowActions.push({ label: t("toolbar.deleteView"), icon: "trash", run: () => actions.deleteView(index), danger: true });
+          }
+          if (actions.editViewIcon) {
+            rowActions.push({ label: t("toolbar.setViewIcon"), icon: "smile", run: () => actions.editViewIcon?.(index, controls) });
+          }
+
+          if (isTouchDevice(this.toolbarRoot)) {
+            // Five 28px icons on a 390px screen leave the name a sliver, and four of them are for
+            // things nobody opened this sheet to do — the sheet exists to switch view. So the row
+            // keeps its title and its type and offers one way in to the rest.
+            //
+            // An owned menu rather than a popover of its own: this codebase already presents one as
+            // a sheet on a phone, so the actions arrive in the presentation every other menu here
+            // uses, with its backdrop, its drag-to-dismiss and its keyboard handling already wired.
+            const more = controls.createEl("button", {
+              cls: "db-all-view-action db-all-view-more",
+              attr: { type: "button", "aria-label": t("common.more"), title: t("common.more"), "aria-haspopup": "menu" },
+            });
+            setIcon(more, "more-horizontal");
+            more.onclick = (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              const menu = createOwnedMenu(more.ownerDocument, { returnFocus: more });
+              for (const action of rowActions) {
+                menu.addRow({ icon: action.icon, label: action.label, warning: action.danger, onClick: () => action.run() });
+              }
+              menu.showAt({ anchor: more });
+            };
+          } else {
+            for (const action of rowActions) {
+              this.renderInlineViewAction(controls, action.label, action.icon, action.run, action.danger ? "is-danger" : "");
+            }
+          }
         }
       }
       const firstOption = list.querySelector<HTMLElement>("button[role=option]");

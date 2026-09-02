@@ -148,6 +148,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // early exit below, and registering only after the move would leave exactly those sheets
     // unknown to the watcher — so the backdrop could be taken down while one was still open.
     sheetsFor(doc).add(panel);
+    claimBottomDock(doc, "sheet", true);
     watchForSheetRemoval(doc);
     // A surface built on the body is already where a sheet has to be, so there is nothing to move
     // and nothing to remember. It still needs the backdrop, which is why that is settled above
@@ -182,6 +183,8 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
 
   sheetsFor(doc).delete(panel);
   setScrim(doc, false, false);
+  // After the prune inside setScrim, so a document that still holds another sheet keeps the claim.
+  claimBottomDock(doc, "sheet", sheetsFor(doc).size > 0);
   if (!remembered) {
     panel.style.removeProperty("--db-mobile-sheet-bottom");
     return;
@@ -238,6 +241,38 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
 const liveSheets = new WeakMap<Document, Set<HTMLElement>>();
 const sheetWatchers = new WeakMap<Document, MutationObserver>();
 
+// ───────────────────────────────────────────────────────────────────
+// 1c. WHO OWNS THE BOTTOM EDGE
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * The surfaces currently claiming the bottom of the screen, by name, per document.
+ *
+ * Three things dock there on a phone — a sheet, an inline cell editor, and the selection status bar
+ * — and each of them used to decide on its own that it belonged. Nothing arbitrated, so whichever
+ * painted last won: the bar stayed drawn under an open sheet, and an editor for a row in the bar's
+ * band landed on top of it and clipped the count chip.
+ *
+ * A set of names rather than a boolean, because two claimants can overlap — an editor opened inside
+ * a sheet is the ordinary case — and a boolean would have the first one to close release the edge
+ * while the second is still using it.
+ *
+ * The claim is a class on the body rather than a callback, so the surfaces that yield do not have
+ * to subscribe to the ones that claim, and a surface added later yields by matching a selector
+ * instead of by remembering to register.
+ */
+const dockClaims = new WeakMap<Document, Set<string>>();
+
+/** Take or release the bottom edge for a named owner. */
+export function claimBottomDock(doc: Document, owner: string, claimed: boolean): void {
+  const existing = dockClaims.get(doc);
+  const claims = existing ?? new Set<string>();
+  if (!existing) dockClaims.set(doc, claims);
+  if (claimed) claims.add(owner);
+  else claims.delete(owner);
+  doc.body?.toggleClass("db-bottom-dock-taken", claims.size > 0);
+}
+
 function sheetsFor(doc: Document): Set<HTMLElement> {
   const existing = liveSheets.get(doc);
   if (existing) return existing;
@@ -267,6 +302,9 @@ function watchForSheetRemoval(doc: Document): void {
     if (pruneSheets(doc)) return;
     // The last sheet has gone, however it went. Remove the backdrop and stop watching:
     // an idle document should not carry an observer waiting for a sheet that may never open.
+    // The dock claim goes with it — a sheet removed with a bare `.remove()` never runs the release
+    // path above, and the bar it displaced would stay hidden with nothing left to explain why.
+    claimBottomDock(doc, "sheet", false);
     doc.body.querySelector<HTMLElement>(".db-mobile-sheet-scrim")?.remove();
     stopWatching(doc);
   });

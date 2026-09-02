@@ -284,6 +284,7 @@ const en: Dictionary = {
   "board.groupColor": "Group color",
   "board.groupExists": "The group “{name}” already exists.",
   "toolbar.selectedCount": "{count} selected",
+  "toolbar.selectedCell": "{count} cell selected",
   "toolbar.selectedCells": "{count} cells selected",
   "toolbar.undo": "Undo",
   "toolbar.openFullView": "Open in full database",
@@ -1943,6 +1944,7 @@ const zhCN: Dictionary = {
   "board.groupColor": "分组颜色",
   "board.groupExists": "分组“{name}”已存在。",
   "toolbar.selectedCount": "已选择 {count} 项",
+  "toolbar.selectedCell": "已选择 {count} 个单元格",
   "toolbar.selectedCells": "已选择 {count} 个单元格",
   "toolbar.undo": "撤销",
   "toolbar.openFullView": "在完整数据库中打开",
@@ -3558,6 +3560,7 @@ const zhTW: Dictionary = {
   "board.groupColor": "分組顏色",
   "board.groupExists": "分組「{name}」已存在。",
   "toolbar.selectedCount": "已選取 {count} 項",
+  "toolbar.selectedCell": "已選取 {count} 個儲存格",
   "toolbar.selectedCells": "已選取 {count} 個儲存格",
   "toolbar.undo": "復原",
   "notice.cutCells": "已剪下 {count} 個儲存格，貼上後將移動資料",
@@ -4863,3 +4866,26 @@ export function t(key: string, vars?: Record<string, string | number>): string {
   if (!vars) return template;
   return template.replace(/\{(\w+)\}/g, (_, name: string) => String(vars[name] ?? ""));
 }
+
+/**
+ * The selected-cell count, in the grammatical number the count calls for.
+ *
+ * Reported off a phone as "1 cells selected". The dictionary carries one string per locale and no
+ * plural machinery, and adding some for a single message would be building a system to hold one
+ * value. Two keys and a choice at the call is the whole of it.
+ *
+ * A function rather than the ternary written out at each of the four call sites, because the two
+ * bars and the live region have to agree: a screen reader announcing a different sentence from the
+ * one on screen is the defect this started as, one layer down. Both keys are named literally here
+ * so the coverage suite — which scans the source for translation calls with a literal first
+ * argument — still requires every locale to define them.
+ *
+ * Neither Chinese locale inflects for number, so both of its keys carry the same string. That is
+ * the translation being right rather than the key being redundant.
+ */
+export function tSelectedCells(count: number): string {
+  return count === 1
+    ? t("toolbar.selectedCell", { count })
+    : t("toolbar.selectedCells", { count });
+}
+

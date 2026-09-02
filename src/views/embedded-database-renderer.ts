@@ -17,7 +17,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { App, HoverPopover, MarkdownRenderChild, MarkdownSectionInformation, normalizePath, Notice, setIcon, setTooltip, TFile } from "obsidian";
-import { t } from "../i18n";
+import { t, tSelectedCells } from "../i18n";
 import { DataChangeBatch, DataSource, NoteRecord, ViewConfigMutation } from "../data/data-source";
 import { RefreshCoordinator } from "../data/refresh-coordinator";
 import { isRefreshBlockedByDrag } from "../data/refresh-blockers";
@@ -4040,13 +4040,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const checkbox = createCheckbox(bar, {
       role: "row",
       cls: "db-selection-clear-checkbox",
-      attr: { title: t("toolbar.selectedCells", { count: cellCount }) },
+      attr: { title: tSelectedCells(cellCount) },
     });
     checkbox.checked = true;
     checkbox.onchange = () => { if (!checkbox.checked) this.clearEmbedCellSelection(); };
 
     // Count text
-    bar.createSpan({ cls: "db-selection-count", text: t("toolbar.selectedCells", { count: cellCount }) });
+    bar.createSpan({ cls: "db-selection-count", text: tSelectedCells(cellCount) });
 
     // Copy buttons (same structure as Dashboard)
     const copyTsvBtn = bar.createEl("button", { cls: "db-selection-action", text: t("selection.copyTsv"), attr: { type: "button" } });

@@ -48,6 +48,7 @@ import { ColumnDef, ComputedFieldDef, RowData, StatusOptionDef } from "../data/t
 import { getEffectiveLocale, t } from "../i18n";
 import { clamp, getVisiblePopoverBounds, resolveAnchoredPopoverTop, resolvePopoverHorizontalLeft, setPosition } from "./popover-position";
 import { positionToolbarPopover } from "./popover-position";
+import { claimBottomDock } from "./mobile-bottom-sheet";
 import { openDropdownMenu } from "./dropdown-field";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { setFieldTooltip } from "./field-tooltip";
@@ -2668,6 +2669,11 @@ export class CellRenderer {
     const host = container || window.activeDocument.body;
     this.activeTextEditClose?.();
     td.addClass("db-cell-popover-editing");
+    // The editor is the active task, so it takes the bottom edge from the selection status bar for
+    // as long as it is open. Without this the bar stays docked in the band the editor is placed in
+    // and the two land on each other — the editor on top, with the bar's count chip clipped behind
+    // it and two rows of actions stacked over the keyboard.
+    claimBottomDock(td.ownerDocument, "cell-editor", true);
 
     const popover = host.createDiv({ cls: "db-cell-edit-popover db-cell-line-edit-popover" });
     popover.dataset.noteDatabaseRowPath = row.file.path;
@@ -2688,6 +2694,7 @@ export class CellRenderer {
       closed = true;
       popover.remove();
       td.removeClass("db-cell-popover-editing");
+      claimBottomDock(td.ownerDocument, "cell-editor", false);
       window.activeDocument.removeEventListener("mousedown", onOutside, true);
       window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
       if (this.activeTextEditClose === close) this.activeTextEditClose = undefined;

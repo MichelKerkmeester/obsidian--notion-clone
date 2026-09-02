@@ -127,6 +127,7 @@ import { renderDateValuePicker, closeActiveDateValuePicker } from "${join(REPO, 
 import { SURFACE_REGISTRY } from "${join(REPO, "src/views/surface-contract")}";
 import { TableRenderer } from "${join(REPO, "src/views/table-renderer")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
+import { mountNoteBodyRegion } from "${join(REPO, "src/views/note-body-region")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
 import { CellRenderer } from "${join(REPO, "src/views/cell-renderer")}";
@@ -136,6 +137,9 @@ import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-datab
 import { getColumnDisplayType, isEmptyValue } from "${join(REPO, "src/data/column-display")}";
 import { formatEuroCurrency, formatEuroNumber } from "${join(REPO, "src/data/euro-format")}";
 globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
+globalThis.__tall = { openRecordDetailPanel, closeRecordDetailPanel, mountNoteBodyRegion };
+globalThis.__dock = { DatabaseView, closeRecordDetailPanel, CellRenderer };
+globalThis.__viewrow = { ToolbarRenderer };
 globalThis.__list = { ListRenderer, reservesColumnsOnWrappingLine };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
@@ -881,6 +885,15 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     EmbeddedDatabaseRenderer.prototype.renderEmbedSelectionStatusBar.call(renderer);
     return { host, bar: host.querySelector(".db-selection-status-bar") };
   };
+  // The bar's own checks need a page with nothing else docked at the bottom.
+  //
+  // Every sheet on this page is a measuring fixture, but a sheet is a sheet: mounting one takes the
+  // bottom edge, and the bar now yields it — correctly, and that is asserted on its own page in
+  // "one thing owns the phone's bottom edge". Here it would mean the checks below measured a 0x0
+  // rectangle and reported the bar as failing the thumb floor and the keyboard clearance, which is a
+  // fixture artefact wearing the costume of a product defect.
+  const releaseDock = () => document.body.removeClass("db-bottom-dock-taken");
+  releaseDock();
   const standaloneSelection = renderStandaloneSelection();
   const embeddedSelection = renderEmbeddedSelection();
   const selectionBar = standaloneSelection.bar;
@@ -936,7 +949,14 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // 331px is not invented: it is the keyboard's height measured off the operator's screenshot
   // (1206x2622 at DPR 3, keyboard top edge at y=1628 physical).
   const KEYBOARD = 331;
-  const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  // Releases the dock on the way out. Every settle here follows a resize, a resize re-places the
+  // sheet fixtures on this page, and re-placing a sheet re-takes the bottom edge. Doing it in the
+  // helper rather than at each call site is what stops the next reader adding one that measures a
+  // hidden bar.
+  const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => {
+    releaseDock();
+    resolve();
+  })));
 
   out.push({
     name: "the WebView exposes visualViewport at all",
@@ -10464,7 +10484,452 @@ await section("nothing truncates while its neighbour has room to spare", async (
   }
 });
 
-results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
+
+// ───────────────────────────────────────────────────────────────────
+// A RECORD SHEET TALLER THAN ITS CAP KEEPS THE HANDLE IT IS DRAGGED BY
+// ───────────────────────────────────────────────────────────────────
+//
+// Reported from a phone as the sheet "not fitting". Measured here on the shipped path — eighteen
+// properties and a long note body at 390x844 — the sheet does reach its cap and it does scroll, so
+// the report's own words describe the symptom rather than the mechanism. What it loses is its
+// chrome: the grab bar and the whole header were ordinary children of the scrolling panel, so
+// reading to the end of a long record carried the bar, the close button and the open-note button
+// off the top of the screen. The sheet was then dismissible only by the backdrop, and the drag the
+// bar advertises had nothing left to aim at.
+//
+// So the requirement has two halves and they are asserted together: the content scrolls to its end,
+// AND the handle is still where a thumb can reach it once it has. Either half alone passes on the
+// defect — scrolling was never broken, and a sheet short enough not to scroll keeps its handle for
+// the wrong reason. The premise is asserted too, because a check whose content fits inside the cap
+// measures nothing at all and would go quiet the day a fixture shrinks.
+//
+// The body is mounted through the shipped region rather than through `openRecordDetailPanel`'s own
+// body path: that path builds an Obsidian `Component` and renders through `MarkdownRenderer`, both
+// of which reach the vault and are deliberately absent here. Only the markdown renderer is stood
+// in for; the region, its classes and its `overflow: hidden` are the ones that ship.
+
+const tallSheetResults = [];
+
+await section("a record sheet taller than its cap keeps its handle", async () => {
+  const record = (name, pass, detail) => tallSheetResults.push({ name, pass, detail });
+  const page = await browser.newPage({
+    reducedMotion: "reduce",
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { openRecordDetailPanel, mountNoteBodyRegion } = globalThis.__tall;
+    const host = document.querySelector(".note-database-container");
+    // The operator's own record, extended past the point where a sheet at its cap can hold it.
+    const PROPS = ["Income", "Expenses", "Subscriptions", "Remaining", "Sales", "Saved",
+      "Invested", "Withdrawn", "Added to", "Balance", "Stocks", "Year", "Quarter", "Owner",
+      "Status", "Category", "Reviewed", "Notes"];
+    const frontmatter = {};
+    for (const key of PROPS) frontmatter[key] = `${key} value`;
+    openRecordDetailPanel({
+      anchorEl: document.getElementById("anchor"),
+      host,
+      row: { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter, computed: {} },
+      columns: [
+        { key: "file.name", label: "Name", type: "text" },
+        ...PROPS.map((key) => ({ key, label: key, type: "text" })),
+      ],
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: { editCell: () => {}, openRow: () => {}, isReadOnly: false },
+    });
+    const panel = document.querySelector(".db-record-detail-panel");
+    mountNoteBodyRegion({
+      parent: panel.querySelector(".db-record-detail-scroll") ?? panel,
+      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(40),
+      placeholder: "Empty",
+      renderMarkdown: (target, markdown) => { target.textContent = markdown; },
+      onCommit: () => {},
+    });
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const sheetRect = panel.getBoundingClientRect();
+    const cap = window.innerHeight * 0.9;
+    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+    const body = panel.querySelector(".db-record-detail-body");
+
+    // Whatever inside the sheet actually owns the scroll — the panel itself before the fix, an
+    // inner region after it. Naming the element would be asserting the mechanism rather than the
+    // outcome, and the outcome is what the operator sees.
+    const scroller = [panel, ...panel.querySelectorAll("*")]
+      .find((el) => el.scrollHeight > el.clientHeight + 1
+        && /auto|scroll/.test(getComputedStyle(el).overflowY));
+    const overflow = scroller ? scroller.scrollHeight - scroller.clientHeight : 0;
+    if (scroller) scroller.scrollTop = scroller.scrollHeight;
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    const handleBox = handle.getBoundingClientRect();
+    const hit = document.elementFromPoint(
+      Math.round(handleBox.left + handleBox.width / 2),
+      Math.round(handleBox.top + handleBox.height / 2),
+    );
+    const bodyBox = body.getBoundingClientRect();
+    return {
+      sheetHeight: Math.round(sheetRect.height),
+      cap: Math.round(cap),
+      fields: panel.querySelectorAll(".db-record-detail-field").length,
+      scrollerClass: scroller ? (scroller.className.split(" ")[0] || scroller.tagName) : "none",
+      overflow: Math.round(overflow),
+      scrolledTo: scroller ? Math.round(scroller.scrollTop) : 0,
+      bodyEndReached: bodyBox.bottom <= sheetRect.bottom + 1,
+      handleOffsetFromSheetTop: Math.round(handleBox.top - sheetRect.top),
+      handleReachable: Boolean(hit) && (hit === handle || handle.contains(hit)),
+    };
+  });
+  await page.close();
+
+  record("a record sheet with more content than its cap scrolls inside itself and keeps its handle at the top",
+    measured.overflow > 1
+      && measured.sheetHeight <= measured.cap + 2
+      && measured.bodyEndReached
+      && measured.handleReachable
+      && measured.handleOffsetFromSheetTop >= -1
+      && measured.handleOffsetFromSheetTop <= 40,
+    `${measured.fields} properties and a note body make the sheet ${measured.sheetHeight}px against a `
+      + `${measured.cap}px cap, with ${measured.overflow}px more than fits; "${measured.scrollerClass}" `
+      + `owns the scroll and reached ${measured.scrolledTo}px, body end visible=${measured.bodyEndReached}. `
+      + `Scrolled to the end the handle sits ${measured.handleOffsetFromSheetTop}px from the sheet's top `
+      + `edge and a press there reaches it=${measured.handleReachable}. Before the chrome was lifted out `
+      + `of the scroll region the panel itself scrolled, and at its end the handle measured -1148px from `
+      + `the sheet's top with reachable=false — off the screen entirely, along with the close button, `
+      + `leaving the backdrop as the only way out of a long record. Both halves are asserted because `
+      + `either alone passes on that: scrolling was never broken, and a sheet short enough not to `
+      + `scroll keeps its handle for the wrong reason`);
+});
+
+// ───────────────────────────────────────────────────────────────────
+// ONE THING OWNS THE PHONE'S BOTTOM EDGE AT A TIME
+// ───────────────────────────────────────────────────────────────────
+//
+// Three surfaces dock to the bottom of a phone screen and none of them knew about the others. The
+// operator's screenshots show the collisions at once: the selection status bar still docked under an
+// open view-switcher sheet, the inline cell editor landing on top of the bar and clipping its count
+// chip, and the floating add control sitting behind both.
+//
+// They are one defect, not three. Each surface decided on its own that it belonged at the bottom, so
+// whichever painted last won and nothing arbitrated. What is asserted here is the arbitration: while
+// a sheet or a cell editor is open, the bar is not on screen; while the bar is on screen, the add
+// control is not. The bar is the surface that yields, because a sheet and an editor are both the
+// active task and the bar is a status readout of a selection that is not going anywhere.
+//
+// Geometry, not classes. A check that asserted the marker class would pass on a marker no rule
+// reads, which is the same failure as asserting a portal instead of the floor the portal exists to
+// reach. Intersection area is the question the screenshots ask.
+
+const dockResults = [];
+
+await section("one thing owns the phone's bottom edge", async () => {
+  const record = (name, pass, detail) => dockResults.push({ name, pass, detail });
+  const page = await browser.newPage({
+    reducedMotion: "reduce",
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { DatabaseView, closeRecordDetailPanel, CellRenderer } = globalThis.__dock;
+    const { openRecordDetailPanel } = globalThis.__tall;
+    const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const host = document.querySelector(".note-database-container");
+
+    // The bar through the shipped view method. `Object.create` gives a real view without the
+    // constructor's Obsidian leaf, so every field the method reads is written here.
+    const addresses = [{ rowPath: "record.md", colKey: "amount" }];
+    const view = Object.create(DatabaseView.prototype);
+    view.containerEl_ = host;
+    view.selectedRows = new Set();
+    view.cellSelection = { anchor: addresses[0], focus: addresses[0] };
+    view.selectionStatusBar = undefined;
+    view.pendingCellFillDraft = null;
+    view.showCellFillInput = false;
+    view.historyStack = [];
+    view.getSelectedCellAddresses = () => addresses;
+    view.getConfig = () => ({ schema: { columns: [] } });
+    DatabaseView.prototype.renderSelectionStatusBar.call(view);
+    await settle();
+
+    const bar = () => host.querySelector(".db-selection-status-bar");
+    const box = (el) => {
+      if (!el) return { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+      const r = el.getBoundingClientRect();
+      return { top: r.top, left: r.left, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
+    };
+    const onScreen = (el) => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden";
+    };
+    const overlap = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left))
+      * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+
+    const restingBar = box(bar());
+
+    // ── 1. a sheet is open ──
+    openRecordDetailPanel({
+      anchorEl: document.getElementById("anchor"),
+      host,
+      row: { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} },
+      columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: { editCell: () => {}, openRow: () => {}, isReadOnly: false },
+    });
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    await settle();
+    const sheetOpen = {
+      barOnScreen: onScreen(bar()),
+      barBox: box(bar()),
+      sheetBox: box(document.querySelector(".db-record-detail-panel")),
+    };
+    sheetOpen.overlapWithSheet = Math.round(overlap(sheetOpen.barBox, sheetOpen.sheetBox));
+    closeRecordDetailPanel();
+    await settle();
+    const barBackAfterSheet = onScreen(bar());
+
+    // ── 2. a cell editor is open ──
+    document.documentElement.style.setProperty("--keyboard-height", "331px");
+    window.dispatchEvent(new window.Event("resize"));
+    await settle();
+    const table = host.createDiv({ cls: "db-table-wrap" });
+    const td = table.createDiv({ cls: "db-cell db-editable-cell db-numeric-value", text: "4975.32" });
+    // Placed in the band the bar has just docked into, read off the bar rather than guessed.
+    //
+    // The editor is not lifted by the keyboard — it is clamped to bounds the navbar derives and
+    // otherwise stays beside its own cell. So the collision is not two surfaces rising to meet each
+    // other; it is a cell whose row happens to lie where the bar now sits, which is what the
+    // operator's screenshot shows and what a fixed coordinate would only reproduce by luck. A cell
+    // anywhere else keeps its editor nowhere near the bar and makes this check green on the defect.
+    const barBand = box(bar());
+    td.setCssProps({
+      position: "fixed", left: "40px", top: `${Math.round(barBand.top + 4)}px`,
+      width: "160px", height: "34px",
+    });
+    const cellRenderer = new CellRenderer({ openNote() {}, getRows: () => [] }, async () => {});
+    cellRenderer.startEdit(td, { file: { path: "record.md", basename: "record" }, frontmatter: { amount: 4975.32 }, computed: {} },
+      { key: "amount", label: "Amount", type: "number" });
+    await settle();
+    const editorEl = document.querySelector(".db-cell-line-edit-popover");
+    const editing = {
+      hasEditor: Boolean(editorEl),
+      editorBox: box(editorEl),
+      barOnScreen: onScreen(bar()),
+      barBox: box(bar()),
+    };
+    editing.overlap = Math.round(overlap(editing.editorBox, editing.barBox));
+    // Closed the way a person closes it. Removing the node by hand skips the renderer's own close,
+    // which is what releases the editor's claim on the bottom edge — so the bar would stay hidden
+    // into the next check and that check would pass for the wrong reason. It did, before this line.
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await settle();
+    document.documentElement.style.removeProperty("--keyboard-height");
+    window.dispatchEvent(new window.Event("resize"));
+    await settle();
+
+    // ── 3. the floating add control, while the bar is up ──
+    //
+    // Hand-built, because the shipped toolbar needs a live view to render at all. What the renderer
+    // contributes to this geometry is exactly the class string below — `toolbar-renderer.ts` adds
+    // `is-mobile-fab` on a touch device — and everything that decides where the control lands is in
+    // the stylesheet, which is loaded here as it ships.
+    const fab = host.createEl("button", { cls: "db-new-button db-new-button-primary is-mobile-fab" });
+    fab.createSpan({ cls: "db-new-button-icon", text: "+" });
+    await settle();
+    const withBar = {
+      barOnScreen: onScreen(bar()),
+      fabOnScreen: onScreen(fab),
+      fabBox: box(fab),
+      barBox: box(bar()),
+    };
+    withBar.overlap = Math.round(overlap(withBar.fabBox, withBar.barBox));
+
+    return { restingBar, sheetOpen, barBackAfterSheet, editing, withBar };
+  });
+  await page.close();
+
+  record("the selection bar is off the screen while a bottom sheet is open",
+    measured.restingBar.height > 0
+      && !measured.sheetOpen.barOnScreen
+      && measured.barBackAfterSheet,
+    `at rest the bar measures ${Math.round(measured.restingBar.width)}x${Math.round(measured.restingBar.height)}px; `
+      + `with a record sheet open it is on screen=${measured.sheetOpen.barOnScreen} `
+      + `(box ${Math.round(measured.sheetOpen.barBox.width)}x${Math.round(measured.sheetOpen.barBox.height)}px, `
+      + `overlapping the sheet by ${measured.sheetOpen.overlapWithSheet}px²), and it comes back when the `
+      + `sheet closes=${measured.barBackAfterSheet}. Before the docking owner it stayed drawn under every `
+      + `sheet — measured 358x98px sitting 35084px² inside the sheet's own rectangle, which is the `
+      + `operator's view-switcher screenshot. The restoration is asserted beside the hiding because a `
+      + `bar that never comes back is a worse defect than one that overlaps`);
+
+  record("an open cell editor and the selection bar do not overlap",
+    measured.editing.hasEditor && measured.editing.overlap === 0,
+    `editor ${Math.round(measured.editing.editorBox.width)}x${Math.round(measured.editing.editorBox.height)}px `
+      + `at y=${Math.round(measured.editing.editorBox.top)}..${Math.round(measured.editing.editorBox.bottom)}, `
+      + `bar on screen=${measured.editing.barOnScreen} at `
+      + `y=${Math.round(measured.editing.barBox.top)}..${Math.round(measured.editing.barBox.bottom)}; `
+      + `they share ${measured.editing.overlap}px². The bar docks above a 331px keyboard and the editor `
+      + `stays beside its own cell, so a row that lies in the bar's band puts one on top of the other — `
+      + `7666px² of overlap before the editor became the docking owner, which is the capture where the `
+      + `count chip reads "1 cells select" with the rest of it underneath. The editor is the active `
+      + `task, so the bar is the one that yields`);
+
+  record("the floating add control is off the screen while the selection bar is up",
+    measured.withBar.barOnScreen && !measured.withBar.fabOnScreen,
+    `with a selection live the bar is on screen=${measured.withBar.barOnScreen} and the add control is `
+      + `on screen=${measured.withBar.fabOnScreen} `
+      + `(${Math.round(measured.withBar.fabBox.width)}x${Math.round(measured.withBar.fabBox.height)}px), `
+      + `sharing ${measured.withBar.overlap}px². Before the fix the 52px control sat at the same bottom `
+      + `corner the bar reaches and measured 2704px² underneath it — the whole of it — at z-index 40 `
+      + `against the bar's 100, visible as a half-covered circle in the operator's capture and reachable `
+      + `only by the part of it the bar left uncovered`);
+});
+
+
+// ───────────────────────────────────────────────────────────────────
+// A VIEW-SWITCHER ROW ON A PHONE CARRIES ONE TRAILING CONTROL
+// ───────────────────────────────────────────────────────────────────
+//
+// The all-views sheet put five icon buttons on every row — rename, duplicate, change layout,
+// delete, set icon. On a 390px screen that is a short title beside 220px of controls, so names
+// truncate while most of the row is affordances for actions nobody opened the sheet to take. The
+// operator's capture shows eight rows of it.
+//
+// The shape borrowed is the reference implementation's: one trailing overflow control per row, and
+// the actions behind it. What differs is where they open — this codebase already presents an owned
+// menu as a sheet on a phone, so the menu is the same object the rest of the plugin uses rather
+// than a second popover written for this row.
+//
+// Three checks, because collapsing the row, keeping the desktop alone, and keeping every action
+// reachable are different claims and only one of them is about geometry. A row reduced to a title
+// with its actions dropped would pass the first on its own, and that is the likelier regression.
+
+const viewRowResults = [];
+
+await section("a view-switcher row on a phone carries one trailing control", async () => {
+  const record = (name, pass, detail) => viewRowResults.push({ name, pass, detail });
+  const build = async (phone) => {
+    const page = await browser.newPage({
+      reducedMotion: "reduce",
+      ...(phone
+        ? { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true }
+        : { viewport: VIEWPORT }),
+    });
+    await page.setContent(phone ? page_html.replace("<body>", phoneBody) : page_html);
+    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+    await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+    await page.addScriptTag({ content: positionerJs });
+    const out = await page.evaluate(async () => {
+      const { ToolbarRenderer } = globalThis.__viewrow;
+      const host = document.querySelector(".note-database-container");
+      const anchor = host.createDiv({ cls: "anchor" });
+      const renderer = new ToolbarRenderer();
+      // The operator's own view list, including the name that truncated on the device.
+      const db = {
+        schema: { columns: [] },
+        views: [
+          { viewType: "table", name: "All" }, { viewType: "table", name: "2027" },
+          { viewType: "table", name: "2026" }, { viewType: "table", name: "2025" },
+          { viewType: "gallery", name: "Gallery view" }, { viewType: "list", name: "List view" },
+          { viewType: "board", name: "Board view" }, { viewType: "calendar", name: "Calendar view" },
+        ],
+      };
+      renderer.showAllViewsHub(anchor, db, 0, {
+        isReadOnlyViews: false,
+        selectViewInView() {}, renameView() {}, deleteView() {},
+        copyCurrentView() {}, editViewIcon() {}, moveView() {},
+      });
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+      const panel = document.querySelector(".db-all-views-popover");
+      const rows = [...panel.querySelectorAll(".db-all-view-row")];
+      const perRow = rows.map((row) => row.querySelectorAll(".db-all-view-action").length);
+      const heights = rows.map((row) => Math.round(row.getBoundingClientRect().height));
+      // Truncation as the element reports it, not as a width comparison guesses it.
+      const labels = rows.map((row) => row.querySelector(".db-all-view-label"));
+      const clipped = labels.filter((el) => el.scrollWidth > el.clientWidth + 1);
+
+      // The actions behind the control, reached the way a thumb reaches them.
+      const more = rows[7].querySelector(".db-all-view-more");
+      let menuLabels = [];
+      if (more) {
+        more.click();
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        // The row's own label element, not its whole text: the harness stands in for Obsidian's
+        // icons with a placeholder glyph that production does not emit, and reading `textContent`
+        // would compare against the stand-in rather than against the label the row carries.
+        menuLabels = [...document.querySelectorAll(".db-owned-menu .db-menu-item")]
+          .map((el) => (el.querySelector(".db-menu-item-label") ?? el).textContent.trim())
+          .filter(Boolean);
+      }
+      return {
+        rows: rows.length,
+        perRow,
+        maxPerRow: Math.max(...perRow),
+        minHeight: Math.min(...heights),
+        clipped: clipped.length,
+        clippedNames: clipped.map((el) => el.textContent).join(", "),
+        hasMore: Boolean(more),
+        menuLabels,
+        pageWidth: document.documentElement.clientWidth,
+      };
+    });
+    await page.close();
+    return out;
+  };
+
+  const phone = await build(true);
+  const desktop = await build(false);
+
+  record("a view-switcher row on a phone carries one trailing control, not five",
+    phone.rows === 8
+      && phone.maxPerRow === 1
+      && phone.hasMore
+      && phone.clipped === 0
+      && phone.minHeight >= 44,
+    `${phone.rows} rows at ${phone.pageWidth}px wide carry ${phone.perRow.join("/")} trailing `
+      + `control(s), shortest row ${phone.minHeight}px, ${phone.clipped} truncated title(s)`
+      + (phone.clipped ? ` (${phone.clippedNames})` : "")
+      + `. Before the collapse this measured 5/5/5/5/5/5/5/5 with a shortest row of 30px, under the `
+      + `44px thumb floor the rest of this stylesheet's phone rows already meet. The truncation the `
+      + `operator photographed — "Calendar vi…" — is NOT reproduced here and this check does not `
+      + `claim it: the harness places the hub as a compact popover where the device presents it as a `
+      + `full-width sheet, so no title overflows at either width. The zero is a guard against the `
+      + `collapse introducing clipping, not a red anyone watched. Whether the device's titles come `
+      + `back whole is a device observation`);
+
+  record("the desktop view-switcher row is unchanged",
+    desktop.rows === 8 && desktop.maxPerRow === 5 && !desktop.hasMore,
+    `${desktop.rows} rows carry ${desktop.perRow.join("/")} trailing control(s) and no overflow `
+      + `control is built (${desktop.hasMore}). The collapse is a phone answer to a phone problem — `
+      + `there is room for five on a 1440px screen and hiding them behind a menu would cost a click `
+      + `each. Asserted rather than assumed, because the branch is one function both presentations `
+      + `share and the cheapest wrong fix collapses both`);
+
+  record("every action the row dropped is still reachable behind its control",
+    phone.menuLabels.length === 5
+      && ["Rename", "Duplicate current view", "Change layout", "Delete view", "Set view icon"]
+        .every((label) => phone.menuLabels.includes(label)),
+    `the overflow control opens ${phone.menuLabels.length} row(s): ${phone.menuLabels.join(", ") || "none"}. `
+      + `Want the same five the inline icons carried — rename, duplicate, change layout, delete, set `
+      + `icon — because a row that sheds four controls and four actions has not been tidied, it has `
+      + `been cut. Before the control existed this measured 0`);
+});
+
+results.push(...tallSheetResults, ...dockResults, ...viewRowResults, ...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);

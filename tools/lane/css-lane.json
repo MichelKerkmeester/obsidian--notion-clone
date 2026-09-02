@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "d0d1827c9393",
+  "baselineHash": "8075a2e1eb25",
   "baselineCommit": "8dd7008",
   "history": [
     {
@@ -1141,6 +1141,23 @@
         "screenshots/views/table-mobile-desktop-dark.png"
       ],
       "note": "P6: the phone selection bar wraps its actions instead of scrolling them off the port. Both mobile captures read in dark and light: Copy CSV is whole on a second row where it was clipped to Cop, and the bar's content box goes 46px to 96px. The retargeted placement check was observed red at maxActionRight 567px against clientRight 373px before the fix and green at 341px inside 373px after. table-mobile-desktop-dark also rewrote, by 3 bytes with an unchanged layoutHash, which is encoder noise and not a layout move."
+    },
+    {
+      "event": "acquire",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-09-02T00:00:00Z",
+      "hash": "d0d1827c9393",
+      "note": "One docking owner for the phone's bottom edge: the selection bar yields to an open sheet and to an open cell editor, and the floating add control yields to either. R30 and R33 ride with this acquisition rather than taking the lane after it \u2014 the view-switcher row collapsing to one trailing overflow control, and the record sheet keeping its chrome out of its own scroll region. All three land in one stylesheet edit and share one recapture. Held open deliberately; the release and the per-image sign-off are the verifier's."
+    },
+    {
+      "event": "release",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-09-02T22:40:00Z",
+      "hash": "8075a2e1eb25",
+      "reviewed": [
+        "screenshots/panels/panel-record-detail-sheet-body-empty-desktop-light.png"
+      ],
+      "note": "Verifier release. One stylesheet edit carrying three fixes, each re-reddened before release: the record sheet made a flex column with its chrome outside a new .db-record-detail-scroll region, the selection bar and the mobile add control yielding to the body dock claim, and the phone view-switcher row given a 44px floor and one 44px trailing control. Reverting styles.css alone put all four placement checks back on their reported numbers \u2014 handle -1148px from the sheet top with reachable=false, bar 35084px2 inside an open sheet, editor over bar 7666px2, add control 2704px2 under the bar, shortest row 30px. One capture moved: panel-record-detail-sheet-body-empty-desktop-light.png, 52925 to 52934 bytes, read in the final state and showing grab bar, header, three property rows and the note placeholder whole, with no layoutHash anywhere in the manifest changed - encoder noise, not a layout move. The fixtures are hand-written markup and depict none of the three fixes, so no capture is expected to move for them; the all-views hub has no scenario at all."
     }
   ],
   "outstanding": [

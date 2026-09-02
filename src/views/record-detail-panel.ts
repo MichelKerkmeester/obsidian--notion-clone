@@ -272,12 +272,23 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     bodyRegion = null;
   };
 
+  /**
+   * Where the properties and the body live.
+   *
+   * A region rather than the panel, because on a phone the panel must not be the thing that
+   * scrolls: the grab bar and the header are its children, and a panel that scrolls carries both
+   * off the screen on any record taller than the sheet's cap. Resolved on each call instead of
+   * captured, since a view re-render rebuilds this node while the closures around it survive.
+   */
+  const contentHost = (): HTMLElement =>
+    panel.querySelector<HTMLElement>(".db-record-detail-scroll") ?? panel;
+
   /** Mount the body under the properties, resuming an interrupted edit where it left off. */
   const mountBody = (r: RowData): void => {
     const save = actions.saveNoteBody;
     if (bodyText === null || closed || !bodyLifetime) return;
     bodyRegion = mountNoteBodyRegion({
-      parent: panel,
+      parent: contentHost(),
       body: bodyText,
       readOnly: actions.isReadOnly || !save,
       placeholder: t("panel.noteBodyPlaceholder"),
@@ -369,7 +380,9 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       close();
     });
     // 字段列表（跳过 titleField；空字段按 showEmptyFields 过滤，对齐看板卡片）
-    const fieldsEl = panel.createDiv({ cls: "db-record-detail-fields" });
+    // The scroll region, holding everything below the header. See `contentHost`.
+    const scrollEl = panel.createDiv({ cls: "db-record-detail-scroll" });
+    const fieldsEl = scrollEl.createDiv({ cls: "db-record-detail-fields" });
     for (const col of columns) {
       if (col.key === titleField) continue;
       const value = getRecordCellValue(r, col);

@@ -159,7 +159,7 @@ import {
 } from "./property-type-conflict-workflow";
 import { CsvMarkdownExportModal } from "./modals/csv-markdown-export-modal";
 import { CsvMarkdownExportOptions } from "../data/csv-markdown-zip-export";
-import { t } from "../i18n";
+import { t, tSelectedCells } from "../i18n";
 import { createStoredZip, ZipEntry } from "../data/zip-export";
 import { saveZipWithPicker } from "../data/export-save-target";
 import { getEffectiveFilterRules } from "../data/filter-rules";
@@ -7551,10 +7551,10 @@ export class DatabaseView extends FileView {
     if (cellCount > 0) {
       bar.createSpan({
         cls: "db-selection-count-badge",
-        text: t("toolbar.selectedCells", { count: cellCount }),
+        text: tSelectedCells(cellCount),
       });
       if (this.selectionLiveRegion) {
-        this.selectionLiveRegion.setText(t("toolbar.selectedCells", { count: cellCount }));
+        this.selectionLiveRegion.setText(tSelectedCells(cellCount));
       }
       const copyTsvBtn = bar.createEl("button", {
         cls: "db-selection-action",

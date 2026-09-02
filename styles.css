@@ -2500,6 +2500,30 @@ input[type="checkbox"].db-toggle-switch:disabled {
   box-shadow: var(--db-elevation-1);
 }
 
+/* The bar yields the bottom edge to whatever is using it.
+
+   Three surfaces dock at the bottom of a phone and each decided on its own that it belonged there,
+   so whichever painted last won and nothing arbitrated. Measured at 390x844: the bar stayed drawn
+   under an open record sheet, 35084px² of it inside the sheet's own rectangle, and an editor opened
+   on a row in the bar's band covered 7666px² of it — which is the capture where the count chip
+   reads "1 cells select" and the rest is behind the editor.
+
+   The bar is the surface that yields, on both counts. A sheet and a cell editor are each the thing
+   the person is doing; the bar reports a selection that is not going anywhere while they do it, and
+   comes back untouched when they close.
+
+   `display: none` rather than a visibility or opacity change, because a bar that is merely
+   invisible still takes the presses aimed at whatever is now drawn over it. It also leaves the
+   accessibility tree, which is what an `aria-hidden` here would have been for — so the marker is
+   not repeated on the element, where it could drift out of step with the rule that hides it.
+
+   `mobile-bottom-sheet.ts` owns the marker for both claimants: sheets take it as they mount, the
+   inline editor takes it as it opens, and a claim is held by name so an editor opened inside a
+   sheet does not release the edge for the sheet still under it. */
+body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
+  display: none;
+}
+
 /* --db-keyboard-inset, not --keyboard-height: the host variable is written only by Obsidian, so on
    any host that does not publish one this rule would resolve to its fallback forever and the bar
    would never move off the floor — silently, because a var() that misses does not fail. The plugin
@@ -9579,6 +9603,38 @@ input[type="checkbox"].db-toggle-switch:disabled {
   font-size: var(--font-smaller);
   min-width: 72px;
   flex-shrink: 0;
+}
+
+/* The sheet's chrome does not scroll, and only its content does.
+
+   The grab bar and the header are children of the panel, and the panel was the scroll container —
+   so a record with more in it than the 90svh cap can hold carried both off the top of the screen
+   the moment it was read to the end. Measured on eighteen properties and a note body at 390x844:
+   1173px more content than fits, and at the end of it the bar sat 1148px above the sheet's own top
+   edge with the close and open-note buttons beside it. The backdrop was the only way out, and the
+   drag the bar advertises had nothing left to aim at.
+
+   `overflow-y` is declared `!important` because the positioner writes `overflow-y: auto` inline on
+   every placement, for every popover it places. That is right for an anchored panel and wrong for
+   this one, and the sheet class is where the two presentations already differ.
+
+   Scoped to the record sheet rather than to `.db-mobile-bottom-sheet`. The menu sheets have no
+   chrome below their bar and scroll their rows directly; taking their overflow away would leave a
+   long menu with rows nothing can reach. */
+.db-record-detail-panel.db-mobile-bottom-sheet {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden !important;
+}
+
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* A flex item's floor is its content, not zero, so without this the region refuses to shrink
+     below the height of every property it holds and pushes the sheet past its own cap instead of
+     scrolling — the defect this rule exists to remove, in a new place. */
+  min-height: 0;
 }
 
 .db-record-detail-panel.db-mobile-bottom-sheet {
@@ -20203,6 +20259,27 @@ body.is-tablet .note-database-container .db-record-open-btn {
   padding: 0;
 }
 
+/* On a phone the row is a title and one way in to everything else.
+
+   Five 28px controls beside a name on a 390px screen left the name a sliver and put four
+   affordances on every row for things nobody opens this sheet to do — it exists to switch view.
+   The row now carries its title and its type and one trailing control, and `toolbar-renderer.ts`
+   spends the same five actions into an owned menu behind it.
+
+   The floor is the one this stylesheet already uses for a phone target, and it is asserted rather
+   than assumed: the rows measured 30px here, under it, while the icons they held were 28px. A row
+   that sheds four controls and keeps a 30px height has been made emptier, not more reachable. */
+.is-phone .note-database-container .db-all-view-row,
+.db-mobile-bottom-sheet .db-all-view-row {
+  min-height: var(--db-sheet-row-min-height, 44px);
+}
+
+.is-phone .note-database-container .db-all-view-more,
+.db-mobile-bottom-sheet .db-all-view-more {
+  width: var(--db-sheet-row-min-height, 44px);
+  height: var(--db-sheet-row-min-height, 44px);
+}
+
 /* Group spacing has to beat item spacing or the groups are not groups. The settings sat 0px from
    the tile grid while their own fields sat 4px apart, so everything read as one flat stack — the
    form's own bottom padding was the only separation and it was doing nothing. Items keep the small
@@ -20411,6 +20488,22 @@ body.is-tablet .note-database-container .db-record-open-btn {
   }
 
   .note-database-container .db-new-button-primary.is-mobile-fab + .db-new-button-dropdown {
+    display: none;
+  }
+
+  /* The add control yields to both of the surfaces above it.
+
+     It is fixed to the same bottom corner the selection bar reaches, at `--db-layer-sticky` against
+     the bar's z-index 100 — so with a selection live the whole 52px of it sat under the bar,
+     2704px² covered, visible in the operator's capture as a half-drawn circle and reachable only
+     where the bar happened not to cover it. `has-selection-status` is the class the view already
+     toggles on its container for exactly this state, so the bar's presence is read from the one
+     place that knows it rather than inferred.
+
+     The second arm is the dock claim a sheet or a cell editor takes. Creating a record from behind
+     a sheet is not a thing to offer, and the control was drawn over the scrim. */
+  .note-database-container.has-selection-status .db-new-button-primary.is-mobile-fab,
+  body.db-bottom-dock-taken .note-database-container .db-new-button-primary.is-mobile-fab {
     display: none;
   }
 
