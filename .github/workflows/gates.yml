@@ -61,7 +61,7 @@ jobs:
         run: npm run storybook:verify
 
       - name: Shim and stub cover the source
-        run: npm run storybook:coverage
+        run: npm run shim:coverage
 
       - name: Popover and sheet geometry
         run: npm run storybook:placement
