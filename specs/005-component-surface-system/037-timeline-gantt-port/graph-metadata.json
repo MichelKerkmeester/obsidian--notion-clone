@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
-  "spec_folder": "005-component-surface-system/036-obsidian-pm-ui-harvest",
+  "packet_id": "005-component-surface-system/037-timeline-gantt-port",
+  "spec_folder": "005-component-surface-system/037-timeline-gantt-port",
   "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
@@ -11,51 +11,47 @@
   },
   "derived": {
     "trigger_phrases": [
-      "obsidian pm ui harvest",
-      "036 harvest",
-      "dotpm patterns",
-      "steal the ui from obsidian-pm",
-      "phone sheet pattern harvest",
-      "036 plan",
-      "obsidian pm harvest loop dispatch",
-      "reserved research paths 036",
-      "tasks",
-      "036",
-      "obsidian pm harvest tasks",
-      "acceptance criteria"
+      "timeline gantt port",
+      "037 timeline port",
+      "obsidian pm timeline harvest",
+      "timeline renderer port",
+      "timeline gantt port plan",
+      "037 plan",
+      "timeline port steps",
+      "timeline gantt port tasks",
+      "037 tasks",
+      "timeline gantt port acceptance criteria",
+      "037 closure gate",
+      "timeline gantt port goal"
     ],
     "key_topics": [
+      "timeline",
+      "gantt",
+      "port",
       "obsidian",
       "harvest",
-      "dotpm",
-      "patterns",
-      "steal",
-      "obsidian-pm",
-      "phone",
-      "sheet",
-      "pattern",
+      "renderer",
       "plan",
-      "loop",
-      "dispatch"
+      "steps",
+      "tasks",
+      "acceptance",
+      "criteria",
+      "closure"
     ],
     "importance_tier": "normal",
-    "status": "planned",
+    "status": "draft",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "research/research.md",
-      ".opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs",
-      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-      "research/lineages/luna-max-fast-pm-harvest/research/research.md",
-      "research/convergence-report.md",
-      "research/spot-check.md",
+      "implementation-summary.md",
       "src/views/calendar-timeline-renderer.ts",
-      "src/views/board-renderer.ts",
-      "src/views/calendar-renderer.ts",
-      "src/views/mobile-bottom-sheet.ts"
+      "src/data/calendar-timeline-model.ts",
+      "src/data/calendar-interaction-model.ts",
+      "tools/lane/css-lane.json",
+      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md"
     ],
     "entities": [
       {
@@ -89,33 +85,9 @@
         "source": "derived"
       },
       {
-        "name": "research.md",
+        "name": "implementation-summary.md",
         "kind": "doc",
-        "path": "research/research.md",
-        "source": "derived"
-      },
-      {
-        "name": "fanout-run.cjs",
-        "kind": "file",
-        "path": ".opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs",
-        "source": "derived"
-      },
-      {
-        "name": "SKILL.md",
-        "kind": "doc",
-        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-        "source": "derived"
-      },
-      {
-        "name": "convergence-report.md",
-        "kind": "doc",
-        "path": "research/convergence-report.md",
-        "source": "derived"
-      },
-      {
-        "name": "spot-check.md",
-        "kind": "doc",
-        "path": "research/spot-check.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -125,21 +97,27 @@
         "source": "derived"
       },
       {
-        "name": "board-renderer.ts",
+        "name": "calendar-timeline-model.ts",
         "kind": "code",
-        "path": "src/views/board-renderer.ts",
+        "path": "src/data/calendar-timeline-model.ts",
         "source": "derived"
       },
       {
-        "name": "calendar-renderer.ts",
+        "name": "calendar-interaction-model.ts",
         "kind": "code",
-        "path": "src/views/calendar-renderer.ts",
+        "path": "src/data/calendar-interaction-model.ts",
         "source": "derived"
       },
       {
-        "name": "mobile-bottom-sheet.ts",
-        "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "SKILL.md",
+        "kind": "doc",
+        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
         "source": "derived"
       },
       {
@@ -149,31 +127,31 @@
         "source": "derived"
       },
       {
-        "name": "Problem Statement Six",
+        "name": "Gantt Port",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Purpose Produce",
+        "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "In Scope",
+        "name": "Handoff Criteria",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "File Path",
+        "name": "Phase Context This",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Change Type",
+        "name": "Scope Boundary",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -191,7 +169,13 @@
         "source": "derived"
       },
       {
-        "name": "Pattern Research",
+        "name": "Overview Rewrite",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Renderer",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
@@ -201,11 +185,23 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
       }
     ],
-    "causal_summary": "Six packets in this program (022, 031, 010, 023, 001/027, 011) are actively deciding phone-surface",
-    "created_at": "2026-09-02T19:31:25.064Z",
-    "last_save_at": "2026-09-02T22:01:47.135Z",
+    "causal_summary": "`src/views/calendar-timeline-renderer.ts` (2,390 lines) already owns an action contract, CSS-unit geometry,",
+    "created_at": "2026-09-02T21:51:11Z",
+    "last_save_at": "2026-09-02T21:57:16.741Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,15 +210,15 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "research/research.md"
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:78ff7c565c7e8ba3750fef4508c69f99e578ce7bbeea2324ef06aa3a120df216",
+    "source_fingerprint": "sha256:e35ca854d62d0085f1d6049dd31d177580a712e8943d75da6b7170ba35829413",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "eadfcf25437076cc0053a0be9ab2cea7d7f287d1022f285d46637a880e469779",
-      "plan.md": "57e15aa0ca5a972362b99ca526c9af00aefc2cfd6bde71a169d43698e17ffd88",
-      "tasks.md": "9150686f4d360796debf351b0f978e2853604cb011fadd8fd1d53e047db9949a",
-      "research/research.md": "9fa3bf2756c4e3cb5917bbb255c74705d1dfe86697d93b4308063b6ca8d39d81"
+      "spec.md": "58477482bcf8ba1ed6411c8ff5428c9a605c0f19fddaea18cbac4c5ad3763bc5",
+      "plan.md": "15668849564e4c0019be092e0ccf3220046f482ccc745caa2db9a34cc2fb9440",
+      "tasks.md": "bf39c37992b5112480e12fc59aa8db00d80156018fb8481b1ec6a1ca6a1ded00",
+      "implementation-summary.md": "1176c8e58cf960976e1003453e6c930c1a78cb34dd9d8fc02fca607ad67c4465"
     },
     "last_active_child_id": null,
     "last_active_at": null

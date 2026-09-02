@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/037-timeline-gantt-port",
+  "description": "Phase 1: timeline-gantt-port",
+  "keywords": [
+    "phase",
+    "timeline-gantt-port"
+  ],
+  "lastUpdated": "2026-09-02T21:51:11.721Z",
+  "specId": "037",
+  "folderSlug": "timeline-gantt-port",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

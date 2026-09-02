@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T22:30:00Z"
-    last_updated_by: "goal-audit-2"
-    recent_action: "Reconciled the parent goal and roadmap against 1.4.1 evidence"
-    next_safe_action: "The operator confirms report 29 sheet by sheet on the installed 1.4.1 build"
+    last_updated_at: "2026-09-03T00:05:00Z"
+    last_updated_by: "port-phases-opened"
+    recent_action: "Opened 037-041 from 036's adoption plan"
+    next_safe_action: "Dispatch 037 step 1: the failing timeline check, devin first per D14"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -519,4 +519,16 @@ and cancelled-gesture-dismissal fixes). Recorded at `roadmap.md` §4 row 29 as *
 on device** — sheets open and close on that build — with the full discriminating sequence (drag
 *after* editing a field, tried against each of the three named failure shapes) still owed. The row
 stays open; a partial is not a close under D3.
+
+### Five port phases opened, 2026-09-03
+
+**2026-09-03T00:05:00Z.** `037-timeline-gantt-port`, `038-board-kanban-port`,
+`039-calendar-parity-port`, `040-subtask-tree-port` and `041-shared-ui-ux-port` were opened from
+`036-obsidian-pm-ui-harvest`'s Final adoption plan (`036/research/research.md`), in the plan's own
+order. Every completion-criteria row in all five is unticked; nothing has run yet. `roadmap.md` §5.2
+now names each folder and reads "Opened" in place of "Planned, not opened"; `spec.md`'s Phase
+Documentation Map carries the same five rows with each child's declared level (`040` at Level 3,
+raised over `recommend-level.sh`'s Level 1 for the reason its own `spec.md` §1 records). This does
+not change `completion_pct` — the parent's 57% basis is unaffected because it is a program-wide
+figure over the phases that were already counted, and the five new phases enter at 0%.
 <!-- /ANCHOR:log -->

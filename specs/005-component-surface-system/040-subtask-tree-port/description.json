@@ -1,0 +1,25 @@
+{
+  "specFolder": "005-component-surface-system/040-subtask-tree-port",
+  "description": "This repo has no subtask/hierarchy concept today: `grep -rn \"parentId\\|subtaskIds\\|hierarchy\" src/data/`",
+  "keywords": [
+    "repo",
+    "subtask",
+    "hierarchy",
+    "concept",
+    "today",
+    "grep",
+    "parentid",
+    "subtaskids",
+    "src",
+    "data"
+  ],
+  "lastUpdated": "2026-09-02T21:56:39.891Z",
+  "specId": "040",
+  "folderSlug": "subtask-tree-port",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

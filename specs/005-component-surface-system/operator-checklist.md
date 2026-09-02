@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-02: **37 phases**, **5 with nothing left**, **50 rows** waiting on a device.
+Derived 2026-09-02: **42 phases**, **5 with nothing left**, **85 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -154,6 +154,56 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The loop reached 20 iterations, or converged earlier with the convergence reason recorded in `research/lineages/<lineage>/convergence-report.md`.
 - [ ] An in-runtime spot-check of 10 randomly selected citations from the module map finds all 10 true against the file on disk — line exists, and its content matches what the map claims about it.
+
+## 037-timeline-gantt-port — 0/6
+
+- [ ] Every module-map row in `spec.md` §3 rewritten and matching its cited reference behavior, observed by placement/teardown pass and a screenshot read at all five zoom levels — currently 0 of 17 rows ported.
+- [ ] The dependency-link seam rejects same-side, duplicate, missing-task, and cycle links, each with a unit test observed passing — currently no seam exists (T001's red baseline).
+- [ ] Local visible-window rendering, unscheduled backlog, invalid-event repair, and group/lane limits are unchanged after the port — no regression observed in a before/after diff.
+- [ ] `styles.css` `db-timeline-*` rules reconciled under an acquired-and-released `css-lane` hold, with a `reviewed` array naming the recaptured screenshots.
+- [ ] `npm run gate` reports `gate: PASS` and exit 0, observed by a fresh in-runtime agent per D14 leg (c).
+- [ ] `validate.sh specs/005-component-surface-system/037-timeline-gantt-port --strict` first `RESULT:` line is `PASSED`.
+
+## 038-board-kanban-port — 0/8
+
+- [ ] The card information hierarchy (title, priority strip, chips, preview, time/tags/progress/ people/due) matches the reference's shape on a read of paired before/after screenshots.
+- [ ] Hover/drag/drop visual language (raised card, hover lift, drop-target tint, column drop highlight) matches the reference's language, rewritten under `--db-*` tokens in `styles.css` §17 BOARD VIEW. Not started. Red to record: a diff of the current `.db-board-card`/`.db-board-column` rules (`styles.css:8881-8908`, `:9175-9197`) against the reference's `kanban.css:13-155`.
+- [ ] Every local extension named in REQ-005 (WIP/visible counts, swimlanes, summaries, conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, cover-target scheme safety) passes the same check before and after the rewrite. Not started. Red to record: today's passing state of each, captured by `plan.md` step 1, before any rewrite line lands.
+- [ ] Card identity, drag/drop payloads, and the path/batch-order transaction are unchanged in contract (REQ-003). Not started. Red to record: today's drag-drop matrix (same-group, cross-group, blank-space) run once, before the rewrite, as the baseline the post-rewrite run must match.
+- [ ] The board/gallery layout-read negative control (`tools/live/renderer-coverage.json`, the bound `026`/`c5566db` wired) stays armed and passing after the rewrite. Not started. Red to record: the control's current armed/disarmed read counts, before the rewrite touches `board-renderer.ts`.
+- [ ] `npm run gate` exits 0, `$?` read directly. Not started.
+- [ ] `validate.sh specs/005-component-surface-system/038-board-kanban-port --strict` reports Errors: 0. Not started.
+- [ ] The operator opens a board on device and confirms the rewritten card/column visual language and drag/drop reads correctly on their own database. Only the operator closes this row; nothing in this tree can close it. Not a report-driven row — no operator report (29-33) named the board surface directly, so this is a proactive confirmation ask, not a defect closure.
+
+## 039-calendar-parity-port — 0/6
+
+- [ ] Completion-aware milestone treatment exists in month, week and day rendering (REQ-002). Observable check: a calendar event whose row's checkbox/status column reads "done" renders visually distinct from one that does not, at all three scales. Red recorded by reading `calendar-renderer.ts:239-293`'s `renderMonth` build path before any edit — it consults no completion column today, confirmed while writing `spec.md` §1. Green recorded by the same read after the change, plus the new harness fixture this phase adds.
+- [ ] Calendar header/date-scale wording carries the reference's day-label/weekend-header language intent (REQ-003). Observable check: `calendar-renderer.ts:1701-1782`'s header copy compared against `GanttHeaderRenderer.ts:48-75` for wording intent, not visual form. Red recorded as today's exact header strings before the change; green as the updated strings plus a recaptured screenshot at `screenshots/views/calendar-*`.
+- [ ] Empty-state and backlog wording reads with the reference's calm density language (REQ-004). Observable check: `renderEmpty`/`EmptyStateRenderer.renderCard` (`calendar-renderer.ts:2478-2489`) and the backlog empty path (`:157-180`) compared before and after. Red recorded as today's copy; green as the updated copy read from the rendered DOM, not from source.
+- [ ] No source-calendar-module fabrication (REQ-001, negative-evidence discipline). Observable check: every REQ-001 citation (`types.ts:4-11`, `YamlHydrator.ts:51-76`, `ProjectView.ts:403-419`) re-read against current disk state and matches this document's quoted line window exactly. Red/green is pass/fail on that re-read, recorded in `acceptance-criteria.md`.
+- [ ] `npm run gate` passes from the final state, including the `css-lane` and `comments` lanes, with the full output read from `tools/lane/gate-logs/`.
+- [ ] Operator-only. The operator confirms on device that a completed milestone reads as completed in the calendar, at whatever scale they open first. No artifact in this tree can close this row; only the operator's own confirmation does (parent goal D3).
+
+## 040-subtask-tree-port — 0/7
+
+- [ ] A relation-fixture test observed failing red, then passing green. Where recorded: `src/data/subtask-relation.test.ts`; the failing value is the exit/assertion output from `plan.md` step 1, run before `subtask-relation.ts` exists.
+- [ ] Hydrate/serialize round-trips a 3-level fixture with no field loss. Where recorded: SC-001 in `acceptance-criteria.md`, evidenced by the round-trip test's before/after diff.
+- [ ] A cross-parent move updates both parents' `subtaskIds`, the child's `parentId`, and sibling ranks atomically, in one observed transaction. Where recorded: SC-002, evidenced by a before/after diff of the relation state around the move call.
+- [ ] A cycle-creating move is rejected and leaves the relation byte-for-byte unchanged. Where recorded: SC-003, evidenced by re-reading the fixture after the rejected call and diffing against the pre-call state.
+- [ ] Explicit and derived progress are asserted as distinct, and derived never overwrites explicit. Where recorded: SC-004.
+- [ ] `npm run gate` prints `gate: PASS` and exits 0 on the final state, read directly (not through a pipe). Where recorded: SC-005, task T017.
+- [ ] `styles.css` lane released with a recapture read, naming the changed depth/expand/progress captures in a `reviewed` array. Where recorded: task T014-T015.
+
+## 041-shared-ui-ux-port — 0/8
+
+- [ ] `git diff -- src/views/mobile-bottom-sheet.ts` is empty after this packet lands (AC-001).
+- [ ] Every reconciled `--db-*` token or primitive traces to a verified reference citation or a documented local-only extension (AC-002).
+- [ ] `SURFACE_PHASE=041-shared-ui-ux-port npm run gate` exits 0, read from `$?` directly (AC-003).
+- [ ] `empty-state-renderer.ts`'s composition covers the verified `EmptyState.ts:10-37` icon/title/ body/action/CTA shape through local diagnostics-aware reasons (AC-004).
+- [ ] `board-renderer.ts`'s card icon/tooltip/chip density is reconciled against `IconButton.ts:3-31`/ `Chip.ts:3-40` through local field renderers, no copied DOM (AC-005).
+- [ ] The reduced-motion media rule covers every implied `db-overlay-enter`/`db-mobile-sheet-scrim` surface without adding a second sheet-height cap (AC-006).
+- [ ] `SettingsTab.display()` exposes the reconciled default-view/editor/save and board/timeline display vocabulary, localized through `src/i18n.ts` (AC-007).
+- [ ] Toggle-button `aria-expanded`/`is-open` state and the board's roving keyboard match the reconciled active/focus language verified at `chrome.css:124-170` (AC-008).
 
 ## Nothing left to check
 

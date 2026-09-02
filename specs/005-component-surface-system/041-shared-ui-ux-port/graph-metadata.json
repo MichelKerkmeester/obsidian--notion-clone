@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/041-shared-ui-ux-port",
+  "spec_folder": "005-component-surface-system/041-shared-ui-ux-port",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "feature",
+      "specification",
+      "shared ui ux port",
+      "041",
+      "spec core",
+      "implementation",
+      "plan",
+      "plan core",
+      "tasks",
+      "tasks core",
+      "acceptance criteria",
+      "closure gate"
+    ],
+    "key_topics": [
+      "feature",
+      "specification",
+      "shared",
+      "port",
+      "spec",
+      "core",
+      "implementation",
+      "plan",
+      "tasks",
+      "acceptance",
+      "criteria",
+      "closure"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/empty-state-renderer.ts",
+      "src/views/board-renderer.ts",
+      "src/settings.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/card-roving-tabindex.ts",
+      "src/views/mobile-bottom-sheet.ts",
+      "tools/lane/css-lane.json",
+      "src/data/types.ts",
+      "src/i18n.ts",
+      "repo-rules/screenshot-currency.md",
+      "specs/005-component-surface-system/036-obsidian-pm-ui-harvest/research/research.md",
+      "src/views/calendar-timeline-renderer.ts",
+      "src/views/calendar-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "empty-state-renderer.ts",
+        "kind": "code",
+        "path": "src/views/empty-state-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-roving-tabindex.ts",
+        "kind": "code",
+        "path": "src/views/card-roving-tabindex.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "screenshot-currency.md",
+        "kind": "doc",
+        "path": "repo-rules/screenshot-currency.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Rewrite",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The obsidian-pm reference names a shared visual and interaction language: semantic tokens, an",
+    "created_at": "2026-09-02T21:57:02.779Z",
+    "last_save_at": "2026-09-02T21:57:02.779Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:8abbd4c0cd8f3f977f25b5f25ece3a4d1fd474c8ffebafae4ad2765da27bbec6",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "00e316f12288b239b47254b33e976b3281e0b56f5740cc99f324d2b0e38de7dd",
+      "plan.md": "f95e4d06beb3ebbde225aaad13a397aeed5b7a0bc5d629fc27cf438a0ebff3bb",
+      "tasks.md": "385af7d93c674ba1365852e6878d164173200c5479c08ecaa8ef0b173c27928c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

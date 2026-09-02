@@ -1,0 +1,28 @@
+{
+  "specFolder": "005-component-surface-system/039-calendar-parity-port",
+  "description": "obsidian-pm has no calendar view; this phase merges its verified date and milestone language into the existing calendar-renderer.ts, not a file port.",
+  "keywords": [
+    "obsidian-pm",
+    "calendar",
+    "view",
+    "phase",
+    "merges",
+    "verified",
+    "date",
+    "milestone",
+    "language",
+    "existing",
+    "calendar-renderer",
+    "file",
+    "port"
+  ],
+  "lastUpdated": "2026-09-02T21:55:40.061Z",
+  "specId": "039",
+  "folderSlug": "calendar-parity-port",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

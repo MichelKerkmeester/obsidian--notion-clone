@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/041-shared-ui-ux-port",
+  "description": "The obsidian-pm reference names a shared visual and interaction language: semantic tokens, an",
+  "keywords": [
+    "obsidian-pm",
+    "reference",
+    "names",
+    "shared",
+    "visual",
+    "interaction",
+    "language",
+    "semantic",
+    "tokens"
+  ],
+  "lastUpdated": "2026-09-02T21:56:53.158Z",
+  "specId": "041",
+  "folderSlug": "shared-ui-ux-port",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

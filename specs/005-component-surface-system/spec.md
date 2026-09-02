@@ -155,6 +155,11 @@ are counted separately.
 | report-driven | `019-card-field-value-formatting` | A number rendering the same in a card as in a cell | Shipped, unverified |
 | report-driven | `029-numeric-coercion-parity` | A row reading a numeric column whole rather than parsing its leading digits | Shipped, unverified; captures owed |
 | report-driven | `035-visual-pass-product-defects` | The seventeen product defects the 2026-09-02 visual pass read, which `020`'s D5 forbids `020` from fixing | In progress — 14 of 17 fixed and read on a recapture |
+| port-plan | `037-timeline-gantt-port` (Level 2) | Port obsidian-pm's timeline/Gantt geometry, controls, header/grid, bars, drag and dependency-link UX near one-to-one into `calendar-timeline-renderer.ts` | Opened 2026-09-02, not started |
+| port-plan | `038-board-kanban-port` (Level 2) | Port obsidian-pm-main's Kanban status-column hierarchy, card density and hover/drag/drop visual language into `board-renderer.ts` near one-to-one, without narrowing the local action contract | Opened 2026-09-02, not started |
+| port-plan | `039-calendar-parity-port` (Level 2) | obsidian-pm has no calendar view; merge its verified date and milestone language into the existing `calendar-renderer.ts` | Opened 2026-09-02, not started |
+| port-plan | `040-subtask-tree-port` (Level 3, raised over `recommend-level.sh`'s L1 — see its `spec.md` §1) | Port obsidian-pm-main's recursive subtask model — normalized parent index, cycle-safe move/reorder, depth/expand UI — into this repo's per-note frontmatter model near one-to-one | Opened 2026-09-02, not started |
+| port-plan | `041-shared-ui-ux-port` (Level 2) | Rewrite obsidian-pm's shared token, primitive, motion and settings language into this repository's `db-*` surfaces without replacing the local bottom sheet | Opened 2026-09-02, not started |
 
 **Rows for `020`-`028` and `030`-`034` are missing from this table.** Those folders exist and this
 map otherwise stops at `029`. The gap is recorded rather than filled by whoever noticed it, since

@@ -108,6 +108,8 @@ viewport and lane limits are not to be dropped.
 | `GanttLinkHandler.ts:56-67` — right output to left input | `src/views/calendar-timeline-renderer.ts:158-170` — date/reorder action seam | Extend data graph/action layer; no direct local dependency renderer exists yet. | 180–260 / `037-timeline-gantt-port` |
 | `gantt.css:1-17` — flex view, controls, wrapper | `styles.css:17126-17133` — timeline event grid variables | Rewrite CSS into the styles lane and local tokens. | 120–180 / `037-timeline-gantt-port` |
 
+_2026-09-03 correction: `styles.css:17126-17133` is `.db-timeline-group-toggle:hover` and `.is-collapsed .db-collapse-triangle`, not the timeline event grid variables. The `--db-timeline-unit-width` / `--db-timeline-content-width` grid variables are at `styles.css:16759-16760`. No other claim in this row was changed._
+
 **Timeline estimate:** 1,100–1,500 LOC including adapter, date transaction/dependency helper,
 renderer/CSS reconciliation, placement/teardown/screenshot tests. Landing packet:
 `037-timeline-gantt-port`; it must leave `npm run gate` green independently.
@@ -334,6 +336,8 @@ calendar grid keyboard, touch gates, portal/scrim/keyboard inset, cover/selectio
 | `settings.ts:133-179` — Gantt/board display toggles | `src/data/types.ts:373-466` — ViewConfig board/timeline fields | Extend local config/i18n; do not clone reference persistence. | 80–130 / `041-shared-ui-ux-port` |
 | `chrome.css:124-150` — segmented view switcher active state | `src/views/toolbar-renderer.ts:2067-2070` — expanded state helper | Align active/focus language with local toolbar. | 80–120 / `041-shared-ui-ux-port` |
 | `chrome.css:158-170` — centered empty state | `src/views/empty-state-renderer.ts:143-150` — shared copy catalog | Preserve local reason precedence and starter presets. | 50–90 / `041-shared-ui-ux-port` |
+
+_2026-09-03 correction: `src/views/toolbar-renderer.ts:2067-2070` has drifted to `closeViewTabPopover`, not the expanded-state helper. `setPopoverTriggerState`, the helper the row means, is now at `:2111-2114`. No other claim in this row was changed._
 
 **Shared UX estimate:** 650–950 LOC including token/primitive reconciliation, motion/focus/touch
 tests, settings/i18n, sheet boundaries, and placement/teardown/screenshot lanes. Landing packet:

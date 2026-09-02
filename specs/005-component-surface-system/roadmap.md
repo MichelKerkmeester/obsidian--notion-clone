@@ -561,10 +561,9 @@ command above is how to disbelieve them.
 
 ### 5.2 Planned port phases (from `036`)
 
-**Planned, not opened.** Five phases the operator wants opened after `036-obsidian-pm-ui-harvest`
-finishes its 20-iteration research loop and its citations have been spot-checked. **No packet
-numbers are assigned here**, because allocation happens when a phase is opened, not when it is
-foreseen. Naming a number now is how two phases end up claiming one.
+**Opened 2026-09-02.** Five phases were opened from `036-obsidian-pm-ui-harvest`'s adoption plan once
+its 20-iteration research loop merged and its citations were spot-checked (`036/goal.md` LOG). Each
+folder number below was allocated at open time, not foreseen in advance.
 
 Every one of them is a near one-to-one port of `specs/context/obsidian-pm-main` (MIT, Stepan
 Kropachev and dotpm contributors), rewritten to this repository's standards under `sk-code` and
@@ -572,13 +571,13 @@ merged into our renderers and our data model rather than bolted alongside them. 
 the table view, the bottom sheets, and formulas, rollups and calculations. Those are better here and
 are not part of the port.
 
-| Planned phase | What it ports | Opens after |
-|---|---|---|
-| Timeline and gantt | Their timeline and gantt surface, into our timeline renderer | `036` research plus citation spot-check |
-| Board | Their board surface, into our board renderer | The same |
-| Calendar | Their calendar surface, into our calendar renderer | The same |
-| Subtask model | Their subtask model, into our data model | The same |
-| Shared UI and UX | Their shared primitives, composites and interaction grammar | The same |
+| Planned phase | Folder | What it ports | Status |
+|---|---|---|---|
+| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Opened |
+| 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Opened |
+| 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Opened |
+| 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Opened |
+| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Opened |
 
 The research runs in a worktree, `.worktrees/003-obsidian-pm-harvest` on branch
 `worktrees/003-obsidian-pm-harvest`, so the main checkout stays free for the in-flight lanes. The

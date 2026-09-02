@@ -75,7 +75,12 @@
     "005-component-surface-system/033-list-virtualisation",
     "005-component-surface-system/034-packet-doc-truth",
     "005-component-surface-system/035-visual-pass-product-defects",
-    "005-component-surface-system/036-obsidian-pm-ui-harvest"
+    "005-component-surface-system/036-obsidian-pm-ui-harvest",
+    "005-component-surface-system/037-timeline-gantt-port",
+    "005-component-surface-system/038-board-kanban-port",
+    "005-component-surface-system/039-calendar-parity-port",
+    "005-component-surface-system/040-subtask-tree-port",
+    "005-component-surface-system/041-shared-ui-ux-port"
   ],
   "manual": {
     "depends_on": [],
@@ -283,7 +288,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-02T20:18:07.730Z",
+    "last_save_at": "2026-09-02T22:01:46.533Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -291,10 +296,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:467bc9af7511bd2312d7004006d468ab096becdb6b55b8689698765e1fc55f9a",
+    "source_fingerprint": "sha256:d974d31b5687985d25883dee79729b4d9f9b049906b75562ec61f2f67a387953",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9a762748667d9ff163ec5b9ca9be880a9ffc755445e188c22d070378885c0495",
+      "spec.md": "968e502931a0a01f28981c41cf4bd5f9ab9e6799425bfa3e8fc508a3c911ad50",
       "handover.md": "49360a90ff14f4b3b4c76406e5bbcc46837ade9931b33af0f62de476f6d139cc"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",

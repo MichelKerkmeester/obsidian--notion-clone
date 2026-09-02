@@ -217,4 +217,15 @@ had no known error, the fifth row stays open too; a re-draw must sample both sid
 D4 requires. No such packet is opened yet, and this phase's two open rows do not block opening one —
 they are about how confidently the catalog's provenance can be described, not about whether the
 catalog is usable.
+
+**2026-09-03: two more local-side citations corrected on direct read.** The five phase leaves
+opened from this packet's adoption plan (`037`-`041`) each read their own cited rows directly.
+`styles.css:17126-17133`, cited for the timeline event grid variables, is
+`.db-timeline-group-toggle:hover`/`.is-collapsed`; the grid variables (`--db-timeline-unit-width`,
+`--db-timeline-content-width`) are at `styles.css:16759-16760`. `src/views/toolbar-renderer.ts:2067-2070`,
+cited for the expanded-state helper, has drifted to `closeViewTabPopover`; `setPopoverTriggerState`
+is now at `:2111-2114`. Both are corrected in `research/research.md` with dated notes at the cited
+rows, same style as the 2026-09-02 `mobile-bottom-sheet.ts` correction. **Three local citations have
+now been corrected on read in total; every sampled reference-side citation still holds** — the
+2026-09-02 spot-check's 10 of 10 reference citations were not re-touched.
 <!-- /ANCHOR:log -->

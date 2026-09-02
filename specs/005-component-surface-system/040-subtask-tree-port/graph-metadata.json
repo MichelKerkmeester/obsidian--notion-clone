@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
-  "spec_folder": "005-component-surface-system/036-obsidian-pm-ui-harvest",
+  "packet_id": "005-component-surface-system/040-subtask-tree-port",
+  "spec_folder": "005-component-surface-system/040-subtask-tree-port",
   "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
@@ -11,51 +11,50 @@
   },
   "derived": {
     "trigger_phrases": [
-      "obsidian pm ui harvest",
-      "036 harvest",
-      "dotpm patterns",
-      "steal the ui from obsidian-pm",
-      "phone sheet pattern harvest",
-      "036 plan",
-      "obsidian pm harvest loop dispatch",
-      "reserved research paths 036",
-      "tasks",
-      "036",
-      "obsidian pm harvest tasks",
-      "acceptance criteria"
+      "subtask tree port",
+      "040 subtask",
+      "parentId subtaskIds",
+      "cycle safe reorder",
+      "subtask progress display",
+      "040 plan",
+      "subtask tree port plan",
+      "parentId subtaskIds plan",
+      "040 tasks",
+      "subtask tree port tasks",
+      "040 acceptance criteria",
+      "subtask tree port ac"
     ],
     "key_topics": [
-      "obsidian",
-      "harvest",
-      "dotpm",
-      "patterns",
-      "steal",
-      "obsidian-pm",
-      "phone",
-      "sheet",
-      "pattern",
+      "subtask",
+      "tree",
+      "port",
+      "parentid",
+      "subtaskids",
+      "cycle",
+      "safe",
+      "reorder",
+      "progress",
+      "display",
       "plan",
-      "loop",
-      "dispatch"
+      "tasks"
     ],
     "importance_tier": "normal",
-    "status": "planned",
+    "status": "draft",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "research/research.md",
-      ".opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs",
-      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-      "research/lineages/luna-max-fast-pm-harvest/research/research.md",
-      "research/convergence-report.md",
-      "research/spot-check.md",
-      "src/views/calendar-timeline-renderer.ts",
+      "decision-record.md",
+      "src/data/types.ts",
+      "src/data/row-pipeline.ts",
+      "src/data/manual-order.ts",
       "src/views/board-renderer.ts",
-      "src/views/calendar-renderer.ts",
-      "src/views/mobile-bottom-sheet.ts"
+      "src/views/calendar-timeline-renderer.ts",
+      "tools/lane/css-lane.json",
+      "src/data/computed-evaluator.ts",
+      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md"
     ],
     "entities": [
       {
@@ -89,39 +88,27 @@
         "source": "derived"
       },
       {
-        "name": "research.md",
+        "name": "decision-record.md",
         "kind": "doc",
-        "path": "research/research.md",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
-        "name": "fanout-run.cjs",
-        "kind": "file",
-        "path": ".opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs",
-        "source": "derived"
-      },
-      {
-        "name": "SKILL.md",
-        "kind": "doc",
-        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-        "source": "derived"
-      },
-      {
-        "name": "convergence-report.md",
-        "kind": "doc",
-        "path": "research/convergence-report.md",
-        "source": "derived"
-      },
-      {
-        "name": "spot-check.md",
-        "kind": "doc",
-        "path": "research/spot-check.md",
-        "source": "derived"
-      },
-      {
-        "name": "calendar-timeline-renderer.ts",
+        "name": "types.ts",
         "kind": "code",
-        "path": "src/views/calendar-timeline-renderer.ts",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "row-pipeline.ts",
+        "kind": "code",
+        "path": "src/data/row-pipeline.ts",
+        "source": "derived"
+      },
+      {
+        "name": "manual-order.ts",
+        "kind": "code",
+        "path": "src/data/manual-order.ts",
         "source": "derived"
       },
       {
@@ -131,15 +118,27 @@
         "source": "derived"
       },
       {
-        "name": "calendar-renderer.ts",
+        "name": "calendar-timeline-renderer.ts",
         "kind": "code",
-        "path": "src/views/calendar-renderer.ts",
+        "path": "src/views/calendar-timeline-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "mobile-bottom-sheet.ts",
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "computed-evaluator.ts",
         "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
+        "path": "src/data/computed-evaluator.ts",
+        "source": "derived"
+      },
+      {
+        "name": "SKILL.md",
+        "kind": "doc",
+        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
         "source": "derived"
       },
       {
@@ -149,31 +148,31 @@
         "source": "derived"
       },
       {
-        "name": "Problem Statement Six",
+        "name": "Subtask Tree Port",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Purpose Produce",
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Add",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "File Path",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Change Type",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -191,21 +190,21 @@
         "source": "derived"
       },
       {
-        "name": "Pattern Research",
+        "name": "Overview Port",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "Key Components",
+        "name": "Recommended Level",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       }
     ],
-    "causal_summary": "Six packets in this program (022, 031, 010, 023, 001/027, 011) are actively deciding phone-surface",
-    "created_at": "2026-09-02T19:31:25.064Z",
-    "last_save_at": "2026-09-02T22:01:47.135Z",
+    "causal_summary": "This repo has no subtask/hierarchy concept today: `grep -rn \"parentId\\|subtaskIds\\|hierarchy\" src/data/`",
+    "created_at": "2026-09-02T21:56:57.762Z",
+    "last_save_at": "2026-09-02T21:56:57.762Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,15 +213,15 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "research/research.md"
+      "decision-record.md"
     ],
-    "source_fingerprint": "sha256:78ff7c565c7e8ba3750fef4508c69f99e578ce7bbeea2324ef06aa3a120df216",
+    "source_fingerprint": "sha256:08f8af1029212ec37e8bd662e741107cf94916e35d32305446be6799bde8fb00",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "eadfcf25437076cc0053a0be9ab2cea7d7f287d1022f285d46637a880e469779",
-      "plan.md": "57e15aa0ca5a972362b99ca526c9af00aefc2cfd6bde71a169d43698e17ffd88",
-      "tasks.md": "9150686f4d360796debf351b0f978e2853604cb011fadd8fd1d53e047db9949a",
-      "research/research.md": "9fa3bf2756c4e3cb5917bbb255c74705d1dfe86697d93b4308063b6ca8d39d81"
+      "spec.md": "d0babe4606cf70f2cd0611feac9f7f8c7052634548068e8b9239909e04cdb5e5",
+      "plan.md": "cebc9f277f7a06b25376823e85be46729d3d76f896dd66ea2327fd51b62eef19",
+      "tasks.md": "0ab505c5d721eb9b26d78b58f94b254a489b0f7c1cc62e659b1c5c392222caa2",
+      "decision-record.md": "6aaf40a0bcf315e641f5187af90dbbdc8f585754d613863ee76f44c05a4da6aa"
     },
     "last_active_child_id": null,
     "last_active_at": null
