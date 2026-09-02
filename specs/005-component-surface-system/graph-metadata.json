@@ -74,7 +74,8 @@
     "005-component-surface-system/032-cover-target-scheme-safety",
     "005-component-surface-system/033-list-virtualisation",
     "005-component-surface-system/034-packet-doc-truth",
-    "005-component-surface-system/035-visual-pass-product-defects"
+    "005-component-surface-system/035-visual-pass-product-defects",
+    "005-component-surface-system/036-obsidian-pm-ui-harvest"
   ],
   "manual": {
     "depends_on": [],
@@ -129,8 +130,9 @@
       "repo-rules/spec-tree-layout.md",
       "scratch/device-2026-09-02/view-switcher-sheet-ios.png",
       "scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png",
-      "020-harness-fidelity-repair/acceptance-criteria.md",
-      "review/lineages/cursor-grok46-xhigh-fast/review-report.md"
+      "tools/live/render-assertion-harness.ts",
+      "tools/live/render-assertions.mjs",
+      "specs/005-component-surface-system/026-production-render-assertions/tasks.md"
     ],
     "entities": [
       {
@@ -224,9 +226,15 @@
         "source": "derived"
       },
       {
-        "name": "review-report.md",
-        "kind": "doc",
-        "path": "review/lineages/cursor-grok46-xhigh-fast/review-report.md",
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
         "source": "derived"
       },
       {
@@ -270,31 +278,25 @@
         "kind": "proper_noun",
         "path": "goal.md",
         "source": "derived"
-      },
-      {
-        "name": "Live Preview",
-        "kind": "proper_noun",
-        "path": "goal.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-02T19:28:30.648Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-02T20:03:29.890Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:562d123f0a075dca68711fe815d7fde0765a7e7de969cbd0710c350376daa67d",
+    "source_fingerprint": "sha256:c5aa2936410a9e8f7b921e593b228c94d040f0db7ad2a78cb0217a6474496d01",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "e08783b8ba5ae70bb6885f693fb83f17422207871ef14d02a8517d46069349c9",
-      "handover.md": "b1d2397516fa5a83d112c0f6c8130527611abbd4e778ee8e2b461e1580106350"
+      "handover.md": "61fdbd64580a44ab9675438880c3058f0a2b194683bd2fcb661511d58355bbb4"
     },
-    "last_active_child_id": "005-component-surface-system/006-record-open-target",
-    "last_active_at": null
+    "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
+    "last_active_at": "2026-09-02T20:00:54.844Z"
   }
 }

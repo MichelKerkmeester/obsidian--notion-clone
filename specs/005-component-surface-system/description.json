@@ -18,12 +18,14 @@
     "placement",
     "authority"
   ],
-  "lastUpdated": "2026-08-31T04:32:16.900Z",
+  "lastUpdated": "2026-09-02T20:00:52.717Z",
   "specId": "005",
   "folderSlug": "component-surface-system",
   "parentChain": [
     "public"
   ],
-  "memorySequence": 0,
-  "memoryNameHistory": []
+  "memorySequence": 1,
+  "memoryNameHistory": [
+    "02-09-26_21-00__delegation-order-d14-revised-twice-by-the-operator.md"
+  ]
 }
