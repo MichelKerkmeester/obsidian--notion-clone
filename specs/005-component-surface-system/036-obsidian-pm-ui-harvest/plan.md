@@ -31,8 +31,12 @@ contextType: "general"
 
 A `/deep:research` loop reads `specs/context/obsidian-pm-main` for up to 20 iterations across three
 sequential executor lanes (operator's fixed order, D3), writing its state into `research/` and
-`research/lineages/` inside this packet. The loop's synthesis step produces `research/research.md`,
-the pattern catalog. This plan does not implement product code; it dispatches and verifies the loop.
+`research/lineages/` inside this packet. The loop's synthesis step produces `research/research.md`: a
+per-surface catalog (timeline, board, calendar, subtasks, shared UI) AND a module map — their file to
+our module, dispositioned copied-verbatim-with-MIT-notice / rewritten / dropped, integration seams,
+LOC estimate — closing with an adoption plan ordered timeline → board → calendar → subtasks → shared
+UI, each naming a proposed new phase packet. This plan does not implement product code or the port
+itself; it dispatches and verifies the loop that produces the map and plan for a later phase to act on.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -70,7 +74,8 @@ two-lineage precedent but with three lanes instead of two.
   own `research.md`, `iterations/`, `deltas/`, `deep-research-state.jsonl` and convergence report —
   the shape already on disk under 007's `research/lineages/`.
 - **Synthesis**: a final pass that reads all lanes' `research.md` files and writes the single, merged
-  `research/research.md` catalog this packet's acceptance criteria check.
+  `research/research.md` — per-surface catalog, module map, do-not-borrow list, and ordered adoption
+  plan — this packet's acceptance criteria check.
 
 ### Data Flow
 
@@ -127,7 +132,7 @@ Do not hand-author anything under `research/` — it is the loop's write surface
 node .opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs \
   --spec-folder specs/005-component-surface-system/036-obsidian-pm-ui-harvest \
   --loop-type research \
-  --research-topic "Obsidian PM (dotpm) UI/UX patterns for phone surfaces: bottom sheets and overflow, per-row actions, bulk-selection bar keyboard docking, floating add control and inline editors, i18n plurals, list/board/calendar interaction, motion — each cited to obsidian-pm-main file:line and mapped to the adopting packet among 022, 031, 010, 023, 001/027, 011" \
+  --research-topic "Port obsidian-pm-main's timeline/gantt, board, calendar and subtask surfaces plus its overall UI/UX near one-to-one into this repo, rewritten to sk-code standards and merged with our renderers and data model; our table view, sheets and formulas/rollups/calcs stay ours. Produce a per-surface catalog and a module map (their file:line to our module, disposition copied-verbatim-with-MIT-notice/rewritten/dropped, integration seams, LOC estimate) plus an adoption plan ordered timeline -> board -> calendar -> subtasks -> shared UI, each naming a proposed new phase packet" \
   --fanout-config-json '{"executors":[{"kind":"cli-codex","label":"luna-max-fast","model":"gpt-5.6-luna","reasoningEffort":"max","serviceTier":"fast"}]}' \
   --base-artifact-dir <spec-folder>/research \
   --stop-policy max-iterations

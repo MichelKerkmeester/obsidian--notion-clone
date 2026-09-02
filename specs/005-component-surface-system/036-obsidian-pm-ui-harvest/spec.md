@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: Obsidian PM UI Harvest"
-description: "A research phase that harvests UI/UX patterns from the vendored reference plugin obsidian-pm-main for this program's phone surfaces, maps each pattern to the packet that would adopt it, and dispositions the license."
+description: "A research phase that ports obsidian-pm-main's timeline, board, calendar and subtask surfaces plus its UI/UX near one-to-one, producing a module map (their file to our module) and an ordered adoption plan; our table, sheets and calc/rollup features stay ours."
 trigger_phrases:
   - "obsidian pm ui harvest"
   - "036 harvest"
@@ -13,8 +13,8 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/036-obsidian-pm-ui-harvest"
     last_updated_at: "2026-09-02T00:00:00Z"
-    last_updated_by: "markdown-agent-scaffold"
-    recent_action: "Scaffolded ahead of the research loop; no iteration has run"
+    last_updated_by: "port-rescope"
+    recent_action: "Rescoped to a UI/UX port: timeline, board, calendar, subtasks"
     next_safe_action: "Dispatch the 20-iteration /deep:research loop per plan.md §4"
     blockers: []
     key_files:
@@ -45,21 +45,31 @@ _memory:
 
 ## EXECUTIVE SUMMARY
 
-**The operator named a source and a reason.** `specs/context/obsidian-pm-main` is a vendored,
-project-manager Obsidian plugin the operator called *"great ui / ux we can steal and use"* — 22,833
-lines across `src/components`, `src/ui/primitives`, `src/ui/composites`, `src/modals`, `src/views`
-and `src/store`, none of it read by this program before now.
+**The operator rescoped this packet on 2026-09-02, verbatim**: *"i want to steal as much as
+possible, our tables, sheets advanced features regarding calcs and all that is better but lets try to
+copy their timeline, board, calendar, subtask setup and ui ux almost 1:1"*, and *"The repo source code
+is there so its mostly rewriting to align with our sk code and integrating merging."* This is a PORT,
+not an inspiration harvest: `specs/context/obsidian-pm-main` — 22,833 lines across `src/components`,
+`src/ui/primitives`, `src/ui/composites`, `src/modals`, `src/views` and `src/store` — supplies the
+timeline/gantt, board, calendar and subtask model plus overall UI/UX to be rewritten near one-to-one
+to this repo's standards (`sk-code`, MODULE banners, comment hygiene, lanes, gate) and merged into our
+renderers and data model. Our table view, bottom sheets and formulas/rollups/calcs stay ours — this
+phase records what does NOT get borrowed and why (D5).
 
 **This phase does not build anything.** It runs a 20-iteration `/deep:research` loop against that
-source, harvests patterns for this program's phone surfaces — bottom sheets and overflow, per-row
-actions, the bulk-selection bar's keyboard docking, the floating add control and inline editors, i18n
-plurals, list/board/calendar interaction, motion — and writes a cited catalog mapping each pattern to
-the packet that would adopt it: 022 (selection bar), 031 (sheet lifecycle), 010 (sheet reading), 023
-(record body), 001/027 (menu language), 011 (mobile menus).
+source and writes two linked deliverables into `research/research.md`: (1) a per-surface catalog —
+timeline, board, calendar, subtasks, shared UI — each entry cited to a `file:line`, and (2) a module
+map, their file mapped to our module, dispositioned copied-verbatim-with-MIT-notice / rewritten /
+dropped, naming integration seams and an LOC estimate. The catalog closes with an adoption plan
+ordered timeline → board → calendar → subtasks → shared UI, each item naming a proposed new phase
+packet.
 
-**Key decisions**: patterns are free to borrow, code is not (`goal.md` D1); every entry is cited to a
-`file:line` and an adopting packet (D2); the loop's executor order is fixed by the operator across
-three CLI/model pairs, and a lane's output is a claim until an in-runtime read confirms it (D3).
+**Key decisions**: this is a port, not inspiration-only borrowing — code is rewritten to this repo's
+standards and merged, not summarized into an idea list (`goal.md` D4); our table view, bottom sheets
+and calc/rollup engine are explicitly out of the port and stay ours (D5); every entry is cited to a
+`file:line` on both sides — theirs and, once mapped, ours (D2); the loop's executor order is fixed by
+the operator across three CLI/model pairs, and a lane's output is a claim until an in-runtime read
+confirms it (D3).
 
 **Critical dependencies**: `specs/context/obsidian-pm-main` must remain on disk and unedited for the
 loop's duration — it is read-only reference material, never a write target. The write-containment
@@ -97,10 +107,12 @@ returns zero matches, the same gap 007 found for the embed host in 006.
 
 ### Purpose
 
-Produce a cited, dispositioned catalog of UI/UX patterns from `obsidian-pm-main`, each naming the
-packet that would adopt it and the license terms under which it may be adopted, so that packets 022,
-031, 010, 023, 001/027 and 011 can consult one document instead of six independent reads of a
-22,833-line tree.
+Produce a cited module map and per-surface adoption plan for porting `obsidian-pm-main`'s timeline,
+board, calendar and subtask surfaces plus its UI/UX near one-to-one into this repo — file:line on both
+sides, a disposition per file (copied verbatim with MIT notice / rewritten / dropped), integration
+seams, an LOC estimate, and a do-not-borrow list recording what stays ours (table view, sheets,
+formulas/rollups/calcs) — so each proposed phase packet inherits one document instead of an
+independent read of a 22,833-line tree.
 <!-- /ANCHOR:problem -->
 
 ---
@@ -113,14 +125,14 @@ packet that would adopt it and the license terms under which it may be adopted, 
 - A 20-iteration `/deep:research` loop reading `specs/context/obsidian-pm-main`, writing its state,
   deltas and per-iteration output into `research/` and `research/lineages/` inside this packet — see
   `plan.md` §4 for the reserved paths and the exact dispatch command.
-- A synthesized pattern catalog at `research/research.md`, one row per harvested pattern, each row
-  carrying: the `obsidian-pm` `file:line`, the adopting packet(s), the operator report(s) it answers
-  where applicable, and a license note (borrowed pattern vs. borrowed code, per `goal.md` §3).
-- Coverage of the eight named surface families: bottom sheets and overflow; per-row actions on a
-  phone; the bulk-selection bar and its keyboard docking; the floating add control and inline editors;
-  i18n plurals; list interaction; board interaction; calendar interaction; motion. (Nine families
-  listed; the operator's phrasing groups list/board/calendar as one item — each is tracked separately
-  in the catalog so a family with nothing worth harvesting says so rather than going unmentioned.)
+- A synthesized deliverable at `research/research.md`: a per-surface catalog (timeline/gantt, board,
+  calendar, subtasks, shared UI) AND a module map — their file mapped to our module, dispositioned
+  copied-verbatim-with-MIT-notice / rewritten / dropped, naming integration seams and an LOC estimate
+  — closing with an adoption plan ordered timeline → board → calendar → subtasks → shared UI, each
+  item naming a proposed new phase packet.
+- A do-not-borrow list naming what stays ours and why: table view, bottom sheets, and
+  formulas/rollups/calcs, because ours is already the stronger implementation per the operator's own
+  comparison.
 - A license disposition read from `specs/context/obsidian-pm-main/LICENSE` and stated once in
   `goal.md` §3, referenced rather than re-derived by every catalog row.
 
@@ -153,8 +165,8 @@ packet that would adopt it and the license terms under which it may be adopted, 
 | ID | Requirement |
 |----|-------------|
 | REQ-001 | The loop runs against `specs/context/obsidian-pm-main` for 20 iterations or until it converges, with the reason recorded, writing only into `research/` and `research/lineages/` inside this packet. |
-| REQ-002 | `research/research.md` exists and carries ≥ 20 entries, each with a `file:line` citation, an adopting packet, and a license note. |
-| REQ-003 | Each harvested entry's license note follows `goal.md` §3's borrowed-pattern / borrowed-code distinction; no entry recommends copying code without stating the MIT attribution requirement. |
+| REQ-002 | `research/research.md` exists and carries a module map with ≥ 20 entries, each with a `file:line` citation on both sides (their file, our module once mapped), a disposition (copied verbatim with MIT notice / rewritten / dropped), and an LOC estimate. |
+| REQ-003 | The adoption plan names a proposed new phase packet per surface, ordered timeline → board → calendar → subtasks → shared UI, and the do-not-borrow list names table view, sheets and formulas/rollups/calcs with the reason each stays ours. |
 | REQ-004 | No spec path, phase number, task id or requirement id appears in any code comment this phase or an adopting packet writes as a result of it (Comment Hygiene HARD BLOCK). |
 
 ### P1 - Required (complete OR user-approved deferral)
@@ -173,9 +185,11 @@ packet that would adopt it and the license terms under which it may be adopted, 
 <!-- ANCHOR:success-criteria -->
 ## 5. SUCCESS CRITERIA
 
-- **SC-001**: `research/research.md` exists with ≥ 20 file:line-cited, packet-mapped, license-noted
-  entries.
-- **SC-002**: A 10-of-10 in-runtime spot-check passes against the catalog.
+- **SC-001**: `research/research.md` exists with a per-surface catalog and a ≥ 20-entry module map,
+  each entry file:line-cited on both sides with a disposition and LOC estimate.
+- **SC-002**: The adoption plan names a phase per surface (timeline, board, calendar, subtasks, shared
+  UI) in that order, and the do-not-borrow list names what stays ours and why.
+- **SC-003**: A 10-of-10 in-runtime spot-check passes against the module map's citations.
 <!-- /ANCHOR:success-criteria -->
 
 ---

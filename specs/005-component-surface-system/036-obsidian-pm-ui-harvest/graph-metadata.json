@@ -197,7 +197,7 @@
     ],
     "causal_summary": "Six packets in this program (022, 031, 010, 023, 001/027, 011) are actively deciding phone-surface",
     "created_at": "2026-09-02T19:31:25.064Z",
-    "last_save_at": "2026-09-02T19:31:54.227Z",
+    "last_save_at": "2026-09-02T19:39:33.492Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,11 +207,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:3c54e42cfdd863c3b033071deda015d9101550592c6a6bd754ce972e43a5ddd8",
+    "source_fingerprint": "sha256:0e135b97e10316eda0b395fd9427ea1ab121d2a99903c588a3a80d6546159c15",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b82a0d7529ef3041404ef12f5e142bd44df2553e60dd1e24dbe88d170401e9c2",
-      "plan.md": "5da285b1dfad9de09f6d79c587623ad3019c50227b22482ebae341c3bd901f2e",
+      "spec.md": "041ba8eaa16ab8b0315d9fa86bf3ebe9e3cf8f908abeb70367445e4c5dd5e440",
+      "plan.md": "57e15aa0ca5a972362b99ca526c9af00aefc2cfd6bde71a169d43698e17ffd88",
       "tasks.md": "9150686f4d360796debf351b0f978e2853604cb011fadd8fd1d53e047db9949a"
     },
     "last_active_child_id": null,
