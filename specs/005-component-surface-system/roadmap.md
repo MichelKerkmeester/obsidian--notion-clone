@@ -313,10 +313,17 @@ shortfall, and `spec.md` says do not reopen it.
 
 **The three that are more than a look.** Reports 18-20 — list, board, calendar and timeline freezing
 — are the ones 1.3.9 exists for. Open each view on the real database (**1,000-3,000 rows at 80-100%
-fill**) and time it. The timeline should now open; the list is **expected to still stall**, because
+fill**) and time it. The timeline should now open; ~~the list is **expected to still stall**, because
 at that shape it blocks 2.0-4.9s and the remaining cost is layout over node count, which only
 virtualisation reaches. A list that still hangs is **not** a failed fix — it is the measured,
-recorded state, and saying so in advance is the point of recording the deferral.
+recorded state, and saying so in advance is the point of recording the deferral.~~
+
+*2026-09-02: the deferral was taken up and the warning is withdrawn.* `033-list-virtualisation`
+windowed the list: its `goal.md` records the blocked main thread at **4,748.6ms -> 48.4ms** at 3,000
+rows and node count **225,007 -> 2,184**, flat to 3,400 rows, with the grouped path windowed too.
+So the list is now expected to **open**, and a list that still hangs on the operator's database is
+the finding — which is the one criterion `033` still carries, because every figure above it is a
+bench figure.
 
 **What none of this closes.** The 20-iteration deep review is unstarted, so every number above is
 self-certified against D4. `--font-ui-medium` is unread on a device, so `021` still rests on an
@@ -678,10 +685,17 @@ trade-off that was accepted. What needs correcting is the record, not the band.
 
 ### 7.6 Eight phases say "not started" after shipping
 
-`000`, `001`, `002`, `003`, `004`, `005`, `010` and `013` all carry `completion_pct: 0` with a
+`000`, `001`, `002`, `003`, `004`, `005`, ~~`010`~~ and `013` all carry `completion_pct: 0` with a
 `recent_action` of "Phase cut… not started" or similar, while the lane journal records their edits
 and the working tree contains them. The continuity blocks were written at phase-cut time and never
 advanced. This is the same defect as the old §5 status table, one level down.
+
+*2026-09-02: `010` is struck because it no longer has the defect.* Its `goal.md`, `spec.md` and
+`implementation-summary.md` all carry `completion_pct: 91` and a `recent_action` describing measured
+work, so the phase named here as unadvanced is advanced. **Only `010` was checked for this
+correction.** The other seven are not thereby confirmed: `000`, `001` and `002` are already known to
+carry non-zero figures in their `spec.md` continuity blocks, so this paragraph's "all carry
+`completion_pct: 0`" needs a phase-by-phase re-read before any of them is struck.
 
 ### 7.7 Seven sheet surfaces, or nine
 

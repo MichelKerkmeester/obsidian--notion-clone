@@ -52,9 +52,9 @@
       "tools/storybook/verify-placement.mjs",
       "src/views/card-field-renderer.ts",
       "tools/live/renderer-coverage.json",
+      "src/views/column-delete-confirmation.test.ts",
       "src/views/overlay-stack.ts",
-      "src/views/interaction-scope.ts",
-      "src/views/column-delete-confirmation.test.ts"
+      "src/views/interaction-scope.ts"
     ],
     "entities": [
       {
@@ -124,6 +124,12 @@
         "source": "derived"
       },
       {
+        "name": "column-delete-confirmation.test.ts",
+        "kind": "test",
+        "path": "src/views/column-delete-confirmation.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "overlay-stack.ts",
         "kind": "code",
         "path": "src/views/overlay-stack.ts",
@@ -133,12 +139,6 @@
         "name": "interaction-scope.ts",
         "kind": "code",
         "path": "src/views/interaction-scope.ts",
-        "source": "derived"
-      },
-      {
-        "name": "column-delete-confirmation.test.ts",
-        "kind": "test",
-        "path": "src/views/column-delete-confirmation.test.ts",
         "source": "derived"
       },
       {
@@ -204,7 +204,7 @@
     ],
     "causal_summary": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
     "created_at": "2026-08-29T12:37:20.727Z",
-    "last_save_at": "2026-09-01T10:50:16.288Z",
+    "last_save_at": "2026-09-02T14:17:15.542Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +215,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:525fa58b7058dfafc6142e083c7e0b79f64f5989385e4c1e37309fd138c2f5e2",
+    "source_fingerprint": "sha256:6ee3243a692c045b382629dd860edb1720b8503cb0e9ba355b548bbb080fdf11",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fa444555594fec398e8e88c09c3f5302a643b909455638ee4018880d40ab44df",
+      "spec.md": "35bc6a8bc35d8de77295a9d61351300d8d73a4c6982c767f0ace836c35e6bab6",
       "plan.md": "9930d86cdc3393986c1e6202d8ce05a4d565bfed694d03c6c72909899eb2b873",
-      "tasks.md": "fac4aac0a28947fa323c81ca8e44f3fc646f684158b57e52cc1edea90cb15004",
-      "implementation-summary.md": "8476076c54b564334d204e0c2b724b1bc3e3a2cf7e6c98ee1b1e22c80568fd45"
+      "tasks.md": "34ae36e5a69c827bbfe1d54ae0a7956a86c09a32551e53ac9271f61a770dcc44",
+      "implementation-summary.md": "328331ffe7f1193b1d63ab1543f936350b52fa6fa057a211327d0a4eac068c1f"
     },
     "last_active_child_id": null,
     "last_active_at": null

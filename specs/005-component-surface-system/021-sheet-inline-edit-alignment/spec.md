@@ -82,6 +82,12 @@ still wrong, and it is **open**.
 | **CSS lane** | **Held and released twice.** Three declarations plus one token swap, all under `.db-record-detail-panel.db-mobile-bottom-sheet` |
 
 <!-- /ANCHOR:metadata -->
+
+*2026-09-02: the 2.4px and the Open above conflict with `acceptance-criteria.md`, which records
+AC-006 as **Provisional at 0.9px** against a 1px threshold, with 2.4px as the value the harness
+produced before it declared the host's `--font-ui-medium`; that file holds the measured figure, this
+one does not re-derive it, and the conflict is open until one of the two documents is re-measured
+rather than reconciled by preference.*
 ---
 
 <!-- ANCHOR:problem -->

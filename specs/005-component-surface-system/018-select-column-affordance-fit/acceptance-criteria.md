@@ -47,10 +47,20 @@ is `>= 0` on every surface that renders both.
 
 **Failing first.** Phone: **−14px in a 49px cell**. Desktop: **−17px**.
 
-**Recorded after.** Phone: **+4px in a 65px cell**. Desktop: no button rendered at all, which is what
-production does — the table builds it only on touch.
+**Recorded after.** Phone: **+4px in a 65px cell**. ~~Desktop: no button rendered at all, which is
+what production does — the table builds it only on touch.~~
 
-**State.** Recorded, not reproduced. Settled by re-running the harness and pasting the two numbers.
+**State.** **WITHDRAWN 2026-09-02, mirroring `goal.md`, which un-ticked this criterion the same day.**
+The struck sentence is false on disk: `table-renderer.ts:1006` builds a `db-table-row-drag-handle`
+into the select cell and returns early only when `isTouchRender()`, so the desktop surface renders a
+button *precisely off touch* — the surface this arm called empty. What is empty is the **fixture**:
+the check mounts the `table-mobile` scenario (`verify-placement.mjs:4850`), whose select cell carries
+a `db-table-mobile-move-btn` and no drag handle (`tools/screenshots/scenarios/core.mjs:284-287`), and
+then looks for `.db-table-mobile-move-btn`, a selector the desktop cell was never going to match. The
+threshold says *every surface that renders both*, so the phone arm alone cannot meet it: the desktop
+pair is **unmeasured rather than absent**, in a column `getSelectionColumnWidth()` sizes at 40px off
+touch. *History: this line read "Recorded, not reproduced. Settled by re-running the harness and
+pasting the two numbers", and the phone half was so settled.*
 
 **Negative control.** Not yet run. Restoring the `display` declaration to the touch-floor block must
 take this check red on the desktop surfaces; restoring the 48px column must take it red on the phone.
@@ -59,18 +69,21 @@ Until both have been observed red, this check has not been shown to be connected
 **The desktop arm is withdrawn: it passes on an absence, and the absence is the fixture's.** With no
 button shown, `gaps` is empty and the check reports "no reorder button is shown in 11 select cells,
 so nothing can collide". Meanwhile production's desktop select cell is not empty beside the
-checkbox — `table-renderer.ts:786` calls `setupRowDrag(selectInner, …)`, which builds a
-`db-table-row-drag-handle` into that same flex row on desktop and returns early on touch
-(`:912`). So desktop renders **handle + checkbox** and the fixture renders **move button +
+checkbox — `table-renderer.ts:876` calls `setupRowDrag(selectInner, …)`, which builds a
+`db-table-row-drag-handle` into that same flex row on desktop (`:1006`) and returns early on touch
+(`:1002`). *Line citations re-read on disk 2026-09-02: they were `:786`, `:912` and `:475`, all
+drifted.* So desktop renders **handle + checkbox** and the fixture renders **move button +
 checkbox**, and the pair production actually paints has never been measured for overlap. By the
-declared arithmetic it fits — handle 16px (`styles.css:6306`) and row checkbox 16px (`:19927`) in a
+declared arithmetic it fits — handle 16px (`styles.css:6385`, `width: 16px` at `:6392`) and row
+checkbox 16px (line not re-verified in this pass) in a
 40px column — so this is an unmeasured question, not a live defect, and it should be recorded as the
 first and not the second.
 
 **The phone arm holds, with the duplicated constant named.** The +4px is real stylesheet arithmetic
 over declared boxes. But the column's 64px reaches a device from a **second** source: the renderer
-writes it inline, `getSelectionColumnWidth()` returning `isTouchDevice ? 64 : 40`
-(`table-renderer.ts:475`, applied at `:423-424`), and an inline width beats the class rule. The two
+writes it inline, `getSelectionColumnWidth()` returning
+`this.isTouchRender() && this.renderCanReorder ? 64 : 40` (`table-renderer.ts:564-566`, applied to
+the `<col>` at `:507-510`), and an inline width beats the class rule. The two
 copies agree today — checked, not assumed — and the fixture carries no inline width, so it measures
 only the CSS one. Change the literal in `table-renderer.ts` and the phone column narrows on device
 while this check still reads 65px and +4px. That is phase 015's transcription cost in CSS form.
@@ -85,7 +98,12 @@ block declared `display: inline-flex` at the same specificity as, and later in t
 
 **Recorded after.** `display` removed from the floor block; the floor itself kept.
 
-**State.** Recorded, not reproduced.
+**State.** **WITHDRAWN 2026-09-02, mirroring `goal.md`, which un-ticked this criterion the same day.**
+The check counts `getComputedStyle(button).display !== "none"` on the hand-written `table-mobile`
+fixture, so it answers "is the stylesheet hiding it" and never "did a renderer build one" — and it
+mounts a table fixture, while the threshold names a **list or gallery** row, which nothing here
+renders on either device. *History: this line read "Recorded, not reproduced", which was true of the
+CSS rule and was never true of the sentence above it.*
 
 **Why this is a criterion and not a footnote.** A minimum-size rule decided visibility. That is the
 same class of defect as the duplicate `.db-mobile-reorder-controls` pair recorded in
@@ -98,8 +116,9 @@ threshold says "zero reorder buttons **present** in a rendered desktop list or g
 harness reads `getComputedStyle(button).display !== "none"` on a fixture that **contains the button
 in every row on both devices**. So it measures whether the stylesheet hides it, which is the defect
 that was fixed and is a fair thing to check — but it cannot see the gate the sentence names, the
-`isTouchDevice(this.renderContainer)` at `table-renderer.ts:790` that decides whether the button is
-built at all. Presence and visibility are different questions and the criterion promises the first.
+`isTouchRender()` guard at `table-renderer.ts:880` that decides whether `renderMobileMoveButton`
+(`:881`) builds the button at all — cited as `isTouchDevice(this.renderContainer)` at `:790` until
+the lines were re-read on disk 2026-09-02. Presence and visibility are different questions and the criterion promises the first.
 
 **And "list or gallery" is measured nowhere.** The check loads one scenario, `table-mobile`. No list
 or gallery row is rendered on either device, so two of the three surfaces the threshold names have no
@@ -128,9 +147,10 @@ true when a different phase raised the control sizes for an unrelated reason, an
 the sum. A criterion that reads the comment would still pass today.
 
 **The same trap has a second instance in this criterion, one layer down.** The width is declared
-twice: `styles.css:17607` says 64px for `.is-phone`, and `table-renderer.ts:475` says
-`isTouchDevice ? 64 : 40` and writes it **inline** on the `<col>` at `:423-424`, where it wins the
-cascade. `table-column-layout-sync.ts:101-105` then reads that inline value back and re-pins it, so
+twice: `styles.css:17607` says 64px for `.is-phone`, and `table-renderer.ts:564-566` says
+`this.isTouchRender() && this.renderCanReorder ? 64 : 40` and writes it **inline** on the `<col>` at
+`:507-510`, where it wins the cascade. *Line citations and the condition re-read on disk 2026-09-02;
+they read `:475`, `:423-424` and `isTouchDevice ? 64 : 40`.* `table-column-layout-sync.ts:101-105` then reads that inline value back and re-pins it, so
 the TypeScript literal is what a device gets. They agree today — read and compared, not assumed —
 but the fixture has no inline width, so this criterion measures the CSS copy only. **Change the
 number in `table-renderer.ts` alone and the phone column narrows on device while this check still
@@ -157,10 +177,10 @@ necessary and never sufficient. Operator confirmation is the program's closing c
 
 | Criterion | Producer | Mount | Environment | Negative control | State |
 |---|---|---|---|---|---|
-| AC-1 phone | `verify-placement.mjs` overlap check | `table-mobile` **fixture** select cell | phone | **Observed red.** Control B (phone column back to 48px **and** the pin back to `right: 6px`) takes phone to `-14px`. Restored: `+4px in a 65px cell`, harness exit 0 | Met on the CSS copy of the width; the renderer writes a second one inline |
-| AC-1 desktop | the same check, gap arm | `table-mobile` **fixture** select cell | desktop | **Observed red.** Control A (touch-floor block re-declares `display: inline-flex`) takes desktop to `-17px in a 40px cell` while the phone stays green | **Withdrawn.** Passes on an absence: production's desktop cell holds a drag handle beside the checkbox, which the fixture never contains and the check never measures |
-| AC-2 | the same check, presence arm | `table-mobile` **fixture**, where the button is always in the DOM | desktop | **Observed red.** Under control A the desktop reports `11 cells show both`. Restored, it reports `no reorder button is shown in 11 select cells, so nothing can collide` | **Withdrawn.** Measures `display`, not presence; and no list or gallery row is rendered at all |
-| AC-3 | column width read from the computed style | `table-mobile` **fixture** select column | phone touch branch | **Observed red.** Reverting both of this phase's phone edits — the column to 48px and the checkbox pin to `right: 6px` — gives `-14px`, the recorded figure. At 64px with the 4px pin the cell measures 65px and the gap is `+4px` | Met on the CSS copy. `table-renderer.ts:475` declares the same 64 in TypeScript and writes it inline, where it wins; the fixture has no inline width |
+| AC-1 phone | `verify-placement.mjs` overlap check | `table-mobile` **fixture** select cell | phone | **Observed red.** Control B (phone column back to 48px **and** the pin back to `right: 6px`) takes phone to `-14px`. Restored: `+4px in a 65px cell`, harness exit 0 | ~~Met on the CSS copy of the width; the renderer writes a second one inline~~ **Arm still green; AC-1 as a whole WITHDRAWN 2026-09-02** — the threshold says *every surface that renders both*, and the desktop arm below is unmeasured, so one green arm cannot meet it. The inline second copy stands as written |
+| AC-1 desktop | the same check, gap arm | `table-mobile` **fixture** select cell | desktop | **Observed red.** Control A (touch-floor block re-declares `display: inline-flex`) takes desktop to `-17px in a 40px cell` while the phone stays green | **Withdrawn, and un-ticked in `goal.md` 2026-09-02.** Passes on an absence: production's desktop cell holds a drag handle beside the checkbox (`table-renderer.ts:1006`, early-returning only on `isTouchRender()`), which the fixture never contains and the check never measures |
+| AC-2 | the same check, presence arm | `table-mobile` **fixture**, where the button is always in the DOM | desktop | **Observed red.** Under control A the desktop reports `11 cells show both`. Restored, it reports `no reorder button is shown in 11 select cells, so nothing can collide` | **Withdrawn, and un-ticked in `goal.md` 2026-09-02.** Measures `display` on a table fixture, not presence in a renderer; and no list or gallery row — the two surfaces the threshold names — is rendered at all |
+| AC-3 | column width read from the computed style | `table-mobile` **fixture** select column | phone touch branch | **Observed red.** Reverting both of this phase's phone edits — the column to 48px and the checkbox pin to `right: 6px` — gives `-14px`, the recorded figure. At 64px with the 4px pin the cell measures 65px and the gap is `+4px` | Met on the CSS copy. `table-renderer.ts:564-566` (cited as `:475` until re-read on disk 2026-09-02) declares the same 64 in TypeScript and writes it inline on the `<col>` at `:507-510`, where it wins; the fixture has no inline width |
 | AC-4 | the operator | the operator's phone | device | n/a | Not requested |
 
 Three of the four controls have now been run and observed red, each isolated to the surface it

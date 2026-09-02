@@ -153,6 +153,13 @@ writing one.
    `--stop-policy=max-iterations`, spread across every phase touched. **The codex lane cannot run
    the placement harness** — its sandbox excludes Chrome, and it reports the gate as 13 green where
    it is 16. Findings from it shaped like "the gate is red" need checking here first.
+
+   **2026-09-02: superseded for new work by the parent `goal.md` D14.** The order above stays as
+   the record of what was asked for; it is not the lane to re-run. Cursor carries no xhigh tier
+   for Luna (`cli-cursor/references/providers-and-models.md:69-70`) and codex's Luna ceiling is
+   `max`, not xhigh (`cli-codex/references/providers-and-models.md:51`), so a re-run goes through
+   cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, verified by a fresh in-runtime
+   Opus agent — the only lane that can reach Chrome.
 3. ~~**Extend production-renderer coverage to board and gallery.**~~ **Done.** Coverage is **6 of
    22**: Calendar, Timeline, Board and Gallery were all added, twelve scenarios across both bags.
    The timeline scenario immediately caught a live quadratic at 964 layout reads against a bound

@@ -144,6 +144,18 @@ Until it is decided: **`npm run gate` is this repository's authority and it is g
 child packet passes. Validating a program root reports `SPECDOC_FRONTMATTER_004` and that is expected,
 not a regression to chase.
 
+**2026-09-02: a fourth disposition was tested and rejected.** The Public monorepo's
+`specs/obsidian` is a symlink to this repository's `specs/` (same inode, verified with `stat`), so
+`obsidian/005-component-surface-system` is a real two-segment path to the same packet and satisfies
+the regex without inventing a folder. It was tried on `005`'s three root pointers and validated from
+both roots. `SPECDOC_FRONTMATTER_004` cleared, and `METADATA_DISK_PATH_CONSISTENCY` failed in its
+place — from **both** roots, with `continuity.packet_pointer=obsidian/005-component-surface-system
+expected=005-component-surface-system`, because that rule derives the expected id from the folder
+leaf and never resolves the symlink. The Public-root run was strictly worse: `Errors: 1 Warnings: 1`
+against the repo form's `Errors: 1 Warnings: 0`, the extra warning being `GRAPH_METADATA_CHILD_DRIFT`
+on children stored under the unprefixed id. So the pointer trades one error for another and closes
+nothing; it was reverted. The three dispositions above remain the whole set.
+
 ---
 
 ## 5. WHAT TO UPDATE IF THE TREE MOVES AGAIN

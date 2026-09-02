@@ -141,4 +141,12 @@ left to substitute for. **This packet's one open row is the operator row**, whic
 **What the 13 turned out to be.** Four of them are the modules the sheet and placement work runs
 through. A naming convention was deciding which of this plugin's most-edited surfaces the catalogue
 could see, on a rule with no relationship to whether a module draws anything.
+
+**CI still calls the script this phase renamed away. Found 2026-09-02, open and unfixed.**
+`.github/workflows/gates.yml:64` runs `npm run storybook:coverage` under the step name
+*Shim and stub cover the source*, and `package.json` defines no such script — the rename landed
+in `tools/` and in `package.json` (`shim:coverage`) and nowhere in CI. This is the same defect
+class as D1, one layer out: the lane the *workflow* names is not a lane that runs. Recorded as a
+log note rather than a completion row so the derived figure keeps its meaning — this packet's one
+open **row** is still the operator's. A code wave owns the fix; it is one line in `gates.yml`.
 <!-- /ANCHOR:log -->

@@ -11,6 +11,9 @@ contextType: "planning"
 <!-- SPECKIT_LEVEL: 3 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 
+**Reconciled against evidence on 2026-09-02: 7 ticked with citations, 20 left open (0 not done by
+decision, 2 operator-owned, rest unfound).**
+
 ---
 
 <!-- ANCHOR:notation -->
@@ -32,12 +35,40 @@ never code, CSS values or token scales.
 Stage 1 is a gate, not a task. Until removing the navbar from the harness moves an asserted number by
 more than the 1.35px fallback artefact, no later claim in this spec means anything.
 
-- [ ] **T1** Add `.mobile-navbar` and a real `--safe-area-inset-bottom` to the browser harness — REQ-008.
+- [x] **T1** Add `.mobile-navbar` and a real `--safe-area-inset-bottom` to the browser harness — REQ-008.
       *Evidence to close:* Removing the navbar moves an asserted number by more than the 1.35px fallback artefact
-- [ ] **T2** Delete the hardcoded `--db-mobile-sheet-bottom: 0px` from `tools/screenshots/runtime-vars.css:43` — REQ-008.
+      **Evidence:** `tools/storybook/verify-placement.mjs:516-533` declares `.mobile-navbar` from
+      the installed application stylesheet — `position: fixed`, `height: 80px`, full width, no
+      z-index — and `:533` sets `--safe-area-inset-bottom: 34px` on the phone body. The gate is
+      `:3903` *"removing the navbar from the harness moves an asserted number"*, ticked on
+      `goal.md` criterion 6: bounds end at **730** with the navbar and **760** without, a **30px**
+      move against the 1.35px fallback artefact. **Watched red** with the positioner's
+      `navbarHeight` pinned to the fallback: `a move of 0px`.
+- [x] **T2** Delete the hardcoded `--db-mobile-sheet-bottom: 0px` from `tools/screenshots/runtime-vars.css:43` — REQ-008.
       *Evidence to close:* Captures reflect the computed offset; the pre-deletion capture and the post-deletion capture differ
-- [ ] **T3** Drive the real positioner in the phone checks instead of `applySheetChrome` alone — REQ-008.
+      **Evidence:** deleted — `grep -n db-mobile-sheet-bottom tools/screenshots/runtime-vars.css`
+      matches only the removal note at `:101`, which records what the pin did:
+      *"computed from the visible bounds; pinning 0px forced the right answer"*. The file's stated
+      rule is now *never assign a property the runtime also assigns*, because *"a harness that
+      supplies the answer cannot detect a wrong one"*. The runtime is the sole writer:
+      `src/views/popover-position.ts:354`
+      `panel.style.setProperty("--db-mobile-sheet-bottom", ...)`, read by `styles.css:196` and
+      `:209`. `goal.md`'s harness-dependence audit records the same fact —
+      *"`--db-mobile-sheet-bottom` is no longer pinned, so that supply is spent"*.
+      **Not closed on a capture pair:** no pre/post capture diff is recorded on disk, so the
+      capture half of this row's stated evidence rests on the removal note rather than on two
+      images.
+- [x] **T3** Drive the real positioner in the phone checks instead of `applySheetChrome` alone — REQ-008.
       *Evidence to close:* Editing the bounds branch changes an assertion; today it changes nothing
+      **Evidence:** the phone section calls the shipped `positionToolbarPopover` directly
+      (`tools/storybook/verify-placement.mjs:651`) and reads the shipped
+      `getVisiblePopoverBounds` at `:583`
+      *"phone bounds are derived from the navbar on the page, not the hardcoded fallback"*,
+      which asserts `bounds.bottom == viewport - navbar - inset` against the `viewport - 50`
+      a fallback-derived bound would give. The bounds branch is now load-bearing: pinning the
+      positioner's `navbarHeight` to its fallback turns the `:3903` ablation to `a move of 0px`
+      (`goal.md` criterion 6), where the file's own note at `:554-555` records that it previously
+      changed no asserted number.
 - [ ] **T4** Prove each phone check can fail — REQ-008.
       *Evidence to close:* Per check: subject deleted from the harness DOM, asserted number moved
 
@@ -75,12 +106,26 @@ more than the 1.35px fallback artefact, no later claim in this spec means anythi
       *Evidence to close:* A surface declaring `sheet` that does not reach the contract fails at build, not silently at `0px`
 - [ ] **T14** Route `DbModal` and the positioner through the one contract — REQ-004.
       *Evidence to close:* `--db-mobile-sheet-bottom` has exactly one writer; today it is `popover-position.ts:115` and `DbModal` never writes it
-- [ ] **T15** Portal phone sheets to `document.body` — REQ-001.
+- [x] **T15** Portal phone sheets to `document.body` — REQ-001.
       *Evidence to close:* `elementFromPoint(centreX, navbarCentreY)` returns the sheet; today it returns `DIV.mobile-navbar` at `z-index: 9999`
+      **Evidence:** `src/views/mobile-bottom-sheet.ts:141` `setSheetMount` appends the sheet to
+      `document.body`, asserted at `tools/storybook/verify-placement.mjs:6586`
+      *"the agreement is the portal, not the ancestor each was built under"* — nine surfaces built
+      under nine wrappers all mount on `body`. The hit test is `:6640`
+      *"a press at the navbar's centre reaches the sheet, not the navbar"*: the press lands on
+      `div.db-record-detail-panel…db-mobile-bottom-sheet`, navbar `z-index auto`, sheet 1000.
+      **Watched red** by restoring the harness's invented `z-index: 9999`: the press lands on
+      `div.mobile-navbar`. Ticked on `goal.md` criterion 1.
 - [ ] **T16** Delete the `is-phone` branch at `popover-position.ts:289-294`, and the `50` fallback at `:291` with it — REQ-002.
       *Evidence to close:* Branch absent from source; sheet bottom offset reads `0px`, not 49px
-- [ ] **T17** Build the sheet scrim — REQ-006.
+- [x] **T17** Build the sheet scrim — REQ-006.
       *Evidence to close:* Scrim rect covers the full viewport including the navbar band; none exists today
+      **Evidence:** `.db-mobile-sheet-scrim` exists and is asserted at
+      `tools/storybook/verify-placement.mjs:6649`
+      *"the scrim covers the whole viewport, navbar band included"* — **scrim box `0,0 390x844`
+      against a 390x844 viewport**, ticked on `goal.md` criterion 5 — with `:6679` (25% black,
+      `pointer-events: auto`), `:6681` (blocks the app behind the sheet) and `:6683` (does not
+      steal the grab band). A reacting control is kept at `:2935`.
 - [ ] **T18** Confirm the portalled sheet is tokened — REQ-001.
       *Evidence to close:* `--db-radius-lg` resolves non-empty on the body-mounted node — this is `000`'s token root, verified here rather than assumed
 
@@ -101,12 +146,23 @@ more than the 1.35px fallback artefact, no later claim in this spec means anythi
 
 Stage 6 — prove it where the user stands.
 
-- [ ] **T22** Navbar hit test in `tools/storybook/verify-placement.mjs` — REQ-001.
+- [x] **T22** Navbar hit test in `tools/storybook/verify-placement.mjs` — REQ-001.
       *Evidence to close:* `vitest` is `environment: "node"` with no jsdom, so the assertion lives here, not in a unit test
+      **Evidence:** `tools/storybook/verify-placement.mjs:6640`
+      *"a press at the navbar's centre reaches the sheet, not the navbar"*, a real
+      `document.elementFromPoint` at the navbar centre, asserting the navbar's height is the
+      host's 80px so the check cannot pass against an invented one. Ticked on `goal.md`
+      criterion 1.
 - [ ] **T23** Geometry assertion for both mechanisms — REQ-004.
       *Evidence to close:* One asserted number covering modal and anchored sheets; today they read 0px and 49px
-- [ ] **T24** Keyboard assertion via a reduced `visualViewport` — REQ-004.
+- [x] **T24** Keyboard assertion via a reduced `visualViewport` — REQ-004.
       *Evidence to close:* Focused field rect inside the visible rect
+      **Evidence:** `tools/storybook/verify-placement.mjs:1029-1085` shrinks
+      `visualViewport.height` and dispatches its `resize` with `--keyboard-height` **unset**, so
+      the arm is not answered by writing the host's variable — `:1075`
+      *"the sheet clears a keyboard no host reported"*, `:1082` the same for the selection bar,
+      `:1102` the return to the floor. Ticked on `goal.md` criterion 4, *"Met on both arms"*, and
+      recorded in the harness-dependence audit as one of the three exposures now spent.
 - [ ] **T25** Phone captures **with a navbar present** — REQ-008.
       *Evidence to close:* Capture set regenerated with the navbar in frame, and a human reviewed the changed PNGs
 - [ ] **T26** Storybook sheet states at the production mount point — REQ-007.

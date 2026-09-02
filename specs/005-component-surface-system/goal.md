@@ -10,14 +10,15 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Goal audit: report denominators and blockers re-derived"
+    last_updated_at: "2026-09-02T12:00:00Z"
+    last_updated_by: "delegation-policy"
+    recent_action: "Recorded the external-delegation policy as D14"
     next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
       - "Every fix is measured on a bench; 1 of 27 reports is confirmed on the operator device"
       - "Every fix is bench-measured; none of the six renderers is asserted against a live Obsidian host"
       - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on the operator device"
+      - "CI runs npm run storybook:coverage, a script package.json no longer defines (.github/workflows/gates.yml:64)"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -72,6 +73,7 @@ production renderer**. One now does (`026`).
 | D11 | One phase holds `styles.css`, released only after a recapture a person looked at. |
 | D12 | Prefer **parity**: a harness cannot fake one without giving two independent producers the same wrong answer. |
 | D13 | One completion figure per phase, **derived** from its `goal.md` criteria checklist — never judged, never two. Status carries shipped/verified/confirmed; a percentage cannot. `roadmap.md` §3.1-3.2. |
+| D14 | **External delegation, decided 2026-09-02.** Implement, debug and review through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, `service_tier=fast`, `--sandbox workspace-write`; cli-opencode only when the task itself needs the browser; fallback cli-devin on `deepseek-v4-flash-max` (that exact id, its effort baked in), read-only audits first. Every external result is verified by a fresh in-runtime Opus agent that runs `npm run gate` and `validate.sh --strict` itself — a delegate's report is a claim, not a result (D4). **No browser number from a sandboxed or cloud lane is evidence**, the lesson the queued-lane note in §4 already paid for. Model ids are passed exactly as each transport spells them — codex `gpt-5.6-luna`, devin `deepseek-v4-flash-max`, which do not share a spelling — never a near-miss. The orchestrator never runs a sub-agent on Fable. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -128,6 +130,14 @@ resolve them silently.
 <!-- ANCHOR:log -->
 
 ### Queued: a 20-iteration deep review, two lanes, no early convergence
+
+**2026-09-02: D14 supersedes this order for new work.** What follows stays as the record of what
+was ordered, not the lanes to use next. Neither half is orderable as written: Cursor's allowlist
+carries no xhigh tier for Luna at all — only `gpt-5.6-luna-max` and its `-fast` variant
+(`cli-cursor/references/providers-and-models.md:69-70`) — and codex's ceiling for Luna is `max`,
+not xhigh (`cli-codex/references/providers-and-models.md:51`). Verification moves to a fresh
+in-runtime Opus agent because that is the only lane that can reach Chrome, for the reason the
+next paragraph gives.
 
 Ordered by the operator once the build work lands. Ten iterations on
 `cursor-grok-4.6-xhigh` through cli-cursor, ten on `gpt-5.6-luna` at
@@ -259,7 +269,7 @@ rule exists to abolish — re-deriving it is a change to three documents and is 
 | ~~22 of 29 children fail `--strict`~~; the parent passes | Measured per folder, not inferred from the recursive tail. The rule is **level-driven, not marker-driven**: a folder's level decides which docs are validated and which anchors their template renders. The acceptance-criteria body sits behind an `IF level:2,3,3+` guard, so at Level 1 it renders empty and the file is exempt — which is why `018` and `019` pass carrying no marker at all, and why removing a marker from a Level 3 folder trades one error for another rather than clearing it. So `goal.md` costs `000`-`009` two errors each, and `spec.md` costs `010`-`017` the same two — I had recorded only the first half and written that `010`-`026` "add nothing", which the scan refutes. `acceptance-criteria.md` carries no marker in 12 folders and that is free: `018` and `019` validate clean with none. `024` and `027` are each missing `plan.md` and `tasks.md`; `028` has no marker on any of its five docs. Content is sound throughout — this is conformance, not rewriting. **This row is stale and was re-measured: `000`, `010` and `018` all pass today. A fresh reviewer found only `022` and `024` failing, both from a metadata regeneration this session skipped after editing them, and both now at Errors: 0.** The count moved because the tree moved; re-derive it rather than citing it |
 | **The rows only a device can close are now one list, derived** | Every phase ends with a row nothing here can close, recorded one per packet across thirty folders — the right place to keep them and the wrong place to act on them. `operator-checklist.md` gathers them: **42 rows across 30 phases**, with 5 phases carrying none. It invents nothing — a row appears because it is unticked in its own `goal.md`, and each figure is a count of that packet's checkboxes. **Generated, and guarded**, because shipping a generated file nobody regenerates would add an instance of the doc-truth failure this program exists to catch: `build-operator-checklist.mjs --check` regenerates in memory and fails the gate on drift, comparing everything but its own derived date so it does not go red each morning for saying nothing. Control: ticking one row in the generated copy fails it. |
 | **The visual pass found three defects, and two of them were the harness** | Read rather than counted. `field-status-colors` and six siblings clipped a long note name mid-word with no ellipsis, because the fixtures built `<a>bare text</a>` where the renderer builds `.db-file-title-inline > .db-file-title-name` and the ellipsis lives on that inner span. `chrome-chart-options-popover` rendered **five rows as single clipped glyphs** — the fixture supplied icon markup without `has-current-icon`, the stylesheet hides the icon without it, and a hidden element is not a grid item, so every child slid one track left and the label landed in the icon's 18px column. **24 captures were showing defects the product does not have.** Both now carry parity checks with controls. The third is real: on a phone the calendar week grid gives each event title 16px, and the two-line clamp stacked single glyphs — fixed by giving width the same compact treatment duration already had. **What the pass did NOT find is also evidence:** a sweep of all 120 fixture-device combinations reports 0 squeezed text nodes, and that detector reports 10 with the chart control armed. **A fourth and fifth were the same shape:** the utilities popover drew one glyph for *Save computed results* and *Refresh database* where the toolbar draws a recalculate badge and a plain refresh, and the timeline options drew the dotted calendar for *Year display* where the renderer draws the plain one. A sixth pair was **rejected** — the calendar's start-date and first-day rows share an icon in the renderer too, and sit under different section headings, so flagging it would ask the fixture to disagree with the product. **And a spacing sweep corrected itself:** 118 off-scale padding and gap values fell to **78** once `theme.css`'s host-control baseline was transcribed from the installed application stylesheet instead of recalled — it claimed to mirror the host while carrying `5px 10px` on a button where the host resolves `4px 12px`, so 40 of the 118 were the harness's own invention being counted as the plugin's drift. The remaining 78 are real 3px half-steps in dense surfaces, recorded rather than refactored because each is plausibly deliberate and none has a demonstrated defect behind it. **Three product defects came out of it, all one fault:** a stated width with padding outside it. `db-empty-hero` is `width: min(100%, 780px)` with 28px padding and overflowed its pane by **26px**; the two inline cell editors are `width: 100%` over the host's input padding and overflowed the cell they edit by **24px**; the invalid-events modal overflowed by its own border. All four are `box-sizing: border-box` now. **Three overhangs were characterised and left:** the toolbar badge is `position: absolute` at `left: 9px` on a button corner, the board subgroup header carries an explicit `margin-right: -8px`, and the list group header reaches the same 8px bleed through content-box — so the pair is visually consistent through two different mechanisms, and changing one alone would break the alignment. **The harness had to be repaired to see any of it:** 60 scenarios declare a `width` and `capture.mjs` read it nowhere, so every element capture sized to `max-content` and a percentage width had nothing honest to resolve against. Honouring it then erased a real responsive difference — 392 declared against a 402px phone made two device captures identical — and `capture-device-parity` caught that as *newly identical*, which is the reading that rule exists for. The declared width frames the desktop shot only. |
-| **Six task lists never advanced while their goals nearly finished** | Measured 2026-09-02: `001` 7/8 goal against **0/67** tasks, `002` 6/7 against **0/65**, `004` 7/8 against **0/28**, `005` 6/7 against **0/36**, `006` 6/7 against **0/32**, `025` 9/10 against **1/21** — **248 unticked tasks in phases whose goal checklist is 86-90% complete.** This is not a cosmetic gap: `roadmap.md` §3 makes the *In progress — N of M tasks* fraction mandatory and derives it from `grep -c '^- \[x\]' tasks.md`, so for these six the status vocabulary cannot be applied at all. **Recorded rather than cleared, deliberately.** Ticking 248 boxes to make the fraction computable would assert per-task evidence nobody gathered, which is the exact failure this program exists to catch — and it would be far harder to detect afterwards than the zero is now. `030` and `031` were reconciled task-by-task against the tree in this session and are what that costs: each tick carries what closed it, and three of `030`'s were marked *gated* rather than done because the decision they wait on defers them. |
+| **Seven task lists never advanced while their goals nearly finished** | Measured 2026-09-02: `001` 7/8 goal against **0/67** tasks, `002` 6/7 against **0/65**, `004` 7/8 against **0/28**, `005` 6/7 against **0/36**, `006` 6/7 against **0/32**, `025` 9/10 against **1/21**, and `022` 6/8 against **0/17** (added 2026-09-02) — **265 unticked tasks in phases whose goal checklist is 75-90% complete.** This is not a cosmetic gap: `roadmap.md` §3 makes the *In progress — N of M tasks* fraction mandatory and derives it from `grep -c '^- \[x\]' tasks.md`, so for these seven the status vocabulary cannot be applied at all. **Recorded rather than cleared, deliberately.** Ticking 265 boxes to make the fraction computable would assert per-task evidence nobody gathered, which is the exact failure this program exists to catch — and it would be far harder to detect afterwards than the zero is now. `030` and `031` were reconciled task-by-task against the tree in this session and are what that costs: each tick carries what closed it, and three of `030`'s were marked *gated* rather than done because the decision they wait on defers them. |
 | `000` declares Planned over nine checked tasks | `spec.md` declares Status Planned; `tasks.md` carries nine checked implementation tasks and the lane journal independently records the acquire, the token-root edit and a release "with a debt". Work started, so the contract also wants an implementation summary. Recorded, not resolved: writing one means asserting what `000` delivered without having verified it |
 
 ### `007` cannot reach Errors: 0, and should not be made to
@@ -312,4 +322,21 @@ an empty **data** cell — rather than a string that correlates with it.
 
 `SURFACE_PHASE=<phase> npm run gate` runs 13-14 checks. `npm run replay` re-asserts 8 results against
 their recorded pre-fix numbers. Lane: `tools/lane/css-lane.json`.
+
+### DONE row 7, tested against the symlinked Public path and still open
+
+Row 7 wants this parent at `Errors: 0`, and today it fails on one rule only:
+`SPECDOC_FRONTMATTER_004`, three times, because `packet_pointer: "005-component-surface-system"` is a
+single segment where the kit's regex wants two. A candidate fix was tested on 2026-09-02 and
+rejected. The Public monorepo's `specs/obsidian` is a symlink to this repository's `specs/` — same
+inode, checked with `stat` — so `obsidian/005-component-surface-system` names this exact packet in two
+segments without inventing a folder. Set on all three root pointers, it cleared
+`SPECDOC_FRONTMATTER_004` and immediately failed `METADATA_DISK_PATH_CONSISTENCY` instead, from both
+roots: `continuity.packet_pointer=obsidian/005-component-surface-system
+expected=005-component-surface-system`. That rule takes the expected id from the folder leaf and does
+not resolve the symlink, so no pointer spelling satisfies both rules at once. Validated from the
+Public root the result was worse still — `Errors: 1 Warnings: 1` against the repo form's
+`Errors: 1 Warnings: 0` — the extra warning being `GRAPH_METADATA_CHILD_DRIFT`, since `children_ids`
+are stored under the unprefixed id. The change was reverted; the pointers read as before. Row 7 stays
+unticked and its disposition remains the operator's, per `repo-rules/spec-tree-layout.md` §4.
 <!-- /ANCHOR:log -->

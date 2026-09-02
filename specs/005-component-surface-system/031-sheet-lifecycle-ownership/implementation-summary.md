@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Sheet Lifecycle Ownership"
-description: "The backdrop leak and the group sheet's vanishing grab bar are fixed and gated; the view sheet, the dead handles and flick dismissal remain."
+description: "The backdrop leak, the group sheet's vanishing grab bar, the portalled view sheet, the dead handles and flick dismissal are all fixed and gated; five of six criteria are met and the operator's device pass is the sixth."
 trigger_phrases:
   - "031 implementation summary"
   - "sheet teardown shipped"
@@ -44,7 +44,7 @@ _memory:
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
 | **Status** | In progress — 5 of 6 criteria met. Everything implementable is in; the last row needs the operator's device |
-| **State** | Committed; gate 18 green, exit 0. Not device-confirmed |
+| **State** | Committed; gate 18 green, exit 0 **at the time — a past run**. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -64,7 +64,8 @@ are the ones that leak, so a fix requiring them to call something new would have
 of them and would break again with the next producer. A caller that only does `.remove()` is now
 correct by construction.
 
-**A new gate lane, `sheet-teardown`**, takes the gate from 16 lanes to 17.
+**A new gate lane, `sheet-teardown`**, takes the gate from 16 lanes to 17. *(Lane counts in this
+section are the roster as this phase left it; `tools/gate.mjs` declares 25 lanes as of 2026-09-02.)*
 
 ### The group sheet keeps its bar (REQ-002)
 
@@ -199,7 +200,7 @@ packet's own lens turned on its own instrument.
 | The compounding failure is gone | A detached leak no longer blocks a later correct teardown |
 | Types | `npx tsc --noEmit` exit 0 |
 | Tests | `npx vitest run` — 531 passed, no reduction |
-| Gate | `npm run gate` — **18 green, exit 0**, read from `$?` |
+| Gate | `npm run gate` — **18 green, exit 0**, read from `$?`. *A past run: the gate carries **25** lanes today (`tools/gate.mjs`), so 18 is the roster of 2026-08-31 and not the current one* |
 | Captures | Recaptured and read; the owned menu sheet renders unchanged |
 | The rebuild check discriminates | Observed **red first** on both halves: bar `before: true, after: false`, and the drag could not be staged. Green with the fix, and a real 120px pointer drag dismisses the rebuilt sheet |
 | The rebuild check's premise holds | Its two mechanism cases (emptying destroys the bar; re-asserting restores it) stay green either way, so a green producer case cannot be a vacuous one |
@@ -224,6 +225,14 @@ found the panel, the sheet never portalled and the case proves nothing.
 
 **Nothing is device-confirmed.** The operator reported this as the app freezing on close; that
 report closes when they say it no longer does, and not before.
+
+*2026-09-02: this document's description said "the view sheet, the dead handles and flick dismissal
+remain", and none of the three does.* `goal.md` records the view sheet met (`dismissPanel` returns
+true against a real open sheet), the dead handles met by construction (`hasSheetDrag`,
+`src/views/mobile-bottom-sheet.ts:342`) and the flick met at a measured threshold — **five of six
+criteria**, which the Status row above already said. What does remain is finding #5, the
+container-wide keyboard inset, which is a deliberate non-fix and not one of the six criteria, and
+the operator's device pass, which is the sixth.
 <!-- /ANCHOR:limitations -->
 
 ---

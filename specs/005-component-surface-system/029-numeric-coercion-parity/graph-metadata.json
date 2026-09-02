@@ -199,7 +199,7 @@
     ],
     "causal_summary": "Two renderers read the same stored value differently, and the table row is the wrong one",
     "created_at": "2026-08-30T18:48:20.649Z",
-    "last_save_at": "2026-09-02T09:05:03.921Z",
+    "last_save_at": "2026-09-02T14:09:53.015Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,13 +210,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4aad97a590098aa2deeed53ef0ed3be6137b0efdc9cda7058ed9252d2ae220da",
+    "source_fingerprint": "sha256:a2bd850b7d2c7ba6bd904406ab54824ee4beb47e52efdf60be91ad55734b2025",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "23b7565a5e4454d8baa03b70078ffbab44195318169a131a3a45f5f7d0343746",
       "plan.md": "ba46f3baad1f45c7d0bfde1f82fcf7bb3df76b6f98af002e844c83a2283cdb08",
       "tasks.md": "e2f2d55bb31139c94c02426a62cfe1edf819fdc23519039787700d1a6c8fee5d",
-      "implementation-summary.md": "6f690e312014f39286b719a84d1cfeb0c773a3e2bedfb617c4d92421a71d137e"
+      "implementation-summary.md": "97c28680ed153815131947ab6e53b6cc264b96e074d3b454abee8b5efb5e0d46"
     },
     "last_active_child_id": null,
     "last_active_at": null

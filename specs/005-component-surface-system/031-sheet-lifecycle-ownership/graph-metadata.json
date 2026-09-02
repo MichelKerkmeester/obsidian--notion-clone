@@ -47,6 +47,7 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
+      "tools/gate.mjs",
       "tools/live/sheet-teardown.mjs"
     ],
     "entities": [
@@ -84,6 +85,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
         "source": "derived"
       },
       {
@@ -187,17 +194,11 @@
         "kind": "heading",
         "path": "acceptance-criteria.md",
         "source": "derived"
-      },
-      {
-        "name": "EVIDENCE STANDARD",
-        "kind": "heading",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-09-02T09:09:54.588Z",
+    "last_save_at": "2026-09-02T14:09:53.929Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:569b425dd54da535cc7db0ee541e6c27c39071e2cf2633341e25ab0ded761c13",
+    "source_fingerprint": "sha256:46fba7e36c64b49be87ee98e50bccdcd53390d03a565b69ad1338fac1c629062",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "bfb541c98999540dd1bba0e0fafba417ab58f31f8d03f8ec661531d6fbd14f72",
       "plan.md": "b3552998690b88665d02c8ad2eb710e0e825a9f785f4400e22c8405ff78c553c",
       "tasks.md": "d8badbce938dbd7eb186d523064f92a5148f6a849b5e5f255882073781cc7c76",
-      "implementation-summary.md": "bf67e67c871ccf1289a71d999a5f37013bd86b4d7c65c7dcee15c5398f9e2e4d"
+      "implementation-summary.md": "0a3632d636cb544ef2e4e67c13a5d0c6ded654ad65cced78cdf9bd30a78509a8"
     },
     "last_active_child_id": null,
     "last_active_at": null

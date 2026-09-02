@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-002-summary"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 86
     open_questions:
       - "Does the duplicate phone rule at styles.css:17413 get collapsed, or declared as intentional"
     answered_questions:
@@ -47,7 +47,7 @@ _memory:
 | **Spec Folder** | 002-properties-panel |
 | **Completed** | Not complete — In Progress |
 | **Level** | 2 |
-| **Status** | **In Progress.** 0 of 65 tasks checked; 0 of 12 acceptance criteria Met |
+| **Status** | **Shipped + verified, awaiting device — 6 of 7 criteria.** 0 of 65 tasks checked; 0 of 12 `acceptance-criteria.md` rows Met. *Moved from **In Progress** 2026-09-02 to match `spec.md`, which §3.1 and the cross-doc status rule both require; the fraction is `goal.md`'s checklist, which is what §3.2 derives from, and the two zeros beside it are unchanged.* |
 | **State** | The row grid shipped and re-asserts green today. The information architecture — what the row shows, where delete lives, the height cap — has not started |
 
 **This document exists because the phase's continuity block said `completion_pct: 0` and "Phase cut
@@ -152,7 +152,7 @@ single viewport pair rather than across 3/12/40 properties, step 2 has **no sign
 | Resolve the phone pair by matching **order**, not by collapsing to one rule | The recorded defect was track order, not track count, and the phase's own `goal.md` says so: *"The rules' real conflict is track order, not count. That distinction changes the fix."* The collapse T-023 asks for was left undone — recorded as Limitation 1 rather than claimed |
 | Believe the static trace over the measurement | They disagreed about whether the 96px track sat on the checkbox or the type icon. With the drag handle hidden the third laid-out child is the type icon, which the fix confirmed |
 | Report **no** criterion Met | Two `replay` entries pass with real pre-fix numbers, but neither meets its criterion's stated threshold. The gap is named per row below rather than rounded up |
-| Set `completion_pct` to 40, not 0 and not 100 | 0 is refuted by a landed, independently re-asserted fix; 100 is forbidden by D3 with nothing operator-confirmed, and half the phase — the information architecture — has not started |
+| ~~Set `completion_pct` to 40, not 0 and not 100~~ | **Superseded 2026-09-02.** The judgment was sound and the figure is no longer judged: `roadmap.md` §3.2 derives it from `goal.md`'s checklist, **6 of 7 rows ticked = 86**, and every continuity block in this folder now carries that — 43 was the last judged value. Kept because the reasoning records why it was never 0 or 100: 0 is refuted by a landed, independently re-asserted fix; 100 is forbidden by D3 with nothing operator-confirmed, and half the phase — the information architecture — has not started |
 <!-- /ANCHOR:decisions -->
 
 ---

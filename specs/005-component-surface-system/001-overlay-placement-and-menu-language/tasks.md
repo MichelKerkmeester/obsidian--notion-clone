@@ -11,6 +11,9 @@ contextType: "planning"
 <!-- SPECKIT_LEVEL: 3 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 
+**Reconciled against evidence on 2026-09-02: 4 ticked with citations, 63 left open (1 not done by
+decision, 3 operator-owned, rest unfound).**
+
 ---
 
 <!-- ANCHOR:notation -->
@@ -31,6 +34,11 @@ number has not shown the check can distinguish.
       [`spec.md`](spec.md) §2, before opening any source file.
 - [ ] **T-001** Confirm `000-surface-contract-and-truthful-harness` has landed and the factory
       stamps `data-db-surface`. This phase cannot start otherwise.
+      **2026-09-02 — not done by decision.** The factory was deleted rather than wired
+      (`e1d9df9`, `git show --name-status e1d9df9` reports `D src/views/surface.ts`;
+      `implementation-summary.md` Key Decisions, "Delete the factory rather than wire it"), so
+      nothing stamps `data-db-surface`: `grep -rn data-db-surface src` returns no match, the only
+      reader being `tools/live/surface-census.mjs:101`. The premise is retired, not met.
 - [ ] **T-002** Build the trigger census of `spec.md` §4: trigger, role, anchor, mount, options, for
       every toolbar button, header affordance, cell affordance, context menu and submenu, desktop
       and phone.
@@ -50,8 +58,14 @@ number has not shown the check can distinguish.
       popped-out window. One authority, expressed as roles, not as numbers at call sites.
 - [ ] **T-011** [REQ-002] Define per-role sizing. Menu role sizes from 292px. Record which of the 15
       bespoke call sites map onto an existing role and which justify a new one.
-- [ ] **T-012** [REQ-002] Establish that the 520px default is unreachable — no code path may produce a
+- [x] **T-012** [REQ-002] Establish that the 520px default is unreachable — no code path may produce a
       four-item menu at that width.
+      **Evidence:** `src/views/popover-position.ts:114` reads
+      `options.preferredWidth ?? COMPACT_MENU_POPOVER.preferredWidth ?? 292`, and
+      `COMPACT_MENU_POPOVER.preferredWidth` is 292 (`popover-position.ts:48`);
+      `grep -n 520 src/views/popover-position.ts` returns one line, the comment at `:110`
+      recording the retired default. Landed at `885a8dc`
+      *"fix(views): panels declare their width instead of inheriting an absurd one"*.
 - [ ] **T-013** [REQ-003] Confirm the bounds definition against `getVisiblePopoverBounds`
       (`popover-position.ts:271`), including the popped-out-window fallback branch that nothing
       currently exercises.
@@ -69,8 +83,15 @@ number has not shown the check can distinguish.
       the cheapest proof the substitution preserves behaviour.
 - [ ] **T-022** [REQ-004] Retire the remaining `render*Row` methods and the row-class grammars they emit
       in `toolbar-renderer.ts`, one commit per grammar so a regression bisects to a grammar.
-- [ ] **T-023** [REQ-004] Make a row carry its own layout, so its computed layout survives a change of
+- [x] **T-023** [REQ-004] Make a row carry its own layout, so its computed layout survives a change of
       container. The container-keyed `display: flex` is retired.
+      **Evidence:** `styles.css:356` declares `min-height`, `border-radius` and cursor on
+      `.db-menu-item` itself, and `styles.css:459-465` records the un-scoping in its own comment
+      — *"Keyed to the row, not to the menu that usually holds it"* — with
+      `.db-menu-item.db-menu-item:not(:hover):not(:focus-visible)` replacing the owned-menu-scoped
+      reset. Measured by `tools/storybook/verify-placement.mjs:6825`
+      *"a menu row lays out identically in any sheet"*, which is the ticked `goal.md` criterion
+      *"A row's computed layout is unchanged when mounted in a different container"*.
 - [ ] **T-024** [A4] Record the failing measurement: opening a chevron row today produces zero new
       surface nodes.
 - [ ] **T-025** [REQ-005] Make `submenu: true` open a real submenu through the same factory that produced
@@ -80,10 +101,22 @@ number has not shown the check can distinguish.
 
 ### Panel parity
 
-- [ ] **T-030** [A2] Record the failing measurement: the distinct-value count for padding, radius,
+- [x] **T-030** [A2] Record the failing measurement: the distinct-value count for padding, radius,
       shadow, row height and font-size across every pair in each role.
-- [ ] **T-031** [A5] Record the failing measurement: Filter's and Sort's role attribute, tab-cycle
+      **Evidence:** `tools/storybook/verify-placement.mjs:3739`
+      *"two surfaces of the same role carry the same padding, radius, shadow and type"*; the
+      numbers are recorded on the ticked `goal.md` criterion — green
+      `6 panel surfaces resolve 1 distinct signature(s)`, `3 containers give a shipped menu row 1
+      distinct signature(s) [44px | 8px 16px | 13px | 44]`, watched red with the type fallback
+      removed at `3 containers … 2 distinct signature(s)` (13px inside a menu, 16px inside a
+      record sheet).
+- [x] **T-031** [A5] Record the failing measurement: Filter's and Sort's role attribute, tab-cycle
       exit target and Escape behaviour.
+      **Evidence:** `tools/storybook/verify-placement.mjs:8274`
+      *"filter and sort answer a keyboard the same way"*, per-dimension rows at `:8377`. The
+      failing read is recorded on the ticked `goal.md` criterion — five of six dimensions
+      diverged: `role` `"dialog"`/`"(none)"`, accessible name `present`/`absent`, focus on open
+      `the panel`/`something outside it`, Escape closes `true`/`false`, Tab wraps `true`/`false`.
 - [ ] **T-032** [REQ-006] Give Filter, Sort, Column Manager and view-config one role, and with it one
       focus behaviour and one keyboard contract.
 - [ ] **T-033** [A6] Run the class-deletion sweep. Record the four values that move when

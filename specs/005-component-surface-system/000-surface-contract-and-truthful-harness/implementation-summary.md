@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-000-impl-summary"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 50
     open_questions:
       - "T14 and T18 read Closed in tasks.md prose but their checkboxes stay open; T14 states no reason"
       - "Whether commit 52e96cc's bundled recapture discharges css-lane.json's outstanding db-surface debt"
@@ -46,6 +46,7 @@ _memory:
 | **Spec Folder** | 000-surface-contract-and-truthful-harness |
 | **Level** | 3 |
 | **Status** | In progress — 9 of 41 tasks discharged, 2 under way, 30 untouched |
+| **Completion figure** | **50**, derived 2026-09-02 from `goal.md`'s checklist under `../roadmap.md` §3.2 — 5 of 10 rows ticked. It read 20 here, a pre-checklist value the task fraction was standing in for |
 | **State** | Stage 1 harness-truthfulness repairs committed (`14fc433`, `6bc121a`, `4928626`, `1cc397c`, `65ab2b9`, `58b3c13`, `0a38723`, `52e96cc`). Phase 1.5 live cross-check, Phase 2 production implementation and Phase 3 verification have not started; `checklist.md` and `acceptance-criteria.md` are unchanged from their pre-work state |
 
 <!-- /ANCHOR:metadata -->

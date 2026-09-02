@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Two operator defects, one question",
     "created_at": "2026-08-29T12:48:53.568Z",
-    "last_save_at": "2026-09-02T08:56:31.241Z",
+    "last_save_at": "2026-09-02T14:14:08.675Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,12 +218,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f2136d09447cd5a9aa4c0fa6adff66168875a459c53fba85b0853b7a748cf614",
+    "source_fingerprint": "sha256:8ce3f1396eb371f62d5c2790e823f814ba795d159e12ef19a666b6e0b8314678",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "52ce33cd850eb6e323e88263d568330bae0ee2821ee8da39e7ffde0a944a69d4",
       "plan.md": "beb128acf893029dc9b273ad85092a97ec424b2a64240f7f124d0a326a0bac6e",
-      "tasks.md": "ed6f83db9d8d29121c5eee74c00f45ff6f13321deaea555346e91e1599fe6665",
+      "tasks.md": "71c78341a263d33bc626336018a028270bfe3c73f17c979eff7c72e08a246977",
       "implementation-summary.md": "e32303f86a532145f5a3a2ac26bcdf6b069c7ecad7f463d2dfe020d5a82625db"
     },
     "last_active_child_id": null,

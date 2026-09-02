@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Placement has no authority and menus have no shared grammar",
     "created_at": "2026-08-29T12:35:11.814Z",
-    "last_save_at": "2026-09-01T10:50:16.277Z",
+    "last_save_at": "2026-09-02T14:16:01.150Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +218,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:bdd93089e92641d32e8dc5a983d3304349a553d7d3aff631c610d7d859591cd5",
+    "source_fingerprint": "sha256:775d7f99b862d41c34bbd41ae1dc1a2a09f9999a03556079a5fa38ebadc7ec6e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e8608207ca33a8ab90d6dc6f1bb259d2f2a4e7cdd4df49c0d04818f3c4dae6ed",
+      "spec.md": "3e4bdcddc140ee31f8ce35697e48241961ee02ee4508cb75f2bdf15d5dcb81f8",
       "plan.md": "b98a78e625093aa2a211eddf0ead78cd9b04c902e8ddf6f5b19848c43269d6de",
-      "tasks.md": "0ce46b748f354659d4aac99863218e1cbf676698b749ff66533c8c670e029394",
-      "implementation-summary.md": "31f7d508e1b56c8a6af19168e8bf7093a9abed7665a74a12cdbaacf35c6712c0"
+      "tasks.md": "4bd2fdf99b51c8ba19a31e7b40e1b5e6a123156bc43df0336729ab0588c5c62d",
+      "implementation-summary.md": "a43e6934381d3e589b894150f55b9d18b8a59458f1a943e3c5d20d77ab89eeef"
     },
     "last_active_child_id": null,
     "last_active_at": null

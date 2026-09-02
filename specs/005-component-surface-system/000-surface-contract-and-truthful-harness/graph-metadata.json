@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Four of the program's defects are one bug wearing different clothes: a surface's appearance is",
     "created_at": "2026-08-29T12:29:43.455Z",
-    "last_save_at": "2026-09-02T09:02:31.097Z",
+    "last_save_at": "2026-09-02T14:15:57.784Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1ebe71b7bd5b6ed0e2900f537fea3b38c68a5395e67aa88721212dc89386b778",
+    "source_fingerprint": "sha256:1188d02c3e26d0acea83f5838151f2992368697c1e256cd3d50a098c93125ba5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b8413f6cabf82823d617cd82567d9b3627181184458b119d26dc05c1501ccc4b",
+      "spec.md": "5e51f7a4e92e1f2ddacca7f8ba4ca337d1b6e7d55af30327d594a39c6b665843",
       "plan.md": "5a37dccf04488bdd70c23592f9e2c12218b7b88e703178ab8a7c891e78a64d04",
       "tasks.md": "23b50cda0e3d77f6e3d7c6aca8fed5cf0db1d251793294627d1d397ab58bb90d",
-      "implementation-summary.md": "ddc40a4ab03d7741a0be0d26cb0a0268f9f15388b9ce555c2392c07a07395824"
+      "implementation-summary.md": "732f0673112019229cc62f50b5a001d08b42a55959adfe91121c2a6f94b6d533"
     },
     "last_active_child_id": null,
     "last_active_at": null

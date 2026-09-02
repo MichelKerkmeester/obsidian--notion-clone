@@ -52,6 +52,8 @@ Each lineage holds its synthesized `research.md` under `research/lineages/<linea
 **HOW TO RE-RUN.** From **inside the plugin worktree** — containment rejects a run launched from the hub, which cost a full 5-minute lineage once:
 `node .opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs --spec-folder specs/005-component-surface-system/007-architecture-research --loop-type research --research-topic "<topic>" --fanout-config-json '{"executors":[{"kind":"cli-codex","label":"<label>","model":"gpt-5.6-luna","reasoningEffort":"xhigh","serviceTier":"fast","iterations":10}]}' --base-artifact-dir <spec-folder>/research --stop-policy max-iterations`
 
+**2026-09-02: the delegation policy changed; the two lineages above are history, not a template.** New work goes through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max` with `service_tier=fast`, verified by a fresh in-runtime Opus agent — parent `goal.md` D14.
+
 **TWO TRAPS THAT COST REAL TIME HERE.**
 - **Do not run a research lineage while an agent is editing the same tree.** Write containment saw a concurrent agent's edits, attributed them to the lineage and **reverted 15 paths** — killing a completed 27-minute run at the final step.
 - **codex has no `--reasoning-effort` flag.** Effort is `-c model_reasoning_effort=`. Passing the obvious flag runs at default effort and looks fine.

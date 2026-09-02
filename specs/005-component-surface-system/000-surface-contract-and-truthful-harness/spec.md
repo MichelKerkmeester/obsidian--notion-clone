@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-000"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 50
     open_questions: []
     answered_questions: []
 ---
@@ -96,7 +96,7 @@ deletions.
 | **Spec Folder** | 000-surface-contract-and-truthful-harness |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | **In progress — 9 of 41 tasks** (`grep -c '^- \[x\]' tasks.md`). In the tree: `.db-surface` in the token-root selector list at `styles.css:33`, and the census instruments under `tools/live/`. `completion_pct` is **22**, derived from that task fraction rather than from criteria — this phase has no `goal.md` checklist for the rule in `../roadmap.md` §3.2 to count, so the figure is provisional until it gets one. It read **0** while nine of its own tasks were ticked |
+| **Status** | **In progress — 9 of 41 tasks** (`grep -c '^- \[x\]' tasks.md`). In the tree: `.db-surface` in the token-root selector list at `styles.css:33`, and the census instruments under `tools/live/`. `completion_pct` is **50**, derived from `goal.md`'s criteria checklist under `../roadmap.md` §3.2 — **5 of 10 rows ticked**. *History: this row used to read 22, derived from the task fraction because "this phase has no `goal.md` checklist for the rule to count". The checklist was written on 2026-09-01 and the derivation now has its intended input; the 22 is kept here because it explains why a task fraction was ever used. Before either, it read **0** while nine of its own tasks were ticked.* |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

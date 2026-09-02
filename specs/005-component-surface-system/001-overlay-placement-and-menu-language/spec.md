@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-001"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 88
     open_questions:
       - "Does AC-008 survive its own phase editing the block it was written to delete"
     answered_questions:
@@ -71,7 +71,7 @@ duration, and blocks `002-properties-panel` and through it `003` and `006`.
 | **Spec Folder** | 001-overlay-placement-and-menu-language |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | **Partial.** In the tree: `src/views/surface.ts` is gone (the `openSurface` factory deleted), `surface-contract.ts` kept, and `tools/live/portal-safety.mjs` built. Not run: the overlay census. `tasks.md` carries 0 of 67 ticked against work the tree contains, so the ticks are not evidence either way. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
+| **Status** | **Shipped + verified, awaiting device — 7 of 8 criteria.** *Was **Partial** until 2026-09-02; §3.1 defines Partial as a phase with no derivable fraction, and `goal.md`'s checklist makes one derivable, with the single open row the operator's own.* In the tree: `src/views/surface.ts` is gone (the `openSurface` factory deleted), `surface-contract.ts` kept, and `tools/live/portal-safety.mjs` built. Not run: the overlay census. `tasks.md` carries 0 of 67 ticked against work the tree contains, so the ticks are not evidence either way. **Completion figure: 88**, derived from `goal.md`'s criteria checklist under `../roadmap.md` §3.2 — **7 of 8 rows ticked**, the open one being the operator opening three dropdowns. *History, 2026-09-02: this read UNKNOWN because "this phase has no `goal.md` criteria checklist, so the rule has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it." The checklist was written on 2026-09-01 and settles it exactly as that sentence said it would; the 50 it replaces was the phase-cut value.* |
 | **Created** | 2026-08-29 |
 | **Blocked by** | `000-surface-contract-and-truthful-harness` |
 | **Blocks** | `002-properties-panel`, and through it `003` and `006` |

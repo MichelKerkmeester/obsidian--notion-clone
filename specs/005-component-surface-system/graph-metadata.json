@@ -124,6 +124,7 @@
       "tools/live/renderer-coverage.json",
       "tools/gate.mjs",
       "tools/lane/css-lane.json",
+      "repo-rules/spec-tree-layout.md",
       "020-harness-fidelity-repair/acceptance-criteria.md",
       "review/lineages/cursor-grok46-xhigh-fast/review-report.md"
     ],
@@ -195,6 +196,12 @@
         "source": "derived"
       },
       {
+        "name": "spec-tree-layout.md",
+        "kind": "doc",
+        "path": "repo-rules/spec-tree-layout.md",
+        "source": "derived"
+      },
+      {
         "name": "review-report.md",
         "kind": "doc",
         "path": "review/lineages/cursor-grok46-xhigh-fast/review-report.md",
@@ -249,13 +256,13 @@
         "source": "derived"
       },
       {
-        "name": "row",
-        "kind": "key_phrase",
+        "name": "The Public",
+        "kind": "proper_noun",
         "path": "goal.md",
         "source": "derived"
       },
       {
-        "name": "the",
+        "name": "row",
         "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
@@ -265,17 +272,11 @@
         "kind": "proper_noun",
         "path": "handover.md",
         "source": "derived"
-      },
-      {
-        "name": "terms",
-        "kind": "key_phrase",
-        "path": "handover.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-02T08:56:30.956Z",
+    "last_save_at": "2026-09-02T15:08:11.724Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -283,11 +284,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:38bc963ed63238b15d2855d6af0570a1d71623c942ca122d6405abd1689c0db2",
+    "source_fingerprint": "sha256:e9880e45b2637c10d95b248c1e666e84477cd3c0e8bb342d05ac44425defc8f1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "937e88a2a837b990002c7e2193ceeab83cf5c9914cef351c0edacbea91b24d60",
-      "handover.md": "79c0a7a0231b37a19d7f0b74988c09f6b99d8370f66103db294d2ddb4bed8891"
+      "handover.md": "063d74ea82160575d7578079e2388464971094f450324ff74422ca59f4200d08"
     },
     "last_active_child_id": "005-component-surface-system/006-record-open-target",
     "last_active_at": null

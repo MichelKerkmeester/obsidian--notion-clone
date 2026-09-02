@@ -9,12 +9,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/029-numeric-coercion-parity"
-    last_updated_at: "2026-08-30T18:55:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Whole-string coercion landed; red, green and control all observed and recorded"
-    next_safe_action: "Refresh the 20 stale captures with npm run screenshots, then read them"
+    last_updated_at: "2026-09-02T12:00:00Z"
+    last_updated_by: "sibling-doc-audit"
+    recent_action: "Screenshots-fresh green at 244; stale blocker cleared"
+    next_safe_action: "Operator types a hand-authored numeric field and reads it back on device"
     blockers:
-      - "screenshots-fresh is red on 20 captures this edit invalidated; the refresh writes outside this phase's scope"
+      - "Every number here is harness-measured; the operator device pass has not run"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -41,7 +41,7 @@ _memory:
 
 | Field | Value |
 |-------|-------|
-| **Status** | In Progress — code landed and verified in the harness, captures owed, device unconfirmed |
+| **Status** | In Progress — code landed and verified in the harness, captures refreshed 2026-09-02, device unconfirmed |
 | **Completed** | Not complete |
 | **Level** | 1 |
 | **Landed** | 2026-08-30, no lane required; no stylesheet touched |
@@ -105,6 +105,11 @@ been a report rather than a patch.
 | Types | `npx tsc --noEmit` (via gate) | green |
 | Gate | `npm run gate`, `$?` read directly | **exit 1** — 15 of 16 green, `screenshots-fresh` red |
 
+*2026-09-02: that gate row is a past run, and its red is gone.* The gate carried 16 lanes then and
+carries **25** today (`tools/gate.mjs`), so the fraction describes a roster that no longer exists;
+and `npm run screenshots:verify` now exits 0 on **244 entries**, none blank or theme-identical, read
+from the exit status rather than through a pipe. The row stays as the measurement it was.
+
 The negative control is the load-bearing one. Without it the pair of checks is decoration: they would
 report green against any implementation that happened to agree with itself.
 <!-- /ANCHOR:verification -->
@@ -114,7 +119,10 @@ report green against any implementation that happened to agree with itself.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-- **The gate is red and it is this edit's fault.** `screenshots-fresh` lists 20 stale captures and
+- **~~The gate is red and it is this edit's fault.~~ Closed 2026-09-02.** The captures were
+  refreshed by later work and `npm run screenshots:verify` exits 0 on 244 entries. The reasoning is
+  kept because the mechanism still applies to the next edit of this file, and it read: the gate is
+  red and it is this edit's fault, `screenshots-fresh` lists 20 stale captures and
   every one names `src/views/cell-renderer.ts`. The check compares source fingerprints rather than
   image bytes, so editing the file makes them stale whether or not a pixel moved. Only a full capture
   run rewrites the manifest — a `--only` run does not, by design — and that writes `screenshots/**`,

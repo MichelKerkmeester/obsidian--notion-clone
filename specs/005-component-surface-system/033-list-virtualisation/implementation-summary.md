@@ -44,7 +44,7 @@ _memory:
 | **Spec Folder** | 033-list-virtualisation |
 | **Level** | 2 |
 | **Status** | In progress — 5 of 6 criteria. Flat and grouped lists windowed; the remaining criterion is the operator on device |
-| **State** | Gate **19 green**, exit 0. tsc, build and vitest exit 0 |
+| **State** | Gate **19 green**, exit 0 — *a past run; see the gate row in §3*. tsc, build and vitest exit 0 |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -144,6 +144,11 @@ worked.
 | The grouped budget is not the evidence, and says so | The unwindowed control still prints `list-bench: PASS` at 1074.5ms against a 2,000ms budget. The threshold cannot tell the two apart at any shape measured, so only the delta is quoted |
 | The grouped control is a real revert | `GROUP_WINDOW_THRESHOLD` raised so no section ever windows, measured, then restored and the restoration verified by SHA-256 against `HEAD` |
 | Gates | `npx tsc --noEmit`, `npm run build`, `npx vitest run` all exit 0 — 611 tests. `npm run gate` **23 green**, exit 0 read from `$?` |
+
+*2026-09-02: both gate figures in this document — 19 in the metadata table and 23 here — are past
+runs.* `tools/gate.mjs` declares **25** lanes today, so neither fraction describes the current gate;
+each is kept as the roster its run saw. Re-reading this phase against the gate means running it
+again.
 <!-- /ANCHOR:verification -->
 
 ---

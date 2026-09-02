@@ -47,6 +47,12 @@ _memory:
 | **State** | Shipped and harness-verified for the value editor. **One criterion open**: the title's rename editor is 2.4px off its own centre line |
 
 <!-- /ANCHOR:metadata -->
+
+*2026-09-02: the 2.4px in the row above conflicts with `acceptance-criteria.md`, which records
+AC-006 as **Provisional at 0.9px** against a 1px threshold and treats 2.4px as the harness's own
+number before it declared the host's `--font-ui-medium`; the acceptance file carries the measured
+figure, nothing is re-measured here, and the conflict stays open rather than being settled by
+picking one.*
 ---
 
 <!-- ANCHOR:what-built -->

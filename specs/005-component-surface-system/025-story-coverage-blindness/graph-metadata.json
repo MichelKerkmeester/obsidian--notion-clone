@@ -51,7 +51,10 @@
       "tools/storybook/verify-coverage.mjs",
       "tools/storybook/story-coverage.mjs",
       "src/views/checkbox.ts",
-      "tools/storybook/story-coverage-allowlist.json"
+      "tools/storybook/story-coverage-allowlist.json",
+      "src/views/checkbox.stories.ts",
+      "src/views/mobile-bottom-sheet.stories.ts",
+      "src/views/popover-position.stories.ts"
     ],
     "entities": [
       {
@@ -121,6 +124,24 @@
         "source": "derived"
       },
       {
+        "name": "checkbox.stories.ts",
+        "kind": "code",
+        "path": "src/views/checkbox.stories.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.stories.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.stories.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.stories.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.stories.ts",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -179,29 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Task Breakdown",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Discharge Each",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "a",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "A gate lane's name is the only thing most readers ever check",
     "created_at": "2026-08-30T15:00:28.772Z",
-    "last_save_at": "2026-09-02T09:05:03.257Z",
+    "last_save_at": "2026-09-02T14:32:41.250Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,12 +215,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c0ef8c12902f4c85d342dd3d3d56c7ddd336a77d4877624bd6517f061f05ed8a",
+    "source_fingerprint": "sha256:ea7eba1ef0929f26f7b5cc1eecc3c5f8c210c7d5f1e4645cad0bb5732618a7a1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "25f003206dc02b583ea335aaf37af93eb3b3a0e272ce799946ed523cbf47dedb",
       "plan.md": "0c8658cd69033439ed1084720d77659118c2cecfc47d1a190e7b0be8237bac6c",
-      "tasks.md": "875ddf0ac177d7c5e9f43c703bdcdf988a1fc3eb207636ccca71fe98a77b8572",
+      "tasks.md": "b9036607904504e077ded8b51856940c68c295f48961a231bb041c6ed926651d",
       "implementation-summary.md": "8c01102a3770ebfce60fb5917366487e56edaf14d31195f22b431129b21bb12b"
     },
     "last_active_child_id": null,

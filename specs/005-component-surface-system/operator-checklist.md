@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-02: **35 phases**, **5 with nothing left**, **45 rows** waiting on a device.
+Derived 2026-09-02: **35 phases**, **5 with nothing left**, **44 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -41,9 +41,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator clicks Open and reads the note. Only the operator closes this.
 
-## 008-integration-and-release-observability — 5/10
+## 008-integration-and-release-observability — 6/10
 
-- [ ] A lane release with an unreviewed changed PNG is demonstrated to be refused. Not enforced, and the record says so every time. Every lane release note in `css-lane.json` ends with *per-image operator sign-off still owed* — the reviewing was done and recorded in prose, and nothing refused a release that skipped it.
 - [ ] Each negative control fails when its dimension is substituted. True where it has been exercised and enforced nowhere. `012` now machine-checks that every check in its section carries a recorded red, and that mechanism is per-phase rather than program-wide.
 - [ ] No compatibility path removed without its agreements recorded. No check. The gallery deprecation is the live test of it: `030` records the decision and the undo, and nothing would have stopped a deletion that did not.
 - [ ] A red operator device review is demonstrated to block a release with the pipeline green — the rehearsal, not just the rule. Never rehearsed. The pipeline has been green while operator rows stayed open throughout this program, which is the condition, not the rehearsal.
@@ -98,7 +97,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator sees the same euro figure on a card and in the table row behind it.
 
-## 020-harness-fidelity-repair — 16/17
+## 020-harness-fidelity-repair — 21/22
 
 - [ ] The operator signs off the two new modal fixtures, per image.
 

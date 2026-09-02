@@ -11,6 +11,9 @@ contextType: "planning"
 <!-- SPECKIT_LEVEL: 3 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 
+**Reconciled against evidence on 2026-09-02: 3 ticked with citations, 34 left open (0 not done by
+decision, 3 operator-owned, rest unfound), and T1 left `[~]` as its own status line already states.**
+
 ---
 
 <!-- ANCHOR:notation -->
@@ -57,10 +60,19 @@ may be recorded until T3 and T4 have each been demonstrated failing.
       *Evidence to close:* every result the replay reads or writes carries recorded input hashes; the
       command name and output shape of `000`'s recorder are cited, and no second recorder exists in
       `tools/`.
-- [ ] **T3** Demonstrate N11 — a staled result is rejected — REQ-009.
+- [x] **T3** Demonstrate N11 — a staled result is rejected — REQ-009.
       *Evidence to close:* take a green result, change one input byte, re-run
       `npm run integration:handoff -- --admissibility`; exit is non-zero and names the differing
       input.
+      **Evidence:** the rejection is carried by the `evidence` gate lane rather than by an
+      `integration:handoff` command that was never built — recorded here rather than re-pointed.
+      `tools/live/evidence.mjs --check-all` fingerprints each artefact's declared `inputs` and
+      names any artefact describing a tree that no longer exists; **16 of 18 `tools/live/*.json`
+      carry an `inputs` map** (the two that do not are baselines by design). Ticked on `goal.md`
+      criterion 5 — *"Observed rejecting repeatedly on 2026-09-01, once per stylesheet edit"*.
+      Re-run 2026-09-02 from the current tree: `evidence: 16 artefact(s) still describe this tree`,
+      **exit 0** read directly. The lane is wired at `tools/gate.mjs:110` and runs **last** on
+      purpose, because four lanes above it re-stamp their own artefacts as they run.
 - [ ] **T4** Demonstrate N12 — a seeded cascade reversal reddens only its own phase — REQ-010,
       REQ-006.
       *Evidence to close:* restore one duplicate block `000`'s audit classified dead, run the handoff
@@ -82,10 +94,19 @@ may be recorded until T3 and T4 have each been demonstrated failing.
       sub-commands in `spec.md` §4B — REQ-011.
       *Evidence to close:* `acquire`, `verify` and `release` each behave as the §4B table specifies,
       with their exit codes read.
-- [ ] **T7** Demonstrate N13 — a non-holder edit is refused — REQ-011.
+- [x] **T7** Demonstrate N13 — a non-holder edit is refused — REQ-011.
       *Evidence to close:* with the ledger naming one phase as holder, modify `styles.css` as another
       and run `npm run lane:check`: exit non-zero, message names both phases and the drifted hash. On
       an unmodified tree the same command exits 0.
+      **Evidence:** ticked on `goal.md` criterion 3 — `css-lane` **observed refusing** on
+      2026-08-31 and again on 2026-09-01:
+      `check-lane: FAIL — the stylesheet changed and no phase claimed the edit`. The
+      unmodified-tree half was re-run 2026-09-02: `node tools/lane/check-lane.mjs` prints
+      `check-lane: stylesheet unchanged since the lane was taken (92022f8399f1)` /
+      `check-lane: held by null`, **exit 0** read directly. Wired as the `css-lane` gate lane at
+      `tools/gate.mjs:55`.
+      **What is not demonstrated:** the refusal observed was *no phase claimed the edit*, not one
+      phase editing while another holds — the message naming **both** phases is unexercised.
 - [ ] **T8** Demonstrate exclusive acquisition — REQ-011.
       *Evidence to close:* `npm run lane:acquire` for a second phase while the lane is held exits
       non-zero and leaves `holder` unchanged.
@@ -94,10 +115,28 @@ may be recorded until T3 and T4 have each been demonstrated failing.
       *Evidence to close:* the changed-PNG set is derived from image byte hashes against
       `tools/lane/capture-baseline.json`, not from the hand-maintained scenario source list; all seven
       failure conditions in §4C are implemented and each is exercised.
-- [ ] **T10** Demonstrate N14 — an incomplete sign-off refuses the lane release — REQ-012.
+- [x] **T10** Demonstrate N14 — an incomplete sign-off refuses the lane release — REQ-012.
       *Evidence to close:* delete one row from a complete `capture-review.md`, run
       `npm run lane:release`: exit non-zero, the lane stays held, the message names the unreviewed
       PNG. Restore the row and the release succeeds.
+      **Evidence:** demonstrated in substance on a different mechanism, recorded rather than
+      re-pointed: there is no `capture-review.md` and no `lane:release`; the sign-off is a
+      `reviewed` array on the newest `css-lane.json` history entry, read by
+      `tools/lane/check-lane.mjs` (**209 lines**, verified 2026-09-02 by `wc -l`).
+      **Observed red** — appending a NUL byte to
+      `screenshots/views/board-view-desktop-light.png` gives
+      *"FAIL — 1 changed capture(s) this release does not name"* with the path listed and
+      *"lists 2 reviewed capture(s), and not these"*, **exit 1**. **Observed green** — the same
+      path added to the release's `reviewed` array gives *"release names all 1 changed capture(s)"*,
+      **exit 0**; both mutations reverted, and the clean tree reports
+      *"names all 0 changed capture(s)"* (re-run 2026-09-02, exit 0).
+      **The failing value is the file it replaced:** the check `was 84 lines` that hashed the
+      stylesheet and read `SURFACE_PHASE` and nothing else, against which the same modified capture
+      passed **exit 0**. Decision logic is two exported pure functions driven by
+      `tools/lane/check-lane.test.mjs` — 8 cases — which against the old file collected **0 tests**
+      and failed on `process.exit unexpectedly called with "0"`. Ticked on `goal.md` criterion 4,
+      including the un-tick and re-tick that record the first claim having been made against code
+      that was never committed.
 - [ ] **T11** Implement registry equality in both directions plus one terminal close per handle —
       REQ-002.
       *Evidence to close:* an unregistered root fails; an unexercised registry entry fails; a handle

@@ -94,6 +94,11 @@ contextType: "implementation"
 | `evidence --check-all` | 8/8 | 8/8, all re-run |
 | `npm run gate` | 14 green | **13 green, 1 red** — `comments`, owned by another agent's untracked `tools/bench/` files |
 
+*2026-09-02: that gate row is a past run, not the current gate.* `tools/gate.mjs` declares **25**
+lanes today, so 14 was the roster at the time and neither figure describes what `npm run gate` runs
+now. The row is kept as the measurement it was; re-reading this phase against the gate means running
+it again rather than comparing to 14.
+
 Each of the 16 new checks was confirmed to go red against the reverted code, and that same run turned
 five pre-existing alignment checks red as well. Those five are the packet's central finding and are
 tabulated in `acceptance-criteria.md` §4.

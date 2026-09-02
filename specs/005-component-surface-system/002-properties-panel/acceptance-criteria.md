@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-002"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 86
     open_questions: []
     answered_questions: []
 ---
@@ -274,7 +274,11 @@ question: **if the value came from the device instead of the harness, would the 
 and could it still fail?**
 
 **No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
-`completion_pct` does not move.**
+`completion_pct` does not move.** *2026-09-02: it has since moved, and not by this audit —
+`goal.md` gained a criteria checklist on 2026-09-01 and `roadmap.md` §3.2 derives the figure from
+it: **6 of 7 rows ticked = 86**, which `spec.md` already carried and every continuity block in this
+folder now matches. The 43 it replaces was the pre-checklist judgment recorded in
+`implementation-summary.md`.*
 
 The supplies, by number: **1** `--keyboard-height`, injected by the harness. **2** values
 `runtime-vars.css` pins where the runtime computes them. **3** production actions replaced by

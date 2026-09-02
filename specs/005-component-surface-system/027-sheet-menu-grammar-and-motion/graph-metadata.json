@@ -52,6 +52,7 @@
       "src/views/popover-position.ts",
       "tools/storybook/verify-placement.mjs",
       "tools/screenshots/scenarios/chrome.mjs",
+      "tools/gate.mjs",
       "tools/bench/run-board.mjs",
       "tools/lane/css-lane.json"
     ],
@@ -120,6 +121,12 @@
         "name": "chrome.mjs",
         "kind": "file",
         "path": "tools/screenshots/scenarios/chrome.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
         "source": "derived"
       },
       {
@@ -193,17 +200,11 @@
         "kind": "key_phrase",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Task Breakdown",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Six operator reports against one surface. The shared menu row reached every one of them and was still centred on a device, because it never declared the one property the host's button rule supplies.",
     "created_at": "2026-08-30T16:52:15.458Z",
-    "last_save_at": "2026-09-02T09:05:03.536Z",
+    "last_save_at": "2026-09-02T14:09:51.994Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +215,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:184ea052208d647ffc225141f960908750abd8c9e69b69c7adb943e1e6a0072f",
+    "source_fingerprint": "sha256:03d2a6171a74bb1533a8bbd90921c8968e0b540fe17fd8a54a814ead8bc4bc36",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "f8740f0d7ece1dcef5281413970f4c1fc5c8521fde69b880df8701d9e8d8206f",
       "plan.md": "d87eb7c560cd9a7d8e92ee6449b4fc8d372be5b54fc00582d2e63acba6d3edaf",
       "tasks.md": "8ac9ef117322ab4b8dbeeeeaa8728ef1b2cdca384bab6c88c4382b8bc26a0e1e",
-      "implementation-summary.md": "f07c13a74ae28b553a086cfb57652e1e5f22b082e323ce0cc71fae47aa555ece"
+      "implementation-summary.md": "66cf77288f06a78d2ac05507bf4081522601bda9b1d5c3ba127fda99b3e29a17"
     },
     "last_active_child_id": null,
     "last_active_at": null

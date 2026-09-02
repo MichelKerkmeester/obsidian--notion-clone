@@ -41,9 +41,17 @@ _memory:
 |---|---|
 | **Spec Folder** | 033-list-virtualisation |
 | **Level** | 2 |
-| **Status** | **In progress — 5 of 6 criteria, flat lists only.** Windowed: blocked main thread 4,748.6ms -> 48.4ms at 3,000 rows, node count 225,007 -> 2,184 and flat to 3,400 rows. Open: the grouped path still renders every row, and the operator has not opened their database |
+| **Status** | **In progress — 5 of 6 criteria.** Windowed: blocked main thread 4,748.6ms -> 48.4ms at 3,000 rows, node count 225,007 -> 2,184 and flat to 3,400 rows. Open: the operator has not opened their database |
 | **Complexity** | 60/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
+
+*2026-09-02: "flat lists only" and "the grouped path still renders every row" were stale and are
+withdrawn.* The grouped path is windowed too: `goal.md`'s first criterion records **1,310 nodes for
+2,000 rows in one group**, and `tools/live/list-window.json` stamps the harness at **16 checks**
+over `src/views/list-renderer.ts`, whose grouped arm asserts the section header survives a recycle.
+The one criterion still open is the operator opening their own database, which no artefact in this
+tree can close.
+
 
 ---
 

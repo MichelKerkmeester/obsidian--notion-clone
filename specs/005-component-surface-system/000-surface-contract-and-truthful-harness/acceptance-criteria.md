@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-000"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 50
     open_questions: []
     answered_questions: []
 ---
@@ -209,7 +209,11 @@ it pins, an action it stubs, host chrome it hand-builds, or Obsidian's absent `a
 about the harness, not about the product.
 
 **No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
-`completion_pct` does not move.** What the audit records instead is which criteria are compromised
+`completion_pct` does not move.** *2026-09-02: it has since moved, for a different reason and not by
+this audit — `goal.md` gained a criteria checklist on 2026-09-01, and `roadmap.md` §3.2 derives the
+figure from it: **5 of 10 rows ticked = 50**, which every continuity block in this folder now
+carries. The sentence above still holds of the audit; the 20 it was written beside was the
+pre-checklist value.* What the audit records instead is which criteria are compromised
 *before* anyone runs them, so the green they eventually produce is read for what it is.
 
 The five supplies, referred to below by number: **1** `--keyboard-height`, set by the harness

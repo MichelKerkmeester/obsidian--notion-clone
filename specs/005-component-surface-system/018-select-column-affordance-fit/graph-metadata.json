@@ -199,7 +199,7 @@
     ],
     "causal_summary": "The operator, on a phone: \"to the left of checkbox that little button doesnt have enough space.\"",
     "created_at": "2026-08-30T17:34:54.869Z",
-    "last_save_at": "2026-09-02T09:05:02.805Z",
+    "last_save_at": "2026-09-02T14:16:07.188Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:edf5bac641f61c1a8db8370c318e32a672e0f2fd5c04f1b7816237e3e6b4da1a",
+    "source_fingerprint": "sha256:cb2b02941e97a420afc4ab9a5f055bb26ed6ec5c794ad95bf5c79edc67162478",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4918b9cfb2930c04c3af10546fa226fa000348bb3d610b0d759b5b85f07c0b1d",

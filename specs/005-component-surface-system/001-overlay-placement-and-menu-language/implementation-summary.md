@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-001-summary"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 88
     open_questions:
       - "Does AC-008 survive its own phase editing the block it was written to delete"
       - "Which of the two names — the folder or the lane's 001-overlay-width-and-chrome — is authoritative"
@@ -49,7 +49,7 @@ _memory:
 | **Spec Folder** | 001-overlay-placement-and-menu-language |
 | **Completed** | Not complete — In Progress |
 | **Level** | 3 |
-| **Status** | **In Progress.** 0 of 67 tasks checked; 0 of 13 acceptance criteria Met |
+| **Status** | **Shipped + verified, awaiting device — 7 of 8 criteria.** 0 of 67 tasks checked; 0 of 13 `acceptance-criteria.md` rows Met. *Moved from **In Progress** 2026-09-02 to match `spec.md`, which §3.1 and the cross-doc status rule both require; the fraction is `goal.md`'s checklist, which is what §3.2 derives from, and the two zeros beside it are unchanged.* |
 | **State** | Four deliverables landed and two of them re-assert green today. The census the phase is built on has never run |
 
 **This document exists because the phase's continuity block said `completion_pct: 0` and "not
@@ -146,7 +146,7 @@ name conflict and it remains unresolved; the missing release is recorded here fo
 | Keep the contract | It holds every role, dismissal set, focus mode and width policy and has its own tests. Deleting it would have destroyed the design to remove a guess at its implementation |
 | Name each surface twice rather than guard the container | The `:not()` guard was tried on the container box and reverted: it raises specificity from (0,1,0) to (0,2,0), winning fights `.is-phone .note-database-container` used to win on order alone, and it moved 34 captures. Recorded at lane entry 23:38 |
 | Report **no** criterion Met | All 13 read Unmet; six of them are `Blocked` for want of a failing number. The phase's own `goal.md` says **"Do not invent one."** Two commands pass today and neither closes a criterion's threshold — that gap is reported below, not rounded away |
-| Set `completion_pct` to 25, not 0 and not 100 | 0 is refuted by four landed deliverables; 100 is forbidden by D3 while nothing is operator-confirmed, and would be absurd against 0 of 67 tasks |
+| ~~Set `completion_pct` to 25, not 0 and not 100~~ | **Superseded 2026-09-02.** The judgment was sound and the figure is no longer judged: `roadmap.md` §3.2 derives it from `goal.md`'s checklist, **7 of 8 rows ticked = 88**, and every continuity block in this folder carries that. Kept because the reasoning it records is why the number was ever anything but 0: 0 is refuted by four landed deliverables; 100 is forbidden by D3 while nothing is operator-confirmed, and would be absurd against 0 of 67 tasks |
 | Leave `tasks.md` untouched | T-011 and T-012 are substantively satisfied by `885a8dc` but ticking boxes is outside this reconciliation's scope. The drift is recorded under Limitations instead |
 <!-- /ANCHOR:decisions -->
 

@@ -55,6 +55,8 @@
       "src/settings.ts",
       "src/data/data-source.ts",
       "tools/storybook/verify-placement.mjs",
+      "src/views/record-open-target.ts",
+      "src/views/record-open-target.test.ts",
       "tools/storybook/obsidian-stub.mjs"
     ],
     "entities": [
@@ -143,6 +145,18 @@
         "source": "derived"
       },
       {
+        "name": "record-open-target.ts",
+        "kind": "code",
+        "path": "src/views/record-open-target.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-open-target.test.ts",
+        "kind": "test",
+        "path": "src/views/record-open-target.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "obsidian-stub.mjs",
         "kind": "file",
         "path": "tools/storybook/obsidian-stub.mjs",
@@ -189,23 +203,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Dependency Matrix",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Depends On",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-09-02T08:56:31.280Z",
+    "last_save_at": "2026-09-02T14:16:06.540Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,12 +218,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:167a67ad33cf5a32b4a5e5b201da2e55123edea3fb92fe9e5ec4a9533cd4737a",
+    "source_fingerprint": "sha256:18defb7b2f35274c5f29109facedb537f3ea28a57ccacf5646e7693062cc6906",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "beb54a75ddc4d932724ac6c30b816e3831a998e800b8966179afedb42f5f6230",
       "plan.md": "f8632745f580cd1359b7b6c3b70117ffaa16d2b828572c19f14ba237c287ba13",
-      "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06",
+      "tasks.md": "f49d5afab3caa5c07d0c59170280ef2ed15bbbfc49a46e1f68aeb07fd2225686",
       "implementation-summary.md": "a8010bbd3442433d98106928ea19bd2b9deb0de0874811c3a223e0b38024f5d7"
     },
     "last_active_child_id": null,

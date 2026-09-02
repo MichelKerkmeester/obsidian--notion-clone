@@ -11,6 +11,9 @@ contextType: "planning"
 <!-- SPECKIT_LEVEL: 2 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 
+**Reconciled against evidence on 2026-09-02: 5 ticked with citations, 60 left open (0 not done by
+decision, 4 operator-owned, rest unfound).**
+
 ---
 
 <!-- ANCHOR:notation -->
@@ -36,8 +39,13 @@ number has not shown the check can distinguish.
 - [ ] **T-003** Build §4's matrix: read-only, required, file field, computed, phone, desktop. For
       each cell record the emitted child count, the **laid-out** child count, the declared track
       count and the resolved grid row of every child.
-- [ ] **T-004** [B2] Record the failing diff in both directions: desktop 7 declared vs 8 laid out;
+- [x] **T-004** [B2] Record the failing diff in both directions: desktop 7 declared vs 8 laid out;
       phone 8 declared vs 7 laid out.
+      **Evidence:** both directions are recorded on the ticked `goal.md` criterion *"Declared track
+      count equals laid-out child count at every breakpoint and condition"* — **"Today desktop 7 vs
+      8, phone 8 vs 7"**. The track claims the numbers are read from are in the stylesheet:
+      `styles.css:11955-11967` declares `grid-column: 1..8` per child, phone override at
+      `styles.css:17773`.
 - [ ] **T-005** [B1] Record the failing row height on desktop against the declared `min-height`, and
       which child resolves to grid row 2.
 - [ ] **T-006** [B3] Record the failing name width at both breakpoints, and whether the name's right
@@ -59,8 +67,14 @@ number has not shown the check can distinguish.
       only the outcome.
 - [ ] **T-011** [REQ-004] Decide the name's minimum widths and its containment rule, and confirm they are
       satisfiable within the panel width `001` gives the role.
-- [ ] **T-012** [REQ-006] Decide where delete lives and what confirms it. This changes what a single
+- [x] **T-012** [REQ-006] Decide where delete lives and what confirms it. This changes what a single
       click does and is settled here, not during implementation.
+      **Evidence:** settled as *delete lives in the trash control only, and `confirmWithModal`
+      confirms it* — `src/views/column-operations.ts:167` and `:340` interpose
+      `confirmWithModal` on every branch before the schema is touched. Recorded with its reasoning
+      on the ticked `goal.md` criterion *"Delete is not a bare one-click target in the row's
+      primary line"*, which also records the reasoning's failure mode: reading the call site
+      cannot see what a click costs one call deeper.
 - [ ] **T-013** [REQ-005] Decide the panel's own height cap, independent of the positioner's inline
       `maxHeight`.
 - [ ] **T-014** Confirm the decision stays inside R3's bound: what the row shows and what hides. The
@@ -76,9 +90,35 @@ number has not shown the check can distinguish.
       Decide which behaviour is correct and delete the other; do not append a third rule.
 - [ ] **T-023** Resolve `styles.css:16879` against `styles.css:16995` to a single declaration — re-resolve with `rg -n '\.is-phone \.note-database-container \.db-column-manager-row' styles.css` and read the hits in order, recording the computed winner before and after — the
       same way.
-- [ ] **T-024** [REQ-002] Ensure no laid-out child resolves to grid row 2 under any condition.
-- [ ] **T-025** [REQ-005] Apply the panel height cap.
-- [ ] **T-026** [REQ-006] Land the delete-affordance change.
+- [x] **T-024** [REQ-002] Ensure no laid-out child resolves to grid row 2 under any condition.
+      **Evidence:** `tools/storybook/verify-placement.mjs:7817`
+      *"every laid-out child of a property row is on one line, <surface>"* asserts
+      `worstTracks === 1 && worstEscaped === 0` over three rows per viewport driven through the
+      shipped `ColumnManagerRenderer`. Ticked on `goal.md` criterion 1. **Watched red twice:**
+      one child beyond the track list forces an implicit second row — track count **2**, one child
+      outside the band, height **47.69px**; a child pushed 40px down keeps the track count at
+      **1** and is caught by the containment clause alone.
+- [x] **T-025** [REQ-005] Apply the panel height cap.
+      **Evidence:** `styles.css:10599` `max-height: min(560px, calc(100vh - 140px))` on the
+      `.db-column-manager` arm, with the phone cap at `styles.css:18142`
+      `max-height: min(380px, calc(100vh - 240px))`. Measured by
+      `tools/storybook/verify-placement.mjs:3621`
+      *"a forty-property panel stays inside the cap its own criterion states"* —
+      `40 rows measure 380px against a cap of 517`, content wanting 1296px, so the cap is what
+      bounds it. **Watched red** by widening the phone cap to the desktop one:
+      `40 rows measure 560px against a cap of 517`. Ticked on `goal.md` criterion 4.
+- [x] **T-026** [REQ-006] Land the delete-affordance change.
+      **Evidence:** `src/views/column-operations.ts:167`, `:340` (confirmation ahead of every
+      mutation) and `src/views/column-delete-confirmation.test.ts`, which drives all four branches
+      of the shipped `deleteColumn`. Row-level proof at
+      `tools/storybook/verify-placement.mjs:7914` *"nothing outside the trash control reaches the
+      delete"* (`2 reached deleteColumn and 0 of those were outside the trash control`), `:7922`
+      *"the delete on a named row deletes the property that row names"*
+      (`"Status [status]"` → handed `"status"`), `:7935` the four non-destructive actions as a set.
+      **Watched red:** removing the plain branch's confirmation gives `expected 0 to be greater
+      than 0`; moving the mutation ahead of the await gives
+      `expected [ 'file.name' ] to deeply equal [ 'file.name', 'status' ]`; the row wired to
+      delete gives **18 of 22 outside the trash control**. Ticked on `goal.md` criterion 5.
 - [ ] **T-027** Hold the serialized CSS lane for the whole phase. Confirm no other spec is editing
       `styles.css`.
 
