@@ -7023,15 +7023,6 @@ input[type="checkbox"].db-toggle-switch:disabled {
   border: 1px solid var(--background-modifier-border);
 }
 
-/* An unregistered tag gets the gray pair, which is the fallback the badge renderer already reaches
-   for elsewhere. Only the tokens: pinning the border to the foreground as well was tried and gave
-   this one tag a hard outline no other tag has in the light theme, 10.31:1 against a surrounding
-   1.22:1. Setting the pair and leaving the edge to the theme puts it back among its siblings. */
-.note-database-container .db-file-tag-badge:not([class*="status-color-"]) {
-  --db-status-bg: var(--status-color-bg-gray);
-  --db-status-fg: var(--status-color-fg-gray);
-}
-
 .note-database-container .db-file-link-list-item {
   display: inline-flex;
   align-items: center;
@@ -7310,6 +7301,19 @@ input[type="checkbox"].db-toggle-switch:disabled {
 
 .theme-dark :is(.note-database-container, .note-database-modal, .note-database-settings, .db-color-picker-popup, .db-icon-picker-popover, .db-dropdown-popover) .status-badge {
   border-color: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+/* An unregistered tag gets the gray pair, which is the fallback the badge renderer already reaches
+   for elsewhere, plus the control-boundary token so its edge clears 3:1 against the page in both
+   themes — 3.62:1 light, 4.29:1 dark, for WCAG 1.4.11 non-text contrast. Pinning the border to the
+   FOREGROUND token was tried first and gave this one tag a hard outline no other tag has in the
+   light theme, 10.31:1 against a surrounding 1.22:1. The boundary token is the same edge every
+   other unchecked control carries, so the tag reads as a control without leaving its siblings. */
+.note-database-container .status-badge:not([class*="status-color-"]),
+.note-database-modal .status-badge:not([class*="status-color-"]) {
+  --db-status-bg: var(--status-color-bg-gray);
+  --db-status-fg: var(--status-color-fg-gray);
+  border-color: var(--db-control-border-strong);
 }
 
 /* 日期紧急度颜色标注（条件格式化） */
@@ -18617,6 +18621,20 @@ img.db-text-md-image {
     top: 0;
     right: 4px;
     z-index: 2;
+  }
+
+  /* A segment is a week-grid item, so its own margin, gap and padding are the only width a phone
+     column can give back to the title: 44px of box in a 48px column. Taking all four back hands the
+     title 4px it never had. Do NOT also relax the title's `flex` to `1 1 auto` — that was tried and
+     measured worse. The `1 0 min(8ch, 100%)` basis is a floor with shrink disabled, so the title
+     keeps 37px of the widened box; letting it shrink to the free space instead gave it 28px and
+     truncated two single-day titles that had fit, 6 of 11 to 7. */
+  .note-database-container .db-calendar-month-week > .db-calendar-month-segment {
+    box-sizing: border-box;
+    width: 100%;
+    margin-inline: 0;
+    gap: 2px;
+    padding-inline: 2px;
   }
 
   .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"],

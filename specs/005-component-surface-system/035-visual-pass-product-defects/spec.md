@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035"
       parent_session_id: null
-    completion_pct: 78
+    completion_pct: 83
     open_questions: ["Should the phone selection bar wrap or keep its scroll lane"]
     answered_questions: ["The selection bar clips because it scrolls and a capture cannot"]
 ---
@@ -39,7 +39,7 @@ _memory:
 | **Level** | 2 |
 | **Parent Spec** | `../spec.md` |
 | **Predecessor** | `../034-packet-doc-truth/spec.md` |
-| **Status** | **In progress.** Fourteen of the seventeen are fixed and read on a recapture; P4, P6 and P15 stay open with what was measured recorded against them. Every row below is a defect read on a capture and then re-verified against the source |
+| **Status** | **In progress.** Fifteen of the seventeen are fixed and read on a recapture; P4 and P6 stay open with what was measured recorded against them — P4 improved 6 truncated segments to 4 without reaching the 0 it asks for. Every row below is a defect read on a capture and then re-verified against the source |
 | **Complexity** | 41/100, confidence 80% |
 
 **On the declared level.** `recommend-level.sh --loc 400 --files 12` returned **Level 1** at 41/100

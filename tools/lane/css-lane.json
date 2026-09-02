@@ -1,8 +1,8 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-02T18:45:00Z",
-  "baselineHash": "b89722c133ec",
-  "baselineCommit": "be6c16e",
+  "acquiredAt": null,
+  "baselineHash": "0d56e9b98197",
+  "baselineCommit": "8dd7008",
   "history": [
     {
       "event": "acquire",
@@ -1106,6 +1106,22 @@
         "screenshots/views/timeline-view-desktop-light.png"
       ],
       "note": "Released by the in-runtime verifier, not by the lane that wrote the fix, because release is what asserts the captures are current and the implementing runtime could not open a browser. Every image named here was opened and read in dark and light. Fourteen of seventeen product defects are repaired; four of the implementing lane's claims were corrected on measurement — the list field's declared width restored as a floor after deleting it collapsed the sparse columns, the chart label recoloured at the nested rule that outranks the button, the slider's 4px line moved from the input to its track after it left a 353x4 control in the touch census, and the tag border unpinned after it drew a 10.31:1 outline in light against siblings at 1.22. The phone selection-bar wrap was built, measured green and REVERTED: verify-placement pins the opposite behaviour and went red, which is a contradiction for the operator rather than a fix for this phase. touch-targets falls 228 to 215."
+    },
+    {
+      "event": "release",
+      "phase": "035-visual-pass-product-defects",
+      "at": "2026-09-02T22:40:00Z",
+      "hash": "0d56e9b98197",
+      "reviewed": [
+        "screenshots/fields/field-file-fields-desktop-dark.png",
+        "screenshots/fields/field-file-fields-desktop-light.png",
+        "screenshots/fields/field-file-fields-mobile-dark.png",
+        "screenshots/fields/field-file-fields-mobile-light.png",
+        "screenshots/views/calendar-month-view-desktop-light.png",
+        "screenshots/views/calendar-month-view-mobile-dark.png",
+        "screenshots/views/calendar-month-view-mobile-light.png"
+      ],
+      "note": "second round: the uncoloured-badge boundary closed P15 at 3.62:1 light and 4.29:1 dark; the calendar segment took truncation 6 to 4 of 11 at the 402px frame and P4 stays open. The lane's title `flex: 1 1 auto` was reverted here after it measured 7. Every capture above read in dark and light before this release."
     }
   ],
   "outstanding": [

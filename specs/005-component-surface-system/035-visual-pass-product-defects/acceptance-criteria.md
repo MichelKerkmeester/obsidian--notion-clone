@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T18:30:00Z"
+    last_updated_at: "2026-09-02T22:40:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "21 of 24 criteria met on measurement; AC-5 AC-8 AC-19 not met"
-    next_safe_action: "Take the operator call on P6 scroll-versus-wrap and P15 threshold"
-    blockers: ["P6 contradicts the placement lane; P15 threshold met by no tag"]
+    recent_action: "22 of 24 criteria met; AC-19 closed on its edge, AC-5 AC-8 open"
+    next_safe_action: "Take the operator call on P6, and on P4 needing a wider column"
+    blockers: ["P6 contradicts the placement lane; P4 truncates from a 48px column"]
     key_files: ["spec.md", "goal.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-ac"
       parent_session_id: null
-    completion_pct: 78
+    completion_pct: 83
     open_questions: ["Should the phone selection bar wrap or keep its scroll lane"]
     answered_questions: ["A criterion without a failing number is a wish, not a criterion"]
 ---
@@ -42,7 +42,7 @@ implementing lane re-observes it before trusting it.
 | AC-2 | Rendered width of the span cell at narrow width | > 0px | **MET.** Was 28x24, inside the 28px select gutter rather than the 0px the pass reported; now 302x28 |
 | AC-3 | Board drop-target background resolves | a defined token | **MET.** `--background-interactive-hover` → `--db-hover-bg`, declared at `styles.css:100`. No fixture renders the state, so this is read from the token table, not a capture |
 | AC-4 | Invalid-events controls under the 28px coarse floor | 0 | **MET.** Was 9 of 12 measured — `db-invalid-event-row-fix` 32x24, datetime inputs 250x19; now 0. Baseline 228 → 215, measured twice |
-| AC-5 | Share of a phone day cell taken by the always-on "+" | title not truncated | **NOT MET, and the premise is false.** The "+" is now an out-of-flow corner control, but truncated month segments read 6 of 12 before and 6 after. The titles are week-grid segments, truncating from a 48px column at 402px, not from the button |
+| AC-5 | Share of a phone day cell taken by the always-on "+" | title not truncated | **NOT MET, improved, and the premise is still false.** The "+" is an out-of-flow 28x28 corner control that hit-tests to itself and never took the titles' width. Truncated segments read 6 before and **4** after, from 11 titles at the 402px frame: the segment gave back its `margin-inline`, `gap` and `padding-inline`, so the box goes 44.28 → 48.28px and the title 33 → 37px. Four still want more than a 48px column gives — "Spotify family" needs 72px in 37px. A relaxed title `flex` was tried and measured **7**, and was reverted |
 | AC-6 | Hidden-count badge overhang past its button | 0px | **MET.** Was 5px right and 22px left of a 28px button; now inset 6px right and 29px left of a 96px one |
 | AC-7 | Hidden-count badge text contrast | ≥ 4.5:1 | **MET.** 4.09:1 → 8.36:1 |
 | AC-8 | Selection-bar actions rendered in full at 402px | 3 of 3 | **NOT MET, and blocked on a contradiction.** A wrapping bar measured 3 of 3 and was reverted: `tools/storybook/verify-placement.mjs:903` requires the bar to overflow |
@@ -56,12 +56,12 @@ implementing lane re-observes it before trusting it.
 | AC-16 | Footer EARLIEST/LATEST output format | the column's own | **MET.** The test was watched red against the old body — `expected '2026-03-01' to be 'March 1, 2026'` — then green |
 | AC-17 | Chart-popover acting rows using the sibling label tone | 2 of 2 | **MET.** 0 of 2 → 2 of 2, rgb(154,155,158) → rgb(220,221,222), identical to the sibling. The tone was on the nested label rule, not the button |
 | AC-18 | Chart-popover current-value contrast | ≥ 4.5:1 | **MET.** 3.31:1 → 6.0:1 |
-| AC-19 | Uncoloured tag edge or fill contrast | ≥ 3:1 | **NOT MET, by any tag.** saas moves fill 1.00 → 1.55 and edge 1.71 → 2.64 in dark, which is where design (1.37/2.27) and personal (1.57/2.65) already sit; light moves 1.00 → 1.23 beside 1.22. The tag is no longer the odd one out and the threshold indicts the shared badge design |
+| AC-19 | Uncoloured tag edge or fill contrast | ≥ 3:1 | **MET, on the edge.** saas had no painted edge at all in light — `border-color` computed `rgba(0, 0, 0, 0)` — and a 20%-alpha currentColor edge in dark at 1.71:1. It now carries `--db-control-border-strong`: rgb(130, 135, 142) at **3.62:1** light and rgb(124, 130, 136) at **4.29:1** dark against `--background-primary`, computed from relative luminance and read back as the painted `border-color`. The fill is untouched at its siblings' 1.2-1.6:1, and that no *fill* in the corpus reaches 3:1 stays the operator's question |
 | AC-20 | "+ Add sort" distinguishable from the copy beside it | yes | **MET.** Button muted/400 at 6.0:1 → normal/600 at 12.26:1 while the copy stays muted/400 |
 | AC-21 | Failures produced by one deliberately reddened lane | 1 | **MET.** A reddened `comments` lane produced its log directory and folder-docs stayed green: one RED, not two |
 | AC-22 | folder-docs still fails a genuinely undocumented source folder | fails | **MET, control observed.** `tools/zz-control/thing.mjs` with no README → exit 1, `tools/zz-control — missing-readme`. Removed after |
 | AC-23 | Changed captures read by a person, not merely regenerated | all | **MET.** 240 recaptured, 63 moved, read in dark and light across seventeen surfaces |
-| AC-24 | `npm run gate` | `gate: PASS`, exit 0 | **MET.** `gate: PASS — 25 green, 0 red for a declared reason`, `$?` read directly at 0 |
+| AC-24 | `npm run gate` | `gate: PASS`, exit 0 | **MET, re-run after the second round.** `gate: PASS — 25 green, 0 red for a declared reason`, `$?` read directly at 0. `evidence` went red first on eight artefacts stale against the new `styles.css` and was re-measured, never edited |
 <!-- /ANCHOR:criteria -->
 
 ---

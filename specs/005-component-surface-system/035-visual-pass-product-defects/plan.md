@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-plan"
       parent_session_id: null
-    completion_pct: 78
+    completion_pct: 83
     open_questions: ["What clips Copy CSV when the bar already scrolls (P6)"]
     answered_questions: ["The implementing runtime cannot reach Chrome, so it cannot close a visual row"]
 ---
