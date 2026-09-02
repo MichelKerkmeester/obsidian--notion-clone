@@ -162,6 +162,11 @@ green before the phase started; green was the symptom.
 - [x] **T26** Confirm comment hygiene — TASK-HYGIENE.
       *Closed on:* the `comments` gate lane green; no spec paths, phase numbers or task ids in
       `styles.css` or `tools/`.
+- [x] **T27** Exercise phone-sheet docking without a host-supplied keyboard variable.
+      *Closed on:* the visual-viewport-only check opens the shipped phone sheet, reads
+      `--db-keyboard-inset`, and compares its measured bottom edge to the published inset at
+      `tools/storybook/verify-placement.mjs:4167`; the four host-supplied checks identify their
+      provenance in their own detail strings.
 
 <!-- /ANCHOR:phase-3 -->
 ---

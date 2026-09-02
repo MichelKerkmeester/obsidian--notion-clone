@@ -964,7 +964,9 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     name: "selection bar clears the keyboard the host reports",
     pass: Math.abs(liftedSelectionBox.bottom - keyboardBarBottom) <= 2,
     detail: `bar bottom=${liftedSelectionBox.bottom.toFixed(0)} want=${keyboardBarBottom}px `
-      + `(keyboard covers ${keyboardBarBottom}..${window.innerHeight})`,
+      + `(keyboard covers ${keyboardBarBottom}..${window.innerHeight}); `
+      + `(harness-supplied --keyboard-height=${KEYBOARD}px; a device where the host publishes nothing `
+      + `is covered by "the phone sheet follows --db-keyboard-inset without a host variable")`,
   });
   out.push({
     name: "selection bar keeps its box fully visible above the keyboard",
@@ -3428,7 +3430,9 @@ const stateResults = await section("the record sheet's identity and its subscrip
     pass: after === before && whileOpen > before && leftBehind === 0,
     detail: `visualViewport listeners: ${before} before, ${whileOpen} while the sheet was open,`
       + ` ${after} after one keyboard cycle and a close. The sheet lifted to`
-      + ` --db-mobile-sheet-bottom=${liftedBottom} while the keyboard was declared.`
+      + ` --db-mobile-sheet-bottom=${liftedBottom} while the keyboard was declared (harness-supplied `
+      + `--keyboard-height=336px; a device where the host publishes nothing is covered by `
+      + `"the phone sheet follows --db-keyboard-inset without a host variable").`
       + ` ${leftBehind} panel or scrim node(s) remain. The inset is written by a subscription, so a`
       + ` leaked one silently moves the next sheet rather than this one`,
   });
@@ -3532,7 +3536,9 @@ const keyboardParityResults = await section("both sheet families under one keybo
       && Math.abs(menuLifted.bottom - panelLifted.bottom) <= 1
       && Math.abs(menuBack.bottom - menuAtRest.bottom) <= 1
       && Math.abs(panelBack.bottom - panelAtRest.bottom) <= 1,
-    detail: `under one declared ${KEYBOARD}px keyboard — menu sheet bottom`
+    detail: `under one declared ${KEYBOARD}px keyboard (harness-supplied --keyboard-height=${KEYBOARD}px; `
+      + `a device where the host publishes nothing is covered by "the phone sheet follows `
+      + `--db-keyboard-inset without a host variable") — menu sheet bottom`
       + ` ${menuAtRest.bottom} -> ${menuLifted.bottom} -> ${menuBack.bottom} (lever`
       + ` ${menuAtRest.lever} -> ${menuLifted.lever} -> ${menuBack.lever}); panel sheet bottom`
       + ` ${panelAtRest.bottom} -> ${panelLifted.bottom} -> ${panelBack.bottom} (lever`
@@ -4079,6 +4085,101 @@ const keyboardParityResults = await section("both sheet families under one keybo
 
   return out;
 }));
+
+// ───────────────────────────────────────────────────────────────────
+// 5a5. THE PHONE SHEET WITH THE HOST SILENT
+// ───────────────────────────────────────────────────────────────────
+//
+// The existing keyboard checks write the host's number before measuring the sheet. That is the
+// supplied-value trap: they can prove the arithmetic after a host report arrives without exercising
+// a device that only shrinks its visual viewport. This section supplies only that platform signal,
+// then checks the plugin-owned inset and the sheet geometry that consumes it.
+const visualViewportFallbackResults = await section(
+  "the phone sheet follows --db-keyboard-inset without a host variable",
+  async () => {
+    const measured = await keyboardPhone.evaluate(async () => {
+      const { openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__place;
+      const { publishKeyboardInset } = globalThis.__p;
+      const host = document.querySelector(".note-database-container");
+      const anchor = document.getElementById("anchor");
+      const visual = window.visualViewport;
+      const keyboard = 336;
+      const tick = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      if (!host || !anchor || !visual) {
+        return { ran: false, reason: "the phone fixture has no container, anchor, or visual viewport" };
+      }
+
+      closeRecordDetailPanel();
+      openRecordDetailPanel({
+        anchorEl: anchor,
+        host,
+        row: { file: { path: "fallback.md", basename: "Fallback", name: "fallback.md" }, frontmatter: { income: 1200 }, computed: {} },
+        columns: [
+          { key: "file.name", label: "Name", type: "text" },
+          { key: "income", label: "Income", type: "number" },
+        ],
+        config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+        app: {},
+        actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+      });
+      await tick();
+      const panel = document.querySelector(".db-record-detail-panel");
+      if (!panel) return { ran: false, reason: "the phone sheet did not open" };
+
+      const beforeVisual = visual.height;
+      const release = publishKeyboardInset(host);
+      Object.defineProperty(visual, "height", {
+        configurable: true,
+        get: () => beforeVisual - keyboard,
+      });
+      visual.dispatchEvent(new Event("resize"));
+      await tick();
+
+      const declared = getComputedStyle(document.documentElement)
+        .getPropertyValue("--keyboard-height").trim();
+      const visualHeight = visual.height;
+      const published = host.style.getPropertyValue("--db-keyboard-inset").trim();
+      const inset = parseFloat(published);
+      const sheetBottom = Math.round(panel.getBoundingClientRect().bottom);
+      const expectedBottom = Math.round(window.innerHeight - inset);
+      const observedInset = Math.round(window.innerHeight - sheetBottom);
+
+      release();
+      delete visual.height;
+      visual.dispatchEvent(new Event("resize"));
+      await tick();
+      closeRecordDetailPanel();
+      return {
+        ran: true,
+        declared: declared || "(unset)",
+        beforeVisual,
+        visualHeight,
+        windowHeight: window.innerHeight,
+        published: published || "(unset)",
+        inset,
+        sheetBottom,
+        expectedBottom,
+        observedInset,
+      };
+    });
+
+    return [{
+      name: "the phone sheet follows --db-keyboard-inset without a host variable",
+      pass: measured.ran
+        && measured.declared === "(unset)"
+        && measured.published === "336px"
+        && measured.inset === 336
+        && measured.sheetBottom === measured.expectedBottom
+        && measured.observedInset === measured.inset,
+      detail: measured.ran
+        ? `--keyboard-height=${measured.declared}; visualViewport.height ${measured.beforeVisual} -> `
+          + `${measured.visualHeight}px while window.innerHeight=${measured.windowHeight}px; `
+          + `--db-keyboard-inset=${measured.published}; sheet bottom=${measured.sheetBottom}px, `
+          + `want=${measured.expectedBottom}px (observed inset=${measured.observedInset}px)`
+        : measured.reason,
+    }];
+  },
+);
 await keyboardPhone.close();
 
 // ───────────────────────────────────────────────────────────────────
@@ -6714,7 +6815,9 @@ await section("lifted probes: the sheet audit", async () => {
   record(4, "a declared keyboard height lifts the sheet clear of it",
     kbVisual.survived && kbVisual.viewport - kbVisual.bottom >= 330,
     kbVisual.survived
-      ? `--keyboard-height:336px moved the sheet's bottom edge ${kbVisual.before} -> ${kbVisual.bottom} on an ${kbVisual.viewport}px screen (clearance ${kbVisual.viewport - kbVisual.bottom}px); lever var=${kbVisual.varValue}`
+      ? `--keyboard-height:336px moved the sheet's bottom edge ${kbVisual.before} -> ${kbVisual.bottom} on an ${kbVisual.viewport}px screen (clearance ${kbVisual.viewport - kbVisual.bottom}px); lever var=${kbVisual.varValue}; `
+        + `(harness-supplied --keyboard-height=336px; a device where the host publishes nothing is `
+        + `covered by "the phone sheet follows --db-keyboard-inset without a host variable")`
       : "the sheet was destroyed before any inset could be applied");
   record(4, "lifting the sheet does not push its top off the screen",
     kbVisual.survived && kbVisual.top >= 0,
@@ -10458,6 +10561,7 @@ await section("nothing truncates while its neighbour has room to spare", async (
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
+  ...visualViewportFallbackResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();

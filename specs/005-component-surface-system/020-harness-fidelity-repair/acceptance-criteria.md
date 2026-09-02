@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-08-31T06:00:00Z"
-    last_updated_by: "harness-supply-audit"
-    recent_action: "Supply audit: 12 rows sound as worded; keyboard-height supply never in scope"
-    next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
+    last_updated_at: "2026-09-02T18:20:00Z"
+    last_updated_by: "host-silent-check-verified"
+    recent_action: "Host-silent check at :4097 observed red; three older checks red too"
+    next_safe_action: "Decide whether the duplicate host-silent check at :4097 earns its place"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -195,6 +195,31 @@ view and of the host's own chrome.
 **Line references drifted** and should be re-derived rather than cited: the two record-sheet sites
 have moved, and the `popover-position.ts` pair has moved. Cite the block comments, which are stable,
 rather than the numbers.
+
+**Stale 3 — a fourth host-silent check landed 2026-09-02, and it is narrower than it reads.**
+`verify-placement.mjs:4097` adds *"the phone sheet follows `--db-keyboard-inset` without a host
+variable"*: it shrinks `visualViewport.height` by 336px on the phone fixture, asserts that
+`--keyboard-height` is unset, then reads the container's published `--db-keyboard-inset` and the
+record sheet's own bottom edge. It is falsifiable, which is the bar this phase set. Dropping the
+visual-viewport term from `keyboardInset()` in `popover-position.ts` turned it red at
+**`--db-keyboard-inset=0px` and a sheet bottom of 844px on an 844px window**, against **336px and
+508px** green with the term restored.
+
+Two limits are recorded rather than left to be rediscovered. First, **it was not the only check the
+edit reddened.** The same one-line change also reddened *"the sheet clears a keyboard no host
+reported"*, *"the selection bar clears a keyboard no host reported"* and *"the keyboard inset falls
+back to the visual viewport when the host declares nothing"* — 4 reds, not 1, and all three of the
+others predate it. The coverage it adds is a duplicate of the block Stale 1 already found, which
+additionally owns a named negative control (`SELECTION_BAR_CONTROL=revert`) that this one does not.
+Second, **its geometry half cannot fail.** `expectedBottom` is derived from the inset the same run
+just measured, so `sheetBottom === expectedBottom` and `observedInset === inset` are two spellings
+of one identity, and both stayed green throughout the red run. The published value is the only
+load-bearing assertion, and `:6761` already carries it.
+
+**The four host-supplied sites now name their own provenance.** `verify-placement.mjs:968`, `:3433`,
+`:3539` and `:6819` each state, in the detail string the run prints, the figure the harness wrote and
+the name of the check that covers a host publishing nothing. That is a legibility repair and not a
+supply repair: all four still prove arithmetic *given* the variable, exactly as before.
 
 ### The same question, asked of the instruments added since
 
