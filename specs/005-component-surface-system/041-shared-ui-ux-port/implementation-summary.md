@@ -11,14 +11,15 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/041-shared-ui-ux-port"
-    last_updated_at: "2026-09-03T13:45:00Z"
-    last_updated_by: "leg-b-verified"
-    recent_action: "Rebased and landed leg b: tokens, focus ring, timeline a11y; gate 25 green"
-    next_safe_action: "Operator device check: timeline bar trigger and link dots on a phone"
+    last_updated_at: "2026-09-03T21:04:00Z"
+    last_updated_by: "reduced-motion-descendant-fix"
+    recent_action: "Closed known limitation 4: owned-menu reduced motion, .db-surface added"
+    next_safe_action: "Verify timeline trigger, link dots and owned-menu motion on a device"
     blockers:
       - "Not operator-confirmed: no capture was read on a real device, only in the harness"
       - "The empty-state p margin is fixed in styles.css but the hand-typed empty-state fixture still does not reach the changed element, so no capture proves it"
       - "T012's cross-surface polish is limited to the timeline; the board is 038's and the calendar was left alone"
+      - "npm run gate carries one pre-existing red (placement: a CM6 Live Preview widget paint-containment case), reproduced identically against unmodified styles.css and unrelated to this fix; it predates this session and needs its own body-portal fix elsewhere"
     key_files:
       - "styles.css"
       - "src/views/calendar-timeline-renderer.ts"
@@ -132,6 +133,10 @@ outstanding once the body element became a `p`.
 | `tools/lane/css-lane.json` | Modified | Leg B: lane re-acquired against `038`'s release and released naming 19 reviewed captures |
 | `screenshots/` (18 PNGs + manifest) | Modified | Leg B: recapture after the markup and stylesheet change |
 | `tools/live/*.json` (16 artefacts) | Modified | Leg B: re-measured after the stylesheet and renderer edit |
+| `styles.css` | Modified | Reduced-motion follow-up: `.db-surface` leads the container-wide reset's selector list so a body-portalled owned menu is covered |
+| `src/views/owned-menu-reduced-motion.test.ts` | Created | Red-first source-string test pinning `.db-surface` in the container-wide reduced-motion block |
+| `screenshots/manifest.json` | Modified | Reduced-motion follow-up: `sourceHashes.styles.css` refreshed for all 268 entries; `layoutHash`/`bytes` restored for the 10 entries whose PNG was reverted as harness noise |
+| `tools/live/*.json` (16 artefacts) | Modified | Reduced-motion follow-up: re-measured after the stylesheet edit |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -264,6 +269,28 @@ reports all 16 artefacts fresh; `npm run gate` is 25 green with `SURFACE_PHASE` 
 | Icon-picker delta attributed | Negative control: with `038`'s stylesheet in the tree the harness reproduces the same 4906-pixel shift, so those two PNGs were stale before this change |
 | Engine parity unchanged | `engine-parity.json` records the same 65 fixtures and 49 differences as `cb9aedf4`; only `measuredAt` and `inputs` moved |
 | REQ-001 sheet untouched (`git diff -- src/views/mobile-bottom-sheet.ts`) | PASS — 0 lines |
+
+### Reduced-motion follow-up
+
+| Check | Result |
+|-------|--------|
+| Red-first (`owned-menu-reduced-motion.test.ts`) | Red: `expected '...' to contain '.db-surface'` against the container-wide block's selector list; green after `styles.css:883-886` |
+| Computed-style probe (`.db-surface` fixture, Playwright, `reducedMotion: "reduce"`) | Before: host/descendants had no declared `animation-duration` (default, not a reset); after: `1e-05s` (0.01ms), matching the container-wide convention |
+| Full unit suite (`npx vitest run`) | PASS — 865 tests / 88 files |
+| Typecheck (`npx tsc --noEmit`) | PASS — 0 errors |
+| Lint (`npm run lint`) | 172 problems (159 errors, 13 warnings), +3 vs the 169 baseline — all three from the new test file's `fs`/`path`/`__dirname` use, the same `import/no-nodejs-modules`/`no-undef` pattern already carried by 14 sibling `src/views/*.test.ts` files reading `styles.css` |
+| Comment scan (`node tools/naming/scan-comments.mjs`) | PASS — exit 0 |
+| Failing-value ratchet (`node tools/naming/scan-failing-values.mjs`) | PASS — exit 0 |
+| Lane, held (`SURFACE_PHASE=041-shared-ui-ux-port node tools/lane/check-lane.mjs`) | PASS — exit 0, edit allowed |
+| Lane, released (`node tools/lane/check-lane.mjs`) | PASS — exit 0, "release names all 0 changed capture(s)" |
+| Recapture (`npm run screenshots`, detached) | 268/268 captured; only 2 scenarios render `.db-surface` (`chrome-owned-menu`, `chrome-owned-menu-sheet`) and both came back byte-identical |
+| Captures read | The 6 `chrome-owned-menu*` PNGs (desktop/mobile x light/dark, plus the sheet pair), confirming the rendered rows and sheet chrome are unchanged |
+| Harness noise identified and restored | 10 PNGs across `calendar-empty-state`, `calendar-mini-calendar`, `panel-record-detail-sheet-body-empty`, `timeline-view` and its `day`/`month`/`year` variants drifted differently across two same-tree reruns; none render `.db-surface`; reverted to committed bytes, `manifest.json` `layoutHash`/`bytes` restored to match, `sourceHashes.styles.css` left at the fresh hash |
+| Screenshot freshness (`npm run screenshots:verify`) | PASS — exit 0, 268 entries match their sources |
+| Evidence freshness (`node tools/live/evidence.mjs --check-all`) | PASS — exit 0, 16 artefacts fresh after re-running all 16 |
+| Gate (`SURFACE_PHASE=041-shared-ui-ux-port npm run gate`) | FAIL — 24 green, 1 red: `placement`'s declared CM6 widget-containment case, reproduced identically against unmodified `styles.css` (see below), unrelated to this fix |
+| Gate (`npm run gate`, bare) | Same: 24 green, 1 red, identical pre-existing cause |
+| Placement red isolated | `git diff -- styles.css` stashed to a patch, `styles.css` reverted to HEAD, `verify-placement.mjs` rerun: the same "RED (declared) — a popover inside a paint-contained widget is not clipped by it" appears with `styles.css` unmodified, then the patch was reapplied and the hash re-checked against the lane's recorded release hash (`5657a71d290b`) to confirm the fix was restored intact |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -287,11 +314,11 @@ reports all 16 artefacts fresh; `npm run gate` is 25 green with `SURFACE_PHASE` 
    runs and reproduces the same 4826-pixel shift with `038`'s stylesheet in the tree, so those two
    committed PNGs were simply stale. **A capture that moved is not on its own evidence that
    something changed** — the cheap test is to rerun that one scenario and see whether it settles.
-4. **Reduced motion still misses an owned menu's descendants.** The named block covers
-   `.db-overlay-enter` itself, so the menu's own entrance is reduced, but the container-wide block
-   is keyed on `.note-database-container` and an owned menu is a `.db-surface` without it
-   (`owned-menu.ts:86`). Closing it means adding `.db-surface` to that block, which moves captures on
-   a surface this packet does not own.
+4. ~~Reduced motion still misses an owned menu's descendants.~~ **Closed.** `.db-surface` (and its
+   `*`/`::before`/`::after` arms) now leads the container-wide reduced-motion block's selector list
+   (`styles.css:883-886`), the same pattern the accent focus ring already uses. It did not move a
+   capture: of the 268 scenarios, only `chrome-owned-menu` and `chrome-owned-menu-sheet` render
+   `.db-surface` at all, and both came back byte-identical on recapture.
 5. **Cross-surface polish (T012) reached the timeline only.** The board is `038`'s and was left
    whole; the calendar was not touched. The shared tokens are available to both and consumed by
    neither beyond what shipped here.

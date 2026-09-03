@@ -876,7 +876,14 @@
 @media (prefers-reduced-motion: reduce) {
   /* The container itself, not only its descendants. A surface portalled to the body carries
      the container marker, so this list reaches everything inside it and skips the surface —
-     which then keeps its own transitions for a reader who asked for none. */
+     which then keeps its own transitions for a reader who asked for none. `.db-surface` leads
+     for the surfaces that never carry the container class at all, an owned menu among them: it
+     mounts on `doc.body` carrying only `.db-surface`, `.db-menu` and `.db-owned-menu`, with no
+     ancestor this list would otherwise reach. */
+  .db-surface,
+  .db-surface *,
+  .db-surface *::before,
+  .db-surface *::after,
   .note-database-container,
   .note-database-container *,
   .note-database-container *::before,

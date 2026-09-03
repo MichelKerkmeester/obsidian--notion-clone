@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/041-shared-ui-ux-port"
-    last_updated_at: "2026-09-03T12:40:00Z"
-    last_updated_by: "leg-a-verified"
-    recent_action: "Verified leg a: empty-state, aria-pressed, default view; 45/45 green"
-    next_safe_action: "T004: observe the current --db-* token ladder red against variables.css:1-9 before extending it"
+    last_updated_at: "2026-09-03T21:04:00Z"
+    last_updated_by: "reduced-motion-descendant-fix"
+    recent_action: "Closed T007's owned-menu reduced-motion gap: added .db-surface to styles.css:876"
+    next_safe_action: "Verify owned-menu reduced motion on an operator device"
     blockers:
-      - "No implementation has started; every completion-criteria row below is unticked"
       - "037-040 have not all landed their own renderer shape yet, so cross-surface polish (plan.md step 7) has no full target"
     key_files:
       - "spec.md"
@@ -70,8 +69,13 @@ view, or calculation layer, all three of which the catalog names as ours to keep
       body/action/CTA shape through local diagnostics-aware reasons (AC-004).
 - [ ] `board-renderer.ts`'s card icon/tooltip/chip density is reconciled against `IconButton.ts:3-31`/
       `Chip.ts:3-40` through local field renderers, no copied DOM (AC-005).
-- [ ] The reduced-motion media rule covers every implied `db-overlay-enter`/`db-mobile-sheet-scrim`
-      surface without adding a second sheet-height cap (AC-006).
+- [x] The reduced-motion media rule covers every implied `db-overlay-enter`/`db-mobile-sheet-scrim`
+      surface without adding a second sheet-height cap (AC-006). T007 closed the named surfaces; the
+      narrower gap it left standing — an owned menu is a `.db-surface` without `.note-database-container`,
+      so the container-wide reset never reached its descendants — is closed by adding `.db-surface` to
+      that reset (`styles.css:883-886`). A source-string test on the block's selector list
+      (`owned-menu-reduced-motion.test.ts`) failed `toContain(".db-surface")` before the fix and passed
+      after. No second sheet-height cap was added.
 - [ ] `SettingsTab.display()` exposes the reconciled default-view/editor/save and board/timeline
       display vocabulary, localized through `src/i18n.ts` (AC-007).
 - [ ] Toggle-button `aria-expanded`/`is-open` state and the board's roving keyboard match the
@@ -109,10 +113,27 @@ Local host files were read before writing this packet's scope, per D2: `styles.c
 | Token reconciliation (plan.md step 1) | Pending | Not started |
 | Empty-state composition (plan.md step 2) | Pending | Not started |
 | Primitive density (plan.md step 3) | Pending | Not started |
-| Motion / reduced motion (plan.md step 4) | Pending | Not started |
+| Motion / reduced motion (plan.md step 4) | Done | T007 (tasks.md) plus the owned-menu descendant fix recorded below; AC-006 ticked |
 | Settings UX (plan.md step 5) | Pending | Not started |
 | Accessibility / focus (plan.md step 6) | Pending | Not started |
 | Cross-surface polish (plan.md step 7) | Pending | Depends on `037`/`038`/`039` landing their own renderer shape |
+
+### Update, 2026-09-03
+
+Leg a and leg b (see `implementation-summary.md`) had already landed by the time this entry was
+written; the paragraph above predates them and is left as the record of how the packet opened.
+
+This entry closes the one gap leg b's own limitations list recorded rather than fixed: an owned
+menu (`owned-menu.ts:86`) mounts on `doc.body` carrying `.db-surface` and never
+`.note-database-container`, so the container-wide reduced-motion reset at `styles.css:876` never
+reached its descendants. `.db-surface` (and its `*`/`::before`/`::after` arms) now leads that
+selector list, mirroring the `.db-surface`-leads-the-list convention the accent focus ring already
+uses. Red-first via a source-string test (`src/views/owned-menu-reduced-motion.test.ts`) asserting
+the block's selector list contains `.db-surface`; failed before the edit, passed after. The two
+scenarios that actually render `.db-surface` (`chrome-owned-menu`, `chrome-owned-menu-sheet`) came
+back byte-identical on recapture; ten unrelated captures drifted across repeated runs on the same
+tree with no `.db-surface` in their markup at all and were restored rather than shipped, matching
+the harness non-determinism this packet's own limitations list already named.
 
 ### Deviations and findings
 

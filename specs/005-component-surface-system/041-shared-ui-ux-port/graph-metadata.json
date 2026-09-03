@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The obsidian-pm reference names a shared visual and interaction language: semantic tokens, an",
     "created_at": "2026-09-02T21:57:02.779Z",
-    "last_save_at": "2026-09-03T11:17:35.950Z",
+    "last_save_at": "2026-09-03T21:07:01.006Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b79b07047aa1503214b7815a05451a97221c8bb1c4956564ac8d91dcd3917132",
+    "source_fingerprint": "sha256:b5f5c59f73c1baaa8d92eb61dd355e939c0fefab830bef4dd9d31edfba01279c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "00e316f12288b239b47254b33e976b3281e0b56f5740cc99f324d2b0e38de7dd",
       "plan.md": "f95e4d06beb3ebbde225aaad13a397aeed5b7a0bc5d629fc27cf438a0ebff3bb",
-      "tasks.md": "05c71b934da977102a156784638303d5036f363d57502252c35a08e1842c1cd5",
-      "implementation-summary.md": "b11b9879085274d889ae2b4bdf8123084b0f7292a62a0458094c126098e3bd89"
+      "tasks.md": "417f5e02595b4f68650c257771903fd81151165f2eef1827741d743f9e2352fa",
+      "implementation-summary.md": "20ad13208db6a95f8c04b037730671961ad2f33a47e77418b5d7c6fc8afdddb6"
     },
     "last_active_child_id": null,
     "last_active_at": null
