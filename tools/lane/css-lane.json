@@ -1531,6 +1531,26 @@
         "screenshots/components/chrome-owned-menu-sheet-mobile-light.png"
       ],
       "note": "Fixed a placement-harness regression the reduced-motion .db-surface arm caused: it set transition-duration: 0.01ms with no transition-property, so the default transition-property: all made every animatable property on that subtree actually transition, and a synchronous getComputedStyle read right after a style mutation (the ablation removing padding-inline from .is-phone .db-menu-section) could land mid-flight and report the departing value instead of the arriving one. Nothing under .db-surface listens for transitionend, so the honest fix is a real zero: .db-surface split into its own rule with transition-duration: 0, leaving .note-database-container at its prior 0.01ms. verify-placement.mjs: the is-phone heading rule check went from FAIL to PASS, 392/393 (the one remaining red is the pre-existing declared paint-contain reason, unrelated). Full recapture run detached: the two owned-menu-sheet-mobile captures (the only .db-surface scenarios in the phone-sheet presentation) came back pixel-identical to the committed baseline (PIL ImageChops bbox=None, manifest layoutHash unchanged) with only PNG-encoder byte noise, so their bytes were restored rather than shipped as churn. Ten unrelated captures (calendar-empty-state x2, timeline-subtask-tree x2, timeline-view and its day/month/quarter/mobile variants x6) drifted the same way on a run this change never touches -- pixel-identical, layoutHash unchanged, restored to committed bytes -- pre-existing harness non-determinism matching this packet's prior findings. manifest.json keeps only the styles.css sourceHash/generatedFrom bump across all 276 scenarios (277 lines each way, sed-applied so no other field moved); no PNG in the tree differs from HEAD."
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-03T21:05:58Z",
+      "hash": "d9c147c9bf3a",
+      "reviewed": [
+        "screenshots/panels/panel-record-detail-sheet-body-empty-desktop-light.png",
+        "screenshots/views/calendar-empty-state-mobile-dark.png",
+        "screenshots/views/calendar-month-view-mobile-dark.png",
+        "screenshots/views/calendar-week-time-grid-mobile-dark.png",
+        "screenshots/views/timeline-subtask-tree-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ],
+      "note": "037-timeline-gantt-port leg B: no styles.css edit (title-window, tick-label-anchor, milestone-placement and day-scale-phone-width fixes are all TS/model logic, not CSS). Recaptured because sourceHashes ties every timeline-view-* and calendar-* scenario to calendar-timeline-renderer.ts, which this leg changed. All eleven PNGs below were opened and read side by side against their HEAD copies: every one is byte-only encoder noise (0-64 changed pixels of 1.4-5.2M, no visible content difference), the same phenomenon 040-subtask-tree-port's own release note already recorded for this toolchain. None of the four fixes are visually confirmed by this capture set: temporal.mjs's TIMELINE_FIXTURES/timelineDynamicFixture build the timeline-view-* markup from its own hand-mirrored constants (title text, tick labels, day width) rather than calling calendar-timeline-model.ts or calendar-timeline-renderer.ts, so none of the changed functions execute when these scenarios render. Confirmed instead by calendar-timeline-model.test.ts, calendar-title-formatter.test.ts and calendar-timeline-tick-label.test.ts (red before, green after) plus direct read of the renderer's container.clientWidth wiring at calendar-timeline-renderer.ts:318 and :2512. goal.md's four open rows stay \"capture pending\" for this reason, not because the fix is unverified \u2014 the milestone-overpaint and axis-label-clip bugs are still visibly reproduced in this capture set (timeline-view-month-desktop-light's \"Adobe CC\" still reads under \"Notion\", timeline-view-day-mobile-dark's leading \"00:00\" is still clipped to \"0:00\") exactly as goal.md already described, since the fixture never reaches the code that fixes them."
     }
   ],
   "outstanding": [

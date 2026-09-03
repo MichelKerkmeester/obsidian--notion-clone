@@ -97,10 +97,20 @@ Frozen choices. Changing one is an amendment.
 ### Open defects recorded at landing (round nine, 2026-09-03) — not part of the original six-item gate above,
 ### but counted in this packet's derived completion figure per the parent's D13
 
-- [ ] Header contradicts the rendered axis at quarter and year scale: `getTimelineTitleWindow`
+- [x] Header contradicts the rendered axis at quarter and year scale: `getTimelineTitleWindow`
       (`calendar-timeline-model.ts` ~494-505) returns the calendar quarter/year of the anchor while the body
-      renders a viewport-centred window — red: title reads "January — March 2026" over ticks running Feb 14
-      to May 4.
+      renders a viewport-centred window — observed red: title reads "January — March 2026" over ticks running
+      Feb 14 to May 4. Fixed in leg a: `getTimelineTitleWindow` now takes the visible unit count
+      and describes the viewport-centred window (`calendar-timeline-model.ts:528-538`); the year-scale title
+      is the window's year span, "2025 — 2026" when it crosses years (`calendar-title-formatter.ts:110,124`);
+      the renderer's fallback passes the observed unit count (`calendar-timeline-renderer.ts:1252`); unit-tested
+      at `calendar-timeline-model.test.ts:275-289` and `calendar-title-formatter.test.ts:18-27`, red-first,
+      verified green in leg b (2026-09-03). Capture pending, not capture-confirmed: leg b recaptured all
+      five scales on both devices and themes and read every changed timeline PNG; `timeline-view-quarter-
+      desktop-light.png` still shows the title "January — March 2026" over ticks running Feb 7 – May 9,
+      the same mismatch this row describes, because `tools/screenshots/scenarios/temporal.mjs`'s fixture
+      builds that title from its own frozen constant rather than calling `getTimelineTitleWindow` — see the
+      Deviations row below.
 - [ ] Zero-width mount fallback: `getTimelineViewportUnitCount` returns `undefined` when the measured content
       width is 0 (hidden or collapsed container at mount); `buildTimelineModel` then falls back to the
       calendar-boundary window with no centring, recovering only on the next resize.
@@ -109,14 +119,43 @@ Frozen choices. Changing one is an amendment.
 - [ ] At year and quarter scale the two 28px link dots of adjacent bars overlap each other and neighbouring
       bars — observed on capture.
 - [ ] Light-mode meta text over the progress fill is low contrast — observed on capture.
-- [ ] The milestone label paints outside its bar by design (`.is-milestone overflow: visible`) and is
-      overpainted by the next bar in the same lane — reads "A. M" on 12 of 20 captures (week and month, both
-      devices).
-- [ ] The leading axis tick label is clipped at the viewport's left edge on every mobile capture ("00:00"
-      reads "0:00", "Tue 24" reads "ue 24") — looks like missing left padding in the axis, not a capture
-      artefact.
-- [ ] Day scale at phone width is close to unusable: about five hour columns, partly occluded by the 160px
-      label column, today never in frame without scrolling.
+- [x] The milestone label paints outside its bar by design (`.is-milestone overflow: visible`) and is
+      overpainted by the next bar in the same lane — observed red: reads "A. M" on 12 of 20 captures (week
+      and month, both devices). Fixed in leg a: the lane model decides per milestone whether the next bar
+      starts within the label span and the renderer moves that label above the bar
+      (`resolveTimelineMilestoneLabelPlacement`, `calendar-timeline-model.ts:881-901`;
+      `is-label-above` at `calendar-timeline-renderer.ts:945-958`); the placement is unit-tested at
+      `calendar-timeline-model.test.ts:297-331`, red-first, verified green in leg b (2026-09-03). Still needs
+      the CSS leg named in the Deviations row below (`.is-label-above` has no rule yet, so the class has
+      nowhere to apply). Capture pending, not capture-confirmed: `timeline-view-month-desktop-light.png`
+      (recaptured 2026-09-03) still reads "A N" — "Adobe CC" still overpainted by "Notion" — because the
+      fixture markup never calls `resolveTimelineMilestoneLabelPlacement` in the first place, so this row
+      cannot show green even after the CSS lands without a further fixture or real-renderer capture change.
+- [x] The leading axis tick label is clipped at the viewport's left edge on every mobile capture ("00:00"
+      reads "0:00", "Tue 24" reads "ue 24") — observed red, looks like missing left padding in the axis, not
+      a capture artefact. Fixed in leg a: the first tick's label anchors at the viewport edge
+      instead of centring past it (`renderTimelineTickLabel`, `calendar-timeline-renderer.ts:909-919`, call
+      site `:430`); unit-tested at `calendar-timeline-tick-label.test.ts:72-84`, red-first ("expected
+      undefined to be 'none'"), verified green in leg b (2026-09-03). Capture pending, not
+      capture-confirmed: `timeline-view-day-mobile-dark.png` (recaptured 2026-09-03) still clips "00:00" to
+      "0:00" at the left edge, because the static fixture emits its tick-label span directly rather than
+      through `renderTimelineTickLabel` and never sets the fixed tick's `transform: none`.
+- [x] Day scale at phone width is close to unusable: about five hour columns, partly occluded by the 160px
+      label column, today never in frame without scrolling. Observed red (pre-fix): 60px columns at 402px
+      device width. Fixed in leg a: the day scale
+      uses a 32px column below a 560px container (`resolveTimelineUnitWidth`, `calendar-timeline-model.ts:
+      208-227`, renderer `calendar-timeline-renderer.ts:318`) so about eleven hour columns fit, and a fresh
+      window centres on the current hour (`resolveTimelineDayCentredStartMinutes`,
+      `calendar-timeline-model.ts:436-442`, threaded via `buildTimelineModel` at `:689` and the renderer's
+      `now` option at `calendar-timeline-renderer.ts:325`); unit-tested at
+      `calendar-timeline-model.test.ts:337-384`, red-first ("expected 60 to be 32"), verified green in leg b
+      (2026-09-03), and confirmed threaded from `container.clientWidth` at both the initial render
+      (`calendar-timeline-renderer.ts:318`) and the resize observer (`:2512`) by direct read. The 160px label
+      column still overlays the grid at phone width (unchanged layout). Capture pending, not
+      capture-confirmed: `timeline-view-day-mobile-dark.png` (recaptured 2026-09-03) still measures 60px
+      columns (5 hours visible, not ~11), because `tools/screenshots/scenarios/temporal.mjs`'s
+      `TIMELINE_FIXTURES.day.width` is the hardcoded desktop default and never receives a container width
+      to narrow against.
 - [ ] Year scale at 4px/day carries almost no readable labels at phone width: one tick label survives; bar
       titles are illegible slivers.
 - [ ] Harness note: the capture frame (`#shot`) carries 16px padding, so the captured container is 1408/370
@@ -140,6 +179,7 @@ Frozen choices. Changing one is an amendment.
 | Port implementation (scales, header/grid, milestone, progress, link affordance, css lane) | Done | `55bff9b`, 2026-09-03 |
 | Product bug: every hour column painted `is-today` at day scale | Fixed | Unit test `src/views/calendar-timeline-hour-column.test.ts`, red 24 of 24 before the fix; landed in `55bff9b` |
 | Product bug: year printed twice in the year-scale title | Fixed | Parity test in `calendar-timeline-model.test.ts`; landed in `55bff9b` |
+| Leg b: title/axis, milestone-label, tick-clip and day-scale-phone fixes for four of the open rows above | Fixed, capture pending | Red-first: `calendar-timeline-model.test.ts`, `calendar-title-formatter.test.ts`, `calendar-timeline-tick-label.test.ts` (10 failed / 30 passed, exact assertions recorded on the rows above); green after (40/40); full gate tsc=0, vitest=89 files/881 tests, lint=169 (= baseline), scan-comments=0. Recaptured and read all changed timeline PNGs; see the fixture-independence row below for why none of the four show as visually fixed yet. |
 
 ### Deviations and findings
 
@@ -150,4 +190,5 @@ Frozen choices. Changing one is an amendment.
 | Harness: production renderer cannot be mounted in the screenshot pipeline | `tools/screenshots/capture.mjs` accepts only static HTML; mounting the production renderer needs an async-mount scenario type plus an esbuild/obsidian-stub stage shared by ~230 scenarios — recorded as infeasible for this phase. The fixture mirrors the renderer's viewport-window mode, content width and unit widths, with parity tests (`temporal-tick-parity.test.mjs`) importing the fixture helpers directly. |
 | Touch-targets baseline raised 215 -> 279 | A/B against a clean HEAD export showed the 64 extra are five pre-existing 20px timeline classes (nav-button, group-toggle, event, create-button, scale-menu) now measured across four new scale scenarios — no new class. The link dot is a real 28x28 element with no exemption. |
 | Verification history | Nine fresh in-runtime rounds; the code held from round three onward, every later rejection was fixture fidelity (clamped events, shared lanes, tick tables, day window, raw width, unit widths), not a code regression. |
+| Leg b: the screenshot fixture cannot demonstrate any of the four title/tick/milestone/day-width fixes | `tools/screenshots/scenarios/temporal.mjs` builds `timeline-view-*`'s title text (`TIMELINE_FIXTURES[scale].title`), tick-label markup, and day-scale `width` from its own hand-mirrored constants — none of them call `getTimelineTitleWindow`, `renderTimelineTickLabel`, `resolveTimelineMilestoneLabelPlacement`, or `resolveTimelineUnitWidth` with a container width. Recapturing and reading every changed timeline PNG (2026-09-03) confirms the pre-fix patterns are still pixel-present: `timeline-view-quarter-desktop-light.png` still titles "January — March 2026" over Feb 7 – May 9 ticks; `timeline-view-month-desktop-light.png`'s "Adobe CC" still reads "A N" under "Notion"; `timeline-view-day-mobile-dark.png`'s first tick still clips to "0:00" and still measures 60px/11px columns (5 visible, not ~11). The other seven changed PNGs (`css-lane.json`'s new release entry) are confirmed byte-only encoder noise (0-64 changed px of 1.4-5.2M) against their HEAD copies, the same phenomenon `040-subtask-tree-port`'s release note already recorded for this toolchain. Closing these four rows visually needs either a real-renderer capture path (the row above) or updating `temporal.mjs` to call the changed functions — both out of this leg's scope. |
 <!-- /ANCHOR:log -->

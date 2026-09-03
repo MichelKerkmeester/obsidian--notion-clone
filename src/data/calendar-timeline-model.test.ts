@@ -14,10 +14,16 @@ import {
   buildTimelineTicks,
   collectUnscheduledTimelineRows,
   formatTimelineAccessibilityLabel,
+  getTimelineTitleWindow,
+  getTimelineViewportWindow,
   resolveTimelineBarGeometry,
   resolveTimelineBarMinUnits,
+  resolveTimelineDayCentredStartMinutes,
+  resolveTimelineMilestoneLabelPlacement,
   resolveTimelineProgressFillUnits,
+  resolveTimelineUnitWidth,
 } from "./calendar-timeline-model";
+import type { CalendarTimelineEvent } from "./calendar-timeline-model";
 import type { RowData, ViewConfig } from "./types";
 
 // ───────────────────────────────────────────────────────────────────
@@ -263,5 +269,116 @@ describe("buildTimelineTicks scale boundaries", () => {
     expect(ticks.find((tick) => tick.dateKey === "2026-04-01")?.isScaleBoundary).toBe(true);
     expect(ticks.find((tick) => tick.dateKey === "2026-07-01")).toMatchObject({ offsetUnits: 181, isScaleBoundary: true });
     expect(ticks.find((tick) => tick.dateKey === "2026-10-01")).toMatchObject({ offsetUnits: 273, isScaleBoundary: true });
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 7. TITLE WINDOW
+// ───────────────────────────────────────────────────────────────────
+
+describe("getTimelineTitleWindow describes the rendered window", () => {
+  it("returns the viewport-centred window when a visible unit count is given", () => {
+    const window = getTimelineTitleWindow({ ...baseConfig, timelineScale: "quarter" }, "2026-03-25", 93);
+    expect(window.startDateKey).toBe("2026-02-07");
+    expect(window.endDateKey).toBe("2026-05-10");
+  });
+
+  it("keeps the natural quarter for the no-viewport fallback path", () => {
+    const window = getTimelineTitleWindow({ ...baseConfig, timelineScale: "quarter" }, "2026-03-25");
+    expect(window.startDateKey).toBe("2026-01-01");
+    expect(window.endDateKey).toBe("2026-03-31");
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 8. MILESTONE LABEL PLACEMENT
+// ───────────────────────────────────────────────────────────────────
+
+describe("resolveTimelineMilestoneLabelPlacement", () => {
+  function timelineEvent(over: Partial<CalendarTimelineEvent>): CalendarTimelineEvent {
+    return {
+      id: "e",
+      title: "Event",
+      filePath: "e.md",
+      row: row("e.md", {}),
+      startDateKey: "2026-03-25",
+      endDateKey: "2026-03-25",
+      offsetUnits: 0,
+      durationUnits: 1,
+      durationDays: 1,
+      windowPosition: "visible",
+      order: 0,
+      ...over,
+    };
+  }
+
+  it("places the label above when the next bar starts within the label span", () => {
+    const milestoneEvent = timelineEvent({ id: "m", title: "Adobe CC", isMilestone: true });
+    const next = timelineEvent({ id: "n", title: "Notion", startDateKey: "2026-03-26", endDateKey: "2026-03-31" });
+    expect(resolveTimelineMilestoneLabelPlacement(milestoneEvent, [milestoneEvent, next], 15, "day")).toBe("above");
+    expect(resolveTimelineMilestoneLabelPlacement(milestoneEvent, [milestoneEvent, next], 100, "day")).toBe("above");
+  });
+
+  it("keeps the label inline when the next bar starts beyond the label span", () => {
+    const milestoneEvent = timelineEvent({ id: "m", title: "Adobe CC", isMilestone: true });
+    const next = timelineEvent({ id: "n", title: "Later", startDateKey: "2026-05-20", endDateKey: "2026-05-25" });
+    expect(resolveTimelineMilestoneLabelPlacement(milestoneEvent, [milestoneEvent, next], 15, "day")).toBe("inline");
+  });
+
+  it("reports inline for non-milestone events", () => {
+    expect(resolveTimelineMilestoneLabelPlacement(timelineEvent({}), [timelineEvent({})], 15, "day")).toBe("inline");
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 9. NARROW-VIEWPORT DAY SCALE
+// ───────────────────────────────────────────────────────────────────
+
+describe("resolveTimelineUnitWidth at narrow viewports", () => {
+  it("narrows the day-scale unit width on a phone-width viewport", () => {
+    expect(resolveTimelineUnitWidth({}, "day", 402)).toBe(32);
+  });
+
+  it("keeps the desktop day width and every other scale unchanged", () => {
+    expect(resolveTimelineUnitWidth({}, "day", 1440)).toBe(60);
+    expect(resolveTimelineUnitWidth({}, "day")).toBe(60);
+    expect(resolveTimelineUnitWidth({}, "week", 402)).toBe(100);
+    expect(resolveTimelineUnitWidth({}, "quarter", 402)).toBe(15);
+  });
+
+  it("respects a custom day width at narrow viewports", () => {
+    expect(resolveTimelineUnitWidth({ timelineColumnSizeMode: "custom", timelineCustomUnitWidth: 90 }, "day", 402)).toBe(90);
+  });
+});
+
+describe("resolveTimelineDayCentredStartMinutes", () => {
+  it("centres the current hour in the middle of the visible window", () => {
+    expect(resolveTimelineDayCentredStartMinutes(11, new Date(2026, 2, 25, 14, 30))).toBe(9 * 60);
+    expect(resolveTimelineDayCentredStartMinutes(11, new Date(2026, 2, 25, 14, 45))).toBe(9 * 60);
+  });
+
+  it("clamps the window into the anchor day", () => {
+    expect(resolveTimelineDayCentredStartMinutes(11, new Date(2026, 2, 25, 2, 0))).toBe(0);
+    expect(resolveTimelineDayCentredStartMinutes(11, new Date(2026, 2, 25, 23, 0))).toBe(13 * 60);
+  });
+});
+
+describe("getTimelineViewportWindow day scale centring", () => {
+  it("centres the window on the current hour when no anchor time is configured", () => {
+    const window = getTimelineViewportWindow({ ...baseConfig, timelineScale: "day" }, "2026-03-25", 11, undefined, new Date(2026, 2, 25, 14, 30));
+    expect(window.startMinutes).toBe(9 * 60);
+    expect(window.startDateKey).toBe("2026-03-25");
+    expect(window.totalUnits).toBe(11);
+  });
+
+  it("keeps a configured anchor time as the window start", () => {
+    const window = getTimelineViewportWindow(
+      { ...baseConfig, timelineScale: "day", timelineAnchorTimeMinutes: 8 * 60 },
+      "2026-03-25",
+      11,
+      undefined,
+      new Date(2026, 2, 25, 14, 30),
+    );
+    expect(window.startMinutes).toBe(8 * 60);
   });
 });

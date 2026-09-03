@@ -93,8 +93,9 @@ export function formatCalendarTitleParts(input: CalendarTitleInput): CalendarTit
   const main = isChineseLocale(locale)
     ? formatChineseTitleMain(input.scale, start, end)
     : formatEnglishTitleMain(input.scale, start, end);
-  // Year scale's main text already IS the year ("2026"); a separate year span would repeat it
-  // verbatim right next to itself instead of adding information.
+  // Year scale's main text already IS the window's year span ("2026", or "2025 — 2026" when the
+  // viewport window crosses a year boundary); a separate year span would repeat it verbatim
+  // right next to itself instead of adding information.
   const year = input.scale === "year" ? "" : formatTitleYear(start, end);
   return makeTitle(main, year);
 }
@@ -106,7 +107,7 @@ function formatEnglishTitleMain(scale: CalendarTitleScale, start: Date, end: Dat
     return `${englishMonth(start)} ${RANGE_DASH} ${englishMonth(end)}`;
   }
   if (scale === "quarter") return `${englishMonth(start)} ${RANGE_DASH} ${englishMonth(end)}`;
-  if (scale === "year") return String(start.getUTCFullYear());
+  if (scale === "year") return formatTitleYear(start, end);
   if (sameUtcMonth(start, end) && sameUtcYear(start, end)) {
     return `${englishMonth(start)} ${start.getUTCDate()} ${COMPACT_RANGE_SEPARATOR} ${end.getUTCDate()}`;
   }
@@ -120,7 +121,7 @@ function formatChineseTitleMain(scale: CalendarTitleScale, start: Date, end: Dat
     return `${chineseMonth(start)} ${RANGE_DASH} ${chineseMonth(end)}`;
   }
   if (scale === "quarter") return `${chineseMonth(start)} ${RANGE_DASH} ${chineseMonth(end)}`;
-  if (scale === "year") return String(start.getUTCFullYear());
+  if (scale === "year") return formatTitleYear(start, end);
   if (sameUtcMonth(start, end) && sameUtcYear(start, end)) {
     return `${chineseMonthDay(start)} ${COMPACT_RANGE_SEPARATOR} ${chineseDay(end.getUTCDate())}`;
   }

@@ -200,10 +200,29 @@ export function getTimelineColumnWidthSpec(scale: TimelineScale): TimelineColumn
   }
 }
 
-export function resolveTimelineUnitWidth(config: Pick<ViewConfig, "timelineColumnSizeMode" | "timelineCustomUnitWidth">, scale: TimelineScale): number {
+/** Measured container width below which the day scale drops to the phone column width. */
+export const TIMELINE_PHONE_VIEWPORT_WIDTH_PX = 560;
+/** Day-scale column width at phone width: more hour columns fit on screen than at the desktop minimum. */
+export const TIMELINE_DAY_PHONE_UNIT_WIDTH_PX = 32;
+
+export function resolveTimelineUnitWidth(
+  config: Pick<ViewConfig, "timelineColumnSizeMode" | "timelineCustomUnitWidth">,
+  scale: TimelineScale,
+  viewportWidth?: number,
+): number {
   const spec = getTimelineColumnWidthSpec(scale);
   const configured = config.timelineColumnSizeMode === "custom" ? Number(config.timelineCustomUnitWidth) : NaN;
   const baseWidth = Number.isFinite(configured) && configured > 0 ? configured : spec.defaultWidth;
+  if (
+    scale === "day" &&
+    !Number.isFinite(configured) &&
+    viewportWidth != null &&
+    Number.isFinite(viewportWidth) &&
+    viewportWidth > 0 &&
+    viewportWidth < TIMELINE_PHONE_VIEWPORT_WIDTH_PX
+  ) {
+    return TIMELINE_DAY_PHONE_UNIT_WIDTH_PX;
+  }
   return Math.max(spec.min, Math.min(spec.max, baseWidth));
 }
 
@@ -282,6 +301,9 @@ export interface TimelineModelOptions {
   /** Real viewport span in day/hour units. May be fractional; used for clipping
    *  and day-scale visibility without adding extra ticks/grid columns. */
   visibleUnitSpan?: number;
+  /** Clock for centring the day-scale window on the current hour. Omit to keep the
+   *  window at the configured (or visible-range) start time. */
+  now?: Date;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -414,15 +436,25 @@ export function getTimelineWindow(config: ViewConfig, anchor: string): TimelineW
   }
 }
 
+/** Day-scale window start (minutes from midnight) that puts the current hour in the middle of
+ *  the visible window, clamped so the window stays on the anchor day. */
+export function resolveTimelineDayCentredStartMinutes(totalUnits: number, now: Date): number {
+  const units = Math.max(1, Math.round(totalUnits));
+  const centred = now.getHours() * MINUTES_PER_HOUR - Math.floor(units / 2) * MINUTES_PER_HOUR;
+  return Math.max(0, Math.min(MINUTES_PER_DAY - units * MINUTES_PER_HOUR, centred));
+}
+
 /** Compute a viewport-sized timeline window centered on the anchor. This is used
  *  by the renderer's pseudo-infinite mode: column width is fixed in pixels, and
  *  the number of visible columns comes from the current viewport width. */
-export function getTimelineViewportWindow(config: ViewConfig, anchor: string, visibleUnitCount: number, visibleUnitSpan?: number): TimelineWindow {
+export function getTimelineViewportWindow(config: ViewConfig, anchor: string, visibleUnitCount: number, visibleUnitSpan?: number, now?: Date): TimelineWindow {
   const scale = config.timelineScale || "week";
   const base = parseDateKey(anchor) || startOfTodayUtc();
   const totalUnits = Math.max(1, Math.round(visibleUnitCount));
   if (scale === "day") {
-    const startMinutes = getTimelineAnchorStartMinutes(config);
+    // Centring needs a clock; without one the window keeps the legacy fixed start so
+    // callers that only care about geometry stay deterministic.
+    const startMinutes = getTimelineAnchorStartMinutes(config, now != null ? totalUnits : undefined, now);
     const lastVisibleMinute = startMinutes + (totalUnits * MINUTES_PER_HOUR) - 1;
     const end = addUtcDays(base, Math.max(0, Math.floor(lastVisibleMinute / MINUTES_PER_DAY)));
     return {
@@ -489,10 +521,16 @@ export function resolveTimelineJumpAnchor(input: TimelineJumpAnchorInput): Timel
   return { dateKey: addDateKeyDays(input.event.startDateKey, targetDayOffset - desiredIndex + before) };
 }
 
-/** The human-facing title range. Quarter layout may extend backward to the week start,
- * but the title should describe the natural quarter itself. */
-export function getTimelineTitleWindow(config: ViewConfig, anchor: string): Pick<TimelineWindow, "startDateKey" | "endDateKey"> {
+/** The human-facing title range. With a visible unit count the title describes the same
+ * viewport-centred window the body renders; without one it falls back to the natural calendar
+ * period (quarter layout may extend backward to the week start, but the title should describe
+ * the natural quarter itself). */
+export function getTimelineTitleWindow(config: ViewConfig, anchor: string, visibleUnitCount?: number): Pick<TimelineWindow, "startDateKey" | "endDateKey"> {
   const scale = config.timelineScale || "week";
+  if (visibleUnitCount != null) {
+    const window = getTimelineViewportWindow(config, anchor, visibleUnitCount);
+    return { startDateKey: window.startDateKey, endDateKey: window.endDateKey };
+  }
   if (scale !== "quarter") {
     const window = getTimelineWindow(config, anchor);
     return { startDateKey: window.startDateKey, endDateKey: window.endDateKey };
@@ -648,7 +686,7 @@ export function buildTimelineModel(rows: RowData[], config: ViewConfig, options:
   const scale = config.timelineScale || "week";
   const anchor = getTimelineAnchor(config);
   const window = options.visibleUnitCount != null
-    ? getTimelineViewportWindow(config, anchor, options.visibleUnitCount, options.visibleUnitSpan)
+    ? getTimelineViewportWindow(config, anchor, options.visibleUnitCount, options.visibleUnitSpan, options.now)
     : getTimelineWindow(config, anchor);
 
   // Keep all dated events in the model so row count stays stable while paging.
@@ -836,6 +874,36 @@ function assignTimelineRows(events: CalendarTimelineEvent[]): number {
     event.timelineRow = index + 1;
   });
   return events.length;
+}
+
+/** Estimated horizontal span of a milestone's inline label in column units: the diamond offset
+ *  plus the title text at the bar's label font size. */
+export function getTimelineMilestoneLabelWidthUnits(title: string, unitWidth: number, charWidthPx = 7): number {
+  const safeUnitWidth = Number.isFinite(unitWidth) && unitWidth > 0 ? unitWidth : 1;
+  const textWidthPx = Math.max(0, title.length) * charWidthPx;
+  return (safeUnitWidth / 2 + 14 + textWidthPx) / safeUnitWidth;
+}
+
+/** Where a milestone's label should render: "above" when the next bar in the lane starts within
+ *  the label's span (an inline label would be painted over), "inline" otherwise. */
+export function resolveTimelineMilestoneLabelPlacement(
+  event: CalendarTimelineEvent,
+  laneEvents: CalendarTimelineEvent[],
+  unitWidth: number,
+  unit: TimelineUnit,
+): "inline" | "above" {
+  if (!event.isMilestone) return "inline";
+  const next = laneEvents.find((candidate) => candidate.id !== event.id && timelineEventStartsAfter(candidate, event));
+  if (!next) return "inline";
+  const gapMinutes = (dateKeyDaysBetween(event.startDateKey, next.startDateKey) ?? 0) * MINUTES_PER_DAY
+    + (next.startMinutes ?? 0) - (event.startMinutes ?? 0);
+  const gapUnits = unit === "hour" ? gapMinutes / MINUTES_PER_HOUR : gapMinutes / MINUTES_PER_DAY;
+  return gapUnits < getTimelineMilestoneLabelWidthUnits(event.title, unitWidth) ? "above" : "inline";
+}
+
+function timelineEventStartsAfter(a: CalendarTimelineEvent, b: CalendarTimelineEvent): boolean {
+  if (a.startDateKey !== b.startDateKey) return a.startDateKey > b.startDateKey;
+  return (a.startMinutes ?? 0) > (b.startMinutes ?? 0);
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -1075,10 +1143,15 @@ function dateTimeFromAbsoluteMinutes(startDateKey: string, absoluteMinutes: numb
   };
 }
 
-function getTimelineAnchorStartMinutes(config: ViewConfig): number {
+function getTimelineAnchorStartMinutes(config: ViewConfig, totalUnits?: number, now?: Date): number {
   const configured = config.timelineAnchorTimeMinutes;
   if (typeof configured === "number" && Number.isFinite(configured)) {
     return normalizeTimelineHourStart(Math.max(0, Math.min(MINUTES_PER_DAY - 1, Math.round(configured))));
+  }
+  if (totalUnits != null) {
+    // A viewport-sized day window with no navigated anchor time opens centred on the current
+    // hour so "now" is in frame at mount instead of sitting far off the window's start.
+    return resolveTimelineDayCentredStartMinutes(totalUnits, now ?? new Date());
   }
   return getTimelineVisibleHourRange(config).startHour * MINUTES_PER_HOUR;
 }

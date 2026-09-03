@@ -19,7 +19,7 @@ import { Notice, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
-import { buildCalendarMonthModel, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineJumpAnchor, resolveTimelineProgressFillUnits, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/calendar-timeline-model";
+import { buildCalendarMonthModel, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineDayCentredStartMinutes, resolveTimelineJumpAnchor, resolveTimelineMilestoneLabelPlacement, resolveTimelineProgressFillUnits, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/calendar-timeline-model";
 import {
   CALENDAR_TIME_SNAP_MINUTES,
   MINUTES_PER_DAY,
@@ -315,13 +315,14 @@ export class CalendarTimelineRenderer {
     }
 
     const scale = config.timelineScale || "week";
-    const unitWidth = this.getTimelineRenderUnitWidth(config, scale);
+    const unitWidth = this.getTimelineRenderUnitWidth(config, scale, container.clientWidth || container.getBoundingClientRect().width || 0);
     const visibleUnitCount = this.getTimelineViewportUnitCount(container, config, unitWidth);
     const visibleUnitSpan = this.getTimelineViewportUnitSpan(container, unitWidth);
     const model = buildTimelineModel(visibleRows, { ...config, timelineStartDateField: startField }, {
       uncategorizedLabel: t("timeline.uncategorized"),
       visibleUnitCount,
       visibleUnitSpan,
+      now: new Date(),
     });
     this.currentVisibleRange = this.getModelVisibleRange(model);
     if ((model.eventCount === 0 && model.lanes.length === 0) || !model.startDateKey || !model.endDateKey) {
@@ -426,7 +427,7 @@ export class CalendarTimelineRenderer {
         },
       });
       tickEl.style.setProperty("--db-timeline-tick-offset", String(tick.offsetUnits + 1));
-      this.renderTimelineTickLabel(tickEl, tick.label, model.scale);
+      this.renderTimelineTickLabel(tickEl, tick.label, model.scale, tick.offsetUnits === 0);
     }
 
     const body = scroll.createDiv({ cls: "db-timeline-body" });
@@ -905,8 +906,11 @@ export class CalendarTimelineRenderer {
     (container.ownerDocument.defaultView || window).requestAnimationFrame(apply);
   }
 
-  private renderTimelineTickLabel(tickEl: HTMLElement, label: string, scale: TimelineScale): void {
+  private renderTimelineTickLabel(tickEl: HTMLElement, label: string, scale: TimelineScale, isFirstTick = false): void {
     const labelEl = tickEl.createSpan({ cls: "db-timeline-tick-label" });
+    // Every label is centred on its tick's left boundary; the first tick's boundary is the
+    // viewport's left edge, so that label anchors at the edge instead of clipping past it.
+    if (isFirstTick) labelEl.setCssProps({ transform: "none" });
     if (scale === "week") {
       const separator = label.lastIndexOf(" ");
       if (separator > 0 && separator < label.length - 1) {
@@ -936,6 +940,11 @@ export class CalendarTimelineRenderer {
     // date 列事件保留 muted 全天条视觉（仅样式，定位统一走 exact）。
     const isDateColumn = this.isTimelineDateColumn(config, event);
     const isMilestone = Boolean(event.isMilestone);
+    // A milestone's label spans wider than its one-day bar; when the next bar in the lane starts
+    // inside that span the label moves above the bar so no bar paints over it.
+    const milestoneLabelPlacement = isMilestone
+      ? resolveTimelineMilestoneLabelPlacement(event, laneEvents, this.getTimelineRenderUnitWidth(config, model.scale), model.unit)
+      : "inline";
     const subtaskNode = this.subtaskRelation?.nodes.get(event.row.file.path);
     const subtaskChildren = this.subtaskRelation?.childrenOf.get(event.row.file.path) || [];
     // A relation node exists for every row (subtask-relation.ts builds a shell per row), so
@@ -946,7 +955,7 @@ export class CalendarTimelineRenderer {
     const subtaskProgress = subtaskNode?.progress;
     const progress = subtaskProgress?.value ?? event.progress ?? 0;
     const eventEl = eventsEl.createDiv({
-      cls: `db-timeline-event${hasSubtaskRelation ? " db-subtask-event" : ""}${hasSubtaskChildren ? " has-subtask-children" : ""}${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
+      cls: `db-timeline-event${hasSubtaskRelation ? " db-subtask-event" : ""}${hasSubtaskChildren ? " has-subtask-children" : ""}${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${milestoneLabelPlacement === "above" ? " is-label-above" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
       attr: {
         role: "group",
         "aria-label": eventDetails,
@@ -1240,7 +1249,7 @@ export class CalendarTimelineRenderer {
   /** Navigation header: window title + prev/today/next buttons. Mirrors the calendar header. */
   private renderTimelineHeader(wrap: HTMLElement, config: ViewConfig, model: { startDateKey?: string; endDateKey?: string; totalUnits: number; scale: TimelineScale }): void {
     const header = wrap.createDiv({ cls: "db-timeline-header" });
-    const fallbackTitleWindow = getTimelineTitleWindow(config, getTimelineAnchor(config));
+    const fallbackTitleWindow = getTimelineTitleWindow(config, getTimelineAnchor(config), this.timelineObservedUnitCount);
     const titleWindow = model.startDateKey && model.endDateKey
       ? { startDateKey: model.startDateKey, endDateKey: model.endDateKey }
       : fallbackTitleWindow;
@@ -1622,11 +1631,9 @@ export class CalendarTimelineRenderer {
     const today = this.getTodayDateKey();
     this.requestTimelineDateFlash(today);
     if ((config.timelineScale || model?.scale || "week") === "day") {
-      const now = new Date();
-      const currentMinutes = now.getHours() * MINUTES_PER_HOUR + now.getMinutes();
-      const centeredStart = currentMinutes - Math.floor(Math.max(1, model?.totalUnits || 1) / 2) * MINUTES_PER_HOUR;
-      const shifted = this.shiftTimelineAnchorTime(today, 0, centeredStart);
-      this.updateTimelineAnchor(shifted.dateKey, shifted.minutes);
+      // Same centring the model applies to a fresh day window, so the Today button and an
+      // initial mount agree on which hours are visible.
+      this.updateTimelineAnchor(today, resolveTimelineDayCentredStartMinutes(model?.totalUnits || 1, new Date()));
       return;
     }
     this.updateTimelineAnchor(today);
@@ -2478,8 +2485,8 @@ export class CalendarTimelineRenderer {
     return getCalendarSlotDuration(config);
   }
 
-  private getTimelineRenderUnitWidth(config: ViewConfig, scale: TimelineScale): number {
-    return resolveTimelineUnitWidth(config, scale);
+  private getTimelineRenderUnitWidth(config: ViewConfig, scale: TimelineScale, viewportWidth?: number): number {
+    return resolveTimelineUnitWidth(config, scale, viewportWidth);
   }
 
   private getTimelineViewportUnitCount(container: HTMLElement, config: ViewConfig, unitWidth: number): number | undefined {
@@ -2503,7 +2510,7 @@ export class CalendarTimelineRenderer {
   private observeTimelineViewport(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
     const ResizeObserverCtor = container.ownerDocument.defaultView?.ResizeObserver || window.ResizeObserver;
     if (!ResizeObserverCtor) return;
-    const unitWidth = this.getTimelineRenderUnitWidth(config, config.timelineScale || "week");
+    const unitWidth = this.getTimelineRenderUnitWidth(config, config.timelineScale || "week", container.clientWidth || container.getBoundingClientRect().width || 0);
     this.timelineResizeObserver = new ResizeObserverCtor(() => {
       if (!this.timelineRoot?.isConnected) {
         this.disconnectTimelineResizeObserver();
