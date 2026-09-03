@@ -75,6 +75,8 @@ contextType: "general"
       Note: not part of the initial pass (D14 leg a); the manifest-compare leg owns this row.
 - [ ] T018 A/B the manifest-compare fix against a clean HEAD clone; confirm it still catches a deliberately mutated capture (repo, per parent D12)
       Note: same leg as T017.
+- [x] T024 [P] Add replay claim entries for the six open-row fixes landed on `main` after `037`-`041` shipped (`7e36671`, `535373a`, `a251a43`, `3f143df`, `fa58c7f`, `b29bf7f`), each with its recorded pre-fix number (`tools/live/replay.mjs`)
+      Evidence: each entry's own measure was re-run on `<sha>^`, extracted via `git archive` into a scratch directory (never `git checkout` against a shared work-tree, which would have dirtied the index). Pre-fix -> recorded pairs: `7e36671: 0 -> 2` (the empty-column and drop-language scenarios did not exist, so `SCENARIOS.find` returned undefined for both); `535373a: 0 -> 2` (neither host binding's board `moveRowToPosition` callback carried a `subtaskMove` parameter); `a251a43: 0 -> 1` (`.db-surface` appeared in no reduced-motion rule); `3f143df: 0 -> 1` (`.db-surface` was still joined into the same rule as `.note-database-container`, not its own). `fa58c7f: 0 -> 4` (none of `getTimelineTitleWindow`'s third parameter, the first-tick `transform: "none"` branch, `resolveTimelineMilestoneLabelPlacement`, or `TIMELINE_DAY_PHONE_UNIT_WIDTH_PX`'s 32px branch existed in source); `b29bf7f: 0 -> 2` (no `.is-label-above` rule and `row-gap` still read the flat 4px, not `var(--db-space-8)`). One correction to the dispatch brief that named this task: the brief's prose swapped `3f143df` and `a251a43`'s descriptions — `git show` on both commits and the parent `goal.md` log (`005-component-surface-system/goal.md`, "`041`'s last open row closed" entry) confirm `a251a43` is the selector-list join and `3f143df` is the one that splits `.db-surface` into its own zero-duration rule; the claims above are written against the verified commit content, not the swapped prose. `node tools/live/replay.mjs`: 27 claims, `reversed: 0`, exit 0. Mutation control: `recorded` moved by one on the `535373a` entry, re-run reported `replay: FAIL — 1 result(s) reversed`, restored and re-verified green.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -110,11 +112,15 @@ defines wrongly), which is the pinned-values scan's half of the pair.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T019 `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate`, `$?` read directly, no stray Chrome process before the run (`pgrep` empty)
-- [ ] T020 `npm run replay`, `$?` read directly, confirm the new claim count and every `held: true`
+- [x] T019 `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate`, `$?` read directly, no stray Chrome process before the run (`pgrep` empty)
+      Evidence: `pgrep -fl "Google Chrome"` was cleared before the run; `npm run gate`, `$?` read directly: `0`, 25 green / 0 red. Re-run a second time with the same clean-`pgrep` precondition for this task's own evidence: `0`, unchanged.
+- [x] T020 `npm run replay`, `$?` read directly, confirm the new claim count and every `held: true`
+      Evidence: `node tools/live/replay.mjs`, `$?` read directly: `0`, "replay: PASS — all 27 results still hold", `reversed: 0`. Was 21 claims before this pass.
 - [ ] T021 External lane per D14: devin initial pass, then codex/luna, then in-runtime verification with Chrome
-- [ ] T022 Update `goal.md`'s completion criteria with the observed red/green pair for each ticked row
-- [ ] T023 Backfill graph metadata, run `validate.sh --strict` on this child, `build-operator-checklist`, `scan-failing-values`
+- [x] T022 Update `goal.md`'s completion criteria with the observed red/green pair for each ticked row
+      Evidence: `goal.md`'s replay completion-criterion row (§3) updated with the six new pre-fix -> recorded pairs; scoped to the row this task covers, not the four unrelated rows the manifest-compare and external-lane tasks own.
+- [x] T023 Backfill graph metadata, run `validate.sh --strict` on this child, `build-operator-checklist`, `scan-failing-values`
+      Evidence: `backfill-graph-metadata.ts 042-harness-fidelity-and-replay` run; `validate.sh --strict` first `RESULT:` line `PASSED`; `build-operator-checklist` regenerated; `scan-failing-values.mjs` exit 0.
 <!-- /ANCHOR:phase-3 -->
 
 ---

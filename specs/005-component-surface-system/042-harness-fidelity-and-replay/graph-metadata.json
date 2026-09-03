@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three DONE-table rows in the parent's `goal.md` share one shape: a check's green, or the replay",
     "created_at": "2026-09-03T20:48:20Z",
-    "last_save_at": "2026-09-03T23:05:22.110Z",
+    "last_save_at": "2026-09-03T23:43:48.121Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5fab6c99551b2640ea5f20a88819bc0c7d00dc0c64b39eac6424671996ec9dc5",
+    "source_fingerprint": "sha256:97c2d0d04d584fa308687e9c6c6a5cb8ea3e95a1e2e385fa62ffe719e08316d7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4b13174bdfbb3f5d2c7d453bcbb2fbe63e3f4a440eec8bb6f58a0607f86c12c2",
       "plan.md": "ec0f2c8859346b2a1039f4404fa4d5cc2eb36cac7b1ab2e45c22c2ee428e4b83",
-      "tasks.md": "fec61e651f1669422da1507c6ea4691645ff3a087a69bed92db90bb0bc4eef5f",
-      "implementation-summary.md": "9dbaa34a6c64eec490bd0239d5b66fbde5999024f3451c72d1024593232249ad"
+      "tasks.md": "de1e817971a44c2f063cf80249749d1be129e2ccdbae192882fa0c0512e3f675",
+      "implementation-summary.md": "8025b9980c964ccb95adf12bb63f65f7395da164b6a37e9ab4dd02950401cf5e"
     },
     "last_active_child_id": null,
     "last_active_at": null

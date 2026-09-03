@@ -520,6 +520,158 @@ const CLAIMS = [
       });
     },
   },
+  {
+    phase: "038-board-kanban-port",
+    claim: "the empty-column and drop-language scenarios depict the states no fixture reached before",
+    was: 0,
+    recorded: 2,
+    // Neither scenario id existed on the landing commit's parent tree, so SCENARIOS.find returned
+    // undefined for both and this measure could not even load a fixture to check.
+    async measure(page) {
+      let ok = 0;
+      const empty = SCENARIOS.find((x) => x.id === "board-empty-column");
+      if (empty) {
+        await load(page, empty.html());
+        if (await page.evaluate(() => document.querySelector(".db-board-empty-slot") !== null)) ok += 1;
+      }
+      const drop = SCENARIOS.find((x) => x.id === "board-drop-language");
+      if (drop) {
+        await load(page, drop.html());
+        const good = await page.evaluate(() => {
+          const column = document.querySelector(".db-board-column.is-drop-target");
+          const dragging = document.querySelector(".db-board-card.is-dragging");
+          const dropTarget = document.querySelector(".db-board-card.is-drop-target");
+          return !!(column && dragging && dropTarget && dropTarget.querySelector(".db-board-drop-indicator"));
+        });
+        if (good) ok += 1;
+      }
+      return ok;
+    },
+  },
+  {
+    phase: "040-subtask-tree-port",
+    claim: "the board's same-parent reorder forwards the planned subtask move through the host binding",
+    was: 0,
+    recorded: 2,
+    // Both host bindings' board `moveRowToPosition` callback must accept and forward a fourth
+    // `subtaskMove` argument into `this.moveRowToPosition`, the path that then applies the plan
+    // through `moveSubtask` before the rank change. `was` is this measure on the landing commit's
+    // parent tree: neither file's board callback carried that parameter, so a drag reordered the
+    // board's manual rank and never called `moveSubtask` -- the host-binding test's red was
+    // "expected vi.fn() to be called 2 times, but got 0 times".
+    measure() {
+      const pattern = /moveRowToPosition:\s*\(movedPath,\s*beforePath,\s*afterPath,\s*subtaskMove\)\s*=>\s*void this\.moveRowToPosition\(movedPath,\s*beforePath,\s*afterPath,\s*subtaskMove\)/;
+      let count = 0;
+      for (const file of ["src/views/database-view.ts", "src/views/embedded-database-renderer.ts"]) {
+        const source = readFileSync(join(REPO, file), "utf8");
+        if (pattern.test(source)) count += 1;
+      }
+      return count;
+    },
+  },
+  {
+    phase: "041-shared-ui-ux-port",
+    claim: "the .db-surface selector leads the reduced-motion reset's selector list",
+    was: 0,
+    recorded: 1,
+    // owned-menu.ts mounts its surface on doc.body carrying .db-surface but never
+    // .note-database-container, so the container-wide reset never matched a menu descendant until
+    // .db-surface joined the reset's own selector list. `was` is this measure on the landing
+    // commit's parent tree: .db-surface appeared in no reduced-motion rule at all.
+    async measure(page) {
+      await load(page, "");
+      return page.evaluate(() => {
+        const rules = [...document.styleSheets].flatMap((sheet) => {
+          try { return [...sheet.cssRules]; } catch { return []; }
+        });
+        const reduced = rules.filter((r) => r.media?.mediaText?.includes("prefers-reduced-motion"))
+          .flatMap((r) => [...r.cssRules]);
+        return reduced.some((inner) =>
+          inner.selectorText?.split(",").map((s) => s.trim()).includes(".db-surface")) ? 1 : 0;
+      });
+    },
+  },
+  {
+    phase: "041-shared-ui-ux-port",
+    claim: "the .db-surface subtree owns a reduced-motion rule separate from the container's",
+    was: 0,
+    recorded: 1,
+    // The reset first joined .db-surface into the same rule as .note-database-container, which
+    // gave the surface the container's near-zero 0.01ms transition-duration and let a synchronous
+    // getComputedStyle read land mid-transition -- the fault verify-placement.mjs's ".is-phone
+    // heading rule" ablation caught. This fix splits .db-surface into its own rule so it can carry
+    // a real zero. `was` is this measure on the landing commit's parent tree, where the prior fix
+    // had already joined .db-surface into the container's rule: still one shared rule, not two.
+    async measure(page) {
+      await load(page, "");
+      return page.evaluate(() => {
+        const rules = [...document.styleSheets].flatMap((sheet) => {
+          try { return [...sheet.cssRules]; } catch { return []; }
+        });
+        const lead = (r) => r.selectorText?.split(",").map((s) => s.trim())[0];
+        const mediaBlocks = rules.filter((r) => r.media?.mediaText?.includes("prefers-reduced-motion"));
+        for (const mq of mediaBlocks) {
+          const inner = [...mq.cssRules];
+          const surfaceRule = inner.find((r) => lead(r) === ".db-surface");
+          if (!surfaceRule) continue;
+          const containerRule = inner.find((r) => lead(r) === ".note-database-container");
+          return containerRule && containerRule !== surfaceRule ? 1 : 0;
+        }
+        return -1;
+      });
+    },
+  },
+  {
+    phase: "037-timeline-gantt-port",
+    claim: "the rendered window titles the header, the first tick stays whole, the milestone helper exists, and the day scale narrows on phones",
+    was: 0,
+    recorded: 4,
+    // Four separate faults, one measure: getTimelineTitleWindow ignoring the visible unit count
+    // ("expected '2026-01-01' to be '2026-02-07'"), the first axis tick centred past the viewport
+    // edge ("expected undefined to be 'none'"), resolveTimelineMilestoneLabelPlacement not existing
+    // at all, and the day scale never narrowing below a 560px container ("expected 60 to be 32").
+    // `was` is this measure on the landing commit's parent tree: none of the four patterns existed.
+    measure() {
+      const model = readFileSync(join(REPO, "src/data/calendar-timeline-model.ts"), "utf8");
+      const renderer = readFileSync(join(REPO, "src/views/calendar-timeline-renderer.ts"), "utf8");
+      const checks = [
+        /export function getTimelineTitleWindow\([^)]*visibleUnitCount\??:\s*number/.test(model),
+        /if \(isFirstTick\)\s*labelEl\.setCssProps\(\{\s*transform:\s*"none"\s*\}\)/.test(renderer),
+        /export function resolveTimelineMilestoneLabelPlacement/.test(model),
+        /TIMELINE_DAY_PHONE_UNIT_WIDTH_PX\s*=\s*32/.test(model) && /return TIMELINE_DAY_PHONE_UNIT_WIDTH_PX/.test(model),
+      ];
+      return checks.filter(Boolean).length;
+    },
+  },
+  {
+    phase: "037-timeline-gantt-port",
+    claim: "a crowded milestone label lifts above its bar and the lane row-gap carries the space-8 token",
+    was: 0,
+    recorded: 2,
+    // The renderer already asked for is-label-above when the next lane bar starts inside a
+    // milestone's label span; the stylesheet had no rule to answer with, so the class went
+    // nowhere. `was` is this measure on the landing commit's parent tree: no is-label-above rule
+    // moved the label out of flow, and the lane's row-gap was still the flat 4px the label now
+    // needs as clearance.
+    async measure(page) {
+      await load(page, `
+        <div class="note-database-container">
+          <div class="db-timeline-events"></div>
+          <div class="db-timeline-event is-milestone is-label-above">
+            <div class="db-timeline-event-trigger">
+              <div class="db-timeline-event-content">label</div>
+            </div>
+          </div>
+        </div>`);
+      return page.evaluate(() => {
+        const events = document.querySelector(".db-timeline-events");
+        const content = document.querySelector(".db-timeline-event-content");
+        const rowGapOk = getComputedStyle(events).rowGap === "24px";
+        const positionOk = getComputedStyle(content).position === "absolute";
+        return (rowGapOk ? 1 : 0) + (positionOk ? 1 : 0);
+      });
+    },
+  },
 ];
 
 // ───────────────────────────────────────────────────────────────────

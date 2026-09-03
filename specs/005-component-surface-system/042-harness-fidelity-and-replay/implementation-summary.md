@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
-    last_updated_at: "2026-09-04T01:45:00Z"
+    last_updated_at: "2026-09-04T01:41:43Z"
     last_updated_by: "verifier"
-    recent_action: "Recorded the landed harness, replay and product-default work with its observed reds"
+    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0"
     next_safe_action: "Correct check-lane changedCaptures to a layoutHash basis"
     blockers: []
     key_files:
@@ -84,6 +84,26 @@ lifecycle events, and no static fixture reproduces them. Those three delegate �
 and requires its recorded pre-fix failure text to still be the one the lane prints. A missing
 artefact, a missing case, or altered failure text returns 1 and reds the lane.
 
+### Replay, second pass: six more claims for the open-row fixes shipped after this phase landed
+
+`037`-`041` closed six more open rows on `main` after the section above shipped, none with a
+replay claim: `038`'s hover/drag/drop-target/empty-column row (`7e36671`), `040`'s
+same-parent-reorder row (`535373a`), `041`'s reduced-motion row in two commits (`a251a43` then
+`3f143df`), and two of `037`'s remaining rows (`fa58c7f`, `b29bf7f`). `replay.mjs` now carries 27
+claims. All six new entries are static, measured against today's fixture/source and re-measured on
+their own fix commit's parent tree (extracted with `git archive <sha>^ | tar -x`, never `git
+checkout` against a borrowed work-tree, which mutates whichever repository's index runs it):
+`7e36671: 0 -> 2` (the `board-empty-column`/`board-drop-language` scenarios did not exist),
+`535373a: 0 -> 2` (neither host binding's board `moveRowToPosition` callback forwarded a
+`subtaskMove` argument), `a251a43: 0 -> 1` (`.db-surface` was in no reduced-motion rule),
+`3f143df: 0 -> 1` (`.db-surface` was still joined into the container's rule rather than owning its
+own), `fa58c7f: 0 -> 4` (none of the title-window third parameter, the first-tick transform
+branch, the milestone placement helper, or the 32px phone day-column branch existed), `b29bf7f: 0
+-> 2` (no `.is-label-above` rule, and the lane's `row-gap` still read the flat 4px). `tasks.md`
+T024 carries the full per-entry evidence and one correction: the dispatch that requested this pass
+had `3f143df` and `a251a43`'s descriptions swapped in its prose; the claims here are written
+against the two commits' actual diffs, verified with `git show` against the parent `goal.md` log.
+
 ### Row-6 harness dependencies
 
 `runtime-vars.css` pinned `--db-calendar-day-min-height` and `--db-calendar-month-week-min-height`
@@ -102,8 +122,8 @@ a bounded, named list.
 | `tools/live/render-scenario-utils.mjs` | Created | The two pure helpers the runner uses for labels and the coverage count |
 | `tools/live/render-scenario-utils.test.mjs` | Created | Covers both helpers, including the scale label and the one-renderer-many-scenarios count |
 | `tools/live/renderer-coverage.json` | Modified | Coverage stamp, 6 → 7 distinct renderers of 22 |
-| `tools/live/replay.mjs` | Modified | Thirteen new claims, the runtime-artefact reader, and the claim-set ratchet |
-| `tools/live/replay.json` | Modified | Stamp of the 21-claim run |
+| `tools/live/replay.mjs` | Modified | Thirteen new claims, the runtime-artefact reader, and the claim-set ratchet; second pass added six more for the open-row fixes shipped after `037`-`041` landed |
+| `tools/live/replay.json` | Modified | Stamp of the 21-claim run; second pass re-stamped at 27 claims |
 | `tools/live/sheet-rebuild.mjs` | Modified | Records per-case `checks` with the pre-fix failure text replay reads |
 | `tools/live/sheet-teardown.mjs` | Modified | The same, for the teardown lane |
 | `tools/live/unstyled-links.json` | Modified | Re-stamped after `theme.css` moved |
@@ -164,6 +184,15 @@ to their committed bytes while moving two different ones — and were restored r
 | Replay negative control — `sheet-rebuild.json` moved aside | PASS — exit 1, 2 claims BROKE, both `031` |
 | Replay negative control — `sheet-teardown.json` moved aside | PASS — exit 1, 1 claim BROKE, `031` |
 | Replay negative control — one claim removed | PASS — exit 1, "1 required claim(s) are missing: 21 published, this run carries 20" |
+| `node tools/live/replay.mjs` (second pass, six open-row-fix claims added) | PASS — exit 0, 27 claims, `reversed: 0`; was 21 claims before this pass |
+| Replay pre-fix audit, second pass (`<sha>^` re-measure, all 6 new entries) | PASS — 6 of 6 return a value differing from their recorded number: `7e36671: 0 -> 2`, `535373a: 0 -> 2`, `a251a43: 0 -> 1`, `3f143df: 0 -> 1`, `fa58c7f: 0 -> 4`, `b29bf7f: 0 -> 2` |
+| Replay negative control, second pass — `535373a`'s `recorded` moved by one | PASS — exit 1, "replay: FAIL — 1 result(s) reversed since the phase that measured them"; restored and re-verified green |
+| `node tools/naming/scan-comments.mjs`, second pass | PASS — exit 0, 381 files, 0 missing banners, 0 commented-out lines |
+| `npx tsc --noEmit`, second pass | PASS — exit 0 |
+| `npx vitest run`, second pass | PASS — exit 0, 93 files, 925 tests |
+| `npm run lint:tools`, second pass | PASS — exit 0 |
+| `npm run lint`, second pass | Exit 1 (eslint's own convention for any error present), 172 problems (159 errors, 13 warnings) — unchanged from the pre-existing baseline; no `src/` file touched this pass |
+| `npm run gate`, second pass (bare, no `SURFACE_PHASE`) | PASS — exit 0, 25 green / 0 red, `pgrep` for stray Chrome empty before the run. No capture drift: the touched `tools/live/*.json` freshness stamps moved only their `measuredAt` field, `git diff` confirms every `inputs` hash unchanged |
 | `node tools/live/render-assertions.mjs` | PASS — exit 0; coverage 7 distinct renderers of 22 renderer files, published 6 → 7 |
 | `RENDER_READ_CONTROL=per-item node tools/live/render-assertions.mjs` | PASS as a control — exit 1, 11 failures. New surfaces observed red: `calendar:week` 14 reads against bound 8 (both bags), `calendar:day` 1600 against 8 (both bags), `chart/file-view` 1630 against bound 48 |
 | `node tools/live/sheet-teardown.mjs` | PASS — exit 0, 11 producers, `leaking: 0`; the named case carries its recorded pre-fix text |

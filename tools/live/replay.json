@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-03T23:39:27.073Z",
+  "measuredAt": "2026-09-03T23:37:53.297Z",
   "inputs": {
     "styles.css": "4c7b8b627ab9",
     "tools/screenshots/theme.css": "115be5a71b07",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-    "tools/live/replay.mjs": "295f7115dd42"
+    "tools/live/replay.mjs": "7d8d200341a5"
   },
   "claims": [
     {
@@ -174,6 +174,54 @@
       "was": 10,
       "recorded": 0,
       "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "038-board-kanban-port",
+      "claim": "the empty-column and drop-language scenarios depict the states no fixture reached before",
+      "was": 0,
+      "recorded": 2,
+      "actual": 2,
+      "held": true
+    },
+    {
+      "phase": "040-subtask-tree-port",
+      "claim": "the board's same-parent reorder forwards the planned subtask move through the host binding",
+      "was": 0,
+      "recorded": 2,
+      "actual": 2,
+      "held": true
+    },
+    {
+      "phase": "041-shared-ui-ux-port",
+      "claim": "the .db-surface selector leads the reduced-motion reset's selector list",
+      "was": 0,
+      "recorded": 1,
+      "actual": 1,
+      "held": true
+    },
+    {
+      "phase": "041-shared-ui-ux-port",
+      "claim": "the .db-surface subtree owns a reduced-motion rule separate from the container's",
+      "was": 0,
+      "recorded": 1,
+      "actual": 1,
+      "held": true
+    },
+    {
+      "phase": "037-timeline-gantt-port",
+      "claim": "the rendered window titles the header, the first tick stays whole, the milestone helper exists, and the day scale narrows on phones",
+      "was": 0,
+      "recorded": 4,
+      "actual": 4,
+      "held": true
+    },
+    {
+      "phase": "037-timeline-gantt-port",
+      "claim": "a crowded milestone label lifts above its bar and the lane row-gap carries the space-8 token",
+      "was": 0,
+      "recorded": 2,
+      "actual": 2,
       "held": true
     }
   ],

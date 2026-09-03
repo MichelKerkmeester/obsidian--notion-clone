@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
-    last_updated_at: "2026-09-04T01:50:00Z"
+    last_updated_at: "2026-09-04T01:41:43Z"
     last_updated_by: "verifier"
-    recent_action: "Landed the chart and calendar week/day scenarios, the replay backfill and the row-6 corrections"
+    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0"
     next_safe_action: "Correct check-lane changedCaptures to a layoutHash basis"
     blockers: []
     key_files:
@@ -86,6 +86,21 @@ Frozen choices. Changing one is an amendment.
       `cb9aedf: 1`, `25ae3a9: 10`. Observed red three ways: removing one entry gave **exit 1, "21
       published, this run carries 20"**; moving `sheet-rebuild.json` aside gave **exit 1, 2 claims
       BROKE**; moving `sheet-teardown.json` aside gave **exit 1, 1 claim BROKE**.
+
+      **2026-09-04, later: the six open-row fixes shipped after `037`-`041` landed added.** Six of
+      them closed after this criterion was first met — `038`'s hover/drag/drop-target/empty-column
+      row (`7e36671`), `040`'s same-parent-reorder row (`535373a`), `041`'s reduced-motion row in
+      two commits (`a251a43`, `3f143df`), and two of `037`'s remaining rows (`fa58c7f`, `b29bf7f`)
+      — and none had a replay claim. **Still Met, now 27 claims.** `node tools/live/replay.mjs`,
+      `$?` read directly: `0`, `reversed: 0`. Each new entry's own measure was re-run on `<sha>^`,
+      extracted via `git archive` (not `git checkout` against a shared work-tree, which mutates the
+      index of whatever repo runs it): `7e36671: 0 -> 2`, `535373a: 0 -> 2`, `a251a43: 0 -> 1`,
+      `3f143df: 0 -> 1`, `fa58c7f: 0 -> 4`, `b29bf7f: 0 -> 2`. Mutation control: moving `535373a`'s
+      `recorded` by one gave **exit 1, "replay: FAIL — 1 result(s) reversed"**, restored and
+      re-verified green. `tasks.md` T024 carries the per-entry evidence and the one correction this
+      pass made to its own dispatch brief: the brief's prose swapped `3f143df` and `a251a43`'s
+      descriptions, and the claims here are written against the two commits' actual diffs and the
+      parent `goal.md` log, not the swapped prose.
 - [x] Every row-6 dependency (pinned `runtime-vars.css` calendar formula, `touch-targets.mjs` /
       `unstyled-links.mjs` fixture reads, `theme.css`'s absent `.mod-cta`) is removed or declared
       with the criterion it cannot prove. **Met.** Removed, each against its recorded pre-fix state:
@@ -124,10 +139,31 @@ and findings belong here.
 | Replay backfill | Done | 21 claims, `reversed: 0`; was 8. All ten static entries re-measured on `<sha>^` and none is vacuous |
 | Row-6 dependency audit | Done | `runtime-vars.css` and `theme.css` corrected; the two fixture lanes declared with a bounded list in `tasks.md` |
 | Manifest-compare fix | Open | T017/T018 not started. This run measured its cost: 7 of 15 movers were paint-only, 0 of 276 `layoutHash` changes |
+| Six open-row-fix replay claims | Done | 21 -> 27 claims, `reversed: 0`. All six re-measured on `<sha>^`, none vacuous |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
 | Level raised over `recommend-level.sh`'s answer | The script scored 61/100 (loc=650, files=10) and 66/100 (loc=850, files=12, reflecting the touch-targets/unstyled-links refactor row 6 implies) — both mid-to-upper Level 2, neither past the 70-point Level 3 floor. Raised to Level 3 anyway, per the operator's explicit "go higher if in doubt" and parity with `020-harness-fidelity-repair`, the closest prior art for this exact class of harness-truthfulness work, which is itself Level 3. |
+
+### Six open-row-fix replay claims added, 2026-09-04
+
+`037`-`041` closed six more open rows on `main` after this phase first met its replay criterion:
+`038`'s hover/drag/drop-target/empty-column row (`7e36671`), `040`'s same-parent-reorder row
+(`535373a`), `041`'s reduced-motion row in two commits (`a251a43` joins `.db-surface` into the
+reset's selector list, `3f143df` splits it into its own zero-duration rule), and two of `037`'s
+remaining rows (`fa58c7f` titles the rendered window/keeps the first tick whole/adds the milestone
+placement helper/narrows the day scale; `b29bf7f` adds the `.is-label-above` rule and moves the
+lane `row-gap` onto `--db-space-8`). None had a replay claim. Six added, each re-measured on its
+own `<sha>^` via `git archive` into a scratch directory: `7e36671: 0 -> 2`, `535373a: 0 -> 2`,
+`a251a43: 0 -> 1`, `3f143df: 0 -> 1`, `fa58c7f: 0 -> 4`, `b29bf7f: 0 -> 2`. `npm run replay`: 27
+claims, `reversed: 0`, exit 0. Mutation control on `535373a`'s entry (`recorded` moved by one):
+exit 1, "1 result(s) reversed", restored and re-verified green. `npm run gate`: 25 green, exit 0,
+no capture drift (only `measuredAt` stamps moved on the freshness JSONs the gate itself re-runs).
+tsc, `vitest` (925 tests), `lint:tools`, `scan-comments` all clean; `lint` (`src/`, untouched by
+this pass) stays at its pre-existing 172-problem baseline. One correction to the dispatch that
+requested this work: its prose swapped `3f143df` and `a251a43`'s descriptions; the claims above
+are written against the two commits' actual `git show` diffs and the parent `goal.md` log's own
+"`041`'s last open row closed" entry, not the swapped prose.
 <!-- /ANCHOR:log -->
