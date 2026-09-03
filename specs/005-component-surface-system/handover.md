@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point mid-flight on the 037 port: cli-devin's initial pass needs in-runtime verification."
+description: "Resume point mid-flight on the 037 port: leg (b) needs a ninth verification round."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,17 +10,19 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T00:20:00Z"
-    last_updated_by: "orchestrate-handover-2"
-    recent_action: "Landed row-6, reports 30-33, 1.4.2; 036 merged; five port phases opened"
-    next_safe_action: "Verify devin's 037 initial pass, then codex leg for CSS"
+    last_updated_at: "2026-09-03T07:40:00Z"
+    last_updated_by: "orchestrate-handover-3"
+    recent_action: "Released 1.4.3 (85ff504); 037 leg b uncommitted after round 8"
+    next_safe_action: "Ninth verification of 037 leg b, then rebase, push, docs, 1.4.4"
     blockers:
-      - "Operator device confirmation of reports 29-33 on iOS 1.4.2 is still owed"
-      - "The cli-devin lane for 037's initial pass is in flight and unverified"
+      - "Operator confirmation of reports 29-36 on iOS is still owed"
+      - "037 leg b is uncommitted in the main checkout"
+      - "Local main is behind origin until 037 commits"
     key_files:
       - "goal.md"
       - "roadmap.md"
       - "037-timeline-gantt-port/goal.md"
+      - "037-timeline-gantt-port/tasks.md"
       - "038-board-kanban-port/goal.md"
       - "039-calendar-parity-port/goal.md"
       - "040-subtask-tree-port/goal.md"
@@ -35,6 +37,7 @@ _memory:
       - "spec.md vs goal.md completion_pct: reconciled at 57, one derived figure per phase (4 of 7 goal.md checklist rows ticked). D13, roadmap 3.2"
       - "The 036 research loop cannot run in the main checkout while a sibling code phase is dirty; it now runs in a worktree"
       - "036 synthesis landed at 036/research/research.md; lineage ledgers stay untracked by .gitignore rule specs/**/research/**/lineages/; iteration count is self-reported; 10/10 reference citations verified with three local citations corrected"
+      - "1.4.3 fixed a bottom-sheet control that rebuilds its own content and closes the sheet: root cause was the overlay-stack seam missing a live panel resolver, and embedded views had never registered dismissal at all. Fix 85ff504, built and gated from a clean clone to avoid the 037 lane"
 ---
 # Session Handover: Component Surface System
 
@@ -44,19 +47,19 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-Landed and pushed since the previous handover: `c5566db` row-6 negative controls, verified
-1601/1601/2003 armed vs 1/1/3 disarmed; `00e2aa2` reports 30-33 fixed and verified by a fresh
-reviewer; `decbc62` release 1.4.2 published on GitHub (`main.js`, `manifest.json`, `styles.css`);
-`28b4809` and `5f68f60` doc audits; `f52732e` the 036 research loop merged, synthesis at
-`036/research/research.md`, lineage ledgers untracked by the `.gitignore` rule
-`specs/**/research/**/lineages/`, iteration count self-reported, all 10 reference citations
-verified with three local citations corrected; `7b0fea4` five port phases opened:
-`037-timeline-gantt-port` (L2), `038-board-kanban-port` (L2), `039-calendar-parity-port` (L2),
-`040-subtask-tree-port` (L3), `041-shared-ui-ux-port` (L2), all criteria unticked. Parent
-completion sits at 57.
+1.4.2 shipped reports 30-33. 1.4.3 shipped reports 34-36: a control inside a bottom sheet that
+rebuilds the sheet's content no longer closes it. The fix, `85ff504`, sits at the overlay-stack
+seam with a live panel resolver; embedded views had never registered dismissal at all. 1.4.3 was
+built and gated from a clean clone at
+`scratchpad/release-1.4.3` (commits `9c0516f` recapture, `46ba24f` bump), because the main
+checkout's tree is dirty with the 037 lane. Origin/main sits at `46ba24f`, local main at `1bcbd1e`.
 
-Origin/main sits at `7b0fea4`. This handover is being written mid-flight on the 037 port, so treat
-the in-flight lane below as unverified until you confirm it yourself.
+Roadmap §4 now carries 35 rows. Parent completion sits at 57. The operator owes confirmation of
+reports 29-36 on iOS; a push notification was sent 2026-09-02 22:35 (device pass) and again
+2026-09-03 07:35 for the fuller set.
+
+037-timeline-gantt-port leg (b) is in flight, uncommitted, after eight in-runtime verification
+rounds. Treat it as unverified until you confirm it yourself.
 <!-- /ANCHOR:handover-summary -->
 
 ---
@@ -66,18 +69,22 @@ the in-flight lane below as unverified until you confirm it yourself.
 
 Run `git status --porcelain` first.
 
-**The 037 lane: cli-devin (deepseek-v4-flash-max), dangerous mode, main checkout.** PID in
-scratchpad `devin-037.pid`, log `devin-037.log`, prompt `devin-037.prompt`. It is doing 037's
-initial pass: a red-first dependency-link seam test, a geometry model for five scales, and
-renderer wiring without CSS, in `src/views/calendar-timeline-model.ts`,
-`calendar-interaction-model.ts`, `calendar-timeline-renderer.ts` and their tests, plus
-`037-timeline-gantt-port/tasks.md` ticks. Recognise it by dirty `src/views/calendar-timeline-*`
-and `calendar-interaction-model` files.
+**037 leg (b): the CSS/renderer pass, main checkout, uncommitted.** Dirty files: renderer, model,
+title formatter, `i18n.ts`, `styles.css` under the held CSS lane,
+`tools/screenshots/scenarios/temporal.mjs` and `temporal-tick-parity.test.mjs`, the touch-targets
+baseline (215 to 279, justified by an A/B check), the timeline PNGs, and
+`037-timeline-gantt-port/tasks.md`. Recognise it by dirty `src/views/calendar-timeline-*`,
+`src/data/calendar-*`, `styles.css`, and `temporal*`.
 
-On resume: if `devin-037.log` ends with a RETURN block, dispatch a fresh in-runtime verifier
-(Sonnet; runs `tsc`, vitest, `npm run gate`, reads captures, checks the red-first evidence) and
-commit with explicit paths. If devin is still running, wait on its PID. If it died without RETURN,
-treat its edits as a claim and verify the same way.
+Code has held since round three. The fixture has been the recurring failure: it hand-mirrors
+timeline geometry instead of importing the real export. The fix now in progress: the fixture's
+unit widths must equal `resolveTimelineUnitWidth` (60/100/80/15/4) with a parity assertion, then a
+recapture, then a ninth verification with commit authority.
+
+On resume: check the scratchpad tasks for a RETURN block or a verifier report and continue from
+it. If neither exists, dispatch a fresh Opus verifier with the eighth-round brief. The findings
+file `scratchpad/037-findings-for-docs.md` lists product defects to record in 037's own docs, not
+in this handover.
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -85,20 +92,18 @@ treat its edits as a claim and verify the same way.
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-1. **Verify devin's 037 initial pass.** Follow the resume steps in Section 2. Dispatch the
-   in-runtime verifier, then commit with explicit paths (never `git add -A`).
-2. **Leg (b): gpt-5.6-luna via cli-codex for CSS.** Handle the CSS/lane step and remaining
-   renderer work for 037 (`styles.css` under the css-lane protocol, recapture, read), then
-   in-runtime verification, docs, commit, and release 1.4.3.
-3. **Then 038, 039, 040, 041 in adoption-plan order,** the same three legs each (initial pass,
-   CSS/lane, in-runtime verify). One cli-* dispatch at a time.
-4. **Ask the operator to confirm reports 29-33 on iOS on 1.4.2.** A push notification was sent
-   2026-09-02 22:35. Record each row as confirmed or deferred in `roadmap.md` §4. An agent never
-   closes an operator row itself.
-5. **Housekeeping:** the sk-git worktree `.worktrees/003-obsidian-pm-harvest`
-   (branch `worktrees/003-obsidian-pm-harvest`) has served its purpose; its research tree is
-   merged. Removal is the operator's call (sk-git owns worktree removal). The scratchpad is
-   session-scoped and may vanish; everything load-bearing is in the repo.
+1. **Ninth verification of 037 leg (b).** Follow Section 2: resume from an existing RETURN or
+   verifier report, or dispatch a fresh Opus verifier. Confirm the fixture parity assertion, the
+   recapture, and `npm run gate` before commit authority.
+2. **Commit with explicit paths** (never `git add -A`), matching the dirty-file list in Section 2.
+3. **Rebase onto origin.** `git pull --rebase origin main`; expect no conflict beyond
+   `screenshots/manifest.json`, which a recapture resolves.
+4. **Push**, then write the 037 docs leaf from `scratchpad/037-findings-for-docs.md`.
+5. **Release 1.4.4.**
+6. **Dispatch 038 on cli-devin**, prompt drafted at `scratchpad/devin-038.prompt`, then 039, 040,
+   041 in adoption-plan order. One cli-* lane at a time.
+7. **Ask the operator to confirm reports 29-36 on iOS.** Record each row as confirmed or deferred
+   in `roadmap.md` §4. An agent never closes an operator row itself.
 <!-- /ANCHOR:session-notes -->
 
 ---
@@ -106,24 +111,28 @@ treat its edits as a claim and verify the same way.
 <!-- ANCHOR:next-session -->
 ## 4. GOTCHAS LEARNED THIS SESSION
 
+- A hand-mirrored fixture must be constrained by parity tests that import the fixture and the real
+  exports, or it lies; this was the root cause behind eight failed 037 rounds.
+- Run `npm run screenshots` detached; `check-lane` needs `SURFACE_PHASE` set.
+- `screenshots-fresh` keys captures to source files, so a `src` change needs a recapture commit or
+  the next clean gate is red.
+- Use `git clone --local`, not `git archive`, for a clean-tree build (used for 1.4.3).
+- Never `git stash` in a tree another lane is writing.
+- Open coverage row from 031: the embedded call site has no test driving the production method;
+  eleven other `installPopoverAutoClose` consumers remain unaudited.
 - `generate-context.js` must be invoked THROUGH the `.opencode` symlink with
-  `NODE_PRESERVE_SYMLINKS=1`, not via `realpath` — going through `realpath` resolves the project root
-  to `Public` and the write guard blocks the packet.
+  `NODE_PRESERVE_SYMLINKS=1`, not via `realpath`; `validate.sh` runs via `realpath`.
 - The fan-out containment check (`fanout-run.cjs`) scans the WHOLE worktree, so a dirty sibling
-  lane anywhere in the checkout rejects a loop launch even when the loop's own files are clean. This
-  is why the 036 loop moved to a separate worktree instead of waiting.
-- `devin -p` needs `--respect-workspace-trust false` or it will not run non-interactively.
-- Codex quota exhaustion exits 1 mid-run, leaving partial edits on disk and no RETURN payload.
-  Check the working tree directly rather than trusting the exit code alone.
-- Every external delegate's claim is verified in-runtime (D4, D14) — a delegate's report is a claim,
+  lane anywhere in the checkout rejects a loop launch even when the loop's own files are clean.
+- Every external delegate's claim is verified in-runtime (D4, D14): a delegate's report is a claim,
   not a result, and a browser number from a sandboxed or cloud lane is not evidence.
 - A pipe makes `$?` the pipe's status; read exit codes directly.
 - `validate.sh` on a phase parent recurses into children; take the FIRST `RESULT:` line for this
   packet's own verdict.
 - Regenerate metadata after any spec-doc edit or the fingerprint check fails.
-- `generate-context.js` runs through the `.opencode` symlink with `NODE_PRESERVE_SYMLINKS=1`;
-  `validate.sh` runs via `realpath`.
 - Commit scopes must not be numeric; use `specs`, `release`, `phone-chrome`, `render-assertions`.
-- Uncommitted work in the main checkout can be wiped by a sibling lane, so external code lanes
-  (cli-devin, cli-codex) get verified and committed promptly.
+- Uncommitted work in the main checkout can be wiped by a sibling lane, so external code lanes get
+  verified and committed promptly.
+- See also `scratchpad/epic-traps.md` for the fuller list; it is session-scoped and not
+  load-bearing on its own.
 <!-- /ANCHOR:next-session -->
