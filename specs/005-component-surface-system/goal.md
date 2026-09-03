@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T23:40:00Z"
-    last_updated_by: "done-audit-2"
-    recent_action: "done-audit-2: unticked rows 3,6; re-verified 4,7; pct 57->29"
-    next_safe_action: "Cut 1.4.7; operator confirms all five surfaces on iOS"
+    last_updated_at: "2026-09-04T00:30:00Z"
+    last_updated_by: "open-rows-landing"
+    recent_action: "038 hover/drag row closed 7e36671; 040 write-path closed 535373a"
+    next_safe_action: "Land 037 CSS leg, 041 placement fix, 042 leg a; operator confirms on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -769,4 +769,23 @@ Basis: `roadmap.md` §3.2's checklist rule, the same basis as every `completion_
 this file. `spec.md` and `handover.md` are outside this audit's write scope (parent `goal.md`
 DONE table and log only) and still carry the prior figure; the divergence is flagged, not fixed,
 exactly as the prior audit's own paragraph above flags its own.
+
+### `038` and `040` open rows closed, 2026-09-04, release 1.4.8 in flight
+
+`038-board-kanban-port`'s hover/drag/drop-target/empty-column row closed in `7e36671`: two new
+board scenarios (`board-empty-column`, `board-drop-language`) mirror `renderColumn`'s empty-group
+branch and the drag handlers class-for-class, red observed (`db-board-drop-indicator` nesting
+mutation), eight captures read, `npm run gate` PASS 25 green, no stylesheet edit. `040-subtask-
+tree-port`'s drag-reorder row closed in `535373a`: both board host bindings (`database-view.ts`,
+`embedded-database-renderer.ts`) now forward the planned `subtaskMove` through `moveSubtask`'s one
+write path and abort on a rejected write — a devin lane then a fresh in-runtime verifier, red
+re-observed independently (`expected "vi.fn()" to be called 2 times, but got 0 times`), a new host
+harness added, both ADRs moved to Accepted in `040/decision-record.md`, gate 25 green. Release
+**1.4.8** is being cut from these two commits by a release leaf in a separate clone; not run here.
+Still in flight on their own branches: `037`'s remaining four open rows (leg a landed, the CSS/
+fixture leg in verification), `041`'s reduced-motion row (the fix landed, a placement-lane
+regression is being resolved), and `042-harness-fidelity-and-replay` (a devin initial pass only).
+`completion_pct` stays **29**: no §3 DONE row changed on this pass, per D13 the figure is derived
+from that checklist alone, not from port-phase landings. `roadmap.md` §5.2's `038` and `040` rows
+updated to match.
 <!-- /ANCHOR:log -->
