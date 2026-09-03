@@ -589,7 +589,7 @@ are not part of the port.
 | 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Landed `b9e2321` + `a6fcd31`, shipped **1.4.5**; hover/drag/drop-target/empty-column row closed `7e36671`, riding **1.4.8** (pending). Not operator-confirmed; open defect rows live in `038`'s `goal.md` |
 | 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Landed `57043e7` + `1588576` + `d8a2508`, shipped **1.4.6**. Not operator-confirmed; open defect rows live in `039`'s `goal.md` |
 | 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Landed `1d611db` + `00b7bd2`, shipped **1.4.7** (`214f6bd`); drag-reorder write-path row closed `535373a`, riding **1.4.8** (pending). Not operator-confirmed; open defect rows live in `040`'s `goal.md` |
-| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, shipped **1.4.6**. Not operator-confirmed; open defect rows live in `041`'s `goal.md` |
+| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, shipped **1.4.6**; reduced-motion row closed `3f143df`+`a251a43`, reconciled `471860d`, riding **1.4.9** (pending). Not operator-confirmed; open rows in `041`'s `goal.md` now closed |
 
 The research runs in a worktree, `.worktrees/003-obsidian-pm-harvest` on branch
 `worktrees/003-obsidian-pm-harvest`, so the main checkout stays free for the in-flight lanes. The

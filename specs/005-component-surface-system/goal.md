@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T00:30:00Z"
-    last_updated_by: "open-rows-landing"
-    recent_action: "038 hover/drag row closed 7e36671; 040 write-path closed 535373a"
-    next_safe_action: "Land 037 CSS leg, 041 placement fix, 042 leg a; operator confirms on iOS"
+    last_updated_at: "2026-09-04T00:50:00Z"
+    last_updated_by: "041-open-row-landed"
+    recent_action: "041 reduced-motion row closed 3f143df+a251a43, reconciled 471860d"
+    next_safe_action: "Land 037 open rows and 042 leg a; cut 1.4.9; operator confirms on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -788,4 +788,32 @@ regression is being resolved), and `042-harness-fidelity-and-replay` (a devin in
 `completion_pct` stays **29**: no §3 DONE row changed on this pass, per D13 the figure is derived
 from that checklist alone, not from port-phase landings. `roadmap.md` §5.2's `038` and `040` rows
 updated to match.
+
+### `041`'s last open row closed, 2026-09-04, release 1.4.9 pending
+
+The reduced-motion row left open when `041-shared-ui-ux-port` landed — reduced motion not reaching
+an owned menu's descendants — closed on `main` in three commits rebased onto `1eb4ab2` (1.4.8).
+`a251a43` fixed the original gap: `owned-menu.ts` mounts its surface on `doc.body` carrying
+`.db-surface` but never `.note-database-container`, so the container-wide reduced-motion reset
+never matched a menu descendant; `.db-surface` now leads that reset's selector list, red-first via
+a source-string test. That fix then regressed the placement lane: the reset gave `.db-surface` a
+`0.01ms` transition-duration with no `transition-property`, so the default `transition-property:
+all` made every animatable property on the subtree actually transition, and `verify-placement.mjs`'s
+synchronous `getComputedStyle` read after a style mutation could land mid-flight and report the
+departing value — caught by its `.is-phone` heading-rule ablation, FAIL. `3f143df` fixed it: nothing
+under `.db-surface` waits on `transitionend`/`animationend`, so `.db-surface` now gets its own
+reduced-motion rule with `transition-duration: 0`, an honest zero rather than a race; placement lane
+FAIL→PASS. `471860d` reconciled all three onto `1eb4ab2`: `tools/live/*.json` re-run fresh against
+the rebased `styles.css` (16/16 fresh), `css-lane.json` kept main's history and appended 041's own
+acquire/edit/release entries, `operator-checklist.md` regenerated, `graph-metadata.json` backfilled
+with no drift. `npm run gate` PASS, 25 green, 0 red; `validate.sh --strict` on `041` first `RESULT:
+PASSED`.
+
+Neither commit is operator-confirmed. The landing ships in **1.4.9 (pending)** bundled with
+`037-timeline-gantt-port`'s own open-row fixes — three of its four remaining rows are now visible
+in captures, and the day-scale row stays capture-pending on two fixture gaps recorded in `037`.
+`042-harness-fidelity-and-replay`'s devin leg a remains in verification, unchanged by this landing.
+`completion_pct` stays **29**: none of the parent's seven §3 DONE rows turn on an individual
+open-row landing, so per D13/§3.2 the figure is unaffected — the same basis every port-phase entry
+above states. `roadmap.md` §5.2's row for `041` updated to match.
 <!-- /ANCHOR:log -->
