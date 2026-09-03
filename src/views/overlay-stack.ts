@@ -25,6 +25,16 @@ export type OverlayCloseReason =
 export interface OverlaySurfaceOptions {
   id?: string;
   panel: HTMLElement;
+  /**
+   * Resolve the live panel node at check time instead of trusting the one captured at register().
+   *
+   * A surface whose owner rebuilds its panel in place (remove + recreate, as the sort and filter
+   * panels do on every add/toggle/remove) leaves `panel` pointing at a detached node the moment it
+   * rebuilds. Every dismissal check below prefers this resolver when it is supplied, so a tap
+   * inside whatever the owner currently considers "the panel" is tested against that node, not the
+   * one that existed when the surface first opened.
+   */
+  getPanel?: () => HTMLElement | null;
   anchor?: HTMLElement;
   getAnchor?: () => HTMLElement | null;
   parentId?: string;
@@ -35,6 +45,7 @@ export interface OverlaySurfaceOptions {
 
 interface OverlaySurface extends Required<Pick<OverlaySurfaceOptions, "panel" | "close">> {
   id: string;
+  getPanel?: () => HTMLElement | null;
   anchor?: HTMLElement;
   getAnchor?: () => HTMLElement | null;
   parentId?: string;
@@ -70,6 +81,7 @@ export class OverlayStack {
     const surface: OverlaySurface = {
       id,
       panel: options.panel,
+      getPanel: options.getPanel,
       anchor: options.anchor,
       getAnchor: options.getAnchor,
       parentId: options.parentId,
@@ -105,7 +117,7 @@ export class OverlayStack {
   }
 
   dismissPanel(panel: HTMLElement, reason: OverlayCloseReason = "programmatic"): boolean {
-    const surface = this.surfaces.find((candidate) => candidate.panel === panel);
+    const surface = this.surfaces.find((candidate) => this.livePanel(candidate) === panel);
     if (!surface) return false;
     this.removeSurface(surface, false);
     surface.close(reason);
@@ -118,7 +130,13 @@ export class OverlayStack {
   }
 
   isTopSurface(panel: HTMLElement): boolean {
-    return this.getTopSurface()?.panel === panel;
+    const top = this.getTopSurface();
+    return top !== undefined && this.livePanel(top) === panel;
+  }
+
+  /** The node this surface currently considers its panel, resolved fresh so a rebuilt owner is not stale. */
+  private livePanel(surface: OverlaySurface): HTMLElement {
+    return surface.getPanel?.() || surface.panel;
   }
 
   size(): number {
@@ -157,7 +175,7 @@ export class OverlayStack {
     const NodeConstructor = doc.defaultView?.Node;
     const isNode = typeof NodeConstructor === "function" && target instanceof NodeConstructor;
     const anchor = surface.getAnchor?.() || surface.anchor;
-    if (isNode && (surface.panel.contains(target) || anchor?.contains(target))) return;
+    if (isNode && (this.livePanel(surface).contains(target) || anchor?.contains(target))) return;
     this.dismissSurface(surface, "outside-pointerdown");
   }
 

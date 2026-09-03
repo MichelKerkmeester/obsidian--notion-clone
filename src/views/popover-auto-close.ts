@@ -21,6 +21,8 @@ import { overlayStack } from "./overlay-stack";
 
 export interface PopoverAutoCloseOptions {
   panel: HTMLElement;
+  /** Resolve the live panel node at check time; see OverlaySurfaceOptions.getPanel. */
+  getPanel?: () => HTMLElement | null;
   anchorEl?: HTMLElement;
   close: () => void;
   parentId?: string;
@@ -41,6 +43,7 @@ export function installPopoverAutoClose(options: PopoverAutoCloseOptions): () =>
   void options.isActiveTarget;
   const registration = overlayStack.register({
     panel: options.panel,
+    getPanel: options.getPanel,
     anchor: options.anchorEl,
     parentId: options.parentId,
     close: options.close,

@@ -1803,17 +1803,26 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private installHeaderPopoverAutoClose(kind: HeaderPopoverKind): void {
     this.removeHeaderPopoverAutoClose?.();
     this.removeHeaderPopoverAutoClose = undefined;
-    const panelSelector = kind === "filter"
-      ? ".db-filter-panel"
+    // Ask the renderer that built the panel, rather than a container-scoped selector.
+    //
+    // A phone sheet is portalled onto the body (see mobile-bottom-sheet.ts), so a selector scoped
+    // to this embed's own container stops matching the instant the panel becomes a sheet, and the
+    // fixed ids these panels share ("db-sort-panel" etc.) make an unscoped document-wide selector
+    // unsafe with more than one embed open. The renderer's own reference has neither problem, and
+    // it is re-asked on every dismissal check, so a rebuild that replaces the node (sort/filter
+    // rebuild on every add/toggle/remove) is followed rather than left pointing at a detached one.
+    const resolvePanel = (): HTMLElement | null => kind === "filter"
+      ? this.filterPanelRenderer.getPanel()
       : kind === "sort"
-        ? ".db-sort-panel"
+        ? this.sortPanelRenderer.getPanel()
         : kind === "view"
-          ? ".db-view-config-panel"
-          : ".db-column-manager";
-    const panel = this.containerEl.querySelector<HTMLElement>(panelSelector);
+          ? this.viewConfigPanelRenderer.getPanel()
+          : this.columnManagerRenderer.getPanel();
+    const panel = resolvePanel();
     if (!panel) return;
     this.removeHeaderPopoverAutoClose = installPopoverAutoClose({
       panel,
+      getPanel: resolvePanel,
       anchorEl: this.headerPopoverAnchorEl,
       close: () => this.closePopovers(),
       isActiveTarget: (target) => target instanceof HTMLElement &&

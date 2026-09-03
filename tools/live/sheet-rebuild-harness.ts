@@ -38,6 +38,8 @@ import { ToolbarRenderer } from "../../src/views/toolbar-renderer";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "../../src/views/popover-position";
 import { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag } from "../../src/views/mobile-bottom-sheet";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
+import { SortPanelRenderer } from "../../src/views/sort-panel-renderer";
+import { FilterPanelRenderer } from "../../src/views/filter-panel-renderer";
 import { overlayStack } from "../../src/views/overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
@@ -334,8 +336,192 @@ function runBindingAblation(doc: Document): RebuildResult[] {
   ];
 }
 
+/**
+ * A tap that lands inside a panel this rebuild just replaced must not read as an outside tap.
+ *
+ * The sort and filter panels do not repopulate their existing node like the group sheet above —
+ * `render()` removes the whole panel and builds a fresh one on every add/toggle/remove
+ * (sort-panel-renderer.ts, filter-panel-renderer.ts both call `panelEl.remove(); panelEl = null`
+ * before creating the replacement). The overlay stack's outside-pointerdown check tests
+ * `surface.panel.contains(target)` against whatever node it registered, and nothing re-registers
+ * after a rebuild — so the first change to either panel leaves the stack holding a detached node
+ * no live tap can ever be "inside" again, and the very next tap reads as outside and closes the
+ * sheet mid-edit.
+ *
+ * WHY THIS DRIVES THE REAL REGISTRATION PATH. `installHeaderPopoverAutoClose` in database-view.ts
+ * is what wires these panels to the stack, and it does so through `installPopoverAutoClose`
+ * against the renderer's own `getPanel()`. This mirrors that exact call shape rather than a
+ * bespoke registration, so a fix to the registration contract is exercised the same way the real
+ * caller uses it — not just the way this file imagines it.
+ */
+function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
+  const rowLabel = (rebuilt: boolean, stillOpen: boolean): RebuildResult["detail"] =>
+    !rebuilt
+      ? "the add action never rebuilt the panel, so this run proves nothing about registration"
+      : stillOpen
+        ? "a tap inside the rebuilt panel stayed inside the sheet"
+        : "a tap inside the panel the rebuild just created read as OUTSIDE and closed the sheet"
+          + " — the stack was still holding the node the rebuild replaced";
+
+  const runSort = (): RebuildResult => {
+    const { root, anchor } = makeHarness(doc);
+    const renderer = new SortPanelRenderer();
+    const config = { viewType: "table", schema: { columns: [{ key: "status", label: "Status", type: "text" }] } } as unknown as Parameters<SortPanelRenderer["render"]>[2];
+    const state = { sortRules: [], sortColumn: undefined, sortDirection: "asc" } as unknown as Parameters<SortPanelRenderer["render"]>[3];
+    let closed = false;
+    const actions = {
+      save: () => undefined,
+      refresh: () => undefined,
+      close: () => { closed = true; },
+    };
+
+    renderer.render(root, true, config, state, actions, anchor);
+    const openPanel = renderer.getPanel();
+    installPopoverAutoClose({
+      panel: openPanel as HTMLElement,
+      anchorEl: anchor,
+      getPanel: () => renderer.getPanel(),
+      close: () => { actions.close(); renderer.render(root, false, config, state, actions, anchor); },
+    });
+
+    // The tap the operator reports first: it lands inside the panel the stack actually registered,
+    // so it works and rebuilds the panel underneath the still-open sheet.
+    const addBtn = openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+    addBtn?.click();
+    const rebuiltPanel = renderer.getPanel();
+    const rebuilt = Boolean(rebuiltPanel && rebuiltPanel !== openPanel);
+
+    // The tap that follows: anywhere inside the panel the rebuild just created. A real device
+    // delivers this as pointerdown before click, and the stack's outside-pointerdown listener runs
+    // on that capture-phase pointerdown — so this is the event that decides whether the tap ever
+    // reaches the button underneath it.
+    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
+    secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
+
+    const stillOpen = !closed && Boolean(renderer.getPanel()?.isConnected);
+    root.remove();
+    return {
+      surface: "sort sheet (real SortPanelRenderer, add-sort)",
+      rebuildShape: "remove-then-recreate",
+      barBeforeRebuild: rebuilt,
+      barAfterRebuild: stillOpen,
+      pass: rebuilt && stillOpen,
+      detail: rowLabel(rebuilt, stillOpen),
+    };
+  };
+
+  const runFilter = (): RebuildResult => {
+    const { root, anchor } = makeHarness(doc);
+    const renderer = new FilterPanelRenderer();
+    const config = { viewType: "table", schema: { columns: [{ key: "status", label: "Status", type: "text" }] } } as unknown as Parameters<FilterPanelRenderer["render"]>[3];
+    const state = {
+      filters: [], filterTree: undefined, filterLogic: "and", sortRules: [], sortDirection: "asc",
+    } as unknown as Parameters<FilterPanelRenderer["render"]>[2];
+    let closed = false;
+    const actions = {
+      saveState: () => undefined,
+      refresh: () => undefined,
+      close: () => { closed = true; },
+    };
+
+    renderer.render(root, true, state, config, actions, anchor);
+    const openPanel = renderer.getPanel();
+    installPopoverAutoClose({
+      panel: openPanel as HTMLElement,
+      anchorEl: anchor,
+      getPanel: () => renderer.getPanel(),
+      close: () => { actions.close(); renderer.render(root, false, state, config, actions, anchor); },
+    });
+
+    const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
+      .find((btn) => /condition/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+    addBtn?.click();
+    const rebuiltPanel = renderer.getPanel();
+    const rebuilt = Boolean(rebuiltPanel && rebuiltPanel !== openPanel);
+
+    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
+    secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
+
+    const stillOpen = !closed && Boolean(renderer.getPanel()?.isConnected);
+    root.remove();
+    return {
+      surface: "filter sheet (real FilterPanelRenderer, add-condition)",
+      rebuildShape: "remove-then-recreate",
+      barBeforeRebuild: rebuilt,
+      barAfterRebuild: stillOpen,
+      pass: rebuilt && stillOpen,
+      detail: rowLabel(rebuilt, stillOpen),
+    };
+  };
+
+  /**
+   * The embedded call site registered by a selector scoped to its own container — the shape
+   * `embedded-database-renderer.ts:1806-1821` had before this case existed. On a phone the panel
+   * is portalled onto `document.body` (mobile-bottom-sheet.ts), which is never a descendant of
+   * that container, so the very first lookup finds nothing and dismissal registration never runs
+   * at all — worse than the rebuild-only staleness the sibling cases above prove, and root cause
+   * for report 36 covering "a lot of sheets" on the embedded surface specifically. Fixed the same
+   * way as the two cases above: ask the renderer for its own live panel instead of querying for it.
+   */
+  const runEmbeddedFilter = (): RebuildResult => {
+    const { root, anchor } = makeHarness(doc);
+    const renderer = new FilterPanelRenderer();
+    const config = { viewType: "table", schema: { columns: [{ key: "status", label: "Status", type: "text" }] } } as unknown as Parameters<FilterPanelRenderer["render"]>[3];
+    const state = {
+      filters: [], filterTree: undefined, filterLogic: "and", sortRules: [], sortDirection: "asc",
+    } as unknown as Parameters<FilterPanelRenderer["render"]>[2];
+    let closed = false;
+    const actions = {
+      saveState: () => undefined,
+      refresh: () => undefined,
+      close: () => { closed = true; },
+    };
+
+    renderer.render(root, true, state, config, actions, anchor);
+
+    // The renderer's own live-panel getter, exactly as the fixed call site now uses it.
+    const openPanel = renderer.getPanel();
+    if (openPanel) {
+      installPopoverAutoClose({
+        panel: openPanel,
+        getPanel: () => renderer.getPanel(),
+        anchorEl: anchor,
+        close: () => { actions.close(); renderer.render(root, false, state, config, actions, anchor); },
+      });
+    }
+
+    const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
+      .find((btn) => /condition/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+    addBtn?.click();
+    const rebuiltPanel = renderer.getPanel();
+    const rebuilt = Boolean(rebuiltPanel && rebuiltPanel !== openPanel);
+
+    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
+    secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
+
+    const stillOpen = !closed && Boolean(renderer.getPanel()?.isConnected);
+    root.remove();
+    return {
+      surface: "embedded filter sheet (real FilterPanelRenderer, portalled on phone)",
+      rebuildShape: "remove-then-recreate",
+      barBeforeRebuild: rebuilt,
+      barAfterRebuild: stillOpen,
+      pass: rebuilt && stillOpen,
+      detail: rowLabel(rebuilt, stillOpen),
+    };
+  };
+
+  return [runSort(), runFilter(), runEmbeddedFilter()];
+}
+
 export function runSheetRebuildParity(doc: Document = document): RebuildResult[] {
-  return [runGroupSheet(doc), ...runChromeContract(doc), ...runHandleWiring(doc), ...runBindingAblation(doc)];
+  return [
+    runGroupSheet(doc),
+    ...runChromeContract(doc),
+    ...runHandleWiring(doc),
+    ...runBindingAblation(doc),
+    ...runOverlayRegistrationAfterRebuild(doc),
+  ];
 }
 
 // ───────────────────────────────────────────────────────────────────

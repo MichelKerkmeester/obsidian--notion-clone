@@ -77,6 +77,10 @@ const REQUIRED = [
   "src/views/toolbar-renderer.ts",
   "src/views/popover-position.ts",
   "src/views/mobile-bottom-sheet.ts",
+  "src/views/sort-panel-renderer.ts",
+  "src/views/filter-panel-renderer.ts",
+  "src/views/overlay-stack.ts",
+  "src/views/popover-auto-close.ts",
 ];
 const bundled = Object.keys(built.metafile.inputs);
 const missing = REQUIRED.filter((source) => !bundled.includes(source));

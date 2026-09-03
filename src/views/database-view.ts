@@ -2950,8 +2950,21 @@ export class DatabaseView extends FileView {
           ? this.viewConfigPanelRenderer.getPanel()
           : this.columnManagerRenderer.getPanel();
     if (!panel) return;
+    // The panel that opened this sheet is not the panel it may become. Sort, filter, the column
+    // manager and the view config panel all rebuild by removing their node outright and creating a
+    // fresh one on every add/toggle/remove — this resolver is asked again on every dismissal check
+    // so the stack always tests the node the owner considers current, not the one that existed
+    // when the sheet first opened.
+    const resolvePanel = (): HTMLElement | null => kind === "filter"
+      ? this.filterPanelRenderer.getPanel()
+      : kind === "sort"
+        ? this.sortPanelRenderer.getPanel()
+        : kind === "view"
+          ? this.viewConfigPanelRenderer.getPanel()
+          : this.columnManagerRenderer.getPanel();
     this.removeHeaderPopoverAutoClose = installPopoverAutoClose({
       panel,
+      getPanel: resolvePanel,
       anchorEl: this.headerPopoverAnchorEl,
       close: () => this.closeHeaderPopovers(),
       isActiveTarget: (target) => target instanceof HTMLElement &&
