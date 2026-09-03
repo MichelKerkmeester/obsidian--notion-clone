@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T22:40:00Z"
-    last_updated_by: "040-landed"
-    recent_action: "040 landed (1d611db+00b7bd2); all 5 ports landed; 1.4.7 pending"
+    last_updated_at: "2026-09-03T23:40:00Z"
+    last_updated_by: "done-audit-2"
+    recent_action: "done-audit-2: unticked rows 3,6; re-verified 4,7; pct 57->29"
     next_safe_action: "Cut 1.4.7; operator confirms all five surfaces on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
@@ -31,7 +31,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 57
+    completion_pct: 29
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
@@ -150,19 +150,47 @@ resolve them silently.
 - [ ] Every view opens on device without freezing. Today only the table does. **2026-09-02:** 1.4.1
       carries sheet lifecycle fixes, not a view fix, so nothing here changed. The board and gallery
       remain the two views with an observed red and no verified green.
-- [x] A gate check constructs a production renderer for **every** view. One lane does now, for
+- [ ] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
       scenarios driven by both action bags. Every view named in an operator report is asserted.
+      **Unticked 2026-09-03T23:40:00Z, on a fresh audit read against the criterion's own wording
+      rather than the looser "every view named in an operator report" it had settled for.**
+      `src/data/types.ts:317` declares seven `DatabaseViewType` values — `table`, `board`,
+      `gallery`, `list`, `chart`, `calendar`, `timeline` — and `chart` is a live,
+      user-selectable view (`DEFAULT_VIEW_TYPES` in `settings.ts:78`, its own toolbar icon and
+      view-switcher row in `toolbar-renderer.ts`), not a retired one. `tools/live/render-
+      assertion-harness.ts` (1188 lines) imports and constructs `ListRenderer`, `TableRenderer`,
+      `BoardRenderer`, `GalleryRenderer`, `CalendarRenderer` and `CalendarTimelineRenderer`;
+      `grep -in chart` on that file returns nothing, so no gate lane ever constructs
+      `chart-renderer.ts`. The calendar lane is narrower than its tick implied, too: it only
+      builds `makeCalendarConfig(columns, "month")`, and `calendar-renderer.ts` supports
+      `scale: "month" | "week" | "day"` (`:82`) — week and day are never constructed by any
+      gate check either. `node tools/live/render-assertions.mjs`, `$?` read directly: `0`,
+      26/26 assertions PASS, coverage stamped 6 of 22 (`tools/live/renderer-coverage.json`). The
+      check is real and green for the six it covers; "every view" is not yet true.
 - [x] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, not a pipe. Was red on
       2026-08-29: the gate was 13 green, reported red by an external lane that could not reach
       Chrome. `SURFACE_PHASE=035-visual-pass-product-defects npm run gate`, `$?` read directly,
-      not through a pipe: today 25 green, exit 0.
+      not through a pipe: today 25 green, exit 0. **Re-verified 2026-09-03T23:40:00Z.**
+      `SURFACE_PHASE=040-subtask-tree-port npm run gate`, `$?` read directly: `0`, 25 green, 0
+      red. Bare `npm run gate`, `$?` read directly: `0`, the same 25 green, 0 red. No stray
+      Chrome process before either run (`pgrep` empty).
 - [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
       `npm run replay` passes today — 8 of 8 held, exit 0 — but observed red: N/A — no earlier
       count recorded. `tools/live/replay.json`'s history carries no run where a claim's `held` was
       `false`, and the parent log records no earlier held-count either, so this tick has no red to
-      cite. Left unticked: a tick needs its red.
-- [x] No criterion's green depends on a value the harness supplies that a device would not — a
+      cite. Left unticked: a tick needs its red. **Re-verified 2026-09-03T23:40:00Z, still open,
+      gap widened.** `npm run replay`, `$?` read directly: `0`, `tools/live/replay.json` still
+      shows the same 8/8 held. Its five covered phases are `000-surface-contract-and-truthful-
+      harness`, `001-overlay-width-and-chrome`, `002-properties-panel`, `004-checkbox-ownership`
+      and `005-content-row-rhythm` — none of this program's later landed work. `replay.json`
+      carries no claim for report 29's fix (`98da630`/`0c92f4d`, owner `031`), reports 34-36's
+      fix (`85ff504`, owner `031`), or any of the five port-phase landings: `037`
+      (`0262386`+`55bff9b`, 1.4.4), `038-board-kanban-port` (`b9e2321`+`a6fcd31`, 1.4.5), `039`
+      (`57043e7`+`1588576`+`d8a2508`, 1.4.6), `040` (`1d611db`+`00b7bd2`, 1.4.7 pending) and `041`
+      (`cb9aedf`+`25ae3a9`, 1.4.6). Every one of those is a landed result with no recorded
+      pre-fix number for replay to hold it against.
+- [ ] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
       **Ticked 2026-09-02, on an observed red verified in-runtime and committed as `c5566db`.** The
       board, gallery and table scenarios had no owned negative control, so their green proved the
@@ -171,12 +199,49 @@ resolve them silently.
       8, over 2000 rows** on table/embed, exit 1. Disarmed the same reads are **1, 1 and 3**, exit
       0. A delegate produced the change and a fresh in-runtime agent ran it here before this tick,
       per D4 and D14: a delegate's report is a claim, and this row waited for the result.
+      **Unticked 2026-09-03T23:40:00Z.** The `c5566db` control above is real and stays true for
+      the three scenarios it covers. A fresh audit checked the other three dependency classes
+      this row's own wording names, none audited before now. **(1) pinned variable** —
+      `tools/screenshots/runtime-vars.css` sets `--db-calendar-day-min-height`/`--db-calendar-
+      month-week-min-height: calc((100vh - 150px) / 5)`; this program's own `039-calendar-
+      parity-port` log already found that formula wrong — production's `getCellMinHeight()`
+      (`calendar-renderer.ts:2196`) defaults to a fixed `112px`, config-driven, never
+      viewport-derived. It does not reach `render-assertions.mjs` (which loads only
+      `styles.css`), but it does reach every calendar screenshot capture. **(2) stubbed
+      actions** — every member of `render-assertion-harness.ts`'s six action bags is a no-op
+      (`openRow: () => undefined`, etc.); the row-3/4 green does not exercise them, but the bags
+      are exactly the "stubbed action" this row names, unaudited until now. **(3) hand-written
+      mounts** — `tools/live/touch-targets.mjs` and `tools/live/unstyled-links.mjs`, two of the
+      25 lanes row 4's green counts, both `import { SCENARIOS } from "../screenshots/
+      scenarios.mjs"` and call `scenario.html()`; `tools/screenshots/capture.mjs` (backing
+      `screenshots-fresh`, `css-lane`, `device-parity`) uses the same fixtures. These are
+      hand-authored HTML strings, not the constructed production renderer — the D10 risk this
+      row exists to police, and this program's own visual pass already caught two real instances
+      of it producing false defects (six siblings clipping mid-word, five single-glyph rows)
+      before adding scenario-specific parity checks; those checks cover the two found defects,
+      not a structural guarantee for the rest of `scenarios.mjs`. **(4) absent host
+      stylesheet** — `tools/screenshots/theme.css` never declares Obsidian's own `.mod-cta`
+      rule, so a capture of any primary-CTA button (`db-empty-action mod-cta`, etc.) never shows
+      the host's real button styling; already recorded as an open row in `039/goal.md` and
+      `039/implementation-summary.md`. (1) and (4) make a capture-based check show a value a
+      device would not; (3) makes touch-target and unstyled-link counts depend on fixture markup
+      a production render might not reproduce. Unticked rather than partially ticked, per this
+      row's own "check both ways" framing (D5): a device dependency found anywhere in the set
+      the wording names disqualifies "no criterion's green," not just the three scenarios
+      `c5566db` armed.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
       `specs/system-speckit/050-single-segment-packet-pointer`). `validate.sh
       specs/005-component-surface-system --strict`, first `RESULT:` line `PASSED`,
-      `grep -c SPECDOC_FRONTMATTER_004` now 0.
+      `grep -c SPECDOC_FRONTMATTER_004` now 0. **Re-verified 2026-09-03T23:40:00Z.**
+      `NODE_PRESERVE_SYMLINKS=1 bash "$(realpath .opencode)/skills/system-spec-kit/scripts/spec/
+      validate.sh" specs/005-component-surface-system --strict`, run to completion without
+      piping through `head` — an earlier attempt in this same audit piped through `head -80` and
+      silently truncated the run via `SIGPIPE` at 100 lines, the exact "never trust a pipe" trap
+      this program's own rules name. Full run: first `RESULT:` line for the parent is `PASSED`,
+      `Summary: Errors: 0  Warnings: 1`. All 42 recursively-validated folders report `RESULT:
+      PASSED`, 0 `RESULT: FAILED`.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -679,4 +744,29 @@ and `spec.md`'s Phase Documentation Map row for `040` updated to match.
 This does not change `completion_pct`: the same basis as the `037`, `039` and `041` entries above
 applies — none of the parent's seven §3 rows turn on an individual port phase landing, so the 57%
 figure is unaffected.
+
+### Done-audit-2, 2026-09-03T23:40:00Z: rows 3 and 6 unticked, 4 and 7 re-verified, 5 confirmed still open
+
+A fresh in-runtime pass audited §3 rows 3-7 against the tree at `421995b`. **Row 3** read too
+loosely: `chart` is a live, user-selectable `DatabaseViewType` (`data/types.ts:317`,
+`settings.ts:78`) that no gate lane ever constructs (`grep -in chart render-assertion-
+harness.ts` returns nothing), and the covered calendar lane only builds `scale: "month"`, never
+`"week"` or `"day"`. Unticked. **Row 6** was ticked on one real negative control (`c5566db`,
+board/gallery/table) but the wording names four dependency classes and only one had been
+checked: a pinned viewport formula for calendar cell height already known wrong (`039`'s own
+log), stubbed action bags (by design, now named rather than assumed harmless), two of the 25
+gate lanes (`touch-targets`, `unstyled-links`) plus the whole screenshot pipeline reading
+hand-authored fixture markup instead of a constructed renderer, and Obsidian's own `.mod-cta`
+rule absent from the capture theme (already an open row in `039/goal.md`). Unticked. **Row 4**
+re-verified fresh: both `SURFACE_PHASE=040-subtask-tree-port npm run gate` and bare `npm run
+gate` exit 0, 25 green, `$?` read directly. **Row 5** re-verified still open: `npm run replay`
+holds 8/8 but its five covered phases (`000`, `001`, `002`, `004`, `005`) predate every landed
+result this program has shipped since — report 29's fix, reports 34-36's fix, and all five
+port-phase landings (`037`-`041`) carry no recorded pre-fix number for replay to check. **Row 7**
+re-verified fresh, `Errors: 0`, first `RESULT: PASSED`, run to completion without a truncating
+pipe. `completion_pct` recomputed 2 of 7 ÷ 7 = **29** (was 57 at 4 of 7): only rows 4 and 7 hold.
+Basis: `roadmap.md` §3.2's checklist rule, the same basis as every `completion_pct` figure in
+this file. `spec.md` and `handover.md` are outside this audit's write scope (parent `goal.md`
+DONE table and log only) and still carry the prior figure; the divergence is flagged, not fixed,
+exactly as the prior audit's own paragraph above flags its own.
 <!-- /ANCHOR:log -->

@@ -128,17 +128,17 @@
       "001-overlay-placement-and-menu-language/spec.md",
       "tools/live/probe.mjs",
       "tools/storybook/verify-placement.mjs",
-      "tools/live/replay.json",
       "tools/live/renderer-coverage.json",
+      "tools/live/replay.json",
+      "tools/screenshots/runtime-vars.css",
+      "tools/live/touch-targets.mjs",
+      "tools/live/unstyled-links.mjs",
+      "tools/screenshots/capture.mjs",
+      "tools/screenshots/theme.css",
       "tools/gate.mjs",
       "tools/lane/css-lane.json",
       "repo-rules/spec-tree-layout.md",
-      "scratch/device-2026-09-02/view-switcher-sheet-ios.png",
-      "scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png",
-      "src/i18n.ts",
-      "src/views/toolbar-renderer.ts",
-      "src/views/record-detail-panel.ts",
-      "src/views/mobile-bottom-sheet.ts"
+      "scratch/device-2026-09-02/view-switcher-sheet-ios.png"
     ],
     "entities": [
       {
@@ -190,15 +190,45 @@
         "source": "derived"
       },
       {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
         "name": "replay.json",
         "kind": "config",
         "path": "tools/live/replay.json",
         "source": "derived"
       },
       {
-        "name": "renderer-coverage.json",
-        "kind": "config",
-        "path": "tools/live/renderer-coverage.json",
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets.mjs",
+        "kind": "file",
+        "path": "tools/live/touch-targets.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "unstyled-links.mjs",
+        "kind": "file",
+        "path": "tools/live/unstyled-links.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
         "source": "derived"
       },
       {
@@ -223,36 +253,6 @@
         "name": "view-switcher-sheet-ios.png",
         "kind": "file",
         "path": "scratch/device-2026-09-02/view-switcher-sheet-ios.png",
-        "source": "derived"
-      },
-      {
-        "name": "cell-editor-over-selection-bar-ios.png",
-        "kind": "file",
-        "path": "scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png",
-        "source": "derived"
-      },
-      {
-        "name": "i18n.ts",
-        "kind": "code",
-        "path": "src/i18n.ts",
-        "source": "derived"
-      },
-      {
-        "name": "toolbar-renderer.ts",
-        "kind": "code",
-        "path": "src/views/toolbar-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "record-detail-panel.ts",
-        "kind": "code",
-        "path": "src/views/record-detail-panel.ts",
-        "source": "derived"
-      },
-      {
-        "name": "mobile-bottom-sheet.ts",
-        "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
         "source": "derived"
       },
       {
@@ -288,7 +288,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-03T20:26:06.570Z",
+    "last_save_at": "2026-09-03T20:43:13.460Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -296,7 +296,7 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:2d74baa4bf19d40ff474ce8ed549b37a3d31eb284e9fa6a562a523268bb2c1fc",
+    "source_fingerprint": "sha256:9d6eec4e568f9f7e5506dde1e707871b77d4d1976279c8dbb81172724931ed8c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "2b57bdf10c7a2392b5842fe328c85b19e479d0b074425bfd5866b745214dc98a",
