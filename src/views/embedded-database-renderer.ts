@@ -51,6 +51,7 @@ import { safeString } from "../data/safe-string";
 import { createCheckbox } from "./checkbox";
 import { CsvMarkdownExportModal } from "./modals/csv-markdown-export-modal";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
+import type { BoardSubtaskMove } from "./board-renderer";
 import { CellRenderer } from "./cell-renderer";
 import { ColumnHeaderController } from "./column-header-controller";
 import { ColumnManagerRenderer } from "./column-manager-renderer";
@@ -409,7 +410,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       createEntry: (defaults) => { if (!isCodeBlock) void this.createBlankEntry(defaults); },
       addColumn: () => { new Notice(t("notice.editInFullView", { action: t("panel.addColumn") })); },
       showRowMenu: (event, row, context, anchorEl) => this.rowMenu.show(event, row, context, anchorEl),
@@ -426,7 +427,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       updateGroup: (row, field, value) => this.updateBoardGroup(row, field, value),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
       updateCardOrder: (field, groupKey, paths) => this.updateBoardCardOrder(field, groupKey, paths),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath, subtaskMove) =>
+        void this.moveRowToPosition(movedPath, beforePath, afterPath, subtaskMove),
       moveSubtask: (request, plan) => this.moveSubtask(request, plan),
       isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.config, row),
       toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.config, row, collapsed),
@@ -459,7 +461,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
       updateCardSize: (width) => this.updateGalleryCardSize(width),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
@@ -480,7 +482,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
       editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
@@ -2679,9 +2681,27 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.saveEmbeddedConfigInBackground();
   }
 
-  private moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string): void {
+  private async moveRowToPosition(
+    movedPath: string,
+    beforePath?: string,
+    afterPath?: string,
+    subtaskMove?: BoardSubtaskMove,
+  ): Promise<void> {
     const config = this.config;
     if (!config) return;
+    // A same-parent drag carries the planned relation write; route it through
+    // the same frontmatter path moveSubtask uses, so a drag never lands as a
+    // rank-only reorder with the relation left stale. A failed plan write
+    // aborts the whole move: applying the rank alone would reorder the board
+    // while the relation still disagrees.
+    if (subtaskMove) {
+      try {
+        await this.moveSubtask(subtaskMove.request, subtaskMove.plan);
+      } catch {
+        new Notice(t("subtask.moveSaveFailed"));
+        return;
+      }
+    }
     this.ensureManualRanks(config);
     const ranks = config.manualOrder?.ranks;
     if (!ranks) return;

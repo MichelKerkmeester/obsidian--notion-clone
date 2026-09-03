@@ -107,6 +107,7 @@ import { removeFilterRuleAt, removeSortRuleAt } from "./view-rule-operations";
 import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
 import { ColumnOperations, FrontmatterValueChange } from "./column-operations";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
+import type { BoardSubtaskMove } from "./board-renderer";
 import { GalleryRenderer } from "./gallery-renderer";
 import { ListRenderer } from "./list-renderer";
 import { ChartRenderer } from "./chart-renderer";
@@ -421,7 +422,7 @@ export class DatabaseView extends FileView {
       void this.createCalendarTimelineEntry(config, dateKey, options);
     },
     updateEventDates: (row, changes) => this.updateCalendarTimelineDates(row, changes),
-    reorderTimelineEvent: (row, beforePath, afterPath) => this.moveRowToPosition(row.file.path, beforePath, afterPath),
+    reorderTimelineEvent: (row, beforePath, afterPath) => void this.moveRowToPosition(row.file.path, beforePath, afterPath),
     moveTimelineEventToGroup: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath) =>
       this.moveRowToGroupAndPosition(row, field, fromGroupKey, toGroupKey, beforePath, afterPath),
     moveSubtask: (request, plan) => this.moveSubtask(request, plan),
@@ -755,7 +756,7 @@ export class DatabaseView extends FileView {
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.getActiveDb()),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.getActiveDb(), targetField),
       setupFillHandle: (td, row, col) => this.setupTableFillHandle(td, row, col),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
       moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath) =>
         this.moveRowToGroupAndPosition(row, field, fromGroupKey, toGroupKey, beforePath, afterPath),
@@ -776,9 +777,10 @@ export class DatabaseView extends FileView {
       updateGroup: (row, field, value, fromValue) => this.updateBoardGroup(row, field, value, fromValue),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
       updateCardOrder: (field, groupKey, paths) => this.updateBoardCardOrder(field, groupKey, paths),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
-      moveRowWithGroupUpdatesAndPosition: (row, updates, beforePath, afterPath, movedPaths) =>
-        this.moveRowWithGroupUpdatesAndPosition(row, updates, beforePath, afterPath, movedPaths),
+      moveRowToPosition: (movedPath, beforePath, afterPath, subtaskMove) =>
+        void this.moveRowToPosition(movedPath, beforePath, afterPath, subtaskMove),
+      moveRowWithGroupUpdatesAndPosition: (row, updates, beforePath, afterPath, movedPaths, subtaskMove) =>
+        this.moveRowWithGroupUpdatesAndPosition(row, updates, beforePath, afterPath, movedPaths, subtaskMove),
       moveRowsToPosition: (paths, beforePath, afterPath) => this.moveRowsToPosition(paths, beforePath, afterPath),
       moveSubtask: (request, plan) => this.moveSubtask(request, plan),
       isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.getConfig(), row),
@@ -819,7 +821,7 @@ export class DatabaseView extends FileView {
       editFileName: (target, row, currentName) => this.cellRenderer.editFileName(target, row, currentName),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
       updateCardSize: (width) => this.updateGalleryCardSize(width),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
       moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath, movedPaths) =>
         this.moveRowWithGroupUpdatesAndPosition(row, [{ field, fromGroupKey, toGroupKey }], beforePath, afterPath, movedPaths),
@@ -850,7 +852,7 @@ export class DatabaseView extends FileView {
       saveCellValue: (row, col, value) => this.saveCellValueWithHistory(row, col, value),
       editFileName: (target, row, currentName) => this.cellRenderer.editFileName(target, row, currentName),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
+      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
       moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath, movedPaths) =>
         this.moveRowWithGroupUpdatesAndPosition(row, [{ field, fromGroupKey, toGroupKey }], beforePath, afterPath, movedPaths),
@@ -10722,9 +10724,28 @@ export class DatabaseView extends FileView {
     this.refresh();
   }
 
-  private moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string): void {
+  private async moveRowToPosition(
+    movedPath: string,
+    beforePath?: string,
+    afterPath?: string,
+    subtaskMove?: BoardSubtaskMove,
+  ): Promise<void> {
     const config = this.getConfig();
     if (!config) return;
+
+    // A same-parent drag carries the planned relation write; route it through
+    // the same frontmatter path moveSubtask uses, so a drag never lands as a
+    // rank-only reorder with the relation left stale. A failed plan write
+    // aborts the whole move: applying the rank alone would reorder the board
+    // while the relation still disagrees.
+    if (subtaskMove) {
+      try {
+        await this.moveSubtask(subtaskMove.request, subtaskMove.plan);
+      } catch {
+        new Notice(t("subtask.moveSaveFailed"));
+        return;
+      }
+    }
 
     if (!this.setManualRank(config, movedPath, beforePath, afterPath)) return;
     this.pendingUndoLabel = t("undo.cardOrderConfig");
@@ -11033,10 +11054,22 @@ export class DatabaseView extends FileView {
     beforePath?: string,
     afterPath?: string,
     movedPaths?: string[],
+    subtaskMove?: BoardSubtaskMove,
   ): Promise<void> {
     const config = this.getConfig();
     const entry = this.getCurrentEntry();
     if (!config || !entry) return;
+    // Same single write path as moveRowToPosition: a drag that carries a
+    // planned relation write applies it before the group and rank changes,
+    // and aborts the whole move if the write fails.
+    if (subtaskMove) {
+      try {
+        await this.moveSubtask(subtaskMove.request, subtaskMove.plan);
+      } catch {
+        new Notice(t("subtask.moveSaveFailed"));
+        return;
+      }
+    }
     const before = this.cloneDatabaseConfig(entry.config);
     try {
       if (movedPaths?.length) {

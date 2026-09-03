@@ -57,10 +57,10 @@
       "src/data/subtask-hydrate.test.ts",
       "src/data/subtask-serialize.test.ts",
       "src/data/data-source.ts",
+      "src/views/database-view.test.ts",
+      "src/views/embedded-database-renderer.test.ts",
       "src/data/manual-order.ts",
-      "src/views/board-renderer.ts",
-      "src/views/calendar-timeline-renderer.ts",
-      "tools/lane/css-lane.json"
+      "src/views/board-renderer.ts"
     ],
     "entities": [
       {
@@ -160,6 +160,18 @@
         "source": "derived"
       },
       {
+        "name": "database-view.test.ts",
+        "kind": "test",
+        "path": "src/views/database-view.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/embedded-database-renderer.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "manual-order.ts",
         "kind": "code",
         "path": "src/data/manual-order.ts",
@@ -169,18 +181,6 @@
         "name": "board-renderer.ts",
         "kind": "code",
         "path": "src/views/board-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "calendar-timeline-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-timeline-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "This repo has no subtask/hierarchy concept today: `grep -rn \"parentId\\|subtaskIds\\|hierarchy\" src/data/`",
     "created_at": "2026-09-02T21:56:57.762Z",
-    "last_save_at": "2026-09-03T20:05:30.077Z",
+    "last_save_at": "2026-09-03T21:41:48.213Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:99208226f75e979ec98a6ceade64a4e7b2c88590769799189fb5e2a5b85e4bab",
+    "source_fingerprint": "sha256:e9dacca5720071ecf48d1b791e6c64f1333298fe2c2de4d9ef7ee1ef23b174d2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d0babe4606cf70f2cd0611feac9f7f8c7052634548068e8b9239909e04cdb5e5",
       "plan.md": "cebc9f277f7a06b25376823e85be46729d3d76f896dd66ea2327fd51b62eef19",
       "tasks.md": "e6d4b145e7b44b5598c6aecbb1bf4950a8770d0e7e1ca271ace7a9af89c0db60",
-      "decision-record.md": "6aaf40a0bcf315e641f5187af90dbbdc8f585754d613863ee76f44c05a4da6aa",
-      "implementation-summary.md": "f45050a5c7deb4e96b1889fbdb8beaedbffcc3bdda22ead8aecea2e237e1d9ee"
+      "decision-record.md": "025112bf48dc67bf6b108f77053c467ae92c7330d77f8dc7eace065161bde3d5",
+      "implementation-summary.md": "8924663b27748906a2a0b36ced070d5aafb45c3f5c40a6d94f914f657b6cb644"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1304,7 +1304,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
-      "bytes": 36858
+      "bytes": 36852
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1331,7 +1331,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
-      "bytes": 39004
+      "bytes": 38993
     },
     {
       "id": "chrome-selection-status-bar",
@@ -1345,7 +1345,7 @@
       ],
       "layoutHash": "9bcd1f820e51",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "90c61e3521c3",
+        "src/views/embedded-database-renderer.ts": "d46c711a7902",
         "styles.css": "32148b7b7646",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1368,7 +1368,7 @@
       ],
       "layoutHash": "9bcd1f820e51",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "90c61e3521c3",
+        "src/views/embedded-database-renderer.ts": "d46c711a7902",
         "styles.css": "32148b7b7646",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1391,7 +1391,7 @@
       ],
       "layoutHash": "834c932f6aa8",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "90c61e3521c3",
+        "src/views/embedded-database-renderer.ts": "d46c711a7902",
         "styles.css": "32148b7b7646",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1414,7 +1414,7 @@
       ],
       "layoutHash": "834c932f6aa8",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "90c61e3521c3",
+        "src/views/embedded-database-renderer.ts": "d46c711a7902",
         "styles.css": "32148b7b7646",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -6166,7 +6166,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 148024
+      "bytes": 147710
     },
     {
       "id": "timeline-subtask-tree",
@@ -6195,7 +6195,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 145043
+      "bytes": 144624
     },
     {
       "id": "timeline-subtask-tree",
@@ -6224,7 +6224,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 84408
+      "bytes": 84705
     },
     {
       "id": "timeline-subtask-tree",
@@ -6468,7 +6468,7 @@
       },
       "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 138267
+      "bytes": 137992
     },
     {
       "id": "timeline-view",
@@ -6514,7 +6514,7 @@
       },
       "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 77242
+      "bytes": 76901
     },
     {
       "id": "timeline-view",
@@ -6560,7 +6560,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 117183
+      "bytes": 116992
     },
     {
       "id": "timeline-view-month",
@@ -6629,7 +6629,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 73332
+      "bytes": 73892
     },
     {
       "id": "timeline-view-quarter",
@@ -6767,7 +6767,7 @@
       },
       "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar year, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 103982
+      "bytes": 103994
     },
     {
       "id": "timeline-view-year",

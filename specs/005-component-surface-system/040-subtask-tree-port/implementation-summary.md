@@ -1,10 +1,11 @@
 ---
 title: "Implementation Summary [template:level-3/implementation-summary.md]"
-description: "Leg a lands the data layer — a derived relation, sanitized hydrate and the single atomic write path — and leg b puts the tree on the board and the timeline: depth, collapse, progress, inline add and moves that route through that one write path."
+description: "Leg a lands the data layer — a derived relation, sanitized hydrate and the single atomic write path — leg b puts the tree on the board and the timeline, and leg c closes the same-parent drag's rank-only gap and adds the host-binding test harness leg b's close-out left open."
 trigger_phrases:
   - "040 implementation summary"
   - "subtask tree port leg a"
   - "subtask tree port leg b"
+  - "subtask tree port leg c"
   - "subtask relation hydrate serialize"
   - "subtask board timeline display"
 importance_tier: "normal"
@@ -12,30 +13,31 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/040-subtask-tree-port"
-    last_updated_at: "2026-09-03T20:30:00Z"
-    last_updated_by: "leg-b-verified"
-    recent_action: "Leg b landed: board and timeline display verified"
-    next_safe_action: "Close the drag-reorder rank-only gap, or take the packet to acceptance-criteria sign-off"
+    last_updated_at: "2026-09-03T23:35:00Z"
+    last_updated_by: "in-runtime-verifier"
+    recent_action: "Closed both leg-b gaps in-runtime: drag routes through moveSubtask, harness added"
+    next_safe_action: "Operator device confirmation of the tree UI is the packet's only open item"
     blockers:
       - "Not operator-confirmed: no device or installed-build confirmation of the tree UI has occurred"
-      - "Drag-reorder inside one parent still routes rank-only: the host handlers drop moveRowToPosition's subtaskMove argument"
-      - "The two host moveSubtask/toggleSubtaskCollapsed bodies have no test harness"
     key_files:
       - "src/data/subtask-relation.ts"
       - "src/data/subtask-serialize.ts"
       - "src/views/board-renderer.ts"
       - "src/views/calendar-timeline-renderer.ts"
       - "src/views/database-view.ts"
+      - "src/views/embedded-database-renderer.ts"
+      - "src/views/database-view.test.ts"
+      - "src/views/embedded-database-renderer.test.ts"
       - "tools/screenshots/scenarios/temporal.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "040-subtask-tree-port-leg-b"
+      session_id: "040-subtask-tree-port-leg-c"
       parent_session_id: null
-    completion_pct: 88
+    completion_pct: 95
     open_questions: []
     answered_questions:
-      - "The subtask relation is a pure derivation over RowData[], never a nested field (ADR-001, decision-record.md)"
-      - "parentId/subtaskIds have exactly one write path, the atomic transaction helper in subtask-serialize.ts (ADR-002, decision-record.md)"
+      - "The subtask relation is a pure derivation over RowData[], never a nested field (ADR-001, Accepted, decision-record.md)"
+      - "parentId/subtaskIds/subtaskRank have exactly one write path, the atomic transaction helper in subtask-serialize.ts, reached by every mover including the same-parent drag (ADR-002, Accepted, decision-record.md)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core + level3-arch | v2.2 -->
 # Implementation Summary
@@ -51,7 +53,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 040-subtask-tree-port |
-| **Completed** | Both legs landed and verified 2026-09-03; not operator-confirmed, and two rows below stay open |
+| **Completed** | Both legs landed and verified 2026-09-03; leg b's two open rows closed and in-runtime verified the same day; not operator-confirmed |
 | **Level** | 3 |
 | **LOC Added (leg a)** | ~545 production (472 new files + 73 in `row-pipeline.ts`/`types.ts`), ~801 test |
 | **LOC Added (leg b)** | ~530 production across `src/data/*` and the four view files, ~130 CSS, ~180 test and fixture |
@@ -124,12 +126,13 @@ path, phase number, task id or requirement id (`rg` scan of the five changed fil
 
 | ADR | Decision | Status | Impact |
 |-----|----------|--------|--------|
-| ADR-001 | The subtask relation is a derivation over `RowData`, never a nested field | Proposed | `RowData` stays the single persistence authority; the relation is rebuilt from `RowData[]` on every pipeline change, so it can never drift from frontmatter |
-| ADR-002 | A single atomic transaction helper is the only write path for `parentId`/`subtaskIds` | Proposed | `planSubtaskMove` is the only function this leg exposes for a relation-affecting write; a rejected cycle check leaves zero writes, so a cross-parent move can never partially commit |
+| ADR-001 | The subtask relation is a derivation over `RowData`, never a nested field | Accepted | `RowData` stays the single persistence authority; the relation is rebuilt from `RowData[]` on every pipeline change, so it can never drift from frontmatter |
+| ADR-002 | A single atomic transaction helper is the only write path for `parentId`/`subtaskIds` | Accepted | `planSubtaskMove` is the only function that plans a relation-affecting write, and `moveSubtask` is now the only function every mover (drag, mobile menu, timeline) calls to apply one; a rejected cycle check leaves zero writes, so a move can never partially commit |
 
 See `decision-record.md` for full ADR documentation, alternatives considered and the Five Checks
-evaluation. Both remain `Proposed`; this leg's green verification is the evidence they were scaffolded
-against, not yet the acceptance event itself.
+evaluation. Both moved from `Proposed` to `Accepted` on 2026-09-03: the same-parent drag was the last
+caller outside the single write path (Known Limitation 1 below), and closing it is what made ADR-002's
+"only write path" claim true of the whole codebase rather than of `subtask-serialize.ts` alone.
 <!-- /ANCHOR:arch-decisions -->
 
 ---
@@ -256,22 +259,58 @@ re-measured by the eight census and audit tools the gate does not re-stamp on it
 
 ---
 
+<!-- ANCHOR:leg-c -->
+## Leg C — Closing the Two Open Rows
+
+Leg b's own close-out left two rows open: the board's same-parent drag reordered the manual rank but
+never wrote `subtaskRank`, and `moveSubtask`/`toggleSubtaskCollapsed` had no test harness. Both are
+now closed (Known Limitations 1-2 above), each red first against this worktree's actual code before
+either fix landed. `git stash push` on only `database-view.ts`/`embedded-database-renderer.ts` (the
+two test files kept) reproduced the claimed failure verbatim, then popped clean.
+
+### Leg C Verification
+
+| Check | Result |
+|-------|--------|
+| Red-first (stashed fix) | `expected "vi.fn()" to be called 2 times, but got 0 times` at `database-view.test.ts:241` and `embedded-database-renderer.test.ts:307` |
+| `npx tsc --noEmit` | PASS — exit 0 |
+| `npx vitest run` | PASS — 89 files, 875 tests |
+| `npm run lint` | 169 problems, identical to `HEAD`; 0 new findings in the four touched files (the four existing findings inside `database-view.ts`/`embedded-database-renderer.ts` predate this leg, confirmed against a stashed `HEAD` copy) |
+| `node tools/naming/scan-comments.mjs` | PASS — 376 files, 0 commented-out lines |
+| `node tools/live/sheet-rebuild.mjs` | PASS — every rebuilt sheet kept its bar |
+| `node tools/live/render-assertions.mjs` | PASS — all renderer/bag-shape checks |
+| `node tools/screenshots/verify.mjs` (before recapture) | STALE — 4 `chrome-selection-status-bar` captures, `embedded-database-renderer.ts` sourceHash moved |
+| `npm run screenshots` | 276 captured; the 4 stale captures are byte-identical to `HEAD` (only the sourceHash needed refreshing); 10 unrelated timeline/chrome-menu captures moved 6-560 bytes, the same encoder non-determinism this lane's history already records |
+| `node tools/lane/check-lane.mjs` | PASS — `release names all 10 changed capture(s)`, no stylesheet edit |
+| `npm run gate` | PASS — 25/25 green, exit 0 |
+
+The worktree was also rebased onto `main` (moved to `7e36671` in the interim) before this
+verification: `tools/live/*.json` conflicted on the merge and were resolved by taking `main`'s
+committed versions, then regenerating them fresh from the rebased tree via the two live tools above,
+per this program's documented resolution rule for that file class.
+<!-- /ANCHOR:leg-c -->
+
+---
+
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Drag-reorder inside one parent still routes rank-only.** `getSubtaskMoveContext`
-   (`board-renderer.ts:1461-1476`) plans a same-parent move and hands it to `moveRowToPosition` as
-   `subtaskMove`, but every host binding drops that argument (`database-view.ts:779`,
-   `embedded-database-renderer.ts:429`), so a drag reorders the manual rank and never writes
-   `subtaskRank`. The timeline's own reorder path does route through the helper
-   (`applyTimelineSubtaskOrder`, `calendar-timeline-renderer.ts:2687-2708`), so the two surfaces
-   disagree today. The plan is computed and discarded on every board drag; closing this is either
-   wiring the argument through the two hosts or removing the parameter.
-2. **The host handler bodies have no test harness.** `moveSubtask` and `toggleSubtaskCollapsed` in
-   `database-view.ts:10882-10911` and `embedded-database-renderer.ts:2726-2755` need a live Obsidian
-   `App`, workspace and metadata cache, which no check here constructs. Their inputs
-   (`planSubtaskMove`, `toFrontmatterUpdates`) and their output shape are covered; the call itself is
-   read, not run.
+1. ~~Drag-reorder inside one parent routed rank-only.~~ **Closed 2026-09-03.** `getSubtaskMoveContext`
+   (`board-renderer.ts:1458-1474`) plans a same-parent move and hands it to `moveRowToPosition`/
+   `moveRowWithGroupUpdatesAndPosition` as `subtaskMove`; the host bindings now forward that argument
+   (`database-view.ts:780-786`, `embedded-database-renderer.ts:427-428`) and the handlers apply the
+   plan through `moveSubtask`'s `updateFrontmatter` loop before the rank change, aborting the whole
+   move if that write fails (`database-view.ts:10727-10755,11054-11072`,
+   `embedded-database-renderer.ts:2684-2704`). The board and the timeline's own reorder path
+   (`applyTimelineSubtaskOrder`, `calendar-timeline-renderer.ts:2687-2708`) now agree. Red first:
+   `database-view.test.ts:241` and `embedded-database-renderer.test.ts:307`,
+   `expected "vi.fn()" to be called 2 times, but got 0 times`.
+2. ~~The host handler bodies had no test harness.~~ **Closed 2026-09-03.**
+   `src/views/database-view.test.ts` and `src/views/embedded-database-renderer.test.ts` drive the
+   real constructor-bound action bags of `DatabaseView` and `EmbeddedDatabaseRenderer` through a fake
+   data source and window stub (no live Obsidian `App` is constructed) and assert
+   `moveRowToPosition`/`moveSubtask`/`toggleSubtaskCollapsed` reach `dataSource.updateFrontmatter`
+   and `dataSource.updateViewDefFile` with the exact planned payloads, not just call counts (6 tests).
 3. **Not operator-confirmed.** No device or installed-build confirmation of the tree UI has occurred,
    and `acceptance-criteria.md`'s rows are not signed off. The captures are headless Chrome against
    hand-written fixtures, which is evidence about markup and stylesheet, not about Obsidian.

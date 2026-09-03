@@ -7,19 +7,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/040-subtask-tree-port"
-    last_updated_at: "2026-09-03T13:20:00Z"
-    last_updated_by: "leg-a-verified"
-    recent_action: "Leg a verified: relation/hydrate/serialize green; UI legs open"
-    next_safe_action: "Implement T008 progress distinction, then T009-T013 renderer affordances"
+    last_updated_at: "2026-09-03T23:35:00Z"
+    last_updated_by: "in-runtime-verifier"
+    recent_action: "Verified both open rows in-runtime: full gate green, both ADRs accepted"
+    next_safe_action: "Operator device confirmation of the tree UI is the packet's only open item"
     blockers:
-      - "Not committed: leg a's data-layer modules sit uncommitted in this worktree"
-      - "Not operator-confirmed: progress display, renderer affordances and styles (T008-T013) remain unbuilt"
-    key_files: ["src/data/subtask-relation.ts", "src/data/subtask-hydrate.ts", "src/data/subtask-serialize.ts", "src/data/row-pipeline.ts", "src/data/types.ts"]
+      - "Not operator-confirmed: no device or installed-build confirmation of the tree UI has occurred"
+    key_files: ["src/views/database-view.ts", "src/views/embedded-database-renderer.ts", "src/views/database-view.test.ts", "src/views/embedded-database-renderer.test.ts", "src/data/subtask-serialize.ts", "src/views/board-renderer.ts"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-040-goal"
       parent_session_id: null
-    completion_pct: 39
+    completion_pct: 95
     open_questions: []
     answered_questions: []
 ---
@@ -114,4 +113,57 @@ ticked completion-criteria rows 1-4 above on that evidence. `completion_pct: 39`
 (7 of 18 `tasks.md` rows, T001-T007, marked `[x]`), not an effort-weighted estimate. Progress display
 (T008/SC-004), renderer affordances (T009-T013) and `styles.css` (T014-T015) are unbuilt; this leg is
 uncommitted and not operator-confirmed.
+
+**LOG (2026-09-03, D14 leg a — two open rows marked fixed, verification pending).** The two open rows
+recorded in the leg-b close-out were addressed, each red first:
+
+1. **Drag-reorder inside one parent no longer routes rank-only.** The board host bindings now forward
+   the planned `subtaskMove` (`src/views/database-view.ts:780-783`,
+   `src/views/embedded-database-renderer.ts:430-431`) and the handlers route the planned writes
+   through `moveSubtask`'s frontmatter path before the rank change, aborting the whole move when the
+   write fails (`database-view.ts:10727-10755,11051-11072`, `embedded-database-renderer.ts:2684-2704`)
+   — one write path per ADR-002, never a rank-only reorder. Red first: `database-view.test.ts:235` and
+   `embedded-database-renderer.test.ts:301` failed with `expected "vi.fn()" to be called 2 times, but
+   got 0 times` before the fix.
+2. **The host handler bodies gained a harness.** `src/views/database-view.test.ts` and
+   `src/views/embedded-database-renderer.test.ts` drive the real constructor-bound action bags with a
+   fake data source (the smallest test double the bindings need — no live Obsidian App is
+   constructed) and assert the planned writes reach `dataSource.updateFrontmatter` and the
+   view-config write reaches `dataSource.updateViewDefFile`; 6 tests total, 2 red first, 4 green on
+   arrival because the handlers were already correct but unrun.
+
+Status of both rows: **fixed in leg a, verification pending** — the in-runtime reviewer has not yet
+re-run the full gate set on this state.
+
+**LOG (2026-09-03, in-runtime verification — both rows closed).** A fresh in-runtime reviewer
+re-verified leg a's claims from this worktree's actual state, then rebased onto `main` (which had
+moved to `7e36671` with an unrelated board-screenshot commit) before landing:
+
+- **Red-first re-observed independently.** `git stash push` on only the two source files (tests kept)
+  reproduced the exact claimed failure — `expected "vi.fn()" to be called 2 times, but got 0 times` —
+  at `database-view.test.ts:241` and `embedded-database-renderer.test.ts:307`. The leg-a LOG above
+  cited `:235`/`:301`; those lines had shifted by the time this review ran. The assertion text and
+  root cause match; only the line numbers were stale.
+- **ADR-002 verdict: satisfied.** Every caller that can move a subtask — this drag, the mobile "move
+  under" menu, and the timeline's own reorder — now converges on `moveSubtask`'s
+  `updateFrontmatter` loop as the one write path for `parentId`/`subtaskIds`/`subtaskRank`. The
+  separate view-config manual-rank write (`setManualRank`) is a pre-existing, unrelated mechanism
+  (board card order, not the subtask relation) that runs only after the relation write succeeds and
+  is skipped entirely on failure — so a drag can no longer half-apply. `decision-record.md` moves both
+  ADRs to Accepted on this evidence.
+- **Full gate PASS.** `tsc` 0; `vitest` 89 files/875 tests (870 pre-rebase + 5 from `main`'s own board
+  screenshot commit); `lint` 169 = HEAD, 0 new findings in the four touched files (verified against a
+  stashed HEAD copy of the two source files); `scan-comments` PASS, 376 files; `sheet-rebuild.mjs` and
+  `render-assertions.mjs` both PASS against the changed host bindings; `npm run gate` PASS 25/25.
+- **screenshots-fresh recapture.** `embedded-database-renderer.ts`'s sourceHash moved, flagging the
+  four `chrome-selection-status-bar` captures stale, but a full `npm run screenshots` run (276
+  entries) shows those four byte-identical to `HEAD` — only the manifest sourceHash needed
+  refreshing. Ten unrelated captures (timeline/chrome-menu scenarios this diff never touches) moved
+  by 6-560 bytes each, the same encoder non-determinism this lane's history already documents; two
+  were opened and read and match their prior content. Named in a new `css-lane.json` release entry
+  (`040-subtask-tree-port`, no stylesheet edit) since `check-lane.mjs` requires every changed capture
+  named regardless of whether styles.css moved.
+
+Status of both rows: **verified**. The packet's one remaining open item is operator device
+confirmation, unchanged by this leg.
 <!-- /ANCHOR:log -->

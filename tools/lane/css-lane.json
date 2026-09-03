@@ -1467,6 +1467,25 @@
         "screenshots/views/timeline-view-year-mobile-light.png"
       ],
       "note": "No stylesheet edit: closes 038's open hover/drag/drop-target/empty-column goal.md row, which every landed leg left styled but undepicted. Two new component scenarios, board-empty-column and board-drop-language, mirror renderColumn's empty-group branch (EmptyStateRenderer's card under db-board-empty-slot) and the drag handlers' own dragstart/dragover classes (is-dragging, is-drop-target on both column and card, the before/after db-board-drop-indicator) class-for-class, proven red first on a nesting mutation (drop-indicator moved inside the card body, empty-slot's icon/content order swapped) that a string-position check would miss. All 8 new captures opened and read: empty column shows the dashed db-board-empty-slot card (folder-open icon, 'No records in this group' / 'This is a valid destination for new or moved records.') beside a populated lane, desktop and phone, both themes; drop-language shows one column carrying its own dragover highlight with a raised (is-dragging) card and a tinted drop-target card carrying its before-indicator line, same four combinations. The remaining 11 changed captures are pre-existing timeline/chrome shots this session did not touch: layoutHash identical to the pre-recapture manifest entry for every one, byte-size-only encoder noise consistent with this harness's documented non-determinism. board-view/board-mobile and every other ordinary board capture are unchanged (git reports no diff). Card-hierarchy and local-extension/drag-drop-matrix criteria this leg does not touch stay as the prior leg left them."
+    },
+    {
+      "event": "release",
+      "phase": "040-subtask-tree-port",
+      "at": "2026-09-03T23:35:00Z",
+      "hash": "32148b7b7646",
+      "reviewed": [
+        "screenshots/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "screenshots/components/chrome-owned-menu-sheet-mobile-light.png",
+        "screenshots/views/timeline-subtask-tree-desktop-dark.png",
+        "screenshots/views/timeline-subtask-tree-desktop-light.png",
+        "screenshots/views/timeline-subtask-tree-mobile-dark.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-year-desktop-light.png"
+      ],
+      "note": "No stylesheet edit: this leg routed the same-parent subtask drag through moveSubtask's write path instead of a rank-only reorder (database-view.ts, embedded-database-renderer.ts) and added a host-binding test harness for both. screenshots-fresh flagged the four chrome-selection-status-bar captures stale because embedded-database-renderer.ts's sourceHash moved, but the scenario's own rendered bytes are unchanged from HEAD, so only its manifest sourceHash refreshed and none of the four appear below. The ten captures that did change are pre-existing timeline/chrome-menu shots this leg's diff never touches: byte deltas of 6 to 560 bytes, the same encoder non-determinism this lane's history already records for these exact scenario families. timeline-view-month-mobile-light and timeline-subtask-tree-mobile-dark were opened and read against their prior content description (ordinary month grid; the Figma parent bar's collapse triangle, depth indent and progress label) and are visually unchanged. board-view, board-subtask-tree and every capture this leg's source files could plausibly affect are unchanged (git reports no diff)."
     }
   ],
   "outstanding": [

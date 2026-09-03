@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "005-component-surface-system/040-subtask-tree-port"
     last_updated_at: "2026-09-02T23:59:00Z"
     last_updated_by: "markdown-agent"
-    recent_action: "ADR-001 and ADR-002 recorded, both Proposed"
-    next_safe_action: "Accept both ADRs once the relation module and transaction helper land"
+    recent_action: "Both ADRs accepted: single write path now reached by every mover"
+    next_safe_action: "Operator device confirmation of the tree UI remains the only open row"
     blockers: []
     key_files: ["decision-record.md", "spec.md"]
     session_dedup:
@@ -34,9 +34,11 @@ _memory:
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-02 |
-| **Deciders** | markdown-agent (scaffold), pending in-runtime implementer |
+| **Status** | Accepted |
+| **Date** | 2026-09-03 |
+| **Deciders** | markdown-agent (scaffold), in-runtime implementer (accepted) |
+
+**Acceptance evidence**: `RowData` (`src/data/types.ts:158-169`) is unchanged by this port; `buildSubtaskRelation` (`src/data/subtask-relation.ts:37-230`) reads it and returns a derived structure that both host renderers (`board-renderer.ts`, `calendar-timeline-renderer.ts`) consume read-only. No write path in the codebase sets a nested `subtasks` field on a row — confirmed by the same `updateFrontmatter`-only write surface ADR-002 documents below.
 
 ---
 
@@ -148,9 +150,21 @@ touched by the derivation itself, so rollback has no data-migration step.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-02 |
-| **Deciders** | markdown-agent (scaffold), pending in-runtime implementer |
+| **Status** | Accepted |
+| **Date** | 2026-09-03 |
+| **Deciders** | markdown-agent (scaffold), in-runtime implementer (accepted) |
+
+**Acceptance evidence**: the same-parent drag was the last caller outside the helper — the board's
+`getSubtaskMoveContext` (`board-renderer.ts:1458-1474`) already planned the write, but the host
+bindings dropped the `subtaskMove` argument, so the drag reordered only the view-config manual rank
+and never called `moveSubtask`. `database-view.ts:10727-10755,11054-11072` and
+`embedded-database-renderer.ts:2684-2704` now apply that plan through `moveSubtask`'s
+`updateFrontmatter` loop before the rank change and abort the whole move on a write failure, so a
+same-parent reorder can no longer land as a rank-only write with the relation left stale. Every
+surviving move path (this drag, the mobile "move under" menu, and the timeline's own reorder) now
+converges on the one helper in `subtask-serialize.ts`, closing the risk row above. Red-first at
+`src/views/database-view.test.ts:241` and `src/views/embedded-database-renderer.test.ts:307`:
+`expected "vi.fn()" to be called 2 times, but got 0 times`.
 
 ---
 
