@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **43 phases**, **5 with nothing left**, **74 rows** waiting on a device.
+Derived 2026-09-03: **43 phases**, **6 with nothing left**, **73 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -193,10 +193,6 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `SettingsTab.display()` exposes the reconciled default-view/editor/save and board/timeline display vocabulary, localized through `src/i18n.ts` (AC-007).
 - [ ] Toggle-button `aria-expanded`/`is-open` state and the board's roving keyboard match the reconciled active/focus language verified at `chrome.css:124-170` (AC-008).
 
-## 042-harness-fidelity-and-replay — 5/6
-
-- [ ] The capture manifest compare is corrected to a content/layout-hash or declared-tolerance basis, and the fix is A/B'd against a clean HEAD clone showing it still catches a deliberately mutated capture.
-
 ## Nothing left to check
 
 - 007-architecture-research — 2/2
@@ -204,4 +200,5 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - 028-remaining-freezes — 6/6
 - 032-cover-target-scheme-safety — 4/4
 - 034-packet-doc-truth — 4/4
+- 042-harness-fidelity-and-replay — 6/6
 

@@ -25,6 +25,7 @@ import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
+import { pixelHash } from "./pixel-hash.mjs";
 
 // This page does not reproduce the workspace leaf, and unlike the placement harness it does not
 // need to. The leaf's `contain: strict` matters to anything positioned against the viewport, and
@@ -332,6 +333,11 @@ async function main() {
           layoutHash: layout
             ? createHash("sha256").update(layout).digest("hex").slice(0, 12)
             : null,
+          // A coarse hash of the decoded pixels, tolerant to the encoder and antialiasing jitter
+          // that moves a capture's file bytes between two runs of the identical page (see
+          // pixel-hash.mjs). This is what a release compares changed captures by; bytes below
+          // stays for information only.
+          pixelHash: pixelHash(bytes),
           sourceHashes: Object.fromEntries(
             [...scenario.sources, ...CAPTURE_INPUTS].map((s) => [s, fingerprint(s)])
           ),

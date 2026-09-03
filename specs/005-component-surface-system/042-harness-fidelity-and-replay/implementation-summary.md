@@ -12,21 +12,22 @@ _memory:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
     last_updated_at: "2026-09-04T01:41:43Z"
     last_updated_by: "verifier"
-    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0"
-    next_safe_action: "Correct check-lane changedCaptures to a layoutHash basis"
+    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0. Manifest-compare fix (pixelHash, check-lane content filter) landed and merged"
+    next_safe_action: "External lane per D14, then in-runtime gate verification with Chrome (tasks.md T019-T023)"
     blockers: []
     key_files:
       - "tools/live/replay.mjs"
       - "tools/live/render-assertion-harness.ts"
       - "tools/lane/check-lane.mjs"
+      - "tools/screenshots/pixel-hash.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-042-impl-summary"
       parent_session_id: null
-    completion_pct: 80
-    open_questions:
-      - "Does the manifest compare belong in check-lane.mjs or a shared comparator"
-    answered_questions: []
+    completion_pct: 90
+    open_questions: []
+    answered_questions:
+      - "Does the manifest compare belong in check-lane.mjs or a shared comparator — check-lane.mjs, reading tools/screenshots/pixel-hash.mjs"
 ---
 
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
@@ -43,7 +44,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 042-harness-fidelity-and-replay |
-| **Completed** | Partial — Phase 2 rows T017/T018 (manifest compare) remain open |
+| **Completed** | Phase 2 complete — all of T001-T018 landed, including the manifest-compare fix (T017/T018). Phase 3 verification (T019-T023) is tracked separately in `tasks.md`. |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -113,10 +114,35 @@ clamped to 72-400 and never measures the pane, so both are now `112px`. `theme.c
 `unstyled-links.mjs` were not rerouted; what each can and cannot prove is recorded in `tasks.md` as
 a bounded, named list.
 
+### Manifest compare: content, not bytes
+
+`check-lane.mjs`'s `changedCaptures()` read `git status --porcelain`, a byte diff, against a
+capture harness the parent's own Traps log had already found is not byte-deterministic — an
+identical rerun moves a different set of PNG bytes each time. `capture.mjs` now decodes each
+capture's pixels and records a coarse, jitter-tolerant `pixelHash` beside the existing
+`layoutHash` (`tools/screenshots/pixel-hash.mjs`); `check-lane.mjs` compares the working-tree
+manifest against `git show HEAD:screenshots/manifest.json` and drops a git-reported move from the
+changed set only when both sides' `pixelHash` (or, for an entry that predates it, `layoutHash`)
+agree. `verify.mjs`'s theme-blind check moved to the same field, since two theme captures are
+expected to share geometry and only paint should tell them apart.
+
+Two full detached recaptures on this worktree moved a different 15-file and 11-file set of PNG
+bytes against the committed tree — the same non-determinism reproduced live — while `pixelHash`
+and `layoutHash` moved on 0 of 276 entries between the two runs. `check-lane.mjs` went from FAIL
+(12 changed captures the release did not name) to PASS (0 changed) over the same tree. Every
+byte-mover was decoded and confirmed pixel-identical to its committed version before being
+restored rather than committed.
+
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
+| `tools/screenshots/pixel-hash.mjs` | Created | `decodePng`/`pixelHash` — decodes an 8-bit PNG and hashes its pixels on a coarse, jitter-tolerant grid |
+| `tools/screenshots/pixel-hash.test.mjs` | Created | Same picture two byte-different ways hashes equal; a mutated block hashes differently; unreadable input returns null |
+| `tools/screenshots/capture.mjs` | Modified | Records `pixelHash` per manifest entry beside `layoutHash`; `bytes` kept for information |
+| `tools/screenshots/verify.mjs` | Modified | `flatColour()` reuses `decodePng()`; the theme-blind check compares `pixelHash`, not file bytes |
+| `tools/lane/check-lane.mjs` | Modified | Adds `isContentChange`/`contentChangedCaptures`; the changed-capture set is filtered by content before `reviewVerdict()` |
+| `tools/lane/check-lane.test.mjs` | Modified | Eight new cases for the content filter, including the pixelHash-introducing-commit bootstrap case |
 | `tools/live/render-assertion-harness.ts` | Modified | Constructs `ChartRenderer`; builds `CalendarRenderer` at week and day; adds the render-entry per-row control both need |
 | `tools/live/render-assertions.mjs` | Modified | Registers the five new scenarios and the chart bag census; prints scale-aware labels |
 | `tools/live/render-scenario-utils.mjs` | Created | The two pure helpers the runner uses for labels and the coverage count |
@@ -197,14 +223,19 @@ to their committed bytes while moving two different ones — and were restored r
 | `RENDER_READ_CONTROL=per-item node tools/live/render-assertions.mjs` | PASS as a control — exit 1, 11 failures. New surfaces observed red: `calendar:week` 14 reads against bound 8 (both bags), `calendar:day` 1600 against 8 (both bags), `chart/file-view` 1630 against bound 48 |
 | `node tools/live/sheet-teardown.mjs` | PASS — exit 0, 11 producers, `leaking: 0`; the named case carries its recorded pre-fix text |
 | `node tools/live/sheet-rebuild.mjs` | PASS — exit 0, 15 checks; all four named cases present and passing |
-| `node tools/naming/scan-comments.mjs` | PASS — exit 0, 381 files, 0 missing banners, 0 commented-out lines |
-| `npx vitest run` | PASS — exit 0, 93 files, 925 tests, including the 5 new `render-scenario-utils` cases |
+| `node tools/naming/scan-comments.mjs` | PASS — exit 0, 383 files (381 plus `pixel-hash.mjs`/`pixel-hash.test.mjs`), 0 missing banners, 0 commented-out lines |
+| `npx vitest run` | PASS — exit 0, 94 files, 938 tests, including the 5 `render-scenario-utils` cases, 4 `pixel-hash` cases and 8 new `check-lane` content-filter cases |
 | `npx tsc --noEmit` | PASS — exit 0 |
 | `npm run lint:tools` | PASS — exit 0 |
 | `npm run lint` | Exit 1, 172 problems (159 errors, 13 warnings) — the pre-existing `src/` number, unchanged; no `src/` file is touched by this phase |
-| `node tools/live/evidence.mjs --check-all` | PASS — exit 0, 16 of 16 artefacts fresh. Observed stale first: `unstyled-links.json` against the moved `theme.css`, re-run rather than edited |
-| `npm run screenshots` (detached) | 276 captured; 15 moved, all opened; 8 committed, 7 paint-only restored; 0 of 276 `layoutHash` changes |
-| `SURFACE_PHASE=042-harness-fidelity-and-replay node tools/lane/check-lane.mjs` | PASS — exit 0, "release names all 8 changed capture(s)". Observed red first: 6 unnamed captures before the release entry |
+| `node tools/live/evidence.mjs --check-all` | PASS — exit 0, 16 of 16 artefacts fresh. Observed stale first: `unstyled-links.json` against the moved `theme.css`, re-run rather than edited; later, `capture-device-parity.json` against the re-stamped `screenshots/manifest.json`, re-run rather than edited |
+| `npm run screenshots` (detached), round 1 | 276 captured; 15 PNGs moved against the committed tree; `pixelHash`/`layoutHash` populated for all 276 |
+| `npm run screenshots` (detached), round 2 | 276 captured; 11 PNGs moved against the committed tree — a different set than round 1, the harness's non-determinism reproduced live |
+| Round 1 vs round 2, the new measure | 0 of 276 `pixelHash` changed, 0 of 276 `layoutHash` changed; 9 of 276 recorded `bytes` changed (deltas -435..+365), all 11 round-2 movers decoded pixel-identical to the committed `HEAD` bytes, then restored |
+| `node tools/screenshots/pixel-hash.test.mjs` (via vitest) | PASS — 4/4. Observed red first against a naive `sha256(bytes)` stand-in: 3/4 failed (two byte-different encodings of the same pixels hashed apart; a non-PNG buffer returned a hash instead of null) |
+| `node tools/lane/check-lane.mjs` | PASS — exit 0, "release names all 0 changed capture(s)", 15/11 byte-only movers excluded across the two rounds. Observed red first (byte-only comparator, round 1 state): "FAIL — 12 changed capture(s) this release does not name", exit 1 |
+| `node tools/lane/check-lane.mjs` steady-state mutation control | PASS — one entry's `pixelHash` deliberately overwritten; `contentChangedCaptures()` reported exactly that one path and no others |
+| `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` | PASS — exit 0, 25 green, 0 red |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -212,11 +243,14 @@ to their committed bytes while moving two different ones — and were restored r
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **The manifest compare is untouched.** `check-lane.mjs`'s `changedCaptures()` still reads the
-   changed set from `git status --porcelain`, a byte diff, while `capture.mjs` already computes a
-   `layoutHash` the comparison ignores. T017 and T018 are open, and goal criterion 5 stays unticked.
-   This phase measured the cost of that gap rather than closing it: seven of fifteen movers this run
-   were paint-only by the `layoutHash` measure, and the release had to name them by hand.
+1. **The manifest compare's bootstrap commit has no `pixelHash` to fall back from.** `isContentChange`
+   compares `pixelHash` to `pixelHash` and only falls back to `layoutHash`-to-`layoutHash` when
+   either side lacks `pixelHash` entirely — which is true of every manifest entry committed before
+   this landing. A pure repaint (unchanged geometry) between the last pre-`pixelHash` commit and the
+   first post-`pixelHash` one is invisible to the fallback, the same limitation `layoutHash` alone
+   always had. This is a one-commit boundary: every commit after this one carries `pixelHash` on
+   both sides of every future comparison, where the steady-state control in `tasks.md` T018 already
+   demonstrates full sensitivity.
 
 2. **Three replay entries prove less than the other ten.** The `031` claims record `0 → 0` as their
    static measure and delegate the real assertion to `sheet-teardown.json` and `sheet-rebuild.json`.

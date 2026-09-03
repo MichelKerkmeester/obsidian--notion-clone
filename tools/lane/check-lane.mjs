@@ -31,11 +31,20 @@
 // git reports as changed are compared against that entry's `reviewed` array,
 // and one the release does not name is refused with the file listed.
 //
-// The changed set is read from git rather than from the capture manifest,
-// because a manifest can be regenerated without anyone opening an image — it
-// would report the review as done at the moment a script rewrote a fingerprint,
-// which is the failure this refusal exists to catch rather than a proxy for it.
-// Git reports what the release is about to commit, and nothing else.
+// The changed set STARTS from git rather than from the capture manifest, because a manifest can
+// be regenerated without anyone opening an image — it would report the review as done at the
+// moment a script rewrote a fingerprint, which is the failure this refusal exists to catch rather
+// than a proxy for it. Git reports what the release is about to commit, and nothing else.
+//
+// It is then narrowed by content, not widened: the capture harness is not byte-deterministic — an
+// identical rerun of the same page can move a different set of PNGs each time, because Chrome's
+// own rasteriser and PNG encoder are not guaranteed reproducible even when nothing on the page
+// changed (see `pixel-hash.mjs`). So a git-reported move is compared against the manifest's
+// `pixelHash`/`layoutHash` for that file, before and after, and a move that changed no pixel is
+// dropped. A file can only leave
+// the changed set this way if BOTH the old and the new manifest entries agree it is unchanged —
+// regenerating the manifest alone, with the image itself untouched, cannot manufacture that
+// agreement, because the "before" side is read from the last commit, not from the working tree.
 //
 // What it does not claim: naming a file asserts someone opened it, and no check
 // can confirm that. This refuses the release that never looked at all. Only the
@@ -44,7 +53,7 @@
 // manufacture exactly the evidence this rule exists to require.
 //
 // Exit 0 when the stylesheet is unchanged or the holder is editing it, and the
-// newest release names every capture git reports as changed.
+// newest release names every capture whose content — not just its bytes — moved.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -64,14 +73,15 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 const LANE = join(REPO, "tools/lane/css-lane.json");
 const SHEET = join(REPO, "styles.css");
 const CAPTURES = "screenshots";
+const MANIFEST = join(REPO, "screenshots", "manifest.json");
 
 // ───────────────────────────────────────────────────────────────────
 // 3. THE CHANGED CAPTURE SET
 // ───────────────────────────────────────────────────────────────────
 
 /**
- * Reads `git status --porcelain -- screenshots` output into the capture paths a
- * release would be committing.
+ * Reads `git status --porcelain -- screenshots` output into a path -> status map for the
+ * capture paths a release would be committing.
  *
  * Only images count. The manifest and the folder README move on every capture
  * run and there is nothing in either for a person to look at, so a release that
@@ -79,10 +89,12 @@ const CAPTURES = "screenshots";
  *
  * Modified and untracked both count: a capture rewritten in place and a capture
  * that did not exist before are the same event to a reviewer, and a new surface
- * arriving unlooked-at is the more likely of the two.
+ * arriving unlooked-at is the more likely of the two — but they are kept distinct
+ * here (`"M"` vs `"??"`) because only a modified capture has a previous manifest
+ * entry to compare content against.
  */
-export function changedCaptures(porcelain) {
-  const seen = new Set();
+function parseChangedCaptures(porcelain) {
+  const seen = new Map();
   for (const line of String(porcelain).split("\n")) {
     if (line.length < 4) continue;
     const code = line.slice(0, 2);
@@ -93,9 +105,80 @@ export function changedCaptures(porcelain) {
     // reviewer can open.
     const path = line.slice(3).split(" -> ").pop().trim().replace(/^"|"$/g, "");
     if (!path.startsWith(`${CAPTURES}/`) || !path.toLowerCase().endsWith(".png")) continue;
-    seen.add(path);
+    seen.set(path, untracked ? "??" : "M");
   }
-  return [...seen].sort();
+  return seen;
+}
+
+export function changedCaptures(porcelain) {
+  return [...parseChangedCaptures(porcelain).keys()].sort();
+}
+
+/**
+ * Decides whether a git-reported change to one capture is a real content change or a byte-only
+ * move — the encoder and antialiasing jitter `pixel-hash.mjs`'s `pixelHash` exists to absorb.
+ * `git status` reads bytes; this reads what the picture is of.
+ *
+ * An untracked capture, or one with no matching entry in the previous manifest, has nothing to
+ * compare against and always counts as changed. A capture present in both manifests changes when
+ * its `pixelHash` differs, comparing `pixelHash` to `pixelHash` only — never `pixelHash` against
+ * `layoutHash`, which are different measures and would read as "different" on every capture
+ * whichever side introduced `pixelHash` first. When either side predates `pixelHash` (this
+ * phase's own landing commit is the boundary), both sides fall back to `layoutHash` together. If
+ * neither measure is comparable on both sides, the conservative reading is "changed": a capture
+ * this comparator cannot read is never silently waved through.
+ */
+export function isContentChange(status, currentEntry, previousEntry) {
+  if (status === "??" || !currentEntry || !previousEntry) return true;
+  if (currentEntry.pixelHash != null && previousEntry.pixelHash != null) {
+    return currentEntry.pixelHash !== previousEntry.pixelHash;
+  }
+  if (currentEntry.layoutHash != null && previousEntry.layoutHash != null) {
+    return currentEntry.layoutHash !== previousEntry.layoutHash;
+  }
+  return true;
+}
+
+/**
+ * Filters git's changed-capture set down to the ones whose content actually moved, reading the
+ * working-tree manifest for "now" and the last commit's manifest for "before". A capture git
+ * reports as modified but the manifest reads as pixel-identical to what was last committed is
+ * not a review a release owes — it moved bytes, not a picture.
+ */
+export function contentChangedCaptures(porcelain, currentManifest, previousManifest) {
+  const changes = parseChangedCaptures(porcelain);
+  const currentByFile = new Map((currentManifest?.scenarios ?? []).map((e) => [e.file, e]));
+  const previousByFile = new Map((previousManifest?.scenarios ?? []).map((e) => [e.file, e]));
+  return [...changes.entries()]
+    .filter(([path, status]) => isContentChange(status, currentByFile.get(path), previousByFile.get(path)))
+    .map(([path]) => path)
+    .sort();
+}
+
+/** Reads and parses a manifest.json from the working tree; null if missing or unparsable. */
+function readManifestFile(path) {
+  if (!existsSync(path)) return null;
+  try {
+    return JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+/** Reads and parses screenshots/manifest.json as it exists in the last commit — "before" for the
+ * content compare, distinct from the working-tree copy `capture.mjs` just wrote. */
+function readManifestAtHead() {
+  const show = spawnSync("git", ["show", "HEAD:screenshots/manifest.json"], {
+    cwd: REPO,
+    encoding: "utf8",
+    shell: false,
+  });
+  if (show.status !== 0) return null;
+  try {
+    return JSON.parse(show.stdout);
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -161,7 +244,17 @@ function main() {
     console.error(`  ${(status.stderr || status.error?.message || "").trim()}`);
     return 2;
   }
-  const review = reviewVerdict(lane, changedCaptures(status.stdout));
+  const byteChanged = changedCaptures(status.stdout);
+  const changed = contentChangedCaptures(
+    status.stdout,
+    readManifestFile(MANIFEST),
+    readManifestAtHead()
+  );
+  const byteOnly = byteChanged.length - changed.length;
+  if (byteOnly > 0) {
+    console.log(`check-lane: ${byteOnly} capture(s) moved bytes but not pixelHash/layoutHash — not a review a release owes`);
+  }
+  const review = reviewVerdict(lane, changed);
   const emit = () => {
     for (const line of review.out) console.log(line);
     for (const line of review.err) console.error(line);

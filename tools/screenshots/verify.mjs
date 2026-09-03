@@ -37,10 +37,10 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { inflateSync } from "node:zlib";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
+import { decodePng } from "./pixel-hash.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONFIGURATION
@@ -60,80 +60,31 @@ const hash = (rel) => {
   return createHash("sha256").update(readFileSync(abs)).digest("hex").slice(0, 12);
 };
 
-const CHANNELS = { 0: 1, 2: 3, 4: 2, 6: 4 };
-
 /**
  * Is this PNG a single flat colour?
  *
- * Decoded here rather than through an image library because the repository has no runtime
- * dependencies and this question is not worth acquiring one for. Only what the capture pipeline
- * actually writes is supported — 8-bit greyscale, RGB, and either of those with alpha. An indexed
- * or 16-bit PNG returns readable:false and is reported rather than silently treated as fine,
- * because "I could not read it" and "it is a picture of something" must not share an answer.
+ * Decoding goes through pixel-hash.mjs's decodePng() — the same un-filter pass capture.mjs's
+ * pixelHash uses to ask what a picture contains, asked here about whether it contains anything at
+ * all. An indexed or 16-bit PNG (decodePng() returns null) is reported unreadable rather than
+ * silently treated as fine, because "I could not read it" and "it is a picture of something" must
+ * not share an answer.
  *
  * Stops at the first pixel that differs from the first, so a normal capture costs a few rows and
  * only a genuinely blank one is scanned whole.
  */
 function flatColour(rel) {
   const buf = readFileSync(join(REPO, rel));
-  if (buf.length < 8 || buf.readUInt32BE(0) !== 0x89504e47) return { readable: false, why: "not a PNG" };
-
-  let width = 0;
-  let height = 0;
-  let depth = 0;
-  let type = 0;
-  const idat = [];
-  for (let at = 8; at + 8 <= buf.length;) {
-    const len = buf.readUInt32BE(at);
-    const tag = buf.toString("ascii", at + 4, at + 8);
-    const body = buf.subarray(at + 8, at + 8 + len);
-    if (tag === "IHDR") {
-      width = body.readUInt32BE(0);
-      height = body.readUInt32BE(4);
-      depth = body[8];
-      type = body[9];
-    } else if (tag === "IDAT") idat.push(body);
-    else if (tag === "IEND") break;
-    at += 12 + len;
+  const image = decodePng(buf);
+  if (!image) {
+    const depth = buf.length >= 8 && buf.readUInt32BE(0) === 0x89504e47 ? "unsupported" : "not a PNG";
+    return { readable: false, why: depth === "not a PNG" ? "not a PNG" : "unsupported PNG encoding" };
   }
-  if (depth !== 8 || !(type in CHANNELS)) {
-    return { readable: false, why: `unsupported PNG: depth ${depth}, colour type ${type}` };
-  }
-
-  const bpp = CHANNELS[type];
-  const stride = width * bpp;
-  const raw = inflateSync(Buffer.concat(idat));
-  let prev = Buffer.alloc(stride);
+  const { width, height, channels, pixels } = image;
   let first = null;
-  let read = 0;
-  for (let y = 0; y < height; y += 1) {
-    const filter = raw[read];
-    read += 1;
-    const line = Buffer.from(raw.subarray(read, read + stride));
-    read += stride;
-    // Un-filter in place. The four predictors are PNG's, not this program's; a is the pixel to
-    // the left, b the one above, c the one above-left, each zero off the edge.
-    for (let x = 0; x < stride; x += 1) {
-      const a = x >= bpp ? line[x - bpp] : 0;
-      const b = prev[x];
-      const c = x >= bpp ? prev[x - bpp] : 0;
-      if (filter === 1) line[x] = (line[x] + a) & 0xff;
-      else if (filter === 2) line[x] = (line[x] + b) & 0xff;
-      else if (filter === 3) line[x] = (line[x] + ((a + b) >> 1)) & 0xff;
-      else if (filter === 4) {
-        const p = a + b - c;
-        const pa = Math.abs(p - a);
-        const pb = Math.abs(p - b);
-        const pc = Math.abs(p - c);
-        line[x] = (line[x] + (pa <= pb && pa <= pc ? a : pb <= pc ? b : c)) & 0xff;
-      }
-    }
-    for (let x = 0; x < stride; x += bpp) {
-      const px = line.subarray(x, x + bpp);
-      if (first === null) first = Buffer.from(px);
-      else if (!px.equals(first)) return { readable: true, flat: false, width, height };
-    }
-    prev = line;
+  for (let at = 0; at < pixels.length; at += channels) {
+    const px = pixels.subarray(at, at + channels);
+    if (first === null) first = Buffer.from(px);
+    else if (!px.equals(first)) return { readable: true, flat: false, width, height };
   }
   return {
     readable: true,
@@ -186,17 +137,20 @@ function main() {
       blank.push(`${entry.file} (${stats.width}x${stats.height}, every pixel ${stats.colour})`);
     }
 
-    // One capture per theme is the whole point of capturing twice. Byte-identical means the theme
-    // never reached the subject, which for these fixtures means the subject was never in the shot.
+    // One capture per theme is the whole point of capturing twice. Pixel-identical means the
+    // theme never reached the subject, which for these fixtures means the subject was never in
+    // the shot. Compared by pixelHash rather than file bytes: a byte hash would also flag two
+    // captures the encoder happened to re-render identically in content but not in bytes as
+    // *not* theme-blind, hiding a real miss — see pixel-hash.mjs.
     const pair = `${entry.id}|${entry.device}`;
     if (!byThemePair.has(pair)) byThemePair.set(pair, new Map());
-    byThemePair.get(pair).set(entry.theme, { file: entry.file, hash: hash(entry.file) });
+    byThemePair.get(pair).set(entry.theme, { file: entry.file, hash: entry.pixelHash ?? null });
   }
 
   for (const [pair, themes] of byThemePair) {
     if (themes.size < 2) continue;
     const hashes = [...themes.values()].map((t) => t.hash);
-    if (new Set(hashes).size === 1) {
+    if (hashes.every((h) => h !== null) && new Set(hashes).size === 1) {
       themeBlind.push(`${pair.replace("|", " on ")} — ${[...themes.values()].map((t) => t.file).join(" == ")}`);
     }
   }

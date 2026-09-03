@@ -20,7 +20,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it } from "vitest";
-import { changedCaptures, reviewVerdict } from "./check-lane.mjs";
+import { changedCaptures, contentChangedCaptures, isContentChange, reviewVerdict } from "./check-lane.mjs";
 
 const BOARD = "screenshots/views/board-view-desktop-light.png";
 const TIMELINE = "screenshots/views/timeline-view-desktop-dark.png";
@@ -53,7 +53,76 @@ describe("the changed set is the images, read from git", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 3. THE RELEASE THAT DID NOT LOOK
+// 3. A MOVED CAPTURE IS NOT EVIDENCE OF CHANGE
+// ───────────────────────────────────────────────────────────────────
+
+describe("isContentChange tells a byte move from a repaint", () => {
+  it("is unchanged when pixelHash agrees before and after, even though git saw a move", () => {
+    const before = { file: BOARD, pixelHash: "abc123abc123", layoutHash: "layout1" };
+    const after = { file: BOARD, pixelHash: "abc123abc123", layoutHash: "layout9" };
+    expect(isContentChange("M", after, before)).toBe(false);
+  });
+
+  it("is changed when pixelHash disagrees", () => {
+    const before = { file: BOARD, pixelHash: "abc123abc123" };
+    const after = { file: BOARD, pixelHash: "def456def456" };
+    expect(isContentChange("M", after, before)).toBe(true);
+  });
+
+  it("falls back to layoutHash for an entry captured before pixelHash existed", () => {
+    const before = { file: BOARD, layoutHash: "layout1" };
+    const after = { file: BOARD, layoutHash: "layout1" };
+    expect(isContentChange("M", after, before)).toBe(false);
+  });
+
+  it("falls back to layoutHash-vs-layoutHash, never pixelHash-vs-layoutHash, across the commit that introduced pixelHash", () => {
+    // The "before" manifest predates this phase and carries no pixelHash at all; the "after"
+    // manifest carries both. Comparing after.pixelHash to before.layoutHash would read every
+    // capture as changed on the introducing commit, which is exactly the false-positive this
+    // comparator exists to prevent.
+    const before = { file: BOARD, layoutHash: "layout1" };
+    const after = { file: BOARD, pixelHash: "pixel1", layoutHash: "layout1" };
+    expect(isContentChange("M", after, before)).toBe(false);
+  });
+
+  it("is always changed for an untracked (new) capture — nothing to compare against", () => {
+    expect(isContentChange("??", { file: BOARD, pixelHash: "x" }, null)).toBe(true);
+  });
+
+  it("is changed, conservatively, when neither side carries a comparable hash", () => {
+    expect(isContentChange("M", { file: BOARD }, { file: BOARD })).toBe(true);
+  });
+
+  it("is changed when only the previous manifest is missing the entry", () => {
+    expect(isContentChange("M", { file: BOARD, pixelHash: "x" }, null)).toBe(true);
+  });
+});
+
+describe("contentChangedCaptures drops a git-reported move that changed no pixel", () => {
+  const manifestOf = (entries) => ({ scenarios: entries });
+
+  it("excludes a capture whose pixelHash is identical before and after", () => {
+    const porcelain = ` M ${BOARD}\n M ${TIMELINE}\n`;
+    const previous = manifestOf([
+      { file: BOARD, pixelHash: "same-hash-1" },
+      { file: TIMELINE, pixelHash: "old-hash-2" },
+    ]);
+    const current = manifestOf([
+      { file: BOARD, pixelHash: "same-hash-1" },
+      { file: TIMELINE, pixelHash: "new-hash-2" },
+    ]);
+    expect(contentChangedCaptures(porcelain, current, previous)).toEqual([TIMELINE]);
+  });
+
+  it("keeps an untracked capture even with no previous manifest at all", () => {
+    const porcelain = `?? ${BOARD}\n`;
+    expect(contentChangedCaptures(porcelain, manifestOf([{ file: BOARD, pixelHash: "x" }]), null))
+      .toEqual([BOARD]);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. THE RELEASE THAT DID NOT LOOK
 // ───────────────────────────────────────────────────────────────────
 
 describe("a release must name every capture it moved", () => {
@@ -84,7 +153,7 @@ describe("a release must name every capture it moved", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 4. THE ENTRIES THIS RULE IS NOT ABOUT
+// 5. THE ENTRIES THIS RULE IS NOT ABOUT
 // ───────────────────────────────────────────────────────────────────
 
 describe("only the newest release, and only on the current stylesheet", () => {

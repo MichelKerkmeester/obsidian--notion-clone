@@ -11,23 +11,23 @@ _memory:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
     last_updated_at: "2026-09-04T01:41:43Z"
     last_updated_by: "verifier"
-    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0"
-    next_safe_action: "Correct check-lane changedCaptures to a layoutHash basis"
+    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0. Manifest-compare fix (pixelHash, check-lane content filter) landed and merged"
+    next_safe_action: "External lane per D14, then in-runtime gate verification with Chrome (tasks.md T019-T023)"
     blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
-      - "tools/live/render-assertion-harness.ts"
-      - "tools/live/replay.mjs"
+      - "tools/screenshots/pixel-hash.mjs"
+      - "tools/lane/check-lane.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-042-goal"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions:
-      - "Does the manifest-compare fix belong in check-lane.mjs or a shared comparator"
       - "Is the chart view constructed through the same bag pattern as the other six renderers"
-    answered_questions: []
+    answered_questions:
+      - "Does the manifest-compare fix belong in check-lane.mjs or a shared comparator — it lives in check-lane.mjs, reading tools/screenshots/pixel-hash.mjs's decodePng/pixelHash"
 ---
 # Goal: Harness Fidelity and Replay
 
@@ -111,9 +111,21 @@ Frozen choices. Changing one is an amendment.
       1.13.4 `app.css` and read in eight recaptured images. Declared: `touch-targets.mjs` and
       `unstyled-links.mjs` still read fixtures, with a bounded list of what each cannot prove in
       `tasks.md`.
-- [ ] The capture manifest compare is corrected to a content/layout-hash or declared-tolerance
+- [x] The capture manifest compare is corrected to a content/layout-hash or declared-tolerance
       basis, and the fix is A/B'd against a clean HEAD clone showing it still catches a
-      deliberately mutated capture.
+      deliberately mutated capture. **Met.** `capture.mjs` now records a coarse, jitter-tolerant
+      `pixelHash` of each PNG's decoded pixels (`tools/screenshots/pixel-hash.mjs`), beside the
+      existing `layoutHash`; `check-lane.mjs`'s changed-capture set is filtered by
+      `pixelHash`/`layoutHash` agreement between the working-tree manifest and `git show
+      HEAD:screenshots/manifest.json` before `reviewVerdict()` ever sees it. A/B on this worktree
+      (branched clean off `main`): two full detached recaptures moved a different 15-file and
+      11-file set of PNG bytes against the committed tree — observed red on the unfixed
+      comparator first, **was 12 changed capture(s) this release does not name, exit 1** — and
+      **0 of 276 `pixelHash`/`layoutHash` moved** between the two runs, so the corrected
+      comparator excludes all of them: `release names all 0 changed capture(s), exit 0`. Decoding
+      the committed bytes of every round-2 mover confirmed each pixel-identical to the fresh
+      capture before any were restored. A steady-state control with one entry's `pixelHash`
+      deliberately overwritten still reported exactly that one path changed and no others.
 - [x] `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` exits 0, read from `$?` directly.
       **Met.** `gate: PASS — 25 green, 0 red for a declared reason`. The capture lane was observed red
       first: `check-lane` reported **6 changed captures the release did not name, exit 1**, before the
@@ -138,7 +150,7 @@ and findings belong here.
 | Calendar week/day scenarios | Done | Both scales 0 against bound 8; armed control was 14 (week) and 1600 (day), exit 1 |
 | Replay backfill | Done | 21 claims, `reversed: 0`; was 8. All ten static entries re-measured on `<sha>^` and none is vacuous |
 | Row-6 dependency audit | Done | `runtime-vars.css` and `theme.css` corrected; the two fixture lanes declared with a bounded list in `tasks.md` |
-| Manifest-compare fix | Open | T017/T018 not started. This run measured its cost: 7 of 15 movers were paint-only, 0 of 276 `layoutHash` changes |
+| Manifest-compare fix | Done | `pixelHash` added to the manifest (`tools/screenshots/pixel-hash.mjs`); `check-lane.mjs` filters by content. Two-run A/B: 0 of 276 `pixelHash`/`layoutHash` moved; `check-lane` went from FAIL (12 unnamed) to PASS (0 changed), exit 0 |
 | Six open-row-fix replay claims | Done | 21 -> 27 claims, `reversed: 0`. All six re-measured on `<sha>^`, none vacuous |
 
 ### Deviations and findings
@@ -146,6 +158,8 @@ and findings belong here.
 | Item | Note |
 |------|------|
 | Level raised over `recommend-level.sh`'s answer | The script scored 61/100 (loc=650, files=10) and 66/100 (loc=850, files=12, reflecting the touch-targets/unstyled-links refactor row 6 implies) — both mid-to-upper Level 2, neither past the 70-point Level 3 floor. Raised to Level 3 anyway, per the operator's explicit "go higher if in doubt" and parity with `020-harness-fidelity-repair`, the closest prior art for this exact class of harness-truthfulness work, which is itself Level 3. |
+| `pixelHash` computed by a hand-written PNG decoder, not an added dependency | No PNG pixel-decode library exists anywhere in `node_modules` or the lockfile. `verify.mjs` already carried a full 8-bit PNG un-filter pass for its flat-colour check; that pass moved into a shared `tools/screenshots/pixel-hash.mjs` (`decodePng`) rather than adding `pngjs` or similar, matching the repository's existing no-runtime-dependency posture for this pipeline. |
+| `pixelHash` is a coarse, quantised hash, not a raw pixel-byte hash | A raw byte hash of decoded pixels would still move on the antialiasing jitter this fix exists to absorb — capture.mjs's own comment already documents the raster, not only the encoder, as non-deterministic. `pixelHash` averages a 16x16 grid of cells and rounds each channel into 32 buckets before hashing, proven stable against a synthetic one-unit jitter and against the two real detached runs (0 of 276 changed) while still separating a deliberately mutated block or a deliberately overwritten hash in every control run. |
 
 ### Six open-row-fix replay claims added, 2026-09-04
 
