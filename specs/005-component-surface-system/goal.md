@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T00:50:00Z"
-    last_updated_by: "041-open-row-landed"
-    recent_action: "041 reduced-motion row closed 3f143df+a251a43, reconciled 471860d"
-    next_safe_action: "Land 037 open rows and 042 leg a; cut 1.4.9; operator confirms on iOS"
+    last_updated_at: "2026-09-04T01:30:00Z"
+    last_updated_by: "037-open-rows-landed"
+    recent_action: "037 open rows: 3 of 4 closed, day-scale pending"
+    next_safe_action: "Cut 1.4.9; land 042 leg a; operator confirms on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -816,4 +816,25 @@ in captures, and the day-scale row stays capture-pending on two fixture gaps rec
 `completion_pct` stays **29**: none of the parent's seven §3 DONE rows turn on an individual
 open-row landing, so per D13/§3.2 the figure is unaffected — the same basis every port-phase entry
 above states. `roadmap.md` §5.2's row for `041` updated to match.
+
+### `037`'s open rows landed, 2026-09-04, release 1.4.9 pending
+
+Three of `037-timeline-gantt-port`'s four remaining open rows closed on `main` in two legs, each
+verified by a fresh reviewer: a devin TypeScript leg (`fa58c7f`, originally `27fae8b`) titled the
+rendered window for quarter and year scales, made the first axis tick label whole on mobile, and
+narrowed the day scale to 32px columns below a 560px container; a codex CSS-and-fixture leg
+(`b29bf7f`, originally `e94b148`) lifts a milestone label above its bar when the next bar starts
+within its width, moving the lane's `row-gap` onto the `space-8` token — a change to lane rhythm on
+every timeline capture, read and accepted. `65fb7dd` reconciled both onto `main`. Reds observed
+before green: `expected '2026-01-01' to be '2026-02-07'`, `expected '2025' to be '2025 — 2026'`,
+`expected undefined to be 'none'`, `resolveTimelineMilestoneLabelPlacement is not a function`,
+`expected 60 to be 32`. `npm run gate` PASS, 25 green. Three rows are now visible in captures; the
+day-scale row stays capture-pending on two fixture gaps recorded in `037` — the fixture's day
+window never centres on `now`, and its day tick labels still read `HH:00` where the renderer now
+emits `HH`.
+
+The landing ships in **1.4.9 (pending)**, bundled with `041`'s reduced-motion fixes above. Neither
+is operator-confirmed. `completion_pct` stays **29**: none of the parent's seven §3 DONE rows turn
+on an individual open-row landing, so per D13/§3.2 the figure is unaffected — the same basis every
+port-phase entry above states. `roadmap.md` §5.2's row for `037` updated to match.
 <!-- /ANCHOR:log -->
