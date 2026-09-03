@@ -183,12 +183,16 @@ already has — and it is that phase's own work, not this board's.
 
 ## 4. OPERATOR REPORT TRACEABILITY
 
-**Thirty-two reports** (1-16, 18-33), each resolved to a named phase. A seventeenth — refactoring the list view to
+**Thirty-five reports** (1-16, 18-36), thirty-two resolved to a named phase and three (34-36) recorded
+with owner pending diagnosis. A seventeenth — refactoring the list view to
 look like ClickUp — is its own packet at `specs/006-list-view-clickup/`, is not part of
-this program, and does not occupy a row here; the table below runs 1-16 then 18-33 because of it.
+this program, and does not occupy a row here; the table below runs 1-16 then 18-36 because of it.
 *2026-09-02: row 29 added, the first device evidence since 1.3.1, raising the count from
 twenty-seven to twenty-eight; rows 30 to 33 added later the same day from the operator's iOS pass,
-raising it to thirty-two.*
+raising it to thirty-two. 2026-09-03 ~06:40 CEST: rows 34-36 added from the iOS operator on 1.4.2 —
+the sort sheet's add-sort control, the filter sheet's Add condition, and the class both belong to
+(controls inside a sheet that mutate the sheet's own content close or crash it) — raising the count
+to thirty-five, owners pending an in-runtime diagnosis running now.*
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -241,9 +245,14 @@ not this note, is what should move them.
 | 32 | *"1 cells selected"* has no singular form | `022-selection-bar-keyboard-docking` | **Fixed in `00e2aa2`; release 1.4.2 pending. Not operator-confirmed.** | Operator report, iOS, 2026-09-02 21:21, bundled with row 31. `src/i18n.ts:287` — `"toolbar.selectedCells": "{count} cells selected"` — is interpolated at every count, including 1. **2026-09-02, `00e2aa2`:** `src/i18n-plural.test.ts` observed red — `TypeError: tSelectedCells is not a function` (3 failed) — then green with a singular form added. Chinese locales deliberately do not inflect |
 | 33 | *"Open details sheet is buggy when overflow is present (content doesnt fit 100vh)"* | `010-sheet-reading-and-keyboard` | **Fixed in `00e2aa2`; release 1.4.2 pending. Not operator-confirmed.** | Operator report, iOS, 2026-09-02 21:24. No screenshot yet. Meaning: the record detail bottom sheet, when its properties and note body exceed the viewport height, does not behave — content does not fit 100vh and the sheet presumably neither scrolls inside its own box nor keeps its handle reachable. **Owner picked by scope, not by feature-readiness:** `010/spec.md`'s own title is "Sheet Reading Rhythm and Keyboard Avoidance" and it already owns the phone record sheet's reading layout and scroll behaviour; `023-record-note-body` owns rendering the note body itself but is "deliberately not startable" per `roadmap.md` §5 — the operator has not chosen display-only vs editable, and no note-body code has shipped, so an overflow bug on the sheet as it exists today cannot be `023`'s to hold. **2026-09-02, `00e2aa2`:** the sheet lost its chrome, not its scroll — the grab bar and header were children of the scrolling panel, so a record taller than the 90svh cap carried both off the top. Red: handle -1148px from the sheet's top, `db-record-detail-panel` owned the scroll, reachable=false. Green: properties and body sit in a `.db-record-detail-scroll` region, the panel is a flex column, 1173px of overflow, handle 25px from the top, reachable=true. Both halves load-bearing: `record-detail-panel.ts`'s wrapper and `styles.css`'s flex column with `overflow-y hidden !important` against `popover-position.ts`'s inline `auto`. Adjacent: `styles.css` now carries two adjacent `.db-record-detail-panel.db-mobile-bottom-sheet` blocks (design-conformance duplicate counter 125→126) |
 
+| 34 | *"add sort button is broken in sort sheet"* | pending diagnosis | **Recorded, this session. Owner: pending diagnosis. Not operator-confirmed. Open.** | Operator report, iOS, plugin 1.4.2, 2026-09-03 ~06:40 CEST. The sort configuration bottom sheet: tapping the add-sort control does not add a sort. An in-runtime diagnosis is running now; owner phase not yet assigned |
+| 35 | *"filter add condition closes / crashes it"*, then *"filter table sheet"* | pending diagnosis | **Recorded, this session. Owner: pending diagnosis. Not operator-confirmed. Open.** | Operator report, iOS, plugin 1.4.2, 2026-09-03 ~06:40 CEST. The table view's filter bottom sheet: tapping Add condition closes or crashes the sheet. An in-runtime diagnosis is running now; owner phase not yet assigned |
+| 36 | *"a lot of sheets have that"* — a named class, not a single symptom | pending diagnosis | **Recorded, this session. Owner: pending diagnosis. Not operator-confirmed. Open.** | Operator report, iOS, plugin 1.4.2, 2026-09-03 ~06:40 CEST. The class: controls inside a bottom sheet that mutate the sheet's own content close or crash the sheet on the phone; rows 34 and 35 are its first instances. Detail not yet given by the operator — whether nothing happens, the sheet closes, or the app freezes. An in-runtime diagnosis is running now; owner phase not yet assigned |
+
 ### What the table says as a whole
 
-**All thirty-two reports now have a named phase**, and fifteen of the original sixteen have
+**Thirty-two of thirty-five reports now have a named phase; rows 34-36 do not** — they are recorded
+with owner pending diagnosis, per the note above. Fifteen of the original sixteen have
 shipped code — report 13 remains the exception, deliberately not a phase. *2026-09-02: of the
 sixteen rows added later (18-33), five now have shipped code under the phase they name. Row 29's
 fix landed in `98da630` and `0c92f4d` under `031` and went out in 1.4.1. Rows 30 to 33 were recorded

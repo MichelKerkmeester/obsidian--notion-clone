@@ -10,17 +10,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T00:05:00Z"
-    last_updated_by: "port-phases-opened"
-    recent_action: "Opened 037-041 from 036's adoption plan"
-    next_safe_action: "Dispatch 037 step 1: the failing timeline check, devin first per D14"
+    last_updated_at: "2026-09-03T06:45:00Z"
+    last_updated_by: "reports-34-36-recorded"
+    recent_action: "Recorded reports 34-36 from iOS operator on 1.4.2"
+    next_safe_action: "Dispatch 037 step 1: the failing timeline check, devin per D14"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
       - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on device"
       - "Report 29 (P0): fixed in 98da630 and 0c92f4d, released in 1.4.1; per-row confirmation is owed"
       - "Reports 30-33: recorded in 62c4fe7, owners 001, 022, 022, 010; the fix is uncommitted"
-      - "036's port research runs in the worktree .worktrees/003-obsidian-pm-harvest"
+      - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
+      - "reports 34-36 open, diagnosis in flight"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -531,4 +532,17 @@ Documentation Map carries the same five rows with each child's declared level (`
 raised over `recommend-level.sh`'s Level 1 for the reason its own `spec.md` §1 records). This does
 not change `completion_pct` — the parent's 57% basis is unaffected because it is a program-wide
 figure over the phases that were already counted, and the five new phases enter at 0%.
+
+### Reports 34-36: three fresh device reports, iOS, 1.4.2, 2026-09-03
+
+**2026-09-03 ~06:40 CEST.** The iOS operator, after installing **plugin 1.4.2**, reported three new
+defects, quoted in full at `roadmap.md` §4 rows 34-36: **row 34** — *"add sort button is broken in
+sort sheet"*, the sort configuration bottom sheet's add-sort control does nothing. **Row 35** —
+*"filter add condition closes / crashes it"*, then *"filter table sheet"*, the table view's filter
+bottom sheet closes or crashes when Add condition is tapped. **Row 36**, a named class rather than a
+single symptom — *"a lot of sheets have that"*: controls inside a bottom sheet that mutate the
+sheet's own content close or crash the sheet on the phone, of which 34 and 35 are the first named
+instances; the operator has not yet said whether the failure is nothing-happens, an immediate close,
+or a freeze. All three are **recorded, not investigated**: owner is pending the in-runtime diagnosis
+running now, none is operator-confirmed, and all three are open.
 <!-- /ANCHOR:log -->

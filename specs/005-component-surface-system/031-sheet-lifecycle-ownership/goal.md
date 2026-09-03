@@ -400,3 +400,15 @@ from 645; `npm run lint:tools` 0; `scan-comments` 0 with `PASS`; `sheet-teardown
 leaking: 0` exit 0; `sheet-rebuild` `barsLost: 0` exit 0; `storybook:placement` 385/386 exit 0;
 `npm run replay` 8/8 exit 0; `SURFACE_PHASE=031-sheet-lifecycle-ownership npm run gate`
 **PASS — 25 green, 0 red** at exit 0. The device rows stay open.
+
+### 2026-09-03: Reports 34-36 may name a third mechanism in this same seam
+
+**2026-09-03 ~06:40 CEST.** The iOS operator, on **plugin 1.4.2**, reported three new defects
+(`roadmap.md` §4 rows 34-36): the sort sheet's add-sort control does nothing (34), the filter
+sheet's Add condition closes or crashes the sheet (35), and a named class — controls inside a
+bottom sheet that mutate the sheet's own content close or crash the sheet on the phone, of which
+34 and 35 are the first instances (36). **Not yet tested against this packet's own mechanisms**
+(the body-portal orphan, the anchored-sheet vanish, or the pointercancel path) — a control that
+re-renders the sheet's own content on interaction is a plausible fourth shape sharing this
+packet's seam, but that is a hypothesis, not a finding. Owner is pending the in-runtime diagnosis
+running now; no criterion above is ticked or unticked by this note.
