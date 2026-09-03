@@ -7,9 +7,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-03T10:40:00Z"
-    last_updated_by: "board-legs-landed"
-    recent_action: "Verified legs b9e2321/a6fcd31; ticked T5-T7 and 3 goal criteria"
+    last_updated_at: "2026-09-03T21:00:00Z"
+    last_updated_by: "board-empty-drop-language-captured"
+    recent_action: "Captured empty-column/drop-language; ticked hover/drag/drop-target row"
     next_safe_action: "Record a T1 pre-rewrite baseline, then close the remaining criteria"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038-goal"
       parent_session_id: null
-    completion_pct: 29
+    completion_pct: 43
     open_questions: []
     answered_questions: []
 ---
@@ -62,11 +62,36 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
       light+dark, 8 captures) confirms topbar, priority strip, parent chip, title-row chips and
       field grid render correctly; `board-view-desktop-light.png` opened directly this session
       and reads clean.
-- [ ] Hover/drag/drop visual language (raised card, hover lift, drop-target tint, column drop
+- [x] Hover/drag/drop visual language (raised card, hover lift, drop-target tint, column drop
       highlight) matches the reference's language, rewritten under `--db-*` tokens in `styles.css`
-      §17 BOARD VIEW. **Not started.** Red to record: a diff of the current
-      `.db-board-card`/`.db-board-column` rules (`styles.css:8881-8908`, `:9175-9197`) against the
-      reference's `kanban.css:13-155`.
+      §17 BOARD VIEW. **Met for the classes the drag handlers apply.** Red to record: neither
+      landed leg's fixture depicted `.db-board-empty-slot`, `.db-board-column.is-drop-target`,
+      `.db-board-card.is-dragging`/`.is-drop-target`, or `.db-board-drop-indicator` — the
+      screenshot corpus had zero captures of any of the four, and `board-renderer-hierarchy.test.ts`
+      /`shared.test.mjs` asserted none of them either, so the styling landed with no fixture able to
+      catch a class rename or a dropped rule. Closed: two new component scenarios,
+      `board-empty-column` and `board-drop-language`, mirror `renderColumn`'s empty-group branch
+      (`board-renderer.ts:621-630`, `EmptyStateRenderer.renderCard` under the "empty-group" reason)
+      and the drag handlers' own dragstart/dragover classes (`:848` `is-dragging`, `:869-870`
+      `.db-board-card`/`.db-board-column` `is-drop-target`, `:1580-1584`
+      `db-board-drop-indicator`) class-for-class. `shared.test.mjs` proved this red first: the
+      empty slot's icon/content order swapped, and the drop-indicator moved inside the card body
+      instead of after it — both pass a naive string-position check and both failed the new
+      `expectDirectChildOrder` DOM-walk assertions (`db-empty-card-content follows the preceding
+      node under the empty slot: expected 0 to be greater than 1`;
+      `db-board-drop-indicator is a direct child of the drop-target card: expected -1 to be
+      greater than -1`); reverting the mutation returned both to green. All 8 new captures
+      (`board-empty-column`/`board-drop-language`, desktop+mobile, light+dark) opened and read
+      this session: the empty column shows the dashed `db-board-empty-slot` card (folder-open
+      icon, "No records in this group" / "This is a valid destination for new or moved records.")
+      beside a populated lane with its own count badge; the drop-language capture shows one
+      column carrying its own dragover tint with a raised (`is-dragging`, reduced opacity) card
+      and a tinted drop-target card carrying its before-insertion line, in every device/theme
+      combination. Named in `tools/lane/css-lane.json`'s `038-board-kanban-port` release
+      (styles.css untouched — no edit, only two new fixtures). The `:hover` pointer-lift rule
+      (`styles.css:9257-9262`, `@media (hover: hover)`) is a real CSS pseudo-class rather than a
+      class the renderer applies, so it stays outside what a static fixture can depict; that gap
+      is unchanged by this pass and is not what "Not started" above was recording.
 - [ ] Every local extension named in REQ-005 (WIP/visible counts, swimlanes, summaries,
       conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop,
       touch long-press, cover-target scheme safety) passes the same check before and after the
@@ -135,4 +160,22 @@ captured against a pre-rewrite baseline, so those two criteria and `tasks.md` T1
 see `implementation-summary.md` for the full verification table. This document's completion_pct
 (29%) is this file's own 2/7 non-operator ratio; the packet-level figure in
 `implementation-summary.md`/`spec.md` averages it against `tasks.md`'s 3/8.
+
+**2026-09-03 (later)** — Closed the hover/drag/drop-target/empty-column half of the criterion
+above that the prior pass on this date left open: two new screenshot scenarios,
+`board-empty-column` and `board-drop-language`, plus new `shared.test.mjs` parity assertions,
+depict `.db-board-empty-slot`, `.db-board-column.is-drop-target`, `.db-board-card.is-dragging`/
+`.is-drop-target`, and `.db-board-drop-indicator` for the first time in this program's screenshot
+corpus. Red recorded by mutating the fixture (empty-slot icon/content order swapped, drop-indicator
+moved inside the card body) and observing the new DOM-walk assertions fail, then reverting to
+green. `styles.css` untouched — no CSS edit, only two additive fixture helpers
+(`boardEmptySlot`, and `dragState`/`dropPlacement`/`columnClass`/`cardRenderer` options on the
+existing `boardCard`/`boardColumn`) that leave every prior scenario's markup byte-identical.
+8 new captures opened and read this session across both devices and themes; named in
+`tools/lane/css-lane.json`'s `038-board-kanban-port` release alongside 11 pre-existing captures
+this pass did not touch, whose `layoutHash` is unchanged from the pre-recapture manifest (byte-only
+encoder noise). `npm run gate`: 25 green / 0 red. This still leaves the local-extension re-check,
+the drag-drop matrix baseline, and the `:hover` pointer-lift rule (a real CSS pseudo-class, not a
+class a fixture can apply) unproven; `tasks.md` T1-T4 and the two remaining `goal.md` criteria stay
+open for that reason.
 <!-- /ANCHOR:log -->

@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **43 phases**, **5 with nothing left**, **85 rows** waiting on a device.
+Derived 2026-09-03: **43 phases**, **5 with nothing left**, **84 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -169,9 +169,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Harness note: the capture frame (`#shot`) carries 16px padding, so the captured container is 1408/370 wide, not 1440/402; the fixture's device-width comment is wrong by 16px a side and the right edge overflows by up to 8 columns at year desktop. Low priority; today-centred content stays in frame.
 - [ ] `.db-timeline-event.is-all-day` remains duplicated at two `styles.css` blocks — pre-existing, not introduced by this port.
 
-## 038-board-kanban-port — 2/8
+## 038-board-kanban-port — 3/8
 
-- [ ] Hover/drag/drop visual language (raised card, hover lift, drop-target tint, column drop highlight) matches the reference's language, rewritten under `--db-*` tokens in `styles.css` §17 BOARD VIEW. Not started. Red to record: a diff of the current `.db-board-card`/`.db-board-column` rules (`styles.css:8881-8908`, `:9175-9197`) against the reference's `kanban.css:13-155`.
 - [ ] Every local extension named in REQ-005 (WIP/visible counts, swimlanes, summaries, conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, cover-target scheme safety) passes the same check before and after the rewrite. Not started. Red to record: today's passing state of each, captured by `plan.md` step 1, before any rewrite line lands.
 - [ ] Card identity, drag/drop payloads, and the path/batch-order transaction are unchanged in contract (REQ-003). Not started. Red to record: today's drag-drop matrix (same-group, cross-group, blank-space) run once, before the rewrite, as the baseline the post-rewrite run must match.
 - [ ] `npm run gate` exits 0, `$?` read directly. Not started as a goal-level criterion — no pre-existing red is on record for this exact check against this packet, so it is not ticked here per this program's `scan-failing-values` discipline, even though it is true today (observed directly 2026-09-03: exit 0, 25 green / 0 red, both `SURFACE_PHASE=038-board-kanban-port npm run gate` and bare `npm run gate` — see `tasks.md` T7, which this evidence closes).

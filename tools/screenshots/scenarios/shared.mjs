@@ -86,6 +86,10 @@ export const ICONS = {
   // The 14px attributes are defaults; `.db-*-cover-placeholder svg` sizes it to 28px.
   image: glyph('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/>'
     + '<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>'),
+  // Lucide's `folder-open`, what `setIcon(icon, "folder-open")` injects into the "empty-group"
+  // empty-state card (empty-state-renderer.ts's EMPTY_STATE_COPY, the reason renderColumn falls
+  // back to when a column has no visible rows).
+  "folder-open": glyph('<path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>'),
 };
 
 /**
@@ -239,8 +243,19 @@ export function tableRows() {
     </tr>`).join("");
 }
 
-export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscriptions") => `
-  <div class="db-board-card" data-note-database-row-path="${parent ? `${parent}/` : ""}${r.name}.md" title="${parent ? `${parent}/` : ""}${r.name}.md" data-subtask-depth="0" data-subtask-visible="true" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1" style="--db-subtask-depth: 0;">
+/**
+ * `dragState`/`dropPlacement` mirror the classes `renderCard`'s own dragstart/dragover handlers
+ * add to the live card (board-renderer.ts:848 `is-dragging`, :869-870 `is-drop-target`,
+ * `updateCardDropIndicator` :1580-1584 the `db-board-drop-indicator` span, appended after the
+ * card body the same way `card.createSpan` does at runtime). Omitted, the card renders exactly
+ * as it always did — this is additive, not a reshape of the ordinary card.
+ */
+export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscriptions", { dragState, dropPlacement } = {}) => {
+  const cardClasses = ["db-board-card", dragState === "dragging" ? "is-dragging" : "", dragState === "drop-target" ? "is-drop-target" : ""]
+    .filter(Boolean).join(" ");
+  const dropIndicator = dropPlacement ? `<span class="db-board-drop-indicator is-${dropPlacement}"></span>` : "";
+  return `
+  <div class="${cardClasses}" data-note-database-row-path="${parent ? `${parent}/` : ""}${r.name}.md" title="${parent ? `${parent}/` : ""}${r.name}.md" data-subtask-depth="0" data-subtask-visible="true" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1" style="--db-subtask-depth: 0;">
     ${tone ? `<div class="db-board-card-priority-strip status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
     <div class="db-board-card-controls">
       ${rowCheckbox("db-board-card-checkbox")}
@@ -264,7 +279,9 @@ export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscrip
         <div class="db-board-card-field" data-note-database-column-key="renew" role="gridcell"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
       </div>
     </div>
+    ${dropIndicator}
   </div>`;
+};
 
 export const SUBTASK_FIXTURE_ROWS = {
   parent: { name: "Website redesign", cost: "€ 42,00", cycle: "Yearly", payment: "Revolut", renew: "April 18, 2026", category: "Design", path: "Projects/Website redesign.md" },
@@ -337,13 +354,39 @@ export const subtaskBoardColumn = (title, cards, tone = OPTION_TONES[title]) => 
   </div>`;
 
 /**
+ * The state `renderColumn`/`renderSubgroup` fall back to when a group's visible-row count is
+ * zero and no view-level empty-state override applies (board-renderer.ts:365-374, :621-630):
+ * `EmptyStateRenderer.renderCard()` under the "empty-group" reason
+ * (empty-state-renderer.ts:199-203, :262-289), with the board's own `db-board-empty-slot` class
+ * appended after creation. Copy is `EMPTY_STATE_COPY["empty-group"]`'s real English strings
+ * (i18n.ts:1504-1505), not placeholder text — `shared.test.mjs` asserts this against the same
+ * `t()` keys the renderer resolves.
+ */
+export const boardEmptySlot = () => `
+  <div class="db-empty db-empty-card db-board-empty-slot" data-empty-reason="empty-group">
+    <div class="db-empty-card-icon" aria-hidden="true">${ICONS["folder-open"]}</div>
+    <div class="db-empty-card-content">
+      <h3 class="db-empty-card-title">No records in this group</h3>
+      <p class="db-empty-card-message">This is a valid destination for new or moved records.</p>
+    </div>
+  </div>`;
+
+/**
  * A board lane. Its title is `renderGroupLabel`'s too — `board-renderer.ts:314` passes
  * `db-board-column-title` to the same function the list, gallery and subgroup headers use — so an
  * option-typed lane field arrives as a badge here exactly as it does there.
+ *
+ * An empty `rows` array draws `boardEmptySlot()` in place of a card list, matching the same
+ * `visibleCount === 0` branch the renderer takes rather than leaving `.db-board-cards` hollow.
+ * `columnClass` and `cardRenderer` are additive escape hatches for the drag/drop-language
+ * scenario, which needs the column's own `is-drop-target` class and per-card drag state that a
+ * single shared `tone` cannot express; neither is passed by an existing caller, so every other
+ * scenario's markup is byte-identical to before.
  */
-export function boardColumn(title, rows, tone = OPTION_TONES[title]) {
+export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnClass = "", cardRenderer } = {}) {
+  const renderRow = cardRenderer || ((row) => boardCard(row, tone ?? null));
   return `
-  <div class="db-board-column">
+  <div class="db-board-column${columnClass ? ` ${columnClass}` : ""}">
     <div class="db-board-column-header">
       ${tone ? `<div class="db-board-column-topbar status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
       <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
@@ -355,7 +398,7 @@ export function boardColumn(title, rows, tone = OPTION_TONES[title]) {
       </div>
     </div>
     <div class="db-board-column-resize-handle" aria-hidden="true"></div>
-    <div class="db-board-cards" role="rowgroup">${rows.map((row) => boardCard(row, tone ?? null)).join("")}</div>
+    <div class="db-board-cards" role="rowgroup">${rows.length ? rows.map(renderRow).join("") : boardEmptySlot()}</div>
   </div>`;
 }
 

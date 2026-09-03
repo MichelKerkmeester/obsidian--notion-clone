@@ -7,8 +7,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { COLUMNS, COVER_BASES, ICONS, ROWS, SUBTASK_FIXTURE_ROWS, boardColumn, dots, emptyCover, glyph, optionPill,
-  rowCheckbox, subtaskBoardCard, subtaskBoardColumn, tableHeader, tableRows } from "./shared.mjs";
+import { COLUMNS, COVER_BASES, ICONS, OPTION_TONES, ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, dots,
+  emptyCover, glyph, optionPill, rowCheckbox, subtaskBoardCard, subtaskBoardColumn, tableHeader, tableRows } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SCENARIOS
@@ -85,6 +85,44 @@ export const CORE_SCENARIOS = [
           ${boardColumn("Design", ROWS.filter((r) => r.category === "Design"))}
         </div>
       </div>`,
+  },
+  {
+    id: "board-empty-column",
+    title: "Board view — empty column",
+    group: "components",
+    width: 660,
+    sources: ["src/views/board-renderer.ts", "src/views/empty-state-renderer.ts", "src/i18n.ts"],
+    note: "The empty-group state renderColumn falls back to when a column has zero visible rows and no view-level empty-state override: EmptyStateRenderer's own card, under db-board-empty-slot's dashed-border sizing, beside a populated lane so the zero count and the column's own width hold up next to an ordinary one.",
+    html: () => `
+      <div class="note-database-container">
+        <div class="db-board" role="grid">
+          ${boardColumn("Design", ROWS.filter((r) => r.category === "Design").slice(0, 2))}
+          ${boardColumn("Personal", [])}
+        </div>
+      </div>`,
+  },
+  {
+    id: "board-drop-language",
+    title: "Board view — drag and drop-target language",
+    group: "components",
+    width: 620,
+    sources: ["src/views/board-renderer.ts"],
+    note: "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
+    html: () => {
+      const rows = ROWS.filter((r) => r.category === "Business").slice(0, 3);
+      const tone = OPTION_TONES.Business;
+      const cardRenderer = (row, index) => {
+        if (index === 1) return boardCard(row, tone, "Subscriptions", { dragState: "dragging" });
+        if (index === 2) return boardCard(row, tone, "Subscriptions", { dragState: "drop-target", dropPlacement: "before" });
+        return boardCard(row, tone);
+      };
+      return `
+      <div class="note-database-container">
+        <div class="db-board" role="grid">
+          ${boardColumn("Business", rows, tone, { columnClass: "is-drop-target", cardRenderer })}
+        </div>
+      </div>`;
+    },
   },
   {
     id: "gallery-view",

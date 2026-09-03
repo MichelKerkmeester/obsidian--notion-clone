@@ -1439,6 +1439,34 @@
         "screenshots/views/timeline-view-year-mobile-light.png"
       ],
       "note": "Subtask display leg. The tree gets its own scenario on each surface rather than decorating the ordinary ones: board-subtask-tree (a two-column lane, because five columns overflow the widest capture device) and timeline-subtask-tree (the week scale reusing TL_LANES\u2019 own bar geometry, so no date or width is invented). TL_LANES itself is back to its landed definition and a parity test now refuses a subtask field on it, so the five ordinary timeline scales still show an un-related bar. All 21 captures below were opened and read. The eight new ones: the board parent carries the collapse triangle, the progress bar with both the derived count and the explicit percentage on two lines, and the inline add row, while its two children carry only the depth indent \u2014 shifted by the card\u2019s own outline, not its inner text \u2014 and no affordance of their own; the timeline parent carries the toggle at the bar\u2019s left edge and both progress values inside the bar, its two children indent by one step, and the Personal lane stays un-related beside them. The remaining thirteen are byte-only encoder noise: the modified set differs between two consecutive runs over identical sources (chrome-owned-menu-sheet flipped dark to light, timeline-view-month-desktop-light and timeline-view-year-mobile-light appeared only in the second), deltas run 2 to 479 bytes, and timeline-view-day-mobile-light and calendar-month-view-mobile-dark were read side by side against their HEAD copies and are indistinguishable. No new rule matches a calendar, field, panel or chrome element."
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-03T21:00:00Z",
+      "hash": "32148b7b7646",
+      "reviewed": [
+        "screenshots/components/board-drop-language-desktop-dark.png",
+        "screenshots/components/board-drop-language-desktop-light.png",
+        "screenshots/components/board-drop-language-mobile-dark.png",
+        "screenshots/components/board-drop-language-mobile-light.png",
+        "screenshots/components/board-empty-column-desktop-dark.png",
+        "screenshots/components/board-empty-column-desktop-light.png",
+        "screenshots/components/board-empty-column-mobile-dark.png",
+        "screenshots/components/board-empty-column-mobile-light.png",
+        "screenshots/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "screenshots/components/chrome-owned-menu-sheet-mobile-light.png",
+        "screenshots/views/timeline-subtask-tree-desktop-light.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ],
+      "note": "No stylesheet edit: closes 038's open hover/drag/drop-target/empty-column goal.md row, which every landed leg left styled but undepicted. Two new component scenarios, board-empty-column and board-drop-language, mirror renderColumn's empty-group branch (EmptyStateRenderer's card under db-board-empty-slot) and the drag handlers' own dragstart/dragover classes (is-dragging, is-drop-target on both column and card, the before/after db-board-drop-indicator) class-for-class, proven red first on a nesting mutation (drop-indicator moved inside the card body, empty-slot's icon/content order swapped) that a string-position check would miss. All 8 new captures opened and read: empty column shows the dashed db-board-empty-slot card (folder-open icon, 'No records in this group' / 'This is a valid destination for new or moved records.') beside a populated lane, desktop and phone, both themes; drop-language shows one column carrying its own dragover highlight with a raised (is-dragging) card and a tinted drop-target card carrying its before-indicator line, same four combinations. The remaining 11 changed captures are pre-existing timeline/chrome shots this session did not touch: layoutHash identical to the pre-recapture manifest entry for every one, byte-size-only encoder noise consistent with this harness's documented non-determinism. board-view/board-mobile and every other ordinary board capture are unchanged (git reports no diff). Card-hierarchy and local-extension/drag-drop-matrix criteria this leg does not touch stay as the prior leg left them."
     }
   ],
   "outstanding": [

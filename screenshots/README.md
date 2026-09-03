@@ -19,6 +19,26 @@ Settings above, actions below, one row grammar for both the seven types and the 
 
 Sources: `src/views/toolbar-renderer.ts`
 
+### Board view — drag and drop-target language
+
+A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.
+
+| dark | light |
+|---|---|
+| ![board-drop-language dark](components/board-drop-language-mobile-dark.png) | ![board-drop-language light](components/board-drop-language-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`
+
+### Board view — empty column
+
+The empty-group state renderColumn falls back to when a column has zero visible rows and no view-level empty-state override: EmptyStateRenderer's own card, under db-board-empty-slot's dashed-border sizing, beside a populated lane so the zero count and the column's own width hold up next to an ordinary one.
+
+| dark | light |
+|---|---|
+| ![board-empty-column dark](components/board-empty-column-mobile-dark.png) | ![board-empty-column light](components/board-empty-column-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `src/views/empty-state-renderer.ts`, `src/i18n.ts`
+
 ### Card covers, board and gallery
 
 The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.

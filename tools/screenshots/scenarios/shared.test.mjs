@@ -9,7 +9,8 @@
 
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, subtaskBoardCard } from "./shared.mjs";
+import { t } from "../../../src/i18n";
+import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, boardEmptySlot, subtaskBoardCard } from "./shared.mjs";
 import { TIMELINE_FIXTURES, TL_LANES, TL_SUBTASK_LANES, timelineEvent } from "./temporal.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -128,6 +129,63 @@ describe("board screenshot fixture parity", () => {
     expect(card).not.toContain("db-board-card-priority-strip");
     expect(card).not.toContain("db-board-card-parent");
     expect(card).toContain("db-file-title-prefix");
+  });
+
+  it("draws the empty-group state in place of a card list when a column has no rows", () => {
+    const column = findDescendant(parseMarkup(boardColumn("Personal", [])), "db-board-column");
+    const cards = findDescendant(column, "db-board-cards");
+    expect(findDescendant(cards, "db-board-card"), "the empty column draws no card").toBeNull();
+    const empty = findDescendant(cards, "db-board-empty-slot");
+    expect(empty, "db-board-empty-slot is present").not.toBeNull();
+    expect(empty.classes, "carries the shared empty-card family too").toEqual(
+      expect.arrayContaining(["db-empty", "db-empty-card"]),
+    );
+    const content = findDescendant(empty, "db-empty-card-content");
+    expectDirectChildOrder(empty, ["db-empty-card-icon", "db-empty-card-content"], "the empty slot");
+    expectDirectChildOrder(content, ["db-empty-card-title", "db-empty-card-message"], "the empty content");
+    // A populated column still renders its cards, not the empty slot.
+    expect(boardColumn("Design", [ROWS[0]])).not.toContain("db-board-empty-slot");
+  });
+
+  it("mirrors the empty-group copy the renderer resolves through the same i18n keys", () => {
+    const markup = boardEmptySlot();
+    expect(markup).toContain('data-empty-reason="empty-group"');
+    expect(markup).toContain(t("emptyState.emptyGroupTitle"));
+    expect(markup).toContain(t("emptyState.emptyGroupMessage"));
+  });
+
+  it("puts the column-level dragover class on the column, not a descendant", () => {
+    const plain = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "db-board-column");
+    expect(plain.classes).not.toContain("is-drop-target");
+    const highlighted = findDescendant(
+      parseMarkup(boardColumn("Design", [ROWS[0]], "pink", { columnClass: "is-drop-target" })),
+      "db-board-column",
+    );
+    expect(highlighted.classes).toContain("is-drop-target");
+  });
+
+  it("puts the card-level dragstart class on the card root, raised above its neighbours", () => {
+    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "pink", "Subscriptions", { dragState: "dragging" })), "db-board-card");
+    expect(dragging.classes).toContain("is-dragging");
+    expect(dragging.classes).not.toContain("is-drop-target");
+  });
+
+  it("puts the card-level dragover tint and its before/after insertion line after the card body", () => {
+    const target = findDescendant(
+      parseMarkup(boardCard(ROWS[0], "pink", "Subscriptions", { dragState: "drop-target", dropPlacement: "before" })),
+      "db-board-card",
+    );
+    expect(target.classes).toContain("is-drop-target");
+    expect(target.classes).not.toContain("is-dragging");
+    expectDirectChildOrder(target, ["db-board-card-controls", "db-board-card-body", "db-board-drop-indicator"], "the drop-target card");
+    const indicator = findDescendant(target, "db-board-drop-indicator");
+    expect(indicator.classes).toContain("is-before");
+    expect(indicator.classes).not.toContain("is-after");
+    const after = findDescendant(
+      parseMarkup(boardCard(ROWS[0], "pink", "Subscriptions", { dropPlacement: "after" })),
+      "db-board-drop-indicator",
+    );
+    expect(after.classes).toContain("is-after");
   });
 });
 

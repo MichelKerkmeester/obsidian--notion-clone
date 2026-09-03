@@ -51,6 +51,7 @@
       "src/views/board-renderer-hierarchy.test.ts",
       "tools/screenshots/scenarios/shared.mjs",
       "tools/screenshots/scenarios/shared.test.mjs",
+      "tools/screenshots/scenarios/core.mjs",
       "tools/lane/css-lane.json",
       "tools/live/engine-parity.json",
       "tools/live/touch-targets.json",
@@ -116,6 +117,12 @@
         "name": "shared.test.mjs",
         "kind": "file",
         "path": "tools/screenshots/scenarios/shared.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
         "source": "derived"
       },
       {
@@ -195,17 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Execution Rules",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-03T09:18:39.553Z",
+    "last_save_at": "2026-09-03T21:00:15.882Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +217,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:eef4384ea22751a2e257cca97dbac8d134bb372ff6b3cc0b77543fa78d6cbf15",
+    "source_fingerprint": "sha256:33a5bb7cf17d7ccf09dc808cca5c69aa402f5537b59abde0e764419112d32d1c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "03c0efc2d5d91c6b3b82d5b3aa03eaa364c5c2e8ba3abb374bb56c5be8d0d286",
       "plan.md": "f97f95f52a2fddd2f2fb102ca1a145ccbf3de92b31fa81130e059cf8c370211e",
       "tasks.md": "145a928988bd6c6d3cbd292a6eff65229336d216c56d2236e905b1cff283f0b9",
-      "implementation-summary.md": "ef08b47cda6c1df0655e208ceb7bee47e9fd9e4e91a2fb8c51e08166e0a41511"
+      "implementation-summary.md": "3db247aff5b3d20a597c85b2afa63d77449a7aca46e3761d78261858082234ba"
     },
     "last_active_child_id": null,
     "last_active_at": null

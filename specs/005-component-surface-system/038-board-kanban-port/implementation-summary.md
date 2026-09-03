@@ -49,7 +49,7 @@ _memory:
 | **Spec Folder** | 038-board-kanban-port |
 | **Completed** | 2026-09-03 (both legs landed on `main`; not operator-confirmed) |
 | **Level** | 2 |
-| **Completion** | 33% — average of `tasks.md`'s 3/8 rows closed (T5-T7, 37.5%) and `goal.md`'s 2/7 non-operator criteria met (card-hierarchy match, negative control, each with a recorded red value, 28.6%). Gate and `validate.sh --strict` are true today (see Verification) but stay unticked in `goal.md` — neither has a pre-existing red on record for this packet, and this program's `scan-failing-values` check requires one for every newly ticked `goal.md` row; they are ticked in `tasks.md` (T7), which carries no such requirement. T1-T4 and the two remaining `goal.md` criteria (local extensions, drag-drop matrix) stay open because no pre-rewrite baseline was ever captured for them. |
+| **Completion** | 40% — average of `tasks.md`'s 3/8 rows closed (T5-T7, 37.5%, unchanged this pass) and `goal.md`'s 3/7 non-operator criteria met (card-hierarchy match, negative control, hover/drag/drop-target/empty-column, each with a recorded red value, 42.9%). Gate and `validate.sh --strict` are true today (see Verification) but stay unticked in `goal.md` — neither has a pre-existing red on record for this packet, and this program's `scan-failing-values` check requires one for every newly ticked `goal.md` row; they are ticked in `tasks.md` (T7), which carries no such requirement. T1-T4 and the two remaining `goal.md` criteria (local extensions, drag-drop matrix) stay open because no pre-rewrite baseline was ever captured for them. |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -61,7 +61,8 @@ The board's Kanban surface now carries `obsidian-pm-main`'s column and card info
 hierarchy, delivered in code across two committed legs and given its `--db-*` token visual
 language in the second. Card identity, drag/drop payloads, and every local extension the
 reference has no equivalent for stay untouched by hunk-range inspection; hover, drag,
-drop-target, and the empty-column slot are styled but not yet proven by any fixture.
+drop-target, and the empty-column slot were styled but unproven by any fixture until this pass,
+which adds two screenshot scenarios that depict all four states with no stylesheet edit.
 
 ### Board / Kanban Port
 
@@ -87,6 +88,20 @@ string-index check cannot see but the DOM-walk assertion catches. The column-wid
 kept: probing the rendered column at 220/250/280/400px reads 236/266/296/416, identical to
 `b9e2321` at every point.
 
+This pass (empty-column and drop-language capture, no commit hash yet): closed the two open
+states neither prior leg's fixture depicted. `boardEmptySlot()` mirrors `renderColumn`'s
+`visibleCount === 0` branch — `EmptyStateRenderer`'s card under the "empty-group" reason, with
+the board's own `db-board-empty-slot` class appended — and `boardColumn`/`boardCard` gained
+additive options (`columnClass`, `cardRenderer`, `dragState`, `dropPlacement`) so a column can
+carry `is-drop-target` and a card can carry `is-dragging` or `is-drop-target` plus its
+before/after `db-board-drop-indicator`, all optional and all matching the exact classes
+`board-renderer.ts`'s dragstart/dragover handlers add. No caller that omits the new options
+renders differently than before. Two new scenarios, `board-empty-column` and
+`board-drop-language`, capture the states across both devices and themes; `shared.test.mjs`
+gained six new assertions proving the empty-slot's icon/content order, the column and card drag
+classes, and the drop-indicator's placement and before/after modifier, red-first on a nesting
+mutation.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -94,8 +109,10 @@ kept: probing the rendered column at 220/250/280/400px reads 236/266/296/416, id
 | `src/views/board-renderer.ts` | Modified | Rewrote `renderColumn`/`renderCard` hierarchy (topbar, priority strip, parent chip, title-row chips) per catalog rows 1, 2, 5, 8 |
 | `src/views/board-renderer-hierarchy.test.ts` | Created | Red-first hierarchy assertions (4/10 red against the pre-rewrite renderer, 10/10 green after) |
 | `styles.css` (§17 BOARD VIEW) | Modified | `--db-*` token visual language for the ported column/card hierarchy; column-width fallback reverted from a hardcoded 280px back to the resize clamp's own 220px floor |
-| `tools/screenshots/scenarios/shared.mjs` | Modified | Board/mobile fixture rewritten to mirror `renderColumn`/`renderCard` class-for-class |
-| `tools/screenshots/scenarios/shared.test.mjs` | Created | Containment parity test for the rewritten fixture (direct-child/sibling-order assertions) |
+| `tools/screenshots/scenarios/shared.mjs` | Modified | Board/mobile fixture rewritten to mirror `renderColumn`/`renderCard` class-for-class; this pass added `boardEmptySlot()` and drag-state options on `boardCard`/`boardColumn` |
+| `tools/screenshots/scenarios/shared.test.mjs` | Created/Modified | Containment parity test for the rewritten fixture; this pass added empty-slot and drag-class assertions |
+| `tools/screenshots/scenarios/core.mjs` | Modified | Added `board-empty-column` and `board-drop-language` component scenarios |
+| `tools/lane/css-lane.json` | Modified | Release entry naming the 8 new plus 11 pre-existing changed captures; no stylesheet edit |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -119,6 +136,28 @@ column carries its colored topbar, every card its matching priority strip, contr
 grid, with nothing clipped, overlapped, or unstyled. The `styles.css` edit ran under the CSS lane
 (`tools/lane/css-lane.json`), released at `9eb4b141471e` naming all 20 changed captures with what
 each shows. This will ride release 1.4.5, pending.
+
+**Later the same session (empty-column and drop-language capture):** no stylesheet edit; two
+new fixture helpers and two new screenshot scenarios only. `npx vitest run` (full suite):
+86/87 files, 868/869 tests green before the recapture — the one red was
+`screenshot-fixtures.test.ts`'s manifest-completeness check, expected until the new scenario ids
+were captured, and green after. The new `shared.test.mjs` assertions were proven red first: the
+empty slot's icon/content order swapped and the drop-indicator moved inside the card body instead
+of after it both passed a naive string-position check and both failed the new
+`expectDirectChildOrder` assertions; reverted to green. `npm run lint:tools` clean. Recaptured
+detached (`nohup npm run screenshots`, waited on the PID; no stray Chrome beforehand or after);
+the first attempt reported `CLIPPED board-empty-column-desktop-{dark,light}: 10px lost` against a
+620px declared width, widened to 660px, and the second full recapture reported 0 failures across
+276 screenshots. `git status --porcelain -- screenshots` shows 8 new PNGs
+(`board-empty-column`/`board-drop-language`, desktop+mobile, light+dark) plus 11 pre-existing
+captures whose `layoutHash` is identical to the pre-recapture manifest entry for every one
+(byte-size-only encoder noise); all 8 new PNGs opened and read directly this session. Named in
+`tools/lane/css-lane.json`'s `038-board-kanban-port` release; `node tools/lane/check-lane.mjs`
+reports "release names all 19 changed capture(s)", exit 0. `node tools/live/evidence.mjs
+--check-all` found `capture-device-parity.json` stale against the new manifest hash, re-ran
+`node tools/live/capture-device-parity.mjs` (PASS — 0 newly-identical pairs against a baseline of
+4), then re-ran `--check-all`: 16/16 fresh. `npm run gate`: 25 green / 0 red, exit 0 read
+directly.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -134,6 +173,9 @@ each shows. This will ride release 1.4.5, pending.
 | Tick only `tasks.md` T5-T7 and the `goal.md` criteria whose own stated evidence bar was actually met | T1's pre-rewrite baseline for the ten local extensions and the drag-drop matrix was never captured in either leg (`b9e2321`'s own message says so directly); T2-T4 and the matching criteria depend on that baseline and stay open even though hunk-range inspection shows their code paths untouched |
 | Arm the board/gallery layout-read negative control (`RENDER_READ_CONTROL=per-item`) rather than citing only its disarmed pass | `node tools/naming/scan-failing-values.mjs` requires every newly ticked `goal.md` row to record a red value; the armed run genuinely reddens `board/file-view` and `board/embed` at 1601 reads against the bound of 8, giving that criterion a real "moved from" number instead of only a today-passes claim |
 | Leave the `goal.md` gate and `validate.sh --strict` criteria unticked even though both are true today | Neither has a pre-existing red on record for this packet (gate was already green; `validate.sh --strict` already returned `RESULT: PASSED` before either leg landed, confirmed by stashing this session's edits and re-running); ticking them would fail `scan-failing-values.mjs`'s program-wide ratchet (baseline 145, 1 unit of slack). They are ticked in `tasks.md` T7 instead, which carries no red-value requirement |
+| Depict the drag/drop-target/empty-column states as additive fixture options, not a rewrite of `boardCard`/`boardColumn` | The existing scenarios' markup has to stay byte-identical so `board-view`/`board-mobile`/`board-subtask-tree` are proven unaffected; `dragState`, `dropPlacement`, `columnClass` and `cardRenderer` all default to producing the exact prior output, verified by re-running the full suite before and after (868/869, then 869/869 after the manifest caught up) |
+| Depict only the classes the drag handlers add on dragstart/dragover (`is-dragging`, `is-drop-target`, `db-board-drop-indicator`), not the `:hover` pointer-lift rule | `.db-board-card:hover` (`styles.css:9257-9262`) is a real CSS pseudo-class under `@media (hover: hover)`, not a class `renderCard` ever applies; a static fixture can depict a class the renderer sets, not a live pointer state, so this stays a genuine gap rather than something this pass silently claimed |
+| Tick the one `goal.md` row this evidence closes (`Hover/drag/drop visual language`) rather than inventing a second checkbox for "empty column" | `goal.md` names exactly one criterion covering all four states (raised card, hover lift, drop-target tint, column drop highlight) and `tasks.md` T3 separately requires the full drag-drop matrix re-proof this pass does not attempt; splitting the criterion in the doc would misstate what `goal.md` actually asks |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -155,6 +197,14 @@ each shows. This will ride release 1.4.5, pending.
 | `npm run gate` (bare) | PASS — 25 green / 0 red, exit 0 read directly; observed 2026-09-03 this session |
 | Screenshot capture (20 changed images named in the `9eb4b141471e` lane release) | Read per the release note; `board-view-desktop-light.png` opened directly this session and matches |
 | `validate.sh --strict` | `RESULT: PASSED`, `Errors: 0`, `Warnings: 1` (pre-existing `COMPLEXITY_MATCH` note, unrelated to this pass) — observed 2026-09-03 |
+| `shared.test.mjs` empty-slot/drag-class red-first | Red: `db-empty-card-content follows the preceding node under the empty slot: expected 0 to be greater than 1` and `db-board-drop-indicator is a direct child of the drop-target card: expected -1 to be greater than -1`, both against a mutated fixture; green (11/11) after reverting |
+| `npx vitest run` (full suite) | 86/87 files, 868/869 tests green pre-recapture (the one red is the manifest-completeness check, expected before capture); green after |
+| `npm run lint:tools` | Clean, no output |
+| `npm run screenshots` (detached, `board-empty-column` width fix) | First attempt: 2 `CLIPPED` failures at a 620px declared width; widened to 660px; second attempt: 0 failures across 276 screenshots |
+| `git status --porcelain -- screenshots` / `layoutHash` diff | 8 new PNGs, 11 pre-existing captures with unchanged `layoutHash` (byte-only encoder noise); all 8 new PNGs opened and read |
+| `node tools/lane/check-lane.mjs` | "release names all 19 changed capture(s)", exit 0 |
+| `node tools/live/evidence.mjs --check-all` (this pass) | 1 stale (`capture-device-parity.json`) on first run; `node tools/live/capture-device-parity.mjs` re-run (PASS, 0 newly-identical); 16/16 fresh on re-check |
+| `npm run gate` (this pass) | PASS — 25 green / 0 red, exit 0 read directly |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -162,9 +212,12 @@ each shows. This will ride release 1.4.5, pending.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Hover, drag, drop-target and the empty-column slot are unproven by any fixture.** `styles.css`
-   adds `.db-board-empty-slot`, drop-target tints, and a hover lift, but no screenshot fixture
-   depicts any of the four states; a device read is still owed (`tasks.md` T3/T4 stay open).
+1. **The `:hover` pointer-lift rule is still unproven by any fixture.** `.db-board-card:hover`
+   (`styles.css:9257-9262`, `@media (hover: hover)`) is a real CSS pseudo-class rather than a
+   class the renderer applies, so a static screenshot fixture cannot depict it; a device read is
+   still owed. The other three states this limitation used to name — the empty-column slot,
+   `is-dragging`, and `is-drop-target`/`db-board-drop-indicator` — are now depicted by the
+   `board-empty-column` and `board-drop-language` scenarios, opened and read this session.
 2. **The local-extension re-check and the drag-drop matrix re-run were never captured.** `tasks.md`
    T1's pre-rewrite baseline for WIP/visible counts, swimlanes, summaries, conditional formatting,
    multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, and
