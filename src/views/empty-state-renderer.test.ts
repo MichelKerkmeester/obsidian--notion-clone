@@ -145,6 +145,24 @@ describe("EmptyStateRenderer", () => {
     expect((card.children[0] as FakeElement | undefined)?.icon).toBe(icon);
   });
 
+  it("composes the verified icon/title/body/action shape with a paragraph body", () => {
+    const root = new FakeElement("div");
+    const card = new EmptyStateRenderer().renderCard(root as unknown as HTMLElement, {
+      reason: "search-empty",
+      actions: [{ label: "Clear search", primary: true, onClick: () => {} }],
+    }) as unknown as FakeElement;
+
+    const icon = elementWithClass(card, "db-empty-card-icon");
+    expect(icon?.getAttribute("aria-hidden")).toBe("true");
+    const title = elementWithClass(card, "db-empty-card-title");
+    expect(title?.tagName).toBe("h3");
+    const body = elementWithClass(card, "db-empty-card-message");
+    expect(body?.tagName).toBe("p");
+    const action = elementWithClass(card, "db-empty-action");
+    expect(action?.classes.has("mod-cta")).toBe(true);
+    expect(action?.getAttribute("aria-label")).toBe("Clear search");
+  });
+
   it("fires action callbacks from keyboard-reachable buttons", () => {
     const root = new FakeElement("div");
     let calls = 0;

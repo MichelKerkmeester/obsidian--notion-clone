@@ -13,7 +13,7 @@
 
 import { App, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
 import NoteDatabasePlugin from "./main";
-import { DatabaseConfig, PluginSettings, TrashedDatabase } from "./data/types";
+import { DatabaseConfig, DatabaseViewType, PluginSettings, TrashedDatabase } from "./data/types";
 import { DEFAULT_RECORD_OPEN_TARGET, RECORD_OPEN_TARGETS, normalizeRecordOpenTarget } from "./views/record-open-target";
 import { LocaleCode, setLocale, t } from "./i18n";
 import { DeleteDatabaseModal } from "./views/modals/delete-database-modal";
@@ -67,6 +67,21 @@ export function createDefaultSettings(): PluginSettings {
     language: DEFAULT_SETTINGS.language,
     recordOpenTarget: DEFAULT_SETTINGS.recordOpenTarget,
   };
+}
+
+/**
+ * View types offered as the default for new databases.
+ *
+ * Gallery stays out: it is a legacy-only type, kept for existing views and
+ * never offered when creating something new.
+ */
+export const DEFAULT_VIEW_TYPES: DatabaseViewType[] = ["table", "board", "list", "chart", "calendar", "timeline"];
+
+/** An unrecognised stored value is the table default, not a crash and not a new behaviour. */
+export function normalizeDefaultViewType(value: unknown): DatabaseViewType {
+  return DEFAULT_VIEW_TYPES.includes(value as DatabaseViewType)
+    ? (value as DatabaseViewType)
+    : "table";
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -138,6 +153,23 @@ export class SettingsTab extends PluginSettingTab {
           .setValue(normalizeRecordOpenTarget(this.plugin.settings.recordOpenTarget))
           .onChange(async (value) => {
             this.plugin.settings.recordOpenTarget = normalizeRecordOpenTarget(value);
+            await this.plugin.saveSettings();
+          });
+      });
+    new Setting(general)
+      .setName(t("settings.defaultView.name"))
+      .setDesc(t("settings.defaultView.desc"))
+      .addDropdown((dropdown) => {
+        for (const viewType of DEFAULT_VIEW_TYPES) {
+          dropdown.addOption(viewType, t(`common.${viewType}View`));
+        }
+        // The stored value goes through the same normaliser the creators
+        // will read, so a settings file holding an unknown type shows the
+        // table default here instead of an empty control.
+        dropdown
+          .setValue(normalizeDefaultViewType(this.plugin.settings.defaultViewType))
+          .onChange(async (value) => {
+            this.plugin.settings.defaultViewType = normalizeDefaultViewType(value);
             await this.plugin.saveSettings();
           });
       });

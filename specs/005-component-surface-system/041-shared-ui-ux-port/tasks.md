@@ -44,11 +44,11 @@ contextType: "general"
 ## Phase 2: Implementation
 
 - [ ] T004 Observe the current `--db-font-*`/`--db-radius-*`/`--db-border-*`/`--db-surface-*` ladder red against `variables.css:1-9`'s verified roles, then extend it additively (`styles.css:55-85`)
-- [ ] T005 Observe `empty-state-renderer.ts`'s current reason/action coverage red against `EmptyState.ts:10-37`, then reconcile the composition (`src/views/empty-state-renderer.ts:25-57, :143-150`)
+- [x] T005 Observe `empty-state-renderer.ts`'s current reason/action coverage red against `EmptyState.ts:10-37`, then reconcile the composition (evidence: red first — `expected 'div' to be 'p'` on `src/views/empty-state-renderer.test.ts:160` before the element change; body element now `p` at `src/views/empty-state-renderer.ts:275-281`; copy catalog rows renamed to the reference `body` term at `:143-204`; composition pinned by `src/views/empty-state-renderer.test.ts:148-164`) (`src/views/empty-state-renderer.ts:25-57, :143-150`)
 - [ ] T006 Observe `board-renderer.ts`'s current card icon/tooltip/chip density red against `IconButton.ts:3-31`/`Chip.ts:3-40`, then reconcile through local field renderers (`src/views/board-renderer.ts:750-789, :782-789`)
 - [ ] T007 Observe the current reduced-motion coverage red against the reconciled `task-editor.css:1-20, :34-60` motion intent, then extend the media rule without a second sheet cap (`styles.css:706-713`)
-- [ ] T008 Observe `SettingsTab.display()`'s current vocabulary red against `settings.ts:54-86, :133-179`, then reconcile settings/`ViewConfig` fields and i18n labels (`src/settings.ts`, `src/data/types.ts:373-`, `src/i18n.ts`)
-- [ ] T009 Observe the current `aria-expanded`/`is-open` and roving-keyboard coverage red against `chrome.css:124-170`, then reconcile the active/focus language (`src/views/toolbar-renderer.ts:2111-2114`, `src/views/card-roving-tabindex.ts:68-99`)
+- [x] T008 Observe `SettingsTab.display()`'s current vocabulary red against `settings.ts:54-86, :133-179`, then reconcile settings/`ViewConfig` fields and i18n labels (evidence: red first — four `expected undefined to be defined` asserts reported across `src/settings.test.ts`'s `SettingsTab reconciled view vocabulary` block before the default-view row existed (two confirmed statically on the `row` lookup at `:319`, `:339`); default-view row at `src/settings.ts:159-175`; `DEFAULT_VIEW_TYPES`/`normalizeDefaultViewType` at `:72-85`; `PluginSettings.defaultViewType` at `src/data/types.ts:666-667`; labels in all three locale blocks at `src/i18n.ts:1120-1121, :2795-2796, :4417-4418`; pinned by `src/settings.test.ts:306-349`. Board/timeline display defaults deferred to `037`/`038` per the spec's open question — no consumer exists in-tree yet) (`src/settings.ts`, `src/data/types.ts:373-`, `src/i18n.ts`)
+- [x] T009 Observe the current `aria-expanded`/`is-open` and roving-keyboard coverage red against `chrome.css:124-170`, then reconcile the active/focus language (evidence: red first — a source-string contain failure on `src/views/toolbar-renderer.test.ts:41`'s `aria-pressed` assertion before the attribute existed; display-width toggle now announces its state via `aria-pressed` at `src/views/toolbar-renderer.ts:1557-1558`; disclosure helper stays on `aria-expanded`/`is-open` at `:2111-2114`; roving 2D language confirmed by `src/views/card-roving-tabindex.test.ts:186-205` — no controller change needed; pinned by `src/views/toolbar-renderer.test.ts:33-47` and `src/views/accessibility-defects.test.ts:159-166`) (`src/views/toolbar-renderer.ts:2111-2114`, `src/views/card-roving-tabindex.ts:68-99`)
 - [ ] T010 Add error handling only where a reconciled path can genuinely fail (e.g. a missing i18n key), never a defensive check on something the type system already guarantees
 <!-- /ANCHOR:phase-2 -->
 
@@ -57,7 +57,7 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T011 Confirm `git diff -- src/views/mobile-bottom-sheet.ts` is empty (no edit to the local sheet)
+- [x] T011 Confirm `git diff -- src/views/mobile-bottom-sheet.ts` is empty (no edit to the local sheet; verified empty on this worktree)
 - [ ] T012 [P] Apply reconciled tokens/primitives to surfaces `037`-`039` land and recapture affected screenshots, reading each recapture (`repo-rules/screenshot-currency.md`)
 - [ ] T013 Release the `styles.css` lane hold with a `reviewed` array naming every recaptured screenshot (`tools/lane/css-lane.json`)
 - [ ] T014 Run `npm run gate`, read `$?` directly, not through a pipe

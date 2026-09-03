@@ -183,6 +183,27 @@ describe("CardRovingTabindex pure helpers", () => {
     expect(getNextBoardRovingIndex(columns, 4, "End")).toBe(7);
   });
 
+  it("skips empty columns when navigating the 2D board roving set", () => {
+    const columns = [
+      [0, 1],
+      [],
+      [2, 3],
+    ];
+
+    expect(getNextBoardRovingIndex(columns, 0, "ArrowRight")).toBe(2);
+    expect(getNextBoardRovingIndex(columns, 3, "ArrowLeft")).toBe(1);
+    expect(getNextBoardRovingIndex(columns, 1, "Home")).toBe(0);
+    expect(getNextBoardRovingIndex(columns, 1, "End")).toBe(3);
+    expect(getNextBoardRovingIndex(columns, 2, "ArrowDown")).toBe(3);
+  });
+
+  it("falls back to linear navigation when the active card is not in the column map", () => {
+    const columns = [[0], [1]];
+
+    expect(getNextBoardRovingIndex(columns, 99, "ArrowRight")).toBe(1);
+    expect(getNextBoardRovingIndex(columns, 99, "ArrowLeft")).toBe(0);
+  });
+
   it("sets roving tabindex so only the active element has 0 and others have -1", () => {
     const el1 = new FakeElement() as unknown as HTMLElement;
     const el2 = new FakeElement() as unknown as HTMLElement;

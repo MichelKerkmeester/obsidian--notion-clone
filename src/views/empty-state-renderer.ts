@@ -140,65 +140,65 @@ export const STARTER_PRESETS: ReadonlyArray<StarterPreset> = [
 // 4. COPY CATALOG
 // ───────────────────────────────────────────────────────────────────
 
-const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; message: string; icon: string }> = {
+const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: string; icon: string }> = {
   "no-database": {
     title: "emptyState.noDatabaseTitle",
-    message: "emptyState.noDatabaseMessage",
+    body: "emptyState.noDatabaseMessage",
     icon: "database",
   },
   "no-columns": {
     title: "emptyState.noColumnsTitle",
-    message: "emptyState.noColumnsMessage",
+    body: "emptyState.noColumnsMessage",
     icon: "columns-3",
   },
   "no-matching-data": {
     title: "emptyState.noMatchingTitle",
-    message: "emptyState.noMatchingMessage",
+    body: "emptyState.noMatchingMessage",
     icon: "inbox",
   },
   "search-empty": {
     title: "emptyState.searchEmptyTitle",
-    message: "emptyState.searchEmptyMessage",
+    body: "emptyState.searchEmptyMessage",
     icon: "search-x",
   },
   "filter-empty": {
     title: "emptyState.filterEmptyTitle",
-    message: "emptyState.filterEmptyMessage",
+    body: "emptyState.filterEmptyMessage",
     icon: "list-filter",
   },
   "filter-and-search-empty": {
     title: "emptyState.filterAndSearchTitle",
-    message: "emptyState.filterAndSearchMessage",
+    body: "emptyState.filterAndSearchMessage",
     icon: "list-filter",
   },
   "limit-empty": {
     title: "emptyState.limitEmptyTitle",
-    message: "emptyState.limitEmptyMessage",
+    body: "emptyState.limitEmptyMessage",
     icon: "list-x",
   },
   "no-date-field": {
     title: "emptyState.noDateFieldTitle",
-    message: "emptyState.noDateFieldMessage",
+    body: "emptyState.noDateFieldMessage",
     icon: "calendar-plus",
   },
   "no-events": {
     title: "emptyState.noEventsTitle",
-    message: "emptyState.noEventsMessage",
+    body: "emptyState.noEventsMessage",
     icon: "calendar-off",
   },
   "no-events-in-range": {
     title: "emptyState.noEventsInRangeTitle",
-    message: "emptyState.noEventsInRangeMessage",
+    body: "emptyState.noEventsInRangeMessage",
     icon: "calendar-search",
   },
   "read-failed": {
     title: "emptyState.readFailedTitle",
-    message: "emptyState.readFailedMessage",
+    body: "emptyState.readFailedMessage",
     icon: "triangle-alert",
   },
   "empty-group": {
     title: "emptyState.emptyGroupTitle",
-    message: "emptyState.emptyGroupMessage",
+    body: "emptyState.emptyGroupMessage",
     icon: "folder-open",
   },
 };
@@ -272,9 +272,12 @@ export class EmptyStateRenderer {
       cls: "db-empty-card-title",
       text: options.title || t(copy.title),
     });
-    content.createDiv({
+    // The body is a paragraph (the reference shape's body element); the
+    // caller-facing option keeps the historical `message` name, and the i18n
+    // keys keep theirs because other surfaces read them directly.
+    content.createEl("p", {
       cls: "db-empty-card-message",
-      text: options.message || t(copy.message),
+      text: options.message || t(copy.body),
     });
     if (options.diagnostics) {
       content.createSpan({ cls: "db-empty-card-diagnostics", text: options.diagnostics });

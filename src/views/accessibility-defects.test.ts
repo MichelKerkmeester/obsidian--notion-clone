@@ -160,7 +160,9 @@ describe("Accessibility Defect Fixes", () => {
     const toolbarPath = resolve(__dirname, "toolbar-renderer.ts");
     const toolbarContent = readFileSync(toolbarPath, "utf-8");
 
-    expect(toolbarContent).not.toMatch(/setPopoverTriggerState[\s\S]*?aria-pressed/);
+    // Scoped to the helper body: two-state toggles elsewhere in the toolbar
+    // legitimately carry aria-pressed, so a whole-file scan would trip on them.
+    expect(toolbarContent).not.toMatch(/setPopoverTriggerState\(button: HTMLElement[\s\S]{0,160}aria-pressed/);
   });
 
   it("Item 10 & 11: renderers use row role on cards and provide explicit aria-labels on controls", () => {

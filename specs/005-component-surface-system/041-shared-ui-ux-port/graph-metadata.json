@@ -46,19 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "src/views/empty-state-renderer.ts",
-      "src/views/board-renderer.ts",
-      "src/settings.ts",
       "src/views/toolbar-renderer.ts",
-      "src/views/card-roving-tabindex.ts",
-      "src/views/mobile-bottom-sheet.ts",
-      "tools/lane/css-lane.json",
+      "src/settings.ts",
       "src/data/types.ts",
       "src/i18n.ts",
-      "repo-rules/screenshot-currency.md",
-      "specs/005-component-surface-system/036-obsidian-pm-ui-harvest/research/research.md",
-      "src/views/calendar-timeline-renderer.ts",
-      "src/views/calendar-renderer.ts"
+      "src/views/empty-state-renderer.test.ts",
+      "src/views/toolbar-renderer.test.ts",
+      "src/settings.test.ts",
+      "src/views/card-roving-tabindex.test.ts",
+      "src/views/accessibility-defects.test.ts",
+      "src/views/board-renderer.ts",
+      "src/views/card-roving-tabindex.ts",
+      "src/views/mobile-bottom-sheet.ts",
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
@@ -92,15 +94,21 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "empty-state-renderer.ts",
         "kind": "code",
         "path": "src/views/empty-state-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "board-renderer.ts",
+        "name": "toolbar-renderer.ts",
         "kind": "code",
-        "path": "src/views/board-renderer.ts",
+        "path": "src/views/toolbar-renderer.ts",
         "source": "derived"
       },
       {
@@ -110,9 +118,51 @@
         "source": "derived"
       },
       {
-        "name": "toolbar-renderer.ts",
+        "name": "types.ts",
         "kind": "code",
-        "path": "src/views/toolbar-renderer.ts",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "empty-state-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/empty-state-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/toolbar-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.test.ts",
+        "kind": "test",
+        "path": "src/settings.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-roving-tabindex.test.ts",
+        "kind": "test",
+        "path": "src/views/card-roving-tabindex.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "accessibility-defects.test.ts",
+        "kind": "test",
+        "path": "src/views/accessibility-defects.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
         "source": "derived"
       },
       {
@@ -131,36 +181,6 @@
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
-        "name": "types.ts",
-        "kind": "code",
-        "path": "src/data/types.ts",
-        "source": "derived"
-      },
-      {
-        "name": "i18n.ts",
-        "kind": "code",
-        "path": "src/i18n.ts",
-        "source": "derived"
-      },
-      {
-        "name": "screenshot-currency.md",
-        "kind": "doc",
-        "path": "repo-rules/screenshot-currency.md",
-        "source": "derived"
-      },
-      {
-        "name": "calendar-timeline-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-timeline-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "calendar-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-renderer.ts",
         "source": "derived"
       },
       {
@@ -186,29 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Purpose Rewrite",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The obsidian-pm reference names a shared visual and interaction language: semantic tokens, an",
     "created_at": "2026-09-02T21:57:02.779Z",
-    "last_save_at": "2026-09-02T21:57:02.779Z",
+    "last_save_at": "2026-09-03T09:44:26.410Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,14 +218,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8abbd4c0cd8f3f977f25b5f25ece3a4d1fd474c8ffebafae4ad2765da27bbec6",
+    "source_fingerprint": "sha256:e19eba9921480baa6aa5620f020f2434848b2a81f3f3299ea5e85aa669120212",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "00e316f12288b239b47254b33e976b3281e0b56f5740cc99f324d2b0e38de7dd",
       "plan.md": "f95e4d06beb3ebbde225aaad13a397aeed5b7a0bc5d629fc27cf438a0ebff3bb",
-      "tasks.md": "385af7d93c674ba1365852e6878d164173200c5479c08ecaa8ef0b173c27928c"
+      "tasks.md": "9b375718976629b24bdd41dcc18cdcef078263e6afa09952360ce2ae05c17f37",
+      "implementation-summary.md": "209a3d3c7f0882c2c7ffe491c38a3549c3869ca5f7b968317f8225cb15f0c048"
     },
     "last_active_child_id": null,
     "last_active_at": null

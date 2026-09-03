@@ -663,6 +663,8 @@ export interface PluginSettings {
    * arrives as data to be normalised rather than as a union the parser must already know.
    */
   recordOpenTarget?: string;
+  /** Default view type a newly created database opens with. Absent means table. */
+  defaultViewType?: DatabaseViewType;
 }
 
 export interface TrashedDatabase {

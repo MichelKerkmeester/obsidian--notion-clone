@@ -1554,6 +1554,8 @@ export class ToolbarRenderer {
     const btn = this.createIconButton(toolbar, "", current === "wide" ? t("toolbar.defaultWidth") : t("toolbar.wide"), "db-width-toggle-btn");
     appendSvg(btn, current === "wide" ? ToolbarRenderer.ICONS.widthIn : ToolbarRenderer.ICONS.widthOut);
     btn.addClass(current === "wide" ? "is-active" : "is-inactive");
+    // Two-state toggle: the active class styles it, aria-pressed announces it.
+    btn.setAttribute("aria-pressed", String(current === "wide"));
     btn.onclick = () => actions.setDisplayWidth(next);
   }
 
