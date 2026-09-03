@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-03T10:56:26.143Z",
+  "measuredAt": "2026-09-03T11:37:19.721Z",
   "inputs": {
-    "styles.css": "6fbeb3f434bf",
+    "styles.css": "2ea12028c7c8",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "fixtures": 65,
-    "differences": 49
+    "fixtures": 66,
+    "differences": 51
   },
   "differences": [
     {
@@ -119,7 +119,7 @@
     {
       "scenarioId": "calendar-month-view",
       "selector": "button",
-      "index": 16,
+      "index": 17,
       "notes": [
         "width 472.58 vs 476"
       ]
@@ -127,7 +127,7 @@
     {
       "scenarioId": "calendar-month-view",
       "selector": "button",
-      "index": 25,
+      "index": 26,
       "notes": [
         "width 790.3 vs 796"
       ]
@@ -135,7 +135,7 @@
     {
       "scenarioId": "calendar-month-view",
       "selector": "button",
-      "index": 36,
+      "index": 37,
       "notes": [
         "width 790.3 vs 796"
       ]
@@ -143,7 +143,7 @@
     {
       "scenarioId": "calendar-month-view",
       "selector": "button",
-      "index": 46,
+      "index": 47,
       "notes": [
         "width 472.58 vs 476"
       ]
@@ -151,7 +151,7 @@
     {
       "scenarioId": "calendar-month-view",
       "selector": "button",
-      "index": 54,
+      "index": 55,
       "notes": [
         "width 631.42 vs 636"
       ]
@@ -159,7 +159,23 @@
     {
       "scenarioId": "calendar-week-time-grid",
       "selector": "button",
-      "index": 22,
+      "index": 9,
+      "notes": [
+        "background color(srgb 0 0 0 / 0.0784314) vs color(srgb 0 0 0 / 0.08)"
+      ]
+    },
+    {
+      "scenarioId": "calendar-week-time-grid",
+      "selector": "button",
+      "index": 15,
+      "notes": [
+        "background color(srgb 0 0 0 / 0.0784314) vs color(srgb 0 0 0 / 0.08)"
+      ]
+    },
+    {
+      "scenarioId": "calendar-week-time-grid",
+      "selector": "button",
+      "index": 23,
       "notes": [
         "width 446.3 vs 449.7"
       ]

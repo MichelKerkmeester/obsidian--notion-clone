@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **42 phases**, **5 with nothing left**, **88 rows** waiting on a device.
+Derived 2026-09-03: **42 phases**, **5 with nothing left**, **83 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -178,13 +178,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `validate.sh specs/005-component-surface-system/038-board-kanban-port --strict` reports Errors: 0. Not started as a goal-level criterion — `validate.sh --strict` already returned `RESULT: PASSED` before either leg landed (confirmed 2026-09-03 by stashing this session's edits and re-running), so there is no red to record for this exact claim; it remains true today (`RESULT: PASSED`, `Errors: 0`, `Warnings: 1` — pre-existing `COMPLEXITY_MATCH` note, unrelated to this pass) but is left unticked here for the same reason as the gate row above.
 - [ ] The operator opens a board on device and confirms the rewritten card/column visual language and drag/drop reads correctly on their own database. Only the operator closes this row; nothing in this tree can close it. Not a report-driven row — no operator report (29-33) named the board surface directly, so this is a proactive confirmation ask, not a defect closure.
 
-## 039-calendar-parity-port — 0/6
+## 039-calendar-parity-port — 5/6
 
-- [ ] Completion-aware milestone treatment exists in month, week and day rendering (REQ-002). Observable check: a calendar event whose row's checkbox/status column reads "done" renders visually distinct from one that does not, at all three scales. Red recorded by reading `calendar-renderer.ts:239-293`'s `renderMonth` build path before any edit — it consults no completion column today, confirmed while writing `spec.md` §1. Green recorded by the same read after the change, plus the new harness fixture this phase adds.
-- [ ] Calendar header/date-scale wording carries the reference's day-label/weekend-header language intent (REQ-003). Observable check: `calendar-renderer.ts:1701-1782`'s header copy compared against `GanttHeaderRenderer.ts:48-75` for wording intent, not visual form. Red recorded as today's exact header strings before the change; green as the updated strings plus a recaptured screenshot at `screenshots/views/calendar-*`.
-- [ ] Empty-state and backlog wording reads with the reference's calm density language (REQ-004). Observable check: `renderEmpty`/`EmptyStateRenderer.renderCard` (`calendar-renderer.ts:2478-2489`) and the backlog empty path (`:157-180`) compared before and after. Red recorded as today's copy; green as the updated copy read from the rendered DOM, not from source.
-- [ ] No source-calendar-module fabrication (REQ-001, negative-evidence discipline). Observable check: every REQ-001 citation (`types.ts:4-11`, `YamlHydrator.ts:51-76`, `ProjectView.ts:403-419`) re-read against current disk state and matches this document's quoted line window exactly. Red/green is pass/fail on that re-read, recorded in `acceptance-criteria.md`.
-- [ ] `npm run gate` passes from the final state, including the `css-lane` and `comments` lanes, with the full output read from `tools/lane/gate-logs/`.
 - [ ] Operator-only. The operator confirms on device that a completed milestone reads as completed in the calendar, at whatever scale they open first. No artifact in this tree can close this row; only the operator's own confirmation does (parent goal D3).
 
 ## 040-subtask-tree-port — 0/7

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-03T10:54:52.606Z",
+  "measuredAt": "2026-09-03T11:37:50.902Z",
   "inputs": {
-    "styles.css": "6fbeb3f434bf",
+    "styles.css": "2ea12028c7c8",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,7 +360,7 @@
     }
   ],
   "totals": {
-    "fixtures": 65,
+    "fixtures": 66,
     "escaping": 1053,
     "growing": 683,
     "scrolling": 370,
@@ -1615,7 +1615,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -1626,7 +1626,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -1637,7 +1637,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -1648,7 +1648,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -1659,7 +1659,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -1670,7 +1670,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -1681,7 +1681,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": true,
       "pastHeader": 0
@@ -2154,7 +2154,7 @@
       "kind": "escaping",
       "tag": "span",
       "cls": "db-calendar-week-day-name",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 18.1,
       "scrolls": true,
       "pastHeader": 0
@@ -2165,7 +2165,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": true,
       "pastHeader": 0
@@ -2286,7 +2286,7 @@
       "kind": "escaping",
       "tag": "span",
       "cls": "db-calendar-week-day-name",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 14.8,
       "scrolls": true,
       "pastHeader": 0
@@ -2297,7 +2297,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": true,
       "pastHeader": 0
@@ -5821,7 +5821,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -5832,7 +5832,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -5843,7 +5843,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -5854,7 +5854,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -5865,7 +5865,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -5876,7 +5876,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -5887,7 +5887,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -6360,7 +6360,7 @@
       "kind": "escaping",
       "tag": "span",
       "cls": "db-calendar-week-day-name",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 6.4,
       "scrolls": false,
       "pastHeader": 0
@@ -6371,7 +6371,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": false,
       "pastHeader": 0
@@ -6481,7 +6481,7 @@
       "kind": "escaping",
       "tag": "span",
       "cls": "db-calendar-week-day-name",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 3.1,
       "scrolls": false,
       "pastHeader": 0
@@ -6492,7 +6492,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": false,
       "pastHeader": 0
@@ -9158,7 +9158,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9169,7 +9169,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9180,7 +9180,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9191,7 +9191,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9202,7 +9202,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9213,7 +9213,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9224,7 +9224,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -9235,7 +9235,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": false,
       "pastHeader": 0
@@ -9301,7 +9301,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": false,
       "pastHeader": 0
@@ -11208,7 +11208,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11219,7 +11219,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11230,7 +11230,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11241,7 +11241,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11252,7 +11252,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11263,7 +11263,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11274,7 +11274,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-weekday",
+      "parentCls": "db-calendar-weekday.is-weekend",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -11285,7 +11285,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": false,
       "pastHeader": 0
@@ -11351,7 +11351,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
-      "parentCls": "db-calendar-time-header-day.",
+      "parentCls": "db-calendar-time-header-day.is-weekend",
       "by": 12,
       "scrolls": false,
       "pastHeader": 0
@@ -12316,6 +12316,11 @@
     },
     {
       "width": 320,
+      "fixture": "calendar-empty-state",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "calendar-toolbar-options",
       "probe": "4px"
     },
@@ -12641,6 +12646,11 @@
     },
     {
       "width": 402,
+      "fixture": "calendar-empty-state",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "calendar-toolbar-options",
       "probe": "4px"
     },
@@ -12966,6 +12976,11 @@
     },
     {
       "width": 768,
+      "fixture": "calendar-empty-state",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "calendar-toolbar-options",
       "probe": "4px"
     },
@@ -13287,6 +13302,11 @@
     {
       "width": 1440,
       "fixture": "calendar-mini-calendar",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "calendar-empty-state",
       "probe": "4px"
     },
     {
