@@ -15,11 +15,11 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { setIcon, setTooltip } from "obsidian";
+import { Notice, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
-import { buildCalendarMonthModel, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE, TimelineModel } from "../data/calendar-timeline-model";
+import { buildCalendarMonthModel, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineJumpAnchor, resolveTimelineProgressFillUnits, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/calendar-timeline-model";
 import {
   CALENDAR_TIME_SNAP_MINUTES,
   MINUTES_PER_DAY,
@@ -33,7 +33,7 @@ import {
   parseDateKeyToUtc,
   snapMinutes,
 } from "../data/calendar-date-time";
-import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveDayMoveChange, resolveDayRangeResize, resolveTimedDragRange } from "../data/calendar-interaction-model";
+import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveDayMoveChange, resolveDayRangeResize, resolveTimelineLinkChange, resolveTimedDragRange, TimelineDependencyGraph, TimelineLinkClick, TimelineLinkResolution } from "../data/calendar-interaction-model";
 import { CalendarTimelineSearchVisibleRange, timelineHourRange } from "../data/calendar-timeline-search-results";
 import { formatDateRangeDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/date-time-format";
 import { RowData, TimelineScale, ViewConfig } from "../data/types";
@@ -170,6 +170,7 @@ export interface CalendarTimelineRendererActions {
   ): void | Promise<void>;
   updateTimelineAnchor?(dateKey: string, label?: string, timeMinutes?: number): void;
   updateTimelineScale?(scale: TimelineScale, label?: string): boolean | Promise<boolean> | void;
+  updateTimelineDependency?(predecessor: RowData, successor: RowData, dependencies: string[]): void | Promise<void>;
   onConfigChange?(label?: string): void;
   isGroupCollapsed?(field: string, key: string): boolean;
   toggleGroupCollapsed?(field: string, key: string): void;
@@ -224,6 +225,11 @@ export class CalendarTimelineRenderer {
   private flashTimeoutHandle: number | null = null;
   /** 进行中拖拽的清理函数：移除 capture 监听并复位 resize 标志；视图卸载时调用以避免泄漏/锁死。 */
   private activeTimelineDragCleanup: (() => void) | null = null;
+  private activeTimelineLinkCleanup: (() => void) | null = null;
+  private timelineLinkSelection: TimelineLinkClick | null = null;
+  private timelineLinkSelectionEl: HTMLElement | null = null;
+  private timelineLinkHoverEl: HTMLElement | null = null;
+  private suppressTimelineLinkClick = false;
   /** 上一次解析到的无效事件计数；cache miss（Promise）时沿用它做即时显示，避免每次刷新 hide→show 闪现。 */
   private timelineInvalidWarningCount: number | null = null;
   private backlogCollapsed = false;
@@ -269,6 +275,7 @@ export class CalendarTimelineRenderer {
     }
     this.activeTimelineDragCleanup?.();
     this.activeTimelineDragCleanup = null;
+    this.cancelTimelineLink();
     this.timelineRoot = null;
     this.timelineFlashWindow = null;
   }
@@ -281,6 +288,7 @@ export class CalendarTimelineRenderer {
     this.closeTimelineMiniCalendar();
     this.closeTimelineScaleMenu();
     this.disconnectTimelineResizeObserver();
+    this.cancelTimelineLink();
     if (this.timelineRoot?.isConnected && this.timelineRoot.parentElement === container) this.timelineRoot.remove();
     this.timelineRoot = null;
     this.timelineFlashWindow = null;
@@ -317,6 +325,14 @@ export class CalendarTimelineRenderer {
     wrap.setAttribute("data-timeline-range-start", range.startDateKey);
     wrap.setAttribute("data-timeline-range-end", range.endDateKey);
     wrap.setAttribute("data-timeline-range-days", String(range.totalDays));
+    wrap.setAttribute("data-timeline-scale", model.scale);
+    wrap.setAttribute("data-timeline-unit", model.unit);
+    wrap.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && this.timelineLinkSelection) {
+        event.preventDefault();
+        this.cancelTimelineLink();
+      }
+    });
     this.timelineObservedUnitCount = visibleUnitCount;
     this.timelineObservedUnitSpan = visibleUnitSpan;
     this.observeTimelineViewport(container, config, rows);
@@ -383,6 +399,8 @@ export class CalendarTimelineRenderer {
     for (const tick of allTicks) {
       const tickClasses = [
         "db-timeline-tick",
+        tick.isScaleBoundary ? "is-scale-boundary" : "",
+        this.isTimelineWeekendDate(tick.dateKey) ? "is-weekend" : "",
         this.isCurrentTimelineTick(tick, model, now) ? "is-current-time-tick" : "",
         this.isCurrentTimelineDateTick(tick, model, now) ? "is-current-date-tick" : "",
       ].filter(Boolean).join(" ");
@@ -399,6 +417,7 @@ export class CalendarTimelineRenderer {
     }
 
     const body = scroll.createDiv({ cls: "db-timeline-body" });
+    this.renderTimelineGridColumns(body, model);
     const todayPosition = getTimelineTodayPositionStyle(now, model, unitWidth);
     // 无分组时不渲染 group header（与表格等视图一致），events 直接占满宽度；
     // collapsed 强制 false（无折叠按钮，也不应折叠唯一泳道）。
@@ -460,6 +479,7 @@ export class CalendarTimelineRenderer {
       }
       this.renderTimelineCreateRow(groupEl, config, model, lane.key);
     }
+    this.renderTimelineDependencyLinks(body);
     if (hasGroupField) this.fitTimelineGroupHeaderWidth(wrap, container);
     if (todayPosition) {
       for (const [property, value] of Object.entries(todayPosition.cssProps)) {
@@ -475,6 +495,298 @@ export class CalendarTimelineRenderer {
         this.flashTimelineDate(key);
       });
     }
+  }
+
+  private renderTimelineGridColumns(
+    body: HTMLElement,
+    model: { startDateKey?: string; startMinutes?: number; totalUnits: number; unit: TimelineUnit },
+  ): void {
+    if (!model.startDateKey) return;
+    const columns = body.createDiv({ cls: "db-timeline-grid-columns", attr: { "aria-hidden": "true" } });
+    const startMinutes = model.startMinutes ?? 0;
+    const now = new Date();
+    const todayKey = this.getTodayDateKey(now);
+    for (let index = 0; index < Math.max(1, model.totalUnits); index += 1) {
+      const dateOffset = model.unit === "hour"
+        ? Math.floor((startMinutes + index * MINUTES_PER_HOUR) / MINUTES_PER_DAY)
+        : index;
+      const dateKey = addDateKeyDays(model.startDateKey, dateOffset);
+      // Each hour column shares one calendar date, so date equality alone would tint every
+      // column of today's grid at once and the highlight would say nothing. The today-line
+      // ruler already marks the exact minute; this class only needs the one column standing
+      // in for the current clock hour.
+      const isToday = model.unit === "hour"
+        ? dateKey === todayKey && Math.floor((startMinutes + index * MINUTES_PER_HOUR) / MINUTES_PER_HOUR) % 24 === now.getHours()
+        : dateKey === todayKey;
+      const classes = [
+        "db-timeline-grid-column",
+        this.isTimelineWeekendDate(dateKey) ? "is-weekend" : "",
+        isToday ? "is-today" : "",
+      ].filter(Boolean).join(" ");
+      const column = columns.createSpan({ cls: classes, attr: { "data-date-key": dateKey } });
+      column.setCssProps({
+        "--db-timeline-grid-column-offset": String(index),
+        "--db-timeline-grid-column-span": "1",
+      });
+    }
+  }
+
+  private isTimelineWeekendDate(dateKey: string): boolean {
+    const date = parseDateKeyToUtc(dateKey);
+    if (!date) return false;
+    const day = date.getUTCDay();
+    return day === 0 || day === 6;
+  }
+
+  private renderTimelineDependencyLinks(body: HTMLElement): void {
+    const graph = this.getTimelineDependencyGraph();
+    const bars = new Map<string, HTMLElement>();
+    for (const bar of Array.from(body.querySelectorAll<HTMLElement>(".db-timeline-event[data-timeline-event-id]"))) {
+      const id = bar.dataset.timelineEventId;
+      if (id) bars.set(id, bar);
+    }
+    const bodyRect = body.getBoundingClientRect();
+    for (const [successorId, predecessorIds] of Object.entries(graph.dependencies)) {
+      const successor = bars.get(successorId);
+      const successorDot = successor?.querySelector<HTMLElement>(".db-timeline-link-dot.is-left");
+      if (!successorDot) continue;
+      for (const predecessorId of predecessorIds) {
+        const predecessor = bars.get(predecessorId);
+        const predecessorDot = predecessor?.querySelector<HTMLElement>(".db-timeline-link-dot.is-right");
+        if (!predecessorDot) continue;
+        const from = predecessorDot.getBoundingClientRect();
+        const to = successorDot.getBoundingClientRect();
+        const startX = from.left + from.width / 2 - bodyRect.left;
+        const startY = from.top + from.height / 2 - bodyRect.top;
+        const endX = to.left + to.width / 2 - bodyRect.left;
+        const endY = to.top + to.height / 2 - bodyRect.top;
+        const length = Math.hypot(endX - startX, endY - startY);
+        if (![startX, startY, endX, endY, length].every(Number.isFinite)) continue;
+        const line = body.createDiv({
+          cls: "db-timeline-link-line",
+          attr: {
+            "aria-hidden": "true",
+            "data-timeline-link-predecessor": predecessorId,
+            "data-timeline-link-successor": successorId,
+          },
+        });
+        line.style.left = `${startX}px`;
+        line.style.top = `${startY}px`;
+        line.style.width = `${Math.max(1, length)}px`;
+        line.style.transform = `rotate(${Math.atan2(endY - startY, endX - startX)}rad)`;
+      }
+    }
+  }
+
+  private getTimelineDependencyGraph(): TimelineDependencyGraph {
+    const taskIds = new Set(this.currentRows.map((row) => row.file.path));
+    const dependencies: Record<string, string[]> = {};
+    for (const row of this.currentRows) {
+      const raw = row.frontmatter.dependencies ?? row.computed.dependencies;
+      const values = Array.isArray(raw) ? raw : raw == null ? [] : [raw];
+      const ids: string[] = [];
+      for (const value of values) {
+        const parts = typeof value === "string" ? value.split(",") : [value];
+        for (const part of parts) {
+          const id = this.normalizeTimelineDependencyId(part);
+          if (id && !ids.includes(id)) ids.push(id);
+        }
+      }
+      dependencies[row.file.path] = ids;
+    }
+    return { dependencies, taskIds };
+  }
+
+  private normalizeTimelineDependencyId(value: unknown): string {
+    if (value && typeof value === "object" && "path" in value && typeof value.path === "string") {
+      return value.path;
+    }
+    if (typeof value !== "string") return "";
+    const raw = value.trim();
+    if (!raw) return "";
+    const unwrapped = raw.replace(/^\[\[/, "").replace(/\]\]$/, "").split("|")[0].trim();
+    const direct = this.rowByPath.get(unwrapped);
+    if (direct) return direct.file.path;
+    const withExtension = unwrapped.endsWith(".md") ? unwrapped : `${unwrapped}.md`;
+    const matchingRow = this.currentRows.find((row) => {
+      const basename = row.file.basename || row.file.name.replace(/\.md$/i, "");
+      return row.file.path === withExtension || basename === unwrapped || row.file.name === unwrapped;
+    });
+    return matchingRow?.file.path || unwrapped;
+  }
+
+  private renderTimelineLinkDots(button: HTMLElement, event: CalendarTimelineEvent): void {
+    for (const side of ["left", "right"] as const) {
+      const labelKey = side === "left" ? "timeline.linkInput" : "timeline.linkOutput";
+      const label = `${t(labelKey)}: ${event.title}`;
+      const dot = button.createSpan({
+        cls: `db-timeline-link-dot is-${side}`,
+        attr: {
+          role: "button",
+          tabindex: "0",
+          "aria-label": label,
+          "aria-keyshortcuts": "Enter Space",
+          "data-timeline-link-side": side,
+        },
+      });
+      setTooltip(dot, label, { delay: 100 });
+      dot.addEventListener("pointerdown", (pointerEvent) => {
+        if (pointerEvent.pointerType === "mouse" && pointerEvent.button !== 0) return;
+        pointerEvent.preventDefault();
+        pointerEvent.stopPropagation();
+        this.beginTimelineLinkDrag(dot, { taskId: event.id, side }, pointerEvent);
+      });
+      dot.addEventListener("click", (mouseEvent) => {
+        mouseEvent.preventDefault();
+        mouseEvent.stopPropagation();
+        if (this.suppressTimelineLinkClick) {
+          this.suppressTimelineLinkClick = false;
+          return;
+        }
+        this.handleTimelineLinkClick({ taskId: event.id, side }, dot);
+      });
+      dot.addEventListener("keydown", (keyboardEvent) => {
+        if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") return;
+        keyboardEvent.preventDefault();
+        keyboardEvent.stopPropagation();
+        this.handleTimelineLinkClick({ taskId: event.id, side }, dot);
+      });
+    }
+  }
+
+  private beginTimelineLinkDrag(dot: HTMLElement, click: TimelineLinkClick, pointerEvent: PointerEvent): void {
+    this.activeTimelineLinkCleanup?.();
+    const document = dot.ownerDocument;
+    const startX = pointerEvent.clientX;
+    const startY = pointerEvent.clientY;
+    let didMove = false;
+    let targetDot: HTMLElement | null = null;
+    const updateTarget = (event: PointerEvent): void => {
+      const target = this.findTimelineLinkTarget(document, event.clientX, event.clientY);
+      if (targetDot !== target?.dot) {
+        targetDot?.removeClass("is-target");
+        targetDot = target?.dot || null;
+        this.timelineLinkHoverEl = targetDot;
+        targetDot?.addClass("is-target");
+      }
+    };
+    const finish = (event?: PointerEvent): void => {
+      document.removeEventListener("pointermove", onMove, true);
+      document.removeEventListener("pointerup", onUp, true);
+      document.removeEventListener("pointercancel", onCancel, true);
+      if (this.activeTimelineLinkCleanup === finish) this.activeTimelineLinkCleanup = null;
+      targetDot?.removeClass("is-target");
+      targetDot = null;
+      this.timelineRoot?.removeClass("is-link-dragging");
+      if (!didMove) return;
+      this.suppressTimelineLinkClick = true;
+      window.setTimeout(() => { this.suppressTimelineLinkClick = false; }, 0);
+      const target = event ? this.findTimelineLinkTarget(document, event.clientX, event.clientY) : null;
+      if (!target) {
+        this.cancelTimelineLink();
+        return;
+      }
+      if (!this.timelineLinkSelection) this.handleTimelineLinkClick(click, dot);
+      this.handleTimelineLinkClick(target.click, target.dot);
+    };
+    const onMove = (event: PointerEvent): void => {
+      if (!didMove && Math.hypot(event.clientX - startX, event.clientY - startY) > 4) {
+        didMove = true;
+        if (!this.timelineLinkSelection) this.handleTimelineLinkClick(click, dot);
+        this.timelineRoot?.addClass("is-link-dragging");
+      }
+      if (didMove) updateTarget(event);
+    };
+    const onUp = (event: PointerEvent): void => finish(event);
+    const onCancel = (): void => finish();
+    document.addEventListener("pointermove", onMove, true);
+    document.addEventListener("pointerup", onUp, true);
+    document.addEventListener("pointercancel", onCancel, true);
+    this.activeTimelineLinkCleanup = finish;
+    if (typeof dot.setPointerCapture === "function") dot.setPointerCapture(pointerEvent.pointerId);
+  }
+
+  private findTimelineLinkTarget(document: Document, clientX: number, clientY: number): { click: TimelineLinkClick; dot: HTMLElement | null } | null {
+    if (typeof document.elementFromPoint !== "function") return null;
+    const target = document.elementFromPoint(clientX, clientY) as HTMLElement | null;
+    const dot = target?.closest<HTMLElement>(".db-timeline-link-dot") || null;
+    const bar = dot?.closest<HTMLElement>(".db-timeline-event") || target?.closest<HTMLElement>(".db-timeline-event") || null;
+    const taskId = bar?.dataset.timelineEventId;
+    if (!taskId) return null;
+    const side = dot?.dataset.timelineLinkSide === "right" ? "right" : "left";
+    const resolvedDot = dot || bar.querySelector<HTMLElement>(`.db-timeline-link-dot.is-${side}`);
+    return { click: { taskId, side }, dot: resolvedDot };
+  }
+
+  private handleTimelineLinkClick(click: TimelineLinkClick, dot: HTMLElement | null): void {
+    const resolution = resolveTimelineLinkChange(this.timelineLinkSelection, click, this.getTimelineDependencyGraph());
+    if (resolution.kind === "pending") {
+      this.timelineLinkSelection = resolution.click;
+      this.timelineLinkSelectionEl?.removeClass("is-active");
+      this.timelineLinkSelectionEl = dot;
+      dot?.addClass("is-active");
+      this.timelineRoot?.addClass("is-linking");
+      return;
+    }
+    this.clearTimelineLinkSelection();
+    if (resolution.kind === "rejected") {
+      this.showTimelineLinkNotice(resolution);
+      return;
+    }
+    if (resolution.kind !== "committed") return;
+    const predecessor = this.rowByPath.get(resolution.predecessorId);
+    const successor = this.rowByPath.get(resolution.successorId);
+    if (!predecessor || !successor) {
+      new Notice(t("timeline.linkMissingTask"));
+      return;
+    }
+    if (!this.actions.updateTimelineDependency) {
+      new Notice(t("timeline.linkUnavailable"));
+      return;
+    }
+    try {
+      const result = this.actions.updateTimelineDependency(predecessor, successor, resolution.dependencies);
+      if (result) {
+        void result
+          .then(() => new Notice(t("timeline.linkCreated")))
+          .catch(() => new Notice(t("timeline.linkSaveFailed")));
+      } else {
+        new Notice(t("timeline.linkCreated"));
+      }
+    } catch {
+      new Notice(t("timeline.linkSaveFailed"));
+    }
+  }
+
+  private clearTimelineLinkSelection(): void {
+    this.timelineLinkSelectionEl?.removeClass("is-active");
+    this.timelineLinkHoverEl?.removeClass("is-target");
+    this.timelineLinkSelection = null;
+    this.timelineLinkSelectionEl = null;
+    this.timelineLinkHoverEl = null;
+    this.timelineRoot?.removeClass("is-linking", "is-link-dragging");
+  }
+
+  private cancelTimelineLink(): void {
+    this.activeTimelineLinkCleanup?.();
+    this.activeTimelineLinkCleanup = null;
+    this.clearTimelineLinkSelection();
+  }
+
+  private showTimelineLinkNotice(resolution: Extract<TimelineLinkResolution, { kind: "rejected" }>): void {
+    const keys: Record<Extract<TimelineLinkResolution, { kind: "rejected" }>['reason'], string> = {
+      "same-side": "timeline.linkSameSide",
+      duplicate: "timeline.linkDuplicate",
+      "missing-task": "timeline.linkMissingTask",
+      cycle: "timeline.linkCycle",
+    };
+    new Notice(t(keys[resolution.reason]));
+  }
+
+  private startTimelineLinkFromMenu(rowPath: string): void {
+    const dot = Array.from(this.timelineRoot?.querySelectorAll<HTMLElement>(".db-timeline-link-dot.is-right") || [])
+      .find((candidate) => candidate.closest<HTMLElement>(".db-timeline-event")?.dataset.timelineEventId === rowPath) || null;
+    this.handleTimelineLinkClick({ taskId: rowPath, side: "right" }, dot);
   }
 
   private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
@@ -526,7 +838,7 @@ export class CalendarTimelineRenderer {
       event.stopPropagation();
       target.removeClass("is-backlog-drop-target");
       const dateKey = this.getTimelineDateFromPoint(target, event.clientX, fallbackDateKey, 1, fallbackDateKey, config.timelineScale);
-      this.actions.updateEventDates?.(row, {
+      void this.actions.updateEventDates?.(row, {
         startField: config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config) || "",
         startDateKey: dateKey,
         endField: config.timelineEndDateField || config.calendarEndDateField,
@@ -615,22 +927,39 @@ export class CalendarTimelineRenderer {
     const dateText = this.formatTimelineEventMeta(event, model.scale, config);
     // date 列事件保留 muted 全天条视觉（仅样式，定位统一走 exact）。
     const isDateColumn = this.isTimelineDateColumn(config, event);
+    const isMilestone = Boolean(event.isMilestone);
+    const progress = event.progress ?? 0;
     const button = eventsEl.createEl("button", {
-      cls: `db-timeline-event${isDateColumn ? " is-all-day" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
-      attr: { type: "button", title: `${event.title} · ${dateText} · ${event.filePath}`, "data-note-database-row-path": event.row.file.path },
+      cls: `db-timeline-event${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
+      attr: {
+        type: "button",
+        title: `${event.title} · ${dateText} · ${event.filePath}`,
+        "data-note-database-row-path": event.row.file.path,
+        "data-timeline-event-id": event.id,
+        ...(isMilestone ? { "data-timeline-milestone": "true" } : {}),
+        ...(progress > 0 ? { "data-timeline-progress": String(progress) } : {}),
+      },
     });
     button.style.setProperty("--db-timeline-row", String(rowIndex));
     // 统一绝对刻度定位（可见窗口夹取后的 [renderStart, renderEnd]）；所有事件同一路径，不再 is-timed 双轨。
     this.applyTimelineAbsolutePosition(button, range.renderStart, range.renderEnd, range.visible.startMinutes, model.unit);
     this.applyCalendarEventColor(button, event.color);
     this.actions.applyConditionalFormat?.(button, event.row, config);
+    if (isMilestone) button.createSpan({ cls: "db-timeline-milestone-diamond", attr: { "aria-hidden": "true" } });
+    if (progress > 0) {
+      const progressDuration = Math.max(model.unit === "hour" ? 0.25 : 1, event.durationUnits || 1);
+      const progressUnits = resolveTimelineProgressFillUnits(progress, progressDuration);
+      const progressEl = button.createSpan({ cls: "db-timeline-event-progress", attr: { "aria-hidden": "true" } });
+      progressEl.style.setProperty("--db-timeline-progress-width", `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(progressUnits)})`);
+    }
     const content = button.createSpan({ cls: "db-timeline-event-content" });
     this.actions.renderRecordIcon?.(content, event.row, config, true);
     const titleEl = content.createSpan({ cls: `db-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
     markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
     content.createSpan({ cls: "db-timeline-event-meta", text: dateText });
+    this.renderTimelineLinkDots(button, event);
     button.onclick = (mouseEvent: MouseEvent) => {
-      if ((mouseEvent.target as HTMLElement | null)?.closest(".db-timeline-resize-handle")) return;
+      if ((mouseEvent.target as HTMLElement | null)?.closest(".db-timeline-resize-handle, .db-timeline-link-dot")) return;
       if (this.actions.openRecordDetail) {
         this.actions.openRecordDetail(button, event.row);
       } else {
@@ -890,7 +1219,7 @@ export class CalendarTimelineRenderer {
     const activeScale = config.timelineScale || currentScale;
     const control = parent.createDiv({
       cls: "db-timeline-scale-control",
-      attr: { role: "group" },
+      attr: { role: "group", "aria-label": t("viewConfig.timelineScale") },
     });
     const segment = control.createDiv({ cls: "db-timeline-scale-segment" });
     for (const option of options) {
@@ -898,7 +1227,7 @@ export class CalendarTimelineRenderer {
       const button = segment.createEl("button", {
         cls: `db-timeline-scale-button${active ? " is-active" : ""}`,
         text: option.text,
-        attr: { type: "button", "aria-pressed": active ? "true" : "false" },
+        attr: { type: "button", "aria-pressed": active ? "true" : "false", "data-timeline-scale": option.value, "aria-label": option.text },
       });
       button.onclick = (event) => {
         event.preventDefault();
@@ -1930,10 +2259,10 @@ export class CalendarTimelineRenderer {
   private renderTimelineMobileMenuButton(
     button: HTMLElement,
     config: ViewConfig,
-    event: { row: RowData; startDateKey: string; endDateKey: string; durationDays: number },
+    event: CalendarTimelineEvent,
     groupKey: string,
-    laneEvents: Array<{ row: RowData }>,
-    lanes: Array<{ key: string; label: string; events: Array<{ row: RowData }> }>
+    laneEvents: CalendarTimelineEvent[],
+    lanes: Array<{ key: string; label: string; events: CalendarTimelineEvent[] }>
   ): void {
     const menuButton = button.createEl("button", {
       cls: "db-timeline-mobile-menu-button",
@@ -1951,16 +2280,17 @@ export class CalendarTimelineRenderer {
   private showTimelineMobileMenu(
     mouseEvent: MouseEvent,
     config: ViewConfig,
-    event: { row: RowData; startDateKey: string; endDateKey: string; durationDays: number },
+    event: CalendarTimelineEvent,
     groupKey: string,
-    laneEvents: Array<{ row: RowData }>,
-    lanes: Array<{ key: string; label: string; events: Array<{ row: RowData }> }>
+    laneEvents: CalendarTimelineEvent[],
+    lanes: Array<{ key: string; label: string; events: CalendarTimelineEvent[] }>
   ): void {
     const startField = config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
     if (!startField) return;
     const endField = config.timelineEndDateField || config.calendarEndDateField;
     const menu = createOwnedMenuForEvent(mouseEvent);
     menu.addRow({ icon: "file-text", label: t("common.open"), onClick: () => this.actions.openRow(event.row) });
+    menu.addRow({ icon: "link-2", label: t("timeline.linkStart"), onClick: () => this.startTimelineLinkFromMenu(event.row.file.path) });
     menu.addSeparator();
     menu.addRow({ icon: "calendar-days", label: t("calendar.moveToday"), onClick: () => {
       this.updateEventDateRange(event.row, startField, endField, this.getTodayDateKey(), event.durationDays);

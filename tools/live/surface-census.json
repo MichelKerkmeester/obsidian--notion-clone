@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-02T20:16:23.225Z",
+  "measuredAt": "2026-09-03T02:55:23.587Z",
   "inputs": {
-    "styles.css": "8075a2e1eb25",
+    "styles.css": "14e1a5a8e3b6",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -717,7 +717,11 @@
       "role": null,
       "rect": "0x0",
       "scenarios": [
-        "timeline-view"
+        "timeline-view-day",
+        "timeline-view",
+        "timeline-view-month",
+        "timeline-view-quarter",
+        "timeline-view-year"
       ]
     },
     "db-timeline-scale-menu-label": {
@@ -727,7 +731,11 @@
       "role": null,
       "rect": "0x0",
       "scenarios": [
-        "timeline-view"
+        "timeline-view-day",
+        "timeline-view",
+        "timeline-view-month",
+        "timeline-view-quarter",
+        "timeline-view-year"
       ]
     },
     "db-timeline-scale-menu-chevron": {
@@ -737,7 +745,11 @@
       "role": null,
       "rect": "0x0",
       "scenarios": [
-        "timeline-view"
+        "timeline-view-day",
+        "timeline-view",
+        "timeline-view-month",
+        "timeline-view-quarter",
+        "timeline-view-year"
       ]
     },
     "db-calendar-timeline-options-popover": {

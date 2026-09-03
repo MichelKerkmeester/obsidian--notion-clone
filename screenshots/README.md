@@ -611,12 +611,52 @@ Column width is a switch plus a slider here, not the calendar's mode dropdown; t
 
 Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
-### Timeline view
+### Timeline view — Week
 
-Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.
+Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.
 
 | dark | light |
 |---|---|
 | ![timeline-view dark](views/timeline-view-mobile-dark.png) | ![timeline-view light](views/timeline-view-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`
+
+### Timeline view — Day
+
+Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.
+
+| dark | light |
+|---|---|
+| ![timeline-view-day dark](views/timeline-view-day-mobile-dark.png) | ![timeline-view-day light](views/timeline-view-day-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`
+
+### Timeline view — Month
+
+Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.
+
+| dark | light |
+|---|---|
+| ![timeline-view-month dark](views/timeline-view-month-mobile-dark.png) | ![timeline-view-month light](views/timeline-view-month-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`
+
+### Timeline view — Quarter
+
+Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.
+
+| dark | light |
+|---|---|
+| ![timeline-view-quarter dark](views/timeline-view-quarter-mobile-dark.png) | ![timeline-view-quarter light](views/timeline-view-quarter-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`
+
+### Timeline view — Year
+
+Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar year, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.
+
+| dark | light |
+|---|---|
+| ![timeline-view-year dark](views/timeline-view-year-mobile-dark.png) | ![timeline-view-year light](views/timeline-view-year-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`

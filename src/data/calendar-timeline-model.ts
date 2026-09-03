@@ -74,6 +74,9 @@ export interface CalendarTimelineEvent {
   endMinutes?: number;
   /** 结束字段是否为纯 date 列（含末天：渲染结束端按 +1 天）；datetime 列为精确结束时刻。 */
   endIsDateOnly?: boolean;
+  /** Presentation metadata read from the row for the timeline bar treatment. */
+  isMilestone?: boolean;
+  progress?: number;
   color?: string;
   /** Position relative to the currently rendered timeline window. */
   windowPosition: "before" | "visible" | "after";
@@ -736,7 +739,11 @@ export function formatTimelineAccessibilityLabel(
 export function collectUnscheduledTimelineRows(rows: RowData[], config: ViewConfig, startField?: string): RowData[] {
   const field = startField || config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
   if (!field) return rows.slice();
-  return rows.filter((row) => normalizeDateKey(getRowFieldValue(row, field, config)) == null);
+  const endField = config.timelineEndDateField || config.calendarEndDateField;
+  return rows.filter((row) => {
+    if (normalizeDateKey(getRowFieldValue(row, field, config)) != null) return false;
+    return !endField || normalizeDateKey(getRowFieldValue(row, endField, config)) == null;
+  });
 }
 
 function createTimelineLane(key: string, label: string, color?: string): TimelineLaneModel {
@@ -922,12 +929,25 @@ export function buildCalendarTimelineEvents(
   let order = 0;
   for (const row of rows) {
     const startValue = getRowFieldValue(row, startField, config);
-    const startDateKey = normalizeDateKey(startValue);
-    if (!startDateKey) continue;
     const endValue = endField ? getRowFieldValue(row, endField, config) : undefined;
+    const parsedStartDateKey = normalizeDateKey(startValue);
     const parsedEndDateKey = endField ? normalizeDateKey(endValue) : null;
+    // A row with only a due date still has a useful one-day bar, matching the
+    // timeline's due-only treatment instead of sending it to the unscheduled backlog.
+    const startDateKey = parsedStartDateKey || parsedEndDateKey;
+    if (!startDateKey) continue;
     const endDateKey = parsedEndDateKey && parsedEndDateKey >= startDateKey ? parsedEndDateKey : startDateKey;
     const title = resolveTitleFieldDisplay(row, config, titleField);
+    const milestoneValue = row.frontmatter.milestone ?? row.frontmatter.type;
+    const milestoneText = typeof milestoneValue === "string" ? milestoneValue.trim().toLowerCase() : "";
+    const isMilestone = milestoneValue === true || milestoneText === "milestone" || milestoneText === "true" || milestoneText === "yes";
+    const rawProgress = row.frontmatter.progress ?? row.computed.progress;
+    const parsedProgress = typeof rawProgress === "number"
+      ? rawProgress
+      : typeof rawProgress === "string" && rawProgress.trim() !== ""
+        ? Number(rawProgress)
+        : Number.NaN;
+    const progress = Number.isFinite(parsedProgress) ? Math.max(0, Math.min(100, parsedProgress)) : undefined;
     events.push({
       id: row.file.path,
       title: title.text,
@@ -948,6 +968,8 @@ export function buildCalendarTimelineEvents(
       endIsDateOnly: endField
         ? extractTimelineEndpointMinutes(endValue, { includeDateObjectTime: endIncludesTime, dateOnlyAsMidnight: false }) == null
         : true,
+      isMilestone: isMilestone || undefined,
+      progress,
       windowPosition: "visible",
       // Preserve the incoming (view-sorted) order so calendar honors the active sort
       order: order++,
@@ -986,7 +1008,7 @@ function getEventColor(row: RowData, config: ViewConfig, colorField: string | un
 
 /** Position an event within the visible window in column units (hour/day depending on scale).
  *  Day-scale events without a time component (or multi-day events crossing the day) become all-day. */
-function assignEventUnits(event: CalendarTimelineEvent, window: TimelineWindow, scale: TimelineScale, config: ViewConfig): void {
+export function assignEventUnits(event: CalendarTimelineEvent, window: TimelineWindow, scale: TimelineScale, config: ViewConfig): void {
   if (scale === "day") {
     // day scale：统一按绝对刻度定位（resolveEventAbsoluteScale），不再 isAllDay 双轨。
     const scaleRange = resolveEventAbsoluteScale(event, window.startDateKey);

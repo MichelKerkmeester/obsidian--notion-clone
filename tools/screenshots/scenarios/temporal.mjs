@@ -65,6 +65,10 @@ const ICON = {
   smilePlus:
     '<path d="M22 11v1a10 10 0 1 1-9-10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01M16 5h6"/>',
   plus: '<path d="M5 12h14M12 5v14"/>',
+  // setIcon(button, "arrow-left"/"arrow-right") on the timeline's window-jump indicator
+  // (calendar-timeline-renderer.ts:1024).
+  arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+  arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
 };
 
 /* Mirrors applyEventColor()/applyCalendarEventColor(): both write the accent and the tint
@@ -381,35 +385,133 @@ const miniDay = (n, weekIndex) => {
 // 8. TIMELINE
 // ───────────────────────────────────────────────────────────────────
 
-/* A two-week window, 23 March – 5 April 2026, one column per day. The renderer measures the
-   unit width from the viewport; 72px is what a full-width desktop pane resolves to. */
+/* A two-week window, 23 March – 5 April 2026, one column per day. The unit width is the
+   week scale's resolveTimelineUnitWidth() default (100px), asserted against the real
+   export in temporal-tick-parity.test.mjs. */
 const TL_UNITS = 14;
-const TL_UNIT_WIDTH = 72;
-const TL_TICKS = [
-  ["Mon", 23, "2026-03-23"], ["Tue", 24, "2026-03-24"], ["Wed", 25, "2026-03-25"],
-  ["Thu", 26, "2026-03-26"], ["Fri", 27, "2026-03-27"], ["Sat", 28, "2026-03-28"],
-  ["Sun", 29, "2026-03-29"], ["Mon", 30, "2026-03-30"], ["Tue", 31, "2026-03-31"],
-  ["Wed", 1, "2026-04-01"], ["Thu", 2, "2026-04-02"], ["Fri", 3, "2026-04-03"],
-  ["Sat", 4, "2026-04-04"], ["Sun", 5, "2026-04-05"],
-];
+const TL_UNIT_WIDTH = 100;
 
-const timelineEvent = (event) => {
-  const geometry =
-    `--db-timeline-row: ${event.row};` +
-    ` --db-timeline-exact-offset: calc(var(--db-timeline-unit-width) * ${event.offset});` +
-    ` --db-timeline-exact-width: calc(var(--db-timeline-unit-width) * ${event.span});` +
-    ` ${eventColor(event.tone)}`;
+const TL_MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "Mar 24 – 27" within one month, "Mar 26 – Apr 1" across a month boundary. Decorative label
+    only; the offset/span below are what has to match the renderer, and do. */
+const timelineEventMeta = (event) => {
+  const start = new Date(`${event.start}T00:00:00Z`);
+  const end = new Date(`${event.end}T00:00:00Z`);
+  const startText = `${TL_MONTH_ABBR[start.getUTCMonth()]} ${start.getUTCDate()}`;
+  const endText = start.getUTCMonth() === end.getUTCMonth()
+    ? String(end.getUTCDate())
+    : `${TL_MONTH_ABBR[end.getUTCMonth()]} ${end.getUTCDate()}`;
+  return event.start === event.end ? startText : `${startText} – ${endText}`;
+};
+
+const MINUTES_PER_DAY = 1440;
+const MINUTES_PER_HOUR = 60;
+
+/* Mirrors resolveEventAbsoluteScale() (calendar-timeline-model.ts:1294-1311): absolute minutes
+   from the window's own start date. Every event here is date-only, so the end is always
+   "the day after the end date at minute 0" — an inclusive end day with an exclusive boundary.
+   Exported so temporal-tick-parity.test.mjs asserts this against the real export instead of
+   re-deriving its own copy of the same date arithmetic. */
+export const timelineEventAbsoluteScale = (event, windowStartKey) => {
+  const rangeStart = new Date(`${windowStartKey}T00:00:00Z`);
+  const start = timelineDaysBetween(rangeStart, new Date(`${event.start}T00:00:00Z`)) * MINUTES_PER_DAY;
+  const endDayOffset = timelineDaysBetween(rangeStart, new Date(`${event.end}T00:00:00Z`));
+  return { start, end: (endDayOffset + 1) * MINUTES_PER_DAY };
+};
+
+/* Mirrors the render loop's own per-event visibility decision (calendar-timeline-renderer.ts:
+   450-476), NOT assignEventUnits() — that function clamps every event's offset/duration into the
+   visible unit count no matter how far outside the window it starts, which is what the bar
+   actually painted on screen does not do. The render loop instead clamps [scale.start, scale.end]
+   against the visible window and only draws a bar where positive width survives the clamp
+   (renderStart < renderEnd); a side that falls outside the window gets a
+   .db-timeline-window-jump indicator instead, never a bar dragged to the window's edge. Exported
+   so the parity test can assert this decision, not just the tick/band math, against a real
+   export (resolveEventAbsoluteScale). */
+export const timelineEventVisibility = (event, fixture) => {
+  const scale = timelineEventAbsoluteScale(event, fixture.start);
+  // Day scale's visible window opens at the fixture's own startMinutes (TL_DAY_START_MINUTES by
+  // default, 0 — midnight), never a hardcoded 08:00: that mismatch against the tick/band/grid/
+  // today-line code below (all of which already read fixture.startMinutes) was the P0 — it made
+  // Notion (26-31 March, no day-25 overlap at midnight-start) paint a real bar in the day-desktop
+  // 16:00 column and gave Adobe CC (a 25 March all-day event) a spurious is-before jump, because
+  // this one function alone still measured the visible window from 08:00.
+  const dayStartMinutes = fixture.startMinutes ?? TL_DAY_START_MINUTES;
+  const visible = fixture.scale === "day"
+    ? { start: dayStartMinutes, end: dayStartMinutes + fixture.units * MINUTES_PER_HOUR }
+    : { start: 0, end: fixture.units * MINUTES_PER_DAY };
+  const renderStart = Math.max(scale.start, visible.start);
+  const renderEnd = Math.min(scale.end, visible.end);
+  const isClippedStart = scale.start < visible.start;
+  const isClippedEnd = scale.end > visible.end;
+  const isOverEvent = renderStart < renderEnd;
+  if (!isOverEvent) return { bar: null, isClippedStart, isClippedEnd, isOverEvent };
+  const minutesPerUnit = fixture.scale === "day" ? MINUTES_PER_HOUR : MINUTES_PER_DAY;
+  return {
+    bar: {
+      offset: Math.max(0, (renderStart - visible.start) / minutesPerUnit),
+      span: Math.max(fixture.scale === "day" ? 0.25 : 1, (renderEnd - renderStart) / minutesPerUnit),
+    },
+    isClippedStart,
+    isClippedEnd,
+    isOverEvent,
+  };
+};
+
+/* Mirrors renderTimelineJumpIndicator() (calendar-timeline-renderer.ts:1004-1025): the arrow
+   button a clipped side gets instead of (or alongside) a bar, pointed at the row's own
+   `--db-timeline-row` lane. */
+const timelineJumpIndicator = (event, direction, isOverEvent) => {
+  const dateKey = direction === "after" ? event.end : event.start;
+  const label = `Jump to ${event.title} on ${dateKey}`;
   return `
-    <button type="button" class="db-timeline-event" title="${event.title} · ${event.meta}"
-      data-note-database-row-path="Subscriptions/${event.title}.md" style="${geometry}">
-      <span class="db-timeline-event-content">
-        <span class="db-timeline-event-title">${event.title}</span>
-        <span class="db-timeline-event-meta">${event.meta}</span>
-      </span>
+    <button type="button" class="db-timeline-window-jump is-${direction === "after" ? "after" : "before"}${isOverEvent ? " is-over-event" : ""}"
+      aria-label="${label}" data-note-database-row-path="Subscriptions/${event.title}.md"
+      style="--db-timeline-row: ${event.row}">
+      ${glyph(direction === "after" ? ICON.arrowRight : ICON.arrowLeft)}
     </button>`;
 };
 
-const timelineLane = (lane) => `
+const timelineEvent = (event, fixture) => {
+  const visibility = timelineEventVisibility(event, fixture);
+  const meta = timelineEventMeta(event);
+  const jumpBefore = visibility.isClippedStart ? timelineJumpIndicator(event, "before", visibility.isOverEvent) : "";
+  const jumpAfter = visibility.isClippedEnd ? timelineJumpIndicator(event, "after", visibility.isOverEvent) : "";
+  if (!visibility.bar) return `${jumpBefore}${jumpAfter}`;
+  const { offset, span } = visibility.bar;
+  const geometry =
+    `--db-timeline-row: ${event.row};` +
+    ` --db-timeline-exact-offset: calc(var(--db-timeline-unit-width) * ${offset});` +
+    ` --db-timeline-exact-width: calc(var(--db-timeline-unit-width) * ${span});` +
+    ` ${eventColor(event.tone)}`;
+  const classes = [
+    "db-timeline-event",
+    event.milestone ? "is-milestone" : "",
+    event.progress > 0 ? "is-progressing" : "",
+  ].filter(Boolean).join(" ");
+  const progress = event.progress > 0
+    ? `<span class="db-timeline-event-progress" style="--db-timeline-progress-width: calc(var(--db-timeline-unit-width) * ${span * event.progress / 100})" aria-hidden="true"></span>`
+    : "";
+  const milestone = event.milestone
+    ? `<span class="db-timeline-milestone-diamond" aria-hidden="true"></span>`
+    : "";
+  return `${jumpBefore}
+    <button type="button" class="${classes}" title="${event.title} · ${meta}"
+      data-note-database-row-path="Subscriptions/${event.title}.md" data-timeline-event-id="Subscriptions/${event.title}.md"
+      ${event.progress > 0 ? `data-timeline-progress="${event.progress}"` : ""}
+      ${event.milestone ? `data-timeline-milestone="true"` : ""} style="${geometry}">
+      ${milestone}${progress}
+      <span class="db-timeline-event-content">
+        <span class="db-timeline-event-title">${event.title}</span>
+        <span class="db-timeline-event-meta">${meta}</span>
+      </span>
+      <span class="db-timeline-link-dot is-left" role="button" tabindex="0" aria-label="Dependency input: ${event.title}" data-timeline-link-side="left"></span>
+      <span class="db-timeline-link-dot is-right" role="button" tabindex="0" aria-label="Dependency output: ${event.title}" data-timeline-link-side="right"></span>
+    </button>${jumpAfter}`;
+};
+
+const timelineLane = (lane, fixture) => `
   <div class="db-timeline-group" data-timeline-lane-key="${lane.key}" id="group-section-${lane.key}">
     <div class="db-timeline-group-header">
       <div class="db-timeline-group-header-label">
@@ -427,11 +529,11 @@ const timelineLane = (lane) => `
     </div>
     <div class="db-timeline-events" data-timeline-lane-key="${lane.key}"
       style="--db-timeline-event-rows: ${lane.rows}">
-      ${lane.events.map(timelineEvent).join("")}
+      ${lane.events.map((event) => timelineEvent(event, fixture)).join("")}
     </div>
     <div class="db-timeline-create-row">
       <button type="button" class="db-timeline-create-button"
-        style="--db-timeline-create-offset: 1; --db-timeline-create-span: ${TL_UNITS}; --db-timeline-create-left: 0px; --db-timeline-create-width: calc(var(--db-timeline-unit-width) * ${TL_UNITS})">
+        style="--db-timeline-create-offset: 1; --db-timeline-create-span: ${fixture.units}; --db-timeline-create-left: 0px; --db-timeline-create-width: calc(var(--db-timeline-unit-width) * ${fixture.units})">
         <span class="db-timeline-create-content">
           <span class="db-timeline-create-icon">${glyph(ICON.plus)}</span>
           <span class="db-timeline-create-label">New</span>
@@ -440,16 +542,28 @@ const timelineLane = (lane) => `
     </div>
   </div>`;
 
-const TL_LANES = [
+/* Every event carries its actual `start`/`end` date keys, once, and every scale derives its own
+   visibility (bar, jump indicator, or both) from those same two dates through
+   `timelineEventVisibility()` (mirroring the render loop's own clip decision in
+   calendar-timeline-renderer.ts, not the separately-clamped assignEventUnits()) rather than
+   reusing one scale's unit offsets on the other four fixtures' windows. A bar drawn at "Mar 24 –
+   27" now sits at Mar 24-27 on every scale's own date axis, not wherever offset:1 span:4 happens
+   to fall in that scale's unit width — and an event whose dates never reach a given scale's
+   window draws no bar there at all, matching the renderer instead of a clamp that faked one.
+   Adobe CC is a single day (Mar 25) rather than the review-flagged Apr 1-3: a milestone that
+   review found unreachable at day/month/quarter scale under the old clamp, moved to the one date
+   every scale's window actually contains. It shares Notion's row rather than Figma's because
+   Figma's Mar 24-27 span already covers Mar 25. */
+export const TL_LANES = [
   {
     key: "business",
     label: "Business",
     tone: "blue",
     rows: 2,
     events: [
-      { title: "Figma", offset: 1, span: 4, row: 1, tone: "blue", meta: "Mar 24 – 27" },
-      { title: "Adobe CC", offset: 9, span: 3, row: 1, tone: "blue", meta: "Apr 1 – 3" },
-      { title: "Notion", offset: 3, span: 6, row: 2, tone: "blue", meta: "Mar 26 – 31" },
+      { title: "Figma", start: "2026-03-24", end: "2026-03-27", row: 1, tone: "blue", progress: 62 },
+      { title: "Adobe CC", start: "2026-03-25", end: "2026-03-25", row: 2, tone: "blue", milestone: true },
+      { title: "Notion", start: "2026-03-26", end: "2026-03-31", row: 2, tone: "blue" },
     ],
   },
   {
@@ -458,8 +572,8 @@ const TL_LANES = [
     tone: "green",
     rows: 2,
     events: [
-      { title: "Spotify", offset: 0, span: 3, row: 1, tone: "green", meta: "Mar 23 – 25" },
-      { title: "iCloud", offset: 1, span: 10, row: 2, tone: "green", meta: "Mar 24 – Apr 2" },
+      { title: "Spotify", start: "2026-03-23", end: "2026-03-25", row: 1, tone: "green" },
+      { title: "iCloud", start: "2026-03-24", end: "2026-04-02", row: 2, tone: "green" },
     ],
   },
 ];
@@ -469,6 +583,381 @@ const timelineNav = (icon, label) =>
     ? `<button type="button" class="db-timeline-nav-button is-icon" aria-label="${label}">
         <span class="db-timeline-nav-icon">${glyph(icon)}</span></button>`
     : `<button type="button" class="db-timeline-nav-button is-text" aria-label="${label}">${label}</button>`;
+
+export const TIMELINE_FIXTURES = {
+  /* `title` is formatCalendarTitleParts()'s `main` for this exact natural (non-viewport) window
+     (verified against the real export in temporal-tick-parity.test.mjs) — getTimelineTitleWindow()
+     always feeds the title from that natural window, never the viewport-centred one every scale
+     actually renders through (timelineDynamicFixture() below), even though that makes the title
+     and the axis disagree at some device widths. That disagreement is a real product defect, not
+     a fixture bug, and is not "fixed" here — see 037/goal.md. `start`/`units` here are that
+     natural window only, used by the tick/band mirror-parity tests below; the scenarios never
+     render it directly any more. No `band` field: every scale's axis bands now come from the real
+     multi-band functions (timelineAxisBands()), not a fixture-supplied label. */
+  day: { scale: "day", label: "Day", units: 12, width: 60, start: "2026-03-25", slot: "30", title: "March 25" },
+  week: { scale: "week", label: "Week", units: TL_UNITS, width: TL_UNIT_WIDTH, start: "2026-03-23", slot: "30", title: "March 23 — April 5" },
+  month: { scale: "month", label: "Month", units: 31, width: 80, start: "2026-03-01", slot: "30", title: "March" },
+  quarter: { scale: "quarter", label: "Quarter", units: 91, width: 15, start: "2026-01-01", slot: "30", title: "January — March" },
+  year: { scale: "year", label: "Year", units: 365, width: 4, start: "2026-01-01", slot: "30", title: "2026" },
+};
+
+const timelineDateKey = (start, offset) => {
+  const date = new Date(`${start}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + offset);
+  return date.toISOString().slice(0, 10);
+};
+
+const timelineWeekend = (dateKey) => {
+  const day = new Date(`${dateKey}T00:00:00Z`).getUTCDay();
+  return day === 0 || day === 6;
+};
+
+const EN_WEEKDAY_TICKS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const timelineAddUtcDays = (date, days) => {
+  const next = new Date(date);
+  next.setUTCDate(next.getUTCDate() + days);
+  return next;
+};
+
+const timelineDaysBetween = (a, b) => Math.round((b.getTime() - a.getTime()) / 86400000);
+
+/* Mirrors formatTimelineTickLabel() (calendar-timeline-model.ts:1093-1108) exactly: day/month/
+   quarter labels are the unpadded day-of-month, week pairs the weekday with the unpadded day, and
+   year steps a label per month. The fixture cannot import that function directly — this bundle
+   runs under plain node (`node tools/screenshots/capture.mjs`), with no ts-node/tsx step, and no
+   other scenario file imports from src/ — so the rule is mirrored here instead, and
+   temporal-tick-parity.test.mjs asserts this mirror against the real export for all five scales. */
+export const timelineFormatTickLabel = (date, scale) => {
+  if (scale === "week") return `${EN_WEEKDAY_TICKS[date.getUTCDay()]} ${date.getUTCDate()}`;
+  if (scale === "year") return String(date.getUTCMonth() + 1);
+  return String(date.getUTCDate());
+};
+
+/* Mirrors buildTimelineTicks() (calendar-timeline-model.ts:845-915) for every scale but day, which
+   stays its own simple hourly branch below. stepDays (quarter 7, year 30, month/week 1) and the
+   quarter-start boundary sweep are the two rules the old step-5/30/31 table and the
+   boundary:true-on-every-tick shortcut both got wrong — every offset, label and boundary flag here
+   comes from the same date arithmetic the model runs, not a hand-picked approximation. */
+export const timelineTicksForDateRange = (fixture) => {
+  const start = new Date(`${fixture.start}T00:00:00Z`);
+  const end = timelineAddUtcDays(start, fixture.units - 1);
+  const stepDays = fixture.scale === "quarter" ? 7 : fixture.scale === "year" ? 30 : 1;
+  const ticks = [];
+  const boundaryOffsets = new Map();
+  if (fixture.scale === "quarter" || fixture.scale === "year") {
+    for (
+      let monthStart = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
+      monthStart.getTime() <= end.getTime();
+      monthStart = new Date(Date.UTC(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1))
+    ) {
+      if (monthStart.getUTCMonth() % 3 === 0 && monthStart.getTime() >= start.getTime()) {
+        boundaryOffsets.set(timelineDaysBetween(start, monthStart), monthStart);
+      }
+    }
+  }
+  for (let tick = start; tick.getTime() <= end.getTime(); tick = timelineAddUtcDays(tick, stepDays)) {
+    const offset = timelineDaysBetween(start, tick);
+    const boundary = boundaryOffsets.get(offset);
+    if (boundary) boundaryOffsets.delete(offset);
+    const isScaleBoundary = fixture.scale === "week"
+      ? tick.getUTCDay() === 1
+      : fixture.scale === "month"
+        ? tick.getUTCDate() === 1
+        : Boolean(boundary);
+    ticks.push({
+      key: tick.toISOString().slice(0, 10),
+      label: timelineFormatTickLabel(tick, fixture.scale),
+      offset,
+      boundary: isScaleBoundary,
+    });
+  }
+  for (const [offset, boundary] of boundaryOffsets) {
+    ticks.push({ key: boundary.toISOString().slice(0, 10), label: timelineFormatTickLabel(boundary, fixture.scale), offset, boundary: true });
+  }
+  ticks.sort((a, b) => a.offset - b.offset);
+  return ticks;
+};
+
+/* Every tick carries the same `offset` field the renderer's buildTimelineTicks() computes
+   (dates or hours from the fixture's window start) — that offset, not the tick's position in
+   the array, is what --db-timeline-tick-offset must render, or every scale's header collapses
+   onto the left edge instead of spanning the visible window. */
+const timelineTicksFor = (fixture) => {
+  if (fixture.scale === "day") {
+    const startHour = (fixture.startMinutes ?? TL_DAY_START_MINUTES) / 60;
+    return Array.from({ length: fixture.units }, (_, index) => ({
+      label: `${String((startHour + index) % 24).padStart(2, "0")}:00`,
+      key: fixture.start,
+      boundary: index === 0,
+      offset: index,
+    }));
+  }
+  return timelineTicksForDateRange(fixture);
+};
+
+/* Mirrors renderTimelineTickLabel(): the week scale splits "Wed 25" into a weekday span and a
+   date span so the 22px today pill only ever sizes against the date, never the whole label. */
+const timelineTickLabel = (tick, scale) => {
+  if (scale === "week") {
+    const separator = tick.label.lastIndexOf(" ");
+    if (separator > 0 && separator < tick.label.length - 1) {
+      return `<span class="db-timeline-tick-weekday">${tick.label.slice(0, separator)}</span><span class="db-timeline-tick-date">${tick.label.slice(separator + 1)}</span>`;
+    }
+  }
+  return `<span class="db-timeline-tick-date">${tick.label}</span>`;
+};
+
+/* Bare English month names, matching calendar-title-formatter.ts's own EN_MONTHS (:64-76) exactly
+   — the axis band label is the plain month name with no year, never the "March 2026"/"Q1 2026"
+   style the day/month fixture bands below still use out of this round's scope. */
+const EN_MONTHS_FULL = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+/* The pinned "now" (13:45) as minutes-of-day and as a day fraction — the same two numbers
+   getTimelineTodayPositionStyle() derives from `now` (calendar-timeline-renderer.ts:103-133) to
+   place the today-line and the current-time/current-date tick. Every scale's today offset below
+   is built from one of these, not a per-scale hand-picked constant. */
+const TL_PINNED_NOW_MINUTES = 13 * 60 + 45;
+const TL_PINNED_DAY_FRACTION = TL_PINNED_NOW_MINUTES / MINUTES_PER_DAY;
+/** Day scale's visible-hour-range start: getTimelineVisibleHourRange()'s own unconfigured
+    default (calendar-timeline-model.ts:541-547 -> clampHour(config.calendarStartHour, 0)) is
+    midnight, not the 08:00 an earlier pass of this fixture assumed — that assumption is what made
+    the window-parity test below red. This fixture's config carries no calendarStartHour, so 0 is
+    what production actually renders here. Only totalUnits (hours visible) varies by device; the
+    day branch of getTimelineViewportWindow() never centres a start time. */
+const TL_DAY_START_MINUTES = 0;
+
+/* Mirrors resolveTimelineViewportUnitCount() (calendar-timeline-model.ts:233-238) exactly,
+   including the parameter the earlier pass of this fixture dropped: day scale floors (a partial
+   trailing hour is not a visible whole column), every other scale ceils (a partial trailing day
+   still shows a clipped column, same as the real render). Exported so the parity test asserts it
+   against the real function for all five scales. */
+export const timelineResolveViewportUnitCount = (width, unitWidth, scale) => {
+  const raw = width / unitWidth;
+  return Math.max(1, scale === "day" ? Math.floor(raw) : Math.ceil(raw));
+};
+
+/* Mirrors getTimelineViewportWindow() (calendar-timeline-model.ts:420-441) for all five scales —
+   the renderer's live "pseudo-infinite" mode, entered whenever buildTimelineModel() is passed a
+   visibleUnitCount (calendar-timeline-model.ts:649-651), which the renderer always has: a live
+   mounted container always reports a width to getTimelineViewportUnitCount()
+   (calendar-timeline-renderer.ts:2419-2426). Day scale never centres — it always opens at the
+   anchor date and TL_DAY_START_MINUTES, only totalUnits (hours) changes with device width, per
+   the real branch's own shape. Every other scale centres totalUnits on the anchor date, replacing
+   the scale's calendar-boundary window getTimelineWindow() uses. todayOffsetUnits mirrors
+   getTimelineTodayPositionStyle()'s own offset formula (:103-133), not a separate guess, so the
+   today-line this fixture draws lands where the real one would. Exported so the parity test
+   asserts start/units against the real function for all five scales. */
+export const timelineViewportWindow = (scale, anchorKey, totalUnits) => {
+  if (scale === "day") {
+    return {
+      start: anchorKey,
+      units: totalUnits,
+      startMinutes: TL_DAY_START_MINUTES,
+      todayOffsetUnits: (TL_PINNED_NOW_MINUTES - TL_DAY_START_MINUTES) / 60,
+    };
+  }
+  const before = Math.floor((totalUnits - 1) / 2);
+  const start = timelineAddUtcDays(new Date(`${anchorKey}T00:00:00Z`), -before);
+  return { start: start.toISOString().slice(0, 10), units: totalUnits, todayOffsetUnits: before + TL_PINNED_DAY_FRACTION };
+};
+
+/* Mirrors buildTimelineMonthBoundaryBands(input, true) (calendar-title-formatter.ts:150-172) in
+   full — one band per calendar month the window crosses, labelled with the bare month name.
+   Every non-day scale goes through this same real function (buildTimelineAxisBands() only
+   special-cases day, calendar-title-formatter.ts:145-148), so week/month/quarter/year all call
+   this one mirror rather than each carrying its own shortcut. */
+export const timelineMonthBoundaryBands = (startKey, endKey) => {
+  const start = new Date(`${startKey}T00:00:00Z`);
+  const end = new Date(`${endKey}T00:00:00Z`);
+  const bands = [];
+  let groupStart = start.getUTCDate() === 1
+    ? new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1))
+    : new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 1));
+  while (groupStart.getTime() <= end.getTime()) {
+    const monthEnd = new Date(Date.UTC(groupStart.getUTCFullYear(), groupStart.getUTCMonth() + 1, 0));
+    const groupEnd = monthEnd.getTime() < end.getTime() ? monthEnd : end;
+    bands.push({
+      label: EN_MONTHS_FULL[groupStart.getUTCMonth()],
+      span: timelineDaysBetween(groupStart, groupEnd) + 1,
+      offset: timelineDaysBetween(start, groupStart),
+    });
+    groupStart = timelineAddUtcDays(groupEnd, 1);
+  }
+  return bands;
+};
+
+const timelinePositiveModulo = (value, modulus) => ((value % modulus) + modulus) % modulus;
+
+/* Mirrors buildTimelineDayBoundaryBands() (calendar-title-formatter.ts:174-193): day scale bands
+   by calendar-day crossing, not by month — a band starts only where the window crosses an actual
+   midnight, so the day already open when the window starts gets no band of its own (only the day
+   it turns into does). TL_DAY_START_MINUTES is 0 (midnight), so offset 0 is itself a boundary and
+   always gets a band; a fixture.startMinutes that were not a multiple of 60 (never the case here)
+   could still open on a short device window that crosses no further midnight at all, in which
+   case the real function returns zero bands beyond that first one, same as here. */
+const timelineDayBoundaryBands = (fixture) => {
+  const start = new Date(`${fixture.start}T00:00:00Z`);
+  const startMinutes = fixture.startMinutes ?? TL_DAY_START_MINUTES;
+  const bands = [];
+  for (let offset = 0; offset < fixture.units; offset++) {
+    const absoluteMinutes = startMinutes + offset * 60;
+    if (timelinePositiveModulo(absoluteMinutes, MINUTES_PER_DAY) !== 0) continue;
+    const dayOffset = Math.floor(absoluteMinutes / MINUTES_PER_DAY);
+    const date = timelineAddUtcDays(start, dayOffset);
+    let nextOffset = fixture.units;
+    for (let probe = offset + 1; probe < fixture.units; probe++) {
+      if (timelinePositiveModulo(startMinutes + probe * 60, MINUTES_PER_DAY) === 0) { nextOffset = probe; break; }
+    }
+    bands.push({ label: `${EN_MONTHS_FULL[date.getUTCMonth()]} ${date.getUTCDate()}`, span: Math.max(1, nextOffset - offset), offset });
+  }
+  return bands;
+};
+
+/* Mirrors buildTimelineAxisBands() (calendar-title-formatter.ts:145-148) exactly: day scale bands
+   by midnight crossing, every other scale by calendar-month crossing — the same real function for
+   all four of week/month/quarter/year, not a per-scale shortcut. */
+export const timelineAxisBands = (fixture) => {
+  if (fixture.scale === "day") return timelineDayBoundaryBands(fixture);
+  return timelineMonthBoundaryBands(fixture.start, timelineDateKey(fixture.start, fixture.units - 1));
+};
+
+/* Mirrors renderTimelineGridColumns() (calendar-timeline-renderer.ts): every hour column shares
+   the fixture's single day, so date equality alone would mark all twelve is-today at once and
+   the highlight would say nothing. Only the column standing in for the pinned "now" hour (13:00)
+   carries it; the rest still get their weekend/date bookkeeping from the real date offset. */
+const timelineGridColumns = (fixture) => Array.from({ length: fixture.units }, (_, index) => {
+  const key = timelineDateKey(fixture.start, fixture.scale === "day" ? 0 : index);
+  const isCurrentHourColumn = fixture.scale === "day" && (fixture.startMinutes ?? TL_DAY_START_MINUTES) / 60 + index === 13;
+  const modifiers = [
+    timelineWeekend(key) ? "is-weekend" : "",
+    fixture.scale === "day" ? (isCurrentHourColumn ? "is-today" : "") : (key === "2026-03-25" ? "is-today" : ""),
+  ].filter(Boolean).join(" ");
+  return `<span class="db-timeline-grid-column ${modifiers}" data-date-key="${key}"
+    style="--db-timeline-grid-column-offset: ${index}; --db-timeline-grid-column-span: 1"></span>`;
+}).join("");
+
+/* Desktop/mobile widths the capture harness actually opens the page at (tools/screenshots/
+   capture.mjs's own DEVICES table, :88-91) — the closest available proxy for the "container"
+   getTimelineViewportUnitCount() measures (calendar-timeline-renderer.ts:2419-2426), since a
+   "viewport" capture (capture.mjs:96-98, every scenario in this group) fills #shot to the full
+   device width with no side margin, and there is no live container here to measure directly. */
+const TL_DEVICE_WIDTH = { desktop: 1440, mobile: 402 };
+
+/* .note-database-container's own padding: `padding: 0 var(--db-space-8) var(--db-space-8)`
+   (styles.css:809), and --db-space-8 is 24px (styles.css:52) — left and right are both the one
+   `var(--db-space-8)` value, 24px each. getTimelineViewportUnitCount() (calendar-timeline-
+   renderer.ts:2419-2426) measures the outer container's own rect width, then
+   getTimelineViewportContentWidth() (calendar-timeline-model.ts:245-250) subtracts exactly this
+   padding — never the sticky group-label column. That column (--db-timeline-group-width, 160px
+   here, set by fitTimelineGroupHeaderWidth() :877-896 flooring at 160 since "Business 3"/
+   "Personal 2" never need more) overlays the day grid rather than shrinking the measured
+   container, so production's own unit count is never reduced by it: the label sits on top of
+   however many columns its 160px happens to cover, occluding them rather than the grid never
+   drawing them. */
+const TL_CONTAINER_PADDING_PX = 24;
+
+/* Mirrors getTimelineViewportContentWidth() (calendar-timeline-model.ts:245-250) exactly: the
+   container's own rect width minus its own left/right CSS padding, floored at 0. Exported so the
+   parity test asserts it against the real function. */
+export const timelineViewportContentWidth = (width, paddingLeft, paddingRight) =>
+  Math.max(0, (Number.isFinite(width) && width > 0 ? width : 0) - (paddingLeft || 0) - (paddingRight || 0));
+
+export const timelineDynamicFixture = (scale, device) => {
+  const base = TIMELINE_FIXTURES[scale];
+  const deviceWidth = TL_DEVICE_WIDTH[device?.id === "mobile" ? "mobile" : "desktop"];
+  const contentWidth = timelineViewportContentWidth(deviceWidth, TL_CONTAINER_PADDING_PX, TL_CONTAINER_PADDING_PX);
+  const units = timelineResolveViewportUnitCount(contentWidth, base.width, scale);
+  // The anchor is always the pinned "now" date, never base.start (that is the *natural*
+  // getTimelineWindow() start the title still follows, e.g. quarter's 1 January) — the viewport
+  // window centres on today regardless of scale, per getTimelineViewportWindow()'s own anchor
+  // parameter (calendar-timeline-model.ts:420-424 takes `anchor`, not a scale-derived boundary).
+  const window = timelineViewportWindow(scale, "2026-03-25", units);
+  return { ...base, start: window.start, units: window.units, startMinutes: window.startMinutes, todayOffsetUnits: window.todayOffsetUnits };
+};
+
+const timelineScaleScenario = (scale) => {
+  const renderBody = (fixture, ticks, todayOffset) => `
+      <div class="note-database-container db-view-timeline">
+        <div class="db-timeline is-scale-${fixture.scale} is-slot-${fixture.slot}"
+          data-timeline-scale="${fixture.scale}" data-timeline-unit="${fixture.scale === "day" ? "hour" : "day"}"
+          style="--db-timeline-units: ${fixture.units}; --db-timeline-unit-width: ${fixture.width}px; --db-timeline-group-width: 160px">
+          <div class="db-timeline-header">
+            <div class="db-timeline-title" title="${[fixture.title, fixture.scale === "year" ? "" : "2026"].filter(Boolean).join(" ")}" aria-label="${[fixture.title, fixture.scale === "year" ? "" : "2026"].filter(Boolean).join(" ")}">
+              <span class="db-timeline-title-main">${fixture.title}</span>
+              ${fixture.scale === "year" ? "" : `<span class="db-timeline-title-year">2026</span>`}
+            </div>
+            <div class="db-timeline-controls">
+              <div class="db-timeline-scale-control" role="group" aria-label="Timeline scale">
+                <div class="db-timeline-scale-segment">
+                  ${Object.values(TIMELINE_FIXTURES).map((option) => `
+                    <button type="button" class="db-timeline-scale-button ${option.scale === fixture.scale ? "is-active" : ""}"
+                      data-timeline-scale="${option.scale}" aria-label="${option.label}" aria-pressed="${option.scale === fixture.scale ? "true" : "false"}">${option.label}</button>`).join("")}
+                </div>
+                <button type="button" class="db-timeline-scale-menu db-timeline-nav-button is-text" aria-haspopup="listbox">
+                  <span class="db-timeline-scale-menu-label">${fixture.label}</span>
+                  <span class="db-timeline-nav-icon db-timeline-scale-menu-chevron">${glyph(ICON.chevronDown)}</span>
+                </button>
+              </div>
+              ${timelineNav(ICON.chevronsLeft, "Previous window")}
+              ${timelineNav(ICON.chevronLeft, "Previous column")}
+              ${timelineNav(null, "Today")}
+              ${timelineNav(ICON.chevronRight, "Next column")}
+              ${timelineNav(ICON.chevronsRight, "Next window")}
+              ${timelineNav(ICON.calendarDays, "Pick a date")}
+            </div>
+          </div>
+          <div class="db-timeline-scroll">
+            <div class="db-timeline-axis">
+              <div class="db-timeline-ticks-band">
+                ${timelineAxisBands(fixture).map((band) => `
+                  <div class="db-timeline-band-item"
+                    style="--db-timeline-band-start: ${band.offset + 1}; --db-timeline-band-span: ${band.span}">${band.label}</div>`).join("")}
+              </div>
+              <div class="db-timeline-ticks">
+                ${ticks.map((tick) => {
+                  /* isCurrentTimelineTick()/isCurrentTimelineDateTick(): the day scale marks the one
+                     hour tick matching "now" (13:00) as is-current-time-tick and never applies
+                     is-current-date-tick (every hour shares the same date); every other scale marks
+                     the single tick whose date is today's as is-current-date-tick. */
+                  const isCurrentTimeTick = fixture.scale === "day" && tick.label === "13:00";
+                  const isCurrentDateTick = fixture.scale !== "day" && tick.key === "2026-03-25";
+                  return `
+                  <div class="db-timeline-tick ${tick.boundary ? "is-scale-boundary" : ""} ${timelineWeekend(tick.key) ? "is-weekend" : ""} ${isCurrentTimeTick ? "is-current-time-tick" : ""} ${isCurrentDateTick ? "is-current-date-tick" : ""}"
+                    title="${tick.key}" data-date-key="${tick.key}" data-timeline-boundary="${tick.boundary ? "true" : "false"}" style="--db-timeline-tick-offset: ${tick.offset + 1}">
+                    <span class="db-timeline-tick-label">${timelineTickLabel(tick, fixture.scale)}</span>
+                  </div>`;
+                }).join("")}
+              </div>
+            </div>
+            <div class="db-timeline-body" style="--db-timeline-today-offset-units: ${todayOffset}; --db-timeline-today-offset-px: ${(todayOffset * fixture.width).toFixed(2)}px">
+              <div class="db-timeline-grid-columns" aria-hidden="true">${timelineGridColumns(fixture)}</div>
+              ${TL_LANES.map((lane) => timelineLane(lane, fixture)).join("")}
+              <div class="db-timeline-today-line" title="2026-03-25"></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  const label = TIMELINE_FIXTURES[scale].label;
+  return {
+    id: scale === "week" ? "timeline-view" : `timeline-view-${scale}`,
+    title: `Timeline view — ${label}`,
+    group: "views",
+    width: 1100,
+    sources: ["src/views/calendar-timeline-renderer.ts"],
+    note: `${label} scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. `
+      + `Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar ${label.toLowerCase()}, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.`,
+    html: (device) => {
+      const fixture = timelineDynamicFixture(scale, device);
+      return renderBody(fixture, timelineTicksFor(fixture), fixture.todayOffsetUnits);
+    },
+  };
+};
+
+const TIMELINE_SCALE_SCENARIOS = Object.keys(TIMELINE_FIXTURES).map(timelineScaleScenario);
 
 // ───────────────────────────────────────────────────────────────────
 // 9. SCENARIOS
@@ -637,68 +1126,7 @@ export const TEMPORAL_SCENARIOS = [
         </div>
       </div>`,
   },
-  {
-    id: "timeline-view",
-    title: "Timeline view",
-    group: "views",
-    width: 1100,
-    sources: ["src/views/calendar-timeline-renderer.ts"],
-    note: "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
-    html: () => `
-      <div class="note-database-container db-view-timeline">
-        <div class="db-timeline is-scale-week is-slot-30"
-          style="--db-timeline-units: ${TL_UNITS}; --db-timeline-unit-width: ${TL_UNIT_WIDTH}px; --db-timeline-group-width: 160px">
-          <div class="db-timeline-header">
-            <div class="db-timeline-title" title="Mar 23 – Apr 5, 2026" aria-label="Mar 23 – Apr 5, 2026">
-              <span class="db-timeline-title-main">Mar 23 – Apr 5</span>
-              <span class="db-timeline-title-year">2026</span>
-            </div>
-            <div class="db-timeline-controls">
-              <div class="db-timeline-scale-control" role="group">
-                <div class="db-timeline-scale-segment">
-                  ${["Day", "Week", "Month", "Quarter", "Year"].map((s) => `
-                    <button type="button" class="db-timeline-scale-button ${s === "Week" ? "is-active" : ""}"
-                      aria-pressed="${s === "Week" ? "true" : "false"}">${s}</button>`).join("")}
-                </div>
-                <button type="button" class="db-timeline-scale-menu db-timeline-nav-button is-text" aria-haspopup="listbox">
-                  <span class="db-timeline-scale-menu-label">Week</span>
-                  <span class="db-timeline-nav-icon db-timeline-scale-menu-chevron">${glyph(ICON.chevronDown)}</span>
-                </button>
-              </div>
-              ${timelineNav(ICON.chevronsLeft, "Previous month")}
-              ${timelineNav(ICON.chevronLeft, "Previous week")}
-              ${timelineNav(null, "Today")}
-              ${timelineNav(ICON.chevronRight, "Next week")}
-              ${timelineNav(ICON.chevronsRight, "Next month")}
-              ${timelineNav(ICON.calendarDays, "Pick a date")}
-            </div>
-          </div>
-          <div class="db-timeline-scroll">
-            <div class="db-timeline-axis">
-              <div class="db-timeline-ticks-band">
-                <div class="db-timeline-band-item"
-                  style="--db-timeline-band-start: 10; --db-timeline-band-span: 5">April</div>
-              </div>
-              <div class="db-timeline-ticks">
-                ${TL_TICKS.map(([weekday, date, key], i) => `
-                  <div class="db-timeline-tick ${key === "2026-03-25" ? "is-current-date-tick" : ""}"
-                    title="${key}" data-date-key="${key}" style="--db-timeline-tick-offset: ${i + 1}">
-                    <span class="db-timeline-tick-label">
-                      <span class="db-timeline-tick-weekday">${weekday}</span>
-                      <span class="db-timeline-tick-date">${date}</span>
-                    </span>
-                  </div>`).join("")}
-              </div>
-            </div>
-            <div class="db-timeline-body"
-              style="--db-timeline-today-offset-units: 2.57; --db-timeline-today-offset-px: ${(2.57 * TL_UNIT_WIDTH).toFixed(2)}px">
-              ${TL_LANES.map(timelineLane).join("")}
-              <div class="db-timeline-today-line" title="2026-03-25"></div>
-            </div>
-          </div>
-        </div>
-      </div>`,
-  },
+  ...TIMELINE_SCALE_SCENARIOS,
   {
     id: "timeline-toolbar-options",
     title: "Timeline settings popover",

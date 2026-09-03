@@ -9,8 +9,10 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  buildCalendarTimelineEvents,
   buildTimelineRangeGeometry,
   buildTimelineTicks,
+  collectUnscheduledTimelineRows,
   formatTimelineAccessibilityLabel,
   resolveTimelineBarGeometry,
   resolveTimelineBarMinUnits,
@@ -128,6 +130,32 @@ describe("resolveTimelineBarMinUnits", () => {
     expect(resolveTimelineBarMinUnits("year", 4)).toBe(2);
     expect(resolveTimelineBarMinUnits("quarter", 15)).toBe(1);
     expect(resolveTimelineBarMinUnits("week", 100)).toBe(1);
+  });
+});
+
+describe("buildCalendarTimelineEvents bar metadata", () => {
+  it("uses a due date as the start of a due-only bar", () => {
+    const events = buildCalendarTimelineEvents(
+      [row("due-only.md", { due: "2026-09-05" })],
+      baseConfig,
+      { startField: "start", endField: "due" },
+    );
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      startDateKey: "2026-09-05",
+      endDateKey: "2026-09-05",
+      endIsDateOnly: true,
+    });
+    expect(collectUnscheduledTimelineRows([row("due-only.md", { due: "2026-09-05" })], baseConfig, "start")).toEqual([]);
+  });
+
+  it("carries milestone and clamped progress metadata into the bar model", () => {
+    const events = buildCalendarTimelineEvents(
+      [row("milestone.md", { start: "2026-09-05", due: "2026-09-05", type: "milestone", progress: "120" })],
+      baseConfig,
+      { startField: "start", endField: "due" },
+    );
+    expect(events[0]).toMatchObject({ isMilestone: true, progress: 100 });
   });
 });
 

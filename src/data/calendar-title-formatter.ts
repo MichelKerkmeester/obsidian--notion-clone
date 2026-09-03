@@ -93,7 +93,9 @@ export function formatCalendarTitleParts(input: CalendarTitleInput): CalendarTit
   const main = isChineseLocale(locale)
     ? formatChineseTitleMain(input.scale, start, end)
     : formatEnglishTitleMain(input.scale, start, end);
-  const year = formatTitleYear(start, end);
+  // Year scale's main text already IS the year ("2026"); a separate year span would repeat it
+  // verbatim right next to itself instead of adding information.
+  const year = input.scale === "year" ? "" : formatTitleYear(start, end);
   return makeTitle(main, year);
 }
 

@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-02T20:16:20.268Z",
+  "measuredAt": "2026-09-03T02:56:04.169Z",
   "inputs": {
-    "styles.css": "8075a2e1eb25",
+    "styles.css": "14e1a5a8e3b6",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "fixtures": 61,
-    "differences": 49
+    "fixtures": 65,
+    "differences": 65
   },
   "differences": [
     {
@@ -229,6 +229,94 @@
       ]
     },
     {
+      "scenarioId": "panel-computed-cleanup-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.07)"
+      ]
+    },
+    {
+      "scenarioId": "panel-computed-cleanup-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.07)"
+      ]
+    },
+    {
+      "scenarioId": "panel-computed-cleanup-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.07)"
+      ]
+    },
+    {
+      "scenarioId": "panel-computed-cleanup-modal",
+      "selector": ".db-checkbox",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.07)"
+      ]
+    },
+    {
+      "scenarioId": "panel-computed-cleanup-modal",
+      "selector": ".db-checkbox",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.07)"
+      ]
+    },
+    {
+      "scenarioId": "panel-computed-cleanup-modal",
+      "selector": ".db-checkbox",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.07)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 3,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 4,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.027)"
+      ]
+    },
+    {
       "scenarioId": "panel-base-import-modal",
       "selector": "input[type=\"text\"]",
       "index": 0,
@@ -258,6 +346,46 @@
       "index": 3,
       "notes": [
         "width 521.03 vs 539.91"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": ".db-checkbox",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": ".db-checkbox",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": ".db-checkbox",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": ".db-checkbox",
+      "index": 3,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.027)"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": ".db-checkbox",
+      "index": 4,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.027)"
       ]
     },
     {

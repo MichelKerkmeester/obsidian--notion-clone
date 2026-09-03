@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "8075a2e1eb25",
+  "baselineHash": "14e1a5a8e3b6",
   "baselineCommit": "8dd7008",
   "history": [
     {
@@ -1159,6 +1159,50 @@
         "screenshots/views/timeline-view-mobile-dark.png"
       ],
       "note": "Verifier release. One stylesheet edit carrying three fixes, each re-reddened before release: the record sheet made a flex column with its chrome outside a new .db-record-detail-scroll region, the selection bar and the mobile add control yielding to the body dock claim, and the phone view-switcher row given a 44px floor and one 44px trailing control. Reverting styles.css alone put all four placement checks back on their reported numbers \u2014 handle -1148px from the sheet top with reachable=false, bar 35084px2 inside an open sheet, editor over bar 7666px2, add control 2704px2 under the bar, shortest row 30px. One capture moved: panel-record-detail-sheet-body-empty-desktop-light.png, 52925 to 52934 bytes, read in the final state and showing grab bar, header, three property rows and the note placeholder whole, with no layoutHash anywhere in the manifest changed - encoder noise, not a layout move. The fixtures are hand-written markup and depict none of the three fixes, so no capture is expected to move for them; the all-views hub has no scenario at all. Follow-up (037-timeline-gantt-port verifier): the range-geometry/bar-min-width/boundary-tick port to calendar-timeline-renderer.ts staled the timeline screenshots; recaptured with `npm run screenshots`. Only timeline-view-mobile-dark.png moved in pixels (74692 -> 75022 bytes, boundary tick line render), read at mobile dark and showing the same week grid, bars and today marker with no visual regression; the other three timeline captures and the manifest's timeline layoutHash (8b9cff53e9d8) are byte-for-byte unchanged, confirming the port added metadata only. No styles.css edit made or needed by this follow-up."
+    },
+    {
+      "event": "acquire",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-02T22:48:47Z",
+      "hash": "8075a2e1eb25",
+      "note": "Timeline surface styles and renderer affordances are being adapted into the local database timeline token and action contracts. Runtime capture and lane release remain with the verifier."
+    },
+    {
+      "event": "edit",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-03T04:45:00Z",
+      "hash": "14e1a5a8e3b6",
+      "note": "Year-scale tick labels collided (observed \"910\" from adjacent month-number ticks overlapping, e.g. September's 30-day-step tick landing a few days from the October quarter-start boundary tick at 4px/day). buildTimelineTicks() steps a tick every 30 days at year scale plus one extra tick per quarter-start boundary (calendar-timeline-model.ts:869-884), so the two sets can land close together; hid the label on every non-.is-scale-boundary tick under .db-timeline.is-scale-year, leaving one label per quarter the way obsidian-pm's GanttHeaderRenderer.ts renderYearHeader() does. Not yet recaptured or released \u2014 037's dispatch holds the lane for further edits in this pass."
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-03T07:30:00Z",
+      "hash": "14e1a5a8e3b6",
+      "reviewed": [
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-month-mobile-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-dark.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-mobile-dark.png",
+        "screenshots/views/timeline-view-quarter-mobile-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png",
+        "screenshots/views/timeline-view-year-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-dark.png",
+        "screenshots/views/timeline-view-year-mobile-light.png",
+        "screenshots/panels/panel-record-detail-sheet-body-empty-desktop-light.png"
+      ],
+      "note": "Verifier release. The five scales (day, week, month, quarter, year) were captured at both devices in light and dark; all 20 timeline-view PNGs read against the renderer's own five-scale ticks, bars, milestone diamond and progress fill, with the day-scale grid's is-today column landing on the single current hour rather than the whole day. panel-record-detail-sheet-body-empty-desktop-light.png moved by byte noise only (no layoutHash change) and was opened and confirmed unchanged in layout. No further styles.css edit is owed by this release."
     }
   ],
   "outstanding": [

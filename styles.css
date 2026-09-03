@@ -16705,24 +16705,6 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 
 /* ── Timeline shared base ── */
 
-.note-database-container .db-timeline-event {
-  --db-timeline-event-background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)));
-  --db-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
-  border: 0;
-  min-height: 20px;
-  height: 20px;
-  border-radius: var(--db-radius-md);
-  background-color: var(--background-primary);
-  background-image: var(--db-timeline-event-background-image);
-  color: var(--text-normal);
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 1.35;
-  text-align: left;
-  box-shadow: var(--db-timeline-event-shadow);
-  transition: box-shadow 150ms ease, transform 150ms ease;
-}
-
 .note-database-container .db-timeline-mobile-menu-button {
   display: inline-flex;
   align-items: center;
@@ -16760,6 +16742,13 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   --db-timeline-content-width: calc(var(--db-timeline-units) * var(--db-timeline-unit-width));
   --db-timeline-event-row-height: 24px;
   --db-timeline-extension-width: 70px;
+  --db-timeline-header-height: 56px;
+  --db-timeline-bar-radius: var(--db-radius-md);
+  --db-timeline-bar-fill: color-mix(in srgb, var(--interactive-accent) 14%, transparent);
+  --db-timeline-progress-fill: color-mix(in srgb, var(--interactive-accent) 78%, transparent);
+  --db-timeline-weekend-fill: color-mix(in srgb, var(--background-modifier-hover) 58%, transparent);
+  --db-timeline-today-fill: color-mix(in srgb, var(--db-current-time-color) 7%, transparent);
+  --db-timeline-link-color: var(--interactive-accent);
   --db-timeline-grid-line-color: color-mix(in srgb, var(--background-modifier-border) 42%, transparent);
   --db-timeline-minor-line-color: color-mix(in srgb, var(--background-modifier-border) 28%, transparent);
   --db-timeline-clipped-fade-width: 18px;
@@ -16782,8 +16771,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   align-items: flex-end;
   justify-content: space-between;
   min-height: 32px;
-  padding: 25px 0 12px;
+  padding: 20px 0 12px;
   gap: 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--background-modifier-border) 72%, transparent);
+  background: var(--background-primary);
 }
 
 
@@ -16865,8 +16856,9 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 }
 
 .note-database-container .db-timeline-axis {
-  position: relative;
-  z-index: 1;
+  position: sticky;
+  top: 0;
+  z-index: 8;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
@@ -16875,6 +16867,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   color: var(--text-faint);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
+  background: var(--background-primary);
 }
 
 .note-database-container .db-timeline-axis::before {
@@ -16909,6 +16902,31 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   background-position: 0 0;
   background-size: var(--db-timeline-unit-width) 100%;
   background-repeat: repeat;
+}
+
+.note-database-container .db-timeline-grid-columns {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.note-database-container .db-timeline-grid-column {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--db-timeline-unit-width) * var(--db-timeline-grid-column-offset, 0));
+  width: calc(var(--db-timeline-unit-width) * var(--db-timeline-grid-column-span, 1));
+  background: transparent;
+}
+
+.note-database-container .db-timeline-grid-column.is-weekend {
+  background: var(--db-timeline-weekend-fill);
+}
+
+.note-database-container .db-timeline-grid-column.is-today {
+  background: var(--db-timeline-today-fill);
 }
 
 .note-database-container .db-timeline-body::before {
@@ -17000,6 +17018,21 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   font-variant-numeric: tabular-nums; /* 备用：强制数字等宽 */
 }
 
+.note-database-container .db-timeline-tick.is-weekend {
+  background: var(--db-timeline-weekend-fill);
+}
+
+.note-database-container .db-timeline-tick.is-scale-boundary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+  left: 0;
+  width: 1px;
+  background: var(--db-timeline-grid-line-color);
+  pointer-events: none;
+}
+
 
 
 .note-database-container .db-timeline-tick .db-timeline-tick-label {
@@ -17012,6 +17045,17 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   text-overflow: ellipsis;
   white-space: nowrap;
   transform: translateX(-50%);
+}
+
+/* Year scale steps a tick every 30 days plus one extra tick per quarter-start boundary
+   (buildTimelineTicks(), calendar-timeline-model.ts:869-884), so a stepped tick can land only a
+   few days from the boundary tick beside it — at 4px/day two adjacent month-number labels then
+   overlap into one unreadable run (e.g. "9" and "10" reading as "910"). Thinning to the
+   boundary ticks only, the same one-label-per-quarter density the reference gantt's year header
+   uses (obsidian-pm's GanttHeaderRenderer.ts renderYearHeader()), keeps every remaining label at
+   least a quarter apart with room to spare. */
+.note-database-container .db-timeline.is-scale-year .db-timeline-tick:not(.is-scale-boundary) .db-timeline-tick-label {
+  display: none;
 }
 
 .note-database-container .db-timeline-tick .db-timeline-tick-weekday {
@@ -17360,7 +17404,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 }
 
 .note-database-container .db-timeline-event {
-  --db-timeline-event-background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)));
+  --db-timeline-event-background-image: linear-gradient(var(--db-calendar-event-bg, var(--db-timeline-bar-fill)), var(--db-calendar-event-bg, var(--db-timeline-bar-fill)));
   --db-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
   position: relative;
   display: flex;
@@ -17376,10 +17420,16 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   margin-left: var(--db-timeline-exact-offset, 0px);
   width: var(--db-timeline-exact-width, 100%);
   min-width: 0;
+  border: 0;
   border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
-  border-radius: var(--db-radius-md);
+  border-radius: var(--db-timeline-bar-radius);
   background-color: var(--background-primary);
   background-image: var(--db-timeline-event-background-image);
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
   box-shadow: var(--db-timeline-event-shadow);
   transition: box-shadow 150ms ease, transform 150ms ease;
   z-index: 3;
@@ -17455,29 +17505,17 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   z-index: 0;
 }
 
+/* Clips at all bar widths, not only the clipped-scroll edge: a bar narrower than its own label
+   has to hide or truncate that label inside its own box, never let it draw past the neighbour
+   in the next lane row (styles.css review, narrow year/quarter bars). */
 .note-database-container .db-timeline-event-content {
   position: relative;
   z-index: 1;
   display: inline-flex;
   align-items: center;
   min-width: 0;
+  overflow: hidden;
   gap: 4px;
-}
-
-.note-database-container .db-timeline-event.is-clipped-end .db-timeline-event-content {
-  overflow: hidden;
-}
-
-.note-database-container .db-timeline-event.is-clipped-end .db-timeline-event-title {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.note-database-container .db-timeline-event.is-clipped-end .db-timeline-event-meta {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
 }
 
 .note-database-container .db-timeline-event.is-resizing {
@@ -17585,17 +17623,18 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 }
 
 .note-database-container .db-timeline-event-title {
-  flex: 0 0 auto;
-  min-width: max-content;
-  overflow: visible;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
   color: var(--text-normal);
   font-weight: 600;
-  text-overflow: clip;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .note-database-container .db-timeline-event-meta {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  min-width: 0;
   overflow: hidden;
   color: var(--text-muted);
   font-size: 11px;
@@ -17661,6 +17700,172 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   opacity: 1;
   background: var(--interactive-accent);
   color: var(--text-on-accent);
+}
+
+/* Timeline bars use local custom properties for the reference hierarchy: a quiet track,
+   a stronger progress fill, a centered milestone, and finish-to-start link affordances. */
+.note-database-container .db-timeline-event-progress {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--db-timeline-progress-width, 0px);
+  max-width: 100%;
+  border-radius: inherit;
+  background: var(--db-timeline-progress-fill);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.note-database-container .db-timeline-event.is-milestone {
+  overflow: visible;
+  border-left: 0;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.note-database-container .db-timeline-milestone-diamond {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--db-timeline-unit-width) / 2);
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--background-primary);
+  border-radius: var(--db-radius-xs);
+  background: var(--db-calendar-event-accent, var(--interactive-accent));
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--db-calendar-event-accent, var(--interactive-accent)) 34%, transparent);
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.note-database-container .db-timeline-event.is-milestone .db-timeline-event-content {
+  padding-left: calc(var(--db-timeline-unit-width) / 2 + 14px);
+}
+
+/* The interactive box is the full 28px a finger needs; the connector a person sees stays a 10px
+   dot drawn inside it with `::after`, so the hit area is real geometry a measurement tool finds
+   on its own rather than a pseudo-element inset a bounding-box check cannot see. */
+.note-database-container .db-timeline-link-dot {
+  position: absolute;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  cursor: crosshair;
+  pointer-events: auto;
+  touch-action: none;
+  transform: translateY(-50%);
+  z-index: 7;
+}
+
+.note-database-container .db-timeline-link-dot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border: 2px solid var(--background-primary);
+  border-radius: var(--db-radius-full);
+  background: var(--db-timeline-link-color);
+  opacity: 0.72;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.note-database-container .db-timeline-link-dot.is-left {
+  left: -16px;
+}
+
+.note-database-container .db-timeline-link-dot.is-right {
+  right: -16px;
+}
+
+.note-database-container .db-timeline-link-dot:hover::after,
+.note-database-container .db-timeline-link-dot:focus-visible::after,
+.note-database-container .db-timeline-link-dot.is-target::after {
+  opacity: 1;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--db-timeline-link-color) 24%, transparent);
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+.note-database-container .db-timeline-link-dot.is-active::after {
+  opacity: 1;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--db-timeline-link-color) 34%, transparent);
+}
+
+.note-database-container .db-timeline.is-linking .db-timeline-link-dot::after {
+  opacity: 1;
+}
+
+.note-database-container .db-timeline.is-link-dragging .db-timeline-link-dot {
+  cursor: grabbing;
+}
+
+.note-database-container .db-timeline-link-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 2px;
+  min-width: 1px;
+  border-radius: var(--db-radius-full);
+  background: var(--db-timeline-link-color);
+  opacity: 0.56;
+  pointer-events: none;
+  transform-origin: left center;
+  z-index: 2;
+}
+
+.note-database-container .db-timeline-link-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -1px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 5px solid var(--db-timeline-link-color);
+  transform: translateY(-50%);
+}
+
+.note-database-container .db-timeline.is-scale-day {
+  --db-timeline-grid-line-color: color-mix(in srgb, var(--background-modifier-border) 48%, transparent);
+}
+
+.note-database-container .db-timeline.is-scale-week {
+  --db-timeline-grid-line-color: color-mix(in srgb, var(--background-modifier-border) 44%, transparent);
+}
+
+.note-database-container .db-timeline.is-scale-month {
+  --db-timeline-grid-line-color: color-mix(in srgb, var(--background-modifier-border) 40%, transparent);
+}
+
+.note-database-container .db-timeline.is-scale-quarter {
+  --db-timeline-grid-line-color: color-mix(in srgb, var(--background-modifier-border) 36%, transparent);
+}
+
+.note-database-container .db-timeline.is-scale-year {
+  --db-timeline-grid-line-color: color-mix(in srgb, var(--background-modifier-border) 32%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container .db-timeline-event,
+  .note-database-container .db-timeline-link-dot::after,
+  .note-database-container .db-timeline-today-line {
+    transition: none;
+  }
+
+  .note-database-container .db-timeline-body-flash-column {
+    animation: none;
+  }
 }
 
 /* ── Chart View ── */
