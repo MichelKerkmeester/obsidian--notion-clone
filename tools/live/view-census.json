@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-03T22:03:10.969Z",
+  "measuredAt": "2026-09-03T22:29:41.375Z",
   "inputs": {
-    "styles.css": "d9c147c9bf3a",
+    "styles.css": "4c7b8b627ab9",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -361,8 +361,8 @@
   ],
   "totals": {
     "fixtures": 70,
-    "escaping": 1198,
-    "growing": 790,
+    "escaping": 1214,
+    "growing": 806,
     "scrolling": 408,
     "rhythmGroups": 28,
     "ragged": 0,
@@ -2812,6 +2812,17 @@
       "width": 320,
       "fixture": "timeline-view",
       "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-view",
+      "kind": "escaping",
       "tag": "button",
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-milestone",
@@ -2915,6 +2926,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-progressing",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-view-month",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 75.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3057,7 +3079,7 @@
       "tag": "span",
       "cls": "db-timeline-event-content",
       "parentCls": "db-timeline-event-trigger",
-      "by": 5.5,
+      "by": 95.1,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3211,6 +3233,17 @@
       "cls": "db-timeline-event-trigger",
       "parentCls": "db-timeline-event.is-milestone",
       "by": 24,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-view-year",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 89.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3375,6 +3408,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.db-subtask-event",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7414,6 +7458,17 @@
       "width": 402,
       "fixture": "timeline-view",
       "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-view",
+      "kind": "escaping",
       "tag": "button",
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-milestone",
@@ -7517,6 +7572,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-progressing",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-view-month",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 75.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7659,7 +7725,7 @@
       "tag": "span",
       "cls": "db-timeline-event-content",
       "parentCls": "db-timeline-event-trigger",
-      "by": 5.5,
+      "by": 95.1,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7813,6 +7879,17 @@
       "cls": "db-timeline-event-trigger",
       "parentCls": "db-timeline-event.is-milestone",
       "by": 24,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-view-year",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 89.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7977,6 +8054,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.db-subtask-event",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -10564,6 +10652,17 @@
       "width": 768,
       "fixture": "timeline-view",
       "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-view",
+      "kind": "escaping",
       "tag": "button",
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-milestone",
@@ -10656,6 +10755,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-progressing",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-view-month",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 75.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -10787,7 +10897,7 @@
       "tag": "span",
       "cls": "db-timeline-event-content",
       "parentCls": "db-timeline-event-trigger",
-      "by": 5.5,
+      "by": 95.1,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -10930,6 +11040,17 @@
       "cls": "db-timeline-event-trigger",
       "parentCls": "db-timeline-event.is-milestone",
       "by": 24,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-view-year",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 89.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -11083,6 +11204,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.db-subtask-event",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -12988,6 +13120,17 @@
       "width": 1440,
       "fixture": "timeline-view",
       "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-view",
+      "kind": "escaping",
       "tag": "button",
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-milestone",
@@ -13080,6 +13223,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.is-progressing",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-view-month",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 75.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -13211,7 +13365,7 @@
       "tag": "span",
       "cls": "db-timeline-event-content",
       "parentCls": "db-timeline-event-trigger",
-      "by": 5.5,
+      "by": 95.1,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -13354,6 +13508,17 @@
       "cls": "db-timeline-event-trigger",
       "parentCls": "db-timeline-event.is-milestone",
       "by": 24,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-view-year",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 89.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -13507,6 +13672,17 @@
       "cls": "db-timeline-link-dot.is-right",
       "parentCls": "db-timeline-event.db-subtask-event",
       "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-event-content",
+      "parentCls": "db-timeline-event-trigger",
+      "by": 65.6,
       "scrolls": false,
       "pastHeader": 0
     },

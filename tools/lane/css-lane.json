@@ -1593,6 +1593,36 @@
         "screenshots/views/timeline-view-year-mobile-light.png"
       ],
       "note": "Milestone label lift plus the first screenshot fixture that runs the changed model code. Two stylesheet edits, both narrow: .db-timeline-event.is-milestone.is-label-above gets overflow:visible on its trigger and an absolutely positioned content box at bottom calc(100% + 4px) with --db-font-xs/--db-font-xs-line-height, and .db-timeline-events row-gap moves 4px to var(--db-space-8) so the lifted label has clearance from the lane above. Both numbers the review asked about are tokens, not literals: --db-space-8 is 24px (styles.css:52) and --db-font-xs is 11px (:53). The row-gap is the one rule NOT scoped to .is-label-above - it changes lane rhythm on every timeline capture, which all 24 timeline PNGs below were read for: every lane stays legible and no bar, dot, toggle or create row moved; z-index 8 sits one above the local timeline ladder's existing 0-7. No interactive box shrank: touch-targets measures under=264 against the 279 baseline, unchanged from the pre-edit tree. All 27 captures below were opened and read. The four goal.md rows this leg exists to photograph: quarter now titles \"February - May 2026\" over Feb 7 - May 9 ticks and year titles \"2025 - 2026\" over November-September, both matching their own axis where the HEAD copies read \"January - March 2026\" and \"March 23 - April 5\" over the same ticks; the leading mobile tick label is whole (\"Tue 24\", not \"ue 24\"; \"00:00\", not \"0:00\"); Adobe CC's label sits above its bar at week, month, quarter and year on both devices and themes, where every HEAD copy read \"A N\" or \"A. M\" under Notion. The fourth row is only half photographed: the day scale does show about 11 columns of 32px at phone width against HEAD's 5 of 60px, but today is not in frame, because temporal.mjs's timelineViewportWindow day branch still hardcodes startMinutes 0 while the model centres the window on the current hour through resolveTimelineDayCentredStartMinutes whenever the renderer passes now - and the parity test calls getTimelineViewportWindow without now, so the assertion passes on the legacy branch and never reaches the centring one. Same fixture, second gap: its day tick labels are HH:00 where buildTimelineTicks emits HH, which is why those two phone captures show colliding hour labels no production render would draw. Both are fixture fidelity, not product defects; the day row stays capture pending. The three calendar captures are byte-only encoder noise (1, 65 and 346 bytes), read side by side and indistinguishable, and no calendar, board, field, panel or chrome rule is touched by either edit."
+    },
+    {
+      "event": "acquire",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T00:30:00Z",
+      "hash": "4c7b8b627ab9"
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T00:30:00Z",
+      "hash": "4c7b8b627ab9",
+      "reviewed": [
+        "screenshots/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "screenshots/panels/panel-record-detail-sheet-body-empty-desktop-light.png",
+        "screenshots/views/calendar-empty-state-desktop-dark.png",
+        "screenshots/views/calendar-empty-state-mobile-dark.png",
+        "screenshots/views/timeline-subtask-tree-mobile-light.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-mobile-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ],
+      "note": "Rebase reconciliation onto main (471860d), which carried 041's reduced-motion .db-surface arm past this leg's own history: styles.css auto-merged clean, keeping both the reduced-motion block and the milestone-label-above/row-gap rules this leg landed, so baselineHash moves from 037's own pre-rebase 4f74f3bd0b1c to 4c7b8b627ab9 (sha256 of the rebased file) with no further edit. Full detached recapture run against the rebased tree changed 15 PNGs, all opened and read: 11 timeline-view-* captures at all five scales carry the milestone-label-above and row-gap fix unchanged (day, week, month, quarter and year titles still match their own axis, first tick still whole, Adobe CC's label still clear above its bar) with byte deltas from -1105 to 359, the same encoder-noise range this leg's prior release already recorded; timeline-subtask-tree-mobile-light carries the same label lift. chrome-owned-menu-sheet-mobile-dark (+6 bytes) is pixel-unchanged against its e94b148 copy, matching 041's own byte-noise finding for the reduced-motion arm this rebase now sits underneath. The three remaining captures (panel-record-detail-sheet-body-empty, calendar-empty-state x2) are 1-9 byte encoder noise, unrelated to either edit."
     }
   ],
   "outstanding": [
