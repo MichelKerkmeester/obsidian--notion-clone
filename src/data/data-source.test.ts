@@ -115,4 +115,32 @@ describe("DataSource view filter tree persistence", () => {
     }).toViewPayload({ ...view, groupByFields: [] });
     expect(emptyPayload.groupByFields).toBeUndefined();
   });
+
+  it("round-trips the per-view subtask collapse override and omits an empty map", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "board",
+          sourceFolder: "",
+          subtaskCollapsed: { "Tasks/Parent.md": true },
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+    expect(view.subtaskCollapsed).toEqual({ "Tasks/Parent.md": true });
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.subtaskCollapsed).toEqual({ "Tasks/Parent.md": true });
+
+    const emptyPayload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload({ ...view, subtaskCollapsed: {} });
+    expect(emptyPayload.subtaskCollapsed).toBeUndefined();
+  });
 });

@@ -38,6 +38,9 @@ import { CalendarTimelineSearchVisibleRange, timelineHourRange } from "../data/c
 import { formatDateRangeDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/date-time-format";
 import { RowData, TimelineScale, ViewConfig } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
+import { buildSubtaskRelation } from "../data/subtask-relation";
+import { planSubtaskMove } from "../data/subtask-serialize";
+import type { SubtaskMovePlan, SubtaskMoveRequest, SubtaskRelation } from "../data/types";
 import { openDropdownMenu } from "./dropdown-field";
 import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./calendar-mini-calendar-renderer";
 import { renderGroupExpandControls } from "./group-expand-controls";
@@ -168,6 +171,11 @@ export interface CalendarTimelineRendererActions {
     beforePath?: string,
     afterPath?: string
   ): void | Promise<void>;
+  moveSubtask?(request: SubtaskMoveRequest, plan: SubtaskMovePlan): void | Promise<void>;
+  /** Per-view collapse override for a row, layered over its own `collapsed` frontmatter default
+   *  by `buildSubtaskRelation`. Returns `undefined` for a row the view has no override for. */
+  isSubtaskCollapsed?(row: RowData): boolean | undefined;
+  toggleSubtaskCollapsed?(row: RowData, collapsed: boolean): void | Promise<void>;
   updateTimelineAnchor?(dateKey: string, label?: string, timeMinutes?: number): void;
   updateTimelineScale?(scale: TimelineScale, label?: string): boolean | Promise<boolean> | void;
   updateTimelineDependency?(predecessor: RowData, successor: RowData, dependencies: string[]): void | Promise<void>;
@@ -207,6 +215,7 @@ interface TimelineFlashWindow {
 
 export class CalendarTimelineRenderer {
   private rowByPath = new Map<string, RowData>();
+  private subtaskRelation: SubtaskRelation | null = null;
   private currentRows: RowData[] = [];
   private timelineResizeInProgress = false;
   private miniCalendarEl: HTMLElement | null = null;
@@ -295,6 +304,10 @@ export class CalendarTimelineRenderer {
     this.currentVisibleRange = null;
     this.currentRows = rows;
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
+    this.subtaskRelation = buildSubtaskRelation(rows, {
+      isCollapsed: (row) => this.actions.isSubtaskCollapsed?.(row),
+    });
+    const visibleRows = rows.filter((row) => this.subtaskRelation?.nodes.get(row.file.path)?.visible !== false);
     const startField = config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
     if (!startField) {
       this.renderEmpty(container, "no-date-field");
@@ -305,7 +318,7 @@ export class CalendarTimelineRenderer {
     const unitWidth = this.getTimelineRenderUnitWidth(config, scale);
     const visibleUnitCount = this.getTimelineViewportUnitCount(container, config, unitWidth);
     const visibleUnitSpan = this.getTimelineViewportUnitSpan(container, unitWidth);
-    const model = buildTimelineModel(rows, { ...config, timelineStartDateField: startField }, {
+    const model = buildTimelineModel(visibleRows, { ...config, timelineStartDateField: startField }, {
       uncategorizedLabel: t("timeline.uncategorized"),
       visibleUnitCount,
       visibleUnitSpan,
@@ -313,7 +326,7 @@ export class CalendarTimelineRenderer {
     this.currentVisibleRange = this.getModelVisibleRange(model);
     if ((model.eventCount === 0 && model.lanes.length === 0) || !model.startDateKey || !model.endDateKey) {
       this.renderEmpty(container, "no-events");
-      this.renderUnscheduledBacklog(container, config, rows, startField);
+      this.renderUnscheduledBacklog(container, config, visibleRows, startField);
       return;
     }
 
@@ -321,7 +334,7 @@ export class CalendarTimelineRenderer {
     this.timelineRoot = wrap;
     // The full task-driven range (padded, min-spanned) is grid metadata for the
     // styles lane; the rendered window stays viewport-sized.
-    const range = buildTimelineRangeGeometry(rows, config, model.scale);
+    const range = buildTimelineRangeGeometry(visibleRows, config, model.scale);
     wrap.setAttribute("data-timeline-range-start", range.startDateKey);
     wrap.setAttribute("data-timeline-range-end", range.endDateKey);
     wrap.setAttribute("data-timeline-range-days", String(range.totalDays));
@@ -364,7 +377,7 @@ export class CalendarTimelineRenderer {
     });
 
     this.renderTimelineHeader(wrap, config, model);
-    this.renderUnscheduledBacklog(wrap, config, rows, startField);
+    this.renderUnscheduledBacklog(wrap, config, visibleRows, startField);
     if (model.visibleEventCount === 0 && model.lanes.length === 0) {
       this.renderTimelineEmptyRange(wrap);
       return;
@@ -923,20 +936,34 @@ export class CalendarTimelineRenderer {
     // date 列事件保留 muted 全天条视觉（仅样式，定位统一走 exact）。
     const isDateColumn = this.isTimelineDateColumn(config, event);
     const isMilestone = Boolean(event.isMilestone);
-    const progress = event.progress ?? 0;
+    const subtaskNode = this.subtaskRelation?.nodes.get(event.row.file.path);
+    const subtaskChildren = this.subtaskRelation?.childrenOf.get(event.row.file.path) || [];
+    // A relation node exists for every row (subtask-relation.ts builds a shell per row), so
+    // presence alone cannot gate the subtask styling class — that restyled every event. Only a
+    // row with children or an actual parent participates in a visible relation.
+    const hasSubtaskRelation = Boolean(subtaskNode) && (subtaskChildren.length > 0 || subtaskNode!.parentId !== null);
+    const hasSubtaskChildren = Boolean(subtaskNode) && subtaskChildren.length > 0;
+    const subtaskProgress = subtaskNode?.progress;
+    const progress = subtaskProgress?.value ?? event.progress ?? 0;
     const eventEl = eventsEl.createDiv({
-      cls: `db-timeline-event${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
+      cls: `db-timeline-event${hasSubtaskRelation ? " db-subtask-event" : ""}${hasSubtaskChildren ? " has-subtask-children" : ""}${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
       attr: {
         role: "group",
         "aria-label": eventDetails,
         title: `${event.title} · ${dateText} · ${event.filePath}`,
         "data-note-database-row-path": event.row.file.path,
         "data-timeline-event-id": event.id,
+        ...(hasSubtaskRelation ? {
+          "data-subtask-depth": String(subtaskNode!.depth),
+          "data-subtask-visible": String(subtaskNode!.visible),
+          "data-subtask-progress-source": subtaskProgress?.source || "none",
+        } : {}),
         ...(isMilestone ? { "data-timeline-milestone": "true" } : {}),
         ...(progress > 0 ? { "data-timeline-progress": String(progress) } : {}),
       },
     });
     eventEl.style.setProperty("--db-timeline-row", String(rowIndex));
+    if (hasSubtaskRelation) eventEl.style.setProperty("--db-subtask-depth", String(subtaskNode!.depth));
     // 统一绝对刻度定位（可见窗口夹取后的 [renderStart, renderEnd]）；所有事件同一路径，不再 is-timed 双轨。
     this.applyTimelineAbsolutePosition(eventEl, range.renderStart, range.renderEnd, range.visible.startMinutes, model.unit);
     this.applyCalendarEventColor(eventEl, event.color);
@@ -948,6 +975,27 @@ export class CalendarTimelineRenderer {
       const progressEl = eventEl.createSpan({ cls: "db-timeline-event-progress", attr: { "aria-hidden": "true" } });
       progressEl.style.setProperty("--db-timeline-progress-width", `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(progressUnits)})`);
     }
+    if (hasSubtaskChildren) {
+      // Sibling of the trigger, not a child of it: a control nested inside the trigger button is
+      // the invalid markup the trigger was introduced to remove. It is created first so the bar
+      // reads left to right in both the DOM and the tab order.
+      const collapsed = subtaskNode!.collapsed;
+      const toggle = eventEl.createEl("button", {
+        cls: `db-subtask-toggle db-subtask-event-toggle${collapsed ? " is-collapsed" : ""}`,
+        attr: {
+          type: "button",
+          "aria-label": collapsed ? t("subtask.expand") : t("subtask.collapse"),
+          "aria-expanded": String(!collapsed),
+        },
+      });
+      toggle.createSpan({ cls: "db-collapse-triangle", attr: { "aria-hidden": "true" } });
+      toggle.onclick = (mouseEvent) => {
+        mouseEvent.preventDefault();
+        mouseEvent.stopPropagation();
+        const result = this.actions.toggleSubtaskCollapsed?.(event.row, !collapsed);
+        if (result) void Promise.resolve(result).catch(() => undefined);
+      };
+    }
     const trigger = eventEl.createEl("button", {
       cls: "db-timeline-event-trigger",
       attr: { type: "button", "aria-label": eventLabel },
@@ -957,9 +1005,22 @@ export class CalendarTimelineRenderer {
     const titleEl = content.createSpan({ cls: `db-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
     markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
     content.createSpan({ cls: "db-timeline-event-meta", text: dateText });
+    if (subtaskProgress && (subtaskProgress.explicit != null || subtaskProgress.derived != null)) {
+      const summary = subtaskProgress.derived == null
+        ? ""
+        : t("subtask.progressSummary", { done: subtaskProgress.done, total: subtaskProgress.total });
+      const explicit = subtaskProgress.explicit == null
+        ? ""
+        : t("subtask.explicitProgress", { value: Math.round(subtaskProgress.explicit) });
+      const labels = [summary, explicit].filter(Boolean);
+      const progressLabel = content.createSpan({ cls: "db-timeline-subtask-progress", attr: { "aria-label": labels.join(" · ") } });
+      if (summary) progressLabel.createSpan({ cls: "db-subtask-progress-derived", text: summary });
+      if (summary && explicit) progressLabel.createSpan({ text: " · ", attr: { "aria-hidden": "true" } });
+      if (explicit) progressLabel.createSpan({ cls: "db-subtask-progress-explicit", text: explicit });
+    }
     this.renderTimelineLinkDots(eventEl, event);
-    // The resize handles, the link dots and the phone menu button are siblings of this trigger, not
-    // children of it, so a press on one of them never reaches here and needs no guard.
+    // The resize handles, the link dots, the subtask toggle and the phone menu button are siblings
+    // of this trigger, not children of it, so a press on one of them never reaches here.
     trigger.onclick = () => {
       if (this.actions.openRecordDetail) {
         this.actions.openRecordDetail(trigger, event.row);
@@ -1938,7 +1999,9 @@ export class CalendarTimelineRenderer {
       if (nextStart === originalStart && nextEnd === originalEnd && !didChangeLane) {
         // 垂直同 lane：rank reorder（如果有命中）。
         if (lastReorderTarget && mode === "move") {
-          void this.actions.reorderTimelineEvent?.(event.row, lastReorderTarget.beforePath, lastReorderTarget.afterPath);
+          if (!this.applyTimelineSubtaskOrder(event.row, lastReorderTarget.beforePath, lastReorderTarget.afterPath)) {
+            void this.actions.reorderTimelineEvent?.(event.row, lastReorderTarget.beforePath, lastReorderTarget.afterPath);
+          }
           return;
         }
         restore();
@@ -2221,7 +2284,9 @@ export class CalendarTimelineRenderer {
 
       // 垂直同 lane：rank reorder（复用 mousemove 缓存命中，不用 clientY 重新命中）。
       if (isVertical && !didChangeLane && this.canTimelineReorder(config) && lastReorderTarget) {
-        void this.actions.reorderTimelineEvent?.(event.row, lastReorderTarget.beforePath, lastReorderTarget.afterPath);
+        if (!this.applyTimelineSubtaskOrder(event.row, lastReorderTarget.beforePath, lastReorderTarget.afterPath)) {
+          void this.actions.reorderTimelineEvent?.(event.row, lastReorderTarget.beforePath, lastReorderTarget.afterPath);
+        }
         return;
       }
       // 跨 lane 拖拽只改分组（垂直意图），不改日期：避免一次拖拽同时触发分组移动 + 日期修改，
@@ -2319,10 +2384,10 @@ export class CalendarTimelineRenderer {
       const paths: string[] = laneEvents.map((candidate) => candidate.row.file.path).filter((path) => path !== event.row.file.path);
       menu.addSeparator();
       menu.addRow({ icon: "chevrons-up", label: t("mobile.moveTop"), disabled: paths.length === 0, onClick: () => {
-        this.actions.reorderTimelineEvent?.(event.row, undefined, paths[0]);
+        if (!this.applyTimelineSubtaskOrder(event.row, undefined, paths[0])) this.actions.reorderTimelineEvent?.(event.row, undefined, paths[0]);
       } });
       menu.addRow({ icon: "chevrons-down", label: t("mobile.moveBottom"), disabled: paths.length === 0, onClick: () => {
-        this.actions.reorderTimelineEvent?.(event.row, paths[paths.length - 1], undefined);
+        if (!this.applyTimelineSubtaskOrder(event.row, paths[paths.length - 1], undefined)) this.actions.reorderTimelineEvent?.(event.row, paths[paths.length - 1], undefined);
       } });
     }
     if (this.canMoveTimelineAcrossLane(config) && config.timelineGroupField) {
@@ -2617,6 +2682,32 @@ export class CalendarTimelineRenderer {
     if (!this.actions.reorderTimelineEvent) return false;
     if (config.timelineGroupField?.startsWith("file.")) return false;
     return !isExplicitlySorted(config);
+  }
+
+  private applyTimelineSubtaskOrder(row: RowData, beforePath?: string, afterPath?: string): boolean {
+    if (!this.actions.moveSubtask) return false;
+    const node = this.subtaskRelation?.nodes.get(row.file.path);
+    if (!node || node.parentId === null || node.orphanParent) return false;
+    const request: SubtaskMoveRequest = {
+      childPath: row.file.path,
+      newParentPath: node.parentId,
+      beforePath,
+      afterPath,
+    };
+    const plan = this.planTimelineSubtaskMove(request);
+    if (!plan) return false;
+    try {
+      const result = this.actions.moveSubtask(request, plan);
+      if (result) void Promise.resolve(result).catch(() => new Notice(t("subtask.moveSaveFailed")));
+    } catch {
+      new Notice(t("subtask.moveSaveFailed"));
+    }
+    return true;
+  }
+
+  private planTimelineSubtaskMove(request: SubtaskMoveRequest): Extract<SubtaskMovePlan, { ok: true }> | null {
+    const plan = planSubtaskMove([...this.rowByPath.values()], request);
+    return plan.ok ? plan : null;
   }
 
   private canMoveTimelineAcrossLane(config: ViewConfig): boolean {

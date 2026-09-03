@@ -824,6 +824,9 @@ export class DataSource {
           manualOrder: source["manualOrder"] && typeof source["manualOrder"] === "object"
             ? source["manualOrder"]
             : undefined,
+          subtaskCollapsed: source["subtaskCollapsed"] && typeof source["subtaskCollapsed"] === "object"
+            ? source["subtaskCollapsed"] as Record<string, boolean>
+            : undefined,
           filterLogic: source["filterLogic"] === "or" ? "or" : "and",
           filters: Array.isArray(source["filters"]) ? source["filters"] as FilterRule[] : undefined,
           filterTree: normalizeViewFilterTree(source["filterTree"]),
@@ -1012,6 +1015,9 @@ export class DataSource {
         : undefined,
       manualOrder: v["manualOrder"] && typeof v["manualOrder"] === "object"
         ? v["manualOrder"]
+        : undefined,
+      subtaskCollapsed: v["subtaskCollapsed"] && typeof v["subtaskCollapsed"] === "object"
+        ? v["subtaskCollapsed"] as Record<string, boolean>
         : undefined,
       filterLogic: v["filterLogic"] === "or" ? "or" : "and",
       filters: Array.isArray(v["filters"]) ? v["filters"] as FilterRule[] : undefined,
@@ -1217,6 +1223,9 @@ export class DataSource {
       boardHiddenGroups: view.boardHiddenGroups || {},
       manualOrder: view.manualOrder && view.manualOrder.ranks && Object.keys(view.manualOrder.ranks).length > 0
         ? view.manualOrder
+        : undefined,
+      subtaskCollapsed: view.subtaskCollapsed && Object.keys(view.subtaskCollapsed).length > 0
+        ? view.subtaskCollapsed
         : undefined,
       galleryImageField: view.galleryImageField || "",
       galleryImageAspectRatio: view.galleryImageAspectRatio || 0.75,

@@ -495,6 +495,16 @@ The board inside the default-width container. On the phone (is-phone) the contai
 
 Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `src/views/card-field-renderer.ts`
 
+### Board view — subtask tree
+
+An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.
+
+| dark | light |
+|---|---|
+| ![board-subtask-tree dark](views/board-subtask-tree-mobile-dark.png) | ![board-subtask-tree light](views/board-subtask-tree-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
+
 ### Board view
 
 | dark | light |
@@ -610,6 +620,16 @@ Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`,
 | ![table-view dark](views/table-view-mobile-dark.png) | ![table-view light](views/table-view-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `src/views/column-header-controller.ts`, `src/views/cell-renderer.ts`
+
+### Timeline view — subtask tree
+
+The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.
+
+| dark | light |
+|---|---|
+| ![timeline-subtask-tree dark](views/timeline-subtask-tree-mobile-dark.png) | ![timeline-subtask-tree light](views/timeline-subtask-tree-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
 ### Timeline settings popover
 

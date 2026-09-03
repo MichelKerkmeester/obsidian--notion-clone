@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-03T11:36:09.654Z",
+  "measuredAt": "2026-09-03T19:52:05.447Z",
   "inputs": {
-    "styles.css": "2ea12028c7c8",
+    "styles.css": "32148b7b7646",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "checkboxes": 258,
-    "fixtures": 66,
-    "owned": 258,
+    "checkboxes": 267,
+    "fixtures": 68,
+    "owned": 267,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 258,
-    "tokenDependent": 248,
+    "appearanceSelfOwned": 267,
+    "tokenDependent": 257,
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
@@ -21,13 +21,13 @@
     "mountGroups": 7,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 258,
+    "boxesUnderHostProfiles": 267,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0
   },
   "shapes": {
-    "16x16 r=4px": 176,
+    "16x16 r=4px": 185,
     "18x18 r=4px": 20,
     "28x28 r=4px": 52,
     "34x18 r=9999px": 10
@@ -1302,6 +1302,227 @@
     {
       "scenario": "board-view",
       "index": 27,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-column-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-column-header"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 3,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 4,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-column-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-column-header"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 5,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 6,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 7,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board",
+        "db-board-column",
+        "db-board-cards",
+        "db-board-card",
+        "db-board-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "board-subtask-tree",
+      "index": 8,
       "classes": [
         "db-checkbox",
         "db-checkbox-row",

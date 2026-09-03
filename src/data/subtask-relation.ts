@@ -18,7 +18,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import type { RowData, SubtaskDiagnostics, SubtaskNode, SubtaskRelation, SubtaskRelationFields } from "./types";
+import type { RowData, SubtaskDiagnostics, SubtaskNode, SubtaskProgress, SubtaskRelation, SubtaskRelationFields } from "./types";
 import { readRelationFields } from "./subtask-hydrate";
 
 export type { SubtaskRelation } from "./types";
@@ -27,10 +27,21 @@ export type { SubtaskRelation } from "./types";
 // 2. BUILD
 // ───────────────────────────────────────────────────────────────────
 
-export function buildSubtaskRelation(rows: RowData[]): SubtaskRelation {
+export interface BuildSubtaskRelationOptions {
+  /** Per-view collapse override (e.g. a view-config toggle) that takes priority over a row's own
+   *  `collapsed` frontmatter default. Returning `undefined` for a row falls back to that default,
+   *  so a caller with no override for most rows only needs to answer for the ones it tracks. */
+  isCollapsed?(row: RowData): boolean | undefined;
+}
+
+export function buildSubtaskRelation(rows: RowData[], options: BuildSubtaskRelationOptions = {}): SubtaskRelation {
   const knownPaths = new Set(rows.map((row) => row.file.path));
   const fieldsByPath = new Map<string, SubtaskRelationFields>();
-  for (const row of rows) fieldsByPath.set(row.file.path, readRelationFields(row.frontmatter));
+  for (const row of rows) {
+    const fields = readRelationFields(row.frontmatter);
+    const override = options.isCollapsed?.(row);
+    fieldsByPath.set(row.file.path, override === undefined ? fields : { ...fields, collapsed: override });
+  }
 
   const nodes = new Map<string, SubtaskNode>();
   const childrenOf = new Map<string, string[]>();
@@ -60,6 +71,7 @@ export function buildSubtaskRelation(rows: RowData[]): SubtaskRelation {
       visible: true,
       inCycle: false,
       orphanParent,
+      progress: emptySubtaskProgress(),
     });
   }
 
@@ -183,6 +195,30 @@ export function buildSubtaskRelation(rows: RowData[]): SubtaskRelation {
     node.visible = !info.ancestors.some((ancestor) => fieldsByPath.get(ancestor)?.collapsed ?? false);
   }
 
+  const rowByPath = new Map(rows.map((row) => [row.file.path, row] as const));
+  const progressByPath = new Map<string, SubtaskProgress>();
+  const resolvingProgress = new Set<string>();
+  const resolveProgress = (path: string): SubtaskProgress => {
+    const cached = progressByPath.get(path);
+    if (cached) return cached;
+    const row = rowByPath.get(path);
+    if (!row || resolvingProgress.has(path)) {
+      return row ? deriveSubtaskProgress(row, []) : emptySubtaskProgress();
+    }
+    resolvingProgress.add(path);
+    const childPaths = childrenOf.get(path) ?? [];
+    const childEntries = childPaths
+      .map((childPath) => ({ row: rowByPath.get(childPath), progress: resolveProgress(childPath) }))
+      .filter((entry): entry is { row: RowData; progress: SubtaskProgress } => Boolean(entry.row));
+    const children = childEntries.map((entry) => entry.row);
+    const childProgress = childEntries.map((entry) => entry.progress);
+    const progress = deriveSubtaskProgress(row, children, childProgress);
+    resolvingProgress.delete(path);
+    progressByPath.set(path, progress);
+    return progress;
+  };
+  for (const row of rows) nodes.get(row.file.path)!.progress = resolveProgress(row.file.path);
+
   const roots: string[] = [];
   for (const row of rows) {
     const path = row.file.path;
@@ -192,4 +228,51 @@ export function buildSubtaskRelation(rows: RowData[]): SubtaskRelation {
   }
 
   return { nodes, childrenOf, roots, diagnostics };
+}
+
+export function deriveSubtaskProgress(
+  row: RowData,
+  children: readonly RowData[],
+  childProgress: readonly SubtaskProgress[] = [],
+): SubtaskProgress {
+  const explicit = readProgress(row.frontmatter.progress);
+  let done = 0;
+  for (const [index, child] of children.entries()) {
+    const nested = childProgress[index];
+    const complete = nested?.value != null
+      ? nested.value >= 100
+      : isCompletedSubtask(child);
+    if (complete) done += 1;
+  }
+  const total = children.length;
+  const derived = total > 0 ? Math.round((done / total) * 100) : null;
+  const value = explicit ?? derived;
+  return {
+    explicit,
+    derived,
+    value,
+    source: explicit != null ? "explicit" : derived != null ? "derived" : "none",
+    done,
+    total,
+  };
+}
+
+function emptySubtaskProgress(): SubtaskProgress {
+  return { explicit: null, derived: null, value: null, source: "none", done: 0, total: 0 };
+}
+
+function readProgress(value: unknown): number | null {
+  const parsed = typeof value === "number"
+    ? value
+    : typeof value === "string" && value.trim() !== ""
+      ? Number(value)
+      : Number.NaN;
+  return Number.isFinite(parsed) ? Math.max(0, Math.min(100, parsed)) : null;
+}
+
+function isCompletedSubtask(row: RowData): boolean {
+  if (row.frontmatter.completed === true || row.frontmatter.done === true) return true;
+  const rawStatus = row.frontmatter.status;
+  const status = (typeof rawStatus === "string" ? rawStatus : "").trim().toLowerCase();
+  return /^(done|complete|completed|closed|cancelled|canceled|finished)$/.test(status);
 }

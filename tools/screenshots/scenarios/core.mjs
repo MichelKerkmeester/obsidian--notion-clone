@@ -7,8 +7,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { COLUMNS, COVER_BASES, ICONS, ROWS, boardColumn, dots, emptyCover, glyph, optionPill,
-  rowCheckbox, tableHeader, tableRows } from "./shared.mjs";
+import { COLUMNS, COVER_BASES, ICONS, ROWS, SUBTASK_FIXTURE_ROWS, boardColumn, dots, emptyCover, glyph, optionPill,
+  rowCheckbox, subtaskBoardCard, subtaskBoardColumn, tableHeader, tableRows } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SCENARIOS
@@ -61,6 +61,28 @@ export const CORE_SCENARIOS = [
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
             .join("")}
+        </div>
+      </div>`,
+  },
+  {
+    id: "board-subtask-tree",
+    title: "Board view — subtask tree",
+    group: "views",
+    width: 620,
+    sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
+    // Its own lane rather than a sixth column on `board-view`: five columns overflow the widest
+    // capture device, and folding the tree into that scenario would have cost two of the four
+    // category lanes the board's ordinary-card coverage lives in.
+    note: "An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.",
+    html: () => `
+      <div class="note-database-container">
+        <div class="db-board" role="grid">
+          ${subtaskBoardColumn("Projects", [
+            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0, children: true, done: 1, total: 2, explicit: 62, value: 62 }),
+            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1 }),
+            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.launch, { depth: 1 }),
+          ], "purple")}
+          ${boardColumn("Design", ROWS.filter((r) => r.category === "Design"))}
         </div>
       </div>`,
   },

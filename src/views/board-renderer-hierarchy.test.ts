@@ -698,3 +698,76 @@ describe("board drop matrix stays path-keyed", () => {
     );
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 7. SUBTASK HOST ACTION CONTRACT
+// ───────────────────────────────────────────────────────────────────
+//
+// Proves the wiring contract a host implementor (database-view.ts,
+// embedded-database-renderer.ts) relies on: the collapse toggle calls
+// toggleSubtaskCollapsed with the row and the next state, and a host's
+// isSubtaskCollapsed override actually changes what the relation renders —
+// not just what it returns. The host handlers' own frontmatter-write bodies
+// have no reachable test harness here (DatabaseView/EmbeddedDatabaseRenderer
+// have no existing unit test file in this codebase to extend; both are
+// thin compositions of already-tested primitives: toFrontmatterUpdates,
+// covered in subtask-serialize.test.ts, and the plain config-object mutation
+// toggleGroupCollapsed already ships untested for the same reason).
+
+describe("board subtask host action contract", () => {
+  const PARENT_PATH = "Tasks/Backlog/Parent.md";
+  const CHILD_PATH = "Tasks/Backlog/Child.md";
+
+  const parentRow: RowData = {
+    file: makeFile(PARENT_PATH, "Parent", "Tasks/Backlog"),
+    frontmatter: { status: "To Do", subtaskIds: [CHILD_PATH] },
+    computed: {},
+  };
+  const childRow: RowData = {
+    file: makeFile(CHILD_PATH, "Child", "Tasks/Backlog"),
+    frontmatter: { status: "To Do", parentId: PARENT_PATH },
+    computed: {},
+  };
+  const SUBTASK_GROUPS: BoardGroup[] = [{ key: "To Do", rows: [parentRow, childRow], count: 2 }];
+
+  it("calls toggleSubtaskCollapsed with the row and the next collapsed state when the chevron is clicked", () => {
+    const toggleSubtaskCollapsed = vi.fn<(row: RowData, collapsed: boolean) => void>();
+    const actions = createActions({ toggleSubtaskCollapsed });
+    const renderer = new BoardRenderer({} as unknown as App, actions);
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, CONFIG, SUBTASK_GROUPS, "status");
+
+    const toggle = container.querySelector<MockElement>(".db-subtask-toggle")!;
+    expect(toggle).toBeTruthy();
+    toggle.onclick!({ preventDefault: vi.fn(), stopPropagation: vi.fn() });
+
+    expect(toggleSubtaskCollapsed).toHaveBeenCalledTimes(1);
+    const [movedRow, nextCollapsed] = toggleSubtaskCollapsed.mock.calls[0];
+    expect(movedRow.file.path).toBe(PARENT_PATH);
+    expect(nextCollapsed).toBe(true);
+  });
+
+  function renderSubtaskBoard(isSubtaskCollapsed: BoardRendererActions["isSubtaskCollapsed"]): MockElement {
+    const container = new MockElement("div");
+    const actions = createActions({ isSubtaskCollapsed });
+    new BoardRenderer({} as unknown as App, actions)
+      .render(container as unknown as HTMLElement, CONFIG, SUBTASK_GROUPS, "status");
+    return container;
+  }
+
+  function cardPaths(container: MockElement): Array<string | null> {
+    return container
+      .querySelectorAll<MockElement>(".db-board-card")
+      .map((card) => card.getAttribute("data-note-database-row-path"));
+  }
+
+  it("keeps the child card visible with no collapse override", () => {
+    expect(cardPaths(renderSubtaskBoard(() => undefined))).toContain(CHILD_PATH);
+  });
+
+  it("hides the child card once isSubtaskCollapsed overrides the parent to collapsed", () => {
+    const paths = cardPaths(renderSubtaskBoard((row) => (row.file.path === PARENT_PATH ? true : undefined)));
+    expect(paths).toContain(PARENT_PATH);
+    expect(paths).not.toContain(CHILD_PATH);
+  });
+});

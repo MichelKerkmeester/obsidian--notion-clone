@@ -553,13 +553,26 @@ export const timelineEvent = (event, fixture) => {
     ` --db-timeline-exact-offset: calc(var(--db-timeline-unit-width) * ${offset});` +
     ` --db-timeline-exact-width: calc(var(--db-timeline-unit-width) * ${span});` +
     ` ${eventColor(event.tone)}`;
+  const subtask = event.subtask || { depth: 0, visible: true, children: false, collapsed: false, source: "none" };
+  // A relation node exists for every row, so only a row with children or an actual
+  // parent (depth > 0) is a real subtask-tree participant — mirrors the renderer's
+  // hasSubtaskRelation gate rather than styling every event.
+  const hasSubtaskRelation = Boolean(subtask.children || subtask.depth > 0);
   const classes = [
     "db-timeline-event",
+    hasSubtaskRelation ? "db-subtask-event" : "",
+    subtask.children ? "has-subtask-children" : "",
     event.milestone ? "is-milestone" : "",
     event.progress > 0 ? "is-progressing" : "",
     visibility.isClippedStart ? "is-clipped-start" : "",
     visibility.isClippedEnd ? "is-clipped-end" : "",
   ].filter(Boolean).join(" ");
+  const subtaskToggle = subtask.children
+    ? `<button type="button" class="db-subtask-toggle db-subtask-event-toggle${subtask.collapsed ? " is-collapsed" : ""}" aria-label="${subtask.collapsed ? "Expand subtasks" : "Collapse subtasks"}" aria-expanded="${subtask.collapsed ? "false" : "true"}"><span class="db-collapse-triangle" aria-hidden="true"></span></button>`
+    : "";
+  const subtaskProgress = subtask.progress
+    ? `<span class="db-timeline-subtask-progress" aria-label="${[subtask.progress.summary, subtask.progress.explicit].filter(Boolean).join(" · ")}">${subtask.progress.summary ? `<span class="db-subtask-progress-derived">${subtask.progress.summary}</span>` : ""}${subtask.progress.summary && subtask.progress.explicit ? `<span aria-hidden="true"> · </span>` : ""}${subtask.progress.explicit ? `<span class="db-subtask-progress-explicit">${subtask.progress.explicit}</span>` : ""}</span>`
+    : "";
   const progress = event.progress > 0
     ? `<span class="db-timeline-event-progress" style="--db-timeline-progress-width: calc(var(--db-timeline-unit-width) * ${span * event.progress / 100})" aria-hidden="true"></span>`
     : "";
@@ -569,13 +582,16 @@ export const timelineEvent = (event, fixture) => {
   return `${jumpBefore}
     <div class="${classes}" role="group" aria-label="${eventDetails}" title="${eventDetails} · ${eventPath}"
       data-note-database-row-path="${eventPath}" data-timeline-event-id="${eventPath}"
+      ${hasSubtaskRelation ? `data-subtask-depth="${subtask.depth}" data-subtask-visible="${subtask.visible}" data-subtask-progress-source="${subtask.source}"` : ""}
       ${event.progress > 0 ? `data-timeline-progress="${event.progress}"` : ""}
-      ${event.milestone ? `data-timeline-milestone="true"` : ""} style="${geometry}">
+      ${event.milestone ? `data-timeline-milestone="true"` : ""} style="${geometry}${hasSubtaskRelation ? ` --db-subtask-depth: ${subtask.depth};` : ""}">
       ${milestone}${progress}
+      ${subtaskToggle}
       <button type="button" class="db-timeline-event-trigger" aria-label="${eventLabel}">
         <span class="db-timeline-event-content">
         <span class="db-timeline-event-title">${event.title}</span>
         <span class="db-timeline-event-meta">${meta}</span>
+        ${subtaskProgress}
         </span>
       </button>
       <button type="button" class="db-timeline-link-dot is-left" aria-keyshortcuts="Enter Space" aria-label="Dependency input: ${event.title}" data-timeline-link-side="left"></button>
@@ -649,6 +665,27 @@ export const TL_LANES = [
     ],
   },
 ];
+
+/* The same two lanes and the same bar geometry as TL_LANES, with the business lane's three events
+   re-read as one expanded parent and its two children. It is a separate lane set rather than a
+   subtask field on TL_LANES itself because every ordinary timeline capture renders those lanes:
+   marking them there would have put an indent, a toggle and a progress label into all five scales
+   on both devices, and the ordinary un-related bar is exactly what those captures exist to show.
+   Reusing the geometry verbatim keeps the tree state free of invented dates and widths. */
+export const TL_SUBTASK_LANES = TL_LANES.map((lane) => lane.key !== "business" ? lane : {
+  ...lane,
+  events: [
+    {
+      ...lane.events[0],
+      subtask: {
+        depth: 0, visible: true, children: true, collapsed: false, source: "explicit",
+        progress: { summary: "1/2 subtasks complete", explicit: "Explicit progress: 62%" },
+      },
+    },
+    { ...lane.events[1], subtask: { depth: 1, visible: true, children: false, collapsed: false, source: "none" } },
+    { ...lane.events[2], subtask: { depth: 1, visible: true, children: false, collapsed: false, source: "none" } },
+  ],
+});
 
 const timelineNav = (icon, label) =>
   icon
@@ -951,7 +988,8 @@ export const timelineDynamicFixture = (scale, device) => {
   return { ...base, start: window.start, units: window.units, startMinutes: window.startMinutes, todayOffsetUnits: window.todayOffsetUnits };
 };
 
-const timelineScaleScenario = (scale) => {
+const timelineScaleScenario = (scale, overrides = {}) => {
+  const lanes = overrides.lanes || TL_LANES;
   const renderBody = (fixture, ticks, todayOffset) => `
       <div class="note-database-container db-view-timeline">
         <div class="db-timeline is-scale-${fixture.scale} is-slot-${fixture.slot}"
@@ -1007,7 +1045,7 @@ const timelineScaleScenario = (scale) => {
             </div>
             <div class="db-timeline-body" style="--db-timeline-today-offset-units: ${todayOffset}; --db-timeline-today-offset-px: ${(todayOffset * fixture.width).toFixed(2)}px">
               <div class="db-timeline-grid-columns" aria-hidden="true">${timelineGridColumns(fixture)}</div>
-              ${TL_LANES.map((lane) => timelineLane(lane, fixture)).join("")}
+              ${lanes.map((lane) => timelineLane(lane, fixture)).join("")}
               <div class="db-timeline-today-line" title="2026-03-25"></div>
             </div>
           </div>
@@ -1015,13 +1053,13 @@ const timelineScaleScenario = (scale) => {
       </div>`;
   const label = TIMELINE_FIXTURES[scale].label;
   return {
-    id: scale === "week" ? "timeline-view" : `timeline-view-${scale}`,
-    title: `Timeline view — ${label}`,
+    id: overrides.id || (scale === "week" ? "timeline-view" : `timeline-view-${scale}`),
+    title: overrides.title || `Timeline view — ${label}`,
     group: "views",
     width: 1100,
-    sources: ["src/views/calendar-timeline-renderer.ts"],
-    note: `${label} scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. `
-      + `Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar ${label.toLowerCase()}, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.`,
+    sources: overrides.sources || ["src/views/calendar-timeline-renderer.ts"],
+    note: overrides.note || (`${label} scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. `
+      + `Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar ${label.toLowerCase()}, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.`),
     html: (device) => {
       const fixture = timelineDynamicFixture(scale, device);
       return renderBody(fixture, timelineTicksFor(fixture), fixture.todayOffsetUnits);
@@ -1029,7 +1067,15 @@ const timelineScaleScenario = (scale) => {
   };
 };
 
-const TIMELINE_SCALE_SCENARIOS = Object.keys(TIMELINE_FIXTURES).map(timelineScaleScenario);
+const TIMELINE_SCALE_SCENARIOS = Object.keys(TIMELINE_FIXTURES).map((scale) => timelineScaleScenario(scale));
+
+const TIMELINE_SUBTASK_SCENARIO = timelineScaleScenario("week", {
+  lanes: TL_SUBTASK_LANES,
+  id: "timeline-subtask-tree",
+  title: "Timeline view — subtask tree",
+  sources: ["src/views/calendar-timeline-renderer.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
+  note: "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
+});
 
 // ───────────────────────────────────────────────────────────────────
 // 9. SCENARIOS
@@ -1220,6 +1266,7 @@ export const TEMPORAL_SCENARIOS = [
       </div>`,
   },
   ...TIMELINE_SCALE_SCENARIOS,
+  TIMELINE_SUBTASK_SCENARIO,
   {
     id: "timeline-toolbar-options",
     title: "Timeline settings popover",

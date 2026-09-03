@@ -130,6 +130,41 @@ describe("buildSubtaskRelation visibility", () => {
     expect(relation.nodes.get("b.md")?.visible).toBe(false);
     expect(relation.nodes.get("c.md")?.visible).toBe(false);
   });
+
+  it("lets a per-view isCollapsed override take priority over the frontmatter default", () => {
+    // b's frontmatter says collapsed: true, but the view override says it is expanded.
+    const rows = treeFixture();
+    const relation = buildSubtaskRelation(rows, { isCollapsed: (row) => row.file.path === "root/b.md" ? false : undefined });
+
+    expect(relation.nodes.get("root/b.md")?.collapsed).toBe(false);
+    expect(relation.nodes.get("root/c.md")?.visible).toBe(true);
+  });
+
+  it("falls back to the frontmatter default when the override returns undefined for every row", () => {
+    const rows = treeFixture();
+    const relation = buildSubtaskRelation(rows, { isCollapsed: () => undefined });
+
+    expect(relation.nodes.get("root/c.md")?.visible).toBe(false);
+  });
+});
+
+describe("buildSubtaskRelation progress", () => {
+  it("keeps explicit progress beside the derived child completion value", () => {
+    const rows = [
+      makeRow("parent.md", { progress: 25, subtaskIds: ["done.md", "open.md"] }),
+      makeRow("done.md", { parentId: "parent.md", status: "done" }),
+      makeRow("open.md", { parentId: "parent.md", status: "in-progress" }),
+    ];
+
+    expect(buildSubtaskRelation(rows).nodes.get("parent.md")?.progress).toEqual({
+      explicit: 25,
+      derived: 50,
+      value: 25,
+      source: "explicit",
+      done: 1,
+      total: 2,
+    });
+  });
 });
 
 // ───────────────────────────────────────────────────────────────────

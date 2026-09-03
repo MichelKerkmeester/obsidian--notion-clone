@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "2ea12028c7c8",
+  "baselineHash": "32148b7b7646",
   "baselineCommit": "cb9aedf4b2759928868c103f9db0edbb1f1513d7",
   "history": [
     {
@@ -1388,6 +1388,57 @@
         "screenshots/views/timeline-view-quarter-mobile-light.png"
       ],
       "note": "Post-rebase reconciliation of the calendar leg (worktrees/004-calendar-parity-port) onto main's 038-board-kanban-port and 041-shared-ui-ux-port landings. No stylesheet edit: the merge of 039's calendar-completion/weekend/empty rules onto 041's already-landed token/focus/motion CSS was purely additive (176 insertions, 0 deletions, confirmed by diff against pre-merge HEAD), so the hash stays 2ea12028c7c8, sha256(styles.css).slice(0,12) recomputed the way check-lane.mjs does. A full detached npm run screenshots recapture (260/260 captured, 0 errors) was run after the rebase and read; 12 captures moved by byte-only encoder noise -- layoutHash identical on every one of the twelve, confirmed against the pre-recapture manifest entry by entry -- consistent with the harness non-determinism this lane's history already documents; screenshots/manifest.json (260 entries) and screenshots/README.md were regenerated (README byte-identical, manifest updated). All twelve were opened and read regardless: calendar-mini-calendar, calendar-month-view and calendar-week-time-grid still show the correct layout, and the four calendar-month-view/calendar-week-time-grid captures spot-checked at full resolution (desktop+mobile, light+dark) confirm a completed event keeps its own status colour with strikethrough (Q1 renewals sweep orange, Spotify billing green), weekend columns carry the quiet tint, and the empty backlog reads 'Nothing unscheduled.'; calendar-empty-state confirms the 'No date property' card at real density. The six changed timeline captures (day, desktop-view, month, quarter across both themes/devices) still show 041's viewport-clipped bar fade (Figma's bar fading past the viewport edge in day and month scale) and both native link-dot sibling buttons on every bar; nothing from 041's a11y restructure regressed. node tools/lane/check-lane.mjs: PASS (stylesheet unchanged since the lane was taken, holder null, 0 changed captures against the lane's own baseline). Lane was never re-acquired for this pass -- no edit, verifier-style reconciliation only, same pattern as 037/038's earlier no-edit release entries."
+    },
+    {
+      "event": "acquire",
+      "phase": "040-subtask-tree-port",
+      "at": "2026-09-03T14:05:00Z",
+      "hash": "2ea12028c7c8",
+      "note": "Re-acquired on top of 039's release after rebasing the subtask display leg onto main at a81115d. An earlier hold recorded against 9eb4b141471e predated the 041 and 039 landings and was dropped in that rebase; this one is taken against the stylesheet 039 released. Scope: board card depth indent, subtask toggle, progress bar and inline-add row, plus the timeline bar's depth padding, toggle placement and progress label. Nothing outside the subtask rules is touched."
+    },
+    {
+      "event": "edit",
+      "phase": "040-subtask-tree-port",
+      "at": "2026-09-03T14:10:00Z",
+      "hash": "256bf3de65ed",
+      "note": "Board subtask rules (card margin-inline-start depth indent so nesting shifts the whole card outline rather than only its inner text, toggle, progress track/fill/label, add row and input) and timeline subtask rules (depth padding on the event content, a reserved 28px lead for a bar that owns children, the toggle overlaid at the bar's left edge with the link dots' stacking order, and the inline progress label). The toggle is positioned rather than laid out in the content flow because 041 made the bar a div wrapping a native trigger button: a control inside that trigger is the nested-interactive markup 041 landed to remove, so the toggle is a sibling and needs absolute placement to sit over the trigger."
+    },
+    {
+      "event": "edit",
+      "phase": "040-subtask-tree-port",
+      "at": "2026-09-03T20:10:00Z",
+      "hash": "32148b7b7646",
+      "note": "One rule changed on a verification read: the board card progress label wrapped instead of truncating. Every board capture showed \"1/2 subtasks complete \u00b7 Explicit\u2026\" \u2014 the derived count fit and the author-set percentage, the other half of the pair this phase exists to keep distinct, was the half the ellipsis ate. The timeline label keeps its own class and its own single-line clip inside the bar, so nothing there moved."
+    },
+    {
+      "event": "release",
+      "phase": "040-subtask-tree-port",
+      "at": "2026-09-03T20:15:00Z",
+      "hash": "32148b7b7646",
+      "reviewed": [
+        "screenshots/components/chrome-owned-menu-sheet-mobile-light.png",
+        "screenshots/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/fields/field-icon-picker-desktop-light.png",
+        "screenshots/panels/panel-record-detail-sheet-mobile-dark.png",
+        "screenshots/views/board-subtask-tree-desktop-dark.png",
+        "screenshots/views/board-subtask-tree-desktop-light.png",
+        "screenshots/views/board-subtask-tree-mobile-dark.png",
+        "screenshots/views/board-subtask-tree-mobile-light.png",
+        "screenshots/views/calendar-empty-state-mobile-dark.png",
+        "screenshots/views/calendar-mini-calendar-desktop-dark.png",
+        "screenshots/views/calendar-month-view-mobile-dark.png",
+        "screenshots/views/calendar-week-time-grid-mobile-light.png",
+        "screenshots/views/timeline-subtask-tree-desktop-dark.png",
+        "screenshots/views/timeline-subtask-tree-desktop-light.png",
+        "screenshots/views/timeline-subtask-tree-mobile-dark.png",
+        "screenshots/views/timeline-subtask-tree-mobile-light.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-dark.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ],
+      "note": "Subtask display leg. The tree gets its own scenario on each surface rather than decorating the ordinary ones: board-subtask-tree (a two-column lane, because five columns overflow the widest capture device) and timeline-subtask-tree (the week scale reusing TL_LANES\u2019 own bar geometry, so no date or width is invented). TL_LANES itself is back to its landed definition and a parity test now refuses a subtask field on it, so the five ordinary timeline scales still show an un-related bar. All 21 captures below were opened and read. The eight new ones: the board parent carries the collapse triangle, the progress bar with both the derived count and the explicit percentage on two lines, and the inline add row, while its two children carry only the depth indent \u2014 shifted by the card\u2019s own outline, not its inner text \u2014 and no affordance of their own; the timeline parent carries the toggle at the bar\u2019s left edge and both progress values inside the bar, its two children indent by one step, and the Personal lane stays un-related beside them. The remaining thirteen are byte-only encoder noise: the modified set differs between two consecutive runs over identical sources (chrome-owned-menu-sheet flipped dark to light, timeline-view-month-desktop-light and timeline-view-year-mobile-light appeared only in the second), deltas run 2 to 479 bytes, and timeline-view-day-mobile-light and calendar-month-view-mobile-dark were read side by side against their HEAD copies and are indistinguishable. No new rule matches a calendar, field, panel or chrome element."
     }
   ],
   "outstanding": [

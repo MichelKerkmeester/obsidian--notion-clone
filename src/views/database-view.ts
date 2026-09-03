@@ -69,6 +69,8 @@ import { buildGroupTree, flattenGroupTree } from "../data/multi-field-grouping";
 import { getDisplayGroupFields } from "../data/multi-group-display";
 import { isEmptyGroupId, moveMultiSelectGroupValue } from "../data/multi-select";
 import { generateRanks, rankBetween, rebalanceRanks, resolveNewEntryRankBounds } from "../data/manual-order";
+import { toFrontmatterUpdates } from "../data/subtask-serialize";
+import type { SubtaskMovePlan, SubtaskMoveRequest } from "../data/types";
 import { CellEditSession, CellOptionTransaction, CellRenderer } from "./cell-renderer";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { ColumnMenu, ColumnMenuOptions } from "./column-menu";
@@ -422,6 +424,9 @@ export class DatabaseView extends FileView {
     reorderTimelineEvent: (row, beforePath, afterPath) => this.moveRowToPosition(row.file.path, beforePath, afterPath),
     moveTimelineEventToGroup: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath) =>
       this.moveRowToGroupAndPosition(row, field, fromGroupKey, toGroupKey, beforePath, afterPath),
+    moveSubtask: (request, plan) => this.moveSubtask(request, plan),
+    isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.getConfig(), row),
+    toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.getConfig(), row, collapsed),
     isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
     toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
@@ -775,6 +780,9 @@ export class DatabaseView extends FileView {
       moveRowWithGroupUpdatesAndPosition: (row, updates, beforePath, afterPath, movedPaths) =>
         this.moveRowWithGroupUpdatesAndPosition(row, updates, beforePath, afterPath, movedPaths),
       moveRowsToPosition: (paths, beforePath, afterPath) => this.moveRowsToPosition(paths, beforePath, afterPath),
+      moveSubtask: (request, plan) => this.moveSubtask(request, plan),
+      isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.getConfig(), row),
+      toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.getConfig(), row, collapsed),
       getSelectedRows: () => this.rows.filter((row) => this.selectedRows.has(row.file.path)),
       updateColumnWidth: (width) => this.updateBoardColumnWidth(width),
       isRowSelected: (row) => this.selectedRows.has(row.file.path),
@@ -10863,6 +10871,43 @@ export class DatabaseView extends FileView {
     config.boardColumnWidth = width;
     this.pendingUndoLabel = t("undo.columnWidthConfig");
     this.scheduleConfigSave();
+  }
+
+  /**
+   * Apply a subtask move/reorder plan through the one write path `planSubtaskMove` produces.
+   * `plan` always arrives `ok: true` here — both renderers only call this action once their own
+   * `planSubtaskMove` check passed — but the type stays the full union so a caller can never skip
+   * that check by construction.
+   */
+  private async moveSubtask(_request: SubtaskMoveRequest, plan: SubtaskMovePlan): Promise<void> {
+    if (!plan.ok || plan.writes.length === 0) return;
+    const fileByPath = new Map(this.rows.map((row) => [row.file.path, row.file]));
+    for (const write of plan.writes) {
+      const file = fileByPath.get(write.path);
+      if (!file) continue;
+      await this.dataSource.updateFrontmatter(file, toFrontmatterUpdates(write), { sourceInstanceId: this.instanceId });
+    }
+    this.pendingUndoLabel = t("undo.editCell");
+    await this.refreshAfterSave();
+  }
+
+  /**
+   * Subtask expand/collapse is view-local state, not a frontmatter write: the board and timeline
+   * both call this from a plain UI toggle (including inside a read-only embed, where a frontmatter
+   * write is not available), so it layers over a row's own `collapsed` frontmatter default the
+   * same way `collapsedGroups` layers over group membership, through `buildSubtaskRelation`'s
+   * `isCollapsed` override rather than a note edit.
+   */
+  private isSubtaskCollapsed(config: ViewConfig | undefined, row: RowData): boolean | undefined {
+    return config?.subtaskCollapsed?.[row.file.path];
+  }
+
+  private toggleSubtaskCollapsed(config: ViewConfig | undefined, row: RowData, collapsed: boolean): void {
+    if (!config) return;
+    config.subtaskCollapsed = { ...(config.subtaskCollapsed || {}), [row.file.path]: collapsed };
+    this.pendingUndoLabel = t("undo.groupCollapseConfig");
+    this.scheduleConfigSave();
+    this.refresh();
   }
 
   private isGroupCollapsed(config: ViewConfig | undefined, field: string, key: string): boolean {

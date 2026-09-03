@@ -21,7 +21,7 @@ import { describe, expect, it, vi } from "vitest";
 import { TFile } from "obsidian";
 import type { RowData } from "./types";
 import { buildSubtaskRelation, type SubtaskRelation } from "./subtask-relation";
-import { planSubtaskMove, type SubtaskWrite } from "./subtask-serialize";
+import { planSubtaskMove, toFrontmatterUpdates, type SubtaskWrite } from "./subtask-serialize";
 
 vi.mock("obsidian", () => ({
   App: class {},
@@ -339,5 +339,44 @@ describe("transaction write shape", () => {
     expect(newParentWrite!.frontmatter.subtaskIds).toEqual(["c1.md", "a1.md"]);
     // The old parent's list became empty, so the key is omitted rather than written as [].
     expect("subtaskIds" in oldParentWrite!.frontmatter).toBe(false);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 8. HOST WRITE ADAPTER
+// ───────────────────────────────────────────────────────────────────
+
+describe("toFrontmatterUpdates", () => {
+  it("carries a written relation key through as a keyed update", () => {
+    const rows = treeFixture();
+    const plan = planSubtaskMove(rows, { childPath: "a1.md", newParentPath: "c.md" });
+    expect(plan.ok).toBe(true);
+    if (!plan.ok) return;
+    const childWrite = plan.writes.find((write) => write.path === "a1.md")!;
+
+    const updates = toFrontmatterUpdates(childWrite);
+    expect(updates.parentId).toBe("c.md");
+  });
+
+  it("maps an omitted (reset-to-default) relation key to null so the host deletes it", () => {
+    const rows = treeFixture();
+    const plan = planSubtaskMove(rows, { childPath: "a1.md", newParentPath: null });
+    expect(plan.ok).toBe(true);
+    if (!plan.ok) return;
+    const oldParentWrite = plan.writes.find((write) => write.path === "a.md")!;
+    expect("subtaskIds" in oldParentWrite.frontmatter).toBe(false);
+
+    const updates = toFrontmatterUpdates(oldParentWrite);
+    expect(updates.subtaskIds).toBeNull();
+  });
+
+  it("never leaks a whole-note frontmatter field outside the four relation keys", () => {
+    const write: SubtaskWrite = {
+      path: "a.md",
+      frontmatter: { title: "Website redesign", cost: 42, parentId: "root.md" },
+    };
+    const updates = toFrontmatterUpdates(write);
+    expect(Object.keys(updates).sort()).toEqual(["collapsed", "parentId", "subtaskIds", "subtaskRank"]);
+    expect(updates.parentId).toBe("root.md");
   });
 });

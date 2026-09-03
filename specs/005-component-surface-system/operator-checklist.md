@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **42 phases**, **5 with nothing left**, **83 rows** waiting on a device.
+Derived 2026-09-03: **42 phases**, **5 with nothing left**, **79 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -182,12 +182,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] Operator-only. The operator confirms on device that a completed milestone reads as completed in the calendar, at whatever scale they open first. No artifact in this tree can close this row; only the operator's own confirmation does (parent goal D3).
 
-## 040-subtask-tree-port — 0/7
+## 040-subtask-tree-port — 4/7
 
-- [ ] A relation-fixture test observed failing red, then passing green. Where recorded: `src/data/subtask-relation.test.ts`; the failing value is the exit/assertion output from `plan.md` step 1, run before `subtask-relation.ts` exists.
-- [ ] Hydrate/serialize round-trips a 3-level fixture with no field loss. Where recorded: SC-001 in `acceptance-criteria.md`, evidenced by the round-trip test's before/after diff.
-- [ ] A cross-parent move updates both parents' `subtaskIds`, the child's `parentId`, and sibling ranks atomically, in one observed transaction. Where recorded: SC-002, evidenced by a before/after diff of the relation state around the move call.
-- [ ] A cycle-creating move is rejected and leaves the relation byte-for-byte unchanged. Where recorded: SC-003, evidenced by re-reading the fixture after the rejected call and diffing against the pre-call state.
 - [ ] Explicit and derived progress are asserted as distinct, and derived never overwrites explicit. Where recorded: SC-004.
 - [ ] `npm run gate` prints `gate: PASS` and exits 0 on the final state, read directly (not through a pipe). Where recorded: SC-005, task T017.
 - [ ] `styles.css` lane released with a recapture read, naming the changed depth/expand/progress captures in a `reviewed` array. Where recorded: task T014-T015.

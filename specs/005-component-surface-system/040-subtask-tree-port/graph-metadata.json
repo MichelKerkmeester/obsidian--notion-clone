@@ -56,11 +56,11 @@
       "src/data/subtask-relation.test.ts",
       "src/data/subtask-hydrate.test.ts",
       "src/data/subtask-serialize.test.ts",
+      "src/data/data-source.ts",
       "src/data/manual-order.ts",
       "src/views/board-renderer.ts",
       "src/views/calendar-timeline-renderer.ts",
-      "tools/lane/css-lane.json",
-      "src/data/computed-evaluator.ts"
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
@@ -154,6 +154,12 @@
         "source": "derived"
       },
       {
+        "name": "data-source.ts",
+        "kind": "code",
+        "path": "src/data/data-source.ts",
+        "source": "derived"
+      },
+      {
         "name": "manual-order.ts",
         "kind": "code",
         "path": "src/data/manual-order.ts",
@@ -175,12 +181,6 @@
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
-        "name": "computed-evaluator.ts",
-        "kind": "code",
-        "path": "src/data/computed-evaluator.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "This repo has no subtask/hierarchy concept today: `grep -rn \"parentId\\|subtaskIds\\|hierarchy\" src/data/`",
     "created_at": "2026-09-02T21:56:57.762Z",
-    "last_save_at": "2026-09-03T09:58:59.097Z",
+    "last_save_at": "2026-09-03T20:05:30.077Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:bc003a9ec6db97dfe72dbdf1e10ad22fa60544167db643e5568a4cc19f467a59",
+    "source_fingerprint": "sha256:99208226f75e979ec98a6ceade64a4e7b2c88590769799189fb5e2a5b85e4bab",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d0babe4606cf70f2cd0611feac9f7f8c7052634548068e8b9239909e04cdb5e5",
       "plan.md": "cebc9f277f7a06b25376823e85be46729d3d76f896dd66ea2327fd51b62eef19",
-      "tasks.md": "b5eacb34a7b3ba7803db95c22a03c7db6c4d61fb59f3187673d8a1395eca39f8",
+      "tasks.md": "e6d4b145e7b44b5598c6aecbb1bf4950a8770d0e7e1ca271ace7a9af89c0db60",
       "decision-record.md": "6aaf40a0bcf315e641f5187af90dbbdc8f585754d613863ee76f44c05a4da6aa",
-      "implementation-summary.md": "73c2e13601adafa270545017c2468f54074bad3d034480e906bdf0759aca03a1"
+      "implementation-summary.md": "f45050a5c7deb4e96b1889fbdb8beaedbffcc3bdda22ead8aecea2e237e1d9ee"
     },
     "last_active_child_id": null,
     "last_active_at": null

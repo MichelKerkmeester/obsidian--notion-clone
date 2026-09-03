@@ -1,33 +1,37 @@
 ---
 title: "Implementation Summary [template:level-3/implementation-summary.md]"
-description: "Leg a of the subtask tree port lands the data layer — a derived relation, sanitized hydrate, and the single atomic write path — verified green but not yet committed or operator-confirmed."
+description: "Leg a lands the data layer — a derived relation, sanitized hydrate and the single atomic write path — and leg b puts the tree on the board and the timeline: depth, collapse, progress, inline add and moves that route through that one write path."
 trigger_phrases:
   - "040 implementation summary"
   - "subtask tree port leg a"
+  - "subtask tree port leg b"
   - "subtask relation hydrate serialize"
+  - "subtask board timeline display"
 importance_tier: "normal"
 contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/040-subtask-tree-port"
-    last_updated_at: "2026-09-03T13:20:00Z"
-    last_updated_by: "leg-a-verified"
-    recent_action: "Recorded leg a: relation/hydrate/serialize verified green, 47/47"
-    next_safe_action: "Implement T008 progress distinction, then T009-T013 renderer affordances"
+    last_updated_at: "2026-09-03T20:30:00Z"
+    last_updated_by: "leg-b-verified"
+    recent_action: "Leg b landed: board and timeline display verified"
+    next_safe_action: "Close the drag-reorder rank-only gap, or take the packet to acceptance-criteria sign-off"
     blockers:
-      - "Not committed: leg a's data-layer modules sit uncommitted in this worktree"
-      - "Not operator-confirmed: progress display, renderer affordances and styles (T008-T013) remain unbuilt"
+      - "Not operator-confirmed: no device or installed-build confirmation of the tree UI has occurred"
+      - "Drag-reorder inside one parent still routes rank-only: the host handlers drop moveRowToPosition's subtaskMove argument"
+      - "The two host moveSubtask/toggleSubtaskCollapsed bodies have no test harness"
     key_files:
       - "src/data/subtask-relation.ts"
-      - "src/data/subtask-hydrate.ts"
       - "src/data/subtask-serialize.ts"
-      - "src/data/row-pipeline.ts"
-      - "src/data/types.ts"
+      - "src/views/board-renderer.ts"
+      - "src/views/calendar-timeline-renderer.ts"
+      - "src/views/database-view.ts"
+      - "tools/screenshots/scenarios/temporal.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "040-subtask-tree-port-leg-a"
+      session_id: "040-subtask-tree-port-leg-b"
       parent_session_id: null
-    completion_pct: 39
+    completion_pct: 88
     open_questions: []
     answered_questions:
       - "The subtask relation is a pure derivation over RowData[], never a nested field (ADR-001, decision-record.md)"
@@ -47,9 +51,10 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 040-subtask-tree-port |
-| **Completed** | Not completed — leg a (data layer) only, verified 2026-09-03 |
+| **Completed** | Both legs landed and verified 2026-09-03; not operator-confirmed, and two rows below stay open |
 | **Level** | 3 |
 | **LOC Added (leg a)** | ~545 production (472 new files + 73 in `row-pipeline.ts`/`types.ts`), ~801 test |
+| **LOC Added (leg b)** | ~530 production across `src/data/*` and the four view files, ~130 CSS, ~180 test and fixture |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -57,15 +62,17 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This leg ports the normalized parent/child relation `obsidian-pm-main` keeps as a recursive in-memory
+### Leg A — The Data Layer
+
+Leg a ports the normalized parent/child relation `obsidian-pm-main` keeps as a recursive in-memory
 tree into this repo's flat, per-note `RowData` model as a pure derivation, plus the one write path
-allowed to touch `parentId`/`subtaskIds` in frontmatter. Nothing in this leg touches a renderer: it is
-the data layer three consuming surfaces (board, timeline, table/tree) will read from in later legs.
+allowed to touch `parentId`/`subtaskIds` in frontmatter. Nothing in it touches a renderer: it is the
+data layer the consuming surfaces read from, and the Leg B section below is where they start doing so.
 
 ### Subtask Relation, Hydrate and Serialize
 
 `src/data/subtask-relation.ts` derives the relation from `RowData[]` — `buildSubtaskRelation`
-(`subtask-relation.ts:30-195`) reads each row's sanitized relation fields and returns depth, ancestor
+(`subtask-relation.ts:37-230`) reads each row's sanitized relation fields and returns depth, ancestor
 chains, visibility and cycle diagnostics without mutating any row. `parentId` is authoritative for
 membership; a parent's own `subtaskIds` only supplies sibling order. Orphaned parents become roots and
 an unresolved child is dropped from its listed parent rather than thrown; a cycle is cut at its
@@ -76,16 +83,16 @@ keeping first-occurrence order, and `collapsed` is only ever exactly `true`.
 
 `src/data/subtask-serialize.ts` is the single write path. `writeRelationFields` omits default-valued
 keys instead of writing them and never mutates its input. `planSubtaskMove`
-(`subtask-serialize.ts:67-186`) is the only function that plans a `parentId`/`subtaskIds` write: it
+(`subtask-serialize.ts:88-207`) is the only function that plans a `parentId`/`subtaskIds` write: it
 validates the request, rejects a move that would create a cycle via a visited-set walk up the ancestor
-chain (`createsCycle`, `subtask-serialize.ts:188-202`) with zero writes on rejection, and otherwise
+chain (`createsCycle`, `subtask-serialize.ts:209-223`) with zero writes on rejection, and otherwise
 returns the full write set — the moved child, both affected parents' `subtaskIds`, and a
 parent-scoped sibling rank from the existing base62 manual-order helpers (`generateRanks`/
 `rankBetween`), rebalancing the whole sibling scope in the same write set when ranks run dense.
 
 `src/data/types.ts` gains `SubtaskRelationFields`, `SubtaskNode`, `SubtaskDiagnostics`,
 `SubtaskRelation`, `SubtaskWrite`, `SubtaskMoveRequest`, `SubtaskMovePlan` and
-`SubtaskMoveErrorCode` (`types.ts:172-230`) — `RowData` itself is untouched (ADR-001).
+`SubtaskMoveErrorCode` (`types.ts:172-249`) — `RowData` itself is untouched (ADR-001).
 `src/data/row-pipeline.ts` gains one optional stage: `buildWithDiagnostics` takes an
 `options.includeRelation` flag (`row-pipeline.ts:89-96`) and attaches `output.relation` only when set
 (`row-pipeline.ts:185-201`); `RowPipelineDiagnostics`'s own shape (`row-pipeline.ts:44-53`) is
@@ -128,7 +135,7 @@ against, not yet the acceptance event itself.
 ---
 
 <!-- ANCHOR:how-delivered -->
-## How It Was Delivered
+## How Leg A Was Delivered
 
 Red-first: before the three modules existed, the suite failed with `Cannot find module` against
 `subtask-relation.ts`/`subtask-hydrate.ts`/`subtask-serialize.ts` across three suites, no tests run
@@ -162,7 +169,7 @@ for that tree) — this leg is data-layer only.
 ---
 
 <!-- ANCHOR:verification -->
-## Verification Results
+## Verification Results (Leg A)
 
 | Check | Result |
 |-------|--------|
@@ -178,20 +185,96 @@ for that tree) — this leg is data-layer only.
 
 ---
 
+<!-- ANCHOR:leg-b -->
+## Leg B — The Tree on the Board and the Timeline
+
+Leg a stopped at the data layer and said so; this leg is the display half. Both renderers build the
+relation from the rows they already hold and read it — they never write it, and the only write they
+can reach is `planSubtaskMove`'s plan handed to a host action, so ADR-002's single path survives the
+crossing into `src/views/`.
+
+`buildSubtaskRelation` gains one option: `isCollapsed(row)`, a per-view override that layers over a
+note's own `collapsed` frontmatter default (`subtask-relation.ts:30-46`). That is what lets a
+collapse toggle work inside a read-only embed, where a frontmatter write is not available, and it is
+why expand state persists in view config (`ViewConfig.subtaskCollapsed`, `types.ts:538-545`;
+round-trip at `data-source.ts:827-829,1019-1021,1227-1229`) rather than in a note. Progress is
+derived in the same pass (`subtask-relation.ts:233-258`), and it keeps the author's number and the
+count from children as separate fields on one record — `explicit` never loses to `derived`, and
+`source` names which one `value` came from.
+
+The board indents by the card's own outline (`margin-inline-start`, `styles.css:9413-9415`), not by
+padding inside it, so a child card reads as nested rather than as a card with a wide gutter. The
+toggle and the inline add row appear only where a real relation exists: a relation node is built for
+every row, so node presence alone would have put an "Add subtask…" input under every leaf card on the
+board, and the gate is children-count rather than node-presence (`board-renderer.ts:1019-1023`). The
+timeline gates its own styling class the same way and says so in place
+(`calendar-timeline-renderer.ts:939-945`). The mobile move menu is bounded to the current group and
+capped at 20 with a trailing count row (`board-renderer.ts:67,1317-1344`); an unbounded sweep of
+`rowByPath` had been putting every other row on the whole board into one phone menu.
+
+`toFrontmatterUpdates` (`subtask-serialize.ts:63-83`) is the one addition to the write path: a
+planned write carries a whole-note frontmatter snapshot, and applying it verbatim would re-set every
+unrelated field on that note, turning a scoped relation write into one that can race a concurrent
+edit elsewhere in the same file. It narrows the write back to the four relation keys, mapping an
+omitted key to `null` so the host's own writer deletes it.
+
+### Fixtures
+
+Each surface gets the tree in its own scenario rather than folded into the ordinary ones. On the
+board that is forced — five columns overflow the widest capture device — and on the timeline it is a
+choice: `TL_LANES` feeds all five scale captures on both devices, and marking its bars would have put
+an indent, a toggle and a progress label into every one of them, when an un-related bar is exactly
+what those captures exist to show. `TL_SUBTASK_LANES` (`temporal.mjs:675-695`) re-reads the same two
+lanes with the same geometry, so no date or width is invented, and a parity test refuses a `subtask`
+field on `TL_LANES` itself (`shared.test.mjs:181-193`).
+
+### Leg B Verification
+
+| Check | Result |
+|-------|--------|
+| `npx tsc --noEmit` | PASS — exit 0 |
+| `npm run test` | PASS — 87 files, 864 tests |
+| Red-first, relation options + progress | `src/data/subtask-relation.ts` at `HEAD`: 2 of 18 red, `expected { explicit: 25, … } to be undefined` |
+| Red-first, collapse round-trip | `src/data/data-source.ts` at `HEAD`: red, `expected undefined to deeply equal { 'Tasks/Parent.md': true }` |
+| Red-first, board fixture parity | one span deleted from the fixture: red, `db-subtask-progress-fill is in its fixture` |
+| Red-first, ordinary-lane guard | a `subtask` field put back on `TL_LANES`: red, `business/Figma carries no subtask state` |
+| `npm run lint` | 169 problems (156 errors, 13 warnings) — identical to `HEAD`; the logs differ only in line numbers of pre-existing findings |
+| `npm run lint:tools` | PASS — exit 0 |
+| `node tools/naming/scan-comments.mjs` | PASS — 374 files, 0 commented-out lines, 0 missing banners |
+| `node tools/naming/scan-failing-values.mjs` | PASS — exit 0 |
+| `node tools/lane/check-lane.mjs` | PASS — `release names all 21 changed capture(s)`, exit 0 bare and phased |
+| `node tools/live/engine-parity.mjs` | 51 differences, the same count as `HEAD`; fixtures 66 -> 68 for the two new scenarios; none names a subtask class |
+| `npm run screenshots` | 268 captured, 0 errors; all 21 changed captures opened and read |
+| `npm run gate` | PASS — 25/25 green, exit 0, bare and with `SURFACE_PHASE` |
+
+Two of those were red before they were green, for reasons worth keeping: the first capture read
+truncated the board progress label to `1/2 subtasks complete · Explicit…`, hiding the author-set half
+of the pair REQ-004 exists to separate, and the `evidence` lane found 11 of 16 artefacts describing a
+stylesheet that no longer existed. The first was a stylesheet fix and a re-read; the second was
+re-measured by the eight census and audit tools the gate does not re-stamp on its own.
+<!-- /ANCHOR:leg-b -->
+
+---
+
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Progress distinction is not built (T008/SC-004).** Explicit vs. derived progress, and the rule
-   that derived never overwrites explicit, is unimplemented; goal.md completion criterion 5 stays
-   unticked.
-2. **No renderer reads the relation yet (T009-T013).** `board-renderer.ts` and
-   `calendar-timeline-renderer.ts` do not yet adapt their move/reorder contracts or lane flattening to
-   the relation; depth/expand-collapse UI and inline add are unbuilt.
-3. **No `styles.css` change landed.** Depth indentation and the expand/collapse affordance (T013-T015)
-   are not yet in the `css-lane` protocol.
-4. **Uncommitted and not operator-confirmed.** This leg's five changed files sit uncommitted in this
-   worktree; no device or installed-build confirmation has occurred, and `acceptance-criteria.md`'s
-   rows remain `Unmet` pending the next leg's work.
+1. **Drag-reorder inside one parent still routes rank-only.** `getSubtaskMoveContext`
+   (`board-renderer.ts:1461-1476`) plans a same-parent move and hands it to `moveRowToPosition` as
+   `subtaskMove`, but every host binding drops that argument (`database-view.ts:779`,
+   `embedded-database-renderer.ts:429`), so a drag reorders the manual rank and never writes
+   `subtaskRank`. The timeline's own reorder path does route through the helper
+   (`applyTimelineSubtaskOrder`, `calendar-timeline-renderer.ts:2687-2708`), so the two surfaces
+   disagree today. The plan is computed and discarded on every board drag; closing this is either
+   wiring the argument through the two hosts or removing the parameter.
+2. **The host handler bodies have no test harness.** `moveSubtask` and `toggleSubtaskCollapsed` in
+   `database-view.ts:10882-10911` and `embedded-database-renderer.ts:2726-2755` need a live Obsidian
+   `App`, workspace and metadata cache, which no check here constructs. Their inputs
+   (`planSubtaskMove`, `toFrontmatterUpdates`) and their output shape are covered; the call itself is
+   read, not run.
+3. **Not operator-confirmed.** No device or installed-build confirmation of the tree UI has occurred,
+   and `acceptance-criteria.md`'s rows are not signed off. The captures are headless Chrome against
+   hand-written fixtures, which is evidence about markup and stylesheet, not about Obsidian.
 <!-- /ANCHOR:limitations -->
 
 ---

@@ -17,7 +17,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, setIcon, setTooltip } from "obsidian";
+import { App, Notice, setIcon, setTooltip } from "obsidian";
 import { isObsidianTagsKey, resolveOptionDisplay, toMultiSelectValuesForKey } from "../data/column-types";
 import { OPTION_REGISTRATION_COLORS } from "../data/option-registration";
 import { isExplicitlySorted } from "../data/manual-order";
@@ -50,6 +50,9 @@ import { attachLongPress, isTouchDevice } from "../data/touch-environment";
 import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./card-roving-tabindex";
 import { createOwnedMenuForEvent } from "./owned-menu";
 import { openExternalUrl } from "./open-external";
+import { buildSubtaskRelation } from "../data/subtask-relation";
+import { planSubtaskMove } from "../data/subtask-serialize";
+import type { SubtaskMovePlan, SubtaskMoveRequest, SubtaskNode, SubtaskProgress, SubtaskRelation } from "../data/types";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -59,6 +62,9 @@ const CARD_MIME = "application/x-note-database-card";
 const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
 const CARD_FROM_SUBGROUP_MIME = "application/x-note-database-card-from-subgroup";
 const GROUP_MIME = "application/x-note-database-group";
+/** "Move under" menu candidate cap — bounds the mobile move-subtask list the same way the
+ *  calendar/timeline search results panel caps its own list, with a trailing count row for the rest. */
+const MOVE_UNDER_CANDIDATE_LIMIT = 20;
 const ROW_BATCH_MIME = "application/x-note-database-row-batch";
 
 // ───────────────────────────────────────────────────────────────────
@@ -78,25 +84,36 @@ export interface BoardSubgroup {
   count: number;
 }
 
+export interface BoardSubtaskMove {
+  request: SubtaskMoveRequest;
+  plan: SubtaskMovePlan;
+}
+
 export interface BoardRendererActions {
   openRow(row: RowData): void;
   openRecordDetail?(anchorEl: HTMLElement, row: RowData): void;
-  createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition): void;
+  createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition, context?: RowCreateContext): void;
   createGroup?(field: string, name: string, color: StatusColor): Promise<boolean>;
   updateGroup(row: RowData, field: string, value: string, fromValue?: string): Promise<void>;
   updateGroupOrder(field: string, order: string[]): void;
   hideGroup?(field: string, key: string): void;
   deleteGroup?(field: string, key: string): void;
   updateCardOrder(field: string, groupKey: string, paths: string[]): void;
-  moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string): void;
+  moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string, subtaskMove?: BoardSubtaskMove): void;
   moveRowWithGroupUpdatesAndPosition?(
     row: RowData,
     updates: Array<{ field: string; fromGroupKey: string; toGroupKey: string }>,
     beforePath?: string,
     afterPath?: string,
     movedPaths?: string[],
+    subtaskMove?: BoardSubtaskMove,
   ): void | Promise<void>;
-  moveRowsToPosition?(movedPaths: string[], beforePath?: string, afterPath?: string): void;
+  moveRowsToPosition?(movedPaths: string[], beforePath?: string, afterPath?: string, subtaskMove?: BoardSubtaskMove): void;
+  moveSubtask?(request: SubtaskMoveRequest, plan: SubtaskMovePlan): void | Promise<void>;
+  /** Per-view collapse override for a row, layered over its own `collapsed` frontmatter default
+   *  by `buildSubtaskRelation`. Returns `undefined` for a row the view has no override for. */
+  isSubtaskCollapsed?(row: RowData): boolean | undefined;
+  toggleSubtaskCollapsed?(row: RowData, collapsed: boolean): void | Promise<void>;
   getSelectedRows?(): RowData[];
   updateColumnWidth(width: number): void;
   isRowSelected(row: RowData): boolean;
@@ -133,6 +150,7 @@ interface ParsedLink {
 
 export class BoardRenderer {
   private rowByPath = new Map<string, RowData>();
+  private subtaskRelation: SubtaskRelation | null = null;
   /** Basenames shared by more than one row, rebuilt whenever the row set is. */
   private duplicateNames: ReadonlySet<string> = new Set<string>();
   private dragEnterCount = new WeakMap<HTMLElement, number>();
@@ -180,6 +198,9 @@ export class BoardRenderer {
     // 这里兜底移除残留的浮动列名 preview 与 dragover 监听，避免孤儿元素与监听器泄漏。
     this.endBoardDragPreview();
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
+    this.subtaskRelation = buildSubtaskRelation([...this.rowByPath.values()], {
+      isCollapsed: (row) => this.actions.isSubtaskCollapsed?.(row),
+    });
     this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
     groups = groups.filter((group) => !hiddenGroups.has(group.key));
@@ -338,7 +359,8 @@ export class BoardRenderer {
         if (collapsed) continue;
         const currentSubgroup = subgroup || { key: laneKey, rows: [], count: 0 };
         const cards = this.createCardsContainer(cell, config, group, groupField, subgroupField, currentSubgroup);
-        const visibleCount = getGroupVisibleCount(config, subgroupField, currentSubgroup.key, currentSubgroup.rows.length);
+        const relationVisibleRows = this.getVisibleSubtaskRows(currentSubgroup.rows);
+        const visibleCount = getGroupVisibleCount(config, subgroupField, currentSubgroup.key, relationVisibleRows.length);
         if (visibleCount === 0) {
           const groupEmptyOptions: EmptyStateOptions = emptyState
             ? (emptyStateTracker?.actionsRendered && emptyState.actions
@@ -351,13 +373,13 @@ export class BoardRenderer {
           const empty = this.emptyStateRenderer.renderCard(cards, groupEmptyOptions);
           empty.addClass("db-board-empty-slot");
         }
-        for (const row of currentSubgroup.rows.slice(0, visibleCount)) this.renderCard(cards, config, groups, group, row, groupField, subgroupField, currentSubgroup.key, currentSubgroup.rows);
-        renderGroupExpandControls(cards, config, subgroupField, currentSubgroup.key, currentSubgroup.rows.length, this.actions);
+        for (const row of relationVisibleRows.slice(0, visibleCount)) this.renderCard(cards, config, groups, group, row, groupField, subgroupField, currentSubgroup.key, relationVisibleRows);
+        renderGroupExpandControls(cards, config, subgroupField, currentSubgroup.key, relationVisibleRows.length, this.actions);
         if (!this.actions.isReadOnly && !this.actions.hideCreateEntry) {
           if (isComputedGroupField(config, groupField) || isComputedGroupField(config, subgroupField)) {
             cards.createEl("button", { cls: "db-board-new-card is-disabled", text: t("group.computedCreateDisabled"), attr: { type: "button", disabled: "true" } });
           } else {
-            cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}`, attr: { type: "button" } }).onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: laneKey }, currentSubgroup.rows);
+            cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}`, attr: { type: "button" } }).onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: laneKey }, relationVisibleRows);
           }
         }
       }
@@ -593,7 +615,8 @@ export class BoardRenderer {
     }
 
     const cards = this.createCardsContainer(column, config, group, groupField);
-    const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
+    const relationVisibleRows = this.getVisibleSubtaskRows(group.rows);
+    const visibleCount = getGroupVisibleCount(config, groupField, group.key, relationVisibleRows.length);
     if (visibleCount === 0) {
       const groupEmptyOptions: EmptyStateOptions = emptyState
         ? (emptyStateTracker?.actionsRendered && emptyState.actions
@@ -606,16 +629,16 @@ export class BoardRenderer {
       const empty = this.emptyStateRenderer.renderCard(cards, groupEmptyOptions);
       empty.addClass("db-board-empty-slot");
     }
-    for (const row of group.rows.slice(0, visibleCount)) {
-      this.renderCard(cards, config, groups, group, row, groupField, undefined, undefined, group.rows);
+    for (const row of relationVisibleRows.slice(0, visibleCount)) {
+      this.renderCard(cards, config, groups, group, row, groupField, undefined, undefined, relationVisibleRows);
     }
-    renderGroupExpandControls(cards, config, groupField, group.key, group.rows.length, this.actions);
+    renderGroupExpandControls(cards, config, groupField, group.key, relationVisibleRows.length, this.actions);
     if (!this.actions.isReadOnly && !this.actions.hideCreateEntry) {
       if (isComputedGroupField(config, groupField)) {
         cards.createEl("button", { cls: "db-board-new-card is-disabled", text: t("group.computedCreateDisabled"), attr: { disabled: "true" } });
       } else {
         cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}` }).onclick =
-          () => this.createEntryNearEnd({ [groupField]: group.key || "" }, group.rows);
+          () => this.createEntryNearEnd({ [groupField]: group.key || "" }, relationVisibleRows);
       }
     }
   }
@@ -667,7 +690,8 @@ export class BoardRenderer {
     if (collapsed) return;
 
     const cards = this.createCardsContainer(section, config, group, groupField, subgroupField, subgroup);
-    const visibleCount = getGroupVisibleCount(config, subgroupField, subgroup.key, subgroup.rows.length);
+    const relationVisibleRows = this.getVisibleSubtaskRows(subgroup.rows);
+    const visibleCount = getGroupVisibleCount(config, subgroupField, subgroup.key, relationVisibleRows.length);
     if (visibleCount === 0) {
       const groupEmptyOptions: EmptyStateOptions = emptyState
         ? (emptyStateTracker?.actionsRendered && emptyState.actions
@@ -680,16 +704,16 @@ export class BoardRenderer {
       const empty = this.emptyStateRenderer.renderCard(cards, groupEmptyOptions);
       empty.addClass("db-board-empty-slot");
     }
-    for (const row of subgroup.rows.slice(0, visibleCount)) {
-      this.renderCard(cards, config, groups, group, row, groupField, subgroupField, subgroup.key, subgroup.rows);
+    for (const row of relationVisibleRows.slice(0, visibleCount)) {
+      this.renderCard(cards, config, groups, group, row, groupField, subgroupField, subgroup.key, relationVisibleRows);
     }
-    renderGroupExpandControls(cards, config, subgroupField, subgroup.key, subgroup.rows.length, this.actions);
+    renderGroupExpandControls(cards, config, subgroupField, subgroup.key, relationVisibleRows.length, this.actions);
     if (!this.actions.isReadOnly && !this.actions.hideCreateEntry) {
       if (isComputedGroupField(config, groupField) || isComputedGroupField(config, subgroupField)) {
         cards.createEl("button", { cls: "db-board-new-card is-disabled", text: t("group.computedCreateDisabled"), attr: { disabled: "true" } });
       } else {
         cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}` }).onclick =
-          () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: subgroup.key || "" }, subgroup.rows);
+          () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: subgroup.key || "" }, relationVisibleRows);
       }
     }
   }
@@ -749,6 +773,10 @@ export class BoardRenderer {
     this.actions.createEntry(defaults, this.getCreatePosition(rows));
   }
 
+  private getVisibleSubtaskRows(rows: RowData[]): RowData[] {
+    return rows.filter((row) => this.subtaskRelation?.nodes.get(row.file.path)?.visible !== false);
+  }
+
   private getCreatePosition(rows: RowData[]): CreateEntryPosition | undefined {
     const last = rows[rows.length - 1];
     return last ? { afterPath: last.file.path } : undefined;
@@ -765,6 +793,8 @@ export class BoardRenderer {
     subgroupKey?: string,
     visibleRows: RowData[] = group.rows
   ): void {
+    const subtaskNode = this.subtaskRelation?.nodes.get(row.file.path);
+    const subtaskChildren = this.subtaskRelation?.childrenOf.get(row.file.path) || [];
     const card = cards.createDiv({
       cls: "db-board-card",
       attr: {
@@ -772,8 +802,13 @@ export class BoardRenderer {
         title: row.file.path,
         role: "row",
         "aria-keyshortcuts": "Enter Space F2",
+        ...(subtaskNode ? {
+          "data-subtask-depth": String(subtaskNode.depth),
+          "data-subtask-visible": String(subtaskNode.visible),
+        } : {}),
       },
     });
+    if (subtaskNode) card.style.setProperty("--db-subtask-depth", String(subtaskNode.depth));
     wireCardKeyboard({
       card,
       rovingController: this.rovingController,
@@ -926,6 +961,7 @@ export class BoardRenderer {
     if (!this.actions.isReadOnly) {
       this.renderMobileMoveButton(controls, config, groups, group, row, groupField, subgroupField, subgroupKey);
     }
+    this.renderSubtaskToggle(controls, row, subtaskNode, subtaskChildren.length > 0);
     const columns = this.actions.getColumns(config);
     const titleField = this.getTitleField(config);
     const groupedFields = new Set([groupField, ...(subgroupField ? [subgroupField] : [])]);
@@ -980,6 +1016,107 @@ export class BoardRenderer {
       const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
       meta.appendChild(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty));
     }
+    this.renderSubtaskProgress(body, subtaskNode?.progress);
+    // Inline add stays on an expanded parent card only — every card showed this input
+    // regardless of whether it had subtasks, which put an "Add subtask…" row under every
+    // leaf card on the board.
+    if (!this.actions.isReadOnly && !this.actions.hideCreateEntry && subtaskChildren.length > 0 && !subtaskNode?.collapsed) {
+      this.renderSubtaskAddInput(body, config, row, visibleRows, groupField, group.key, subgroupField, subgroupKey);
+    }
+  }
+
+  private renderSubtaskToggle(parent: HTMLElement, row: RowData, node: SubtaskNode | undefined, hasChildren: boolean): void {
+    if (!node || !hasChildren) return;
+    const collapsed = node.collapsed;
+    const toggle = parent.createEl("button", {
+      cls: `db-subtask-toggle${collapsed ? " is-collapsed" : ""}`,
+      attr: {
+        type: "button",
+        "aria-label": collapsed ? t("subtask.expand") : t("subtask.collapse"),
+        "aria-expanded": String(!collapsed),
+      },
+    });
+    toggle.createSpan({ cls: "db-collapse-triangle", attr: { "aria-hidden": "true" } });
+    toggle.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const result = this.actions.toggleSubtaskCollapsed?.(row, !collapsed);
+      if (result) void Promise.resolve(result).catch(() => undefined);
+    };
+  }
+
+  private renderSubtaskProgress(parent: HTMLElement, progress: SubtaskProgress | undefined): void {
+    if (!progress || (progress.explicit == null && progress.derived == null)) return;
+    const value = progress.value ?? progress.derived ?? progress.explicit ?? 0;
+    const summary = progress.derived == null
+      ? ""
+      : t("subtask.progressSummary", { done: progress.done, total: progress.total });
+    const explicit = progress.explicit == null
+      ? ""
+      : t("subtask.explicitProgress", { value: Math.round(progress.explicit) });
+    const labels = [summary, explicit].filter(Boolean);
+    const status = parent.createDiv({
+      cls: "db-subtask-progress",
+      attr: {
+        "data-subtask-progress-source": progress.source,
+        "aria-label": labels.join(" · "),
+      },
+    });
+    status.style.setProperty("--db-subtask-progress", String(value));
+    const track = status.createSpan({ cls: "db-subtask-progress-track", attr: { "aria-hidden": "true" } });
+    track.createSpan({ cls: "db-subtask-progress-fill" });
+    const label = status.createSpan({ cls: "db-subtask-progress-label" });
+    if (summary) label.createSpan({ cls: "db-subtask-progress-derived", text: summary });
+    if (summary && explicit) label.createSpan({ text: " · ", attr: { "aria-hidden": "true" } });
+    if (explicit) label.createSpan({ cls: "db-subtask-progress-explicit", text: explicit });
+  }
+
+  private renderSubtaskAddInput(
+    parent: HTMLElement,
+    config: ViewConfig,
+    row: RowData,
+    visibleRows: RowData[],
+    groupField: string,
+    groupKey: string,
+    subgroupField?: string,
+    subgroupKey?: string,
+  ): void {
+    const addRow = parent.createDiv({ cls: "db-subtask-add-row" });
+    const input = addRow.createEl("input", {
+      cls: "db-subtask-add-input",
+      attr: {
+        type: "text",
+        placeholder: t("subtask.addPlaceholder"),
+        "aria-label": t("subtask.addLabel", { parent: this.getMobileRowLabel(config, row) }),
+      },
+    });
+    input.onkeydown = (event) => {
+      if (isImeComposing(event)) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        input.value = "";
+        input.blur();
+        return;
+      }
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      const title = input.value.trim();
+      if (!title) return;
+      const titleField = this.getTitleField(config);
+      const defaults = titleField && titleField !== "file.name" ? { [titleField]: title } : undefined;
+      const context: RowCreateContext = {
+        visibleRows,
+        groups: [
+          { field: groupField, key: groupKey },
+          ...(subgroupField && subgroupKey != null ? [{ field: subgroupField, key: subgroupKey }] : []),
+        ],
+        parentId: row.file.path,
+        parentPath: row.file.path,
+        title,
+      };
+      this.actions.createEntry(defaults, this.getCreatePosition(visibleRows), context);
+      input.value = "";
+    };
   }
 
   /**
@@ -1177,6 +1314,35 @@ export class BoardRenderer {
         : groupLabel;
       menu.addRow({ icon: "folder-input", label: `${t("mobile.moveTo")} ${label}`, onClick: () => applyOrder(target.group, target.subgroupKey, "bottom") });
     }
+    if (this.actions.moveSubtask) {
+      const node = this.subtaskRelation?.nodes.get(row.file.path);
+      // Bounded to the current group, not every row on the board: an unbounded rowByPath sweep
+      // put every other row on the whole board — every column, every group — into one menu.
+      const allCandidates = currentRows.filter((candidate) => {
+        if (candidate.file.path === row.file.path) return false;
+        const candidateNode = this.subtaskRelation?.nodes.get(candidate.file.path);
+        return !node?.ancestors.includes(candidate.file.path) && !candidateNode?.ancestors.includes(row.file.path);
+      });
+      const parentCandidates = allCandidates.slice(0, MOVE_UNDER_CANDIDATE_LIMIT);
+      if (node?.parentId !== null) {
+        menu.addSeparator();
+        menu.addRow({ icon: "corner-left-up", label: t("subtask.moveToRoot"), onClick: () => this.moveSubtask({ childPath: row.file.path, newParentPath: null }) });
+      }
+      for (const candidate of parentCandidates) {
+        if (candidate.file.path === node?.parentId) continue;
+        menu.addRow({
+          icon: "corner-down-right",
+          label: `${t("subtask.moveUnder")} ${this.getMobileRowLabel(config, candidate)}`,
+          onClick: () => this.moveSubtask({ childPath: row.file.path, newParentPath: candidate.file.path }),
+        });
+      }
+      if (allCandidates.length > parentCandidates.length) {
+        menu.addRow({
+          label: t("search.moreResults", { count: allCandidates.length - parentCandidates.length }),
+          disabled: true,
+        });
+      }
+    }
     menu.showAt({ x: event.clientX, y: event.clientY });
   }
 
@@ -1268,18 +1434,58 @@ export class BoardRenderer {
     if (subgroupField && subgroupKey != null && fromSubgroup != null && !isSameBoardGroup(fromSubgroup, subgroupKey)) {
       groupUpdates.push({ field: subgroupField, fromGroupKey: fromSubgroup, toGroupKey: subgroupKey });
     }
+    const subtaskMove = this.getSubtaskMoveContext(movingPaths, position);
     if (groupUpdates.length > 0 && this.actions.moveRowWithGroupUpdatesAndPosition) {
-      await this.actions.moveRowWithGroupUpdatesAndPosition(row, groupUpdates, position.before, position.after, movingPaths);
+      if (subtaskMove) {
+        await this.actions.moveRowWithGroupUpdatesAndPosition(row, groupUpdates, position.before, position.after, movingPaths, subtaskMove);
+      } else {
+        await this.actions.moveRowWithGroupUpdatesAndPosition(row, groupUpdates, position.before, position.after, movingPaths);
+      }
       return;
     }
     if (movingPaths.length > 1 && this.actions.moveRowsToPosition) {
-      this.actions.moveRowsToPosition(movingPaths, position.before, position.after);
+      if (subtaskMove) this.actions.moveRowsToPosition(movingPaths, position.before, position.after, subtaskMove);
+      else this.actions.moveRowsToPosition(movingPaths, position.before, position.after);
       return;
     }
     for (const update of groupUpdates) {
       await this.actions.updateGroup(row, update.field, update.toGroupKey, update.fromGroupKey);
     }
-    this.actions.moveRowToPosition(draggedPath, position.before, position.after);
+    if (subtaskMove) this.actions.moveRowToPosition(draggedPath, position.before, position.after, subtaskMove);
+    else this.actions.moveRowToPosition(draggedPath, position.before, position.after);
+  }
+
+  private getSubtaskMoveContext(
+    movingPaths: string[],
+    position: { before?: string; after?: string },
+  ): BoardSubtaskMove | undefined {
+    if (movingPaths.length !== 1 || !this.actions.moveSubtask) return undefined;
+    const childPath = movingPaths[0];
+    const node = this.subtaskRelation?.nodes.get(childPath);
+    if (!node || node.parentId === null || node.orphanParent) return undefined;
+    const request: SubtaskMoveRequest = {
+      childPath,
+      newParentPath: node.parentId,
+      beforePath: position.before,
+      afterPath: position.after,
+    };
+    const plan = planSubtaskMove([...this.rowByPath.values()], request);
+    return plan.ok ? { request, plan } : undefined;
+  }
+
+  private moveSubtask(request: SubtaskMoveRequest): void {
+    if (!this.actions.moveSubtask) return;
+    const plan = planSubtaskMove([...this.rowByPath.values()], request);
+    if (!plan.ok) {
+      new Notice(plan.error.code === "cycle" ? t("subtask.moveCycle") : t("subtask.moveUnavailable"));
+      return;
+    }
+    try {
+      const result = this.actions.moveSubtask(request, plan);
+      if (result) void Promise.resolve(result).catch(() => new Notice(t("subtask.moveSaveFailed")));
+    } catch {
+      new Notice(t("subtask.moveSaveFailed"));
+    }
   }
 
   private updateCardOrder(groupField: string, groupKey: string, paths: string[]): void {

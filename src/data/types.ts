@@ -181,6 +181,18 @@ export interface SubtaskRelationFields {
   collapsed: boolean;
 }
 
+/** Progress keeps author input separate from completion derived from children. */
+export type SubtaskProgressSource = "explicit" | "derived" | "none";
+
+export interface SubtaskProgress {
+  explicit: number | null;
+  derived: number | null;
+  value: number | null;
+  source: SubtaskProgressSource;
+  done: number;
+  total: number;
+}
+
 /** One node of the derived subtask relation. */
 export interface SubtaskNode {
   parentId: string | null;
@@ -191,6 +203,7 @@ export interface SubtaskNode {
   visible: boolean;
   inCycle: boolean;
   orphanParent: boolean;
+  progress: SubtaskProgress;
 }
 
 export interface SubtaskDiagnostics {
@@ -245,6 +258,12 @@ export interface RowCreateContext {
   visibleRows?: RowData[];
   /** Explicit group/subgroup keys for the rendered occurrence of the record. */
   groups?: Array<{ field: string; key: string }>;
+  /** Parent relation identity for an inline child creation. */
+  parentId?: string | null;
+  /** Source path used to resolve the parent relation in the host transaction. */
+  parentPath?: string;
+  /** Text entered by the user when the host needs a file-title seed. */
+  title?: string;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -519,6 +538,10 @@ export interface ViewConfig {
   boardHiddenGroups?: Record<string, string[]>;
   /** Manual row ordering. Key = file.path, value = base62 rank string. */
   manualOrder?: { ranks?: Record<string, string> };
+  /** Per-view subtask expand/collapse override, keyed by file.path. Layers over a note's own
+   *  `collapsed` frontmatter default so collapsing a tree node in one view (including a
+   *  read-only embed) never requires a frontmatter write. */
+  subtaskCollapsed?: Record<string, boolean>;
   /** Gallery cover image property. */
   galleryImageField?: string;
   /** Optional card/list title property. When absent, renderers fall back to visible file.name. */

@@ -8,7 +8,9 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it } from "vitest";
-import { ROWS, boardCard, boardColumn } from "./shared.mjs";
+import { readFileSync } from "node:fs";
+import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, subtaskBoardCard } from "./shared.mjs";
+import { TIMELINE_FIXTURES, TL_LANES, TL_SUBTASK_LANES, timelineEvent } from "./temporal.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MARKUP TREE
@@ -126,5 +128,67 @@ describe("board screenshot fixture parity", () => {
     expect(card).not.toContain("db-board-card-priority-strip");
     expect(card).not.toContain("db-board-card-parent");
     expect(card).toContain("db-file-title-prefix");
+  });
+});
+
+describe("subtask screenshot fixture parity", () => {
+  const boardRenderer = readFileSync(new URL("../../../src/views/board-renderer.ts", import.meta.url), "utf8");
+  const timelineRenderer = readFileSync(new URL("../../../src/views/calendar-timeline-renderer.ts", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../../../styles.css", import.meta.url), "utf8");
+
+  it("keeps the board hierarchy helper in the renderer's child order", () => {
+    const markup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62 });
+    const card = findDescendant(parseMarkup(markup), "db-board-card");
+    const controls = findDescendant(card, "db-board-card-controls");
+    const body = findDescendant(card, "db-board-card-body");
+    expectDirectChildOrder(controls, ["db-board-card-checkbox", "db-board-card-open", "db-card-mobile-move-btn", "db-subtask-toggle"], "the subtask card controls");
+    expectDirectChildOrder(body, ["db-board-card-parent", "db-record-title-line", "db-board-card-meta", "db-subtask-progress", "db-subtask-add-row"], "the subtask card body");
+    const childMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1 });
+    expect(childMarkup).toContain('data-subtask-depth="1"');
+    expect(childMarkup).toContain("--db-subtask-depth: 1;");
+    expect(boardRenderer).toContain("db-subtask-toggle");
+    expect(boardRenderer).toContain("db-subtask-progress-derived");
+    expect(boardRenderer).toContain("db-subtask-progress-explicit");
+    expect(boardRenderer).toContain("db-subtask-add-input");
+  });
+
+  it("keeps every new class in the hand-written board and timeline states styled and sourced", () => {
+    const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62 });
+    const treeParent = TL_SUBTASK_LANES.find((lane) => lane.key === "business").events[0];
+    const timelineMarkup = timelineEvent(treeParent, TIMELINE_FIXTURES.week);
+    const contracts = [
+      ["db-subtask-toggle", boardRenderer, boardMarkup],
+      ["db-subtask-progress", boardRenderer, boardMarkup],
+      ["db-subtask-progress-track", boardRenderer, boardMarkup],
+      ["db-subtask-progress-fill", boardRenderer, boardMarkup],
+      ["db-subtask-progress-label", boardRenderer, boardMarkup],
+      ["db-subtask-progress-derived", boardRenderer, boardMarkup],
+      ["db-subtask-progress-explicit", boardRenderer, boardMarkup],
+      ["db-subtask-add-row", boardRenderer, boardMarkup],
+      ["db-subtask-add-input", boardRenderer, boardMarkup],
+      ["db-subtask-event", timelineRenderer, timelineMarkup],
+      ["has-subtask-children", timelineRenderer, timelineMarkup],
+      ["db-subtask-event-toggle", timelineRenderer, timelineMarkup],
+      ["db-timeline-subtask-progress", timelineRenderer, timelineMarkup],
+    ];
+    for (const [className, source, markup] of contracts) {
+      expect(markup, `${className} is in its fixture`).toContain(className);
+      expect(source, `${className} is emitted by its renderer`).toContain(className);
+      expect(styles, `${className} has a stylesheet rule`).toContain(`.${className}`);
+    }
+  });
+
+  it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {
+    // The five scale captures exist to show an un-related bar; the tree has its own scenario.
+    for (const lane of TL_LANES) {
+      for (const event of lane.events) {
+        expect(event.subtask, `${lane.key}/${event.title} carries no subtask state`).toBeUndefined();
+        expect(timelineEvent(event, TIMELINE_FIXTURES.week)).not.toContain("db-subtask-event");
+      }
+    }
+    const treeLane = TL_SUBTASK_LANES.find((lane) => lane.key === "business");
+    expect(treeLane.events.map((event) => event.subtask?.depth)).toEqual([0, 1, 1]);
+    expect(treeLane.events[0].subtask.children).toBe(true);
+    expect(TL_SUBTASK_LANES.find((lane) => lane.key === "personal").events.every((event) => !event.subtask)).toBe(true);
   });
 });

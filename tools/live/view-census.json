@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-03T11:37:50.902Z",
+  "measuredAt": "2026-09-03T19:53:15.085Z",
   "inputs": {
-    "styles.css": "2ea12028c7c8",
+    "styles.css": "32148b7b7646",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 66,
-    "escaping": 1053,
-    "growing": 683,
-    "scrolling": 370,
+    "fixtures": 68,
+    "escaping": 1134,
+    "growing": 749,
+    "scrolling": 385,
     "rhythmGroups": 28,
     "ragged": 0,
     "probeBlind": 0
@@ -870,6 +870,138 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-priority-strip.status-color-green",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "db-board",
+      "by": 40,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-purple",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "db-board",
+      "by": 350,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
       "parentCls": "db-board-card",
       "by": 8,
       "scrolls": false,
@@ -3006,6 +3138,116 @@
     },
     {
       "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-controls",
+      "parentCls": "db-timeline-header",
+      "by": 180.4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-axis",
+      "parentCls": "db-timeline-scroll",
+      "by": 1144,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-body",
+      "parentCls": "db-timeline-scroll",
+      "by": 1144,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.is-clipped-end",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
       "fixture": "panel-filter-conditions",
       "kind": "escaping",
       "tag": "span",
@@ -3956,7 +4198,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3967,7 +4209,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3978,7 +4220,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5109,6 +5351,127 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-priority-strip.status-color-green",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-purple",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "db-board",
+      "by": 268,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
       "parentCls": "db-board-card",
       "by": 8,
       "scrolls": false,
@@ -7201,6 +7564,116 @@
     },
     {
       "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-controls",
+      "parentCls": "db-timeline-header",
+      "by": 98.4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-axis",
+      "parentCls": "db-timeline-scroll",
+      "by": 1062,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-body",
+      "parentCls": "db-timeline-scroll",
+      "by": 1062,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.is-clipped-end",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "panel-filter-conditions",
       "kind": "escaping",
       "tag": "span",
@@ -7766,7 +8239,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7777,7 +8250,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7788,7 +8261,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -8523,6 +8996,116 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-priority-strip.status-color-green",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-purple",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
       "parentCls": "db-board-card",
       "by": 8,
       "scrolls": false,
@@ -9933,6 +10516,105 @@
     },
     {
       "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-axis",
+      "parentCls": "db-timeline-scroll",
+      "by": 720,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-body",
+      "parentCls": "db-timeline-scroll",
+      "by": 720,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.is-clipped-end",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
       "fixture": "panel-filter-conditions",
       "kind": "rhythm",
       "cls": "db-panel-row",
@@ -10157,7 +10839,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -10168,7 +10850,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -10179,7 +10861,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -10595,6 +11277,116 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-priority-strip.status-color-green",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-purple",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
       "parentCls": "db-board-card",
       "by": 8,
       "scrolls": false,
@@ -11983,6 +12775,105 @@
     },
     {
       "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-axis",
+      "parentCls": "db-timeline-scroll",
+      "by": 48,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-timeline-body",
+      "parentCls": "db-timeline-scroll",
+      "by": 48,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.db-subtask-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-timeline-link-dot.is-right",
+      "parentCls": "db-timeline-event.is-clipped-end",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-timeline-create-content",
+      "parentCls": "db-timeline-create-button",
+      "by": 6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
       "fixture": "panel-filter-conditions",
       "kind": "rhythm",
       "cls": "db-panel-row",
@@ -12185,7 +13076,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -12196,7 +13087,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -12207,7 +13098,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -12251,6 +13142,11 @@
     },
     {
       "width": 320,
+      "fixture": "board-subtask-tree",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -12347,6 +13243,11 @@
     {
       "width": 320,
       "fixture": "timeline-view-year",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "timeline-subtask-tree",
       "probe": "4px"
     },
     {
@@ -12581,6 +13482,11 @@
     },
     {
       "width": 402,
+      "fixture": "board-subtask-tree",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -12677,6 +13583,11 @@
     {
       "width": 402,
       "fixture": "timeline-view-year",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "timeline-subtask-tree",
       "probe": "4px"
     },
     {
@@ -12911,6 +13822,11 @@
     },
     {
       "width": 768,
+      "fixture": "board-subtask-tree",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -13007,6 +13923,11 @@
     {
       "width": 768,
       "fixture": "timeline-view-year",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "timeline-subtask-tree",
       "probe": "4px"
     },
     {
@@ -13241,6 +14162,11 @@
     },
     {
       "width": 1440,
+      "fixture": "board-subtask-tree",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -13337,6 +14263,11 @@
     {
       "width": 1440,
       "fixture": "timeline-view-year",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "timeline-subtask-tree",
       "probe": "4px"
     },
     {

@@ -9410,6 +9410,107 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   margin-bottom: var(--db-space-3);
 }
 
+.note-database-container .db-board-card[data-subtask-depth] {
+  margin-inline-start: calc(var(--db-subtask-depth, 0) * var(--db-space-8));
+}
+
+.note-database-container .db-subtask-toggle {
+  display: inline-flex;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.note-database-container .db-subtask-toggle:hover,
+.note-database-container .db-subtask-toggle:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-subtask-toggle.is-collapsed .db-collapse-triangle {
+  transform: rotate(0deg);
+}
+
+.note-database-container .db-subtask-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-3);
+  min-width: 0;
+  min-height: 28px;
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+  line-height: var(--db-font-xs-line-height);
+}
+
+.note-database-container .db-subtask-progress-track {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--db-radius-full);
+  background: var(--background-modifier-border);
+}
+
+.note-database-container .db-subtask-progress-fill {
+  display: block;
+  width: calc(var(--db-subtask-progress, 0) * 1%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--interactive-accent);
+}
+
+/* Wraps rather than truncates: the derived count and the author's own percentage are two
+   different facts, and a card narrow enough to clip one of them was clipping the author's —
+   "1/2 subtasks complete · Explicit…" on every card width the board captures at. */
+.note-database-container .db-subtask-progress-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.note-database-container .db-subtask-progress-derived,
+.note-database-container .db-subtask-progress-explicit {
+  display: inline;
+}
+
+.note-database-container .db-subtask-progress-explicit {
+  color: var(--text-normal);
+}
+
+.note-database-container .db-subtask-add-row {
+  display: flex;
+  min-width: 0;
+  min-height: 28px;
+  margin-top: var(--db-space-1);
+}
+
+.note-database-container .db-subtask-add-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 28px;
+  padding: var(--db-space-2) var(--db-space-3);
+  border: 1px solid var(--db-border-subtle);
+  border-radius: var(--db-radius-md);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: var(--db-font-sm);
+}
+
+.note-database-container .db-subtask-add-input::placeholder {
+  color: var(--text-faint);
+}
+
 .note-database-container .db-board-card-checkbox {
   flex: 0 0 auto;
   margin: 0;
@@ -17895,6 +17996,36 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
   max-width: 100%;
   overflow: hidden;
   gap: var(--db-space-2);
+}
+
+.note-database-container .db-timeline-event.db-subtask-event .db-timeline-event-content {
+  padding-inline-start: calc(var(--db-subtask-depth, 0) * var(--db-space-4));
+}
+
+/* A bar that owns children reserves the toggle's width so the title never sits under it. */
+.note-database-container .db-timeline-event.has-subtask-children .db-timeline-event-content {
+  padding-inline-start: calc(var(--db-subtask-depth, 0) * var(--db-space-4) + 28px);
+}
+
+/* The toggle overlays the trigger rather than sitting inside it, so it needs the link dots'
+   stacking order to stay clickable. */
+.note-database-container .db-timeline-event .db-subtask-event-toggle {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--db-space-3) + var(--db-subtask-depth, 0) * var(--db-space-4));
+  transform: translateY(-50%);
+  z-index: 7;
+}
+
+.note-database-container .db-timeline-subtask-progress {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .note-database-container .db-timeline-event.is-resizing {

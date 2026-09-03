@@ -60,6 +60,27 @@ export function writeRelationFields(
   return out;
 }
 
+/**
+ * Narrow a planned write's full frontmatter snapshot down to just the relation keys it changed,
+ * in the `null`-deletes shape the host's frontmatter writer already expects.
+ *
+ * `write.frontmatter` is a whole-note snapshot (`writeRelationFields` starts from a spread of the
+ * row's own frontmatter), so applying it verbatim as a keyed update would also re-set every
+ * unrelated field the row already had — harmless in isolation, but it turns a scoped relation
+ * write into a whole-frontmatter write that can race a concurrent edit to some other field on the
+ * same note. Re-deriving only the relation keys keeps the host's write exactly as scoped as the
+ * plan intended.
+ */
+export function toFrontmatterUpdates(write: SubtaskWrite): Record<string, unknown> {
+  const updates: Record<string, unknown> = {};
+  for (const key of RELATION_KEYS) {
+    updates[key] = Object.prototype.hasOwnProperty.call(write.frontmatter, key)
+      ? write.frontmatter[key]
+      : null;
+  }
+  return updates;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 3. MOVE TRANSACTION
 // ───────────────────────────────────────────────────────────────────

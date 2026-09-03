@@ -240,7 +240,7 @@ export function tableRows() {
 }
 
 export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscriptions") => `
-  <div class="db-board-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
+  <div class="db-board-card" data-note-database-row-path="${parent ? `${parent}/` : ""}${r.name}.md" title="${parent ? `${parent}/` : ""}${r.name}.md" data-subtask-depth="0" data-subtask-visible="true" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1" style="--db-subtask-depth: 0;">
     ${tone ? `<div class="db-board-card-priority-strip status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
     <div class="db-board-card-controls">
       ${rowCheckbox("db-board-card-checkbox")}
@@ -264,6 +264,76 @@ export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscrip
         <div class="db-board-card-field" data-note-database-column-key="renew" role="gridcell"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
       </div>
     </div>
+  </div>`;
+
+export const SUBTASK_FIXTURE_ROWS = {
+  parent: { name: "Website redesign", cost: "€ 42,00", cycle: "Yearly", payment: "Revolut", renew: "April 18, 2026", category: "Design", path: "Projects/Website redesign.md" },
+  copy: { name: "Copy review", cost: "€ 0,00", cycle: "Monthly", payment: "ING", renew: "April 20, 2026", category: "Design", path: "Projects/Copy review.md" },
+  launch: { name: "Launch checklist", cost: "€ 0,00", cycle: "Monthly", payment: "ING", renew: "April 22, 2026", category: "Design", path: "Projects/Launch checklist.md" },
+};
+
+export const subtaskBoardCard = (r, {
+  depth = 0,
+  parent = "Projects",
+  collapsed = false,
+  children = false,
+  done = 0,
+  total = 0,
+  explicit = null,
+  value = null,
+} = {}) => {
+  const progress = explicit != null || total > 0;
+  const summary = total > 0 ? `${done}/${total} subtasks complete` : "";
+  const explicitLabel = explicit != null ? `Explicit progress: ${explicit}%` : "";
+  return `
+  <div class="db-board-card" data-note-database-row-path="${r.path}" title="${r.path}" data-subtask-depth="${depth}" data-subtask-visible="true" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1" style="--db-subtask-depth: ${depth};">
+    <div class="db-board-card-controls">
+      <input type="checkbox" class="db-checkbox db-checkbox-row db-board-card-checkbox" aria-label="Select">
+      <button type="button" class="db-board-card-open" aria-label="Open note">${ICONS.maximize}</button>
+      <button type="button" class="db-card-mobile-move-btn" aria-label="Move">${ICONS.move}</button>
+      ${children ? `<button type="button" class="db-subtask-toggle${collapsed ? " is-collapsed" : ""}" aria-label="${collapsed ? "Expand subtasks" : "Collapse subtasks"}" aria-expanded="${collapsed ? "false" : "true"}"><span class="db-collapse-triangle" aria-hidden="true"></span></button>` : ""}
+    </div>
+    <div class="db-board-card-body">
+      <div class="db-board-card-parent" title="${parent}">${parent}</div>
+      <div class="db-record-title-line">
+        <div class="db-board-card-title db-file-title-stacked has-folder-prefix" title="${r.path}">
+          <div class="db-file-title-name">${r.name}</div>
+          <div class="db-file-title-prefix">${parent}/</div>
+        </div>
+        <span class="db-board-card-chips">
+          <span class="db-board-card-chip" data-note-database-column-key="cycle">${optionPill(r.cycle)}</span>
+          <span class="db-board-card-chip" data-note-database-column-key="payment">${optionPill(r.payment)}</span>
+        </span>
+      </div>
+      <div class="db-board-card-meta">
+        <div class="db-board-card-field" data-note-database-column-key="cost" role="gridcell"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">${r.cost}</span></div>
+        <div class="db-board-card-field" data-note-database-column-key="renew" role="gridcell"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
+      </div>
+      ${progress ? `<div class="db-subtask-progress" data-subtask-progress-source="${explicit != null ? "explicit" : "derived"}" aria-label="${[summary, explicitLabel].filter(Boolean).join(" · ")}" style="--db-subtask-progress: ${value ?? explicit ?? 0}">
+        <span class="db-subtask-progress-track" aria-hidden="true"><span class="db-subtask-progress-fill"></span></span>
+        <span class="db-subtask-progress-label">${summary ? `<span class="db-subtask-progress-derived">${summary}</span>` : ""}${summary && explicitLabel ? `<span aria-hidden="true"> · </span>` : ""}${explicitLabel ? `<span class="db-subtask-progress-explicit">${explicitLabel}</span>` : ""}</span>
+      </div>` : ""}
+      ${children ? `<div class="db-subtask-add-row">
+        <input type="text" class="db-subtask-add-input" placeholder="Add subtask…" aria-label="Add subtask to ${r.name}">
+      </div>` : ""}
+    </div>
+  </div>`;
+};
+
+export const subtaskBoardColumn = (title, cards, tone = OPTION_TONES[title]) => `
+  <div class="db-board-column">
+    <div class="db-board-column-header">
+      ${tone ? `<div class="db-board-column-topbar status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
+      <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
+      ${rowCheckbox("db-board-column-checkbox")}
+      <div class="db-board-header-text">
+        ${groupTitle("db-board-column-title", title, tone)}
+        <span class="db-board-count">${cards.length}</span>
+        <button type="button" class="db-board-column-options" aria-label="Column options">${dots}</button>
+      </div>
+    </div>
+    <div class="db-board-column-resize-handle" aria-hidden="true"></div>
+    <div class="db-board-cards" role="rowgroup">${cards.join("")}</div>
   </div>`;
 
 /**
