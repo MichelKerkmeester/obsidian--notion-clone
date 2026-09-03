@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **43 phases**, **5 with nothing left**, **84 rows** waiting on a device.
+Derived 2026-09-03: **43 phases**, **5 with nothing left**, **83 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -187,14 +187,13 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` prints `gate: PASS` and exits 0 on the final state, read directly (not through a pipe). Where recorded: SC-005, task T017.
 - [ ] `styles.css` lane released with a recapture read, naming the changed depth/expand/progress captures in a `reviewed` array. Where recorded: task T014-T015.
 
-## 041-shared-ui-ux-port — 0/8
+## 041-shared-ui-ux-port — 1/8
 
 - [ ] `git diff -- src/views/mobile-bottom-sheet.ts` is empty after this packet lands (AC-001).
 - [ ] Every reconciled `--db-*` token or primitive traces to a verified reference citation or a documented local-only extension (AC-002).
 - [ ] `SURFACE_PHASE=041-shared-ui-ux-port npm run gate` exits 0, read from `$?` directly (AC-003).
 - [ ] `empty-state-renderer.ts`'s composition covers the verified `EmptyState.ts:10-37` icon/title/ body/action/CTA shape through local diagnostics-aware reasons (AC-004).
 - [ ] `board-renderer.ts`'s card icon/tooltip/chip density is reconciled against `IconButton.ts:3-31`/ `Chip.ts:3-40` through local field renderers, no copied DOM (AC-005).
-- [ ] The reduced-motion media rule covers every implied `db-overlay-enter`/`db-mobile-sheet-scrim` surface without adding a second sheet-height cap (AC-006).
 - [ ] `SettingsTab.display()` exposes the reconciled default-view/editor/save and board/timeline display vocabulary, localized through `src/i18n.ts` (AC-007).
 - [ ] Toggle-button `aria-expanded`/`is-open` state and the board's roving keyboard match the reconciled active/focus language verified at `chrome.css:124-170` (AC-008).
 

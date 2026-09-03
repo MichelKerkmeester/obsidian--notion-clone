@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-03T19:53:15.085Z",
+  "measuredAt": "2026-09-03T22:03:10.969Z",
   "inputs": {
-    "styles.css": "32148b7b7646",
+    "styles.css": "d9c147c9bf3a",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 68,
-    "escaping": 1134,
-    "growing": 749,
-    "scrolling": 385,
+    "fixtures": 70,
+    "escaping": 1198,
+    "growing": 790,
+    "scrolling": 408,
     "rhythmGroups": 28,
     "ragged": 0,
     "probeBlind": 0
@@ -1003,6 +1003,204 @@
       "tag": "div",
       "cls": "db-board-card-priority-strip.status-color-pink",
       "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "db-board",
+      "by": 40,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "db-board",
+      "by": 350,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-green",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-empty.db-empty-card",
+      "parentCls": "db-board-cards",
+      "by": 34,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column.is-drop-target",
+      "parentCls": "db-board",
+      "by": 40,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-blue",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-dragging",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-drop-target",
       "by": 8,
       "scrolls": false,
       "pastHeader": 0
@@ -5479,6 +5677,182 @@
     },
     {
       "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "db-board",
+      "by": 268,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-green",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-empty.db-empty-card",
+      "parentCls": "db-board-cards",
+      "by": 34,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-blue",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-dragging",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-drop-target",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "list-view",
       "kind": "escaping",
       "tag": "div",
@@ -9113,6 +9487,171 @@
     },
     {
       "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-green",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-empty.db-empty-card",
+      "parentCls": "db-board-cards",
+      "by": 42,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-blue",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-dragging",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-drop-target",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
       "fixture": "list-view",
       "kind": "escaping",
       "tag": "div",
@@ -11394,6 +11933,171 @@
     },
     {
       "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-pink",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-pink",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-green",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-empty.db-empty-card",
+      "parentCls": "db-board-cards",
+      "by": 42,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-header",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-topbar.status-color-blue",
+      "parentCls": "db-board-column-header",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column-resize-handle",
+      "parentCls": "db-board-column.is-drop-target",
+      "by": 13,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-dragging",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-priority-strip.status-color-blue",
+      "parentCls": "db-board-card.is-drop-target",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
       "fixture": "list-view",
       "kind": "escaping",
       "tag": "div",
@@ -13147,6 +13851,16 @@
     },
     {
       "width": 320,
+      "fixture": "board-empty-column",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "board-drop-language",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -13487,6 +14201,16 @@
     },
     {
       "width": 402,
+      "fixture": "board-empty-column",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "board-drop-language",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -13827,6 +14551,16 @@
     },
     {
       "width": 768,
+      "fixture": "board-empty-column",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "board-drop-language",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "gallery-view",
       "probe": "4px"
     },
@@ -14163,6 +14897,16 @@
     {
       "width": 1440,
       "fixture": "board-subtask-tree",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "board-empty-column",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "board-drop-language",
       "probe": "4px"
     },
     {
