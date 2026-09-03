@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T13:50:00Z"
-    last_updated_by: "041-landed"
-    recent_action: "041 landed (cb9aedf+25ae3a9); 1.4.6 pending, not confirmed"
-    next_safe_action: "Merge 039 and 040, cut 1.4.6, operator confirms on iOS"
+    last_updated_at: "2026-09-03T14:20:00Z"
+    last_updated_by: "039-landed"
+    recent_action: "039 landed (57043e7+1588576); 1.4.6 pending, not confirmed"
+    next_safe_action: "Land 040, cut 1.4.6, operator confirms on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -614,4 +614,39 @@ port phase landing, so the 57% figure is unaffected. Release 1.4.6 is planned to
 with `039-calendar-parity-port` and `040-subtask-tree-port`, both landed on their own worktree
 branches (`worktrees/004-calendar-parity-port` at `9ae6ea3`, `worktrees/005-subtask-tree-port` at
 `cf91587`) and not yet merged to `main`.
+
+### `039-calendar-parity-port` landed, 2026-09-03
+
+Two legs plus a reconciliation. `57043e7` (dispatched to `cli-devin`, then verified in-runtime)
+read completion from the view's own checkbox column (`isRowCompleted`), applied `is-completed`/
+`is-weekend` across month/week/day segments, popover and timed events, added the backlog's
+"Nothing unscheduled." empty line, and landed calm empty-state copy in `en`/`zh-CN`/`zh-TW`.
+Red-first: `calendar-renderer.test.ts`'s parity block read `8 failed | 7 passed (15)` before any
+renderer edit; green after. `1588576` (dispatched to `cli-codex`, one in-runtime fix round, two
+Opus verifications) styled the marks: `.is-completed` dims and strikes through rather than
+repainting, so a completed event keeps its row's own status colour — a first draft's `!important`
+background override was rejected; weekend cells take a 4.3-9.0% tint; the empty card reads its
+density from a token on `.note-database-container`; reduced motion now covers the month and
+week-grid flash columns too; the capture theme gained Obsidian's `--color-green`/`--text-success`
+so the strikethrough renders in status colour instead of falling back to accent purple; a
+calendar empty-state capture scenario was added; and the fixture parity suite was bound to i18n.
+20 captures read; `css-lane` released; `npm run gate` PASS 25 green; `validate.sh --strict` first
+`RESULT: PASSED`. The month fixture's 112px cell height is confirmed as the product's own default
+(`getCellMinHeight`), not a framing artifact — `runtime-vars.css`'s viewport-derived formula was
+the inaccurate value, not the fixture.
+
+`d8a2508` reconciled both legs onto `main` after `038-board-kanban-port` and `041-shared-ui-ux-port`
+landed: `styles.css` merged purely additively (039's rules append after 041's, 0 lines removed), 12
+of 260 recaptured screenshots moved on byte-only encoder noise with an identical `layoutHash`, all
+twelve opened and read correct, and `tools/live/*.json` re-generated fresh against the merged tree.
+
+Four rows stay open in `039/goal.md`: `T6` (re-exercise move/resize/quick-add against the
+completion marker), `T11` (operator confirms on device), the capture harness's absent Obsidian
+`.mod-cta` rule, and `runtime-vars.css`'s viewport-derived cell-height formula, which the month
+fixture now mirrors but leaves wrong for any future scenario. Neither leg is operator-confirmed,
+and release **1.4.6** is planned to bundle this landing with `040-subtask-tree-port`. This does
+not change `completion_pct`: the same basis as the `037` and `041` entries above applies, none of
+the parent's seven §3 rows turn on an individual port phase landing, so the 57% figure is
+unaffected. `roadmap.md` §5.2's port-phases row and `spec.md`'s Phase Documentation Map row for
+`039` updated to match.
 <!-- /ANCHOR:log -->

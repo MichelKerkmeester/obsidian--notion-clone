@@ -586,7 +586,7 @@ are not part of the port.
 |---|---|---|---|
 | 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, release 1.4.4 pending, not operator-confirmed |
 | 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Opened |
-| 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Opened |
+| 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Landed `57043e7` + `1588576`, release 1.4.6 pending, not operator-confirmed |
 | 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Opened |
 | 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, release 1.4.6 pending, not operator-confirmed |
 
