@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **42 phases**, **5 with nothing left**, **79 rows** waiting on a device.
+Derived 2026-09-03: **43 phases**, **5 with nothing left**, **85 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -198,6 +198,15 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The reduced-motion media rule covers every implied `db-overlay-enter`/`db-mobile-sheet-scrim` surface without adding a second sheet-height cap (AC-006).
 - [ ] `SettingsTab.display()` exposes the reconciled default-view/editor/save and board/timeline display vocabulary, localized through `src/i18n.ts` (AC-007).
 - [ ] Toggle-button `aria-expanded`/`is-open` state and the board's roving keyboard match the reconciled active/focus language verified at `chrome.css:124-170` (AC-008).
+
+## 042-harness-fidelity-and-replay — 0/6
+
+- [ ] A render-assertion scenario constructs the production chart renderer and asserts a thresholded property of what it builds, with an owned negative control observed red before green.
+- [ ] Render-assertion scenarios construct the production `CalendarRenderer` at `scale: "week"` and `scale: "day"`, each with an owned negative control and bounds set from measured reads.
+- [ ] `npm run replay` carries a claim for report 29, reports 34-36, and phases `037`-`041`, each held against its recorded pre-fix number; the replay lane reds when a required entry is missing.
+- [ ] Every row-6 dependency (pinned `runtime-vars.css` calendar formula, `touch-targets.mjs` / `unstyled-links.mjs` fixture reads, `theme.css`'s absent `.mod-cta`) is removed or declared with the criterion it cannot prove.
+- [ ] The capture manifest compare is corrected to a content/layout-hash or declared-tolerance basis, and the fix is A/B'd against a clean HEAD clone showing it still catches a deliberately mutated capture.
+- [ ] `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` exits 0, read from `$?` directly.
 
 ## Nothing left to check
 

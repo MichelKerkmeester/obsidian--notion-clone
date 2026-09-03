@@ -160,6 +160,7 @@ are counted separately.
 | port-plan | `039-calendar-parity-port` (Level 2) | obsidian-pm has no calendar view; merge its verified date and milestone language into the existing `calendar-renderer.ts` | **Landed (partial)** `57043e7` + `1588576`, release pending, not operator-confirmed |
 | port-plan | `040-subtask-tree-port` (Level 3, raised over `recommend-level.sh`'s L1 — see its `spec.md` §1) | Port obsidian-pm-main's recursive subtask model — normalized parent index, cycle-safe move/reorder, depth/expand UI — into this repo's per-note frontmatter model near one-to-one | **Landed (partial)** `1d611db` + `00b7bd2`, release 1.4.7 pending, not operator-confirmed |
 | port-plan | `041-shared-ui-ux-port` (Level 2) | Rewrite obsidian-pm's shared token, primitive, motion and settings language into this repository's `db-*` surfaces without replacing the local bottom sheet | **Landed (partial)** `cb9aedf` + `25ae3a9`, release pending, not operator-confirmed |
+| audit-driven | `042-harness-fidelity-and-replay` (Level 3) | Chart and calendar week/day renderer coverage (DONE-row 3); replay backfill for report 29, reports 34-36 and phases `037`-`041` (DONE-row 5); the row-6 harness-dependency audit — pinned `runtime-vars.css` calendar formula, `touch-targets.mjs`/`unstyled-links.mjs` fixture reads, `theme.css`'s absent `.mod-cta`, plus the capture manifest's byte-level (non-content-hash) compare | Opened 2026-09-03, not started |
 
 **Rows for `020`-`028` and `030`-`034` are missing from this table.** Those folders exist and this
 map otherwise stops at `029`. The gap is recorded rather than filled by whoever noticed it, since
@@ -405,3 +406,26 @@ stale rectangle or the wrong logical row. Each child's `acceptance-criteria.md` 
 proof tuple — producer, runtime branch, mount/host, environment, transition, semantic outcome,
 negative control — as a coverage table, and a blank cell blocks closure even when the number in it
 would have been valid.
+
+<!-- ANCHOR:phase-map -->
+## PHASE DOCUMENTATION MAP
+
+> This spec uses phased decomposition. Each phase is an independently executable child spec folder. All implementation details (plan, tasks, verification, decisions, continuity) live inside the phase children. **This anchored table is scaffold-appended** (the hand-authored map above at §"PHASE DOCUMENTATION MAP" predates the `<!-- ANCHOR:phase-map -->` marker and is the reader-facing table `roadmap.md` §5.1 cites); the same row is carried in both so neither goes stale alone.
+
+| Phase | Folder | Focus | Status |
+|-------|--------|-------|--------|
+| 42 | 042-harness-fidelity-and-replay/ | Chart and calendar week/day renderer coverage, replay backfill for every landed result since `005`, and the row-6 harness-dependency audit | Opened 2026-09-03, not started |
+
+### Phase Transition Rules
+
+- Each phase MUST pass `validate.sh` independently before the next phase begins
+- Parent spec tracks aggregate progress via this map
+- Use `/speckit:resume [parent-folder]/[NNN-phase]/` to resume a specific phase
+- Run `validate.sh --recursive` on parent to validate all phases as integrated unit
+
+### Phase Handoff Criteria
+
+| From | To | Criteria | Verification |
+|------|-----|----------|--------------|
+| 041-shared-ui-ux-port | 042-harness-fidelity-and-replay | None — `042` is audit-driven (opened from the parent's own 2026-09-03 DONE-table audit), not blocked on `041`'s release | n/a |
+<!-- /ANCHOR:phase-map -->

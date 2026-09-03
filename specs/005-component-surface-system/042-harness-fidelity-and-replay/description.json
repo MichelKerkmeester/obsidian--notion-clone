@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/042-harness-fidelity-and-replay",
+  "description": "Phase 1: harness-fidelity-and-replay",
+  "keywords": [
+    "phase",
+    "harness-fidelity-and-replay"
+  ],
+  "lastUpdated": "2026-09-03T20:48:22.058Z",
+  "specId": "042",
+  "folderSlug": "harness-fidelity-and-replay",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
