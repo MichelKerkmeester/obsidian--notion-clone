@@ -1145,7 +1145,7 @@
       ],
       "layoutHash": "9bcd1f820e51",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "0d6e55cdee8b",
+        "src/views/embedded-database-renderer.ts": "8da5f8571463",
         "styles.css": "8075a2e1eb25",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1168,7 +1168,7 @@
       ],
       "layoutHash": "9bcd1f820e51",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "0d6e55cdee8b",
+        "src/views/embedded-database-renderer.ts": "8da5f8571463",
         "styles.css": "8075a2e1eb25",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1191,7 +1191,7 @@
       ],
       "layoutHash": "834c932f6aa8",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "0d6e55cdee8b",
+        "src/views/embedded-database-renderer.ts": "8da5f8571463",
         "styles.css": "8075a2e1eb25",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1214,7 +1214,7 @@
       ],
       "layoutHash": "834c932f6aa8",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "0d6e55cdee8b",
+        "src/views/embedded-database-renderer.ts": "8da5f8571463",
         "styles.css": "8075a2e1eb25",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5882,7 +5882,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 75022
+      "bytes": 74692
     },
     {
       "id": "timeline-view",
