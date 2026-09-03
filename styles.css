@@ -8881,18 +8881,23 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: calc(var(--db-space-5) + var(--db-space-1));
   width: max-content;
   min-width: 100%;
   min-height: 360px;
-  overflow: visible;
-  padding-bottom: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--db-space-6) 0;
+  scrollbar-gutter: stable;
 }
 
 /* 单个看板列 */
 .note-database-container .db-board-column {
   position: relative;
-  flex: 0 0 var(--db-board-column-width, 280px);  /* 列宽，可拖拽调整 */
+  /* Column width, resized by dragging the handle: the JS clamp (220-520px) keeps
+     --db-board-column-width in range, so the 220px fallback here only matters before that
+     property is ever set. */
+  flex: 0 0 var(--db-board-column-width, 220px);
   /* min-width:0 lets the flex item shrink below its content's min-content, so a
      long group title no longer pins the column open and the resize clamp (220px)
      actually takes effect. The whole flex chain (column → header → title) must
@@ -8908,6 +8913,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-board-column.is-drop-target {
+  background: color-mix(in srgb, var(--interactive-accent) 5%, var(--background-secondary));
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 68%, transparent);
 }
 
@@ -8928,16 +8934,29 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   min-width: 0;
   align-items: center;
   /* justify-content: space-between; */
-  gap: 8px;
-  min-height: 32px;
-  max-height: 32px;
+  gap: var(--db-space-3);
+  min-height: 40px;
+  max-height: none;
   margin: calc(-1 * var(--db-space-4)) calc(-1 * var(--db-space-4)) 0;
   border: 1px solid transparent;
   border-radius: var(--db-radius-lg) var(--db-radius-lg) var(--db-radius-md) var(--db-radius-md);
   background: var(--background-secondary);
   box-shadow: 0 2px 0 var(--background-modifier-border);
+  box-sizing: border-box;
   cursor: grab;
-  padding: var(--db-space-3) var(--db-space-2);
+  padding: calc(var(--db-space-3) + 3px) var(--db-space-2) var(--db-space-2);
+}
+
+.note-database-container .db-board-column-topbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
+  background: var(--db-status-fg, var(--interactive-accent));
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .note-database-container .db-board-column-header::before {
@@ -8985,8 +9004,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   margin-left: 2px;
   padding: 0;
   border: 0;
@@ -9003,6 +9024,15 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board-column-options svg {
   width: 16px;
   height: 16px;
+}
+
+.note-database-container .db-board-column-header .db-board-group-toggle,
+.note-database-container .db-board-subgroup-header .db-board-subgroup-toggle {
+  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
 }
 
 .note-database-container .db-board-column-header:hover .db-board-column-options,
@@ -9096,7 +9126,32 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board-cards {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  flex: 1 1 auto;
+  gap: var(--db-space-4);
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  padding: var(--db-space-3) var(--db-space-2);
+  border-radius: var(--db-radius-md);
+  transition: background-color var(--db-transition-fast);
+}
+
+.note-database-container .db-board-column.is-drop-target > .db-board-cards,
+.note-database-container .db-board-subgroup.is-drop-target > .db-board-cards {
+  background: color-mix(in srgb, var(--interactive-accent) 8%, transparent);
+}
+
+.note-database-container .db-board-column > .db-board-cards > .db-board-empty-slot,
+.note-database-container .db-board > .db-board-empty-slot {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 104px;
+  margin: 0;
+  border-color: color-mix(in srgb, var(--interactive-accent) 45%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
 }
 
 .note-database-container .db-board-subgroups {
@@ -9174,6 +9229,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 /* 单张看板卡片 */
 .note-database-container .db-board-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 112px;
+  min-width: 0;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--db-radius-lg);
   background: var(--db-surface-raised);
@@ -9187,17 +9246,96 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 @media (hover: hover) {
   .note-database-container .db-board-card:hover {
     background: color-mix(in srgb, var(--db-hover-bg) 82%, var(--db-surface-raised));
+    border-color: var(--background-modifier-border-hover);
     box-shadow: var(--db-elevation-2);
     transform: translateY(-1px);
   }
 }
 
+.note-database-container .db-board-card-priority-strip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  min-height: 3px;
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
+  background: var(--db-status-fg, var(--interactive-accent));
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.note-database-container .db-board-card-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--db-space-3);
+  min-width: 0;
+}
+
+.note-database-container .db-board-card-parent {
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--db-radius-full);
+  background: color-mix(in srgb, var(--background-modifier-hover) 72%, transparent);
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+  line-height: 1.25;
+  padding: var(--db-space-1) var(--db-space-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-database-container .db-board-card-body > .db-record-title-line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--db-space-2);
+  min-width: 0;
+}
+
+.note-database-container .db-board-card-body > .db-record-title-line > .db-board-card-title {
+  flex: 1 1 auto;
+}
+
+.note-database-container .db-board-card-chips {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--db-space-1);
+  min-width: 0;
+  max-width: 50%;
+}
+
+.note-database-container .db-board-card-chip {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.note-database-container .db-board-card-chip .status-badge {
+  min-width: 0;
+  overflow: hidden;
+  padding-inline: var(--db-space-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .note-database-container .db-board-card.is-dragging {
   opacity: 0.45;
+  border-color: color-mix(in srgb, var(--interactive-accent) 55%, var(--background-modifier-border));
+  box-shadow: var(--db-elevation-2);
+  cursor: grabbing;
 }
 
 .note-database-container .db-board-card.is-drop-target {
-  background: var(--db-hover-bg);
+  border-color: color-mix(in srgb, var(--interactive-accent) 68%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--interactive-accent) 10%, var(--db-surface-raised));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 36%, transparent);
 }
 
 .note-database-container .db-board-card.is-drop-before {
@@ -9257,9 +9395,9 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  min-height: 24px;
-  margin-bottom: 6px;
+  gap: var(--db-space-3);
+  min-height: 28px;
+  margin-bottom: var(--db-space-3);
 }
 
 .note-database-container .db-board-card-checkbox {
@@ -9271,8 +9409,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   margin: 0 0 0 auto;
   border: 0;
   border-radius: var(--db-radius-md);
@@ -9342,8 +9482,9 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board-card-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-top: 8px;
+  gap: var(--db-space-2);
+  margin-top: 0;
+  min-width: 0;
 }
 
 /* 单个属性字段：标签名 | 值 */
@@ -9351,7 +9492,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: grid;
   grid-template-columns: minmax(64px, auto) minmax(0, var(--db-card-field-width, 1fr));
   align-items: start;
-  gap: 8px;
+  gap: var(--db-space-3);
   border-radius: var(--db-radius-md);
   color: var(--text-muted);
   cursor: text;
@@ -9375,6 +9516,12 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-board-card-field-wrap .db-board-card-value {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  max-height: calc(1.4em * 3);
   text-align: left;
   white-space: normal;
 }
@@ -9426,7 +9573,12 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--db-space-1);
+}
+
+.note-database-container .db-board-card-meta .db-cell-progress {
+  width: 100%;
+  min-width: 0;
 }
 
 .note-database-container .db-board-card-field.is-checkbox-field .db-board-card-value {
@@ -9940,6 +10092,14 @@ body.is-phone .note-database-container .db-record-detail-panel {
 
 .note-database-container .db-board-add-group-cancel:hover {
   color: var(--text-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container .db-board,
+  .note-database-container .db-board * {
+    scroll-behavior: auto;
+    transition: none;
+  }
 }
 
 .note-database-container .db-board-add-group-color-preview {

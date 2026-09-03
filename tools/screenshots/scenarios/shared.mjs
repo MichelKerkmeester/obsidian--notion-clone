@@ -239,12 +239,31 @@ export function tableRows() {
     </tr>`).join("");
 }
 
-export const boardCard = (r) => `
+export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscriptions") => `
   <div class="db-board-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
-    <div class="db-board-card-controls">${rowCheckbox("db-board-card-checkbox")}</div>
-    <div class="db-board-card-title">${r.name}</div>
-    <div class="db-board-card-field"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">${r.cost}</span></div>
-    <div class="db-board-card-field"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
+    ${tone ? `<div class="db-board-card-priority-strip status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
+    <div class="db-board-card-controls">
+      ${rowCheckbox("db-board-card-checkbox")}
+      <button type="button" class="db-board-card-open" aria-label="Open note">${ICONS.maximize}</button>
+      <button type="button" class="db-card-mobile-move-btn" aria-label="Move">${ICONS.move}</button>
+    </div>
+    <div class="db-board-card-body">
+      ${parent ? `<div class="db-board-card-parent" title="${parent}">${parent}</div>` : ""}
+      <div class="db-record-title-line">
+        <div class="db-board-card-title db-file-title-stacked has-folder-prefix" title="${parent ? `${parent}/` : ""}${r.name}.md">
+          <div class="db-file-title-name">${r.name}</div>
+          <div class="db-file-title-prefix">${parent ? `${parent}/` : ""}</div>
+        </div>
+        <span class="db-board-card-chips">
+          <span class="db-board-card-chip" data-note-database-column-key="cycle">${optionPill(r.cycle)}</span>
+          <span class="db-board-card-chip" data-note-database-column-key="payment">${optionPill(r.payment)}</span>
+        </span>
+      </div>
+      <div class="db-board-card-meta">
+        <div class="db-board-card-field" data-note-database-column-key="cost" role="gridcell"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">${r.cost}</span></div>
+        <div class="db-board-card-field" data-note-database-column-key="renew" role="gridcell"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
+      </div>
+    </div>
   </div>`;
 
 /**
@@ -256,15 +275,17 @@ export function boardColumn(title, rows, tone = OPTION_TONES[title]) {
   return `
   <div class="db-board-column">
     <div class="db-board-column-header">
+      ${tone ? `<div class="db-board-column-topbar status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
       <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
       ${rowCheckbox("db-board-column-checkbox")}
       <div class="db-board-header-text">
         ${groupTitle("db-board-column-title", title, tone)}
         <span class="db-board-count">${rows.length}</span>
+        <button type="button" class="db-board-column-options" aria-label="Column options">${dots}</button>
       </div>
-      <button type="button" class="db-board-column-options" aria-label="Column options">${dots}</button>
     </div>
-    <div class="db-board-cards" role="rowgroup">${rows.map(boardCard).join("")}</div>
+    <div class="db-board-column-resize-handle" aria-hidden="true"></div>
+    <div class="db-board-cards" role="rowgroup">${rows.map((row) => boardCard(row, tone ?? null)).join("")}</div>
   </div>`;
 }
 
@@ -316,4 +337,3 @@ export const boardSubgroupHeader = (title, count, tone = OPTION_TONES[title]) =>
     </div>
     <div class="db-board-cards" role="rowgroup"></div>
   </div>`;
-

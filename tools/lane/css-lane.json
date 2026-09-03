@@ -1,8 +1,8 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "14e1a5a8e3b6",
-  "baselineCommit": "8dd7008",
+  "baselineHash": "9eb4b141471e",
+  "baselineCommit": "b9e2321af5a9",
   "history": [
     {
       "event": "acquire",
@@ -1217,6 +1217,48 @@
         "screenshots/views/timeline-view-month-desktop-light.png"
       ],
       "note": "No stylesheet edit was taken and the lane was never held: the hash is unchanged at 14e1a5a8e3b6. This is a verifier pass over the 038 board card/column information-hierarchy rewrite (topbar, priority strip, body wrapper, parent chip, title-row select/status chips) in board-renderer.ts. screenshots-fresh flagged 16 captures stale by source hash (board-view x4, board-mobile x4, card-cover-states x4, chrome-group-selection-controls x4); after recapture all 16 are byte-identical to HEAD, so none appear in this reviewed list. board-view/board-mobile are hand-written static fixtures (boardColumn/boardCard in tools/screenshots/scenarios/shared.mjs) that were not updated to mirror the new markup, so the rewrite is not yet visible in any capture; the paired-screenshot proof this port eventually needs is not satisfied by this pass and is named as an open follow-up, not claimed here. The five captures actually named here changed for unrelated reasons (icon-picker and timeline sources only, no board-renderer.ts dependency) and were opened and read: field-icon-picker desktop dark/light still show the full emoji/icon grid and recent-icons row correctly; timeline-view-day desktop dark/light and timeline-view-month desktop light still show the Business/Personal lanes, bars and today-marker correctly. Nothing broken in any of the five."
+    },
+    {
+      "event": "acquire",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-03T06:58:08.000Z",
+      "hash": "14e1a5a8e3b6"
+    },
+    {
+      "event": "edit",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-03T07:43:11.000Z",
+      "hash": "9eb4b141471e",
+      "note": "Column flex-basis fallback restored to the resize clamp's own floor (220px), reverting a hardcoded 280px floor a prior hunk on this lane had introduced that was overriding --db-board-column-width below that point; min-width returned to 0 so the ellipsis chain keeps working. Probed at 220/250/280/400px: rendered widths now match the pre-edit stylesheet exactly (236/266/296/416). Not yet recaptured or released — this lane's dispatch holds for further edits."
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-03T08:20:00.000Z",
+      "hash": "9eb4b141471e",
+      "reviewed": [
+        "screenshots/components/card-cover-states-desktop-dark.png",
+        "screenshots/components/card-cover-states-desktop-light.png",
+        "screenshots/components/card-cover-states-mobile-dark.png",
+        "screenshots/components/card-cover-states-mobile-light.png",
+        "screenshots/components/chrome-group-selection-controls-desktop-dark.png",
+        "screenshots/components/chrome-group-selection-controls-desktop-light.png",
+        "screenshots/components/chrome-group-selection-controls-mobile-dark.png",
+        "screenshots/components/chrome-group-selection-controls-mobile-light.png",
+        "screenshots/panels/panel-record-detail-desktop-dark.png",
+        "screenshots/panels/panel-record-detail-desktop-light.png",
+        "screenshots/panels/panel-record-detail-mobile-dark.png",
+        "screenshots/panels/panel-record-detail-mobile-light.png",
+        "screenshots/views/board-mobile-desktop-dark.png",
+        "screenshots/views/board-mobile-desktop-light.png",
+        "screenshots/views/board-mobile-mobile-dark.png",
+        "screenshots/views/board-mobile-mobile-light.png",
+        "screenshots/views/board-view-desktop-dark.png",
+        "screenshots/views/board-view-desktop-light.png",
+        "screenshots/views/board-view-mobile-dark.png",
+        "screenshots/views/board-view-mobile-light.png"
+      ],
+      "note": "Board column/card visual language under --db-* tokens, released after every capture above was opened. BOARD (8): board-view and board-mobile, desktop and mobile, light and dark — each column now carries a status-coloured 3px topbar, and each card a matching priority strip, a controls row (checkbox, open, and on mobile the move button), a Subscriptions parent chip, a title line with select/status chips ranged right, and the Cost/Renews grid beneath. Column geometry is unchanged from the pre-edit sheet: probed at 220/250/280/400px the rendered widths are 236/266/296/416, identical to b9e2321, and the columns start at the same x in the paired reads. Mobile shows one column with the next peeking, so the horizontal scroll survives overflow-x:auto. No clipping, no overlap, no unstyled element in any of the eight. PANEL (4) and COVER (4): panel-record-detail grew 8px taller and card-cover-states 2px, because both borrow .db-board-card-open, which went 24px to 28px for the touch floor; both still read correctly in all four variants. CHROME (4): only the third row moved, the board subgroup toggle taking the same 28px — the two table/list rows above it are unchanged. NOT PROVEN BY ANY CAPTURE: hover, drag, drop-target and the empty-column slot have no fixture that depicts them, and the .db-board-empty-slot rule is therefore unphotographed; device confirmation is still owed. EXCLUDED DELIBERATELY: timeline-view-day-desktop-light and timeline-view-month-desktop-light drift by max 8/255 per pixel over their text on this machine, and a control capture from a clean b9e2321 clone reproduces that drift byte-for-byte against the committed PNG, so it is this environment and not this stylesheet; both were restored rather than committed. field-record-icon-mobile-light drifted the same way and came back identical to HEAD on a re-run."
     }
   ],
   "outstanding": [
