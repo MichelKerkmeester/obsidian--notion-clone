@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T06:45:00Z"
-    last_updated_by: "reports-34-36-recorded"
-    recent_action: "Recorded reports 34-36 from iOS operator on 1.4.2"
+    last_updated_at: "2026-09-03T07:10:00Z"
+    last_updated_by: "reports-34-36-fixed"
+    recent_action: "Reports 34-36 fixed in 85ff504, owner 031; device confirm owed"
     next_safe_action: "Dispatch 037 step 1: the failing timeline check, devin per D14"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
@@ -21,7 +21,7 @@ _memory:
       - "Report 29 (P0): fixed in 98da630 and 0c92f4d, released in 1.4.1; per-row confirmation is owed"
       - "Reports 30-33: recorded in 62c4fe7, owners 001, 022, 022, 010; the fix is uncommitted"
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
-      - "reports 34-36 open, diagnosis in flight"
+      - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -545,4 +545,24 @@ sheet's own content close or crash the sheet on the phone, of which 34 and 35 ar
 instances; the operator has not yet said whether the failure is nothing-happens, an immediate close,
 or a freeze. All three are **recorded, not investigated**: owner is pending the in-runtime diagnosis
 running now, none is operator-confirmed, and all three are open.
+
+### Reports 34-36 fixed, 2026-09-03 ~07:10 CEST
+
+The in-runtime diagnosis referenced above landed as `85ff504` (`fix(sheets): keep a rebuilt panel
+inside its own sheet`), owner **`031-sheet-lifecycle-ownership`**. Mechanism: the sort, filter,
+view-config and column-manager panel renderers remove and recreate their panel node on every
+add/toggle/remove; the overlay stack's outside-pointerdown check held the node captured at
+`register()` time, so the first in-panel rebuild left it stale and the next tap anywhere in the
+live panel read as OUTSIDE and closed the sheet mid-edit. On the embedded surface a
+container-scoped lookup never matched at all once `mobile-bottom-sheet.ts` portals the sheet onto
+`document.body`, so dismissal never registered there in the first place. Fix: `OverlaySurfaceOptions`
+gained an optional `getPanel()` resolver that `OverlayStack.livePanel()` re-asks on every dismissal
+check, and `database-view.ts`/`embedded-database-renderer.ts` now pass their renderer's own
+`getPanel()` for all four panel kinds. Red observed in `tools/live/sheet-rebuild.mjs` with
+`overlay-stack.ts` reverted, for both the sort and filter cases; green after. Lane exits:
+`sheet-rebuild` 0, `sheet-teardown` 0, `render-assertions` 0, `touch-targets` 0; `tsc` 0; `vitest`
+761 passed; `lint` 145 (pre-existing baseline, unchanged); `scan-comments` 0. This is a **new**
+mechanism in the same overlay-stack seam `031` already owns — not one of that packet's six
+originally-ranked findings — and is recorded there. Not released (1.4.3 pending) and **not
+operator-confirmed**; `roadmap.md` §4 rows 34-36 updated to match.
 <!-- /ANCHOR:log -->

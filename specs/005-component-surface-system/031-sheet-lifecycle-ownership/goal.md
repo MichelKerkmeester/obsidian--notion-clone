@@ -9,12 +9,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-02T19:30:00Z"
-    last_updated_by: "report-29-second-mechanism"
-    recent_action: "Long press now consumes its compat click; class-prune refuted"
+    last_updated_at: "2026-09-03T07:10:00Z"
+    last_updated_by: "reports-34-36-fixed"
+    recent_action: "Reports 34-36 fixed in 85ff504: getPanel() resolver, stale-node seam"
     next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
     blockers:
       - "Nothing here is confirmed on the operator's device"
+      - "Reports 34-36 fixed in 85ff504; release 1.4.3 pending; device confirmation owed"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -22,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-goal"
       parent_session_id: null
-    completion_pct: 75
+    completion_pct: 70
     open_questions:
       - "Does Obsidian's Modal.close() detach containerEl alone or also modalEl"
     answered_questions:
@@ -412,3 +413,37 @@ bottom sheet that mutate the sheet's own content close or crash the sheet on the
 re-renders the sheet's own content on interaction is a plausible fourth shape sharing this
 packet's seam, but that is a hypothesis, not a finding. Owner is pending the in-runtime diagnosis
 running now; no criterion above is ticked or unticked by this note.
+
+### 2026-09-03: Reports 34-36 confirmed as a fourth mechanism in this seam, and fixed
+
+**2026-09-03 ~07:10 CEST.** The hypothesis above is confirmed, refined and fixed in `85ff504`
+(`fix(sheets): keep a rebuilt panel inside its own sheet`). It is **not** report 36's "re-renders its
+own content" framing verbatim — the panels do not re-render in place, they remove and recreate their
+node outright on every add/toggle/remove — but it is the same seam this packet already owns: sort,
+filter, view-config and column-manager panels all rebuild their node, and the overlay stack's
+outside-pointerdown check held the node captured at `register()` time. The first in-panel rebuild
+left the stack holding a detached reference, so the very next tap anywhere in the live panel read as
+OUTSIDE and closed the sheet mid-edit — row 34's add-sort control and row 35's Add condition are both
+this. On the embedded surface (`embedded-database-renderer.ts`) the lookup was a container-scoped
+`querySelector`, which never matched at all once `mobile-bottom-sheet.ts` portals the sheet onto
+`document.body`, so dismissal never registered there in the first place — row 36's "a lot of sheets".
+
+Fix is at the same seam T5 registered but did not fully close: `OverlaySurfaceOptions` gains an
+optional `getPanel()` resolver that `OverlayStack.livePanel()` re-asks on every dismissal check
+(`dismissPanel`, `isTopSurface`, outside-pointerdown), instead of trusting the node captured once at
+registration. `database-view.ts` and `embedded-database-renderer.ts` now pass the owning renderer's
+own `getPanel()` for all four panel kinds, replacing the embedded container-scoped selector.
+
+**Red observed first** in `tools/live/sheet-rebuild.mjs` with only `overlay-stack.ts` reverted: "a
+tap inside the panel the rebuild just created read as OUTSIDE and closed the sheet" for both the sort
+and filter cases (3 failures). All green after. Lane exits: `sheet-rebuild` 0, `sheet-teardown` 0,
+`render-assertions` 0, `touch-targets` 0; `tsc` 0; `vitest` 761 passed; `lint` 145 (pre-existing
+baseline, unchanged); `scan-comments` 0.
+
+**This is a new, fourth mechanism — not one of this packet's six originally-ranked findings** (§3
+table above), discovered because report 36 named the general shape and this session traced it to the
+same overlay-stack seam findings #1 and #3 already live in. **No completion-criteria row above is
+ticked by this fix**: none of the ten criteria names sort/filter/view-config panel rebuilds, and the
+fix is not released (1.4.3 pending) and not operator-confirmed. Recorded here because the mechanism
+and the file (`overlay-stack.ts`) are this packet's own, and `roadmap.md` §4 rows 34-36 now point
+here as owner.
