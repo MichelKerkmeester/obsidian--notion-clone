@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T14:20:00Z"
-    last_updated_by: "039-landed"
-    recent_action: "039 landed (57043e7+1588576); 1.4.6 pending, not confirmed"
-    next_safe_action: "Land 040, cut 1.4.6, operator confirms on iOS"
+    last_updated_at: "2026-09-03T22:40:00Z"
+    last_updated_by: "040-landed"
+    recent_action: "040 landed (1d611db+00b7bd2); all 5 ports landed; 1.4.7 pending"
+    next_safe_action: "Cut 1.4.7; operator confirms all five surfaces on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -649,4 +649,34 @@ not change `completion_pct`: the same basis as the `037` and `041` entries above
 the parent's seven §3 rows turn on an individual port phase landing, so the 57% figure is
 unaffected. `roadmap.md` §5.2's port-phases row and `spec.md`'s Phase Documentation Map row for
 `039` updated to match.
+
+### `040-subtask-tree-port` landed, 2026-09-03
+
+Two legs. `1d611db` (dispatched to `cli-devin`, resumed after a connection loss, verified
+in-runtime) derives the subtask relation over `RowData[]` — never nested, per ADR-001 — and adds
+`planSubtaskMove` as the single atomic write path with a cycle guard, per ADR-002, plus hydrate and
+serialize modules and an optional pipeline stage carrying byte-identical diagnostics. Red-first:
+`Cannot find module './subtask-hydrate'` before the three modules existed; 47/47 green after.
+`00b7bd2` (dispatched to `cli-codex`, one in-runtime fix round after a rejection for an
+unconditional subtask class and an add input on every card, then rebased onto `main` and verified
+by a fresh Opus reviewer) puts depth on the board card's own outline, an expand toggle, an
+explicit-vs-derived progress distinction, an inline add row only on an expanded parent, and a
+Move-under menu bounded to the group and capped at 20, with host handlers wired through
+`planSubtaskMove` and `ViewConfig.subtaskCollapsed` carrying per-view collapse state. Four reds
+seen across the relation, data-source and two fixture probes; the tree got its own board and
+timeline scenarios so the ordinary ones stayed unchanged. 21 captures read; the lane released
+naming all 21; `npm run gate` PASS 25 green; `validate.sh --strict` first `RESULT: PASSED`.
+
+Two rows stay open, recorded in `040/goal.md` rather than here: drag-reorder inside one parent
+still routes rank-only because every host binding drops the `subtaskMove` argument, so the board
+and timeline disagree; and the host `moveSubtask`/`toggleSubtaskCollapsed` bodies have no test
+harness — their inputs and output shape are covered, the call itself is read, not run. Both ADRs
+stay Proposed in `decision-record.md`. Neither leg is operator-confirmed. `037`, `038` and
+`039`/`041` already shipped in 1.4.4, 1.4.5 and 1.4.6 respectively; `040` is the last of the five
+and missed 1.4.6, so it will ride release **1.4.7, pending**. `roadmap.md` §5.2's port-phases row
+and `spec.md`'s Phase Documentation Map row for `040` updated to match.
+
+This does not change `completion_pct`: the same basis as the `037`, `039` and `041` entries above
+applies — none of the parent's seven §3 rows turn on an individual port phase landing, so the 57%
+figure is unaffected.
 <!-- /ANCHOR:log -->

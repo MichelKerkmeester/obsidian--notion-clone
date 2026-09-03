@@ -587,13 +587,22 @@ are not part of the port.
 | 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, release 1.4.4 pending, not operator-confirmed |
 | 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Opened |
 | 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Landed `57043e7` + `1588576`, release 1.4.6 pending, not operator-confirmed |
-| 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Opened |
+| 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Landed `1d611db` + `00b7bd2`, release 1.4.7 pending, not operator-confirmed |
 | 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, release 1.4.6 pending, not operator-confirmed |
 
 The research runs in a worktree, `.worktrees/003-obsidian-pm-harvest` on branch
 `worktrees/003-obsidian-pm-harvest`, so the main checkout stays free for the in-flight lanes. The
 untracked `036/research/` directory in the main checkout is residue from a rejected launch and is
 not evidence of anything.
+
+**All five port phases opened above have now landed on `main`.** `037` at `0262386`+`55bff9b`
+(released 1.4.4), `038` at `b9e2321`+`a6fcd31` (released 1.4.5), `039` at `57043e7`+`1588576`
+(reconciled `d8a2508`, released 1.4.6), `041` at `cb9aedf`+`25ae3a9` (released 1.4.6), and `040` at
+`1d611db`+`00b7bd2` (unreleased). `040` is the only leg that missed 1.4.6, so **release 1.4.7 is
+pending** to carry it. None of the five is operator-confirmed. This table's own status cells for
+`037` (still reading "release 1.4.4 pending") and `038` (still reading "Opened") were not updated
+by their own landings and sit outside this dispatch's write scope, which is `040`'s row alone;
+flagged rather than silently reconciled.
 
 ### 5.3 Release cadence
 

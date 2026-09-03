@@ -228,4 +228,13 @@ is now at `:2111-2114`. Both are corrected in `research/research.md` with dated 
 rows, same style as the 2026-09-02 `mobile-bottom-sheet.ts` correction. **Three local citations have
 now been corrected on read in total; every sampled reference-side citation still holds** — the
 2026-09-02 spot-check's 10 of 10 reference citations were not re-touched.
+
+**2026-09-03: all five adoption-plan phases opened above have now landed.** `037`
+(`0262386`+`55bff9b`, released 1.4.4), `038` (`b9e2321`+`a6fcd31`, released 1.4.5), `039`
+(`57043e7`+`1588576`, reconciled `d8a2508`, released 1.4.6), `041` (`cb9aedf`+`25ae3a9`, released
+1.4.6) and `040` (`1d611db`+`00b7bd2`, unreleased) each closed the rewrite-and-merge D4 requires for
+its own surface. `040` is the only one not yet shipped; release **1.4.7 is pending** to carry it.
+This phase's own two open rows — the 20-iteration count being self-reported rather than measured,
+and the spot-check having sampled only the reference side — are unaffected by any of the five
+landings and stay open.
 <!-- /ANCHOR:log -->
