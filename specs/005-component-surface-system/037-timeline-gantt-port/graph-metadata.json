@@ -50,10 +50,12 @@
       "src/views/calendar-timeline-renderer.ts",
       "src/data/calendar-timeline-model.ts",
       "src/data/calendar-interaction-model.ts",
+      "src/data/calendar-title-formatter.ts",
+      "tools/screenshots/scenarios/temporal.mjs",
+      "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
       "tools/screenshots/capture.mjs",
       "tools/lane/css-lane.json",
       ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-      "tools/screenshots/scenarios/temporal.mjs",
       "src/views/calendar-timeline-hour-column.test.ts"
     ],
     "entities": [
@@ -112,6 +114,24 @@
         "source": "derived"
       },
       {
+        "name": "calendar-title-formatter.ts",
+        "kind": "code",
+        "path": "src/data/calendar-title-formatter.ts",
+        "source": "derived"
+      },
+      {
+        "name": "temporal.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "temporal-tick-parity.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
+        "source": "derived"
+      },
+      {
         "name": "capture.mjs",
         "kind": "file",
         "path": "tools/screenshots/capture.mjs",
@@ -127,12 +147,6 @@
         "name": "SKILL.md",
         "kind": "doc",
         "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-        "source": "derived"
-      },
-      {
-        "name": "temporal.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/scenarios/temporal.mjs",
         "source": "derived"
       },
       {
@@ -188,23 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Overview Rewrite",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Pattern Renderer",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`src/views/calendar-timeline-renderer.ts` (2,390 lines) already owns an action contract, CSS-unit geometry,",
     "created_at": "2026-09-02T21:51:11Z",
-    "last_save_at": "2026-09-03T21:12:14.811Z",
+    "last_save_at": "2026-09-03T22:01:27.388Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +217,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:40aa5dd3b90c3fbef94792c444cb39f9b61f9b83586a122e7cd78c713eda7d6a",
+    "source_fingerprint": "sha256:abda90a2a247130e81741ae06e2a58d6b7c689f196548f2efcd4cac5dd6c0f06",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "a60811452fceaa109e4da1242bf8aba532712bdcd69032fc9390e10dacd229cb",
       "plan.md": "15668849564e4c0019be092e0ccf3220046f482ccc745caa2db9a34cc2fb9440",
       "tasks.md": "09447d4ceb883561447112e82d7aa6f5d2e44e4821208f0251f1156eb42e550b",
-      "implementation-summary.md": "0b7b062c11e5cc1bbbfd5d2977f40ed225f0d0cf0c2a2d94eedb4c7fc416280d"
+      "implementation-summary.md": "875bd0c03e62c853cd4bb5760ba6e6f0680bc69a859f62571b61a2a08f94769f"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -60,8 +60,8 @@
   /* The step between --db-font-md and --db-font-lg, added because the ladder had no member of the
      audited 12/14/16/18/20/24 scale between 13 and 16 and a surface measured against that scale
      needs one. Kept as its own step rather than by moving --db-font-md, which thirty-odd rules read
-     and which another phase's frozen editor geometry is measured against: raising it grew that
-     editor by exactly one line-height and reddened a freeze that has nothing to do with this label. */
+     and which frozen editor geometry is measured against: raising it grew that editor by exactly
+     one line-height and reddened an unrelated layout. */
   --db-font-base: 14px;
   --db-font-base-line-height: 1.4;
   --db-font-lg: 16px;
@@ -17694,7 +17694,9 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
   grid-template-rows: repeat(var(--db-timeline-event-rows, 0), var(--db-timeline-event-row-height, 24px));
   grid-auto-rows: var(--db-timeline-event-row-height, 24px);
   align-items: center;
-  row-gap: 4px;
+  /* Raised labels use the lane gap as vertical clearance; the token keeps that space consistent
+     while the native trigger and dependency controls retain their compact hit-box size. */
+  row-gap: var(--db-space-8);
   column-gap: 0;
   padding: 2px 0 6px;
   background: transparent;
@@ -18271,6 +18273,25 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
 
 .note-database-container .db-timeline-event.is-milestone .db-timeline-event-content {
   padding-left: calc(var(--db-timeline-unit-width) / 2 + 14px);
+}
+
+/* A milestone label moves above its bar when the following lane item starts inside its inline
+   span. The trigger must let that label escape, while compact label typography and the lane gap
+   keep it clear of the row above without shrinking any interactive box. */
+.note-database-container .db-timeline-event.is-milestone.is-label-above .db-timeline-event-trigger {
+  overflow: visible;
+}
+
+.note-database-container .db-timeline-event.is-milestone.is-label-above .db-timeline-event-content {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  max-width: none;
+  overflow: visible;
+  white-space: nowrap;
+  z-index: 8;
+  font-size: var(--db-font-xs);
+  line-height: var(--db-font-xs-line-height);
 }
 
 /* The interactive box is the full 28px a finger needs; the connector a person sees stays a 10px

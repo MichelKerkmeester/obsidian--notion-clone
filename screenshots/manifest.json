@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@d9c147c9bf3a"
+    "stylesheet": "styles.css@4c7b8b627ab9"
   },
   "scenarios": [
     {
@@ -5067,7 +5067,7 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 44905
+      "bytes": 44904
     },
     {
       "id": "calendar-empty-state",
@@ -5286,7 +5286,7 @@
       },
       "note": "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
       "capture": "viewport",
-      "bytes": 100333
+      "bytes": 99987
     },
     {
       "id": "calendar-month-view",
@@ -5478,7 +5478,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
-      "bytes": 65790
+      "bytes": 65725
     },
     {
       "id": "calendar-week-time-grid",
@@ -6152,13 +6152,13 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "a7df7ae5222a",
+      "layoutHash": "7b6e6a23f538",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6166,7 +6166,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 147710
+      "bytes": 151293
     },
     {
       "id": "timeline-subtask-tree",
@@ -6181,13 +6181,13 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "a7df7ae5222a",
+      "layoutHash": "7b6e6a23f538",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6195,7 +6195,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 144624
+      "bytes": 148670
     },
     {
       "id": "timeline-subtask-tree",
@@ -6210,13 +6210,13 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "03a9883ae254",
+      "layoutHash": "439871ff5d58",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6224,7 +6224,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 84705
+      "bytes": 86118
     },
     {
       "id": "timeline-subtask-tree",
@@ -6239,13 +6239,13 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "03a9883ae254",
+      "layoutHash": "439871ff5d58",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6253,7 +6253,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 84685
+      "bytes": 87299
     },
     {
       "id": "timeline-toolbar-options",
@@ -6270,7 +6270,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6295,7 +6295,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6320,7 +6320,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6345,7 +6345,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "d9c147c9bf3a",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6365,18 +6365,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "88f3d049550a",
+      "layoutHash": "8bad06be7f25",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 155241
+      "bytes": 154927
     },
     {
       "id": "timeline-view-day",
@@ -6388,18 +6388,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "88f3d049550a",
+      "layoutHash": "8bad06be7f25",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 127965
+      "bytes": 128576
     },
     {
       "id": "timeline-view-day",
@@ -6411,18 +6411,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "527db9223617",
+      "layoutHash": "e27d2e271c70",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 83008
+      "bytes": 93855
     },
     {
       "id": "timeline-view-day",
@@ -6434,18 +6434,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "527db9223617",
+      "layoutHash": "e27d2e271c70",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 76037
+      "bytes": 76013
     },
     {
       "id": "timeline-view",
@@ -6457,18 +6457,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "6b335e134dc0",
+      "layoutHash": "944d7a234cb7",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 137992
+      "bytes": 141148
     },
     {
       "id": "timeline-view",
@@ -6480,18 +6480,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "6b335e134dc0",
+      "layoutHash": "944d7a234cb7",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 135020
+      "bytes": 138427
     },
     {
       "id": "timeline-view",
@@ -6503,18 +6503,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "404c4fff039f",
+      "layoutHash": "342290924de6",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 76901
+      "bytes": 78733
     },
     {
       "id": "timeline-view",
@@ -6526,18 +6526,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "404c4fff039f",
+      "layoutHash": "342290924de6",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar week, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 77243
+      "bytes": 79702
     },
     {
       "id": "timeline-view-month",
@@ -6549,18 +6549,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "917f9c3e7d22",
+      "layoutHash": "9ae847d418d7",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 116992
+      "bytes": 123497
     },
     {
       "id": "timeline-view-month",
@@ -6572,18 +6572,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "917f9c3e7d22",
+      "layoutHash": "9ae847d418d7",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 143707
+      "bytes": 149810
     },
     {
       "id": "timeline-view-month",
@@ -6595,18 +6595,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "9f43b8fae9da",
+      "layoutHash": "be0665f71907",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 66407
+      "bytes": 70706
     },
     {
       "id": "timeline-view-month",
@@ -6618,18 +6618,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "9f43b8fae9da",
+      "layoutHash": "be0665f71907",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 73892
+      "bytes": 78257
     },
     {
       "id": "timeline-view-quarter",
@@ -6641,18 +6641,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "629b794c70f6",
+      "layoutHash": "a2fd00b40b9b",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 101530
+      "bytes": 106365
     },
     {
       "id": "timeline-view-quarter",
@@ -6664,18 +6664,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "629b794c70f6",
+      "layoutHash": "a2fd00b40b9b",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 118563
+      "bytes": 123507
     },
     {
       "id": "timeline-view-quarter",
@@ -6687,18 +6687,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "89958e77eb14",
+      "layoutHash": "cbd109733bbe",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 60915
+      "bytes": 64026
     },
     {
       "id": "timeline-view-quarter",
@@ -6710,18 +6710,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "89958e77eb14",
+      "layoutHash": "cbd109733bbe",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 68870
+      "bytes": 72430
     },
     {
       "id": "timeline-view-year",
@@ -6733,18 +6733,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "2afab4142815",
+      "layoutHash": "429031c7c305",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar year, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 98217
+      "bytes": 105337
     },
     {
       "id": "timeline-view-year",
@@ -6756,18 +6756,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "2afab4142815",
+      "layoutHash": "429031c7c305",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar year, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 103994
+      "bytes": 110852
     },
     {
       "id": "timeline-view-year",
@@ -6779,18 +6779,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "888efddccedb",
+      "layoutHash": "dfc907fa8574",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar year, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 52450
+      "bytes": 57486
     },
     {
       "id": "timeline-view-year",
@@ -6802,18 +6802,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "888efddccedb",
+      "layoutHash": "dfc907fa8574",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
-        "styles.css": "32148b7b7646",
+        "styles.css": "4f74f3bd0b1c",
         "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar year, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 55927
+      "bytes": 61171
     }
   ]
 }

@@ -23,9 +23,11 @@ import { buildTimelineAxisBands, formatCalendarTitleParts } from "../../../src/d
 import { t } from "../../../src/i18n";
 import {
   buildTimelineTicks,
+  getTimelineTitleWindow,
   getTimelineViewportContentWidth,
   getTimelineViewportWindow,
   resolveEventAbsoluteScale,
+  resolveTimelineMilestoneLabelPlacement,
   resolveTimelineUnitWidth,
   resolveTimelineViewportUnitCount,
 } from "../../../src/data/calendar-timeline-model";
@@ -37,9 +39,11 @@ import {
   timelineEventAbsoluteScale,
   timelineEventVisibility,
   timelineFormatTickLabel,
+  timelineMilestoneLabelPlacement,
   timelineMonthBoundaryBands,
   timelineResolveViewportUnitCount,
   timelineEvent,
+  timelineTickLabel,
   timelineTicksForDateRange,
   timelineViewportContentWidth,
   timelineViewportWindow,
@@ -57,6 +61,8 @@ const ALL_SCALES = ["day", "week", "month", "quarter", "year"];
 describe("timeline screenshot event markup mirrors the renderer", () => {
   const source = readFileSync(resolve(process.cwd(), "src/views/calendar-timeline-renderer.ts"), "utf8");
   const fixtureMarkup = timelineEvent(TL_LANES[0].events[0], TIMELINE_FIXTURES.week);
+  const milestone = TL_LANES[0].events[1];
+  const milestoneMarkup = timelineEvent(milestone, TIMELINE_FIXTURES.week, TL_LANES[0].events);
   const requiredClasses = [
     "db-timeline-event",
     "is-progressing",
@@ -81,6 +87,20 @@ describe("timeline screenshot event markup mirrors the renderer", () => {
     expect(source).toContain('const trigger = eventEl.createEl("button", {');
     expect(source).toContain('const dot = parent.createEl("button", {');
     expect(source).not.toMatch(/renderTimelineLinkDots[\s\S]{0,1200}role: "button"/);
+  });
+
+  it("photographs a milestone label above its bar when the next bar starts inside its span", () => {
+    expect(milestoneMarkup).toContain("is-label-above");
+    expect(milestoneMarkup).toContain("db-timeline-milestone-diamond");
+    expect(source).toContain("milestoneLabelPlacement === \"above\"");
+  });
+
+  it("anchors the first tick label while keeping interior labels centered", () => {
+    const first = timelineTickLabel({ label: "00:00" }, "day", true);
+    const interior = timelineTickLabel({ label: "01:00" }, "day");
+    expect(first).toContain('<span class="db-timeline-tick-label" style="transform: none">');
+    expect(interior).not.toContain('style="transform: none"');
+    expect(source).toContain('if (isFirstTick) labelEl.setCssProps({ transform: "none" });');
   });
 });
 
@@ -175,6 +195,59 @@ describe("timeline fixture title matches formatCalendarTitleParts, once", () => 
   }
 });
 
+const TITLE_DEVICE_WIDTHS = [1440, 402];
+
+describe("timeline fixture title follows the viewport window", () => {
+  for (const width of TITLE_DEVICE_WIDTHS) {
+    for (const scale of ALL_SCALES) {
+      it(`agrees with getTimelineTitleWindow at ${scale} scale, ${width}px`, () => {
+        const fixture = timelineDynamicFixture(scale, { id: width === 402 ? "mobile" : "desktop", width });
+        const realWindow = getTimelineTitleWindow({ timelineScale: scale }, "2026-03-25", fixture.units);
+        const realTitle = formatCalendarTitleParts({
+          scale,
+          startDateKey: realWindow.startDateKey,
+          endDateKey: realWindow.endDateKey,
+          locale: "en",
+        });
+        expect(fixture.start).toBe(realWindow.startDateKey);
+        expect(fixture.end).toBe(realWindow.endDateKey);
+        expect(fixture.title).toBe(realTitle.main);
+        expect(fixture.titleYear).toBe(realTitle.year);
+      });
+    }
+  }
+});
+
+const modelTimelineEvent = (event) => ({
+  id: `Subscriptions/${event.title}.md`,
+  title: event.title,
+  startDateKey: event.start,
+  endDateKey: event.end,
+  startMinutes: event.startMinutes,
+  endMinutes: event.endMinutes,
+  isMilestone: Boolean(event.milestone),
+});
+
+describe("timeline milestone placement parity", () => {
+  for (const scale of ["week", "month", "quarter", "year"]) {
+    it(`puts the Adobe CC label above at ${scale} scale`, () => {
+      const fixture = timelineDynamicFixture(scale, { id: "desktop", width: 1440 });
+      const lane = TL_LANES[0].events;
+      const milestone = modelTimelineEvent(lane[1]);
+      const next = modelTimelineEvent(lane[2]);
+      const real = resolveTimelineMilestoneLabelPlacement(
+        milestone,
+        [milestone, next],
+        fixture.width,
+        "day",
+      );
+      expect(real).toBe("above");
+      expect(timelineMilestoneLabelPlacement(lane[1], lane, fixture.width, "day")).toBe(real);
+      expect(timelineEvent(lane[1], fixture, lane)).toContain("is-label-above");
+    });
+  }
+});
+
 // ───────────────────────────────────────────────────────────────────
 // 5. BAR GEOMETRY & VISIBILITY PARITY (the fake-clamped-bar review flagged)
 // ───────────────────────────────────────────────────────────────────
@@ -213,11 +286,9 @@ describe("timeline fixture event visibility matches the render loop's clip decis
     for (const fixture of Object.values(TIMELINE_FIXTURES)) {
       const visibility = timelineEventVisibility(adobeCc, fixture);
       expect(visibility.bar, `${fixture.scale} scale`).not.toBeNull();
-      // Day scale's visible window is only its own 08:00-20:00 hour band (temporal.mjs's mirror
-      // of the fixture's fixed window open), and the milestone is an all-day event spanning the
-      // full 00:00-24:00 of 25 March — so it legitimately carries both jump arrows there, same as
-      // the real renderer, while still drawing the bar the old clamp never reached at three of
-      // the other four scales.
+      // Day scale opens at midnight and shows the configured whole-hour span. The all-day
+      // milestone starts at that visible boundary and extends beyond the trailing edge, matching
+      // the renderer's bar-plus-trailing-jump behavior while remaining visible in the lane.
       if (fixture.scale !== "day") {
         expect(visibility.isClippedStart, `${fixture.scale} scale`).toBe(false);
         expect(visibility.isClippedEnd, `${fixture.scale} scale`).toBe(false);
@@ -237,18 +308,30 @@ describe("timeline fixture event visibility matches the render loop's clip decis
 // 5B. UNIT-WIDTH PARITY (the fixture's per-scale column width against the real model)
 // ───────────────────────────────────────────────────────────────────
 
-/* Every fixture's `width` must equal what resolveTimelineUnitWidth() resolves for that scale
-   with no config override (calendar-timeline-model.ts:200-205), the same value the renderer
-   writes to --db-timeline-unit-width (calendar-timeline-renderer.ts:340). Without this, a
-   fixture width could drift from production silently: the later viewport-unit-count tests feed
-   TIMELINE_FIXTURES[scale].width to both the real and the mirrored side, so a wrong shared width
-   cancels out and neither side goes red. */
+/* Natural fixture widths and the viewport-specific widths must equal the values the renderer
+   writes to --db-timeline-unit-width. The explicit container-width argument guards the phone
+   branch instead of allowing the fixture and its viewport-unit count to drift together. */
 describe("timeline fixture unit width matches resolveTimelineUnitWidth", () => {
   for (const scale of ALL_SCALES) {
     it(`agrees with resolveTimelineUnitWidth at ${scale} scale`, () => {
       expect(TIMELINE_FIXTURES[scale].width).toBe(resolveTimelineUnitWidth({}, scale));
     });
   }
+
+  for (const width of TITLE_DEVICE_WIDTHS) {
+    for (const scale of ALL_SCALES) {
+      it(`uses the container width for ${scale} at ${width}px`, () => {
+        const fixture = timelineDynamicFixture(scale, { id: width === 402 ? "mobile" : "desktop", width });
+        expect(fixture.width, `${scale} @ ${width}px`).toBe(resolveTimelineUnitWidth({}, scale, width));
+      });
+    }
+  }
+
+  it("uses 32px day columns at the phone container width", () => {
+    const fixture = timelineDynamicFixture("day", { id: "mobile", width: 402 });
+    expect(fixture.width).toBe(32);
+    expect(resolveTimelineUnitWidth({}, "day", 402)).toBe(32);
+  });
 });
 
 // ───────────────────────────────────────────────────────────────────
@@ -284,7 +367,7 @@ describe("timeline viewport content-width mirror matches the real container meas
   for (const width of DEVICE_WIDTHS) {
     for (const scale of ALL_SCALES) {
       it(`timelineDynamicFixture's unit count equals resolveTimelineViewportUnitCount(getTimelineViewportContentWidth(...), resolveTimelineUnitWidth(...)) at ${scale} scale, ${width}px`, () => {
-        const unitWidth = TIMELINE_FIXTURES[scale].width;
+        const unitWidth = resolveTimelineUnitWidth({}, scale, width);
         const realContentWidth = getTimelineViewportContentWidth(width, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX);
         const realUnits = resolveTimelineViewportUnitCount(realContentWidth, unitWidth, scale);
         const fixture = timelineDynamicFixture(scale, { id: width === 402 ? "mobile" : "desktop", width });
@@ -295,7 +378,7 @@ describe("timeline viewport content-width mirror matches the real container meas
         expect(fixture.units, `${scale} @ ${width}px (config-resolved width)`).toBe(
           resolveTimelineViewportUnitCount(
             getTimelineViewportContentWidth(width, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX),
-            resolveTimelineUnitWidth({}, scale),
+            resolveTimelineUnitWidth({}, scale, width),
             scale,
           ),
         );
@@ -308,7 +391,7 @@ describe("timeline viewport-window mirror matches the real live-container mode",
   for (const width of DEVICE_WIDTHS) {
     for (const scale of ALL_SCALES) {
       it(`agrees with resolveTimelineViewportUnitCount + getTimelineViewportWindow at ${scale} scale, ${width}px`, () => {
-        const unitWidth = TIMELINE_FIXTURES[scale].width;
+        const unitWidth = resolveTimelineUnitWidth({}, scale, width);
         const contentWidth = getTimelineViewportContentWidth(width, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX);
         const realUnits = resolveTimelineViewportUnitCount(contentWidth, unitWidth, scale);
         const mirroredContentWidth = timelineViewportContentWidth(width, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX);
@@ -330,7 +413,7 @@ describe("timeline viewport-window mirror matches the real live-container mode",
 
   for (const scale of ["week", "month", "quarter", "year"]) {
     it(`agrees with buildTimelineAxisBands at ${scale} scale under the desktop viewport window`, () => {
-      const unitWidth = TIMELINE_FIXTURES[scale].width;
+      const unitWidth = resolveTimelineUnitWidth({}, scale, 1440);
       const contentWidth = getTimelineViewportContentWidth(1440, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX);
       const units = resolveTimelineViewportUnitCount(contentWidth, unitWidth, scale);
       const window = getTimelineViewportWindow({ timelineScale: scale }, "2026-03-25", units);
@@ -346,7 +429,7 @@ describe("timeline viewport-window mirror matches the real live-container mode",
   }
 
   it("agrees with buildTimelineAxisBands at day scale under the desktop viewport window", () => {
-    const unitWidth = TIMELINE_FIXTURES.day.width;
+    const unitWidth = resolveTimelineUnitWidth({}, "day", 1440);
     const contentWidth = getTimelineViewportContentWidth(1440, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX);
     const units = resolveTimelineViewportUnitCount(contentWidth, unitWidth, "day");
     const window = getTimelineViewportWindow({ timelineScale: "day" }, "2026-03-25", units);
@@ -363,13 +446,12 @@ describe("timeline viewport-window mirror matches the real live-container mode",
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 7. DAY-SCALE BAR/JUMP PARITY (the P0: visible.start hardcoded to 08:00)
+// 7. DAY-SCALE BAR/JUMP PARITY (the visible-window start)
 // ───────────────────────────────────────────────────────────────────
 
-/* timelineEventVisibility()'s day branch measured its visible window from a hardcoded 08:00 while
-   every other day-scale helper (ticks, bands, grid columns, today-line) already read
-   fixture.startMinutes (TL_DAY_START_MINUTES = 0) — so this is the one function that needs a
-   direct check against the real render loop's clip decision, not just the window it is fed.
+/* timelineEventVisibility()'s day branch must measure its visible window from fixture.startMinutes
+   (TL_DAY_START_MINUTES = 0 here), matching the ticks, bands, grid columns and today-line. This
+   direct check covers the render loop's clip decision, not just the viewport window it is fed.
    There is no exported symbol for the render loop's own clip (calendar-timeline-renderer.ts:
    450-476 is four lines of Math.max/Math.min inline in a private method), so the oracle here is
    resolveEventAbsoluteScale() (a real export) plus that same small, documented formula, applied

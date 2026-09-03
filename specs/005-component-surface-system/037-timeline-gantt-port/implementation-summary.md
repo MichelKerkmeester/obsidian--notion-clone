@@ -90,7 +90,10 @@ the pre-existing duplicated `.db-timeline-event.is-all-day` CSS block.
 | `src/views/calendar-timeline-renderer.ts` | Modified | Rewrote controls/header/grid/bars/drag/link affordance per `spec.md` §3 |
 | `src/data/calendar-timeline-model.ts` | Modified | Extended `buildTimelineModel` with reference padding/min-span semantics; due-only/milestone metadata |
 | `src/data/calendar-interaction-model.ts` | Modified | Added `resolveTimelineLinkChange` / `wouldCreateTimelineDependencyCycle` |
-| `styles.css` | Modified | Reconciled `db-timeline-*` rules against the reference's visual hierarchy under the `css-lane` protocol |
+| `styles.css` | Modified | Reconciled `db-timeline-*` rules against the reference's visual hierarchy under the `css-lane` protocol; leg c added the `.is-label-above` milestone rules and moved `.db-timeline-events` `row-gap` to `var(--db-space-8)` |
+| `src/data/calendar-title-formatter.ts` | Modified | Leg a: the title follows the rendered window, and spans years when the window crosses one |
+| `tools/screenshots/scenarios/temporal.mjs` | Modified | Leg c: the timeline fixture takes its title, first-tick anchor, day column width and milestone placement from the viewport window instead of frozen constants |
+| `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Modified | Leg c: binds each new fixture mirror to the real model export it mirrors |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -129,12 +132,18 @@ agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This will ri
 
 | Check | Result |
 |-------|--------|
-| Unit tests (`npx vitest run`) | PASS — 78 files / 682 tests green, 2026-09-03 |
+| Unit tests (`npx vitest run`) | PASS — 89 files / 913 tests green after leg c, exit 0 (78 files / 682 at landing; 908 before rebasing onto `7e36671`, whose board leg adds 5) |
+| Typecheck / lint / comments after leg c | `npx tsc --noEmit` exit 0; `npm run lint` 169 problems, exactly the recorded baseline; `scan-comments` exit 0 |
+| Fixture-mirror mutation checks (leg c) | Forcing `timelineMilestoneLabelPlacement` to `"inline"` — red, 5 failed; mutating the title mirror's same-month branch — red, 1 failed. Both restored, `shasum -a 256` identical to the pre-mutation file |
+| `css-lane` (leg c) | Acquired at `32148b7b7646`, released at `4f74f3bd0b1c` naming all 27 changed captures; `check-lane` exit 0 both held (`SURFACE_PHASE=037-timeline-gantt-port`) and plain |
+| `touch-targets` after leg c | `under = 264` against the recorded 279 baseline, unchanged from the pre-edit tree — no interactive box shrank |
 | Dependency-link seam red-first | Red: 12 of 12, `TypeError: resolveTimelineLinkChange is not a function`; green after `calendar-interaction-model.ts:270` landed |
 | Hour-column `is-today` fix | Red: 24 of 24 (`calendar-timeline-hour-column.test.ts`); green after `55bff9b` |
 | `npm run gate` | PASS — 25 green, 0 red, observed twice by fresh in-runtime agents (lane held and released) |
 | `validate.sh --strict` | First `RESULT: PASSED` |
 | Screenshot capture (20 timeline images, five scales x two devices x two themes) | Read, matching renderer's ticks/bars/milestone/progress; day-scale `is-today` column lands on the current hour only |
+| Recapture and read after leg c (27 changed PNGs) | All opened and read against their `HEAD` copies. Three of the four open rows are now photographed: quarter titles "February — May 2026" and year "2025 — 2026" over their own axes; "Tue 24" and "00:00" whole at the mobile viewport edge; "Adobe CC Mar 25" above its bar on all 16 week/month/quarter/year captures where `HEAD` read "A N". The day row is half photographed — eleven 32px columns against `HEAD`'s five of 60px, but today out of frame |
+| `npm run gate` after leg c | PASS — 25 green, exit 0, run twice (`SURFACE_PHASE=037-timeline-gantt-port` and plain) |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -142,9 +151,8 @@ agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This will ri
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Header/axis mismatch at quarter and year scale.** `getTimelineTitleWindow` returns the calendar
-   quarter/year of the anchor while the body renders a viewport-centred window; the title can disagree with
-   the visible ticks.
+1. ~~**Header/axis mismatch at quarter and year scale.**~~ Fixed in leg a and photographed in leg c: the
+   title describes the rendered window, and spans years when the window crosses one.
 2. **Zero-width mount fallback has no centring.** `getTimelineViewportUnitCount` returns `undefined` on a
    0-width mount and falls back to the calendar-boundary window until the next resize.
 3. **Invalid interactive nesting.** `span[role=button][tabindex=0]` sits inside `button.db-timeline-event`;
@@ -152,12 +160,20 @@ agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This will ri
 4. **Link-dot overlap at year/quarter scale.** Adjacent bars' 28px link dots overlap each other and
    neighbouring bars.
 5. **Low-contrast meta over the progress fill in light mode.**
-6. **Milestone label overpaint.** `.is-milestone` paints outside its bar by design and is overpainted by the
-   next bar in the same lane; reads "A. M" on 12 of 20 captures.
-7. **Clipped leading axis label on mobile.** The left-most tick label is clipped at the viewport edge on every
-   mobile capture.
-8. **Day and year scale are hard to use at phone width.** Day scale shows about five hour columns, partly
-   occluded by the 160px label column; year scale at 4px/day carries almost no readable labels.
+6. ~~**Milestone label overpaint.**~~ Fixed across legs a and c: the lane model raises a crowded label and
+   `.is-label-above` gives it somewhere to go. Photographed on all 16 week/month/quarter/year captures.
+7. ~~**Clipped leading axis label on mobile.**~~ Fixed in leg a and photographed in leg c.
+8. **Day and year scale at phone width, partly repaired.** Day scale now draws eleven 32px hour columns
+   instead of five at 60px, and the model centres the window on the current hour — but the screenshot
+   fixture's day branch still hardcodes `startMinutes: 0`, so today is out of frame in the capture and that
+   half of the row stays capture-pending. Year scale at 4px/day still carries almost no readable labels, and
+   the 160px label column still overlays the grid at phone width.
+11. **Two screenshot-fixture fidelity gaps, both in the day branch.** `temporal.mjs` emits `"HH:00"` tick
+    labels where the model emits `"HH"`, which is why the phone day captures show colliding hour labels no
+    production render draws; and its viewport window never exercises
+    `resolveTimelineDayCentredStartMinutes`, because `temporal-tick-parity.test.mjs` calls
+    `getTimelineViewportWindow` without a `now`. Neither is a product defect; both leave the fixture
+    describing a render the plugin does not produce.
 9. **Capture-harness padding note (low priority).** `#shot` carries 16px padding not reflected in the
    fixture's device-width comment; the right edge overflows by up to 8 columns at year desktop, though
    today-centred content stays in frame.
