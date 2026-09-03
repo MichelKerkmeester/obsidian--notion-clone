@@ -584,7 +584,7 @@ are not part of the port.
 
 | Planned phase | Folder | What it ports | Status |
 |---|---|---|---|
-| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Opened |
+| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, release 1.4.4 pending, not operator-confirmed |
 | 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Opened |
 | 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Opened |
 | 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Opened |

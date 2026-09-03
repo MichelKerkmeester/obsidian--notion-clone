@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T07:10:00Z"
-    last_updated_by: "reports-34-36-fixed"
-    recent_action: "Reports 34-36 fixed in 85ff504, owner 031; device confirm owed"
-    next_safe_action: "Dispatch 037 step 1: the failing timeline check, devin per D14"
+    last_updated_at: "2026-09-03T08:30:00Z"
+    last_updated_by: "037-landed"
+    recent_action: "037 landed in 0262386+55bff9b; 1.4.4 pending, 11 open rows"
+    next_safe_action: "Ship 1.4.4; open 038 next; 037's 11 open rows stay tracked"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -22,6 +22,7 @@ _memory:
       - "Reports 30-33: recorded in 62c4fe7, owners 001, 022, 022, 010; the fix is uncommitted"
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
+      - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -565,4 +566,20 @@ check, and `database-view.ts`/`embedded-database-renderer.ts` now pass their ren
 mechanism in the same overlay-stack seam `031` already owns — not one of that packet's six
 originally-ranked findings — and is recorded there. Not released (1.4.3 pending) and **not
 operator-confirmed**; `roadmap.md` §4 rows 34-36 updated to match.
+
+### `037-timeline-gantt-port` landed, 2026-09-03
+
+`0262386` (range geometry, cycle-safe dependency-link seam) and `55bff9b` (five scales, header/grid,
+milestone, progress, link affordance) closed the packet's own six-item completion gate: 17 of 17
+module-map rows rewritten and matching, the link seam red-first (12 of 12, `TypeError:
+resolveTimelineLinkChange is not a function`) then green, keep-local behaviours untouched, `css-lane`
+released naming 21 captures, `npm run gate` PASS 25 green observed twice by fresh in-runtime agents, and
+`validate.sh --strict` first `RESULT: PASSED`. Two product bugs were fixed on the way (every hour column
+painted `is-today` at day scale; the year printed twice in the year title). Nine fresh in-runtime rounds
+ran; the code held from round three, and eleven defects found in the ninth round (header/axis mismatch,
+zero-width mount fallback, span-in-button nesting, link-dot overlap, low-contrast meta, milestone-label
+overpaint, clipped mobile axis label, unusable day/year scale at phone width, a harness padding note, and
+a pre-existing duplicated CSS block) are recorded as open rows in `037/goal.md` §3, not fixed in this leg.
+Will ride release **1.4.4, pending**; **not operator-confirmed**. `roadmap.md` §5.2's port-phases row
+updated to match.
 <!-- /ANCHOR:log -->

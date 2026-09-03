@@ -22,7 +22,7 @@ contextType: "planning"
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | **Partial — landed and verified in `0262386` + `55bff9b`; release 1.4.4 outstanding; 6 of 17 criteria; awaiting operator confirmation on device.** The original six-item closure gate is met; eleven defects found in verification round nine (header/axis mismatch at quarter+year, zero-width mount fallback, span-in-button nesting, overlapping link dots, low-contrast progress-fill meta, milestone-label overpaint, clipped leading axis label on mobile, unusable day/year scale at phone width, a harness padding note, and the pre-existing duplicated `.is-all-day` CSS block) are open rows, per `goal.md` §3. Was *Draft*. |
 | **Created** | 2026-09-02 |
 | **Branch** | none (skip-branch) |
 | **Parent Spec** | `../spec.md` |

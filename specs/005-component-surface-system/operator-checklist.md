@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **42 phases**, **5 with nothing left**, **85 rows** waiting on a device.
+Derived 2026-09-03: **42 phases**, **5 with nothing left**, **90 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -155,14 +155,19 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The loop reached 20 iterations, or converged earlier with the convergence reason recorded in `research/lineages/<lineage>/convergence-report.md`.
 - [ ] An in-runtime spot-check of 10 randomly selected citations from the module map finds all 10 true against the file on disk — line exists, and its content matches what the map claims about it.
 
-## 037-timeline-gantt-port — 0/6
+## 037-timeline-gantt-port — 6/17
 
-- [ ] Every module-map row in `spec.md` §3 rewritten and matching its cited reference behavior, observed by placement/teardown pass and a screenshot read at all five zoom levels — currently 0 of 17 rows ported.
-- [ ] The dependency-link seam rejects same-side, duplicate, missing-task, and cycle links, each with a unit test observed passing — currently no seam exists (T001's red baseline).
-- [ ] Local visible-window rendering, unscheduled backlog, invalid-event repair, and group/lane limits are unchanged after the port — no regression observed in a before/after diff.
-- [ ] `styles.css` `db-timeline-*` rules reconciled under an acquired-and-released `css-lane` hold, with a `reviewed` array naming the recaptured screenshots.
-- [ ] `npm run gate` reports `gate: PASS` and exit 0, observed by a fresh in-runtime agent per D14 leg (c).
-- [ ] `validate.sh specs/005-component-surface-system/037-timeline-gantt-port --strict` first `RESULT:` line is `PASSED`.
+- [ ] Header contradicts the rendered axis at quarter and year scale: `getTimelineTitleWindow` (`calendar-timeline-model.ts` ~494-505) returns the calendar quarter/year of the anchor while the body renders a viewport-centred window — red: title reads "January — March 2026" over ticks running Feb 14 to May 4.
+- [ ] Zero-width mount fallback: `getTimelineViewportUnitCount` returns `undefined` when the measured content width is 0 (hidden or collapsed container at mount); `buildTimelineModel` then falls back to the calendar-boundary window with no centring, recovering only on the next resize.
+- [ ] Invalid interactive nesting: `span[role=button][tabindex=0]` inside `button.db-timeline-event` (renderer ~:623) — flagged for `041-shared-ui-ux-port`.
+- [ ] At year and quarter scale the two 28px link dots of adjacent bars overlap each other and neighbouring bars — observed on capture.
+- [ ] Light-mode meta text over the progress fill is low contrast — observed on capture.
+- [ ] The milestone label paints outside its bar by design (`.is-milestone overflow: visible`) and is overpainted by the next bar in the same lane — reads "A. M" on 12 of 20 captures (week and month, both devices).
+- [ ] The leading axis tick label is clipped at the viewport's left edge on every mobile capture ("00:00" reads "0:00", "Tue 24" reads "ue 24") — looks like missing left padding in the axis, not a capture artefact.
+- [ ] Day scale at phone width is close to unusable: about five hour columns, partly occluded by the 160px label column, today never in frame without scrolling.
+- [ ] Year scale at 4px/day carries almost no readable labels at phone width: one tick label survives; bar titles are illegible slivers.
+- [ ] Harness note: the capture frame (`#shot`) carries 16px padding, so the captured container is 1408/370 wide, not 1440/402; the fixture's device-width comment is wrong by 16px a side and the right edge overflows by up to 8 columns at year desktop. Low priority; today-centred content stays in frame.
+- [ ] `.db-timeline-event.is-all-day` remains duplicated at two `styles.css` blocks — pre-existing, not introduced by this port.
 
 ## 038-board-kanban-port — 0/8
 
