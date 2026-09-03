@@ -20,6 +20,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { buildTimelineAxisBands, formatCalendarTitleParts } from "../../../src/data/calendar-title-formatter";
+import { t } from "../../../src/i18n";
 import {
   buildTimelineTicks,
   getTimelineViewportContentWidth,
@@ -42,6 +43,13 @@ import {
   timelineTicksForDateRange,
   timelineViewportContentWidth,
   timelineViewportWindow,
+  calendarBacklogEmptyMarkup,
+  calendarEmptyStateMarkup,
+  calendarIsWeekendDateKey,
+  calendarWeekdayMarkup,
+  monthDayCell,
+  monthSegment,
+  timedEvent,
 } from "./temporal.mjs";
 
 const ALL_SCALES = ["day", "week", "month", "quarter", "year"];
@@ -408,5 +416,69 @@ describe("timeline day-scale event visibility matches the render loop's clip dec
     const visibility = timelineEventVisibility(adobeCc, fixture);
     expect(visibility.bar).not.toBeNull();
     expect(visibility.isClippedStart).toBe(false);
+  });
+});
+
+describe("calendar fixture markup mirrors the renderer states", () => {
+  it("keeps weekend labels and day cells aligned", () => {
+    expect(calendarIsWeekendDateKey("2026-03-22")).toBe(true);
+    expect(calendarIsWeekendDateKey("2026-03-23")).toBe(false);
+    expect(calendarWeekdayMarkup("Sun", 0)).toContain("db-calendar-weekday is-weekend");
+    expect(calendarWeekdayMarkup("Mon", 1)).toContain("class=\"db-calendar-weekday \"");
+    expect(monthDayCell({ n: 22, key: "2026-03-22" }, 1)).toContain("is-weekend");
+    expect(monthDayCell({ n: 23, key: "2026-03-23" }, 2)).not.toContain("is-weekend");
+  });
+
+  it("keeps completion modifiers on calendar event and backlog markup", () => {
+    expect(monthSegment({ column: 1, span: 1, lane: 0, title: "Done", tone: "green", completed: true, start: true, end: true }))
+      .toContain("is-completed");
+    expect(timedEvent({ title: "Done", from: 540, to: 630, tone: "green", completed: true }))
+      .toContain("is-completed");
+    const empty = calendarBacklogEmptyMarkup();
+    expect(empty).toContain("db-calendar-backlog");
+    expect(empty).toContain("db-calendar-backlog-empty");
+    expect(empty).toContain("Nothing unscheduled.");
+  });
+
+  it("keeps the fixture's calendar copy tied to the strings the product renders", () => {
+    // The card and the drawer are hand-mirrored markup, so their words can drift from the
+    // dictionary the renderer reads without any class changing — and the capture would then
+    // depict copy the product no longer shows. These bind the two.
+    const noDateField = calendarEmptyStateMarkup("no-date-field");
+    expect(noDateField).toContain(t("emptyState.noDateFieldTitle"));
+    expect(noDateField).toContain(t("emptyState.noDateFieldMessage"));
+    expect(noDateField).toContain(t("emptyState.selectDateProperty"));
+    const noEvents = calendarEmptyStateMarkup("no-events");
+    expect(noEvents).toContain(t("emptyState.noEventsTitle"));
+    expect(noEvents).toContain(t("emptyState.noEventsMessage"));
+    const backlog = calendarBacklogEmptyMarkup();
+    expect(backlog).toContain(t("calendar.unscheduled"));
+    expect(backlog).toContain(t("calendar.unscheduledEmpty"));
+  });
+
+  it("mirrors renderEmpty()'s empty-card markup class-for-class for both calendar reasons", () => {
+    // "no-date-field" carries the one action calendar-renderer.ts's renderEmpty() ever attaches
+    // (openDateConfig is always present in the real app), and lands as a direct child of
+    // .note-database-container — never a .db-calendar descendant — matching the actual DOM
+    // renderCard() builds before any calendar wrapper exists.
+    const noDateField = calendarEmptyStateMarkup("no-date-field");
+    expect(noDateField).toContain('class="db-empty db-empty-card"');
+    expect(noDateField).toContain('data-empty-reason="no-date-field"');
+    expect(noDateField).toContain("db-empty-card-icon");
+    expect(noDateField).toContain("db-empty-card-content");
+    expect(noDateField).toContain("db-empty-card-title");
+    expect(noDateField).toContain("No date property");
+    expect(noDateField).toContain("db-empty-card-message");
+    expect(noDateField).toContain("Select the property that supplies dates for this view.");
+    expect(noDateField).toContain("db-empty-action-group");
+    expect(noDateField).toContain('db-empty-action mod-cta');
+    expect(noDateField).toContain("Select date property");
+
+    // "no-events" never carries an action (renderEmpty() only attaches one for "no-date-field").
+    const noEvents = calendarEmptyStateMarkup("no-events");
+    expect(noEvents).toContain('data-empty-reason="no-events"');
+    expect(noEvents).toContain("No events");
+    expect(noEvents).toContain("Records with a value in the selected date property will appear here.");
+    expect(noEvents).not.toContain("db-empty-action-group");
   });
 });

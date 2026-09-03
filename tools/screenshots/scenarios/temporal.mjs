@@ -69,6 +69,17 @@ const ICON = {
   // (calendar-timeline-renderer.ts:1024).
   arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
   arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  // renderEmpty()'s reason-specific glyphs and its "select date property" action
+  // (empty-state-renderer.ts EMPTY_STATE_COPY/renderCard).
+  calendarPlus:
+    '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/>' +
+    '<path d="M3 10h18"/><path d="M10 16h4"/><path d="M12 14v4"/>',
+  calendarOff:
+    '<path d="M16 2v4"/><path d="M3 10h5"/><path d="M21 10h-5.5"/>' +
+    '<path d="M21 15.5V6a2 2 0 0 0-2-2H9.5"/>' +
+    '<path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"/>' +
+    '<path d="m2 2 20 20"/>',
+  settings2: '<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
 };
 
 /* Mirrors applyEventColor()/applyCalendarEventColor(): both write the accent and the tint
@@ -172,8 +183,61 @@ const calendarHeader = (main, year, activeScale, prev, next) => `
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const monthDayCell = (day, column) => `
-  <div class="db-calendar-day ${day.outside ? "is-outside-month" : ""} ${day.today ? "is-today" : ""}"
+export const calendarIsWeekendDateKey = (dateKey) => {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const weekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+  return weekday === 0 || weekday === 6;
+};
+
+export const calendarWeekdayMarkup = (name, index) => `
+  <div class="db-calendar-weekday ${index === 0 || index === 6 ? "is-weekend" : ""}" role="columnheader"><span>${name}</span>
+    <div class="db-calendar-col-resize-handle"></div></div>`;
+
+export const calendarBacklogEmptyMarkup = () => `
+  <div class="db-calendar-backlog">
+    <div class="db-calendar-backlog-header">
+      <button type="button" class="db-calendar-backlog-toggle" aria-expanded="true">Unscheduled (0)</button>
+    </div>
+    <div class="db-calendar-backlog-list">
+      <div class="db-calendar-backlog-empty">Nothing unscheduled.</div>
+    </div>
+  </div>`;
+
+/* Mirrors EmptyStateRenderer.renderCard() (empty-state-renderer.ts:262-295) class-for-class, for
+   the two reasons calendar-renderer.ts's renderEmpty() ever passes it (:248-268, :631-667):
+   "no-date-field" (no calendarStartDateField resolved) and "no-events" (a date field exists but
+   nothing in it falls in view). renderEmpty() calls renderCard(container, ...) directly — no
+   .db-calendar wrapper is ever created on this path — so the card lands as a direct child of
+   .note-database-container, which is what styles.css:16849-16864's density rule keys off. Only
+   "no-date-field" carries an action (this.actions.openDateConfig is always present in the real
+   app); copy is EMPTY_STATE_COPY's real English strings (empty-state-renderer.ts:179-188), not
+   placeholder text, so the capture reads as the real card, not a stand-in for it. */
+const CALENDAR_EMPTY_STATE_COPY = {
+  "no-date-field": { title: "No date property", message: "Select the property that supplies dates for this view.", icon: ICON.calendarPlus },
+  "no-events": { title: "No events", message: "Records with a value in the selected date property will appear here.", icon: ICON.calendarOff },
+};
+
+export const calendarEmptyStateMarkup = (reason) => {
+  const copy = CALENDAR_EMPTY_STATE_COPY[reason];
+  const actions = reason === "no-date-field" ? `
+      <div class="db-empty-action-group">
+        <button type="button" class="db-empty-action mod-cta" aria-label="Select date property">
+          <span class="db-empty-action-icon" aria-hidden="true">${glyph(ICON.settings2)}</span>
+          <span>Select date property</span>
+        </button>
+      </div>` : "";
+  return `
+  <div class="db-empty db-empty-card" data-empty-reason="${reason}">
+    <div class="db-empty-card-icon" aria-hidden="true">${glyph(copy.icon)}</div>
+    <div class="db-empty-card-content">
+      <h3 class="db-empty-card-title">${copy.title}</h3>
+      <div class="db-empty-card-message">${copy.message}</div>${actions}
+    </div>
+  </div>`;
+};
+
+export const monthDayCell = (day, column) => `
+  <div class="db-calendar-day ${day.outside ? "is-outside-month" : ""} ${day.today ? "is-today" : ""} ${calendarIsWeekendDateKey(day.key) ? "is-weekend" : ""}"
     data-date-key="${day.key}" role="gridcell" tabindex="${day.today ? "0" : "-1"}" aria-label="${day.key}"
     style="grid-column: ${column}">
     <div class="db-calendar-day-heading">
@@ -186,13 +250,13 @@ const monthDayCell = (day, column) => `
  * One month segment. `lane` is the zero-based event lane; the renderer offsets it by two —
  * one for the heading row, one because grid lines are 1-based — before writing the variable.
  */
-const monthSegment = (seg) => {
+export const monthSegment = (seg) => {
   const edges = `${seg.start ? "is-start" : "is-continuation"} ${seg.end ? "is-end" : "continues-after"}`;
   const geometry =
     `--db-calendar-segment-start: ${seg.column}; --db-calendar-segment-span: ${seg.span};` +
     ` --db-calendar-segment-lane: ${seg.lane + 2}; ${eventColor(seg.tone)}`;
   return `
-    <button type="button" class="db-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"} ${edges}"
+    <button type="button" class="db-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"} ${edges}${seg.completed ? " is-completed" : ""}"
       title="${seg.title}" data-note-database-row-path="Subscriptions/${seg.title}.md" style="${geometry}">
       ${seg.timed ? `<span class="db-calendar-month-timed-dot"></span>
       <span class="db-calendar-month-time">${seg.time}</span>` : ""}
@@ -260,7 +324,7 @@ const MARCH_WEEKS = [
     days: [22, 23, 24, 25, 26, 27, 28].map((n) => ({ n, key: `2026-03-${n}`, today: n === 25 })),
     segments: [
       { column: 3, span: 1, lane: 0, timed: true, time: "08:45", title: "iCloud", tone: "green", start: true, end: true },
-      { column: 5, span: 3, lane: 0, title: "Q1 renewals sweep", tone: "orange", dates: "Mar 26 – Apr 1", start: true, end: false },
+      { column: 5, span: 3, lane: 0, title: "Q1 renewals sweep", tone: "orange", dates: "Mar 26 – Apr 1", completed: true, start: true, end: false },
     ],
   },
   {
@@ -272,7 +336,7 @@ const MARCH_WEEKS = [
       { n: 3, key: "2026-04-03", outside: true }, { n: 4, key: "2026-04-04", outside: true },
     ],
     segments: [
-      { column: 1, span: 4, lane: 0, title: "Q1 renewals sweep", tone: "orange", dates: "Mar 26 – Apr 1", start: false, end: true },
+      { column: 1, span: 4, lane: 0, title: "Q1 renewals sweep", tone: "orange", dates: "Mar 26 – Apr 1", completed: true, start: false, end: true },
     ],
   },
 ];
@@ -292,10 +356,11 @@ const WEEK_DAYS = [22, 23, 24, 25, 26, 27, 28].map((n, i) => ({
   key: `2026-03-${n}`,
   name: WEEKDAYS[i],
   today: n === 25,
+  weekend: calendarIsWeekendDateKey(`2026-03-${n}`),
 }));
 
 /** A timed card. Under 42px the renderer drops the time range and keeps the title. */
-const timedEvent = (event) => {
+export const timedEvent = (event) => {
   const top = offsetOf(event.from);
   const height = Math.max(14, ((event.to - event.from) / 60) * HOUR_HEIGHT);
   const compact = height < 42;
@@ -305,7 +370,7 @@ const timedEvent = (event) => {
   const range = `${String(Math.floor(event.from / 60)).padStart(2, "0")}:${String(event.from % 60).padStart(2, "0")}`
     + ` - ${String(Math.floor(event.to / 60)).padStart(2, "0")}:${String(event.to % 60).padStart(2, "0")}`;
   return `
-    <button type="button" class="db-calendar-week-timed-event ${compact ? "is-compact" : ""}"
+    <button type="button" class="db-calendar-week-timed-event ${compact ? "is-compact" : ""}${event.completed ? " is-completed" : ""}"
       title="${range} ${event.title}" aria-label="${range} ${event.title}"
       data-note-database-row-path="Subscriptions/${event.title}.md"
       style="top: ${top}px; height: ${height}px; left: calc(${left}% + 4px); width: calc(${width}% - 8px); ${eventColor(event.tone)}">
@@ -320,7 +385,7 @@ const WEEK_EVENTS = {
   "2026-03-23": [{ title: "Figma sync", from: 540, to: 630, tone: "blue" }],
   "2026-03-24": [{ title: "Notion review", from: 660, to: 720, tone: "blue" }],
   "2026-03-25": [
-    { title: "Spotify billing", from: 780, to: 840, tone: "green" },
+    { title: "Spotify billing", from: 780, to: 840, tone: "green", completed: true },
     { title: "iCloud", from: 915, to: 945, tone: "green" },
   ],
   "2026-03-26": [{ title: "Adobe CC renewal", from: 600, to: 750, tone: "blue" }],
@@ -977,14 +1042,20 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/calendar-renderer.ts"],
-    note: "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
+    /* The wrapper carries --db-calendar-day-min-height because applyMonthSizingVars() writes it
+       there on every month render, from config.calendarCellMinHeight ?? 112 clamped to 72-400
+       (calendar-renderer.ts:2165-2199). Nothing in that renderer measures the pane, so 112px is
+       the product's row height at any viewport; runtime-vars.css derives this one variable from
+       viewport height instead, and without the renderer's own write mirrored here the grid would
+       photograph a denser month than the product draws. */
+    note: "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
     html: () => `
       <div class="note-database-container">
-        <div class="db-calendar db-calendar-month">
+        <div class="db-calendar db-calendar-month" style="--db-calendar-day-min-height: 112px">
           ${calendarHeader("March", "2026", "Month", "Previous month", "Next month")}
+          ${calendarBacklogEmptyMarkup()}
           <div class="db-calendar-weekdays" role="row">
-            ${WEEKDAYS.map((d) => `<div class="db-calendar-weekday" role="columnheader"><span>${d}</span>
-              <div class="db-calendar-col-resize-handle"></div></div>`).join("")}
+            ${WEEKDAYS.map(calendarWeekdayMarkup).join("")}
           </div>
           <div class="db-calendar-grid db-calendar-month-grid" role="grid" aria-label="March 2026">
             ${MARCH_WEEKS.map(monthWeek).join("")}
@@ -998,17 +1069,18 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/calendar-renderer.ts"],
-    note: "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
+    note: "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
     html: () => `
       <div class="note-database-container">
         <div class="db-calendar db-calendar-week">
           ${calendarHeader("Mar 22 – 28", "2026", "Week", "Previous week", "Next week")}
+          ${calendarBacklogEmptyMarkup()}
           <div class="db-calendar-week-sticky">
             <div class="db-calendar-time-header-row" role="row">
               <div class="db-calendar-time-header-gutter"></div>
               <div class="db-calendar-time-header-days" style="--db-calendar-time-day-count: 7">
                 ${WEEK_DAYS.map((day) => `
-                  <button type="button" class="db-calendar-time-header-day ${day.today ? "is-today" : ""}"
+                  <button type="button" class="db-calendar-time-header-day ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}"
                     title="${day.key}" data-date-key="${day.key}" role="columnheader">
                     <span class="db-calendar-week-day-name">${day.name}</span>
                     <div class="db-calendar-col-resize-handle"></div>
@@ -1020,12 +1092,12 @@ export const TEMPORAL_SCENARIOS = [
               <div class="db-calendar-week-allday-cols" data-calendar-visible-lanes="1"
                 style="--db-calendar-time-day-count: 7; grid-template-rows: 28px repeat(1, 22px)">
                 ${WEEK_DAYS.map((day, i) => `
-                  <div class="db-calendar-week-allday-col ${day.today ? "is-today" : ""} ${i === 6 ? "is-last-col" : ""}"
+                  <div class="db-calendar-week-allday-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""} ${i === 6 ? "is-last-col" : ""}"
                     data-date-key="${day.key}" style="grid-column: ${i + 1}"></div>`).join("")}
                 ${WEEK_DAYS.map((day, i) => `
-                  <button type="button" class="db-calendar-week-allday-date ${day.today ? "is-today" : ""}"
+                  <button type="button" class="db-calendar-week-allday-date ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}"
                     title="${day.key}" aria-label="${day.key}" style="grid-column: ${i + 1}">${day.n}</button>`).join("")}
-                <button type="button" class="db-calendar-month-segment db-calendar-week-allday-segment is-all-day is-start is-end"
+                <button type="button" class="db-calendar-month-segment db-calendar-week-allday-segment is-all-day is-start is-end is-completed"
                   title="Q1 renewals sweep" data-note-database-row-path="Subscriptions/Q1.md"
                   style="--db-calendar-segment-start: 3; --db-calendar-segment-span: 3; --db-calendar-segment-lane: 2; ${eventColor("orange")}">
                   <span class="db-calendar-week-allday-content">
@@ -1043,7 +1115,7 @@ export const TEMPORAL_SCENARIOS = [
               ${slotLines()}
               <div class="db-calendar-time-columns" role="row" style="--db-calendar-time-day-count: 7">
                 ${WEEK_DAYS.map((day) => `
-                  <div class="db-calendar-week-day-col ${day.today ? "is-today" : ""}" data-date-key="${day.key}"
+                  <div class="db-calendar-week-day-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}" data-date-key="${day.key}"
                     role="gridcell" tabindex="${day.today ? "0" : "-1"}" aria-label="${day.key}">
                     ${(WEEK_EVENTS[day.key] || []).map(timedEvent).join("")}
                     ${day.today ? `<div class="db-calendar-timed-current-line" aria-hidden="true"
@@ -1089,6 +1161,20 @@ export const TEMPORAL_SCENARIOS = [
             <button type="button" class="db-calendar-mini-today">Today</button>
           </div>
         </div>
+      </div>`,
+  },
+  {
+    id: "calendar-empty-state",
+    title: "Calendar empty state — no date property",
+    group: "views",
+    width: 1100,
+    sources: ["src/views/calendar-renderer.ts", "src/views/empty-state-renderer.ts"],
+    note: "renderEmpty() returns before .db-calendar is ever created, so the card lands as a "
+      + "direct child of .note-database-container — the density rule (styles.css:16849-16864) has "
+      + "to key off that same container, not a .db-calendar descendant, or it never applies.",
+    html: () => `
+      <div class="note-database-container">
+        ${calendarEmptyStateMarkup("no-date-field")}
       </div>`,
   },
   {

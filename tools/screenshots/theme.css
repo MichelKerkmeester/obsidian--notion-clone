@@ -32,6 +32,12 @@
      `--text-warning: var(--color-orange)`, and gives `--color-orange` a different value per theme. */
   --color-orange: #ec7500;
   --text-warning: var(--color-orange);
+  /* Same absence, same shape: `--db-calendar-done-accent` reads `var(--text-success, var(--interactive-accent))`,
+     so with no `--text-success` declared here every completed calendar event fell back to the
+     accent purple instead of the host's green. TRANSCRIBED from the installed application
+     stylesheet of Obsidian 1.13.7: app.css resolves `--text-success: var(--color-green)`. */
+  --color-green: #08b94e;
+  --text-success: var(--color-green);
   --text-accent: #5a67d8;
   --text-selection: rgba(90, 103, 216, 0.18);
   /* The host's link tokens. Their absence is why the file-field captures painted #0000EE — the
@@ -118,6 +124,7 @@
   --text-muted: #9a9b9e;
   --text-faint: #6c6f74;
   --color-orange: #e9973f;
+  --color-green: #44cf6e;
   --text-accent: #a5b4fc;
   --text-selection: rgba(130, 145, 255, 0.22);
   --link-color: #a5b4fc;

@@ -50,8 +50,11 @@
       "src/views/calendar-renderer.ts",
       "src/i18n.ts",
       "src/views/calendar-renderer.test.ts",
-      "src/data/calendar-timeline-model.ts",
-      "tools/lane/css-lane.json"
+      "tools/screenshots/theme.css",
+      "tools/screenshots/scenarios/temporal.mjs",
+      "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
+      "tools/lane/css-lane.json",
+      "src/data/calendar-timeline-model.ts"
     ],
     "entities": [
       {
@@ -109,15 +112,33 @@
         "source": "derived"
       },
       {
-        "name": "calendar-timeline-model.ts",
-        "kind": "code",
-        "path": "src/data/calendar-timeline-model.ts",
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
+        "source": "derived"
+      },
+      {
+        "name": "temporal.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "temporal-tick-parity.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
         "source": "derived"
       },
       {
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-model.ts",
+        "kind": "code",
+        "path": "src/data/calendar-timeline-model.ts",
         "source": "derived"
       },
       {
@@ -179,29 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Status Reporting Format Task",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "its",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "identical",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "obsidian-pm has no calendar view; this phase merges its verified date and milestone language into the existing calendar-renderer.ts, not a file port.",
     "created_at": "2026-09-02T21:56:40.087Z",
-    "last_save_at": "2026-09-03T09:09:24.002Z",
+    "last_save_at": "2026-09-03T11:16:19.655Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +215,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4fd26f18811ee4e67be0d0785ce507b850e88d65d9c11413dd1f798e92da7a42",
+    "source_fingerprint": "sha256:712e45b3f425460da99e54a723f314d86be8d159cf954ff0d42be528b562e699",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "87735cd28d8ab39ba7fddcd1ef5e3517620e14ef1908513777fad0508b7958cb",
+      "spec.md": "9384e616c1fbdf036cca5a638f18390ae4b21f944f32f5d8c03bc9d7a8d80d0e",
       "plan.md": "822cd1fe3da8684f7dd69b7f08af129efae19f9f063b54471e84988261ee97a6",
-      "tasks.md": "9448b32cf7e566f04ea9398f72ccb3383adff9ca1da87d5b97d626b622da088c",
-      "implementation-summary.md": "5e659f3f1328f1cc30053fc3dc4ab299d1960b00e816b5cd27134ecdd3299fa2"
+      "tasks.md": "995ba44686effa326d060ee1b2aa6a2fa1cf59a852f1e116447b4f4951a9e51b",
+      "implementation-summary.md": "f27059a2f0380fdd3f43a6bf91d016f6c1ec9a3e75b8f9dd2f925b85fdb82dd3"
     },
     "last_active_child_id": null,
     "last_active_at": null

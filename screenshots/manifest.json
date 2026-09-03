@@ -4696,6 +4696,106 @@
       "bytes": 111807
     },
     {
+      "id": "calendar-empty-state",
+      "title": "Calendar empty state — no date property",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/calendar-empty-state-desktop-dark.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "b60e6dd318bf",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "93f92c9ff426"
+      },
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "capture": "viewport",
+      "bytes": 44558
+    },
+    {
+      "id": "calendar-empty-state",
+      "title": "Calendar empty state — no date property",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/calendar-empty-state-desktop-light.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "b60e6dd318bf",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "93f92c9ff426"
+      },
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "capture": "viewport",
+      "bytes": 44905
+    },
+    {
+      "id": "calendar-empty-state",
+      "title": "Calendar empty state — no date property",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/calendar-empty-state-mobile-dark.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "dd07ca8069ce",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "93f92c9ff426"
+      },
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "capture": "viewport",
+      "bytes": 33378
+    },
+    {
+      "id": "calendar-empty-state",
+      "title": "Calendar empty state — no date property",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/calendar-empty-state-mobile-light.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "dd07ca8069ce",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "93f92c9ff426"
+      },
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "capture": "viewport",
+      "bytes": 33801
+    },
+    {
       "id": "calendar-mini-calendar",
       "title": "Mini calendar date picker",
       "group": "views",
@@ -4710,8 +4810,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4735,8 +4835,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4760,8 +4860,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4785,8 +4885,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4805,18 +4905,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "913ca45b27bf",
+      "layoutHash": "0d8fcb7217da",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
+      "note": "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
       "capture": "viewport",
-      "bytes": 129186
+      "bytes": 138275
     },
     {
       "id": "calendar-month-view",
@@ -4828,18 +4928,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "913ca45b27bf",
+      "layoutHash": "0d8fcb7217da",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
+      "note": "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
       "capture": "viewport",
-      "bytes": 132472
+      "bytes": 142042
     },
     {
       "id": "calendar-month-view",
@@ -4851,18 +4951,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "4e8eb82fefdd",
+      "layoutHash": "cc640d6d33b1",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
+      "note": "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
       "capture": "viewport",
-      "bytes": 90018
+      "bytes": 99987
     },
     {
       "id": "calendar-month-view",
@@ -4874,18 +4974,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "4e8eb82fefdd",
+      "layoutHash": "cc640d6d33b1",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
+      "note": "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
       "capture": "viewport",
-      "bytes": 91534
+      "bytes": 101775
     },
     {
       "id": "calendar-toolbar-options",
@@ -4902,8 +5002,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "6fbeb3f434bf",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4927,8 +5027,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "6fbeb3f434bf",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4952,8 +5052,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "6fbeb3f434bf",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4977,8 +5077,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "6fbeb3f434bf",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
@@ -4997,18 +5097,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "6352305dcf50",
+      "layoutHash": "2395fa1dafa8",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
-      "bytes": 114040
+      "bytes": 123878
     },
     {
       "id": "calendar-week-time-grid",
@@ -5020,18 +5120,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "6352305dcf50",
+      "layoutHash": "2395fa1dafa8",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
-      "bytes": 119776
+      "bytes": 130740
     },
     {
       "id": "calendar-week-time-grid",
@@ -5043,18 +5143,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "cd05cfbdc0cd",
+      "layoutHash": "92cfb7bd2ff2",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
-      "bytes": 56204
+      "bytes": 65725
     },
     {
       "id": "calendar-week-time-grid",
@@ -5066,18 +5166,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "cd05cfbdc0cd",
+      "layoutHash": "92cfb7bd2ff2",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-        "styles.css": "14e1a5a8e3b6",
-        "tools/screenshots/theme.css": "32c4327c3764",
+        "styles.css": "1758e1ebb21e",
+        "tools/screenshots/theme.css": "241e526062cd",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "93f92c9ff426"
       },
-      "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
-      "bytes": 60390
+      "bytes": 69824
     },
     {
       "id": "gallery-view",
@@ -6112,7 +6212,7 @@
       },
       "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 101530
+      "bytes": 101499
     },
     {
       "id": "timeline-view-quarter",
@@ -6158,7 +6258,7 @@
       },
       "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 60915
+      "bytes": 60941
     },
     {
       "id": "timeline-view-quarter",
@@ -6181,7 +6281,7 @@
       },
       "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 68870
+      "bytes": 69110
     },
     {
       "id": "timeline-view-year",

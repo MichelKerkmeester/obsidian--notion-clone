@@ -503,6 +503,16 @@ Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `sr
 
 Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`
 
+### Calendar empty state — no date property
+
+renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.
+
+| dark | light |
+|---|---|
+| ![calendar-empty-state dark](views/calendar-empty-state-mobile-dark.png) | ![calendar-empty-state light](views/calendar-empty-state-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `src/views/empty-state-renderer.ts`
+
 ### Mini calendar date picker
 
 Days with events carry a short accent underline; the visible week reads as the selected pill run.
@@ -515,7 +525,7 @@ Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/calendar-ren
 
 ### Calendar month view
 
-Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.
+Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.
 
 | dark | light |
 |---|---|
@@ -535,7 +545,7 @@ Sources: `src/views/calendar-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
 ### Calendar week time grid
 
-Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.
+Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.
 
 | dark | light |
 |---|---|

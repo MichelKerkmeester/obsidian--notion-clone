@@ -806,6 +806,10 @@
   --db-current-time-saturation: max(var(--accent-s, 82%), 82%);
   --db-current-time-lightness: clamp(44%, calc(var(--accent-l, 52%) + 4%), 56%);
   --db-current-time-color: hsl(var(--accent-h, 254) var(--db-current-time-saturation) var(--db-current-time-lightness));
+  /* Calendar's empty-card density: declared here (not on .db-calendar) because renderEmpty()
+     builds the card as a direct child of this container, before any .db-calendar wrapper
+     exists to inherit from. */
+  --db-calendar-empty-min-height: 144px;
   height: 100%;
   /* overflow: auto 让容器自身成为滚动容器，表头 sticky 相对于此生效 */
   overflow: auto;
@@ -16867,6 +16871,178 @@ body.is-mobile .note-database-container .db-calendar-month-segment {
 
 body.is-mobile .note-database-container .db-calendar-month-time {
   display: none;
+}
+
+/* Calendar state tokens keep date-column and milestone emphasis local to this surface. */
+.note-database-container .db-calendar {
+  --db-calendar-weekend-header-bg: color-mix(in srgb, var(--background-modifier-active-hover) 100%, transparent);
+  --db-calendar-weekend-bg: color-mix(in srgb, var(--background-modifier-hover) 100%, transparent);
+  --db-calendar-done-accent: var(--text-success, var(--interactive-accent));
+  --db-calendar-done-bg: color-mix(in srgb, var(--db-calendar-done-accent) 12%, var(--background-primary));
+}
+
+/* Weekend headers and columns use a quiet fill while today keeps its stronger marker. */
+.note-database-container .db-calendar-weekday.is-weekend,
+.note-database-container .db-calendar-time-header-day.is-weekend:not(.is-today) {
+  background: var(--db-calendar-weekend-header-bg);
+  color: var(--text-muted);
+}
+
+.note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend:not(.is-today),
+.note-database-container .db-calendar-week-allday-col.is-weekend:not(.is-today),
+.note-database-container .db-calendar-time-columns .db-calendar-week-day-col.is-weekend:not(.is-today) {
+  background: var(--db-calendar-weekend-bg);
+}
+
+.note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend.is-outside-month:not(.is-today) {
+  background: color-mix(in srgb, var(--background-secondary) 78%, var(--db-calendar-weekend-bg));
+}
+
+.note-database-container .db-calendar-week-allday-date.is-weekend:not(.is-today) {
+  color: var(--text-muted);
+}
+
+/* Completion dims the row rather than repainting it: the base rule already fills border-left
+   and background from --db-calendar-event-accent/-bg, so leaving those alone here keeps a
+   completed event in its own colour instead of a flat "done" tint. */
+.note-database-container .db-calendar-month-segment.is-completed,
+.note-database-container .db-calendar-week-timed-event.is-completed {
+  opacity: 0.82;
+}
+
+.note-database-container .db-calendar-month-segment.is-completed .db-calendar-month-title,
+.note-database-container .db-calendar-week-timed-event.is-completed .db-calendar-week-event-title {
+  text-decoration: line-through;
+  text-decoration-color: var(--db-calendar-done-accent);
+  text-decoration-thickness: 1px;
+}
+
+/* The unscheduled drawer is deliberately quiet, but its controls remain easy to reach. */
+.note-database-container .db-calendar-backlog {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--background-modifier-border) 82%, transparent);
+  border-radius: var(--db-radius-md);
+  background: color-mix(in srgb, var(--background-secondary) 42%, transparent);
+}
+
+.note-database-container .db-calendar-backlog-header {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 2px 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--background-modifier-border) 68%, transparent);
+}
+
+.note-database-container .db-calendar-backlog-toggle {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 3px 8px;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--db-font-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.note-database-container .db-calendar-backlog-toggle:hover,
+.note-database-container .db-calendar-backlog-toggle:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-calendar-backlog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 8px 8px;
+}
+
+.note-database-container .db-calendar-backlog.is-collapsed .db-calendar-backlog-list {
+  display: none;
+}
+
+.note-database-container .db-calendar-backlog-empty {
+  display: flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 2px 8px;
+  color: var(--text-faint);
+  font-size: var(--db-font-sm);
+  line-height: 1.35;
+}
+
+.note-database-container .db-calendar-backlog-item {
+  display: flex;
+  min-width: 0;
+  min-height: 28px;
+  align-items: center;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-normal);
+  cursor: pointer;
+  font: inherit;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-database-container .db-calendar-backlog-item:hover,
+.note-database-container .db-calendar-backlog-item:focus-visible {
+  background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-calendar-backlog-item.is-completed {
+  border-inline-start: 3px solid var(--db-calendar-done-accent);
+  background: var(--db-calendar-done-bg);
+  color: var(--text-muted);
+  opacity: 0.82;
+  text-decoration: line-through;
+  text-decoration-color: var(--db-calendar-done-accent);
+  text-decoration-thickness: 1px;
+}
+
+/* Keep empty calendar cards compact without changing the shared empty-state component. */
+.note-database-container > .db-empty-card[data-empty-reason="no-date-field"],
+.note-database-container > .db-empty-card[data-empty-reason="no-events"] {
+  box-sizing: border-box;
+  min-height: var(--db-calendar-empty-min-height);
+  align-items: center;
+  padding: 16px 20px;
+}
+
+body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-date-field"],
+body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-events"],
+.is-phone .note-database-container > .db-empty-card[data-empty-reason="no-date-field"],
+.is-phone .note-database-container > .db-empty-card[data-empty-reason="no-events"] {
+  --db-calendar-empty-min-height: 128px;
+  gap: 12px;
+  padding: 16px;
+}
+
+/* Reduced motion removes the calendar's own transition and flash animation in addition to the
+   global duration clamp, including the marker transitions inherited by completed events. Also
+   covers the week-grid flash targets (db-calendar-col-flash, styles.css:15290-15295), which
+   .db-calendar-time-header-day above shares but the day/all-day columns do not. */
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container .db-calendar-month-segment,
+  .note-database-container .db-calendar-time-header-day,
+  .note-database-container .db-calendar-month-flash-column,
+  .note-database-container .db-calendar-week-day-col.is-flash,
+  .note-database-container .db-calendar-week-allday-col.is-flash {
+    animation: none;
+    transition: none;
+  }
 }
 
 /* ── Timeline shared base ── */

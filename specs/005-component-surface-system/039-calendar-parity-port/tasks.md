@@ -8,10 +8,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/039-calendar-parity-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened; every task unticked"
-    next_safe_action: "T1 — observe the missing completion branch as red"
+    last_updated_at: "2026-09-03T13:25:00Z"
+    last_updated_by: "leg-b-verified"
+    recent_action: "Leg b verified in-runtime: recapture read, gate PASS 25 green, lane released"
+    next_safe_action: "T6 — re-exercise move/resize/quick-add against the completion marker"
     blockers: []
     key_files:
       - "spec.md"
@@ -88,12 +88,28 @@ _memory:
       `YamlHydrator.ts:59-60` (valid modes table/gantt/kanban only), `ProjectView.ts:400-411`
       (switcher options table/gantt/board only) — all match the quoted windows; no source calendar
       module exists.
-- [ ] **T9** Screenshots recaptured and read.
+- [x] **T9** Screenshots recaptured and read.
       *Evidence to close:* every changed calendar PNG recaptured in full for its surface and opened
       by a human; `npm run screenshots:verify` exit 0 recorded alongside, not in place of, the read.
-- [ ] **T10** `npm run gate` passes from the final state.
+      *Closed:* was red — `screenshots-fresh` reported 12 calendar PNGs stale against
+      `calendar-renderer.ts`. A full `npm run screenshots` run rewrote 260 captures; the 20 that moved
+      were opened: `calendar-month-view` and `calendar-week-time-grid` (desktop+mobile, dark+light)
+      show the completed "Q1 renewals sweep" still orange and "Spotify billing" still green, both
+      struck through, weekend columns and headers tinted, the "Nothing unscheduled." line present and
+      all five month weeks in frame (grid bottom y=789.5 in a 900px viewport); the four new
+      `calendar-empty-state` PNGs show the "No date property" card with its calendar-plus glyph and
+      action button at 144px desktop / 128px phone density; `calendar-mini-calendar` is byte-identical
+      to HEAD (0 differing pixels). The eight timeline PNGs are capture-run noise — each differs from
+      its HEAD copy by at most 7/255 on one channel across 0.01-0.34% of pixels, and all eight still
+      show their lanes, bars, milestone diamond and today ruler. `npm run screenshots:verify` exit 0,
+      260 entries match their sources.
+- [x] **T10** `npm run gate` passes from the final state.
       *Evidence to close:* `gate: PASS`, exit 0, including the `css-lane` and `comments` lanes; any
       red lane's full log read from `tools/lane/gate-logs/<lane>.log`.
+      *Closed:* was 24 green with `screenshots-fresh` red. From the final state `npm run gate` reads
+      `gate: PASS — 25 green, 0 red for a declared reason`, exit 0 read from `$?`, both under
+      `SURFACE_PHASE=039-calendar-parity-port` and plain; `css-lane` and `comments` are among the 25.
+      `node tools/lane/check-lane.mjs` exit 0 — the release names all 20 changed captures.
 - [ ] **T11** Operator confirms on device.
       *Evidence to close:* the operator says a completed milestone reads as completed in the
       calendar. Nothing else closes this — only the operator does.

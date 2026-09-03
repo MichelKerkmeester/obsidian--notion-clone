@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/039-calendar-parity-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from 036's Final adoption plan row 3"
-    next_safe_action: "Observe the missing completion-aware distinction in renderMonth before any code change"
+    last_updated_at: "2026-09-03T13:25:00Z"
+    last_updated_by: "leg-b-verified"
+    recent_action: "Leg b verified: CSS treatment, captures read, gate PASS 25 green"
+    next_safe_action: "T6 — exercise move/resize/quick-add against the completion marker"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-039"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 82
     open_questions:
       - "Whether the shared date-transaction module lands here or in 037, if both reach it first"
     answered_questions:
@@ -48,7 +48,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 039-calendar-parity-port |
 | **Level** | 2 — `recommend-level.sh --loc 1150 --files 9 --architectural` scores 65/100, confidence 82%. Phase score 20/50 stays below the 25 decomposition threshold, so this is a standard Level 2 child, not a further phase parent. |
-| **Status** | Not started. Nothing in this folder has run. |
+| **Status** | In progress — leg a and leg b landed and verified in-runtime; `npm run gate` PASS 25 green. Open: T6 (drag/resize against the marker) and T11 (operator confirmation on device). |
 | **Complexity** | 65/100, confidence 82% |
 <!-- /ANCHOR:metadata -->
 
