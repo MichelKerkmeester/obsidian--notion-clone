@@ -810,11 +810,14 @@ export const timelineTicksForDateRange = (fixture) => {
    (dates or hours from the fixture's window start) — that offset, not the tick's position in
    the array, is what --db-timeline-tick-offset must render, or every scale's header collapses
    onto the left edge instead of spanning the visible window. */
-const timelineTicksFor = (fixture) => {
+export const timelineTicksFor = (fixture) => {
   if (fixture.scale === "day") {
+    // Matches buildTimelineTicks()'s own day branch (calendar-timeline-model.ts:913-931), which
+    // never calls formatTimelineTickLabel: the label is the bare zero-padded hour, not an "HH:00"
+    // clock string — the wider label was fixture-only and never what production draws.
     const startHour = (fixture.startMinutes ?? TL_DAY_START_MINUTES) / 60;
     return Array.from({ length: fixture.units }, (_, index) => ({
-      label: `${String((startHour + index) % 24).padStart(2, "0")}:00`,
+      label: String((startHour + index) % 24).padStart(2, "0"),
       key: fixture.start,
       boundary: index === 0,
       offset: index,
@@ -850,10 +853,25 @@ const EN_MONTHS_FULL = [
    is built from one of these, not a per-scale hand-picked constant. */
 const TL_PINNED_NOW_MINUTES = 13 * 60 + 45;
 const TL_PINNED_DAY_FRACTION = TL_PINNED_NOW_MINUTES / MINUTES_PER_DAY;
-/* The standalone scenario has no calendarStartHour override, so the visible day begins at
-   midnight. Keeping this explicit lets the tick, band, grid and visibility mirrors share the
-   renderer's start while only the number of visible hours varies by device. */
+/* Same pinned "now" as a local Date, for the one call that needs .getHours() rather than a
+   minutes-of-day number: the day-scale centring mirror below reads it exactly the way
+   resolveTimelineDayCentredStartMinutes() reads any other "now" (calendar-timeline-model.ts:
+   441-445). */
+const TL_PINNED_NOW = new Date(2026, 2, 25, 13, 45);
+/* The standalone scenario has no calendarStartHour override, so an uncentred visible day would
+   begin at midnight — still the fallback the tick/band/grid/visibility mirrors share whenever no
+   "now" is given (temporal-tick-parity.test.mjs's legacy-branch parity check), even though the
+   dynamic fixture below always passes one. */
 const TL_DAY_START_MINUTES = 0;
+
+/* Mirrors resolveTimelineDayCentredStartMinutes() (calendar-timeline-model.ts:441-445): centres
+   the pinned "now" hour in the middle of the visible window, clamped so the window stays on the
+   anchor day. */
+const timelineDayCentredStartMinutes = (totalUnits, now) => {
+  const units = Math.max(1, Math.round(totalUnits));
+  const centred = now.getHours() * MINUTES_PER_HOUR - Math.floor(units / 2) * MINUTES_PER_HOUR;
+  return Math.max(0, Math.min(MINUTES_PER_DAY - units * MINUTES_PER_HOUR, centred));
+};
 
 /* Mirrors resolveTimelineViewportUnitCount() (calendar-timeline-model.ts:233-238) exactly,
    including the parameter the earlier pass of this fixture dropped: day scale floors (a partial
@@ -869,22 +887,25 @@ export const timelineResolveViewportUnitCount = (width, unitWidth, scale) => {
    the renderer's live "pseudo-infinite" mode, entered whenever buildTimelineModel() is passed a
    visibleUnitCount (calendar-timeline-model.ts:649-651), which the renderer always has: a live
    mounted container always reports a width to getTimelineViewportUnitCount()
-   (calendar-timeline-renderer.ts:2419-2426). Day scale never centres — it always opens at the
-   anchor date and TL_DAY_START_MINUTES, only totalUnits (hours) changes with device width, per
-   the real branch's own shape. Every other scale centres totalUnits on the anchor date, replacing
-   the scale's calendar-boundary window getTimelineWindow() uses. todayOffsetUnits mirrors
+   (calendar-timeline-renderer.ts:2419-2426). Day scale centres on `now` exactly like the real
+   branch does whenever the renderer passes one (calendar-timeline-renderer.ts:325 ->
+   calendar-timeline-model.ts:689,1146-1156): omitting `now` keeps the legacy fixed
+   TL_DAY_START_MINUTES start, matching getTimelineViewportWindow()'s own no-clock fallback.
+   Every other scale centres totalUnits on the anchor date, replacing the scale's
+   calendar-boundary window getTimelineWindow() uses. todayOffsetUnits mirrors
    getTimelineTodayPositionStyle()'s own offset formula (:103-133), not a separate guess, so the
    today-line this fixture draws lands where the real one would. Exported so the parity test
    asserts start/units against the real function for all five scales. */
-export const timelineViewportWindow = (scale, anchorKey, totalUnits) => {
+export const timelineViewportWindow = (scale, anchorKey, totalUnits, now) => {
   if (scale === "day") {
-    const endOffset = Math.floor((TL_DAY_START_MINUTES + totalUnits * MINUTES_PER_HOUR - 1) / MINUTES_PER_DAY);
+    const startMinutes = now != null ? timelineDayCentredStartMinutes(totalUnits, now) : TL_DAY_START_MINUTES;
+    const endOffset = Math.floor((startMinutes + totalUnits * MINUTES_PER_HOUR - 1) / MINUTES_PER_DAY);
     return {
       start: anchorKey,
       end: timelineDateKey(anchorKey, endOffset),
       units: totalUnits,
-      startMinutes: TL_DAY_START_MINUTES,
-      todayOffsetUnits: (TL_PINNED_NOW_MINUTES - TL_DAY_START_MINUTES) / 60,
+      startMinutes,
+      todayOffsetUnits: (TL_PINNED_NOW_MINUTES - startMinutes) / 60,
     };
   }
   const before = Math.floor((totalUnits - 1) / 2);
@@ -1038,8 +1059,9 @@ export const timelineDynamicFixture = (scale, device) => {
   const width = timelineResolveUnitWidth(scale, deviceWidth);
   const units = timelineResolveViewportUnitCount(contentWidth, width, scale);
   // The anchor is always the pinned "now" date. The title follows this same viewport window,
-  // including a range that crosses month or year boundaries.
-  const window = timelineViewportWindow(scale, "2026-03-25", units);
+  // including a range that crosses month or year boundaries. Passing TL_PINNED_NOW centres day
+  // scale on it exactly as the renderer's own always-on `now` option does.
+  const window = timelineViewportWindow(scale, "2026-03-25", units, TL_PINNED_NOW);
   const title = timelineTitleParts(scale, window.start, window.end);
   return {
     ...base,
@@ -1101,7 +1123,7 @@ const timelineScaleScenario = (scale, overrides = {}) => {
                      hour tick matching "now" (13:00) as is-current-time-tick and never applies
                      is-current-date-tick (every hour shares the same date); every other scale marks
                      the single tick whose date is today's as is-current-date-tick. */
-                  const isCurrentTimeTick = fixture.scale === "day" && tick.label === "13:00";
+                  const isCurrentTimeTick = fixture.scale === "day" && tick.label === "13";
                   const isCurrentDateTick = fixture.scale !== "day" && tick.key === "2026-03-25";
                   return `
                   <div class="db-timeline-tick ${tick.boundary ? "is-scale-boundary" : ""} ${timelineWeekend(tick.key) ? "is-weekend" : ""} ${isCurrentTimeTick ? "is-current-time-tick" : ""} ${isCurrentDateTick ? "is-current-date-tick" : ""}"

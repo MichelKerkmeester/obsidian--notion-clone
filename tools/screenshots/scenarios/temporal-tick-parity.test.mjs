@@ -44,6 +44,7 @@ import {
   timelineResolveViewportUnitCount,
   timelineEvent,
   timelineTickLabel,
+  timelineTicksFor,
   timelineTicksForDateRange,
   timelineViewportContentWidth,
   timelineViewportWindow,
@@ -446,6 +447,50 @@ describe("timeline viewport-window mirror matches the real live-container mode",
 });
 
 // ───────────────────────────────────────────────────────────────────
+// 6B. DAY-SCALE CENTRED-WINDOW PARITY (today in frame at phone width)
+// ───────────────────────────────────────────────────────────────────
+
+/* The same pinned "now" the whole module renders every capture against (temporal.mjs's own
+   header comment: Wednesday 25 March 2026, 13:45), as a local Date so .getHours() reads 13 the
+   way resolveTimelineDayCentredStartMinutes() reads any other "now" — the same convention
+   calendar-timeline-model.test.ts's own centring tests already use. */
+const TL_NOW = new Date(2026, 2, 25, 13, 45);
+
+describe("timeline day-scale window centres on the pinned now, matching the live-container branch", () => {
+  for (const width of DEVICE_WIDTHS) {
+    it(`agrees with getTimelineViewportWindow's centred start at ${width}px`, () => {
+      const unitWidth = resolveTimelineUnitWidth({}, "day", width);
+      const contentWidth = getTimelineViewportContentWidth(width, CONTAINER_PADDING_PX, CONTAINER_PADDING_PX);
+      const units = resolveTimelineViewportUnitCount(contentWidth, unitWidth, "day");
+
+      const real = getTimelineViewportWindow({ timelineScale: "day" }, "2026-03-25", units, undefined, TL_NOW);
+      const mirrored = timelineViewportWindow("day", "2026-03-25", units, TL_NOW);
+
+      expect(mirrored.startMinutes, `${width}px`).toBe(real.startMinutes);
+      expect(mirrored.start, `${width}px`).toBe(real.startDateKey);
+      expect(mirrored.end, `${width}px`).toBe(real.endDateKey);
+      expect(mirrored.units, `${width}px`).toBe(real.totalUnits);
+      // Proves the centring actually happened, not just that both sides agree on a shared bug:
+      // the pinned "now" hour (13:00) must fall inside the window the real function returns.
+      expect(real.startMinutes, `${width}px`).toBeLessThanOrEqual(13 * 60);
+      expect(real.startMinutes + real.totalUnits * 60, `${width}px`).toBeGreaterThan(13 * 60);
+    });
+
+    it(`labels day-scale ticks the same as buildTimelineTicks at ${width}px`, () => {
+      const fixture = timelineDynamicFixture("day", { id: width === 402 ? "mobile" : "desktop", width });
+      const real = buildTimelineTicks(
+        { startDateKey: fixture.start, endDateKey: fixture.end, totalUnits: fixture.units, startMinutes: fixture.startMinutes, unit: "hour" },
+        "day",
+        {},
+        "en",
+      );
+      const mirrored = timelineTicksFor(fixture);
+      expect(mirrored.map((tick) => tick.label), `${width}px`).toEqual(real.map((tick) => tick.label));
+    });
+  }
+});
+
+// ───────────────────────────────────────────────────────────────────
 // 7. DAY-SCALE BAR/JUMP PARITY (the visible-window start)
 // ───────────────────────────────────────────────────────────────────
 
@@ -483,7 +528,7 @@ describe("timeline day-scale event visibility matches the render loop's clip dec
     }
   }
 
-  it("draws no Notion bar at day-desktop (26-31 March never reaches a midnight-start window)", () => {
+  it("draws no Notion bar at day-desktop (26-31 March never reaches the visible window)", () => {
     const fixture = timelineDynamicFixture("day", { id: "desktop", width: 1440 });
     const notion = TL_LANES[0].events.find((event) => event.title === "Notion");
     const visibility = timelineEventVisibility(notion, fixture);
@@ -492,12 +537,18 @@ describe("timeline day-scale event visibility matches the render loop's clip dec
     expect(visibility.isClippedEnd).toBe(true);
   });
 
-  it("gives Adobe CC no spurious is-before jump at day-desktop (25 March starts exactly at the midnight-start window)", () => {
+  // Once the window centres on the pinned "now" (13:45), desktop's 23 hour columns can no
+  // longer fit a full day while keeping 13:00 centred, so resolveTimelineDayCentredStartMinutes()
+  // clamps the window open at 01:00, not midnight (verified directly against
+  // getTimelineViewportWindow() + resolveEventAbsoluteScale(): startMinutes 60, scale.start 0).
+  // Adobe CC (an all-day event starting at midnight) is therefore genuinely clipped at its start
+  // here — this is real, shipped production geometry, not a fixture gap.
+  it("clips Adobe CC's start at day-desktop, since the centred window no longer opens at midnight", () => {
     const fixture = timelineDynamicFixture("day", { id: "desktop", width: 1440 });
     const adobeCc = TL_LANES[0].events.find((event) => event.title === "Adobe CC");
     const visibility = timelineEventVisibility(adobeCc, fixture);
     expect(visibility.bar).not.toBeNull();
-    expect(visibility.isClippedStart).toBe(false);
+    expect(visibility.isClippedStart).toBe(true);
   });
 });
 

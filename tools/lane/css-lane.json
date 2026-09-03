@@ -1640,6 +1640,31 @@
         "screenshots/views/calendar-empty-state-mobile-light.png"
       ],
       "note": "styles.css untouched by this phase, so baselineHash stays 4c7b8b627ab9 — the lane is entered only because the harness stylesheets moved. theme.css gained button.mod-cta transcribed from the installed Obsidian 1.13.4 app.css, and runtime-vars.css replaced the calc((100vh - 150px) / 5) calendar formula with the product default 112px. A full detached capture run moved 15 PNGs; all 15 were opened. Eight are the real change and are listed above: every one is a primary action that photographed in the neutral button style before and now carries the accent fill with on-accent label text (empty-state \"Add property\", calendar-empty-state \"Select date property\"), with nothing else in the frame moved. The other seven were paint-only: zero of the 276 manifest entries moved layoutHash across the run, and a targeted re-capture of those scenarios returned four of them to their committed bytes while moving two different ones, which is the varying-mover set the parent Traps log records. They were restored rather than committed. The runtime-vars.css correction moved no capture at all: both calendar fixtures already pin 112px inline (temporal.mjs:280, :1169) mirroring applyMonthSizingVars(), so the root value they shadowed was never what the month grid drew — the fix removes a wrong number from the harness root rather than changing a picture. No board or timeline empty-state capture moved either; only two fixtures carry mod-cta (core.mjs:324, temporal.mjs:224)."
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T01:35:00Z",
+      "hash": "4c7b8b627ab9",
+      "reviewed": [
+        "screenshots/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "screenshots/components/chrome-owned-menu-sheet-mobile-light.png",
+        "screenshots/panels/panel-record-detail-sheet-mobile-dark.png",
+        "screenshots/views/calendar-empty-state-desktop-light.png",
+        "screenshots/views/calendar-empty-state-mobile-dark.png",
+        "screenshots/views/calendar-empty-state-mobile-light.png",
+        "screenshots/views/timeline-subtask-tree-mobile-dark.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-month-mobile-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png"
+      ],
+      "note": "Closes goal.md's day-scale open row: the fixture's day branch now derives its viewport window from the same centred-start-minutes math the model uses whenever the renderer passes now (resolveTimelineDayCentredStartMinutes via getTimelineViewportWindow), instead of a fixed TL_DAY_START_MINUTES 0, and its tick labels are the bare zero-padded hour buildTimelineTicks emits (HH), not the fixture-only HH:00. Extended temporal-tick-parity.test.mjs's day case to pass a pinned now (2026-03-25 13:45 local) to getTimelineViewportWindow and assert startMinutes/start/end/units parity plus tick-label parity against the real exports - red first (4 failed: startMinutes 0 vs 60/480 at desktop/mobile, labels HH:00 vs HH), green after the fixture fix (118/118). No styles.css edit; baselineHash stays 4c7b8b627ab9. The four day-scale captures below are the real change: desktop now shows 23 hourly columns (01-23) and mobile 11 (08-18), both with the 13:00 tick highlighted and the now-line/today band at 13:45 in frame, plain zero-padded labels with no colliding :00 suffix, read in both themes. One downstream test assumption was also updated rather than papered over: at desktop width the 23-column window can no longer open exactly at midnight while staying centred on 13:45, so Adobe CC (all-day, starts at midnight) is now genuinely clipped-start - verified directly against getTimelineViewportWindow plus resolveEventAbsoluteScale (startMinutes 60, scale.start 0), not a fixture artefact. The other twelve changed captures are unrelated to this edit and match the toolchain's known non-deterministic re-render noise this history already documents: chrome-owned-menu-sheet-mobile-dark/light, panel-record-detail-sheet-mobile-dark and calendar-empty-state-desktop-light/mobile-dark/mobile-light move under 100 bytes each (1-bit encoder noise); timeline-view-desktop-dark/light, timeline-view-month-mobile-dark/light, timeline-view-year-desktop-dark and timeline-subtask-tree-mobile-dark carry larger byte deltas but a channel-level pixel diff (tolerance 2) found 0-2 significant pixels across the three checked directly (max delta 5, at most 2 of 5.18M pixels) - none in the geometry this edit touches, since only the day branch changed."
     }
   ],
   "outstanding": [

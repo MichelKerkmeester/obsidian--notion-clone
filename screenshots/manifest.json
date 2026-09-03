@@ -1331,7 +1331,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
-      "bytes": 38993
+      "bytes": 39004
     },
     {
       "id": "chrome-selection-status-bar",
@@ -4172,7 +4172,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 76953
+      "bytes": 76971
     },
     {
       "id": "panel-record-detail-sheet",
@@ -5067,7 +5067,7 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 44566
+      "bytes": 44567
     },
     {
       "id": "calendar-empty-state",
@@ -5092,7 +5092,7 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33170
+      "bytes": 33169
     },
     {
       "id": "calendar-empty-state",
@@ -5117,7 +5117,7 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33534
+      "bytes": 33528
     },
     {
       "id": "calendar-mini-calendar",
@@ -5192,7 +5192,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42401
+      "bytes": 42427
     },
     {
       "id": "calendar-mini-calendar",
@@ -6224,7 +6224,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 86118
+      "bytes": 85852
     },
     {
       "id": "timeline-subtask-tree",
@@ -6365,7 +6365,7 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "8bad06be7f25",
+      "layoutHash": "55728b570470",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "styles.css": "4c7b8b627ab9",
@@ -6376,7 +6376,7 @@
       },
       "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 154927
+      "bytes": 150076
     },
     {
       "id": "timeline-view-day",
@@ -6388,7 +6388,7 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "8bad06be7f25",
+      "layoutHash": "55728b570470",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "styles.css": "4c7b8b627ab9",
@@ -6399,7 +6399,7 @@
       },
       "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 127857
+      "bytes": 123538
     },
     {
       "id": "timeline-view-day",
@@ -6411,7 +6411,7 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "e27d2e271c70",
+      "layoutHash": "89b3ca5470e3",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "styles.css": "4c7b8b627ab9",
@@ -6422,7 +6422,7 @@
       },
       "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 93855
+      "bytes": 92997
     },
     {
       "id": "timeline-view-day",
@@ -6434,7 +6434,7 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "e27d2e271c70",
+      "layoutHash": "89b3ca5470e3",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "styles.css": "4c7b8b627ab9",
@@ -6445,7 +6445,7 @@
       },
       "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 76013
+      "bytes": 74427
     },
     {
       "id": "timeline-view",
@@ -6583,7 +6583,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 149810
+      "bytes": 149375
     },
     {
       "id": "timeline-view-month",
@@ -6606,7 +6606,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 70706
+      "bytes": 71008
     },
     {
       "id": "timeline-view-month",
@@ -6629,7 +6629,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 78257
+      "bytes": 77612
     },
     {
       "id": "timeline-view-quarter",

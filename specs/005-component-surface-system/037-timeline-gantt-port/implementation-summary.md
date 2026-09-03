@@ -11,13 +11,13 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-03T08:30:00Z"
-    last_updated_by: "leg-b-landed"
-    recent_action: "Landed gantt port in 0262386+55bff9b; 1.4.4 pending"
-    next_safe_action: "Ship 1.4.4; operator confirms the gantt on iOS; open rows stay"
+    last_updated_at: "2026-09-04T01:35:00Z"
+    last_updated_by: "leg-d-landed"
+    recent_action: "Landed leg d: centred day-scale fixture on pinned now, fixed HH tick label; 4/4 rows shot"
+    next_safe_action: "Pick up next open row: zero-width mount fallback or year-scale phone width"
     blockers:
-      - "Not operator-confirmed: release 1.4.4 has not been cut yet"
-      - "Eleven product/harness defects found in verification round nine remain open"
+      - "Not operator-confirmed: the gantt has not been checked on iOS"
+      - "Seven product/harness defects from verification round nine remain open (see goal.md Completion Criteria)"
     key_files:
       - "src/views/calendar-timeline-renderer.ts"
       - "src/data/calendar-timeline-model.ts"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "037-timeline-gantt-port"
       parent_session_id: null
-    completion_pct: 35
+    completion_pct: 38
     open_questions: []
     answered_questions:
       - "The dependency-link seam persists as an optional persistence action off the local action contract (calendar-timeline-renderer.ts:173), not note frontmatter"
@@ -92,8 +92,8 @@ the pre-existing duplicated `.db-timeline-event.is-all-day` CSS block.
 | `src/data/calendar-interaction-model.ts` | Modified | Added `resolveTimelineLinkChange` / `wouldCreateTimelineDependencyCycle` |
 | `styles.css` | Modified | Reconciled `db-timeline-*` rules against the reference's visual hierarchy under the `css-lane` protocol; leg c added the `.is-label-above` milestone rules and moved `.db-timeline-events` `row-gap` to `var(--db-space-8)` |
 | `src/data/calendar-title-formatter.ts` | Modified | Leg a: the title follows the rendered window, and spans years when the window crosses one |
-| `tools/screenshots/scenarios/temporal.mjs` | Modified | Leg c: the timeline fixture takes its title, first-tick anchor, day column width and milestone placement from the viewport window instead of frozen constants |
-| `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Modified | Leg c: binds each new fixture mirror to the real model export it mirrors |
+| `tools/screenshots/scenarios/temporal.mjs` | Modified | Leg c: the timeline fixture takes its title, first-tick anchor, day column width and milestone placement from the viewport window instead of frozen constants. Leg d: the day branch's viewport window centres on a pinned `now` and its tick labels match `buildTimelineTicks`'s bare `"HH"` format |
+| `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Modified | Leg c: binds each new fixture mirror to the real model export it mirrors. Leg d: adds day-scale window- and tick-label-parity assertions against a pinned `now`, and corrects a downstream test assumption the centring made stale |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -110,7 +110,14 @@ viewport-window mode, content width, and unit widths, backed by parity tests
 across all five scales, both devices, both themes. The `css-lane` was acquired before the `styles.css` edit
 and released naming all 21 changed captures. `npm run gate` was observed PASS at 25 green twice — once with
 `SURFACE_PHASE=037-timeline-gantt-port` (lane held) and once plain (lane released) — by fresh in-runtime
-agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This will ride release 1.4.4, pending.
+agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This shipped in release 1.4.4. Leg d
+(2026-09-04) closed the day-scale row's last fixture-fidelity gap on a dedicated worktree branch: the
+screenshot fixture now centres its day-scale viewport window on the pinned "now" through the same clamp
+math `resolveTimelineDayCentredStartMinutes` uses, and its tick labels match `buildTimelineTicks`'s bare
+`"HH"` format. `temporal-tick-parity.test.mjs` gained window- and tick-label-parity assertions per device
+width, observed red first (4 of 118 failed), green after the fixture fix (118/118); all four day-scale
+captures were read in both themes, and the twelve other captures the recapture moved were verified as the
+toolchain's known encoder noise before being named in the same `css-lane.json` release.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -144,6 +151,11 @@ agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This will ri
 | Screenshot capture (20 timeline images, five scales x two devices x two themes) | Read, matching renderer's ticks/bars/milestone/progress; day-scale `is-today` column lands on the current hour only |
 | Recapture and read after leg c (27 changed PNGs) | All opened and read against their `HEAD` copies. Three of the four open rows are now photographed: quarter titles "February — May 2026" and year "2025 — 2026" over their own axes; "Tue 24" and "00:00" whole at the mobile viewport edge; "Adobe CC Mar 25" above its bar on all 16 week/month/quarter/year captures where `HEAD` read "A N". The day row is half photographed — eleven 32px columns against `HEAD`'s five of 60px, but today out of frame |
 | `npm run gate` after leg c | PASS — 25 green, exit 0, run twice (`SURFACE_PHASE=037-timeline-gantt-port` and plain) |
+| Day-scale fixture parity (leg d), red-first | Red: 4 of 118 failed in `temporal-tick-parity.test.mjs` (`startMinutes` 0 vs 60 at 1440px / 0 vs 480 at 402px; tick labels `"HH:00"` vs `"HH"` at both widths), before `timelineViewportWindow` took a `now` argument. Green after: 118/118 |
+| Typecheck / full suite / tools lint / comments after leg d | `npx tsc --noEmit` exit 0; `npm test` 93 files/929 tests green; `npm run lint:tools` exit 0; `scan-comments` exit 0; `npm run lint` (src) unchanged at 172 problems, confirmed by `git diff --stat main -- src/` reporting no `src/` changes on this leg's branch |
+| `css-lane` (leg d) | `styles.css` untouched, `baselineHash` unchanged at `4c7b8b627ab9`; `check-lane` exit 0, release names all 16 recaptured PNGs (4 real day-scale captures, 12 verified toolchain encoder noise) |
+| Screenshot capture (leg d), 4 day-scale timeline images read | `timeline-view-day-desktop-{light,dark}.png` show 23 hourly columns "01"–"23"; `timeline-view-day-mobile-{light,dark}.png` show 11 columns "08"–"18"; all four show the 13:00 tick highlighted and the now-line/today band at 13:45 in frame, with plain zero-padded labels and no `:00` collision |
+| `npm run gate` after leg d | PASS — 25 green, exit 0 |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -163,17 +175,17 @@ agents, and `validate.sh --strict` returned first `RESULT: PASSED`. This will ri
 6. ~~**Milestone label overpaint.**~~ Fixed across legs a and c: the lane model raises a crowded label and
    `.is-label-above` gives it somewhere to go. Photographed on all 16 week/month/quarter/year captures.
 7. ~~**Clipped leading axis label on mobile.**~~ Fixed in leg a and photographed in leg c.
-8. **Day and year scale at phone width, partly repaired.** Day scale now draws eleven 32px hour columns
-   instead of five at 60px, and the model centres the window on the current hour — but the screenshot
-   fixture's day branch still hardcodes `startMinutes: 0`, so today is out of frame in the capture and that
-   half of the row stays capture-pending. Year scale at 4px/day still carries almost no readable labels, and
-   the 160px label column still overlays the grid at phone width.
-11. **Two screenshot-fixture fidelity gaps, both in the day branch.** `temporal.mjs` emits `"HH:00"` tick
-    labels where the model emits `"HH"`, which is why the phone day captures show colliding hour labels no
-    production render draws; and its viewport window never exercises
-    `resolveTimelineDayCentredStartMinutes`, because `temporal-tick-parity.test.mjs` calls
-    `getTimelineViewportWindow` without a `now`. Neither is a product defect; both leave the fixture
-    describing a render the plugin does not produce.
+8. ~~**Day scale at phone width, partly repaired.**~~ Fixed and fully photographed as of leg d
+   (2026-09-04): eleven 32px hour columns, the window centred on the current hour, and — closing the last
+   capture gap — the screenshot fixture now derives that centring from the same clamp math the model uses,
+   so `timeline-view-day-{desktop,mobile}-{light,dark}.png` all show today (13:00) in frame with no
+   colliding tick labels. **Year scale at phone width remains open**: 4px/day still carries almost no
+   readable labels, and the 160px label column still overlays the grid.
+11. ~~**Two screenshot-fixture fidelity gaps, both in the day branch.**~~ Fixed in leg d: `temporal.mjs`'s
+    `timelineTicksFor` day branch now emits the bare `"HH"` label `buildTimelineTicks` emits, and
+    `timelineViewportWindow` now takes a `now` argument and centres through
+    `resolveTimelineDayCentredStartMinutes`'s own clamp math. `temporal-tick-parity.test.mjs` binds both to
+    the real exports, red-first (4 of 118 failed), green after (118/118).
 9. **Capture-harness padding note (low priority).** `#shot` carries 16px padding not reflected in the
    fixture's device-width comment; the right edge overflows by up to 8 columns at year desktop, though
    today-centred content stays in frame.
