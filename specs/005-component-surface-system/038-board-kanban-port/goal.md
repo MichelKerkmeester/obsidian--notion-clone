@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from 036's adoption plan row 2"
-    next_safe_action: "Write a check that fails on the current board renderer before any rewrite"
+    last_updated_at: "2026-09-03T10:40:00Z"
+    last_updated_by: "board-legs-landed"
+    recent_action: "Verified legs b9e2321/a6fcd31; ticked T5-T7 and 3 goal criteria"
+    next_safe_action: "Record a T1 pre-rewrite baseline, then close the remaining criteria"
     blockers: []
-    key_files: ["spec.md", "plan.md"]
+    key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 29
     open_questions: []
     answered_questions: []
 ---
@@ -53,10 +53,15 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] The card information hierarchy (title, priority strip, chips, preview, time/tags/progress/
+- [x] The card information hierarchy (title, priority strip, chips, preview, time/tags/progress/
       people/due) matches the reference's shape on a read of paired before/after screenshots.
-      **Not started — no rewrite exists yet.** Red to record: the current card's field order and
-      density against catalog rows 5 and 8 (`research/research.md` lines 160, 164).
+      **Met.** Observed red in `b9e2321`: 4 of 10 hierarchy assertions failed against the
+      pre-rewrite renderer (missing topbar, priority strip/body/parent chip, meta-grid field
+      probe, select/status chip dedup); green 10/10 after the rewrite. Paired screenshot read in
+      `a6fcd31`'s `9eb4b141471e` lane release (`board-view`/`board-mobile`, desktop+mobile,
+      light+dark, 8 captures) confirms topbar, priority strip, parent chip, title-row chips and
+      field grid render correctly; `board-view-desktop-light.png` opened directly this session
+      and reads clean.
 - [ ] Hover/drag/drop visual language (raised card, hover lift, drop-target tint, column drop
       highlight) matches the reference's language, rewritten under `--db-*` tokens in `styles.css`
       §17 BOARD VIEW. **Not started.** Red to record: a diff of the current
@@ -71,13 +76,27 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
       contract (REQ-003). **Not started.** Red to record: today's drag-drop matrix (same-group,
       cross-group, blank-space) run once, before the rewrite, as the baseline the post-rewrite run
       must match.
-- [ ] The board/gallery layout-read negative control (`tools/live/renderer-coverage.json`, the
-      bound `026`/`c5566db` wired) stays armed and passing after the rewrite. **Not started.** Red
-      to record: the control's current armed/disarmed read counts, before the rewrite touches
-      `board-renderer.ts`.
-- [ ] `npm run gate` exits 0, `$?` read directly. **Not started.**
+- [x] The board/gallery layout-read negative control (`tools/live/renderer-coverage.json`, the
+      bound `026`/`c5566db` wired) stays armed and passing after the rewrite. **Met.** Observed
+      red 2026-09-03 with the control armed (`RENDER_READ_CONTROL=per-item node
+      tools/live/render-assertions.mjs`): `board/file-view` and `board/embed` both go red at 1601
+      layout reads against the bound of 8, confirming the control is armed and would catch a
+      regression; disarmed (default) both pass at their normal count, same armed/disarmed shape
+      as before the rewrite; `renderer-coverage.json` stamped fresh in the disarmed re-run
+      (`evidence --check-all`: 16/16 fresh).
+- [ ] `npm run gate` exits 0, `$?` read directly. **Not started as a goal-level criterion** — no
+      pre-existing red is on record for this exact check against this packet, so it is not ticked
+      here per this program's `scan-failing-values` discipline, even though it is true today
+      (observed directly 2026-09-03: exit 0, 25 green / 0 red, both
+      `SURFACE_PHASE=038-board-kanban-port npm run gate` and bare `npm run gate` — see `tasks.md`
+      T7, which this evidence closes).
 - [ ] `validate.sh specs/005-component-surface-system/038-board-kanban-port --strict` reports
-      Errors: 0. **Not started.**
+      Errors: 0. **Not started as a goal-level criterion** — `validate.sh --strict` already
+      returned `RESULT: PASSED` before either leg landed (confirmed 2026-09-03 by stashing this
+      session's edits and re-running), so there is no red to record for this exact claim; it
+      remains true today (`RESULT: PASSED`, `Errors: 0`, `Warnings: 1` — pre-existing
+      `COMPLEXITY_MATCH` note, unrelated to this pass) but is left unticked here for the same
+      reason as the gate row above.
 
 ### Operator-only rows
 
@@ -99,4 +118,21 @@ Volatile. Not part of the directive.
 (`research/research.md` lines 394-402), which orders the board second after
 `037-timeline-gantt-port`. Nothing has started; every completion row above is unticked and names
 the red it is waiting to record.
+
+**2026-09-03** — Both legs landed on `main`: `b9e2321` ports the column/card hierarchy
+(red-first, 4/10 then 10/10), `a6fcd31` styles it under `--db-*` tokens (fixture containment
+parity test, red-first on a nesting mutation; column-width contract kept at 236/266/296/416).
+This pass re-verified both legs in-runtime and closed the card-hierarchy and negative-control
+criteria above (2 of 7 non-operator criteria — each with a genuine red value: 4/10 pre-rewrite
+assertions, and 1601-vs-8 with the control armed), plus `tasks.md` T5-T7 (3 of 8 rows, which
+carries no red-value requirement of its own). The gate and `validate.sh --strict` criteria are
+true today but stay unticked here: neither has a pre-existing red on record for this packet (gate
+was already green, and `validate.sh --strict` already returned `RESULT: PASSED` before either leg
+landed, confirmed by stashing this session's edits and re-running), and this program's
+`scan-failing-values` check requires a recorded red for every newly ticked `goal.md` row. Local
+extensions, the drag-drop matrix and hover/drag/drop-target/empty-column visuals were never
+captured against a pre-rewrite baseline, so those two criteria and `tasks.md` T1-T4 stay open too;
+see `implementation-summary.md` for the full verification table. This document's completion_pct
+(29%) is this file's own 2/7 non-operator ratio; the packet-level figure in
+`implementation-summary.md`/`spec.md` averages it against `tasks.md`'s 3/8.
 <!-- /ANCHOR:log -->

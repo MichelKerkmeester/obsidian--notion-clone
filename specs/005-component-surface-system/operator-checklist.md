@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-03: **42 phases**, **5 with nothing left**, **90 rows** waiting on a device.
+Derived 2026-09-03: **42 phases**, **5 with nothing left**, **88 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -169,15 +169,13 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Harness note: the capture frame (`#shot`) carries 16px padding, so the captured container is 1408/370 wide, not 1440/402; the fixture's device-width comment is wrong by 16px a side and the right edge overflows by up to 8 columns at year desktop. Low priority; today-centred content stays in frame.
 - [ ] `.db-timeline-event.is-all-day` remains duplicated at two `styles.css` blocks — pre-existing, not introduced by this port.
 
-## 038-board-kanban-port — 0/8
+## 038-board-kanban-port — 2/8
 
-- [ ] The card information hierarchy (title, priority strip, chips, preview, time/tags/progress/ people/due) matches the reference's shape on a read of paired before/after screenshots.
 - [ ] Hover/drag/drop visual language (raised card, hover lift, drop-target tint, column drop highlight) matches the reference's language, rewritten under `--db-*` tokens in `styles.css` §17 BOARD VIEW. Not started. Red to record: a diff of the current `.db-board-card`/`.db-board-column` rules (`styles.css:8881-8908`, `:9175-9197`) against the reference's `kanban.css:13-155`.
 - [ ] Every local extension named in REQ-005 (WIP/visible counts, swimlanes, summaries, conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, cover-target scheme safety) passes the same check before and after the rewrite. Not started. Red to record: today's passing state of each, captured by `plan.md` step 1, before any rewrite line lands.
 - [ ] Card identity, drag/drop payloads, and the path/batch-order transaction are unchanged in contract (REQ-003). Not started. Red to record: today's drag-drop matrix (same-group, cross-group, blank-space) run once, before the rewrite, as the baseline the post-rewrite run must match.
-- [ ] The board/gallery layout-read negative control (`tools/live/renderer-coverage.json`, the bound `026`/`c5566db` wired) stays armed and passing after the rewrite. Not started. Red to record: the control's current armed/disarmed read counts, before the rewrite touches `board-renderer.ts`.
-- [ ] `npm run gate` exits 0, `$?` read directly. Not started.
-- [ ] `validate.sh specs/005-component-surface-system/038-board-kanban-port --strict` reports Errors: 0. Not started.
+- [ ] `npm run gate` exits 0, `$?` read directly. Not started as a goal-level criterion — no pre-existing red is on record for this exact check against this packet, so it is not ticked here per this program's `scan-failing-values` discipline, even though it is true today (observed directly 2026-09-03: exit 0, 25 green / 0 red, both `SURFACE_PHASE=038-board-kanban-port npm run gate` and bare `npm run gate` — see `tasks.md` T7, which this evidence closes).
+- [ ] `validate.sh specs/005-component-surface-system/038-board-kanban-port --strict` reports Errors: 0. Not started as a goal-level criterion — `validate.sh --strict` already returned `RESULT: PASSED` before either leg landed (confirmed 2026-09-03 by stashing this session's edits and re-running), so there is no red to record for this exact claim; it remains true today (`RESULT: PASSED`, `Errors: 0`, `Warnings: 1` — pre-existing `COMPLEXITY_MATCH` note, unrelated to this pass) but is left unticked here for the same reason as the gate row above.
 - [ ] The operator opens a board on device and confirms the rewritten card/column visual language and drag/drop reads correctly on their own database. Only the operator closes this row; nothing in this tree can close it. Not a report-driven row — no operator report (29-33) named the board surface directly, so this is a proactive confirmation ask, not a defect closure.
 
 ## 039-calendar-parity-port — 0/6

@@ -19,7 +19,10 @@
       "038 tasks",
       "038 acceptance criteria",
       "038 goal",
-      "board kanban port goal"
+      "board kanban port goal",
+      "implementation",
+      "summary",
+      "template"
     ],
     "key_topics": [
       "board",
@@ -31,22 +34,28 @@
       "acceptance",
       "criteria",
       "goal",
-      "obsidian-pm-main",
-      "near",
-      "one-to-one"
+      "implementation",
+      "summary",
+      "template"
     ],
     "importance_tier": "important",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "src/views/board-renderer.ts",
+      "src/views/board-renderer-hierarchy.test.ts",
+      "tools/screenshots/scenarios/shared.mjs",
+      "tools/screenshots/scenarios/shared.test.mjs",
+      "tools/lane/css-lane.json",
+      "tools/live/engine-parity.json",
+      "tools/live/touch-targets.json",
       "src/views/mobile-bottom-sheet.ts",
-      "tools/live/renderer-coverage.json",
-      "tools/lane/css-lane.json"
+      "tools/live/renderer-coverage.json"
     ],
     "entities": [
       {
@@ -80,9 +89,51 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "board-renderer.ts",
         "kind": "code",
         "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer-hierarchy.test.ts",
+        "kind": "test",
+        "path": "src/views/board-renderer-hierarchy.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "shared.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/shared.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "shared.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/shared.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "engine-parity.json",
+        "kind": "config",
+        "path": "tools/live/engine-parity.json",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets.json",
         "source": "derived"
       },
       {
@@ -95,12 +146,6 @@
         "name": "renderer-coverage.json",
         "kind": "config",
         "path": "tools/live/renderer-coverage.json",
-        "source": "derived"
-      },
-      {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -156,47 +201,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Comment Hygiene",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Status Reporting Format Task",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "its",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "TASKS",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "COMPLETION",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "CROSS-REFERENCES",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-02T21:56:17.102Z",
+    "last_save_at": "2026-09-03T09:18:39.553Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -204,14 +213,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8fa0611414c4464808cdc489d1f42fc83edd004283ffc070b7dbae3c2dcb9a20",
+    "source_fingerprint": "sha256:eef4384ea22751a2e257cca97dbac8d134bb372ff6b3cc0b77543fa78d6cbf15",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b0ddd2b7331b1299c5de5a8891e7a367d520b5ced4324ef45f3497d0a5d6ff70",
+      "spec.md": "03c0efc2d5d91c6b3b82d5b3aa03eaa364c5c2e8ba3abb374bb56c5be8d0d286",
       "plan.md": "f97f95f52a2fddd2f2fb102ca1a145ccbf3de92b31fa81130e059cf8c370211e",
-      "tasks.md": "ff36ee47a2575c85828758d117c2ae7db3ba18bb443dd84461bc50006667c659"
+      "tasks.md": "145a928988bd6c6d3cbd292a6eff65229336d216c56d2236e905b1cff283f0b9",
+      "implementation-summary.md": "ef08b47cda6c1df0655e208ceb7bee47e9fd9e4e91a2fb8c51e08166e0a41511"
     },
     "last_active_child_id": null,
     "last_active_at": null

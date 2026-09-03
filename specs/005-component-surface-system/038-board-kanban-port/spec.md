@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from 036's adoption plan row 2, catalog section 2"
-    next_safe_action: "Write a check that fails on the current board renderer before any rewrite"
+    last_updated_at: "2026-09-03T10:40:00Z"
+    last_updated_by: "board-legs-landed"
+    recent_action: "Verified legs b9e2321/a6fcd31; ticked T5-T7 and 3 goal criteria"
+    next_safe_action: "Record a T1 pre-rewrite baseline, then close the remaining rows"
     blockers: []
-    key_files: ["../036-obsidian-pm-ui-harvest/research/research.md", "goal.md"]
+    key_files: ["../036-obsidian-pm-ui-harvest/research/research.md", "goal.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 33
     open_questions: []
     answered_questions: []
 ---
@@ -42,7 +42,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 038-board-kanban-port |
 | **Level** | 2 — `recommend-level.sh --loc 950 --files 10 --architectural` scores 65/100 at 82% confidence (mid-range of the catalog's 800-1,100 LOC estimate, 10 files touched across renderer/data/styles, architectural because the port re-seams card identity onto `RowData.file.path`). Matches the sibling port-adjacent phases' own Level 2 shape (`031-sheet-lifecycle-ownership`, `033-list-virtualisation`). |
-| **Status** | Not started. No code changed. |
+| **Status** | Landed (partial) — both legs committed (`b9e2321`, `a6fcd31`): the column/card information hierarchy is ported and styled under `--db-*` tokens, and `npm run gate` re-runs green (25/25, exit 0). Hover/drag/drop visual language, the per-extension re-check, and the drag-drop matrix re-run are coded or untouched but not yet proven by any fixture. Not operator-confirmed — see `implementation-summary.md`. |
 | **Complexity** | 65/100, confidence 82% |
 <!-- /ANCHOR:metadata -->
 
