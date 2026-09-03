@@ -584,37 +584,31 @@ are not part of the port.
 
 | Planned phase | Folder | What it ports | Status |
 |---|---|---|---|
-| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, release 1.4.4 pending, not operator-confirmed |
-| 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Opened |
-| 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Landed `57043e7` + `1588576`, release 1.4.6 pending, not operator-confirmed |
-| 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Landed `1d611db` + `00b7bd2`, release 1.4.7 pending, not operator-confirmed |
-| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, release 1.4.6 pending, not operator-confirmed |
+| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, shipped **1.4.4**. Not operator-confirmed; open defect rows live in `037`'s `goal.md` |
+| 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Landed `b9e2321` + `a6fcd31`, shipped **1.4.5**. Not operator-confirmed; open defect rows live in `038`'s `goal.md` |
+| 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Landed `57043e7` + `1588576` + `d8a2508`, shipped **1.4.6**. Not operator-confirmed; open defect rows live in `039`'s `goal.md` |
+| 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Landed `1d611db` + `00b7bd2`, shipped **1.4.7** (`214f6bd`). Not operator-confirmed; open defect rows live in `040`'s `goal.md` |
+| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, shipped **1.4.6**. Not operator-confirmed; open defect rows live in `041`'s `goal.md` |
 
 The research runs in a worktree, `.worktrees/003-obsidian-pm-harvest` on branch
 `worktrees/003-obsidian-pm-harvest`, so the main checkout stays free for the in-flight lanes. The
 untracked `036/research/` directory in the main checkout is residue from a rejected launch and is
 not evidence of anything.
 
-**All five port phases opened above have now landed on `main`.** `037` at `0262386`+`55bff9b`
-(released 1.4.4), `038` at `b9e2321`+`a6fcd31` (released 1.4.5), `039` at `57043e7`+`1588576`
-(reconciled `d8a2508`, released 1.4.6), `041` at `cb9aedf`+`25ae3a9` (released 1.4.6), and `040` at
-`1d611db`+`00b7bd2` (unreleased). `040` is the only leg that missed 1.4.6, so **release 1.4.7 is
-pending** to carry it. None of the five is operator-confirmed. This table's own status cells for
-`037` (still reading "release 1.4.4 pending") and `038` (still reading "Opened") were not updated
-by their own landings and sit outside this dispatch's write scope, which is `040`'s row alone;
-flagged rather than silently reconciled.
+**All five port phases opened above have now landed on `main` and shipped.** `037` at
+`0262386`+`55bff9b` (1.4.4), `038` at `b9e2321`+`a6fcd31` (1.4.5), `039` at `57043e7`+`1588576`
+(reconciled `d8a2508`, 1.4.6), `041` at `cb9aedf`+`25ae3a9` (1.4.6), and `040` at `1d611db`+`00b7bd2`
+(1.4.7, cut `214f6bd`). None of the five is operator-confirmed; each packet's own `goal.md` carries
+its own open defect rows, and the table above now reads the same as this paragraph.
 
 ### 5.3 Release cadence
 
 Each verified milestone is pushed to `origin main` and cut as a GitHub release, so the operator can
-install it on the phone. **1.4.0 and 1.4.1 are shipped.** **1.4.2 is pending** — the fix for
-reports 30 to 33 landed in `00e2aa2` and is verified in-runtime, but the release has not yet been
-cut, so it is not operator-confirmed.
-
-**1.4.6 is planned** to bundle `041-shared-ui-ux-port` (landed `cb9aedf` + `25ae3a9`) with
-`039-calendar-parity-port` and `040-subtask-tree-port`, both landed on their own worktree branches
-and being reconciled onto `main`; none of the three is operator-confirmed and no release has been
-cut yet.
+install it on the phone. **1.4.0 and 1.4.1 are shipped. 1.4.2 through 1.4.7 have all shipped too**,
+each built and gated from a clean clone: 1.4.2 (reports 30 to 33), 1.4.3 (overlay-stack `getPanel()`
+fix, `85ff504`), 1.4.4 (`037` timeline/gantt), 1.4.5 (`038` board), 1.4.6 (`039` calendar parity plus
+`041` shared UI/UX), and 1.4.7 (`040` subtask tree, cut `214f6bd`). None of 1.4.2 through 1.4.7 is
+operator-confirmed yet.
 
 ---
 
