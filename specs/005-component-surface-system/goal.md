@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-03T08:30:00Z"
-    last_updated_by: "037-landed"
-    recent_action: "037 landed in 0262386+55bff9b; 1.4.4 pending, 11 open rows"
-    next_safe_action: "Ship 1.4.4; open 038 next; 037's 11 open rows stay tracked"
+    last_updated_at: "2026-09-03T13:50:00Z"
+    last_updated_by: "041-landed"
+    recent_action: "041 landed (cb9aedf+25ae3a9); 1.4.6 pending, not confirmed"
+    next_safe_action: "Merge 039 and 040, cut 1.4.6, operator confirms on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -582,4 +582,36 @@ overpaint, clipped mobile axis label, unusable day/year scale at phone width, a 
 a pre-existing duplicated CSS block) are recorded as open rows in `037/goal.md` §3, not fixed in this leg.
 Will ride release **1.4.4, pending**; **not operator-confirmed**. `roadmap.md` §5.2's port-phases row
 updated to match.
+
+### `041-shared-ui-ux-port` landed, 2026-09-03
+
+Two legs. `cb9aedf` (dispatched to `cli-devin`, then verified in-runtime) reconciled three tasks
+named in the packet's own `tasks.md` — T005, T008, T009: `EmptyStateRenderer`'s message element now
+matches the reference's paragraph body shape, the display-width toolbar toggle announces its state
+via `aria-pressed`, and a new `PluginSettings.defaultViewType` field plus its Settings dropdown row
+let a new database's default view be chosen, localized across `en`, `zh-CN` and `zh-TW`. Red-first,
+verified in-runtime: `empty-state-renderer.test.ts:160` ("expected 'div' to be 'p'"),
+`toolbar-renderer.test.ts:41` (source-string contain failure on `aria-pressed`), and
+`settings.test.ts:319/339/350/354` ("expected undefined to be defined/false"); 45/45 green after,
+across the four changed/new test files. `cli-codex` then carried a second leg, rebased onto `main`
+and verified by a fresh Opus reviewer as `25ae3a9`: four semantic role tokens, a `.db-surface` arm on
+the accent focus ring for a menu portalled to the body, `margin: 0` on `.db-empty-card-message`, and
+the timeline event bar's nested `span[role="button"]` link dots replaced with a native
+`.db-timeline-event-trigger` button and native sibling buttons — the reduced-motion coverage task was
+checked against this leg and found already complete, so nothing there was extended. Four speculative
+rules the leg carried were dropped on inspection rather than shipped. `touch-targets` moved from 277
+to 253 controls under 28px against an unchanged baseline of 279. 18 captures were read, not counted,
+and every one opened against its `cb9aedf4` copy; the lane released naming all 18. `npm run gate`
+read PASS, 25 green, both `SURFACE_PHASE=041-shared-ui-ux-port` and bare, and `validate.sh --strict`
+first `RESULT: PASSED`. Two open rows stay recorded in `041/goal.md`: reduced motion still misses an
+owned menu's descendants when that menu is not wrapped in the container class, and six captures moved
+in one run and reproduced their committed bytes in another, so the harness is not byte-deterministic
+for them. Neither commit is operator-confirmed, and no release has been cut for either leg yet.
+`roadmap.md` §5.2's port-phases row and §5.3's release-cadence line updated to match; `spec.md`'s
+Phase Documentation Map row for `041` updated to match. This does not change `completion_pct` — the
+same basis as the `037` entry above applies: none of the parent's seven §3 rows turn on an individual
+port phase landing, so the 57% figure is unaffected. Release 1.4.6 is planned to bundle this landing
+with `039-calendar-parity-port` and `040-subtask-tree-port`, both landed on their own worktree
+branches (`worktrees/004-calendar-parity-port` at `9ae6ea3`, `worktrees/005-subtask-tree-port` at
+`cf91587`) and not yet merged to `main`.
 <!-- /ANCHOR:log -->

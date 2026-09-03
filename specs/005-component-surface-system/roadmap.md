@@ -588,7 +588,7 @@ are not part of the port.
 | 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Opened |
 | 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Opened |
 | 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Opened |
-| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Opened |
+| 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, release 1.4.6 pending, not operator-confirmed |
 
 The research runs in a worktree, `.worktrees/003-obsidian-pm-harvest` on branch
 `worktrees/003-obsidian-pm-harvest`, so the main checkout stays free for the in-flight lanes. The
@@ -601,6 +601,11 @@ Each verified milestone is pushed to `origin main` and cut as a GitHub release, 
 install it on the phone. **1.4.0 and 1.4.1 are shipped.** **1.4.2 is pending** — the fix for
 reports 30 to 33 landed in `00e2aa2` and is verified in-runtime, but the release has not yet been
 cut, so it is not operator-confirmed.
+
+**1.4.6 is planned** to bundle `041-shared-ui-ux-port` (landed `cb9aedf` + `25ae3a9`) with
+`039-calendar-parity-port` and `040-subtask-tree-port`, both landed on their own worktree branches
+and being reconciled onto `main`; none of the three is operator-confirmed and no release has been
+cut yet.
 
 ---
 
