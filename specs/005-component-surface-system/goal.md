@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T01:30:00Z"
-    last_updated_by: "037-open-rows-landed"
-    recent_action: "037 open rows: 3 of 4 closed, day-scale pending"
-    next_safe_action: "Cut 1.4.9; land 042 leg a; operator confirms on iOS"
+    last_updated_at: "2026-09-04T03:40:00Z"
+    last_updated_by: "done-audit-3"
+    recent_action: "Row 3 closed; rows 5-6 narrowed, replay backfill running"
+    next_safe_action: "Add six replay claims, land pixel-hash compare, re-audit rows 5 and 6"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -31,7 +31,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 29
+    completion_pct: 43
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
@@ -150,7 +150,7 @@ resolve them silently.
 - [ ] Every view opens on device without freezing. Today only the table does. **2026-09-02:** 1.4.1
       carries sheet lifecycle fixes, not a view fix, so nothing here changed. The board and gallery
       remain the two views with an observed red and no verified green.
-- [ ] A gate check constructs a production renderer for **every** view. One lane does now, for
+- [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
       scenarios driven by both action bags. Every view named in an operator report is asserted.
       **Unticked 2026-09-03T23:40:00Z, on a fresh audit read against the criterion's own wording
@@ -168,13 +168,23 @@ resolve them silently.
       gate check either. `node tools/live/render-assertions.mjs`, `$?` read directly: `0`,
       26/26 assertions PASS, coverage stamped 6 of 22 (`tools/live/renderer-coverage.json`). The
       check is real and green for the six it covers; "every view" is not yet true.
+      **Ticked 2026-09-04T03:40:00Z, landed `7e9fd27`.** All seven `DatabaseViewType` values are
+      now covered: list, table, board, gallery, timeline, chart, and calendar at month, week and
+      day. `node tools/live/render-assertions.mjs` disarmed: exit 0. Armed
+      `RENDER_READ_CONTROL=per-item`: exit 1, 11 reds — chart 1630 against bound 48; calendar
+      week 14 and day 1600 against bound 8; board/gallery 1601 and table 2003 against bound 8,
+      carried from the earlier controls. Was: chart and calendar week/day uncovered, coverage 6
+      of 22 renderer files; now 7 of 22 distinct renderers.
 - [x] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, not a pipe. Was red on
       2026-08-29: the gate was 13 green, reported red by an external lane that could not reach
       Chrome. `SURFACE_PHASE=035-visual-pass-product-defects npm run gate`, `$?` read directly,
       not through a pipe: today 25 green, exit 0. **Re-verified 2026-09-03T23:40:00Z.**
       `SURFACE_PHASE=040-subtask-tree-port npm run gate`, `$?` read directly: `0`, 25 green, 0
       red. Bare `npm run gate`, `$?` read directly: `0`, the same 25 green, 0 red. No stray
-      Chrome process before either run (`pgrep` empty).
+      Chrome process before either run (`pgrep` empty). **Re-verified 2026-09-04T03:40:00Z.**
+      `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate`, `$?` read directly: `0`, 25
+      green. Bare `npm run gate`, `$?` read directly: `0`, the same 25 green. No stray Chrome
+      process (`pgrep` empty).
 - [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
       `npm run replay` passes today — 8 of 8 held, exit 0 — but observed red: N/A — no earlier
       count recorded. `tools/live/replay.json`'s history carries no run where a claim's `held` was
@@ -190,6 +200,12 @@ resolve them silently.
       (`57043e7`+`1588576`+`d8a2508`, 1.4.6), `040` (`1d611db`+`00b7bd2`, 1.4.7 pending) and `041`
       (`cb9aedf`+`25ae3a9`, 1.4.6). Every one of those is a landed result with no recorded
       pre-fix number for replay to hold it against.
+      **Re-verified 2026-09-04T03:40:00Z, narrowed, still open.** `replay.json` now carries
+      claims for report 29 and reports 34-36 (delegated `031` claims) and both legs of phases
+      `037`-`041` (10 claims, pre-fix audited). Missing: six open-row fix commits with
+      documented reds but no replay claim — `7e36671` (038 board captures), `535373a` (040
+      same-parent reorder), `3f143df` and `a251a43` (041 reduced motion), `fa58c7f` and
+      `b29bf7f` (037 timeline open rows). A lane is adding them now.
 - [ ] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
       **Ticked 2026-09-02, on an observed red verified in-runtime and committed as `c5566db`.** The
@@ -229,6 +245,13 @@ resolve them silently.
       row's own "check both ways" framing (D5): a device dependency found anywhere in the set
       the wording names disqualifies "no criterion's green," not just the three scenarios
       `c5566db` armed.
+      **Re-verified 2026-09-04T03:40:00Z, narrowed, still open.** Of the four dependency classes
+      named above, two are REMOVED: (1) `tools/screenshots/runtime-vars.css`'s calendar
+      min-height formula now matches production's `getCellMinHeight()` at a fixed 112px. (4)
+      `tools/screenshots/theme.css` now declares `.mod-cta`, transcribed from Obsidian 1.13.4.
+      Two stay open: (2)/(3) `touch-targets.mjs` and `unstyled-links.mjs`, plus the shared
+      capture-pipeline fixtures, remain DECLARED in `042/tasks.md`'s provability record and back
+      two of the 25 gate lanes that make row 4 green. Stays open on that bounded list.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -241,7 +264,9 @@ resolve them silently.
       silently truncated the run via `SIGPIPE` at 100 lines, the exact "never trust a pipe" trap
       this program's own rules name. Full run: first `RESULT:` line for the parent is `PASSED`,
       `Summary: Errors: 0  Warnings: 1`. All 42 recursively-validated folders report `RESULT:
-      PASSED`, 0 `RESULT: FAILED`.
+      PASSED`, 0 `RESULT: FAILED`. **Re-verified 2026-09-04T03:40:00Z.** First `RESULT:` line
+      for the parent is `PASSED`, all 43 recursively-validated folders report `RESULT: PASSED`,
+      `Summary: Errors: 0`.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -837,4 +862,27 @@ The landing ships in **1.4.9 (pending)**, bundled with `041`'s reduced-motion fi
 is operator-confirmed. `completion_pct` stays **29**: none of the parent's seven §3 DONE rows turn
 on an individual open-row landing, so per D13/§3.2 the figure is unaffected — the same basis every
 port-phase entry above states. `roadmap.md` §5.2's row for `037` updated to match.
+
+### Done-audit-3, 2026-09-04T03:40:00Z: row 3 closed, rows 5 and 6 narrowed, 4 and 7 re-verified
+
+A fresh in-runtime audit checked §3 rows 3-7 against `7e9fd27`. **Row 3** ticks: all seven
+`DatabaseViewType` values are now constructed — list, table, board, gallery, timeline, chart, and
+calendar at month, week and day. `node tools/live/render-assertions.mjs` disarmed exits 0; armed
+`RENDER_READ_CONTROL=per-item` exits 1 with 11 reds (chart 1630 against bound 48; calendar week 14
+and day 1600 against bound 8; board/gallery 1601 and table 2003 against bound 8, carried from the
+earlier controls). Coverage moves from 6 of 22 renderer files to 7 of 22 distinct renderers. **Row
+5** narrows but stays open: `replay.json` now carries claims for report 29, reports 34-36
+(delegated `031` claims) and both legs of phases `037`-`041` (10 claims, pre-fix audited), but six
+open-row fix commits still carry no replay claim — `7e36671`, `535373a`, `3f143df`, `a251a43`,
+`fa58c7f`, `b29bf7f` — and a lane is adding them now. **Row 6** narrows but stays open: of the four
+dependency classes named in its wording, two are removed (`runtime-vars.css`'s calendar
+min-height formula now matches production's `getCellMinHeight()` at 112px; `theme.css` now
+declares `.mod-cta`, transcribed from Obsidian 1.13.4), and two remain declared —
+`touch-targets.mjs`/`unstyled-links.mjs` and the shared capture-pipeline fixtures back two of the
+25 gate lanes row 4's green counts. **Row 4** and **Row 7** re-verified fresh: `SURFACE_PHASE=042-
+harness-fidelity-and-replay npm run gate` and bare `npm run gate` both exit 0, 25 green, no stray
+Chrome; `validate.sh specs/005-component-surface-system --strict`, first `RESULT:` line `PASSED`,
+43 of 43 folders `PASSED`, `Errors: 0`. `completion_pct` recomputed 3 of 7 ÷ 7 = **43** (was 29):
+rows 3, 4 and 7 now hold. `spec.md`'s Phase Documentation Map row and `roadmap.md` §5's bullet for
+`042` updated to match; rows 5 and 6 remain this phase's open work.
 <!-- /ANCHOR:log -->
