@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T03:40:00Z"
-    last_updated_by: "done-audit-3"
-    recent_action: "Row 3 closed; rows 5-6 narrowed, replay backfill running"
-    next_safe_action: "Add six replay claims, land pixel-hash compare, re-audit rows 5 and 6"
+    last_updated_at: "2026-09-04T05:10:00Z"
+    last_updated_by: "037-rows-closed"
+    recent_action: "037: day-scale row closed (7ca6cc2); all four open rows now closed"
+    next_safe_action: "Land the three 042 harness lanes; re-audit rows 5 and 6; operator confirms"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -885,4 +885,24 @@ Chrome; `validate.sh specs/005-component-surface-system --strict`, first `RESULT
 43 of 43 folders `PASSED`, `Errors: 0`. `completion_pct` recomputed 3 of 7 ÷ 7 = **43** (was 29):
 rows 3, 4 and 7 now hold. `spec.md`'s Phase Documentation Map row and `roadmap.md` §5's bullet for
 `042` updated to match; rows 5 and 6 remain this phase's open work.
+
+### `037`'s last open row closed, 2026-09-04, all four rows confirmed
+
+`037-timeline-gantt-port`'s day-scale row — the last of its four remaining open product rows —
+closed on `main` in `7ca6cc2` (leg d): `temporal.mjs`'s day branch now centres the fixture window
+on the pinned `now` through the same clamp `resolveTimelineDayCentredStartMinutes` uses, and its
+tick labels drop the `":00"` suffix to match what `buildTimelineTicks` emits. Red observed first:
+`temporal-tick-parity.test.mjs`'s new window- and tick-label-parity assertions failed 4 of 118
+(`startMinutes` 0 vs 60 desktop / 480 mobile; labels `"HH:00"` vs `"HH"`), green after (118/118).
+Captures read: `timeline-view-day-desktop-{light,dark}.png` show 23 hourly columns;
+`timeline-view-day-mobile-{light,dark}.png` show 11 columns 08-18 with the 13:00 tick and the
+now-line in frame, no label collision. 16 captures named in the `css-lane.json` release (12
+verified encoder noise). `npm run gate` PASS, 25 green.
+
+All four of `037`'s open product rows — title/axis contradiction, milestone label, tick-clip and
+day-scale — are now closed and visible in captures. Neither `037` nor `041` is operator-confirmed.
+`completion_pct` stays **43**: no §3 DONE row changed on this pass — rows 3, 4 and 7 still hold,
+the same 3-of-7 basis the prior audit derived — per D13/§3.2 the figure is derived from the
+parent's own checklist alone, not from a child phase's open-row landing. `roadmap.md` §5.2's row
+for `037` updated to match.
 <!-- /ANCHOR:log -->
