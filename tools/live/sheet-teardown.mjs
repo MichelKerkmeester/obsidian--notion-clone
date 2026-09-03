@@ -41,6 +41,9 @@ const STAMP_PATH = "tools/live/sheet-teardown.json";
 // rather than inferred, so a run where the reference itself regresses is legible as
 // "the reference broke" and not as "everything passes".
 const REFERENCE = "owned menu (reference)";
+const PRE_FIX_FAILURES = new Map([
+  ["DbModal with a detached host wrapper", "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed"],
+]);
 
 // ───────────────────────────────────────────────────────────────────
 // 2. BUNDLE
@@ -165,7 +168,14 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-stamp(STAMP_PATH, { producers: results.length, leaking: 0 }, [
+const checks = results.map(({ producer: name, pass, detail }) => ({
+  name,
+  pass,
+  detail,
+  preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
+}));
+
+stamp(STAMP_PATH, { producers: results.length, leaking: 0, checks }, [
   "tools/live/sheet-teardown.mjs",
   "tools/live/sheet-teardown-harness.ts",
   SOURCE,

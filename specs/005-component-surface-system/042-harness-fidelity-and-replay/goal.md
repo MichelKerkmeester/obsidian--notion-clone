@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
-    last_updated_at: "2026-09-03T23:50:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from the parent's 2026-09-03 audit; no code written yet"
-    next_safe_action: "Read render-assertion-harness.ts, then add the chart scenario with its negative control"
+    last_updated_at: "2026-09-04T01:50:00Z"
+    last_updated_by: "verifier"
+    recent_action: "Landed the chart and calendar week/day scenarios, the replay backfill and the row-6 corrections"
+    next_safe_action: "Correct check-lane changedCaptures to a layoutHash basis"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-042-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 80
     open_questions:
       - "Does the manifest-compare fix belong in check-lane.mjs or a shared comparator"
       - "Is the chart view constructed through the same bag pattern as the other six renderers"
@@ -66,22 +66,43 @@ Frozen choices. Changing one is an amendment.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] A render-assertion scenario constructs the production chart renderer and asserts a
+- [x] A render-assertion scenario constructs the production chart renderer and asserts a
       thresholded property of what it builds, with an owned negative control observed red before
-      green.
-- [ ] Render-assertion scenarios construct the production `CalendarRenderer` at `scale: "week"`
+      green. **Met.** `chart/file-view` constructs `ChartRenderer` and reads 30 layout reads against
+      a bound of 48. Observed red first: `RENDER_READ_CONTROL=per-item` armed a per-row read at the
+      render entry and the lane failed by name — **was 1630 reads against bound 48, exit 1**.
+- [x] Render-assertion scenarios construct the production `CalendarRenderer` at `scale: "week"`
       and `scale: "day"`, each with an owned negative control and bounds set from measured reads.
-      `renderer-coverage.json` moves from 6 of 22.
-- [ ] `npm run replay` carries a claim for report 29, reports 34-36, and phases `037`-`041`, each
+      `renderer-coverage.json` moves from 6 of 22. **Met.** Both scales read 0 against a bound of 8
+      on both bags; `renderer-coverage.json` records `constructed: 7, total: 22`, published 6 -> 7.
+      Observed red first under `RENDER_READ_CONTROL=per-item` — **week was 14 reads against bound 8,
+      day was 1600 against 8, both bags, exit 1**.
+- [x] `npm run replay` carries a claim for report 29, reports 34-36, and phases `037`-`041`, each
       held against its recorded pre-fix number; the replay lane reds when a required entry is
-      missing.
-- [ ] Every row-6 dependency (pinned `runtime-vars.css` calendar formula, `touch-targets.mjs` /
+      missing. **Met.** 21 claims, `reversed: 0`, exit 0 — was 8 claims before this phase. Every one
+      of the ten static entries was re-measured on its own fix commit's parent tree and returns a
+      value differing from what it records; the pre-fix pairs are `0262386: 5`, `55bff9b: 0`,
+      `b9e2321: 1`, `a6fcd31: 2`, `57043e7: 4`, `1588576: 1`, `1d611db: 2`, `00b7bd2: 0`,
+      `cb9aedf: 1`, `25ae3a9: 10`. Observed red three ways: removing one entry gave **exit 1, "21
+      published, this run carries 20"**; moving `sheet-rebuild.json` aside gave **exit 1, 2 claims
+      BROKE**; moving `sheet-teardown.json` aside gave **exit 1, 1 claim BROKE**.
+- [x] Every row-6 dependency (pinned `runtime-vars.css` calendar formula, `touch-targets.mjs` /
       `unstyled-links.mjs` fixture reads, `theme.css`'s absent `.mod-cta`) is removed or declared
-      with the criterion it cannot prove.
+      with the criterion it cannot prove. **Met.** Removed, each against its recorded pre-fix state:
+      the calendar formula **was `calc((100vh - 150px) / 5)`** against a production default of
+      `112px` that `getCellMinHeight()` returns and never derives from a viewport, now pinned to
+      that default; and `theme.css` **was 0 `button.mod-cta` rules**, so every CTA in the corpus
+      photographed in the neutral button style, now 1 rule transcribed from the installed Obsidian
+      1.13.4 `app.css` and read in eight recaptured images. Declared: `touch-targets.mjs` and
+      `unstyled-links.mjs` still read fixtures, with a bounded list of what each cannot prove in
+      `tasks.md`.
 - [ ] The capture manifest compare is corrected to a content/layout-hash or declared-tolerance
       basis, and the fix is A/B'd against a clean HEAD clone showing it still catches a
       deliberately mutated capture.
-- [ ] `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` exits 0, read from `$?` directly.
+- [x] `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` exits 0, read from `$?` directly.
+      **Met.** `gate: PASS — 25 green, 0 red for a declared reason`. The capture lane was observed red
+      first: `check-lane` reported **6 changed captures the release did not name, exit 1**, before the
+      release entry naming all eight was appended.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -98,11 +119,11 @@ and findings belong here.
 | Item | State | Evidence |
 |------|-------|----------|
 | Phase folder opened | Done | `specs/005-component-surface-system/042-harness-fidelity-and-replay/` scaffolded via `create.sh --phase --parent`, Level 3 |
-| Chart renderer scenario | Pending | — |
-| Calendar week/day scenarios | Pending | — |
-| Replay backfill | Pending | — |
-| Row-6 dependency audit | Pending | — |
-| Manifest-compare fix | Pending | — |
+| Chart renderer scenario | Done | `chart/file-view`, 30 reads against bound 48; armed control was 1630, exit 1 |
+| Calendar week/day scenarios | Done | Both scales 0 against bound 8; armed control was 14 (week) and 1600 (day), exit 1 |
+| Replay backfill | Done | 21 claims, `reversed: 0`; was 8. All ten static entries re-measured on `<sha>^` and none is vacuous |
+| Row-6 dependency audit | Done | `runtime-vars.css` and `theme.css` corrected; the two fixture lanes declared with a bounded list in `tasks.md` |
+| Manifest-compare fix | Open | T017/T018 not started. This run measured its cost: 7 of 15 movers were paint-only, 0 of 276 `layoutHash` changes |
 
 ### Deviations and findings
 

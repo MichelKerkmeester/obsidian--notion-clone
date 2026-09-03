@@ -35,7 +35,10 @@
 // scenario. Board and gallery read 1 against a bound of 8 and have no shipped
 // defect on this tree — a bound that was never observed failing is not
 // evidence — and the table's per-row bound (measured 3, same bound of 8) has
-// the same need. Disarmed is the default; the gate never arms it.
+// the same need. The calendar week/day and chart scenarios are new here and
+// own the same control: week/day through the per-item bag seam, the chart
+// through a per-row read at the render entry. Disarmed is the default; the
+// gate never arms it.
 //
 // Usage: node tools/live/render-assertions.mjs
 
@@ -50,6 +53,7 @@ import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
 import { chromium } from "playwright-core";
 import { stamp } from "./evidence.mjs";
+import { countConstructed, scenarioLabel } from "./render-scenario-utils.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. THE CHECKED SHAPES
@@ -73,8 +77,13 @@ const SCENARIOS = [
   { name: "gallery/embed", renderer: "gallery", bag: "embed" },
   { name: "calendar/file-view", renderer: "calendar", bag: "file-view" },
   { name: "calendar/embed", renderer: "calendar", bag: "embed" },
+  { name: "calendar-week/file-view", renderer: "calendar", bag: "file-view", scale: "week" },
+  { name: "calendar-week/embed", renderer: "calendar", bag: "embed", scale: "week" },
+  { name: "calendar-day/file-view", renderer: "calendar", bag: "file-view", scale: "day" },
+  { name: "calendar-day/embed", renderer: "calendar", bag: "embed", scale: "day" },
   { name: "timeline/file-view", renderer: "timeline", bag: "file-view" },
   { name: "timeline/embed", renderer: "timeline", bag: "embed" },
+  { name: "chart/file-view", renderer: "chart", bag: "file-view" },
 ];
 
 const RENDERER_SOURCES = [
@@ -84,6 +93,7 @@ const RENDERER_SOURCES = [
   "src/views/gallery-renderer.ts",
   "src/views/calendar-renderer.ts",
   "src/views/calendar-timeline-renderer.ts",
+  "src/views/chart-renderer.ts",
 ];
 
 // The action bags the two hosts build, measured at the two construction sites
@@ -175,6 +185,9 @@ const BAGS = {
     "openTimelineInvalidEvents", "renderGroupSummaries", "renderRecordIcon",
     "toggleGroupCollapsed", "updateTimelineAnchor", "updateTimelineScale",
   ],
+  // The chart's bag is the actions object passed to render, and both hosts pass the same two
+  // members — the embed does not trim it, because neither host calls a chart action during render.
+  "chart/file-view": ["onConfigChange", "onFilter"],
 };
 
 const FILE_VIEW_ONLY = [
@@ -288,16 +301,17 @@ try {
       || result.name === "no forced layout inside the card loop"
       || result.name === "no forced layout inside the segment loop"
       || result.name === "no forced layout inside the event loop"
+      || result.name === "no forced layout inside the chart build"
       || result.name === "no per-row layout read"
       || result.name === "no row appended to a connected table");
     for (const shape of shapes) {
-      console.log(`  shape  ${`${outcome.scenario.renderer}/${outcome.scenario.bag}`.padEnd(20)} ${shape.detail}`);
+      console.log(`  shape  ${scenarioLabel(outcome.scenario).padEnd(20)} ${shape.detail}`);
     }
   }
   console.log("");
 
   for (const outcome of outcomes) {
-    const label = outcome.scenario.renderer + "/" + outcome.scenario.bag;
+    const label = scenarioLabel(outcome.scenario);
     for (const result of outcome.results) {
       const mark = result.pass ? "PASS" : "FAIL";
       if (!result.pass) failures.push(`${label}: ${result.name} — ${result.detail}`);
@@ -345,7 +359,7 @@ console.log("        this check asserts the difference exists, not that it is in
 // 6. COVERAGE RATCHET
 // ───────────────────────────────────────────────────────────────────
 
-const constructed = new Set(SCENARIOS.map((scenario) => scenario.renderer)).size;
+const constructed = countConstructed(SCENARIOS);
 const viewFiles = readdirSync(join(REPO, "src/views"))
   .filter((name) => name.endsWith(".ts") && !name.endsWith(".test.ts") && !name.endsWith(".stories.ts"));
 const total = viewFiles.filter((name) =>
@@ -356,11 +370,11 @@ if (existsSync(join(REPO, STAMP_PATH))) {
   const record = JSON.parse(readFileSync(join(REPO, STAMP_PATH), "utf8"));
   published = Number(record.constructed) || 0;
 }
-console.log(`\nrender-assertions: coverage ${constructed} of ${total} renderers exercised by this check`
+console.log(`\nrender-assertions: coverage ${constructed} distinct renderers of ${total} renderer files exercised by this check`
   + ` (published ${published})`);
 if (constructed < published) {
   console.error(`render-assertions: FAIL — coverage cannot decrease: ${published} published, `
-    + `this check constructs ${constructed}`);
+    + `this check constructs ${constructed} distinct renderers`);
   process.exit(1);
 }
 

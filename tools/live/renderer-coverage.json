@@ -1,14 +1,15 @@
 {
-  "measuredAt": "2026-09-03T22:32:52.014Z",
+  "measuredAt": "2026-09-03T23:08:39.011Z",
   "inputs": {
-    "tools/live/render-assertions.mjs": "e6664bb478a6",
-    "tools/live/render-assertion-harness.ts": "308686810582",
+    "tools/live/render-assertions.mjs": "f65803ea6080",
+    "tools/live/render-assertion-harness.ts": "813b44d0efa9",
     "src/views/list-renderer.ts": "722b433d196c",
     "src/views/table-renderer.ts": "2044cea151d8",
     "src/views/board-renderer.ts": "04e9a24620e3",
     "src/views/gallery-renderer.ts": "c7d6e9216f39",
     "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
     "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
+    "src/views/chart-renderer.ts": "1a9fef67b5de",
     "tools/bench/list-render-bench.ts": "af7fa1913bbb",
     "tools/bench/table-render-bench.ts": "d9c1f7c3e162",
     "tools/bench/board-render-bench.ts": "468718e05f2a",
@@ -18,6 +19,6 @@
     "src/views/database-view.ts": "03e4d407f02f",
     "src/views/embedded-database-renderer.ts": "d46c711a7902"
   },
-  "constructed": 6,
+  "constructed": 7,
   "total": 22
 }

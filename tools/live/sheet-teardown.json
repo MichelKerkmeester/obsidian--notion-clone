@@ -1,12 +1,80 @@
 {
-  "measuredAt": "2026-09-03T22:32:53.141Z",
+  "measuredAt": "2026-09-03T23:08:40.340Z",
   "inputs": {
-    "tools/live/sheet-teardown.mjs": "977e3a475380",
+    "tools/live/sheet-teardown.mjs": "79db2b03b39b",
     "tools/live/sheet-teardown-harness.ts": "0768e51b8d59",
     "src/views/mobile-bottom-sheet.ts": "b7ad55cb6167",
     "src/views/popover-position.ts": "6cae246726c0",
     "src/views/owned-menu.ts": "f32cc37ad4be"
   },
   "producers": 11,
-  "leaking": 0
+  "leaking": 0,
+  "checks": [
+    {
+      "name": "owned menu (reference)",
+      "pass": true,
+      "detail": "backdrop and sheet both gone",
+      "preFixFailure": null
+    },
+    {
+      "name": "record detail panel",
+      "pass": true,
+      "detail": "backdrop and sheet both gone",
+      "preFixFailure": null
+    },
+    {
+      "name": "filter / sort / column / view panels",
+      "pass": true,
+      "detail": "backdrop and sheet both gone",
+      "preFixFailure": null
+    },
+    {
+      "name": "group popover",
+      "pass": true,
+      "detail": "backdrop and sheet both gone",
+      "preFixFailure": null
+    },
+    {
+      "name": "add-view sheet",
+      "pass": true,
+      "detail": "backdrop and sheet both gone",
+      "preFixFailure": null
+    },
+    {
+      "name": "a correct teardown after another producer leaked",
+      "pass": true,
+      "detail": "the backdrop came down despite the earlier leak",
+      "preFixFailure": null
+    },
+    {
+      "name": "DbModal with a detached host wrapper",
+      "pass": true,
+      "detail": "base close restored the panel before the host wrapper was removed",
+      "preFixFailure": "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed"
+    },
+    {
+      "name": "view config panel (real renderer)",
+      "pass": true,
+      "detail": "one panel throughout, and the body is clean after close",
+      "preFixFailure": null
+    },
+    {
+      "name": "column manager (real renderer)",
+      "pass": true,
+      "detail": "one panel throughout, and the body is clean after close",
+      "preFixFailure": null
+    },
+    {
+      "name": "overlay-stack registration of a portalled sheet",
+      "pass": true,
+      "detail": "the selector finds nothing, the retained reference finds the sheet, and the stack dismisses it",
+      "preFixFailure": null
+    },
+    {
+      "name": "the backdrop's pointer contract, both directions",
+      "pass": true,
+      "detail": "default is modal (stylesheet value stands) and the opt-out reads \"none\"",
+      "preFixFailure": null
+    }
+  ]
 }

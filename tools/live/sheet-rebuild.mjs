@@ -31,6 +31,12 @@ import { stamp } from "./evidence.mjs";
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const STAMP_PATH = "tools/live/sheet-rebuild.json";
+const PRE_FIX_FAILURES = new Map([
+  ["a tap that never moves", "dismissed the sheet — the press is not reaching the bar, and every gesture above is passing for that reason rather than its own"],
+  ["sort sheet (real SortPanelRenderer, add-sort)", "a tap inside the panel the rebuild just created read as OUTSIDE"],
+  ["filter sheet (real FilterPanelRenderer, add-condition)", "a tap inside the panel the rebuild just created read as OUTSIDE"],
+  ["embedded filter sheet (real FilterPanelRenderer, portalled on phone)", "a tap inside the panel the rebuild just created read as OUTSIDE"],
+]);
 
 // ───────────────────────────────────────────────────────────────────
 // 2. BUNDLE
@@ -322,7 +328,22 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-stamp(STAMP_PATH, { cases: results.length + dragResult.length, barsLost: 0, gesturesMeasured: dragResult.length }, [
+const checks = [
+  ...results.map(({ surface: name, pass, detail }) => ({
+    name,
+    pass,
+    detail,
+    preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
+  })),
+  ...dragResult.map(({ name, pass, detail }) => ({
+    name,
+    pass,
+    detail,
+    preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
+  })),
+];
+
+stamp(STAMP_PATH, { cases: results.length + dragResult.length, barsLost: 0, gesturesMeasured: dragResult.length, checks }, [
   "tools/live/sheet-rebuild.mjs",
   "tools/live/sheet-rebuild-harness.ts",
   ...REQUIRED,

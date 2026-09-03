@@ -237,6 +237,289 @@ const CLAIMS = [
       });
     },
   },
+  {
+    phase: "031-sheet-lifecycle-ownership",
+    claim: "a closed sheet removes its body-mounted chrome",
+    was: 0,
+    recorded: 0,
+    runtime: {
+      artifact: "tools/live/sheet-teardown.json",
+      redLivesIn: "the sheet-teardown lane",
+      cases: [{
+        name: "DbModal with a detached host wrapper",
+        preFixFailure: "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed",
+      }],
+    },
+    measure() {
+      return readRuntimeChecks(this.runtime);
+    },
+  },
+  {
+    phase: "031-sheet-lifecycle-ownership",
+    claim: "one finger runs one action after a sheet rebuild",
+    was: 0,
+    recorded: 0,
+    runtime: {
+      artifact: "tools/live/sheet-rebuild.json",
+      redLivesIn: "the sheet-rebuild lane",
+      cases: [{
+        name: "a tap that never moves",
+        preFixFailure: "dismissed the sheet — the press is not reaching the bar, and every gesture above is passing for that reason rather than its own",
+      }],
+    },
+    measure() {
+      return readRuntimeChecks(this.runtime);
+    },
+  },
+  {
+    phase: "031-sheet-lifecycle-ownership",
+    claim: "a rebuilt sheet keeps an inside tap inside its panel",
+    was: 0,
+    recorded: 0,
+    runtime: {
+      artifact: "tools/live/sheet-rebuild.json",
+      redLivesIn: "the sheet-rebuild lane",
+      cases: [
+        "sort sheet (real SortPanelRenderer, add-sort)",
+        "filter sheet (real FilterPanelRenderer, add-condition)",
+        "embedded filter sheet (real FilterPanelRenderer, portalled on phone)",
+      ].map((name) => ({
+        name,
+        preFixFailure: "a tap inside the panel the rebuild just created read as OUTSIDE",
+      })),
+    },
+    measure() {
+      return readRuntimeChecks(this.runtime);
+    },
+  },
+  {
+    phase: "037-timeline-gantt-port",
+    claim: "the timeline bars carry the dependency-link affordance the seam gates",
+    was: 5,
+    recorded: 0,
+    // A bar without both endpoint dots cannot expose the dependency interaction. `was` is this
+    // measure run on the landing commit's parent tree, where only the one timeline fixture existed
+    // and all five of its bars were dotless; the four extra scale fixtures arrived with the fix.
+    async measure(page) {
+      let missing = 0;
+      for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
+        const s = SCENARIOS.find((x) => x.id === id);
+        if (!s) continue;
+        await load(page, s.html());
+        missing += await page.evaluate(() =>
+          [...document.querySelectorAll(".db-timeline-event")]
+            .filter((bar) => bar.querySelectorAll(".db-timeline-link-dot").length < 2).length);
+      }
+      return missing;
+    },
+  },
+  {
+    phase: "037-timeline-gantt-port",
+    claim: "all five timeline scales carry the ported header, grid, weekend and today fills",
+    was: 0,
+    recorded: 5,
+    // The port's red was 0 of 17 module-map rows rewritten; its green recorded the captures read
+    // at five scales. A day window is one weekday, so the day fixture carries no weekend tick by
+    // construction — the weekend requirement applies to the four multi-day scales.
+    async measure(page) {
+      let complete = 0;
+      for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
+        const s = SCENARIOS.find((x) => x.id === id);
+        if (!s) continue;
+        await load(page, s.html());
+        complete += await page.evaluate(({ id: scaleId }) => {
+          const hasBars = document.querySelectorAll(".db-timeline-event").length > 0;
+          const hasTicks = document.querySelectorAll(".db-timeline-tick").length > 0;
+          const hasToday = document.querySelectorAll(".db-timeline-today-line").length > 0;
+          const hasWeekend = document.querySelectorAll(".db-timeline-tick.is-weekend").length > 0;
+          return hasBars && hasTicks && hasToday && (scaleId === "timeline-view-day" || hasWeekend) ? 1 : 0;
+        }, { id });
+      }
+      return complete;
+    },
+  },
+  {
+    phase: "038-board-kanban-port",
+    claim: "the board card carries the ported kanban hierarchy",
+    was: 1,
+    recorded: 10,
+    // The complete hierarchy is required so a card cannot look present while omitting its content
+    // region or the affordance that opens it.
+    async measure(page) {
+      const s = SCENARIOS.find((x) => x.id === "board-view");
+      if (!s) return -1;
+      await load(page, s.html());
+      return page.evaluate(() => {
+        const column = document.querySelector(".db-board-column");
+        const card = document.querySelector(".db-board-card");
+        if (!column || !card) return 0;
+        const checks = [
+          column.querySelector(".db-board-column-topbar") !== null,
+          card.querySelector(".db-board-card-controls") !== null,
+          card.querySelector(".db-board-card-priority-strip") !== null,
+          card.querySelector(".db-board-card-body") !== null,
+          card.querySelector(".db-board-card-body > .db-board-card-parent") !== null,
+          card.querySelector(".db-board-card-body > .db-record-title-line") !== null,
+          card.querySelector(".db-record-title-line .db-board-card-title") !== null,
+          card.querySelector(".db-record-title-line .db-board-card-chips") !== null,
+          card.querySelector(".db-board-card-meta") !== null,
+          card.querySelectorAll(".db-board-card-meta .db-board-card-field").length >= 2,
+        ];
+        return checks.filter(Boolean).length;
+      });
+    },
+  },
+  {
+    phase: "038-board-kanban-port",
+    claim: "the board topbar and priority strip resolve their status colours from the token ladder",
+    was: 2,
+    recorded: 0,
+    // Both status-colour surfaces must exist before their computed paint can be meaningful.
+    async measure(page) {
+      const s = SCENARIOS.find((x) => x.id === "board-view");
+      if (!s) return -1;
+      await load(page, s.html());
+      return page.evaluate(() => {
+        let bad = 0;
+        for (const selector of [".db-board-column-topbar", ".db-board-card-priority-strip"]) {
+          const elements = [...document.querySelectorAll(selector)];
+          if (elements.length === 0) {
+            bad += 1;
+            continue;
+          }
+          for (const el of elements) {
+            const bg = getComputedStyle(el).backgroundColor;
+            if (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") bad += 1;
+          }
+        }
+        return bad;
+      });
+    },
+  },
+  {
+    phase: "039-calendar-parity-port",
+    claim: "the calendar parity surface carries completion, weekend and calm-empty markers",
+    was: 4,
+    recorded: 0,
+    // Each probe represents a separate surface contract, and a missing fixture must count as a
+    // failure rather than making an empty query look green.
+    async measure(page) {
+      const probes = [
+        { id: "calendar-month-view", check: () =>
+          [...document.querySelectorAll(".db-calendar-month-segment")].some((el) => el.classList.contains("is-completed")) ? 0 : 1 },
+        { id: "calendar-week-time-grid", check: () =>
+          document.querySelectorAll(".db-calendar-time-header-day.is-weekend").length > 0 ? 0 : 1 },
+        { id: "calendar-month-view", check: () =>
+          document.querySelectorAll(".db-calendar-backlog-empty").length > 0 ? 0 : 1 },
+        { id: "calendar-empty-state", check: () => {
+          const title = document.querySelector(".db-empty-card-title");
+          return title && title.textContent.trim() === "No date property" ? 0 : 1;
+        } },
+      ];
+      let missing = 0;
+      for (const probe of probes) {
+        const s = SCENARIOS.find((x) => x.id === probe.id);
+        if (!s) { missing += 1; continue; }
+        await load(page, s.html());
+        missing += await page.evaluate(probe.check);
+      }
+      return missing;
+    },
+  },
+  {
+    phase: "039-calendar-parity-port",
+    claim: "a completed event dims to 0.82 and strikes its title through in the done accent",
+    was: 1,
+    recorded: 0,
+    // A missing completed marker is a failed treatment, even when no descendant exists to style.
+    async measure(page) {
+      const s = SCENARIOS.find((x) => x.id === "calendar-month-view");
+      if (!s) return -1;
+      await load(page, s.html());
+      return page.evaluate(() => {
+        let bad = 0;
+        const segments = [...document.querySelectorAll(".db-calendar-month-segment.is-completed")];
+        if (segments.length === 0) return 1;
+        for (const seg of segments) {
+          if (getComputedStyle(seg).opacity !== "0.82") bad += 1;
+          const title = seg.querySelector(".db-calendar-month-title");
+          if (!title || !getComputedStyle(title).textDecorationLine.includes("line-through")) bad += 1;
+        }
+        return bad;
+      });
+    },
+  },
+  {
+    phase: "040-subtask-tree-port",
+    claim: "the subtask tree fixtures carry the depth and progress markers the relation derives",
+    was: 2,
+    recorded: 0,
+    // Both rendered surfaces need their depth marker; a missing fixture must count as a failure.
+    async measure(page) {
+      let missing = 0;
+      for (const id of ["board-subtask-tree", "timeline-subtask-tree"]) {
+        const s = SCENARIOS.find((x) => x.id === id);
+        if (!s) { missing += 1; continue; }
+        await load(page, s.html());
+        missing += await page.evaluate(() => document.querySelectorAll("[data-subtask-depth]").length > 0 ? 0 : 1);
+      }
+      return missing;
+    },
+  },
+  {
+    phase: "040-subtask-tree-port",
+    claim: "the board and timeline surfaces both render the subtask tree",
+    was: 0,
+    recorded: 2,
+    // The surface leg's red was the data layer landing with no view reading it; its green is the
+    // two surfaces that now do. The fixtures mirror both, so this holds that both still carry the
+    // tree markup.
+    async measure(page) {
+      let surfaces = 0;
+      for (const id of ["board-subtask-tree", "timeline-subtask-tree"]) {
+        const s = SCENARIOS.find((x) => x.id === id);
+        if (!s) continue;
+        await load(page, s.html());
+        surfaces += await page.evaluate(() => document.querySelectorAll("[data-subtask-depth]").length > 0 ? 1 : 0);
+      }
+      return surfaces;
+    },
+  },
+  {
+    phase: "041-shared-ui-ux-port",
+    claim: "the empty-card message is a paragraph in the renderer",
+    was: 1,
+    recorded: 0,
+    // The element type is the product change; a stylesheet rule can exist while the renderer still emits a div.
+    measure() {
+      const source = readFileSync(join(REPO, "src/views/empty-state-renderer.ts"), "utf8");
+      return /content\.createEl\("p",\s*\{[\s\S]*?cls: "db-empty-card-message"/.test(source) ? 0 : 1;
+    },
+  },
+  {
+    phase: "041-shared-ui-ux-port",
+    claim: "the timeline event bar is a group holding a native trigger that clears the 28px floor",
+    was: 10,
+    recorded: 0,
+    // The event container must remain a group while its native trigger owns the interaction and
+    // clears the minimum target size. `was` is this measure on the landing commit's parent tree:
+    // five bars, each a bare button with no trigger inside it, which is two faults per bar.
+    async measure(page) {
+      const s = SCENARIOS.find((x) => x.id === "timeline-view");
+      if (!s) return -1;
+      await load(page, s.html());
+      return page.evaluate(() => {
+        let bad = 0;
+        for (const bar of document.querySelectorAll(".db-timeline-event")) {
+          if (bar.tagName === "BUTTON") bad += 1;
+          const trigger = bar.querySelector(".db-timeline-event-trigger");
+          if (!trigger) bad += 1;
+          else if (trigger.getBoundingClientRect().height < 28) bad += 1;
+        }
+        return bad;
+      });
+    },
+  },
 ];
 
 // ───────────────────────────────────────────────────────────────────
@@ -246,6 +529,25 @@ const CLAIMS = [
 const css = readFileSync(join(REPO, "styles.css"), "utf8");
 const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
 const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8");
+
+// Runtime lifecycle claims are valid only when their lane has recorded the named passing case
+// and the failure text that made the case worth keeping.
+function readRuntimeChecks(definition) {
+  if (!definition || !Array.isArray(definition.cases)) return 1;
+  const path = join(REPO, definition.artifact);
+  if (!existsSync(path)) return 1;
+  let record;
+  try {
+    record = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return 1;
+  }
+  const checks = Array.isArray(record.checks) ? record.checks : [];
+  return definition.cases.every(({ name, preFixFailure }) => {
+    const check = checks.find((candidate) => candidate.name === name);
+    return check?.pass === true && check.preFixFailure === preFixFailure;
+  }) ? 0 : 1;
+}
 
 async function load(page, html) {
   await page.setContent(`<body><div id="shot">${html}</div></body>`);
@@ -276,6 +578,22 @@ for (const c of CLAIMS) {
   console.log(`         recorded ${c.recorded}, now ${actual}${held ? "" : `  (the defect stood at ${c.was})`}`);
 }
 await browser.close();
+
+// The claim set is itself a ratchet, the same shape as the renderer-coverage stamp: an entry
+// removed by a later phase must red this lane rather than silently shrinking the re-asserted set.
+// The stamped count is the published one, so the first run after a removal compares against the
+// last run that still carried the entry.
+let published = 0;
+if (existsSync(join(REPO, "tools/live/replay.json"))) {
+  const record = JSON.parse(readFileSync(join(REPO, "tools/live/replay.json"), "utf8"));
+  published = Array.isArray(record.claims) ? record.claims.length : 0;
+}
+if (CLAIMS.length < published) {
+  console.error(`replay: FAIL — ${published - CLAIMS.length} required claim(s) are missing: `
+    + `${published} published, this run carries ${CLAIMS.length}`);
+  console.error("  removing an entry is how a gate stops covering what its wording claims; restore it");
+  process.exit(1);
+}
 
 // Dated so the freshness lane can see it. Every claim above is measured by loading a fixture and
 // reading computed style, so the files that decide the answer are enumerable -- which is the whole

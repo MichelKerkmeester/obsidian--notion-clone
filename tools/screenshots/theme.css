@@ -306,6 +306,17 @@ button.mod-warning {
   --text-color: var(--text-on-accent);
 }
 
+/* The primary button. The plugin styles only its placement and reads the modifier from the
+   host, so with no stand-in here every CTA photographed in the neutral button style — the empty
+   state's "Add property" and the calendar empty card's "Select date property" among them.
+   TRANSCRIBED from the installed application stylesheet of Obsidian 1.13.4 (app.css, button.mod-cta).
+   The hover and mobile-tap arms are deliberately left out: a capture has no pointer, so they
+   would be rules that never run. */
+button.mod-cta {
+  background-color: var(--interactive-accent);
+  --text-color: var(--text-on-accent);
+}
+
 /* The phone form is a different button, not the same one narrower: the host drops the red fill and
    states the destructive meaning in red bold text instead. Without it the phone capture of a
    destructive modal shows the desktop button. */

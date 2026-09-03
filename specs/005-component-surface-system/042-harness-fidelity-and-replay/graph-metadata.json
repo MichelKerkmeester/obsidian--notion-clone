@@ -49,17 +49,18 @@
       "implementation-summary.md",
       "tools/live/render-assertion-harness.ts",
       "tools/live/replay.mjs",
-      "tools/lane/check-lane.mjs",
-      "tools/screenshots/capture.mjs",
       "tools/live/render-assertions.mjs",
+      "tools/live/render-scenario-utils.mjs",
+      "tools/live/render-scenario-utils.test.mjs",
       "tools/live/renderer-coverage.json",
       "tools/live/replay.json",
+      "tools/live/sheet-rebuild.mjs",
+      "tools/live/sheet-teardown.mjs",
+      "tools/live/unstyled-links.json",
       "tools/screenshots/runtime-vars.css",
-      "tools/live/touch-targets.mjs",
-      "tools/live/unstyled-links.mjs",
       "tools/screenshots/theme.css",
       "tools/lane/css-lane.json",
-      "src/views/chart-renderer.ts"
+      "tools/lane/check-lane.mjs"
     ],
     "entities": [
       {
@@ -111,21 +112,21 @@
         "source": "derived"
       },
       {
-        "name": "check-lane.mjs",
-        "kind": "file",
-        "path": "tools/lane/check-lane.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "capture.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/capture.mjs",
-        "source": "derived"
-      },
-      {
         "name": "render-assertions.mjs",
         "kind": "file",
         "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-scenario-utils.mjs",
+        "kind": "file",
+        "path": "tools/live/render-scenario-utils.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-scenario-utils.test.mjs",
+        "kind": "file",
+        "path": "tools/live/render-scenario-utils.test.mjs",
         "source": "derived"
       },
       {
@@ -141,21 +142,27 @@
         "source": "derived"
       },
       {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-teardown.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-teardown.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "unstyled-links.json",
+        "kind": "config",
+        "path": "tools/live/unstyled-links.json",
+        "source": "derived"
+      },
+      {
         "name": "runtime-vars.css",
         "kind": "file",
         "path": "tools/screenshots/runtime-vars.css",
-        "source": "derived"
-      },
-      {
-        "name": "touch-targets.mjs",
-        "kind": "file",
-        "path": "tools/live/touch-targets.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "unstyled-links.mjs",
-        "kind": "file",
-        "path": "tools/live/unstyled-links.mjs",
         "source": "derived"
       },
       {
@@ -171,9 +178,9 @@
         "source": "derived"
       },
       {
-        "name": "chart-renderer.ts",
-        "kind": "code",
-        "path": "src/views/chart-renderer.ts",
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
         "source": "derived"
       },
       {
@@ -199,17 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Three DONE-table rows in the parent's `goal.md` share one shape: a check's green, or the replay",
     "created_at": "2026-09-03T20:48:20Z",
-    "last_save_at": "2026-09-03T20:58:01.174Z",
+    "last_save_at": "2026-09-03T23:05:22.110Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:392615015def5e5fe546014ff2b0d3f2dfe5215ae13cccd24bb59dfd028c5367",
+    "source_fingerprint": "sha256:5fab6c99551b2640ea5f20a88819bc0c7d00dc0c64b39eac6424671996ec9dc5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4b13174bdfbb3f5d2c7d453bcbb2fbe63e3f4a440eec8bb6f58a0607f86c12c2",
       "plan.md": "ec0f2c8859346b2a1039f4404fa4d5cc2eb36cac7b1ab2e45c22c2ee428e4b83",
-      "tasks.md": "f26f4c20f52cbf0ca501ce72187f868e59f51974757eef6ea84b0883397e7ee6",
-      "implementation-summary.md": "7ceac9c037f19a6a10a26fe3ee54085142e02410f5adb1dedefdc4760447c45c"
+      "tasks.md": "fec61e651f1669422da1507c6ea4691645ff3a087a69bed92db90bb0bc4eef5f",
+      "implementation-summary.md": "9dbaa34a6c64eec490bd0239d5b66fbde5999024f3451c72d1024593232249ad"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -32,9 +32,12 @@ contextType: "general"
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Read `tools/live/render-assertion-harness.ts` in full and confirm the existing bag/scenario contract before extending it (`tools/live/render-assertion-harness.ts`)
-- [ ] T002 Read `src/views/chart-renderer.ts`'s constructor and public surface to determine whether it fits the existing bag pattern (`src/views/chart-renderer.ts`)
-- [ ] T003 [P] Confirm each replay-entry SHA (`98da630`, `0c92f4d`, `85ff504`, `037`-`041`'s landing commits) still exists in `git log` (repo)
+- [x] T001 Read `tools/live/render-assertion-harness.ts` in full and confirm the existing bag/scenario contract before extending it (`tools/live/render-assertion-harness.ts`)
+      Evidence: the contract now carries a calendar `scale` member (`render-assertion-harness.ts:171`) and a `"chart"` renderer (`:172`); the scenario runner branches at `:1182` (calendar) and `:1222` (chart).
+- [x] T002 Read `src/views/chart-renderer.ts`'s constructor and public surface to determine whether it fits the existing bag pattern (`src/views/chart-renderer.ts`)
+      Evidence: `ChartRenderer` is constructed with no arguments (`chart-renderer.ts:266-272`); its bag is the actions object the render call takes, and both hosts pass the same two members — `database-view.ts:10634-10641`, `embedded-database-renderer.ts:804-817`. The harness builds the same bag (`render-assertion-harness.ts:511-516`) and the runner's census pins it (`render-assertions.mjs:190`).
+- [x] T003 [P] Confirm each replay-entry SHA (`98da630`, `0c92f4d`, `85ff504`, `037`-`041`'s landing commits) still exists in `git log` (repo)
+      Evidence: `git log -1 --format="%h %s"` on `98da630`, `0c92f4d`, `85ff504`, `0262386`, `55bff9b`, `b9e2321`, `a6fcd31`, `57043e7`, `1588576`, `1d611db`, `00b7bd2`, `cb9aedf`, `25ae3a9` — all thirteen resolve on this worktree's history; each commit body and the owning phase's `goal.md` supplied the recorded red/green numbers the replay entries carry (`tools/live/replay.mjs:241-539`).
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -42,22 +45,65 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 Measure and record the chart view's current renderer-coverage state (uncovered) before writing any scenario (`tools/live/renderer-coverage.json`)
-- [ ] T005 Add a chart-renderer render-assertion scenario with an owned negative control, observed red before green (`tools/live/render-assertion-harness.ts`, `tools/live/render-assertions.mjs`)
-- [ ] T006 Measure and record the calendar lane's current scale coverage (month-only) before writing the week/day scenarios (`tools/live/render-assertion-harness.ts`)
-- [ ] T007 Add calendar `scale: "week"` and `scale: "day"` scenarios, each with an owned negative control and bounds set from measured reads (`tools/live/render-assertion-harness.ts`, `tools/live/render-assertions.mjs`)
-- [ ] T008 Re-stamp `renderer-coverage.json` and confirm the ratchet does not decrease (`tools/live/renderer-coverage.json`)
-- [ ] T009 [P] Add replay claim entries for report 29 (`98da630`, `0c92f4d`), each with its recorded pre-fix number (`tools/live/replay.mjs`)
-- [ ] T010 [P] Add replay claim entries for reports 34-36 (`85ff504`), each with its recorded pre-fix number (`tools/live/replay.mjs`)
-- [ ] T011 [P] Add replay claim entries for phases `037`-`041`'s landings, each with its recorded pre-fix number; skip `040` until 1.4.7 ships if it has not by the time this task runs (`tools/live/replay.mjs`)
-- [ ] T012 Confirm the replay lane reds when a required entry is deliberately removed, then restore it (`tools/live/replay.mjs`)
-- [ ] T013 [P] Remove or declare the pinned `--db-calendar-day-min-height` / `--db-calendar-month-week-min-height` formula in `runtime-vars.css`, citing `getCellMinHeight()`'s real default (`tools/screenshots/runtime-vars.css`)
-- [ ] T014 [P] Route `touch-targets.mjs` to the constructed renderer where the calendar/chart scenarios now cover it, or declare the remaining fixture dependency with its criterion (`tools/live/touch-targets.mjs`)
-- [ ] T015 [P] Route `unstyled-links.mjs` the same way (`tools/live/unstyled-links.mjs`)
-- [ ] T016 [P] Declare or add Obsidian's `.mod-cta` rule to `theme.css` (`tools/screenshots/theme.css`)
+- [x] T004 Measure and record the chart view's current renderer-coverage state (uncovered) before writing any scenario (`tools/live/renderer-coverage.json`)
+      Evidence: before this leg, `grep -in chart tools/live/render-assertion-harness.ts` returned nothing and the stamp read `constructed: 6` (`renderer-coverage.json` pre-edit). After: `constructed: 7` distinct renderers of 22 renderer files (`renderer-coverage.json:21`), published 6 → 7.
+- [x] T005 Add a chart-renderer render-assertion scenario with an owned negative control, observed red before green (`tools/live/render-assertion-harness.ts`, `tools/live/render-assertions.mjs`)
+      Evidence: scenario at `render-assertions.mjs:86` (registered), constructed at `render-assertion-harness.ts:1222-1241`; assertions at `:1023-1042`; provenance tag at `:614`. Red first: `RENDER_READ_CONTROL=per-item node tools/live/render-assertions.mjs` — `chart/file-view: no forced layout inside the chart build — 1630 layout reads during render, bound 48`, exit 1. Green: disarmed run reads 30 against the same bound, exit 0. Bound basis: the measured 30 (theme token reads + Chart.js canvas sizing) plus margin, far below the armed 1630.
+- [x] T006 Measure and record the calendar lane's current scale coverage (month-only) before writing the week/day scenarios (`tools/live/render-assertion-harness.ts`)
+      Evidence: the pre-edit runner called `makeCalendarConfig(columns, "month")` only; the lane now constructs all three scales (`render-assertion-harness.ts:1195`), with scenarios registered at `render-assertions.mjs:80-83`.
+- [x] T007 Add calendar `scale: "week"` and `scale: "day"` scenarios, each with an owned negative control and bounds set from measured reads (`tools/live/render-assertion-harness.ts`, `tools/live/render-assertions.mjs`)
+      Evidence: week/day branches at `render-assertion-harness.ts:1199-1201`, assertion suite at `:1000-1016`. Red first (armed): week 14 reads vs bound 8, day 1600 vs 8, both bags, exit 1. Green: both read 0 vs 8, exit 0 — the measured basis (0 reads at both scales) is the recorded bound basis. Week arms the shared per-item seam; day cannot exceed the bound through that seam (a day column caps its all-day lanes at six), so it arms the per-row render-entry control (`:1097-1105`), the same shape the bound exists to catch.
+- [x] T008 Re-stamp `renderer-coverage.json` and confirm the ratchet does not decrease (`tools/live/renderer-coverage.json`)
+      Evidence: stamped `constructed: 7, total: 22` (`renderer-coverage.json:21-22`); the lane wording is `coverage 7 distinct renderers of 22 renderer files exercised by this check (published 6 → 7)`, exit 0. The count is distinct renderer names via `countConstructed` (`render-assertions.mjs:362`, `tools/live/render-scenario-utils.mjs`).
+- [x] T009 [P] Add replay claim entries for report 29 (`98da630`, `0c92f4d`), each with its recorded pre-fix number (`tools/live/replay.mjs`)
+      Evidence: `98da630`: the static parent-tree probe is 0 → delegated runtime result 0; the named teardown case must be PASS with `1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed` as its pre-fix failure. `0c92f4d`: the static parent-tree probe is 0 → delegated runtime result 0; the named rebuild case records `dismissed the sheet — the press is not reaching the bar, and every gesture above is passing for that reason rather than its own`. Missing artifacts or cases return 1.
+- [x] T010 [P] Add replay claim entries for reports 34-36 (`85ff504`), each with its recorded pre-fix number (`tools/live/replay.mjs`)
+      Evidence: `85ff504`: the static parent-tree probe is 0 → delegated runtime result 0 across the three real sort/filter rebuild cases; the red lives in `sheet-rebuild.json`, whose pre-fix failure text is `a tap inside the panel the rebuild just created read as OUTSIDE`.
+- [x] T011 [P] Add replay claim entries for phases `037`-`041`'s landings, each with its recorded pre-fix number; skip `040` until 1.4.7 ships if it has not by the time this task runs (`tools/live/replay.mjs`)
+      Evidence: `tools/live/replay.mjs`. Parent-tree → current pairs, each re-measured by running this entry's own measure on `<sha>^`, are `0262386: 5 → 0`, `55bff9b: 0 → 5` (kept), `b9e2321: 1 → 10`, `a6fcd31: 2 → 0`, `57043e7: 4 → 0`, `1588576: 1 → 0`, `1d611db: 2 → 0`, `00b7bd2: 0 → 2` (kept), `cb9aedf: 1 → 0`, and `25ae3a9: 10 → 0`; `040` remains included.
+- [x] T012 Confirm the replay lane reds when a required entry is deliberately removed, then restore it (`tools/live/replay.mjs`)
+      Evidence: the claim-set ratchet still compares 21 entries with the published count and returns 1 when an entry is removed. The mutation set retains delegated runtime pairs `0 → 0` × 3 and static pairs `5 → 0`, `0 → 5`, `1 → 10`, `2 → 0`, `4 → 0`, `1 → 0`, `2 → 0`, `0 → 2`, `1 → 0`, `10 → 0`; runtime entries also return 1 when their artifact, named case, PASS state, or recorded pre-fix failure text is absent.
+- [x] T013 [P] Remove or declare the pinned `--db-calendar-day-min-height` / `--db-calendar-month-week-min-height` formula in `runtime-vars.css`, citing `getCellMinHeight()`'s real default (`tools/screenshots/runtime-vars.css`)
+      Evidence: `tools/screenshots/runtime-vars.css:57-63` now pins the product default `112px` for both variables (the renderer writes `config.calendarCellMinHeight ?? 112` clamped to 72-400 at `calendar-renderer.ts:2196-2199` and never measures the pane), replacing the `calc((100vh - 150px) / 5)` viewport formula and its stand-in comment. Removed, not declared: the harness now carries the product's real value.
+- [x] T014 [P] Route `touch-targets.mjs` to the constructed renderer where the calendar/chart scenarios now cover it, or declare the remaining fixture dependency with its criterion (`tools/live/touch-targets.mjs`)
+      Evidence: declared, not routed — the pipeline rewrite is out of this phase's scope. See the fixture-lane provability record below.
+- [x] T015 [P] Route `unstyled-links.mjs` the same way (`tools/live/unstyled-links.mjs`)
+      Evidence: declared, not routed. See the fixture-lane provability record below.
+- [x] T016 [P] Declare or add Obsidian's `.mod-cta` rule to `theme.css` (`tools/screenshots/theme.css`)
+      Evidence: `tools/screenshots/theme.css:309-318` declares `button.mod-cta { background-color: var(--interactive-accent); --text-color: var(--text-on-accent); }`, transcribed from the installed application stylesheet of Obsidian 1.13.4 (`/Applications/Obsidian.app/Contents/Resources/obsidian.asar`, `app.css` `button.mod-cta` — the 1.13.4 bundle on this machine; the hover and mobile-tap arms are omitted because a capture has no pointer, mirroring the `mod-warning` precedent). Blast radius: two fixture sources carry `mod-cta` (`tools/screenshots/scenarios/core.mjs` empty-state, `tools/screenshots/scenarios/temporal.mjs` calendar-empty-state); their captures photograph the accent fill after recapture.
 - [ ] T017 Correct `check-lane.mjs`'s `changedCaptures()` to compare by content/layout hash or a declared tolerance instead of raw git byte-diff (`tools/lane/check-lane.mjs`)
+      Note: not part of the initial pass (D14 leg a); the manifest-compare leg owns this row.
 - [ ] T018 A/B the manifest-compare fix against a clean HEAD clone; confirm it still catches a deliberately mutated capture (repo, per parent D12)
+      Note: same leg as T017.
 <!-- /ANCHOR:phase-2 -->
+
+---
+
+### Fixture-lane provability record (touch-targets, unstyled-links)
+
+Both lanes read hand-written fixture markup (`scenarios.mjs` `html()`) against `styles.css` plus
+the harness stand-ins — they never construct a renderer. The render-assertion lane is the
+constructed-renderer check, and it is where a renderer regression must be caught. Recorded here
+is exactly what each fixture lane can and cannot prove, so the row-6 dependency list stays
+bounded and named:
+
+**`tools/live/touch-targets.mjs`** can prove: for every scenario fixture at phone width under a
+coarse pointer, each interactive element's bounding box clears the 28px floor; the coarse-pointer
+premise holds on every measured page; and the count of sub-floor controls does not grow past the
+recorded baseline. It cannot prove: (1) anything about an element no fixture contains — a control
+the renderer builds that no fixture mirrors is invisible to this lane, and the render-assertion
+lane is the check that constructs the renderers; (2) the real renderers' output — fixture markup
+can drift from what the renderers build, which is exactly the failure the provenance marker and
+the fixture-parity tests exist to catch; (3) hit area — a bounding box is not a hit area, so an
+overlapping element or a parent-carried press can still make a clearing control hard to hit; (4)
+any device behaviour — no device is involved.
+
+**`tools/live/unstyled-links.mjs`** can prove: no link in any fixture resolves to a user-agent
+default colour in either theme, and the harness's link tokens resolve. It cannot prove: (1) links
+the fixtures do not contain; (2) links the real renderers build, for the same fixture-vs-renderer
+reason as above; (3) that a colour the harness supplies equals the colour the host supplies — the
+lane catches silence (a token the harness never defines) but not disagreement (a token the harness
+defines wrongly), which is the pinned-values scan's half of the pair.
 
 ---
 

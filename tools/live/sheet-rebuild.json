@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-03T22:32:56.116Z",
+  "measuredAt": "2026-09-03T23:08:43.513Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "3b544af3e425",
+    "tools/live/sheet-rebuild.mjs": "32d05d74176a",
     "tools/live/sheet-rebuild-harness.ts": "c25e7d72b34a",
     "src/views/toolbar-renderer.ts": "145ddf231347",
     "src/views/popover-position.ts": "6cae246726c0",
@@ -13,5 +13,97 @@
   },
   "cases": 15,
   "barsLost": 0,
-  "gesturesMeasured": 4
+  "gesturesMeasured": 4,
+  "checks": [
+    {
+      "name": "group sheet (real ToolbarRenderer)",
+      "pass": true,
+      "detail": "the bar survived the rebuild",
+      "preFixFailure": null
+    },
+    {
+      "name": "chrome alone draws no bar",
+      "pass": true,
+      "detail": "no bar without a gesture, so an unwired one cannot be built",
+      "preFixFailure": null
+    },
+    {
+      "name": "attaching the gesture draws it",
+      "pass": true,
+      "detail": "the bar appeared with the gesture",
+      "preFixFailure": null
+    },
+    {
+      "name": "emptying a sheet panel (the mechanism)",
+      "pass": true,
+      "detail": "emptying destroyed the bar, as the producer case assumes",
+      "preFixFailure": null
+    },
+    {
+      "name": "re-asserting chrome restores it while the gesture lives",
+      "pass": true,
+      "detail": "the bar came back",
+      "preFixFailure": null
+    },
+    {
+      "name": "positioner-mounted sheet",
+      "pass": true,
+      "detail": "the bar it drew has a gesture attached",
+      "preFixFailure": null
+    },
+    {
+      "name": "a rebuild replaces the bar node, so a bar-bound listener would die",
+      "pass": true,
+      "detail": "the bar the gesture would have bound to is detached after the rebuild — a listener on it reaches nothing",
+      "preFixFailure": null
+    },
+    {
+      "name": "the panel is the same object across the rebuild",
+      "pass": true,
+      "detail": "the panel and its gesture registration both survive, which is why the drag still works",
+      "preFixFailure": null
+    },
+    {
+      "name": "sort sheet (real SortPanelRenderer, add-sort)",
+      "pass": true,
+      "detail": "a tap inside the rebuilt panel stayed inside the sheet",
+      "preFixFailure": "a tap inside the panel the rebuild just created read as OUTSIDE"
+    },
+    {
+      "name": "filter sheet (real FilterPanelRenderer, add-condition)",
+      "pass": true,
+      "detail": "a tap inside the rebuilt panel stayed inside the sheet",
+      "preFixFailure": "a tap inside the panel the rebuild just created read as OUTSIDE"
+    },
+    {
+      "name": "embedded filter sheet (real FilterPanelRenderer, portalled on phone)",
+      "pass": true,
+      "detail": "a tap inside the rebuilt panel stayed inside the sheet",
+      "preFixFailure": "a tap inside the panel the rebuild just created read as OUTSIDE"
+    },
+    {
+      "name": "a 120px drag after a rebuild",
+      "pass": true,
+      "detail": "dismissed, as the distance threshold requires",
+      "preFixFailure": null
+    },
+    {
+      "name": "a 40px flick reaches the handler, and the speed rule decides it",
+      "pass": true,
+      "detail": "the gesture staged on a rebuilt bar and the pointer is real; the shipped decision takes a genuine flick at 1.18 px/ms (true), refuses a brisk drag at 0.5 (false), refuses a tap that travelled nowhere (false) and refuses a finger that rested before lifting (false), against a 0.8 px/ms threshold. Whether THIS gesture closed the sheet (false) is not asserted: the harness cannot control how fast its own events arrive, and that number moved with machine load rather than with the tree",
+      "preFixFailure": null
+    },
+    {
+      "name": "a slow 40px drag",
+      "pass": true,
+      "detail": "sprang back, as a slow gesture short of the threshold should",
+      "preFixFailure": null
+    },
+    {
+      "name": "a tap that never moves",
+      "pass": true,
+      "detail": "left the sheet open, so the presses above are landing on the bar",
+      "preFixFailure": "dismissed the sheet — the press is not reaching the bar, and every gesture above is passing for that reason rather than its own"
+    }
+  ]
 }

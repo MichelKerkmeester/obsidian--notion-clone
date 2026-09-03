@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-03T22:31:53.212Z",
+  "measuredAt": "2026-09-03T23:07:40.554Z",
   "inputs": {
     "styles.css": "4c7b8b627ab9",
-    "tools/screenshots/theme.css": "241e526062cd",
-    "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+    "tools/screenshots/theme.css": "115be5a71b07",
+    "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-    "tools/live/replay.mjs": "a7bb3c7b715a"
+    "tools/live/replay.mjs": "295f7115dd42"
   },
   "claims": [
     {
@@ -70,6 +70,110 @@
       "was": 0,
       "recorded": 1,
       "actual": 1,
+      "held": true
+    },
+    {
+      "phase": "031-sheet-lifecycle-ownership",
+      "claim": "a closed sheet removes its body-mounted chrome",
+      "was": 0,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "031-sheet-lifecycle-ownership",
+      "claim": "one finger runs one action after a sheet rebuild",
+      "was": 0,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "031-sheet-lifecycle-ownership",
+      "claim": "a rebuilt sheet keeps an inside tap inside its panel",
+      "was": 0,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "037-timeline-gantt-port",
+      "claim": "the timeline bars carry the dependency-link affordance the seam gates",
+      "was": 5,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "037-timeline-gantt-port",
+      "claim": "all five timeline scales carry the ported header, grid, weekend and today fills",
+      "was": 0,
+      "recorded": 5,
+      "actual": 5,
+      "held": true
+    },
+    {
+      "phase": "038-board-kanban-port",
+      "claim": "the board card carries the ported kanban hierarchy",
+      "was": 1,
+      "recorded": 10,
+      "actual": 10,
+      "held": true
+    },
+    {
+      "phase": "038-board-kanban-port",
+      "claim": "the board topbar and priority strip resolve their status colours from the token ladder",
+      "was": 2,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "039-calendar-parity-port",
+      "claim": "the calendar parity surface carries completion, weekend and calm-empty markers",
+      "was": 4,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "039-calendar-parity-port",
+      "claim": "a completed event dims to 0.82 and strikes its title through in the done accent",
+      "was": 1,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "040-subtask-tree-port",
+      "claim": "the subtask tree fixtures carry the depth and progress markers the relation derives",
+      "was": 2,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "040-subtask-tree-port",
+      "claim": "the board and timeline surfaces both render the subtask tree",
+      "was": 0,
+      "recorded": 2,
+      "actual": 2,
+      "held": true
+    },
+    {
+      "phase": "041-shared-ui-ux-port",
+      "claim": "the empty-card message is a paragraph in the renderer",
+      "was": 1,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "041-shared-ui-ux-port",
+      "claim": "the timeline event bar is a group holding a native trigger that clears the 28px floor",
+      "was": 10,
+      "recorded": 0,
+      "actual": 0,
       "held": true
     }
   ],

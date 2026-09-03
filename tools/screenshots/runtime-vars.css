@@ -55,11 +55,12 @@
   --db-mobile-bar-height: 48px;
 
   --db-calendar-col-width: 140px;
-  /* The plugin measures these from the pane it is given, so a fixed stub leaves the
-     grid floating in dead space. Deriving them from the viewport reproduces the
-     stretch-to-fit the runtime performs. */
-  --db-calendar-day-min-height: calc((100vh - 150px) / 5);
-  --db-calendar-month-week-min-height: calc((100vh - 150px) / 5);
+  /* The renderer writes both of these inline from config.calendarCellMinHeight ?? 112, clamped
+     to 72-400 — it never measures the pane, so the viewport formula this file used to pin made
+     every capture denser than the product draws. The 112px default is the value the runtime
+     writes when nothing is configured, which is the state a screenshot implies. */
+  --db-calendar-day-min-height: 112px;
+  --db-calendar-month-week-min-height: 112px;
   --db-calendar-allday-rows: 1;
   --db-calendar-time-day-count: 7;
   --db-calendar-event-bg: var(--interactive-accent);

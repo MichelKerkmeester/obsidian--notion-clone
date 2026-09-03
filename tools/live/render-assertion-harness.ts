@@ -32,6 +32,9 @@
 // shipped their defects; board and gallery read 1 against the same bound of 8
 // with no red on this tree, and the table's per-row bound is new here, so all
 // three own a switch that reintroduces the shape the bound exists to catch.
+// The calendar week and day scenarios are new here and own the same switch;
+// the chart scenario's switch is separate, because the chart has no bag member
+// called per item.
 //
 // `RENDER_READ_CONTROL=per-item`, read by the runner and passed into
 // `runRenderAssertions`, arms it: the card and row renderers call the bag's
@@ -39,7 +42,9 @@
 // calls always name the field — and the armed wrapper reads the item's box at
 // that call. Board and gallery then read one per card plus the touch probe,
 // the table one per row plus its O(1) reads, and the check fails naming the
-// scenario; disarmed, each reads its O(1) count.
+// scenario; disarmed, each reads its O(1) count. The chart's armed wrapper
+// reads the host's box once per row at the render entry, since neither host
+// passes an action the renderer calls per item.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -48,6 +53,7 @@
 import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
 import { TableRenderer, type TableRendererActions } from "../../src/views/table-renderer";
 import { CalendarRenderer, type CalendarRendererActions } from "../../src/views/calendar-renderer";
+import { ChartRenderer, type ChartRendererActions } from "../../src/views/chart-renderer";
 import {
   CalendarTimelineRenderer,
   type CalendarTimelineRendererActions,
@@ -142,9 +148,27 @@ export const GALLERY_COLUMNS = 21;
 export const GALLERY_ROWS = 1600;
 export const GALLERY_FILL = 0.3;
 
+// The chart is fed the board bench's measured shape — the operator's twenty-one-column database
+// at thirty percent fill, grouped by the bench's five-status field. The chart has no bench of
+// its own: it draws one canvas, so its item count is the group count, and the row count only
+// enters through the aggregation, which is the path this shape exercises.
+export const CHART_COLUMNS = BOARD_COLUMNS;
+export const CHART_ROWS = BOARD_ROWS;
+export const CHART_FILL = BOARD_FILL;
+export const CHART_GROUPS = BOARD_GROUPS;
+
+// The chart pays a fixed token-read set — the theme colours are read once per render — plus
+// Chart.js's own canvas sizing, which is O(1) in the data. The bound sits above that fixed set
+// (measured 30 on this fixture) and far below any read that scales with rows; the armed control
+// re-introduces one read per row and must clear it by two orders of magnitude.
+export const MAX_CHART_LAYOUT_READS = 48;
+
 export interface ScenarioSpec {
-  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery";
+  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery" | "chart";
   bag: "file-view" | "embed";
+  /** The calendar scale to construct. Month is the reported surface; week and day draw a
+   *  narrower window and are covered here because the calendar ships all three. */
+  scale?: "month" | "week" | "day";
 }
 
 export interface AssertionResult {
@@ -486,6 +510,16 @@ function embedTimelineBag(): CalendarTimelineRendererActions {
   };
 }
 
+// The chart's bag is the actions object the render call takes, and the two hosts pass the same
+// two members — unlike the other views, the embed does not trim it, because neither host calls
+// any chart action during render. The census pins that sameness every run.
+function chartBag(): ChartRendererActions {
+  return {
+    onFilter: () => undefined,
+    onConfigChange: () => undefined,
+  };
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. PROVENANCE
 // ───────────────────────────────────────────────────────────────────
@@ -577,6 +611,20 @@ function tagTimelineRenders(): void {
   };
 }
 
+function tagChartRenders(): void {
+  const original = ChartRenderer.prototype.render;
+  ChartRenderer.prototype.render = function taggedRender(
+    container: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+    columns: ColumnDef[],
+    actions?: ChartRendererActions,
+  ): void {
+    original.call(this, container, config, rows, columns, actions);
+    container.setAttribute(PROVENANCE_ATTR, "chart-renderer");
+  };
+}
+
 // Armed once at module load, in the browser only: the harness is bundled into
 // the render entry and never runs outside it.
 tagListRenders();
@@ -585,6 +633,7 @@ tagBoardRenders();
 tagGalleryRenders();
 tagCalendarRenders();
 tagTimelineRenders();
+tagChartRenders();
 
 function provenanceResult(container: HTMLElement, expected: string): AssertionResult {
   const marker = container.getAttribute(PROVENANCE_ATTR);
@@ -945,6 +994,58 @@ function calendarAssertions(container: HTMLElement): AssertionResult[] {
   return results;
 }
 
+// The week and day scales draw a window of their own width — seven day columns, or one — and
+// the same empty-window rule applies: a scale that drew nothing satisfies every per-item bound
+// trivially, so each suite establishes a non-zero drawn count before the layout bound is read.
+function weekAssertions(container: HTMLElement, scale: "week" | "day"): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const dayCols = container.querySelectorAll<HTMLElement>(".db-calendar-week-day-col").length;
+  const segments = container.querySelectorAll<HTMLElement>(
+    ".db-calendar-week-allday-segment, .db-calendar-week-timed-event",
+  ).length;
+
+  results.push({
+    name: `the ${scale} view drew its day column${scale === "week" ? "s" : ""}`,
+    pass: scale === "week" ? dayCols === 7 : dayCols === 1,
+    detail: `${dayCols} day column(s), want ${scale === "week" ? 7 : 1}`,
+  });
+  results.push({
+    name: `the drawn ${scale} is not empty`,
+    pass: segments > 0,
+    detail: segments > 0
+      ? `${segments} event segments drawn from ${CALENDAR_ROWS} rows`
+      : "no event segment was drawn: every bound below this passes trivially on an empty window, "
+        + "so this run proves nothing about the calendar",
+  });
+  return results;
+}
+
+function chartAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const roots = container.querySelectorAll<HTMLElement>(".db-chart").length;
+  const empties = container.querySelectorAll<HTMLElement>(".db-chart-empty, .db-chart-number").length;
+  const canvases = container.querySelectorAll<HTMLElement>(".db-chart-canvas").length;
+  const titles = Array.from(container.querySelectorAll<HTMLElement>(".db-chart-title"))
+    .filter((el) => (el.textContent || "").trim().length > 0).length;
+
+  results.push({
+    name: "the chart drew its root exactly once",
+    pass: roots === 1 && empties === 0,
+    detail: `${roots} .db-chart root(s) and ${empties} empty/number state(s), want 1 and 0`,
+  });
+  results.push({
+    name: "the chart drew its canvas",
+    pass: canvases === 1,
+    detail: `${canvases} .db-chart-canvas element(s), want 1`,
+  });
+  results.push({
+    name: "the chart drew a non-empty title",
+    pass: titles === 1,
+    detail: `${titles} non-empty .db-chart-title element(s), want 1`,
+  });
+  return results;
+}
+
 function timelineAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
   const bars = container.querySelectorAll<HTMLElement>(".db-timeline-event").length;
@@ -984,6 +1085,22 @@ function armPerItemRead(bag: {
   bag.applyConditionalFormat = (element, row, config, targetField) => {
     if (targetField === undefined) element.getBoundingClientRect();
     original?.(element, row, config, targetField);
+  };
+}
+
+// The chart and the day-scale calendar share a structural constraint: neither renders enough
+// visible items for the per-item bag seam to exceed the bound — the chart draws one canvas, and
+// a day column caps its all-day lanes at six — so their armed control wraps the render entry and
+// reads the host's box once per row. That is the shape the bound exists to catch: reads that
+// scale with the data at the render boundary. Wrapping the instance rather than the prototype
+// keeps the seam on harness-owned data.
+function armPerRowReadAtRenderEntry(
+  render: (container: HTMLElement, config: ViewConfig, rows: RowData[], ...rest: unknown[]) => void,
+  container: HTMLElement,
+): (container: HTMLElement, config: ViewConfig, rows: RowData[], ...rest: unknown[]) => void {
+  return (c, config, rows, ...rest) => {
+    for (let i = 0; i < rows.length; i += 1) void container.getBoundingClientRect();
+    render(c, config, rows, ...rest);
   };
 }
 
@@ -1072,12 +1189,17 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec, c
       });
     }
   } else if (scenario.renderer === "calendar") {
+    const scale = scenario.scale || "month";
     const columns = makeCalendarColumns(CALENDAR_COLUMNS, "text");
     const rows = makeCalendarRows(CALENDAR_ROWS, columns, CALENDAR_FILL);
-    const config = makeCalendarConfig(columns, "month");
+    const config = makeCalendarConfig(columns, scale);
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
     bagKeys = Object.keys(bag).sort();
     const renderer = new CalendarRenderer(bag);
+    if (control === "per-item" && scale === "week") armPerItemRead(bag);
+    if (control === "per-item" && scale === "day") {
+      renderer.render = armPerRowReadAtRenderEntry(renderer.render.bind(renderer), container);
+    }
 
     const stopCounting = countLayoutReads();
     renderer.render(container, config, rows);
@@ -1085,7 +1207,9 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec, c
 
     results.push(provenanceResult(container, "calendar-renderer"));
     if (results[0].pass) {
-      results.push(...calendarAssertions(container));
+      results.push(...(scale === "month"
+        ? calendarAssertions(container)
+        : weekAssertions(container, scale)));
       results.push({
         name: "no forced layout inside the segment loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -1093,6 +1217,40 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec, c
           + (layoutReads > MAX_LAYOUT_READS
             ? " — reads scale with events, which is the quadratic shape that froze the app"
             : " (the window is sized once per render, not once per segment)"),
+      });
+    }
+  } else if (scenario.renderer === "chart") {
+    const columns = makeBoardColumns(CHART_COLUMNS, "text");
+    const rows = makeBoardRows(CHART_ROWS, columns, CHART_FILL, CHART_GROUPS);
+    const config = {
+      ...makeBoardConfig(columns),
+      viewType: "chart",
+      chartType: "bar",
+      chartAggregation: "count",
+      chartGroupField: BOARD_GROUP_FIELD,
+      schema: { columns, computedFields: [] },
+    } as ViewConfig;
+    const actions = chartBag();
+    bagKeys = Object.keys(actions).sort();
+    const renderer = new ChartRenderer();
+    if (control === "per-item") {
+      renderer.render = armPerRowReadAtRenderEntry(renderer.render.bind(renderer), container);
+    }
+
+    const stopCounting = countLayoutReads();
+    renderer.render(container, config, rows, columns, actions);
+    const layoutReads = stopCounting();
+
+    results.push(provenanceResult(container, "chart-renderer"));
+    if (results[0].pass) {
+      results.push(...chartAssertions(container));
+      results.push({
+        name: "no forced layout inside the chart build",
+        pass: layoutReads <= MAX_CHART_LAYOUT_READS,
+        detail: `${layoutReads} layout reads during render, bound ${MAX_CHART_LAYOUT_READS}`
+          + (layoutReads > MAX_CHART_LAYOUT_READS
+            ? " — reads scale with rows, which is the quadratic shape that froze the app"
+            : " (the theme token reads and Chart.js's own canvas sizing are the legitimate O(1) set)"),
       });
     }
   } else if (scenario.renderer === "timeline") {
