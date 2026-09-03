@@ -11,26 +11,25 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/041-shared-ui-ux-port"
-    last_updated_at: "2026-09-03T12:40:00Z"
-    last_updated_by: "leg-a-verified"
-    recent_action: "Verified leg a: empty-state, aria-pressed, default view; 45/45 green"
-    next_safe_action: "T004: styles.css token ladder red against variables.css, under the css-lane hold"
+    last_updated_at: "2026-09-03T13:45:00Z"
+    last_updated_by: "leg-b-verified"
+    recent_action: "Rebased and landed leg b: tokens, focus ring, timeline a11y; gate 25 green"
+    next_safe_action: "Operator device check: timeline bar trigger and link dots on a phone"
     blockers:
-      - "Not committed to git: leg a sits as uncommitted working-tree state on this worktree"
-      - "Not operator-confirmed"
-      - "CSS leg outstanding: .db-empty-card-message has no margin rule, so the new p element's ~20px is unstyled and the hand-typed empty-state screenshot fixture does not reach the changed element"
-      - "T004/T006/T007/T012-T014 (token reconciliation, primitive density, motion, cross-surface polish, gate) not started"
+      - "Not operator-confirmed: no capture was read on a real device, only in the harness"
+      - "The empty-state p margin is fixed in styles.css but the hand-typed empty-state fixture still does not reach the changed element, so no capture proves it"
+      - "T012's cross-surface polish is limited to the timeline; the board is 038's and the calendar was left alone"
     key_files:
-      - "src/views/empty-state-renderer.ts"
-      - "src/views/toolbar-renderer.ts"
-      - "src/settings.ts"
-      - "src/data/types.ts"
-      - "src/i18n.ts"
+      - "styles.css"
+      - "src/views/calendar-timeline-renderer.ts"
+      - "tools/screenshots/scenarios/temporal.mjs"
+      - "tools/screenshots/scenarios/temporal-tick-parity.test.mjs"
+      - "tools/lane/css-lane.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "041-shared-ui-ux-port-leg-a"
       parent_session_id: null
-    completion_pct: 27
+    completion_pct: 90
     open_questions: []
     answered_questions:
       - "The settings reconciliation adds a first-class PluginSettings.defaultViewType field now, rather than deferring to 037/038: no board/timeline display consumer exists in-tree yet, so the field ships with a normaliser and no dependent behaviour"
@@ -49,7 +48,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 041-shared-ui-ux-port |
-| **Completed** | 2026-09-03 (leg a only; uncommitted) |
+| **Completed** | 2026-09-03 (leg a and leg b) |
 | **Level** | 2 |
 <!-- /ANCHOR:metadata -->
 
@@ -90,6 +89,28 @@ unrecognised stored value. `SettingsTab.display()` renders a new dropdown row bo
 field yet; it ships as data with no dependent behaviour, matching the open question `goal.md`
 recorded for this leg.
 
+### Leg B: Shared Tokens, Focus, Motion and the Timeline's Nested Control
+
+Leg B lands the stylesheet half of the same vocabulary plus one real accessibility defect. The
+timeline event bar was a `button` that contained two `span[role="button"]` link dots: interactive
+content nested inside a button, which no assistive technology is required to expose and which the
+HTML parser is entitled to reshape. The bar is now a `div[role="group"]` holding a native
+`button.db-timeline-event-trigger` that fills it, with the two link dots as native sibling buttons.
+Enter and Space work because the elements are buttons, so the hand-rolled `keydown` handler that
+simulated them is gone, and the trigger's click guard against presses on the dots and the resize
+handles went with it: those are siblings of the trigger now, so a press on one never reaches it. Tab order follows the DOM: trigger, left dot, right dot.
+
+The trigger reaches 4px above and below the 20px bar to make a 28px target. Rows are 24px on a
+28px pitch, so the reach stops exactly at the midpoint between two bars and steals nothing from
+the neighbour. `touch-targets` measured the effect: 277 controls under 28px before, 253 after,
+against an unchanged baseline of 279, because a timeline bar is no longer itself a 20px button.
+
+Alongside it: four semantic role tokens (`--db-text-primary`, `--db-text-secondary`,
+`--db-surface-interactive`, `--db-surface-interactive-hover`), a `.db-surface` arm on the accent
+focus ring so a menu portalled to the body gets a focus ring rather than the host's default, and
+`margin: 0` on `.db-empty-card-message` — the CSS leg that leg a's own limitations list recorded as
+outstanding once the body element became a `p`.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -104,6 +125,13 @@ recorded for this leg.
 | `src/settings.test.ts` | Created | Pins the default-view row, persistence, gallery exclusion, normaliser |
 | `src/views/card-roving-tabindex.test.ts` | Modified | Pins 2D roving-tabindex coverage already present in the controller |
 | `src/views/accessibility-defects.test.ts` | Modified | Regex re-anchored to the disclosure helper's signature |
+| `styles.css` | Modified | Leg B: semantic role tokens, `.db-surface` focus arm, empty-state margin, timeline trigger and link-dot rules |
+| `src/views/calendar-timeline-renderer.ts` | Modified | Leg B: event bar to `div[role=group]` with a native trigger and native sibling link dots |
+| `tools/screenshots/scenarios/temporal.mjs` | Modified | Leg B: fixture mirrors the new markup and the renderer's clipped-start/end classes |
+| `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Modified | Leg B: parity test pinning fixture and renderer to the same classes and native controls |
+| `tools/lane/css-lane.json` | Modified | Leg B: lane re-acquired against `038`'s release and released naming 19 reviewed captures |
+| `screenshots/` (18 PNGs + manifest) | Modified | Leg B: recapture after the markup and stylesheet change |
+| `tools/live/*.json` (16 artefacts) | Modified | Leg B: re-measured after the stylesheet and renderer edit |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -134,6 +162,47 @@ lint debt; `node tools/naming/scan-comments.mjs` reports 0 hits; `node
 tools/naming/scan-failing-values.mjs` exits 0 (PASS, no newly ticked criterion without its failing
 value). `git diff --stat` confirms `mobile-bottom-sheet.ts`, `table-renderer.ts`, `calc*.ts` and
 `board-renderer.ts` carry no changes in this worktree.
+
+### Leg B, and the rebase that had to come first
+
+Leg B arrived as an external leg written against a branch that predated `a6fcd31`. In the interval
+`038` landed the board's stylesheet and rewrote `tools/screenshots/scenarios/shared.mjs` with a new
+containment parity test, and the external leg had done the same board work independently. The
+branch was checkpointed, rebased onto `origin/main`, and the collision resolved one hunk at a time:
+`038`'s board section won whole, so the board region of `styles.css` is byte-identical to
+`a6fcd31`, and `shared.mjs` merged to nothing because the two versions were byte-identical anyway.
+`shared.test.mjs` differed from `038`'s only in comment prose and `038`'s was kept. Seven textual
+conflicts in the board region were each read and resolved to `038`, and the board hunks that had
+auto-merged were reverted, including one that would have left two competing `.db-board-card-chip`
+rules in the cascade and turned a transparent card button opaque.
+
+The generated artefacts conflicted the same way. `screenshots/manifest.json` was resolved per hash —
+each renderer's hash from the leg that owns that file, `styles.css`'s from the rebased base — and
+the `tools/live/*.json` measurements were taken from `main` and re-measured afterwards, since a
+merged measurement would describe a tree that never existed.
+
+Three things in the leg were dropped rather than shipped. `--db-text-tertiary` and
+`--db-border-control` had 0 uses. An `animation: none` reset for `.db-overlay-enter` guarded an
+animation that class never has; it carries a transition only. A `.db-mobile-bottom-sheet` arm on the
+focus selector was redundant, because `mobile-bottom-sheet.ts:175` already adds
+`note-database-container` to the portalled panel, so the existing arm reaches it in every state. One
+was corrected rather than dropped: a phone card move button had gone from `transparent` to
+`var(--db-surface-interactive, transparent)`, which resolves to `--background-primary` and is opaque;
+the fallback had been mistaken for the effective value.
+
+One change in the leg was kept after a closer look and is worth naming, because it moves what the
+captures depict: the fixture now emits the renderer's `is-clipped-start` and `is-clipped-end`
+classes, so a bar running past the window edge loses its accent cap and fades as the renderer draws
+it. A third, `is-all-day` on every event unconditionally, was removed — the renderer sets it only
+for a date column, and the parity test had pinned it, which would have washed out every gantt bar
+the 1.4.4 landing gave its fill.
+
+Independently re-run after the rebase: `npx tsc --noEmit` exits 0; `npm run build` exits 0 (`main.js`
+is a release artefact here and was restored, not committed); `npx vitest run` reports 791 tests
+across 84 files; `npm run lint` reports 169 problems, measured against the same 169 by putting
+`HEAD`'s `calendar-timeline-renderer.ts` back in the tree and re-running; `scan-comments` and
+`scan-failing-values` exit 0; `check-lane` exits 0 both held and released; `evidence --check-all`
+reports all 16 artefacts fresh; `npm run gate` is 25 green with `SURFACE_PHASE` set and bare.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -148,6 +217,11 @@ value). `git diff --stat` confirms `mobile-bottom-sheet.ts`, `table-renderer.ts`
 | `accessibility-defects.test.ts` regex scoped to the helper's parameter signature rather than dropped or loosened further | The toggle button legitimately carries `aria-pressed` now; a whole-file scan would wrongly fail on it, so the check narrows to the disclosure helper it was written to police |
 | `defaultViewType` ships with no consumer | No board/timeline creator path reads it yet; adding one was out of this leg's named scope (T008), and the field's own tests (normaliser, gallery exclusion) stand on their own |
 | Roving tabindex left uncoded | `card-roving-tabindex.ts` already matched the reconciled active/focus language; the leg only needed tests proving it, not a rewrite |
+| The board keeps `038`'s stylesheet whole; the external leg's board restyle was dropped | Two independent attempts at the same section, and `038`'s is the one with read captures and a measured column-width contract behind it. Keeping both would have left duplicate `.db-board-card-chip` rules deciding by source order |
+| The timeline bar becomes a `div[role=group]` rather than keeping the button and moving the dots out | A `button` cannot contain interactive content, and the dots have to sit on the bar. Moving them out of the bar would have cost their positioning; making the bar a group and adding a trigger keeps both |
+| The trigger reaches 4px beyond the bar rather than growing the bar to 28px | Growing the bar changes every timeline capture's geometry and the row pitch the lanes are laid out on. 4px is exactly half the 8px between two bars, so the target grows and nothing overlaps |
+| Two unused tokens, a no-op animation reset and a redundant focus arm were removed from the leg | Each would have read as live to the next person. The lane's own outstanding list already records three dead blocks nobody dares touch; adding four more is the cheapest kind of debt to refuse |
+| `is-clipped-start`/`is-clipped-end` kept in the fixture, `is-all-day` removed | The first two are read off the fixture's own geometry and mirror what the renderer emits; the third asserts a column type the fixture never declares, and its parity assertion would have pinned the invention |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -168,6 +242,28 @@ value). `git diff --stat` confirms `mobile-bottom-sheet.ts`, `table-renderer.ts`
 | Comment scan (`node tools/naming/scan-comments.mjs`) | PASS — 0 hits |
 | Failing-value ratchet (`node tools/naming/scan-failing-values.mjs`) | PASS — exit 0 |
 | Keep-local scope (`git diff --stat`) | Confirmed empty for `mobile-bottom-sheet.ts`, `table-renderer.ts`, `calc*.ts`, `board-renderer.ts`, `card-roving-tabindex.ts` |
+
+### Leg B
+
+| Check | Result |
+|-------|--------|
+| Typecheck (`npx tsc --noEmit`) | PASS — exit 0 |
+| Build (`npm run build`) | PASS — exit 0; `main.js` restored, it is cut at release only |
+| Full unit suite (`npx vitest run`) | PASS — 791 tests / 84 files |
+| Lint (`npm run lint`) | 169 problems, exit 1 as always; HEAD re-measured at 169 by putting its `calendar-timeline-renderer.ts` back and re-running — 0 new |
+| Comment scan (`node tools/naming/scan-comments.mjs`) | PASS — exit 0, 368 files |
+| Failing-value ratchet (`node tools/naming/scan-failing-values.mjs`) | PASS — exit 0, 145 bare against a baseline of 145 |
+| Lane, held (`SURFACE_PHASE=041-shared-ui-ux-port node tools/lane/check-lane.mjs`) | PASS — exit 0, edit allowed |
+| Lane, released (`node tools/lane/check-lane.mjs`) | PASS — exit 0, "release names all 18 changed capture(s)" |
+| Touch reach (`node tools/live/touch-targets.mjs`) | PASS — exit 0; was 277 under 28px, now 253, baseline unchanged at 279 |
+| Screenshot freshness (`npm run screenshots:verify`) | PASS — exit 0, 256 entries match their sources |
+| Evidence freshness (`node tools/live/evidence.mjs --check-all`) | PASS — exit 0, 16 artefacts fresh after re-running the 13 the edit staled |
+| Gate (`SURFACE_PHASE=041-shared-ui-ux-port npm run gate`) | PASS — 25 green, 0 red, exit 0 |
+| Gate (`npm run gate`, bare) | PASS — 25 green, 0 red, exit 0 |
+| Captures read | 18 opened against their `cb9aedf4` copies; 16 timeline across all five scales on both devices and themes, plus 2 icon-picker |
+| Icon-picker delta attributed | Negative control: with `038`'s stylesheet in the tree the harness reproduces the same 4906-pixel shift, so those two PNGs were stale before this change |
+| Engine parity unchanged | `engine-parity.json` records the same 65 fixtures and 49 differences as `cb9aedf4`; only `measuredAt` and `inputs` moved |
+| REQ-001 sheet untouched (`git diff -- src/views/mobile-bottom-sheet.ts`) | PASS — 0 lines |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -175,17 +271,31 @@ value). `git diff --stat` confirms `mobile-bottom-sheet.ts`, `table-renderer.ts`
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **CSS leg outstanding for the empty-state body.** `.db-empty-card-message` has no margin rule,
-   so the new `p` element renders roughly 20px different from the old `div` with nothing styling
-   the difference intentionally; this leg only changed the element, not `styles.css`.
-2. **Screenshot fixture does not reach the changed element.** The hand-typed empty-state capture
-   fixture predates this leg and does not exercise the `p` element, so there is no visual capture
-   proving the CSS gap above.
-3. **Not committed, not operator-confirmed.** This leg is uncommitted working-tree state on
-   `worktrees/006-shared-ui-ux-port`.
-4. **Remaining plan steps not started.** Token/primitive ladder (T004), card icon/tooltip/chip
-   density (T006), reduced-motion coverage (T007), cross-surface polish (T012), the `css-lane`
-   release (T013), and `npm run gate` (T014) remain pending.
+1. **The empty-state margin is fixed but still unphotographed.** Leg B adds `margin: 0` to
+   `.db-empty-card-message`, closing the gap leg a recorded. The hand-typed empty-state fixture
+   still does not reach the `p` element, so no capture proves it and the claim rests on reading the
+   rule rather than an image.
+2. **Not operator-confirmed.** Every capture was read in the harness, which renders fixture markup
+   against the shipped stylesheet in headless Chrome. Nobody has held a phone and pressed the
+   timeline bar's trigger or either link dot.
+3. **The harness is not run-to-run deterministic for a set of scenarios.** Across three full
+   capture runs against the same tree, `calendar-month-view`, `chrome-owned-menu-sheet`,
+   `panel-record-detail-sheet-body-empty`, `calendar-week-time-grid`, `board-view`, `gallery-view`
+   and `calendar-mini-calendar` each moved in one run and reproduced their committed bytes in
+   another, sometimes on a different device or theme each time. All were restored rather than
+   committed. `field-icon-picker` behaved differently and was kept: it is stable across repeated
+   runs and reproduces the same 4826-pixel shift with `038`'s stylesheet in the tree, so those two
+   committed PNGs were simply stale. **A capture that moved is not on its own evidence that
+   something changed** — the cheap test is to rerun that one scenario and see whether it settles.
+4. **Reduced motion still misses an owned menu's descendants.** The named block covers
+   `.db-overlay-enter` itself, so the menu's own entrance is reduced, but the container-wide block
+   is keyed on `.note-database-container` and an owned menu is a `.db-surface` without it
+   (`owned-menu.ts:86`). Closing it means adding `.db-surface` to that block, which moves captures on
+   a surface this packet does not own.
+5. **Cross-surface polish (T012) reached the timeline only.** The board is `038`'s and was left
+   whole; the calendar was not touched. The shared tokens are available to both and consumed by
+   neither beyond what shipped here.
+6. **`defaultViewType` still has no consumer.** Unchanged from leg a.
 <!-- /ANCHOR:limitations -->
 
 ---

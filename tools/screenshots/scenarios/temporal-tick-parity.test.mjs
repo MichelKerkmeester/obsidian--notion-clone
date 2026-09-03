@@ -16,6 +16,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { buildTimelineAxisBands, formatCalendarTitleParts } from "../../../src/data/calendar-title-formatter";
 import {
@@ -36,12 +38,43 @@ import {
   timelineFormatTickLabel,
   timelineMonthBoundaryBands,
   timelineResolveViewportUnitCount,
+  timelineEvent,
   timelineTicksForDateRange,
   timelineViewportContentWidth,
   timelineViewportWindow,
 } from "./temporal.mjs";
 
 const ALL_SCALES = ["day", "week", "month", "quarter", "year"];
+
+describe("timeline screenshot event markup mirrors the renderer", () => {
+  const source = readFileSync(resolve(process.cwd(), "src/views/calendar-timeline-renderer.ts"), "utf8");
+  const fixtureMarkup = timelineEvent(TL_LANES[0].events[0], TIMELINE_FIXTURES.week);
+  const requiredClasses = [
+    "db-timeline-event",
+    "is-progressing",
+    "db-timeline-event-trigger",
+    "db-timeline-event-content",
+    "db-timeline-event-title",
+    "db-timeline-event-meta",
+    "db-timeline-link-dot",
+  ];
+
+  it("uses the same event classes and native sibling controls", () => {
+    for (const className of requiredClasses) {
+      expect(fixtureMarkup).toContain(className);
+      expect(source).toContain(className);
+    }
+    expect(fixtureMarkup).toContain('role="group"');
+    expect(fixtureMarkup).toContain('<button type="button" class="db-timeline-event-trigger"');
+    expect(fixtureMarkup).toContain('<button type="button" class="db-timeline-link-dot is-left"');
+    expect(fixtureMarkup).not.toContain('role="button"');
+    expect(source).toContain('const eventEl = eventsEl.createDiv({');
+    expect(source).toContain('role: "group"');
+    expect(source).toContain('const trigger = eventEl.createEl("button", {');
+    expect(source).toContain('const dot = parent.createEl("button", {');
+    expect(source).not.toMatch(/renderTimelineLinkDots[\s\S]{0,1200}role: "button"/);
+  });
+});
 
 // ───────────────────────────────────────────────────────────────────
 // 2. FIXTURE WINDOWS
@@ -377,4 +410,3 @@ describe("timeline day-scale event visibility matches the render loop's clip dec
     expect(visibility.isClippedStart).toBe(false);
   });
 });
-

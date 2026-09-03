@@ -615,15 +615,14 @@ export class CalendarTimelineRenderer {
     return matchingRow?.file.path || unwrapped;
   }
 
-  private renderTimelineLinkDots(button: HTMLElement, event: CalendarTimelineEvent): void {
+  private renderTimelineLinkDots(parent: HTMLElement, event: CalendarTimelineEvent): void {
     for (const side of ["left", "right"] as const) {
       const labelKey = side === "left" ? "timeline.linkInput" : "timeline.linkOutput";
       const label = `${t(labelKey)}: ${event.title}`;
-      const dot = button.createSpan({
+      const dot = parent.createEl("button", {
         cls: `db-timeline-link-dot is-${side}`,
         attr: {
-          role: "button",
-          tabindex: "0",
+          type: "button",
           "aria-label": label,
           "aria-keyshortcuts": "Enter Space",
           "data-timeline-link-side": side,
@@ -643,12 +642,6 @@ export class CalendarTimelineRenderer {
           this.suppressTimelineLinkClick = false;
           return;
         }
-        this.handleTimelineLinkClick({ taskId: event.id, side }, dot);
-      });
-      dot.addEventListener("keydown", (keyboardEvent) => {
-        if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") return;
-        keyboardEvent.preventDefault();
-        keyboardEvent.stopPropagation();
         this.handleTimelineLinkClick({ taskId: event.id, side }, dot);
       });
     }
@@ -925,14 +918,17 @@ export class CalendarTimelineRenderer {
     rowIndex: number,
   ): void {
     const dateText = this.formatTimelineEventMeta(event, model.scale, config);
+    const eventDetails = [event.title, dateText].filter(Boolean).join(" · ");
+    const eventLabel = `${t("menu.openNote")}: ${eventDetails}`;
     // date 列事件保留 muted 全天条视觉（仅样式，定位统一走 exact）。
     const isDateColumn = this.isTimelineDateColumn(config, event);
     const isMilestone = Boolean(event.isMilestone);
     const progress = event.progress ?? 0;
-    const button = eventsEl.createEl("button", {
+    const eventEl = eventsEl.createDiv({
       cls: `db-timeline-event${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
       attr: {
-        type: "button",
+        role: "group",
+        "aria-label": eventDetails,
         title: `${event.title} · ${dateText} · ${event.filePath}`,
         "data-note-database-row-path": event.row.file.path,
         "data-timeline-event-id": event.id,
@@ -940,48 +936,53 @@ export class CalendarTimelineRenderer {
         ...(progress > 0 ? { "data-timeline-progress": String(progress) } : {}),
       },
     });
-    button.style.setProperty("--db-timeline-row", String(rowIndex));
+    eventEl.style.setProperty("--db-timeline-row", String(rowIndex));
     // 统一绝对刻度定位（可见窗口夹取后的 [renderStart, renderEnd]）；所有事件同一路径，不再 is-timed 双轨。
-    this.applyTimelineAbsolutePosition(button, range.renderStart, range.renderEnd, range.visible.startMinutes, model.unit);
-    this.applyCalendarEventColor(button, event.color);
-    this.actions.applyConditionalFormat?.(button, event.row, config);
-    if (isMilestone) button.createSpan({ cls: "db-timeline-milestone-diamond", attr: { "aria-hidden": "true" } });
+    this.applyTimelineAbsolutePosition(eventEl, range.renderStart, range.renderEnd, range.visible.startMinutes, model.unit);
+    this.applyCalendarEventColor(eventEl, event.color);
+    this.actions.applyConditionalFormat?.(eventEl, event.row, config);
+    if (isMilestone) eventEl.createSpan({ cls: "db-timeline-milestone-diamond", attr: { "aria-hidden": "true" } });
     if (progress > 0) {
       const progressDuration = Math.max(model.unit === "hour" ? 0.25 : 1, event.durationUnits || 1);
       const progressUnits = resolveTimelineProgressFillUnits(progress, progressDuration);
-      const progressEl = button.createSpan({ cls: "db-timeline-event-progress", attr: { "aria-hidden": "true" } });
+      const progressEl = eventEl.createSpan({ cls: "db-timeline-event-progress", attr: { "aria-hidden": "true" } });
       progressEl.style.setProperty("--db-timeline-progress-width", `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(progressUnits)})`);
     }
-    const content = button.createSpan({ cls: "db-timeline-event-content" });
+    const trigger = eventEl.createEl("button", {
+      cls: "db-timeline-event-trigger",
+      attr: { type: "button", "aria-label": eventLabel },
+    });
+    const content = trigger.createSpan({ cls: "db-timeline-event-content" });
     this.actions.renderRecordIcon?.(content, event.row, config, true);
     const titleEl = content.createSpan({ cls: `db-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
     markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
     content.createSpan({ cls: "db-timeline-event-meta", text: dateText });
-    this.renderTimelineLinkDots(button, event);
-    button.onclick = (mouseEvent: MouseEvent) => {
-      if ((mouseEvent.target as HTMLElement | null)?.closest(".db-timeline-resize-handle, .db-timeline-link-dot")) return;
+    this.renderTimelineLinkDots(eventEl, event);
+    // The resize handles, the link dots and the phone menu button are siblings of this trigger, not
+    // children of it, so a press on one of them never reaches here and needs no guard.
+    trigger.onclick = () => {
       if (this.actions.openRecordDetail) {
-        this.actions.openRecordDetail(button, event.row);
+        this.actions.openRecordDetail(trigger, event.row);
       } else {
         this.actions.openRow(event.row);
       }
     };
-    button.oncontextmenu = (mouseEvent) => this.actions.showRowMenu?.(mouseEvent, event.row);
+    eventEl.oncontextmenu = (mouseEvent) => this.actions.showRowMenu?.(mouseEvent, event.row);
     // 拖拽入口按列类型分流（全 scale 通用）：datetime 列在日视图走 timed move（改时间），
     // date 列（任意 scale）走 date move（按天整体平移）。date 列不再进 timed 路径，避免无 time
     // 事件被当作 1h 区间或夹到 visibleStart 改写起始日。
     const useTimedMove = model.scale === "day" && !isDateColumn;
     if (useTimedMove) {
-      this.setupTimelineTimedEventPointerDrag(button, eventsEl, config, event, groupKey, model, laneEvents, lanes);
+      this.setupTimelineTimedEventPointerDrag(eventEl, eventsEl, config, event, groupKey, model, laneEvents, lanes);
     } else {
-      this.setupTimelineEventDateDrag(button, eventsEl, config, event, groupKey, model, laneEvents, lanes);
+      this.setupTimelineEventDateDrag(eventEl, eventsEl, config, event, groupKey, model, laneEvents, lanes);
     }
     if (!this.actions.isReadOnly && this.actions.updateEventDates && (config.timelineEndDateField || config.calendarEndDateField)) {
-      if (!range.isClippedStart) this.renderTimelineResizeHandle(button, eventsEl, config, event, model, "start", groupKey);
-      if (!range.isClippedEnd) this.renderTimelineResizeHandle(button, eventsEl, config, event, model, "end", groupKey);
+      if (!range.isClippedStart) this.renderTimelineResizeHandle(eventEl, eventsEl, config, event, model, "start", groupKey);
+      if (!range.isClippedEnd) this.renderTimelineResizeHandle(eventEl, eventsEl, config, event, model, "end", groupKey);
     }
     if (this.touchMode && !this.actions.isReadOnly) {
-      this.renderTimelineMobileMenuButton(button, config, event, groupKey, laneEvents, lanes);
+      this.renderTimelineMobileMenuButton(eventEl, config, event, groupKey, laneEvents, lanes);
     }
   }
 

@@ -473,9 +473,12 @@ const timelineJumpIndicator = (event, direction, isOverEvent) => {
     </button>`;
 };
 
-const timelineEvent = (event, fixture) => {
+export const timelineEvent = (event, fixture) => {
   const visibility = timelineEventVisibility(event, fixture);
   const meta = timelineEventMeta(event);
+  const eventPath = `Subscriptions/${event.title}.md`;
+  const eventDetails = [event.title, meta].filter(Boolean).join(" · ");
+  const eventLabel = `Open note: ${eventDetails}`;
   const jumpBefore = visibility.isClippedStart ? timelineJumpIndicator(event, "before", visibility.isOverEvent) : "";
   const jumpAfter = visibility.isClippedEnd ? timelineJumpIndicator(event, "after", visibility.isOverEvent) : "";
   if (!visibility.bar) return `${jumpBefore}${jumpAfter}`;
@@ -489,6 +492,8 @@ const timelineEvent = (event, fixture) => {
     "db-timeline-event",
     event.milestone ? "is-milestone" : "",
     event.progress > 0 ? "is-progressing" : "",
+    visibility.isClippedStart ? "is-clipped-start" : "",
+    visibility.isClippedEnd ? "is-clipped-end" : "",
   ].filter(Boolean).join(" ");
   const progress = event.progress > 0
     ? `<span class="db-timeline-event-progress" style="--db-timeline-progress-width: calc(var(--db-timeline-unit-width) * ${span * event.progress / 100})" aria-hidden="true"></span>`
@@ -497,18 +502,20 @@ const timelineEvent = (event, fixture) => {
     ? `<span class="db-timeline-milestone-diamond" aria-hidden="true"></span>`
     : "";
   return `${jumpBefore}
-    <button type="button" class="${classes}" title="${event.title} · ${meta}"
-      data-note-database-row-path="Subscriptions/${event.title}.md" data-timeline-event-id="Subscriptions/${event.title}.md"
+    <div class="${classes}" role="group" aria-label="${eventDetails}" title="${eventDetails} · ${eventPath}"
+      data-note-database-row-path="${eventPath}" data-timeline-event-id="${eventPath}"
       ${event.progress > 0 ? `data-timeline-progress="${event.progress}"` : ""}
       ${event.milestone ? `data-timeline-milestone="true"` : ""} style="${geometry}">
       ${milestone}${progress}
-      <span class="db-timeline-event-content">
+      <button type="button" class="db-timeline-event-trigger" aria-label="${eventLabel}">
+        <span class="db-timeline-event-content">
         <span class="db-timeline-event-title">${event.title}</span>
         <span class="db-timeline-event-meta">${meta}</span>
-      </span>
-      <span class="db-timeline-link-dot is-left" role="button" tabindex="0" aria-label="Dependency input: ${event.title}" data-timeline-link-side="left"></span>
-      <span class="db-timeline-link-dot is-right" role="button" tabindex="0" aria-label="Dependency output: ${event.title}" data-timeline-link-side="right"></span>
-    </button>${jumpAfter}`;
+        </span>
+      </button>
+      <button type="button" class="db-timeline-link-dot is-left" aria-keyshortcuts="Enter Space" aria-label="Dependency input: ${event.title}" data-timeline-link-side="left"></button>
+      <button type="button" class="db-timeline-link-dot is-right" aria-keyshortcuts="Enter Space" aria-label="Dependency output: ${event.title}" data-timeline-link-side="right"></button>
+    </div>${jumpAfter}`;
 };
 
 const timelineLane = (lane, fixture) => `

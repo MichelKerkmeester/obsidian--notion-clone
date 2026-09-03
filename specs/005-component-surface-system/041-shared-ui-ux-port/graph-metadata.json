@@ -57,9 +57,9 @@
       "src/settings.test.ts",
       "src/views/card-roving-tabindex.test.ts",
       "src/views/accessibility-defects.test.ts",
-      "src/views/board-renderer.ts",
-      "src/views/card-roving-tabindex.ts",
-      "src/views/mobile-bottom-sheet.ts",
+      "src/views/calendar-timeline-renderer.ts",
+      "tools/screenshots/scenarios/temporal.mjs",
+      "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
       "tools/lane/css-lane.json"
     ],
     "entities": [
@@ -160,21 +160,21 @@
         "source": "derived"
       },
       {
-        "name": "board-renderer.ts",
+        "name": "calendar-timeline-renderer.ts",
         "kind": "code",
-        "path": "src/views/board-renderer.ts",
+        "path": "src/views/calendar-timeline-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "card-roving-tabindex.ts",
-        "kind": "code",
-        "path": "src/views/card-roving-tabindex.ts",
+        "name": "temporal.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal.mjs",
         "source": "derived"
       },
       {
-        "name": "mobile-bottom-sheet.ts",
-        "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
+        "name": "temporal-tick-parity.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The obsidian-pm reference names a shared visual and interaction language: semantic tokens, an",
     "created_at": "2026-09-02T21:57:02.779Z",
-    "last_save_at": "2026-09-03T09:44:26.410Z",
+    "last_save_at": "2026-09-03T11:17:35.950Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e19eba9921480baa6aa5620f020f2434848b2a81f3f3299ea5e85aa669120212",
+    "source_fingerprint": "sha256:b79b07047aa1503214b7815a05451a97221c8bb1c4956564ac8d91dcd3917132",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "00e316f12288b239b47254b33e976b3281e0b56f5740cc99f324d2b0e38de7dd",
       "plan.md": "f95e4d06beb3ebbde225aaad13a397aeed5b7a0bc5d629fc27cf438a0ebff3bb",
-      "tasks.md": "9b375718976629b24bdd41dcc18cdcef078263e6afa09952360ce2ae05c17f37",
-      "implementation-summary.md": "209a3d3c7f0882c2c7ffe491c38a3549c3869ca5f7b968317f8225cb15f0c048"
+      "tasks.md": "05c71b934da977102a156784638303d5036f363d57502252c35a08e1842c1cd5",
+      "implementation-summary.md": "b11b9879085274d889ae2b4bdf8123084b0f7292a62a0458094c126098e3bd89"
     },
     "last_active_child_id": null,
     "last_active_at": null

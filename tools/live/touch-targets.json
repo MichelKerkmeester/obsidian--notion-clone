@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-03T08:06:59.137Z",
+  "measuredAt": "2026-09-03T11:19:33.085Z",
   "inputs": {
     "tools/live/touch-targets.mjs": "b4b851bbf59c",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-    "styles.css": "9eb4b141471e"
+    "styles.css": "6fbeb3f434bf"
   },
   "measured": 1367,
   "scenarios": 65,
-  "under": 277,
-  "betweenFloors": 693,
-  "classes": 34
+  "under": 253,
+  "betweenFloors": 717,
+  "classes": 33
 }

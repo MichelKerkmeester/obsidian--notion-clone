@@ -97,6 +97,10 @@
   --db-accent-hover: var(--interactive-accent-hover, var(--interactive-accent));
   --db-accent-subtle: color-mix(in srgb, var(--interactive-accent) 14%, transparent);
   --db-accent-focus-ring: 0 0 0 2px var(--background-primary), 0 0 0 4px var(--interactive-accent);
+  --db-text-primary: var(--text-normal);
+  --db-text-secondary: var(--text-muted);
+  --db-surface-interactive: var(--background-primary);
+  --db-surface-interactive-hover: var(--background-modifier-hover);
   --db-hover-bg: var(--background-modifier-hover);
   --db-active-bg: var(--background-modifier-active-hover, var(--background-modifier-hover));
   --db-transition-fast: 120ms ease;
@@ -858,7 +862,8 @@
   .db-dropdown-popover,
   .db-cell-option-popover,
   .formula-workbench-modal,
-  .db-chart-drilldown-modal
+  .db-chart-drilldown-modal,
+  .db-surface
 ) :is(button, input, select, textarea, [tabindex]):focus-visible {
   outline: none;
   box-shadow: var(--db-accent-focus-ring);
@@ -1285,8 +1290,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: var(--db-row-height-compact, 28px);
+  height: var(--db-row-height-compact, 28px);
   padding: 0;
   border: 0;
   border-radius: var(--db-radius-sm);
@@ -7580,7 +7585,8 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .note-database-container .db-empty-card-message,
 .note-database-container .db-empty-hero-description {
-  color: var(--text-muted);
+  margin: 0;
+  color: var(--db-text-secondary, var(--text-muted));
   line-height: 1.45;
 }
 
@@ -17567,14 +17573,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   --db-timeline-event-background-image: linear-gradient(var(--db-calendar-event-bg, var(--db-timeline-bar-fill)), var(--db-calendar-event-bg, var(--db-timeline-bar-fill)));
   --db-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 4px;
+  display: block;
   box-sizing: border-box;
   min-height: 20px;
   height: 20px;
-  padding: 0 6px;
   grid-column: 1 / -1;
   grid-row: var(--db-timeline-row, 1);
   margin-left: var(--db-timeline-exact-offset, 0px);
@@ -17583,19 +17585,51 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   border: 0;
   border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
   border-radius: var(--db-timeline-bar-radius);
-  background-color: var(--background-primary);
+  background-color: var(--db-surface-interactive, var(--background-primary));
   background-image: var(--db-timeline-event-background-image);
-  color: var(--text-normal);
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 1.35;
-  text-align: left;
+  color: var(--db-text-primary, var(--text-normal));
+  cursor: default;
   box-shadow: var(--db-timeline-event-shadow);
   transition: box-shadow 150ms ease, transform 150ms ease;
   z-index: 3;
 }
 
+.note-database-container .db-timeline-event-trigger {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  bottom: -4px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--db-space-2);
+  box-sizing: border-box;
+  min-width: var(--db-row-height-compact, 28px);
+  min-height: var(--db-row-height-compact, 28px);
+  margin: 0;
+  padding: 0 var(--db-space-3);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--db-text-primary, var(--text-normal));
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--db-font-sm);
+  line-height: var(--db-font-sm-line-height);
+  text-align: left;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
 .note-database-container .db-timeline-event.is-draggable {
+  cursor: grab;
+}
+
+.note-database-container .db-timeline-event.is-draggable .db-timeline-event-trigger {
   cursor: grab;
 }
 
@@ -17615,6 +17649,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   box-shadow: var(--db-timeline-event-shadow);
 }
 
+.note-database-container .db-timeline-event.is-moving .db-timeline-event-trigger {
+  cursor: grabbing;
+}
+
 .note-database-container .db-timeline-event:hover {
   --db-timeline-event-shadow: 0 4px 12px rgba(0, 0, 0, 0.13);
   box-shadow: var(--db-timeline-event-shadow);
@@ -17630,10 +17668,13 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 .note-database-container .db-timeline-event.is-clipped-end {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  padding-right: calc(var(--db-timeline-clipped-fade-width) + 6px);
   background-color: transparent;
   background-image: none;
   box-shadow: none;
+}
+
+.note-database-container .db-timeline-event.is-clipped-end .db-timeline-event-trigger {
+  padding-right: calc(var(--db-timeline-clipped-fade-width) + var(--db-space-3));
 }
 
 .note-database-container .db-timeline-event.is-clipped-start::before {
@@ -17672,10 +17713,12 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   position: relative;
   z-index: 1;
   display: inline-flex;
+  flex: 1 1 auto;
   align-items: center;
   min-width: 0;
+  max-width: 100%;
   overflow: hidden;
-  gap: 4px;
+  gap: var(--db-space-2);
 }
 
 .note-database-container .db-timeline-event.is-resizing {
@@ -17786,7 +17829,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
-  color: var(--text-normal);
+  color: var(--db-text-primary, var(--text-normal));
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -17796,8 +17839,8 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
-  color: var(--text-muted);
-  font-size: 11px;
+  color: var(--db-text-secondary, var(--text-muted));
+  font-size: var(--db-font-xs);
   font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -17913,13 +17956,26 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: var(--db-row-height-compact, 28px);
+  height: var(--db-row-height-compact, 28px);
   box-sizing: border-box;
+  min-width: var(--db-row-height-compact, 28px);
+  min-height: var(--db-row-height-compact, 28px);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-full);
+  background: transparent;
+  color: inherit;
   cursor: crosshair;
+  font: inherit;
+  line-height: 1;
   pointer-events: auto;
   touch-action: none;
   transform: translateY(-50%);
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
   z-index: 7;
 }
 
@@ -18462,18 +18518,22 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  flex: 0 0 var(--db-row-height-compact, 28px);
+  width: var(--db-row-height-compact, 28px);
+  height: var(--db-row-height-compact, 28px);
+  min-width: var(--db-row-height-compact, 28px);
+  min-height: var(--db-row-height-compact, 28px);
   padding: 0;
   border: 0;
   border-radius: var(--db-radius-md);
-  color: var(--text-muted);
+  color: var(--db-text-secondary, var(--text-muted));
   background: transparent;
+  transition: background-color var(--db-transition-fast), color var(--db-transition-fast);
 }
 
 .is-phone .note-database-container .db-card-mobile-move-btn:active {
-  color: var(--text-normal);
-  background: var(--background-modifier-hover);
+  color: var(--db-text-primary, var(--text-normal));
+  background: var(--db-surface-interactive-hover, var(--background-modifier-hover));
 }
 
 .is-phone .note-database-container .db-list-mobile-move-btn {

@@ -1,8 +1,8 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "9eb4b141471e",
-  "baselineCommit": "b9e2321af5a9",
+  "baselineHash": "6fbeb3f434bf",
+  "baselineCommit": "cb9aedf4b2759928868c103f9db0edbb1f1513d7",
   "history": [
     {
       "event": "acquire",
@@ -988,8 +988,24 @@
       "at": "2026-09-02T07:40:00Z",
       "hash": "92022f8399f1",
       "reviewed": [
-        "screenshots/components/panel-base-import-modal-mobile-dark.png",
-        "screenshots/components/panel-base-import-modal-mobile-light.png"
+        "screenshots/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/fields/field-icon-picker-desktop-light.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-mobile-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png",
+        "screenshots/views/timeline-view-year-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-dark.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
       ],
       "note": "One phone rule: the base-import modal drops its key column at .is-phone so the label input stops absorbing the whole five-column shortfall. Measured 36px -> 155px at 402px, desktop unchanged at 670px. Both phone captures read: all four labels now show in full, the excluded row keeps its strikethrough, and the files count and include boxes are untouched. The two timeline captures that also moved are the known churn set and carry no rule from this edit."
     },
@@ -1259,6 +1275,41 @@
         "screenshots/views/board-view-mobile-light.png"
       ],
       "note": "Board column/card visual language under --db-* tokens, released after every capture above was opened. BOARD (8): board-view and board-mobile, desktop and mobile, light and dark — each column now carries a status-coloured 3px topbar, and each card a matching priority strip, a controls row (checkbox, open, and on mobile the move button), a Subscriptions parent chip, a title line with select/status chips ranged right, and the Cost/Renews grid beneath. Column geometry is unchanged from the pre-edit sheet: probed at 220/250/280/400px the rendered widths are 236/266/296/416, identical to b9e2321, and the columns start at the same x in the paired reads. Mobile shows one column with the next peeking, so the horizontal scroll survives overflow-x:auto. No clipping, no overlap, no unstyled element in any of the eight. PANEL (4) and COVER (4): panel-record-detail grew 8px taller and card-cover-states 2px, because both borrow .db-board-card-open, which went 24px to 28px for the touch floor; both still read correctly in all four variants. CHROME (4): only the third row moved, the board subgroup toggle taking the same 28px — the two table/list rows above it are unchanged. NOT PROVEN BY ANY CAPTURE: hover, drag, drop-target and the empty-column slot have no fixture that depicts them, and the .db-board-empty-slot rule is therefore unphotographed; device confirmation is still owed. EXCLUDED DELIBERATELY: timeline-view-day-desktop-light and timeline-view-month-desktop-light drift by max 8/255 per pixel over their text on this machine, and a control capture from a clean b9e2321 clone reproduces that drift byte-for-byte against the committed PNG, so it is this environment and not this stylesheet; both were restored rather than committed. field-record-icon-mobile-light drifted the same way and came back identical to HEAD on a re-run."
+    },
+    {
+      "event": "acquire",
+      "phase": "041-shared-ui-ux-port",
+      "at": "2026-09-03T12:45:00.000Z",
+      "hash": "9eb4b141471e",
+      "note": "Re-acquired on top of 038's release after rebasing the shared-UI leg onto main. The earlier hold, recorded against 14e1a5a8e3b6, predated the board landing and was dropped in the rebase; this one is taken against the stylesheet 038 released. Scope: semantic text and surface tokens, the portalled-surface focus ring, and the timeline event markup restructure. The board section is untouched."
+    },
+    {
+      "event": "release",
+      "phase": "041-shared-ui-ux-port",
+      "at": "2026-09-03T13:30:00.000Z",
+      "hash": "6fbeb3f434bf",
+      "note": "Shared token, focus and motion vocabulary plus the timeline event a11y restructure. Rebased onto 038's release first: the external leg had independently restyled the board section and rewritten the board fixture, and all of that was dropped in favour of what 038 landed, so the board region of this stylesheet is byte-identical to a6fcd31. What stayed is four semantic role tokens, the portalled-surface arm on the accent focus ring, a zeroed margin on the empty-state body now that it is a p, two value-preserving token substitutions, and the timeline rules the markup restructure needs. Three additions from the leg were dropped on inspection rather than shipped: an unused text-tertiary and border-control token, an animation reset for an overlay that only ever transitions, and a redundant bottom-sheet arm on the focus selector, since the portalled panel already carries the container class. One was corrected: a phone move button had gone from transparent to an opaque background because a var() fallback was mistaken for the effective value. 18 captures moved and every one was opened against its cb9aedf4 copy. The sixteen timeline images carry the restructure: the bar is now a div with a native trigger button inside it and the two link dots as native sibling buttons, and every scale still draws its bars, its milestone diamond, its progress fill, its jump indicator and both link dots. The visible change is the clipped-start and clipped-end classes the fixture now mirrors from the renderer, so a bar that runs past the window edge loses its accent cap and fades as the renderer draws it. Month desktop dark and quarter are pixel-identical above a threshold of 40 and move only in the encoder; month desktop light moved in one capture run and reproduced its committed bytes in the next, so it was left alone. The two icon-picker images are a stale-capture refresh, not this change: with 038's stylesheet in the tree the harness reproduces the same 4906-pixel shift, so the committed PNGs predated it. Four more scenarios moved in one full run and reproduced their committed bytes on a rerun with the same tree, so the harness is not byte-deterministic and those were restored rather than committed. touch-targets improved from 277 to 253 controls under 28px against an unchanged baseline of 279, because a timeline bar is no longer itself a 20px-tall button.",
+      "reviewed": [
+        "screenshots/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/fields/field-icon-picker-desktop-light.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-month-mobile-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png",
+        "screenshots/views/timeline-view-year-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-dark.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ]
     }
   ],
   "outstanding": [
