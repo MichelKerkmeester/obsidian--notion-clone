@@ -18,14 +18,14 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { App, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/column-types";
+import { isObsidianTagsKey, resolveOptionDisplay, toMultiSelectValuesForKey } from "../data/column-types";
 import { OPTION_REGISTRATION_COLORS } from "../data/option-registration";
 import { isExplicitlySorted } from "../data/manual-order";
 import { getColumnDisplayType } from "../data/column-display";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey } from "../data/file-fields";
 import { isCoverImageBlocked, resolveCoverImage } from "../data/cover-image";
 import { markCoverImageLoadError } from "../data/cover-wiring";
-import { formatGroupKeyDisplay, isComputedGroupField } from "../data/group-display";
+import { formatGroupKeyDisplay, isComputedGroupField, isUncategorizedGroupKey } from "../data/group-display";
 import { renderGroupLabel } from "./group-label-renderer";
 import { markNoteHoverLink } from "./hover-link-preview";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, StatusColor, ViewConfig } from "../data/types";
@@ -42,7 +42,7 @@ import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
 import { openOptionColorPicker } from "./option-color-picker";
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
-import { renderCardField } from "./card-field-renderer";
+import { renderCardField, renderCardFieldValue } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
 import { EdgeAutoScroller } from "./edge-auto-scroller";
 import { DragDropFeedbackState, resolveDropPlacement } from "./drag-drop-feedback";
@@ -531,6 +531,13 @@ export class BoardRenderer {
     });
 
     const header = column.createDiv({ cls: "db-board-column-header" });
+    const topbarColor = this.getGroupStatusColorClass(config, groupField, group.key);
+    if (topbarColor) {
+      header.createDiv({
+        cls: `db-board-column-topbar ${topbarColor}`,
+        attr: { "data-status-color": topbarColor.replace("status-color-", ""), "aria-hidden": "true" },
+      });
+    }
     const columnCollapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
     column.toggleClass("is-collapsed", columnCollapsed);
     if (this.canReorderGroups() && !this.touchMode) {
@@ -880,6 +887,14 @@ export class BoardRenderer {
       });
     }
 
+    const stripColor = this.getGroupStatusColorClass(config, groupField, group.key);
+    if (stripColor) {
+      card.createDiv({
+        cls: `db-board-card-priority-strip ${stripColor}`,
+        attr: { "data-status-color": stripColor.replace("status-color-", ""), "aria-hidden": "true" },
+      });
+    }
+
     if (config.boardImageField) this.renderCover(card, config, row);
 
     const controls = card.createDiv({ cls: "db-board-card-controls" });
@@ -913,9 +928,20 @@ export class BoardRenderer {
     }
     const columns = this.actions.getColumns(config);
     const titleField = this.getTitleField(config);
+    const groupedFields = new Set([groupField, ...(subgroupField ? [subgroupField] : [])]);
+    // The information hierarchy: a context line and the title first, then the
+    // field grid. Single-value colored fields (select/status) read as chips
+    // beside the title, so they leave the grid and never render twice.
+    const body = card.createDiv({ cls: "db-board-card-body" });
+    const parentFolder = row.file.parent?.path;
+    if (parentFolder && parentFolder !== "/") {
+      const parentChip = body.createDiv({ cls: "db-board-card-parent" });
+      parentChip.textContent = parentFolder.split("/").filter(Boolean).pop() || parentFolder;
+      parentChip.title = parentFolder;
+    }
     const title = titleField ? resolveTitleFieldDisplay(row, config, titleField) : undefined;
     if (title && !title.isHidden) {
-      const titleLine = card.createDiv({ cls: "db-record-title-line" });
+      const titleLine = body.createDiv({ cls: "db-record-title-line" });
       this.actions.renderRecordIcon?.(titleLine, row, config);
       const titleEl = titleLine.createDiv({
         cls: "db-board-card-title",
@@ -936,10 +962,16 @@ export class BoardRenderer {
         titleEl.textContent = title.text;
         if (title.isEmpty) titleEl.addClass("is-empty-title");
       }
+      this.renderCardTitleChips(titleLine, config, row, titleField, groupedFields);
     }
-    const meta = card.createDiv({ cls: "db-board-card-meta" });
-    const groupedFields = new Set([groupField, ...(subgroupField ? [subgroupField] : [])]);
-    const fields = columns.filter((col) => col.key !== titleField && !groupedFields.has(col.key));
+    const meta = body.createDiv({ cls: "db-board-card-meta" });
+    const fields = columns.filter(
+      (col) =>
+        col.key !== titleField
+        && !groupedFields.has(col.key)
+        && col.type !== "select"
+        && col.type !== "status",
+    );
     for (const col of fields) {
       const value = this.getCellValue(row, col);
       const displayType = this.getDisplayType(config, col);
@@ -947,6 +979,75 @@ export class BoardRenderer {
       if (empty && !this.shouldShowEmptyField(config, col)) continue;
       const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
       meta.appendChild(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty));
+    }
+  }
+
+  /**
+   * Resolve the status-color class for a group key against its column's option
+   * palette. Mirrors the group-label renderer's own resolution so the column
+   * topbar, the card priority strip and the header badge all agree on color.
+   */
+  private getGroupStatusColorClass(config: ViewConfig, field: string, key: string): string | undefined {
+    const column = config.schema.columns.find((candidate) => candidate.key === field);
+    const displayType = column ? getColumnDisplayType(column, config.schema.computedFields) : undefined;
+    if (displayType !== "status" && displayType !== "select" && displayType !== "multi-select") return undefined;
+    if (isUncategorizedGroupKey(key)) return undefined;
+    const { option } = column ? resolveOptionDisplay(column, key) : { option: undefined };
+    return `status-color-${option?.color || "gray"}`;
+  }
+
+  /**
+   * Single-value colored fields (select/status) render as compact chips beside
+   * the title instead of label-value rows, keeping the edit, conditional-format
+   * and tooltip contracts of the field grid. Only non-empty values produce a
+   * chip, so an empty select leaves no orphan badge in the title row.
+   */
+  private renderCardTitleChips(
+    titleLine: HTMLElement,
+    config: ViewConfig,
+    row: RowData,
+    titleField: string | undefined,
+    groupedFields: Set<string>,
+  ): void {
+    const chipColumns = this.actions.getColumns(config).filter(
+      (col) =>
+        (col.type === "select" || col.type === "status")
+        && col.key !== titleField
+        && !groupedFields.has(col.key),
+    );
+    let container: HTMLElement | undefined;
+    for (const col of chipColumns) {
+      const value = this.getCellValue(row, col);
+      if (this.isEmptyValue(value)) continue;
+      if (!container) container = titleLine.createSpan({ cls: "db-board-card-chips" });
+      const chip = container.createSpan({ cls: "db-board-card-chip" });
+      chip.setAttribute("data-note-database-column-key", col.key);
+      renderCardFieldValue(chip, this.app, row, col, value, this.getDisplayType(config, col), {
+        badgesClass: "db-board-card-badges",
+        linkClass: "db-board-card-link",
+        readOnly: this.actions.isReadOnly,
+        onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
+        onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
+        onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+        onNumberChange: (targetRow, targetCol, next) => this.actions.saveCellValue?.(targetRow, targetCol, next),
+      });
+      this.actions.applyConditionalFormat?.(chip, row, config, col.key);
+      setFieldTooltip(chip, value, col.label);
+      if (!this.actions.isReadOnly) {
+        chip.tabIndex = -1;
+        chip.addEventListener("click", (event) => {
+          event.stopPropagation();
+          this.actions.editCell(chip, row, col, event);
+        });
+        chip.addEventListener("keydown", (event) => {
+          if (isImeComposing(event)) return;
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            event.stopPropagation();
+            this.actions.editCell(chip, row, col);
+          }
+        });
+      }
     }
   }
 

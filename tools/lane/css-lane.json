@@ -1203,6 +1203,20 @@
         "screenshots/panels/panel-record-detail-sheet-body-empty-desktop-light.png"
       ],
       "note": "Verifier release. The five scales (day, week, month, quarter, year) were captured at both devices in light and dark; all 20 timeline-view PNGs read against the renderer's own five-scale ticks, bars, milestone diamond and progress fill, with the day-scale grid's is-today column landing on the single current hour rather than the whole day. panel-record-detail-sheet-body-empty-desktop-light.png moved by byte noise only (no layoutHash change) and was opened and confirmed unchanged in layout. No further styles.css edit is owed by this release."
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-03T06:43:35Z",
+      "hash": "14e1a5a8e3b6",
+      "reviewed": [
+        "screenshots/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/fields/field-icon-picker-desktop-light.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-month-desktop-light.png"
+      ],
+      "note": "No stylesheet edit was taken and the lane was never held: the hash is unchanged at 14e1a5a8e3b6. This is a verifier pass over the 038 board card/column information-hierarchy rewrite (topbar, priority strip, body wrapper, parent chip, title-row select/status chips) in board-renderer.ts. screenshots-fresh flagged 16 captures stale by source hash (board-view x4, board-mobile x4, card-cover-states x4, chrome-group-selection-controls x4); after recapture all 16 are byte-identical to HEAD, so none appear in this reviewed list. board-view/board-mobile are hand-written static fixtures (boardColumn/boardCard in tools/screenshots/scenarios/shared.mjs) that were not updated to mirror the new markup, so the rewrite is not yet visible in any capture; the paired-screenshot proof this port eventually needs is not satisfied by this pass and is named as an open follow-up, not claimed here. The five captures actually named here changed for unrelated reasons (icon-picker and timeline sources only, no board-renderer.ts dependency) and were opened and read: field-icon-picker desktop dark/light still show the full emoji/icon grid and recent-icons row correctly; timeline-view-day desktop dark/light and timeline-view-month desktop light still show the Business/Personal lanes, bars and today-marker correctly. Nothing broken in any of the five."
     }
   ],
   "outstanding": [

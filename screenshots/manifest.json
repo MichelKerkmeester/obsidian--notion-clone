@@ -108,7 +108,7 @@
       ],
       "layoutHash": "661433e9060d",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -133,7 +133,7 @@
       ],
       "layoutHash": "661433e9060d",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -158,7 +158,7 @@
       ],
       "layoutHash": "8c468ec9860a",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -183,7 +183,7 @@
       ],
       "layoutHash": "8c468ec9860a",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -887,7 +887,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -914,7 +914,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -941,7 +941,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -968,7 +968,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2748,7 +2748,7 @@
         "src/views/icon-picker-popover.ts",
         "src/views/record-icon-renderer.ts"
       ],
-      "layoutHash": "e4b6f070f056",
+      "layoutHash": "44272030ec6c",
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
@@ -2760,7 +2760,7 @@
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
-      "bytes": 37904
+      "bytes": 37902
     },
     {
       "id": "field-icon-picker",
@@ -2773,7 +2773,7 @@
         "src/views/icon-picker-popover.ts",
         "src/views/record-icon-renderer.ts"
       ],
-      "layoutHash": "e4b6f070f056",
+      "layoutHash": "44272030ec6c",
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
@@ -2785,7 +2785,7 @@
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
-      "bytes": 36048
+      "bytes": 36042
     },
     {
       "id": "field-icon-picker",
@@ -4501,7 +4501,7 @@
       ],
       "layoutHash": "20e21d51036c",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
@@ -4528,7 +4528,7 @@
       ],
       "layoutHash": "20e21d51036c",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
@@ -4555,7 +4555,7 @@
       ],
       "layoutHash": "57642e4a1ba7",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
@@ -4582,7 +4582,7 @@
       ],
       "layoutHash": "57642e4a1ba7",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
@@ -4608,7 +4608,7 @@
       ],
       "layoutHash": "6460b4a6d0f6",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -4633,7 +4633,7 @@
       ],
       "layoutHash": "6460b4a6d0f6",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -4658,7 +4658,7 @@
       ],
       "layoutHash": "f27f91f12a52",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -4683,7 +4683,7 @@
       ],
       "layoutHash": "f27f91f12a52",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/board-renderer.ts": "43594405eed7",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
@@ -5836,7 +5836,7 @@
       },
       "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 154953
+      "bytes": 154483
     },
     {
       "id": "timeline-view-day",
@@ -5859,7 +5859,7 @@
       },
       "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar day, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 127017
+      "bytes": 128511
     },
     {
       "id": "timeline-view-day",
@@ -6043,7 +6043,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 143374
+      "bytes": 143707
     },
     {
       "id": "timeline-view-month",
