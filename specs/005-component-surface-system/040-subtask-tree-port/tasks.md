@@ -46,14 +46,17 @@ _memory:
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Add the 3-level task-tree frontmatter fixture and a Vitest file asserting relation hydrate
+- [x] T001 Add the 3-level task-tree frontmatter fixture and a Vitest file asserting relation hydrate
   returns correct depth/ancestors; run it and record the failing value (`src/data/subtask-relation.test.ts`)
-- [ ] T002 Re-verify the reference `file:line` citations this phase depends on
+  — red first: `Cannot find module '/src/data/subtask-relation'` (3 failed suites, no tests run, 2026-09-03);
+  green after implementation: 47/47 in `subtask-relation|hydrate|serialize.test.ts`
+- [x] T002 Re-verify the reference `file:line` citations this phase depends on
   (`YamlHydrator.ts:80-113,127-138`; `YamlSerializer.ts:80-105,126-141`; `TaskTreeOps.ts:12-25,38-68,108-121`;
   `TaskIndex.ts:10-19`; `SubtasksPanel.ts:23-48,75-89`) against current disk state in
-  `specs/context/obsidian-pm-main`
-- [ ] T003 [P] Confirm the pre-change baseline: `rg -n "parentId|subtaskIds" src/data/` returns zero
-  hits
+  `specs/context/obsidian-pm-main` — all six ranges read and confirmed this session
+- [x] T003 [P] Confirm the pre-change baseline: `rg -n "parentId|subtaskIds" src/data/` returns zero
+  hits — confirmed 2026-09-03; the only `parentId` occurrences in `src/` are the overlay stack's
+  unrelated parent-id concept (`src/views/overlay-stack.ts`, `src/views/popover-auto-close.ts`)
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -61,15 +64,23 @@ _memory:
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 Implement `src/data/subtask-relation.ts` (pure derivation: parentId/subtaskIds/depth/
+- [x] T004 Implement `src/data/subtask-relation.ts` (pure derivation: parentId/subtaskIds/depth/
   ancestors/visibility/cycle diagnostics) until T001's test passes (`src/data/subtask-relation.ts`)
-- [ ] T005 Implement `src/data/subtask-hydrate.ts` and a hydrate round-trip test
+  — `buildSubtaskRelation` at `src/data/subtask-relation.ts:30-195`
+- [x] T005 Implement `src/data/subtask-hydrate.ts` and a hydrate round-trip test
   (`src/data/subtask-hydrate.ts`, `src/data/subtask-hydrate.test.ts`)
-- [ ] T006 Implement `src/data/subtask-serialize.ts`'s atomic move/reorder transaction; write SC-002's
+  — `readRelationFields` at `src/data/subtask-hydrate.ts:28-35`; round-trip test at
+  `src/data/subtask-hydrate.test.ts:120-150`
+- [x] T006 Implement `src/data/subtask-serialize.ts`'s atomic move/reorder transaction; write SC-002's
   atomic-move test and SC-003's cycle-rejection test as failing-red first
   (`src/data/subtask-serialize.ts`, `src/data/subtask-serialize.test.ts`)
-- [ ] T007 Wire the relation/index stage into `src/data/row-pipeline.ts`, keeping
+  — `planSubtaskMove` at `src/data/subtask-serialize.ts:67-186`; SC-002 at
+  `src/data/subtask-serialize.test.ts:79-149`, SC-003 at `src/data/subtask-serialize.test.ts:197-218`;
+  both red first (module-not-found), green now
+- [x] T007 Wire the relation/index stage into `src/data/row-pipeline.ts`, keeping
   `RowPipelineDiagnostics`'s shape intact (`src/data/row-pipeline.ts`)
+  — optional `options.includeRelation` stage at `src/data/row-pipeline.ts:89-96,185-201`;
+  diagnostics shape untouched (`RowPipelineDiagnostics` at `:44-53`)
 - [ ] T008 Add the explicit-vs-derived progress distinction and SC-004's test asserting derived never
   overwrites explicit (`src/data/subtask-relation.ts` or a dedicated progress module)
 - [ ] T009 Adapt `src/views/board-renderer.ts`'s move/order action contract (`:90-99`) and card

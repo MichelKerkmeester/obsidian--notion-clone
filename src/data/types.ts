@@ -170,6 +170,66 @@ export interface RowData {
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 5b. SUBTASK RELATION
+// ───────────────────────────────────────────────────────────────────
+
+/** Sanitized per-note frontmatter fields that feed the subtask relation. */
+export interface SubtaskRelationFields {
+  parentId: string | null;
+  subtaskIds: string[];
+  subtaskRank: string | null;
+  collapsed: boolean;
+}
+
+/** One node of the derived subtask relation. */
+export interface SubtaskNode {
+  parentId: string | null;
+  subtaskRank: string | null;
+  collapsed: boolean;
+  depth: number;
+  ancestors: string[];
+  visible: boolean;
+  inCycle: boolean;
+  orphanParent: boolean;
+}
+
+export interface SubtaskDiagnostics {
+  orphanParents: Array<{ path: string; parentId: string }>;
+  unknownChildren: Array<{ parentPath: string; childPath: string }>;
+  parentChildMismatches: Array<{ path: string; listedParent: string; actualParent: string | null }>;
+  cycles: string[][];
+}
+
+/** The subtask relation is a pure derivation over RowData[], rebuilt whenever
+ *  the row pipeline changes and never mutated in place, so the note on disk
+ *  stays the single source of truth. */
+export interface SubtaskRelation {
+  nodes: Map<string, SubtaskNode>;
+  childrenOf: Map<string, string[]>;
+  roots: string[];
+  diagnostics: SubtaskDiagnostics;
+}
+
+/** One frontmatter write planned by the move transaction. */
+export interface SubtaskWrite {
+  path: string;
+  frontmatter: Record<string, unknown>;
+}
+
+export type SubtaskMoveErrorCode = "cycle" | "unknown-child" | "unknown-parent" | "unknown-sibling";
+
+export interface SubtaskMoveRequest {
+  childPath: string;
+  newParentPath: string | null;
+  beforePath?: string;
+  afterPath?: string;
+}
+
+export type SubtaskMovePlan =
+  | { ok: true; writes: SubtaskWrite[] }
+  | { ok: false; error: { code: SubtaskMoveErrorCode; message: string } };
+
+// ───────────────────────────────────────────────────────────────────
 // 6. ROW CREATION
 // ───────────────────────────────────────────────────────────────────
 

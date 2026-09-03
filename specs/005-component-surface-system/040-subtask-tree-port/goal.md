@@ -7,17 +7,19 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/040-subtask-tree-port"
-    last_updated_at: "2026-09-02T23:59:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Packet opened from 036 adoption plan row 4"
-    next_safe_action: "Write the relation-fixture check that fails on the current renderer (plan.md step 1)"
-    blockers: []
-    key_files: ["spec.md", "plan.md", "acceptance-criteria.md"]
+    last_updated_at: "2026-09-03T13:20:00Z"
+    last_updated_by: "leg-a-verified"
+    recent_action: "Leg a verified: relation/hydrate/serialize green; UI legs open"
+    next_safe_action: "Implement T008 progress distinction, then T009-T013 renderer affordances"
+    blockers:
+      - "Not committed: leg a's data-layer modules sit uncommitted in this worktree"
+      - "Not operator-confirmed: progress display, renderer affordances and styles (T008-T013) remain unbuilt"
+    key_files: ["src/data/subtask-relation.ts", "src/data/subtask-hydrate.ts", "src/data/subtask-serialize.ts", "src/data/row-pipeline.ts", "src/data/types.ts"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-040-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 39
     open_questions: []
     answered_questions: []
 ---
@@ -55,17 +57,28 @@ and the parent program's `../goal.md` D4/D5.
 None of these is ticked. None may be ticked by the runtime that wrote the fix — only an in-runtime
 verifier that reads the actual test/gate output ticks a row (D3 of the parent program's own goal.md).
 
-- [ ] **A relation-fixture test observed failing red, then passing green.** Where recorded:
+- [x] **A relation-fixture test observed failing red, then passing green.** Where recorded:
       `src/data/subtask-relation.test.ts`; the failing value is the exit/assertion output from
-      `plan.md` step 1, run before `subtask-relation.ts` exists.
-- [ ] **Hydrate/serialize round-trips a 3-level fixture with no field loss.** Where recorded: SC-001 in
-      `acceptance-criteria.md`, evidenced by the round-trip test's before/after diff.
-- [ ] **A cross-parent move updates both parents' `subtaskIds`, the child's `parentId`, and sibling
+      `plan.md` step 1, run before `subtask-relation.ts` exists. Verified 2026-09-03: `subtask-relation.test.ts:60`
+      derives depth/ancestors for a 3-level tree; the module-not-found red is recorded at `tasks.md` T001.
+- [x] **Hydrate/serialize round-trips a 3-level fixture with no field loss.** Where recorded: SC-001 in
+      `acceptance-criteria.md`, evidenced by the round-trip test's before/after diff. Verified 2026-09-03:
+      `subtask-hydrate.test.ts` observed red (module-not-found) alongside the other two suites per
+      `tasks.md` T001, before `subtask-hydrate.ts`/`subtask-serialize.ts` existed; its four-case
+      round-trip (full tree node, root with children, bare root, explicit nulls) now passes green
+      (`subtask-hydrate.test.ts:120-151`).
+- [x] **A cross-parent move updates both parents' `subtaskIds`, the child's `parentId`, and sibling
       ranks atomically, in one observed transaction.** Where recorded: SC-002, evidenced by a
-      before/after diff of the relation state around the move call.
-- [ ] **A cycle-creating move is rejected and leaves the relation byte-for-byte unchanged.** Where
+      before/after diff of the relation state around the move call. Verified 2026-09-03:
+      `subtask-serialize.test.ts` observed red (module-not-found) per `tasks.md` T001/T006 before
+      `subtask-serialize.ts` existed; now passes green at `subtask-serialize.test.ts:79-149` against
+      `planSubtaskMove` at `subtask-serialize.ts:67-186`.
+- [x] **A cycle-creating move is rejected and leaves the relation byte-for-byte unchanged.** Where
       recorded: SC-003, evidenced by re-reading the fixture after the rejected call and diffing
-      against the pre-call state.
+      against the pre-call state. Verified 2026-09-03: the same suite observed red per T001/T006
+      before `subtask-serialize.ts` existed; `subtask-serialize.test.ts:199-220` now covers self-parent,
+      own child, direct and indirect descendant, asserting zero writes via the visited-set guard in
+      `createsCycle` (`subtask-serialize.ts:188-202`).
 - [ ] **Explicit and derived progress are asserted as distinct, and derived never overwrites
       explicit.** Where recorded: SC-004.
 - [ ] **`npm run gate` prints `gate: PASS` and exits 0 on the final state, read directly (not through a
@@ -91,4 +104,14 @@ plan row 4. No implementation has run. `037-timeline-gantt-port`, `038-board-kan
 packet's renderer-seam line citations (`board-renderer.ts:90-99,750-789`;
 `calendar-timeline-renderer.ts:391-445,704-738`) should be re-verified against current disk state
 before editing if any of those siblings land first, per `spec.md` R-004.
+
+**LOG (2026-09-03, leg a verified).** A devin lane landed the data-layer leg (T001-T007):
+`src/data/subtask-relation.ts`, `subtask-hydrate.ts`, `subtask-serialize.ts`, plus the optional
+`includeRelation` stage on `row-pipeline.ts` and relation types on `types.ts`. A fresh in-runtime
+reviewer re-ran the suite (47/47 in the three new files, 824/824 project-wide, `tsc` 0, lint 169 =
+HEAD with none in the changed files, `scan-failing-values.mjs` PASS, `npm run gate` PASS 25/25) and
+ticked completion-criteria rows 1-4 above on that evidence. `completion_pct: 39` is a task-count basis
+(7 of 18 `tasks.md` rows, T001-T007, marked `[x]`), not an effort-weighted estimate. Progress display
+(T008/SC-004), renderer affordances (T009-T013) and `styles.css` (T014-T015) are unbuilt; this leg is
+uncommitted and not operator-confirmed.
 <!-- /ANCHOR:log -->

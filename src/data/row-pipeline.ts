@@ -8,7 +8,9 @@
 // result (hidden by a filter vs genuinely no matches) without re-running the
 // pipeline. Calendar/timeline views hide the property panel, so their search
 // widens the "hidden" column set to everything except start/end/title instead
-// of trusting the view's own hiddenColumns.
+// of trusting the view's own hiddenColumns. An optional relation stage may
+// follow the final row list; it attaches a derived subtask relation to the
+// output and never changes the diagnostics.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -19,6 +21,8 @@ import { evaluateComputedFields } from "./computed-evaluator";
 import { NoteRecord } from "./data-source";
 import { QueryEngine } from "./query-engine";
 import { ColumnDef, RowData, ViewConfig } from "./types";
+import type { SubtaskRelation } from "./types";
+import { buildSubtaskRelation } from "./subtask-relation";
 import { DatabaseViewState } from "../views/view-state-store";
 import { getEffectiveFilterRules, isEffectiveFilterRule } from "./filter-rules";
 import { sortByManualRank } from "./manual-order";
@@ -51,6 +55,8 @@ export interface RowPipelineDiagnostics {
 export interface RowPipelineOutput {
   rows: RowData[];
   diagnostics: RowPipelineDiagnostics;
+  /** Derived subtask relation, present only when the relation stage is enabled. */
+  relation?: SubtaskRelation;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -86,6 +92,7 @@ export class RowPipeline {
     state: DatabaseViewState & Pick<ViewModeStateDef, "filterTree">,
     app?: App,
     derivedValues?: ReadonlyMap<string, Record<string, unknown>>,
+    options?: { includeRelation?: boolean },
   ): RowPipelineOutput {
     let rows = this.buildRows(records, config, app, derivedValues);
     const sourceCount = rows.length;
@@ -175,7 +182,7 @@ export class RowPipeline {
       rows = rows.slice(0, Math.floor(config.resultLimit ?? 0));
     }
 
-    return {
+    const output: RowPipelineOutput = {
       rows,
       diagnostics: {
         sourceCount,
@@ -188,6 +195,10 @@ export class RowPipeline {
         hasActiveLimit,
       },
     };
+    if (options?.includeRelation) {
+      output.relation = buildSubtaskRelation(rows);
+    }
+    return output;
   }
 
   private buildRows(

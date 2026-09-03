@@ -47,14 +47,20 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
+      "src/data/subtask-relation.ts",
+      "src/data/subtask-hydrate.ts",
+      "src/data/subtask-serialize.ts",
       "src/data/types.ts",
       "src/data/row-pipeline.ts",
+      "src/data/subtask-relation.test.ts",
+      "src/data/subtask-hydrate.test.ts",
+      "src/data/subtask-serialize.test.ts",
       "src/data/manual-order.ts",
       "src/views/board-renderer.ts",
       "src/views/calendar-timeline-renderer.ts",
       "tools/lane/css-lane.json",
-      "src/data/computed-evaluator.ts",
-      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md"
+      "src/data/computed-evaluator.ts"
     ],
     "entities": [
       {
@@ -94,6 +100,30 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "subtask-relation.ts",
+        "kind": "code",
+        "path": "src/data/subtask-relation.ts",
+        "source": "derived"
+      },
+      {
+        "name": "subtask-hydrate.ts",
+        "kind": "code",
+        "path": "src/data/subtask-hydrate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "subtask-serialize.ts",
+        "kind": "code",
+        "path": "src/data/subtask-serialize.ts",
+        "source": "derived"
+      },
+      {
         "name": "types.ts",
         "kind": "code",
         "path": "src/data/types.ts",
@@ -103,6 +133,24 @@
         "name": "row-pipeline.ts",
         "kind": "code",
         "path": "src/data/row-pipeline.ts",
+        "source": "derived"
+      },
+      {
+        "name": "subtask-relation.test.ts",
+        "kind": "test",
+        "path": "src/data/subtask-relation.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "subtask-hydrate.test.ts",
+        "kind": "test",
+        "path": "src/data/subtask-hydrate.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "subtask-serialize.test.ts",
+        "kind": "test",
+        "path": "src/data/subtask-serialize.test.ts",
         "source": "derived"
       },
       {
@@ -136,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "SKILL.md",
-        "kind": "doc",
-        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -164,47 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Purpose Add",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Overview Port",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Recommended Level",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "This repo has no subtask/hierarchy concept today: `grep -rn \"parentId\\|subtaskIds\\|hierarchy\" src/data/`",
     "created_at": "2026-09-02T21:56:57.762Z",
-    "last_save_at": "2026-09-02T21:56:57.762Z",
+    "last_save_at": "2026-09-03T09:58:59.097Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:08f8af1029212ec37e8bd662e741107cf94916e35d32305446be6799bde8fb00",
+    "source_fingerprint": "sha256:bc003a9ec6db97dfe72dbdf1e10ad22fa60544167db643e5568a4cc19f467a59",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d0babe4606cf70f2cd0611feac9f7f8c7052634548068e8b9239909e04cdb5e5",
       "plan.md": "cebc9f277f7a06b25376823e85be46729d3d76f896dd66ea2327fd51b62eef19",
-      "tasks.md": "0ab505c5d721eb9b26d78b58f94b254a489b0f7c1cc62e659b1c5c392222caa2",
-      "decision-record.md": "6aaf40a0bcf315e641f5187af90dbbdc8f585754d613863ee76f44c05a4da6aa"
+      "tasks.md": "b5eacb34a7b3ba7803db95c22a03c7db6c4d61fb59f3187673d8a1395eca39f8",
+      "decision-record.md": "6aaf40a0bcf315e641f5187af90dbbdc8f585754d613863ee76f44c05a4da6aa",
+      "implementation-summary.md": "73c2e13601adafa270545017c2468f54074bad3d034480e906bdf0759aca03a1"
     },
     "last_active_child_id": null,
     "last_active_at": null
