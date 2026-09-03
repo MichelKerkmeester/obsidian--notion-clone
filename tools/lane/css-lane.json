@@ -1245,7 +1245,7 @@
       "phase": "038-board-kanban-port",
       "at": "2026-09-03T07:43:11.000Z",
       "hash": "9eb4b141471e",
-      "note": "Column flex-basis fallback restored to the resize clamp's own floor (220px), reverting a hardcoded 280px floor a prior hunk on this lane had introduced that was overriding --db-board-column-width below that point; min-width returned to 0 so the ellipsis chain keeps working. Probed at 220/250/280/400px: rendered widths now match the pre-edit stylesheet exactly (236/266/296/416). Not yet recaptured or released — this lane's dispatch holds for further edits."
+      "note": "Column flex-basis fallback restored to the resize clamp's own floor (220px), reverting a hardcoded 280px floor a prior hunk on this lane had introduced that was overriding --db-board-column-width below that point; min-width returned to 0 so the ellipsis chain keeps working. Probed at 220/250/280/400px: rendered widths now match the pre-edit stylesheet exactly (236/266/296/416). Not yet recaptured or released \u2014 this lane's dispatch holds for further edits."
     },
     {
       "event": "release",
@@ -1274,7 +1274,7 @@
         "screenshots/views/board-view-mobile-dark.png",
         "screenshots/views/board-view-mobile-light.png"
       ],
-      "note": "Board column/card visual language under --db-* tokens, released after every capture above was opened. BOARD (8): board-view and board-mobile, desktop and mobile, light and dark — each column now carries a status-coloured 3px topbar, and each card a matching priority strip, a controls row (checkbox, open, and on mobile the move button), a Subscriptions parent chip, a title line with select/status chips ranged right, and the Cost/Renews grid beneath. Column geometry is unchanged from the pre-edit sheet: probed at 220/250/280/400px the rendered widths are 236/266/296/416, identical to b9e2321, and the columns start at the same x in the paired reads. Mobile shows one column with the next peeking, so the horizontal scroll survives overflow-x:auto. No clipping, no overlap, no unstyled element in any of the eight. PANEL (4) and COVER (4): panel-record-detail grew 8px taller and card-cover-states 2px, because both borrow .db-board-card-open, which went 24px to 28px for the touch floor; both still read correctly in all four variants. CHROME (4): only the third row moved, the board subgroup toggle taking the same 28px — the two table/list rows above it are unchanged. NOT PROVEN BY ANY CAPTURE: hover, drag, drop-target and the empty-column slot have no fixture that depicts them, and the .db-board-empty-slot rule is therefore unphotographed; device confirmation is still owed. EXCLUDED DELIBERATELY: timeline-view-day-desktop-light and timeline-view-month-desktop-light drift by max 8/255 per pixel over their text on this machine, and a control capture from a clean b9e2321 clone reproduces that drift byte-for-byte against the committed PNG, so it is this environment and not this stylesheet; both were restored rather than committed. field-record-icon-mobile-light drifted the same way and came back identical to HEAD on a re-run."
+      "note": "Board column/card visual language under --db-* tokens, released after every capture above was opened. BOARD (8): board-view and board-mobile, desktop and mobile, light and dark \u2014 each column now carries a status-coloured 3px topbar, and each card a matching priority strip, a controls row (checkbox, open, and on mobile the move button), a Subscriptions parent chip, a title line with select/status chips ranged right, and the Cost/Renews grid beneath. Column geometry is unchanged from the pre-edit sheet: probed at 220/250/280/400px the rendered widths are 236/266/296/416, identical to b9e2321, and the columns start at the same x in the paired reads. Mobile shows one column with the next peeking, so the horizontal scroll survives overflow-x:auto. No clipping, no overlap, no unstyled element in any of the eight. PANEL (4) and COVER (4): panel-record-detail grew 8px taller and card-cover-states 2px, because both borrow .db-board-card-open, which went 24px to 28px for the touch floor; both still read correctly in all four variants. CHROME (4): only the third row moved, the board subgroup toggle taking the same 28px \u2014 the two table/list rows above it are unchanged. NOT PROVEN BY ANY CAPTURE: hover, drag, drop-target and the empty-column slot have no fixture that depicts them, and the .db-board-empty-slot rule is therefore unphotographed; device confirmation is still owed. EXCLUDED DELIBERATELY: timeline-view-day-desktop-light and timeline-view-month-desktop-light drift by max 8/255 per pixel over their text on this machine, and a control capture from a clean b9e2321 clone reproduces that drift byte-for-byte against the committed PNG, so it is this environment and not this stylesheet; both were restored rather than committed. field-record-icon-mobile-light drifted the same way and came back identical to HEAD on a re-run."
     },
     {
       "event": "acquire",
@@ -1310,6 +1310,20 @@
         "screenshots/views/timeline-view-year-mobile-dark.png",
         "screenshots/views/timeline-view-year-mobile-light.png"
       ]
+    },
+    {
+      "event": "release",
+      "phase": "039-calendar-parity-port",
+      "at": "2026-09-03T11:15:00Z",
+      "hash": "6fbeb3f434bf",
+      "reviewed": [
+        "screenshots/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/fields/field-icon-picker-desktop-light.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-dark.png"
+      ],
+      "note": "No stylesheet edit taken and the lane was never held (hash unchanged at 6fbeb3f434bf after rebasing onto main's 038/041 landings). Leg a of 039's calendar completion-marking and weekend-header rewrite in calendar-renderer.ts is landing. screenshots-fresh flagged calendar-mini-calendar, calendar-month-view and calendar-week-time-grid (12 PNGs) stale by source hash; after recapture all 12 are byte-identical to HEAD (no CSS rule exists yet for is-completed/is-weekend, so the new classes render invisibly), so none appear in this reviewed list. The five captures actually named here changed for unrelated reasons -- none has a calendar-renderer.ts sourceHash dependency, so this is capture-run noise, not caused by this pass -- and were opened and read: field-icon-picker desktop dark/light still show the full colour grid, recent-icons and common rows correctly; timeline-view-day desktop light, timeline-view-month desktop light and timeline-view-quarter desktop dark still show the Business/Personal lanes, Figma/Notion/Spotify/iCloud bars and the Adobe CC milestone diamond correctly, nothing broken in any of the five."
     }
   ],
   "outstanding": [

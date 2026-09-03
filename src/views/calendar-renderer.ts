@@ -48,6 +48,7 @@ import {
 } from "../data/calendar-date-time";
 import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveCalendarCreateDateRange, resolveDayMoveChange, resolveDayRangeResize, resolveTimedDragRange } from "../data/calendar-interaction-model";
 import { CalendarTimelineSearchVisibleRange } from "../data/calendar-timeline-search-results";
+import { toBooleanValue } from "../data/column-types";
 import { formatDateTimeRangeDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/date-time-format";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
@@ -156,7 +157,6 @@ export class CalendarRenderer {
 
 	private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
 		const unscheduled = collectUnscheduledTimelineRows(rows, config, startField);
-		if (unscheduled.length === 0) return;
 		const drawer = parent.createDiv({ cls: `db-calendar-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
 		const header = drawer.createDiv({ cls: "db-calendar-backlog-header" });
 		const toggle = header.createEl("button", {
@@ -170,9 +170,15 @@ export class CalendarRenderer {
 			toggle.setAttribute("aria-expanded", this.backlogCollapsed ? "false" : "true");
 		};
 		const list = drawer.createDiv({ cls: "db-calendar-backlog-list" });
+		if (unscheduled.length === 0) {
+			// The drawer stays present so an empty unscheduled pool reads as a calm
+			// absence instead of the whole section disappearing.
+			list.createDiv({ cls: "db-calendar-backlog-empty", text: t("calendar.unscheduledEmpty") });
+			return;
+		}
 		for (const row of unscheduled) {
 			const item = list.createEl("button", {
-				cls: "db-calendar-backlog-item",
+				cls: `db-calendar-backlog-item${this.isRowCompleted(row, config) ? " is-completed" : ""}`,
 				text: row.file.basename || row.file.name,
 				attr: { type: "button", title: row.file.path },
 			});
@@ -336,6 +342,7 @@ export class CalendarRenderer {
 					"db-calendar-day",
 					day.inCurrentMonth ? "" : "is-outside-month",
 					day.dateKey === todayKey ? "is-today" : "",
+					this.isWeekendDateKey(day.dateKey) ? "is-weekend" : "",
 				].filter(Boolean).join(" "),
 				attr: {
 					"data-date-key": day.dateKey,
@@ -375,6 +382,7 @@ export class CalendarRenderer {
 					segment.isTimed ? "is-timed" : "is-all-day",
 					segment.isStart ? "is-start" : "is-continuation",
 					segment.isEnd ? "is-end" : "continues-after",
+					this.isRowCompleted(segment.event.row, config) ? "is-completed" : "",
 				].join(" "),
 				attr: {
 					type: "button",
@@ -545,6 +553,7 @@ export class CalendarRenderer {
 					timing.isTimed ? "is-timed" : "is-all-day",
 					"is-start",
 					"is-end",
+					this.isRowCompleted(event.row, config) ? "is-completed" : "",
 				].join(" "),
 				attr: {
 					type: "button",
@@ -688,7 +697,7 @@ export class CalendarRenderer {
 		const todayKey = this.getTodayDateKey();
 		for (const day of days) {
 			const button = daysEl.createEl("button", {
-				cls: `db-calendar-time-header-day${day.dateKey === todayKey ? " is-today" : ""}`,
+				cls: `db-calendar-time-header-day${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
 				attr: { type: "button", title: day.dateKey, "data-date-key": day.dateKey, role: "columnheader" },
 			});
 			button.createSpan({ cls: "db-calendar-week-day-name", text: this.formatWeekDayName(day.dateKey) });
@@ -729,7 +738,7 @@ export class CalendarRenderer {
 		for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
 			const day = days[dayIndex];
 			const col = stage.createDiv({
-				cls: `db-calendar-week-allday-col${day.dateKey === todayKey ? " is-today" : ""}${dayIndex === days.length - 1 ? " is-last-col" : ""}`,
+				cls: `db-calendar-week-allday-col${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}${dayIndex === days.length - 1 ? " is-last-col" : ""}`,
 				attr: { "data-date-key": day.dateKey },
 			});
 			if (dayIndex === 0) firstAllDayCol = col;
@@ -743,7 +752,7 @@ export class CalendarRenderer {
 			}
 
 			const dateButton = stage.createEl("button", {
-				cls: `db-calendar-week-allday-date${day.dateKey === todayKey ? " is-today" : ""}`,
+				cls: `db-calendar-week-allday-date${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
 				text: String(Number(day.dateKey.slice(8, 10))),
 				attr: { type: "button", title: day.dateKey, "aria-label": day.dateKey },
 			});
@@ -779,6 +788,7 @@ export class CalendarRenderer {
 					"is-all-day",
 					segment.isStart ? "is-start" : "is-continuation",
 					segment.isEnd ? "is-end" : "continues-after",
+					this.isRowCompleted(segment.event.row, config) ? "is-completed" : "",
 				].join(" "),
 				attr: { type: "button", title: this.getSegmentTitle(segment), "data-note-database-row-path": segment.event.row.file.path },
 			});
@@ -852,7 +862,7 @@ export class CalendarRenderer {
 		const list = popover.createDiv({ cls: "db-calendar-day-popover-events" });
 		for (const event of events) {
 			const eventEl = list.createEl("button", {
-				cls: "db-calendar-month-segment is-all-day is-start is-end",
+				cls: `db-calendar-month-segment is-all-day is-start is-end${this.isRowCompleted(event.row, config) ? " is-completed" : ""}`,
 				attr: { type: "button", title: event.title, "data-note-database-row-path": event.row.file.path },
 			});
 			this.applyEventColor(eventEl, event.color);
@@ -917,7 +927,7 @@ export class CalendarRenderer {
 		for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
 			const day = days[dayIndex];
 			const col = columns.createDiv({
-				cls: `db-calendar-week-day-col${day.dateKey === todayKey ? " is-today" : ""}`,
+				cls: `db-calendar-week-day-col${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
 				attr: {
 					"data-date-key": day.dateKey,
 					role: "gridcell",
@@ -979,7 +989,7 @@ export class CalendarRenderer {
 		const width = 100 / layout.columnCount;
 		const eventTitle = `${formatCalendarTime(layout.startMinutes)} - ${formatCalendarTime(layout.endMinutes)} ${layout.event.title}`;
 		const eventEl = dayCol.createEl("button", {
-			cls: `db-calendar-week-timed-event${isCompact ? " is-compact" : ""}`,
+			cls: `db-calendar-week-timed-event${isCompact ? " is-compact" : ""}${this.isRowCompleted(layout.event.row, config) ? " is-completed" : ""}`,
 			attr: {
 				type: "button",
 				style: `top: ${top}px; height: ${height}px; left: calc(${left}% + 4px); width: calc(${width}% - 8px);`,
@@ -2057,9 +2067,10 @@ export class CalendarRenderer {
 
 	private renderWeekdayLabels(wrap: HTMLElement, config: ViewConfig, weekStartsOn: number): void {
 		const weekdaysRow = wrap.createDiv({ cls: "db-calendar-weekdays", attr: { role: "row" } });
-		for (const weekday of this.getWeekdayLabels(weekStartsOn)) {
-			const wdDiv = weekdaysRow.createDiv({ cls: "db-calendar-weekday", attr: { role: "columnheader" } });
-			wdDiv.createSpan({ text: weekday });
+		const labels = this.getWeekdayLabels(weekStartsOn);
+		for (let index = 0; index < labels.length; index++) {
+			const wdDiv = weekdaysRow.createDiv({ cls: `db-calendar-weekday${this.isWeekendWeekday(weekStartsOn, index) ? " is-weekend" : ""}`, attr: { role: "columnheader" } });
+			wdDiv.createSpan({ text: labels[index] });
 			if (!this.actions.isReadOnly && this.actions.onConfigChange) {
 				const resizeHandle = wdDiv.createDiv({ cls: "db-calendar-col-resize-handle" });
 				this.setupColumnResize(resizeHandle, config, wrap);
@@ -2391,6 +2402,26 @@ export class CalendarRenderer {
 		const date = parseDateKeyToUtc(dateKey);
 		if (!date) return "";
 		return new Intl.DateTimeFormat(getEffectiveLocale(),{ weekday: "short", timeZone: "UTC" }).format(date);
+	}
+
+	/** Weekend columns share the timeline's is-weekend convention so the header band and grid body agree. */
+	private isWeekendDateKey(dateKey: string): boolean {
+		const date = parseDateKeyToUtc(dateKey);
+		if (!date) return false;
+		const day = date.getUTCDay();
+		return day === 0 || day === 6;
+	}
+
+	private isWeekendWeekday(weekStartsOn: number, index: number): boolean {
+		const day = (weekStartsOn + index) % 7;
+		return day === 0 || day === 6;
+	}
+
+	/** A checkbox column is the view's only native completion signal; status columns carry display colors, not a terminal flag. */
+	private isRowCompleted(row: RowData, config: ViewConfig): boolean {
+		const checkboxColumn = config.schema.columns.find((column) => column.type === "checkbox");
+		if (!checkboxColumn) return false;
+		return toBooleanValue(row.frontmatter[checkboxColumn.key]);
 	}
 
 	private formatHourLabel(hour: number): string {

@@ -4709,8 +4709,8 @@
       "layoutHash": "02a7ab1228ec",
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4734,8 +4734,8 @@
       "layoutHash": "02a7ab1228ec",
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4759,8 +4759,8 @@
       "layoutHash": "99171d68710c",
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4784,8 +4784,8 @@
       "layoutHash": "99171d68710c",
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4807,8 +4807,8 @@
       ],
       "layoutHash": "913ca45b27bf",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4830,8 +4830,8 @@
       ],
       "layoutHash": "913ca45b27bf",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4853,8 +4853,8 @@
       ],
       "layoutHash": "4e8eb82fefdd",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4876,8 +4876,8 @@
       ],
       "layoutHash": "4e8eb82fefdd",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -4999,8 +4999,8 @@
       ],
       "layoutHash": "6352305dcf50",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -5022,8 +5022,8 @@
       ],
       "layoutHash": "6352305dcf50",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -5045,8 +5045,8 @@
       ],
       "layoutHash": "cd05cfbdc0cd",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -5068,8 +5068,8 @@
       ],
       "layoutHash": "cd05cfbdc0cd",
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "6fbeb3f434bf",
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "styles.css": "14e1a5a8e3b6",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
@@ -6043,7 +6043,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar month, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 143707
+      "bytes": 143374
     },
     {
       "id": "timeline-view-month",
@@ -6112,7 +6112,7 @@
       },
       "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window is the live viewport-centred one (getTimelineViewportWindow(), same as production whenever a real container is mounted) rather than the full calendar quarter, sized per device width (minus the container's own left/right padding) so today, the bars and the milestone stay in frame. The title keeps following getTimelineTitleWindow()'s natural window regardless, same as production — the two can disagree, and that disagreement is a real product defect this fixture depicts rather than hides.",
       "capture": "viewport",
-      "bytes": 101499
+      "bytes": 101530
     },
     {
       "id": "timeline-view-quarter",

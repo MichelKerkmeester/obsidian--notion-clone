@@ -21,7 +21,8 @@
       "039 acceptance criteria",
       "039 goal",
       "calendar parity goal",
-      "calendar milestone completion goal"
+      "calendar milestone completion goal",
+      "implementation"
     ],
     "key_topics": [
       "calendar",
@@ -38,14 +39,17 @@
       "goal"
     ],
     "importance_tier": "important",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "src/views/calendar-renderer.ts",
+      "src/i18n.ts",
+      "src/views/calendar-renderer.test.ts",
       "src/data/calendar-timeline-model.ts",
       "tools/lane/css-lane.json"
     ],
@@ -81,9 +85,27 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "calendar-renderer.ts",
         "kind": "code",
         "path": "src/views/calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-renderer.test.ts",
         "source": "derived"
       },
       {
@@ -175,29 +197,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "calm",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "TASKS",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "obsidian-pm has no calendar view; this phase merges its verified date and milestone language into the existing calendar-renderer.ts, not a file port.",
     "created_at": "2026-09-02T21:56:40.087Z",
-    "last_save_at": "2026-09-02T21:56:40.087Z",
+    "last_save_at": "2026-09-03T09:09:24.002Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,14 +209,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:05e4cf1058946c5525b9607a8b5d31abec860e3be325d3455714526b71e6e582",
+    "source_fingerprint": "sha256:4fd26f18811ee4e67be0d0785ce507b850e88d65d9c11413dd1f798e92da7a42",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "87735cd28d8ab39ba7fddcd1ef5e3517620e14ef1908513777fad0508b7958cb",
       "plan.md": "822cd1fe3da8684f7dd69b7f08af129efae19f9f063b54471e84988261ee97a6",
-      "tasks.md": "0b831fb198941528648c1cce5a02abffe2dd8f91baa3ce4637be2f7bdf3548d4"
+      "tasks.md": "9448b32cf7e566f04ea9398f72ccb3383adff9ca1da87d5b97d626b622da088c",
+      "implementation-summary.md": "5e659f3f1328f1cc30053fc3dc4ab299d1960b00e816b5cd27134ecdd3299fa2"
     },
     "last_active_child_id": null,
     "last_active_at": null

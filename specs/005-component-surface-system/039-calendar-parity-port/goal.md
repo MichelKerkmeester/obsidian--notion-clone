@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/039-calendar-parity-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from 036's Final adoption plan row 3; nothing has run"
+    last_updated_at: "2026-09-03T10:40:00Z"
+    last_updated_by: "leg-a-verified"
+    recent_action: "Leg a verified: completion/weekend/empty-state landed; not committed"
     next_safe_action: "Observe renderMonth's missing completion branch as the red baseline for REQ-002"
     blockers: []
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-039-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 64
     open_questions:
       - "Whether the shared date-transaction module lands here or in 037"
     answered_questions:

@@ -15,7 +15,7 @@
 import { describe, expect, it, vi, beforeAll } from "vitest";
 import { CalendarRenderer, CalendarRendererActions } from "./calendar-renderer";
 import { ViewConfig, RowData, ColumnDef } from "../data/types";
-import type { TFile } from "obsidian";
+import { TFile } from "obsidian";
 
 vi.mock("obsidian", () => ({
   setIcon: vi.fn(),
@@ -33,11 +33,13 @@ vi.mock("../i18n", () => ({
       "calendar.week": "Week",
       "calendar.day": "Day",
       "calendar.untitled": "Untitled",
+      "calendar.unscheduledEmpty": "Nothing unscheduled.",
       "timeline.invalidEventsTitle": "Invalid time events",
       "timeline.invalidEventsConflictNotice": "{count} event(s) with time conflict (end ≤ start)",
       "emptyState.selectDateProperty": "Select date property",
-      "emptyState.noDateFieldTitle": "No date property configured",
-      "emptyState.noEventsTitle": "No events found",
+      "emptyState.noDateFieldTitle": "No date property",
+      "emptyState.noEventsTitle": "No events",
+      "emptyState.noEventsMessage": "Records with a value in the selected date property will appear here.",
       "emptyState.readFailedTitle": "Failed to read calendar data",
     };
     const template = messages[key] || key;
@@ -237,6 +239,15 @@ beforeAll(() => {
 // 3. TESTS
 // ───────────────────────────────────────────────────────────────────
 
+const createMockActions = (overrides?: Partial<CalendarRendererActions>): CalendarRendererActions => ({
+  openRow: vi.fn(),
+  getColumns: vi.fn((): ColumnDef[] => [
+    { key: "due", label: "Due Date", type: "date" as const },
+    { key: "name", label: "Name", type: "text" as const },
+  ]),
+  ...overrides,
+});
+
 describe("CalendarRenderer Unit Tests", () => {
   const baseConfig: ViewConfig = {
     id: "calendar-view-1",
@@ -254,15 +265,6 @@ describe("CalendarRenderer Unit Tests", () => {
       computedFields: [],
     },
   };
-
-  const createMockActions = (overrides?: Partial<CalendarRendererActions>): CalendarRendererActions => ({
-    openRow: vi.fn(),
-    getColumns: vi.fn((): ColumnDef[] => [
-      { key: "due", label: "Due Date", type: "date" as const },
-      { key: "name", label: "Name", type: "text" as const },
-    ]),
-    ...overrides,
-  });
 
   it("sets accessible title and aria-label on warning button at creation", () => {
     const actions = createMockActions({
@@ -419,5 +421,210 @@ describe("CalendarRenderer Unit Tests", () => {
     const emptyCard = mockRoot.querySelector(".db-empty-card");
     expect(emptyCard).not.toBeNull();
     expect(emptyCard?.getAttribute("data-empty-reason")).toBe("read-failed");
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. PARITY BEHAVIOURS (completion-aware marking, weekend headers, calm empty copy)
+// ───────────────────────────────────────────────────────────────────
+
+describe("Calendar parity behaviours", () => {
+  const parityConfig: ViewConfig = {
+    id: "calendar-view-parity",
+    name: "Calendar",
+    sourceFolder: "notes",
+    calendarStartDateField: "due",
+    calendarMonth: "2026-08",
+    calendarScale: "month",
+    schema: {
+      columns: [
+        { key: "due", label: "Due Date", type: "date" as const },
+        { key: "done", label: "Done", type: "checkbox" as const },
+      ],
+      computedFields: [],
+    },
+  };
+
+  const makeRow = (path: string, frontmatter: Record<string, unknown>): RowData => ({
+    file: Object.assign(new TFile(), { path, name: path.replace(/\.md$/, "") }),
+    frontmatter,
+    computed: {},
+  });
+
+  const eventForPath = (root: MockElement, selector: string, path: string): MockElement | undefined =>
+    root.querySelectorAll(selector).find((el) => el.getAttribute("data-note-database-row-path") === path);
+
+  const isWeekendKey = (dateKey: string): boolean => {
+    const dow = new Date(Date.UTC(Number(dateKey.slice(0, 4)), Number(dateKey.slice(5, 7)) - 1, Number(dateKey.slice(8, 10)))).getUTCDay();
+    return dow === 0 || dow === 6;
+  };
+
+  it("marks a completed-row event distinctly from an open one in the month grid", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, parityConfig, [
+      makeRow("done-note.md", { due: "2026-08-15", done: true }),
+      makeRow("open-note.md", { due: "2026-08-16", done: false }),
+    ]);
+
+    const root = container as unknown as MockElement;
+    const doneSegment = eventForPath(root, ".db-calendar-month-segment", "done-note.md");
+    const openSegment = eventForPath(root, ".db-calendar-month-segment", "open-note.md");
+    expect(doneSegment).toBeDefined();
+    expect(openSegment).toBeDefined();
+    expect(doneSegment?.className.split(/\s+/)).toContain("is-completed");
+    expect(openSegment?.className.split(/\s+/)).not.toContain("is-completed");
+  });
+
+  it("marks a completed-row event in the week all-day strip", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+    const allDayConfig: ViewConfig = {
+      ...parityConfig,
+      calendarScale: "week",
+      calendarWeekStart: "2026-08-10",
+    };
+
+    renderer.render(container, allDayConfig, [
+      makeRow("done-week.md", { due: "2026-08-11", dueEnd: "2026-08-12", done: true }),
+      makeRow("open-week.md", { due: "2026-08-13", done: false }),
+    ]);
+
+    const root = container as unknown as MockElement;
+    const doneSegment = eventForPath(root, ".db-calendar-week-allday-segment", "done-week.md");
+    const openSegment = eventForPath(root, ".db-calendar-week-allday-segment", "open-week.md");
+    expect(doneSegment).toBeDefined();
+    expect(openSegment).toBeDefined();
+    expect(doneSegment?.className.split(/\s+/)).toContain("is-completed");
+    expect(openSegment?.className.split(/\s+/)).not.toContain("is-completed");
+  });
+
+  it("marks a completed-row event on timed week events", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+    const timedConfig: ViewConfig = {
+      ...parityConfig,
+      calendarScale: "week",
+      calendarWeekStart: "2026-08-10",
+      calendarEndDateField: "dueEnd",
+      schema: {
+        columns: [
+          { key: "due", label: "Due", type: "datetime" as const },
+          { key: "dueEnd", label: "Due End", type: "datetime" as const },
+          { key: "done", label: "Done", type: "checkbox" as const },
+        ],
+        computedFields: [],
+      },
+    };
+
+    renderer.render(container, timedConfig, [
+      makeRow("meeting-done.md", { due: "2026-08-12 10:00", dueEnd: "2026-08-12 11:00", done: true }),
+      makeRow("meeting-open.md", { due: "2026-08-12 14:00", dueEnd: "2026-08-12 15:00", done: false }),
+    ]);
+
+    const root = container as unknown as MockElement;
+    const doneEvent = eventForPath(root, ".db-calendar-week-timed-event", "meeting-done.md");
+    const openEvent = eventForPath(root, ".db-calendar-week-timed-event", "meeting-open.md");
+    expect(doneEvent).toBeDefined();
+    expect(openEvent).toBeDefined();
+    expect(doneEvent?.className.split(/\s+/)).toContain("is-completed");
+    expect(openEvent?.className.split(/\s+/)).not.toContain("is-completed");
+  });
+
+  it("marks a completed row in the unscheduled backlog", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, parityConfig, [
+      makeRow("unscheduled-done.md", { done: true }),
+      makeRow("unscheduled-open.md", { done: false }),
+    ]);
+
+    const root = container as unknown as MockElement;
+    const items = root.querySelectorAll(".db-calendar-backlog-item");
+    const doneItem = items.find((el) => el.getAttribute("title") === "unscheduled-done.md");
+    const openItem = items.find((el) => el.getAttribute("title") === "unscheduled-open.md");
+    expect(doneItem).toBeDefined();
+    expect(openItem).toBeDefined();
+    expect(doneItem?.className.split(/\s+/)).toContain("is-completed");
+    expect(openItem?.className.split(/\s+/)).not.toContain("is-completed");
+  });
+
+  it("marks weekend day cells and matching header labels in the month grid", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, parityConfig, []);
+
+    const root = container as unknown as MockElement;
+    const cells = root.querySelectorAll(".db-calendar-day");
+    expect(cells.length).toBeGreaterThan(0);
+    for (const cell of cells) {
+      const dateKey = cell.getAttribute("data-date-key") || "";
+      const hasWeekend = cell.className.split(/\s+/).includes("is-weekend");
+      expect(hasWeekend).toBe(isWeekendKey(dateKey));
+    }
+
+    // The weekday label row marks the same columns as the first grid week.
+    const weekdays = root.querySelectorAll(".db-calendar-weekday");
+    const firstWeekCells = cells.slice(0, 7);
+    expect(weekdays.length).toBe(7);
+    firstWeekCells.forEach((cell, index) => {
+      const cellIsWeekend = cell.className.split(/\s+/).includes("is-weekend");
+      expect(weekdays[index].className.split(/\s+/).includes("is-weekend")).toBe(cellIsWeekend);
+    });
+  });
+
+  it("marks weekend day headers in the week view", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+    const weekConfig: ViewConfig = {
+      ...parityConfig,
+      calendarScale: "week",
+      calendarWeekStart: "2026-08-10",
+    };
+
+    renderer.render(container, weekConfig, []);
+
+    const root = container as unknown as MockElement;
+    const headers = root.querySelectorAll(".db-calendar-time-header-day");
+    expect(headers.length).toBe(7);
+    for (const header of headers) {
+      const dateKey = header.getAttribute("data-date-key") || "";
+      expect(header.className.split(/\s+/).includes("is-weekend")).toBe(isWeekendKey(dateKey));
+    }
+  });
+
+  it("renders a muted empty line in the backlog when nothing is unscheduled", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
+
+    const root = container as unknown as MockElement;
+    const drawer = root.querySelector(".db-calendar-backlog");
+    expect(drawer).not.toBeNull();
+    const emptyLine = root.querySelector(".db-calendar-backlog-empty");
+    expect(emptyLine).not.toBeNull();
+    expect(emptyLine?.textContent).toBe("Nothing unscheduled.");
+  });
+
+  it("renders the calm empty-state title for no-events through the renderer", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, { ...parityConfig, calendarMonth: undefined }, []);
+
+    const root = container as unknown as MockElement;
+    const title = root.querySelector(".db-empty-card-title");
+    expect(title?.textContent).toBe("No events");
+  });
+
+  it("reads the calm empty-state copy from the real dictionary", async () => {
+    const actual = await vi.importActual<typeof import("../i18n")>("../i18n");
+    expect(actual.t("emptyState.noEventsTitle")).toBe("No events");
+    expect(actual.t("emptyState.noEventsMessage")).toBe("Records with a value in the selected date property will appear here.");
+    expect(actual.t("calendar.unscheduledEmpty")).toBe("Nothing unscheduled.");
   });
 });
