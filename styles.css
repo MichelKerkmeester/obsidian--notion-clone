@@ -879,11 +879,23 @@
      which then keeps its own transitions for a reader who asked for none. `.db-surface` leads
      for the surfaces that never carry the container class at all, an owned menu among them: it
      mounts on `doc.body` carrying only `.db-surface`, `.db-menu` and `.db-owned-menu`, with no
-     ancestor this list would otherwise reach. */
+     ancestor this list would otherwise reach.
+
+     `.db-surface` takes a real zero for its transition-duration, not the near-zero the container
+     gets below: nothing under this marker ever waits on a `transitionend`, so a hard stop starves
+     no listener, while a duration merely close to zero still runs a transition — and a synchronous
+     style read that lands inside that run reports the value a property is leaving, not the one it
+     is heading to. A spec-true `0` suppresses the transition outright instead of racing it. */
   .db-surface,
   .db-surface *,
   .db-surface *::before,
-  .db-surface *::after,
+  .db-surface *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0;
+    scroll-behavior: auto;
+  }
+
   .note-database-container,
   .note-database-container *,
   .note-database-container *::before,

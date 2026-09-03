@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "5657a71d290b",
+  "baselineHash": "d9c147c9bf3a",
   "baselineCommit": "421995b3790a0e6486e72bfcd3280e1fe7101562",
   "history": [
     {
@@ -1507,6 +1507,30 @@
         "screenshots/components/chrome-owned-menu-sheet-mobile-light.png",
         "screenshots/components/chrome-owned-menu-sheet-mobile-dark.png"
       ]
+    },
+    {
+      "event": "acquire",
+      "phase": "041-shared-ui-ux-port",
+      "at": "2026-09-03T21:38:51.199Z",
+      "hash": "5657a71d290b"
+    },
+    {
+      "event": "edit",
+      "phase": "041-shared-ui-ux-port",
+      "at": "2026-09-03T21:38:51.199Z",
+      "hash": "d9c147c9bf3a",
+      "note": "Split the reduced-motion .db-surface arm out of the container-wide rule into its own block with a real-zero transition-duration, instead of the container's 0.01ms. Nothing under .db-surface waits on transitionend, and the 0.01ms duration combined with the default transition-property: all meant a mutation (padding-inline removed from .is-phone .db-menu-section by the placement harness ablation) started a real, if brief, transition -- a synchronous getComputedStyle read right after the mutation could land mid-flight and report the departing value. A spec-true 0 suppresses the transition outright. animation-duration/iteration-count/scroll-behavior unchanged; .note-database-container keeps 0.01ms."
+    },
+    {
+      "event": "release",
+      "phase": "041-shared-ui-ux-port",
+      "at": "2026-09-03T21:43:55.129Z",
+      "hash": "d9c147c9bf3a",
+      "reviewed": [
+        "screenshots/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "screenshots/components/chrome-owned-menu-sheet-mobile-light.png"
+      ],
+      "note": "Fixed a placement-harness regression the reduced-motion .db-surface arm caused: it set transition-duration: 0.01ms with no transition-property, so the default transition-property: all made every animatable property on that subtree actually transition, and a synchronous getComputedStyle read right after a style mutation (the ablation removing padding-inline from .is-phone .db-menu-section) could land mid-flight and report the departing value instead of the arriving one. Nothing under .db-surface listens for transitionend, so the honest fix is a real zero: .db-surface split into its own rule with transition-duration: 0, leaving .note-database-container at its prior 0.01ms. verify-placement.mjs: the is-phone heading rule check went from FAIL to PASS, 392/393 (the one remaining red is the pre-existing declared paint-contain reason, unrelated). Full recapture run detached: the two owned-menu-sheet-mobile captures (the only .db-surface scenarios in the phone-sheet presentation) came back pixel-identical to the committed baseline (PIL ImageChops bbox=None, manifest layoutHash unchanged) with only PNG-encoder byte noise, so their bytes were restored rather than shipped as churn. Ten unrelated captures (calendar-empty-state x2, timeline-subtask-tree x2, timeline-view and its day/month/quarter/mobile variants x6) drifted the same way on a run this change never touches -- pixel-identical, layoutHash unchanged, restored to committed bytes -- pre-existing harness non-determinism matching this packet's prior findings. manifest.json keeps only the styles.css sourceHash/generatedFrom bump across all 276 scenarios (277 lines each way, sed-applied so no other field moved); no PNG in the tree differs from HEAD."
     }
   ],
   "outstanding": [
