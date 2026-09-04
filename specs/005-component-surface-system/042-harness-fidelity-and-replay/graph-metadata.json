@@ -49,18 +49,18 @@
       "implementation-summary.md",
       "tools/live/render-assertion-harness.ts",
       "tools/live/replay.mjs",
+      "tools/screenshots/pixel-hash.mjs",
+      "tools/screenshots/pixel-hash.test.mjs",
+      "tools/screenshots/capture.mjs",
+      "tools/screenshots/verify.mjs",
+      "tools/lane/check-lane.mjs",
+      "tools/lane/check-lane.test.mjs",
       "tools/live/render-assertions.mjs",
       "tools/live/render-scenario-utils.mjs",
       "tools/live/render-scenario-utils.test.mjs",
       "tools/live/renderer-coverage.json",
       "tools/live/replay.json",
-      "tools/live/sheet-rebuild.mjs",
-      "tools/live/sheet-teardown.mjs",
-      "tools/live/unstyled-links.json",
-      "tools/screenshots/runtime-vars.css",
-      "tools/screenshots/theme.css",
-      "tools/lane/css-lane.json",
-      "tools/lane/check-lane.mjs"
+      "tools/live/sheet-rebuild.mjs"
     ],
     "entities": [
       {
@@ -112,6 +112,42 @@
         "source": "derived"
       },
       {
+        "name": "pixel-hash.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/pixel-hash.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "pixel-hash.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/pixel-hash.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.test.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.test.mjs",
+        "source": "derived"
+      },
+      {
         "name": "render-assertions.mjs",
         "kind": "file",
         "path": "tools/live/render-assertions.mjs",
@@ -148,42 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "sheet-teardown.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-teardown.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "unstyled-links.json",
-        "kind": "config",
-        "path": "tools/live/unstyled-links.json",
-        "source": "derived"
-      },
-      {
-        "name": "runtime-vars.css",
-        "kind": "file",
-        "path": "tools/screenshots/runtime-vars.css",
-        "source": "derived"
-      },
-      {
-        "name": "theme.css",
-        "kind": "file",
-        "path": "tools/screenshots/theme.css",
-        "source": "derived"
-      },
-      {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
-        "name": "check-lane.mjs",
-        "kind": "file",
-        "path": "tools/lane/check-lane.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three DONE-table rows in the parent's `goal.md` share one shape: a check's green, or the replay",
     "created_at": "2026-09-03T20:48:20Z",
-    "last_save_at": "2026-09-03T23:43:48.121Z",
+    "last_save_at": "2026-09-04T00:01:04.570Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:97c2d0d04d584fa308687e9c6c6a5cb8ea3e95a1e2e385fa62ffe719e08316d7",
+    "source_fingerprint": "sha256:4e7f39f3474c1b23787aa37d2bf56a2b7b021a515de89ca650d6296b336d3815",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4b13174bdfbb3f5d2c7d453bcbb2fbe63e3f4a440eec8bb6f58a0607f86c12c2",
       "plan.md": "ec0f2c8859346b2a1039f4404fa4d5cc2eb36cac7b1ab2e45c22c2ee428e4b83",
-      "tasks.md": "de1e817971a44c2f063cf80249749d1be129e2ccdbae192882fa0c0512e3f675",
-      "implementation-summary.md": "8025b9980c964ccb95adf12bb63f65f7395da164b6a37e9ab4dd02950401cf5e"
+      "tasks.md": "6998623261a058448db501515cc94e38d6f28de03c113bb575adf61f0f59a7cc",
+      "implementation-summary.md": "606199b09d09f9866f399a0f6bb1ade7b5569ac63464f9c8f0a5917836151860"
     },
     "last_active_child_id": null,
     "last_active_at": null

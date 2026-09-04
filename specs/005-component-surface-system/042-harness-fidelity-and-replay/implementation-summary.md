@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
     last_updated_at: "2026-09-04T01:41:43Z"
     last_updated_by: "verifier"
-    recent_action: "Added 6 open-row-fix replay claims; 21 -> 27 claims, reversed 0. Manifest-compare fix (pixelHash, check-lane content filter) landed and merged"
+    recent_action: "Reconciled 042 docs during rebase: manifest-compare fix + 6 open-row replay claims merged"
     next_safe_action: "External lane per D14, then in-runtime gate verification with Chrome (tasks.md T019-T023)"
     blockers: []
     key_files:
