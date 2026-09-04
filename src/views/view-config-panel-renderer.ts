@@ -28,6 +28,7 @@ import { getVaultProperties, VaultProperty } from "../data/vault-properties";
 import { createConditionalFormatLeaf, getConditionalFormatCondition, isConditionalFormatOperator } from "../data/conditional-format-editor";
 import { t } from "../i18n";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
+import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
 import { createCheckbox } from "./checkbox";
@@ -293,6 +294,7 @@ export class ViewConfigPanelRenderer {
     anchorEl?: HTMLElement
   ): void {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
+    const wasOpen = Boolean(this.panelEl?.isConnected);
     // Removing it is enough to take the backdrop with it: the sheet module drops the backdrop once
     // the last live sheet leaves the document, so this does not have to remember to say so.
     this.panelEl?.remove();
@@ -301,6 +303,9 @@ export class ViewConfigPanelRenderer {
 
     const panel = containerEl.createDiv({ cls: "db-view-config-panel", attr: { id: "db-view-config-panel" } });
     this.panelEl = panel;
+    // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
+    // is what keeps the sheet from replaying its rise and moving out from under the thumb.
+    if (wasOpen) carrySheetEntrance(panel);
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
 

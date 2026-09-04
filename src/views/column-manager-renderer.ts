@@ -22,6 +22,7 @@ import { ColumnDef, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { getFileFieldFixedType, QUICK_ADD_FILE_FIELDS } from "../data/file-fields";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { getPropertyDropdownIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { isHTMLElement } from "./dom-guards";
@@ -76,6 +77,7 @@ export class ColumnManagerRenderer {
     anchorEl?: HTMLElement
   ): void {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
+    const wasOpen = Boolean(this.panelEl?.isConnected);
     // Removing it is enough to take the backdrop with it: the sheet module drops the backdrop once
     // the last live sheet leaves the document, so this does not have to remember to say so.
     this.panelEl?.remove();
@@ -87,6 +89,9 @@ export class ColumnManagerRenderer {
       attr: { id: "db-column-manager" },
     });
     this.panelEl = panel;
+    // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
+    // is what keeps the sheet from replaying its rise and moving out from under the thumb.
+    if (wasOpen) carrySheetEntrance(panel);
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) {
       header.parentElement.insertBefore(panel, header.nextSibling);

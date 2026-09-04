@@ -614,3 +614,199 @@ export function openGroupSheetForDrag(doc: Document): DragSetup {
     detail: "sheet open and rebuilt, bar ready to drag",
   };
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 6. AN EDIT INSIDE AN OPEN SHEET
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * The sort and filter sheets, wired the way the view wires them, so a real tap can be aimed at
+ * "+ Add" twice.
+ *
+ * The cases in section 4 above register the same way this does and prove the stack follows a
+ * rebuilt node. They cannot see what this one is for, because they dispatch `click()` on a node
+ * they looked up AFTER the rebuild — a real thumb aims at a screen COORDINATE before the rebuild
+ * and lands on whatever is there afterwards. Those are different questions, and only the second
+ * one notices a surface that moves between the two taps.
+ *
+ * Two things the real view does are modelled here because both bear on where the sheet is when the
+ * second tap lands: `refresh()` rebuilds the toolbar, so the anchor the panel opened against is
+ * destroyed and re-resolved, and it re-renders the open panel, so one tap on "+ Add" replaces the
+ * panel node twice rather than once.
+ */
+interface AddRowScenario {
+  root: HTMLElement;
+  kind: "sort" | "filter";
+  rules(): number;
+  panel(): HTMLElement | null;
+  open: boolean;
+}
+
+let activeAddRow: AddRowScenario | null = null;
+let topTrack: number[] = [];
+
+export interface AddRowSetup {
+  ready: boolean;
+  detail: string;
+}
+
+export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter"): AddRowSetup {
+  // Same reason as the drag setup above: a leftover surface takes the press meant for this one.
+  while (overlayStack.size() > 0) {
+    const top = overlayStack.getTopSurface()?.panel;
+    if (!top || !overlayStack.dismissPanel(top, "programmatic")) break;
+  }
+  for (const stale of Array.from(doc.body.querySelectorAll(".note-database-container, .db-sort-panel, .db-filter-panel"))) {
+    stale.remove();
+  }
+  activeAddRow?.root.remove();
+  activeAddRow = null;
+  topTrack = [];
+
+  const root = doc.createElement("div");
+  root.className = "note-database-container";
+  doc.body.appendChild(root);
+  const header = root.createDiv({ cls: "db-header" });
+  const toolbar = header.createDiv({ cls: "db-toolbar" });
+  const buildToolbar = (): void => {
+    toolbar.empty();
+    toolbar.createEl("button", { cls: "db-sort-btn", text: "sort" });
+    toolbar.createEl("button", { cls: "db-filter-btn", text: "filter" });
+  };
+  buildToolbar();
+  root.createDiv({ cls: "db-table-wrapper", text: "rows" });
+
+  const sortRenderer = new SortPanelRenderer();
+  const filterRenderer = new FilterPanelRenderer();
+  const config = {
+    viewType: "table",
+    schema: { columns: [{ key: "status", label: "Status", type: "text" }, { key: "owner", label: "Owner", type: "text" }] },
+  } as unknown as Parameters<SortPanelRenderer["render"]>[2];
+  const state = {
+    sortRules: [] as unknown[], sortColumn: undefined, sortDirection: "asc",
+    filters: [] as unknown[], filterTree: undefined, filterLogic: "and",
+  } as unknown as Parameters<SortPanelRenderer["render"]>[3];
+
+  const scenario: AddRowScenario = {
+    root,
+    kind,
+    open: true,
+    rules: () => {
+      const held = state as unknown as { sortRules: unknown[]; filters: unknown[] };
+      return kind === "sort" ? held.sortRules.length : held.filters.length;
+    },
+    panel: () => (kind === "sort" ? sortRenderer.getPanel() : filterRenderer.getPanel()),
+  };
+
+  const anchor = (): HTMLElement | undefined =>
+    (root.querySelector(kind === "sort" ? ".db-sort-btn" : ".db-filter-btn") as HTMLElement) || undefined;
+
+  const renderPanel = (): void => {
+    if (kind === "sort") {
+      sortRenderer.render(root, scenario.open, config, state, {
+        save: () => undefined,
+        refresh: () => refresh(),
+        close: () => { scenario.open = false; renderPanel(); },
+      }, anchor());
+      return;
+    }
+    filterRenderer.render(
+      root,
+      scenario.open,
+      state as unknown as Parameters<FilterPanelRenderer["render"]>[2],
+      config as unknown as Parameters<FilterPanelRenderer["render"]>[3],
+      {
+        saveState: () => undefined,
+        refresh: () => refresh(),
+        close: () => { scenario.open = false; renderPanel(); },
+      },
+      anchor(),
+    );
+  };
+
+  const refresh = (): void => {
+    buildToolbar();
+    if (scenario.open) renderPanel();
+  };
+
+  renderPanel();
+  const panel = scenario.panel();
+  if (!panel) return { ready: false, detail: `the ${kind} panel never rendered` };
+  installPopoverAutoClose({
+    panel,
+    getPanel: () => scenario.panel(),
+    anchorEl: anchor(),
+    close: () => { scenario.open = false; renderPanel(); },
+  });
+
+  activeAddRow = scenario;
+  return { ready: true, detail: `${kind} sheet open` };
+}
+
+export interface AddRowProbe {
+  /** Centre of the "+ Add" control, in viewport coordinates. */
+  addButton: { x: number; y: number } | null;
+  rules: number;
+  open: boolean;
+  sheets: number;
+  scrims: number;
+  panelTop: number | null;
+}
+
+export function readAddRowProbe(doc: Document): AddRowProbe {
+  const panel = activeAddRow?.panel() ?? null;
+  const add = panel
+    ? Array.from(panel.querySelectorAll<HTMLButtonElement>(".db-panel-button")).find((btn) => (btn.textContent || "").startsWith("+"))
+    : undefined;
+  const box = add?.getBoundingClientRect();
+  return {
+    addButton: box && box.width > 0 ? { x: box.x + box.width / 2, y: box.y + box.height / 2 } : null,
+    rules: activeAddRow?.rules() ?? -1,
+    open: Boolean(activeAddRow?.open && panel?.isConnected),
+    sheets: doc.body.querySelectorAll(".db-mobile-bottom-sheet").length,
+    scrims: doc.body.querySelectorAll(".db-mobile-sheet-scrim").length,
+    panelTop: panel ? panel.getBoundingClientRect().top : null,
+  };
+}
+
+/**
+ * Sample the sheet's top edge every frame, so a surface that moves cannot do it unobserved.
+ *
+ * The first sample is taken SYNCHRONOUSLY rather than on the first frame. An entrance commits its
+ * start state during the call that begins it, and the surface leaves that state on the very next
+ * frame — so a tracker that waits for one has already missed the deepest point it exists to see.
+ * Measured: 830 on a first-frame tracker against 844 taken synchronously, on the same 844px screen.
+ */
+export function trackSheetTop(doc: Document, durationMs: number): void {
+  const view = doc.defaultView;
+  if (!view) return;
+  topTrack = [];
+  const sample = (): void => {
+    const panel = activeAddRow?.panel();
+    if (panel) topTrack.push(panel.getBoundingClientRect().top);
+  };
+  sample();
+  const started = view.performance.now();
+  const step = (): void => {
+    sample();
+    if (view.performance.now() - started < durationMs) view.requestAnimationFrame(step);
+  };
+  view.requestAnimationFrame(step);
+}
+
+/**
+ * Open a sheet and begin tracking it in the same turn.
+ *
+ * Two round trips from the driver leave frames between the open and the first sample, which is
+ * exactly the window the entrance lives in. The control case that asserts an opening sheet still
+ * rises cannot be staged any other way.
+ */
+export function openHeaderSheetTracked(doc: Document, kind: "sort" | "filter", durationMs: number): AddRowSetup {
+  const setup = openHeaderSheetForAddRow(doc, kind);
+  if (setup.ready) trackSheetTop(doc, durationMs);
+  return setup;
+}
+
+export function readSheetTrack(): number[] {
+  return topTrack.slice();
+}

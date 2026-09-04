@@ -114,6 +114,29 @@ export function playSheetEntrance(panel: HTMLElement): void {
   panel.addClass("is-visible");
 }
 
+/**
+ * Adopt a replacement node into a surface that is already on screen, so its entrance does not run
+ * a second time.
+ *
+ * The entrance above is keyed to the NODE: a panel without `is-visible` has not entered, so it
+ * plays. Four header panels rebuild by removing their node outright and building a fresh one — on
+ * every add, remove, toggle, and on any background refresh that lands while they are open — and a
+ * fresh node has never entered. So editing inside an open sheet replayed the whole rise from below
+ * the fold. Measured on a 390x844 phone page: the top edge went 708 to 844 and back over ~280ms,
+ * and a second tap aimed at the same button landed on whatever the slide had put under the thumb.
+ * Five taps at one coordinate added two rules; with the transition disabled the same five taps
+ * added five, which is what isolates this from anything else on the tree.
+ *
+ * Only the owner knows that a replacement is a rebuild rather than an opening, so the owner says
+ * so. The classes are the pair `playSheetEntrance` finishes with rather than a third state of this
+ * function's own: a rebuilt sheet then ends up in the same state an opened one is in, and a later
+ * entrance on the same node is a no-op for the same reason it already was.
+ */
+export function carrySheetEntrance(panel: HTMLElement): void {
+  panel.addClass("db-overlay-enter");
+  panel.addClass("is-visible");
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 1b. THE MOUNT POINT
 // ───────────────────────────────────────────────────────────────────

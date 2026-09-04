@@ -17,6 +17,7 @@ import { SortRule, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { createDropdownField } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
@@ -57,6 +58,7 @@ export class SortPanelRenderer {
     anchorEl?: HTMLElement
   ): void {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
+    const wasOpen = Boolean(this.panelEl?.isConnected);
     this.removeFocusTrap?.();
     this.removeFocusTrap = null;
     this.panelEl?.remove();
@@ -82,6 +84,9 @@ export class SortPanelRenderer {
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) header.parentElement.insertBefore(panel, header.nextSibling);
     this.panelEl = panel;
+    // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
+    // is what keeps the sheet from replaying its rise and moving out from under the thumb.
+    if (wasOpen) carrySheetEntrance(panel);
     this.removeFocusTrap = trapFocus(panel, {
       onEscape: () => {
         actions.close();

@@ -22,6 +22,7 @@ import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "..
 import { t } from "../i18n";
 import { createDropdownField } from "./dropdown-field";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
@@ -149,6 +150,7 @@ export class FilterPanelRenderer {
     anchorEl?: HTMLElement
   ): void {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
+    const wasOpen = Boolean(this.panelEl?.isConnected);
     closeActiveDateValuePicker(containerEl.ownerDocument);
     if (this.panelEl) {
       this.removeFocusTrap?.();
@@ -173,6 +175,9 @@ export class FilterPanelRenderer {
       header.parentElement.insertBefore(panel, header.nextSibling);
     }
     this.panelEl = panel;
+    // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
+    // is what keeps the sheet from replaying its rise and moving out from under the thumb.
+    if (wasOpen) carrySheetEntrance(panel);
     this.removeFocusTrap = trapFocus(panel, {
       onEscape: () => {
         actions.close();

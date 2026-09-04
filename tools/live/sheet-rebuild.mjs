@@ -36,6 +36,10 @@ const PRE_FIX_FAILURES = new Map([
   ["sort sheet (real SortPanelRenderer, add-sort)", "a tap inside the panel the rebuild just created read as OUTSIDE"],
   ["filter sheet (real FilterPanelRenderer, add-condition)", "a tap inside the panel the rebuild just created read as OUTSIDE"],
   ["embedded filter sheet (real FilterPanelRenderer, portalled on phone)", "a tap inside the panel the rebuild just created read as OUTSIDE"],
+  ["the sort sheet holds still while it rebuilds", "settled at top 708 and the rebuild dropped it to 844 on an 844px screen"],
+  ["the filter sheet holds still while it rebuilds", "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"],
+  ["five taps on the sort sheet's add control", "2 of 5 taps reached it; the other three landed on a rule row and on two icons"],
+  ["five taps on the filter sheet's add control", "2 of 5 taps reached it; one of the strays opened a field dropdown"],
 ]);
 
 // ───────────────────────────────────────────────────────────────────
@@ -56,12 +60,17 @@ const entry = join(work, "entry.ts");
 
 writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runSheetRebuildParity, openGroupSheetForDrag } from "${resolve(HERE, "sheet-rebuild-harness")}";
+import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, trackSheetTop, readSheetTrack } from "${resolve(HERE, "sheet-rebuild-harness")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
 window.__sheetRebuild = () => runSheetRebuildParity(document);
 window.__openGroupSheetForDrag = () => openGroupSheetForDrag(document);
+window.__openAddRowSheet = (kind) => openHeaderSheetForAddRow(document, kind);
+window.__openAddRowSheetTracked = (kind, ms) => openHeaderSheetTracked(document, kind, ms);
+window.__addRowProbe = () => readAddRowProbe(document);
+window.__trackSheetTop = (ms) => trackSheetTop(document, ms);
+window.__sheetTrack = () => readSheetTrack();
 // The speed rule, exported so this lane can ask it rather than race to produce it.
 window.__sheet = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 `);
@@ -124,11 +133,12 @@ const SHORT_PX = 40;
 
 let results = null;
 let dragResult = null;
+let addRowResult = null;
 let browser;
 const failures = [];
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await page.goto(`file://${join(work, "index.html")}`);
@@ -285,6 +295,130 @@ try {
     },
   ];
 
+  // ─────────────────────────────────────────────────────────────────
+  // AN EDIT INSIDE AN OPEN SHEET
+  // ─────────────────────────────────────────────────────────────────
+  //
+  // The parity cases above dispatch `click()` on a node they looked up after the rebuild. A thumb
+  // aims at a screen COORDINATE, before the rebuild, and lands on whatever is there when the tap
+  // arrives — so a sheet that moves between two taps sends the second one somewhere the operator
+  // never aimed. That is a different question, and nothing here asked it until now.
+
+  /** Open the sheet, let the entrance finish, and report where "+ Add" ended up. */
+  const openSettled = async (kind) => {
+    const setup = await page.evaluate((k) => window.__openAddRowSheet(k), kind);
+    if (!setup.ready) return null;
+    // Past the 260ms entrance with room to spare, and confirmed settled rather than assumed: the
+    // coordinate is only meaningful once the surface has stopped moving.
+    // Unmoving is not enough. The entrance holds its start state for a frame or two before it
+    // begins interpolating, so two identical samples are also what the BEGINNING of a rise looks
+    // like — and a coordinate taken there is a coordinate on a sheet that is about to leave. The
+    // surface must have stopped moving AND be on screen.
+    await page.waitForFunction(() => {
+      const probe = window.__addRowProbe();
+      const last = window.__settleTop;
+      window.__settleTop = probe.panelTop;
+      return probe.panelTop !== null
+        && probe.panelTop < window.innerHeight - 1
+        && last !== undefined
+        && Math.abs(last - probe.panelTop) < 0.5;
+    }, null, { timeout: 4000, polling: "raf" });
+    await page.evaluate(() => { delete window.__settleTop; });
+    return page.evaluate(() => window.__addRowProbe());
+  };
+
+  addRowResult = [];
+  for (const kind of ["sort", "filter"]) {
+    const settled = await openSettled(kind);
+    if (!settled?.addButton) {
+      addRowResult.push({
+        name: `the ${kind} sheet holds still while it rebuilds`,
+        pass: false,
+        detail: "could not stage: the sheet never opened with an add control on screen",
+      });
+      addRowResult.push({
+        name: `five taps on the ${kind} sheet's add control`,
+        pass: false,
+        detail: "could not stage: the sheet never opened with an add control on screen",
+      });
+      continue;
+    }
+
+    // 1. THE MECHANISM. One tap, and the sheet's own top edge sampled every frame for 500ms after
+    //    it. A rebuild replaces the panel node; if the replacement is treated as an opening, the
+    //    surface drops the full height of itself and slides back over the entrance duration.
+    const settledTop = settled.panelTop;
+    await page.evaluate(() => window.__trackSheetTop(500));
+    await page.touchscreen.tap(settled.addButton.x, settled.addButton.y);
+    await page.waitForTimeout(600);
+    const track = await page.evaluate(() => window.__sheetTrack());
+    const deepest = track.length > 0 ? Math.max(...track) : Number.NaN;
+    // Downward only. Adding a row makes the sheet taller and its top edge legitimately rises, so
+    // the floor is the settled top and the ceiling is nothing.
+    const held = Number.isFinite(deepest) && deepest <= settledTop + 4;
+    addRowResult.push({
+      name: `the ${kind} sheet holds still while it rebuilds`,
+      pass: held,
+      detail: !Number.isFinite(deepest)
+        ? "the sheet was never sampled, so this run proves nothing"
+        : held
+          ? `settled at top ${settledTop.toFixed(0)}; the deepest point during the rebuild was ${deepest.toFixed(0)}`
+          : `settled at top ${settledTop.toFixed(0)} and the rebuild dropped it to ${deepest.toFixed(0)}`
+            + " — the surface replayed its entrance, so it is moving under the finger",
+    });
+
+    // 2. THE CONSEQUENCE. Five taps at ONE coordinate, at a rate a person actually taps. Every one
+    //    of them must reach the control the operator is aiming at.
+    const restaged = await openSettled(kind);
+    if (!restaged?.addButton) {
+      addRowResult.push({
+        name: `five taps on the ${kind} sheet's add control`,
+        pass: false,
+        detail: "could not stage: the sheet never reopened",
+      });
+      continue;
+    }
+    const TAPS = 5;
+    for (let tap = 0; tap < TAPS; tap += 1) {
+      await page.touchscreen.tap(restaged.addButton.x, restaged.addButton.y);
+      await page.waitForTimeout(120);
+    }
+    await page.waitForTimeout(600);
+    const after = await page.evaluate(() => window.__addRowProbe());
+    const landed = after.rules === TAPS && after.open && after.sheets === 1 && after.scrims === 1;
+    addRowResult.push({
+      name: `five taps on the ${kind} sheet's add control`,
+      pass: landed,
+      detail: landed
+        ? `all ${TAPS} taps reached it: ${after.rules} rule(s), sheet still open, 1 sheet and 1 backdrop`
+        : `${after.rules} of ${TAPS} taps reached it (open: ${after.open}, sheets: ${after.sheets},`
+          + ` backdrops: ${after.scrims}) — the rest landed on whatever the moving sheet put under the thumb`,
+    });
+  }
+
+  // 3. THE CONTROL. Deleting the entrance would pass both checks above and would be wrong: the
+  //    sheet is supposed to rise when it OPENS. This is the case that keeps the fix honest, so it
+  //    asserts the opposite of the two above on the one path where movement is correct.
+  await page.evaluate(() => window.__openAddRowSheetTracked("sort", 500));
+  await page.waitForTimeout(600);
+  const openTrack = await page.evaluate(() => window.__sheetTrack());
+  const openProbe = await page.evaluate(() => window.__addRowProbe());
+  const floor = await page.evaluate(() => window.innerHeight);
+  const startedBelow = openTrack.length > 0 && Math.max(...openTrack) >= floor - 1;
+  const settledAbove = openProbe.panelTop !== null && openProbe.panelTop < floor - 1;
+  addRowResult.push({
+    name: "a sheet that is genuinely opening still rises",
+    pass: startedBelow && settledAbove,
+    detail: openTrack.length === 0
+      ? "the sheet was never sampled, so this run proves nothing"
+      : startedBelow && settledAbove
+        ? `the entrance still runs: first seen at ${Math.max(...openTrack).toFixed(0)} on a ${floor}px screen,`
+          + ` settled at ${openProbe.panelTop.toFixed(0)}`
+        : `the entrance no longer runs on an open (deepest ${Math.max(...openTrack).toFixed(0)},`
+          + ` settled ${openProbe.panelTop === null ? "nothing" : openProbe.panelTop.toFixed(0)}, screen ${floor}px)`
+          + " — a sheet that appears instantly is not the fix this lane is asking for",
+  });
+
   await page.close();
   for (const error of pageErrors) failures.push(`page error: ${error}`);
 } catch (error) {
@@ -305,6 +439,16 @@ for (const r of results) {
   console.log(`  ${r.pass ? "PASS" : "FAIL"}  ${r.surface.padEnd(44)} ${r.rebuildShape}`);
   console.log(`        bar before: ${r.barBeforeRebuild}, after: ${r.barAfterRebuild} — ${r.detail}`);
   if (!r.pass) failures.push(`${r.surface}: ${r.detail}`);
+}
+
+if (addRowResult) {
+  for (const a of addRowResult) {
+    console.log(`  ${a.pass ? "PASS" : "FAIL"}  ${a.name.padEnd(44)} real touch`);
+    console.log(`        ${a.detail}`);
+    if (!a.pass) failures.push(`${a.name}: ${a.detail}`);
+  }
+} else {
+  failures.push("the add-row cases never ran, so an edit inside an open sheet is unmeasured");
 }
 
 if (dragResult) {
@@ -341,9 +485,15 @@ const checks = [
     detail,
     preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
   })),
+  ...addRowResult.map(({ name, pass, detail }) => ({
+    name,
+    pass,
+    detail,
+    preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
+  })),
 ];
 
-stamp(STAMP_PATH, { cases: results.length + dragResult.length, barsLost: 0, gesturesMeasured: dragResult.length, checks }, [
+stamp(STAMP_PATH, { cases: results.length + dragResult.length + addRowResult.length, barsLost: 0, gesturesMeasured: dragResult.length, checks }, [
   "tools/live/sheet-rebuild.mjs",
   "tools/live/sheet-rebuild-harness.ts",
   ...REQUIRED,
