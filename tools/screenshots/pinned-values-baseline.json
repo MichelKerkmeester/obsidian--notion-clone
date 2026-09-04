@@ -1,11 +1,8 @@
 {
   "unsuppliedWhy": "Tokens styles.css reads as var(--x) with NO fallback and nothing declares — not the stylesheet, not src/, not a harness file. The substitution is invalid at computed-value time, so the whole declaration is dropped and every capture shows the rule missing. The number is the count of such declarations, and the ratchet is on both the names and the counts: a new name, or a known name gaining reads, is a red. --text-warning was the thirteenth-largest kind of this and the largest instance; it is stood in now, transcribed from the host, which is why it is not below.",
-  "unsuppliedRecorded": "2026-09-02",
+  "unsuppliedRecorded": "2026-09-04",
   "unsupplied": {
     "--background-interactive-hover": 1,
-    "--color-blue": 1,
-    "--color-green": 1,
-    "--color-purple": 1,
     "--font-medium": 4,
     "--font-semibold": 2,
     "--font-smaller": 3,
@@ -14,7 +11,8 @@
     "--text-success": 1
   },
   "unsuppliedDisposition": {
-    "hostTokensNotYetStoodIn": "--color-blue, --color-green, --color-purple, --font-medium, --font-semibold, --font-smaller and --text-success are all defined by the installed host stylesheet and are transcribable exactly as --text-warning was. They are not done in the same pass because each one changes a weight, a size or a colour in captures outside the surfaces under review, and a transcription nobody looks at is the failure this repository keeps removing.",
+    "hostTokensStoodIn": "--color-blue and --color-purple are now transcribed into tools/screenshots/theme.css (TRANSCRIBED from the installed application stylesheet of Obsidian 1.13.4: light #086ddd/#7852ee, dark #027aff/#a882ff), the same board milestone/recurrence-chip gap --color-red/--color-orange/--color-green were stood in for. --color-green's own entry is dropped from this map for the same reason — theme.css already declares it and this scan no longer reads it back — rather than left here stale.",
+    "hostTokensNotYetStoodIn": "--font-medium, --font-semibold and --font-smaller are all defined by the installed host stylesheet and are transcribable exactly as --text-warning was. They are not done in the same pass because each one changes a weight or a size in captures outside the surfaces under review, and a transcription nobody looks at is the failure this repository keeps removing.",
     "accentChain": "--interactive-accent-hsl and --text-accent-hover both resolve through the host's --accent-h/--accent-s/--accent-l triple (258, 88%, 66%). The harness pins --interactive-accent to #5a67d8 and #6b74e0, which that triple does not produce, so supplying them means first deciding which accent this harness represents. That is a decision, not a transcription.",
     "productDefect": "--background-interactive-hover is read once, at styles.css:9153, and appears nowhere in the host stylesheet of Obsidian 1.13.7 — searched, zero occurrences. It is not a harness gap: it is a hover background the plugin asks for and no device can supply, so the declaration is dropped for every user. Recorded here because this scan is where it was found; it is fixed in the stylesheet, not here."
   },

@@ -73,6 +73,8 @@ window.__stateMarkers = (scenario) => {
     calendarOptionsPopover: !!container.querySelector(".db-calendar-options-popover"),
     timelineOptionsPopover: !!container.querySelector(".db-calendar-timeline-options-popover"),
     chartOptionsPopover: !!container.querySelector(".db-chart-options-popover"),
+    priorityBarCount: container.querySelectorAll(".pm-kanban-card-priority-bar").length,
+    priorityBarTotal: container.querySelectorAll(".pm-kanban-card").length,
     toolbar: !!container.querySelector(".db-toolbar .db-view-tab"),
     toolbarSearchActive: !!container.querySelector(".db-search-control.is-active"),
     toolbarUtilitiesPopover: !!container.querySelector(".db-toolbar-utilities-popover"),
@@ -424,6 +426,26 @@ const SINGLE_CASES = [
   },
 ];
 
+// Count case: priority is not a boolean captureData suboption like the cases above — it is an
+// always-present column whenever captureData is on (board-render-bench.ts's PRIORITY_COLUMN_INDEX
+// rename), and its own value distributes across four named tiers rather than flipping a single
+// marker (render-assertion-harness.ts's applyCapturePriorityTiers). The reference paints the
+// card-top strip for every tier except its two lowest ("medium"/"low"), so a mount that shows the
+// strip on every card or on none of them is the same defect this case exists to catch: the tier's
+// meaning never reached the DOM. CAPTURE_ROWS (18) cycling four tiers in urgent/high/medium/low
+// order gives urgent and high five rows each and medium and low four rows each — ten cards striped,
+// eight not.
+const COUNT_CASES = [
+  {
+    id: "constructed-board-priority",
+    spec: { renderer: "board", bag: "file-view", captureData: true },
+    marker: "priorityBarCount",
+    want: 10,
+    totalMarker: "priorityBarTotal",
+    wantTotal: 18,
+  },
+];
+
 const failures = [];
 let browser;
 try {
@@ -476,6 +498,23 @@ try {
       if (!ok) failures.push(`${id}: ${marker} was ${markers[marker]}, wanted true`);
 
       console.log(`  ${ok ? "PASS" : "FAIL"}  ${id} — ${marker}: ${markers[marker]}`);
+    }
+    console.log("");
+  }
+
+  for (const { id, spec, marker, want, totalMarker, wantTotal } of COUNT_CASES) {
+    const markers = await page.evaluate((scenario) => window.__stateMarkers(scenario), spec);
+    console.log(`constructed-state-assertions: ${id} mounted once — a per-row value distributed across four tiers\n`);
+    if (!markers.mounted) {
+      failures.push(`${id}: did not mount`);
+      console.log(`  FAIL  ${id} — did not mount`);
+    } else {
+      const barOk = markers[marker] === want;
+      const totalOk = markers[totalMarker] === wantTotal;
+      if (!barOk) failures.push(`${id}: ${marker} was ${markers[marker]}, wanted ${want} (five urgent + five high rows of eighteen)`);
+      if (!totalOk) failures.push(`${id}: ${totalMarker} was ${markers[totalMarker]}, wanted ${wantTotal}`);
+      console.log(`  ${barOk ? "PASS" : "FAIL"}  ${id} — ${marker}: ${markers[marker]}`);
+      console.log(`  ${totalOk ? "PASS" : "FAIL"}  ${id} — ${totalMarker}: ${markers[totalMarker]}`);
     }
     console.log("");
   }

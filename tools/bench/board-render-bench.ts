@@ -85,6 +85,12 @@ const MIXED_TYPES: ColumnDef["type"][] = [
 // one this loop produces is re-keyed for it.
 const PEOPLE_COLUMN_INDEX = MIXED_TYPES.indexOf("multi-select");
 
+// The index of MIXED_TYPES' one "select" entry — mirrors PEOPLE_COLUMN_INDEX above.
+// board-renderer.ts's priority-strip source (`getReferencePriorityColumn`) matches a select
+// column keyed exactly "priority" (case-insensitive); only the first select column this loop
+// produces is re-keyed for it, the same one-column swap the people rename already established.
+const PRIORITY_COLUMN_INDEX = MIXED_TYPES.indexOf("select");
+
 export function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
   const columns = Array.from({ length: count }, (_unused, i) => {
     const type = kind === "mixed" && i > 0 ? MIXED_TYPES[i % MIXED_TYPES.length] : "text";
@@ -96,9 +102,16 @@ export function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] 
     // constructed-board-subtask) without disturbing REPORTED_COLUMNS' other reported names or any
     // count-based threshold calibrated against this bench's 21 columns.
     const isPeopleColumn = kind === "mixed" && i === PEOPLE_COLUMN_INDEX;
+    // Same swap, for the card-top priority strip instead of the avatar stack: the reference paints
+    // it from a mapped priority column and omits it for the two lowest tiers, and no bench column
+    // was ever named "priority", so no production capture ever exercised that branch either. The
+    // harness's own captureData wiring (render-assertion-harness.ts's applyCapturePriorityTiers)
+    // gives this renamed column its urgent/high/medium/low values and colours; this rename only
+    // decides which one column carries them.
+    const isPriorityColumn = kind === "mixed" && i === PRIORITY_COLUMN_INDEX;
     const base = {
-      key: i === 0 ? "file.name" : isPeopleColumn ? "people" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
-      label: i === 0 ? "Name" : isPeopleColumn ? "People" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length],
+      key: i === 0 ? "file.name" : isPeopleColumn ? "people" : isPriorityColumn ? "priority" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
+      label: i === 0 ? "Name" : isPeopleColumn ? "People" : isPriorityColumn ? "Priority" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length],
       type,
     } as ColumnDef;
     if (kind === "mixed" && base.type === "text" && i % 5 === 0) base.textRenderMode = "markdown";

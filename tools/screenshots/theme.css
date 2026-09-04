@@ -44,6 +44,15 @@
      stylesheet of Obsidian 1.13.7: app.css resolves `--text-success: var(--color-green)`. */
   --color-green: #08b94e;
   --text-success: var(--color-green);
+  /* The board's milestone (M) and recurrence (R) chips set `--pm-chip-color` inline to
+     `var(--color-purple)`/`var(--color-blue)` (board-renderer.ts's renderReferenceChip), not
+     through a stylesheet rule, so with neither token declared here the custom property carried a
+     guaranteed-invalid value and every reader of it — the chip's own text colour and the
+     `--pm-chip--solid` background mixed from it — fell back to inherited/initial instead, painting
+     both chips with no fill at all in every capture that shows one. TRANSCRIBED from the installed
+     application stylesheet of Obsidian 1.13.4, not recalled. */
+  --color-purple: #7852ee;
+  --color-blue: #086ddd;
   --text-accent: #5a67d8;
   --text-selection: rgba(90, 103, 216, 0.18);
   /* The host's link tokens. Their absence is why the file-field captures painted #0000EE — the
@@ -132,6 +141,8 @@
   --color-red: #fb464c;
   --color-orange: #e9973f;
   --color-green: #44cf6e;
+  --color-purple: #a882ff;
+  --color-blue: #027aff;
   --text-accent: #a5b4fc;
   --text-selection: rgba(130, 145, 255, 0.22);
   --link-color: #a5b4fc;

@@ -467,10 +467,18 @@ function applyEmptyMetadataCache(rows: RowData[]): void {
  * own group field whose values grouping logic reads by identity) at `CAPTURE_OPTIONS` and
  * rewrites the rows' values to match, in place. Only touches keys the row already carries, so the
  * fill-rate gaps the bench decided stay gaps.
+ *
+ * The board bench's renamed "priority" column (board-render-bench.ts's PRIORITY_COLUMN_INDEX) is
+ * excluded the same way the group field is: CAPTURE_OPTIONS' five generic status names carry no
+ * tier meaning, so a priority column left in this loop would paint the reference's card-top strip
+ * on every row (none of "Backlog"/"Doing"/"Review"/"Done"/"Blocked" match the reference's omitted
+ * "medium"/"low"/"none" tiers) instead of only the tiers the reference actually paints it for.
+ * `applyCapturePriorityTiers`, below, gives it real tier values instead.
  */
 function applyCaptureOptions(columns: ColumnDef[], rows: RowData[], excludeKey?: string): void {
   const optionColumns = columns.filter(
-    (col) => (col.type === "select" || col.type === "status" || col.type === "multi-select") && col.key !== excludeKey,
+    (col) => (col.type === "select" || col.type === "status" || col.type === "multi-select")
+      && col.key !== excludeKey && col.key !== "priority",
   );
   for (const col of optionColumns) col.statusOptions = CAPTURE_OPTIONS;
   rows.forEach((row, i) => {
@@ -481,6 +489,38 @@ function applyCaptureOptions(columns: ColumnDef[], rows: RowData[], excludeKey?:
         ? [CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].value, CAPTURE_OPTIONS[(i + 2) % CAPTURE_OPTIONS.length].value]
         : CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].value;
     }
+  });
+}
+
+// The reference paints the card-top strip for every priority except its two lowest named tiers
+// (board-renderer.ts's isReferenceLowPriorityTier: "medium"/"low"/"none") and omits it entirely
+// when no priority column is mapped or a row carries no value. Four named tiers, not
+// CAPTURE_OPTIONS' five generic status names, is what lets a single capture show both states at
+// once — some cards striped, some not — rather than proving only the fallback or only the strip.
+const PRIORITY_OPTIONS: StatusOptionDef[] = [
+  { value: "urgent", color: "red" },
+  { value: "high", color: "orange" },
+  { value: "medium", color: "yellow" },
+  { value: "low", color: "gray" },
+];
+
+/**
+ * Gives the board bench's renamed "priority" column (board-render-bench.ts's
+ * PRIORITY_COLUMN_INDEX) real tier values and colours, in place — the same shape
+ * `applyCaptureGroupPalette` gives the group field, carved out of `applyCaptureOptions` above for
+ * the same reason. `CAPTURE_ROWS` (18) cycling four tiers puts the first two tiers (urgent, high —
+ * the ones the reference paints) on five rows each and the last two (medium, low — the reference's
+ * own omitted tiers) on four rows each, so a mount always shows the strip on some cards and not
+ * others rather than on all eighteen or none.
+ */
+function applyCapturePriorityTiers(columns: ColumnDef[], rows: RowData[]): void {
+  const col = columns.find((candidate) => candidate.key === "priority");
+  if (!col) return;
+  col.statusOptions = PRIORITY_OPTIONS;
+  rows.forEach((row, i) => {
+    const frontmatter = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+    if (!(col.key in frontmatter)) return;
+    frontmatter[col.key] = PRIORITY_OPTIONS[i % PRIORITY_OPTIONS.length].value;
   });
 }
 
@@ -2431,6 +2471,7 @@ export function runRenderAssertions(
     if (scenario.captureData) {
       applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
       applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
+      applyCapturePriorityTiers(columns, rows);
       if (scenario.subtaskTree) applyCaptureSubtaskTree(rows, BOARD_GROUP_FIELD);
     }
     let groups = makeBoardGroups(rows, BOARD_GROUPS);
