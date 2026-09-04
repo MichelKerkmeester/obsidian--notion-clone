@@ -29,6 +29,17 @@
  *
  * Exit 0 when every screenshot matches its sources, 1 when any is stale or missing, so it
  * can gate a commit. Add --json for machine-readable output.
+ *
+ * A `sources` entry can name a file this repository deliberately does not track — the
+ * reference-capture group depends on a vendored comparison plugin under specs/context/,
+ * gitignored on purpose (see .gitignore's `specs/**\/context/`) so it never ships in this
+ * repo. On a machine that has it vendored in, staleness is checked exactly as strictly as
+ * any other source. On one that does not — every fresh checkout, CI included, since the
+ * directory is never committed — the file's absence is not a broken repo, it is the
+ * documented shape of that checkout, and reporting it as MISSING SOURCE would fail a gate
+ * no push could ever satisfy. classifySource() tells the two apart by asking git, the one
+ * authority that already knows which paths were never meant to be here, and only a path git
+ * itself disowns is downgraded to VENDOR UNAVAILABLE rather than treated as a real break.
  */
 
 // ───────────────────────────────────────────────────────────────────
@@ -37,6 +48,7 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
@@ -59,6 +71,40 @@ const hash = (rel) => {
   if (!existsSync(abs)) return null;
   return createHash("sha256").update(readFileSync(abs)).digest("hex").slice(0, 12);
 };
+
+/**
+ * Does an ignore rule in this repo's own .gitignore disown `rel`? git check-ignore answers
+ * from the pattern alone — it never requires the path to exist on disk — so this works the
+ * same whether the vendored tree is checked out beside this repo or missing entirely.
+ *
+ * Any failure to ask (git absent, not a repo, an unreadable path) answers "no" rather than
+ * "yes": without a confirmed ignore rule behind it, an absent source stays a real MISSING
+ * SOURCE. That is the fail-closed default this check already had, kept for every path this
+ * function cannot positively clear.
+ */
+export function isGitIgnored(rel) {
+  try {
+    execFileSync("git", ["check-ignore", "-q", "--", rel], { cwd: REPO, stdio: "ignore" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Classifies one sourceHashes entry against the file the manifest recorded a fingerprint
+ * for. "present" carries the current hash for the caller to compare; "missing" is a real
+ * break (a tracked source disappeared); "vendor-unavailable" is a git-ignored source this
+ * checkout was never going to have, which the caller must not fail the gate over.
+ *
+ * Takes readHash/checkIgnored as parameters (defaulting to the real implementations) so the
+ * three-way branch is testable without touching the filesystem or spawning git.
+ */
+export function classifySource(rel, { readHash = hash, checkIgnored = isGitIgnored } = {}) {
+  const current = readHash(rel);
+  if (current !== null) return { status: "present", hash: current };
+  return { status: checkIgnored(rel) ? "vendor-unavailable" : "missing" };
+}
 
 /**
  * Is this PNG a single flat colour?
@@ -111,6 +157,7 @@ function main() {
   const stale = [];
   const missingFile = [];
   const missingSource = [];
+  const vendorUnavailable = [];
   const blank = [];
   const unreadable = [];
   const themeBlind = [];
@@ -122,10 +169,12 @@ function main() {
       continue;
     }
     for (const [src, recorded] of Object.entries(entry.sourceHashes || {})) {
-      const current = hash(src);
-      if (current === null) {
+      const classified = classifySource(src);
+      if (classified.status === "vendor-unavailable") {
+        vendorUnavailable.push(`${entry.file} <- ${src}`);
+      } else if (classified.status === "missing") {
         missingSource.push(`${entry.file} <- ${src} (source no longer exists)`);
-      } else if (current !== recorded) {
+      } else if (classified.hash !== recorded) {
         stale.push(`${entry.file} <- ${src}`);
       }
     }
@@ -165,13 +214,14 @@ function main() {
 
   if (json) {
     console.log(JSON.stringify({
-      stale, missingFile, missingSource, uncaptured, blank, unreadable, themeBlind,
+      stale, missingFile, missingSource, vendorUnavailable, uncaptured, blank, unreadable, themeBlind,
       ok: problems === 0,
     }, null, 2));
-  } else if (problems === 0) {
-    console.log(`  screenshots current: ${manifest.scenarios.length} entries match their sources,`
-      + " and none is blank or identical across themes");
   } else {
+    if (problems === 0) {
+      console.log(`  screenshots current: ${manifest.scenarios.length} entries match their sources,`
+        + " and none is blank or identical across themes");
+    }
     if (stale.length) {
       console.log(`  STALE (${stale.length}) - source changed since capture:`);
       for (const s of stale) console.log(`    ${s}`);
@@ -203,10 +253,18 @@ function main() {
       console.log(`  UNREADABLE (${unreadable.length}):`);
       for (const s of unreadable) console.log(`    ${s}`);
     }
-    console.log("\n  Refresh with: npm run screenshots");
+    if (vendorUnavailable.length) {
+      console.log(`  VENDOR UNAVAILABLE (${vendorUnavailable.length}) - git-ignored reference `
+        + "sources not present in this checkout, staleness unverified here:");
+      for (const s of vendorUnavailable) console.log(`    ${s}`);
+    }
+    if (problems > 0) console.log("\n  Refresh with: npm run screenshots");
   }
 
   process.exit(problems === 0 ? 0 : 1);
 }
 
-main();
+// Guarded so verify.mjs stays importable — classifySource() and isGitIgnored() are tested
+// directly from verify.test.mjs, which must not trigger the CLI's own process.exit().
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+if (isMain) main();
