@@ -319,12 +319,11 @@ describe("SettingsTab reconciled view vocabulary", () => {
     expect(row).toBeDefined();
     expect(row?.desc).toBe(t("settings.defaultView.desc"));
     expect(row?.dropdown?.options.map((option) => option.value)).toEqual([
-      "table", "board", "list", "chart", "calendar", "timeline",
+      "table", "board", "chart", "calendar", "timeline",
     ]);
     expect(row?.dropdown?.options.map((option) => option.text)).toEqual([
       t("common.tableView"),
       t("common.boardView"),
-      t("common.listView"),
       t("common.chartView"),
       t("common.calendarView"),
       t("common.timelineView"),
@@ -350,12 +349,22 @@ describe("SettingsTab reconciled view vocabulary", () => {
     expect(row?.dropdown?.options.some((option) => option.value === "gallery")).toBe(false);
   });
 
+  it("keeps the list type out of the offered default views", () => {
+    // Withdrawn from every picker, the same way the gallery already is: a database can no
+    // longer be minted as a list, so the default-view dropdown must not offer one either.
+    openTab();
+
+    const row = dom.instances.find((setting) => setting.name === t("settings.defaultView.name"));
+    expect(row?.dropdown?.options.some((option) => option.value === "list")).toBe(false);
+  });
+
   it("normalises the stored default view to a known type", () => {
-    expect(DEFAULT_VIEW_TYPES).toEqual(["table", "board", "list", "chart", "calendar", "timeline"]);
+    expect(DEFAULT_VIEW_TYPES).toEqual(["table", "board", "chart", "calendar", "timeline"]);
     expect(normalizeDefaultViewType("timeline")).toBe("timeline");
     expect(normalizeDefaultViewType("table")).toBe("table");
     expect(normalizeDefaultViewType(undefined)).toBe("table");
     expect(normalizeDefaultViewType("gallery")).toBe("table");
+    expect(normalizeDefaultViewType("list")).toBe("table");
     expect(normalizeDefaultViewType("bogus")).toBe("table");
   });
 });

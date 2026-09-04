@@ -93,7 +93,8 @@ import { ActiveViewControlsRenderer } from "./active-view-controls-renderer";
 import { ActiveRulePopoverRenderer } from "./active-rule-popover-renderer";
 import { removeFilterRuleAt, removeSortRuleAt } from "./view-rule-operations";
 import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
-import { DATABASE_VIEW_TYPE, DatabaseView } from "./database-view";
+import { DATABASE_VIEW_TYPE, DatabaseView, getNoteDatabasePlugin } from "./database-view";
+import { applyListMigration, planListMigration } from "../data/list-migration";
 import { resolveViewIndex } from "../data/view-selection";
 
 import { installPopoverAutoClose } from "./popover-auto-close";
@@ -288,6 +289,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private currentDbConfig?: DatabaseConfig;
   private currentSourcePath = "";
   private currentViewIndex = 0;
+  /**
+   * Databases already offered the list migration this session, by database id.
+   *
+   * The persisted notice record guards the notice across sessions; this set guards the attempt
+   * within one — an embed re-renders on every data change, and a migration that failed must not
+   * be retried, and re-announced, on every render.
+   */
+  private migratedListViews = new Set<string>();
   private viewIndexOverride: number | null = null;
   private selectedRows = new Set<string>();
   private lastSelectedRowPath: string | null = null;
@@ -690,6 +699,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.restoreEmbeddedHostViewport(hostViewport);
       return;
     }
+    this.migrateListViewOnOpen(config);
     // Reset scroll to the top on an actual view-type switch: switching into a
     // tall calendar/timeline embed must start at the top instead of keeping the
     // previous view's mid-page scroll. Filter/sort/data refreshes reuse the same
@@ -710,6 +720,45 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.restoreScroll(viewTypeChanged ? { top: 0, left: pos.left } : pos);
     this.restoreDescriptionScroll(descriptionScroll);
     this.restoreEmbeddedHostViewport(hostViewport);
+  }
+
+  /**
+   * Turn an embedded list into a table the first time its view renders.
+   *
+   * The embed holds a CLONE of the database's view, so migrating here rewrites the clone and
+   * persists it back through the same config-mutation path the embed uses for every other edit —
+   * the full view's migration runs on its own schedule, and whichever opens the database first
+   * is the one that migrates it.
+   *
+   * The notice fires once per database, remembered in the plugin data rather than per session,
+   * and a failed attempt is not retried on the next render: the session set is filled before the
+   * attempt, so a failure announces itself once, not per data change.
+   */
+  private migrateListViewOnOpen(config: ViewConfig): void {
+    const db = this.currentDbConfig;
+    if (!config?.id || !db?.id) return;
+    const plan = planListMigration(config);
+    if (!plan) return;
+    const plugin = getNoteDatabasePlugin(this.app);
+    const alreadyNotified = plugin?.settings.listMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedListViews.has(db.id)) return;
+      this.migratedListViews.add(db.id);
+    }
+    try {
+      if (!applyListMigration(config, plan)) return;
+      this.persistEmbeddedConfigToSource();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.listMigrationNotices = [...(plugin.settings.listMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.listMigrated", { name: config.name || t("common.listView") }));
+      }
+    } catch (err) {
+      if (config.viewType === "table") config.viewType = "list";
+      console.error("Note Database: failed to migrate an embedded list view to a table", err);
+    }
   }
 
   private saveScroll(): { top: number; left: number } {
@@ -1167,21 +1216,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         );
       } else {
         this.galleryRenderer.render(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
-      }
-    } else if (config.viewType === "list") {
-      if (this.vs(config).groupByField) {
-        const field = this.vs(config).groupByField;
-        const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
-        const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-        this.listRenderer.renderGrouped(
-          target,
-          renderConfig,
-          this.queryEngine.sortGroups(groups, order),
-          field,
-          this.getEmptyStateOptions(config),
-        );
-      } else {
-        this.listRenderer.render(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
       }
     } else if (config.viewType === "chart") {
       this.chartRenderer.render(target, renderConfig, this.rows, config.schema.columns, {

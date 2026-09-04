@@ -20,6 +20,7 @@ import { isRefreshBlockedByDrag } from "../data/refresh-blockers";
 import { evaluateBaseFilterExpression } from "../data/base-expression";
 import { moveDatabaseFilePath, sortDatabaseFileEntries } from "../data/database-file-order";
 import { applyGalleryMigration, planGalleryMigration } from "../data/gallery-migration";
+import { applyListMigration, planListMigration } from "../data/list-migration";
 import { QueryEngine } from "../data/query-engine";
 import { PropertyService } from "../data/property-service";
 import { ComputedFieldEngine } from "../data/computed-field";
@@ -249,7 +250,7 @@ interface NoteDatabasePluginLike {
   openDatabaseFileView?(file: TFile): Promise<void>;
 }
 
-function getNoteDatabasePlugin(app: App): NoteDatabasePluginLike | null {
+export function getNoteDatabasePlugin(app: App): NoteDatabasePluginLike | null {
   const plugins = (app as unknown as { plugins?: { plugins?: Record<string, unknown> } }).plugins;
   const instance = plugins?.plugins?.["note-database"];
   if (instance && typeof (instance as NoteDatabasePluginLike).saveSettings === "function") {
@@ -555,6 +556,14 @@ export class DatabaseView extends FileView {
    * render, and the undo they just performed would be re-applied on top of itself.
    */
   private migratedGalleryViews = new Set<string>();
+  /**
+   * Databases already offered the list migration this session, by database id.
+   *
+   * The persisted notice record guards the notice across sessions; this set guards the attempt
+   * within one, for the same reason the gallery keeps one: `refresh` runs on every scroll and
+   * edit, and a migration that failed must not be retried — and re-announced — on every render.
+   */
+  private migratedListViews = new Set<string>();
   private undoActionEl?: HTMLElement;
   private viewStateStore = new ViewStateStore();
   private viewState?: DatabaseViewState;
@@ -2743,6 +2752,51 @@ export class DatabaseView extends FileView {
     this.pendingUndoLabel = t("undo.galleryMigration");
     this.scheduleConfigSave();
     new Notice(t("notice.galleryMigrated", { name: view.name || t("common.galleryView") }));
+  }
+
+  /**
+   * Turn an existing list into a table the first time its view is rendered.
+   *
+   * The pickers stopped offering `list`, which does nothing for the views already written into
+   * vault files: the type string sits on disk, and deleting the renderer later would coerce those
+   * views to `table` — a card grid becoming a spreadsheet with no warning.
+   *
+   * Migrating on open is a WRITE caused by a read, and that is the part worth stating plainly
+   * rather than burying: opening a view changes it. The rewrite is only the type string — the
+   * column set, the filters, the sorts and the grouping are already the table's, since the list
+   * derives its tracks from the table's column widths — and the notice names the change once, per
+   * database, remembered in the plugin data rather than per session.
+   *
+   * A migration that throws leaves the view as it was and is not retried on the next render: the
+   * session set is filled before the attempt, so a failure announces itself once, not per scroll.
+   */
+  private migrateListViewOnOpen(): void {
+    if (!this.hasActiveDatabase()) return;
+    const db = this.getActiveDb();
+    const view = this.getActiveView();
+    if (!view?.id || !db?.id) return;
+    const plan = planListMigration(view);
+    if (!plan) return;
+    const plugin = getNoteDatabasePlugin(this.app);
+    const alreadyNotified = plugin?.settings.listMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedListViews.has(db.id)) return;
+      this.migratedListViews.add(db.id);
+    }
+    try {
+      if (!applyListMigration(view, plan)) return;
+      this.scheduleConfigSave();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.listMigrationNotices = [...(plugin.settings.listMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.listMigrated", { name: view.name || t("common.listView") }));
+      }
+    } catch (err) {
+      if (view.viewType === "table") view.viewType = "list";
+      console.error("Note Database: failed to migrate a list view to a table", err);
+    }
   }
 
   private updateToolbarViewConfig(label?: string): void {
@@ -6913,8 +6967,6 @@ export class DatabaseView extends FileView {
       this.renderBoard(config);
     } else if (config.viewType === "gallery") {
       this.renderGallery(config);
-    } else if (config.viewType === "list") {
-      this.renderList(config);
     } else if (config.viewType === "chart") {
       this.renderChart(config);
     } else if (config.viewType === "calendar") {
@@ -11683,6 +11735,7 @@ export class DatabaseView extends FileView {
   refresh(options: { viewport?: DatabaseViewportRequest } = {}): void {
     if (!this.containerEl_) return;
     this.migrateGalleryViewOnOpen();
+    this.migrateListViewOnOpen();
     const interaction = this.captureInteractionSnapshot();
     this.showSkeletonLoader();
     const nextViewType = this.hasActiveDatabase() ? (this.getConfig()?.viewType || "table") : "table";

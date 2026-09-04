@@ -1284,16 +1284,17 @@ export class ToolbarRenderer {
   }
 
   /**
-   * The view types a user may pick, with the gallery withdrawn.
+   * The view types a user may pick, with the gallery and the list withdrawn.
    *
-   * Deprecated, not deleted, and the difference is the whole point. `gallery` is a value in a
-   * persisted union — it is written into vault files — so removing the renderer would leave every
-   * database already configured as one unable to open. Withdrawing it from the pickers stops
-   * anyone new arriving at it while every existing gallery keeps working, and the step is
-   * reversible by deleting one filter.
+   * Deprecated, not deleted, and the difference is the whole point. `gallery` and `list` are values
+   * in a persisted union — they are written into vault files — so removing their renderers would
+   * leave every database already configured as one unable to open. Withdrawing them from the
+   * pickers stops anyone new arriving at them while every existing one keeps working, and the step
+   * is reversible by deleting one filter.
    *
-   * `current` is what keeps that honest: a database that IS a gallery still sees the option, or its
-   * own type picker would show a value it does not offer and the control would read as broken.
+   * `current` is what keeps that honest: a database that IS one of the withdrawn types still sees
+   * the option, or its own type picker would show a value it does not offer and the control would
+   * read as broken.
    */
   private getViewTypeOptions(current?: DatabaseViewType): Array<{ value: DatabaseViewType; text: string; icon: string }> {
     const all: Array<{ value: DatabaseViewType; text: string; icon: string }> = [
@@ -1305,7 +1306,7 @@ export class ToolbarRenderer {
       { value: "calendar", text: t("common.calendarView"), icon: this.getViewTypeIcon("calendar") },
       { value: "timeline", text: t("common.timelineView"), icon: this.getViewTypeIcon("timeline") },
     ];
-    return all.filter((option) => option.value !== "gallery" || current === "gallery");
+    return all.filter((option) => (option.value !== "gallery" || current === "gallery") && (option.value !== "list" || current === "list"));
   }
 
   private renderViewTabPopoverRow(

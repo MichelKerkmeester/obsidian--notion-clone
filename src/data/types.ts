@@ -768,6 +768,14 @@ export interface PluginSettings {
    * device does around the touch rather than the touch itself.
    */
   debugSheetTrace?: boolean;
+  /**
+   * Database ids whose list-view retirement notice has been shown.
+   *
+   * The migration rewrites the view once and the notice fires once per database, remembered here
+   * rather than per session: a view that migrates again after a hand revert is quiet, and a
+   * database opened in two leaves does not announce the retirement twice.
+   */
+  listMigrationNotices?: string[];
 }
 
 export interface TrashedDatabase {

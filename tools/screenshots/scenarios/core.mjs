@@ -241,8 +241,10 @@ export const CORE_SCENARIOS = [
       position: static !important; top: auto !important; left: auto !important;
       max-height: none !important;
     }`,
-    // Seven types, because getViewTypeOptions() returns seven. This markup is hand-written and
-    // cannot import the renderer, so add-view-popover-layout.test.ts holds the two in step instead.
+    // Seven exist in the union; five are offered. Gallery and list are deprecated, not deleted —
+    // the types are persisted in vault files, so the picker withdraws them while the renderer
+    // keeps serving whichever database already is one. This markup is hand-written and cannot
+    // import the renderer, so add-view-popover-layout.test.ts holds the two in step instead.
     html: () => {
       const row = (label, d) => `
         <button type="button" class="db-menu-item" role="menuitem" aria-checked="false">
@@ -273,7 +275,6 @@ export const CORE_SCENARIOS = [
           <div class="db-add-view-choices">
             ${row("Table view", '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>')}
             ${row("Board view", '<rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/>')}
-            ${row("List view", '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>')}
             ${row("Chart view", '<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="13" y="6" width="3" height="11"/>')}
             ${row("Calendar view", '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>')}
             ${row("Timeline view", '<path d="M3 6h11M3 12h7M3 18h14"/>')}

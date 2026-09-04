@@ -85,8 +85,8 @@ const rendererViewTypes = (): string[] => {
   return [...body.matchAll(/text:\s*t\("common\.(\w+)"\)/g)].map((m) => m[1]);
 };
 
-/** The view types actually offered — the gallery is listed but withdrawn from the pickers. */
-const offeredViewTypes = (): string[] => rendererViewTypes().filter((type) => type !== "galleryView");
+/** The view types actually offered — gallery and list are listed but withdrawn from the pickers. */
+const offeredViewTypes = (): string[] => rendererViewTypes().filter((type) => type !== "galleryView" && type !== "listView");
 
 describe("add-view surface", () => {
   it("keeps the duplicate checkbox at its native size instead of stretching it to the form width", () => {
@@ -149,11 +149,12 @@ describe("add-view surface", () => {
 
   describe("the screenshot fixture depicts what the renderer emits", () => {
     it("draws one row per view type the renderer offers", () => {
-      // Seven exist in the union; six are offered. The gallery is deprecated, not deleted — the
-      // type is persisted in vault files, so the entry stays and only the picker withdraws it.
+      // Seven exist in the union; five are offered. The gallery and the list are deprecated, not
+      // deleted — the types are persisted in vault files, so the entries stay and only the picker
+      // withdraws them.
       expect(rendererViewTypes()).toHaveLength(7);
       const types = offeredViewTypes();
-      expect(types).toHaveLength(6);
+      expect(types).toHaveLength(5);
       const fixture = addViewFixture();
       const drawn = [...fixture.matchAll(/class="db-menu-item-label">([^<]+)</g)].map((m) => m[1]);
       // The duplicate action is a row too, so the fixture draws one more than there are types.
@@ -161,6 +162,7 @@ describe("add-view surface", () => {
       expect(drawn).toContain("Duplicate current view");
       // A withdrawn type must not be depicted as available.
       expect(drawn).not.toContain("Gallery view");
+      expect(drawn).not.toContain("List view");
       // `common.tableView` -> "Table view", which is the caption the fixture writes out.
       for (const type of types) {
         const label = type.replace(/View$/, " view");

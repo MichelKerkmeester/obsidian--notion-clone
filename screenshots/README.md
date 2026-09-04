@@ -339,6 +339,16 @@ One role, three views: the whole-group selection box from the list, the gallery 
 
 Sources: `src/views/list-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`
 
+### A migrated list view (constructed)
+
+A config built as viewType: "list" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does — ListRenderer if it stayed "list", TableRenderer otherwise. Photographs a real table, not a hand-authored one.
+
+| dark | light |
+|---|---|
+| ![constructed-list-migrated dark](components/constructed-list-migrated-mobile-dark.png) | ![constructed-list-migrated light](components/constructed-list-migrated-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/list-migration.ts`, `src/views/list-renderer.ts`
+
 ### Owned menu — the shell every context menu uses (constructed)
 
 createOwnedMenu's own entry with rows built through the handle's addRow the way ColumnMenu builds them. The menu mounts on document.body by design, so the capture is full-page; the phone device pass becomes the bottom-sheet presentation through the module's own showAt placement. Supersedes the desktop menu and the phone sheet fixtures together.

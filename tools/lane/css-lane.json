@@ -2734,6 +2734,27 @@
       "at": "2026-09-05T00:20:00.000Z",
       "hash": "719ba0fca8e1",
       "note": "Reconciliation release, not a CSS edit: styles.css is byte-identical to the lane baseline (719ba0fca8e1), and the lane was never acquired. The release exists because this leg moves every capture under screenshots/<group>/ to screenshots/notion-clone/<group>/ (534 PNGs, pure git mv), so the operator's split lands beside screenshots/project-manager/ (16 PNGs, landed separately by another phase, left exactly where main put it, not moved). Rebased across the settings sheet, column-width sheet, WebKit sheet, reference-capture and milestone-label landings (62e7e5c1 -> 5af7eef7, release 0.0.21); git's own rename-directory detection placed all but 6 new column-width PNGs at their notion-clone destination automatically, and every one of the 550 final entries was verified byte-identical to origin/main's blob for that path (0 mismatches). screenshots/manifest.json was rebuilt from main's 550 entries with file remapped (reference entries left flat, the other 534 prefixed notion-clone/); screenshots/README.md regenerated from that manifest so every image link resolves. Editing capture.mjs and manifest-schema.mjs to carry the root split, reconciled with main's own independent reference-capture support in the same two files, bumped capture.mjs's own content hash, which every entry fingerprints as a capture input; re-baselined that one sourceHashes key across all 550 entries rather than recapturing, since no pixel changed. This release changes no existing capture's content: reviewed is empty because nothing here needs a fresh look, the pixels are exactly what main already carried."
+    },
+    {
+      "event": "release",
+      "phase": "044-list-hide-migrate",
+      "at": "2026-09-04T21:48:52.000Z",
+      "hash": "cdc0217ad1d7",
+      "reviewed": [
+        "screenshots/notion-clone/components/add-view-popover-desktop-dark.png",
+        "screenshots/notion-clone/components/add-view-popover-desktop-light.png",
+        "screenshots/notion-clone/components/add-view-popover-mobile-dark.png",
+        "screenshots/notion-clone/components/add-view-popover-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-list-migrated-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-list-migrated-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-list-migrated-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-list-migrated-mobile-light.png"
+      ],
+      "note": "Not a CSS edit: styles.css is byte-identical to the lane baseline, confirmed by an empty `git diff styles.css`, and the lane was never acquired. The release exists because 006-hide-and-migrate withdrew list from getViewTypeOptions() (toolbar-renderer.ts), which moved the four add-view-popover captures and the four constructed-toolbar-add-view captures -- the List row is gone from both, Gallery already was. Four new constructed-list-migrated captures were added: a config built as viewType:\"list\" (listCompactFields included, the real Punch List shape), run through planListMigration/applyListMigration, then forked on the migrated viewType the way database-view.ts's render() does. All twelve were opened and read this session, both themes/devices: the picker shows Table/Board/Chart/Calendar/Timeline plus Duplicate current view with no List or Gallery row; the migrated capture shows a real table (headers, checkboxes, currency, file-link cells), not list markup. Seven other captures moved bytes with pixelHash/layoutHash unchanged (Chrome's PNG encoder is not byte-deterministic) and were restored to their committed bytes rather than reviewed as content changes."
     }
   ],
   "outstanding": [

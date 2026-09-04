@@ -52,6 +52,7 @@
 
 import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
 import { TableRenderer, type TableRendererActions } from "../../src/views/table-renderer";
+import { applyListMigration, planListMigration } from "../../src/data/list-migration";
 import { CellRenderer } from "../../src/views/cell-renderer";
 import { CalendarRenderer, type CalendarRendererActions } from "../../src/views/calendar-renderer";
 import { ChartRenderer, type ChartRendererActions } from "../../src/views/chart-renderer";
@@ -401,6 +402,17 @@ export interface ScenarioSpec {
    * `columnHeaderController`.
    */
   longHeaderLabel?: boolean;
+  /**
+   * Opt-in, renderer "table" only: builds the config as `viewType: "list"` with
+   * `listCompactFields: true` set (the real Punch-List shape `006` migrates), runs it through the
+   * production `planListMigration`/`applyListMigration`, and THEN forks on the migrated
+   * `viewType` the same way `database-view.ts`'s own `render()` does — `ListRenderer` if it is
+   * still `"list"`, `TableRenderer` otherwise. Every other `scenario.renderer` value in this file
+   * picks its renderer straight off `scenario.renderer` and never exercises that viewType-driven
+   * fork; this option exists because that fork is exactly what a failed migration would get
+   * wrong, and nothing else here would catch it.
+   */
+  migratedFromList?: boolean;
 }
 
 export interface AssertionResult {
@@ -3594,6 +3606,47 @@ export function runRenderAssertions(
       results.push(multiMarkerAssertion(container,
         [".db-board-card-cover.is-empty .db-board-card-cover-placeholder", ".db-gallery-cover.is-empty .db-gallery-cover-placeholder"],
         "the empty cover rendered in the board card and the gallery card"));
+    }
+  } else if (scenario.renderer === "table" && scenario.migratedFromList) {
+    const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const rows = makeTableRows(scenario.captureData ? CAPTURE_ROWS : TABLE_ROWS, columns);
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
+    // Built as a list — real Punch-List shape, `listCompactFields` included — and only ever
+    // turned into a table by running the production plan/apply pair, not by authoring it as one.
+    const migratedConfig = {
+      ...makeTableConfig(columns),
+      schema: { columns, computedFields: [] },
+      viewType: "list",
+      listCompactFields: true,
+    } as ViewConfig;
+    const plan = planListMigration(migratedConfig);
+    if (plan) applyListMigration(migratedConfig, plan);
+    bagKeys = [];
+
+    // The fork itself is the assertion: `database-view.ts`'s `render()` picks `ListRenderer` for
+    // `viewType === "list"` and `TableRenderer` otherwise. A migration that failed to flip the
+    // type would land here, not in a broken render — `ListRenderer` renders a `viewType: "list"`
+    // config just fine, which is exactly why the marker below checks which renderer actually ran.
+    if (migratedConfig.viewType === "list") {
+      const bag = scenario.bag === "file-view" ? fileViewListBag(columns) : embedListBag(columns);
+      new ListRenderer(app, bag).render(container, migratedConfig, rows);
+    } else {
+      const bag = scenario.bag === "file-view"
+        ? fileViewTableBag(columns, scenario.captureData)
+        : embedTableBag(columns, scenario.captureData);
+      new TableRenderer(bag).renderTable(container, migratedConfig, rows);
+    }
+
+    results.push({
+      name: "the migrated list view rendered through the table renderer, not the list renderer",
+      pass: !!container.querySelector("table.db-table") && !container.querySelector(".db-list-row"),
+      detail: `table.db-table present: ${!!container.querySelector("table.db-table")}, `
+        + `.db-list-row present: ${!!container.querySelector(".db-list-row")}, `
+        + `plan: ${plan ? `${plan.from}->${plan.to}` : "null"}, `
+        + `final viewType: ${migratedConfig.viewType}`,
+    });
+    if (results[0].pass) {
+      results.push(...tableAssertions(container, rows, columns));
     }
   } else {
     // captureData sizes the data as well as typing it, the way it already does for list, board

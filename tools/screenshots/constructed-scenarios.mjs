@@ -176,7 +176,7 @@ const SPEC_OPTIONS = [
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
   "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
   "boardEmptyColumn", "galleryImageField", "tableGroups", "tableFooter", "fullStatusPalette",
-  "recordIconColumn", "columnHeaderController", "longHeaderLabel",
+  "recordIconColumn", "columnHeaderController", "longHeaderLabel", "migratedFromList",
 ];
 
 function constructedScenario(view, opts) {
@@ -624,6 +624,19 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/views/group-label-renderer.ts", "src/views/summary-renderer.ts"]),
     note: "renderGroupedTable's own entry over a two-level group tree with summary rules, so the "
       + "divider rows carry their coloured badges at both depths and their computed totals.",
+  }),
+  constructedScenario("list-migrated", {
+    renderer: "table",
+    migratedFromList: true,
+    group: "components",
+    title: "A migrated list view (constructed)",
+    sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/data/list-migration.ts", "src/views/list-renderer.ts"]),
+    note: "A config built as viewType: \"list\" (listCompactFields included, the real Punch List "
+      + "shape 006 migrates), run through the production planListMigration/applyListMigration, "
+      + "then forked on the migrated viewType the same way database-view.ts's render() does — "
+      + "ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, "
+      + "not a hand-authored one.",
   }),
   constructedScenario("summary", {
     renderer: "summary",

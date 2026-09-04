@@ -124,6 +124,8 @@ window.__stateMarkers = (scenario) => {
       .some((col) => col.querySelectorAll(".pm-kanban-card").length === 0),
     boardExtensions: !!container.querySelector(".db-board-column-checkbox")
       && !!container.querySelector(".db-board-card-checkbox"),
+    migratedListAsTable: !!container.querySelector("table.db-table")
+      && !container.querySelector(".db-list-row"),
     };
   });
   return result;
@@ -423,6 +425,17 @@ const SINGLE_CASES = [
     id: "constructed-board-extensions",
     spec: { renderer: "board", bag: "file-view", captureData: true, boardExtensions: true },
     marker: "boardExtensions",
+  },
+  {
+    // A config built as `viewType: "list"`, run through the real `planListMigration`/
+    // `applyListMigration` before the harness ever hands it to `TableRenderer` — not a config
+    // authored as a table from the start. The marker requires both a real `table.db-table` and
+    // the absence of any `.db-list-row`, so a regression that left the config half-migrated (or
+    // a harness change that silently kept routing it to `ListRenderer`) fails here instead of
+    // only showing up as a visual diff nobody was looking for.
+    id: "constructed-list-migrated",
+    spec: { renderer: "table", bag: "file-view", captureData: true, migratedFromList: true },
+    marker: "migratedListAsTable",
   },
 ];
 

@@ -139,7 +139,7 @@ export default class NoteDatabasePlugin extends Plugin {
             if (v.filters != null && !Array.isArray(v.filters)) v.filters = undefined;
             if (v.filterLogic !== "or") v.filterLogic = "and";
             if (!v.name) v.name = `${t("common.database")} ${i + 1}`;
-            if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "list" && v.viewType !== "chart") v.viewType = "table";
+            if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "chart") v.viewType = "table";
             // Wrap as DatabaseConfig with one ViewConfig child
             const viewCopy = { ...v, id: (v.id as string) || generateId() };
             const migrated = {
@@ -175,7 +175,7 @@ export default class NoteDatabasePlugin extends Plugin {
             if (!db.schema) db.schema = (isRecord(dbViews[0]) ? dbViews[0].schema : undefined) || { columns: [], computedFields: [] };
             for (const view of dbViews) {
               if (!isRecord(view)) continue;
-              if (view.viewType !== "board" && view.viewType !== "gallery" && view.viewType !== "list" && view.viewType !== "chart") view.viewType = "table";
+              if (view.viewType !== "board" && view.viewType !== "gallery" && view.viewType !== "chart") view.viewType = "table";
             }
             return db as unknown as DatabaseConfig;
           });
@@ -1543,12 +1543,13 @@ export default class NoteDatabasePlugin extends Plugin {
     const views: ViewConfig[] = parsed.views
       .filter((bv) => bv.type === "table" || bv.type === "cards" || bv.type === "list" || bv.type === "map")
       .map((bv) => {
-      // A `cards` view used to import as `gallery`. Withdrawing the type from the pickers did
-      // nothing about this path: the importer kept minting new galleries, so a deprecation that
-      // migrates on open would have spent its first act undoing an import from a minute earlier.
-      // `board` is the same landing the migration makes, and for the same reason — it is the other
-      // surface that draws a cover image, so the cards keep their covers and their shape.
-      const viewType = bv.type === "cards" ? "board" : bv.type === "list" ? "list" : "table";
+      // A `cards` view used to import as `gallery`, and a native `list` view imported as itself.
+      // Withdrawing the types from the pickers did nothing about this path: the importer kept
+      // minting views a deprecation that migrates on open would have spent its first act undoing.
+      // `board` is the same landing the gallery migration makes — it is the other surface that
+      // draws a cover image, so the cards keep their covers and their shape — and a `.base` list
+      // imports as `table`, the same landing its migration makes, keeping its columns and rules.
+      const viewType = bv.type === "cards" ? "board" : "table";
       const galleryImageField = bv.image ? this.cleanBaseKey(bv.image) : undefined;
       const schemaColumnKeys = new Set(schema.columns.map(c => c.key));
       const importedGalleryImageField = galleryImageField && schemaColumnKeys.has(galleryImageField) ? galleryImageField : undefined;
@@ -1582,7 +1583,7 @@ export default class NoteDatabasePlugin extends Plugin {
 
       const view: ViewConfig = {
         id: generateId(),
-        name: bv.name || (viewType === "board" ? t("common.boardView") : viewType === "list" ? t("common.listView") : t("common.tableView")),
+        name: bv.name || (viewType === "board" ? t("common.boardView") : t("common.tableView")),
         viewType,
         sourceFolder,
         // A view carries only its OWN source rules; global rules live on the db level and are

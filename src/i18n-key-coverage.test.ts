@@ -104,4 +104,14 @@ describe("i18n key coverage", () => {
   it("resolves the key whose absence motivated this suite", () => {
     expect(collectDefinedKeys().has("calendar.unscheduled")).toBe(true);
   });
+
+  it("defines the list-retirement notice in all three locales", () => {
+    const source = readFileSync(join(SRC_ROOT, "i18n.ts"), "utf-8");
+    const english = source.slice(source.indexOf("const en: Dictionary = {"), source.indexOf("const zhCN: Dictionary = {"));
+    const simplified = source.slice(source.indexOf("const zhCN: Dictionary = {"), source.indexOf("const zhTW: Dictionary = {"));
+    const traditional = source.slice(source.indexOf("const zhTW: Dictionary = {"));
+    for (const block of [english, simplified, traditional]) {
+      expect(block).toMatch(/^\s*"notice\.listMigrated":/m);
+    }
+  });
 });
