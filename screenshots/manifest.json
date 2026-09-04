@@ -109,11 +109,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "09556d787a5a",
-      "pixelHash": "21e3b287baf1",
+      "layoutHash": "92d0d8b3b4fc",
+      "pixelHash": "9afc9d60fd0e",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -121,7 +121,7 @@
       },
       "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
-      "bytes": 46539
+      "bytes": 46880
     },
     {
       "id": "board-drop-language",
@@ -133,11 +133,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "09556d787a5a",
-      "pixelHash": "c405021f3804",
+      "layoutHash": "92d0d8b3b4fc",
+      "pixelHash": "422e87037183",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -145,7 +145,7 @@
       },
       "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
-      "bytes": 47298
+      "bytes": 47452
     },
     {
       "id": "board-drop-language",
@@ -157,11 +157,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "aeb57891f273",
-      "pixelHash": "4e637ceec663",
+      "layoutHash": "7e23906429aa",
+      "pixelHash": "47e0b354f61d",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -169,7 +169,7 @@
       },
       "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
-      "bytes": 42592
+      "bytes": 42072
     },
     {
       "id": "board-drop-language",
@@ -181,11 +181,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "aeb57891f273",
-      "pixelHash": "49d7b3119515",
+      "layoutHash": "7e23906429aa",
+      "pixelHash": "8acef8efd6b5",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -193,7 +193,7 @@
       },
       "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
-      "bytes": 43439
+      "bytes": 42804
     },
     {
       "id": "board-empty-column",
@@ -205,11 +205,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "462a619780f1",
-      "pixelHash": "0b2599c37708",
+      "layoutHash": "d77e4f99c87e",
+      "pixelHash": "4243734e5de4",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -217,7 +217,7 @@
       },
       "note": "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
       "capture": "element",
-      "bytes": 39521
+      "bytes": 40704
     },
     {
       "id": "board-empty-column",
@@ -229,11 +229,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "462a619780f1",
-      "pixelHash": "aed10b6a1562",
+      "layoutHash": "d77e4f99c87e",
+      "pixelHash": "7d879ad33d46",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -241,7 +241,7 @@
       },
       "note": "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
       "capture": "element",
-      "bytes": 39963
+      "bytes": 41088
     },
     {
       "id": "board-empty-column",
@@ -253,11 +253,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "56ec1e1d7c29",
-      "pixelHash": "2514c41972f1",
+      "layoutHash": "37f405eb0ebc",
+      "pixelHash": "6caa0dda6056",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -265,7 +265,7 @@
       },
       "note": "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
       "capture": "element",
-      "bytes": 35171
+      "bytes": 36748
     },
     {
       "id": "board-empty-column",
@@ -277,11 +277,11 @@
       "sources": [
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "56ec1e1d7c29",
-      "pixelHash": "23aeaf8c0fa1",
+      "layoutHash": "37f405eb0ebc",
+      "pixelHash": "9f12a66848b4",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -289,7 +289,7 @@
       },
       "note": "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
       "capture": "element",
-      "bytes": 35608
+      "bytes": 37191
     },
     {
       "id": "card-cover-states",
@@ -712,8 +712,8 @@
       "layoutHash": "da266291b87b",
       "pixelHash": "2bfb8e6b1f38",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -736,8 +736,8 @@
       "layoutHash": "da266291b87b",
       "pixelHash": "4366b9d11218",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -760,8 +760,8 @@
       "layoutHash": "b066d1f25764",
       "pixelHash": "1c99b8439302",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -784,8 +784,8 @@
       "layoutHash": "b066d1f25764",
       "pixelHash": "b5e2572ae32f",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
-        "styles.css": "d3c6cc3e8453",
+        "src/views/board-renderer.ts": "2adecc45f18d",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5491,13 +5491,13 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b464aa16ee92",
-      "pixelHash": "5ee37ae0a278",
+      "layoutHash": "276b89016513",
+      "pixelHash": "7c1690333e7a",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5505,7 +5505,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 170056,
+      "bytes": 176081,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5520,13 +5520,13 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b464aa16ee92",
-      "pixelHash": "7a63cf891090",
+      "layoutHash": "276b89016513",
+      "pixelHash": "b5b87130de38",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5534,7 +5534,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 171994,
+      "bytes": 177394,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5549,13 +5549,13 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "3f20328a58a7",
-      "pixelHash": "57f48226ab11",
+      "layoutHash": "fa5e1b51c5d7",
+      "pixelHash": "ddcbc4847d03",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5563,7 +5563,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 61227,
+      "bytes": 78639,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5578,13 +5578,13 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "3f20328a58a7",
-      "pixelHash": "fc64a5b14595",
+      "layoutHash": "fa5e1b51c5d7",
+      "pixelHash": "20b871fac7c5",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5592,7 +5592,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 61279,
+      "bytes": 79253,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5609,15 +5609,15 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "a4f8ccff8486",
-      "pixelHash": "f1afba06acd2",
+      "layoutHash": "2d6a3ae087dc",
+      "pixelHash": "0c5061eb7ee9",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5625,7 +5625,7 @@
       },
       "note": "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
       "capture": "viewport",
-      "bytes": 115688,
+      "bytes": 116371,
       "fixtureOf": "constructed-board-subtask"
     },
     {
@@ -5642,15 +5642,15 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "a4f8ccff8486",
-      "pixelHash": "f3ba21230f35",
+      "layoutHash": "2d6a3ae087dc",
+      "pixelHash": "f9ff26d9e9cd",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5658,7 +5658,7 @@
       },
       "note": "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
       "capture": "viewport",
-      "bytes": 116032,
+      "bytes": 117385,
       "fixtureOf": "constructed-board-subtask"
     },
     {
@@ -5675,15 +5675,15 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "d245f514f417",
-      "pixelHash": "e54d9d437eb0",
+      "layoutHash": "ac7f7bd6f3e3",
+      "pixelHash": "b7c0cb1e797c",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5691,7 +5691,7 @@
       },
       "note": "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
       "capture": "viewport",
-      "bytes": 59418,
+      "bytes": 76041,
       "fixtureOf": "constructed-board-subtask"
     },
     {
@@ -5708,15 +5708,15 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "d245f514f417",
-      "pixelHash": "3adc83db4186",
+      "layoutHash": "ac7f7bd6f3e3",
+      "pixelHash": "eb1d363e1bcc",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5724,7 +5724,7 @@
       },
       "note": "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
       "capture": "viewport",
-      "bytes": 60014,
+      "bytes": 76672,
       "fixtureOf": "constructed-board-subtask"
     },
     {
@@ -5738,12 +5738,12 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "5f536eddec07",
-      "pixelHash": "c482791f15dc",
+      "layoutHash": "c8dd03dc5ba7",
+      "pixelHash": "852cf9e2af31",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5751,7 +5751,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 207596,
+      "bytes": 245080,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5765,12 +5765,12 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "5f536eddec07",
-      "pixelHash": "d1b1fc9182d2",
+      "layoutHash": "c8dd03dc5ba7",
+      "pixelHash": "3e7dd7496d57",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5778,7 +5778,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 209769,
+      "bytes": 247127,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5792,12 +5792,12 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "041c12054639",
-      "pixelHash": "57f48226ab11",
+      "layoutHash": "9a1c9a8f4429",
+      "pixelHash": "baf40a046586",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5805,7 +5805,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 61227,
+      "bytes": 81377,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5819,12 +5819,12 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "041c12054639",
-      "pixelHash": "fc64a5b14595",
+      "layoutHash": "9a1c9a8f4429",
+      "pixelHash": "bedff55b8365",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5832,7 +5832,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 61279,
+      "bytes": 81648,
       "fixtureOf": "constructed-board"
     },
     {
@@ -6375,17 +6375,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "325fb163b9b7",
-      "pixelHash": "2b2211455209",
+      "layoutHash": "2e8a49e11c57",
+      "pixelHash": "92b0425f1397",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6393,7 +6393,7 @@
       },
       "note": "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
       "capture": "viewport",
-      "bytes": 102700,
+      "bytes": 94772,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6414,17 +6414,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "325fb163b9b7",
-      "pixelHash": "da7e52a632a5",
+      "layoutHash": "2e8a49e11c57",
+      "pixelHash": "501e09b1cfa4",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6432,7 +6432,7 @@
       },
       "note": "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
       "capture": "viewport",
-      "bytes": 104322,
+      "bytes": 95472,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6453,17 +6453,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "d30bf004f1dd",
-      "pixelHash": "671bf1d3efca",
+      "layoutHash": "7d2ed56d5800",
+      "pixelHash": "5bac3cf96960",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6471,7 +6471,7 @@
       },
       "note": "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
       "capture": "viewport",
-      "bytes": 39947,
+      "bytes": 40342,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6492,17 +6492,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "d30bf004f1dd",
-      "pixelHash": "2731da197bc3",
+      "layoutHash": "7d2ed56d5800",
+      "pixelHash": "9b1e0b05fd73",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "d3c6cc3e8453",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6510,7 +6510,7 @@
       },
       "note": "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
       "capture": "viewport",
-      "bytes": 41088,
+      "bytes": 40694,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6534,20 +6534,20 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "07e6be40da8a",
-      "pixelHash": "d2ef30230bf8",
+      "layoutHash": "21a5bd27ff38",
+      "pixelHash": "c8b61d1075d9",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6555,7 +6555,7 @@
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 122758,
+      "bytes": 110109,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6579,20 +6579,20 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "07e6be40da8a",
-      "pixelHash": "f46878678592",
+      "layoutHash": "21a5bd27ff38",
+      "pixelHash": "f1edcc803aca",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6600,7 +6600,7 @@
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 124817,
+      "bytes": 111364,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6624,20 +6624,20 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "a2ca19cc066f",
-      "pixelHash": "fd7947667674",
+      "layoutHash": "0b50b4b84d9b",
+      "pixelHash": "3cf0a6767d36",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6645,7 +6645,7 @@
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 55885,
+      "bytes": 57802,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6669,20 +6669,20 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "a2ca19cc066f",
-      "pixelHash": "317eaadce6ca",
+      "layoutHash": "0b50b4b84d9b",
+      "pixelHash": "e28aa858f816",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "7ae9f2b7f12e",
+        "src/views/board-renderer.ts": "2adecc45f18d",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
-        "tools/live/render-assertion-bundle.mjs": "b615d790829f",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "9fbd5872f827",
-        "styles.css": "d3c6cc3e8453",
+        "src/i18n.ts": "4202396d81fb",
+        "styles.css": "6d7f2ea7147c",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -6690,7 +6690,7 @@
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 57212,
+      "bytes": 58665,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"

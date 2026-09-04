@@ -18,7 +18,8 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { App, Notice, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toMultiSelectValuesForKey } from "../data/column-types";
+import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/column-types";
+import { STATUS_COLORS } from "../data/status-colors";
 import { OPTION_REGISTRATION_COLORS } from "../data/option-registration";
 import { isExplicitlySorted } from "../data/manual-order";
 import { getColumnDisplayType } from "../data/column-display";
@@ -66,6 +67,10 @@ const GROUP_MIME = "application/x-note-database-group";
  *  calendar/timeline search results panel caps its own list, with a trailing count row for the rest. */
 const MOVE_UNDER_CANDIDATE_LIMIT = 20;
 const ROW_BATCH_MIME = "application/x-note-database-row-batch";
+/** The badge icon for a column whose option carries no icon of its own — the
+ *  status dot, standing in for the reference's per-status icon slot, which
+ *  the option model here has no field for. */
+const REFERENCE_STATUS_ICON = "circle-dot";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TYPES
@@ -324,13 +329,19 @@ export class BoardRenderer {
 
     const col = board.createDiv({ cls: "pm-kanban-col", attr: { "data-status": group.key } });
     const header = col.createDiv({ cls: "pm-kanban-col-header" });
-    if (color) header.style.setProperty("--col-color", color);
+    const resolvedColor = this.resolveReferenceColor(color);
+    if (resolvedColor) header.style.setProperty("--col-color", resolvedColor);
     const topBar = header.createDiv({ cls: "pm-kanban-col-topbar" });
-    if (color) topBar.setCssStyles({ background: color });
+    if (resolvedColor) topBar.setCssStyles({ background: resolvedColor });
     const titleRow = header.createDiv({ cls: "pm-kanban-col-title-row" });
     const badge = titleRow.createSpan({ cls: "pm-kanban-col-badge" });
-    badge.setText(formatGroupKeyDisplay(config, groupField, group.key));
-    if (color) badge.style.color = color;
+    // The reference's badge-icon slot precedes the label; the option model
+    // here has no per-option icon field, so the slot always takes the
+    // default status icon.
+    const badgeIcon = badge.createSpan({ cls: "pm-kanban-col-badge-icon" });
+    setIcon(badgeIcon, REFERENCE_STATUS_ICON);
+    badge.appendText(formatGroupKeyDisplay(config, groupField, group.key));
+    if (resolvedColor) badge.style.color = resolvedColor;
     const headerRight = titleRow.createDiv({ cls: "pm-kanban-col-header-right" });
     headerRight.createSpan({ cls: "pm-kanban-col-count", text: String(visibleRows.length) });
 
@@ -392,7 +403,6 @@ export class BoardRenderer {
   ): void {
     const fields = this.getReferenceCardFields(config);
     const subtaskNode = this.subtaskRelation?.nodes.get(row.file.path);
-    const color = this.getReferenceGroupColor(config, groupField, group.key);
 
     const card = cards.createDiv({
       cls: "pm-kanban-card",
@@ -423,12 +433,13 @@ export class BoardRenderer {
       });
     }
 
-    // The reference colors the strip from the card's own priority; a
-    // status-grouped RowData set has no per-card priority concept, so the
-    // strip carries the group's status color instead.
-    if (color) {
+    // The reference paints the strip from the card's own priority and omits
+    // it for tasks without one; the mapped priority column supplies the
+    // per-card option color, and with no such column there is no strip.
+    const priorityColor = this.getReferencePriorityColor(config, row);
+    if (priorityColor) {
       const priorityBar = card.createDiv({ cls: "pm-kanban-card-priority-bar" });
-      priorityBar.setCssStyles({ background: color });
+      priorityBar.setCssStyles({ background: this.resolveReferenceColor(priorityColor) });
     }
 
     const body = card.createDiv({ cls: "pm-kanban-card-body" });
@@ -440,15 +451,36 @@ export class BoardRenderer {
 
     const titleRow = body.createDiv({ cls: "pm-kanban-card-title-row" });
     titleRow.createSpan({ cls: "pm-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
-    if (subtaskNode) {
-      // The reference's milestone and recurrence chips have no RowData
-      // equivalent, so only the subtask chip can render.
+    // The reference's type chips render in a fixed order: milestone,
+    // subtask, recurrence. Milestone reads the same frontmatter fields the
+    // timeline model uses; recurrence is any non-empty recurrence/repeat
+    // column value. Only a row with an actual parent is a subtask — the
+    // relation builds a node for every row.
+    if (this.isReferenceMilestoneRow(row)) {
+      this.renderReferenceChip(titleRow, {
+        label: "M",
+        variant: "solid",
+        size: "sm",
+        color: "var(--color-purple)",
+        tooltip: t("board.milestone"),
+      });
+    }
+    if (subtaskNode?.parentId) {
       this.renderReferenceChip(titleRow, {
         label: "Sub",
         variant: "solid",
         size: "sm",
         color: "var(--color-green)",
         tooltip: t("board.subtask"),
+      });
+    }
+    if (this.isReferenceRecurring(config, row)) {
+      this.renderReferenceChip(titleRow, {
+        label: "R",
+        variant: "solid",
+        size: "sm",
+        color: "var(--color-blue)",
+        tooltip: t("board.recurrence"),
       });
     }
 
@@ -490,8 +522,11 @@ export class BoardRenderer {
 
     const footer = body.createDiv({ cls: "pm-kanban-card-footer" });
 
+    // The reference always constructs the avatar stack; an unmapped people
+    // column just leaves it empty, which is what keeps the due chip pushed
+    // to the footer's right edge.
+    const stack = footer.createDiv({ cls: "pm-avatar-stack" });
     if (fields.people) {
-      const stack = footer.createDiv({ cls: "pm-avatar-stack" });
       const people = toMultiSelectValuesForKey(fields.people.key, row.frontmatter[fields.people.key]);
       for (const name of people.slice(0, 3)) {
         const display = referenceDisplayName(name);
@@ -508,11 +543,15 @@ export class BoardRenderer {
     if (fields.due) {
       const due = this.getCellValue(row, fields.due);
       if (typeof due === "string" && due) {
-        const overdue = due < referenceTodayIso();
+        const urgency = this.getReferenceDueUrgency(due, row, config);
         this.renderReferenceChip(footer, {
           label: referenceFormatDateShort(due),
           size: "sm",
-          ...(overdue ? { variant: "solid" as const, color: "var(--color-red)", strong: true } : {}),
+          ...(urgency === "overdue"
+            ? { variant: "solid" as const, color: "var(--color-red)", strong: true }
+            : urgency === "near"
+              ? { variant: "solid" as const, color: "var(--color-orange)" }
+              : {}),
         });
       }
     }
@@ -577,6 +616,86 @@ export class BoardRenderer {
     if (displayType !== "status" && displayType !== "select" && displayType !== "multi-select") return undefined;
     if (isUncategorizedGroupKey(key)) return undefined;
     return column ? resolveOptionDisplay(column, key).option?.color : undefined;
+  }
+
+  /** A palette name paints through the theme-aware foreground token so both
+   *  themes resolve the same option color; any other authored color string
+   *  (hex/rgb custom values) passes through unchanged. */
+  private resolveReferenceColor(color: string | undefined): string | undefined {
+    if (!color) return undefined;
+    return STATUS_COLORS.includes(color as StatusColor) ? `var(--status-color-fg-${color})` : color;
+  }
+
+  /** The reference's milestone flag, read from the same frontmatter fields
+   *  the timeline model uses: `milestone` or `type`, accepting the boolean
+   *  and the accepted true-ish spellings. */
+  private isReferenceMilestoneRow(row: RowData): boolean {
+    const value = row.frontmatter.milestone ?? row.frontmatter.type;
+    const text = typeof value === "string" ? value.trim().toLowerCase() : "";
+    return value === true || text === "milestone" || text === "true" || text === "yes";
+  }
+
+  /** A non-empty recurrence/repeat column value marks the card recurring. */
+  private isReferenceRecurring(config: ViewConfig, row: RowData): boolean {
+    const column = this.actions.getColumns(config).find((candidate) => /^(recurrence|repeat)$/i.test(candidate.key));
+    if (!column) return false;
+    const value = this.getCellValue(row, column);
+    const trimmed = typeof value === "string" ? value.trim() : value;
+    return Boolean(trimmed);
+  }
+
+  /** The select column named "priority" (case-insensitive), if any — the
+   *  per-card priority source the reference's strip is painted from. */
+  private getReferencePriorityColumn(config: ViewConfig): ColumnDef | undefined {
+    return this.actions.getColumns(config).find(
+      (candidate) => candidate.type === "select" && /^priority$/i.test(candidate.key),
+    );
+  }
+
+  /** The reference paints the strip for every priority except its two
+   *  lowest named tiers (KanbanView.ts:86-88: `!== 'medium' && !== 'low'`);
+   *  this port matches by option name case-insensitively and also omits
+   *  "none", the third non-urgent name a priority select commonly carries. */
+  private isReferenceLowPriorityTier(value: string): boolean {
+    return /^(medium|low|none)$/i.test(value.trim());
+  }
+
+  /** The priority option's color for a row, resolved like the group colors;
+   *  undefined when no priority column is mapped, the row has no value, or
+   *  the value names one of the reference's omitted low tiers. */
+  private getReferencePriorityColor(config: ViewConfig, row: RowData): string | undefined {
+    const column = this.getReferencePriorityColumn(config);
+    if (!column) return undefined;
+    const value = this.getCellValue(row, column);
+    if (value == null || value === "") return undefined;
+    const resolved = resolveOptionDisplay(column, value);
+    if (this.isReferenceLowPriorityTier(resolved.value)) return undefined;
+    return resolved.option?.color;
+  }
+
+  /** A checkbox column is the board's only native completion signal, the
+   *  same pattern the calendar renderer's isRowCompleted resolves from —
+   *  status columns carry display colors, not a terminal flag. */
+  private isReferenceRowCompleted(row: RowData, config: ViewConfig): boolean {
+    const checkboxColumn = config.schema.columns.find((column) => column.type === "checkbox");
+    if (!checkboxColumn) return false;
+    return toBooleanValue(row.frontmatter[checkboxColumn.key]);
+  }
+
+  /** Due urgency tiers copied from the reference: a past date reads overdue,
+   *  a date within three days reads near, anything else plain — and a
+   *  terminal row is always plain (utils.ts:80-83: "Terminal tasks are
+   *  never urgent"). */
+  private getReferenceDueUrgency(due: string, row: RowData, config: ViewConfig): "normal" | "near" | "overdue" {
+    if (this.isReferenceRowCompleted(row, config)) return "normal";
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(due);
+    if (!match) return "normal";
+    const dueDate = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const days = Math.round((dueDate.getTime() - today.getTime()) / 86_400_000);
+    if (days < 0) return "overdue";
+    return days < 3 ? "near" : "normal";
   }
 
   /** Reproduces the reference Chip's DOM from its builder calls: a span with
@@ -2370,18 +2489,6 @@ function referenceInitialsFor(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
   const raw = parts.length >= 2 ? parts[0][0] + parts[1][0] : name.slice(0, 2)
   return raw.toUpperCase()
-}
-
-/**
- * Local date as YYYY-MM-DD, the format due fields use, so a past-due check is
- * a plain string comparison. The reference compares through the Temporal
- * polyfill it vendors; this plugin has no Temporal dependency, so the check is
- * rewritten against the ISO shape the fields already carry.
- */
-function referenceTodayIso(): string {
-  const d = new Date();
-  const pad = (value: number): string => String(value).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
 /**

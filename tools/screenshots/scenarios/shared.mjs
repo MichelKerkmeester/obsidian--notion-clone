@@ -243,6 +243,16 @@ export function tableRows() {
     </tr>`).join("");
 }
 
+/** Mirrors board-renderer.ts's resolveReferenceColor: a name from this project's closed palette
+ *  (src/data/status-colors.ts) paints through the theme-aware foreground token so both themes
+ *  resolve the same option color; any other authored color string (hex/rgb custom values, or a
+ *  CSS var the fixture already carries) passes through unchanged. */
+const STATUS_COLOR_NAMES = new Set([
+  "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink",
+  "red", "slate", "cyan", "teal", "lime", "indigo", "violet", "rose",
+]);
+const resolveTone = (tone) => (tone && STATUS_COLOR_NAMES.has(tone) ? `var(--status-color-fg-${tone})` : tone);
+
 const pmChip = (label, { variant, size, tag = false, color, dot = false, strong = false } = {}) => {
   const classes = [
     "pm-chip",
@@ -264,26 +274,37 @@ const pmCardFields = (row) => `
         ${[row.category, row.payment].filter(Boolean).map((tag) => pmChip(tag, { variant: "outline", tag })).join("")}
       </div>`;
 
-const pmCardFooter = (row) => `
+/** The due chip's urgency tiers, matching the renderer's getReferenceDueUrgency: past due paints
+ *  solid strong red, due within three days paints solid orange, anything else stays plain. */
+const pmDueChip = (label, urgency = "normal") => {
+  if (urgency === "overdue") return pmChip(label, { size: "sm", variant: "solid", color: "var(--color-red)", strong: true });
+  if (urgency === "near") return pmChip(label, { size: "sm", variant: "solid", color: "var(--color-orange)" });
+  return pmChip(label, { size: "sm" });
+};
+
+/** The footer always constructs the avatar stack (empty when the row carries no people), which
+ *  is what keeps the due chip pushed to the footer's right edge — none of this fixture's rows
+ *  map a people column, so the stack renders empty in every capture that uses it. */
+const pmCardFooter = (row, dueUrgency = "normal") => `
       <div class="pm-kanban-card-footer">
-        ${row.people ? `<div class="pm-avatar-stack"><span class="pm-avatar pm-avatar--sm" style="background: var(--color-blue);">${row.people}</span></div>` : ""}
-        ${row.renew ? pmChip(row.renew, { size: "sm" }) : ""}
+        <div class="pm-avatar-stack">${row.people ? `<span class="pm-avatar pm-avatar--sm" style="background: var(--color-blue);">${row.people}</span>` : ""}</div>
+        ${row.renew ? pmDueChip(row.renew, dueUrgency) : ""}
       </div>`;
 
-export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "", { dragState } = {}) => {
+export const boardCard = (r, parent = "", { dragState, priorityColor = null, dueUrgency = "normal" } = {}) => {
   const path = pmCardPath(r, parent);
   const cardClasses = ["pm-kanban-card", dragState === "dragging" ? "pm-kanban-card--dragging" : ""]
     .filter(Boolean).join(" ");
   return `
   <div class="${cardClasses}" data-task-id="${path}" data-note-database-row-path="${path}">
-    ${tone ? `<div class="pm-kanban-card-priority-bar" style="background: ${tone};"></div>` : ""}
+    ${priorityColor ? `<div class="pm-kanban-card-priority-bar" style="background: ${priorityColor};"></div>` : ""}
     <div class="pm-kanban-card-body">
       ${parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
       <div class="pm-kanban-card-title-row">
         <span class="pm-kanban-card-title">${r.name}</span>
       </div>
       ${pmCardFields(r)}
-      ${pmCardFooter(r)}
+      ${pmCardFooter(r, dueUrgency)}
     </div>
   </div>`;
 };
@@ -301,12 +322,14 @@ export const subtaskBoardCard = (r, {
   total = 0,
   explicit = null,
   value = null,
+  priorityColor = null,
+  dueUrgency = "normal",
 } = {}) => {
   const progressValue = value ?? explicit ?? (total > 0 ? (done / total) * 100 : 0);
   const cardPath = pmCardPath(r, parent);
   return `
   <div class="pm-kanban-card" data-task-id="${cardPath}" data-note-database-row-path="${cardPath}">
-    <div class="pm-kanban-card-priority-bar" style="background: purple;"></div>
+    ${priorityColor ? `<div class="pm-kanban-card-priority-bar" style="background: ${priorityColor};"></div>` : ""}
     <div class="pm-kanban-card-body">
       ${depth > 0 && parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
       <div class="pm-kanban-card-title-row">
@@ -315,7 +338,7 @@ export const subtaskBoardCard = (r, {
       </div>
       ${pmCardFields(r)}
       ${progressValue > 0 ? `<div class="pm-progress pm-progress--sm"><div class="pm-progress-track"><div class="pm-progress-fill" style="width: ${Math.max(0, Math.min(100, progressValue))}%;"></div></div></div>` : ""}
-      ${pmCardFooter(r)}
+      ${pmCardFooter(r, dueUrgency)}
     </div>
   </div>`;
 };
@@ -326,14 +349,15 @@ export const subtaskBoardColumn = (title, cards, tone = OPTION_TONES[title]) =>
 export const boardEmptySlot = () => "";
 
 export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnClass = "", cardRenderer } = {}) {
-  const renderRow = cardRenderer || ((row) => boardCard(row, tone ?? null));
+  const renderRow = cardRenderer || ((row) => boardCard(row));
   const cardsClass = columnClass === "is-drop-target" ? "pm-kanban-cards pm-kanban-drop-target" : "pm-kanban-cards";
+  const resolvedTone = resolveTone(tone);
   return `
   <div class="pm-kanban-col" data-status="${title}">
-    <div class="pm-kanban-col-header"${tone ? ` style="--col-color: ${tone};"` : ""}>
-      <div class="pm-kanban-col-topbar"${tone ? ` style="background: ${tone};"` : ""}></div>
+    <div class="pm-kanban-col-header"${resolvedTone ? ` style="--col-color: ${resolvedTone};"` : ""}>
+      <div class="pm-kanban-col-topbar"${resolvedTone ? ` style="background: ${resolvedTone};"` : ""}></div>
       <div class="pm-kanban-col-title-row">
-        <span class="pm-kanban-col-badge"${tone ? ` style="color: ${tone};"` : ""}>${title}</span>
+        <span class="pm-kanban-col-badge"${resolvedTone ? ` style="color: ${resolvedTone};"` : ""}><span class="pm-kanban-col-badge-icon">${ICONS["circle-dot"]}</span>${title}</span>
         <div class="pm-kanban-col-header-right"><span class="pm-kanban-col-count">${rows.length}</span></div>
       </div>
     </div>

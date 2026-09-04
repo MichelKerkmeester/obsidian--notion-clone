@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "d3c6cc3e8453",
+  "baselineHash": "276e1094c61c",
   "baselineCommit": "421995b3790a0e6486e72bfcd3280e1fe7101562",
   "history": [
     {
@@ -1994,6 +1994,56 @@
         "screenshots/views/constructed-timeline-subtask-mobile-light.png"
       ],
       "note": "Reconciliation release, not a new CSS edit \u2014 rebasing worktrees/024-gantt-one-to-one (this phase's ganttPortRaiseHistory/ganttPortLowerHistory, ending at hash 20d8ee6827be) onto main after main absorbed the board kanban port plus its ten constructed state variants moved styles.css to a new merged hash (d3c6cc3e8453, both regions disjoint and kept verbatim: the gantt.css copy and the board's kanban.css copy sit in separate MIT-notice blocks). A full recapture (npm run screenshots, 356 entries) plus check-lane's own pixelHash/layoutHash compare against the pre-rebase committed manifest found exactly 4 content-changed captures, all four opened and read this session (both themes, both devices): the constructed-timeline-subtask scenario's parent row (row-0) now shows the collapse-toggle diamond and 62% progress label from the T040 subtask-tree work, indented children (row-1, row-2) below it, unchanged from before the rebase in every visual respect \u2014 the CSS leg's own coarse-pointer hit-area rule and the reference gantt.css block are both present and unaffected by the board's disjoint kanban block. One further capture (screenshots/views/board-mobile-mobile-light.png) moved bytes on this recapture but not pixelHash/layoutHash \u2014 pre-existing encoder-noise re-encode, restored to its committed HEAD bytes rather than recommitted, manifest.json's bytes field corrected to the real 61279-byte file size on disk, matching this lane's established handling. field-icon-picker-desktop-dark/light, flagged as environment-drift-prone by earlier releases on this lane, did not move on this recapture at all (clean against HEAD). All four constructed-timeline-subtask reads plus the four constructed-timeline and two timeline-view captures read separately this session (controls bar, label column, SVG header/grid/bars, progress fill, milestone diamond, dependency arrow, today line) confirm the gantt still renders fully styled post-merge."
+    },
+    {
+      "event": "acquire",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-04T09:31:00.000Z",
+      "hash": "b7de3b6fb54a"
+    },
+    {
+      "event": "edit",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-04T09:31:30.000Z",
+      "hash": "6d7f2ea7147c",
+      "note": "Fidelity-pass CSS leg, three edits over the T11 landing. (1) Scoped every copied pm-kanban-*/pm-chip*/pm-avatar*/pm-progress* selector under .note-database-container (one WHY comment at the block header, not per-rule) so a co-installed reference plugin sharing those class names cannot be painted by this stylesheet or vice versa -- declarations kept verbatim, only the selector prefix changed. (2) The board's first column started ~56px from the container edge against the reference's 16px: the host .note-database-container carries its own 24px left/right padding plus scrollbar-gutter on top of .pm-kanban-board's own 16px. Zeroing the container's own padding for the kanban view was rejected -- .db-header (the toolbar) is a sibling inside that same container and relies on a negative-margin bleed against that exact 24px value, so zeroing it would misalign the toolbar for every board view instead. Canceled the 24px with a matching negative margin on .pm-kanban-board alone (var(--db-space-8), the same token the container's own padding reads), landing the first column at its own 16px without touching the container's padding property or anything else that reads it. (3) Deleted .pm-content--kanban (dead: grep-confirmed nothing emits the class after the T10 port moved off the local db-content-- vocabulary); kept .pm-kanban-col-badge-icon, which T13's fidelity fix (board-renderer.ts's badge icon span) now genuinely uses."
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-04T09:55:00.000Z",
+      "hash": "6d7f2ea7147c",
+      "reviewed": [
+        "screenshots/components/board-drop-language-desktop-dark.png",
+        "screenshots/components/board-drop-language-desktop-light.png",
+        "screenshots/components/board-drop-language-mobile-dark.png",
+        "screenshots/components/board-drop-language-mobile-light.png",
+        "screenshots/components/board-empty-column-desktop-dark.png",
+        "screenshots/components/board-empty-column-desktop-light.png",
+        "screenshots/components/board-empty-column-mobile-dark.png",
+        "screenshots/components/board-empty-column-mobile-light.png",
+        "screenshots/views/board-mobile-desktop-dark.png",
+        "screenshots/views/board-mobile-desktop-light.png",
+        "screenshots/views/board-mobile-mobile-dark.png",
+        "screenshots/views/board-mobile-mobile-light.png",
+        "screenshots/views/board-subtask-tree-desktop-dark.png",
+        "screenshots/views/board-subtask-tree-desktop-light.png",
+        "screenshots/views/board-subtask-tree-mobile-dark.png",
+        "screenshots/views/board-subtask-tree-mobile-light.png",
+        "screenshots/views/board-view-desktop-dark.png",
+        "screenshots/views/board-view-desktop-light.png",
+        "screenshots/views/board-view-mobile-dark.png",
+        "screenshots/views/board-view-mobile-light.png",
+        "screenshots/views/constructed-board-desktop-dark.png",
+        "screenshots/views/constructed-board-desktop-light.png",
+        "screenshots/views/constructed-board-mobile-dark.png",
+        "screenshots/views/constructed-board-mobile-light.png",
+        "screenshots/views/constructed-board-subtask-desktop-dark.png",
+        "screenshots/views/constructed-board-subtask-desktop-light.png",
+        "screenshots/views/constructed-board-subtask-mobile-dark.png",
+        "screenshots/views/constructed-board-subtask-mobile-light.png"
+      ],
+      "note": "All 28 content-changed captures opened and read this session (both themes, both devices where applicable). board-view (the hand fixture): five/four status columns with the badge icon leading each label, topbar/badge/priority-strip colors resolving through var(--status-color-fg-*) and legible in both themes, the board flush at its own 16px from the container's left edge (no more ~56px host inset), Figma carrying a deliberate red priority-bearing demo strip, Sketch's due chip in the solid-orange near tier, every other card's due chip plain, and the footer's avatar stack present (empty) on every card. board-empty-column: the populated lane unchanged, the empty lane a hollow cards container with no placeholder. board-drop-language: no card carries a priority strip now (this fixture's rows map no priority column), drag-target tint and dragging-card lift unchanged. board-subtask-tree: the previously-hardcoded purple priority bar is gone from every subtask card (same no-priority-column reality), Sub chip and progress fill unaffected. constructed-board / constructed-board-subtask (the real BoardRenderer at the bench data shape): due chips resolve live from the bench's actual dates against today, several genuinely overdue and rendering solid red -- direct proof getReferenceDueUrgency runs correctly outside the hand fixtures too; the subtask variant's real parent/two-children relation, Sub chip and progress bar are unaffected. board-mobile pages the same fixed-width columns horizontally, unaffected by the fixture rewrite beyond the shared badge/color/inset fixes. chrome-board-extensions-selection (unrelated db-board-column/db-board-card-controls checkbox family, not pm-kanban-*) read for sanity and confirmed byte-identical, not part of this release's changed set. One stub gap surfaced by this read and deliberately NOT fixed: tools/storybook/obsidian-stub.mjs's REAL_ICONS curated glyph list has no entry for \"circle-dot\", so the constructed-board captures' badge icon renders as that stub's generic \u25c6 placeholder rather than the real dot-in-circle glyph the hand fixtures and the live plugin both show; \"circle-dot\" is also used by chart-toolbar-renderer.ts, column-menu.ts and property-type-icon.ts well outside this packet, so adding it would move unrelated captures beyond REQ-007's scope -- left as a residual, named rather than silently patched. Byte-only re-encode noise (3 timeline captures, pixelHash/layoutHash identical to HEAD) and the pre-existing field-icon-picker-desktop-{dark,light} Chrome/OS rendering drift (this environment's known divergence, unrelated to any code here, per this lane's own prior releases) were both restored to committed HEAD bytes rather than recommitted. `npm run gate` (SURFACE_PHASE=038-board-kanban-port): 25 green / 0 red, evidence lane needed cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census, token-census and view-census re-run to re-stamp against the new styles.css hash (all still pass or hold their pre-existing baseline -- engine-parity's 51 Chrome-vs-WebKit disagreements are the same pre-existing baseline this lane already documented as unrelated)."
     }
   ],
   "outstanding": [

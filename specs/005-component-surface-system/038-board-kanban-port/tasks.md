@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T10:10:00Z"
-    last_updated_by: "board-1to1-t11-css-leg"
-    recent_action: "T11 CSS leg closed: kanban.css copied, fixtures rewritten, gate 25/25 green"
-    next_safe_action: "Dispatch a fresh (non-T10/T11) session to close T12 visual half, then T8"
+    last_updated_at: "2026-09-04T09:55:00Z"
+    last_updated_by: "board-1to1-fidelity-pass-2"
+    recent_action: "T20-T21 fidelity pass closed: priority's non-urgent tiers, completion-suppressed due urgency, fixture/stylesheet class-for-class rewrite, host-container scoping, and the board's 16px inset; 28 captures recaptured, read and released through the CSS lane; gate 25/25"
+    next_safe_action: "T12's visual-language/density/column-width comparison and T8 (operator device confirmation) remain the only rows before COMPLETION"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 71
     open_questions: []
     answered_questions: []
 ---
@@ -217,6 +217,127 @@ _memory:
       exit 0. **Not closed:** the visual-language/density/column-width comparison this row also
       asks for has no styled reference-vocabulary capture to compare against yet — that half
       waits on T11.
+- [x] **T13** Palette names no longer paint as inline CSS keywords — REQ-007 fidelity pass (A).
+      *Evidence to close:* `board-renderer-parity.test.ts`'s column-shell test asserts
+      `var(--status-color-fg-blue)` for `--col-color`, the topbar background and the badge color;
+      ran red against the landed renderer — `expected 'blue' to be 'var(--status-color-fg-blue)'` —
+      and green after. `resolveReferenceColor` (`board-renderer.ts:621-627`) maps the closed
+      `StatusColor` name palette to the theme-aware `--status-color-fg-<name>` token (both themes
+      define it, `styles.css:130-161` light, `:749-786` dark) and passes any other authored color
+      string through unchanged; the four paint slots (`board-renderer.ts:332-344`, `:442-443`) use
+      it. Hex passthrough pinned by a new test (`board-renderer-parity.test.ts:715-726`, a custom
+      `#ff6600` option reads back unchanged in all three slots).
+- [x] **T14** Footer avatar stack is always constructed — REQ-007 fidelity pass (B).
+      *Evidence to close:* new test `always renders the footer avatar stack, empty without a people
+      column` (`board-renderer-parity.test.ts:728-737`); ran red — `expected null not to be null`
+      on `.pm-avatar-stack` — and green after the stack creation moved out of the people-column
+      branch (`board-renderer.ts:523-541`), matching the reference's unconditional
+      `new AvatarStack(footer)` so the footer's space-between still pushes the due chip right.
+- [x] **T15** "Sub" chip renders only for actual children — REQ-007 fidelity pass (C).
+      *Evidence to close:* new test `gates the Sub chip on an actual parent relation, not row
+      presence` (`board-renderer-parity.test.ts:739-747`); ran red — `expected MockElement{…} to
+      be null` on the root card's title-row chip — and green after the gate changed from node
+      presence to `subtaskNode?.parentId` (`board-renderer.ts:469`), matching the reference's
+      `task.type === 'subtask'` on a relation that builds a node for every row.
+- [x] **T16** Column badge renders its icon span — REQ-007 fidelity pass (D).
+      *Evidence to close:* the column-shell test asserts the `.pm-kanban-col-badge-icon` span
+      exists before the label with `setIcon(…, "circle-dot")` (`board-renderer-parity.test.ts:532-537`);
+      the same test ran red before the fix (on its color assertion, the test's first failing line)
+      and green after; the span is created unconditionally because the option model carries no
+      per-option icon field (`board-renderer.ts:337-343`, default icon constant `:70-73`), and the
+      label is appended after it exactly as the reference orders them.
+- [x] **T17** Priority strip is per-card from a mapped priority column, omitted otherwise —
+      REQ-007 fidelity pass (E).
+      *Evidence to close:* two new tests (`board-renderer-parity.test.ts:589-602`, `:749-774`); red
+      before the fix — `expected MockElement{…} to be null` (bar rendered without any priority
+      column) and `expected 'blue' to be 'var(--status-color-fg-red)'` (group color painted on the
+      bar) — green after. `getReferencePriorityColumn`/`getReferencePriorityColor`
+      (`board-renderer.ts:647-663`) resolve a select column named "priority" case-insensitively
+      and paint its per-card option color through the same resolution as the column colors
+      (`:437-444`); with no such column, or no value, the bar is omitted as the reference omits it
+      for tasks without priority.
+- [x] **T18** Milestone and recurrence chips render — REQ-007 fidelity pass (F).
+      *Evidence to close:* two new tests (`board-renderer-parity.test.ts:776-786`, `:788-801`); red
+      before the fix — `expected 'var(--color-green)' to be 'var(--color-purple)'` (the Sub chip
+      sat where the milestone chip belongs) and `expected 'var(--color-green)' to be
+      'var(--color-blue)'` — green after. The milestone flag reuses the timeline model's exact
+      frontmatter resolution (`isReferenceMilestoneRow`, `board-renderer.ts:629-636`,
+      `calendar-timeline-model.ts:1009-1011`); recurrence is any non-empty value in a
+      recurrence/repeat-named column (`isReferenceRecurring`, `:638-645`); chips render in the
+      reference's order with its classes and colors (`:455-486`). Tooltips go through new i18n
+      keys in all three locale blocks — `board.milestone` / `board.recurrence`
+      (`src/i18n.ts:137-138` en, `:1824-1825` zh-CN, `:3501-3502` zh-TW).
+- [x] **T19** Due chip gains the "near" urgency tier — REQ-007 fidelity pass (G).
+      *Evidence to close:* new test `renders a due chip due within three days as the near tier`
+      (`board-renderer-parity.test.ts:803-811`); red before the fix — `expected 'pm-chip
+      pm-chip--sm' to contain 'pm-chip--solid'` — green after. `getReferenceDueUrgency`
+      (`board-renderer.ts:665-676`) copies the reference's tiers and thresholds exactly
+      (`dueChip.ts:3-13`, `utils.ts:71-77`): past due → solid red strong, due within three days →
+      solid orange, else plain (`:543-557`).
+- [x] **T20** Two reference rules T13-T19 skipped: priority's non-urgent tiers, and completion
+      suppressing due urgency — REQ-007 fidelity pass (H).
+      *Evidence to close:* two new red-first tests. `omits the priority bar for the reference's
+      non-urgent tiers, paints every other option name` (`board-renderer-parity.test.ts:794-826`)
+      — red: `expected MockElement{ textContent: '', …(12) } to be null` (a "Medium"-named
+      priority option still painted the strip) — green after `isReferenceLowPriorityTier`
+      (`board-renderer.ts:659-664`) gates `getReferencePriorityColor` on the resolved option name,
+      matching KanbanView.ts:86-88's `priority !== 'medium' && priority !== 'low'` by name
+      case-insensitively and also omitting "none", the third non-urgent name a priority select
+      commonly carries; "urgent"/"high"/"critical" and any other name still paint. `suppresses the
+      due chip's urgency tiers once the row's checkbox column marks it complete`
+      (`board-renderer-parity.test.ts:865-883`) — red: `expected 'pm-chip pm-chip--solid pm-chip--sm
+      pm-chip--strong' not to contain 'pm-chip--solid'` (an overdue-but-complete row still painted
+      solid red) — green after `isReferenceRowCompleted` (`board-renderer.ts:676-682`) — the same
+      checkbox-column completion signal `calendar-renderer.ts:2420-2425`'s `isRowCompleted` reads —
+      short-circuits `getReferenceDueUrgency` (`:689-698`) to "normal", matching utils.ts:80-83's
+      "Terminal tasks are never urgent". 30/30 parity tests green; full suite 990/990, `tsc` 0,
+      lint 172 = 172 (byte-identical, confirmed by diff-hunk overlap against the pre-session lint
+      locations rather than a rebuilt baseline worktree), `scan-comments` PASS.
+- [x] **T21** Fixture and stylesheet class-for-class fidelity, plus host-container scoping and
+      inset — REQ-007 fidelity pass (I).
+      *Evidence to close:* `tools/screenshots/scenarios/shared.mjs`'s `boardColumn`/`boardCard`/
+      `subtaskBoardCard` rewritten to match the renderer exactly: badge icon span
+      (`.pm-kanban-col-badge-icon`, reusing the existing `ICONS["circle-dot"]` glyph) leading the
+      label; `resolveTone` mapping a `StatusColor` name to `var(--status-color-fg-<name>)` for
+      `--col-color`/topbar/badge, matching `resolveReferenceColor`; the priority bar moved from an
+      implicit group-tone parameter to an explicit opt-in `priorityColor` (no fixture row maps a
+      real priority column, so none paints one by default); the footer avatar stack always
+      constructed, matching T14; a `pmDueChip` helper carrying the near/overdue tiers. Existing
+      structural tests updated in lockstep (`shared.test.mjs`, `board-renderer-parity.test.ts`'s
+      "keeps the screenshot fixture helpers on the reference class contract"), all green (40 tests
+      across both files). `core.mjs`'s `board-view` scenario forces one deterministic
+      priority-bearing card (Figma, red) and one near-tier due chip (Sketch) — not date- or
+      wall-clock-derived, so the capture stays reproducible — which also keeps
+      `tools/live/replay.mjs`'s two pre-existing 038 claims ("the board card carries the ported
+      kanban hierarchy", "the board topbar and priority strip resolve their status colours") at
+      their original recorded values (10, 0) rather than needing renumbering; all 28 replay claims
+      hold. `styles.css`: every copied `pm-kanban-*`/`pm-chip*`/`pm-avatar*`/`pm-progress*`
+      selector scoped under `.note-database-container` (one WHY comment at the block header, not
+      per-rule) so a co-installed reference plugin sharing those class names cannot cross-paint
+      with this stylesheet; declarations kept verbatim, only the selector prefix changed. The
+      board's first column started ~56px from the container edge against the reference's 16px
+      (`.note-database-container`'s own 24px padding, `styles.css:817`, plus `.pm-kanban-board`'s
+      own 16px); zeroing the container's own padding was rejected because `.db-header` (the
+      toolbar) is a sibling inside that same container and relies on a negative-margin bleed
+      against that exact 24px value, so a matching negative margin on `.pm-kanban-board` alone
+      (`var(--db-space-8)`, the same token the container's padding reads) cancels it without
+      touching the container's padding or the toolbar. Deleted the dead `.pm-content--kanban` rule
+      (grep-confirmed nothing emits the class); kept `.pm-kanban-col-badge-icon`, which the badge
+      icon span now genuinely uses. `tools/lane/css-lane.json`: acquired, edited, and released as
+      holder `038-board-kanban-port`, naming all 28 content-changed captures (`check-lane` exit 0).
+      All 28 read this session, both themes: badge icon present, topbar/badge/priority-strip
+      colors resolve through the token and stay legible in dark, Sub chip only on children, due
+      chip right-aligned with the near/overdue tiers correctly styled, priority strips only where
+      a priority-bearing state was deliberately forced, board flush at 16px, nothing else moved. A
+      residual left named rather than fixed: `tools/storybook/obsidian-stub.mjs`'s curated icon
+      glyph list has no "circle-dot" entry, so `constructed-board`/`constructed-board-subtask`
+      (the real renderer, not the hand fixture) show that stub's generic ◆ placeholder instead of
+      the real glyph — out of REQ-007's scope, since "circle-dot" is also used by three
+      unrelated renderers this packet does not touch. `npm run gate`
+      (`SURFACE_PHASE=038-board-kanban-port`): 25 green / 0 red; the evidence lane needed 8
+      artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance,
+      engine-parity, surface-census, token-census, view-census) re-run to re-stamp against the new
+      `styles.css` hash — all pass or hold their documented pre-existing baseline.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

@@ -103,7 +103,9 @@ describe("board screenshot fixture parity", () => {
   });
 
   it("nests the card's priority bar and body content under the reference card", () => {
-    const markup = boardCard(ROWS[0], "pink");
+    // The strip is per-card, from a mapped priority column — not from the group tone — so a
+    // priority-bearing state has to be requested explicitly to exercise this order.
+    const markup = boardCard(ROWS[0], "", { priorityColor: "red" });
     expect(markup).not.toContain("db-board-");
     const card = findDescendant(parseMarkup(markup), "pm-kanban-card");
     expectDirectChildOrder(
@@ -121,8 +123,8 @@ describe("board screenshot fixture parity", () => {
     expectDirectChildOrder(titleRow, ["pm-kanban-card-title"], "the title row");
   });
 
-  it("omits the optional parent and priority nodes when the renderer has no value", () => {
-    const card = boardCard(ROWS[0], null, "");
+  it("omits the priority bar by default and the parent node without a parent title", () => {
+    const card = boardCard(ROWS[0], "");
     expect(card).not.toContain("pm-kanban-card-priority-bar");
     expect(card).not.toContain("pm-kanban-card-parent");
     expect(card).toContain("pm-kanban-card-title");
@@ -150,13 +152,13 @@ describe("board screenshot fixture parity", () => {
   });
 
   it("puts the card-level dragstart class on the card root, raised above its neighbours", () => {
-    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "pink", "", { dragState: "dragging" })), "pm-kanban-card");
+    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "", { dragState: "dragging" })), "pm-kanban-card");
     expect(dragging.classes).toContain("pm-kanban-card--dragging");
     expect(dragging.classes).not.toContain("pm-kanban-drop-target");
   });
 
   it("keeps insertion feedback on the reference container rather than inventing a card node", () => {
-    const markup = boardCard(ROWS[0], "pink", "", { dragState: "drop-target", dropPlacement: "before" });
+    const markup = boardCard(ROWS[0], "", { dragState: "drop-target", dropPlacement: "before" });
     expect(markup).not.toContain("pm-kanban-drop-target");
     expect(markup).not.toContain("db-board-drop-indicator");
   });
@@ -168,7 +170,9 @@ describe("subtask screenshot fixture parity", () => {
   const styles = readFileSync(new URL("../../../styles.css", import.meta.url), "utf8");
 
   it("keeps the board hierarchy helper in the renderer's child order", () => {
-    const markup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62 });
+    // priorityColor is opt-in like the ordinary board card's — forced here so the strip's child
+    // order still has a documented, exercised path even though no fixture row maps a priority.
+    const markup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62, priorityColor: "purple" });
     const card = findDescendant(parseMarkup(markup), "pm-kanban-card");
     const body = findDescendant(card, "pm-kanban-card-body");
     expectDirectChildOrder(card, ["pm-kanban-card-priority-bar", "pm-kanban-card-body"], "the subtask card");
@@ -183,7 +187,7 @@ describe("subtask screenshot fixture parity", () => {
   });
 
   it("keeps every new class in the hand-written board and timeline states styled and sourced", () => {
-    const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62 });
+    const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62, priorityColor: "purple" });
     const treeParent = TL_SUBTASK_LANES.find((lane) => lane.key === "business").events[0];
     const timelineMarkup = timelineEvent(treeParent, TIMELINE_FIXTURES.week);
     const contracts = [

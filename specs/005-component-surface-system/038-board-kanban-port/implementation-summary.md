@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T10:10:00Z"
-    last_updated_by: "board-1to1-t11-css-leg"
-    recent_action: "T11 CSS leg closed: kanban.css copied, fixtures rewritten, gate 25/25 green"
+    last_updated_at: "2026-09-04T09:55:00Z"
+    last_updated_by: "board-1to1-fidelity-pass-2"
+    recent_action: "T20-T21 fidelity pass closed: priority's non-urgent tiers, completion-suppressed due urgency, fixture/stylesheet class-for-class rewrite, host-container scoping, board inset; gate 25/25 green"
     next_safe_action: "Dispatch a fresh (non-T10/T11) session to close T12 visual half, then T8"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "038-board-kanban-port"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 71
     open_questions: []
     answered_questions:
       - "Card identity stays RowData.file.path throughout: no hunk in either landed commit touches drag/drop, WIP/visible-count, swimlane, summary, conditional-formatting or touch-mode identifiers (confirmed by re-reading both diffs' added lines)."
@@ -396,6 +396,68 @@ five gate-lane fixes are in `tools/lane/css-lane.json`'s `038-board-kanban-port`
 a session that ran neither T10 nor T11, per its own evidence bar — this session ran T11 and so
 cannot be the one to close it, even though the captures it needs now exist. T8 (operator device
 confirmation) remains the only row that closes the packet.
+
+**2026-09-04, T20-T21 landed (this session).** An external agent (devin) had left uncommitted
+fidelity fixes on top of T10/T11's landing — palette-color token resolution, the unconditional
+avatar stack, the parent-gated Sub chip, the badge icon span, a per-card priority strip,
+milestone/recurrence chips and the due chip's near tier (T13-T19) — with a claim of `tsc` 0,
+`vitest` 988 green, `lint` 172 = 172, and zero comment-hygiene violations. This session verified
+every claim against the actual commands rather than trusting the note, read each fix line-by-line
+against the reference source (`KanbanView.ts`, `dueChip.ts`, `utils.ts`), and found the claims
+accurate but two reference rules still missing.
+
+`KanbanView.ts:86-88` omits the priority strip for `medium`/`low` priorities by name — devin's
+port painted the strip for any priority value, mapped or not. Fixed with
+`isReferenceLowPriorityTier` gating `getReferencePriorityColor` on the resolved option name
+(case-insensitive, also omitting "none" as a third non-urgent name a priority select commonly
+carries), red first (`expected MockElement{…} to be null`, a "Medium" option still painting).
+`utils.ts:80-83` suppresses due urgency entirely for a terminal task — devin's port computed
+urgency from the date alone. Fixed with `isReferenceRowCompleted`, the same checkbox-column
+completion signal `calendar-renderer.ts:2420-2425`'s `isRowCompleted` already reads, short-circuiting
+`getReferenceDueUrgency` to "normal", red first (an overdue-but-complete row still painting solid
+red). Both closed under `tasks.md` T20.
+
+Reading devin's fixture and stylesheet diffs against the renderer surfaced three further gaps,
+closed under T21. `tools/screenshots/scenarios/shared.mjs`'s `boardColumn`/`boardCard` still built
+the badge without an icon span, painted `--col-color`/topbar/badge with the raw palette-name string
+instead of the theme-aware token, and let the priority bar ride on the group's tone rather than an
+explicit priority-bearing state — a pre-T13 shape the fixture rewrite had not caught up to.
+Rewritten class-for-class, with a forced (not date-derived) priority-bearing demo card and near-tier
+due chip in the flagship `board-view` capture so two pre-existing `tools/live/replay.mjs` claims
+about those exact surfaces keep their original recorded values rather than needing renumbering.
+`styles.css`'s copied `pm-kanban-*`/`pm-chip*`/`pm-avatar*`/`pm-progress*` rules carried no
+`.note-database-container` scope, meaning a co-installed copy of the reference plugin (the operator
+runs both) would cross-paint with this stylesheet through the shared class names; scoped every
+selector under the container, verbatim declarations, one WHY comment at the block header. The
+board's first column started roughly 56px from the container edge against the reference's 16px —
+the container's own 24px padding plus the board's own 16px; zeroing the container's padding was
+rejected because the toolbar (`.db-header`, a sibling inside that same container) relies on a
+negative-margin bleed against that exact 24px value and would have misaligned for every board view,
+so a matching negative margin on `.pm-kanban-board` alone cancels the inset without touching
+anything the toolbar reads. The dead `.pm-content--kanban` rule (grep-confirmed unemitted since the
+T10 port) was deleted.
+
+All 28 content-changed captures (both themes, both devices where applicable) were read this
+session: badge icon present, status-token colors legible in dark, Sub chip only on children, due
+chip right-aligned with correct near/overdue styling, priority strips only on the deliberately
+forced demo card, board flush at 16px, nothing else moved. `constructed-board`/
+`constructed-board-subtask` (the real `BoardRenderer` at bench scale, not a hand fixture) showed
+due chips resolving live against actual bench dates — direct proof the due-urgency fix runs
+correctly outside the fixtures too. One gap found and deliberately left unfixed: the render-assertion
+bundle's icon stub (`tools/storybook/obsidian-stub.mjs`) has no curated glyph for `circle-dot`, so
+those two constructed captures show its generic ◆ placeholder instead of the real icon — named
+rather than patched, since `circle-dot` is also used by three renderers outside this packet and
+fixing the stub would move captures beyond REQ-007's scope. The CSS lane was acquired, edited and
+released as holder `038-board-kanban-port`, naming all 28 captures. `npm run gate`
+(`SURFACE_PHASE=038-board-kanban-port`): 25 green / 0 red — the evidence lane needed 8 artefacts
+re-run to re-stamp against the new `styles.css` hash, all still passing or holding their documented
+pre-existing baseline (engine-parity's 51 Chrome-vs-WebKit disagreements, unrelated to this leg).
+Full verification: `tsc --noEmit` 0; `npx vitest run` 990/990 (98 files); `npm run lint` 172
+problems (159 errors, 13 warnings), unchanged; `scan-comments` PASS.
+
+**Not closed by this session:** T12 and T8 remain exactly as the T11 session left them — this
+session touched neither the visual-language/density/column-width surface T12 needs a disqualified
+session to avoid, nor an operator device.
 <!-- /ANCHOR:next-leg -->
 
 ---
