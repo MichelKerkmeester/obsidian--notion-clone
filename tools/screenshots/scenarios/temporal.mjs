@@ -1149,6 +1149,9 @@ const timelineScaleScenario = (scale, overrides = {}) => {
     group: "views",
     width: 1100,
     sources: overrides.sources || ["src/views/calendar-timeline-renderer.ts"],
+    // The plain week-scale fixture is the state the constructed timeline capture photographs;
+    // the other scales and the subtask-tree variant are not reproduced by it and stay fixture-only.
+    fixtureOf: overrides.fixtureOf || (scale === "week" && !overrides.id ? "constructed-timeline" : undefined),
     note: overrides.note || (`${label} scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. `
       + `Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.`),
     html: (device) => {
@@ -1179,6 +1182,7 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/calendar-renderer.ts"],
+    fixtureOf: "constructed-calendar-month",
     /* The wrapper carries --db-calendar-day-min-height because applyMonthSizingVars() writes it
        there on every month render, from config.calendarCellMinHeight ?? 112 clamped to 72-400
        (calendar-renderer.ts:2165-2199). Nothing in that renderer measures the pane, so 112px is
@@ -1206,6 +1210,7 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/calendar-renderer.ts"],
+    fixtureOf: "constructed-calendar-week",
     note: "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
     html: () => `
       <div class="note-database-container">

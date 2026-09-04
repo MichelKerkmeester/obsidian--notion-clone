@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-04T00:29:49.568Z",
+  "measuredAt": "2026-09-04T01:37:01.888Z",
   "inputs": {
     "styles.css": "c32661e8c089",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
-    "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
+    "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 70,

@@ -7,14 +7,22 @@
  * Screenshot scenario registry.
  *
  * Scenarios live in `scenarios/` one module per surface family, so several can be authored
- * at once without contending for a single file. This module only aggregates them.
+ * at once without contending for a single file. This module aggregates the hand-written
+ * fixtures; the constructed scenarios that photograph the shipped renderers through the
+ * render-assertion bundle live in `constructed-scenarios.mjs` and are aggregated by the
+ * capture run instead, because the fixture lanes that iterate this list never mount a
+ * renderer.
  *
- * Every scenario renders the class structure the renderers emit, against mock rows, so the
+ * Every fixture renders the class structure the renderers emit, against mock rows, so the
  * shipped stylesheet is what gets photographed. Markup is hand-written rather than driven
  * through the real renderers because those need a live Obsidian App, a vault and a metadata
  * cache. The cost is that markup drift shows up as a screenshot that stops matching the
  * code; the fixture-class guard in `src/views/screenshot-fixtures.test.ts` catches the
  * sharper failure, a class the plugin never emits and no rule ever styles.
+ *
+ * A fixture that depicts a state a constructed capture also photographs declares
+ * `fixtureOf: "constructed-<view>"`, so the manifest marks the constructed capture as the
+ * authority for that state while the fixture stays registered and captured.
  *
  * `sources` lists the files a scenario depicts. The staleness checker uses it to decide
  * which screenshots a change invalidates, so keep it accurate or the check goes quiet when

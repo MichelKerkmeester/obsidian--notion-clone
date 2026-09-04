@@ -21,6 +21,7 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/table-renderer.ts", "src/views/column-header-controller.ts", "src/views/cell-renderer.ts"],
+    fixtureOf: "constructed-table",
     html: () => `
       <div class="note-database-container">
         <table class="db-table"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
@@ -55,6 +56,7 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts"],
+    fixtureOf: "constructed-board",
     html: () => `
       <div class="note-database-container">
         <div class="db-board" role="grid">
@@ -130,6 +132,7 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 900,
     sources: ["src/views/gallery-renderer.ts", "src/views/card-field-renderer.ts"],
+    fixtureOf: "constructed-gallery",
     // Two things this fixture used to get wrong, both of which made the gallery photograph as
     // something the renderer does not build.
     //
@@ -163,6 +166,7 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 900,
     sources: ["src/views/list-renderer.ts", "src/views/card-field-renderer.ts"],
+    fixtureOf: "constructed-list",
     // renderRow builds `db-list-row-controls` — checkbox, open button, move button — with no
     // device test around it, so a desktop row has all three. This fixture used to render a bare
     // title and two values, which meant the desktop list's own selection checkbox appeared in no

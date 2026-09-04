@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-04T00:58:55.559Z",
+  "measuredAt": "2026-09-04T01:48:46.094Z",
   "inputs": {
     "styles.css": "c32661e8c089",
     "tools/screenshots/theme.css": "115be5a71b07",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
-    "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+    "tools/screenshots/scenarios.mjs": "4c26fcda113a",
     "tools/live/replay.mjs": "e3835f07ceda"
   },
   "claims": [

@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T00:45:07Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored the acceptance criteria for this packet"
-    next_safe_action: "Meet, waive or supersede the open criteria"
+    last_updated_at: "2026-09-04T02:10:00Z"
+    last_updated_by: "in-runtime-verifier"
+    recent_action: "AC-001 and AC-010 marked Met from in-runtime evidence"
+    next_safe_action: "Rule on AC-002, then decide whether AC-006 stands"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-ac"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 18
     open_questions: []
     answered_questions: []
 ---
@@ -54,8 +54,8 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given `capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous markup string (`capture.mjs:108-133`), When a constructed scenario type is added that mounts through `buildRenderAssertionBundle()`/`runRenderAssertions()`, Then a constructed capture exists whose bundle input list (`built.metafile.inputs`) includes the real `src/views/*` renderer source, not a second implementation. | `node tools/screenshots/capture.mjs --constructed` (or equivalent); direct inspection of the bundle's `metafile.inputs` for the renderer path | Unmet | - |
-| AC-002 | REQ-002 | Given `calendar-renderer.ts` and `calendar-timeline-renderer.ts` schedule a post-render layout correction via `window.requestAnimationFrame` (workday scroll, popover reposition, timeline group-width), When a constructed capture of one of these views is taken with the readiness wait removed and again with it present, Then the two captures differ (`pixelHash` or `layoutHash`), proving the wait changes what is photographed rather than being decorative. | The negative-control pair's manifest entries, `pixelHash`/`layoutHash` compared directly | Unmet | - |
+| AC-001 | REQ-001 | Given `capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous markup string (`capture.mjs:108-133`), When a constructed scenario type is added that mounts through `buildRenderAssertionBundle()`/`runRenderAssertions()`, Then a constructed capture exists whose bundle input list (`built.metafile.inputs`) includes the real `src/views/*` renderer source, not a second implementation. | Observed in-runtime: two full detached `npm run screenshots` runs produced 36 constructed entries marked `source: "constructed"`, each naming its renderer; `prepareConstructedBundle()` throws when `buildRenderAssertionBundle`'s `missingSources` is non-empty, so a bundle that dropped a shipped renderer fails the run. All 36 PNGs opened and read; they show the production renderers, not fixture markup. Was 0. | Met | - |
+| AC-002 | REQ-002 | Given `calendar-renderer.ts` and `calendar-timeline-renderer.ts` schedule a post-render layout correction via `window.requestAnimationFrame` (workday scroll, popover reposition, timeline group-width), When a constructed capture of one of these views is taken with the readiness wait removed and again with it present, Then the two captures differ (`pixelHash` or `layoutHash`), proving the wait changes what is photographed rather than being decorative. | Run, and the criterion failed on its own terms rather than the implementation failing: `constructed-calendar-week` captured with `READY_ANIMATION_FRAMES` set to 0 gives pixelHash 265f58faa024 / f46ff021c4b2 / 2ea63aecd959 / afcbb4870a24, identical to the two-frame run on all four entries, because the screenshot command flushes pending animation frames before rasterising. The correction is real: inside the mount, `.note-database-container` scrollTop reads 0 synchronously after mount returns and 376 one frame later. Needs an amendment to the inside-mount basis, or an explicit acceptance of determinism (0 of 36 entries moved across two full runs) as the basis. | Unmet | - |
 | AC-003 | REQ-003 | Given `ScenarioSpec.scale` is typed `"month" \| "week" \| "day"` (calendar-only, `render-assertion-harness.ts`), When the type and the timeline construction branch are extended to accept all five shipped scales, Then a scenario naming each of `day`, `week`, `month`, `quarter`, `year` constructs `CalendarTimelineRenderer` at that scale, and `node tools/live/render-assertions.mjs` continues to exit 0 for every previously-registered scenario, unchanged. | `node tools/live/render-assertions.mjs`, `$?`; before/after diff of its per-scenario output for existing entries | Unmet | - |
 | AC-004 | REQ-004 | Given the constructed mount path's row/column counts are hardcoded to the perf-bench shape (1600-2000 rows, `render-assertion-harness.ts:106-160`), When an opt-in capture-sized data option is added, Then a constructed capture using the option shows a row count comparable to the fixture it declares (`scenarios/shared.mjs`'s curated ~12-20 rows), and `render-assertions.mjs`/`touch-targets.mjs`/`unstyled-links.mjs` produce byte-identical output to today when the option is omitted. | Row count in the captured DOM (`layoutHash` element count) for the option-enabled path; before/after run of the three existing checks with the option unused | Unmet | - |
 | AC-005 | REQ-005 | Given no capture has ever photographed a constructed `ChartRenderer` or a constructed calendar `day` scale (both real, confirmed coverage gaps — `grep` across `scenarios/*.mjs` returns no chart-view fixture, no `calendar-day` fixture), When the 13-scenario registry (list, table, board, gallery, calendar×3, timeline×5, chart) is captured desktop + phone, both themes, Then `screenshots/constructed-manifest.json` carries 52 entries and every one of the 13 renderer/scale combinations is represented at least once. | `screenshots/constructed-manifest.json` entry count and distinct renderer/scale coverage, read directly | Unmet | - |
@@ -63,7 +63,7 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-007 | REQ-007 | Given eleven `scenarios.mjs` fixtures depict a state a constructed capture also photographs (per the mapping audited in `plan.md`'s Architecture table), When `declared-fixtures.mjs` is written, Then every one of the eleven is named with its constructed authority, and the thirteen fixtures that do NOT map to a constructed state are named as staying fixture-only rather than silently omitted. | `declared-fixtures.mjs` contents, diffed against the mapping table in `plan.md` | Unmet | - |
 | AC-008 | REQ-008 | Given `check-lane.mjs`'s `contentChangedCaptures()` reads only `screenshots/manifest.json`, When it is widened to also read `screenshots/constructed-manifest.json`, Then a deliberately mutated constructed capture's `pixelHash`, left unnamed in a release entry, reds the lane the same way an unnamed fixture change already does. | `node tools/lane/check-lane.mjs` before/after the mutation, `$?` and printed reason | Unmet | - |
 | AC-009 | REQ-009 | Given `verify.mjs` judges a DECLARED scenario's staleness only against the fixture's hand-maintained `sources` array, When it is wired to also check the constructed capture's `sourceHashes` for a DECLARED scenario, Then a change to a `src/views/*` file a DECLARED scenario's constructed capture depends on is flagged stale even if the fixture's own `sources` array happened to omit it. | `node tools/screenshots/verify.mjs` before/after a scratch edit to a depended-on renderer source (reverted after the check) | Unmet | - |
-| AC-010 | REQ-010 | Given `capture-device-parity.mjs`'s directory scan is naming-convention-driven, not scenario-list-driven (`capture-device-parity.mjs:47-61`), When a full constructed capture lands under `screenshots/constructed/`, Then the check either already reports the new mobile/desktop pairs with zero code change, or is extended minimally to do so — one of the two is true and recorded, not assumed. | `node tools/live/capture-device-parity.mjs` output after the first real constructed capture run, read directly | Unmet | - |
+| AC-010 | REQ-010 | Given `capture-device-parity.mjs`'s directory scan is naming-convention-driven, not scenario-list-driven (`capture-device-parity.mjs:47-61`), When a full constructed capture lands under `screenshots/constructed/`, Then the check either already reports the new mobile/desktop pairs with zero code change, or is extended minimally to do so — one of the two is true and recorded, not assumed. | Observed in-runtime: exit 0, 77 scenarios captured on both devices against a committed 68, with `capture-device-parity.json` recording the same tool input hash ff0cac47e594 before and after — so the existing directory-and-naming scan reached all 9 constructed pairs with no code change. 0 render identically against a baseline of 4. Was 68 pairs. | Met | - |
 | AC-011 | REQ-011 | Given the fixture and constructed pipelines use different mock-data shapes (curated ~12-20 rows vs. perf-bench 1600-2000 rows) until AC-004 lands, When `fixture-constructed-parity.test.mjs` is written, Then it states explicitly which comparison basis it uses (data-aligned pixel equality, contingent on AC-004; or a named structural check otherwise) for every DECLARED scenario where both a fixture and a constructed manifest entry exist. | `tools/screenshots/fixture-constructed-parity.test.mjs` via `vitest`, plus a read of which basis it documents | Unmet | - |
 
 ### Status values
@@ -91,7 +91,19 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Not yet started. Every criterion above is `Unmet`. Write this section when the packet closes, not
-before — it should name which criteria carried the packet and what was consciously left out (for
-example, whether AC-011's parity basis ended up being pixel-equal or structural, and why).
+Two of eleven are `Met` (AC-001, AC-010) and nine remain open. The constructed capture exists and is
+verified, but the packet's own scope is only partly delivered: no separate
+`screenshots/constructed-manifest.json` (AC-005, AC-006), no `declared-fixtures.mjs` (AC-007 —
+the mapping landed as `fixtureOf` on the fixtures instead), no harness timeline scale or
+capture-sized data option (AC-003, AC-004), no `verify.mjs` DECLARED staleness inheritance (AC-009)
+and no parity test (AC-011).
+
+AC-008 is a special case worth reading before anyone writes code for it: css-lane already reds an
+unnamed constructed capture, because the constructed entries share the fixture manifest. The
+criterion's effect is achieved; its stated mechanism (widening `contentChangedCaptures()` to read a
+second file) is not, and will only be needed if AC-006 is upheld.
+
+AC-002 is blocked on a decision rather than on work, and the decision is recorded in
+`implementation-summary.md` §Known Limitations 1. Do not close this packet by quietly restating that
+criterion; either amend it with a reason or accept the determinism basis explicitly.
 <!-- /ANCHOR:closure -->

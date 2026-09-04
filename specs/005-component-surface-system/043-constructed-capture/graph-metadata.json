@@ -21,7 +21,8 @@
       "043 acceptance criteria",
       "constructed capture closure gate",
       "043 goal",
-      "constructed capture goal"
+      "constructed capture goal",
+      "043 implementation summary"
     ],
     "key_topics": [
       "constructed",
@@ -45,15 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "tools/screenshots/capture.mjs",
       "tools/live/render-assertion-bundle.mjs",
       "tools/live/render-assertion-harness.ts",
       "tools/lane/check-lane.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/screenshots/manifest-schema.mjs",
+      "tools/screenshots/constructed-capture.test.mjs",
       "tools/screenshots/scenarios.mjs",
+      "tools/screenshots/scenarios/core.mjs",
+      "tools/screenshots/scenarios/temporal.mjs",
       "screenshots/manifest.json",
-      "tools/screenshots/verify.mjs",
-      "tools/live/capture-device-parity.mjs",
-      "tools/lane/css-lane.json"
+      "screenshots/README.md",
+      "tools/lane/css-lane.json",
+      "tools/screenshots/verify.mjs"
     ],
     "entities": [
       {
@@ -87,6 +94,12 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "capture.mjs",
         "kind": "file",
         "path": "tools/screenshots/capture.mjs",
@@ -111,9 +124,39 @@
         "source": "derived"
       },
       {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest-schema.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/manifest-schema.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-capture.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-capture.test.mjs",
+        "source": "derived"
+      },
+      {
         "name": "scenarios.mjs",
         "kind": "file",
         "path": "tools/screenshots/scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "temporal.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/temporal.mjs",
         "source": "derived"
       },
       {
@@ -123,21 +166,21 @@
         "source": "derived"
       },
       {
-        "name": "verify.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/verify.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "capture-device-parity.mjs",
-        "kind": "file",
-        "path": "tools/live/capture-device-parity.mjs",
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/README.md",
         "source": "derived"
       },
       {
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
         "source": "derived"
       },
       {
@@ -163,47 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Overview Extend",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Pattern Extend",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`tools/screenshots/capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous",
     "created_at": "2026-09-04T00:45:06Z",
-    "last_save_at": "2026-09-04T01:02:22.329Z",
+    "last_save_at": "2026-09-04T01:50:40.366Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,14 +218,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:757661eff87fd7f2e88ac3b2be8a70ddd88aa72db66dc35c91c5b5bcec3a0046",
+    "source_fingerprint": "sha256:0c7346cbfba3609b05a6163673d77be8cfe85e15e164434f22558c4233ee4c57",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b3771fe811fca839f455d4c5248f1069baa5b0241326504b5d81b09efa58f82c",
       "plan.md": "179bc41334877b704c5a6bc1036ce38bdae1e852335fd4507eef372a2a5cd8e1",
-      "tasks.md": "f31e269bbabaa0a6e5524d4f2e4f0c733aab0eb6d1aa0ae2b82865970209ead6"
+      "tasks.md": "9f761916a2278caf8cfef6e79cca75019aab64795ef535adebc21e9d934ba2fa",
+      "implementation-summary.md": "4548569d70a913a6f3631c215fc48b87f51984cf82b46c90c5fca8f2ad28e6c5"
     },
     "last_active_child_id": null,
     "last_active_at": null

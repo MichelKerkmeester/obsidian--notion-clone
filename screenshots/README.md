@@ -583,6 +583,96 @@ Sticky day header and all-day strip over the 08–16 time grid; weekend columns,
 
 Sources: `src/views/calendar-renderer.ts`
 
+### Board view (constructed)
+
+The shipped board renderer at the bench shape: 1600 rows into five status columns.
+
+| dark | light |
+|---|---|
+| ![constructed-board dark](views/constructed-board-mobile-dark.png) | ![constructed-board light](views/constructed-board-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Calendar day view (constructed)
+
+The shipped day time grid, scrolled to the workday by the renderer's own post-render correction.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-day dark](views/constructed-calendar-day-mobile-dark.png) | ![constructed-calendar-day light](views/constructed-calendar-day-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Calendar month view (constructed)
+
+The shipped month grid anchored on the bench's event dates, with its unscheduled backlog.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-month dark](views/constructed-calendar-month-mobile-dark.png) | ![constructed-calendar-month light](views/constructed-calendar-month-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Calendar week view (constructed)
+
+The shipped week time grid, scrolled to the workday by the renderer's own post-render correction.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-week dark](views/constructed-calendar-week-mobile-dark.png) | ![constructed-calendar-week light](views/constructed-calendar-week-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Chart view (constructed)
+
+The shipped chart renderer over the board bench's five-group count aggregation.
+
+| dark | light |
+|---|---|
+| ![constructed-chart dark](views/constructed-chart-mobile-dark.png) | ![constructed-chart light](views/constructed-chart-mobile-light.png) |
+
+Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Gallery view (constructed)
+
+The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid.
+
+| dark | light |
+|---|---|
+| ![constructed-gallery dark](views/constructed-gallery-mobile-dark.png) | ![constructed-gallery light](views/constructed-gallery-mobile-light.png) |
+
+Sources: `src/views/gallery-renderer.ts`, `tools/bench/gallery-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### List view (constructed)
+
+The shipped list renderer at the harness's bench shape (1600 rows, 30% fill), windowed to the viewport.
+
+| dark | light |
+|---|---|
+| ![constructed-list dark](views/constructed-list-mobile-dark.png) | ![constructed-list light](views/constructed-list-mobile-light.png) |
+
+Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Table view (constructed)
+
+The shipped table renderer at the bench's sixteen-column, 2000-row shape.
+
+| dark | light |
+|---|---|
+| ![constructed-table dark](views/constructed-table-mobile-dark.png) | ![constructed-table light](views/constructed-table-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Timeline view (constructed)
+
+The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline dark](views/constructed-timeline-mobile-dark.png) | ![constructed-timeline light](views/constructed-timeline-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
 ### Gallery view
 
 A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.

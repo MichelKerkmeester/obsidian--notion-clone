@@ -25,6 +25,13 @@ import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
+import {
+  CONSTRUCTED_SCENARIOS,
+  disposeConstructedBundle,
+  prepareConstructedBundle,
+  validateConstructedScenario,
+} from "./constructed-scenarios.mjs";
+import { validateManifestEntry } from "./manifest-schema.mjs";
 import { pixelHash } from "./pixel-hash.mjs";
 
 // This page does not reproduce the workspace leaf, and unlike the placement harness it does not
@@ -91,6 +98,34 @@ const DEVICES = [
   { id: "mobile", width: 402, height: 874, bodyClass: "is-mobile is-phone" },
 ];
 
+// The constructed scenarios photograph the shipped renderers, which register their own
+// scenarios with an async `mount` instead of `html`.
+const ALL_SCENARIOS = [...SCENARIOS, ...CONSTRUCTED_SCENARIOS];
+
+// How many animation frames a constructed capture waits after the renderer signals ready.
+// The calendar week/day host scrolls its time grid to the workday one frame after render
+// returns (measured: scrollTop moves 0 -> 376 at the bench shape), and a screenshot cannot
+// catch that pre-correction frame — the capture command itself runs pending animation frames
+// before rasterising. The wait exists for the measurements taken before the screenshot: the
+// layout hash must not race the correction, or it nondeterministically describes a layout
+// that differs from the pixels. Two frames: one lets the scheduled correction run, one lets
+// the corrected frame be painted.
+const READY_ANIMATION_FRAMES = 2;
+
+async function waitForConstructedLayout(page) {
+  await page.evaluate((frames) => new Promise((resolve) => {
+    let remaining = frames;
+    const tick = () => {
+      if (remaining <= 0) resolve();
+      else {
+        remaining -= 1;
+        requestAnimationFrame(tick);
+      }
+    };
+    requestAnimationFrame(tick);
+  }), READY_ANIMATION_FRAMES);
+}
+
 /* A full view is documented inside a device frame; a component is documented on its own,
    sized to itself on a transparent ground so it can sit on any background. Scenarios may
    override with an explicit `capture` field. */
@@ -146,10 +181,26 @@ async function main() {
     console.error(`No device matched --device ${deviceArg} (expected desktop or mobile)`);
     process.exit(1);
   }
-  const list = only ? SCENARIOS.filter((s) => s.id === only) : SCENARIOS;
+  const list = only ? ALL_SCENARIOS.filter((s) => s.id === only) : ALL_SCENARIOS;
   if (!list.length) {
     console.error(`No scenario matched --only ${only}`);
     process.exit(1);
+  }
+
+  // A constructed scenario must carry a readiness signal before it is allowed to run at all:
+  // without an async mount there is nothing for the capture to wait on, and a screenshot taken
+  // before the renderer mounted photographs an empty box while every check stays green.
+  for (const scenario of list) {
+    if (scenario.mount) validateConstructedScenario(scenario);
+  }
+
+  // The constructed scenarios share one esbuild step with the assertion lanes. Building it here,
+  // before any constructed scenario runs, keeps the fixture scenarios independent of it: a
+  // fixture-only run never pays the bundle build, and a constructed run never repeats it.
+  let bundleBuilt = false;
+  if (list.some((scenario) => scenario.mount)) {
+    await prepareConstructedBundle();
+    bundleBuilt = true;
   }
 
   // Fingerprint every file a scenario depicts. The freshness check compares these against
@@ -208,10 +259,25 @@ async function main() {
           isMobile: device.id === "mobile",
           hasTouch: device.id === "mobile",
         });
-        const html = buildPage(scenario, theme, styles, themeCss, runtimeCss, device);
-        const tmpFile = join(TMP, `${scenario.id}-${device.id}-${theme}.html`);
-        writeFileSync(tmpFile, html, "utf8");
-        await page.goto(pathToFileURL(tmpFile).href, { waitUntil: "load" });
+        if (scenario.mount) {
+          // The mount resolves with the mounted container only when the renderer signalled
+          // ready; anything else means the renderer never mounted, and photographing that
+          // would record an empty box as a successful capture.
+          const mounted = await scenario.mount(page, device, theme);
+          if (!mounted) {
+            failures.push(`${scenario.group}/${scenario.id}-${device.id}-${theme}.png: `
+              + "renderer never signalled ready — refusing to photograph an unmounted view");
+            console.log(`  NOTREADY ${scenario.id}-${device.id}-${theme}`);
+            await page.close();
+            continue;
+          }
+          await waitForConstructedLayout(page);
+        } else {
+          const html = buildPage(scenario, theme, styles, themeCss, runtimeCss, device);
+          const tmpFile = join(TMP, `${scenario.id}-${device.id}-${theme}.html`);
+          writeFileSync(tmpFile, html, "utf8");
+          await page.goto(pathToFileURL(tmpFile).href, { waitUntil: "load" });
+        }
 
         const target = await page.$("#shot");
 
@@ -344,6 +410,13 @@ async function main() {
           note: scenario.note || null,
           capture: captureMode(scenario),
           bytes: bytes.length,
+          // Constructed captures name the renderer they photographed; fixtures that a
+          // constructed capture supersedes declare it, so the manifest can tell the two
+          // authorities apart.
+          ...(scenario.mount
+            ? { source: "constructed", renderer: scenario.renderer, bag: scenario.bag, ...(scenario.scale ? { scale: scenario.scale } : {}) }
+            : {}),
+          ...(scenario.fixtureOf ? { fixtureOf: scenario.fixtureOf } : {}),
         });
         count += 1;
         console.log(`  captured ${rel} (${bytes.length} bytes)`);
@@ -353,12 +426,21 @@ async function main() {
     }
   } finally {
     await browser.close();
+    if (bundleBuilt) disposeConstructedBundle();
     rmSync(TMP, { recursive: true, force: true });
   }
 
   // Only rewrite the manifest on a full run; a --only run would otherwise drop every
   // scenario it did not capture and make the freshness check read as complete.
   if (!only && themeArg === "both" && deviceArg === "both") {
+    // An entry the schema rejects is a capture that cannot be told apart from what it is not,
+    // so the run fails instead of publishing a manifest that lies about its own record.
+    for (const entry of manifest) {
+      const verdict = validateManifestEntry(entry);
+      if (!verdict.ok) {
+        throw new Error(`manifest schema rejects an entry this run captured: ${verdict.problems.join("; ")}`);
+      }
+    }
     const payload = {
       generatedFrom: { stylesheet: `styles.css@${stylesHash}` },
       scenarios: manifest.sort((a, b) => a.file.localeCompare(b.file)),
