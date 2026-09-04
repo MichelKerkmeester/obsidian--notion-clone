@@ -5954,19 +5954,27 @@ await section("lifted probes: desktop placement", async () => {
     menu.close();
 
     // ─────────────────────────────────────────────────────────────────
-    // PHONE ANCHOR LIFETIME — the arm that was never exercised
+    // PHONE ANCHOR LIFETIME — what a dead anchor does and does not mean
     // ─────────────────────────────────────────────────────────────────
     //
-    // The dead-anchor guard sits BEFORE the sheet branch, so it runs on phones too, and the phase
-    // that added it checked only desktop. On a phone the consequence is different in kind rather
-    // than in degree: the surface carries a body-level backdrop, so hiding the panel alone leaves a
-    // full-screen scrim swallowing every tap with nothing visible above it. That is the freeze
-    // symptom, arrived at by a guard whose whole purpose was to be conservative.
+    // These rows used to assert the opposite: a phone sheet whose anchor died stopped presenting and
+    // took its backdrop down. The reasoning was that an unreachable sheet should stop blocking the
+    // app, and the premise inside it — that a sheet with no anchor is unreachable — is the part that
+    // is wrong. It is true of an anchored popover, which has no coordinate without its trigger. A
+    // bottom sheet is docked to the viewport edge and spans it; nothing about where it sits, how it
+    // is drawn, or whether a thumb can reach it passes through the anchor at all.
     //
-    // What a phone should do is the substance of this check, not a detail of it. The answer taken:
-    // the surface stops presenting AND its chrome comes down with it. The panel node is still only
-    // hidden — an unreachable sheet stops blocking the app, and the owner's surface is not destroyed
-    // behind its back.
+    // The cost of that inference was the whole surface. The view rebuilds its toolbar on roughly two
+    // dozen paths, most of them background refreshes; each one leaves the panel's owner holding a
+    // detached button, and the next viewport event — a scroll, a rotation, the keyboard — read that
+    // as an unreachable sheet and took it away mid-edit. The operator reported it twice as the add
+    // controls doing nothing, which is what it looks like from the outside.
+    //
+    // The freeze the old rows were aimed at is real and is guarded at the event that actually means
+    // the surface is gone: the panel leaving the document. `sheet-teardown` asserts it across every
+    // producer, and the sheet module's own observer takes the backdrop down on the last removal
+    // however it happened. The second row below states that here too, because the row it replaced
+    // was the only place this file said the backdrop cannot outlive its sheet.
     //
     // Sequential, not parallel: the backdrop is shared and comes down when the LAST sheet goes, so
     // two open at once would report each other's state.
@@ -5992,18 +6000,32 @@ await section("lifted probes: desktop placement", async () => {
     await tick();
     const orphanVisibility = getComputedStyle(orphan).visibility;
     const scrimAfter = scrims();
+    const orphanIsSheet = orphan.classList.contains("db-mobile-bottom-sheet");
     out.push({
-      name: "PHONE a sheet whose anchor was destroyed stops presenting AND takes its backdrop with it",
+      name: "PHONE a sheet outlives the toolbar rebuild that destroyed its anchor",
       pass: openedAsSheet && scrimWhileOpen === 1
-        && (orphanVisibility === "hidden" || !orphan.isConnected) && scrimAfter === 0,
+        && orphanVisibility !== "hidden" && orphanIsSheet && orphan.isConnected && scrimAfter === 1,
       detail: `opened as a sheet=${openedAsSheet} with ${scrimWhileOpen} backdrop(s);`
-        + ` after the anchor was destroyed and the loop ran, visibility=${orphanVisibility} and`
-        + ` ${scrimAfter} backdrop(s) remain. Hiding the panel alone would leave a full-screen scrim`
-        + ` taking every tap with nothing visible above it — the freeze symptom, reached by a guard`
-        + ` meant to be conservative`,
+        + ` after the anchor was destroyed and the loop ran, visibility=${orphanVisibility},`
+        + ` still a sheet=${orphanIsSheet}, ${scrimAfter} backdrop(s). A docked full-width surface`
+        + ` measures nothing through its trigger, so losing one says nothing about whether it can`
+        + ` still be seen or touched — and taking it away mid-edit is what the add controls doing`
+        + ` nothing looks like from the outside`,
     });
+
+    // The freeze the row above used to chase, asserted at the event that actually means the surface
+    // is gone. Without this the file would say a sheet survives a dead anchor and say nothing at all
+    // about the backdrop ever coming down, which is the shape a full-screen tap-swallowing overlay
+    // reaches production in.
     orphan.remove();
     await tick();
+    out.push({
+      name: "PHONE CONTROL a sheet that leaves the document takes its backdrop with it",
+      pass: scrims() === 0,
+      detail: `${scrims()} backdrop(s) after the panel was removed. A backdrop is a body-level`
+        + ` sibling, so a bare removal cannot take it down by containment; the sheet module's`
+        + ` observer is what does, and this is the clause that says so`,
+    });
 
     // CONTROL: a live anchor must survive the same loop with its backdrop intact, or the check
     // above is satisfied by a positioner that hides every sheet and clears every scrim.
