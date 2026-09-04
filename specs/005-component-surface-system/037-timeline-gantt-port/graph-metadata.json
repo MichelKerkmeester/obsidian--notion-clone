@@ -59,8 +59,8 @@
       "tools/live/touch-targets-constructed-baseline.json",
       "tools/lane/css-lane.json",
       "tools/screenshots/capture.mjs",
-      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-      "src/views/calendar-timeline-gantt.test.ts"
+      "screenshots/manifest.json",
+      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md"
     ],
     "entities": [
       {
@@ -172,15 +172,15 @@
         "source": "derived"
       },
       {
-        "name": "SKILL.md",
-        "kind": "doc",
-        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
-        "name": "calendar-timeline-gantt.test.ts",
-        "kind": "test",
-        "path": "src/views/calendar-timeline-gantt.test.ts",
+        "name": "SKILL.md",
+        "kind": "doc",
+        "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "`src/views/calendar-timeline-renderer.ts` (2,390 lines) already owns an action contract, CSS-unit geometry,",
     "created_at": "2026-09-02T21:51:11Z",
-    "last_save_at": "2026-09-04T11:39:40.875Z",
+    "last_save_at": "2026-09-04T12:13:09.226Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8b85c0a59c025cb53daf457da2361db49c3cda981b83bedb13a5728671f1ed61",
+    "source_fingerprint": "sha256:d890bea35d945e198e6f5d4947eb6be0dd87538120b2b42fa8b6c1df4dd84af3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b9140d5482409deda96a10c515a8979982896d4047231912fda1cd632e7f3651",
       "plan.md": "e809a1bfd52e382aa4f4b09b7f50fbaf595c2ddae07c020223abdec629c602d1",
       "tasks.md": "c89a9084487d3ecc12748ff8d91a4d8fb60f357070942418ed305089582f3ca6",
-      "implementation-summary.md": "33d48733ab2ee617320a52c8e8e4e442af2a19c94402bbec83a12bcb8031da1c"
+      "implementation-summary.md": "c5d188925bbae4ad0a1ad45b8c3e1a862e2d1298bdd39abb85fcbf9c58de1dc5"
     },
     "last_active_child_id": null,
     "last_active_at": null
