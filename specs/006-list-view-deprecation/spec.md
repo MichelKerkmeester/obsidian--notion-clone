@@ -12,21 +12,23 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "deprecation-conversion"
-    recent_action: "Converted the ClickUp packet into a phased list-view deprecation"
-    next_safe_action: "Run the usage and migration audit (005-usage-and-migration-audit)"
+    last_updated_at: "2026-09-05T00:40:00Z"
+    last_updated_by: "phase-006-reconciliation"
+    recent_action: "006-hide-and-migrate shipped, verified, reconciled with main"
+    next_safe_action: "Await one operator report before 007 starts"
     blockers:
-      - "Migration target is table with the same columns; the data-loss check has not run"
+      - "007 does not start before one operator report confirms 006's migration on a released build"
     key_files:
       - "spec.md"
       - "superseded-clickup-direction.md"
       - "decision-record.md"
+      - "005-usage-and-migration-audit/implementation-summary.md"
+      - "006-hide-and-migrate/implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-view-deprecation-006"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 29
     open_questions:
       - "Does list stay an accepted-but-redirected value in DatabaseViewType, or leave the union?"
       - "Do stacked titles and listCompactFields have a table equivalent, or are they a declared loss?"
@@ -83,7 +85,7 @@ performs the removal it asserts.
 | **Spec Folder** | `specs/006-list-view-deprecation/` |
 | **Level** | 3 (Full) — `recommend-level.sh --loc 1800 --files 26 --architectural --db` returned 80/100, confidence 94% |
 | **Phase decomposition** | Qualifies, both thresholds met independently: phase complexity **30/50** against a threshold of 25, and documentation level **3** against a threshold of 3. The script's suggested count at 30 is 2; four children are used because the deprecation has four distinct stopping points, and the count is the author's call under `phase-definitions.md` §2 |
-| **Status** | Planned — direction converted 2026-09-04, no code written |
+| **Status** | In progress — `005` (audit) complete, `006` (hide and migrate) shipped + verified with operator confirmation open, `007`-`008` not started |
 | **Primary source** | `src/views/list-renderer.ts` (1,173 lines), `src/views/card-field-renderer.ts` (349), `src/data/types.ts:317` (the persisted union), `tools/live/list-window.mjs` (a gate lane) |
 | **Precedent** | `../005-component-surface-system/030-gallery-view-deprecation/` |
 | **Superseded direction** | [`superseded-clickup-direction.md`](superseded-clickup-direction.md), children `000`-`004` |
@@ -232,8 +234,8 @@ migrates to — records it and does not fix it.
 | — | `002-clickup-chrome/` | ClickUp's list chrome | **Superseded 2026-09-04** — kept as history |
 | — | `003-group-affordances-and-selection/` | Per-group add affordance and selection semantics | **Superseded 2026-09-04** — kept as history |
 | — | `004-mobile-and-live-verification/` | Phone presentation and live verification of the converted list | **Superseded 2026-09-04** — kept as history |
-| 1 | `005-usage-and-migration-audit/` | Which vaults and views use list; what the migration target must preserve; the data-loss check | Draft — Level 1 |
-| 2 | `006-hide-and-migrate/` | Remove list from the pickers and the switcher; migrate existing list views to table with a one-time notice, in three locales | Draft — Level 1 |
+| 1 | `005-usage-and-migration-audit/` | Which vaults and views use list; what the migration target must preserve; the data-loss check | **Complete** — Level 1 |
+| 2 | `006-hide-and-migrate/` | Remove list from the pickers and the switcher; migrate existing list views to table with a one-time notice, in three locales | **Shipped + verified, operator confirmation open** — Level 1 |
 | 3 | `007-remove-renderer-and-harness/` | Delete the renderer, the `list-window` lane, the fixtures and constructed scenarios, the bench and the replay claims; re-baseline the ratchets; prune the captures | Draft — Level 3 |
 | 4 | `008-docs-and-release/` | README, changelog, and the release that carries the removal | Draft — Level 1 |
 
@@ -414,8 +416,8 @@ still has a passing test.
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 5 | 005-usage-and-migration-audit/ | Which vaults and views use list; the migration target and what it preserves; the data-loss check | Draft — Level 1 (`recommend-level.sh` 24/100, floored to the packet minimum) |
-| 6 | 006-hide-and-migrate/ | Withdraw list from every picker and switcher; migrate existing list views to table with a one-time notice in three locales | Draft — Level 1 (39/100) |
+| 5 | 005-usage-and-migration-audit/ | Which vaults and views use list; the migration target and what it preserves; the data-loss check | **Complete** — Level 1 (`recommend-level.sh` 24/100, floored to the packet minimum) |
+| 6 | 006-hide-and-migrate/ | Withdraw list from every picker and switcher; migrate existing list views to table with a one-time notice in three locales | **Shipped + verified, operator confirmation open** — Level 1 (39/100) |
 | 7 | 007-remove-renderer-and-harness/ | Delete the renderer, the `list-window` lane and harness, the fixtures and constructed scenarios, the bench entry and the replay claims; re-baseline the ratchets; prune the captures | Draft — Level 3 (72/100) |
 | 8 | 008-docs-and-release/ | README, changelog, and the release that carries the removal | Draft — Level 1 (18/100, floored) |
 

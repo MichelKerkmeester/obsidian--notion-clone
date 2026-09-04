@@ -49,7 +49,7 @@
       "migrate"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -58,6 +58,8 @@
       "goal.md",
       "decision-record.md",
       "superseded-clickup-direction.md",
+      "005-usage-and-migration-audit/implementation-summary.md",
+      "006-hide-and-migrate/implementation-summary.md",
       "src/data/gallery-migration.ts",
       "src/views/list-renderer.ts",
       "src/views/card-field-renderer.ts",
@@ -68,9 +70,7 @@
       "tools/live/replay.mjs",
       "000-grid-contract-and-list-harness/plan.md",
       "tools/gate.mjs",
-      "007-remove-renderer-and-harness/acceptance-criteria.md",
-      "tools/storybook/verify-placement.mjs",
-      "000-grid-contract-and-list-harness/decision-record.md"
+      "007-remove-renderer-and-harness/acceptance-criteria.md"
     ],
     "entities": [
       {
@@ -170,12 +170,6 @@
         "source": "derived"
       },
       {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -216,11 +210,17 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "The operator retired the list view outright on 2026-09-04, replacing the ClickUp direction this packet was built for. Phase parent for the retirement: audit what uses list, migrate it to table, remove the renderer and its harness surface, then document and release.",
     "created_at": "2026-08-30T07:11:59.138Z",
-    "last_save_at": "2026-09-04T20:40:10.516Z",
+    "last_save_at": "2026-09-04T22:49:36.805Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -231,10 +231,10 @@
       "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:1699995d69e1510ff65d3163110db2ece1236fce3520ae150941900530381ab4",
+    "source_fingerprint": "sha256:3a6be2a05366c8ee7baa09a5443fa5f71a44648acc1dd38987d678622a6886f4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "16a15e4f1f1365c8363cfa290a426372e55c0832ab02e60f756b21142b420ae6",
+      "spec.md": "ee6c5efaddb0102521427813617b0bda7e2ca2e9b6143019383a88480a848bcb",
       "plan.md": "cf3f5c68ac9dc5e371bf5c4189710aad79a2b0d8c10eaa332326005a50991868",
       "tasks.md": "a2e18c9c43e17c0807a7a86001d204212c813f8486cfc0cf28aa3cff66e9bb82",
       "decision-record.md": "0c8f724b4eea62bb81f720fc41fd5bc9ff2d98a01f893cac0d67c9397fc8b8a9"

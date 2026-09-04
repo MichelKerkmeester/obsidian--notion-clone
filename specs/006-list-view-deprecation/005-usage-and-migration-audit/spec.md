@@ -22,7 +22,7 @@ contextType: "general"
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P0 |
-| **Status** | Draft |
+| **Status** | **Complete.** A read-only audit with no rendered surface and no device-confirmation gate: all tasks ticked, `implementation-summary.md` reports the three-direction enumeration, the data-loss list and the migration target, and `goal.md`'s `completion_pct` reads 100 |
 | **Created** | 2026-09-04 |
 | **Branch** | Not yet dispatched |
 | **Parent Spec** | ../spec.md |

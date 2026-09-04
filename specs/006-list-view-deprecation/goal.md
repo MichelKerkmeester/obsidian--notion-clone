@@ -11,21 +11,22 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-04T20:35:23Z"
-    last_updated_by: "phase-005-audit"
-    recent_action: "005-usage-and-migration-audit completed: table confirmed, 4 declared losses named"
-    next_safe_action: "Start 006-hide-and-migrate against 005's implementation-summary.md"
+    last_updated_at: "2026-09-05T00:40:00Z"
+    last_updated_by: "phase-006-reconciliation"
+    recent_action: "006-hide-and-migrate shipped, verified, reconciled with main"
+    next_safe_action: "Await one operator report before 007 starts"
     blockers: []
     key_files:
       - "spec.md"
       - "plan.md"
       - "superseded-clickup-direction.md"
       - "005-usage-and-migration-audit/implementation-summary.md"
+      - "006-hide-and-migrate/implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-view-deprecation-goal"
       parent_session_id: null
-    completion_pct: 12
+    completion_pct: 29
     open_questions:
       - "Does list leave DatabaseViewType, or stay accepted-but-redirected like gallery? 005 recommends: stay accepted-but-redirected, decided by 007"
       - "Do stacked titles and listCompactFields map to table, or are they a declared loss? 005 answers: both are declared losses (implementation-summary.md §6, L1-L2), alongside two more it found (roving-tabindex keyboard model, col.wrap)"
@@ -88,11 +89,13 @@ Frozen choices. Changing one is an amendment.
 
 Three to seven bullets, each checkable without opening another file.
 
-- [ ] No surface offers list as a choice. **Today: every picker does** —
-      `toolbar-renderer.ts:1297-1308` lists all seven view types and filters only `gallery`.
-- [ ] A vault carrying a list-configured view opens it as a table with the same columns, once, with
-      a notice. **Today: no migration exists** — `src/data/gallery-migration.ts` is the only one, and
-      its target is `board`.
+- [x] No surface offers list as a choice. **Shipped by `006-hide-and-migrate`** —
+      `getViewTypeOptions` (`toolbar-renderer.ts`), the view-config panel, and the add-view fixture
+      all filter `list` alongside `gallery`, with the `current` escape hatch for a view already
+      configured as one.
+- [x] A vault carrying a list-configured view opens it as a table with the same columns, once, with
+      a notice. **Shipped by `006-hide-and-migrate`** — `src/data/list-migration.ts`, run on open in
+      both hosts (`database-view.ts`, `embedded-database-renderer.ts`), notice in three locales.
 - [ ] `src/views/list-renderer.ts` is gone. **Today: 1,173 lines.**
 - [ ] The `list-window` gate lane is **removed, not skipped**, and `npm run gate` exits 0 read from
       `$?`. **Today: `tools/gate.mjs:89` runs it, and `tools/live/list-window.json` ratchets it.**
@@ -122,7 +125,7 @@ into the objective, and it is expected to grow.
 | ClickUp direction preserved | Done | `superseded-clickup-direction.md`, `git mv` from the old `spec.md`; `decision-record.md` untouched |
 | Four deprecation children opened | Done | `005`-`008` |
 | Usage audit | Done | `005-usage-and-migration-audit/implementation-summary.md` — migration target confirmed, 4 declared losses, measurement surface enumerated, 2 open questions answered with recommended defaults |
-| Hide and migrate | Pending | `006-hide-and-migrate` |
+| Hide and migrate | Shipped + verified, operator confirmation open | `006-hide-and-migrate/implementation-summary.md` — list withdrawn from every picker and switcher, migration on open with a locale-complete notice, `npm run gate` 25/25 green; open item is one operator report against a released build |
 
 ### Deviations and findings
 

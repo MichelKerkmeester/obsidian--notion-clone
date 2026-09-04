@@ -22,7 +22,7 @@ contextType: "general"
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P0 |
-| **Status** | Draft |
+| **Status** | **Shipped + verified, operator confirmation open.** List is withdrawn from every picker and switcher (`getViewTypeOptions`, the view-config panel, the add-view fixture), and an existing list-typed view migrates to a table on open, once, with a locale-complete notice — proven against a hand-built fixture, the operator's own vault, and a constructed capture through the real `TableRenderer`. `npm run gate` 25/25 green on the landed tree. Open: this phase's own handoff criterion, one operator report against a released build, which is what unblocks `007` |
 | **Created** | 2026-09-04 |
 | **Branch** | Not yet dispatched |
 | **Parent Spec** | ../spec.md |

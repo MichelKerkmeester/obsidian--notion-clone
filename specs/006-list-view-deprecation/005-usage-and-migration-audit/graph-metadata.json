@@ -39,7 +39,7 @@
       "decision"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -207,7 +207,7 @@
     ],
     "causal_summary": "The deprecation cannot start by deleting, because `viewType: \"list\"` is written into vault files and",
     "created_at": "2026-09-04T19:33:25Z",
-    "last_save_at": "2026-09-04T20:40:09.811Z",
+    "last_save_at": "2026-09-04T22:49:36.680Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,10 +217,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c392860ef8af17fe7d1d08f28ae2f294600bf8221996f155aea38747c4a7dd79",
+    "source_fingerprint": "sha256:f6a9b5419796d0d443a5ee079b84e45f8e59eed3092eba8f93abf946ad1bbe9a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "69bf2ff95020d444bc9ec072c56d9f39745ef7f2cd4030e7a297c779190dac95",
+      "spec.md": "f8fd5ca7f0f9138654b0cafdb718b585a520c87ce1f60b4be38576440be0dc4d",
       "plan.md": "e747da061fc9ed38815365a2e3936305ef60232f0933907ee3af313a48fa74be",
       "tasks.md": "953358065f9fbaa07454f5507f72ea769ff7565c8230ae519cda108e0634c49d",
       "implementation-summary.md": "9815c6c2152ff11d3e1de3ba2b3dc6fce96379df636e7aab8109c677681adb66"

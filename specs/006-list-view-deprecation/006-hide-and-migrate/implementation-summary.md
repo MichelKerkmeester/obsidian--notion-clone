@@ -191,11 +191,11 @@ config is handed to.
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | 0 errors |
-| `npx vitest run` | 1091/1091 passing (106 files) — 1085 from the handoff, +6 from this session (real-data suite ×5, settings default-view ×1) |
+| `npx vitest run` | 1091/1091 passing (106 files) at this phase's own completion — 1085 from the handoff, +6 from this session (real-data suite ×5, settings default-view ×1); 1101/1101 after reconciling with main (933308a5, past the screenshots-folder split) |
 | `npm run lint` | 172 problems (159 errors, 13 warnings), byte-identical to the stash-and-restore baseline |
 | `npm run lint:tools` | Clean |
 | `node tools/naming/scan-comments.mjs` | PASS |
-| `npm run screenshots` | 548 entries captured |
+| `npm run screenshots` | 548 entries at this phase's own completion; 554 after reconciling with main |
 | `npm run screenshots:verify` | 0 stale |
 | `npm run gate` | PASS — 25 green, 0 red for a declared reason |
 | `node tools/live/render-assertions.mjs` | PASS; renderer coverage unchanged at 7 of 22 |

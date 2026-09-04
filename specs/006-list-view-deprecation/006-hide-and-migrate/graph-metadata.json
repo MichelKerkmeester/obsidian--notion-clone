@@ -39,7 +39,7 @@
       "module"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "`viewType` is a persisted union written into vault files (`src/data/types.ts:317`), so the list",
     "created_at": "2026-09-04T19:33:26Z",
-    "last_save_at": "2026-09-04T22:04:46.469Z",
+    "last_save_at": "2026-09-04T22:47:40.411Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,13 +220,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e1f84b92267ea5ccfb19ef1be277bfc50434ad98fdb3d521fb3f90717750f02c",
+    "source_fingerprint": "sha256:09b66d6c2948b17761672f06c832b87c9b2c4c343a07337cae471df5c71753a0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "691a922f91332a9d5e7fb37ace3bb7be226252256f25fcffe704b7fce47dfaa3",
+      "spec.md": "37be9759769ddd1ed61c7bb2b14225959ef6b67992b4bdb061466f4f1714b55d",
       "plan.md": "13ea795def7ce027ada501ff4f052dddd3b88bf8f5c8c909d4fca29bfdcce78f",
-      "tasks.md": "9b32ce00cd3c27f5e8014266f26ee74d87edea826023ff8f1ed37c72192e4699",
-      "implementation-summary.md": "4386a1ea78808d00d9a6c1253212e6008cf9efd6418da31c117ee8dce8613d0f"
+      "tasks.md": "ca12f9997ba5e2af1fa28e2ce2e5ef620b900b8324d74175f285af519ba36cc8",
+      "implementation-summary.md": "e207404218d2f84c4ae864d7296ef5cd22830d82c95e162e900c2fa7e765aa8e"
     },
     "last_active_child_id": null,
     "last_active_at": null

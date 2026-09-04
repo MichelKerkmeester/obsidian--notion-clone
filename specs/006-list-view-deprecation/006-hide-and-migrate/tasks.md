@@ -71,7 +71,7 @@ contextType: "general"
 
 - [x] All tasks marked `[x]`
 - [x] No `[B]` blocked tasks remaining
-- [x] Manual verification passed — `npx tsc --noEmit` 0; `npx vitest run` 1091/1091 (106 files); `npm run lint` 172 problems (159 errors, 13 warnings), byte-identical to the stashed-and-restored baseline; `npm run lint:tools` clean; `node tools/naming/scan-comments.mjs` PASS; `npm run screenshots` 548 entries, `npm run screenshots:verify` 0 stale; `npm run gate` PASS — 25 green, 0 red for a declared reason (placement carries 1 pre-existing declared red, unrelated to this work); `node tools/live/render-assertions.mjs` PASS, coverage unchanged at 7 of 22 renderer files
+- [x] Manual verification passed — `npx tsc --noEmit` 0; `npx vitest run` 1091/1091 (106 files) at this phase's own completion, 1101/1101 after reconciling with main; `npm run lint` 172 problems (159 errors, 13 warnings), byte-identical to the stashed-and-restored baseline; `npm run lint:tools` clean; `node tools/naming/scan-comments.mjs` PASS; `npm run screenshots` 548 entries at this phase's own completion, 554 after reconciling with main (past the screenshots-folder split), `npm run screenshots:verify` 0 stale; `npm run gate` PASS — 25 green, 0 red for a declared reason (placement carries 1 pre-existing declared red, unrelated to this work); `node tools/live/render-assertions.mjs` PASS, coverage unchanged at 7 of 22 renderer files
 <!-- /ANCHOR:completion -->
 
 ---
