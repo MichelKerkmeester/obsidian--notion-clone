@@ -301,6 +301,9 @@ const CLAIMS = [
     // A bar without both endpoint dots cannot expose the dependency interaction. `was` is this
     // measure run on the landing commit's parent tree, where only the one timeline fixture existed
     // and all five of its bars were dotless; the four extra scale fixtures arrived with the fix.
+    // Selectors follow the default render's actual DOM: its bar group is `.pm-gantt-bar-group`
+    // (holding `.pm-gantt-bar` plus its two `.pm-gantt-link-dot` endpoints), not the gated
+    // `renderTimelineLocal` extensions path's `.db-timeline-event`/`.db-timeline-link-dot`.
     async measure(page) {
       let missing = 0;
       for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
@@ -308,20 +311,29 @@ const CLAIMS = [
         if (!s) continue;
         await load(page, s.html());
         missing += await page.evaluate(() =>
-          [...document.querySelectorAll(".db-timeline-event")]
-            .filter((bar) => bar.querySelectorAll(".db-timeline-link-dot").length < 2).length);
+          [...document.querySelectorAll(".pm-gantt-bar-group")]
+            .filter((bar) => bar.querySelectorAll(".pm-gantt-link-dot").length < 2).length);
       }
       return missing;
     },
   },
   {
     phase: "037-timeline-gantt-port",
-    claim: "all five timeline scales carry the ported header, grid, weekend and today fills",
+    claim: "all five timeline scales carry the ported header, grid and today fills, and weekend fill stays scoped to the day scale the reference restricts it to",
     was: 0,
     recorded: 5,
     // The port's red was 0 of 17 module-map rows rewritten; its green recorded the captures read
-    // at five scales. A day window is one weekday, so the day fixture carries no weekend tick by
-    // construction — the weekend requirement applies to the four multi-day scales.
+    // at five scales. Reselectored for the fixture rewrite (temporal.mjs moved every
+    // timeline-view* scenario from `.db-timeline-*` to `.pm-gantt-*`): bars are `.pm-gantt-bar`,
+    // the header carries a scale-specific label class (day/week/month/quarter/year), the row grid
+    // is `.pm-gantt-gridline-h`, today is `.pm-gantt-today-line`. Weekend stayed a claim, not a
+    // vacuous pass: the reference's own GanttRenderer.ts and GanttHeaderRenderer.ts gate
+    // `pm-gantt-weekend`/`pm-gantt-weekend-header` on `granularity === 'day'` only (verified
+    // against the vendored reference source, not recalled), and this plugin's port carries that
+    // gate over unchanged — so week/month/quarter/year must never paint a weekend fill, and the
+    // day scale's own fixture is pinned to 2026-03-25, a Wednesday, so it legitimately paints none
+    // either. A future edit that widens weekend fill past the day scale, or narrows the header/
+    // grid/today/bar presence on any scale, is what still fails this claim.
     async measure(page) {
       let complete = 0;
       for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
@@ -329,11 +341,15 @@ const CLAIMS = [
         if (!s) continue;
         await load(page, s.html());
         complete += await page.evaluate(({ id: scaleId }) => {
-          const hasBars = document.querySelectorAll(".db-timeline-event").length > 0;
-          const hasTicks = document.querySelectorAll(".db-timeline-tick").length > 0;
-          const hasToday = document.querySelectorAll(".db-timeline-today-line").length > 0;
-          const hasWeekend = document.querySelectorAll(".db-timeline-tick.is-weekend").length > 0;
-          return hasBars && hasTicks && hasToday && (scaleId === "timeline-view-day" || hasWeekend) ? 1 : 0;
+          const hasBars = document.querySelectorAll(".pm-gantt-bar").length > 0;
+          const hasHeader = document.querySelectorAll(
+            ".pm-gantt-header-day, .pm-gantt-header-week, .pm-gantt-header-month, .pm-gantt-header-quarter, .pm-gantt-header-year"
+          ).length > 0;
+          const hasGrid = document.querySelectorAll(".pm-gantt-gridline-h").length > 0;
+          const hasToday = document.querySelectorAll(".pm-gantt-today-line").length > 0;
+          const weekendCount = document.querySelectorAll(".pm-gantt-weekend, .pm-gantt-weekend-header").length;
+          const weekendScoped = scaleId === "timeline-view-day" || weekendCount === 0;
+          return hasBars && hasHeader && hasGrid && hasToday && weekendScoped ? 1 : 0;
         }, { id });
       }
       return complete;
@@ -468,17 +484,20 @@ const CLAIMS = [
     was: 2,
     recorded: 0,
     // Both rendered surfaces need their depth marker; a missing fixture must count as a failure.
-    // Rewritten for the T11 CSS leg: the reference board never carried a `data-subtask-depth`
-    // attribute (renderReferenceCard sets only data-task-id/data-note-database-row-path) — depth
-    // is shown by a `.pm-kanban-card-parent` label on a child card instead, one-to-one with the
-    // reference's own KanbanCard, and derived progress by `.pm-progress`. timeline-subtask-tree is
-    // untouched by this leg and keeps its own data-subtask-depth attribute unchanged.
+    // Both surfaces dropped `data-subtask-depth`: board (T11 CSS leg) shows depth via a
+    // `.pm-kanban-card-parent` label on a child card and derived progress by `.pm-progress`,
+    // one-to-one with the reference's own KanbanCard; timeline (REQ-007 CSS leg) indents a child
+    // row via an inline `padding-left` computed from the relation's depth instead, matching the
+    // reference's own GanttView label row (`.pm-gantt-label-row`), so a child row's box is >8px
+    // (the base, non-subtask padding) rather than data-attribute-tagged.
     async measure(page) {
       const checks = {
         "board-subtask-tree": () =>
           document.querySelector(".pm-kanban-card-parent") !== null
           && document.querySelector(".pm-progress") !== null,
-        "timeline-subtask-tree": () => document.querySelectorAll("[data-subtask-depth]").length > 0,
+        "timeline-subtask-tree": () =>
+          [...document.querySelectorAll(".pm-gantt-label-row")]
+            .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
       };
       let missing = 0;
       for (const [id, check] of Object.entries(checks)) {
@@ -497,14 +516,15 @@ const CLAIMS = [
     recorded: 2,
     // The surface leg's red was the data layer landing with no view reading it; its green is the
     // two surfaces that now do. The fixtures mirror both, so this holds that both still carry the
-    // tree markup. Rewritten for the T11 CSS leg alongside the claim above: same two markers, same
-    // per-surface predicate.
+    // tree markup. See the sibling claim above for why the two surfaces are checked differently.
     async measure(page) {
       const checks = {
         "board-subtask-tree": () =>
           document.querySelector(".pm-kanban-card-parent") !== null
           && document.querySelector(".pm-progress") !== null,
-        "timeline-subtask-tree": () => document.querySelectorAll("[data-subtask-depth]").length > 0,
+        "timeline-subtask-tree": () =>
+          [...document.querySelectorAll(".pm-gantt-label-row")]
+            .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
       };
       let surfaces = 0;
       for (const [id, check] of Object.entries(checks)) {
@@ -724,6 +744,10 @@ const CLAIMS = [
     // buildTimelineTicks()'s own day branch never emits. `was` is this measure re-run on the
     // landing commit's parent tree: every day-scale tick still read "HH:00" (0 of 34 labels bare)
     // and both widths still opened at startMinutes 0 (sum 0), for a total of 0.
+    // Reselectored for the fixture rewrite: the default render's day-scale hour label is
+    // `.pm-gantt-header-day` (`.db-timeline-tick-date` was the gated extensions path's class and
+    // no longer exists on this fixture); the bare-hour text and startMinutes centring are
+    // unchanged, so the total still reproduces exactly 574.
     async measure(page) {
       const s = SCENARIOS.find((x) => x.id === "timeline-view-day");
       if (!s) return -1;
@@ -732,7 +756,7 @@ const CLAIMS = [
       for (const device of [{ id: "desktop", width: 1440 }, { id: "mobile", width: 402 }]) {
         await load(page, s.html(device));
         plainLabels += await page.evaluate(() =>
-          [...document.querySelectorAll(".db-timeline-tick-date")]
+          [...document.querySelectorAll(".pm-gantt-header-day")]
             .filter((el) => /^\d\d$/.test(el.textContent.trim())).length);
         startMinutesSum += timelineDynamicFixture("day", device).startMinutes;
       }

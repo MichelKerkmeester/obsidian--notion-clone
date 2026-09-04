@@ -17565,6 +17565,481 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
   }
 }
 
+/*
+ * MIT License
+ *
+ * Copyright (c) 2026 Stepan Kropachev and dotpm contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/*
+ * WHY: the reference mounts its variables under .pm-root, while this plugin
+ * mounts the same Gantt tree under .note-database-container. Keep the
+ * reference class vocabulary and bridge only the surface tokens the copied
+ * rules below actually consume (font-family/color); the reference's own
+ * --pm-ghost-border/--pm-shadow-ambient tokens back kanban/time-log surfaces
+ * that are not part of this port and are intentionally left unmapped.
+ */
+.pm-gantt-view {
+  font-family: var(--font-interface);
+  color: var(--db-text-primary, var(--text-normal));
+}
+
+.pm-gantt-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pm-gantt-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  flex-shrink: 0;
+  background: var(--background-primary);
+  flex-wrap: wrap;
+}
+.pm-gantt-sep {
+  flex: 1;
+}
+
+.pm-gantt-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.pm-gantt-left {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-secondary);
+  z-index: 5;
+}
+
+.pm-gantt-left-header {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 12px 10px;
+  box-shadow: inset 0 -2px 0 var(--background-modifier-border);
+  flex-shrink: 0;
+  background: var(--background-primary);
+  box-sizing: border-box;
+}
+.pm-gantt-left-header-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.pm-gantt-left-body {
+  flex: 1;
+  overflow: hidden; /* synced by JS */
+}
+
+.pm-gantt-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 8px;
+  box-shadow: inset 0 -1px 0 var(--background-modifier-border);
+  cursor: default;
+  transition: background 0.1s;
+  box-sizing: border-box;
+}
+.pm-gantt-label-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.pm-gantt-label-spacer {
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.pm-gantt-label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pm-gantt-label-title {
+  flex: 1;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.pm-gantt-label-title:hover {
+  color: var(--interactive-accent);
+}
+
+.pm-gantt-label-progress {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.pm-gantt-resize-handle {
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 6;
+  transition: background 0.15s;
+}
+.pm-gantt-resize-handle:hover,
+.pm-gantt-resize-handle:active {
+  background: var(--interactive-accent);
+}
+
+.pm-gantt-right {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+/* Only `top` is constrained, so the header pins vertically but scrolls with the body. */
+.pm-gantt-header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+.pm-gantt-header-svg {
+  display: block;
+}
+
+.pm-gantt-svg-container {
+  position: relative;
+}
+.pm-gantt-svg {
+  display: block;
+}
+
+.pm-gantt-header-bg {
+  fill: var(--background-secondary);
+}
+.pm-gantt-band-even {
+  fill: rgba(0, 0, 0, 0);
+}
+.pm-gantt-band-odd {
+  fill: rgba(0, 0, 0, 0.025);
+}
+.theme-dark .pm-gantt-band-odd {
+  fill: rgba(255, 255, 255, 0.025);
+}
+
+.pm-gantt-header-month-top {
+  font-size: 10px;
+  fill: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pm-gantt-header-year {
+  font-size: 11px;
+  fill: var(--text-muted);
+  font-weight: 600;
+}
+.pm-gantt-header-day {
+  font-size: 10px;
+  fill: var(--text-muted);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.pm-gantt-header-week {
+  font-size: 10px;
+  fill: var(--text-muted);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: 600;
+}
+.pm-gantt-header-month {
+  font-size: 11px;
+  fill: var(--text-normal);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: 600;
+}
+.pm-gantt-header-quarter {
+  font-size: 12px;
+  fill: var(--text-normal);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: 700;
+}
+.pm-gantt-header-tick {
+  stroke: var(--background-modifier-border);
+  stroke-width: 1;
+}
+
+.pm-gantt-weekend-header {
+  fill: rgba(0, 0, 0, 0.04);
+}
+.theme-dark .pm-gantt-weekend-header {
+  fill: rgba(255, 255, 255, 0.04);
+}
+
+.pm-gantt-gridline-v {
+  stroke: var(--background-modifier-border);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.pm-gantt-gridline-h {
+  stroke: var(--background-modifier-border);
+  stroke-width: 0.5;
+}
+.pm-gantt-weekend {
+  fill: rgba(0, 0, 0, 0.025);
+}
+.theme-dark .pm-gantt-weekend {
+  fill: rgba(255, 255, 255, 0.025);
+}
+
+.pm-gantt-row-hover {
+  fill: transparent;
+  cursor: default;
+}
+.pm-gantt-row-hover:hover {
+  fill: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
+}
+
+.pm-gantt-empty-row-hit:hover {
+  fill: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
+}
+.pm-gantt-empty-row-preview {
+  fill: var(--interactive-accent);
+  opacity: 0.25;
+}
+
+.pm-gantt-bar {
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+.pm-gantt-bar:hover {
+  filter: brightness(1.15);
+}
+.pm-gantt-bar-progress {
+  pointer-events: none;
+}
+.pm-gantt-bar-label {
+  font-size: 10px;
+  fill: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  dominant-baseline: central;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.55);
+}
+
+.pm-gantt-today-line {
+  stroke: color-mix(in srgb, var(--color-red) 65%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+.pm-gantt-today-diamond {
+  fill: color-mix(in srgb, var(--color-red) 65%, transparent);
+}
+
+.pm-gantt-arrow {
+  fill: none;
+  stroke: var(--interactive-accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  opacity: 0.4;
+}
+.pm-gantt-arrowhead {
+  fill: var(--interactive-accent);
+  opacity: 0.5;
+}
+
+/* WHY: the reference Gantt surface mounts these shared affordances beside its copied layout rules. */
+.pm-segmented {
+  display: flex;
+  gap: 6px;
+}
+
+.pm-gantt-label-row .pm-collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  --icon-size: 14px;
+}
+.pm-gantt-label-row .pm-collapse-toggle:hover {
+  color: var(--text-normal);
+}
+.pm-gantt-label-row .pm-collapse-toggle.is-collapsed .svg-icon {
+  transform: rotate(-90deg);
+}
+
+.pm-gantt-label-row .pm-icon-btn--hover-only {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.pm-gantt-label-row:hover .pm-icon-btn--hover-only,
+.pm-gantt-label-row .pm-icon-btn--hover-only:focus-visible {
+  opacity: 1;
+}
+
+.pm-gantt-add-row button.pm-prop-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 20px;
+  padding: 3px 7px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+.pm-gantt-add-row button.pm-prop-add:hover {
+  color: var(--text-accent);
+  background: var(--background-modifier-hover);
+}
+
+.pm-gantt-drag-handle {
+  fill: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    fill 0.15s;
+}
+.pm-gantt-bar-group:hover .pm-gantt-drag-handle {
+  opacity: 1;
+  fill: rgba(255, 255, 255, 0.25);
+}
+.pm-gantt-bar-group .pm-gantt-drag-handle:hover {
+  fill: rgba(255, 255, 255, 0.45);
+}
+.pm-gantt-bar-grabbing {
+  cursor: grabbing;
+}
+
+.pm-gantt-link-dot {
+  fill: transparent;
+  stroke: var(--interactive-accent);
+  stroke-width: 1.5;
+  opacity: 0;
+  transition:
+    opacity 0.15s,
+    fill 0.15s;
+  pointer-events: all;
+}
+.pm-gantt-bar-group:hover .pm-gantt-link-dot {
+  opacity: 0.5;
+}
+.pm-gantt-bar-group .pm-gantt-link-dot:hover {
+  opacity: 1;
+  fill: var(--interactive-accent);
+}
+.pm-gantt-bar-group .pm-gantt-link-dot--active {
+  opacity: 1;
+  fill: var(--interactive-accent);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 3px var(--interactive-accent));
+}
+
+.pm-gantt-milestone {
+  transition:
+    transform 0.15s,
+    filter 0.15s;
+}
+.pm-gantt-milestone:hover {
+  filter: brightness(1.2);
+}
+.pm-gantt-milestone-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.pm-gantt-bar-icon {
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.pm-gantt-label-row--dragging {
+  opacity: 0.4;
+}
+.pm-gantt-label-row--drop-before {
+  box-shadow: inset 0 2px 0 var(--interactive-accent);
+}
+.pm-gantt-label-row--drop-after {
+  box-shadow: inset 0 -2px 0 var(--interactive-accent);
+}
+
+/*
+ * WHY: preserve the reference dimensions while giving coarse-pointer users
+ * a 28px box for native controls and transparent SVG affordance strokes.
+ */
+@media (pointer: coarse) {
+  .pm-gantt-controls button.clickable-icon,
+  .pm-gantt-label-row button.pm-icon-btn,
+  .pm-gantt-add-row button.pm-prop-add {
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .pm-gantt-resize-handle {
+    width: 28px;
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+
+  .pm-gantt-drag-handle,
+  .pm-gantt-link-dot {
+    stroke: transparent;
+    stroke-width: 20px;
+  }
+}
+
+/*
+ * WHY: renderTimelineLocal (calendar-timeline-renderer.ts) still renders this
+ * .db-timeline DOM tree when the timelineLocalExtensions config flag is on
+ * (default off; the default render is the .pm-gantt-view SVG tree copied
+ * above). Its grouped lanes, backlog drawer, link-dot dependency editor,
+ * milestone diamonds, snap markers and drag/resize affordances have no
+ * equivalent in the reference Gantt copy, so the pm-gantt-* rules above do
+ * not supersede any of it. These class names are exclusive to this gated
+ * path and are never emitted by the default tree, so no additional scoping
+ * root is needed to keep the two trees from colliding.
+ */
+
 /* ── Timeline shared base ── */
 
 .note-database-container .db-timeline-mobile-menu-button {

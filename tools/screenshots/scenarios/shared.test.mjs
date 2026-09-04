@@ -198,10 +198,11 @@ describe("subtask screenshot fixture parity", () => {
       ["pm-progress-track", boardRenderer, boardMarkup],
       ["pm-progress-fill", boardRenderer, boardMarkup],
       ["pm-kanban-card-footer", boardRenderer, boardMarkup],
-      ["db-subtask-event", timelineRenderer, timelineMarkup],
-      ["has-subtask-children", timelineRenderer, timelineMarkup],
-      ["db-subtask-event-toggle", timelineRenderer, timelineMarkup],
-      ["db-timeline-subtask-progress", timelineRenderer, timelineMarkup],
+      ["pm-gantt-bar-group", timelineRenderer, timelineMarkup],
+      ["pm-gantt-bar", timelineRenderer, timelineMarkup],
+      ["pm-gantt-bar-progress", timelineRenderer, timelineMarkup],
+      ["pm-gantt-drag-handle", timelineRenderer, timelineMarkup],
+      ["pm-gantt-link-dot", timelineRenderer, timelineMarkup],
     ];
     for (const [className, source, markup] of contracts) {
       expect(markup, `${className} is in its fixture`).toContain(className);
@@ -219,7 +220,7 @@ describe("subtask screenshot fixture parity", () => {
     for (const lane of TL_LANES) {
       for (const event of lane.events) {
         expect(event.subtask, `${lane.key}/${event.title} carries no subtask state`).toBeUndefined();
-        expect(timelineEvent(event, TIMELINE_FIXTURES.week)).not.toContain("db-subtask-event");
+        expect(timelineEvent(event, TIMELINE_FIXTURES.week)).not.toContain("pm-collapse-toggle");
       }
     }
     const treeLane = TL_SUBTASK_LANES.find((lane) => lane.key === "business");

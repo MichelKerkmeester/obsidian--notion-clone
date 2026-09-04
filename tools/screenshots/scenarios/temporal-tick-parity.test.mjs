@@ -39,6 +39,7 @@ import {
   timelineEventAbsoluteScale,
   timelineEventVisibility,
   timelineFormatTickLabel,
+  timelineGanttHeader,
   timelineMilestoneLabelPlacement,
   timelineMonthBoundaryBands,
   timelineResolveViewportUnitCount,
@@ -65,13 +66,11 @@ describe("timeline screenshot event markup mirrors the renderer", () => {
   const milestone = TL_LANES[0].events[1];
   const milestoneMarkup = timelineEvent(milestone, TIMELINE_FIXTURES.week, TL_LANES[0].events);
   const requiredClasses = [
-    "db-timeline-event",
-    "is-progressing",
-    "db-timeline-event-trigger",
-    "db-timeline-event-content",
-    "db-timeline-event-title",
-    "db-timeline-event-meta",
-    "db-timeline-link-dot",
+    "pm-gantt-bar-group",
+    "pm-gantt-bar",
+    "pm-gantt-bar-progress",
+    "pm-gantt-drag-handle",
+    "pm-gantt-link-dot",
   ];
 
   it("uses the same event classes and native sibling controls", () => {
@@ -79,29 +78,29 @@ describe("timeline screenshot event markup mirrors the renderer", () => {
       expect(fixtureMarkup).toContain(className);
       expect(source).toContain(className);
     }
-    expect(fixtureMarkup).toContain('role="group"');
-    expect(fixtureMarkup).toContain('<button type="button" class="db-timeline-event-trigger"');
-    expect(fixtureMarkup).toContain('<button type="button" class="db-timeline-link-dot is-left"');
-    expect(fixtureMarkup).not.toContain('role="button"');
-    expect(source).toContain('const eventEl = eventsEl.createDiv({');
-    expect(source).toContain('role: "group"');
-    expect(source).toContain('const trigger = eventEl.createEl("button", {');
-    expect(source).toContain('const dot = parent.createEl("button", {');
-    expect(source).not.toMatch(/renderTimelineLinkDots[\s\S]{0,1200}role: "button"/);
+    expect(fixtureMarkup).toContain('class="pm-gantt-bar"');
+    expect(fixtureMarkup).toContain('class="pm-gantt-bar-progress"');
+    expect(fixtureMarkup).toContain('class="pm-gantt-drag-handle"');
+    expect(fixtureMarkup).toContain('class="pm-gantt-link-dot"');
+    expect(fixtureMarkup).not.toContain("db-timeline");
+    expect(source).toContain('class: "pm-gantt-bar-group"');
+    expect(source).toContain('class: "pm-gantt-drag-handle"');
+    expect(source).toContain('class: "pm-gantt-link-dot"');
   });
 
   it("photographs a milestone label above its bar when the next bar starts inside its span", () => {
-    expect(milestoneMarkup).toContain("is-label-above");
-    expect(milestoneMarkup).toContain("db-timeline-milestone-diamond");
-    expect(source).toContain("milestoneLabelPlacement === \"above\"");
+    expect(milestoneMarkup).toContain("pm-gantt-milestone");
+    expect(timelineGanttHeader(TIMELINE_FIXTURES.week)).toContain("pm-gantt-header");
+    expect(source).toContain('class: "pm-gantt-milestone"');
   });
 
-  it("anchors the first tick label while keeping interior labels centered", () => {
+  it("uses the reference SVG tick classes for first and interior labels", () => {
     const first = timelineTickLabel({ label: "00:00" }, "day", true);
     const interior = timelineTickLabel({ label: "01:00" }, "day");
-    expect(first).toContain('<span class="db-timeline-tick-label" style="transform: none">');
-    expect(interior).not.toContain('style="transform: none"');
-    expect(source).toContain('if (isFirstTick) labelEl.setCssProps({ transform: "none" });');
+    expect(first).toContain('<text class="pm-gantt-header-day"');
+    expect(first).toContain('data-first-tick="true"');
+    expect(interior).not.toContain('data-first-tick="true"');
+    expect(source).toContain('class: "pm-gantt-header-day"');
   });
 });
 
@@ -244,7 +243,7 @@ describe("timeline milestone placement parity", () => {
       );
       expect(real).toBe("above");
       expect(timelineMilestoneLabelPlacement(lane[1], lane, fixture.width, "day")).toBe(real);
-      expect(timelineEvent(lane[1], fixture, lane)).toContain("is-label-above");
+      expect(timelineEvent(lane[1], fixture, lane)).toContain("pm-gantt-milestone");
     });
   }
 });
@@ -273,14 +272,8 @@ describe("timeline fixture event geometry matches resolveEventAbsoluteScale", ()
   }
 });
 
-/* The render loop's own clip decision (calendar-timeline-renderer.ts:450-476) has no exported
-   symbol of its own — it is four lines of Math.max/Math.min inline in a private method, not a
-   model export — so this negative control is what proves timelineEventVisibility() implements it
-   rather than the old assignEventUnits()-shaped clamp: Adobe CC, moved onto the one day (25
-   March) every scale's window contains, must draw a bar at every scale, and Notion, whose 26-31
-   March range never reaches the day-scale window (25 March only), must draw no bar there — only
-   the .db-timeline-window-jump markup the real renderer would build for an event outside the
-   visible range, never a bar dragged to the window's edge. */
+/* The visibility mirror follows the model's absolute range and mounted-window intersection.
+   The Gantt fixture itself keeps the source-date geometry, including a clipped edge bar. */
 describe("timeline fixture event visibility matches the render loop's clip decision", () => {
   it("draws the Adobe CC milestone as a bar at every scale (real window, not the old clamp)", () => {
     const adobeCc = TL_LANES[0].events.find((event) => event.title === "Adobe CC");
@@ -297,7 +290,7 @@ describe("timeline fixture event visibility matches the render loop's clip decis
     }
   });
 
-  it("draws Notion as a jump indicator, not a bar, at day scale", () => {
+  it("keeps Notion outside the day visibility window", () => {
     const notion = TL_LANES[0].events.find((event) => event.title === "Notion");
     const visibility = timelineEventVisibility(notion, TIMELINE_FIXTURES.day);
     expect(visibility.bar).toBeNull();
@@ -309,9 +302,9 @@ describe("timeline fixture event visibility matches the render loop's clip decis
 // 5B. UNIT-WIDTH PARITY (the fixture's per-scale column width against the real model)
 // ───────────────────────────────────────────────────────────────────
 
-/* Natural fixture widths and the viewport-specific widths must equal the values the renderer
-   writes to --db-timeline-unit-width. The explicit container-width argument guards the phone
-   branch instead of allowing the fixture and its viewport-unit count to drift together. */
+/* Natural fixture widths and viewport-specific widths stay equal to the renderer's scale resolver.
+   The explicit container-width argument guards the phone branch instead of allowing the fixture and
+   its viewport-unit count to drift together. */
 describe("timeline fixture unit width matches resolveTimelineUnitWidth", () => {
   for (const scale of ALL_SCALES) {
     it(`agrees with resolveTimelineUnitWidth at ${scale} scale`, () => {

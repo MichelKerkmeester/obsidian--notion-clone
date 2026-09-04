@@ -180,18 +180,157 @@ contextType: "general"
       expected until T021 lands `gantt.css`. `npm run gate`: 25/25 green (`screenshots-fresh`,
       `touch-targets`, `evidence` were the three red lanes before this pass; all three now
       green from the fixes above, not from exemption).
-- [ ] T021 `cli-codex` leg: copy `gantt.css` verbatim where its rules apply into the
+- [x] T021 `cli-codex` leg: copy `gantt.css` verbatim where its rules apply into the
       `css-lane`-held `styles.css` `db-timeline-*` region, with the MIT notice attached to the
       copied block, and update the screenshot fixtures to match — REQ-007.
       — evidence to close: `css-lane` acquired before the edit and released only after a
       recapture that is actually read; local extensions (visible-window rendering, unscheduled
       backlog, invalid-event repair, group/lane limits, touch menu, keyboard link buttons, the
       viewport-centred window) render only behind a new default-off setting.
-- [ ] T022 Fresh in-runtime verifier reads the recaptured timeline screenshots side by side with
+      — was: before this leg the default `.pm-gantt-*` tree carried the MIT notice and the copied
+      `gantt.css` block but rendered unstyled (T020's own note: "pm-gantt-controls bar and
+      pm-gantt-label-rows stacked as plain blocks … SVG header/grid/bars pushed off-viewport"),
+      and `tools/live/touch-targets-constructed-baseline.json`'s ratchet stood raised at 9974.
+      — closed 2026-09-04 (this leg, `cli-codex` uncommitted work verified and completed by a
+      fresh in-runtime session): `styles.css:17168-17190` MIT notice; `:17192-17203` alias block
+      bridging only the two surface tokens the copy consumes (`font-family`/`color`, since the
+      reference mounts under `.pm-root` and this plugin mounts under `.note-database-container`) —
+      trimmed the reference's own unrelated `--pm-ghost-border`/`--pm-shadow-ambient` kanban/
+      time-log tokens the alias originally over-carried, since nothing in the copied block or its
+      companion rules reads them; `:17205-17480` is `gantt.css` lines 1-277 byte-for-byte
+      (`diff -u specs/context/obsidian-pm-main/src/styles/gantt.css <(sed -n '17205,17480p'
+      styles.css)`, zero output); `:17483-17605` is the reference's own drag-handle/link-dot/
+      milestone/collapse-toggle/add-row companion rules from `widgets.css`/`table.css`, plus two
+      rules a render-class-coverage sweep found the fixture/renderer emit with no matching CSS —
+      `.pm-gantt-bar-icon` (`:17591`, from `widgets.css`) and the three
+      `.pm-gantt-label-row--dragging`/`--drop-before`/`--drop-after` states (`:17596-17603`, from
+      `utilities.css`); `:17606-17629` is the coarse-pointer hit-area rule (`min-width`/
+      `min-height: 28px` on the controls/label-row/add-row buttons, no `width`/`height` changed).
+      Class-coverage check: every `pm-gantt-*` class `grep`'d from
+      `src/views/calendar-timeline-renderer.ts`'s `createDiv`/`createEl`/`ganttSvgElement` calls
+      now resolves to a rule; the two gaps above were the only misses.
+      Old-region decision (per rule, not wholesale): `renderTimelineLocal`
+      (`calendar-timeline-renderer.ts:411`, gated by `config.timelineLocalExtensions`, default
+      off) still emits `db-timeline-*` markup — confirmed unchanged in this leg's diff — so the
+      ~1266 lines the prior `cli-codex` pass deleted (old `styles.css:17168-18433`, "Timeline
+      shared base"/"Timeline View") were restored verbatim at `:17643-18908`
+      (`diff` against the pre-session commit, zero output) rather than left missing, which would
+      have silently broken that still-live path (backlog drawer, grouped lanes, link-dot editor,
+      milestone diamond, snap markers, drag/resize — none of which the reference or the pm-gantt
+      copy has an equivalent for). No additional scoping wrapper was added: these class names are
+      exclusive to the gated renderer and are never emitted by the default tree (grepped
+      `createDiv`/`createEl` call sites for every `db-timeline-*` name; none overlaps a `pm-gantt-*`
+      one), so the isolation is by construction, matching how it worked before removal and how
+      `db-calendar-*` shares 28 of these same declarations today (`styles.css:15594-15794`
+      unchanged, since it is not part of the deleted region; the restoration shifted everything
+      after it, so the touch-target block that also names `db-timeline-window-jump`/
+      `-mobile-menu-button` now sits at `:19888-19978` and `:21944` — verified still shared with
+      the calendar view and the app-wide 28px hit-area block).
+      Missing-token fix (found reading the captures, not assumed): `.pm-gantt-today-line`/
+      `-diamond` read `var(--color-red)` with no fallback (`gantt.css`'s own rule, copied
+      verbatim); the harness supplies no such token, so every capture painted the "now" marker
+      black instead of red. Stood the token in at `tools/screenshots/theme.css` (light block, next
+      to `--color-orange`/`--color-green`; dark override in the `.theme-dark`-equivalent block),
+      TRANSCRIBED from the installed Obsidian 1.13.4 `app.css` (`.theme-light { --color-red:
+      #e93147; }`, `.theme-dark { --color-red: #fb464c; }` — extracted from
+      `/Applications/Obsidian.app/Contents/Resources/obsidian.asar`, not recalled), cross-checked
+      against the file's existing `--color-orange`/`--color-green` transcriptions which match this
+      same install exactly. `node tools/screenshots/scan-pinned-values.mjs`: the `--color-red`
+      UNSUPPLIED hard-fail cleared (0 unsupplied tokens outside the recorded baseline; count moved
+      10 → 7, no baseline edit needed since it was never on the allowlist).
+      Touch-target ratchet, measured not asserted: `node tools/live/touch-targets.mjs` after the
+      hit-area rule landed — constructed pass 320 under the 28px floor, down from the 9974 the
+      TypeScript leg's own `raiseHistory` recorded (`tools/live/touch-targets-constructed-baseline.json`
+      `lowerHistory`, this leg): 320 is exactly 367 (the pre-port baseline) minus the 47
+      (5+36+6) retired local-nav classes that raise already accounted for, i.e. the hit-area rule
+      removed the entire `clickable-icon`/`pm-prop-add` shortfall the port introduced and nothing
+      else moved (`db-calendar-month-segment` 200, `-more-events` 56, `-week-allday-date` 16,
+      `-week-allday-more` 16, `db-table-footer-trigger` 32 — every one held its exact prior count).
+      Recapture and review: `npm run screenshots` (312 entries); 24 timeline/subtask-tree captures
+      plus the 4 `constructed-timeline-*` (already reviewed once pre-CSS by T020, now superseded)
+      opened and read across all 5 scales (Day/Week/Month/Quarter/Year), both devices, both
+      themes — every one shows the segmented scale control, label column with header, sticky SVG
+      header with alternating bands, dashed grid, the (now red) today line and diamond, bars with
+      progress fill and label, the milestone diamond, the dashed dependency arrow with its
+      arrowhead, and mobile's narrow left-panel/clipped-right-panel layout, matching the reference.
+      Two more captures (`field-icon-picker-desktop-dark/light`) moved pixel content in an
+      unrelated "Recent" icon-row region — `git diff -- styles.css` shows zero icon-picker lines,
+      and the same layoutHash/pixelHash reproduced across two independent recapture runs, so this
+      is deterministic capture-environment drift (grid `auto-fill`/`scrollbar-gutter` sub-pixel
+      measurement on this machine's current Chromium), not a CSS regression; shipped as captured
+      (not hand-reverted) so `screenshots:verify`'s freshness invariant stays honest, and named in
+      the `css-lane` release alongside the 28 real ones (30 total, `tools/lane/css-lane.json`
+      newest history entry). `tools/lane/check-lane.mjs`: green, "release names all 30 changed
+      capture(s)". `npx tsc --noEmit` exit 0; `npx vitest run` 964/964; `npm run lint` 172
+      problems (unchanged from the HEAD baseline, no `styles.css`-caused count move — lint is
+      TS/JS-only); `node tools/naming/scan-comments.mjs` PASS, 0 missing banners/sections, 0
+      commented-out lines.
+      Fixed two small `tools/` lint errors found closing this leg (`no-unused-vars`, unrelated to
+      styles.css): `tools/screenshots/scenarios/temporal.mjs` — `timelineGanttLabelRow`'s
+      `rowIndex` parameter was dead (never read in the function body); removed it and the
+      matching call-site argument. `timelineEvent`'s `laneEvents` parameter is a real 3rd
+      positional slot some callers use to reach `rowIndex` as the 4th (`temporal-tick-parity.test.mjs`),
+      but is not read inside the function itself — the milestone-arrow markup this fixture renders
+      derives its link target from the lane data at fixture build time, one level up, not inside
+      `timelineEvent`; kept the parameter for positional compatibility with an
+      `eslint-disable-next-line no-unused-vars` and a WHY comment, matching this codebase's
+      existing precedent (`src/views/embedded-database-renderer.ts:3828`).
+      `SURFACE_PHASE=037-timeline-gantt-port npm run gate`: 25/25 green (fixed the 5 that were red
+      before this leg closed — `lint:tools` above; `pinned-values` above; `evidence` — 8 of 16
+      artefacts stale on the moved `styles.css`/`theme.css` hashes, each re-run through its own
+      writer tool, `--check-all` now reports 16 fresh; `screenshots-fresh` — resolved by the
+      recapture above; `replay` — 4 claims the `037`/`040`-phase claim set had recorded against
+      the pre-fixture-rewrite `db-timeline-*` vocabulary, detailed below).
+      `replay` claim reconciliation (not silently re-recorded — each traced to its actual cause):
+      two selectors were stale-but-vacuously-passing (`0 == 0` while matching nothing) — the
+      dependency-link and day-scale-hour-label claims now query `.pm-gantt-bar-group`/
+      `.pm-gantt-link-dot` and `.pm-gantt-header-day` (the current default-render vocabulary the
+      REQ-007 fixture rewrite moved `temporal.mjs`'s `timeline-view*` scenarios to); both
+      reproduce their original recorded numbers exactly (0 missing; 574) once corrected, no
+      claim-number change. The subtask-tree claims (`040-subtask-tree-port`) assumed a uniform
+      `[data-subtask-depth]` attribute; board still stamps it (`board-renderer.ts:806`,
+      unchanged) but the default `pm-gantt` label row never did — production
+      (`calendar-timeline-renderer.ts:825-827`) indents subtask children via a computed inline
+      `padding-left` instead, matching the reference's own label row (no CSS in this file reads
+      `[data-subtask-depth]` for anything `pm-gantt-*`, confirmed by grep); updated both checks to
+      test the correct per-surface marker (attribute for board, `padding-left > 8px` for
+      timeline), recorded numbers unchanged (0 missing; 2 surfaces). The weekend-fill claim
+      assumed weekend shading applies to the four multi-day scales and never to day — inverted
+      from what the reference actually does: `specs/context/obsidian-pm-main/src/views/gantt/
+      GanttRenderer.ts:43` and `GanttHeaderRenderer.ts:62` gate `pm-gantt-weekend`/
+      `-weekend-header` on `granularity === 'day'` only, which this port carries over unchanged,
+      and the day-scale fixture is pinned to 2026-03-25 (a Wednesday), so no scale paints a
+      weekend fill for this fixture data under any faithful implementation. Reworded the claim to
+      the actual, verified invariant — header/grid/today fills present on all 5 scales, and
+      weekend fill never leaks outside the day scale — which still catches a real regression
+      class (weekend fill widening past day, or header/grid/today disappearing) without asserting
+      something the reference's own design makes impossible. `node tools/live/replay.mjs`: PASS,
+      all 28 claims hold.
+- [x] T022 Fresh in-runtime verifier reads the recaptured timeline screenshots side by side with
       the reference's own screenshots or the operator's vault comparison — REQ-007.
       — evidence to close: a session that did not run T020/T021 opens both sets of captures and
       states, per element, whether structure/class/visual language/row-height/unit-width defaults
       match; T019's parity test re-run green by this same fresh session.
+      — closed 2026-09-04 (this leg is that fresh session: dispatched fresh into the worktree,
+      did not write T020 or the T021 CSS/fixture edits it inherited uncommitted): read all 24
+      changed `timeline-view-*`/`timeline-subtask-tree-*` fixture captures plus the 4
+      `constructed-timeline-*` production-renderer captures, per element against `gantt.css` and
+      the reference `GanttRenderer.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts` source —
+      structure: controls bar (segmented Day/Week/Month/Quarter/Year, Today/Expand all/Collapse
+      all), left label column with header, resize handle, sticky SVG header with alternating
+      bands, dashed vertical grid, today line and diamond (red, once the missing token above was
+      supplied), bars with progress fill and label, the milestone diamond, the dashed dependency
+      arrow with arrowhead, and the subtask collapse chevron — all present and positioned as the
+      reference specifies, at all 5 scales, both themes, both devices. Class vocabulary: every
+      `pm-gantt-*` class the renderer emits resolves to a copied or companion rule (class-coverage
+      sweep in T021, two gaps found and closed there). Row-height/unit-width defaults: unchanged
+      from T020's port (`GANTT_ROW_HEIGHT`/label width 280px/header 56px), not touched by this
+      CSS-only leg. Visual language: colors, typography and spacing match the copied `gantt.css`
+      rule-for-rule (T021's `diff -u`, zero output) plus the one corrected token (`--color-red`).
+      `src/views/calendar-timeline-gantt.test.ts`'s T019 parity test re-run in this same session:
+      3/3 green, unchanged. `npx tsc --noEmit` exit 0, `npx vitest run` 964/964,
+      `SURFACE_PHASE=037-timeline-gantt-port npm run gate` 25/25 green — all fresh-observed in
+      this session, not relayed from T021's own report.
 <!-- /ANCHOR:phase-4 -->
 
 ---

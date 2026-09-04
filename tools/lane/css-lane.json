@@ -1925,6 +1925,12 @@
       "note": "Reconciliation release, not a CSS edit -- styles.css is untouched (baselineHash still b7de3b6fb54a, matching the CSS leg's own release above). Rebasing worktrees/023-board-one-to-one onto main and recapturing surfaced four constructed-board-subtask captures (desktop/mobile, both themes) that neither the T10 nor the T11 release above named: this scenario mounts the real BoardRenderer with a captureData-wired parent/two-children relation, and its pixelHash had moved from both legs' own review scope without either catching it. All four were opened and read this session: the parent card (row-0, backlog column) carries a blue-purple progress fill on its pm-progress track, and both children (row-1, row-2) show a small grey row-0 parent-name label above their own title instead of an indent -- the real BoardRenderer's flat per-column layout has no nested-card affordance, so parentage renders as a label rather than a tree, styled with the same pm-kanban card chrome as every other capture in this release. Correct on both themes and both devices. field-icon-picker-desktop-dark/light moved pixelHash again on this recapture, the same pre-existing Chrome/OS environment drift the CSS-leg release above already proved unrelated to any code here; restored to committed HEAD bytes rather than recommitted, same handling. Seven further captures (timeline/calendar views) moved bytes only this run, pixelHash/layoutHash unchanged -- not a review this release owes. `npm run gate`: 25 green, 0 red on the rebased tree."
     },
     {
+      "event": "acquire",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T00:30:00Z",
+      "hash": "4c7b8b627ab9"
+    },
+    {
       "event": "release",
       "phase": "037-timeline-gantt-port",
       "at": "2026-09-04T08:30:00.000Z",
@@ -1936,6 +1942,45 @@
         "screenshots/views/constructed-timeline-mobile-light.png"
       ],
       "note": "Not a CSS edit \u2014 styles.css is still untouched (git diff --stat styles.css empty, baselineHash still c32661e8c089). REQ-007's TypeScript leg (this phase) switched the timeline's default render (timelineLocalExtensions unset/false) from the local db-timeline-* tree to a structural copy of obsidian-pm's GanttView/GanttHeaderRenderer/GanttTaskBarRenderer/TimelineConfig DOM shape (pm-gantt-*), which moved these four constructed-renderer captures (the only captures render-assertion-bundle.mjs drives through the real CalendarTimelineRenderer for the timeline surface; the other twelve timeline-view-*/timeline-subtask-tree-* captures in this same recapture are hand-written scenarios.mjs fixtures depicting the unchanged local db-timeline-* markup, confirmed pixel-identical by check-lane's own pixelHash/layoutHash compare \u2014 byte movement only, no review owed). All four were opened and read on both desktop and phone, light and dark, before this entry was written: every one shows the pm-gantt-controls bar (Day/Week/Month/Quarter/Year segmented buttons plus Today/Expand all/Collapse all) and the pm-gantt-left-body label rows (row-0..row-N, each with its add-subtask + button) stacked as plain block elements from the top of the page, in the browser's unstyled default appearance \u2014 no pm-gantt-* rule exists in styles.css yet (grep -c pm-gantt styles.css is 0), so .pm-gantt-wrapper's left/resize-handle/right panels stack vertically instead of side by side, and the header/grid/bars SVG (which the DOM-structure parity test in calendar-timeline-gantt.test.ts confirms is present, 3/3 green) renders far below the row list, off the captured viewport. This is the expected pre-CSS-leg appearance: REQ-007's CSS leg (T021, cli-codex, spec.md REQ-005) copies gantt.css's layout, color and typography rules into styles.css's db-timeline-* region next and will move these same four captures again once the reference's pm-gantt-* rules apply."
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T07:44:37.000Z",
+      "hash": "20d8ee6827be",
+      "note": "REQ-007's CSS leg (T021): copied the reference gantt.css (specs/context/obsidian-pm-main/src/styles/gantt.css, 277 lines) into styles.css verbatim under the file's existing MIT notice, byte-diffed clean against the source (diff -u exits 0); bridged only the two surface tokens the copy needs via a `.pm-gantt-view` alias block (font-family/color, since the reference mounts under .pm-root and this plugin mounts under .note-database-container) instead of carrying over the reference's unrelated --pm-ghost-border/--pm-shadow-ambient kanban/time-log tokens; added the reference's own drag-handle/link-dot/milestone/collapse-toggle/add-row companion rules from widgets.css and table.css beside it, plus two rules the render class-coverage sweep found missing (pm-gantt-bar-icon from widgets.css, and the three pm-gantt-label-row--dragging/--drop-before/--drop-after states from utilities.css); added a coarse-pointer hit-area rule (min-width/min-height 28px on the controls/label-row/add-row buttons, no width/height change) that dropped the constructed touch-targets ratchet from 9974 back to 320 (see tools/live/touch-targets-constructed-baseline.json lowerHistory \u2014 320 is exactly this baseline's pre-port total of 367 minus the three retired local-nav classes the TypeScript leg's own raiseHistory already accounted for). Separately: renderTimelineLocal (gated behind config.timelineLocalExtensions, default off) still renders the old .db-timeline DOM tree and none of its grouped-lane/backlog/link-dot/milestone-diamond/snap-marker/drag-resize concepts exist in the reference copy, so the ~1266 lines removed for the default path's CSS were restored verbatim (diffed clean against the pre-session commit) rather than left missing, since removing them would have silently broken that still-live gated path; its class names are exclusive to that renderer and are never emitted by the default pm-gantt tree, so no additional scoping wrapper was needed to keep the two trees apart. All 24 content-changed captures here were opened and read on both desktop and phone, light and dark, across every scale tab (Day/Week/Month/Quarter/Year) plus the subtask-tree collapse affordance: each shows the segmented scale control, label column with header, sticky SVG header with alternating bands, dashed grid, today line and diamond, bars with progress fill and label, the milestone diamond, the dependency arrow with its arrowhead, and mobile's narrow left-panel/clipped-right-panel layout, matching the reference design. Two more captures moved bytes and pixelHash/layoutHash (field-icon-picker-desktop-dark/light), in a bounded 'Recent' icon-row region unrelated to any pm-gantt-*/db-timeline-* selector (icon-picker's own CSS text is byte-identical to HEAD: `git diff -- styles.css` shows zero icon-picker lines). Reproduced identically (same layoutHash e4b6f070f056, same pixelHash per theme) across two independent detached `npm run screenshots` runs, so this is deterministic environment drift (most likely grid auto-fill / scrollbar-gutter sub-pixel measurement on this machine's current Chromium, differing from whatever produced the committed baseline) rather than flaky noise or a CSS-caused regression; both were opened and read, no visual defect. Shipped as captured rather than hand-reverted, since hand-editing sourceHashes/pixelHash without an actual matching capture would desync screenshots:verify's freshness invariant. tsc 0, vitest 964/964, lint 172 (unchanged from HEAD baseline), scan-comments 0, check-lane and touch-targets both green. The four constructed-renderer captures (constructed-timeline-*) were already read above in this same pass (production CalendarTimelineRenderer output, the only captures render-assertion-bundle.mjs drives through the real renderer for this surface); named here too since this release entry now sits on the same stylesheet hash and supersedes the prior release that reviewed them against the pre-CSS-leg (unstyled) state. Recaptured once more after standing --color-red into theme.css (pinned-values fix, below): the today-line/today-diamond now paint the intended red tint instead of the unstyled-token black every one of these 30 captures showed before. Re-verified the same set of 30 content-changed paths (git status/check-lane diffed identical; only pixelHash moved further within them).",
+      "reviewed": [
+        "screenshots/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/fields/field-icon-picker-desktop-light.png",
+        "screenshots/views/constructed-timeline-desktop-dark.png",
+        "screenshots/views/constructed-timeline-desktop-light.png",
+        "screenshots/views/constructed-timeline-mobile-dark.png",
+        "screenshots/views/constructed-timeline-mobile-light.png",
+        "screenshots/views/timeline-subtask-tree-desktop-dark.png",
+        "screenshots/views/timeline-subtask-tree-desktop-light.png",
+        "screenshots/views/timeline-subtask-tree-mobile-dark.png",
+        "screenshots/views/timeline-subtask-tree-mobile-light.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-month-mobile-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-dark.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-mobile-dark.png",
+        "screenshots/views/timeline-view-quarter-mobile-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png",
+        "screenshots/views/timeline-view-year-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-dark.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ]
     }
   ],
   "outstanding": [

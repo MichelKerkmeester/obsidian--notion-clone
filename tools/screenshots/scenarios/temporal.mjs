@@ -65,8 +65,7 @@ const ICON = {
   smilePlus:
     '<path d="M22 11v1a10 10 0 1 1-9-10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01M16 5h6"/>',
   plus: '<path d="M5 12h14M12 5v14"/>',
-  // setIcon(button, "arrow-left"/"arrow-right") on the timeline's window-jump indicator
-  // (calendar-timeline-renderer.ts:1024).
+  // Reserved for calendar controls that use the same directional glyphs.
   arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
   arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   // renderEmpty()'s reason-specific glyphs and its "select date property" action
@@ -485,15 +484,9 @@ export const timelineEventAbsoluteScale = (event, windowStartKey) => {
   return { start, end: (endDayOffset + 1) * MINUTES_PER_DAY };
 };
 
-/* Mirrors the render loop's own per-event visibility decision (calendar-timeline-renderer.ts:
-   450-476), NOT assignEventUnits() — that function clamps every event's offset/duration into the
-   visible unit count no matter how far outside the window it starts, which is what the bar
-   actually painted on screen does not do. The render loop instead clamps [scale.start, scale.end]
-   against the visible window and only draws a bar where positive width survives the clamp
-   (renderStart < renderEnd); a side that falls outside the window gets a
-   .db-timeline-window-jump indicator instead, never a bar dragged to the window's edge. Exported
-   so the parity test can assert this decision, not just the tick/band math, against a real
-   export (resolveEventAbsoluteScale). */
+/* Mirrors the model's per-event visibility decision. The Gantt bar helper keeps source dates
+   available for clipped SVG geometry while this exported mirror records whether the event
+   intersects the mounted window. */
 export const timelineEventVisibility = (event, fixture) => {
   const scale = timelineEventAbsoluteScale(event, fixture.start);
   // Day scale's visible window opens at the fixture's own startMinutes (TL_DAY_START_MINUTES by
@@ -522,131 +515,193 @@ export const timelineEventVisibility = (event, fixture) => {
   };
 };
 
-/* Mirrors renderTimelineJumpIndicator() (calendar-timeline-renderer.ts:1004-1025): the arrow
-   button a clipped side gets instead of (or alongside) a bar, pointed at the row's own
-   `--db-timeline-row` lane. */
-const timelineJumpIndicator = (event, direction, isOverEvent) => {
-  const dateKey = direction === "after" ? event.end : event.start;
-  const label = `Jump to ${event.title} on ${dateKey}`;
-  return `
-    <button type="button" class="db-timeline-window-jump is-${direction === "after" ? "after" : "before"}${isOverEvent ? " is-over-event" : ""}"
-      aria-label="${label}" data-note-database-row-path="Subscriptions/${event.title}.md"
-      style="--db-timeline-row: ${event.row}">
-      ${glyph(direction === "after" ? ICON.arrowRight : ICON.arrowLeft)}
-    </button>`;
+const escapeMarkup = (value) => String(value)
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;");
+
+const timelineGanttSvg = (tag, attrs = {}, body = "") => {
+  const attributes = Object.entries(attrs)
+    .map(([name, value]) => " " + name + "=\"" + String(value) + "\"")
+    .join("");
+  return "<" + tag + attributes + ">" + body + "</" + tag + ">";
 };
 
-export const timelineEvent = (event, fixture, laneEvents = [event]) => {
-  const visibility = timelineEventVisibility(event, fixture);
+const timelineGanttBarX = (event, fixture) => {
+  const start = new Date(fixture.start + "T00:00:00Z");
+  const eventStart = new Date(event.start + "T00:00:00Z");
+  return timelineDaysBetween(start, eventStart) * fixture.width;
+};
+
+const timelineGanttBarEndX = (event, fixture) => {
+  const start = new Date(fixture.start + "T00:00:00Z");
+  const eventEnd = new Date(event.end + "T00:00:00Z");
+  return (timelineDaysBetween(start, eventEnd) + 1) * fixture.width;
+};
+
+// laneEvents is a 3rd positional slot some callers rely on to reach rowIndex as the 4th; the
+// milestone-arrow markup this fixture renders derives its link target from the lane data at
+// fixture build time, not here.
+// eslint-disable-next-line no-unused-vars
+export const timelineEvent = (event, fixture, laneEvents = [event], rowIndex = 0) => {
+  const totalWidth = fixture.units * fixture.width;
+  const x = Math.max(0, Math.min(totalWidth, timelineGanttBarX(event, fixture)));
+  const xEnd = Math.max(0, Math.min(totalWidth, timelineGanttBarEndX(event, fixture)));
+  const width = Math.max(8, xEnd - x);
+  const rowY = 56 + rowIndex * 44;
+  const y = rowY + 8;
+  const height = 28;
+  const color = "var(--status-color-fg-" + (event.tone || "blue") + ")";
   const meta = timelineEventMeta(event);
-  const eventPath = `Subscriptions/${event.title}.md`;
-  const eventDetails = [event.title, meta].filter(Boolean).join(" · ");
-  const eventLabel = `Open note: ${eventDetails}`;
-  const milestoneLabelPlacement = timelineMilestoneLabelPlacement(
-    event,
-    laneEvents,
-    fixture.width,
-    fixture.scale === "day" ? "hour" : "day",
-  );
-  const jumpBefore = visibility.isClippedStart ? timelineJumpIndicator(event, "before", visibility.isOverEvent) : "";
-  const jumpAfter = visibility.isClippedEnd ? timelineJumpIndicator(event, "after", visibility.isOverEvent) : "";
-  if (!visibility.bar) return `${jumpBefore}${jumpAfter}`;
-  const { offset, span } = visibility.bar;
-  const geometry =
-    `--db-timeline-row: ${event.row};` +
-    ` --db-timeline-exact-offset: calc(var(--db-timeline-unit-width) * ${offset});` +
-    ` --db-timeline-exact-width: calc(var(--db-timeline-unit-width) * ${span});` +
-    ` ${eventColor(event.tone)}`;
-  const subtask = event.subtask || { depth: 0, visible: true, children: false, collapsed: false, source: "none" };
-  // A relation node exists for every row, so only a row with children or an actual
-  // parent (depth > 0) is a real subtask-tree participant — mirrors the renderer's
-  // hasSubtaskRelation gate rather than styling every event.
-  const hasSubtaskRelation = Boolean(subtask.children || subtask.depth > 0);
-  const classes = [
-    "db-timeline-event",
-    hasSubtaskRelation ? "db-subtask-event" : "",
-    subtask.children ? "has-subtask-children" : "",
-    event.milestone ? "is-milestone" : "",
-    milestoneLabelPlacement === "above" ? "is-label-above" : "",
-    event.progress > 0 ? "is-progressing" : "",
-    visibility.isClippedStart ? "is-clipped-start" : "",
-    visibility.isClippedEnd ? "is-clipped-end" : "",
-  ].filter(Boolean).join(" ");
-  const subtaskToggle = subtask.children
-    ? `<button type="button" class="db-subtask-toggle db-subtask-event-toggle${subtask.collapsed ? " is-collapsed" : ""}" aria-label="${subtask.collapsed ? "Expand subtasks" : "Collapse subtasks"}" aria-expanded="${subtask.collapsed ? "false" : "true"}"><span class="db-collapse-triangle" aria-hidden="true"></span></button>`
-    : "";
-  const subtaskProgress = subtask.progress
-    ? `<span class="db-timeline-subtask-progress" aria-label="${[subtask.progress.summary, subtask.progress.explicit].filter(Boolean).join(" · ")}">${subtask.progress.summary ? `<span class="db-subtask-progress-derived">${subtask.progress.summary}</span>` : ""}${subtask.progress.summary && subtask.progress.explicit ? `<span aria-hidden="true"> · </span>` : ""}${subtask.progress.explicit ? `<span class="db-subtask-progress-explicit">${subtask.progress.explicit}</span>` : ""}</span>`
-    : "";
-  const progress = event.progress > 0
-    ? `<span class="db-timeline-event-progress" style="--db-timeline-progress-width: calc(var(--db-timeline-unit-width) * ${span * event.progress / 100})" aria-hidden="true"></span>`
-    : "";
-  const milestone = event.milestone
-    ? `<span class="db-timeline-milestone-diamond" aria-hidden="true"></span>`
-    : "";
-  return `${jumpBefore}
-    <div class="${classes}" role="group" aria-label="${eventDetails}" title="${eventDetails} · ${eventPath}"
-      data-note-database-row-path="${eventPath}" data-timeline-event-id="${eventPath}"
-      ${hasSubtaskRelation ? `data-subtask-depth="${subtask.depth}" data-subtask-visible="${subtask.visible}" data-subtask-progress-source="${subtask.source}"` : ""}
-      ${event.progress > 0 ? `data-timeline-progress="${event.progress}"` : ""}
-      ${event.milestone ? `data-timeline-milestone="true"` : ""} style="${geometry}${hasSubtaskRelation ? ` --db-subtask-depth: ${subtask.depth};` : ""}">
-      ${milestone}${progress}
-      ${subtaskToggle}
-      <button type="button" class="db-timeline-event-trigger" aria-label="${eventLabel}">
-        <span class="db-timeline-event-content">
-        <span class="db-timeline-event-title">${event.title}</span>
-        <span class="db-timeline-event-meta">${meta}</span>
-        ${subtaskProgress}
-        </span>
-      </button>
-      <button type="button" class="db-timeline-link-dot is-left" aria-keyshortcuts="Enter Space" aria-label="Dependency input: ${event.title}" data-timeline-link-side="left"></button>
-      <button type="button" class="db-timeline-link-dot is-right" aria-keyshortcuts="Enter Space" aria-label="Dependency output: ${event.title}" data-timeline-link-side="right"></button>
-    </div>${jumpAfter}`;
+
+  if (event.milestone) {
+    const cx = Math.max(0, Math.min(totalWidth, x + Math.min(fixture.width, width) / 2));
+    const cy = rowY + 22;
+    const size = 12;
+    const points = [
+      cx + "," + (cy - size),
+      cx + size + "," + cy,
+      cx + "," + (cy + size),
+      cx - size + "," + cy,
+    ].join(" ");
+    return timelineGanttSvg("polygon", {
+      points,
+      fill: color,
+      opacity: 0.8,
+      class: "pm-gantt-milestone",
+      cursor: "pointer",
+    }, timelineGanttSvg("title", {}, "Milestone: " + escapeMarkup(event.title) + " on " + event.start));
+  }
+
+  const children = [];
+  const barAttrs = {
+    x,
+    y,
+    width,
+    height,
+    rx: 7,
+    ry: 7,
+    fill: color,
+    opacity: 0.4,
+    class: "pm-gantt-bar",
+    cursor: "grab",
+  };
+  children.push(timelineGanttSvg("rect", barAttrs, timelineGanttSvg("title", {},
+    escapeMarkup(event.title) + "\n" + escapeMarkup(meta) + "\nProgress: " + (event.progress || 0) + "%")));
+  if (event.progress > 0) {
+    children.push(timelineGanttSvg("rect", {
+      x,
+      y,
+      width: (event.progress / 100) * width,
+      height,
+      rx: 7,
+      ry: 7,
+      fill: color,
+      opacity: 0.9,
+      class: "pm-gantt-bar-progress",
+    }));
+  }
+  if (event.recurrence) {
+    children.push(timelineGanttSvg("text", {
+      x: x + width + 4,
+      y: y + height / 2 + 5,
+      class: "pm-gantt-bar-icon",
+    }, "R"));
+  }
+  if (width > 55) {
+    const maxChars = Math.max(4, Math.floor((width - 16) / 7.5));
+    const label = event.title.length > maxChars ? event.title.slice(0, maxChars - 1) + "\u2026" : event.title;
+    children.push(timelineGanttSvg("text", {
+      x: x + 8,
+      y: y + height / 2 + 5,
+      class: "pm-gantt-bar-label",
+    }, escapeMarkup(label)));
+  }
+  for (const side of ["left", "right"]) {
+    children.push(timelineGanttSvg("rect", {
+      x: side === "left" ? x : x + width - 8,
+      y,
+      width: 8,
+      height,
+      rx: 3,
+      ry: 3,
+      class: "pm-gantt-drag-handle",
+      cursor: "ew-resize",
+    }));
+  }
+  for (const side of ["left", "right"]) {
+    children.push(timelineGanttSvg("circle", {
+      cx: side === "left" ? x - 8 : x + width + 8,
+      cy: y + height / 2,
+      r: 4,
+      class: "pm-gantt-link-dot",
+      cursor: "crosshair",
+    }));
+  }
+  return timelineGanttSvg("g", { class: "pm-gantt-bar-group" }, children.join(""));
 };
 
-const timelineLane = (lane, fixture) => `
-  <div class="db-timeline-group" data-timeline-lane-key="${lane.key}" id="group-section-${lane.key}">
-    <div class="db-timeline-group-header">
-      <div class="db-timeline-group-header-label">
-        <button type="button" class="db-timeline-group-toggle" aria-expanded="true"
-          aria-controls="group-section-${lane.key}" aria-label="Collapse">
-          <span class="db-collapse-triangle"></span>
-        </button>
-        <span class="db-timeline-group-tag status-color-${lane.tone}"
-          style="--db-timeline-group-tag-bg: var(--status-color-bg-${lane.tone}); --db-timeline-group-tag-fg: var(--status-color-fg-${lane.tone})">
-          <span class="db-timeline-group-title">${lane.label}</span>
-          <span class="db-timeline-group-count">${lane.events.length}</span>
-        </span>
-      </div>
-      <div class="db-timeline-group-header-grid"></div>
-    </div>
-    <div class="db-timeline-events" data-timeline-lane-key="${lane.key}"
-      style="--db-timeline-event-rows: ${lane.rows}">
-      ${lane.events.map((event) => timelineEvent(event, fixture, lane.events)).join("")}
-    </div>
-    <div class="db-timeline-create-row">
-      <button type="button" class="db-timeline-create-button"
-        style="--db-timeline-create-offset: 1; --db-timeline-create-span: ${fixture.units}; --db-timeline-create-left: 0px; --db-timeline-create-width: calc(var(--db-timeline-unit-width) * ${fixture.units})">
-        <span class="db-timeline-create-content">
-          <span class="db-timeline-create-icon">${glyph(ICON.plus)}</span>
-          <span class="db-timeline-create-label">New</span>
-        </span>
-      </button>
-    </div>
-  </div>`;
+const timelineGanttRows = (lanes) => [
+  ...lanes.flatMap((lane) => lane.events.map((event) => ({ ...event, laneKey: lane.key }))),
+  { title: "Delta", tone: "slate", empty: true, laneKey: "empty" },
+];
 
-/* Every event carries its actual `start`/`end` date keys, once, and every scale derives its own
-   visibility (bar, jump indicator, or both) from those same two dates through
-   `timelineEventVisibility()` (mirroring the render loop's own clip decision in
-   calendar-timeline-renderer.ts, not the separately-clamped assignEventUnits()) rather than
-   reusing one scale's unit offsets on the other four fixtures' windows. A bar drawn at "Mar 24 –
-   27" now sits at Mar 24-27 on every scale's own date axis, not wherever offset:1 span:4 happens
-   to fall in that scale's unit width — and an event whose dates never reach a given scale's
-   window draws no bar there at all, matching the renderer instead of a clamp that faked one.
-   Adobe CC is a single day (Mar 25) rather than the review-flagged Apr 1-3: a milestone that
-   review found unreachable at day/month/quarter scale under the old clamp, moved to the one date
-   every scale's window actually contains. It shares Notion's row rather than Figma's because
-   Figma's Mar 24-27 span already covers Mar 25. */
+const timelineGanttLabelRow = (event) => {
+  const subtask = event.subtask || {};
+  const rowPath = "Subscriptions/" + event.title + ".md";
+  const leading = subtask.children
+    ? '<div class="tree-item-icon collapse-icon pm-collapse-toggle" aria-label="Collapse">' + glyph(ICON.chevronRight) + "</div>"
+    : '<span class="pm-gantt-label-spacer"></span>';
+  const progress = event.progress > 0
+    ? '<span class="pm-gantt-label-progress">' + Math.round(event.progress) + "%</span>"
+    : "";
+  const title = escapeMarkup(event.title);
+  return '<div class="pm-gantt-label-row" data-task-id="' + rowPath + '" draggable="true" style="height: 44px; padding-left: ' + (subtask.depth ? subtask.depth * 18 + 8 : 8) + 'px">'
+    + leading
+    + '<span class="pm-gantt-label-dot" style="background: var(--status-color-fg-' + (event.tone || "blue") + ')"></span>'
+    + '<span class="pm-gantt-label-title">' + title + "</span>"
+    + progress
+    + '<button type="button" class="clickable-icon pm-icon-btn pm-icon-btn--hover-only" aria-label="Add subtask">' + glyph(ICON.plus) + "</button>"
+    + "</div>";
+};
+
+const timelineGanttRowMarkup = (event, fixture, rowIndex) => {
+  const rowY = 56 + rowIndex * 44;
+  if (event.empty) {
+    return timelineGanttSvg("rect", {
+      x: 0,
+      y: rowY,
+      width: fixture.units * fixture.width,
+      height: 44,
+      fill: "transparent",
+      cursor: "cell",
+      class: "pm-gantt-empty-row-hit",
+    }, timelineGanttSvg("title", {}, "Click to set dates"))
+      + timelineGanttSvg("rect", {
+        x: 0,
+        y: rowY + 8,
+        width: Math.max(fixture.width, 8),
+        height: 28,
+        rx: 7,
+        ry: 7,
+        class: "pm-gantt-empty-row-preview pm-hidden",
+        "pointer-events": "none",
+      });
+  }
+  const hover = timelineGanttSvg("rect", {
+    x: 0,
+    y: rowY,
+    width: fixture.units * fixture.width,
+    height: 44,
+    class: "pm-gantt-row-hover",
+  });
+  return hover + timelineEvent(event, fixture, undefined, rowIndex);
+};
+/* Every event carries its actual start/end date keys once. Each scale converts those dates into
+   the clipped SVG coordinates the Gantt renderer uses, keeping a short bar at the edge when an
+   event extends beyond the mounted range. The milestone stays on the date shared by every
+   scale, while the remaining rows keep their original spans. */
 export const TL_LANES = [
   {
     key: "business",
@@ -691,12 +746,6 @@ export const TL_SUBTASK_LANES = TL_LANES.map((lane) => lane.key !== "business" ?
     { ...lane.events[2], subtask: { depth: 1, visible: true, children: false, collapsed: false, source: "none" } },
   ],
 });
-
-const timelineNav = (icon, label) =>
-  icon
-    ? `<button type="button" class="db-timeline-nav-button is-icon" aria-label="${label}">
-        <span class="db-timeline-nav-icon">${glyph(icon)}</span></button>`
-    : `<button type="button" class="db-timeline-nav-button is-text" aria-label="${label}">${label}</button>`;
 
 export const TIMELINE_FIXTURES = {
   /* These natural windows keep the date arithmetic used by the standalone tick/band mirrors.
@@ -806,10 +855,8 @@ export const timelineTicksForDateRange = (fixture) => {
   return ticks;
 };
 
-/* Every tick carries the same `offset` field the renderer's buildTimelineTicks() computes
-   (dates or hours from the fixture's window start) — that offset, not the tick's position in
-   the array, is what --db-timeline-tick-offset must render, or every scale's header collapses
-   onto the left edge instead of spanning the visible window. */
+/* Every tick carries the same offset the renderer computes from the window start. The SVG header
+   uses that offset to span the visible range rather than placing every label at the left edge. */
 export const timelineTicksFor = (fixture) => {
   if (fixture.scale === "day") {
     // Matches buildTimelineTicks()'s own day branch (calendar-timeline-model.ts:913-931), which
@@ -826,17 +873,18 @@ export const timelineTicksFor = (fixture) => {
   return timelineTicksForDateRange(fixture);
 };
 
-/* Mirrors renderTimelineTickLabel(): the week scale splits "Wed 25" into a weekday span and a
-   date span so the 22px today pill only ever sizes against the date, never the whole label. */
+/* Mirrors the SVG text node used by the Gantt header. */
 export const timelineTickLabel = (tick, scale, isFirstTick = false) => {
-  const anchorStyle = isFirstTick ? ' style="transform: none"' : "";
-  if (scale === "week") {
-    const separator = tick.label.lastIndexOf(" ");
-    if (separator > 0 && separator < tick.label.length - 1) {
-      return `<span class="db-timeline-tick-label"${anchorStyle}><span class="db-timeline-tick-weekday">${tick.label.slice(0, separator)}</span><span class="db-timeline-tick-date">${tick.label.slice(separator + 1)}</span></span>`;
-    }
-  }
-  return `<span class="db-timeline-tick-label"${anchorStyle}><span class="db-timeline-tick-date">${tick.label}</span></span>`;
+  const className = scale === "day"
+    ? "pm-gantt-header-day"
+    : scale === "week"
+      ? "pm-gantt-header-week"
+      : scale === "month"
+        ? "pm-gantt-header-month"
+        : "pm-gantt-header-quarter";
+  const attrs = { class: className };
+  if (isFirstTick) attrs["data-first-tick"] = "true";
+  return timelineGanttSvg("text", attrs, escapeMarkup(tick.label));
 };
 
 /* Bare English month names, matching calendar-title-formatter.ts's own EN_MONTHS (:64-76) exactly
@@ -939,15 +987,9 @@ const timelineTitleParts = (scale, startKey, endKey) => {
       : `${start.getUTCFullYear()} — ${end.getUTCFullYear()}`;
   return { main, year };
 };
-
-/* Mirrors buildTimelineMonthBoundaryBands(input, true) (calendar-title-formatter.ts:150-172) in
-   full — one band per calendar month the window crosses, labelled with the bare month name.
-   Every non-day scale goes through this same real function (buildTimelineAxisBands() only
-   special-cases day, calendar-title-formatter.ts:145-148), so week/month/quarter/year all call
-   this one mirror rather than each carrying its own shortcut. */
 export const timelineMonthBoundaryBands = (startKey, endKey) => {
-  const start = new Date(`${startKey}T00:00:00Z`);
-  const end = new Date(`${endKey}T00:00:00Z`);
+  const start = new Date(startKey + "T00:00:00Z");
+  const end = new Date(endKey + "T00:00:00Z");
   const bands = [];
   let groupStart = start.getUTCDate() === 1
     ? new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1))
@@ -965,6 +1007,206 @@ export const timelineMonthBoundaryBands = (startKey, endKey) => {
   return bands;
 };
 
+const timelineGanttDateX = (fixture, dateKey) => {
+  const offset = timelineDaysBetween(new Date(fixture.start + "T00:00:00Z"), new Date(dateKey + "T00:00:00Z"));
+  return Math.max(0, Math.min(fixture.units * fixture.width, offset * fixture.width));
+};
+
+const timelineGanttYearBands = (fixture) => {
+  const start = new Date(fixture.start + "T00:00:00Z");
+  const end = new Date(fixture.end + "T00:00:00Z");
+  const bands = [];
+  for (let year = start.getUTCFullYear(); year <= end.getUTCFullYear(); year++) {
+    const yearStart = new Date(Date.UTC(year, 0, 1));
+    const nextStart = new Date(Date.UTC(year + 1, 0, 1));
+    const x1 = Math.max(0, timelineDaysBetween(start, yearStart) * fixture.width);
+    const x2 = Math.min(fixture.units * fixture.width, timelineDaysBetween(start, nextStart) * fixture.width);
+    if (x2 <= 0 || x1 >= fixture.units * fixture.width) continue;
+    bands.push({ x: Math.max(0, x1), width: Math.max(0, x2 - x1), label: String(year), year });
+  }
+  return bands;
+};
+
+const timelineGanttMonthSegments = (fixture) => {
+  const start = new Date(fixture.start + "T00:00:00Z");
+  const end = new Date(fixture.end + "T00:00:00Z");
+  const segments = [];
+  let cursor = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
+  while (cursor.getTime() <= end.getTime()) {
+    const next = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 1, 1));
+    const x1 = Math.max(0, timelineDaysBetween(start, cursor) * fixture.width);
+    const x2 = Math.min(fixture.units * fixture.width, timelineDaysBetween(start, next) * fixture.width);
+    if (x2 > 0 && x1 < fixture.units * fixture.width) {
+      segments.push({ x: Math.max(0, x1), width: Math.max(0, x2 - x1), label: TL_MONTH_ABBR[cursor.getUTCMonth()] });
+    }
+    cursor = next;
+  }
+  return segments;
+};
+
+const timelineGanttQuarterSegments = (fixture) => {
+  const start = new Date(fixture.start + "T00:00:00Z");
+  const end = new Date(fixture.end + "T00:00:00Z");
+  const segments = [];
+  let cursor = new Date(Date.UTC(start.getUTCFullYear(), Math.floor(start.getUTCMonth() / 3) * 3, 1));
+  while (cursor.getTime() <= end.getTime()) {
+    const next = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 3, 1));
+    const x1 = Math.max(0, timelineDaysBetween(start, cursor) * fixture.width);
+    const x2 = Math.min(fixture.units * fixture.width, timelineDaysBetween(start, next) * fixture.width);
+    if (x2 > 0 && x1 < fixture.units * fixture.width) {
+      const quarter = Math.floor(cursor.getUTCMonth() / 3) + 1;
+      segments.push({
+        x: Math.max(0, x1),
+        width: Math.max(0, x2 - x1),
+        label: "Q" + quarter + (fixture.scale === "quarter" ? " " + cursor.getUTCFullYear() : ""),
+      });
+    }
+    cursor = next;
+  }
+  return segments;
+};
+
+const timelineGanttWeekNumber = (date) => {
+  const target = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const dayNum = (target.getUTCDay() + 6) % 7;
+  target.setUTCDate(target.getUTCDate() - dayNum + 3);
+  const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+  const firstDay = (firstThursday.getUTCDay() + 6) % 7;
+  firstThursday.setUTCDate(firstThursday.getUTCDate() - firstDay + 3);
+  return 1 + Math.round((target.getTime() - firstThursday.getTime()) / (7 * 86400000));
+};
+
+const timelineGanttHeaderText = (className, x, y, value) =>
+  timelineGanttSvg("text", { x, y, class: className }, escapeMarkup(value));
+
+export const timelineGanttHeader = (fixture) => {
+  const totalWidth = fixture.units * fixture.width;
+  const children = [
+    timelineGanttSvg("rect", { x: 0, y: 0, width: totalWidth, height: 56, class: "pm-gantt-header-bg" }),
+  ];
+  const bands = fixture.scale === "day" || fixture.scale === "week"
+    ? timelineAxisBands(fixture).map((band) => ({
+      x: band.offset * fixture.width,
+      width: band.span * fixture.width,
+      label: band.label,
+      year: new Date(fixture.start + "T00:00:00Z").getUTCFullYear(),
+    }))
+    : timelineGanttYearBands(fixture);
+  bands.forEach((band, index) => {
+    children.push(timelineGanttSvg("rect", {
+      x: band.x,
+      y: 0,
+      width: band.width,
+      height: 24,
+      class: index % 2 === 0 ? "pm-gantt-band-even" : "pm-gantt-band-odd",
+    }));
+    children.push(timelineGanttHeaderText(
+      fixture.scale === "day" || fixture.scale === "week" ? "pm-gantt-header-month-top" : "pm-gantt-header-year",
+      band.x + 6,
+      18,
+      fixture.scale === "day" || fixture.scale === "week"
+        ? TL_MONTH_ABBR[new Date(fixture.start + "T00:00:00Z").getUTCMonth()] + " " + String(band.year).slice(-2)
+        : band.label,
+    ));
+  });
+
+  if (fixture.scale === "day") {
+    timelineTicksFor(fixture).forEach((tick, index) => {
+      const key = timelineDateKey(fixture.start, Math.floor((fixture.startMinutes || 0) / 1440) + Math.floor(index / 24));
+      if (timelineWeekend(key)) {
+        children.push(timelineGanttSvg("rect", {
+          x: index * fixture.width,
+          y: 24,
+          width: fixture.width,
+          height: 32,
+          class: "pm-gantt-weekend-header",
+        }));
+      }
+      children.push(timelineGanttHeaderText("pm-gantt-header-day", index * fixture.width + fixture.width / 2, 42, tick.label));
+    });
+  } else if (fixture.scale === "week") {
+    const start = new Date(fixture.start + "T00:00:00Z");
+    const dow = start.getUTCDay() === 0 ? 7 : start.getUTCDay();
+    const firstWeek = dow === 1 ? 0 : 8 - dow;
+    if (firstWeek > 0) {
+      children.push(timelineGanttHeaderText("pm-gantt-header-week", firstWeek * fixture.width / 2, 44, "W" + timelineGanttWeekNumber(start)));
+    }
+    for (let i = firstWeek; i < fixture.units; i += 7) {
+      const date = new Date(start);
+      date.setUTCDate(date.getUTCDate() + i);
+      const width = Math.min(7, fixture.units - i) * fixture.width;
+      children.push(timelineGanttHeaderText("pm-gantt-header-week", i * fixture.width + width / 2, 44, "W" + timelineGanttWeekNumber(date)));
+      children.push(timelineGanttSvg("line", {
+        x1: i * fixture.width,
+        y1: 24,
+        x2: i * fixture.width,
+        y2: 56,
+        class: "pm-gantt-header-tick",
+      }));
+    }
+  } else if (fixture.scale === "month") {
+    for (const segment of timelineGanttMonthSegments(fixture)) {
+      children.push(timelineGanttHeaderText("pm-gantt-header-month", segment.x + segment.width / 2, 44, segment.label));
+      children.push(timelineGanttSvg("line", { x1: segment.x, y1: 24, x2: segment.x, y2: 56, class: "pm-gantt-header-tick" }));
+    }
+  } else {
+    for (const segment of timelineGanttQuarterSegments(fixture)) {
+      children.push(timelineGanttHeaderText("pm-gantt-header-quarter", segment.x + segment.width / 2, 44, segment.label));
+      if (fixture.scale === "year") {
+        children.push(timelineGanttSvg("line", { x1: segment.x, y1: 24, x2: segment.x, y2: 56, class: "pm-gantt-header-tick" }));
+      }
+    }
+  }
+  return timelineGanttSvg("g", { class: "pm-gantt-header" }, children.join(""));
+};
+
+export const timelineGanttGrid = (fixture, totalRows) => {
+  const totalWidth = fixture.units * fixture.width;
+  const totalHeight = 56 + totalRows * 44;
+  const children = [];
+  for (let index = 0; index < fixture.units; index++) {
+    const key = fixture.scale === "day"
+      ? timelineDateKey(fixture.start, Math.floor(((fixture.startMinutes || 0) + index * 60) / 1440))
+      : timelineDateKey(fixture.start, index);
+    const date = new Date(key + "T00:00:00Z");
+    if (fixture.scale === "day" && timelineWeekend(key)) {
+      children.push(timelineGanttSvg("rect", {
+        x: index * fixture.width,
+        y: 56,
+        width: fixture.width,
+        height: totalHeight - 56,
+        class: "pm-gantt-weekend",
+      }));
+    }
+    const boundary = fixture.scale === "day"
+      ? date.getUTCDay() === 1
+      : fixture.scale === "week"
+        ? date.getUTCDay() === 1
+        : fixture.scale === "month"
+          ? date.getUTCDate() === 1
+          : date.getUTCDate() === 1 && date.getUTCMonth() % 3 === 0;
+    if (boundary) {
+      children.push(timelineGanttSvg("line", {
+        x1: index * fixture.width,
+        y1: 56,
+        x2: index * fixture.width,
+        y2: totalHeight,
+        class: "pm-gantt-gridline-v",
+      }));
+    }
+  }
+  for (let row = 0; row <= totalRows; row++) {
+    const y = 56 + row * 44;
+    children.push(timelineGanttSvg("line", {
+      x1: 0,
+      y1: y,
+      x2: totalWidth,
+      y2: y,
+      class: "pm-gantt-gridline-h",
+    }));
+  }
+  return timelineGanttSvg("g", { class: "pm-gantt-grid" }, children.join(""));
+};
 const timelinePositiveModulo = (value, modulus) => ((value % modulus) + modulus) % modulus;
 
 /* Mirrors buildTimelineDayBoundaryBands() (calendar-title-formatter.ts:174-193): day scale bands
@@ -1000,21 +1242,6 @@ export const timelineAxisBands = (fixture) => {
   return timelineMonthBoundaryBands(fixture.start, timelineDateKey(fixture.start, fixture.units - 1));
 };
 
-/* Mirrors renderTimelineGridColumns() (calendar-timeline-renderer.ts): every hour column shares
-   the fixture's single day, so date equality alone would mark all twelve is-today at once and
-   the highlight would say nothing. Only the column standing in for the pinned "now" hour (13:00)
-   carries it; the rest still get their weekend/date bookkeeping from the real date offset. */
-const timelineGridColumns = (fixture) => Array.from({ length: fixture.units }, (_, index) => {
-  const key = timelineDateKey(fixture.start, fixture.scale === "day" ? 0 : index);
-  const isCurrentHourColumn = fixture.scale === "day" && (fixture.startMinutes ?? TL_DAY_START_MINUTES) / 60 + index === 13;
-  const modifiers = [
-    timelineWeekend(key) ? "is-weekend" : "",
-    fixture.scale === "day" ? (isCurrentHourColumn ? "is-today" : "") : (key === "2026-03-25" ? "is-today" : ""),
-  ].filter(Boolean).join(" ");
-  return `<span class="db-timeline-grid-column ${modifiers}" data-date-key="${key}"
-    style="--db-timeline-grid-column-offset: ${index}; --db-timeline-grid-column-span: 1"></span>`;
-}).join("");
-
 /* Desktop/mobile widths the capture harness actually opens the page at (tools/screenshots/
    capture.mjs's own DEVICES table, :88-91) — the closest available proxy for the "container"
    getTimelineViewportUnitCount() measures (calendar-timeline-renderer.ts:2419-2426), since a
@@ -1033,17 +1260,9 @@ export const timelineResolveUnitWidth = (scale, viewportWidth) => {
   return baseWidth;
 };
 
-/* .note-database-container's own padding: `padding: 0 var(--db-space-8) var(--db-space-8)`
-   (styles.css:809), and --db-space-8 is 24px (styles.css:52) — left and right are both the one
-   `var(--db-space-8)` value, 24px each. getTimelineViewportUnitCount() (calendar-timeline-
-   renderer.ts:2419-2426) measures the outer container's own rect width, then
-   getTimelineViewportContentWidth() (calendar-timeline-model.ts:245-250) subtracts exactly this
-   padding — never the sticky group-label column. That column (--db-timeline-group-width, 160px
-   here, set by fitTimelineGroupHeaderWidth() :877-896 flooring at 160 since "Business 3"/
-   "Personal 2" never need more) overlays the day grid rather than shrinking the measured
-   container, so production's own unit count is never reduced by it: the label sits on top of
-   however many columns its 160px happens to cover, occluding them rather than the grid never
-   drawing them. */
+/* The capture harness opens the outer surface at a fixed device width. Its 24px side padding
+   matches the shipped container rhythm, so the fixture uses the same content width when it
+   derives the number of visible columns. */
 const TL_CONTAINER_PADDING_PX = 24;
 
 /* Mirrors getTimelineViewportContentWidth() (calendar-timeline-model.ts:245-250) exactly: the
@@ -1078,69 +1297,112 @@ export const timelineDynamicFixture = (scale, device) => {
 
 const timelineScaleScenario = (scale, overrides = {}) => {
   const lanes = overrides.lanes || TL_LANES;
-  const renderBody = (fixture, ticks, todayOffset) => {
-    const title = [fixture.title, fixture.titleYear].filter(Boolean).join(" ");
-    return `
-      <div class="note-database-container db-view-timeline">
-        <div class="db-timeline is-scale-${fixture.scale} is-slot-${fixture.slot}"
-          data-timeline-scale="${fixture.scale}" data-timeline-unit="${fixture.scale === "day" ? "hour" : "day"}"
-          style="--db-timeline-units: ${fixture.units}; --db-timeline-unit-width: ${fixture.width}px; --db-timeline-group-width: 160px">
-          <div class="db-timeline-header">
-            <div class="db-timeline-title" title="${title}" aria-label="${title}">
-              <span class="db-timeline-title-main">${fixture.title}</span>
-              ${fixture.titleYear ? `<span class="db-timeline-title-year">${fixture.titleYear}</span>` : ""}
-            </div>
-            <div class="db-timeline-controls">
-              <div class="db-timeline-scale-control" role="group" aria-label="Timeline scale">
-                <div class="db-timeline-scale-segment">
-                  ${Object.values(TIMELINE_FIXTURES).map((option) => `
-                    <button type="button" class="db-timeline-scale-button ${option.scale === fixture.scale ? "is-active" : ""}"
-                      data-timeline-scale="${option.scale}" aria-label="${option.label}" aria-pressed="${option.scale === fixture.scale ? "true" : "false"}">${option.label}</button>`).join("")}
-                </div>
-                <button type="button" class="db-timeline-scale-menu db-timeline-nav-button is-text" aria-haspopup="listbox">
-                  <span class="db-timeline-scale-menu-label">${fixture.label}</span>
-                  <span class="db-timeline-nav-icon db-timeline-scale-menu-chevron">${glyph(ICON.chevronDown)}</span>
-                </button>
-              </div>
-              ${timelineNav(ICON.chevronsLeft, "Previous window")}
-              ${timelineNav(ICON.chevronLeft, "Previous column")}
-              ${timelineNav(null, "Today")}
-              ${timelineNav(ICON.chevronRight, "Next column")}
-              ${timelineNav(ICON.chevronsRight, "Next window")}
-              ${timelineNav(ICON.calendarDays, "Pick a date")}
-            </div>
-          </div>
-          <div class="db-timeline-scroll">
-            <div class="db-timeline-axis">
-              <div class="db-timeline-ticks-band">
-                ${timelineAxisBands(fixture).map((band) => `
-                  <div class="db-timeline-band-item"
-                    style="--db-timeline-band-start: ${band.offset + 1}; --db-timeline-band-span: ${band.span}">${band.label}</div>`).join("")}
-              </div>
-              <div class="db-timeline-ticks">
-                ${ticks.map((tick) => {
-                  /* isCurrentTimelineTick()/isCurrentTimelineDateTick(): the day scale marks the one
-                     hour tick matching "now" (13:00) as is-current-time-tick and never applies
-                     is-current-date-tick (every hour shares the same date); every other scale marks
-                     the single tick whose date is today's as is-current-date-tick. */
-                  const isCurrentTimeTick = fixture.scale === "day" && tick.label === "13";
-                  const isCurrentDateTick = fixture.scale !== "day" && tick.key === "2026-03-25";
-                  return `
-                  <div class="db-timeline-tick ${tick.boundary ? "is-scale-boundary" : ""} ${timelineWeekend(tick.key) ? "is-weekend" : ""} ${isCurrentTimeTick ? "is-current-time-tick" : ""} ${isCurrentDateTick ? "is-current-date-tick" : ""}"
-                    title="${tick.key}" data-date-key="${tick.key}" data-timeline-boundary="${tick.boundary ? "true" : "false"}" style="--db-timeline-tick-offset: ${tick.offset + 1}">
-                    ${timelineTickLabel(tick, fixture.scale, tick.offset === 0)}
-                  </div>`;
-                }).join("")}
-              </div>
-            </div>
-            <div class="db-timeline-body" style="--db-timeline-today-offset-units: ${todayOffset}; --db-timeline-today-offset-px: ${(todayOffset * fixture.width).toFixed(2)}px">
-              <div class="db-timeline-grid-columns" aria-hidden="true">${timelineGridColumns(fixture)}</div>
-              ${lanes.map((lane) => timelineLane(lane, fixture)).join("")}
-              <div class="db-timeline-today-line" title="2026-03-25"></div>
-            </div>
-          </div>
-        </div>
-      </div>`;
+  const renderBody = (fixture, _ticks, todayOffset) => {
+    const rows = timelineGanttRows(lanes);
+    const totalWidth = fixture.units * fixture.width;
+    const totalRows = rows.length;
+    const svgHeight = 56 + (totalRows + 1) * 44;
+    const controls = [
+      '<div class="pm-gantt-controls">',
+      '<div class="pm-segmented">',
+      Object.values(TIMELINE_FIXTURES).map((option) => '<button type="button" class="clickable-icon'
+        + (option.scale === fixture.scale ? ' mod-cta' : "") + '">' + option.label + "</button>").join(""),
+      "</div>",
+      '<span class="pm-gantt-sep"></span>',
+      '<button type="button" class="clickable-icon">Today</button>',
+      '<button type="button" class="clickable-icon">Expand all</button>',
+      '<button type="button" class="clickable-icon">Collapse all</button>',
+      "</div>",
+    ].join("");
+
+    const todayX = Math.max(0, Math.min(totalWidth, todayOffset * fixture.width));
+    const headerExtras = [];
+    if (todayOffset >= 0 && todayOffset <= fixture.units) {
+      headerExtras.push(timelineGanttSvg("polygon", {
+        points: todayX + ",40 " + (todayX + 6) + ",48 " + todayX + ",56 " + (todayX - 6) + ",48",
+        class: "pm-gantt-today-diamond",
+      }));
+    }
+    const milestoneIndex = rows.findIndex((row) => row.milestone);
+    const milestone = milestoneIndex >= 0 ? rows[milestoneIndex] : null;
+    const milestoneX = milestone ? timelineGanttDateX(fixture, milestone.start) + fixture.width / 2 : 0;
+    if (milestone) {
+      headerExtras.push(timelineGanttSvg("text", {
+        x: milestoneX,
+        y: 14,
+        "text-anchor": "middle",
+        class: "pm-gantt-milestone-label",
+        fill: "var(--status-color-fg-" + milestone.tone + ")",
+      }, escapeMarkup(milestone.title)));
+    }
+
+    const regularRows = rows.filter((row) => !row.empty);
+    const arrow = regularRows.length >= 3
+      ? timelineGanttSvg("path", {
+        d: "M " + timelineGanttBarEndX(regularRows[0], fixture) + " 78 C "
+          + ((timelineGanttBarEndX(regularRows[0], fixture) + timelineGanttBarX(regularRows[2], fixture)) / 2)
+          + " 78, "
+          + ((timelineGanttBarEndX(regularRows[0], fixture) + timelineGanttBarX(regularRows[2], fixture)) / 2)
+          + " 166, " + timelineGanttBarX(regularRows[2], fixture) + " 166",
+        class: "pm-gantt-arrow",
+        "marker-end": "url(#pm-arrowhead)",
+      })
+      : "";
+    const milestoneLine = milestone
+      ? timelineGanttSvg("line", {
+        x1: milestoneX,
+        y1: 56,
+        x2: milestoneX,
+        y2: 56 + totalRows * 44,
+        stroke: "var(--status-color-fg-" + milestone.tone + ")",
+        "stroke-width": 1,
+        "stroke-dasharray": "4 4",
+        opacity: 0.4,
+      })
+      : "";
+
+    return [
+      '<div class="note-database-container">',
+      '<div class="pm-gantt-view">',
+      controls,
+      '<div class="pm-gantt-wrapper">',
+      '<div class="pm-gantt-left" style="width: 280px; min-width: 280px">',
+      '<div class="pm-gantt-left-header" style="height: 56px"><span class="pm-gantt-left-header-label">Task</span></div>',
+      '<div class="pm-gantt-left-body">',
+      rows.map((row) => timelineGanttLabelRow(row)).join(""),
+      '<div class="pm-gantt-label-row pm-gantt-add-row" style="height: 44px"><button type="button" class="pm-prop-add"><span class="pm-glyph-icon">'
+        + glyph(ICON.plus) + '</span><span class="pm-prop-add-label">Add task</span></button></div>',
+      '<div class="pm-no-shrink"></div>',
+      "</div>",
+      "</div>",
+      '<div class="pm-gantt-resize-handle"></div>',
+      '<div class="pm-gantt-right">',
+      '<div class="pm-gantt-header-sticky" style="width: ' + totalWidth + 'px; height: 56px"><svg width="'
+        + totalWidth + '" height="56" class="pm-gantt-header-svg">'
+        + timelineGanttHeader(fixture) + headerExtras.join("") + "</svg></div>",
+      '<div class="pm-gantt-svg-container" style="width: ' + totalWidth + 'px; margin-top: -56px">',
+      '<svg width="' + totalWidth + '" height="' + svgHeight + '" class="pm-gantt-svg">',
+      '<defs><marker id="pm-arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">'
+        + '<path d="M0,0 L0,6 L8,3 z" class="pm-gantt-arrowhead"></path></marker></defs>',
+      timelineGanttGrid(fixture, totalRows),
+      timelineGanttSvg("line", {
+        x1: todayX,
+        y1: 48,
+        x2: todayX,
+        y2: svgHeight,
+        class: "pm-gantt-today-line",
+      }),
+      '<g class="pm-gantt-bars">',
+      rows.map((row, index) => timelineGanttRowMarkup(row, fixture, index)).join(""),
+      "</g>",
+      '<g class="pm-gantt-arrows">' + arrow + "</g>",
+      '<g class="pm-gantt-milestone-labels">' + milestoneLine + "</g>",
+      "</svg>",
+      "</div>",
+      "</div>",
+      "</div>",
+      "</div>",
+    ].join("");
   };
   const label = TIMELINE_FIXTURES[scale].label;
   return {
