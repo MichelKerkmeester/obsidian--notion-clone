@@ -87,6 +87,25 @@ describe("OverlayStack", () => {
     expect(stack.size()).toBe(1);
   });
 
+  it("decides inside-or-outside at pointerdown, and never at click", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    stack.register({ panel: createElement(doc), close: () => undefined });
+
+    // A tap on a touch device produces its click on a delay, and by the time it arrives the node the
+    // finger went down on may have been replaced by a rebuild the tap itself caused. A dismissal
+    // decided then tests a target that is no longer anywhere, reads a press that began inside the
+    // surface as outside, and closes it mid-edit. Deciding at pointerdown tests the target while it
+    // is still the one under the finger.
+    //
+    // Asserted as the absence of a listener rather than as a behaviour, because that is the whole
+    // guarantee: there is no click path to get wrong, and this is what stops one being added.
+    expect(doc.listeners.has("pointerdown")).toBe(true);
+    expect(doc.listeners.has("click")).toBe(false);
+    expect(doc.listeners.has("mouseup")).toBe(false);
+    expect(doc.listeners.has("touchend")).toBe(false);
+  });
+
   it("does not restore focus when an action intentionally moves focus", () => {
     const stack = new OverlayStack();
     const doc = createDocument();
