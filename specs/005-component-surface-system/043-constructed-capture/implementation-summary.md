@@ -598,6 +598,12 @@ Every exit code below was read from `$?` directly.
    phase's reference captures; this packet did not create that content. Every `screenshots/...`
    path cited above this note, and everywhere else in this packet's docs, predates the move and
    resolves by prefixing `notion-clone/` after `screenshots/`.
+   **Landed, 2026-09-05.** The split rebased onto `origin/main` (0.0.21, `5af7eef7`) and reconciled
+   as `7d95a882`+`aa049b45`+`933308a5`. Both roots now exist on main: `screenshots/notion-clone/`
+   (534 PNGs, this program's own fixtures and constructed renders) and
+   `screenshots/project-manager/` (16 PNGs, landed separately as `295401ad`/`04814e24`, left
+   untouched by this reconciliation). All 550 final entries verified byte-identical to main's prior
+   blob for that path — paths moved, no pixel did.
 <!-- /ANCHOR:limitations -->
 
 ---
