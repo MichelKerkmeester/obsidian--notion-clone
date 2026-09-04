@@ -11,25 +11,25 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T07:30:00Z"
-    last_updated_by: "board-1to1-amendment"
-    recent_action: "Recorded the operator's 1:1 board copy directive as a next leg"
-    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
+    last_updated_at: "2026-09-04T08:20:00Z"
+    last_updated_by: "board-1to1-t12-fresh-verify"
+    recent_action: "T12 fresh-verify: fixed T10 drag/drop group-update gap, re-armed harness control"
+    next_safe_action: "Dispatch cli-codex T11: copy kanban.css into styles.css, rewrite board fixtures"
     blockers:
-      - "Not operator-confirmed: release 1.4.5 has not been cut yet"
-      - "Hover, drag, drop-target and the empty-column slot are coded but depicted by no fixture"
-      - "2026-09-04: operator judged the landed legs not a close-enough copy; REQ-007's 1:1 leg pair has not started"
+      - "Not operator-confirmed: release has not been cut for this leg yet"
+      - "T11 (CSS leg) has not run: the default board renders the reference structure unstyled; visual-language/density/column-width comparison is not possible until it lands"
+      - "T8 (operator device confirmation) is the only row that closes the packet"
     key_files:
       - "src/views/board-renderer.ts"
-      - "src/views/board-renderer-hierarchy.test.ts"
+      - "src/views/board-renderer-parity.test.ts"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/lane/css-lane.json"
       - "styles.css"
-      - "tools/screenshots/scenarios/shared.mjs"
-      - "tools/screenshots/scenarios/shared.test.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "038-board-kanban-port"
       parent_session_id: null
-    completion_pct: 33
+    completion_pct: 42
     open_questions: []
     answered_questions:
       - "Card identity stays RowData.file.path throughout: no hunk in either landed commit touches drag/drop, WIP/visible-count, swimlane, summary, conditional-formatting or touch-mode identifiers (confirmed by re-reading both diffs' added lines)."
@@ -48,9 +48,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 038-board-kanban-port |
-| **Completed** | 2026-09-03 (both legs landed on `main`; not operator-confirmed) |
+| **Completed** | Not yet — REQ-007's 1:1 leg pair is in progress: T9/T10 (structure/class port) and this session's T12 fresh-verify pass have landed; T11 (CSS leg) and T8 (operator confirmation) are open |
 | **Level** | 2 |
-| **Completion** | 40% — average of `tasks.md`'s 3/8 rows closed (T5-T7, 37.5%, unchanged this pass) and `goal.md`'s 3/7 non-operator criteria met (card-hierarchy match, negative control, hover/drag/drop-target/empty-column, each with a recorded red value, 42.9%). Gate and `validate.sh --strict` are true today (see Verification) but stay unticked in `goal.md` — neither has a pre-existing red on record for this packet, and this program's `scan-failing-values` check requires one for every newly ticked `goal.md` row; they are ticked in `tasks.md` (T7), which carries no such requirement. T1-T4 and the two remaining `goal.md` criteria (local extensions, drag-drop matrix) stay open because no pre-rewrite baseline was ever captured for them. |
+| **Completion** | `tasks.md` 5/12 rows closed (T5-T7, T9-T10, 42%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md` (unchanged this pass); the amendment's own 1:1-copy criterion is now partially evidenced — structure/class vocabulary confirmed by a fresh T12 session (this pass), visual-language/density/column-width comparison still blocked on T11. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug this session found in T10's port and fixed. |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -267,6 +267,71 @@ and a meta grid.
 
 No implementation has landed for this leg yet; this section documents the amendment and its plan
 only.
+
+**2026-09-04, T10 landed + T12 fresh-verified (this session).** `cli-devin`'s T10 leg ported
+`KanbanView`/`KanbanColumn`/`KanbanCard`'s DOM structure and class vocabulary onto
+`board-renderer.ts`'s default (no-setting) render path — `pm-kanban-view`/`pm-kanban-board`/
+`pm-kanban-col`/`pm-kanban-cards`/`pm-kanban-card`, verbatim helpers (`getReferenceDragAfterElement`,
+`stringToColor`) under an MIT notice, and local extensions moved behind a new default-off
+`ViewConfig.boardExtensionsEnabled`. T9's parity test (18 tests) ran red 18/18 against the
+pre-port renderer, green 18/18 after.
+
+This session is the T12 fresh in-runtime verifier — a session that ran neither T10 nor T11 — and
+found one P0 correctness gap in the landed port: the card's dragstart handler wrote `CARD_MIME`
+but never `CARD_FROM_GROUP_MIME`, so every real drag's `fromGroup` read back `undefined`. Because
+`isSameBoardGroup(undefined, groupKey)` is false for any real (non-empty) group, every drop —
+same-column included — was misclassified as cross-group, and because `moveCardAndOrder`'s own
+`fromGroup != null` guard was also false, `groupUpdates` stayed empty and
+`moveRowWithGroupUpdatesAndPosition` was never invoked. Net effect: a real cross-column drag
+never actually moved the card's status field (only its position), and a real same-column drag
+spuriously reordered the row to the end of its group. This was invisible to the existing test
+suite because its two drop-transaction tests build a synthetic `dropEvent(path, fromGroup)` that
+injects `fromGroup` directly into the drop event, bypassing the dragstart handler that a real
+browser drag actually depends on. Reproduced with a real dragstart-then-drop cycle on one shared
+`DataTransfer` double (two new tests in `board-renderer-parity.test.ts`), fixed with a one-line
+addition (`event.dataTransfer?.setData(CARD_FROM_GROUP_MIME, group.key)` beside the existing
+`CARD_MIME` write, `board-renderer.ts:415`), and both new tests plus the full 20-test parity suite
+now pass. Full detail under `tasks.md` T10/T12.
+
+This session also found the `board/file-view`/`board/embed` render-assertion harness's armed
+negative control (`RENDER_READ_CONTROL=per-item`) had gone silently inert against the new default
+render path: its seam wraps `applyConditionalFormat`, a local-extension-only call the reference
+card path never reaches (conditional formatting is itself one of the extensions REQ-007 gates
+off by default), so the armed run read 1 layout read — the same as disarmed — instead of
+reddening. `tools/live/render-assertion-harness.ts` gained a second, board-specific seam
+(`armBoardReferenceCardRead`, wrapping `getColumns`, the one bag member the reference card path
+does call once per card) so the control is meaningful again; armed reads now go red at 1601
+against the bound of 8, the same number the control produced before the port. The harness's
+`boardAssertions` structural probe was also repointed from `.db-board-card`/`.db-board-column` to
+`.pm-kanban-card`/`.pm-kanban-col`, since the default board no longer emits the former.
+
+Screenshots were recaptured (detached, two full runs — the first discarded after a scratch
+manifest-formatting mistake). The 4 `constructed-board-*` captures (the production `BoardRenderer`
+mounted through the harness, not a hand-written fixture) changed content and were opened and read
+in both themes and both device widths: the board now paints as unstyled, top-to-bottom flowing
+plain text — group labels in their inline status color, then each card's title, `Sub` chip text,
+hours, and due date, with no column layout, no card boundary, and no chip styling, because no
+stylesheet rule yet targets the `pm-kanban-*` classes. This is the expected shape until T11 lands
+the CSS, not a regression. The 5 hand-written board fixture captures (`board-view`,
+`board-subtask-tree`, `board-empty-column`, `board-drop-language`, `board-mobile`) were confirmed
+byte-and-pixel-unchanged — they still depict the old `db-board-*` markup by design, per this
+leg's explicit instruction not to touch them; that rewrite belongs to T11. 13 further captures
+moved bytes only (pre-existing PNG-encoder nondeterminism across a full recapture, not content
+changes) and were restored to their committed bytes; `screenshots/manifest.json`'s stale `bytes`
+fields for those 13 were corrected to match. A new release entry was appended to
+`tools/lane/css-lane.json` naming the 4 real content changes (no stylesheet edit — `baselineHash`
+unchanged); `check-lane` exits 0. `node tools/live/evidence.mjs --check-all` found
+`capture-device-parity.json` stale against the new manifest hash, re-ran
+`tools/live/capture-device-parity.mjs` (PASS), then 16/16 fresh. Full verification this session:
+`tsc --noEmit` 0; `npx vitest run` 981/981 (98 files, includes the 2 new drag/drop regression
+tests); `npm run lint` 172 problems (159 errors, 13 warnings), unchanged from the pre-session
+baseline — `board-renderer.ts` still carries its 5 pre-existing problems, the parity test file 0;
+`scan-comments` PASS; `npm run gate` 25 green / 0 red, exit 0 read directly (not through a pipe).
+
+**Not closed by this session:** T11 (the `cli-codex` CSS leg) has not run, so the
+visual-language/density/column-width half of T12's evidence bar has no styled capture to compare
+against the reference yet — only the structural/class half is verified. T8 (operator device
+confirmation) remains the only row that can close the packet.
 <!-- /ANCHOR:next-leg -->
 
 ---

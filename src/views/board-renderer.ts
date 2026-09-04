@@ -115,6 +115,12 @@ export interface BoardRendererActions {
   isSubtaskCollapsed?(row: RowData): boolean | undefined;
   toggleSubtaskCollapsed?(row: RowData, collapsed: boolean): void | Promise<void>;
   getSelectedRows?(): RowData[];
+  /** Lazy description source for the reference card layout: called after render,
+   *  never during it, and the board re-renders once a body arrives. Absent in
+   *  hosts that keep descriptions out of the row pipeline, which leaves the
+   *  description slot empty — the same shape as the reference view's optional
+   *  preview setting. */
+  loadRowDescription?(row: RowData): Promise<string | undefined>;
   updateColumnWidth(width: number): void;
   isRowSelected(row: RowData): boolean;
   toggleRowSelected(row: RowData, selected: boolean, event?: MouseEvent): void;
@@ -188,6 +194,14 @@ export class BoardRenderer {
    * which is the width the touch threshold was written about.
    */
   private touchMode = false;
+  /** Local extensions (swimlanes, covers, WIP counts, summaries, batch order,
+   *  touch menus, group controls) render only when the view opts in; the default
+   *  layout is the one-to-one kanban copy, which has none of them. */
+  private boardExtensions = false;
+  /** Bodies hydrated lazily after the first render, keyed by row path. */
+  private hydratedDescriptions = new Map<string, string>();
+  /** Render arguments replayed once when a lazy description load lands. */
+  private referenceRenderArgs?: { container: HTMLElement; config: ViewConfig; groups: BoardGroup[]; groupField: string };
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
@@ -204,6 +218,11 @@ export class BoardRenderer {
     this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
     groups = groups.filter((group) => !hiddenGroups.has(group.key));
+    this.boardExtensions = config.boardExtensionsEnabled === true;
+    if (!this.boardExtensions) {
+      this.renderReferenceBoard(container, config, groups, groupField);
+      return;
+    }
     const board = container.createDiv({ cls: "db-board", attr: { role: "grid" } });
     // 缓存当前看板与分组元数据，供拖拽期间实时列命中（方案 A/B）复用。
     this.boardEl = board;
@@ -264,6 +283,350 @@ export class BoardRenderer {
       if (derived.length > 0) columnIndices = derived;
     }
     syncCardRoving(board, this.rovingController, ".db-board-card", columnIndices);
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // 4b. REFERENCE KANBAN LAYOUT (default)
+  // ───────────────────────────────────────────────────────────────────
+  //
+  // The default board reproduces obsidian-pm's kanban one-to-one: the same
+  // element tree and class vocabulary as its KanbanView / KanbanColumn /
+  // KanbanCard output, mapped to RowData. The local extensions above render
+  // only when the view opts in (boardExtensionsEnabled), so the default view
+  // is indistinguishable from the reference apart from data.
+
+  private renderReferenceBoard(
+    container: HTMLElement,
+    config: ViewConfig,
+    groups: BoardGroup[],
+    groupField: string,
+  ): void {
+    this.referenceRenderArgs = { container, config, groups, groupField };
+    container.addClass("pm-kanban-view");
+    const board = container.createDiv({ cls: "pm-kanban-board" });
+    const rows: RowData[] = [];
+    for (const group of groups) {
+      this.renderReferenceColumn(board, config, group, groupField, rows);
+    }
+    void this.hydrateReferenceDescriptions(rows);
+  }
+
+  private renderReferenceColumn(
+    board: HTMLElement,
+    config: ViewConfig,
+    group: BoardGroup,
+    groupField: string,
+    allRows: RowData[],
+  ): void {
+    const color = this.getReferenceGroupColor(config, groupField, group.key);
+    const visibleRows = this.getVisibleSubtaskRows(group.rows);
+    allRows.push(...visibleRows);
+
+    const col = board.createDiv({ cls: "pm-kanban-col", attr: { "data-status": group.key } });
+    const header = col.createDiv({ cls: "pm-kanban-col-header" });
+    if (color) header.style.setProperty("--col-color", color);
+    const topBar = header.createDiv({ cls: "pm-kanban-col-topbar" });
+    if (color) topBar.setCssStyles({ background: color });
+    const titleRow = header.createDiv({ cls: "pm-kanban-col-title-row" });
+    const badge = titleRow.createSpan({ cls: "pm-kanban-col-badge" });
+    badge.setText(formatGroupKeyDisplay(config, groupField, group.key));
+    if (color) badge.style.color = color;
+    const headerRight = titleRow.createDiv({ cls: "pm-kanban-col-header-right" });
+    headerRight.createSpan({ cls: "pm-kanban-col-count", text: String(visibleRows.length) });
+
+    const cardsEl = col.createDiv({ cls: "pm-kanban-cards", attr: { "data-status": group.key } });
+    this.attachReferenceDropHandlers(cardsEl, group, groupField);
+    for (const row of visibleRows) {
+      this.renderReferenceCard(cardsEl, config, group, row, groupField);
+    }
+  }
+
+  /** Drag language copied from the reference column: a tint on the cards
+   *  container, a live before/after preview while dragging, and a drop that
+   *  resolves through the local path-keyed transaction (status once, then the
+   *  host refreshes) instead of the reference's bare task id. */
+  private attachReferenceDropHandlers(cardsEl: HTMLElement, group: BoardGroup, groupField: string): void {
+    cardsEl.addEventListener("dragover", (event) => {
+      if (this.actions.isReadOnly) return;
+      if (!this.isCardDrag(event)) return;
+      event.preventDefault();
+      cardsEl.addClass("pm-kanban-drop-target");
+      const afterEl = getReferenceDragAfterElement(cardsEl, event.clientY);
+      const dragging = cardsEl.querySelector(".pm-kanban-card--dragging");
+      if (dragging) {
+        if (afterEl) cardsEl.insertBefore(dragging, afterEl);
+        else cardsEl.appendChild(dragging);
+      }
+    });
+    cardsEl.addEventListener("dragleave", () => {
+      cardsEl.removeClass("pm-kanban-drop-target");
+    });
+    cardsEl.addEventListener("drop", (event) => {
+      if (this.actions.isReadOnly) return;
+      event.preventDefault();
+      cardsEl.removeClass("pm-kanban-drop-target");
+      const path = event.dataTransfer?.getData(CARD_MIME) || event.dataTransfer?.getData("text/plain") || "";
+      if (!path) return;
+      const row = this.rowByPath.get(path);
+      if (!row) return;
+      const fromGroup = event.dataTransfer?.getData(CARD_FROM_GROUP_MIME) || undefined;
+      const drop = resolveBoardContainerDropOrder({
+        rows: group.rows,
+        draggedPath: path,
+        fromGroup,
+        groupKey: group.key,
+        fromSubgroup: undefined,
+        subgroupKey: undefined,
+      });
+      if (drop.keepInPlace) return;
+      void this.moveCardAndOrder(row, groupField, group.key, fromGroup, path, drop.order);
+    });
+  }
+
+  private renderReferenceCard(
+    cards: HTMLElement,
+    config: ViewConfig,
+    group: BoardGroup,
+    row: RowData,
+    groupField: string,
+  ): void {
+    const fields = this.getReferenceCardFields(config);
+    const subtaskNode = this.subtaskRelation?.nodes.get(row.file.path);
+    const color = this.getReferenceGroupColor(config, groupField, group.key);
+
+    const card = cards.createDiv({
+      cls: "pm-kanban-card",
+      attr: {
+        // The reference's task-id slot carries our path identity so every
+        // drag payload and selection contract stays path-keyed.
+        "data-task-id": row.file.path,
+        "data-note-database-row-path": row.file.path,
+      },
+    });
+    card.draggable = !this.actions.isReadOnly && !this.touchMode;
+    card.addEventListener("click", () => this.actions.openRow(row));
+    card.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      this.actions.showRowMenu?.(event, row);
+    });
+    if (card.draggable) {
+      card.addEventListener("dragstart", (event) => {
+        event.dataTransfer?.setData(CARD_MIME, row.file.path);
+        event.dataTransfer?.setData(CARD_FROM_GROUP_MIME, group.key);
+        event.dataTransfer?.setData("text/plain", row.file.path);
+        card.addClass("pm-kanban-card--dragging");
+        window.setTimeout(() => card.addClass("pm-dragging"), 0);
+      });
+      card.addEventListener("dragend", () => {
+        card.removeClass("pm-kanban-card--dragging");
+        card.removeClass("pm-dragging");
+      });
+    }
+
+    // The reference colors the strip from the card's own priority; a
+    // status-grouped RowData set has no per-card priority concept, so the
+    // strip carries the group's status color instead.
+    if (color) {
+      const priorityBar = card.createDiv({ cls: "pm-kanban-card-priority-bar" });
+      priorityBar.setCssStyles({ background: color });
+    }
+
+    const body = card.createDiv({ cls: "pm-kanban-card-body" });
+
+    const parentTitle = subtaskNode && subtaskNode.parentId
+      ? this.getReferenceRowTitle(config, this.rowByPath.get(subtaskNode.parentId))
+      : undefined;
+    if (parentTitle) body.createSpan({ cls: "pm-kanban-card-parent", text: parentTitle });
+
+    const titleRow = body.createDiv({ cls: "pm-kanban-card-title-row" });
+    titleRow.createSpan({ cls: "pm-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
+    if (subtaskNode) {
+      // The reference's milestone and recurrence chips have no RowData
+      // equivalent, so only the subtask chip can render.
+      this.renderReferenceChip(titleRow, {
+        label: "Sub",
+        variant: "solid",
+        size: "sm",
+        color: "var(--color-green)",
+        tooltip: t("board.subtask"),
+      });
+    }
+
+    const description = this.hydratedDescriptions.get(row.file.path);
+    if (description) body.createDiv({ cls: "pm-kanban-card-description", text: description });
+
+    // The reference's estimate field has no RowData equivalent; the time chip
+    // shows the mapped hours column alone.
+    if (fields.time) {
+      const logged = Number(this.getCellValue(row, fields.time));
+      if (logged > 0) this.renderReferenceChip(body, { label: `${logged}h`, size: "sm" });
+    }
+
+    if (fields.tags) {
+      const tags = toMultiSelectValuesForKey(fields.tags.key, row.frontmatter[fields.tags.key]);
+      if (tags.length > 0) {
+        const tagsEl = body.createDiv({ cls: "pm-kanban-card-tags" });
+        // Freeform Obsidian tags carry no palette; an option column's values
+        // are colored, standing in for the reference's tag-color setting.
+        const colored = !isObsidianTagsKey(fields.tags.key);
+        for (const tag of tags.slice(0, 3)) {
+          this.renderReferenceChip(tagsEl, {
+            label: tag,
+            variant: "outline",
+            tag: true,
+            dot: colored,
+            color: colored ? referenceStringToColor(tag) : undefined,
+          });
+        }
+      }
+    }
+
+    const progress = this.getReferenceProgress(config, row, fields, subtaskNode);
+    if (progress != null && progress > 0) {
+      const progressEl = body.createDiv({ cls: "pm-progress pm-progress--sm" });
+      const track = progressEl.createDiv({ cls: "pm-progress-track" });
+      track.createDiv({ cls: "pm-progress-fill" }).style.width = `${Math.max(0, Math.min(100, progress))}%`;
+    }
+
+    const footer = body.createDiv({ cls: "pm-kanban-card-footer" });
+
+    if (fields.people) {
+      const stack = footer.createDiv({ cls: "pm-avatar-stack" });
+      const people = toMultiSelectValuesForKey(fields.people.key, row.frontmatter[fields.people.key]);
+      for (const name of people.slice(0, 3)) {
+        const display = referenceDisplayName(name);
+        const avatar = stack.createSpan({ cls: "pm-avatar pm-avatar--sm", text: referenceInitialsFor(display) });
+        avatar.style.background = referenceStringToColor(display);
+        setTooltip(avatar, display);
+      }
+      const overflow = people.length - 3;
+      if (overflow > 0) {
+        stack.createSpan({ cls: "pm-avatar pm-avatar--more pm-avatar--sm", text: `+${overflow}` });
+      }
+    }
+
+    if (fields.due) {
+      const due = this.getCellValue(row, fields.due);
+      if (typeof due === "string" && due) {
+        const overdue = due < referenceTodayIso();
+        this.renderReferenceChip(footer, {
+          label: referenceFormatDateShort(due),
+          size: "sm",
+          ...(overdue ? { variant: "solid" as const, color: "var(--color-red)", strong: true } : {}),
+        });
+      }
+    }
+  }
+
+  /** The reference card's fixed field set, mapped to RowData columns by type
+   *  and key convention. First match per slot wins, in schema order. */
+  private getReferenceCardFields(config: ViewConfig): {
+    time?: ColumnDef;
+    progress?: ColumnDef;
+    due?: ColumnDef;
+    tags?: ColumnDef;
+    people?: ColumnDef;
+  } {
+    const fields: {
+      time?: ColumnDef;
+      progress?: ColumnDef;
+      due?: ColumnDef;
+      tags?: ColumnDef;
+      people?: ColumnDef;
+    } = {};
+    for (const col of this.actions.getColumns(config)) {
+      if (col.type === "number" && /progress/i.test(col.key) && !fields.progress) fields.progress = col;
+      else if (col.type === "number" && !fields.time) fields.time = col;
+      else if (col.type === "date" && !fields.due) fields.due = col;
+      else if (col.type === "multi-select" && /people|person|assignee|owner/i.test(col.key) && !fields.people) fields.people = col;
+      else if (col.type === "multi-select" && (isObsidianTagsKey(col.key) || /tag/i.test(col.key)) && !fields.tags) fields.tags = col;
+    }
+    return fields;
+  }
+
+  /** Progress maps from a progress-typed number column, then from the subtask
+   *  relation's derived completion — the two progress concepts RowData has. */
+  private getReferenceProgress(
+    config: ViewConfig,
+    row: RowData,
+    fields: { progress?: ColumnDef },
+    subtaskNode: SubtaskNode | undefined,
+  ): number | null {
+    if (fields.progress) {
+      const value = Number(this.getCellValue(row, fields.progress));
+      if (Number.isFinite(value)) return value;
+    }
+    return subtaskNode?.progress.value ?? null;
+  }
+
+  private getReferenceRowTitle(config: ViewConfig, row: RowData | undefined): string {
+    if (!row) return "";
+    const titleField = this.getTitleField(config);
+    const title = titleField ? resolveTitleFieldDisplay(row, config, titleField) : undefined;
+    if (title && !title.isHidden) {
+      return title.isFileTitle ? row.file.basename : title.text;
+    }
+    return row.file.basename;
+  }
+
+  /** The group's option color as a CSS value; undefined for uncategorized
+   *  groups, which have no option to color from. */
+  private getReferenceGroupColor(config: ViewConfig, field: string, key: string): string | undefined {
+    const column = config.schema.columns.find((candidate) => candidate.key === field);
+    const displayType = column ? getColumnDisplayType(column, config.schema.computedFields) : undefined;
+    if (displayType !== "status" && displayType !== "select" && displayType !== "multi-select") return undefined;
+    if (isUncategorizedGroupKey(key)) return undefined;
+    return column ? resolveOptionDisplay(column, key).option?.color : undefined;
+  }
+
+  /** Reproduces the reference Chip's DOM from its builder calls: a span with
+   *  the pm-chip vocabulary and a label child, with the dot leading. */
+  private renderReferenceChip(
+    parent: HTMLElement,
+    options: {
+      label: string;
+      variant?: "solid" | "outline";
+      size?: "sm";
+      color?: string;
+      dot?: boolean;
+      strong?: boolean;
+      tag?: boolean;
+      tooltip?: string;
+    },
+  ): HTMLElement {
+    const chip = parent.createSpan({ cls: "pm-chip" });
+    if (options.dot) chip.createSpan({ cls: "pm-chip-dot" });
+    chip.createSpan({ cls: "pm-chip-label", text: options.label });
+    if (options.variant === "solid") chip.addClass("pm-chip--solid");
+    if (options.variant === "outline") chip.addClass("pm-chip--outline");
+    if (options.size === "sm") chip.addClass("pm-chip--sm");
+    if (options.tag) chip.addClass("pm-chip--tag");
+    if (options.strong) chip.addClass("pm-chip--strong");
+    if (options.color) chip.style.setProperty("--pm-chip-color", options.color);
+    if (options.tooltip) setTooltip(chip, options.tooltip);
+    return chip;
+  }
+
+  /** Lazy description hydration: bodies load after the first render, and the
+   *  board re-renders once any of them arrive — the reference view's preview
+   *  contract, driven by whatever host supplies the optional loader. */
+  private async hydrateReferenceDescriptions(rows: RowData[]): Promise<void> {
+    const actions = this.actions;
+    if (!actions.loadRowDescription) return;
+    const pending = rows.filter((row) => !this.hydratedDescriptions.has(row.file.path));
+    if (pending.length === 0) return;
+    let changed = false;
+    await Promise.all(
+      pending.map(async (row) => {
+        const description = await actions.loadRowDescription?.(row);
+        if (description && !this.hydratedDescriptions.has(row.file.path)) {
+          this.hydratedDescriptions.set(row.file.path, description);
+          changed = true;
+        }
+      }),
+    );
+    const args = this.referenceRenderArgs;
+    if (changed && args) this.render(args.container, args.config, args.groups, args.groupField);
   }
 
   private canCreateGroup(config: ViewConfig, groupField: string): boolean {
@@ -1925,7 +2288,110 @@ export class BoardRenderer {
   }
 
   private clear(container: HTMLElement): void {
-    container.querySelectorAll(".db-board").forEach((el) => el.remove());
+    container.querySelectorAll(".db-board, .pm-kanban-board").forEach((el) => el.remove());
+    container.removeClass("pm-kanban-view");
     this.detachBoardDropHighlight();
   }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 5. REFERENCE HELPERS (verbatim)
+// ───────────────────────────────────────────────────────────────────
+//
+// The blocks below are copied from obsidian-pm's kanban sources. They carry
+// the MIT license notice of that project:
+//
+// MIT License
+// Copyright (c) 2026 Stepan Kropachev and dotpm contributors
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+
+/** MIT (notice above) — verbatim from obsidian-pm KanbanColumn.ts:118-131. */
+function getReferenceDragAfterElement(container: HTMLElement, y: number): Element | null {
+  const cards = Array.from(container.querySelectorAll(".pm-kanban-card:not(.pm-kanban-card--dragging)"));
+  let closest: Element | null = null;
+  let closestOffset = Number.NEGATIVE_INFINITY;
+  for (const card of cards) {
+    const box = card.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closestOffset) {
+      closestOffset = offset;
+      closest = card;
+    }
+  }
+  return closest;
+}
+
+/** MIT (notice above) — verbatim from obsidian-pm utils.ts:40-44. */
+function referenceStringToColor(s: string): string {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) hash = s.charCodeAt(i) + ((hash << 5) - hash);
+  return `hsl(${Math.abs(hash) % 360}, 55%, 45%)`;
+}
+
+/**
+ * MIT (notice above) — from obsidian-pm utils.ts:7-22, rewritten to drop its
+ * `parseLinktext` dependency: the reference resolves the wikilink target
+ * through Obsidian, which this module cannot import without touching the
+ * shared stub, so the plain wikilink forms people fields actually carry are
+ * handled here instead. Heading/subpath suffixes are not split.
+ */
+function referenceDisplayName(raw: string): string {
+  // Values come from frontmatter, where anything YAML allows can turn up in a list of names.
+  const trimmed = typeof raw === "string" ? raw.trim() : "";
+  const m = trimmed.match(/^\[\[([^\]]+)\]\]$/)
+  if (!m) return trimmed
+  const inner = m[1]
+  const pipe = inner.indexOf("|")
+  if (pipe >= 0) {
+    const alias = inner.slice(pipe + 1).trim()
+    if (alias) return alias
+  }
+  const target = pipe >= 0 ? inner.slice(0, pipe) : inner
+  const base = target.split("/").pop() ?? target
+  return (base.endsWith(".md") ? base.slice(0, -3) : base).trim()
+}
+
+/** MIT (notice above) — verbatim from obsidian-pm Avatar.ts:4-8. */
+function referenceInitialsFor(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean)
+  const raw = parts.length >= 2 ? parts[0][0] + parts[1][0] : name.slice(0, 2)
+  return raw.toUpperCase()
+}
+
+/**
+ * Local date as YYYY-MM-DD, the format due fields use, so a past-due check is
+ * a plain string comparison. The reference compares through the Temporal
+ * polyfill it vendors; this plugin has no Temporal dependency, so the check is
+ * rewritten against the ISO shape the fields already carry.
+ */
+function referenceTodayIso(): string {
+  const d = new Date();
+  const pad = (value: number): string => String(value).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/**
+ * "Mar 28" for a YYYY-MM-DD value, in the runtime's locale — the reference's
+ * formatDateShort (obsidian-pm dates.ts:27-30), rewritten from its Temporal
+ * call to Intl, with UTC pinned so the formatted date never shifts a day.
+ */
+function referenceFormatDateShort(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return "";
+  const date = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" }).format(date);
 }

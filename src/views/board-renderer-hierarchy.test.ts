@@ -406,6 +406,10 @@ const CONFIG: ViewConfig = {
   sourceFolder: "Tasks",
   viewType: "board",
   boardGroupField: "status",
+  // The db-board-* vocabulary these assertions pin is the local-extension
+  // layout; the default board renders the reference kanban structure
+  // (covered by board-renderer-parity.test.ts).
+  boardExtensionsEnabled: true,
   schema: { columns: COLUMNS, computedFields: [] },
 };
 

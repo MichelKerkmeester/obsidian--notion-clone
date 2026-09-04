@@ -55,8 +55,12 @@
       "tools/lane/css-lane.json",
       "tools/live/engine-parity.json",
       "tools/live/touch-targets.json",
+      "tools/live/render-assertion-harness.ts",
+      "screenshots/manifest.json",
+      "tools/live/capture-device-parity.mjs",
       "src/views/mobile-bottom-sheet.ts",
-      "tools/live/renderer-coverage.json"
+      "tools/live/renderer-coverage.json",
+      "src/views/board-renderer-parity.test.ts"
     ],
     "entities": [
       {
@@ -144,6 +148,24 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "capture-device-parity.mjs",
+        "kind": "file",
+        "path": "tools/live/capture-device-parity.mjs",
+        "source": "derived"
+      },
+      {
         "name": "mobile-bottom-sheet.ts",
         "kind": "code",
         "path": "src/views/mobile-bottom-sheet.ts",
@@ -153,6 +175,12 @@
         "name": "renderer-coverage.json",
         "kind": "config",
         "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer-parity.test.ts",
+        "kind": "test",
+        "path": "src/views/board-renderer-parity.test.ts",
         "source": "derived"
       },
       {
@@ -178,35 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "File Path",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Change Type",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Checklist",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-04T05:15:27.769Z",
+    "last_save_at": "2026-09-04T06:18:54.549Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:98dd816b5d46711408cced5f4befa081ce5ec95c5fbd4c1510dc319e70f6c9d2",
+    "source_fingerprint": "sha256:1a90517aaa847ac9a7c96083b4bc1fe382f64cdb115f44c20b4fc09362576ce6",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "169448c930dba334c3a4b7e0639eef21eb7fc70f8de0459a37017c5a53352a5a",
       "plan.md": "6519d27a955160cb441921b511e1c005ff2c12ffa3c2756ac5fdb5139479c3e8",
-      "tasks.md": "8b58941f13275aeff715a47a0c96ee948171cf95cb9cb8cf5cab2145e2b1e9c5",
-      "implementation-summary.md": "e76f69488d912917003f8bced0574432682d7289cec7acad4fa89807d9ab591f"
+      "tasks.md": "70071f862e7cb5270e3139654da344f395e60a774164f7b7480ed9e6772dd7f8",
+      "implementation-summary.md": "efc613074b2bb3b7d6232006bdcc24eacec61056b798672358115bf657ba25b4"
     },
     "last_active_child_id": null,
     "last_active_at": null

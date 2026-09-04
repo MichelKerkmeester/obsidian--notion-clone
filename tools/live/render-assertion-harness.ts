@@ -1179,8 +1179,11 @@ function tableAssertions(
 
 function boardAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const cards = container.querySelectorAll<HTMLElement>(".db-board-card").length;
-  const columns = container.querySelectorAll<HTMLElement>(".db-board-column").length;
+  // The default board (boardExtensionsEnabled unset) renders the reference's
+  // pm-kanban-* vocabulary, not the local extension classes; probe that
+  // vocabulary rather than opting the scenario into the extensions.
+  const cards = container.querySelectorAll<HTMLElement>(".pm-kanban-card").length;
+  const columns = container.querySelectorAll<HTMLElement>(".pm-kanban-col").length;
 
   results.push({
     name: "every row becomes a card",
@@ -1443,6 +1446,23 @@ function armPerItemRead(bag: {
   };
 }
 
+// The default board (boardExtensionsEnabled unset) renders the reference's
+// card tree, which never calls `applyConditionalFormat` — that call is one of
+// the local extensions the reference has no equivalent for, so armPerItemRead
+// alone leaves this scenario's negative control unarmed. `getColumns` is the
+// one bag member the reference card path still calls once per card
+// (`getReferenceCardFields`), so it is the seam this scenario polices instead.
+function armBoardReferenceCardRead(
+  bag: { getColumns: (config: ViewConfig) => ColumnDef[] },
+  container: HTMLElement,
+): void {
+  const original = bag.getColumns;
+  bag.getColumns = (config) => {
+    container.getBoundingClientRect();
+    return original(config);
+  };
+}
+
 // The chart and the day-scale calendar share a structural constraint: neither renders enough
 // visible items for the per-item bag seam to exceed the bound — the chart draws one canvas, and
 // a day column caps its all-day lanes at six — so their armed control wraps the render entry and
@@ -1524,7 +1544,10 @@ export function runRenderAssertions(
     const config = makeBoardConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewBoardBag(columns) : embedBoardBag(columns);
     bagKeys = Object.keys(bag).sort();
-    if (control === "per-item") armPerItemRead(bag);
+    if (control === "per-item") {
+      armPerItemRead(bag);
+      armBoardReferenceCardRead(bag, container);
+    }
     const renderer = new BoardRenderer(app, bag);
 
     const stopCounting = countLayoutReads();

@@ -495,6 +495,10 @@ export interface ViewConfig {
   boardColumnWidth?: number;
   /** Board card cover image property. Empty = no cover. */
   boardImageField?: string;
+  /** When true, local board extensions (swimlanes, covers, WIP limits, summaries,
+   *  batch order, touch menus, empty slots, group controls) render; the default
+   *  board is the one-to-one obsidian-pm kanban copy, which has none of them. */
+  boardExtensionsEnabled?: boolean;
   /** Board card cover aspect ratio as width / height. */
   boardImageAspectRatio?: number;
   /** Board card cover image fit mode. */
