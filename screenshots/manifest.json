@@ -15394,7 +15394,7 @@
       "layoutHash": "6161e32888f7",
       "pixelHash": "ce25a0aec633",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15435,7 +15435,7 @@
       "layoutHash": "6161e32888f7",
       "pixelHash": "9fad3730699f",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15476,7 +15476,7 @@
       "layoutHash": "146cb68436e5",
       "pixelHash": "bf4a20a05123",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15517,7 +15517,7 @@
       "layoutHash": "146cb68436e5",
       "pixelHash": "ab5580e147b5",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15558,7 +15558,7 @@
       "layoutHash": "55ae1c17c388",
       "pixelHash": "be56d483cd08",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15597,7 +15597,7 @@
       "layoutHash": "55ae1c17c388",
       "pixelHash": "0eef8f1d4d20",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15636,7 +15636,7 @@
       "layoutHash": "70024147b8c9",
       "pixelHash": "e570e1db5efb",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15675,7 +15675,7 @@
       "layoutHash": "70024147b8c9",
       "pixelHash": "27c0e47dbbcf",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15714,7 +15714,7 @@
       "layoutHash": "299f8edf71c2",
       "pixelHash": "7dc837315e31",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15755,7 +15755,7 @@
       "layoutHash": "299f8edf71c2",
       "pixelHash": "e9a4ce1e3f9e",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15796,7 +15796,7 @@
       "layoutHash": "680cd5cd25d7",
       "pixelHash": "9f52896d6243",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15837,7 +15837,7 @@
       "layoutHash": "680cd5cd25d7",
       "pixelHash": "9f360c5f9211",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15878,7 +15878,7 @@
       "layoutHash": "e896b361d1c7",
       "pixelHash": "76051d8cd9d9",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15919,7 +15919,7 @@
       "layoutHash": "e896b361d1c7",
       "pixelHash": "aed0a5e20958",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -15960,7 +15960,7 @@
       "layoutHash": "5ccf331fcb80",
       "pixelHash": "5719b867be9f",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16001,7 +16001,7 @@
       "layoutHash": "5ccf331fcb80",
       "pixelHash": "5c58a69ddc5c",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16045,7 +16045,7 @@
       "layoutHash": "31e93bb047fa",
       "pixelHash": "be56d483cd08",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16090,7 +16090,7 @@
       "layoutHash": "31e93bb047fa",
       "pixelHash": "04f2616acde3",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16135,7 +16135,7 @@
       "layoutHash": "ae5fbcd71e39",
       "pixelHash": "84a962fc13ff",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16180,7 +16180,7 @@
       "layoutHash": "ae5fbcd71e39",
       "pixelHash": "821882f44340",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16222,7 +16222,7 @@
       "layoutHash": "fce88c2dedad",
       "pixelHash": "231d5a88d1d7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16263,7 +16263,7 @@
       "layoutHash": "fce88c2dedad",
       "pixelHash": "4672b7cd6e5f",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16304,7 +16304,7 @@
       "layoutHash": "55912a24f8f7",
       "pixelHash": "8c557ea2ecf3",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -16345,7 +16345,7 @@
       "layoutHash": "55912a24f8f7",
       "pixelHash": "e5878cddb59b",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -17067,7 +17067,7 @@
       "layoutHash": "49e6373c6ab0",
       "pixelHash": "59d99d585ea7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "faffa188ff12",
@@ -17098,7 +17098,7 @@
       "layoutHash": "49e6373c6ab0",
       "pixelHash": "cfff2a697cdb",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "faffa188ff12",
@@ -17129,7 +17129,7 @@
       "layoutHash": "a9531e4025e0",
       "pixelHash": "ee46a134668b",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "faffa188ff12",
@@ -17160,7 +17160,7 @@
       "layoutHash": "a9531e4025e0",
       "pixelHash": "9e70f6573fa8",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
         "src/i18n.ts": "faffa188ff12",
@@ -17296,7 +17296,7 @@
       "layoutHash": "d67923ac976b",
       "pixelHash": "69a8df86bf67",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17321,7 +17321,7 @@
       "layoutHash": "d67923ac976b",
       "pixelHash": "a7cc162c0927",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17346,7 +17346,7 @@
       "layoutHash": "5ae0a62102b2",
       "pixelHash": "30d7e82c1df9",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17371,7 +17371,7 @@
       "layoutHash": "5ae0a62102b2",
       "pixelHash": "1808ca994f6e",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17396,7 +17396,7 @@
       "layoutHash": "00cb5dddd8e1",
       "pixelHash": "93485aec1974",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17421,7 +17421,7 @@
       "layoutHash": "00cb5dddd8e1",
       "pixelHash": "e723ea8865ca",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17446,7 +17446,7 @@
       "layoutHash": "bf0ff731cfe3",
       "pixelHash": "ce4a06459a82",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17471,7 +17471,7 @@
       "layoutHash": "bf0ff731cfe3",
       "pixelHash": "00987dcc34f1",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17496,7 +17496,7 @@
       "layoutHash": "33c391b5b54a",
       "pixelHash": "5e2612e6e061",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17521,7 +17521,7 @@
       "layoutHash": "33c391b5b54a",
       "pixelHash": "971f58c5dae3",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17546,7 +17546,7 @@
       "layoutHash": "6c3a0cb36e5d",
       "pixelHash": "b97cde1feb54",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17571,7 +17571,7 @@
       "layoutHash": "6c3a0cb36e5d",
       "pixelHash": "33110bcf88ac",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17596,7 +17596,7 @@
       "layoutHash": "91683bfb2702",
       "pixelHash": "fd9fe6599a67",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17621,7 +17621,7 @@
       "layoutHash": "91683bfb2702",
       "pixelHash": "970d0cbadca1",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17646,7 +17646,7 @@
       "layoutHash": "a7de2395d3f4",
       "pixelHash": "d0e99200bac8",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17671,7 +17671,7 @@
       "layoutHash": "a7de2395d3f4",
       "pixelHash": "6b27a55ca30c",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17696,7 +17696,7 @@
       "layoutHash": "d89daca6f035",
       "pixelHash": "9b98c21a5bc7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17721,7 +17721,7 @@
       "layoutHash": "d89daca6f035",
       "pixelHash": "90dac5756f97",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17746,7 +17746,7 @@
       "layoutHash": "b13dbb395256",
       "pixelHash": "57041a6ffffd",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -17771,7 +17771,7 @@
       "layoutHash": "b13dbb395256",
       "pixelHash": "a9a3117b74eb",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "6e43f999854b",
+        "src/views/calendar-timeline-renderer.ts": "79071ffa9e4a",
         "styles.css": "cdc0217ad1d7",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
