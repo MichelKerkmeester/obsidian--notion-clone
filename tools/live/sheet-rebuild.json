@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-04T19:12:26.472Z",
+  "measuredAt": "2026-09-04T19:35:26.495Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "32d05d74176a",
-    "tools/live/sheet-rebuild-harness.ts": "c25e7d72b34a",
+    "tools/live/sheet-rebuild.mjs": "50eafeae8e14",
+    "tools/live/sheet-rebuild-harness.ts": "34a7665c3548",
     "src/views/toolbar-renderer.ts": "145ddf231347",
     "src/views/popover-position.ts": "6cae246726c0",
-    "src/views/mobile-bottom-sheet.ts": "b7ad55cb6167",
-    "src/views/sort-panel-renderer.ts": "e1776153a092",
-    "src/views/filter-panel-renderer.ts": "a231643a2078",
+    "src/views/mobile-bottom-sheet.ts": "88fef4fb226b",
+    "src/views/sort-panel-renderer.ts": "2f22ec80a772",
+    "src/views/filter-panel-renderer.ts": "a08e9e12d9f0",
     "src/views/overlay-stack.ts": "b842936dde22",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
-  "cases": 15,
+  "cases": 20,
   "barsLost": 0,
   "gesturesMeasured": 4,
   "checks": [
@@ -104,6 +104,36 @@
       "pass": true,
       "detail": "left the sheet open, so the presses above are landing on the bar",
       "preFixFailure": "dismissed the sheet — the press is not reaching the bar, and every gesture above is passing for that reason rather than its own"
+    },
+    {
+      "name": "the sort sheet holds still while it rebuilds",
+      "pass": true,
+      "detail": "settled at top 708; the deepest point during the rebuild was 711",
+      "preFixFailure": "settled at top 708 and the rebuild dropped it to 844 on an 844px screen"
+    },
+    {
+      "name": "five taps on the sort sheet's add control",
+      "pass": true,
+      "detail": "all 5 taps reached it: 5 rule(s), sheet still open, 1 sheet and 1 backdrop",
+      "preFixFailure": "2 of 5 taps reached it; the other three landed on a rule row and on two icons"
+    },
+    {
+      "name": "the filter sheet holds still while it rebuilds",
+      "pass": true,
+      "detail": "settled at top 699; the deepest point during the rebuild was 699",
+      "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
+    },
+    {
+      "name": "five taps on the filter sheet's add control",
+      "pass": true,
+      "detail": "all 5 taps reached it: 5 rule(s), sheet still open, 1 sheet and 1 backdrop",
+      "preFixFailure": "2 of 5 taps reached it; one of the strays opened a field dropdown"
+    },
+    {
+      "name": "a sheet that is genuinely opening still rises",
+      "pass": true,
+      "detail": "the entrance still runs: first seen at 844 on a 844px screen, settled at 708",
+      "preFixFailure": null
     }
   ]
 }
