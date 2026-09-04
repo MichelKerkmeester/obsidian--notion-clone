@@ -1,17 +1,18 @@
 {
-  "measuredAt": "2026-09-04T20:39:15.149Z",
+  "measuredAt": "2026-09-04T21:08:13.029Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "2ba9292708a7",
-    "tools/live/sheet-rebuild-harness.ts": "62ec00ff2554",
+    "tools/live/sheet-rebuild.mjs": "9b8cd68af575",
+    "tools/live/sheet-rebuild-harness.ts": "cb014e452dc0",
     "src/views/toolbar-renderer.ts": "145ddf231347",
     "src/views/popover-position.ts": "e33b0768ec48",
     "src/views/mobile-bottom-sheet.ts": "715ed7650295",
     "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
     "src/views/filter-panel-renderer.ts": "8cca93f10465",
+    "src/views/view-config-panel-renderer.ts": "81e17bcb3e3a",
     "src/views/overlay-stack.ts": "4f35a9904a53",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
-  "cases": 34,
+  "cases": 35,
   "barsLost": 0,
   "gesturesMeasured": 4,
   "enginesMeasured": [
@@ -84,6 +85,12 @@
       "pass": true,
       "detail": "a tap inside the rebuilt panel stayed inside the sheet",
       "preFixFailure": "a tap inside the panel the rebuild just created read as OUTSIDE"
+    },
+    {
+      "name": "settings sheet chrome survives its own scroll",
+      "pass": true,
+      "detail": "the band held at 48px through a 200px scroll (48px at rest), and the header stayed put at 24px from the sheet's top edge",
+      "preFixFailure": "the grab band went from 48px to ZERO after a 200px scroll — the bar and the header scrolled off the top with the content"
     },
     {
       "name": "a 120px drag after a rebuild",
