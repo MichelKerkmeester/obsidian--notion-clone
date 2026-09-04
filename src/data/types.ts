@@ -707,6 +707,10 @@ export interface ViewConfig {
   timelineColumnSizeMode?: "auto" | "custom";
   /** Custom column-unit width in px when timelineColumnSizeMode is "custom". */
   timelineCustomUnitWidth?: number;
+  /** Render the local extensions (visible-window paging, unscheduled backlog, group lanes,
+   *  touch menu, viewport-centred window). Default off: the timeline then renders the
+   *  reference gantt structure one-to-one. */
+  timelineLocalExtensions?: boolean;
   /** Per-renderer state so table and board can keep independent visible columns, filters, and sorting. */
   viewStates?: Partial<Record<DatabaseViewType, ViewModeStateDef>>;
 }

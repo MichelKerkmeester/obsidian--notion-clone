@@ -1406,20 +1406,22 @@ function toolbarPopoverAssertion(container: HTMLElement, selector: string): Asse
 
 function timelineAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const bars = container.querySelectorAll<HTMLElement>(".db-timeline-event").length;
-  const lanes = container.querySelectorAll<HTMLElement>(".db-timeline-events").length;
+  // The bench leaves timelineLocalExtensions unset, so the renderer's default path is the
+  // reference-copy gantt tree (pm-gantt-*), not the local db-timeline-* markup.
+  const bars = container.querySelectorAll<HTMLElement>(".pm-gantt-bar-group, .pm-gantt-milestone").length;
+  const labelRows = container.querySelectorAll<HTMLElement>(".pm-gantt-label-row:not(.pm-gantt-add-row)").length;
 
   results.push({
-    name: "the timeline drew its lanes",
-    pass: lanes > 0,
-    detail: `${lanes} lanes`,
+    name: "the gantt drew its label rows",
+    pass: labelRows > 0,
+    detail: `${labelRows} label rows`,
   });
   results.push({
     name: "the drawn window is not empty",
     pass: bars > 0,
     detail: bars > 0
-      ? `${bars} event bars drawn from ${TIMELINE_ROWS} rows`
-      : "no event bar was drawn: every bound below this passes trivially on an empty window, "
+      ? `${bars} bar/milestone marks drawn from ${TIMELINE_ROWS} rows`
+      : "no bar or milestone was drawn: every bound below this passes trivially on an empty window, "
         + "so this run proves nothing about the timeline",
   });
   return results;

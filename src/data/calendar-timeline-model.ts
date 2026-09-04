@@ -246,6 +246,12 @@ export const TIMELINE_RANGE_DAY_WIDTH: Record<TimelineScale, number> = {
   quarter: 5,
   year: 2,
 };
+/** Reference gantt row height in px, adopted as the 1:1 default. */
+export const TIMELINE_REFERENCE_ROW_HEIGHT = 44;
+/** Reference gantt header band height in px, adopted as the 1:1 default. */
+export const TIMELINE_REFERENCE_HEADER_HEIGHT = 56;
+/** Reference gantt label column width in px, adopted as the 1:1 default. */
+export const TIMELINE_REFERENCE_LABEL_WIDTH = 280;
 /** Smallest rendered bar width in px; a whole day narrower than this is widened to stay visible and grabbable. */
 export const TIMELINE_BAR_MIN_WIDTH_PX = 8;
 

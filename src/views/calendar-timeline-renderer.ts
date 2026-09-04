@@ -19,16 +19,19 @@ import { Notice, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
-import { buildCalendarMonthModel, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineDayCentredStartMinutes, resolveTimelineJumpAnchor, resolveTimelineMilestoneLabelPlacement, resolveTimelineProgressFillUnits, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/calendar-timeline-model";
+import { buildCalendarMonthModel, buildCalendarTimelineEvents, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineDayCentredStartMinutes, resolveTimelineJumpAnchor, resolveTimelineMilestoneLabelPlacement, resolveTimelineProgressFillUnits, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TIMELINE_REFERENCE_HEADER_HEIGHT, TIMELINE_REFERENCE_LABEL_WIDTH, TIMELINE_REFERENCE_ROW_HEIGHT, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/calendar-timeline-model";
 import {
   CALENDAR_TIME_SNAP_MINUTES,
   MINUTES_PER_DAY,
   MINUTES_PER_HOUR,
   addDateKeyDays,
+  addUtcDays,
   dateKeyDaysBetween,
+  dateKeyFromUtc,
   getLocalDateKey,
   getLocaleWeekStartsOn,
   getWeekdayLabels,
+  makeUtcDate,
   minuteOfDay,
   parseDateKeyToUtc,
   snapMinutes,
@@ -55,6 +58,47 @@ import { createOwnedMenuForEvent } from "./owned-menu";
 // ───────────────────────────────────────────────────────────────────
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
+
+// Reference gantt geometry (the 1:1 default timeline): row/header/label sizes
+// and the bar treatment constants the reference TimelineConfig and
+// GanttTaskBarRenderer hardcode.
+const GANTT_ROW_HEIGHT = TIMELINE_REFERENCE_ROW_HEIGHT;
+const GANTT_HEADER_HEIGHT = TIMELINE_REFERENCE_HEADER_HEIGHT;
+const GANTT_LABEL_WIDTH = TIMELINE_REFERENCE_LABEL_WIDTH;
+const GANTT_BAR_PADDING = 8;
+const GANTT_BAR_BORDER_RADIUS = 7;
+const GANTT_HANDLE_WIDTH = 8;
+const GANTT_LINK_DOT_RADIUS = 4;
+const GANTT_LINK_DOT_GAP = 4;
+const GANTT_BAR_MIN_WIDTH = 8;
+const GANTT_BAR_LABEL_MIN_WIDTH = 55;
+const GANTT_LABEL_MIN_WIDTH = 150;
+const GANTT_LABEL_MAX_WIDTH = 600;
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+
+/** Reference-gantt geometry: the padded task-driven range plus the reference day width. */
+interface GanttTimelineCfg {
+  startDateKey: string;
+  endDateKey: string;
+  dayWidth: number;
+  granularity: TimelineScale;
+  totalDays: number;
+  totalWidth: number;
+}
+
+/** Reference-gantt bar drag wiring; mirrors the reference's BarDragOpts. */
+interface GanttBarDragOpts {
+  trigger: HTMLElement;
+  rect: HTMLElement;
+  barGroup: HTMLElement;
+  row: RowData;
+  side: "left" | "right" | "move";
+  x: number;
+  width: number;
+  cfg: GanttTimelineCfg;
+  startField: string;
+  endField: string | undefined;
+}
 
 // ───────────────────────────────────────────────────────────────────
 // 3. POSITION STYLE TYPES
@@ -243,6 +287,39 @@ export class CalendarTimelineRenderer {
   private timelineInvalidWarningCount: number | null = null;
   private backlogCollapsed = false;
   private emptyStateRenderer = new EmptyStateRenderer();
+  /** Cleanup handles for the reference-gantt render path (resize handle, drags, scroll sync). */
+  private ganttCleanupFns: (() => void)[] = [];
+  /** Reference-gantt label column width in px, adjustable via the divider. */
+  private ganttLabelWidth = GANTT_LABEL_WIDTH;
+  /** Reference-gantt scroll pane, set when the right panel is built (Today button target). */
+  private ganttScrollEl: HTMLElement | null = null;
+  /** Current reference-gantt range, kept so the Today button can scroll without re-deriving it. */
+  private ganttScrollCfg: GanttTimelineCfg | null = null;
+  /** Captured scroll position + date anchor from the outgoing gantt DOM, restored after the
+   *  next render instead of re-centring on today. Adapted from GanttView's pendingScroll:
+   *  every data/config change re-renders this view from scratch, so without this the
+   *  viewport would snap back to today after each drag, link, or scale change. */
+  private ganttPendingScroll: { top: number; anchorDateKey: string } | null = null;
+  /** Whether the last bar drag moved the bar (suppresses the post-drag click). */
+  private ganttDragMoved = false;
+  /** Reference-gantt drag state, mirroring the reference's DragState shape. */
+  private ganttDragState: {
+    isDragging: boolean;
+    dragSide: "left" | "right" | "move" | null;
+    dragRow: RowData | null;
+    dragStartX: number;
+    dragBarEl: HTMLElement | null;
+    dragInitialX: number;
+    dragInitialW: number;
+  } = {
+    isDragging: false,
+    dragSide: null,
+    dragRow: null,
+    dragStartX: 0,
+    dragBarEl: null,
+    dragInitialX: 0,
+    dragInitialW: 0,
+  };
   /**
    * Whether this surface takes touch input, decided once per render.
    *
@@ -285,19 +362,27 @@ export class CalendarTimelineRenderer {
     this.activeTimelineDragCleanup?.();
     this.activeTimelineDragCleanup = null;
     this.cancelTimelineLink();
+    this.ganttCleanupFns.forEach((fn) => fn());
+    this.ganttCleanupFns = [];
+    this.ganttDragState.isDragging = false;
+    this.ganttDragState.dragBarEl = null;
+    this.ganttPendingScroll = null;
     this.timelineRoot = null;
     this.timelineFlashWindow = null;
   }
 
   renderTimeline(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
     this.touchMode = isTouchDevice(container);
-    if (normalizeTimelineDayScale(config)) {
-      this.actions.onConfigChange?.(t("undo.timelineScaleConfig"));
-    }
     this.closeTimelineMiniCalendar();
     this.closeTimelineScaleMenu();
     this.disconnectTimelineResizeObserver();
     this.cancelTimelineLink();
+    if (this.ganttScrollEl?.isConnected && this.ganttScrollCfg) {
+      this.ganttPendingScroll = {
+        top: this.ganttScrollEl.scrollTop,
+        anchorDateKey: this.ganttXToDate(this.ganttScrollCfg, this.ganttScrollEl.scrollLeft),
+      };
+    }
     if (this.timelineRoot?.isConnected && this.timelineRoot.parentElement === container) this.timelineRoot.remove();
     this.timelineRoot = null;
     this.timelineFlashWindow = null;
@@ -313,7 +398,20 @@ export class CalendarTimelineRenderer {
       this.renderEmpty(container, "no-date-field");
       return;
     }
+    if (config.timelineLocalExtensions) {
+      this.ganttPendingScroll = null;
+      this.renderTimelineLocal(container, config, rows, visibleRows, startField);
+      return;
+    }
+    this.renderTimelineGantt(container, config, visibleRows, startField);
+  }
 
+  /** 本地扩展时间线渲染路径：可见窗口分页、未排期 backlog、分组泳道、触摸菜单、
+   *  视口居中窗口等本地扩展都在这里；默认关闭，由配置的 timelineLocalExtensions 开启。 */
+  private renderTimelineLocal(container: HTMLElement, config: ViewConfig, rows: RowData[], visibleRows: RowData[], startField: string): void {
+    if (normalizeTimelineDayScale(config)) {
+      this.actions.onConfigChange?.(t("undo.timelineScaleConfig"));
+    }
     const scale = config.timelineScale || "week";
     const unitWidth = this.getTimelineRenderUnitWidth(config, scale, container.clientWidth || container.getBoundingClientRect().width || 0);
     const visibleUnitCount = this.getTimelineViewportUnitCount(container, config, unitWidth);
@@ -509,6 +607,1171 @@ export class CalendarTimelineRenderer {
         this.flashTimelineDate(key);
       });
     }
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // 6b. REFERENCE-GANTT RENDER PATH (1:1 default timeline)
+  // ───────────────────────────────────────────────────────────────────
+  //
+  // The default timeline renders obsidian-pm's gantt structure one-to-one:
+  // the same element tree and class vocabulary as GanttView.ts,
+  // GanttHeaderRenderer.ts, GanttTaskBarRenderer.ts, GanttRenderer.ts and
+  // TimelineConfig.ts, mapped onto this repo's RowData/action contract.
+  // Blocks adapted from that source carry its notice below; code was
+  // rewritten only where this repo's data model forces it (date keys and
+  // Date objects instead of Temporal.PlainDate, status colors from the
+  // schema instead of a status config, and the local action pipeline as the
+  // single persistence path). The local extensions (visible-window paging,
+  // unscheduled backlog, invalid-event repair, group lanes, touch menu,
+  // keyboard link buttons, viewport-centred window) render only behind the
+  // timelineLocalExtensions setting, so the default view is
+  // indistinguishable from the reference apart from data.
+  //
+  // MIT License
+  // Copyright (c) 2026 Stepan Kropachev and dotpm contributors
+  //
+  // Permission is hereby granted, free of charge, to any person obtaining a
+  // copy of this software and associated documentation files (the
+  // "Software"), to deal in the Software without restriction, including
+  // without limitation the rights to use, copy, modify, merge, publish,
+  // distribute, sublicense, and/or sell copies of the Software, and to
+  // permit persons to whom the Software is furnished to do so, subject to
+  // the following conditions: the above copyright notice and this
+  // permission notice shall be included in all copies or substantial
+  // portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
+  // WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+  // THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  // NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  // LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+  private renderTimelineGantt(container: HTMLElement, config: ViewConfig, visibleRows: RowData[], startField: string): void {
+    this.ganttCleanupFns.forEach((fn) => fn());
+    this.ganttCleanupFns = [];
+    this.ganttDragState.isDragging = false;
+    this.ganttDragState.dragBarEl = null;
+    this.ganttDragMoved = false;
+    this.ganttScrollEl = null;
+    this.ganttScrollCfg = null;
+    const scale = config.timelineScale || "week";
+    const range = buildTimelineRangeGeometry(visibleRows, config, scale);
+    const cfg: GanttTimelineCfg = {
+      startDateKey: range.startDateKey,
+      endDateKey: range.endDateKey,
+      dayWidth: range.dayWidth,
+      granularity: scale,
+      totalDays: range.totalDays,
+      totalWidth: range.totalDays * range.dayWidth,
+    };
+    this.ganttScrollCfg = cfg;
+    const endField = config.timelineEndDateField || config.calendarEndDateField;
+    const events = buildCalendarTimelineEvents(visibleRows, config, {
+      startField,
+      endField,
+      titleField: config.timelineTitleField,
+      colorField: config.timelineColorField || config.calendarColorField,
+    });
+    const eventByPath = new Map<string, CalendarTimelineEvent>();
+    const invalidPaths = new Set<string>();
+    for (const event of events) {
+      if (event.isInvalid) invalidPaths.add(event.id);
+      else eventByPath.set(event.id, event);
+    }
+
+    const root = container.createDiv({ cls: "pm-gantt-view" });
+    this.timelineRoot = root;
+    this.renderGanttControls(root, config, scale);
+
+    const wrapper = root.createDiv({ cls: "pm-gantt-wrapper" });
+    const leftPanel = wrapper.createDiv({ cls: "pm-gantt-left" });
+    leftPanel.style.width = `${this.ganttLabelWidth}px`;
+    leftPanel.style.minWidth = `${this.ganttLabelWidth}px`;
+    const leftHeader = leftPanel.createDiv({ cls: "pm-gantt-left-header" });
+    leftHeader.style.height = `${GANTT_HEADER_HEIGHT}px`;
+    leftHeader.createSpan({ cls: "pm-gantt-left-header-label", text: t("timeline.taskColumn") });
+    const leftBody = leftPanel.createDiv({ cls: "pm-gantt-left-body" });
+    this.setupGanttResizeHandle(wrapper, leftPanel);
+
+    const rightPanel = wrapper.createDiv({ cls: "pm-gantt-right" });
+    this.ganttScrollEl = rightPanel;
+    const headerSticky = rightPanel.createDiv({ cls: "pm-gantt-header-sticky" });
+    headerSticky.style.width = `${cfg.totalWidth}px`;
+    headerSticky.style.height = `${GANTT_HEADER_HEIGHT}px`;
+    const headerSvgEl = this.ganttSvgElement("svg", { width: cfg.totalWidth, height: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-svg" });
+    headerSticky.appendChild(headerSvgEl);
+    const svgContainer = rightPanel.createDiv({ cls: "pm-gantt-svg-container" });
+    svgContainer.style.width = `${cfg.totalWidth}px`;
+    svgContainer.style.marginTop = `-${GANTT_HEADER_HEIGHT}px`;
+
+    const totalRows = visibleRows.length;
+    const svgHeight = GANTT_HEADER_HEIGHT + (totalRows + 1) * GANTT_ROW_HEIGHT;
+    const svgEl = this.ganttSvgElement("svg", { width: cfg.totalWidth, height: svgHeight, class: "pm-gantt-svg" });
+    svgContainer.appendChild(svgEl);
+    // The arrow marker lives in the first-child defs so arrows can reference it.
+    const defs = this.ganttSvgElement("defs");
+    svgEl.appendChild(defs);
+    const marker = this.ganttSvgElement("marker", { id: "pm-arrowhead", markerWidth: 8, markerHeight: 8, refX: 6, refY: 3, orient: "auto" });
+    marker.appendChild(this.ganttSvgElement("path", { d: "M0,0 L0,6 L8,3 z", class: "pm-gantt-arrowhead" }));
+    defs.appendChild(marker);
+
+    this.renderGanttLabelRows(leftBody, config, visibleRows, eventByPath);
+    const addRow = leftBody.createDiv({ cls: "pm-gantt-label-row pm-gantt-add-row" });
+    addRow.style.height = `${GANTT_ROW_HEIGHT}px`;
+    this.renderGanttAddButton(addRow, config);
+
+    this.renderGanttHeader(headerSvgEl, cfg);
+    const grid = this.ganttSvgElement("g", { class: "pm-gantt-grid" });
+    svgEl.appendChild(grid);
+    this.renderGanttGrid(grid, cfg, totalRows);
+    this.renderGanttTodayLine(svgEl, headerSvgEl, cfg, svgHeight);
+    const barsGroup = this.ganttSvgElement("g", { class: "pm-gantt-bars" });
+    svgEl.appendChild(barsGroup);
+    this.renderGanttBars(barsGroup, cfg, visibleRows, eventByPath, invalidPaths, config, startField, endField, svgEl);
+    this.renderGanttDependencyArrows(svgEl, cfg, visibleRows, eventByPath);
+    this.renderGanttMilestoneLabels(svgEl, headerSvgEl, cfg, visibleRows, eventByPath);
+
+    this.setupGanttScrollSync(leftBody, rightPanel);
+    root.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && this.timelineLinkSelection) {
+        event.preventDefault();
+        this.cancelTimelineLink();
+      }
+    });
+    const raf = container.ownerDocument?.defaultView?.requestAnimationFrame
+      ?? (typeof window !== "undefined" ? window.requestAnimationFrame : undefined);
+    const restoreScroll = () => this.applyGanttPendingScroll(cfg, rightPanel);
+    if (typeof raf === "function") {
+      raf(restoreScroll);
+    } else {
+      restoreScroll();
+    }
+  }
+
+  /** Reference controls bar: five-level segmented scale, Today, Expand all, Collapse all.
+   *  Adapted from GanttView.renderGranularityControls. */
+  private renderGanttControls(parent: HTMLElement, config: ViewConfig, scale: TimelineScale): void {
+    const bar = parent.createDiv({ cls: "pm-gantt-controls" });
+    const levels: TimelineScale[] = ["day", "week", "month", "quarter", "year"];
+    const labels: Record<TimelineScale, string> = {
+      day: t("timeline.scaleDay"),
+      week: t("timeline.scaleWeek"),
+      month: t("timeline.scaleMonth"),
+      quarter: t("timeline.scaleQuarter"),
+      year: t("timeline.scaleYear"),
+    };
+    const segment = bar.createDiv({ cls: "pm-segmented" });
+    for (const level of levels) {
+      const button = segment.createEl("button", { cls: "clickable-icon", text: labels[level], attr: { type: "button" } });
+      if (level === scale) button.addClass("mod-cta");
+      button.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        void this.setTimelineScale(config, level);
+      };
+    }
+    bar.createSpan({ cls: "pm-gantt-sep" });
+    const today = bar.createEl("button", { cls: "clickable-icon", text: t("timeline.today"), attr: { type: "button" } });
+    today.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (this.ganttScrollEl) this.scrollGanttToToday(this.ganttCfgForScroll(), this.ganttScrollEl);
+    };
+    const expandAll = bar.createEl("button", { cls: "clickable-icon", text: t("timeline.expandAll"), attr: { type: "button" } });
+    expandAll.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.setGanttAllCollapsed(false);
+    };
+    const collapseAll = bar.createEl("button", { cls: "clickable-icon", text: t("timeline.collapseAll"), attr: { type: "button" } });
+    collapseAll.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.setGanttAllCollapsed(true);
+    };
+  }
+
+  private setGanttAllCollapsed(collapsed: boolean): void {
+    for (const row of this.currentRows) {
+      if ((this.subtaskRelation?.childrenOf.get(row.file.path) || []).length > 0) {
+        void this.actions.toggleSubtaskCollapsed?.(row, collapsed);
+      }
+    }
+  }
+
+  /** The current range, for the Today button; a fresh default keeps the scroll safe if none. */
+  private ganttCfgForScroll(): GanttTimelineCfg {
+    if (this.ganttScrollCfg) return this.ganttScrollCfg;
+    const today = this.getTodayDateKey();
+    return {
+      startDateKey: today,
+      endDateKey: today,
+      dayWidth: 1,
+      granularity: "week",
+      totalDays: 1,
+      totalWidth: 1,
+    };
+  }
+
+  /** Label rows: collapse toggle or spacer, status dot, title, progress, add-subtask button.
+   *  Adapted from TaskLabelRenderer.renderTaskLabel; drag/drop reorder maps to the local
+   *  reorder action, and the external-dependency chip lists paths instead of a menu. */
+  private renderGanttLabelRows(leftBody: HTMLElement, config: ViewConfig, visibleRows: RowData[], eventByPath: Map<string, CalendarTimelineEvent>): void {
+    for (const row of visibleRows) {
+      const node = this.subtaskRelation?.nodes.get(row.file.path);
+      const depth = node?.depth ?? 0;
+      const children = this.subtaskRelation?.childrenOf.get(row.file.path) || [];
+      const event = eventByPath.get(row.file.path);
+      const el = leftBody.createDiv({ cls: "pm-gantt-label-row" });
+      el.style.height = `${GANTT_ROW_HEIGHT}px`;
+      el.style.paddingLeft = `${depth * 18 + 8}px`;
+      el.dataset.taskId = row.file.path;
+      el.draggable = true;
+      el.addEventListener("dragstart", (e: DragEvent) => {
+        e.dataTransfer?.setData("text/plain", row.file.path);
+        el.addClass("pm-gantt-label-row--dragging");
+      });
+      el.addEventListener("dragend", () => {
+        el.removeClass("pm-gantt-label-row--dragging");
+      });
+      let dropPosition: "before" | "after" = "before";
+      el.addEventListener("dragover", (e: DragEvent) => {
+        e.preventDefault();
+        const rect = el.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+        dropPosition = e.clientY < midY ? "before" : "after";
+        el.removeClass("pm-gantt-label-row--drop-before", "pm-gantt-label-row--drop-after");
+        el.addClass(dropPosition === "before" ? "pm-gantt-label-row--drop-before" : "pm-gantt-label-row--drop-after");
+      });
+      el.addEventListener("dragleave", () => {
+        el.removeClass("pm-gantt-label-row--drop-before", "pm-gantt-label-row--drop-after");
+      });
+      el.addEventListener("drop", (e: DragEvent) => {
+        e.preventDefault();
+        el.removeClass("pm-gantt-label-row--drop-before", "pm-gantt-label-row--drop-after");
+        const draggedId = e.dataTransfer?.getData("text/plain");
+        if (!draggedId || draggedId === row.file.path) return;
+        const draggedRow = this.rowByPath.get(draggedId);
+        if (!draggedRow || !this.actions.reorderTimelineEvent) return;
+        this.actions.reorderTimelineEvent(
+          draggedRow,
+          dropPosition === "before" ? undefined : row.file.path,
+          dropPosition === "before" ? row.file.path : undefined,
+        );
+      });
+      if (children.length > 0) {
+        const collapsed = Boolean(node?.collapsed);
+        const toggle = el.createDiv({ cls: `tree-item-icon collapse-icon pm-collapse-toggle${collapsed ? " is-collapsed" : ""}` });
+        setIcon(toggle, "right-triangle");
+        toggle.setAttr("aria-label", collapsed ? t("subtask.expand") : t("subtask.collapse"));
+        toggle.addEventListener("click", (mouseEvent) => {
+          mouseEvent.preventDefault();
+          mouseEvent.stopPropagation();
+          void this.actions.toggleSubtaskCollapsed?.(row, !collapsed);
+        });
+      } else {
+        el.createSpan({ cls: "pm-gantt-label-spacer" });
+      }
+      const dot = el.createSpan({ cls: "pm-gantt-label-dot" });
+      dot.style.background = this.resolveGanttStatusColor(config, row);
+      const titleEl = el.createSpan({ cls: "pm-gantt-label-title", text: event?.title ?? (row.file.basename || row.file.name) });
+      titleEl.addEventListener("click", () => {
+        if (this.actions.openRecordDetail) this.actions.openRecordDetail(titleEl, row);
+        else this.actions.openRow(row);
+      });
+      const progress = this.resolveGanttEventProgress(event, row);
+      if (progress > 0) {
+        el.createSpan({ cls: "pm-gantt-label-progress", text: `${Math.round(progress)}%` });
+      }
+      const elsewhere = this.getGanttElsewhereDependencies(row);
+      if (elsewhere.length > 0) {
+        const chip = el.createSpan({ cls: "pm-chip pm-chip--plain pm-chip--sm" });
+        chip.createSpan({ cls: "pm-chip-label", text: t("timeline.dependsElsewhere", { count: elsewhere.length }) });
+        setTooltip(chip, elsewhere.join("\n"), { delay: 100 });
+      }
+      const addSubtask = el.createEl("button", { cls: "clickable-icon pm-icon-btn pm-icon-btn--hover-only", attr: { type: "button" } });
+      setIcon(addSubtask, "plus");
+      setTooltip(addSubtask, t("timeline.addSubtask"), { delay: 100 });
+      addSubtask.addEventListener("click", (mouseEvent) => {
+        mouseEvent.preventDefault();
+        mouseEvent.stopPropagation();
+        this.actions.showRowMenu?.(mouseEvent, row);
+      });
+    }
+  }
+
+  /** Add-task row: ghost button with plus glyph and label. Adapted from addButton.renderAddButton. */
+  private renderGanttAddButton(parent: HTMLElement, config: ViewConfig): void {
+    const button = parent.createEl("button", { cls: "pm-prop-add", attr: { type: "button" } });
+    setIcon(button.createSpan({ cls: "pm-glyph-icon" }), "plus");
+    button.createSpan({ cls: "pm-prop-add-label", text: t("timeline.addTask") });
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (this.actions.createEntryForDate) {
+        this.actions.createEntryForDate(config, this.getTodayDateKey(), {});
+      }
+    });
+  }
+
+  /** Divider between label column and chart. Adapted from GanttView's resize-handle wiring. */
+  private setupGanttResizeHandle(wrapper: HTMLElement, leftPanel: HTMLElement): void {
+    const resizeHandle = wrapper.createDiv({ cls: "pm-gantt-resize-handle" });
+    let resizing = false;
+    let startX = 0;
+    let startWidth = 0;
+    resizeHandle.addEventListener("mousedown", (e: MouseEvent) => {
+      e.preventDefault();
+      resizing = true;
+      startX = e.clientX;
+      startWidth = this.ganttLabelWidth;
+      window.activeDocument.body.addClass("pm-resize-active");
+    });
+    const onMouseMove = (e: MouseEvent) => {
+      if (!resizing) return;
+      const newWidth = Math.max(GANTT_LABEL_MIN_WIDTH, Math.min(GANTT_LABEL_MAX_WIDTH, startWidth + (e.clientX - startX)));
+      this.ganttLabelWidth = newWidth;
+      leftPanel.style.width = `${newWidth}px`;
+      leftPanel.style.minWidth = `${newWidth}px`;
+    };
+    const onMouseUp = () => {
+      if (!resizing) return;
+      resizing = false;
+      window.activeDocument.body.removeClass("pm-resize-active");
+    };
+    window.activeDocument.addEventListener("mousemove", onMouseMove);
+    window.activeDocument.addEventListener("mouseup", onMouseUp);
+    this.ganttCleanupFns.push(() => {
+      window.activeDocument.removeEventListener("mousemove", onMouseMove);
+      window.activeDocument.removeEventListener("mouseup", onMouseUp);
+    });
+  }
+
+  /** Header svg: background, band fills, per-scale labels and ticks.
+   *  Adapted from GanttHeaderRenderer.renderTimelineHeader and the per-scale renderers. */
+  private renderGanttHeader(headerSvgEl: HTMLElement, cfg: GanttTimelineCfg): void {
+    const g = this.ganttSvgElement("g", { class: "pm-gantt-header" });
+    g.appendChild(this.ganttSvgElement("rect", { x: 0, y: 0, width: cfg.totalWidth, height: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-bg" }));
+    const { granularity } = cfg;
+    if (granularity === "day") this.renderGanttDayHeader(g, cfg);
+    else if (granularity === "week") this.renderGanttWeekHeader(g, cfg);
+    else if (granularity === "month") this.renderGanttMonthHeader(g, cfg);
+    else if (granularity === "quarter") this.renderGanttQuarterHeader(g, cfg);
+    else this.renderGanttYearHeader(g, cfg);
+    headerSvgEl.appendChild(g);
+  }
+
+  /** Day header: month-top bands, weekend fills, day-of-month labels. Adapted from
+   *  GanttHeaderRenderer.renderDayHeader. */
+  private renderGanttDayHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
+    this.renderGanttMonthBands(g, 0, 24, cfg);
+    for (let i = 0; i < cfg.totalDays; i++) {
+      const d = this.ganttDateAt(cfg.startDateKey, i);
+      const x = i * cfg.dayWidth;
+      const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6;
+      if (isWeekend) {
+        g.appendChild(this.ganttSvgElement("rect", { x, y: 24, width: cfg.dayWidth, height: GANTT_HEADER_HEIGHT - 24, class: "pm-gantt-weekend-header" }));
+      }
+      if (cfg.dayWidth >= 20) {
+        const text = this.ganttSvgElement("text", { x: x + cfg.dayWidth / 2, y: 42, class: "pm-gantt-header-day" });
+        text.setText(String(d.getUTCDate()));
+        g.appendChild(text);
+      }
+    }
+  }
+
+  /** Week header: month-top bands, Monday-aligned week labels and ticks. Adapted from
+   *  GanttHeaderRenderer.renderWeekHeader (week-label mode stays at the reference default). */
+  private renderGanttWeekHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
+    this.renderGanttMonthBands(g, 0, 24, cfg);
+    const start = this.ganttDateAt(cfg.startDateKey, 0);
+    const dow = start.getUTCDay() === 0 ? 7 : start.getUTCDay();
+    const offsetToMonday = dow === 1 ? 0 : 8 - dow;
+    if (offsetToMonday > 0) {
+      const weekNum = this.ganttWeekNumber(start);
+      const w = offsetToMonday * cfg.dayWidth;
+      const text = this.ganttSvgElement("text", { x: w / 2, y: 44, class: "pm-gantt-header-week" });
+      text.setText(`W${weekNum}`);
+      g.appendChild(text);
+    }
+    let i = offsetToMonday;
+    while (i < cfg.totalDays) {
+      const d = this.ganttDateAt(cfg.startDateKey, i);
+      const weekNum = this.ganttWeekNumber(d);
+      const x = i * cfg.dayWidth;
+      const daysInWeek = Math.min(7, cfg.totalDays - i);
+      const w = daysInWeek * cfg.dayWidth;
+      const text = this.ganttSvgElement("text", { x: x + w / 2, y: 44, class: "pm-gantt-header-week" });
+      text.setText(`W${weekNum}`);
+      g.appendChild(text);
+      g.appendChild(this.ganttSvgElement("line", { x1: x, y1: 24, x2: x, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
+      i += 7;
+    }
+  }
+
+  /** Month header: year bands, month labels and ticks. Adapted from
+   *  GanttHeaderRenderer.renderMonthHeader. */
+  private renderGanttMonthHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
+    this.renderGanttYearBands(g, 0, 24, cfg);
+    let monthStart = this.ganttMonthStart(cfg.startDateKey);
+    while (dateKeyFromUtc(monthStart) < cfg.endDateKey) {
+      const nextMonthStart = makeUtcDate(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1);
+      const x1 = Math.max(0, this.ganttDateToX(cfg, dateKeyFromUtc(monthStart)));
+      const x2 = Math.min(cfg.totalWidth, this.ganttDateToX(cfg, dateKeyFromUtc(nextMonthStart)));
+      const w = x2 - x1;
+      const text = this.ganttSvgElement("text", { x: x1 + w / 2, y: 44, class: "pm-gantt-header-month" });
+      text.setText(this.ganttMonthLabel(monthStart));
+      g.appendChild(text);
+      g.appendChild(this.ganttSvgElement("line", { x1, y1: 24, x2: x1, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
+      monthStart = nextMonthStart;
+    }
+  }
+
+  /** Quarter header: year bands, quarter labels. Adapted from
+   *  GanttHeaderRenderer.renderQuarterHeader. */
+  private renderGanttQuarterHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
+    this.renderGanttYearBands(g, 0, 24, cfg);
+    const start = this.ganttDateAt(cfg.startDateKey, 0);
+    let date = makeUtcDate(start.getUTCFullYear(), Math.floor(start.getUTCMonth() / 3) * 3, 1);
+    while (dateKeyFromUtc(date) < cfg.endDateKey) {
+      const q = Math.floor(date.getUTCMonth() / 3) + 1;
+      const nextQStart = makeUtcDate(date.getUTCFullYear(), date.getUTCMonth() + 3, 1);
+      const x1 = Math.max(0, this.ganttDateToX(cfg, dateKeyFromUtc(date)));
+      const x2 = Math.min(cfg.totalWidth, this.ganttDateToX(cfg, dateKeyFromUtc(nextQStart)));
+      const text = this.ganttSvgElement("text", { x: x1 + (x2 - x1) / 2, y: 44, class: "pm-gantt-header-quarter" });
+      text.setText(`Q${q} ${date.getUTCFullYear()}`);
+      g.appendChild(text);
+      date = nextQStart;
+    }
+  }
+
+  /** Year header: year bands, quarter labels and ticks. Adapted from
+   *  GanttHeaderRenderer.renderYearHeader. */
+  private renderGanttYearHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
+    this.renderGanttYearBands(g, 0, 24, cfg);
+    const start = this.ganttDateAt(cfg.startDateKey, 0);
+    let date = makeUtcDate(start.getUTCFullYear(), Math.floor(start.getUTCMonth() / 3) * 3, 1);
+    while (dateKeyFromUtc(date) < cfg.endDateKey) {
+      const q = Math.floor(date.getUTCMonth() / 3) + 1;
+      const nextQStart = makeUtcDate(date.getUTCFullYear(), date.getUTCMonth() + 3, 1);
+      const x1 = Math.max(0, this.ganttDateToX(cfg, dateKeyFromUtc(date)));
+      const x2 = Math.min(cfg.totalWidth, this.ganttDateToX(cfg, dateKeyFromUtc(nextQStart)));
+      const text = this.ganttSvgElement("text", { x: x1 + (x2 - x1) / 2, y: 44, class: "pm-gantt-header-quarter" });
+      text.setText(`Q${q}`);
+      g.appendChild(text);
+      g.appendChild(this.ganttSvgElement("line", { x1, y1: 24, x2: x1, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
+      date = nextQStart;
+    }
+  }
+
+  /** Month bands across the top band. Adapted from GanttHeaderRenderer.renderMonthBands. */
+  private renderGanttMonthBands(g: HTMLElement, y: number, h: number, cfg: GanttTimelineCfg): void {
+    let monthStart = this.ganttMonthStart(cfg.startDateKey);
+    while (dateKeyFromUtc(monthStart) < cfg.endDateKey) {
+      const nextMonthStart = makeUtcDate(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1);
+      const x1 = Math.max(0, this.ganttDateToX(cfg, dateKeyFromUtc(monthStart)));
+      const x2 = Math.min(cfg.totalWidth, this.ganttDateToX(cfg, dateKeyFromUtc(nextMonthStart)));
+      const w = x2 - x1;
+      g.appendChild(this.ganttSvgElement("rect", {
+        x: x1,
+        y,
+        width: w,
+        height: h,
+        class: monthStart.getUTCMonth() % 2 === 0 ? "pm-gantt-band-even" : "pm-gantt-band-odd",
+      }));
+      const text = this.ganttSvgElement("text", { x: x1 + 6, y: y + h - 6, class: "pm-gantt-header-month-top" });
+      text.setText(this.ganttMonthTopLabel(monthStart));
+      g.appendChild(text);
+      monthStart = nextMonthStart;
+    }
+  }
+
+  /** Year bands across the top band. Adapted from GanttHeaderRenderer.renderYearBands. */
+  private renderGanttYearBands(g: HTMLElement, y: number, h: number, cfg: GanttTimelineCfg): void {
+    const start = this.ganttDateAt(cfg.startDateKey, 0);
+    let date = makeUtcDate(start.getUTCFullYear(), 0, 1);
+    while (dateKeyFromUtc(date) < cfg.endDateKey) {
+      const yearEnd = makeUtcDate(date.getUTCFullYear() + 1, 0, 1);
+      const x1 = Math.max(0, this.ganttDateToX(cfg, dateKeyFromUtc(date)));
+      const x2 = Math.min(cfg.totalWidth, this.ganttDateToX(cfg, dateKeyFromUtc(yearEnd)));
+      g.appendChild(this.ganttSvgElement("rect", {
+        x: x1,
+        y,
+        width: x2 - x1,
+        height: h,
+        class: date.getUTCFullYear() % 2 === 0 ? "pm-gantt-band-even" : "pm-gantt-band-odd",
+      }));
+      const text = this.ganttSvgElement("text", { x: x1 + 6, y: y + h - 6, class: "pm-gantt-header-year" });
+      text.setText(String(date.getUTCFullYear()));
+      g.appendChild(text);
+      date = yearEnd;
+    }
+  }
+
+  /** Grid: weekend fills (day scale), boundary verticals, row horizontals. Adapted from
+   *  GanttRenderer.renderGridLines. */
+  private renderGanttGrid(grid: HTMLElement, cfg: GanttTimelineCfg, totalRows: number): void {
+    const totalHeight = GANTT_HEADER_HEIGHT + totalRows * GANTT_ROW_HEIGHT;
+    const { startDateKey, totalDays, dayWidth, granularity } = cfg;
+    for (let i = 0; i < totalDays; i++) {
+      const d = this.ganttDateAt(startDateKey, i);
+      const x = i * dayWidth;
+      const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6;
+      const isMonday = d.getUTCDay() === 1;
+      const isFirst = d.getUTCDate() === 1;
+      if (isWeekend && granularity === "day") {
+        grid.appendChild(this.ganttSvgElement("rect", { x, y: GANTT_HEADER_HEIGHT, width: dayWidth, height: totalHeight - GANTT_HEADER_HEIGHT, class: "pm-gantt-weekend" }));
+      }
+      const shouldDrawLine =
+        (granularity === "day" && isMonday) ||
+        (granularity === "week" && isMonday) ||
+        (granularity === "month" && isFirst) ||
+        ((granularity === "quarter" || granularity === "year") && isFirst && d.getUTCMonth() % 3 === 0);
+      if (shouldDrawLine) {
+        grid.appendChild(this.ganttSvgElement("line", { x1: x, y1: GANTT_HEADER_HEIGHT, x2: x, y2: totalHeight, class: "pm-gantt-gridline-v" }));
+      }
+    }
+    for (let r = 0; r <= totalRows; r++) {
+      const y = GANTT_HEADER_HEIGHT + r * GANTT_ROW_HEIGHT;
+      grid.appendChild(this.ganttSvgElement("line", { x1: 0, y1: y, x2: cfg.totalWidth, y2: y, class: "pm-gantt-gridline-h" }));
+    }
+  }
+
+  /** Today line in the body and its diamond cap in the sticky header. Adapted from
+   *  GanttRenderer.renderTodayLine. */
+  private renderGanttTodayLine(svgEl: HTMLElement, headerSvgEl: HTMLElement, cfg: GanttTimelineCfg, svgHeight: number): void {
+    const x = this.ganttDateToX(cfg, this.getTodayDateKey());
+    if (x < 0 || x > cfg.totalWidth) return;
+    svgEl.appendChild(this.ganttSvgElement("line", { x1: x, y1: GANTT_HEADER_HEIGHT - 8, x2: x, y2: svgHeight, class: "pm-gantt-today-line" }));
+    headerSvgEl.appendChild(this.ganttSvgElement("polygon", {
+      points: `${x},${GANTT_HEADER_HEIGHT - 16} ${x + 6},${GANTT_HEADER_HEIGHT - 8} ${x},${GANTT_HEADER_HEIGHT} ${x - 6},${GANTT_HEADER_HEIGHT - 8}`,
+      class: "pm-gantt-today-diamond",
+    }));
+  }
+
+  /** One bar (or milestone / empty-row target) per dated row. Adapted from
+   *  GanttTaskBarRenderer.renderTaskBar; the tooltip and colors resolve through the
+   *  local schema, and drags persist through the local action pipeline. */
+  private renderGanttBars(
+    barsGroup: HTMLElement,
+    cfg: GanttTimelineCfg,
+    visibleRows: RowData[],
+    eventByPath: Map<string, CalendarTimelineEvent>,
+    invalidPaths: ReadonlySet<string>,
+    config: ViewConfig,
+    startField: string,
+    endField: string | undefined,
+    svgEl: HTMLElement,
+  ): void {
+    visibleRows.forEach((row, rowIndex) => {
+      const event = eventByPath.get(row.file.path);
+      const rowY = GANTT_HEADER_HEIGHT + rowIndex * GANTT_ROW_HEIGHT;
+      if (!event) {
+        this.renderGanttEmptyRowTarget(barsGroup, cfg, row, rowY, startField, endField, svgEl);
+        return;
+      }
+      barsGroup.appendChild(this.ganttSvgElement("rect", { x: 0, y: rowY, width: cfg.totalWidth, height: GANTT_ROW_HEIGHT, class: "pm-gantt-row-hover" }));
+      // An invalid date range keeps its row band but renders no bar (surfaced for
+      // repair through the invalid-events warning), like the local timeline.
+      if (invalidPaths.has(row.file.path)) return;
+      if (event.isMilestone) {
+        this.renderGanttMilestoneDiamond(barsGroup, cfg, event, rowY);
+        return;
+      }
+      const effectiveStart = event.startDateKey;
+      const effectiveEnd = addDateKeyDays(event.endDateKey, 1);
+      const x = Math.max(0, this.ganttDateToX(cfg, effectiveStart));
+      const xEnd = Math.min(cfg.totalWidth, this.ganttDateToX(cfg, effectiveEnd));
+      const width = Math.max(GANTT_BAR_MIN_WIDTH, xEnd - x);
+      const y = rowY + GANTT_BAR_PADDING;
+      const height = GANTT_ROW_HEIGHT - GANTT_BAR_PADDING * 2;
+      const barGroup = this.ganttSvgElement("g", { class: "pm-gantt-bar-group" });
+      barsGroup.appendChild(barGroup);
+      const color = this.resolveGanttBarColor(event);
+      const rect = this.ganttSvgElement("rect", {
+        x,
+        y,
+        width,
+        height,
+        rx: GANTT_BAR_BORDER_RADIUS,
+        ry: GANTT_BAR_BORDER_RADIUS,
+        fill: color,
+        opacity: 0.4,
+        class: "pm-gantt-bar",
+      });
+      barGroup.appendChild(rect);
+      const progress = this.resolveGanttEventProgress(event, row);
+      if (progress > 0) {
+        const pw = (progress / 100) * width;
+        barGroup.appendChild(this.ganttSvgElement("rect", {
+          x,
+          y,
+          width: pw,
+          height,
+          rx: GANTT_BAR_BORDER_RADIUS,
+          ry: GANTT_BAR_BORDER_RADIUS,
+          fill: color,
+          opacity: 0.9,
+          class: "pm-gantt-bar-progress",
+        }));
+      }
+      if (this.ganttRowRecurrence(row)) {
+        const icon = this.ganttSvgElement("text", { x: x + width + 4, y: y + height / 2 + 5, class: "pm-gantt-bar-icon" });
+        icon.setText("R");
+        barGroup.appendChild(icon);
+      }
+      if (width > GANTT_BAR_LABEL_MIN_WIDTH) {
+        const label = this.ganttSvgElement("text", { x: x + 8, y: y + height / 2 + 5, class: "pm-gantt-bar-label" });
+        const maxChars = Math.max(4, Math.floor((width - 16) / 7.5));
+        label.setText(event.title.length > maxChars ? `${event.title.slice(0, maxChars - 1)}\u2026` : event.title);
+        barGroup.appendChild(label);
+      }
+      const tt = this.ganttSvgElement("title");
+      tt.setText(this.formatGanttBarTooltip(row, event, config));
+      rect.appendChild(tt);
+      for (const side of ["left", "right"] as const) {
+        const hx = side === "left" ? x : x + width - GANTT_HANDLE_WIDTH;
+        const handle = this.ganttSvgElement("rect", { x: hx, y, width: GANTT_HANDLE_WIDTH, height, rx: 3, ry: 3, class: "pm-gantt-drag-handle", cursor: "ew-resize" });
+        barGroup.appendChild(handle);
+        this.ganttCleanupFns.push(this.attachGanttBarDrag({ trigger: handle, rect, barGroup, row, side, x, width, cfg, startField, endField }));
+      }
+      for (const side of ["left", "right"] as const) {
+        const cx = side === "left" ? x - GANTT_LINK_DOT_GAP - GANTT_LINK_DOT_RADIUS : x + width + GANTT_LINK_DOT_GAP + GANTT_LINK_DOT_RADIUS;
+        const cy = y + height / 2;
+        const dot = this.ganttSvgElement("circle", { cx, cy, r: GANTT_LINK_DOT_RADIUS, class: "pm-gantt-link-dot", cursor: "crosshair" });
+        dot.addEventListener("mousedown", (e: MouseEvent) => {
+          e.stopPropagation();
+        });
+        dot.addEventListener("click", (e: MouseEvent) => {
+          e.stopPropagation();
+          this.handleGanttLinkDotClick(dot, event.id, side);
+        });
+        barGroup.appendChild(dot);
+      }
+      const hasStart = this.ganttRowHasDate(row, startField, config);
+      const hasDue = endField != null && this.ganttRowHasDate(row, endField, config);
+      if (hasStart && hasDue) {
+        this.ganttCleanupFns.push(this.attachGanttBarDrag({ trigger: rect, rect, barGroup, row, side: "move", x, width, cfg, startField, endField }));
+        rect.setAttribute("cursor", "grab");
+      } else {
+        rect.setAttribute("cursor", "pointer");
+      }
+      rect.addEventListener("click", () => {
+        if (this.ganttDragMoved) {
+          this.ganttDragMoved = false;
+          return;
+        }
+        if (this.actions.openRecordDetail) this.actions.openRecordDetail(rect, row);
+        else this.actions.openRow(row);
+      });
+    });
+  }
+
+  /** Milestone diamond marker. Adapted from GanttTaskBarRenderer.renderMilestoneDiamond. */
+  private renderGanttMilestoneDiamond(barsGroup: HTMLElement, cfg: GanttTimelineCfg, event: CalendarTimelineEvent, rowY: number): void {
+    const cx = this.ganttDateToX(cfg, event.startDateKey) + cfg.dayWidth / 2;
+    const cy = rowY + GANTT_ROW_HEIGHT / 2;
+    const size = 12;
+    const pts = `${cx},${cy - size} ${cx + size},${cy} ${cx},${cy + size} ${cx - size},${cy}`;
+    const diamond = this.ganttSvgElement("polygon", { points: pts, fill: this.resolveGanttBarColor(event), opacity: 0.8, class: "pm-gantt-milestone", cursor: "pointer" });
+    barsGroup.appendChild(diamond);
+    const tt = this.ganttSvgElement("title");
+    tt.setText(t("timeline.milestoneTooltip", { title: event.title, date: event.startDateKey }));
+    diamond.appendChild(tt);
+    diamond.addEventListener("click", () => {
+      if (this.actions.openRecordDetail) this.actions.openRecordDetail(diamond, event.row);
+      else this.actions.openRow(event.row);
+    });
+  }
+
+  /** Empty row target: click-to-set-dates hit area with a snap preview. Adapted from
+   *  GanttTaskBarRenderer.renderEmptyRowClickTarget. */
+  private renderGanttEmptyRowTarget(
+    barsGroup: HTMLElement,
+    cfg: GanttTimelineCfg,
+    row: RowData,
+    rowY: number,
+    startField: string,
+    endField: string | undefined,
+    svgEl: HTMLElement,
+  ): void {
+    const hitArea = this.ganttSvgElement("rect", { x: 0, y: rowY, width: cfg.totalWidth, height: GANTT_ROW_HEIGHT, fill: "transparent", cursor: "cell", class: "pm-gantt-empty-row-hit" });
+    const previewY = rowY + GANTT_BAR_PADDING;
+    const previewH = GANTT_ROW_HEIGHT - GANTT_BAR_PADDING * 2;
+    const previewW = Math.max(cfg.dayWidth, GANTT_BAR_MIN_WIDTH);
+    const preview = this.ganttSvgElement("rect", { x: 0, y: previewY, width: previewW, height: previewH, rx: GANTT_BAR_BORDER_RADIUS, ry: GANTT_BAR_BORDER_RADIUS, class: "pm-gantt-empty-row-preview", "pointer-events": "none" });
+    preview.addClass("pm-hidden");
+    barsGroup.appendChild(hitArea);
+    barsGroup.appendChild(preview);
+    const snapPoints = this.ganttSnapPoints(cfg);
+    const snapThreshold = cfg.dayWidth * 0.4;
+    hitArea.addEventListener("mousemove", (e: MouseEvent) => {
+      const svgRect = svgEl.getBoundingClientRect();
+      const rawX = e.clientX - svgRect.left;
+      const snapped = this.ganttSnapX(rawX, snapPoints, snapThreshold);
+      preview.setAttribute("x", String(snapped));
+      preview.removeClass("pm-hidden");
+    });
+    hitArea.addEventListener("mouseleave", () => {
+      preview.addClass("pm-hidden");
+    });
+    hitArea.addEventListener("click", (e: MouseEvent) => {
+      if (this.actions.isReadOnly || !this.actions.updateEventDates) return;
+      const svgRect = svgEl.getBoundingClientRect();
+      const rawX = e.clientX - svgRect.left;
+      const snapped = this.ganttSnapX(rawX, snapPoints, snapThreshold);
+      const iso = this.ganttXToDate(cfg, snapped);
+      const result = this.actions.updateEventDates(row, { startField, startDateKey: iso, endField, endDateKey: iso, changedEdge: "both" });
+      if (result) {
+        void Promise.resolve(result).catch(() => new Notice(t("timeline.dateSaveFailed")));
+      }
+    });
+    const tt = this.ganttSvgElement("title");
+    tt.setText(t("timeline.clickToSetDates"));
+    hitArea.appendChild(tt);
+  }
+
+  /** Milestone guide lines in the body and their labels in the sticky header. Adapted from
+   *  GanttTaskBarRenderer.renderMilestoneLabels. */
+  private renderGanttMilestoneLabels(
+    svgEl: HTMLElement,
+    headerSvgEl: HTMLElement,
+    cfg: GanttTimelineCfg,
+    visibleRows: RowData[],
+    eventByPath: Map<string, CalendarTimelineEvent>,
+  ): void {
+    const milestones = visibleRows
+      .map((row) => eventByPath.get(row.file.path))
+      .filter((event): event is CalendarTimelineEvent => Boolean(event?.isMilestone));
+    if (milestones.length === 0) return;
+    const linesG = this.ganttSvgElement("g", { class: "pm-gantt-milestone-labels" });
+    for (const event of milestones) {
+      const x = this.ganttDateToX(cfg, event.startDateKey) + cfg.dayWidth / 2;
+      const totalH = GANTT_HEADER_HEIGHT + visibleRows.length * GANTT_ROW_HEIGHT;
+      linesG.appendChild(this.ganttSvgElement("line", {
+        x1: x,
+        y1: GANTT_HEADER_HEIGHT,
+        x2: x,
+        y2: totalH,
+        stroke: this.resolveGanttBarColor(event),
+        "stroke-width": 1,
+        "stroke-dasharray": "4 4",
+        opacity: 0.4,
+      }));
+      const label = this.ganttSvgElement("text", { x, y: 14, "text-anchor": "middle", class: "pm-gantt-milestone-label", fill: this.resolveGanttBarColor(event) });
+      label.setText(event.title.length > 16 ? `${event.title.slice(0, 14)}\u2026` : event.title);
+      headerSvgEl.appendChild(label);
+    }
+    svgEl.appendChild(linesG);
+  }
+
+  /** Dependency arrows: finish-to-start bezier from the predecessor's due edge to the
+   *  successor's start edge. Adapted from GanttTaskBarRenderer.renderDependencyArrows. */
+  private renderGanttDependencyArrows(
+    svgEl: HTMLElement,
+    cfg: GanttTimelineCfg,
+    visibleRows: RowData[],
+    eventByPath: Map<string, CalendarTimelineEvent>,
+  ): void {
+    const graph = this.getTimelineDependencyGraph();
+    const indexMap = new Map<string, number>();
+    visibleRows.forEach((row, i) => indexMap.set(row.file.path, i));
+    const arrowGroup = this.ganttSvgElement("g", { class: "pm-gantt-arrows" });
+    for (const row of visibleRows) {
+      const toRow = indexMap.get(row.file.path);
+      if (toRow === undefined) continue;
+      const toEvent = eventByPath.get(row.file.path);
+      if (!toEvent) continue;
+      const toY = GANTT_HEADER_HEIGHT + toRow * GANTT_ROW_HEIGHT + GANTT_ROW_HEIGHT / 2;
+      const toX = this.ganttDateToX(cfg, toEvent.startDateKey);
+      for (const depId of graph.dependencies[row.file.path] ?? []) {
+        const fromRow = indexMap.get(depId);
+        if (fromRow === undefined) continue;
+        const depEvent = eventByPath.get(depId);
+        if (!depEvent) continue;
+        const fromX = this.ganttDateToX(cfg, addDateKeyDays(depEvent.endDateKey, 1));
+        const fromY = GANTT_HEADER_HEIGHT + fromRow * GANTT_ROW_HEIGHT + GANTT_ROW_HEIGHT / 2;
+        const midX = (fromX + toX) / 2;
+        arrowGroup.appendChild(this.ganttSvgElement("path", {
+          d: `M ${fromX} ${fromY} C ${midX} ${fromY}, ${midX} ${toY}, ${toX} ${toY}`,
+          class: "pm-gantt-arrow",
+          "marker-end": "url(#pm-arrowhead)",
+        }));
+      }
+    }
+    svgEl.appendChild(arrowGroup);
+  }
+
+  /** Bar drag: edge drags move one edge, bar drag moves the span; dates are written once
+   *  on release through the local action pipeline. Adapted from
+   *  GanttDragHandler.attachBarDrag (the reference commits through the plugin store and
+   *  pushes its own undo entry; here the local updateEventDates action owns persistence). */
+  private attachGanttBarDrag(opts: GanttBarDragOpts): () => void {
+    const { trigger, rect, barGroup, row, side, x, width, cfg, startField, endField } = opts;
+    const moving = side === "move";
+    let activeCleanup: (() => void) | null = null;
+    trigger.addEventListener("mousedown", (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      if (!moving) e.stopPropagation();
+      e.preventDefault();
+      this.ganttDragState.isDragging = true;
+      this.ganttDragMoved = false;
+      this.ganttDragState.dragSide = side;
+      this.ganttDragState.dragRow = row;
+      this.ganttDragState.dragStartX = e.clientX;
+      this.ganttDragState.dragBarEl = rect;
+      this.ganttDragState.dragInitialX = x;
+      this.ganttDragState.dragInitialW = width;
+
+      const snapPoints = this.ganttSnapPoints(cfg);
+      const snap = (value: number) => this.ganttSnapX(value, snapPoints, cfg.dayWidth * 0.4);
+      let movedX = x;
+      let movedW = width;
+
+      const restore = () => {
+        if (moving) {
+          barGroup.removeAttribute("transform");
+          return;
+        }
+        rect.setAttribute("x", String(this.ganttDragState.dragInitialX));
+        rect.setAttribute("width", String(this.ganttDragState.dragInitialW));
+        this.repositionGanttBarChildren(barGroup, this.ganttDragState.dragInitialX, this.ganttDragState.dragInitialW);
+      };
+
+      const onMove = (ev: MouseEvent) => {
+        if (!this.ganttDragState.isDragging || !this.ganttDragState.dragBarEl) return;
+        const dx = ev.clientX - this.ganttDragState.dragStartX;
+        if (Math.abs(dx) > 3) this.ganttDragMoved = true;
+        if (moving) {
+          movedX = snap(Math.max(0, this.ganttDragState.dragInitialX + dx));
+          barGroup.setAttribute("transform", `translate(${movedX - this.ganttDragState.dragInitialX}, 0)`);
+          return;
+        }
+        if (side === "left") {
+          movedX = snap(Math.max(0, this.ganttDragState.dragInitialX + dx));
+          movedW = this.ganttDragState.dragInitialX + this.ganttDragState.dragInitialW - movedX;
+        } else {
+          movedW = snap(movedX + this.ganttDragState.dragInitialW + dx) - movedX;
+        }
+        movedW = Math.max(cfg.dayWidth, movedW);
+        this.ganttDragState.dragBarEl.setAttribute("x", String(movedX));
+        this.ganttDragState.dragBarEl.setAttribute("width", String(movedW));
+        this.repositionGanttBarChildren(barGroup, movedX, movedW);
+      };
+
+      const onUp = () => {
+        window.activeDocument.removeEventListener("mousemove", onMove);
+        window.activeDocument.removeEventListener("mouseup", onUp);
+        if (moving) rect.removeClass("pm-gantt-bar-grabbing");
+        activeCleanup = null;
+        if (!this.ganttDragState.isDragging || !this.ganttDragState.dragRow || !this.ganttDragState.dragBarEl) return;
+        this.ganttDragState.isDragging = false;
+        if (!this.ganttDragMoved) {
+          restore();
+          return;
+        }
+        const startDateKey = this.ganttXToDate(cfg, snap(movedX));
+        const dueDateKey = addDateKeyDays(this.ganttXToDate(cfg, snap(movedX + movedW)), -1);
+        const change: CalendarEventDateChange = {
+          startField,
+          startDateKey,
+          endField,
+          endDateKey: side === "right" || side === "move" ? dueDateKey : undefined,
+          changedEdge: side === "left" ? "start" : side === "right" ? "end" : "both",
+        };
+        if (this.actions.isReadOnly || !this.actions.updateEventDates) {
+          restore();
+          return;
+        }
+        const result = this.actions.updateEventDates(this.ganttDragState.dragRow, change);
+        if (result) {
+          void Promise.resolve(result).catch(() => new Notice(t("timeline.dateSaveFailed")));
+        }
+      };
+
+      if (moving) rect.addClass("pm-gantt-bar-grabbing");
+      window.activeDocument.addEventListener("mousemove", onMove);
+      window.activeDocument.addEventListener("mouseup", onUp);
+      activeCleanup = () => {
+        window.activeDocument.removeEventListener("mousemove", onMove);
+        window.activeDocument.removeEventListener("mouseup", onUp);
+      };
+    });
+
+    return () => {
+      if (activeCleanup) {
+        activeCleanup();
+        activeCleanup = null;
+        this.ganttDragState.isDragging = false;
+        this.ganttDragState.dragBarEl = null;
+      }
+    };
+  }
+
+  /** Keeps the label, handles, and progress overlay on the bar while it resizes. Adapted from
+   *  GanttDragHandler.repositionBarChildren. */
+  private repositionGanttBarChildren(barGroup: HTMLElement, newX: number, newW: number): void {
+    const label = barGroup.querySelector(".pm-gantt-bar-label");
+    if (label) {
+      label.setAttribute("x", String(newX + 8));
+      if (newW <= GANTT_BAR_LABEL_MIN_WIDTH) {
+        label.setAttribute("visibility", "hidden");
+      } else {
+        label.removeAttribute("visibility");
+      }
+    }
+    const handles = barGroup.querySelectorAll(".pm-gantt-drag-handle");
+    if (handles.length === 2) {
+      handles[0].setAttribute("x", String(newX));
+      handles[1].setAttribute("x", String(newX + newW - GANTT_HANDLE_WIDTH));
+    }
+    const progress = barGroup.querySelector(".pm-gantt-bar-progress");
+    if (progress) progress.setAttribute("x", String(newX));
+    const icon = barGroup.querySelector(".pm-gantt-bar-icon");
+    if (icon) icon.setAttribute("x", String(newX + newW + 4));
+  }
+
+  /** Two-click finish-to-start linking with the reference's rejection rules, via the local
+   *  link seam; the active dot highlight mirrors the reference's modifier class. */
+  private handleGanttLinkDotClick(dot: HTMLElement, taskId: string, side: "left" | "right"): void {
+    if (this.timelineLinkSelectionEl) this.timelineLinkSelectionEl.removeClass("pm-gantt-link-dot--active");
+    this.handleTimelineLinkClick({ taskId, side }, dot);
+    if (this.timelineLinkSelection && this.timelineLinkSelectionEl) {
+      this.timelineLinkSelectionEl.addClass("pm-gantt-link-dot--active");
+    }
+  }
+
+  /** Wheel passthrough and vertical scroll sync between the label column and the chart.
+   *  Adapted from GanttView's left-panel wheel handling and scroll sync. */
+  private setupGanttScrollSync(leftBody: HTMLElement, rightPanel: HTMLElement): void {
+    const onLeftWheel = (e: WheelEvent) => {
+      rightPanel.scrollTop += e.deltaY;
+      rightPanel.scrollLeft += e.deltaX;
+      e.preventDefault();
+    };
+    leftBody.addEventListener("wheel", onLeftWheel, { passive: false });
+    this.ganttCleanupFns.push(() => leftBody.removeEventListener("wheel", onLeftWheel));
+    const leftSpacer = leftBody.createDiv();
+    leftSpacer.addClass("pm-no-shrink");
+    const syncSpacer = () => {
+      const hScrollbarH = rightPanel.offsetHeight - rightPanel.clientHeight;
+      leftSpacer.style.height = `${hScrollbarH}px`;
+    };
+    rightPanel.addEventListener("scroll", () => {
+      syncSpacer();
+      leftBody.scrollTop = rightPanel.scrollTop;
+    });
+    syncSpacer();
+  }
+
+  /** Center the chart on today, clamped to the range start. Adapted from
+   *  GanttView.scrollToToday. */
+  private scrollGanttToToday(cfg: GanttTimelineCfg, scrollEl: HTMLElement): void {
+    const x = this.ganttDateToX(cfg, this.getTodayDateKey());
+    const center = x - (scrollEl.clientWidth || 0) / 2;
+    scrollEl.scrollLeft = Math.max(0, center);
+  }
+
+  /** Restores the scroll position captured before this render, or centers on today when
+   *  there is none (first render). Adapted from GanttView.render's pendingScroll branch. */
+  private applyGanttPendingScroll(cfg: GanttTimelineCfg, scrollEl: HTMLElement): void {
+    const pending = this.ganttPendingScroll;
+    if (pending) {
+      this.ganttPendingScroll = null;
+      scrollEl.scrollTop = pending.top;
+      scrollEl.scrollLeft = Math.max(0, this.ganttDateToX(cfg, pending.anchorDateKey));
+      return;
+    }
+    this.scrollGanttToToday(cfg, scrollEl);
+  }
+
+  /** Snap-point X positions; day: every day border, week: Monday and Thursday,
+   *  month: 1st/8th/15th/22nd, quarter and year: the 1st of each month. Adapted from
+   *  TimelineConfig.getSnapPoints. */
+  private ganttSnapPoints(cfg: GanttTimelineCfg): number[] {
+    const points: number[] = [];
+    const { startDateKey, totalDays, dayWidth, granularity } = cfg;
+    for (let i = 0; i <= totalDays; i++) {
+      const d = this.ganttDateAt(startDateKey, i);
+      const x = i * dayWidth;
+      const dow = d.getUTCDay();
+      if (granularity === "day") {
+        points.push(x);
+      } else if (granularity === "week") {
+        if (dow === 1 || dow === 4) points.push(x);
+      } else if (granularity === "month") {
+        if (d.getUTCDate() === 1 || d.getUTCDate() === 8 || d.getUTCDate() === 15 || d.getUTCDate() === 22) points.push(x);
+      } else if (d.getUTCDate() === 1) {
+        points.push(x);
+      }
+    }
+    return points;
+  }
+
+  /** Snap an x position to the nearest snap point within a threshold. Adapted from
+   *  TimelineConfig.snapX. */
+  private ganttSnapX(x: number, snapPoints: number[], threshold: number): number {
+    let closest = x;
+    let minDist = Infinity;
+    for (const sp of snapPoints) {
+      const dist = Math.abs(x - sp);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = sp;
+      }
+      if (sp > x + threshold) break;
+    }
+    return minDist <= threshold ? closest : x;
+  }
+
+  /** Date-to-x conversion in reference day units. Adapted from TimelineConfig.dateToX. */
+  private ganttDateToX(cfg: GanttTimelineCfg, dateKey: string): number {
+    return (dateKeyDaysBetween(cfg.startDateKey, dateKey) ?? 0) * cfg.dayWidth;
+  }
+
+  /** X-to-date conversion in reference day units. Adapted from TimelineConfig.xToDate. */
+  private ganttXToDate(cfg: GanttTimelineCfg, x: number): string {
+    return addDateKeyDays(cfg.startDateKey, Math.round(x / cfg.dayWidth));
+  }
+
+  /** Create an SVG element in the timeline's document, falling back to the host's
+   *  element factory when the document surface is unavailable (tests). */
+  private ganttSvgElement(tag: string, attrs?: Record<string, string | number>): HTMLElement {
+    const host = this.timelineRoot ?? (typeof window !== "undefined" ? (window.activeDocument?.body ?? null) : null);
+    const doc = host?.ownerDocument ?? (typeof window !== "undefined" ? window.activeDocument : undefined);
+    let el: HTMLElement;
+    if (doc && typeof doc.createElementNS === "function") {
+      el = doc.createElementNS(SVG_NAMESPACE, tag) as unknown as HTMLElement;
+    } else if (host) {
+      el = host.createEl(tag as keyof HTMLElementTagNameMap);
+    } else {
+      throw new Error("No document available to create gantt SVG elements");
+    }
+    for (const [key, value] of Object.entries(attrs ?? {})) el.setAttribute(key, String(value));
+    return el;
+  }
+
+  /** ISO week number for a UTC date (Temporal weekOfYear equivalent, rewritten). */
+  private ganttWeekNumber(date: Date): number {
+    const target = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    const dayNum = (target.getUTCDay() + 6) % 7;
+    target.setUTCDate(target.getUTCDate() - dayNum + 3);
+    const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+    const firstDayNum = (firstThursday.getUTCDay() + 6) % 7;
+    firstThursday.setUTCDate(firstThursday.getUTCDate() - firstDayNum + 3);
+    return 1 + Math.round((target.getTime() - firstThursday.getTime()) / 604800000);
+  }
+
+  private ganttDateAt(startDateKey: string, days: number): Date {
+    const base = parseDateKeyToUtc(startDateKey);
+    return base ? addUtcDays(base, days) : new Date(0);
+  }
+
+  private ganttMonthStart(dateKey: string): Date {
+    const base = parseDateKeyToUtc(dateKey) ?? new Date(0);
+    return makeUtcDate(base.getUTCFullYear(), base.getUTCMonth(), 1);
+  }
+
+  private ganttMonthLabel(date: Date): string {
+    return new Intl.DateTimeFormat(getEffectiveLocale(), { month: "short" }).format(date);
+  }
+
+  private ganttMonthTopLabel(date: Date): string {
+    return new Intl.DateTimeFormat(getEffectiveLocale(), { month: "short", year: "2-digit" }).format(date);
+  }
+
+  /** Bar fill: schema color token, falling back to the interactive accent. */
+  private resolveGanttBarColor(event: CalendarTimelineEvent): string {
+    if (event.color) return `var(--status-color-fg-${event.color})`;
+    return "var(--interactive-accent)";
+  }
+
+  /** Status dot color: the status column's option color, falling back to muted text. */
+  private resolveGanttStatusColor(config: ViewConfig, row: RowData): string {
+    const column = config.schema.columns.find((candidate) => candidate.type === "status");
+    const raw = column ? this.ganttScalarValue(row.frontmatter[column.key] ?? row.computed[column.key]) : "";
+    const option = column?.statusOptions?.find((candidate) => candidate.value === raw);
+    return option?.color ? `var(--status-color-fg-${option.color})` : "var(--text-muted)";
+  }
+
+  /** Status label for the bar tooltip: the raw status value, else a dash. */
+  private resolveGanttStatusLabel(config: ViewConfig, row: RowData): string {
+    const column = config.schema.columns.find((candidate) => candidate.type === "status");
+    const raw = column ? this.ganttScalarValue(row.frontmatter[column.key] ?? row.computed[column.key]) : "";
+    return raw || "\u2014";
+  }
+
+  /** Row progress: subtask-derived progress when present, else the row's own. */
+  private resolveGanttEventProgress(event: CalendarTimelineEvent | undefined, row: RowData): number {
+    const subtaskProgress = this.subtaskRelation?.nodes.get(row.file.path)?.progress;
+    const value = subtaskProgress?.value ?? event?.progress ?? 0;
+    return Number.isFinite(value) ? Math.max(0, Math.min(100, value)) : 0;
+  }
+
+  private ganttRowRecurrence(row: RowData): boolean {
+    return Boolean(row.frontmatter.recurrence);
+  }
+
+  /** Whether the row carries a real value in the given date-ish field. */
+  private ganttRowHasDate(row: RowData, field: string, config: ViewConfig): boolean {
+    const column = config.schema.columns.find((candidate) => candidate.key === field);
+    const raw = column && (column.type === "computed" || column.type === "rollup")
+      ? row.computed[column.type === "computed" ? column.computedKey || column.key : column.key]
+      : row.frontmatter[field];
+    if (raw instanceof Date) return Number.isFinite(raw.getTime());
+    if (typeof raw === "number") return Number.isFinite(raw);
+    if (typeof raw !== "string") return false;
+    return /^\d{4}-\d{1,2}-\d{1,2}/.test(raw.trim());
+  }
+
+  /** Dependencies that point outside the current view, for the label-row chip. */
+  private getGanttElsewhereDependencies(row: RowData): string[] {
+    const graph = this.getTimelineDependencyGraph();
+    return (graph.dependencies[row.file.path] ?? []).filter((id) => !graph.taskIds.has(id));
+  }
+
+  private formatGanttBarTooltip(row: RowData, event: CalendarTimelineEvent, config: ViewConfig): string {
+    const status = this.resolveGanttStatusLabel(config, row);
+    const priority = this.ganttScalarValue(row.frontmatter.priority ?? row.computed.priority) || "\u2014";
+    const startValue = this.ganttScalarValue(row.frontmatter[config.timelineStartDateField || ""]);
+    const dueValue = this.ganttScalarValue(config.timelineEndDateField ? row.frontmatter[config.timelineEndDateField] : undefined);
+    const progress = Math.round(this.resolveGanttEventProgress(event, row));
+    let text = t("timeline.barTooltip", {
+      title: event.title,
+      status,
+      priority,
+      start: startValue || "\u2014",
+      due: dueValue || "\u2014",
+      progress: String(progress),
+    });
+    const assignees = this.ganttAssignees(row);
+    if (assignees.length > 0) {
+      text += t("timeline.barTooltipAssignees", { names: assignees.join(", ") });
+    }
+    return text;
+  }
+
+  /** Frontmatter assignees with wiki-link wrappers and aliases unwrapped. */
+  private ganttAssignees(row: RowData): string[] {
+    const raw = row.frontmatter.assignees;
+    if (!Array.isArray(raw)) return [];
+    const names: string[] = [];
+    for (const item of raw) {
+      const text = String(item).trim();
+      const inner = text.match(/^\[\[([^\]]+)\]\]$/)?.[1] ?? text;
+      const pipe = inner.indexOf("|");
+      names.push(pipe >= 0 ? inner.slice(pipe + 1).trim() : inner);
+    }
+    return names.filter(Boolean);
+  }
+
+  private ganttScalarValue(value: unknown): string {
+    if (Array.isArray(value)) return value.length > 0 ? this.ganttScalarValue(value[0]) : "";
+    if (value == null) return "";
+    if (typeof value === "string") return value.trim();
+    if (typeof value === "number" || typeof value === "boolean") return String(value);
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    return "";
   }
 
   private renderTimelineGridColumns(
@@ -766,7 +2029,7 @@ export class CalendarTimelineRenderer {
   }
 
   private clearTimelineLinkSelection(): void {
-    this.timelineLinkSelectionEl?.removeClass("is-active");
+    this.timelineLinkSelectionEl?.removeClass("is-active", "pm-gantt-link-dot--active");
     this.timelineLinkHoverEl?.removeClass("is-target");
     this.timelineLinkSelection = null;
     this.timelineLinkSelectionEl = null;

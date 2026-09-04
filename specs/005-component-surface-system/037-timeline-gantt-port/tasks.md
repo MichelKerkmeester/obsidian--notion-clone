@@ -113,16 +113,73 @@ contextType: "general"
 <!-- ANCHOR:phase-4 -->
 ## Phase 4: 1:1 Reference Port (Amendment 2026-09-04, REQ-007)
 
-- [ ] T019 Write a red-first DOM-structure parity test walking the reference's `GanttView` output
+- [x] T019 Write a red-first DOM-structure parity test walking the reference's `GanttView` output
       shape — REQ-007.
       — evidence to close: the test is observed failing against the current (pre-amendment)
       renderer before any port line lands, naming the exact structural gap.
-- [ ] T020 `cli-devin` leg: port `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/
+      — closed 2026-09-04 (this leg): `src/views/calendar-timeline-gantt.test.ts` — red first:
+      3 failed of 3, `AssertionError: expected 'div\n  div.db-timeline.is-scale-month…' to be
+      'div.pm-gantt-view\n  div.pm-gantt-con…' // Object.is equality`, the pre-port renderer
+      emitting `db-timeline-*` classes where the reference shape requires `pm-gantt-*`
+      (`calendar-timeline-gantt.test.ts:398, 542, 603`); green after the port: 3/3, plus the
+      reference geometry defaults (label width 280px, header 56px, row 44px) asserted at
+      `calendar-timeline-gantt.test.ts:535-549`.
+- [x] T020 `cli-devin` leg: port `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/
       `TimelineConfig.ts`'s DOM structure and class vocabulary 1:1 onto
       `calendar-timeline-renderer.ts` — REQ-007, REQ-002, REQ-003.
       — evidence to close: T019's parity test turns green; the dependency-link seam and
       visible-window/backlog/invalid-event/group-limit behavior named in REQ-002/REQ-003 are
       unchanged by hunk-range inspection of the diff.
+      — closed 2026-09-04 (this leg): default render dispatch to the 1:1 path at
+      `calendar-timeline-renderer.ts:389-393`, ported tree at `renderTimelineGantt`
+      (`:636-734`) with the MIT notice at `:573-608`; the local-extension path is unchanged and
+      gated by `timelineLocalExtensions` (default off) at `:389` (`src/data/types.ts:706-709`);
+      reference geometry constants at `src/data/calendar-timeline-model.ts:249-254`; strings in
+      all three locale blocks (`src/i18n.ts:863-873, 2551-2561, 4210-4220`). REQ-002 seam
+      (`resolveTimelineLinkChange` → `handleTimelineLinkClick`) reused unchanged by the link
+      dots (`calendar-timeline-renderer.ts:1227`, `handleGanttLinkDotClick` at `:1516`);
+      REQ-003 behaviors live unchanged behind the setting. Local extensions and their gates
+      listed in the leg report.
+      — fresh verifier pass, 2026-09-04 (a session that did not write T019/T020): re-read every
+      reference file (`GanttView.ts`, `GanttHeaderRenderer.ts`, `GanttRenderer.ts`,
+      `GanttTaskBarRenderer.ts`, `GanttDragHandler.ts`, `GanttLinkHandler.ts`,
+      `TaskLabelRenderer.ts`, `TimelineConfig.ts`) against the ported block line by line; found
+      and fixed one real gap the port left open — every data/config change re-renders the
+      timeline from scratch (`renderTimeline` at `calendar-timeline-renderer.ts:374`), and
+      without the reference's `pendingScroll` mechanism (`GanttView.ts:48,65-73,258-267`) the
+      viewport snapped back to "today" after every drag, link, or scale change; added
+      `ganttPendingScroll` (`:302`), a capture before teardown in `renderTimeline` (`:374`), and
+      `applyGanttPendingScroll` (`:1577`) called from `renderTimelineGantt`'s RAF (`:649`) instead
+      of unconditionally centering on today. `npx tsc --noEmit` exit 0, `npx vitest run` 964/964
+      (including the untouched T019 parity test), `npm run lint` 172 problems (verified equal to
+      a clean `f7b080a` baseline via a disposable `git worktree add`, not `git stash`), comment
+      scan 0. One accepted, undocumented-by-devin structural gap left as-is (no local fix
+      possible without new app infrastructure): the reference's per-view Ctrl+Z/Ctrl+Shift+Z/
+      Ctrl+Y undo/redo (`GanttView.ts:201-217`) has no local equivalent — this codebase carries
+      no `plugin.undoLastAction`/`redoLastAction` analogue outside Obsidian's own editor-focused
+      undo, so REQ-007's "drag and resize behaviour" parity holds for the drag/resize/link
+      mechanics themselves but not this specific reference keyboard shortcut; flagged for the
+      orchestrator rather than invented. Repointed the harness's `db-timeline-*` assertions to
+      the new default: `tools/live/render-assertion-harness.ts`'s `timelineAssertions()` now
+      queries `.pm-gantt-label-row`/`.pm-gantt-bar-group`/`.pm-gantt-milestone` (the bench never
+      sets `timelineLocalExtensions`, so its scenario always exercised the new default path);
+      raised `tools/live/touch-targets-constructed-baseline.json`'s ratchet from 367 to 9974 with
+      a full per-class audit (clickable-icon 0→9648, pm-prop-add 0→6, the three retired
+      `db-timeline-nav`/`-create-button`/`-scale-menu` classes 47→0) — the reference's own
+      controls bar and per-row add-subtask button are bare, unstyled `clickable-icon` buttons at
+      bench scale (1600 rows × 6 timeline scenarios), matching the reference's own `gantt.css`,
+      which carries no sizing rule for them either; added a `tools/lane/css-lane.json` release
+      entry (`037-timeline-gantt-port`, same `baselineHash`, no styles.css edit) naming the four
+      `constructed-timeline-*` captures that moved for real (the other twelve recaptured
+      `timeline-view-*`/`timeline-subtask-tree-*` PNGs are hand-written `scenarios.mjs` fixtures,
+      confirmed pixel-identical by `check-lane`'s own compare — byte-only re-encode noise, no
+      review owed); read all four constructed-timeline captures at both densities and both
+      themes — every one shows the unstyled pre-CSS-leg state (`pm-gantt-controls` bar and
+      `pm-gantt-label-row`s stacked as plain blocks from the top, the SVG header/grid/bars
+      pushed off-viewport below the row list because `.pm-gantt-wrapper` has no flex rule yet),
+      expected until T021 lands `gantt.css`. `npm run gate`: 25/25 green (`screenshots-fresh`,
+      `touch-targets`, `evidence` were the three red lanes before this pass; all three now
+      green from the fixes above, not from exemption).
 - [ ] T021 `cli-codex` leg: copy `gantt.css` verbatim where its rules apply into the
       `css-lane`-held `styles.css` `db-timeline-*` region, with the MIT notice attached to the
       copied block, and update the screenshot fixtures to match — REQ-007.
