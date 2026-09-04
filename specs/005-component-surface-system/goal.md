@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T05:10:00Z"
-    last_updated_by: "037-rows-closed"
-    recent_action: "037: day-scale row closed (7ca6cc2); all four open rows now closed"
-    next_safe_action: "Land the three 042 harness lanes; re-audit rows 5 and 6; operator confirms"
+    last_updated_at: "2026-09-04T06:40:00Z"
+    last_updated_by: "done-audit-4"
+    recent_action: "042 re-audit: row 5 needs 7ca6cc2 claim; row 6 open on 5 lanes"
+    next_safe_action: "Add a replay claim for 7ca6cc2; operator device confirms; T021 external lane"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -23,6 +23,7 @@ _memory:
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
+      - "042: row 5 open on 7ca6cc2's missing replay claim; row 6 open on 5 fixture-backed gate lanes"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -185,6 +186,10 @@ resolve them silently.
       `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate`, `$?` read directly: `0`, 25
       green. Bare `npm run gate`, `$?` read directly: `0`, the same 25 green. No stray Chrome
       process (`pgrep` empty).
+      **Re-verified 2026-09-04T06:40:00Z (done-audit-4).** `pgrep -f "tools/screenshots/
+      capture.mjs|tools/gate.mjs"` empty before each run. `SURFACE_PHASE=042-harness-fidelity-
+      and-replay npm run gate`, `$?` read directly: `0`, 25 green, 0 red. Bare `npm run gate`,
+      `$?` read directly: `0`, the same 25 green, 0 red.
 - [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
       `npm run replay` passes today — 8 of 8 held, exit 0 — but observed red: N/A — no earlier
       count recorded. `tools/live/replay.json`'s history carries no run where a claim's `held` was
@@ -206,6 +211,34 @@ resolve them silently.
       documented reds but no replay claim — `7e36671` (038 board captures), `535373a` (040
       same-parent reorder), `3f143df` and `a251a43` (041 reduced motion), `fa58c7f` and
       `b29bf7f` (037 timeline open rows). A lane is adding them now.
+      **Re-verified 2026-09-04T06:40:00Z (done-audit-4), narrowed further, still open.**
+      `node tools/live/replay.mjs`, `$?` read directly: `0`, "replay: PASS — all 27 results
+      still hold", `reversed: 0`. The six open-row claims above landed in `5fa0b0c`, all
+      pre-fix-audited (T024: `7e36671: 0 -> 2`, `535373a: 0 -> 2`, `a251a43: 0 -> 1`,
+      `3f143df: 0 -> 1`, `fa58c7f: 0 -> 4`, `b29bf7f: 0 -> 2`, each measured on `<sha>^` via
+      `git archive`, never `git checkout`). Checked every landed result this audit named: report
+      29 and reports 34-36 delegate to `sheet-teardown.json`/`sheet-rebuild.json` by design —
+      `was`/`recorded` both read `0` because the assertion is artefact-presence-plus-failure-text,
+      not a numeric diff; proven non-vacuous by the negative controls in `042/implementation-
+      summary.md`'s Verification table (moving either artefact reds the lane), not by a
+      differing number. Both legs of `037`-`041` (10 static claims) and the six open-row fixes
+      above (6 more) all show `was` differing from `recorded`, confirmed by reading
+      `replay.json` directly. One landed result in the named list still carries no claim:
+      `7ca6cc2` — `037`'s fourth and last open row (day-scale fixture centring on the pinned
+      `now`, `HH` tick-label suffix dropped), which this parent's own log calls "the last of its
+      four remaining open product rows," the identical framing used for `fa58c7f`/`b29bf7f`.
+      This row's own precedent already required a claim for a capture-only commit (`7e36671`
+      touches no `src/` file either), so `7ca6cc2` is not exempt on that basis. Read
+      `replay.mjs`'s existing `037` claims in full: both measure only
+      `src/data/calendar-timeline-model.ts`/`src/views/calendar-timeline-renderer.ts` patterns
+      (title window, first-tick transform, milestone-placement helper, the 32px phone-day
+      branch, and the dependency-link/five-scale checks) — none reads `tools/screenshots/
+      scenarios/temporal.mjs`'s day-branch centring or its tick-label suffix, so `7ca6cc2`'s fix
+      is genuinely uncovered, not double-counted under an existing claim. `042`'s own four
+      commits (`7e9fd27`, `5fa0b0c`, `bea1b1c`, `8759399`) are out of scope for a claim: none
+      closes a documented open row in another phase's ledger the way `7e36671` did, and
+      `replay.mjs` holding a claim against its own construction would be circular — the
+      instrument cannot certify itself. Stays open on `7ca6cc2` alone.
 - [ ] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
       **Ticked 2026-09-02, on an observed red verified in-runtime and committed as `c5566db`.** The
@@ -252,6 +285,28 @@ resolve them silently.
       Two stay open: (2)/(3) `touch-targets.mjs` and `unstyled-links.mjs`, plus the shared
       capture-pipeline fixtures, remain DECLARED in `042/tasks.md`'s provability record and back
       two of the 25 gate lanes that make row 4 green. Stays open on that bounded list.
+      **Re-verified 2026-09-04T06:40:00Z (done-audit-4), narrowed further, still open.** (1) and
+      (4) stay REMOVED, unchanged. (2)/(3) moved from DECLARED to DECLARED-AND-CROSS-VALIDATED
+      for `touch-targets.mjs`/`unstyled-links.mjs` specifically: both now run a second pass
+      (`8759399`) that mounts every scenario `render-assertions.mjs` knows through the identical
+      bundle and mount path the render-assertion lane itself uses, measuring real `src/views`
+      renderer output rather than fixture markup. That pass is not theatre — it found four real
+      touch-target classes no fixture could see (`touch-targets-constructed-baseline.json`,
+      `under: 8493`) and prints an explicit empty-sample caveat for `unstyled-links.mjs` per D6
+      rather than a silent pass. But the fixture pass was supplemented, not replaced: both
+      hand-written passes still count toward two of the 25 gate lanes' green, confirmed
+      unchanged this run (fixture 264/279 and 112/70). Three more of the 25 lanes —
+      `css-lane`, `screenshots-fresh`, `device-parity` — read only `tools/screenshots/
+      scenarios.mjs`'s hand-written fixtures with no constructed-renderer counterpart at all;
+      `check-lane.mjs` now compares captures by content (`pixelHash`/`layoutHash`, `bea1b1c`)
+      rather than a raw byte diff, and specific scenarios (board empty-column/drop-language,
+      timeline day/tick) are constrained by scenario-specific parity tests, but the fixtures
+      themselves remain hand-authored HTML a device did not render. The dependency is DECLARED
+      rather than hidden — named, bounded, and now partly cross-checked — but this row's own
+      wording is unconditional ("No criterion's green depends on...") and, per the "check both
+      ways" precedent this row already set (D5): a device dependency found anywhere in the named
+      set disqualifies the tick, a declared-and-bounded dependency is still a dependency. Stays
+      open on the fixture passes of these five gate lanes.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -267,6 +322,12 @@ resolve them silently.
       PASSED`, 0 `RESULT: FAILED`. **Re-verified 2026-09-04T03:40:00Z.** First `RESULT:` line
       for the parent is `PASSED`, all 43 recursively-validated folders report `RESULT: PASSED`,
       `Summary: Errors: 0`.
+      **Re-verified 2026-09-04T06:40:00Z (done-audit-4).**
+      `NODE_PRESERVE_SYMLINKS=1 bash "$(realpath .opencode)/skills/system-spec-kit/scripts/spec/
+      validate.sh" specs/005-component-surface-system --strict`, run to completion, output
+      redirected to a file rather than piped. First `RESULT:` line for the parent is `PASSED`,
+      all 43 recursively-validated folders report `RESULT: PASSED`, 0 `RESULT: FAILED`,
+      `Summary: Errors: 0  Warnings: 0`.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -905,4 +966,39 @@ day-scale — are now closed and visible in captures. Neither `037` nor `041` is
 the same 3-of-7 basis the prior audit derived — per D13/§3.2 the figure is derived from the
 parent's own checklist alone, not from a child phase's open-row landing. `roadmap.md` §5.2's row
 for `037` updated to match.
+
+### Done-audit-4, 2026-09-04T06:40:00Z: rows 5 and 6 re-audited and narrowed further, 4 and 7 re-verified
+
+A fresh in-runtime audit re-checked §3 rows 4-7 against `8759399` (main, equal to origin). **Row
+5**: `node tools/live/replay.mjs`, `$?` read directly `0`, 27 claims, `reversed: 0`. The six
+open-row claims `5fa0b0c` added are all pre-fix-audited against `<sha>^` (T024). Every landed
+result this audit's dispatch named now carries a claim — reports 29/34-36 (delegated by design,
+proven by negative control rather than a differing number), both `037`-`041` legs (10 claims,
+`was` differs from `recorded` on all 10, confirmed in `replay.json`), and the six open-row fixes
+(differs on all 6) — except `7ca6cc2`, `037`'s fourth open row (day-scale fixture centring, `HH`
+tick label), which this parent's own prior entry calls "the last of its four remaining open
+product rows" in the identical language used for `fa58c7f`/`b29bf7f`. Reading `replay.mjs`'s
+`037` measures in full confirms neither existing claim reads `temporal.mjs`'s day-branch centring
+or tick-label suffix, so this is a genuine gap, not a double-count. `042`'s own four commits
+(`7e9fd27`, `5fa0b0c`, `bea1b1c`, `8759399`) stay out of scope for a claim — none closes another
+phase's documented open row, and the instrument cannot certify itself. **Left unticked**, narrowed
+to one commit. **Row 6**: of the four dependency classes, (1) and (4) stay removed. (2)/(3) moved
+from declared to declared-and-cross-validated for `touch-targets.mjs`/`unstyled-links.mjs` — a
+constructed-renderer pass (`8759399`) now measures real `src/views` output for both and found four
+real touch-target classes no fixture could see — but the fixture pass was supplemented, not
+replaced, and still counts toward two of the 25 gate lanes' green (unchanged: 264/279, 112/70).
+`css-lane`, `screenshots-fresh` and `device-parity` (three more lanes) still read only hand-written
+fixtures with no constructed counterpart; `check-lane.mjs` now compares by content
+(`pixelHash`/`layoutHash`, `bea1b1c`) rather than raw bytes, but the fixtures themselves are
+unchanged in kind. Per this row's own "check both ways" precedent, a declared-and-bounded
+dependency is still a dependency. **Left unticked**, narrowed to the fixture passes of five gate
+lanes. **Row 4** and **Row 7** re-verified fresh: `pgrep` empty before each gate run;
+`SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` and bare `npm run gate` both exit 0,
+25 green; `validate.sh specs/005-component-surface-system --strict`, output to a file rather than
+a pipe, first `RESULT:` line `PASSED`, 43 of 43 folders `PASSED`, `Errors: 0  Warnings: 0`.
+`completion_pct` stays **43**: no §3 DONE row changed on this pass — rows 3, 4 and 7 still hold,
+the same 3-of-7 basis. `roadmap.md` §5's `042` bullet updated to name the three lanes landed since
+the prior audit (27-claim replay incl. the six open-row fixes `5fa0b0c`; the pixel-hash manifest
+compare `bea1b1c`; the constructed-renderer touch-target/link measures `8759399`) and the two
+remaining gaps (`7ca6cc2` for row 5; the fixture passes for row 6).
 <!-- /ANCHOR:log -->

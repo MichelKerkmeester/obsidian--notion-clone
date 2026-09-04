@@ -131,15 +131,15 @@
       "tools/storybook/verify-placement.mjs",
       "tools/live/renderer-coverage.json",
       "tools/live/replay.json",
+      "src/data/calendar-timeline-model.ts",
+      "src/views/calendar-timeline-renderer.ts",
       "tools/screenshots/runtime-vars.css",
       "tools/live/touch-targets.mjs",
       "tools/live/unstyled-links.mjs",
       "tools/screenshots/capture.mjs",
       "tools/screenshots/theme.css",
       "tools/gate.mjs",
-      "tools/lane/css-lane.json",
-      "repo-rules/spec-tree-layout.md",
-      "scratch/device-2026-09-02/view-switcher-sheet-ios.png"
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
@@ -203,6 +203,18 @@
         "source": "derived"
       },
       {
+        "name": "calendar-timeline-model.ts",
+        "kind": "code",
+        "path": "src/data/calendar-timeline-model.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-renderer.ts",
+        "source": "derived"
+      },
+      {
         "name": "runtime-vars.css",
         "kind": "file",
         "path": "tools/screenshots/runtime-vars.css",
@@ -245,18 +257,6 @@
         "source": "derived"
       },
       {
-        "name": "spec-tree-layout.md",
-        "kind": "doc",
-        "path": "repo-rules/spec-tree-layout.md",
-        "source": "derived"
-      },
-      {
-        "name": "view-switcher-sheet-ios.png",
-        "kind": "file",
-        "path": "scratch/device-2026-09-02/view-switcher-sheet-ios.png",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -289,7 +289,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-03T23:49:31.230Z",
+    "last_save_at": "2026-09-04T00:38:31.594Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -297,7 +297,7 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:99ac27eb7f1e762a18367b01e81743c0f49e104491987a6caeaa0b09871a6222",
+    "source_fingerprint": "sha256:8a75fedd2682ecb3fb82570bae1dd0848561af4f1061ae47d753fda216542a6d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "c3971ebd24f393b9bd987df9c0e9488dcdf0b7de594de9bd5e4310ac276909f2",
