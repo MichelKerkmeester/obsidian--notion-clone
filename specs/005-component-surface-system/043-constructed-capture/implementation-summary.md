@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T17:30:00Z"
-    last_updated_by: "in-runtime-doc-agent"
-    recent_action: "AC-002 marked Met on the operator's determinism ruling (2026-09-04)"
-    next_safe_action: "Fresh audit re-reads row 6 against T029's widened pass"
+    last_updated_at: "2026-09-04T21:40:00Z"
+    last_updated_by: "in-runtime-code-agent"
+    recent_action: "T031 landed: 16 Project Manager reference captures under screenshots/project-manager/; AC-002 marked Met on the operator's determinism ruling (2026-09-04)"
+    next_safe_action: "Fresh audit re-reads row 6 against T029's widened pass; decide T031's two P2 kanban fidelity gaps"
     blockers: []
     key_files:
       - "tools/live/render-assertion-harness.ts"
@@ -25,6 +25,7 @@ _memory:
       - "tools/storybook/obsidian-stub.mjs"
       - "tools/screenshots/constructed-scenarios.mjs"
       - "tools/bench/table-render-bench.ts"
+      - "tools/bench/reference-fixture.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-impl-summary"
@@ -32,7 +33,7 @@ _memory:
     completion_pct: 79
     open_questions:
       - "Does the shared manifest stand, or does AC-006's separate file still apply?"
-      - "Does parent row 6 tick now that touch-targets/unstyled-links' own constructed pass covers all ten state variants (T029), or does another residual keep it open? Left to a fresh audit (parent D4)."
+      - "Does parent row 6 tick after T029, or does a residual keep it open? Left to a fresh audit (parent D4)."
     answered_questions:
       - "Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ."
       - "Row count alone enough for row 6? No, captureData also types columns."
@@ -217,6 +218,86 @@ decision rather than the harness's, and the column header wires `ColumnHeaderCon
 the renderer's own `setupColumnHeader` action — which also restored the property-type icon the
 hand-built header had omitted.
 
+### The reference comparison (T031)
+
+The constructed captures photograph our renderers. This leg adds the other half of the comparison:
+16 PNGs under `screenshots/project-manager/` of the vendored Project Manager plugin
+(`specs/context/obsidian-pm-main`, unedited) rendering the SAME bench project, so our one-to-one
+kanban and gantt ports can be read beside the originals. Each entry declares `referenceOf`, naming
+the constructed capture it mirrors.
+
+Every value below was measured on the committed pairs at desktop/dark (2880x1800 at DPR 2, so a CSS
+pixel is two image pixels) unless a row says otherwise. Verdicts are (a) fixture mapping, fixed here;
+(b) a stub hosting limit; (c) a data-model or host adaptation already recorded in 037/038; (d) a real
+fidelity gap in our copy.
+
+**Gantt — `constructed-timeline` vs `reference-gantt`**
+
+| Element | Ours | Reference | Verdict |
+|---------|------|-----------|---------|
+| Controls bar | Day/Week/Month/Quarter/Year segmented, Week active; Today / Expand all / Collapse all right | identical set and order | match |
+| Controls bar inset | 24 CSS px further right; right group ~32 px further left | flush at 16 px | (c) `.note-database-container` padding plus its `scrollbar-gutter: stable` |
+| Label column width | 280 px desktop | 280 px | match |
+| Label column left edge | 320 px (40 inset + 280) | 296 px (16 + 280) | (c) same host inset |
+| Header height | 56 px | 56 px | exact — the label-column row separators land on the SAME y in both (113, 157, 201, 245, ...) |
+| Row height | 44 px | 44 px | exact, same evidence |
+| Chart grid | sampled vertical gridline column: 0 differing px of 86,141 | — | pixel-identical |
+| Week bands and month label | W33-W39 plus `SEP 26`, same x | same | match (best cross-correlation at dx 0) |
+| Today line and diamond | red dashed line, diamond at the header edge | same x, same shape | match |
+| Bar geometry | one day = 22 px at week granularity, padding 8, radius 7 | same | match |
+| Bar and milestone fill | `var(--interactive-accent)` at 0.4 -> rgb(61,64,108) | `#8a94a0` -> rgb(73,77,82) | (c) our timeline has no per-status colour; `resolveProjectConfig`'s `withInUseExtras` mints the reference's FALLBACK_COLOR for every in-use id, so the reference never reaches its own `--interactive-accent` fallback |
+| Label dot | `var(--text-muted)` | the same status colour as the bar | (c) same cause: the reference paints bar and dot from one colour, our port splits them |
+| Progress fill | rows 0/4/8/12/16, same geometry | same | match |
+| Dependency arrows | 3 curved dashed edges with an 8x8 arrowhead | same anchors | match |
+| Milestone label overpainting the month band | present | present | reference-faithful, already dispositioned as 037 T050 |
+| Phone layout | label column 160 px, chart ~230 px, four week bands and every bar visible | label column stays 280 px, chart squeezed to ~90 px | (c) our documented phone adaptation; the reference has none. This is the whole of the 10.4% (dark) and 36.0% (light) phone difference |
+| Subtask variant | collapse diamond on row-0, two indented children, 62% | same | match |
+
+**Kanban — `constructed-board` vs `reference-kanban`**
+
+| Element | Ours | Reference | Verdict |
+|---------|------|-----------|---------|
+| Column width / gap | 280 / 14 | 280 / 14 | exact — column edges 32/312, 326/606, 620/900, 914/1194 in both |
+| Board left inset | 32 px | 32 px | match; our `.pm-kanban-board` negative margin cancels the container padding exactly |
+| Board right clip | 1416 px | 1424 px | (c) 8 px, the container's right padding and scrollbar gutter |
+| Column topbar | 3 px tall at y 32-35, opacity .5 | identical y and rule | match; colour differs |
+| Header badge | 13 px / 600, glyph band y 49.0-61.0 | identical band | exact |
+| Count chip | pill y 45.0-64.0 (19 px), text 50.5-58.5 | pill 45.0-62.0 (17 px), text 49.5-57.5 | **(d) 2 px taller** |
+| Column header height | 2 px taller; everything below shifts 2 px down (cross-correlation minimum at -2 CSS px) | — | **(d)**, the same cause |
+| Card padding / gap | `.pm-kanban-cards` 6/10, body 10/12, gaps 8/7 | identical declarations | match |
+| Card title | 12 px / 500 / 1.45 inside `.pm-kanban-card-title-row` | identical (`widgets.css:81`) | match |
+| Priority strip | 3 px, opacity .5, drawn on the urgent/high rows and omitted for medium/low | identical rule, identical row set | match; colour differs |
+| Hours chip | `0.5h`, `37.5h`, `74.5h`, ... | identical after the (a) fix | match |
+| Avatar stack | two `sm` avatars, same initials and overlap | same | match |
+| Due chip | same text, same position | same | match |
+| Overdue state | red on odd rows only | red on every past-due row outside the terminal lane | (c) our port reads completion from a checkbox column, which the bench fills on `i % 2 === 0`; the reference reads the status config's `complete` flag |
+| Tag row | none | none | match by construction: the bench has no tags column, so the fixture leaves `tags` empty rather than inventing one |
+| Lane label / lane and priority colours | raw group value; harness palette (gray/blue/purple/green/red, red/orange/yellow/gray) | same labels after the (a) fix; its own DEFAULT_STATUSES / DEFAULT_PRIORITIES hexes | label match; colour is a recorded fixture difference — ours resolves an option's palette NAME through `--status-color-fg-*`, a token defined in `styles.css`, which the reference page deliberately does not load |
+| Subtask variant | parent chip `row-0`, `Sub` chip, 62% progress bar, lane counts 6/3/3/3 | same | match |
+
+**The two (d) gaps, both P2, neither fixed here** because `styles.css` and `src/` are outside this
+packet's scope:
+
+1. The kanban column header renders 2 CSS px taller than the reference's.
+   `.note-database-container` sets `line-height: var(--db-font-md-line-height)` (1.45,
+   `styles.css:826`), which every descendant inherits; `.pm-kanban-col-count` sets no line-height of
+   its own in either copy, so our count pill measures 19 px against the reference's 17 and pushes the
+   whole header — and every card under it — down by 2 px. A one-declaration fix on the chip.
+2. The reference's `::-webkit-scrollbar` rules for `.pm-kanban-board` and `.pm-kanban-cards` were
+   never copied. Our stylesheet carries that block for `.pm-gantt-right` alone. Invisible in these
+   captures because the columns do not scroll, which is exactly why no earlier read caught it.
+
+**What the stub cannot host, and what that costs the comparison.** The vendored views needed three
+working shims the plugin-under-test never calls (`ButtonComponent`, `ExtraButtonComponent`,
+`parseLinktext`) plus the bare global `createSpan` its icon-name probe uses; `Keymap`, `SuggestModal`
+and `prepareFuzzySearch` stay out-of-scope throws because only interaction reaches them.
+`temporal-polyfill`, the reference's one uninstalled dependency, is stood in by
+`reference-temporal-shim.mjs`. `metadataCache.getFirstLinkpathDest` answers null, so assignees render
+as unresolved initials — which is what OUR capture shows too, from the same empty cache. Menus,
+modals, drag and the undo keybindings are never constructed, so nothing in these pictures depends on
+them. No icon placeholder appears in any of the 16: every icon the render path reaches is in the
+shim's set.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -262,6 +343,17 @@ hand-built header had omitted.
 | `tools/live/render-assertion-bundle.mjs` | Modified (T029) | `STATE_SCENARIOS` (the ten per-state entries) and `SCENARIOS_WITH_STATES = [...SCENARIOS, ...STATE_SCENARIOS]` added; `SCENARIOS` itself left unwidened since `render-assertions.mjs`'s `BAGS` table has no entry for the three new toolbar `renderer` values |
 | `tools/live/touch-targets.mjs`, `tools/live/unstyled-links.mjs` | Modified (T029) | Both import `SCENARIOS_WITH_STATES` instead of `SCENARIOS` for their own constructed pass — 21 scenarios widened to 31 |
 | `tools/live/touch-targets-constructed-baseline.json` | Modified (T029) | `under` raised 367 -> 422 with a `raiseHistory` entry attributing all 55 new under-floor controls to the ten state variants, per class and per scenario |
+| `tools/live/reference-assertion-bundle.mjs` | Created (T031) | The one esbuild step that makes the vendored Project Manager views run outside Obsidian, through the same obsidian stub our own bundles use; fails rather than proceeding if a vendored view stopped being imported |
+| `tools/live/reference-mount.ts` | Created (T031) | The host surface the vendored views expect — plugin, `ProjectScope`, a `TaskSource` whose `configFor` is the real `resolveProjectConfig` — plus the `.pm-root`/`.pm-content` chrome `ProjectView.ts` builds. The vendored tree is untouched |
+| `tools/live/reference-temporal-shim.mjs` | Created (T031) | Stands in for `temporal-polyfill`, the reference's one dependency this repository does not install |
+| `tools/live/reference-state-assertions.mjs` | Created (T031) | Red-first live check over the four mounts: 33 markers — the kanban's five columns and 18 cards, the gantt's 17 bars, 5 progress fills, milestone, 3 arrows, today diamond and 19 label rows, and the subtask variants' parent chips and indent |
+| `tools/bench/reference-fixture.ts` | Created (T031) | Converts the benches' own `makeColumns`/`makeRows` output into the reference's `Task`/`Project` shape through a documented mapping table — identity where the shapes overlap, the reference's own default where our rows carry no equivalent |
+| `tools/bench/reference-fixture.test.mjs` | Created (T031) | Asserts that mapping field-for-field against the real bench exports, including the four corrections this leg made |
+| `tools/screenshots/reference-scenarios.mjs` | Created (T031) | The four reference scenarios, their mount driver and the host page that loads the vendored plugin's own seven stylesheets and deliberately not ours; `referenceOf` cross-checked against the constructed registry at load |
+| `tools/screenshots/manifest-schema.mjs` | Modified (T031) | Third `source` kind: a reference entry must name a `pm-kanban`/`pm-gantt` renderer, sit in the `project-manager` group, and declare the constructed scenario it mirrors |
+| `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs` | Modified (T031) | Working `ButtonComponent`/`ExtraButtonComponent`/`parseLinktext` and the bare global `createSpan` the vendored render path needs; `Keymap`/`SuggestModal`/`prepareFuzzySearch` added to the out-of-scope throws |
+| `screenshots/project-manager/*` | Created (T031) | 16 reference captures (4 scenarios x 2 devices x 2 themes), each paired to its constructed twin by `referenceOf` |
+| `tools/lane/css-lane.json` | Modified (T031) | Release entry naming all 16; `styles.css` byte-identical to the lane baseline `e357f63d13ac` |
 <!-- /ANCHOR:what-built -->
 
 ---

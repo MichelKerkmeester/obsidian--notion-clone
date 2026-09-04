@@ -31,6 +31,11 @@ import {
   prepareConstructedBundle,
   validateConstructedScenario,
 } from "./constructed-scenarios.mjs";
+import {
+  REFERENCE_SCENARIOS,
+  disposeReferenceBundle,
+  prepareReferenceBundle,
+} from "./reference-scenarios.mjs";
 import { validateManifestEntry } from "./manifest-schema.mjs";
 import { pixelHash } from "./pixel-hash.mjs";
 
@@ -99,8 +104,9 @@ const DEVICES = [
 ];
 
 // The constructed scenarios photograph the shipped renderers, which register their own
-// scenarios with an async `mount` instead of `html`.
-const ALL_SCENARIOS = [...SCENARIOS, ...CONSTRUCTED_SCENARIOS];
+// scenarios with an async `mount` instead of `html`; the reference scenarios photograph
+// the vendored Project Manager plugin's own views the same way.
+const ALL_SCENARIOS = [...SCENARIOS, ...CONSTRUCTED_SCENARIOS, ...REFERENCE_SCENARIOS];
 
 // How many animation frames a constructed capture waits after the renderer signals ready.
 // The calendar week/day host scrolls its time grid to the workday one frame after render
@@ -194,13 +200,19 @@ async function main() {
     if (scenario.mount) validateConstructedScenario(scenario);
   }
 
-  // The constructed scenarios share one esbuild step with the assertion lanes. Building it here,
-  // before any constructed scenario runs, keeps the fixture scenarios independent of it: a
-  // fixture-only run never pays the bundle build, and a constructed run never repeats it.
-  let bundleBuilt = false;
-  if (list.some((scenario) => scenario.mount)) {
+  // The constructed scenarios share one esbuild step with the assertion lanes, and the
+  // reference scenarios a second one over the vendored views. Each is built here, before
+  // any scenario of its kind runs, so a fixture-only run never pays either build and a
+  // constructed run never pays the reference's.
+  let constructedBundleBuilt = false;
+  let referenceBundleBuilt = false;
+  if (list.some((scenario) => scenario.mount && scenario.kind !== "reference")) {
     await prepareConstructedBundle();
-    bundleBuilt = true;
+    constructedBundleBuilt = true;
+  }
+  if (list.some((scenario) => scenario.kind === "reference")) {
+    await prepareReferenceBundle();
+    referenceBundleBuilt = true;
   }
 
   // Fingerprint every file a scenario depicts. The freshness check compares these against
@@ -410,12 +422,15 @@ async function main() {
           note: scenario.note || null,
           capture: captureMode(scenario),
           bytes: bytes.length,
-          // Constructed captures name the renderer they photographed; fixtures that a
-          // constructed capture supersedes declare it, so the manifest can tell the two
-          // authorities apart.
-          ...(scenario.mount
-            ? { source: "constructed", renderer: scenario.renderer, bag: scenario.bag, ...(scenario.scale ? { scale: scenario.scale } : {}) }
-            : {}),
+          // Constructed captures name the renderer they photographed; reference captures
+          // name the vendored view they photographed and the constructed scenario they
+          // mirror; fixtures that a constructed capture supersedes declare it, so the
+          // manifest can tell the authorities apart.
+          ...(scenario.kind === "reference"
+            ? { source: "reference", renderer: scenario.renderer, ...(scenario.referenceOf ? { referenceOf: scenario.referenceOf } : {}) }
+            : scenario.mount
+              ? { source: "constructed", renderer: scenario.renderer, bag: scenario.bag, ...(scenario.scale ? { scale: scenario.scale } : {}) }
+              : {}),
           ...(scenario.fixtureOf ? { fixtureOf: scenario.fixtureOf } : {}),
         });
         count += 1;
@@ -426,7 +441,8 @@ async function main() {
     }
   } finally {
     await browser.close();
-    if (bundleBuilt) disposeConstructedBundle();
+    if (constructedBundleBuilt) disposeConstructedBundle();
+    if (referenceBundleBuilt) disposeReferenceBundle();
     rmSync(TMP, { recursive: true, force: true });
   }
 

@@ -913,6 +913,48 @@ The top of the panel for a table view: database-scoped rows above the section di
 
 Sources: `src/views/view-config-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
+## project-manager
+
+### Project Manager gantt (reference)
+
+The vendored GanttView at its week scale over the timeline bench's rows converted into its Task shape: bars, the milestone diamond, dependency arrows and the today line. Read beside constructed-timeline.
+
+| dark | light |
+|---|---|
+| ![reference-gantt dark](project-manager/reference-gantt-mobile-dark.png) | ![reference-gantt light](project-manager/reference-gantt-mobile-light.png) |
+
+Sources: `specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttHeaderRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttTaskBarRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttDragHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttLinkHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TaskLabelRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TimelineConfig.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/reference-assertion-bundle.mjs`, `tools/live/reference-mount.ts`, `tools/live/reference-temporal-shim.mjs`, `tools/screenshots/reference-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `tools/bench/reference-fixture.ts`, `src/data/calendar-date-time.ts`, `specs/context/obsidian-pm-main/src/styles/variables.css`, `specs/context/obsidian-pm-main/src/styles/chrome.css`, `specs/context/obsidian-pm-main/src/styles/table.css`, `specs/context/obsidian-pm-main/src/styles/gantt.css`, `specs/context/obsidian-pm-main/src/styles/kanban.css`, `specs/context/obsidian-pm-main/src/styles/widgets.css`, `specs/context/obsidian-pm-main/src/styles/utilities.css`
+
+### Project Manager gantt — subtask tree (reference)
+
+The same gantt over the tree-wired rows: the nested children render as indented label rows with collapse toggles, beside constructed-timeline-subtask.
+
+| dark | light |
+|---|---|
+| ![reference-gantt-subtask dark](project-manager/reference-gantt-subtask-mobile-dark.png) | ![reference-gantt-subtask light](project-manager/reference-gantt-subtask-mobile-light.png) |
+
+Sources: `specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttHeaderRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttTaskBarRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttDragHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttLinkHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TaskLabelRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TimelineConfig.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/reference-assertion-bundle.mjs`, `tools/live/reference-mount.ts`, `tools/live/reference-temporal-shim.mjs`, `tools/screenshots/reference-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `tools/bench/reference-fixture.ts`, `src/data/calendar-date-time.ts`, `specs/context/obsidian-pm-main/src/styles/variables.css`, `specs/context/obsidian-pm-main/src/styles/chrome.css`, `specs/context/obsidian-pm-main/src/styles/table.css`, `specs/context/obsidian-pm-main/src/styles/gantt.css`, `specs/context/obsidian-pm-main/src/styles/kanban.css`, `specs/context/obsidian-pm-main/src/styles/widgets.css`, `specs/context/obsidian-pm-main/src/styles/utilities.css`
+
+### Project Manager kanban (reference)
+
+The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides — our card matches a tags column by name and the bench carries none.
+
+| dark | light |
+|---|---|
+| ![reference-kanban dark](project-manager/reference-kanban-mobile-dark.png) | ![reference-kanban light](project-manager/reference-kanban-mobile-light.png) |
+
+Sources: `specs/context/obsidian-pm-main/src/views/KanbanView.ts`, `specs/context/obsidian-pm-main/src/ui/composites/KanbanColumn.ts`, `specs/context/obsidian-pm-main/src/ui/composites/KanbanCard.ts`, `tools/bench/board-render-bench.ts`, `tools/live/reference-assertion-bundle.mjs`, `tools/live/reference-mount.ts`, `tools/live/reference-temporal-shim.mjs`, `tools/screenshots/reference-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `tools/bench/reference-fixture.ts`, `src/data/calendar-date-time.ts`, `specs/context/obsidian-pm-main/src/styles/variables.css`, `specs/context/obsidian-pm-main/src/styles/chrome.css`, `specs/context/obsidian-pm-main/src/styles/table.css`, `specs/context/obsidian-pm-main/src/styles/gantt.css`, `specs/context/obsidian-pm-main/src/styles/kanban.css`, `specs/context/obsidian-pm-main/src/styles/widgets.css`, `specs/context/obsidian-pm-main/src/styles/utilities.css`
+
+### Project Manager kanban — subtask tree (reference)
+
+The same kanban with the first three rows wired into a parent with two children and the config's kanbanShowSubtasks on, so the subtask cards carry the parent chip the way constructed-board-subtask draws its tree.
+
+| dark | light |
+|---|---|
+| ![reference-kanban-subtask dark](project-manager/reference-kanban-subtask-mobile-dark.png) | ![reference-kanban-subtask light](project-manager/reference-kanban-subtask-mobile-light.png) |
+
+Sources: `specs/context/obsidian-pm-main/src/views/KanbanView.ts`, `specs/context/obsidian-pm-main/src/ui/composites/KanbanColumn.ts`, `specs/context/obsidian-pm-main/src/ui/composites/KanbanCard.ts`, `tools/bench/board-render-bench.ts`, `tools/live/reference-assertion-bundle.mjs`, `tools/live/reference-mount.ts`, `tools/live/reference-temporal-shim.mjs`, `tools/screenshots/reference-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `tools/bench/reference-fixture.ts`, `src/data/calendar-date-time.ts`, `specs/context/obsidian-pm-main/src/styles/variables.css`, `specs/context/obsidian-pm-main/src/styles/chrome.css`, `specs/context/obsidian-pm-main/src/styles/table.css`, `specs/context/obsidian-pm-main/src/styles/gantt.css`, `specs/context/obsidian-pm-main/src/styles/kanban.css`, `specs/context/obsidian-pm-main/src/styles/widgets.css`, `specs/context/obsidian-pm-main/src/styles/utilities.css`
+
 ## states
 
 ### Empty state (constructed)

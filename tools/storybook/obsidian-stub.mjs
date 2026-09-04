@@ -169,7 +169,132 @@ export const Platform = {
 };
 
 // ───────────────────────────────────────────────────────────────────
-// 2. OUT-OF-SCOPE SURFACES
+// 2. REFERENCE-VENDOR SHIMS
+// ───────────────────────────────────────────────────────────────────
+//
+// The reference-capture bundle also mounts the vendored Project Manager plugin
+// (specs/context/obsidian-pm-main) against this same stub. Its render path needs three
+// names the plugin-under-test never calls, and none of them can be a throw: a gantt mount
+// constructs ButtonComponents for its granularity controls on every render, the label rows
+// build an ExtraButtonComponent per task, and `displayName` parses wikilinks through
+// parseLinktext while resolving assignees. Each shim implements only the surface the
+// reference's render path reaches; anything else the vendored code might call stays a
+// throw in section 3.
+
+/** A real button, because the gantt's control bar constructs these during render. */
+export class ButtonComponent {
+  constructor(parent) {
+    const doc = parent.ownerDocument ?? document;
+    this.buttonEl = doc.createElement("button");
+    parent.appendChild(this.buttonEl);
+  }
+
+  setButtonText(text) {
+    this.buttonEl.textContent = text;
+    return this;
+  }
+
+  setIcon(icon) {
+    setIcon(this.buttonEl, icon);
+    return this;
+  }
+
+  setTooltip(text) {
+    setTooltip(this.buttonEl, text);
+    return this;
+  }
+
+  setCta() {
+    this.buttonEl.classList.add("mod-cta");
+    return this;
+  }
+
+  removeCta() {
+    this.buttonEl.classList.remove("mod-cta");
+    return this;
+  }
+
+  setWarning() {
+    this.buttonEl.classList.add("mod-warning");
+    return this;
+  }
+
+  setClass(cls) {
+    this.buttonEl.classList.add(cls);
+    return this;
+  }
+
+  setDisabled(disabled) {
+    this.buttonEl.classList.toggle("is-disabled", disabled);
+    if (disabled) this.buttonEl.setAttribute("disabled", "");
+    else this.buttonEl.removeAttribute("disabled");
+    return this;
+  }
+
+  onClick(callback) {
+    this.buttonEl.addEventListener("click", callback);
+    return this;
+  }
+}
+
+/** The icon-only button the reference's IconButton primitive wraps. */
+export class ExtraButtonComponent {
+  constructor(parent) {
+    const doc = parent.ownerDocument ?? document;
+    this.buttonEl = doc.createElement("button");
+    parent.appendChild(this.buttonEl);
+    // IconButton reads `extraSettingsEl` off the component and attaches its own
+    // classes and click listeners to it, so it is the button element itself.
+    this.extraSettingsEl = this.buttonEl;
+  }
+
+  setIcon(icon) {
+    setIcon(this.buttonEl, icon);
+    return this;
+  }
+
+  setTooltip(text) {
+    setTooltip(this.buttonEl, text);
+    return this;
+  }
+
+  setClass(cls) {
+    this.buttonEl.classList.add(cls);
+    return this;
+  }
+
+  setDisabled(disabled) {
+    this.buttonEl.classList.toggle("is-disabled", disabled);
+    if (disabled) this.buttonEl.setAttribute("disabled", "");
+    else this.buttonEl.removeAttribute("disabled");
+    return this;
+  }
+
+  onClick(callback) {
+    this.buttonEl.addEventListener("click", callback);
+    return this;
+  }
+}
+
+/**
+ * Splits a linktext into its path and subpath ("note#heading" -> note + heading). The
+ * reference's displayName reads only the path; the alias is split off the same way
+ * Obsidian's implementation does so a display name never includes it.
+ */
+export function parseLinktext(linktext) {
+  const aliasSep = linktext.indexOf("|");
+  const alias = aliasSep >= 0 ? linktext.slice(aliasSep + 1) : "";
+  const pathPart = aliasSep >= 0 ? linktext.slice(0, aliasSep) : linktext;
+  const hash = pathPart.indexOf("#");
+  return {
+    path: hash >= 0 ? pathPart.slice(0, hash) : pathPart,
+    subpath: hash >= 0 ? pathPart.slice(hash + 1) : "",
+    alias,
+  };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 3. OUT-OF-SCOPE SURFACES
 // ───────────────────────────────────────────────────────────────────
 
 /** Fail loudly: a story reaching these wants a surface the catalogue cannot honestly render. */
@@ -192,6 +317,9 @@ export const FileView = outOfScope("FileView");
 export const FuzzySuggestModal = outOfScope("FuzzySuggestModal");
 export const HoverParent = outOfScope("HoverParent");
 export const HoverPopover = outOfScope("HoverPopover");
+// Reachable from the vendored reference's modal graph, constructed only on interaction.
+export const Keymap = outOfScope("Keymap");
+export const SuggestModal = outOfScope("SuggestModal");
 export const MarkdownRenderChild = outOfScope("MarkdownRenderChild");
 export const MarkdownRenderer = outOfScope("MarkdownRenderer");
 export const MarkdownSectionInformation = outOfScope("MarkdownSectionInformation");
@@ -215,5 +343,7 @@ export const getAllTags = outOfScope("getAllTags");
 export const getIconIds = outOfScope("getIconIds");
 export const loadMathJax = outOfScope("loadMathJax");
 export const parseYaml = outOfScope("parseYaml");
+// Reachable from the vendored reference's note-link suggest, interaction-only.
+export const prepareFuzzySearch = outOfScope("prepareFuzzySearch");
 export const renderMath = outOfScope("renderMath");
 export const stringifyYaml = outOfScope("stringifyYaml");

@@ -3,12 +3,15 @@
 // COMPONENT: the capture manifest's entry contract — what an entry must carry to be written
 // ───────────────────────────────────────────────────────────────────
 //
-// The capture manifest records two kinds of picture: a hand-written fixture and a
-// constructed render of the shipped renderer. They share one file so a change to
+// The capture manifest records three kinds of picture: a hand-written fixture, a
+// constructed render of the shipped renderer, and a reference render of the vendored
+// Project Manager plugin the renderer ports. They share one file so a change to
 // either kind marks its own captures stale, and they are told apart by `source`.
 // A fixture may omit the field (every historical entry does); a constructed
 // capture must declare it and must name the view it photographs, so a manifest
-// that lost the renderer or the scale cannot read as a complete record.
+// that lost the renderer or the scale cannot read as a complete record; a
+// reference capture must additionally name the vendored view and the constructed
+// scenario it mirrors, or the pair a reviewer is told to read does not exist.
 //
 // Validation is a pure check rather than a writer-side assertion so the same
 // contract can gate a test and the capture run: entries are validated before the
@@ -19,7 +22,7 @@
 // 1. THE CONTRACT
 // ───────────────────────────────────────────────────────────────────
 
-export const MANIFEST_SOURCES = ["fixture", "constructed"];
+export const MANIFEST_SOURCES = ["fixture", "constructed", "reference"];
 export const CONSTRUCTED_RENDERERS = [
   "list", "table", "board", "gallery", "calendar", "timeline", "chart",
   "calendar-toolbar", "timeline-toolbar", "chart-toolbar",
@@ -31,6 +34,7 @@ export const CONSTRUCTED_RENDERERS = [
 ];
 export const CONSTRUCTED_BAGS = ["file-view", "embed"];
 export const CONSTRUCTED_SCALES = ["month", "week", "day", "quarter", "year"];
+export const REFERENCE_RENDERERS = ["pm-kanban", "pm-gantt"];
 
 export function validateManifestEntry(entry) {
   const problems = [];
@@ -78,6 +82,24 @@ export function validateManifestEntry(entry) {
     if (entry.scale !== undefined && !CONSTRUCTED_SCALES.includes(entry.scale)) {
       problems.push(`constructed entry ${entry.id ?? "?"} has scale ${JSON.stringify(entry.scale)}, `
         + `want one of ${CONSTRUCTED_SCALES.join(", ")}`);
+    }
+  }
+
+  // A reference capture is only the mirror it claims to be if it names the vendored view and
+  // the constructed scenario it pairs with; without either, the entry cannot be read beside
+  // the capture it exists to compare against.
+  if (entry.source === "reference") {
+    if (!REFERENCE_RENDERERS.includes(entry.renderer)) {
+      problems.push(`reference entry ${entry.id ?? "?"} has renderer ${JSON.stringify(entry.renderer)}, `
+        + `want one of ${REFERENCE_RENDERERS.join(", ")}`);
+    }
+    if (entry.group !== "project-manager") {
+      problems.push(`reference entry ${entry.id ?? "?"} has group ${JSON.stringify(entry.group)}, `
+        + `want "project-manager" (the directory the pair is read from)`);
+    }
+    if (typeof entry.referenceOf !== "string" || entry.referenceOf.length === 0) {
+      problems.push(`reference entry ${entry.id ?? "?"} has no referenceOf naming the constructed `
+        + `scenario it mirrors`);
     }
   }
 

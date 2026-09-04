@@ -206,6 +206,15 @@ export function installObsidianDomShim(target = globalThis) {
       if (callback) callback(el);
       return el;
     },
+    // Obsidian declares createSpan as a global too, and the vendored reference plugin's
+    // icon-name probe (`isIconName` in its utils) calls the bare form, so a reference
+    // mount would throw without it.
+    createSpan(info, callback) {
+      const el = target.document.createElement("span");
+      applyInfo(el, info);
+      if (callback) callback(el);
+      return el;
+    },
   };
   for (const [name, fn] of Object.entries(globals)) {
     if (name in target) continue;

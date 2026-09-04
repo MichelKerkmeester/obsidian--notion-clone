@@ -2635,6 +2635,31 @@
         "screenshots/views/constructed-timeline-subtask-mobile-light.png"
       ],
       "note": "Operator amendment to REQ-007 (roadmap.md row 39): raise a milestone label off the month/year band label baseline on the reference gantt header when the two would overpaint (GanttHeaderRenderer y=18, GanttTaskBarRenderer y=14, same header SVG) — renderGanttMilestoneLabels now estimates both labels by character count and, when their spans overlap, moves the milestone label to y=8 and adds .pm-gantt-milestone-label--raised (a background-color text stroke for legibility). New styles.css rule only; the reference gantt.css copy is untouched. All 10 real content-changed captures opened and read this session, both themes/devices where applicable: constructed-timeline (week scale, default) and constructed-timeline-day (day scale) both show row-1s milestone label cleanly stacked above the SEP 26 month-band label instead of overpainting it (before/after compared directly against the HEAD-committed PNG); constructed-timeline-subtask shows the same fix with the parent/child indent unaffected. pixelHash read these as unchanged (its coarse tolerance misses a ~6px text-baseline move) while layoutHash and a direct visual read both confirmed the change — reviewed by opening every file, not by trusting the hash. Six further files the recapture moved (constructed-owned-menu-mobile-dark, field-icon-picker-desktop-dark/light, constructed-record-detail-desktop-dark, constructed-sort-panel-calendar-mobile-light, board-view-desktop-dark) were confirmed pixelHash-identical to HEAD except field-icon-picker (this environment doc-documented Chrome/OS drift, unrelated to any code here, same handling every prior release gave it) and restored to HEAD-committed bytes rather than recommitted; manifest.json bytes/pixelHash/layoutHash for those six reset to HEAD values while sourceHashes carry the current fingerprint. The hand-authored temporal.mjs fixture (timeline-view-* captures) was checked against the same crowd heuristic and produces no collision in any of its five scales/two devices, so it needed no update — confirmed unchanged in this recapture. tsc 0; vitest 1038/1038 (101 files); lint 172 (unchanged baseline); lint:tools clean; scan-comments PASS."
+    },
+    {
+      "event": "release",
+      "phase": "043-constructed-capture",
+      "at": "2026-09-04T21:35:00.000Z",
+      "hash": "e357f63d13ac",
+      "reviewed": [
+        "screenshots/project-manager/reference-gantt-desktop-dark.png",
+        "screenshots/project-manager/reference-gantt-desktop-light.png",
+        "screenshots/project-manager/reference-gantt-mobile-dark.png",
+        "screenshots/project-manager/reference-gantt-mobile-light.png",
+        "screenshots/project-manager/reference-gantt-subtask-desktop-dark.png",
+        "screenshots/project-manager/reference-gantt-subtask-desktop-light.png",
+        "screenshots/project-manager/reference-gantt-subtask-mobile-dark.png",
+        "screenshots/project-manager/reference-gantt-subtask-mobile-light.png",
+        "screenshots/project-manager/reference-kanban-desktop-dark.png",
+        "screenshots/project-manager/reference-kanban-desktop-light.png",
+        "screenshots/project-manager/reference-kanban-mobile-dark.png",
+        "screenshots/project-manager/reference-kanban-mobile-light.png",
+        "screenshots/project-manager/reference-kanban-subtask-desktop-dark.png",
+        "screenshots/project-manager/reference-kanban-subtask-desktop-light.png",
+        "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png",
+        "screenshots/project-manager/reference-kanban-subtask-mobile-light.png"
+      ],
+      "note": "Not a CSS edit: styles.css is byte-identical to the lane baseline (e357f63d13ac, confirmed by an empty `git diff styles.css`), and the lane was never acquired. The release exists because this leg adds a capture GROUP - screenshots/project-manager/, 16 PNGs photographing the vendored Project Manager plugin (specs/context/obsidian-pm-main) rendering the same bench project our constructed captures show, so a reviewer can read our one-to-one kanban and gantt ports beside the originals. All 16 were opened and read beside their referenceOf twin (constructed-board, constructed-timeline, constructed-board-subtask, constructed-timeline-subtask) at both devices and both themes; the per-element comparison is recorded in 043 tasks.md T031 and carried into 037 and 038 tasks.md. The reference page loads the vendored plugin's own variables/chrome/table/gantt/kanban/widgets/utilities.css plus the shared theme stand-in, and deliberately does NOT load styles.css, so nothing in this group can be evidence about our stylesheet. Manifest 528 -> 544 entries; the nine other PNGs the run moved were byte-only re-encode noise or the known field-icon-picker jitter and were restored to HEAD together with their manifest bytes/pixelHash/layoutHash, so this release changes no existing capture."
     }
   ],
   "outstanding": [
