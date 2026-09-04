@@ -7,11 +7,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T15:40:00Z"
-    last_updated_by: "board-tokens-and-priority-column"
-    recent_action: "Closed T26-T30 (host tokens, bench priority column); T12 in-repo half MET"
+    last_updated_at: "2026-09-04T14:09:55Z"
+    last_updated_by: "board-t12-land-reconciliation"
+    recent_action: "Landed 033-board-t12 onto main; 19 captures reconciled; screenshots-fresh pre-existing red"
     next_safe_action: "Operator vault compare (roadmap.md row 37), then T8"
-    blockers: []
+    blockers:
+      - "npm run gate reads 24/25 (screenshots-fresh RED, pre-existing on origin/main before this reconciliation, not owed by this leg) — see acceptance-criteria.md AC-7"
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"

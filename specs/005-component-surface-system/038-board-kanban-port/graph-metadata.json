@@ -58,9 +58,9 @@
       "tools/live/engine-parity.json",
       "tools/live/touch-targets.json",
       "tools/bench/board-render-bench.ts",
+      "tools/screenshots/theme.css",
       "tools/live/render-assertion-harness.ts",
-      "tools/live/capture-device-parity.mjs",
-      "src/views/board-renderer-parity.test.ts"
+      "tools/live/capture-device-parity.mjs"
     ],
     "entities": [
       {
@@ -166,6 +166,12 @@
         "source": "derived"
       },
       {
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
+        "source": "derived"
+      },
+      {
         "name": "render-assertion-harness.ts",
         "kind": "code",
         "path": "tools/live/render-assertion-harness.ts",
@@ -175,12 +181,6 @@
         "name": "capture-device-parity.mjs",
         "kind": "file",
         "path": "tools/live/capture-device-parity.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "board-renderer-parity.test.ts",
-        "kind": "test",
-        "path": "src/views/board-renderer-parity.test.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-04T13:37:41.075Z",
+    "last_save_at": "2026-09-04T14:13:02.268Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3cb356af096a433718b001f2f0ceb84421b56e379bdfeeeeca8934a985b9e75c",
+    "source_fingerprint": "sha256:55d4155dc61f4612acdf01449c30201771731a4d8cc0e939eeb61317e24b4fa3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "169448c930dba334c3a4b7e0639eef21eb7fc70f8de0459a37017c5a53352a5a",
       "plan.md": "6519d27a955160cb441921b511e1c005ff2c12ffa3c2756ac5fdb5139479c3e8",
-      "tasks.md": "6cff909108ea9cfab63d8bfd93469b505fff07f0f371b0ae0d8f7f739ede7f75",
-      "implementation-summary.md": "ffc1a316065bdc9a4c1dfe351a2b82f21de0a74d5536b652d526af8595c9e549"
+      "tasks.md": "e4ba8134c1f72a753a6befc578806e58a932058988a59a02447dc88518bfec0f",
+      "implementation-summary.md": "6bf640de0f4f2c75b878e7fcc620344adcf050921c41f4493e259ea3171026d8"
     },
     "last_active_child_id": null,
     "last_active_at": null

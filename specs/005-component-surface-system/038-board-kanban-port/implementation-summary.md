@@ -11,14 +11,15 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T15:40:00Z"
-    last_updated_by: "board-tokens-and-priority-column"
-    recent_action: "Closed T29-T30 (host tokens, bench priority column); T12 in-repo half MET"
+    last_updated_at: "2026-09-04T14:09:55Z"
+    last_updated_by: "board-t12-land-reconciliation"
+    recent_action: "Landed 033-board-t12 onto main; 19 captures reconciled; screenshots-fresh pre-existing red"
     next_safe_action: "Operator vault compare (roadmap.md row 37), then T8"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
       - "T12's operator vault-compare half (roadmap.md row 37) is not this repo's to close — the in-repo source-pixel half is now MET"
       - "T8 (operator device confirmation) is the only row that closes the packet"
+      - "npm run gate reads 24/25 (screenshots-fresh RED, pre-existing on origin/main before this reconciliation, not owed by this leg) — see AC-7"
     key_files:
       - "src/views/board-renderer.ts"
       - "styles.css"
@@ -224,6 +225,8 @@ directly.
 | `constructed-board`/`constructed-board-subtask` avatar-stack read, both themes | Real `BoardRenderer` (not the hand fixture) paints initialed avatars once `tools/bench/board-render-bench.ts`'s one `"mixed"` multi-select column is keyed `"people"`; column count and every other `REPORTED_COLUMNS` entry unchanged |
 | Manifest-staleness self-correction | An initial full revert of the 2 byte-only-noise `manifest.json` entries to `HEAD` (including `sourceHashes.styles.css`) made `npm run screenshots:verify` report them `STALE` against the committed `styles.css` hash; caught before committing, fixed by keeping this run's fresh `sourceHashes` and correcting only `bytes` to the restored file's size — `screenshots:verify` then read 356/356 fresh |
 | `npm run gate` (this pass, after the manifest fix and the 8 evidence artefacts above) | 25 green / 0 red, exit 0 read directly |
+| Post-rebase reconciliation (onto `origin/main`, `a78000c`, landing `worktrees/033-board-t12`) | `constructed-state-assertions.mjs` merge kept main's subtask-marker fixes plus this branch's `constructed-board-priority` case; re-run 0 FAIL / 72 PASS, the branch's own six pre-existing subtask failures now resolved. Full recapture (528 entries) found 19 real content changes in five families this leg does not own (`constructed-board-empty-column`/`-extensions`/`-card-covers`/`-group-selection-controls`/`-record-detail`) — a stale `tools/bench/board-render-bench.ts` fingerprint from `d07f47e5`'s 11-file-scoped recapture, surfaced now because they share `bag: "file-view"` with `constructed-board`; confirmed real (not encoder jitter) via isolated `--only` recaptures, 10 of 19 opened and read across all five families. `css-lane.json` release entry names all 19. `npx tsc --noEmit` exit 0; `npx vitest run` 1023/1023 (100 files); `npm run lint` 172 (unchanged); `lint:tools` clean; `scan-comments` PASS; `touch-targets.mjs` x3 stable at fixture 279/constructed 1223, 0 new. |
+| `npm run gate` (this pass) | **24 green / 1 red**, exit 1 — `screenshots-fresh` RED, confirmed present on a stashed pristine `origin/main` tip before this session's own edits (848 STALE fixture captures against `tools/screenshots/theme.css`, inherited from `d07f47e5`'s narrow recapture, never regressed or introduced by this reconciliation). Fixing it means recapturing ~800 files this leg does not own; left as an explicit open follow-up rather than silently claimed green — see `acceptance-criteria.md` AC-7. |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -712,6 +715,26 @@ post-port state with file:line evidence this same session (AC-8 unchanged, still
 **Not closed by this session:** the operator's vault side-by-side compare (`../roadmap.md` §4 row
 37) is not this repo's to close, and T8 (operator device confirmation) remains the only row that
 closes the packet.
+
+**Reconciliation 2026-09-04, landing `worktrees/033-board-t12` onto `origin/main` (`a78000c`).**
+Not a fresh T12 read — a git-landing pass rebasing the T29/T30 commits (`d07f47e5`,
+carrying `c5c79390`) onto main's own advances since `c563f08` (the constructed-scenario families,
+gantt behaviours, and a docs-only row-6 tick). Two files needed hand-merging beyond the mechanical
+`tools/live/*.json -> main` / `screenshots/manifest.json` per-entry-by-owner recipe:
+`constructed-state-assertions.mjs` (main's rewritten `runRenderAssertions` callback plus this
+branch's `priorityBarCount`/`priorityBarTotal` fields, inserted rather than replaced — a
+line-count mismatch, not a logic conflict) and `tools/lane/css-lane.json` (main's history plus
+this branch's own T29/T30 entry appended, `baselineHash` unchanged since neither side touched
+`styles.css`, confirmed by recomputing the hash directly against the merged file). A full
+recapture then found 19 real content changes this branch does not own — see the Verification
+table above for the root cause (a T30 fingerprint gap in five unrelated `file-view`-bag families)
+and `tools/lane/css-lane.json`'s newest release for the per-capture account. The same recapture
+also surfaced a pre-existing `screenshots-fresh` gate failure (848 stale fixture captures against
+`tools/screenshots/theme.css`), confirmed present on a stashed pristine `origin/main` before this
+session touched anything — not a regression this reconciliation introduced, and out of its scope
+to fix; `acceptance-criteria.md` AC-7 now reads 24/25 rather than repeating the prior 25/25 claim
+uncritically. Landed via `git merge --ff-only` from the primary checkout after this reconciliation
+commit; the worktree was not removed.
 <!-- /ANCHOR:next-leg -->
 
 ---
