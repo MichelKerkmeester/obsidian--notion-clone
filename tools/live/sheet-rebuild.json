@@ -1,19 +1,23 @@
 {
-  "measuredAt": "2026-09-04T19:35:26.495Z",
+  "measuredAt": "2026-09-04T20:22:04.802Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "50eafeae8e14",
-    "tools/live/sheet-rebuild-harness.ts": "34a7665c3548",
+    "tools/live/sheet-rebuild.mjs": "2ba9292708a7",
+    "tools/live/sheet-rebuild-harness.ts": "62ec00ff2554",
     "src/views/toolbar-renderer.ts": "145ddf231347",
-    "src/views/popover-position.ts": "6cae246726c0",
-    "src/views/mobile-bottom-sheet.ts": "88fef4fb226b",
-    "src/views/sort-panel-renderer.ts": "2f22ec80a772",
-    "src/views/filter-panel-renderer.ts": "a08e9e12d9f0",
-    "src/views/overlay-stack.ts": "b842936dde22",
+    "src/views/popover-position.ts": "e33b0768ec48",
+    "src/views/mobile-bottom-sheet.ts": "715ed7650295",
+    "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+    "src/views/filter-panel-renderer.ts": "8cca93f10465",
+    "src/views/overlay-stack.ts": "4f35a9904a53",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
-  "cases": 20,
+  "cases": 34,
   "barsLost": 0,
   "gesturesMeasured": 4,
+  "enginesMeasured": [
+    "Chrome",
+    "WebKit"
+  ],
   "checks": [
     {
       "name": "group sheet (real ToolbarRenderer)",
@@ -133,6 +137,90 @@
       "name": "a sheet that is genuinely opening still rises",
       "pass": true,
       "detail": "the entrance still runs: first seen at 844 on a 844px screen, settled at 708",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a toolbar rebuild behind the open sort sheet",
+      "pass": true,
+      "detail": "the sheet is still a sheet, still on the body, still visible, and still has its backdrop",
+      "preFixFailure": "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"
+    },
+    {
+      "name": "Chrome: the sort sheet's add control after a toolbar rebuild",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"
+    },
+    {
+      "name": "Chrome: the sort sheet keeps its own node across the rebuild",
+      "pass": true,
+      "detail": "the panel the press began in is the panel that is still there afterwards",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a toolbar rebuild behind the open filter sheet",
+      "pass": true,
+      "detail": "the sheet is still a sheet, still on the body, still visible, and still has its backdrop",
+      "preFixFailure": "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"
+    },
+    {
+      "name": "Chrome: the filter sheet's add control after a toolbar rebuild",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"
+    },
+    {
+      "name": "Chrome: the filter sheet keeps its own node across the rebuild",
+      "pass": true,
+      "detail": "the panel the press began in is the panel that is still there afterwards",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: an anchored popover still goes when its anchor does",
+      "pass": true,
+      "detail": "hidden, as a surface with no anchor left to sit beside should be",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a toolbar rebuild behind the open sort sheet",
+      "pass": true,
+      "detail": "the sheet is still a sheet, still on the body, still visible, and still has its backdrop",
+      "preFixFailure": "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"
+    },
+    {
+      "name": "WebKit: the sort sheet's add control after a toolbar rebuild",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"
+    },
+    {
+      "name": "WebKit: the sort sheet keeps its own node across the rebuild",
+      "pass": true,
+      "detail": "the panel the press began in is the panel that is still there afterwards",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a toolbar rebuild behind the open filter sheet",
+      "pass": true,
+      "detail": "the sheet is still a sheet, still on the body, still visible, and still has its backdrop",
+      "preFixFailure": "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"
+    },
+    {
+      "name": "WebKit: the filter sheet's add control after a toolbar rebuild",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"
+    },
+    {
+      "name": "WebKit: the filter sheet keeps its own node across the rebuild",
+      "pass": true,
+      "detail": "the panel the press began in is the panel that is still there afterwards",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: an anchored popover still goes when its anchor does",
+      "pass": true,
+      "detail": "hidden, as a surface with no anchor left to sit beside should be",
       "preFixFailure": null
     }
   ]
