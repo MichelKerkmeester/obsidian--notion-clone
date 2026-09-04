@@ -19,7 +19,7 @@ _memory:
       - "Not operator-confirmed: release has not been cut for this leg yet"
       - "T12's operator vault-compare half (roadmap.md row 37) is not this repo's to close — the in-repo source-pixel half is now MET"
       - "T8 (operator device confirmation) is the only row that closes the packet"
-      - "npm run gate reads 24/25 (screenshots-fresh RED, pre-existing on origin/main before this reconciliation, not owed by this leg) — see AC-7"
+      - "CLOSED by follow-up commit 349e22c4 (043-constructed-capture): npm run gate now reads 25/25 — screenshots-fresh's 791 STALE (down from the 848 first measured) recaptured to 0 — see AC-7"
     key_files:
       - "src/views/board-renderer.ts"
       - "styles.css"
@@ -735,6 +735,17 @@ session touched anything — not a regression this reconciliation introduced, an
 to fix; `acceptance-criteria.md` AC-7 now reads 24/25 rather than repeating the prior 25/25 claim
 uncritically. Landed via `git merge --ff-only` from the primary checkout after this reconciliation
 commit; the worktree was not removed.
+
+**CLOSED by follow-up commit `349e22c4` (`043-constructed-capture`, 2026-09-04).** The debt this
+entry named stayed open through the intervening 037/038 releases (each recapturing only its own
+narrow scope, bringing the count from 848 down to 791) until a dedicated full recapture of all 528
+entries refreshed every `sourceHashes` fingerprint. 8 captures moved bytes only — encoder
+re-encode noise plus the established `field-icon-picker-desktop` Chrome/OS drift, confirmed
+`pixelHash`/`layoutHash`-identical to `HEAD` via `pixel-hash.mjs` and restored to committed bytes
+— zero moved real content. `npm run screenshots:verify`: 791 STALE -> 0. `npm run gate`: 25 green
+/ 0 red, exit 0. `tools/lane/css-lane.json` carries the reconciliation release entry (`reviewed:
+[]`, empty by construction — nothing this release moved for a person to look at). `AC-7` now reads
+25/25, closed.
 <!-- /ANCHOR:next-leg -->
 
 ---
