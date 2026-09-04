@@ -9,9 +9,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T22:25:07Z"
+    last_updated_at: "2026-09-05T01:15:00Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "Fixed the Gates capture-staleness gate for PM sourceHashes — Known Limitations #9"
+    recent_action: "Fixed isGitIgnored()'s symlink-crossing false negative (KL #9 follow-up)"
     next_safe_action: "Audit row 6 against T029 and resolve the two open P2 kanban gaps"
     blockers: []
     key_files:
@@ -625,6 +625,33 @@ Every exit code below was read from `$?` directly.
    landing (`7d95a882`+`aa049b45`+`933308a5`+`9afe6e13`). Confirmed on GitHub Actions: run
    `https://github.com/MichelKerkmeester/obsidian--notion-clone/actions/runs/33925013508` for
    `e0145ac9` — `Capture staleness` step passed, full workflow concluded `success`.
+   **Follow-up, 2026-09-05 (`6328c9cb`).** #9's own `isGitIgnored()` fix carried a second bug that its
+   test suite caught but its `screenshots:verify` run never did: `git check-ignore` refuses to answer
+   a directory-only rule (`specs/**/context/`) against a path that crosses a symlink at all — it
+   fatals ("beyond a symbolic link") for anything named past the link, and silently answers "not
+   ignored" for the link itself, because it classifies directory-ness from lstat type and a symlink's
+   type is never "directory". Every worktree this program creates points `specs/context` at the main
+   checkout's own (real, gitignored) `specs/context` through exactly that kind of symlink, so
+   `verify.test.mjs`'s direct `isGitIgnored()` assertions failed red in any worktree — while
+   `screenshots:verify` itself stayed green there, because the vendored files are physically present
+   through the symlink and `classifySource()` never reaches the ignore check for a present file; the
+   misclassification only bites a checkout where the source is genuinely absent, which no worktree
+   with the symlink is. Reproduced first (`npx vitest run tools/screenshots/verify.test.mjs` red,
+   `expected false to be true` on `isGitIgnored("specs/context/obsidian-pm-main/...")`).
+   `isGitIgnored()` now walks `rel`'s ancestors for the first symlink, confirms the path isn't
+   actually tracked (`git ls-files` doesn't share `check-ignore`'s symlink restriction), and answers
+   the real question — would this rule match the ancestor if it were a plain directory — from a
+   throwaway repo that mirrors only the applicable `.gitignore` cascade plus a real directory at that
+   path, reusing git's own pattern matcher rather than reimplementing gitignore syntax; this works
+   whether the symlink's target lives inside this repository (as it does in every worktree here),
+   another one, or nowhere a repository has ever been — covered by a new synthetic-repo test case in
+   `verify.test.mjs` alongside the existing real-path assertions. Verified green in this worktree
+   (`npx tsc --noEmit`, `npx vitest run` — 104 files / 1083 tests, `npm run lint:tools`,
+   `node tools/naming/scan-comments.mjs`, `screenshots:verify` — 550 present and hashed, 0 stale, 0
+   VENDOR UNAVAILABLE since the symlink resolves here — and `npm run gate`, 25/25) and, separately, in
+   a `git clone --local` scratch clone with no `specs/context` at all (`screenshots:verify` exit 0,
+   `200 VENDOR UNAVAILABLE`, `0` problems, matching #9's original clean-checkout evidence). Fixed in
+   `tools/screenshots/verify.mjs`/`verify.test.mjs` (`6328c9cb`).
 <!-- /ANCHOR:limitations -->
 
 ---
