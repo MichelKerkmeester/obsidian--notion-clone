@@ -11,26 +11,27 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "deprecation-conversion"
-    recent_action: "Authored the durable directive after the operator retired the list view"
-    next_safe_action: "Run the usage and migration audit (005-usage-and-migration-audit)"
-    blockers:
-      - "Migration target decided as table; the data-loss check has not run"
+    last_updated_at: "2026-09-04T20:35:23Z"
+    last_updated_by: "phase-005-audit"
+    recent_action: "005-usage-and-migration-audit completed: table confirmed, 4 declared losses named"
+    next_safe_action: "Start 006-hide-and-migrate against 005's implementation-summary.md"
+    blockers: []
     key_files:
       - "spec.md"
       - "plan.md"
       - "superseded-clickup-direction.md"
+      - "005-usage-and-migration-audit/implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-view-deprecation-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 12
     open_questions:
-      - "Does list leave DatabaseViewType, or stay accepted-but-redirected like gallery"
-      - "Do stacked titles and listCompactFields map to table, or are they a declared loss"
+      - "Does list leave DatabaseViewType, or stay accepted-but-redirected like gallery? 005 recommends: stay accepted-but-redirected, decided by 007"
+      - "Do stacked titles and listCompactFields map to table, or are they a declared loss? 005 answers: both are declared losses (implementation-summary.md §6, L1-L2), alongside two more it found (roving-tabindex keyboard model, col.wrap)"
     answered_questions:
       - "Route B is superseded; the operator retired the view rather than converting it"
+      - "005's audit ran: table confirmed via column-width.ts's shared getFieldWidth; the per-group create button is not a loss (table's version is the styled one); the picker is not the only list-minting surface — the settings-load sanitizer and the .base importer mint it too"
 ---
 # Goal: List View Deprecation
 
@@ -120,7 +121,8 @@ into the objective, and it is expected to grow.
 | Folder renamed | Done | `git mv specs/006-list-view-clickup specs/006-list-view-deprecation`, 47 files moved with history preserved |
 | ClickUp direction preserved | Done | `superseded-clickup-direction.md`, `git mv` from the old `spec.md`; `decision-record.md` untouched |
 | Four deprecation children opened | Done | `005`-`008` |
-| Usage audit | Pending | `005-usage-and-migration-audit` |
+| Usage audit | Done | `005-usage-and-migration-audit/implementation-summary.md` — migration target confirmed, 4 declared losses, measurement surface enumerated, 2 open questions answered with recommended defaults |
+| Hide and migrate | Pending | `006-hide-and-migrate` |
 
 ### Deviations and findings
 
@@ -130,4 +132,6 @@ into the objective, and it is expected to grow.
 | Five superseded children, not three | The brief named three. There are five: `000-grid-contract-and-list-harness` and `004-mobile-and-live-verification` belong to the same direction and are marked the same way. |
 | The old `spec.md` was preserved rather than rewritten in place | It carried a twenty-screen ClickUp interaction study and a measured feature diff. Overwriting it would have lost real work, so it moved to `superseded-clickup-direction.md` by `git mv` and the new `spec.md` cites it. |
 | `030`'s own deprecation is unfinished | `renderer-coverage.json` still pins `gallery-renderer.ts`, and `toolbar-renderer.ts` still renders gallery when a view already is one. That is the precedent working as designed — withdrawal without deletion — and it is also a reminder that this packet's `007` is the step that actually removes anything. |
+| `005` found two more list-minting surfaces than this document named | The settings-load sanitizer (`main.ts:142,178`) and the `.base` file importer (`main.ts:1544-1585`) both accept or mint `viewType: "list"` independently of the view picker. `006`'s REQ-002 ("no surface offers list as a choice") needs to account for all three, not just the picker. |
+| The embedded-codeblock migration gap is inherited from `030`, not introduced by this packet | `gallery-migration.ts` is called only from `database-view.ts`'s `refresh()`; `embedded-database-renderer.ts` has no equivalent call and would still render a list-configured codeblock through `ListRenderer` unmigrated. `006` decides whether to close this for `list` or accept the same partial state the gallery already ships with. |
 <!-- /ANCHOR:log -->

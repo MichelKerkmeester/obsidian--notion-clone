@@ -46,20 +46,18 @@
       "tasks.md",
       "goal.md",
       "implementation-summary.md",
+      "tools/live/list-window.json",
+      "tools/bench/list-render-bench.ts",
+      "tools/bench/run-list.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/replay.mjs",
+      "screenshots/manifest.json",
+      "src/data/gallery-migration.ts",
       "src/views/list-renderer.ts",
       "src/views/card-field-renderer.ts",
-      "tools/live/list-window.mjs",
-      "tools/live/list-window.json",
-      "tools/live/renderer-coverage.json",
-      "tools/bench/list-render-bench.ts",
-      "tools/screenshots/constructed-scenarios.mjs",
-      "src/views/list-reservation.test.ts",
-      "src/views/list-row-contracts.test.ts",
-      "src/data/gallery-migration.ts",
       "src/data/types.ts",
       "tools/gate.mjs",
-      "tools/live/replay.mjs",
-      "screenshots/manifest.json"
+      "tools/live/list-window.mjs"
     ],
     "entities": [
       {
@@ -93,33 +91,9 @@
         "source": "derived"
       },
       {
-        "name": "list-renderer.ts",
-        "kind": "code",
-        "path": "src/views/list-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "card-field-renderer.ts",
-        "kind": "code",
-        "path": "src/views/card-field-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "list-window.mjs",
-        "kind": "file",
-        "path": "tools/live/list-window.mjs",
-        "source": "derived"
-      },
-      {
         "name": "list-window.json",
         "kind": "config",
         "path": "tools/live/list-window.json",
-        "source": "derived"
-      },
-      {
-        "name": "renderer-coverage.json",
-        "kind": "config",
-        "path": "tools/live/renderer-coverage.json",
         "source": "derived"
       },
       {
@@ -129,27 +103,45 @@
         "source": "derived"
       },
       {
+        "name": "run-list.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-list.mjs",
+        "source": "derived"
+      },
+      {
         "name": "constructed-scenarios.mjs",
         "kind": "file",
         "path": "tools/screenshots/constructed-scenarios.mjs",
         "source": "derived"
       },
       {
-        "name": "list-reservation.test.ts",
-        "kind": "test",
-        "path": "src/views/list-reservation.test.ts",
+        "name": "replay.mjs",
+        "kind": "file",
+        "path": "tools/live/replay.mjs",
         "source": "derived"
       },
       {
-        "name": "list-row-contracts.test.ts",
-        "kind": "test",
-        "path": "src/views/list-row-contracts.test.ts",
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
         "name": "gallery-migration.ts",
         "kind": "code",
         "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
         "source": "derived"
       },
       {
@@ -165,15 +157,9 @@
         "source": "derived"
       },
       {
-        "name": "replay.mjs",
+        "name": "list-window.mjs",
         "kind": "file",
-        "path": "tools/live/replay.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
+        "path": "tools/live/list-window.mjs",
         "source": "derived"
       },
       {
@@ -205,11 +191,23 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "The deprecation cannot start by deleting, because `viewType: \"list\"` is written into vault files and",
     "created_at": "2026-09-04T19:33:25Z",
-    "last_save_at": "2026-09-04T20:07:56.876Z",
+    "last_save_at": "2026-09-04T20:40:09.811Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,13 +217,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:818371cb9382599d205fac88e724a42bd3815a8eceeee6955d1233918916a4a6",
+    "source_fingerprint": "sha256:c392860ef8af17fe7d1d08f28ae2f294600bf8221996f155aea38747c4a7dd79",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "69bf2ff95020d444bc9ec072c56d9f39745ef7f2cd4030e7a297c779190dac95",
       "plan.md": "e747da061fc9ed38815365a2e3936305ef60232f0933907ee3af313a48fa74be",
-      "tasks.md": "241504dec9ae7c5b6ae95bf804e222293c9c59ee6ce2692d870545a2e99b7843",
-      "implementation-summary.md": "dc8c39f7c28c68c7b008e3c86599f96c22216124115b5c4898c8f41f1391b099"
+      "tasks.md": "953358065f9fbaa07454f5507f72ea769ff7565c8230ae519cda108e0634c49d",
+      "implementation-summary.md": "9815c6c2152ff11d3e1de3ba2b3dc6fce96379df636e7aab8109c677681adb66"
     },
     "last_active_child_id": null,
     "last_active_at": null

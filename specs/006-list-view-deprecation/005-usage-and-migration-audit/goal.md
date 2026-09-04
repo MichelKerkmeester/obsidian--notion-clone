@@ -11,23 +11,26 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation/005-usage-and-migration-audit"
-    last_updated_at: "2026-09-04T21:10:00Z"
-    last_updated_by: "phase-goal-backfill"
-    recent_action: "Authored the durable directive from the parent's conversion"
-    next_safe_action: "Enumerate every list surface, every measurement of it, and every affordance the table lacks"
-    blockers:
-      - "The data-loss check has not run, so no migration knows yet what it drops"
+    last_updated_at: "2026-09-04T20:35:23Z"
+    last_updated_by: "phase-author"
+    recent_action: "Ran the three-direction enumeration and wrote the data-loss list"
+    next_safe_action: "006-hide-and-migrate implements the migration against this audit's findings"
+    blockers: []
     key_files:
       - "spec.md"
       - "plan.md"
       - "tasks.md"
+      - "implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-deprecation-005-goal"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
-    answered_questions: []
+    completion_pct: 100
+    open_questions:
+      - "Does list leave DatabaseViewType, or stay accepted-but-redirected like gallery? Recommend: stay accepted-but-redirected, decided by 007."
+      - "Are stacked titles and listCompactFields declared losses? Recommend: yes for both, dispositioned in implementation-summary.md §6."
+    answered_questions:
+      - "The per-group create button is not a declared loss — table's version calls the same createEntryNearEnd and carries real CSS where the list's carries none"
 ---
 # Goal: Usage and Migration Audit
 
@@ -80,11 +83,11 @@ summary of it. Name a conflict rather than resolving it silently.
 Each row is checkable without opening another file, and each records what is true today
 so the check has a value to move from.
 
-- [ ] Every surface that offers `list` as a choice is enumerated with its file and line. **Today: `toolbar-renderer.ts:1297-1308` is the one known site, and nobody has counted the rest.**
-- [ ] Every measurement of the list is enumerated: the lane, the ratchet, the fixtures, the constructed scenarios, the bench entry, the replay claims and the unit specs. **Today: `tools/gate.mjs:89` and `tools/live/list-window.json` are named in the parent spec; the full set is not.**
-- [ ] Every list affordance with no table equivalent is named and dispositioned as a preserved feature or a declared loss. **Today: three are known — the stacked-title reading mode, `listCompactFields`, and the per-group create button at `list-renderer.ts:172` — and none is dispositioned.**
-- [ ] The data-loss check has run against a real list-configured view and its result is recorded. **Today: it has not run.**
-- [ ] `006` can implement the migration without reading a source file this audit did not name, and `007` can remove the measurement surface without finding one it missed.
+- [x] Every surface that offers `list` as a choice is enumerated with its file and line. **Done: the picker (`toolbar-renderer.ts:1297-1308`), the settings-load sanitizer (`main.ts:142,178`), and the `.base` importer (`main.ts:1544,1551,1585`) — three surfaces, not one.**
+- [x] Every measurement of the list is enumerated: the lane, the ratchet, the fixtures, the constructed scenarios, the bench entry, the replay claims and the unit specs. **Done: `implementation-summary.md` §2 — 1 gate lane (16 checks, pins both list and table renderers), 1 bench, 1 coverage pin (7/22), 2 replay claims, 2 constructed scenarios, 3 screenshot fixture ids, 2 list-only unit specs plus 2 shared specs carrying list assertions.**
+- [x] Every list affordance with no table equivalent is named and dispositioned as a preserved feature or a declared loss. **Done: `implementation-summary.md` §6 — 4 declared losses (`listCompactFields`, stacked title, roving-tabindex keyboard model, `col.wrap`); the per-group create button confirmed NOT a loss on inspection.**
+- [x] The data-loss check has run against a real list-configured view and its result is recorded. **Done against the operator's own `Database Testbed/Testbed.md` (viewType: list, "Punch List") — 1 of 244 files in that vault; result recorded in `implementation-summary.md` §4 and §6.**
+- [x] `006` can implement the migration without reading a source file this audit did not name, and `007` can remove the measurement surface without finding one it missed.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -100,13 +103,16 @@ into the objective, and it is expected to grow.
 | Item | State | Evidence |
 |------|-------|----------|
 | Phase opened | Done | Parent conversion 2026-09-04; `../spec.md` PHASE DOCUMENTATION MAP |
-| Surface enumeration | Pending | `tasks.md` |
-| Measurement enumeration | Pending | `tasks.md` |
-| Data-loss check | Pending | Blocked on a real list-configured view to run against |
+| Surface enumeration | Done | `implementation-summary.md` §1 — 8 `viewType === "list"` branches, 3 view-minting surfaces |
+| Measurement enumeration | Done | `implementation-summary.md` §2 |
+| Data-loss check | Done | `implementation-summary.md` §6, run against the operator's own list-configured view |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
 | Numbered `005`, not `001` | The lower numbers belong to superseded children that inbound references cite by path. Reusing them would silently repoint those citations. |
+| Two more list-minting surfaces than the spec named | `spec.md` and the parent named only the view picker. The settings-load sanitizer (`main.ts:142,178`) and the `.base` file importer (`main.ts:1544-1585`) also mint or preserve `list` views; `006` needs to touch both, not only the picker |
+| The embedded-codeblock gap is inherited, not new | `gallery-migration.ts` is only ever called from `database-view.ts`'s `refresh()` — never from `embedded-database-renderer.ts`. A list migration built the same way inherits the identical gap the gallery's own deprecation log already records as unfinished |
+| One of three opening data-loss candidates was wrong | The per-group create button (`list-renderer.ts:172`) has zero CSS rules for its own class; the table's equivalent calls the same method and is fully styled. Migrating fixes it rather than losing it — checked, not assumed |
 <!-- /ANCHOR:log -->
