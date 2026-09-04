@@ -47,9 +47,19 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
+      "research/research.md",
       "tools/gate.mjs",
+      "research/citation-spot-check.md",
       "tools/live/sheet-teardown.mjs",
-      "tools/live/sheet-rebuild.mjs"
+      "research/resource-map.md",
+      "tools/live/sheet-rebuild.mjs",
+      "src/views/filter-panel-renderer.ts",
+      "src/views/sort-panel-renderer.ts",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/overlay-stack.ts",
+      "src/views/popover-auto-close.ts",
+      "src/views/popover-position.ts",
+      "src/views/dropdown-field.ts"
     ],
     "entities": [
       {
@@ -89,9 +99,21 @@
         "source": "derived"
       },
       {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
         "name": "gate.mjs",
         "kind": "file",
         "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "citation-spot-check.md",
+        "kind": "doc",
+        "path": "research/citation-spot-check.md",
         "source": "derived"
       },
       {
@@ -104,6 +126,48 @@
         "name": "sheet-rebuild.mjs",
         "kind": "file",
         "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "overlay-stack.ts",
+        "kind": "code",
+        "path": "src/views/overlay-stack.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-auto-close.ts",
+        "kind": "code",
+        "path": "src/views/popover-auto-close.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "dropdown-field.ts",
+        "kind": "code",
+        "path": "src/views/dropdown-field.ts",
         "source": "derived"
       },
       {
@@ -141,65 +205,11 @@
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Checklist",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Execution Rules",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Status Reporting Format Task",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Blocked Task Protocol Halt",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "The Chromium",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "its",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Acceptance Criteria",
-        "kind": "proper_noun",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-09-03T04:59:17.278Z",
+    "last_save_at": "2026-09-04T19:29:45.043Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,15 +218,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:73b0df860872d871b2fdee3365bfab40f79ca2930f8060d4d0fee34cec4a18e5",
+    "source_fingerprint": "sha256:1da0309339d7204386ea216131d7963c755bd7cebb77eff1916b756530a60345",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "32a8c75d00a449d536d16c67578fa7e027d593bcd252317957f6e19c009ea9aa",
       "plan.md": "b3552998690b88665d02c8ad2eb710e0e825a9f785f4400e22c8405ff78c553c",
-      "tasks.md": "2372a44931020ef2e1ad611bacec2ca675ca7297106820529cd3f134eadf5550",
-      "implementation-summary.md": "a77701f44d085080cbf1b0932babef0f4ec5fecac8947560d6be3877358cd5f1"
+      "tasks.md": "e20d7ce43b77772844178f837da13a0d14c1145636f9d7ec9329591518339c1f",
+      "implementation-summary.md": "65bb39adb9f9dff8859854ab36368dd0cf4324c17673a115de5bed97e48a9742",
+      "research/research.md": "19532c2eda32f8e2abb08aae7990d079d2adc035aca9cf2eb14d2daa82f568ba"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -213,6 +213,37 @@ class in `src/`, and `applySheetChrome(panel, false)` deregisters the panel on t
 `scrimsLeft: 1` offered as its red comes from a bench whose orphan is classed and still on the body —
 an open sheet, for which holding the backdrop up is correct. Reasoning and its three observations in
 `goal.md`, 2026-09-02 second-mechanism entry.
+
+## PHASE 6: WEBKIT RESEARCH — ADD CONDITION / ADD SORT FREEZE
+
+- [x] **T14** Diagnose the post-entrance-fix Add condition / Add sort freeze on iOS WebKit —
+      research only, no code change.
+      *Closed by:* a converged `/deep:research` loop (lineage `codex-luna`, run id
+      `1788547579619-slpzp3`), five iterations, new-information ratios `0.82, 0.63, 0.46, 0.24,
+      0.04` against a `0.05` threshold, all five key questions dispositioned, 21 findings. Full
+      synthesis at [`research/research.md`](research/research.md); source inventory at
+      [`research/resource-map.md`](research/resource-map.md); raw loop evidence retained at
+      `research/lineages/codex-luna/`.
+      *Ranked mechanisms (repo fit, 5 = direct/high-risk):* (1) 5/5 synchronous
+      `touchend`/synthetic-click into a destructive panel remove/recreate/refresh, crossing a
+      stale-target generation boundary; (2) 4/5 VisualViewport/keyboard timing moving the
+      body-portalled sheet while placement is still active; (3) 4/5 the new row's custom listbox
+      focusing and `scrollIntoView`-ing its active option on open; (4) 3/5 document-capture outside
+      dismissal racing the Add handoff; (5) 3/5 an Obsidian private host layer or z-index collision
+      at the Add coordinates; lower-fit and ruled-out branches (native `<select>`, missing
+      `transitionend`, passive listeners, global `touch-action:none`) are tabled in `research.md`
+      §6 and its Eliminated Alternatives table.
+      *Recommended preview trace:* one opt-in, generation-tagged diagnostic recording pointer/click
+      identity and connectedness, panel-generation and teardown/mount order, focus/scroll targets
+      and pre/post rects, VisualViewport/keyboard geometry, and hit-test winners at the Add
+      coordinates — full event schema and branch classification (A lifecycle / B overlay /
+      C viewport / D focus-scroll / E host-gesture) in `research.md` §8.
+      *Spot-check:* 10 of the synthesis's citations (5 repository `[SOURCE:...]`, 5 external)
+      verified in-runtime — 10/10 CONFIRMED, 0 discrepancies. Full verdicts:
+      [`research/citation-spot-check.md`](research/citation-spot-check.md).
+      *Scope:* no production code or spec changed by the research loop; no repository validation
+      or generation tooling run during it. Does not close T10 or T13 — those remain the operator's
+      device rows for the fixes already shipped in Phases 1-5.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->
@@ -227,4 +258,5 @@ Complete when T10 closes. Every other task is a precondition for asking.
 - Scope and the harness blind spot: [`spec.md`](spec.md)
 - Order and ADR-001: [`plan.md`](plan.md)
 - The record sheet's equivalent fix: [`../016-sheet-drag-and-audit/goal.md`](../016-sheet-drag-and-audit/goal.md)
+- iOS WebKit Add-condition/Add-sort freeze research: [`research/research.md`](research/research.md)
 <!-- /ANCHOR:cross-refs -->

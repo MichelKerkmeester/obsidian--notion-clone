@@ -319,3 +319,35 @@ This pass implemented and verified in one runtime because all three external lan
 | Implemented and verified in one runtime | The plan sends implementation out to an external lane so the verifier is not the author. All three lanes were unavailable, so this pass is both. Recorded as the weaker arrangement rather than left implicit |
 | The gate's `evidence` lane self-heals | It checks artefact freshness at lane 9, and lanes 11, 16, 17 and 18 re-stamp their own artefacts afterwards. So the first run after a source change reds and the second greens with no human action. The re-stamps are genuine re-measurements, so nothing is hidden — but "just run it again" is the wrong habit to teach, and moving the lane last would fix it. Left for the packet that owns the gate |
 <!-- /ANCHOR:decisions -->
+
+---
+
+<!-- ANCHOR:next-leg -->
+## 6. NEXT LEG — iOS WEBKIT ADD-CONDITION / ADD-SORT FREEZE
+
+A converged research loop (`research/research.md`, lineage `codex-luna`, run
+`1788547579619-slpzp3`, five iterations, ratios `0.82/0.63/0.46/0.24/0.04` against a `0.05`
+threshold, 21 findings) diagnosed a freeze that survives everything shipped above: tapping Add
+condition or Add sort on iOS WebKit. Highest-fit mechanism (5/5): the Add handler crosses a
+destructive panel remove/recreate/refresh synchronously, opening a stale-target/generation window
+between the original touch/click, document-capture outside dismissal, the overlay's live-panel
+lookup, and old placement callbacks. Ten of the synthesis's citations were spot-checked
+in-runtime — 10/10 confirmed (`research/citation-spot-check.md`).
+
+**Recommended next leg, running on the WebKit branch, in order:**
+
+1. **Retained-node rebuild.** Replace the destructive panel remove/recreate with a stable
+   shell/keyed-row update; if replacement stays, gate one Add action per generation, dispose the
+   old surface before removal, and reject stale callbacks/events.
+2. **Pointerdown-decided inside/outside.** Make the overlay's outside-dismissal generation-aware:
+   resolve the live panel at capture time, defer or guard outside dismissal across the active Add
+   handoff, and restore focus only to a still-connected anchor.
+3. **Debug trace.** Ship the opt-in, generation-tagged preview diagnostic from `research.md` §8
+   before changing behavior, and classify the first device reproduction into branch A-E
+   (lifecycle / overlay / viewport / focus-scroll / host-gesture) before choosing which fix to
+   build.
+
+This is a new leg, not a reopening of the work above — none of the five shipped fixes are
+contradicted by the research, and the two open device rows (T10, T13) still gate this packet's own
+completion.
+<!-- /ANCHOR:next-leg -->

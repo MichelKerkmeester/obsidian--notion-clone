@@ -1,0 +1,22 @@
+{
+  "run_id": "1788547579619-slpzp3",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/031-sheet-lifecycle-ownership",
+  "base_artifact_dir": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/041-sheet-webkit-research/specs/005-component-surface-system/031-sheet-lifecycle-ownership/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  }
+}
