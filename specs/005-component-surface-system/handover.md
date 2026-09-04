@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: five obsidian-pm port phases, 042, and both 043 legs (structural, then typed data and real icons) are landed and merged; no lane is in flight; the operator owes device confirmation and the 043 AC-002 ruling."
+description: "Resume point: five obsidian-pm port phases, 042, and all three 043 legs (structural, typed data and real icons, then table and chart) are landed and merged; no lane is in flight; the operator owes device confirmation and the 043 AC-002 ruling."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T05:40:00Z"
-    last_updated_by: "orchestrate-handover-11"
-    recent_action: "T004-T006 landed; row 6 re-narrowed to table/chart/13 fixtures"
-    next_safe_action: "Operator confirms and rules; then pick from the bounded lists"
+    last_updated_at: "2026-09-04T07:00:00Z"
+    last_updated_by: "orchestrate-handover-12"
+    recent_action: "T027 landed; row 6 narrowed to 13 fixture-only scenarios, row-4 dep"
+    next_safe_action: "Operator confirms and rules"
     blockers:
       - "operator confirmation owed: reports 29-36 and the five ported surfaces, on 1.4.10"
       - "043's AC-002 ruling owed: amend the criterion, or accept determinism as its basis"
@@ -37,6 +37,7 @@ _memory:
       - "043-constructed-capture landed at 2ab4942, Level 3, partial. Nine constructed scenarios and 36 captures exist for every registered view, mounted through 042's own bundle seam, reproducing 0 of 312 manifest entries changed across two runs. Seven of eleven planned fixtures declared superseded via fixtureOf; the other 13 stay fixture-only, named. css-lane and device-parity now read the constructed captures for free; screenshots-fresh's DECLARED-staleness wiring is still open. AC-002's readiness negative control is unmeetable through the capture path because the screenshot command flushes pending animation frames before rasterising, and needs an operator ruling"
       - "Done-audit-6: the structural 043 landing did not close DONE row 6. Every constructed bench column was untyped text and every icon was the stub's placeholder diamond, so the fixture pass carried the only evidence for typed rendering and icon fidelity. That dependency was declared and bounded rather than hidden, but a declared-and-bounded dependency is still a dependency"
       - "Done-audit-7: a second 043 leg (0af4ca6, reconciled in bf67475) gave list, board, gallery, calendar and timeline real typed cells and 21 real icon names, closing the gap for those 7 declared pairs; the remaining difference there is curated content, a declared complement rather than a device-value dependency. Table and chart stay untyped by design (table's column builder takes no captureData argument, chart has no per-row field), so row 6 stays open, narrowed to those two views plus the 13 fixture-only scenarios. completion_pct stays 4 of 7 = 57"
+      - "Done-audit-8: T027 (425d552) closed table and chart, typed-data-assertions.mjs 6 of 6 new markers PASS. All nine constructed views are now typed; the 13 fixture-only scenarios are the sole remaining gap, and they back 5 of the 25 npm run gate lanes, so ticked row 4's green partly depends on their hand-authored markup. Row 6 stays open on that narrower list. completion_pct stays 4 of 7 = 57"
 ---
 # Session Handover: Component Surface System
 
@@ -46,33 +47,36 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-As of 2026-09-04 05:40 CEST, releases 1.4.2 through 1.4.10 are live on GitHub and installed into
+As of 2026-09-04 07:00 CEST, releases 1.4.2 through 1.4.10 are live on GitHub and installed into
 the iCloud vault plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
 Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it.
 
 All five obsidian-pm port phases (037-041) are landed and shipped, and every open product row they
 carried is closed. Both harness phases the parent's DONE table opened are landed too. 042 gave
 chart and calendar week/day their production renderers and brought replay to 28 held claims,
-reversed 0. 043 landed in two legs: the structural landing at `2ab4942` (nine constructed
-scenarios, 36 captures, mounted through 042's own bundle seam), then a typed-data landing at
-`0af4ca6`, reconciled onto a list-mount fix (`cf562e3`) in `bf67475`. The second leg gives list,
-board, gallery, calendar and timeline real typed cells (select pills, checkboxes, currency,
-relation chips) and 21 real icon names, closing the typed-state/icon gap for 7 of the 11 planned
-fixture-to-constructed pairs.
+reversed 0. 043 landed across three legs on main, equal to origin: the structural landing at
+`2ab4942` (nine constructed scenarios, 36 captures, mounted through 042's own bundle seam), a
+typed-data landing at `0af4ca6` (reconciled in `bf67475`) giving list, board, gallery, calendar and
+timeline real typed cells and 21 real icon names, and `425d552` (T027), which closed the last two
+views: table now routes through a real `CellRenderer` when `captureData` is on, and chart sums a
+real per-row value column instead of a flat row count. Typed data and real icons now land for all
+nine constructed views; `typed-data-assertions.mjs` extended to 6 of 6 new markers, red before and
+green after.
 
-The parent DONE table (`goal.md`'s 7-row checklist) is 4 of 7 = 57, unchanged this pass: rows 3,
-4, 5 and 7 hold. Row 6 was re-audited against `bf67475` (done-audit-7) and stays open, narrowed a
-second time: table's constructed side is permanently untyped (its column builder never receives
-typed columns), chart has no per-row field to type at all, and 13 named fixture-only scenarios
-still back the same five gate lanes' green with hand-authored markup. The 7 declared pairs' own
-gap is closed, read as a declared complement rather than a dependency: both sides now show real
-typed cells, so the remaining difference there is curated content. Rows 1 and 2 stay open on
+The parent DONE table (`goal.md`'s 7-row checklist) is 4 of 7 = 57, unchanged this pass: rows 3, 4,
+5 and 7 hold. Row 6 was re-audited against `425d552` (done-audit-8) and stays open, narrowed a
+third time: the typed-state/icon gap is fully closed for all nine views, so what remains is 13
+named fixture-only scenarios (mobile widths, subtask-tree overlays, sparse fields, empty states,
+toolbar-options popovers, and the chart view's three chrome popovers) with no constructed or device
+counterpart at all. They back five of the 25 `npm run gate` lanes (`css-lane`, `screenshots-fresh`,
+`device-parity`, `touch-targets`, `unstyled-links`), so ticked row 4's "exits 0" is itself partly
+computed over their hand-authored markup, not only the fixture lanes' own greens. Row 3 is
+unaffected: none of the 13 is one of the seven `DatabaseViewType` values. Rows 1 and 2 stay open on
 operator device confirmation, unrelated to either phase.
 
-No lane is in flight. Worktrees 003 through 020 are all merged into main, confirmed directly:
-every worktree's HEAD commit is an ancestor of `bf67475`, including the list-view phone-fold
-diagnosis that landed as `cf562e3`. Removing the finished worktrees is the operator's call,
-through sk-git. Main is clean at `bf67475` and equal to origin/main.
+No lane is in flight. Worktrees 003 through 021 are all merged or finished into main, confirmed
+directly: every worktree's HEAD commit is an ancestor of `425d552`. Removing the finished worktrees
+is the operator's call, through sk-git. Main is clean at `425d552` and equal to origin/main.
 <!-- /ANCHOR:handover-summary -->
 
 ---
@@ -88,9 +92,9 @@ determinism as its basis. Second, device confirmation: reports 29-36 and the fiv
 now that 1.4.10 is installed. Each confirmation closes its `roadmap.md` §4 row; each "still
 broken" reopens it with the device fact given, not an assumption.
 
-Candidate next work is bounded, not open-ended: only what the operator's confirmations reopen,
-plus row 6's own remaining list (table's typed cell rendering, chart's per-row icon typing, and
-the 13 fixture-only scenarios), plus whatever AC-002's ruling requires. Nothing else is queued.
+Candidate next work is bounded, not open-ended: only what the operator's confirmations reopen, plus
+row 6's own remaining list (the 13 fixture-only scenarios that back five gate lanes with no
+constructed or device counterpart), plus whatever AC-002's ruling requires. Nothing else is queued.
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -103,9 +107,9 @@ the 13 fixture-only scenarios), plus whatever AC-002's ruling requires. Nothing 
    answer.
 3. Record each answer in `roadmap.md` §4: confirmed rows close, "still broken" rows reopen with
    the device fact given. An agent never closes an operator row on its own judgment.
-4. If the operator wants table's or chart's typed rendering closed, open a fresh spec-folder
-   decision (Gate 3) scoped to that work; it is not implicit in either landed phase.
-5. Offer to remove the finished worktrees (003-020) through sk-git once the operator confirms
+4. If the operator wants the 13 fixture-only scenarios given a constructed counterpart, open a
+   fresh spec-folder decision (Gate 3) scoped to that work; it is not implicit in the landed phase.
+5. Offer to remove the finished worktrees (003-021) through sk-git once the operator confirms
    they are no longer needed for reference.
 <!-- /ANCHOR:session-notes -->
 

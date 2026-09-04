@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T05:40:00Z"
-    last_updated_by: "done-audit-7"
-    recent_action: "Row 6 re-audited: T004-T006 narrows dep to table/chart/13 fixtures"
+    last_updated_at: "2026-09-04T07:00:00Z"
+    last_updated_by: "done-audit-8"
+    recent_action: "T027 closes table/chart; row 6 narrows to 13 fixtures, row-4 dep"
     next_safe_action: "Operator confirms 29–36 and five surfaces on iOS; rules on 043 AC-002"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
@@ -23,7 +23,7 @@ _memory:
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
-      - "043 landed 2ab4942, typed data/icons landed 0af4ca6+bf67475; row 6 stays open, narrowed to table's untyped cells, chart's absent per-row typing and 13 fixture-only scenarios; AC-002 needs an operator ruling"
+      - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -382,6 +382,65 @@ resolve them silently.
       cells, chart's absent per-row typing, and the 13 fixture-only scenarios. Observed today: 312
       manifest entries, 36 constructed, 28 `fixtureOf` entries (7 pairs), 21 real icon names, 3 of 3
       typed markers, 0 of 312 entries moved on `043`'s own two detached runs.
+
+      **Re-verified 2026-09-04T07:00:00Z (done-audit-8), narrowed a third time, stays open.**
+      `425d552` (main, equal to origin) landed T027 after `done-audit-7` audited the tree. Verified
+      directly: `node tools/live/typed-data-assertions.mjs`, `$?` read directly: `0` — 6 of 6 new
+      markers (table's named select pill, checked checkbox, currency, date, relation icon; chart's
+      per-row value field) PASS with `captureData: true`, all false without it, on
+      `constructed-table` and `constructed-chart`; `constructed-list`'s original 3 markers
+      unaffected. `grep -c fixtureOf tools/screenshots/scenarios/*.mjs` still reads 7 (core.mjs 4,
+      temporal.mjs 3), unchanged — T027 typed table and chart without declaring a new fixture pair
+      for either. Both gaps `done-audit-7` narrowed to are closed: table's `fileViewTableBag`/
+      `embedTableBag` now route through a real `CellRenderer` when `captureData` is on, and chart
+      sums a real `number`/`currency` column instead of a flat row count, confirmed by reading
+      `implementation-summary.md`'s T027 verification table and the 8 changed constructed PNGs it
+      names.
+
+      The 13 named fixture-only scenarios (`plan.md`'s Architecture table: `board-subtask-tree`,
+      `table-mobile`, `list-mobile`, `board-mobile`, `list-sparse-fields`, `calendar-mini-calendar`,
+      `calendar-empty-state`, `calendar-toolbar-options`, `timeline-subtask-tree`,
+      `timeline-toolbar-options`, `chrome-chart-options-popover`, `chrome-chart-number`,
+      `chrome-chart-empty`) are unchanged, counted directly against `screenshots/manifest.json`: 63
+      fixture ids in total carry no `fixtureOf`, and these 13 are exactly `plan.md`'s own bounded
+      list within that 63 — the other 50 were never candidates for a constructed pair (chrome
+      popovers, panels and field-level fixtures outside this row's scope). Correcting this audit's
+      own dispatch framing rather than repeating it: ten of the 13 are per-view state variants of
+      views that already carry a typed constructed capture (mobile width, subtask-tree overlay,
+      sparse fields, an empty state, a toolbar-options popover), not "menus, sheets, chrome" as a
+      category apart from views; only the three `chrome-chart-*` entries are popover/chrome
+      elements, and those are specifically the chart view's own chrome. None of the 13 is one of the
+      seven `DatabaseViewType` values row 3 counts, so row 3's tick does not rest on them.
+
+      They still back the same five gate lanes named since `done-audit-4`: `css-lane`,
+      `screenshots-fresh`, `device-parity`, `touch-targets`, `unstyled-links` — confirmed by reading
+      `tools/gate.mjs` directly (`grep -n "name:" tools/gate.mjs` = 25 lines) rather than trusting
+      the prior count: these five are 5 of the 25 lanes `SURFACE_PHASE=<phase> npm run gate` sums
+      into its exit code. That makes row 4's own wording the test: its tick reads only "exits 0,"
+      and it does, so the tick is correct on its own narrower terms. But this row's question is
+      different and unconditional ("no criterion's green depends on..."), and the answer is no
+      longer "only the fixture lanes' own greens" as it read when `done-audit-6` first bounded it —
+      five of the 25 lane exit codes that together ARE row 4's green are each computed in part over
+      these 13 scenarios' hand-authored markup (touch-target counts, link counts, pixel/layout
+      hashes, source freshness) with no constructed or device capture to cross-check against, unlike
+      the now-typed 7 declared pairs. Row 4's green therefore does depend on a value the harness
+      supplies that a device would not, through this bounded 13-scenario slice. Checked the other
+      ticked rows and the child goals directly rather than assuming clearance: row 5's 28 replay
+      claims (`tools/live/replay.json`) name no claim referencing any of the 13 ids or the five
+      lanes' baseline counts; row 7 validates spec docs, unrelated to captures; four child `goal.md`
+      files mention one of the 13 ids (`018`, `037`, `038`, `039`) but none makes a ticked child
+      criterion's green rest on it beyond what `018` already discloses under its own D5 ("a number
+      measured on a hand-written fixture is a fact about the fixture") — a disclosed limit, not a
+      new dependency.
+
+      **Stays open**, narrowed a third time: no longer table's or chart's rendering (T027 closed
+      both), and no longer framed as "typed-state and icon fidelity" (closed for all 9 declared/
+      constructed views) — now solely the 13 named fixture-only scenarios, which have no constructed
+      or device counterpart at all, and whose fixture-authored measurements compose five of the 25
+      lane results that together make ticked row 4 exit 0. Observed today: 312 manifest entries, 36
+      constructed, 7 `fixtureOf` entries unchanged, 6 of 6 new typed markers PASS, 13 fixture-only
+      ids confirmed against `plan.md`'s named list, 25 total gate lanes with the five named ones
+      confirmed among them.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1145,4 +1204,40 @@ to: table's permanently untyped cells, chart's absent per-row typing, and the 13
 scenarios. `completion_pct` stays **4 of 7 = 57**: rows 3, 4, 5 and 7 hold, rows 1 and 2 stay open
 on operator device confirmation, row 6 stays open on the narrower list above. `roadmap.md` §5's
 `043` bullet, `spec.md`'s two Phase Documentation Map rows and `handover.md` updated to match.
+
+### Done-audit-8, 2026-09-04T07:00:00Z: `425d552` lands T027, row 6 narrowed a third time to 13 fixture-only scenarios plus a row-4 dependency
+
+A fresh audit re-read row 6 against `425d552` (main, equal to origin), the T027 landing that closed
+`done-audit-7`'s last two open items. Verified directly, not carried over: `node tools/live/typed-
+data-assertions.mjs`, `$?` read directly: `0` — 6 of 6 new markers PASS (table's named select pill,
+checked checkbox, currency, date and relation icon; chart's per-row value field), all false without
+`captureData`, on the same two scenarios; `constructed-list`'s original 3 markers unaffected.
+`grep -c fixtureOf tools/screenshots/scenarios/*.mjs` still reads 7, unchanged. Table's
+`fileViewTableBag`/`embedTableBag` now route through a real `CellRenderer` when `captureData` is
+on, and chart sums a real `number`/`currency` column instead of a flat row count — both gaps
+`done-audit-7` named are closed.
+
+What remains is the 13 named fixture-only scenarios, unchanged and counted directly against
+`screenshots/manifest.json` (63 fixture ids total lack `fixtureOf`; these 13 are `plan.md`'s own
+bounded subset). This audit corrects its own dispatch framing: ten of the 13 are per-view state
+variants of already-typed views (mobile width, subtask-tree overlay, sparse fields, an empty
+state, a toolbar-options popover), not "menus, sheets, chrome" as a category apart from views; only
+the three `chrome-chart-*` entries are chrome/popover elements, and those belong to the chart view.
+None is one of the seven `DatabaseViewType` values, so row 3's tick does not depend on them. They
+still back `css-lane`, `screenshots-fresh`, `device-parity`, `touch-targets` and `unstyled-links` —
+confirmed 5 of the 25 lanes in `tools/gate.mjs` (`grep -n "name:" tools/gate.mjs` = 25). Row 4's own
+wording ("exits 0") is met and its tick stands on its own narrower terms, but row 6 asks the wider,
+unconditional question, and the answer moved: these five lane exit codes, which together compose
+row 4's green, are each computed in part over the 13 scenarios' hand-authored markup with no
+constructed or device counterpart to cross-check against. Row 4's green therefore does depend on a
+value the harness supplies that a device would not, through this bounded slice — not merely on "the
+fixture lanes' own greens." Checked rather than assumed: row 5's 28 replay claims name none of the
+13; row 7 is unrelated to captures; the four child `goal.md` files that mention one of the 13
+(`018`, `037`, `038`, `039`) disclose it as a fixture-derived fact, per `018`'s own D5, not a hidden
+dependency. **Row 6 stays open**, narrowed a third time: no longer table/chart rendering (T027
+closed both) and no longer "typed-state and icon fidelity" (closed for all 9 constructed views) —
+solely the 13 fixture-only scenarios and the fact that they feed a piece of row 4's ticked green.
+`completion_pct` stays **4 of 7 = 57**: rows 3, 4, 5 and 7 hold, rows 1 and 2 stay open on operator
+device confirmation, row 6 stays open on the narrower list above. `roadmap.md` §5's `043` bullet,
+`spec.md`'s two Phase Documentation Map rows and `handover.md` updated to match.
 <!-- /ANCHOR:log -->
