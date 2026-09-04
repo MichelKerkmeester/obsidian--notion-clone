@@ -9,9 +9,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T21:40:00Z"
+    last_updated_at: "2026-09-04T22:25:07Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "T031 landed 16 PM reference captures, closing AC-002 as Met"
+    recent_action: "Fixed the Gates capture-staleness gate for PM sourceHashes — Known Limitations #9"
     next_safe_action: "Audit row 6 against T029 and resolve the two open P2 kanban gaps"
     blockers: []
     key_files:
@@ -604,6 +604,27 @@ Every exit code below was read from `$?` directly.
    `screenshots/project-manager/` (16 PNGs, landed separately as `295401ad`/`04814e24`, left
    untouched by this reconciliation). All 550 final entries verified byte-identical to main's prior
    blob for that path — paths moved, no pixel did.
+9. **RESOLVED, 2026-09-05.** `04814e24` (the reconciliation that landed `295401ad`'s 16
+   `project-manager` reference captures onto main) turned the GitHub Actions `Gates` workflow's
+   "Capture staleness" step red on every push since, while `npm run screenshots:verify` and the full
+   `npm run gate` both stayed green locally at the same commits. Root cause: the reference group's
+   `sourceHashes` name 18 files under `specs/context/obsidian-pm-main/...` — the vendored comparison
+   plugin `.gitignore` deliberately excludes (`specs/**/context/`) so it never ships in this repo. A
+   fresh checkout has no `specs/context` at all, CI included, so `verify.mjs` read every one of the
+   200 `sourceHashes` entries touching that tree as `MISSING SOURCE` and failed a gate no push could
+   ever satisfy — reproduced locally in a `git clone --local` fresh clone with `specs/context`
+   removed: `screenshots:verify` exit 1, `MISSING SOURCE (200)`, matching the CI log verbatim.
+   Fixed in `tools/screenshots/verify.mjs` (`e0145ac9`, plus new `verify.test.mjs`): `classifySource()`
+   asks git's own ignore rules (`isGitIgnored()`, via `git check-ignore`) before calling an absent
+   source a break. Only a source both absent AND git-ignored downgrades to a new `VENDOR UNAVAILABLE`
+   bucket — reported, non-fatal; a present source, on any machine that does have the vendor checked
+   out (unchanged from before), is still hashed and compared, so real drift still fails `STALE` —
+   confirmed by mutating a real vendored source file and watching `STALE` fire, then clear on revert.
+   Verified green in the same clean clone (`screenshots:verify` exit 0, `200 VENDOR UNAVAILABLE`, `0`
+   problems) and in `npm run gate` (25/25), both before and after rebasing onto the folder-split
+   landing (`7d95a882`+`aa049b45`+`933308a5`+`9afe6e13`). Confirmed on GitHub Actions: run
+   `https://github.com/MichelKerkmeester/obsidian--notion-clone/actions/runs/33925013508` for
+   `e0145ac9` — `Capture staleness` step passed, full workflow concluded `success`.
 <!-- /ANCHOR:limitations -->
 
 ---
