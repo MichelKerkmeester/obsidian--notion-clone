@@ -126,6 +126,7 @@
       "handover.md",
       "roadmap.md",
       "architecture-findings.md",
+      "screenshots/manifest.json",
       "src/views/surface-contract.ts",
       "001-overlay-placement-and-menu-language/spec.md",
       "tools/live/probe.mjs",
@@ -139,8 +140,7 @@
       "tools/live/unstyled-links.mjs",
       "tools/screenshots/capture.mjs",
       "tools/screenshots/theme.css",
-      "tools/gate.mjs",
-      "tools/lane/css-lane.json"
+      "tools/gate.mjs"
     ],
     "entities": [
       {
@@ -171,6 +171,12 @@
         "name": "architecture-findings.md",
         "kind": "doc",
         "path": "architecture-findings.md",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
@@ -252,12 +258,6 @@
         "source": "derived"
       },
       {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -290,7 +290,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-04T01:15:10.418Z",
+    "last_save_at": "2026-09-04T02:04:39.672Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -298,11 +298,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:daf8e926b07c0242a89cd8b90e509b153e9927d96eb0bcfe940aa3fe9f9f6784",
+    "source_fingerprint": "sha256:aac1cdd0b0b2d6ef6057831effabf12297fd43b19127f36e50b01de4824321b5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c4c2fa49770cb412a73b5b735d23ff2cc0cbc00894839486b22b5239efab7619",
-      "handover.md": "ef33e0bb19fe82ae8a1179674cab9f6a76a6eee7d93f1c396606f56f1f63bbc3"
+      "spec.md": "7ed73001d0a8ab7926362c3a477eed7c97eb8fd491b4b746c46cda6f5788faa3",
+      "handover.md": "b17a893a433b6d0dc8e27d52c4bddbe58be0e694da344bd26007db8c11ccc331"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"

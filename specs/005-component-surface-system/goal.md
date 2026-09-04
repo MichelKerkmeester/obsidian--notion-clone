@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T09:10:00Z"
-    last_updated_by: "done-audit-5"
-    recent_action: "Ticked row 5: 8a79ff8 closed the replay gap; 28 held, pct 57"
-    next_safe_action: "Land 043 leg a; operator confirms on iOS"
+    last_updated_at: "2026-09-04T10:40:00Z"
+    last_updated_by: "done-audit-6"
+    recent_action: "Row 6 re-audited: 043 landed, dep declared-bounded, stays open"
+    next_safe_action: "Operator confirms 29–36 and five surfaces on iOS; rule on 043 AC-002"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -23,7 +23,7 @@ _memory:
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
-      - "042 landed; row 5 closed by 8a79ff8's replay claim (28 held, reversed 0); row 6 open on 5 fixture-backed gate lanes, 043-constructed-capture opened for it, devin leg a in flight"
+      - "043 landed 2ab4942; row 6 stays open, narrowed to the fixture-backed typed-state/icon dependency behind css-lane, screenshots-fresh and device-parity; AC-002 needs an operator ruling"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -318,6 +318,37 @@ resolve them silently.
       ways" precedent this row already set (D5): a device dependency found anywhere in the named
       set disqualifies the tick, a declared-and-bounded dependency is still a dependency. Stays
       open on the fixture passes of these five gate lanes.
+      **Re-verified 2026-09-04T10:40:00Z (done-audit-6), still open, verdict unchanged by the
+      `043` landing.** `043-constructed-capture` landed `2ab4942`: nine constructed scenarios, 36
+      captures, mounted through the same `buildRenderAssertionBundle()` seam `042` reused, read
+      in-runtime and reproducing 0 of 312 `pixelHash`/`layoutHash` changes across two detached
+      runs. Seven of `plan.md`'s eleven planned fixture-to-constructed pairs now carry
+      `fixtureOf` inside `screenshots/manifest.json` (28 of 312 entries), and the 13 fixture-only
+      scenarios this row's own audit already named stay registered and captured, confirmed
+      present in both the registry and the manifest. Two of the three lanes done-audit-4 found no
+      constructed-renderer counterpart for — `css-lane` and `device-parity` — do now read the
+      constructed captures with zero code change: `check-lane.mjs`'s `contentChangedCaptures()`
+      and `capture-device-parity.mjs`'s directory scan both already covered the shared manifest,
+      so the constructed entries joined it for free (`043/goal.md`'s own AC rows for both, now
+      ticked). `screenshots-fresh` (`verify.mjs`) does validate the 36 constructed entries' own
+      freshness ("312 entries match their sources"), but the specific wiring this row named — a
+      DECLARED scenario's staleness judged against its constructed counterpart's `sourceHashes` —
+      stays unmet in `043/goal.md`'s own checklist. None of that closes the dependency this row
+      polices, because the fixture pass those three lanes still run is not merely present, it is
+      load-bearing: every bench column in the constructed captures is `"text"` — no select pill,
+      currency, date format or completed-strikethrough — and every Obsidian icon draws as the
+      stub's placeholder diamond, so the fixture captures remain the sole evidence for typed-state
+      and icon rendering across all 7 declared pairs, read side by side
+      (`043/implementation-summary.md` Known Limitation 3). The dependency is now DECLARED
+      (`fixtureOf`) and bounded to those 7 pairs plus the 13 named fixture-only scenarios, rather
+      than spread across all five lanes undifferentiated as it read in done-audit-3. But per this
+      row's own "check both ways" precedent, a declared-and-bounded dependency is still a
+      dependency, and this row's wording stays unconditional. **Stays open**, narrowed to: the
+      fixture pass backing typed-state and icon fidelity in css-lane, screenshots-fresh and
+      device-parity greens for the 7 declared pairs and 13 fixture-only scenarios. Closes only
+      when an Obsidian stub renders real icons, or the constructed mount gains a typed bench-data
+      option (`043/tasks.md` T004-T006, still pending). Observed today: 312 manifest entries, 36
+      constructed, 7 of 11 declared pairs, 13 named fixture-only.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1032,4 +1063,29 @@ device confirmation, unrelated to either phase. `completion_pct` recomputed 4 of
 one that moved. `roadmap.md` §5's `042` bullet updated to record the lanes landed since the prior
 audit and the `043` row opened for the remainder; §5.3's release cadence line updated through
 1.4.10.
+
+### Done-audit-6, 2026-09-04T10:40:00Z: `043` landed at `2ab4942`, row 6 re-audited, stays open
+
+`043-constructed-capture` landed on main at `2ab4942`, equal to origin. A fresh audit re-read row 6
+against the merged tree, per the precedent done-audit-5 set: landing a phase is not itself proof its
+row closes. Nine constructed scenarios and 36 captures now exist for every registered view, declared
+alongside seven of eleven planned fixtures via `fixtureOf`, and two of the three lanes done-audit-4
+found no constructed-renderer counterpart for (`css-lane`, `device-parity`) now read the constructed
+captures with zero code change. The dependency this row polices did not close: the fixture pass
+across all five gate lanes still carries the only evidence for typed rendering and icon fidelity,
+because every constructed bench column is untyped text and every icon is the stub's placeholder
+diamond. That dependency is now DECLARED and bounded (`fixtureOf`, 7 of 11 pairs; 13 named
+fixture-only scenarios) rather than undifferentiated, but per this row's own "check both ways"
+precedent (D5), a declared-and-bounded dependency still counts. **Row 6 stays open**, narrowed from
+the full fixture pass of five gate lanes to the typed-state and icon-fidelity slice of it.
+`completion_pct` stays **4 of 7 = 57**, unchanged: rows 3, 4, 5 and 7 hold, row 6 stays open, rows 1
+and 2 stay open on the operator's own device confirmation, unrelated to either phase. `roadmap.md`
+§5's `043` bullet updated to record the landing and its own known limitations (AC-002 unmet as
+written and needing an operator ruling, the shared manifest kept over AC-006's separate file, the
+timeline captured at week scale only); a new "operator rulings owed" line records the AC-002 wording
+decision plus the still-outstanding device confirmation of reports 29-36 and the five ported surfaces
+on 1.4.10. `spec.md`'s two Phase Documentation Map rows for `043` updated to match, since the doc's
+own note requires the row be carried the same in both. `handover.md` refreshed for the same state,
+including the in-flight list-view phone-fold diagnosis lane this pass found already running in a
+separate worktree, unrelated to `043`.
 <!-- /ANCHOR:log -->
