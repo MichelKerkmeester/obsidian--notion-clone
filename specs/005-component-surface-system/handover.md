@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T07:20:00Z"
+    last_updated_at: "2026-09-04T07:39:00Z"
     last_updated_by: "orchestrate-handover-13"
-    recent_action: "T028 merged; done-audit-9 re-audited row 6 and narrowed it a fifth time"
-    next_safe_action: "Operator confirms the release on device and rules on 043 AC-002"
+    recent_action: "Renumbered releases to 0.0.x; main and iCloud installs now read 0.0.15 (was 1.4.10)"
+    next_safe_action: "Operator confirms 0.0.15 on device and rules on 043 AC-002; next release is 0.0.16"
     blockers:
       - "operator confirmation owed: reports 29-36 and the five ported surfaces, on 1.4.10"
       - "043's AC-002 ruling owed: amend the criterion to the inside-mount measurement, or accept determinism as its basis"
@@ -42,6 +42,7 @@ _memory:
       - "Done-audit-8: T027 (425d552) closed table and chart, typed-data-assertions.mjs 6 of 6 new markers PASS. All nine constructed views are now typed; the 13 fixture-only scenarios are the sole remaining gap, and they back 5 of the 25 npm run gate lanes, so ticked row 4's green partly depends on their hand-authored markup. Row 6 stays open on that narrower list. completion_pct stays 4 of 7 = 57"
       - "043 T028 is merged to main (d363456, reconciled dc67803): all 13 of row 6's named fixture-only scenarios now have a constructed counterpart, ten via new additive ScenarioSpec options (subtaskTree, sparseFields, emptyState, chartVariant, miniCalendar, three new toolbar-popover renderer values), three (table/list/board-mobile) via a fixtureOf declaration onto the existing mobile-device capture already on record. A real bug (constructedScenario() dropping opts.miniCalendar) was found only by reading the 40 new captures, after the assertion script had already reported green through a spec that bypassed it"
       - "Done-audit-9 answered the question T028 left open: a manifest-level counterpart does NOT satisfy row 6 regardless of which lane reads it, since the criterion tests whether a green depends on a harness-supplied value, not whether a counterpart exists anywhere. css-lane, screenshots-fresh and device-parity now cross-check all 13; touch-targets and unstyled-links never read the manifest, iterating render-assertion-bundle.mjs's 21-entry SCENARIOS instead. Row 6 stays open, narrowed a fifth time to ten scenarios and two lanes. completion_pct stays 57"
+      - "2026-09-04, operator decision 'renumber our history': the version scheme restarted after the fork from pangy9/obsidian-note-database (fork point upstream 1.2.8). Upstream's seventeen tags (1.0.0-1.2.8) were removed from origin; our fifteen post-fork releases were re-tagged on the same commits and recreated on GitHub with the same builds, only the asset manifest's version field rewritten: 1.2.8-euro.1 through 1.4.10 now read 0.0.1 through 0.0.15 (Latest) in order. manifest.json/package.json/versions.json on main (6f81eb8) and the iCloud install both now read 0.0.15; the iCloud manifest carries a backup of the pre-rename 1.4.10 manifest. The next release is 0.0.16 (board + gantt one-to-one copies), then 0.0.17 onward, always 0.0.N. .github/workflows/release.yml auto-creates a release on any *.*.* tag push and raced the manual recreation, briefly leaving five releases wrong before they were fixed; future releases must push the tag and wait for CI, or create with gh and expect CI to fail with 'already exists'"
 ---
 # Session Handover: Component Surface System
 
@@ -51,9 +52,11 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-As of 2026-09-04, releases 1.4.2 through 1.4.10 are live on GitHub and installed into the iCloud
-vault plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
-Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it.
+As of 2026-09-04, releases 0.0.7 through 0.0.15 (formerly 1.4.2 through 1.4.10, renumbered this
+session — `roadmap.md` §5.3) are live on GitHub and installed into the iCloud vault plugin folder
+(`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
+Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it. Current is
+0.0.15; the next release is 0.0.16.
 
 All five obsidian-pm port phases (037-041) are landed and shipped, and every open product row they
 carried is closed. Both harness phases the parent's DONE table opened are landed too. `043` is now
@@ -105,8 +108,9 @@ First, `043`'s AC-002: the readiness wait is real inside the mount (`scrollTop` 
 across one frame), but the screenshot command flushes that frame before it rasterises, so a
 photograph can never show the difference the criterion asks for. Amend the criterion to the
 inside-mount measurement, or accept determinism as its basis. Second, device confirmation: reports
-29-36 and the five ported surfaces, now that 1.4.10 is installed. Each confirmation closes its
-`roadmap.md` §4 row; each "still broken" reopens it with the device fact given, not an assumption.
+29-36 and the five ported surfaces, now that 0.0.15 (formerly 1.4.10) is installed. Each
+confirmation closes its `roadmap.md` §4 row; each "still broken" reopens it with the device fact
+given, not an assumption.
 
 Candidate next work is bounded, not open-ended: finishing the two 1:1 CSS legs on their own
 worktrees and landing them under the usual discipline, row 6's named closing move above, whatever
@@ -118,7 +122,8 @@ the operator's confirmations reopen, and whatever AC-002's ruling requires. Noth
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-1. Ask the operator to confirm reports 29-36 and the five ported surfaces on iOS, on 1.4.10.
+1. Ask the operator to confirm reports 29-36 and the five ported surfaces on iOS, on 0.0.15
+   (formerly 1.4.10).
 2. Bring the AC-002 wording decision to the operator; do not amend or tick it without their
    answer.
 3. Record each answer in `roadmap.md` §4: confirmed rows close, "still broken" rows reopen with

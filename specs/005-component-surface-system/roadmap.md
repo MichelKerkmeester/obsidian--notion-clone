@@ -608,16 +608,36 @@ a separate clone); the table above reflects both.
 ### 5.3 Release cadence
 
 Each verified milestone is pushed to `origin main` and cut as a GitHub release, so the operator can
-install it on the phone. **1.4.0 and 1.4.1 are shipped. 1.4.2 through 1.4.10 have all shipped too**,
-each built and gated from a clean clone, and since the operator's 2026-09-03 request each release
-also installs into the iCloud vault plugin folder (`.../obsidian/plugins/note-database`) with a
-`.backup-<old>` beside it: 1.4.2 (reports 30 to 33), 1.4.3 (overlay-stack `getPanel()` fix,
-`85ff504`), 1.4.4 (`037` timeline/gantt), 1.4.5 (`038` board), 1.4.6 (`039` calendar parity plus
-`041` shared UI/UX), 1.4.7 (`040` subtask tree, cut `214f6bd`), 1.4.8 (`038`'s empty-column/
-drop-language row `7e36671` and `040`'s same-parent reorder `535373a`), 1.4.9 (`037`'s three
-open-row fixes `fa58c7f`/`b29bf7f` and `041`'s reduced-motion fix `a251a43`/`3f143df`, reconciled
-`65fb7dd`/`471860d`), and 1.4.10 (`037`'s last open row `7ca6cc2` and the touch-floor fix
-`a3781ae`). None of 1.4.2 through 1.4.10 is operator-confirmed yet.
+install it on the phone. **The version scheme was renumbered on 2026-09-04**, at the operator's
+request to "renumber our history": the fork point is `pangy9/obsidian-note-database` at upstream
+1.2.8, whose seventeen upstream tags (1.0.0-1.2.8) were removed from `origin`, and our fifteen
+post-fork releases were re-tagged on the same commits and recreated on GitHub with the same builds —
+only the asset manifest's version field was rewritten, nothing was rebuilt. Every prior release is
+renamed, not replaced: 1.2.8-euro.1→**0.0.1**, 1.2.9→**0.0.2**, 1.3.0→**0.0.3**, 1.3.1→**0.0.4**,
+1.4.0→**0.0.5**, 1.4.1→**0.0.6**, 1.4.2→**0.0.7**, 1.4.3→**0.0.8**, 1.4.4→**0.0.9**, 1.4.5→**0.0.10**,
+1.4.6→**0.0.11**, 1.4.7→**0.0.12**, 1.4.8→**0.0.13**, 1.4.9→**0.0.14**, and 1.4.10→**0.0.15**
+(Latest). `manifest.json`/`package.json`/`versions.json` on `main` (`6f81eb8`) and the iCloud
+install both now read **0.0.15**; the iCloud manifest carries a backup of the pre-rename 1.4.10
+manifest. **The cadence continues at 0.0.16** (the board and gantt one-to-one copies), then
+**0.0.17** onward — always `0.0.N`, never a second `.N.N`.
+
+Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
+folder (`.../obsidian/plugins/note-database`) with a `.backup-<old>` beside it. What each renumbered
+release actually shipped, keyed to its **new** number: 0.0.7, was 1.4.2 (reports 30 to 33), 0.0.8,
+was 1.4.3 (overlay-stack `getPanel()` fix, `85ff504`), 0.0.9, was 1.4.4 (`037` timeline/gantt), 0.0.10,
+was 1.4.5 (`038` board), 0.0.11, was 1.4.6 (`039` calendar parity plus `041` shared UI/UX), 0.0.12,
+was 1.4.7 (`040` subtask tree, cut `214f6bd`), 0.0.13, was 1.4.8 (`038`'s empty-column/
+drop-language row `7e36671` and `040`'s same-parent reorder `535373a`), 0.0.14, was 1.4.9 (`037`'s
+three open-row fixes `fa58c7f`/`b29bf7f` and `041`'s reduced-motion fix `a251a43`/`3f143df`,
+reconciled `65fb7dd`/`471860d`), and 0.0.15, was 1.4.10 — Latest (`037`'s last open row `7ca6cc2`
+and the touch-floor fix `a3781ae`). None of 0.0.7 through 0.0.15 is operator-confirmed yet.
+
+**Release-mechanics gotcha, surfaced during the rename:** `.github/workflows/release.yml`
+auto-creates a GitHub release on any `*.*.*` tag push, and it raced the manual tag-recreation pass —
+five of the fifteen recreated releases briefly carried the CI-generated body before being fixed by
+hand. Future releases must account for the same race: either push the tag and wait for the CI run to
+finish before editing the release, or create the release with `gh` first and expect the CI run to
+fail with "already exists" — never assume the tag push is the only writer.
 
 ---
 
