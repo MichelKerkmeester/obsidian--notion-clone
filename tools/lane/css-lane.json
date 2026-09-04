@@ -1768,6 +1768,19 @@
         "screenshots/views/constructed-timeline-mobile-light.png"
       ],
       "note": "styles.css is still untouched by this phase (git diff --stat styles.css empty; baselineHash still reads c32661e8c089) \u2014 this is not a CSS change. render-assertion-harness.ts gained ScenarioSpec.captureData, an opt-in that swaps its 1600-2000-row \"text\" structural-cost shape for a fixture-sized (18-row, full-fill) \"mixed\"-type one when constructed-scenarios.mjs opts every constructed spec in, and obsidian-stub.mjs's setIcon now draws real lucide-style SVG for the icon names the render-assertion bundle actually mounts instead of the text placeholder. 28 of the 36 constructed captures changed pixelHash as a result: list, board, gallery, calendar month/week/day and timeline now show a named select pill (col.statusOptions, not the grey no-match fallback), a checked checkbox, a formatted currency figure, a relation/link cell and real icons; table and chart are unchanged (table's harness bag renders cells through a stub unaffected by the option, chart draws no per-row field and no icon at all in this config). Every one of the 28 was opened and read before this entry was written. Two full detached capture runs reproduced identical pixelHash/layoutHash for all 36 constructed entries, so the change is deterministic, not run-to-run noise."
+    },
+    {
+      "event": "release",
+      "phase": "043-constructed-capture",
+      "at": "2026-09-04T04:59:00.000Z",
+      "hash": "c32661e8c089",
+      "reviewed": [
+        "screenshots/views/constructed-list-desktop-dark.png",
+        "screenshots/views/constructed-list-desktop-light.png",
+        "screenshots/views/constructed-list-mobile-dark.png",
+        "screenshots/views/constructed-list-mobile-light.png"
+      ],
+      "note": "Reconciliation release, not a CSS edit \u2014 styles.css is still untouched (git diff --stat styles.css empty, baselineHash still c32661e8c089). This rebases the typed-data-and-icons commit (c86fdb9) onto main's list mount-order fix (cf562e3, #shot detached before mount). Only the 4 constructed-list captures moved content: they now show both fixes together \u2014 row-0 seated directly under the header (the mount fix) AND the named select pill, checked checkbox, formatted currency and relation chip (the typed captureData wiring) \u2014 verified by reading all four in both themes. The other 24 typed constructed captures (board, calendar month/week/day, gallery, timeline) carry over byte-identical from c86fdb9's own commit: 0 git diff against HEAD, since the mount bug only ever affected the list view's offsetTop read. table and chart stay untyped by design, unaffected either way. Two full detached recapture runs after the rebase reproduced identical pixelHash/layoutHash for all 36 constructed entries and all 312 total \u2014 determinism proven, not assumed. 9 fixture captures (chrome-owned-menu-sheet-mobile-light, panel-record-detail-sheet-mobile-dark, timeline-subtask-tree-mobile-dark/light, timeline-view-day-desktop-light/mobile-dark, timeline-view-month-desktop-dark/light/mobile-dark) moved bytes only \u2014 pre-existing encoder-noise re-encodes, pixelHash unchanged \u2014 and were restored to their committed HEAD bytes rather than recommitted. manifest.json also had a pre-existing bytes-field staleness on those 9 plus timeline-subtask-tree-desktop-light and timeline-view-year-desktop-dark (recorded byte count did not match the already-committed file, predating this session); corrected to the real file size on disk for all 11, no pixel content involved."
     }
   ],
   "outstanding": [

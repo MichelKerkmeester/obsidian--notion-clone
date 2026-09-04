@@ -57,10 +57,10 @@
       "tools/screenshots/scenarios.mjs",
       "tools/screenshots/scenarios/core.mjs",
       "tools/screenshots/scenarios/temporal.mjs",
-      "screenshots/manifest.json",
-      "screenshots/README.md",
-      "tools/lane/css-lane.json",
-      "tools/screenshots/verify.mjs"
+      "tools/storybook/obsidian-stub.mjs",
+      "tools/live/typed-data-assertions.mjs",
+      "tools/live/touch-targets-constructed-baseline.json",
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
@@ -160,27 +160,27 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
+        "name": "obsidian-stub.mjs",
+        "kind": "file",
+        "path": "tools/storybook/obsidian-stub.mjs",
         "source": "derived"
       },
       {
-        "name": "README.md",
-        "kind": "doc",
-        "path": "screenshots/README.md",
+        "name": "typed-data-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/typed-data-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-constructed-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-constructed-baseline.json",
         "source": "derived"
       },
       {
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
-        "name": "verify.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/verify.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "`tools/screenshots/capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous",
     "created_at": "2026-09-04T00:45:06Z",
-    "last_save_at": "2026-09-04T02:11:44.036Z",
+    "last_save_at": "2026-09-04T03:14:35.025Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e11d6f1344b386a1b0c380d2489e4f0e78f9ed6f9850ab210461670cfbbd962b",
+    "source_fingerprint": "sha256:551d16559ee0a3c6e3898706c07cded8908cb1a643d8caac4ecb673815d656ba",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b3771fe811fca839f455d4c5248f1069baa5b0241326504b5d81b09efa58f82c",
       "plan.md": "179bc41334877b704c5a6bc1036ce38bdae1e852335fd4507eef372a2a5cd8e1",
-      "tasks.md": "9f761916a2278caf8cfef6e79cca75019aab64795ef535adebc21e9d934ba2fa",
-      "implementation-summary.md": "4548569d70a913a6f3631c215fc48b87f51984cf82b46c90c5fca8f2ad28e6c5"
+      "tasks.md": "0a584989371963e4ec9c3c17353aa3f5be84d97b0847b8766c020b982ea4ebc5",
+      "implementation-summary.md": "8e4d47f84bd4fa48919af06b7f49d0f2be422bcd82ab11fb48312358ec2dba0b"
     },
     "last_active_child_id": null,
     "last_active_at": null

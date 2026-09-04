@@ -11,7 +11,7 @@ _memory:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
     last_updated_at: "2026-09-04T04:45:00Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "Fixed constructed-list mount-staging offset (in-runtime-verifier), recaptured, gate PASS 25 green; T004-T006 landed: 28/36 captures recaptured, gate PASS 25 green"
+    recent_action: "Rebased typed captures onto main's mount fix; T004-T006 landed, gate PASS 25 green"
     next_safe_action: "Rule on AC-002; then T009-T012, T016"
     blockers:
       - "AC-002 as written cannot be satisfied through the capture path — needs a phase ruling before it can be ticked or amended"
