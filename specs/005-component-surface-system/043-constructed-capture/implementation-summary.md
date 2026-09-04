@@ -652,6 +652,23 @@ Every exit code below was read from `$?` directly.
    a `git clone --local` scratch clone with no `specs/context` at all (`screenshots:verify` exit 0,
    `200 VENDOR UNAVAILABLE`, `0` problems, matching #9's original clean-checkout evidence). Fixed in
    `tools/screenshots/verify.mjs`/`verify.test.mjs` (`6328c9cb`).
+
+10. **`pixelHash` collision observed (2026-09-05, `038-board-kanban-port` T32's recapture).**
+   `constructed-timeline-desktop-dark.png` and its subtask variant,
+   `constructed-timeline-subtask-desktop-dark.png`, carry the same `pixelHash`
+   (`be56d483cd08`) despite different `layoutHash` values — the two captures are visibly
+   different (one has the collapsible subtask tree, the other does not). `pixelHash`'s own
+   design comment (`tools/screenshots/pixel-hash.mjs`) is explicit that it hashes a coarse
+   16x16-cell colour-bucket grid tolerant of rendering jitter, not full pixel content, so this
+   is the grid's coarseness producing a false match rather than a hashing bug: two
+   visibly-different layouts can average out to the same bucketed cell colours often enough
+   that any lane relying on `pixelHash` alone (rather than `layoutHash` or a direct read) to
+   decide "did this capture change" can miss a real change. `037-timeline-gantt-port`'s T052
+   landing already hit this in practice — ten real content-changed gantt captures read as
+   `pixelHash`-unchanged and had to be named in the CSS lane release by `layoutHash` and a
+   direct visual read instead. No code change from this observation; recorded here as the
+   known limitation a future lane hardening (tightening the grid, or requiring `layoutHash`
+   agreement too) would need to cite.
 <!-- /ANCHOR:limitations -->
 
 ---

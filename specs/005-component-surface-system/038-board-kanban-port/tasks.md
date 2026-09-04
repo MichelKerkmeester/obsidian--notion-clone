@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T14:09:55Z"
-    last_updated_by: "board-t12-land-reconciliation"
-    recent_action: "Landed 033-board-t12 onto main; 19 captures reconciled; screenshots-fresh pre-existing red"
-    next_safe_action: "Operator vault compare (roadmap.md row 37), then T8"
+    last_updated_at: "2026-09-05T00:00:00Z"
+    last_updated_by: "046-board-line-height"
+    recent_action: "Closed T31 gap (1) via T32; corrected T31 gap (2) scrollbar note"
+    next_safe_action: "Operator vault compare (roadmap.md row 37/38), then T8"
     blockers:
       - "npm run gate reads 24/25 (screenshots-fresh RED, pre-existing on origin/main before this reconciliation, not owed by this leg) — see acceptance-criteria.md AC-7"
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
@@ -676,6 +676,62 @@ _memory:
       `.pm-kanban-cards` were never copied; our stylesheet carries that block for `.pm-gantt-right`
       alone. Invisible in these captures because the columns do not scroll, which is why no earlier
       source read caught it. Everything else on the card and column is pixel-faithful.
+
+      **Correction (2026-09-05):** gap (2) above is wrong about the cause, not the symptom. The
+      reference's `widgets.css:1-7` scopes its `::-webkit-scrollbar` rule to
+      `.pm-gantt-right, .pm-kanban-board, .pm-kanban-cards, .pm-task-modal, .pm-edit` at `6px`. Our
+      port never copied that per-element rule, but it is not scrollbar-less: `styles.css:834-835`'s
+      pre-existing `.note-database-container::-webkit-scrollbar, .note-database-container
+      *::-webkit-scrollbar { width: 8px; height: 8px; }` already reaches `.pm-kanban-board` and
+      `.pm-kanban-cards` as descendants of the container, the same way it reaches every other
+      scrollable surface in this plugin. So the board's scrollbar is styled, just 2px wider than
+      the reference's own 6px — a P3 sizing gap, not a missing-rule gap. Left unfixed here (still
+      outside this leg's scope); T31 stays open on gap (2) under the corrected description.
+- [x] **T32** Fix T31 gap (1): reset the inherited container line-height on the ported kanban
+      block, 2026-09-05 — a fresh in-repo side-by-side (reviewer, 2026-09-04, at commit
+      `466eb370`) traced three board fidelity gaps to the same T31 cause: (a) the count pill 19px
+      vs 17px / header 2px taller; (b) the subtask parent line (`.pm-kanban-card-parent`) 2-3px
+      taller per card, compounding down the column; (c) the hours-row baseline reading low by a
+      sub-pixel amount. Root cause confirmed: `.note-database-container` sets
+      `line-height: var(--db-font-md-line-height)` (1.45), and the reference this board is a
+      one-to-one port of never sets a line-height on its kanban tree at all, so every ported
+      `pm-*` element the reference leaves unset (`.pm-kanban-col-badge`, `.pm-kanban-col-count`,
+      `.pm-kanban-card-parent`, `.pm-avatar*`) was inheriting 1.45 instead of computing to the UA
+      `normal` (~1.2) the reference gets.
+      *Evidence to close:* red first — `tools/screenshots/scenarios/shared.test.mjs`'s new
+      "resets the inherited container line-height on the ported kanban block" asserted
+      `line-height: normal;` inside the `.note-database-container.pm-kanban-view` rule block,
+      FAIL against the pre-fix stylesheet. Fix: added `line-height: normal;` to that existing
+      compound-selector rule (`styles.css:962`, the same selector the flex/overflow height chain
+      already uses), inherited by the whole kanban subtree; elements the reference DOES author
+      with their own value (`.pm-kanban-card-title` 1.45, `.pm-kanban-card-description` 1.4,
+      `.pm-chip` 1.5) keep it, asserted by the same test. Audited every ported `pm-*` rule in the
+      kanban block for a missing line-height: `.pm-kanban-col-badge` and `.pm-kanban-col-count`
+      (both affected, now `normal`), `.pm-kanban-card-parent` (affected, now `normal`),
+      `.pm-avatar`/`.pm-avatar--sm`/`.pm-avatar--more` (technically inherit `normal` too now, but
+      were never visible in practice — fixed 26px/22px box, flex-centered content, so line-height
+      never changed their rendered size), `.pm-progress-label` (same gap in principle, but unused
+      by the current renderer — dead CSS, not screenshot-testable). Measured directly against
+      `screenshots/project-manager/reference-kanban{,-subtask}-{desktop,mobile}-{dark,light}.png`
+      and against the HEAD-committed captures, at DPR 2 (physical px / 2 = CSS px): count pill
+      38->34 physical px (19->17 CSS px), exact match to the reference, confirmed on
+      desktop-dark, desktop-light and mobile-light; subtask child card (`row-1`) full
+      border-to-border height 254->248 physical px (127->124 CSS px), exact match to the
+      reference's own 248; every band in that card from the title down (title/hours/avatar-top)
+      now sits at the identical absolute pixel y-range as the reference
+      (476-490/525-540/574-575 physical, bit-for-bit) versus a 4-10 physical px low offset before
+      the fix — confirming gap (c)'s "hours baseline low" was the header-height delta (a) and the
+      parent-line delta (b) propagating downward through the flex column, not an independent
+      third defect. A non-subtask card (`row-0`) showed the same bit-for-bit match after the fix
+      (152-159/188-206/239-254), consistent with the header-height shift alone. Zero gantt
+      captures moved (see T31's sibling audit in `037-timeline-gantt-port/tasks.md`). 32 real
+      content-changed captures (`board-drop-language`, `board-empty-column`,
+      `constructed-board-empty-column`, `board-mobile`, `board-subtask-tree`, `board-view`,
+      `constructed-board`, `constructed-board-subtask`, all four theme/device combinations) opened
+      and read; 3 byte-only-noise captures restored to HEAD. `tools/lane/css-lane.json`: acquired
+      as `038-board-kanban-port`, released naming all 32 changed captures. `tsc` 0, `vitest` full
+      suite green (new stylesheet-contract test red-then-green), `lint:tools` clean,
+      `scan-comments` PASS, `npm run gate` 25 green / 0 red.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

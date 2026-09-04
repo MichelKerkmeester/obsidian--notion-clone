@@ -966,7 +966,7 @@ This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing 
 | Bar / milestone / label-dot colour | bar `var(--interactive-accent)` at 0.4 = rgb(61,64,108); dot `var(--text-muted)` | one colour for both, `#8a94a0` = rgb(73,77,82) | data model: our timeline has no per-status colour, and the reference cannot express its absence — `resolveProjectConfig`'s `withInUseExtras` mints its FALLBACK_COLOR for every in-use id, so it never reaches its own `--interactive-accent` fallback. The reference paints bar and dot from one colour; our port splits them |
 | Progress fill | rows 0/4/8/12/16, same geometry | same | match |
 | Dependency arrows | 3 curved dashed edges, 8x8 arrowhead, same anchors | same | match |
-| Milestone label over the month band | present | present | reference-faithful, already dispositioned as T050 |
+| Milestone label over the month band | raised off the band baseline when spans overlap | present (overpaints) | **correction (2026-09-05):** this row cited T050, which named the overpaint reference-faithful and left it undispositioned pending an operator call. The operator's actual decision (`roadmap.md` §4 row 39, "reinstate local fix") is T052, landed before this comparison — the default render path already raises a colliding milestone label (`.pm-gantt-milestone-label--raised`) rather than leaving it overpainted, so "ours" above was stated backwards. This is T052's one deliberate REQ-007 divergence from the 1:1 copy, not a residual gap |
 | Phone | label column 160 px, chart ~230 px, four week bands and every bar visible | label column stays 280 px, chart squeezed to ~90 px | our documented phone adaptation; the reference has none. This is the whole of the 10.4% (dark) and 36.0% (light) phone difference |
 | Subtask variant | collapse diamond on row-0, two indented children, 62% | same | match |
 
@@ -977,6 +977,19 @@ This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing 
       two P2 gaps this comparison did find are both on the kanban and belong to
       `../038-board-kanban-port` T31. The operator's own vault side-by-side compare (parent
       `../roadmap.md` row 38) is untouched by this leg and stays open.
+
+      **Line-height audit (2026-09-05, `../038-board-kanban-port` T32's sibling check):** T32 fixed
+      three board fidelity gaps caused by `.note-database-container`'s `line-height:
+      var(--db-font-md-line-height)` (1.45) leaking into ported `pm-*` elements the reference
+      leaves unset. The gantt tree sits under the same container and was audited for the same
+      pattern — no fix needed, confirmed by construction rather than assumption: `.pm-gantt-view`'s
+      chart surface (bars, ticks, header labels, milestone labels) is SVG `<text>`, positioned by
+      its own `y`/`dominant-baseline` attributes, which CSS `line-height` never affects. The only
+      HTML (non-SVG) text in the tree — `.pm-gantt-left-header-label`, `.pm-gantt-label-title`,
+      `.pm-gantt-label-progress` in the left label pane — sits inside `.pm-gantt-label-row`, whose
+      height is synced by JS to the chart's own per-row pixel height rather than grown from content
+      line-height, so the inherited 1.45 never changes a rendered row's size there either. This
+      matches T053's "no fidelity gap found on the gantt" and required no `styles.css` edit.
 <!-- /ANCHOR:phase-8 -->
 
 ---
