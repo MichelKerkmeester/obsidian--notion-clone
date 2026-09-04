@@ -60,7 +60,7 @@
       "src/i18n.ts",
       "src/views/mobile-bottom-sheet.stories.ts",
       "tools/live/touch-targets.mjs",
-      "tools/live/touch-targets-constructed-baseline.json"
+      "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
       {
@@ -178,9 +178,9 @@
         "source": "derived"
       },
       {
-        "name": "touch-targets-constructed-baseline.json",
-        "kind": "config",
-        "path": "tools/live/touch-targets-constructed-baseline.json",
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three operator reports arrived inside eight minutes on 2026-09-04 and they are one defect seen from",
     "created_at": "2026-09-04T18:46:24Z",
-    "last_save_at": "2026-09-04T21:16:17.676Z",
+    "last_save_at": "2026-09-04T21:44:34.564Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,12 +221,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:78ee662d2e9b9292dfccc3f188259c88510655ab083725adad7fe251c19add24",
+    "source_fingerprint": "sha256:3e479cf3e33c47fceaa1111df2b2c89feec371c57a53ad7467cfbb4bb3052b32",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ed71bcf8935d979b00674f7294f3ae0abf8a77a5d13b09b12ae4aba4b00be253",
       "plan.md": "220be2579bff6607d196d9b02b0b4b8426c00cc4e1ac6b1a987ea42efb64cff2",
-      "tasks.md": "ec41a85ed4f38e6940a54d5aa88eb6bd6bfc95c2c30dd6c548d24e5f38b3822b",
+      "tasks.md": "2a0d5e7053bd17892d20ba746ccf1c8ddce1def7654aaf68827899e1e5eb8c41",
       "implementation-summary.md": "0e23474a4a4f6f6abdb11cc34b75af3b13f1bd3a278017881056332984d081c7"
     },
     "last_active_child_id": null,

@@ -335,6 +335,13 @@ more than the 1.35px fallback artefact, no later claim in this spec means anythi
       `surface-census`, `token-census`, `view-census` — re-run by hand to re-stamp their
       `styles.css` fingerprint after it changed; none reported a new defect).
 
+      **Backfill 2026-09-04:** `044-phone-sheet-alignment` now exists (it did not at the time this
+      row was written, see the note above) and owns report 40/40b as its T005/T006. The evidence
+      above is this task's own record of the original fix and is left in place; the authoritative,
+      continuing evidence — including landing this branch onto `main` — lives in
+      `../044-phone-sheet-alignment/tasks.md` T005/T006. `worktrees/039-column-width-sheet` landed
+      onto `main` via `chore(sheets): reconcile the column-width sheet with main`.
+
 <!-- /ANCHOR:phase-2 -->
 ---
 

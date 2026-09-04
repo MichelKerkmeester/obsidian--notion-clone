@@ -55,12 +55,12 @@
       "src/views/view-config-panel-renderer.ts",
       "tools/live/sheet-rebuild-harness.ts",
       "tools/live/sheet-rebuild.mjs",
+      "src/views/column-width.ts",
       "src/views/popover-position.ts",
       "src/data/touch-environment.ts",
       "src/views/modals/db-modal.ts",
       "src/views/database-view.ts",
-      "src/main.ts",
-      "src/views/image-file-suggest-modal.ts"
+      "src/main.ts"
     ],
     "entities": [
       {
@@ -148,6 +148,12 @@
         "source": "derived"
       },
       {
+        "name": "column-width.ts",
+        "kind": "code",
+        "path": "src/views/column-width.ts",
+        "source": "derived"
+      },
+      {
         "name": "popover-position.ts",
         "kind": "code",
         "path": "src/views/popover-position.ts",
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "image-file-suggest-modal.ts",
-        "kind": "code",
-        "path": "src/views/image-file-suggest-modal.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The sheet starts above the Obsidian bottom navigation bar instead of covering it",
     "created_at": "2026-08-29T12:41:53.187Z",
-    "last_save_at": "2026-09-04T21:16:08.617Z",
+    "last_save_at": "2026-09-04T21:44:34.423Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:914344088eeb7d49992205ecce905fb58bfc4874b22184cfcf6d5f8212f8e656",
+    "source_fingerprint": "sha256:4dbf22f2b69c3a49c9eed7e1915fc527ddcb6d402ad9ac2351b12377fda9e83d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8c9f1ddc5110c8025b3949545d76e71dd07ca5fc8e1a5c99387e4803ca953096",
       "plan.md": "0ef850a840ccabeab5fa2f1318ec826096a89f85123882e01a2ee03461e0b1f2",
-      "tasks.md": "fbf55a18a617531c5fd1de223a1c9cecfecc93f39bfd15d2b52fd4f35782dbe3",
-      "implementation-summary.md": "3045972ed3db1d181594bf64d296842654361d2735d9e8ad33a315adf73a3a23"
+      "tasks.md": "ca4f941ab57abb0736eb1e2a385b6eccb610c1b9f135434fcb469e5385516d59",
+      "implementation-summary.md": "20b8a9038ec993b730ee68f0948ace115e05f5cc13601b0d929206fb0184c8f8"
     },
     "last_active_child_id": null,
     "last_active_at": null
