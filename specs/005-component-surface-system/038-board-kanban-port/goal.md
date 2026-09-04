@@ -145,6 +145,12 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
       this row; nothing in this tree can close it. Not a report-driven row — no operator report
       (29-33) named the board surface directly, so this is a proactive confirmation ask, not a
       defect closure.
+- [ ] **The operator compares the rewritten board against obsidian-pm's kanban side by side in
+      the vault where both plugins are installed.** Only the operator closes this row; nothing in
+      this tree can close it. Closes T12's operator half (`tasks.md`) and the parent
+      `../roadmap.md` §4 row 37 — the vendored reference carries no image files an in-repo session
+      could compare captures against, so this half of T12's evidence cannot be met from this repo
+      alone.
 <!-- /ANCHOR:completion -->
 
 ---
