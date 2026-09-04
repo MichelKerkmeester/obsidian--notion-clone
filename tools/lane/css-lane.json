@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "4c7b8b627ab9",
+  "baselineHash": "c32661e8c089",
   "baselineCommit": "421995b3790a0e6486e72bfcd3280e1fe7101562",
   "history": [
     {
@@ -1665,6 +1665,27 @@
         "screenshots/views/timeline-view-year-desktop-dark.png"
       ],
       "note": "Closes goal.md's day-scale open row: the fixture's day branch now derives its viewport window from the same centred-start-minutes math the model uses whenever the renderer passes now (resolveTimelineDayCentredStartMinutes via getTimelineViewportWindow), instead of a fixed TL_DAY_START_MINUTES 0, and its tick labels are the bare zero-padded hour buildTimelineTicks emits (HH), not the fixture-only HH:00. Extended temporal-tick-parity.test.mjs's day case to pass a pinned now (2026-03-25 13:45 local) to getTimelineViewportWindow and assert startMinutes/start/end/units parity plus tick-label parity against the real exports - red first (4 failed: startMinutes 0 vs 60/480 at desktop/mobile, labels HH:00 vs HH), green after the fixture fix (118/118). No styles.css edit; baselineHash stays 4c7b8b627ab9. The four day-scale captures below are the real change: desktop now shows 23 hourly columns (01-23) and mobile 11 (08-18), both with the 13:00 tick highlighted and the now-line/today band at 13:45 in frame, plain zero-padded labels with no colliding :00 suffix, read in both themes. One downstream test assumption was also updated rather than papered over: at desktop width the 23-column window can no longer open exactly at midnight while staying centred on 13:45, so Adobe CC (all-day, starts at midnight) is now genuinely clipped-start - verified directly against getTimelineViewportWindow plus resolveEventAbsoluteScale (startMinutes 60, scale.start 0), not a fixture artefact. The other twelve changed captures are unrelated to this edit and match the toolchain's known non-deterministic re-render noise this history already documents: chrome-owned-menu-sheet-mobile-dark/light, panel-record-detail-sheet-mobile-dark and calendar-empty-state-desktop-light/mobile-dark/mobile-light move under 100 bytes each (1-bit encoder noise); timeline-view-desktop-dark/light, timeline-view-month-mobile-dark/light, timeline-view-year-desktop-dark and timeline-subtask-tree-mobile-dark carry larger byte deltas but a channel-level pixel diff (tolerance 2) found 0-2 significant pixels across the three checked directly (max delta 5, at most 2 of 5.18M pixels) - none in the geometry this edit touches, since only the day branch changed."
+    },
+    {
+      "event": "acquire",
+      "phase": "042-harness-fidelity-and-replay",
+      "at": "2026-09-04T00:23:44.061Z",
+      "hash": "4c7b8b627ab9"
+    },
+    {
+      "event": "edit",
+      "phase": "042-harness-fidelity-and-replay",
+      "at": "2026-09-04T00:24:44.062Z",
+      "hash": "c32661e8c089",
+      "note": "Added .db-row-insert-button, .db-gallery-card-open, .db-timeline-mobile-menu-button to the existing coarse-pointer min-width/min-height 28px block (same idiom as db-list-row-open/db-source-rule-icon-button); no width/height/position changed."
+    },
+    {
+      "event": "release",
+      "phase": "042-harness-fidelity-and-replay",
+      "at": "2026-09-04T00:35:36.844Z",
+      "hash": "c32661e8c089",
+      "reviewed": [],
+      "note": "Landed the touch-floor fix drafted and previously reverted: added .db-row-insert-button, .db-gallery-card-open and .db-timeline-mobile-menu-button to the existing coarse-pointer min-width/min-height 28px block (styles.css:21456-21469). None of the three classes are mounted by any scenarios.mjs fixture (grepped, zero hits), so a full detached recapture of all 276 entries moved zero content: check-lane content compare (pixelHash/layoutHash) reported 0 of 276 changed. 9 captures moved bytes only (pre-existing encoder-noise re-encodes, unrelated) and were restored to their committed bytes rather than recommitted, so reviewed is empty by construction — there is nothing this release moved for a person to look at. manifest.json still carries the styles.css sourceHash bump on all 276 entries, required for screenshots:verify freshness. Re-stamped and confirmed fresh: cascade-audit, checkbox-appearance (pre-existing 2.99:1 fail, unchanged vs main), checkbox-inventory, design-conformance, engine-parity (pre-existing 520 vs 512 fail, unchanged vs main), surface-census, token-census, view-census, plus capture-device-parity, touch-targets, unstyled-links — evidence.mjs --check-all reaches 16/16."
     }
   ],
   "outstanding": [

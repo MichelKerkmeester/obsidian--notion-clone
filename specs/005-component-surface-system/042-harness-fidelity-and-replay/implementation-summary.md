@@ -132,10 +132,24 @@ was built, verified under the full CSS-lane protocol, and then reverted for thre
 invalidated eight unrelated census/audit artefacts' freshness stamps, and re-running two of them to
 re-stamp surfaced pre-existing, unrelated failures (`checkbox-appearance.mjs`'s border contrast,
 `engine-parity.mjs`'s cross-engine differences), confirmed pre-existing against `7e9fd27`'s
-untouched `styles.css` by byte-identical failing output. The verified fix stays recorded in the
-baseline's `note` for a future CSS-lane-holding phase. `db-calendar-week-allday-more` was never a
+untouched `styles.css` by byte-identical failing output. `db-calendar-week-allday-more` was never a
 fix candidate in this leg — it sits inside the calendar's fragile CSS-grid all-day row track — and
-stays deferred the same way.
+stays deferred.
+
+**Landed on a later CSS-lane hold.** The three-selector addition was applied for real: `styles.css`'s
+`@media (pointer: coarse) { min-width: 28px; min-height: 28px; }` block (styles.css:21456-21469) now
+also raises `.db-row-insert-button`, `.db-gallery-card-open` and `.db-timeline-mobile-menu-button`,
+the identical idiom already used for `.db-list-row-open`/`.db-source-rule-icon-button`. No width,
+height or position property moved on any of the three. Verified none of the three classes are ever
+mounted by any `scenarios.mjs` fixture (grepped, zero hits), so a full detached recapture of all 276
+manifest entries moved zero content — check-lane's `pixelHash`/`layoutHash` content compare reported
+0 changed; 9 captures moved bytes only (pre-existing encoder-noise re-encodes, confirmed unrelated)
+and were restored to committed bytes rather than recommitted. `touch-targets.mjs`'s constructed pass:
+`db-row-insert-button` 3998 → 0, `db-gallery-card-open` 3200 → 0, `db-timeline-mobile-menu-button`
+960 → 0, total under-floor 8493 → 335 (the new baseline), fixture pass unchanged at 264/279, exit 0.
+`checkbox-appearance` and `engine-parity` re-stamped fresh, both still failing for the same
+pre-existing reasons recorded above and unchanged versus `main`; `evidence.mjs --check-all` reaches
+16/16.
 
 `unstyled-links.mjs`'s zero-link constructed result is a genuine structural empty sample: every
 `render-assertion-harness.ts` scenario builds `"text"`-type columns only, so no relation- or
@@ -195,9 +209,12 @@ restored rather than committed.
 | `tools/live/page-module-script.mjs` | Created | `asPageScript()` — strips `export` so a measurement module can be injected into a fixture page as a classic script |
 | `tools/live/render-assertion-harness.ts` | Modified (this leg) | `runRenderAssertions()` gained an optional `onMounted(container, results)` hook, fired before its own `container.remove()` |
 | `tools/live/render-assertions.mjs` | Modified (this leg) | `SCENARIOS`/`RENDERER_SOURCES`/the bundle-build block now import from `render-assertion-bundle.mjs` instead of a local copy |
-| `tools/live/touch-targets-constructed-baseline.json` | Created | Ratchet for the constructed pass, `under: 8493`, four real classes with a verified-but-reverted CSS fix recorded in its `note` |
+| `tools/live/touch-targets-constructed-baseline.json` | Modified (later CSS-lane leg) | `under` lowered 8493 → 335: three classes' fix landed (`db-row-insert-button`/`db-gallery-card-open`/`db-timeline-mobile-menu-button`), `lastTriage` records the per-class before/after |
 | `tools/live/touch-targets.json` | Modified | Re-stamped: `fixture`/`constructed` sub-objects, each with its own `measured`/`scenarios`/`under`/`betweenFloors`/`classes` |
 | `tools/live/unstyled-links.json` | Modified (this leg) | Re-stamped the same way |
+| `styles.css` | Modified (later CSS-lane leg) | `.db-row-insert-button`, `.db-gallery-card-open`, `.db-timeline-mobile-menu-button` added to the existing coarse-pointer `min-width`/`min-height: 28px` block |
+| `tools/lane/css-lane.json` | Modified (later CSS-lane leg) | Acquire/edit/release entries for the landed touch-floor fix; `reviewed: []` — zero captures content-changed |
+| `tools/live/capture-device-parity.json`, `checkbox-appearance.json`, `cascade-audit.json`, `checkbox-inventory.json`, `design-conformance.json`, `engine-parity.json`, `surface-census.json`, `token-census.json`, `view-census.json` | Modified (later CSS-lane leg) | Re-stamped fresh against the new `styles.css` hash; `checkbox-appearance`/`engine-parity` still fail for the same pre-existing, unrelated reasons |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -240,7 +257,7 @@ to their committed bytes while moving two different ones — and were restored r
 | `runRenderAssertions()` gained an `onMounted` hook rather than a parallel mount path | The ~250-line per-renderer branch already exists once; a measurement check that re-implemented it would drift from the real mount the moment either changed. The hook fires while the container is still attached, right before the function's own `container.remove()`, so a caller measures exactly what the assertions just checked |
 | `SCENARIOS`/`RENDERER_SOURCES`/the esbuild bundle step moved to a new shared module | Three checks (`render-assertions`, `touch-targets`, `unstyled-links`) now need the identical bundle. A copy in each would let "every scenario the harness knows" mean three different things |
 | The measurement predicates (`classifyBox`, `findDeclaredExcuse`, `classifyLinkColour`) live in their own modules, imported for real by the constructed pass and injected as a classic script for the fixture pass | `page.evaluate(fn, arg)` only stringifies `fn` itself; a function that calls a sibling helper by reference loses that reference when re-parsed in the page. Rather than inline the predicate twice (real duplication) the module is injected via `page.addScriptTag` so its functions exist for real in page scope, exactly as the bundle has them |
-| The verified CSS fix for three of the five newly-found classes was reverted rather than landed | Landing it kept `npm run gate` red: any `styles.css` edit invalidates eight unrelated census/audit artefacts' freshness stamps, and re-running two of them (`checkbox-appearance`, `engine-parity`) surfaced pre-existing, unrelated failures, confirmed pre-existing by running both against `7e9fd27`'s untouched `styles.css`. Scope lock says a lane hold permits editing a file, not adopting whatever it drags in. The fix stays fully specified in `touch-targets-constructed-baseline.json`'s `note` for whichever phase next holds the CSS lane |
+| The verified CSS fix for three of the five newly-found classes was reverted rather than landed in this leg, then landed on a later CSS-lane hold | Landing it kept `npm run gate` red at the time: any `styles.css` edit invalidates eight unrelated census/audit artefacts' freshness stamps, and re-running two of them (`checkbox-appearance`, `engine-parity`) surfaced pre-existing, unrelated failures, confirmed pre-existing by running both against `7e9fd27`'s untouched `styles.css`. Scope lock says a lane hold permits editing a file, not adopting whatever it drags in — so the eight artefacts were re-run and re-stamped rather than silently repaired, and the two pre-existing failures were recorded unchanged versus `main` instead of fixed incidentally. `touch-targets-constructed-baseline.json`'s `under` dropped from 8493 to 335 |
 | `db-board-pagination-dot` is declared as a false positive, not baselined as a real shortfall | Its `::before` inset (`styles.css:19696-19699`, pre-existing, untouched by this leg) gives it a 44px effective hit area — the identical shape as the checkbox exemption already in `DECLARED`. A bounding-box measurement cannot see it, but a finger can |
 | `unstyled-links.mjs`'s constructed pass prints an explicit empty-sample caveat rather than a silent PASS | D6: "a pass on an empty set proves nothing." Zero links across every scenario is structurally true (every scenario's columns are `"text"`-type, so no relation/file field, and no `.internal-link` markup, is ever built) and would otherwise read as coverage it does not have |
 <!-- /ANCHOR:decisions -->
@@ -303,6 +320,22 @@ to their committed bytes while moving two different ones — and were restored r
 | `node tools/naming/scan-comments.mjs` | PASS — exit 0, 387 files (one new file initially missing a numbered section, fixed) |
 | `node tools/live/evidence.mjs --check-all` | PASS — exit 0, 16 of 16 fresh, after re-stamping `renderer-coverage.json` against the real `render-assertion-harness.ts`/`render-assertions.mjs` edits and reverting six unrelated stamps (`capture-device-parity`, `list-window`, `replay`, `sheet-rebuild`, `sheet-teardown`, `renderer-coverage` before its legitimate re-stamp) that only carried a `measuredAt` bump from running the gate multiple times |
 | `npm run gate` | PASS — exit 0, 25 green, 0 red |
+
+**Still later — landing the reverted CSS fix from a fresh CSS-lane hold:**
+
+| Check | Result |
+|-------|--------|
+| `node tools/live/touch-targets.mjs --json` (before edit) | Red baseline confirmed live: `db-row-insert-button` 3998, `db-gallery-card-open` 3200, `db-timeline-mobile-menu-button` 960, total 8493 — matches the recorded baseline exactly |
+| Fixture grep for the three class names in `scenarios.mjs`/`scenarios/` | Zero hits — no fixture ever mounts any of the three, so no capture can show them |
+| `npm run screenshots` (detached, 276 entries) then `SURFACE_PHASE=... npm run lane:check` | 9 captures moved bytes; check-lane's content compare: 0 of 276 `pixelHash`/`layoutHash` changed. The 9 restored to committed bytes (`git checkout --`), not recommitted |
+| `node tools/live/touch-targets.mjs` (after) | PASS — exit 0, fixture 264/279 (unchanged), constructed 335/335 (lowered baseline); per-class: all three 0 remaining |
+| `cascade-audit`, `checkbox-inventory`, `design-conformance`, `surface-census`, `token-census`, `view-census` | Exit 0, all clean |
+| `checkbox-appearance` | Exit 1, same single 2.99:1 border-contrast finding as `main` (`npm run lint`-style direct A/B, unchanged) |
+| `engine-parity` | Exit 1, same width-520-vs-512 findings as `main`, unchanged |
+| `node tools/live/evidence.mjs --check-all` | PASS — exit 0, 16 of 16 fresh |
+| `npx tsc --noEmit` | PASS — exit 0 |
+| `npx vitest run` | PASS — exit 0, 96 files, 953 tests |
+| `npm run lint` (worktree vs. `main`, both read directly via `$?`) | Exit 1 both, 172 problems both — identical, no `src/` file touched |
 <!-- /ANCHOR:verification -->
 
 ---

@@ -21458,6 +21458,18 @@ input[type="checkbox"].db-checkbox.db-checkbox-field {
     min-width: 28px;
     min-height: 28px;
   }
+
+  /* A row's hover-to-insert button, a gallery card's open button, and the timeline's phone-only
+     overflow menu button — three controls painting at 22-24px with no compensating hit area and no
+     coarse-pointer rule at all. Raised the same way as the pair above: `min-width`/`min-height`
+     rather than `width`/`height`, because the declaration already sets an explicit width, and a bare
+     width alone loses to it — the box would simply not grow, and a census would read the old number. */
+  .note-database-container .db-row-insert-button,
+  .note-database-container .db-gallery-card-open,
+  .note-database-container .db-timeline-mobile-menu-button {
+    min-width: 28px;
+    min-height: 28px;
+  }
 }
 
 input[type="checkbox"].db-checkbox::before {
