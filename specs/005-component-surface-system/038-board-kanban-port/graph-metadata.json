@@ -53,14 +53,14 @@
       "tools/screenshots/scenarios/shared.test.mjs",
       "tools/screenshots/scenarios/core.mjs",
       "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
+      "tools/live/touch-targets-constructed-baseline.json",
       "tools/live/engine-parity.json",
       "tools/live/touch-targets.json",
       "tools/live/render-assertion-harness.ts",
-      "screenshots/manifest.json",
       "tools/live/capture-device-parity.mjs",
       "src/views/board-renderer-parity.test.ts",
-      "tools/live/replay.mjs",
-      "tools/storybook/obsidian-stub.mjs"
+      "tools/live/replay.mjs"
     ],
     "entities": [
       {
@@ -136,6 +136,18 @@
         "source": "derived"
       },
       {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-constructed-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-constructed-baseline.json",
+        "source": "derived"
+      },
+      {
         "name": "engine-parity.json",
         "kind": "config",
         "path": "tools/live/engine-parity.json",
@@ -154,12 +166,6 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
         "name": "capture-device-parity.mjs",
         "kind": "file",
         "path": "tools/live/capture-device-parity.mjs",
@@ -175,12 +181,6 @@
         "name": "replay.mjs",
         "kind": "file",
         "path": "tools/live/replay.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "obsidian-stub.mjs",
-        "kind": "file",
-        "path": "tools/storybook/obsidian-stub.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-04T09:56:49.421Z",
+    "last_save_at": "2026-09-04T10:16:58.169Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d16a4951482651160af1dbf754c51841976d085cdf2915bfdc52c42f35a9f1ba",
+    "source_fingerprint": "sha256:42a66022e0f67fe4d4da518367ba4e2b30422537eb8261e45ac838cf3d81bfb4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "169448c930dba334c3a4b7e0639eef21eb7fc70f8de0459a37017c5a53352a5a",
       "plan.md": "6519d27a955160cb441921b511e1c005ff2c12ffa3c2756ac5fdb5139479c3e8",
-      "tasks.md": "8c07500e8434f431b07ee648bcd5da2032b9591e4c2d43c17657058ab787b048",
-      "implementation-summary.md": "25034f60e10d80b6969e223503e14a6720f7707a516da41f574226b5687b757a"
+      "tasks.md": "2bb1fa3c1b99aabed81d635552501d38a21068c4172d452c736c649761d024e5",
+      "implementation-summary.md": "ada6a536da8c1826b2c1e9c7faaa4a9093853895791d3d52f7659afbac23170f"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -7,9 +7,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T09:55:00Z"
-    last_updated_by: "board-1to1-fidelity-pass-2"
-    recent_action: "T20-T21 closed: priority non-urgent tiers, due-completion suppression, fixture/CSS fidelity"
+    last_updated_at: "2026-09-04T12:15:00Z"
+    last_updated_by: "board-fidelity-rebase-landing"
+    recent_action: "Rebased onto main's gantt port, reconciled css-lane/manifest/evidence, landed to main"
     next_safe_action: "T12 visual-language comparison next, then T8 operator confirmation"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
@@ -338,6 +338,30 @@ _memory:
       artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance,
       engine-parity, surface-census, token-census, view-census) re-run to re-stamp against the new
       `styles.css` hash — all pass or hold their documented pre-existing baseline.
+      Post-rebase reconciliation (onto main's one-to-one gantt port and its four constructed
+      captures, `75eaa34`, merge-base `46a8525`): `styles.css` gained a new merged hash
+      (`276e1094c61c`) since the two legs' regions are disjoint — the kanban block scoped under
+      `.note-database-container` plus its host-inset negative margin, and the `pm-gantt-*` block —
+      and both auto-merged clean with no conflict markers. A fresh `npm run screenshots` (356
+      entries) found zero content-changed captures (`pixelHash`/`layoutHash` unmoved against the
+      pre-rebase committed manifest): every board capture already reflects this task's own review
+      above, every timeline capture the gantt phase's. Five captures moved bytes only (encoder
+      re-encode noise, restored to `HEAD`, `manifest.json`'s `bytes` field corrected to match).
+      `tools/live/touch-targets-constructed-baseline.json`: untouched by this task's own diff, and
+      a re-measure on the merged tree (`node tools/live/touch-targets.mjs`) still lands on 367,
+      main's existing baseline — no value moved, no new entry needed. `tools/lane/css-lane.json`:
+      merged history (main's 200 entries plus this task's 3), `baselineHash` recomputed on the
+      merged stylesheet, one further release entry appended (hash `276e1094c61c`, `reviewed: []`)
+      closing the lane's own invariant since nothing new needed review. 16 `tools/live/*.json`
+      evidence files took main's version at merge time; the evidence gate then flagged 8 stale
+      against the merged hash (cascade-audit, checkbox-appearance, checkbox-inventory,
+      design-conformance, engine-parity, surface-census, token-census, view-census) — re-run, all
+      still pass or hold their documented pre-existing baseline (engine-parity's 51
+      Chrome-vs-WebKit disagreements, unrelated to this task). Two `constructed-board` and two
+      `constructed-timeline` captures were opened and read this session: both surfaces confirmed
+      still fully styled post-merge. `npx tsc --noEmit` exit 0; `npx vitest run` 993/993 (99
+      files); `npm run lint` 172 problems (159 errors, 13 warnings), unchanged; `scan-comments`
+      PASS; `npm run gate` 25/25 green, no exemptions.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T09:55:00Z"
-    last_updated_by: "board-1to1-fidelity-pass-2"
-    recent_action: "T20-T21 closed: priority non-urgent tiers, due-completion suppression, fixture/CSS fidelity"
+    last_updated_at: "2026-09-04T12:15:00Z"
+    last_updated_by: "board-fidelity-rebase-landing"
+    recent_action: "Rebased onto main's gantt port, reconciled css-lane/manifest/evidence, landed to main"
     next_safe_action: "Dispatch a fresh (non-T10/T11) session to close T12 visual half, then T8"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
@@ -113,7 +113,10 @@ mutation.
 | `tools/screenshots/scenarios/shared.mjs` | Modified | Board/mobile fixture rewritten to mirror `renderColumn`/`renderCard` class-for-class; this pass added `boardEmptySlot()` and drag-state options on `boardCard`/`boardColumn` |
 | `tools/screenshots/scenarios/shared.test.mjs` | Created/Modified | Containment parity test for the rewritten fixture; this pass added empty-slot and drag-class assertions |
 | `tools/screenshots/scenarios/core.mjs` | Modified | Added `board-empty-column` and `board-drop-language` component scenarios |
-| `tools/lane/css-lane.json` | Modified | Release entry naming the 8 new plus 11 pre-existing changed captures; no stylesheet edit |
+| `tools/lane/css-lane.json` | Modified | Release entry naming the 8 new plus 11 pre-existing changed captures; no stylesheet edit. Post-rebase: merged with main's own gantt-port history, `baselineHash` recomputed on the merged stylesheet (`276e1094c61c`), a further release entry closes the lane's invariant since the recapture found nothing new to review |
+| `screenshots/manifest.json` | Modified | Post-rebase: merged per entry by owner (board/chrome-board/constructed-board from this task's branch, everything else from main), then a fresh full capture found zero content changes beyond that merge |
+| `tools/live/*.json` (16 evidence artefacts) | Modified | Post-rebase: took main's version at merge time, then re-ran the 8 the evidence gate flagged stale against the merged `styles.css` hash; the gate's own run re-stamped the remaining 10 |
+| `tools/live/touch-targets-constructed-baseline.json` | Unchanged | Post-rebase: this task never edited it; a re-measure on the merged tree still lands on main's existing 367, so no reconciliation entry was needed |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -206,6 +209,7 @@ directly.
 | `node tools/lane/check-lane.mjs` | "release names all 19 changed capture(s)", exit 0 |
 | `node tools/live/evidence.mjs --check-all` (this pass) | 1 stale (`capture-device-parity.json`) on first run; `node tools/live/capture-device-parity.mjs` re-run (PASS, 0 newly-identical); 16/16 fresh on re-check |
 | `npm run gate` (this pass) | PASS — 25 green / 0 red, exit 0 read directly |
+| Post-rebase reconciliation (onto main's one-to-one gantt port, `75eaa34`, merge-base `46a8525`) | `styles.css` conflict-free rebase to a new merged hash (`276e1094c61c`); `npm run screenshots` (356 entries) found zero content-changed captures, 5 byte-only re-encode captures restored to `HEAD`; `touch-targets.mjs` re-measure held main's 367; `css-lane.json` merged and closed with a new release entry; 8/16 `tools/live/*.json` evidence artefacts re-stamped; two `constructed-board` and two `constructed-timeline` captures opened and read, both surfaces confirmed still fully styled; `npx tsc --noEmit` exit 0; `npx vitest run` 993/993 (99 files); `npm run lint` 172 (unchanged); `scan-comments` PASS; `npm run gate` 25/25 green |
 <!-- /ANCHOR:verification -->
 
 ---
