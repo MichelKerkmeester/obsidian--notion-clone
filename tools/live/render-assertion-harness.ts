@@ -1104,7 +1104,12 @@ function armPerRowReadAtRenderEntry(
   };
 }
 
-export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec, control = ""): ScenarioOutcome {
+export function runRenderAssertions(
+  host: HTMLElement,
+  scenario: ScenarioSpec,
+  control = "",
+  onMounted?: (container: HTMLElement, results: AssertionResult[]) => void,
+): ScenarioOutcome {
   const results: AssertionResult[] = [];
   const container = host.createDiv({ cls: "note-database-container" });
   const app = undefined as unknown as App;
@@ -1340,6 +1345,11 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec, c
       });
     }
   }
+
+  // Fires while the container is still attached and styled — a measurement check can inspect the
+  // exact DOM the renderer built without re-implementing any of the branches above, and a
+  // measurement that ran after this line would be measuring a node already removed from the page.
+  if (onMounted) onMounted(container, results);
 
   container.remove();
   return { scenario, bagKeys, results };

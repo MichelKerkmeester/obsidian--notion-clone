@@ -46,13 +46,12 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import esbuild from "esbuild";
 import { chromium } from "playwright-core";
 import { stamp } from "./evidence.mjs";
+import { buildRenderAssertionBundle, RENDERER_SOURCES, SCENARIOS } from "./render-assertion-bundle.mjs";
 import { countConstructed, scenarioLabel } from "./render-scenario-utils.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -60,41 +59,10 @@ import { countConstructed, scenarioLabel } from "./render-scenario-utils.mjs";
 // ───────────────────────────────────────────────────────────────────
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
-const HERE = fileURLToPath(new URL(".", import.meta.url));
 
-// The row counts and column shapes the benches already measure — the operator's
-// twenty-one-column database at thirty percent fill, and the table bench's
-// sixteen-column table. Sampling above the bend matters for timing budgets;
-// here it matters that the row count is the count the freeze was measured at.
-const SCENARIOS = [
-  { name: "list/file-view", renderer: "list", bag: "file-view" },
-  { name: "list/embed", renderer: "list", bag: "embed" },
-  { name: "table/file-view", renderer: "table", bag: "file-view" },
-  { name: "table/embed", renderer: "table", bag: "embed" },
-  { name: "board/file-view", renderer: "board", bag: "file-view" },
-  { name: "board/embed", renderer: "board", bag: "embed" },
-  { name: "gallery/file-view", renderer: "gallery", bag: "file-view" },
-  { name: "gallery/embed", renderer: "gallery", bag: "embed" },
-  { name: "calendar/file-view", renderer: "calendar", bag: "file-view" },
-  { name: "calendar/embed", renderer: "calendar", bag: "embed" },
-  { name: "calendar-week/file-view", renderer: "calendar", bag: "file-view", scale: "week" },
-  { name: "calendar-week/embed", renderer: "calendar", bag: "embed", scale: "week" },
-  { name: "calendar-day/file-view", renderer: "calendar", bag: "file-view", scale: "day" },
-  { name: "calendar-day/embed", renderer: "calendar", bag: "embed", scale: "day" },
-  { name: "timeline/file-view", renderer: "timeline", bag: "file-view" },
-  { name: "timeline/embed", renderer: "timeline", bag: "embed" },
-  { name: "chart/file-view", renderer: "chart", bag: "file-view" },
-];
-
-const RENDERER_SOURCES = [
-  "src/views/list-renderer.ts",
-  "src/views/table-renderer.ts",
-  "src/views/board-renderer.ts",
-  "src/views/gallery-renderer.ts",
-  "src/views/calendar-renderer.ts",
-  "src/views/calendar-timeline-renderer.ts",
-  "src/views/chart-renderer.ts",
-];
+// SCENARIOS and RENDERER_SOURCES are shared with touch-targets.mjs and unstyled-links.mjs via
+// render-assertion-bundle.mjs, so "every scenario the harness knows" means the same list in all
+// three checks rather than three lists that could silently diverge.
 
 // The action bags the two hosts build, measured at the two construction sites
 // and pinned here as data. The harness builds its own bags; this comparison is
@@ -207,43 +175,10 @@ const READ_CONTROL = process.env.RENDER_READ_CONTROL || "";
 // 3. BUNDLE
 // ───────────────────────────────────────────────────────────────────
 
-const obsidianStubPlugin = {
-  name: "obsidian-stub",
-  setup(build) {
-    build.onResolve({ filter: /^obsidian$/ }, () => ({
-      path: resolve(HERE, "../storybook/obsidian-stub.mjs"),
-    }));
-  },
-};
-
-const work = mkdtempSync(join(tmpdir(), "render-assertions-"));
-const entry = join(work, "render-entry.ts");
-const bundle = join(work, "render-bundle.js");
-
-writeFileSync(entry, `
-import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runRenderAssertions } from "${resolve(HERE, "render-assertion-harness")}";
-
-installObsidianDomShim(window);
+const { work, missingSources } = await buildRenderAssertionBundle(`
 window.__renderAssertions = (scenario) => runRenderAssertions(document.body, scenario, ${JSON.stringify(READ_CONTROL)});
 `);
 
-const built = await esbuild.build({
-  entryPoints: [entry],
-  bundle: true,
-  format: "iife",
-  outfile: bundle,
-  plugins: [obsidianStubPlugin],
-  metafile: true,
-  logLevel: "warning",
-  absWorkingDir: REPO,
-});
-
-// The bundle must have been built from the shipped sources. A bundle that
-// stopped importing a renderer and rendered a copy instead would prove the
-// copy, so the manifest is checked rather than assumed.
-const bundleInputs = Object.keys(built.metafile.inputs);
-const missingSources = RENDERER_SOURCES.filter((source) => !bundleInputs.includes(source));
 if (missingSources.length > 0) {
   console.error(`render-assertions: FAIL — the bundle no longer imports ${missingSources.join(", ")}`);
   console.error("  a check that does not bundle the shipped renderer asserts nothing about them");

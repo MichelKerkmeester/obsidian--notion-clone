@@ -66,9 +66,9 @@ contextType: "general"
 - [x] T013 [P] Remove or declare the pinned `--db-calendar-day-min-height` / `--db-calendar-month-week-min-height` formula in `runtime-vars.css`, citing `getCellMinHeight()`'s real default (`tools/screenshots/runtime-vars.css`)
       Evidence: `tools/screenshots/runtime-vars.css:57-63` now pins the product default `112px` for both variables (the renderer writes `config.calendarCellMinHeight ?? 112` clamped to 72-400 at `calendar-renderer.ts:2196-2199` and never measures the pane), replacing the `calc((100vh - 150px) / 5)` viewport formula and its stand-in comment. Removed, not declared: the harness now carries the product's real value.
 - [x] T014 [P] Route `touch-targets.mjs` to the constructed renderer where the calendar/chart scenarios now cover it, or declare the remaining fixture dependency with its criterion (`tools/live/touch-targets.mjs`)
-      Evidence: declared, not routed — the pipeline rewrite is out of this phase's scope. See the fixture-lane provability record below.
+      Evidence: routed, not merely declared. `touch-targets.mjs` now runs the fixture pass unchanged and then mounts every scenario `render-assertions.mjs` knows (`render-assertion-bundle.mjs`'s shared `SCENARIOS`/`buildRenderAssertionBundle`, no mount code duplicated — `runRenderAssertions()`'s new `onMounted` hook in `render-assertion-harness.ts` fires the measurement while the container is still attached, before its own `container.remove()`). Red first, before any constructed baseline existed: the constructed pass measured **8503** under-floor controls across 12 classes on the first run. Five classes were invisible to every fixture (no `scenarios.mjs` fixture mounts them): `db-row-insert-button` (22x22, 3998), `db-gallery-card-open` (24x24, 3200), `db-timeline-mobile-menu-button` (22x22, 960), `db-board-pagination-dot` (12x12, 10), `db-calendar-week-allday-more` (67x13, 16). One is declared as a false positive: `db-board-pagination-dot` has a `::before` inset of -16px on every side (44px effective hit area, `styles.css:19696-19699`), added to `touch-targets.mjs`'s shared `DECLARED` list beside the checkbox, the identical shape. The other four are real and recorded in the new `tools/live/touch-targets-constructed-baseline.json` (`under: 8493 = 8503 - 10`, per-class breakdown and reasoning in its `note`). A CSS fix was built and verified for three of the four — `.db-row-insert-button`, `.db-gallery-card-open`, `.db-timeline-mobile-menu-button` have no compensating hit area and no coarse-pointer rule at all, so adding them to the existing `@media (pointer: coarse) { min-width: 28px; min-height: 28px }` block (`styles.css:21462-21469`, the same idiom already used for `db-list-row-open`/`db-source-rule-icon-button`) was applied under the full CSS lane protocol (acquired, edited, recaptured detached — `npm run screenshots`, 276 entries, 0 `layoutHash` moves confirming the fix touches no fixture, 13 encoder-noise PNGs opened and restored to committed bytes) and confirmed clean. It was then **reverted rather than landed**: any `styles.css` edit invalidates `sourceHashes.styles.css` on eight unrelated census/audit artefacts, and re-running them to re-stamp surfaced that two — `checkbox-appearance.mjs` (a 2.99:1 border-contrast shortfall) and `engine-parity.mjs` (Chrome/WebKit rendering differences) — fail for reasons that predate this pass, confirmed pre-existing by running both against the untouched `7e9fd27` `styles.css` and diffing: byte-for-byte identical failing output. Fixing those two is a different phase's scope (a WCAG contrast repair and a cross-engine tolerance mechanism are not touch-target or link-colour work), so `styles.css` and `tools/lane/css-lane.json` were both restored to their exact pre-dispatch committed bytes (`git show 7e9fd27:<path>`) rather than forcing this pass to either land red on `npm run gate` or silently absorb two unrelated repairs. The verified fix stays recorded in `touch-targets-constructed-baseline.json`'s `note`, ready for a future CSS-lane-holding phase to apply directly. The fourth, `db-calendar-week-allday-more` (67x13), was never a fix candidate here regardless: it sits inside the calendar's CSS-grid all-day row track shared with event-segment bars, an area this program's own history already flags as fragile, so it stays deferred pending a dedicated pass with its own capture verification. Negative control: temporarily raising the constructed baseline's `under` requirement (lowering `under` to 1000) reddened the check (`FAIL [constructed] — 7493 control(s) newly under 28px`, exit 1); restoring it passed again (exit 0). Final state: `node tools/live/touch-targets.mjs`, `$?` read directly: `0` — fixture 264 against baseline 279 (unchanged), constructed 8493 against the new baseline 8493; `styles.css` unchanged from `7e9fd27` (hash `4c7b8b627ab9`).
 - [x] T015 [P] Route `unstyled-links.mjs` the same way (`tools/live/unstyled-links.mjs`)
-      Evidence: declared, not routed. See the fixture-lane provability record below.
+      Evidence: routed the same way — fixture pass unchanged, then every `render-assertions.mjs` scenario mounted through the identical bundle/hook path, both themes toggled per scenario inside the `onMounted` callback (mount and remove happen around one synchronous call, so both-theme measurement has to run inside it). Red-first raw count: the constructed pass measures **0** links across all 17 scenarios, both themes — genuinely empty, not a bug: every `render-assertion-harness.ts` scenario builds `"text"`-type columns only (`LIST_COLUMNS`/`TABLE_COLUMNS`/`BOARD_COLUMNS`/etc., all `makeXColumns(n, "text")`), so no relation- or file-type field is ever constructed and `.internal-link`/`a[href]` markup — built by `relation-value-renderer.ts`, `file-field-renderer.ts`, `inline-markdown-renderer.ts`, `cell-renderer.ts`, none of it needing a live `App` to build the DOM — never appears regardless of this pass's own fix. Per D6 ("a pass on an empty set proves nothing"), the check says so itself: `unstyled-links.mjs` prints an explicit empty-sample caveat rather than reporting a silent PASS for the constructed link-colour surface. `node tools/live/unstyled-links.mjs`, `$?` read directly: `0` — fixture 112 links / 70 scenarios (unchanged, zero-tolerance), constructed 0 links / 17 scenarios with the caveat printed.
 - [x] T016 [P] Declare or add Obsidian's `.mod-cta` rule to `theme.css` (`tools/screenshots/theme.css`)
       Evidence: `tools/screenshots/theme.css:309-318` declares `button.mod-cta { background-color: var(--interactive-accent); --text-color: var(--text-on-accent); }`, transcribed from the installed application stylesheet of Obsidian 1.13.4 (`/Applications/Obsidian.app/Contents/Resources/obsidian.asar`, `app.css` `button.mod-cta` — the 1.13.4 bundle on this machine; the hover and mobile-tap arms are omitted because a capture has no pointer, mirroring the `mod-warning` precedent). Blast radius: two fixture sources carry `mod-cta` (`tools/screenshots/scenarios/core.mjs` empty-state, `tools/screenshots/scenarios/temporal.mjs` calendar-empty-state); their captures photograph the accent fill after recapture.
 - [x] T017 Correct `check-lane.mjs`'s `changedCaptures()` to compare by content/layout hash or a declared tolerance instead of raw git byte-diff (`tools/lane/check-lane.mjs`)
@@ -81,31 +81,56 @@ contextType: "general"
 
 ---
 
-### Fixture-lane provability record (touch-targets, unstyled-links)
+### Two-pass provability record (touch-targets, unstyled-links)
 
-Both lanes read hand-written fixture markup (`scenarios.mjs` `html()`) against `styles.css` plus
-the harness stand-ins — they never construct a renderer. The render-assertion lane is the
-constructed-renderer check, and it is where a renderer regression must be caught. Recorded here
-is exactly what each fixture lane can and cannot prove, so the row-6 dependency list stays
-bounded and named:
+Both lanes now run two passes and record every row with a `source` field (`fixture` or
+`constructed`). The fixture pass reads hand-written markup (`scenarios.mjs` `html()`) against
+`styles.css` plus the harness stand-ins; the constructed pass mounts every scenario
+`render-assertions.mjs` knows through the identical bundle and `runRenderAssertions()` mount path
+(`render-assertion-bundle.mjs`, `render-assertion-harness.ts`'s `onMounted` hook — no mount code
+duplicated), so it measures the same DOM the render-assertion lane already asserts structural facts
+about. Recorded here is exactly what each pass can and cannot prove, so the row-6 dependency-class
+finding is closed for the classes both passes can see, and what remains open is bounded and named:
 
-**`tools/live/touch-targets.mjs`** can prove: for every scenario fixture at phone width under a
-coarse pointer, each interactive element's bounding box clears the 28px floor; the coarse-pointer
-premise holds on every measured page; and the count of sub-floor controls does not grow past the
-recorded baseline. It cannot prove: (1) anything about an element no fixture contains — a control
-the renderer builds that no fixture mirrors is invisible to this lane, and the render-assertion
-lane is the check that constructs the renderers; (2) the real renderers' output — fixture markup
-can drift from what the renderers build, which is exactly the failure the provenance marker and
-the fixture-parity tests exist to catch; (3) hit area — a bounding box is not a hit area, so an
-overlapping element or a parent-carried press can still make a clearing control hard to hit; (4)
-any device behaviour — no device is involved.
+**`tools/live/touch-targets.mjs`, fixture pass** can prove: for every scenario fixture at phone
+width under a coarse pointer, each interactive element's bounding box clears the 28px floor; the
+coarse-pointer premise holds on every measured page; and the count of sub-floor controls does not
+grow past the recorded baseline (`touch-targets-baseline.json`). It cannot prove anything about a
+control the renderer builds that no fixture mirrors — that gap is what the constructed pass below
+closes for the seven renderer types (`list`, `table`, `board`, `gallery`, `calendar`, `timeline`,
+`chart`) and seventeen scenarios `render-assertions.mjs` covers.
 
-**`tools/live/unstyled-links.mjs`** can prove: no link in any fixture resolves to a user-agent
-default colour in either theme, and the harness's link tokens resolve. It cannot prove: (1) links
-the fixtures do not contain; (2) links the real renderers build, for the same fixture-vs-renderer
-reason as above; (3) that a colour the harness supplies equals the colour the host supplies — the
-lane catches silence (a token the harness never defines) but not disagreement (a token the harness
-defines wrongly), which is the pinned-values scan's half of the pair.
+**`tools/live/touch-targets.mjs`, constructed pass** proves the same 28px-floor claim against real
+`src/views` renderer output for those seven types and seventeen scenarios, with its own recorded
+ratchet (`touch-targets-constructed-baseline.json`, `under: 8493`, four real classes: three with a
+verified-but-not-landed CSS fix recorded in the baseline's `note`, one — `db-calendar-week-allday-more`
+— deferred pending a dedicated capture-verified pass; see T014's evidence for why the fix was
+reverted). It still cannot prove: (1) anything about the 15 of 22 renderer files no
+`render-assertions.mjs` scenario constructs yet — that is `render-assertions.mjs`'s own coverage
+ratchet's gap, not this lane's; (2) hit area — a bounding box is not a hit area, same as the fixture
+pass; (3) any device behaviour — no device is involved, same as the fixture pass; (4) anything about
+a field value the harness's bench data never populates — every scenario's columns are the bench's
+own shape (21 or 16 uniform columns), not every field type or configuration a real database can
+carry.
+
+**`tools/live/unstyled-links.mjs`, fixture pass** can prove: no link in any fixture resolves to a
+user-agent default colour in either theme, and the harness's link tokens resolve. It cannot prove
+anything about a link the real renderers build that no fixture mirrors — the same gap the
+constructed pass exists to close.
+
+**`tools/live/unstyled-links.mjs`, constructed pass** measures every scenario `render-assertions.mjs`
+knows, in both themes, against the same zero-tolerance rule. It found **zero** links across all
+seventeen scenarios — a genuine, structural empty sample, not a bug: every
+`render-assertion-harness.ts` scenario builds `"text"`-type columns only, so no relation- or
+file-type field is ever constructed, and `.internal-link`/`a[href]` markup (built by
+`relation-value-renderer.ts`, `file-field-renderer.ts`, `inline-markdown-renderer.ts`,
+`cell-renderer.ts` — none of it needing a live `App` to build the DOM, only the harness's bench
+column shape) never appears regardless of what this lane fixes. Per D6, the check prints this
+caveat itself rather than reporting a silent pass. Neither pass can prove: (1) that a colour the
+harness supplies equals the colour the host supplies — both catch silence, not disagreement, which
+is the pinned-values scan's half of the pair; (2) anything about a relation/file-type field's link
+colour, until `render-assertion-harness.ts`'s own scenario columns carry one — an extension to that
+harness's scenario shape, out of this row's scope.
 
 ---
 

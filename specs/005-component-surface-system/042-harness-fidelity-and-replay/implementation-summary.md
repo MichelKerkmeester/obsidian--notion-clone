@@ -111,8 +111,36 @@ against the two commits' actual diffs, verified with `git show` against the pare
 to `calc((100vh - 150px) / 5)`. Production's `getCellMinHeight()` returns `config.calendarCellMinHeight ?? 112`
 clamped to 72-400 and never measures the pane, so both are now `112px`. `theme.css` gained
 `button.mod-cta`, transcribed from the installed Obsidian 1.13.4 `app.css`. `touch-targets.mjs` and
-`unstyled-links.mjs` were not rerouted; what each can and cannot prove is recorded in `tasks.md` as
-a bounded, named list.
+`unstyled-links.mjs` were declared, not rerouted, at the time this section was first written.
+
+### Constructed-renderer measurement for touch-targets and unstyled-links (later leg)
+
+Both lanes now run a second pass after their fixture pass: every scenario `render-assertions.mjs`
+knows, mounted through the identical bundle and mount path (`render-assertion-bundle.mjs`'s shared
+`SCENARIOS`/`buildRenderAssertionBundle`; `render-assertion-harness.ts`'s `runRenderAssertions()`
+gained an `onMounted` hook so the measurement runs against the still-attached container without any
+mount logic duplicated). Every finding row carries a `source` field (`fixture` or `constructed`).
+
+Red first, before either constructed baseline existed: `touch-targets.mjs`'s constructed pass
+measured 8503 under-floor controls across 12 classes on its first run; `unstyled-links.mjs`'s
+measured 0 links across 17 scenarios, both themes. Five touch-target classes were invisible to
+every fixture. One, `db-board-pagination-dot`, is a false positive — a `::before` inset gives it a
+44px effective hit area — and is now declared in `touch-targets.mjs`'s shared `DECLARED` list. The
+other four are real and recorded in the new `touch-targets-constructed-baseline.json`. A CSS fix
+was built, verified under the full CSS-lane protocol, and then reverted for three of the four
+(`db-row-insert-button`, `db-gallery-card-open`, `db-timeline-mobile-menu-button`): applying it
+invalidated eight unrelated census/audit artefacts' freshness stamps, and re-running two of them to
+re-stamp surfaced pre-existing, unrelated failures (`checkbox-appearance.mjs`'s border contrast,
+`engine-parity.mjs`'s cross-engine differences), confirmed pre-existing against `7e9fd27`'s
+untouched `styles.css` by byte-identical failing output. The verified fix stays recorded in the
+baseline's `note` for a future CSS-lane-holding phase. `db-calendar-week-allday-more` was never a
+fix candidate in this leg — it sits inside the calendar's fragile CSS-grid all-day row track — and
+stays deferred the same way.
+
+`unstyled-links.mjs`'s zero-link constructed result is a genuine structural empty sample: every
+`render-assertion-harness.ts` scenario builds `"text"`-type columns only, so no relation- or
+file-type field, and no `.internal-link`/`a[href]` markup, is ever constructed. Per D6, the check
+prints this as an explicit caveat rather than a silent pass.
 
 ### Manifest compare: content, not bytes
 
@@ -157,6 +185,19 @@ restored rather than committed.
 | `tools/screenshots/theme.css` | Modified | Declares `button.mod-cta` from the installed Obsidian bundle |
 | `tools/lane/css-lane.json` | Modified | Release entry naming the eight captures this phase moved |
 | `screenshots/` (8 PNGs, manifest) | Modified | The primary actions now photograph in the accent fill |
+| `tools/live/touch-targets.mjs` | Modified | Adds the constructed-renderer pass; `DECLARED` gains `db-board-pagination-dot`; both passes tag `source` |
+| `tools/live/unstyled-links.mjs` | Modified | Adds the constructed-renderer pass, both themes; prints the empty-sample D6 caveat |
+| `tools/live/touch-target-measure.mjs` | Created | The shared floor-classification predicate both passes call (`classifyBox`, `findDeclaredExcuse`, `measureInteractiveBoxes`) |
+| `tools/live/touch-target-measure.test.mjs` | Created | Boundary tests for `classifyBox`/`findDeclaredExcuse`, including the exact-28px edge |
+| `tools/live/unstyled-links-measure.mjs` | Created | The shared UA-default classifier both passes call (`classifyLinkColour`, `measureLinkColours`) |
+| `tools/live/unstyled-links-measure.test.mjs` | Created | Tests for the three tracked defaults and near-miss colour strings |
+| `tools/live/render-assertion-bundle.mjs` | Created | The one esbuild step (`buildRenderAssertionBundle`) plus the shared `SCENARIOS`/`RENDERER_SOURCES`, now used by all three checks |
+| `tools/live/page-module-script.mjs` | Created | `asPageScript()` — strips `export` so a measurement module can be injected into a fixture page as a classic script |
+| `tools/live/render-assertion-harness.ts` | Modified (this leg) | `runRenderAssertions()` gained an optional `onMounted(container, results)` hook, fired before its own `container.remove()` |
+| `tools/live/render-assertions.mjs` | Modified (this leg) | `SCENARIOS`/`RENDERER_SOURCES`/the bundle-build block now import from `render-assertion-bundle.mjs` instead of a local copy |
+| `tools/live/touch-targets-constructed-baseline.json` | Created | Ratchet for the constructed pass, `under: 8493`, four real classes with a verified-but-reverted CSS fix recorded in its `note` |
+| `tools/live/touch-targets.json` | Modified | Re-stamped: `fixture`/`constructed` sub-objects, each with its own `measured`/`scenarios`/`under`/`betweenFloors`/`classes` |
+| `tools/live/unstyled-links.json` | Modified (this leg) | Re-stamped the same way |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -194,8 +235,14 @@ to their committed bytes while moving two different ones — and were restored r
 | The three `031` claims delegate to their runtime lanes rather than to a static fixture | A teardown and a rebuild are lifecycle events. A fixture that reproduced their markup would assert the shape of a fix without ever running it, which is the failure this program exists to stop. The delegation still reds: the named case must exist, pass, and carry its recorded failure text |
 | `was` is the number this measure returns on the fix commit's parent tree | `replay.mjs` already said so in its own comment. Two inherited numbers did not reproduce and were corrected rather than kept, because an unreproducible pre-fix number is the same defect as a vacuous entry wearing better clothes |
 | The chart and day-scale controls wrap the render entry, not the bag | Neither surface reaches the bound through the per-item bag seam — one canvas, and a six-lane cap. A control that cannot fail is not one, so both arm a per-row read where the data crosses the boundary |
-| `touch-targets` and `unstyled-links` are declared, not rerouted | Rerouting them to a constructed renderer is a pipeline rewrite, and this phase's scope boundary is instrument truthfulness. A bounded, named list of what each cannot prove is the honest interim, and it is recorded rather than implied |
+| `touch-targets` and `unstyled-links` are declared, not rerouted (at the time this row was first written) | Rerouting them to a constructed renderer is a pipeline rewrite, and this phase's scope boundary was instrument truthfulness. A bounded, named list of what each cannot prove was the honest interim; the later leg below does the rewrite |
 | The seven paint-only captures were restored, not committed | Zero of 276 manifest entries moved `layoutHash`, and the mover set varied between identical runs. Committing them would record a review of noise as a review of a change |
+| `runRenderAssertions()` gained an `onMounted` hook rather than a parallel mount path | The ~250-line per-renderer branch already exists once; a measurement check that re-implemented it would drift from the real mount the moment either changed. The hook fires while the container is still attached, right before the function's own `container.remove()`, so a caller measures exactly what the assertions just checked |
+| `SCENARIOS`/`RENDERER_SOURCES`/the esbuild bundle step moved to a new shared module | Three checks (`render-assertions`, `touch-targets`, `unstyled-links`) now need the identical bundle. A copy in each would let "every scenario the harness knows" mean three different things |
+| The measurement predicates (`classifyBox`, `findDeclaredExcuse`, `classifyLinkColour`) live in their own modules, imported for real by the constructed pass and injected as a classic script for the fixture pass | `page.evaluate(fn, arg)` only stringifies `fn` itself; a function that calls a sibling helper by reference loses that reference when re-parsed in the page. Rather than inline the predicate twice (real duplication) the module is injected via `page.addScriptTag` so its functions exist for real in page scope, exactly as the bundle has them |
+| The verified CSS fix for three of the five newly-found classes was reverted rather than landed | Landing it kept `npm run gate` red: any `styles.css` edit invalidates eight unrelated census/audit artefacts' freshness stamps, and re-running two of them (`checkbox-appearance`, `engine-parity`) surfaced pre-existing, unrelated failures, confirmed pre-existing by running both against `7e9fd27`'s untouched `styles.css`. Scope lock says a lane hold permits editing a file, not adopting whatever it drags in. The fix stays fully specified in `touch-targets-constructed-baseline.json`'s `note` for whichever phase next holds the CSS lane |
+| `db-board-pagination-dot` is declared as a false positive, not baselined as a real shortfall | Its `::before` inset (`styles.css:19696-19699`, pre-existing, untouched by this leg) gives it a 44px effective hit area — the identical shape as the checkbox exemption already in `DECLARED`. A bounding-box measurement cannot see it, but a finger can |
+| `unstyled-links.mjs`'s constructed pass prints an explicit empty-sample caveat rather than a silent PASS | D6: "a pass on an empty set proves nothing." Zero links across every scenario is structurally true (every scenario's columns are `"text"`-type, so no relation/file field, and no `.internal-link` markup, is ever built) and would otherwise read as coverage it does not have |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -236,6 +283,26 @@ to their committed bytes while moving two different ones — and were restored r
 | `node tools/lane/check-lane.mjs` | PASS — exit 0, "release names all 0 changed capture(s)", 15/11 byte-only movers excluded across the two rounds. Observed red first (byte-only comparator, round 1 state): "FAIL — 12 changed capture(s) this release does not name", exit 1 |
 | `node tools/lane/check-lane.mjs` steady-state mutation control | PASS — one entry's `pixelHash` deliberately overwritten; `contentChangedCaptures()` reported exactly that one path and no others |
 | `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate` | PASS — exit 0, 25 green, 0 red |
+
+**Later leg — constructed-renderer measurement for touch-targets/unstyled-links:**
+
+| Check | Result |
+|-------|--------|
+| `node tools/live/touch-target-measure.test.mjs`, `unstyled-links-measure.test.mjs` (via `vitest`) | PASS — 16 new tests, boundary cases for `classifyBox` (exact 28px, exact 44px, thin-wide bar) and `classifyLinkColour` (3 tracked defaults, near-miss colour strings) |
+| `node tools/live/touch-targets.mjs` (first run, no constructed baseline) | Observed red: constructed pass measured 8503 under-floor controls across 12 classes, 5 invisible to every fixture |
+| `node tools/live/touch-targets.mjs` (after declaring `db-board-pagination-dot`, recording the other four) | PASS — exit 0, fixture 264/279 (unchanged), constructed 8493/8493 |
+| Touch-targets negative control — constructed baseline `under` lowered to 1000 | PASS as a control — exit 1, "7493 control(s) newly under 28px"; restored, exit 0 |
+| CSS-fix trial for `db-row-insert-button`/`db-gallery-card-open`/`db-timeline-mobile-menu-button` | Built, recaptured detached (276 entries, 0 `layoutHash` moves), 13 encoder-noise PNGs opened and restored — then reverted, not landed (see Key Decisions) |
+| `checkbox-appearance.mjs`/`engine-parity.mjs` against `7e9fd27`'s untouched `styles.css` vs. against the (since-reverted) fix | Byte-for-byte identical failing output both ways — confirms both failures pre-exist this leg |
+| `node tools/live/unstyled-links.mjs` | PASS — exit 0, fixture 112/70 (unchanged, zero-tolerance), constructed 0/17 with the D6 empty-sample caveat printed |
+| `node tools/live/render-assertions.mjs` (re-run after the `onMounted` hook and the `render-assertion-bundle.mjs` extraction) | PASS — exit 0, coverage unchanged at 7 of 22, published 7 |
+| `npx tsc --noEmit` | PASS — exit 0 |
+| `npx vitest run` | PASS — exit 0, 95 files, 936 tests |
+| `npm run lint:tools` | PASS — exit 0 |
+| `npm run lint` | Exit 1, same 172 pre-existing problems; no `src/` file touched by this leg |
+| `node tools/naming/scan-comments.mjs` | PASS — exit 0, 387 files (one new file initially missing a numbered section, fixed) |
+| `node tools/live/evidence.mjs --check-all` | PASS — exit 0, 16 of 16 fresh, after re-stamping `renderer-coverage.json` against the real `render-assertion-harness.ts`/`render-assertions.mjs` edits and reverting six unrelated stamps (`capture-device-parity`, `list-window`, `replay`, `sheet-rebuild`, `sheet-teardown`, `renderer-coverage` before its legitimate re-stamp) that only carried a `measuredAt` bump from running the gate multiple times |
+| `npm run gate` | PASS — exit 0, 25 green, 0 red |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -260,10 +327,19 @@ to their committed bytes while moving two different ones — and were restored r
    the lane's own failure message rather than to a number cited in `031`'s report; the other two
    trace to `031`'s `goal.md` verbatim.
 
-3. **`touch-targets.mjs` and `unstyled-links.mjs` still read hand-written fixtures.** Neither
-   constructs a renderer, so neither can see a control the renderer builds that no fixture mirrors,
-   and neither proves the real renderers' output. The bounded list of what each can and cannot prove
-   is in `tasks.md`; the dependency is declared, not removed.
+3. **`touch-targets.mjs` and `unstyled-links.mjs` no longer only read hand-written fixtures — a
+   later leg added a constructed-renderer pass to both** (see the section above). What remains open:
+   (a) coverage is bounded to the seven renderer types and seventeen scenarios
+   `render-assertions.mjs` covers, not all 22 renderer files; (b) the constructed pass's bench data
+   is text-only columns, so `unstyled-links.mjs`'s constructed pass cannot see a relation- or
+   file-type field's link colour at all — a genuine, D6-documented empty sample, not evidence of
+   safety; (c) four real touch-target classes the constructed pass found are recorded in
+   `touch-targets-constructed-baseline.json` rather than fixed — three with a verified,
+   ready-to-apply CSS fix that was built and then reverted (see Key Decisions) because landing it
+   exposed unrelated pre-existing failures in two other census tools, and one
+   (`db-calendar-week-allday-more`) deferred because its fix sits inside the calendar's fragile
+   CSS-grid all-day row track. The two-pass provability record in `tasks.md` is the current bounded,
+   named list for both lanes.
 
 4. **The chart bound is a headroom number, not a measured ceiling.** `MAX_CHART_LAYOUT_READS` is 48
    against a measured 30, with the armed control at 1630. It catches the shape that matters — reads
@@ -276,6 +352,19 @@ to their committed bytes while moving two different ones — and were restored r
 
 6. **Verified by construction only.** Per `026`'s D5 and this phase's D4, no device is involved and
    none is owed.
+
+7. **Two pre-existing, unrelated gate failures were discovered but not fixed.**
+   `checkbox-appearance.mjs` reports one checkbox border (`db-checkbox db-checkbox-row
+   db-board-card-checkbox` in the `board-drop-language` fixture) at 2.99:1 against WCAG 1.4.11's
+   3:1 non-text minimum. `engine-parity.mjs` reports 51 elements disagreeing between Chrome and
+   WebKit across several fixtures (native `<select>` sizing, sub-pixel width rounding). Neither is
+   part of `tools/gate.mjs`'s `CHECKS` list — only their stamp freshness is — so both were silently
+   stale (passing by omission) until any `styles.css` edit forced a re-run. Both are confirmed
+   pre-existing (identical output against `7e9fd27`'s untouched `styles.css`) and out of this
+   phase's scope (a contrast repair and a cross-engine tolerance mechanism are not harness-fidelity
+   or touch-target/link-colour work). Neither blocks `npm run gate`, because neither check is wired
+   into it — only `evidence --check-all`'s freshness read would surface them again, the next time
+   anyone edits `styles.css`.
 <!-- /ANCHOR:limitations -->
 
 ---

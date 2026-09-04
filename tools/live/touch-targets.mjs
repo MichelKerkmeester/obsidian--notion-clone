@@ -40,21 +40,36 @@
 // Rows and action bars ARE held to 44 elsewhere, by the placement lane, which is
 // the right place for a per-surface rule.
 //
+// A HAND-WRITTEN FIXTURE IS NOT THE ONLY SURFACE THIS MEASURES. `scenarios.mjs`
+// depicts what a renderer builds, but depicting is not building — a control the
+// renderer emits that no fixture mirrors is invisible to the fixture pass alone.
+// So after every fixture scenario, this also mounts every production renderer
+// scenario the render-assertion harness knows — the same bundle, the same
+// scenario list, esbuild and a real src/views module rather than hand-written
+// markup — and measures that DOM too. Both passes record every row with a
+// `source` field (`fixture` or `constructed`) rather than merging silently,
+// because a control invisible to one pass and caught by the other is exactly
+// the gap this second pass exists to close.
+//
 // Usage: node tools/live/touch-targets.mjs [--json]
-// Exit:  0 when every undeclared interactive element clears the floor.
+// Exit:  0 when every undeclared interactive element clears the floor, in both passes.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
+import { buildRenderAssertionBundle, SCENARIOS as RENDERER_SCENARIOS } from "./render-assertion-bundle.mjs";
+import { scenarioLabel } from "./render-scenario-utils.mjs";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
+import { asPageScript } from "./page-module-script.mjs";
 import { stamp } from "./evidence.mjs";
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
+const HERE = fileURLToPath(new URL(".", import.meta.url));
 const STAMP_PATH = "tools/live/touch-targets.json";
 const FLOOR = 28;
 /** Reported, never enforced: the gap between this project's floor and WCAG 2.5.5 Enhanced. */
@@ -81,7 +96,8 @@ const INTERACTIVE = [
  *
  * Each carries its reason. A declaration is a claim someone has to defend, which is why these are
  * listed rather than filtered out by a broad selector — a selector wide enough to hide these would
- * hide the next regression with them.
+ * hide the next regression with them. Shared by both passes: the reason a checkbox's bounding box
+ * misses its real hit area does not change depending on whether a fixture or a real renderer drew it.
  */
 const DECLARED = [
   {
@@ -97,6 +113,13 @@ const DECLARED = [
   {
     match: "db-mobile-bottom-sheet-handle",
     reason: "the grab bar is 4px tall by design and hit-tests as a full-width band above it",
+  },
+  {
+    match: "db-board-pagination-dot",
+    reason: "the dot paints at 12px and takes its touch area from a ::before inset of -16px on"
+      + " every side (styles.css's coarse-pointer board-pagination block), a 44px effective hit"
+      + " area a bounding box does not include — the same shape as the checkbox exemption above."
+      + " Found by the constructed-renderer pass: no fixture mounts the board's pagination dots.",
   },
 ];
 
@@ -180,6 +203,12 @@ async function assertPremise(page, scenarioId) {
   return true;
 }
 
+// ─── PASS 1: FIXTURES ────────────────────────────────────────────────
+// scenarios.mjs's hand-written markup, as before: fast, and covers every scenario the screenshot
+// corpus depicts. What it cannot prove is bounded in tasks.md's fixture-lane provability record.
+
+const measureScript = asPageScript(join(HERE, "touch-target-measure.mjs"));
+
 const findings = [];
 let measured = 0;
 let scenariosRendered = 0;
@@ -193,46 +222,104 @@ for (const scenario of SCENARIOS) {
   }
   await page.setContent(`<body class="is-phone theme-dark"><div id="shot">${html}</div></body>`);
   for (const content of [styles, theme, runtime]) await page.addStyleTag({ content });
-  // Checked on every scenario, not once at startup: `setContent` replaces the document and the
-  // style tags with it, so a premise established before the loop says nothing about the page any
-  // particular scenario was measured on.
+  // `setContent` replaces the document, so both the stylesheets and the measurement script are
+  // re-attached every scenario — a premise or a function established before the loop says nothing
+  // about the page any particular scenario was measured on.
+  await page.addScriptTag({ content: measureScript });
   if (!(await assertPremise(page, scenario.id))) {
     await browser.close();
     process.exit(1);
   }
   scenariosRendered += 1;
 
-  const result = await page.evaluate(({ selector, floor, enhanced, declared, id }) => {
-    const rows = [];
-    let seen = 0;
-    for (const el of document.querySelectorAll(selector)) {
-      const rect = el.getBoundingClientRect();
-      // A control with no box is not rendered on this surface; it is not a small target.
-      if (rect.width === 0 || rect.height === 0) continue;
-      seen += 1;
-      const short = Math.min(rect.width, rect.height);
-      if (short >= enhanced) continue;
-      const belowFloor = short < floor;
-      const classes = el.className && typeof el.className === "string" ? el.className : "";
-      const excuse = declared.find((d) => classes.includes(d.match));
-      rows.push({
-        scenario: id,
-        tag: el.tagName.toLowerCase(),
-        classes: classes.slice(0, 90),
-        width: Math.round(rect.width),
-        height: Math.round(rect.height),
-        declared: excuse ? excuse.reason : null,
-        belowFloor,
-      });
-    }
-    return { rows, seen };
-  }, { selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED, id: scenario.id });
+  const result = await page.evaluate(
+    (opts) => window.measureInteractiveBoxes(opts),
+    {
+      selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED,
+      id: scenario.id, source: "fixture",
+    },
+  );
 
   measured += result.seen;
   findings.push(...result.rows);
 }
 
+// ─── PASS 2: CONSTRUCTED RENDERERS ──────────────────────────────────
+// Every scenario render-assertions.mjs knows, mounted through the identical bundle and the
+// identical runRenderAssertions() mount path — no mount logic duplicated here, only the
+// measurement applied to the container while it is still attached, via the onMounted hook.
+
+const constructedFindings = [];
+let constructedMeasured = 0;
+let constructedScenariosRendered = 0;
+const provenanceFailures = [];
+
+const { work, missingSources } = await buildRenderAssertionBundle(`
+import { measureInteractiveBoxes } from "${resolve(HERE, "touch-target-measure.mjs")}";
+window.__measureConstructedTouch = (scenario, opts) => {
+  let measurement = null;
+  let provenance = false;
+  runRenderAssertions(document.body, scenario, "", (container, results) => {
+    provenance = results.length > 0 && results[0].pass;
+    measurement = measureInteractiveBoxes(opts);
+  });
+  return { measurement, provenance };
+};
+`);
+
+if (missingSources.length > 0) {
+  console.error(`touch-targets: FAIL — the constructed bundle no longer imports ${missingSources.join(", ")}`);
+  console.error("  a check that does not bundle the shipped renderer measures nothing about it");
+  await browser.close();
+  process.exit(1);
+}
+
+writeFileSync(join(work, "index.html"), `<!doctype html>
+<html><head><meta charset="utf-8"></head>
+<body class="is-phone theme-dark"><script src="render-bundle.js"></script></body></html>`);
+
+await page.goto(`file://${join(work, "index.html")}`);
+for (const content of [styles, theme, runtime]) await page.addStyleTag({ content });
+
+// The bundle's page is navigated once and every scenario mounts and unmounts inside it — unlike
+// the fixture loop, nothing here calls setContent per scenario, so one premise check after the
+// stylesheets attach covers every scenario that follows.
+if (!(await assertPremise(page, "constructed-renderer bundle"))) {
+  rmSync(work, { recursive: true, force: true });
+  await browser.close();
+  process.exit(1);
+}
+
+for (const scenario of RENDERER_SCENARIOS) {
+  const label = scenarioLabel(scenario);
+  const { measurement, provenance } = await page.evaluate(
+    ({ scenario, opts }) => window.__measureConstructedTouch(scenario, opts),
+    {
+      scenario,
+      opts: {
+        selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED,
+        id: label, source: "constructed",
+      },
+    },
+  );
+  if (!provenance) {
+    provenanceFailures.push(label);
+    continue;
+  }
+  constructedScenariosRendered += 1;
+  constructedMeasured += measurement.seen;
+  constructedFindings.push(...measurement.rows);
+}
+
+rmSync(work, { recursive: true, force: true });
 await browser.close();
+
+if (provenanceFailures.length > 0) {
+  console.error(`touch-targets: FAIL — ${provenanceFailures.length} constructed scenario(s) did not carry the `
+    + `production-render marker: ${provenanceFailures.join(", ")}`);
+  console.error("  measuring DOM without the marker would prove nothing about the shipped renderer");
+  process.exit(1);
+}
 
 // ───────────────────────────────────────────────────────────────────
 // 4. VERDICT
@@ -243,9 +330,19 @@ const declaredHits = findings.filter((f) => f.declared);
 // Between this project's 28px floor and WCAG 2.5.5's 44px. Counted, not enforced.
 const betweenFloors = findings.filter((f) => !f.declared && !f.belowFloor);
 
+const constructedUndeclared = constructedFindings.filter((f) => !f.declared && f.belowFloor);
+const constructedDeclaredHits = constructedFindings.filter((f) => f.declared);
+const constructedBetweenFloors = constructedFindings.filter((f) => !f.declared && !f.belowFloor);
+
 if (process.argv.includes("--json")) {
-  console.log(JSON.stringify({ measured, scenariosRendered, undeclared, declaredHits }, null, 2));
-  process.exit(undeclared.length === 0 ? 0 : 1);
+  console.log(JSON.stringify({
+    fixture: { measured, scenariosRendered, undeclared, declaredHits },
+    constructed: {
+      measured: constructedMeasured, scenariosRendered: constructedScenariosRendered,
+      undeclared: constructedUndeclared, declaredHits: constructedDeclaredHits,
+    },
+  }, null, 2));
+  process.exit(undeclared.length === 0 && constructedUndeclared.length === 0 ? 0 : 1);
 }
 
 // A RATCHET, NOT A CLIFF. 331 controls sit below this project's own 28px floor today — a real
@@ -256,16 +353,23 @@ if (process.argv.includes("--json")) {
 // So the baseline is recorded and the count may not grow. That prevents the next control from
 // arriving under the floor while leaving the existing set to be triaged deliberately. A lane that
 // simply reported would never fail, and one that failed on all 331 would be switched off within a
-// day — neither protects anything.
+// day — neither protects anything. The constructed pass gets its own baseline file rather than
+// sharing the fixture one, because the two passes measure different DOM and a control invisible to
+// fixtures needs its own recorded number rather than inflating (or silently padding) the fixture
+// count.
 const BASELINE_PATH = join(REPO, "tools/live/touch-targets-baseline.json");
 const baseline = existsSync(BASELINE_PATH)
   ? JSON.parse(readFileSync(BASELINE_PATH, "utf8"))
   : null;
+const CONSTRUCTED_BASELINE_PATH = join(REPO, "tools/live/touch-targets-constructed-baseline.json");
+const constructedBaseline = existsSync(CONSTRUCTED_BASELINE_PATH)
+  ? JSON.parse(readFileSync(CONSTRUCTED_BASELINE_PATH, "utf8"))
+  : null;
 
 // The count is always printed: a run that measured nothing would satisfy "no control is too small"
 // without looking at anything, which is the emptiest possible pass.
-console.log(`touch-targets: ${measured} interactive element(s) across ${scenariosRendered} scenario(s), floor ${FLOOR}px, coarse pointer`);
-console.log(`touch-targets: ${betweenFloors.length} between ${FLOOR}px and WCAG 2.5.5's ${ENHANCED}px — reported, not enforced, because the project examined that standard and did not adopt it\n`);
+console.log(`touch-targets: [fixture] ${measured} interactive element(s) across ${scenariosRendered} scenario(s), floor ${FLOOR}px, coarse pointer`);
+console.log(`touch-targets: [fixture] ${betweenFloors.length} between ${FLOOR}px and WCAG 2.5.5's ${ENHANCED}px — reported, not enforced\n`);
 
 for (const hit of declaredHits.slice(0, 6)) {
   console.log(`  declared  ${hit.scenario} ${hit.tag}.${hit.classes.split(" ")[0]} ${hit.width}x${hit.height}`);
@@ -283,24 +387,61 @@ for (const name of classes.slice(0, 12)) {
 }
 if (classes.length > 12) console.log(`    ...and ${classes.length - 12} more classes`);
 
-if (undeclared.length > allowed) {
-  console.error(`\ntouch-targets: FAIL — ${undeclared.length - allowed} control(s) newly under ${FLOOR}px`);
-  console.error("  The existing set is a recorded baseline awaiting triage; this is about the ones that just arrived.");
+console.log(`\ntouch-targets: [constructed] ${constructedMeasured} interactive element(s) across `
+  + `${constructedScenariosRendered} production-renderer scenario(s), floor ${FLOOR}px, coarse pointer`);
+console.log(`touch-targets: [constructed] ${constructedBetweenFloors.length} between ${FLOOR}px and `
+  + `WCAG 2.5.5's ${ENHANCED}px — reported, not enforced\n`);
+
+for (const hit of constructedDeclaredHits.slice(0, 6)) {
+  console.log(`  declared  ${hit.scenario} ${hit.tag}.${hit.classes.split(" ")[0]} ${hit.width}x${hit.height}`);
+}
+if (constructedDeclaredHits.length > 6) console.log(`  declared  ...and ${constructedDeclaredHits.length - 6} more`);
+
+const constructedAllowed = constructedBaseline ? constructedBaseline.under : constructedUndeclared.length;
+
+console.log(`  ${constructedUndeclared.length} control(s) under ${FLOOR}px, against a recorded baseline of ${constructedAllowed}`);
+const constructedClasses = [...new Set(constructedUndeclared.map((f) => f.classes.split(" ")[0]))].sort();
+for (const name of constructedClasses.slice(0, 12)) {
+  const worst = constructedUndeclared.filter((f) => f.classes.startsWith(name))
+    .sort((a, b) => Math.min(a.width, a.height) - Math.min(b.width, b.height))[0];
+  console.log(`    ${name.padEnd(34)} smallest ${worst.width}x${worst.height}`);
+}
+if (constructedClasses.length > 12) console.log(`    ...and ${constructedClasses.length - 12} more classes`);
+
+const fixtureFailed = undeclared.length > allowed;
+const constructedFailed = constructedUndeclared.length > constructedAllowed;
+
+if (fixtureFailed || constructedFailed) {
+  if (fixtureFailed) {
+    console.error(`\ntouch-targets: FAIL [fixture] — ${undeclared.length - allowed} control(s) newly under ${FLOOR}px`);
+  }
+  if (constructedFailed) {
+    console.error(`\ntouch-targets: FAIL [constructed] — ${constructedUndeclared.length - constructedAllowed} `
+      + `control(s) newly under ${FLOOR}px`);
+  }
+  console.error("  Each recorded baseline is awaiting triage; this is about the ones that just arrived.");
   process.exit(1);
 }
 
 stamp(STAMP_PATH, {
-  measured,
-  scenarios: scenariosRendered,
-  under: undeclared.length,
-  betweenFloors: betweenFloors.length,
-  classes: classes.length,
+  fixture: {
+    measured, scenarios: scenariosRendered, under: undeclared.length,
+    betweenFloors: betweenFloors.length, classes: classes.length,
+  },
+  constructed: {
+    measured: constructedMeasured, scenarios: constructedScenariosRendered, under: constructedUndeclared.length,
+    betweenFloors: constructedBetweenFloors.length, classes: constructedClasses.length,
+  },
 }, [
   "tools/live/touch-targets.mjs",
+  "tools/live/touch-target-measure.mjs",
+  "tools/live/render-assertion-bundle.mjs",
+  "tools/live/render-assertion-harness.ts",
   "tools/screenshots/scenarios.mjs",
   "styles.css",
 ]);
-console.log(`\ntouch-targets: PASS — nothing newly under ${FLOOR}px (baseline ${allowed}, ${classes.length} classes awaiting triage)`);
+console.log(`\ntouch-targets: PASS — nothing newly under ${FLOOR}px in either pass `
+  + `(fixture baseline ${allowed}, constructed baseline ${constructedAllowed})`);
 console.log("  what this does not prove: a bounding box is not a hit area. A control that clears");
 console.log("  the floor here can still be hard to hit if something overlaps it, and one that fails");
 console.log("  can still be comfortable if its parent carries the press.");
