@@ -30,7 +30,11 @@
     "what": "worktrees/025-row6-state-lanes was rebased onto main after main absorbed the one-to-one board port (854c748, 46a8525), which touched render-assertion-harness.ts and the tools/live/*.json evidence stamps but not this file or render-assertion-bundle.mjs. This file's own `raiseHistory` above (367 -> 422) auto-merged cleanly onto main, carrying no conflict, so re-measurement was to confirm the number still held rather than to resolve one.",
     "reMeasured": 422,
     "matchesRaiseHistory": true,
-    "verification": "`node tools/live/touch-targets.mjs` on the rebased tree: constructed pass reports 422 under the 28px floor against a recorded baseline of 422 (fixture pass 264 against 279, unaffected), exit 0, PASS in both passes. The board port changed no styles.css class this file's perClass breakdown names and mounted no additional constructed scenario, so an unchanged count was the expected outcome, now confirmed rather than assumed."
+    "measuredTotalBeforeRebase": 57060,
+    "measuredTotalAfterRebase": 50462,
+    "unstyledLinksConstructedBeforeRebase": 144,
+    "unstyledLinksConstructedAfterRebase": 72,
+    "verification": "`node tools/live/touch-targets.mjs` on the rebased tree: constructed pass reports 422 under the 28px floor against a recorded baseline of 422 (fixture pass 264 against 279, unaffected), exit 0, PASS in both passes. The board port changed no styles.css class this file's perClass breakdown names and mounted no additional constructed scenario, so an unchanged count was the expected outcome, now confirmed rather than assumed. The total interactive-element count the constructed pass scans dropped 57060 -> 50462 (stable across two independent runs), and `node tools/live/unstyled-links.mjs`'s constructed link total dropped 144 -> 72 in step — both consistent with the board port rewriting the kanban structure one-to-one, neither a regression: the pass/fail-relevant numbers (422 under-floor, 0 UA-default link findings) are exactly unchanged."
   },
   "lastTriage": {
     "recorded": "2026-09-04",
