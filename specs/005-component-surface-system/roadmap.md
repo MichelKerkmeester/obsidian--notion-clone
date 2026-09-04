@@ -28,7 +28,7 @@ contextType: "planning"
 **Owner:** Operator, with several agents holding phase folders concurrently — the four
 flagged live in §5 this morning, plus `027` and `028`, opened today to investigate the reports
 below.
-**Last updated:** 2026-09-02
+**Last updated:** 2026-09-04
 
 **Reconciliation note.** Sections 2, 5 and 6 were rewritten on 2026-08-30 against the working tree,
 `tools/lane/css-lane.json` and each phase's continuity block. The previous version listed nine
@@ -48,6 +48,13 @@ silent on them.
 published, and report 29 was fixed and partially confirmed. §1, §3, §4, §4A, §5.2, §5.3 and §9 are
 what this pass changed. §5, §5.0, §5.1, §6, §6A, §7, §8, §10, §11 and §12 were not re-audited and
 carry their own dates.
+
+**Fourth reconciliation note, 2026-09-04.** `037` and `038`'s port rows closed their in-repo
+comparison halves (row 38's AC-007 read and T12's own row, per §5.2) and release **0.0.20** cut,
+carrying both packets' residual work plus `043`'s constructed fixture families. A new never-tick
+row (39) was added for a fresh operator ruling the AC-007 read surfaced — keep the reference-faithful
+milestone/month-band label overpaint or reinstate a local fix. §4, §5.2 and §5.3 are what this pass
+changed; the rest were not re-audited and carry their own dates.
 
 **What this file does not do.** It does not resolve disagreements between a phase's own documents.
 Where they disagree, §7 names both readings and leaves the decision to the operator.
@@ -199,7 +206,13 @@ stack's outside-pointerdown check held a stale panel reference across an in-pane
 `038-board-kanban-port`'s T12 criterion, split out because the vendored reference carries no
 image files an in-repo session could compare against. Same day, row 38 added, raising the count
 to thirty-seven — the equivalent operator-only half of `037-timeline-gantt-port`'s AC-007
-criterion, the same vendored-reference-has-no-images problem, split out the same way.*
+criterion, the same vendored-reference-has-no-images problem, split out the same way. 2026-09-04
+(later the same day): row 38's in-repo half closed — a fresh reviewer (`30c4b746`) confirmed AC-007
+MET in-repo, zero divergence across 60/60 `pm-gantt-*` classes; row 38 itself is unaffected, since
+it names only the operator's own vault compare. Row 39 added, raising the count to thirty-eight —
+not an operator report either, but a fresh operator-only ruling that ask surfaced: whether to keep
+the reference-faithful milestone-label/month-band overpaint on the gantt's default render path or
+reinstate a local anti-collision fix, `037-timeline-gantt-port` `tasks.md` T050.*
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -256,7 +269,8 @@ not this note, is what should move them.
 | 35 | *"filter add condition closes / crashes it"*, then *"filter table sheet"* | `031` | **Fixed in 85ff504 (owner 031); release 1.4.3 pending; NOT operator-confirmed; open** | Same mechanism as row 34, on the filter panel: Add condition rebuilds the panel node, the overlay stack's captured reference went stale, and the next tap dismissed the sheet. Same `getPanel()` fix. Red observed in `sheet-rebuild.mjs` for the filter case; green after. Not released, not device-confirmed |
 | 36 | *"a lot of sheets have that"* — a named class, not a single symptom | `031` | **Fixed in 85ff504 (owner 031); release 1.4.3 pending; NOT operator-confirmed; open** | The named class is the same seam as rows 34-35 plus a second half on the embedded surface: `database-view.ts` and `embedded-database-renderer.ts` used a container-scoped `querySelector` for sort/filter/view-config/column-manager panels, which never matched once `mobile-bottom-sheet.ts` portals the sheet onto `document.body` — dismissal never registered there at all. Both renderers now pass their own `getPanel()` resolver. Not released, not device-confirmed |
 | 37 | Not an operator complaint — the operator-only half of `038-board-kanban-port`'s T12 criterion ("compare the two plugins side by side in the vault where both are installed"), split out because the vendored reference carries no image files an in-repo session could compare captures against | `038-board-kanban-port` | **Not started — awaiting the operator. Never tick this row.** | 2026-09-04: `038/tasks.md` T12 was amended (an orchestrator decision, reversible default, recorded in `038/implementation-summary.md`'s Key Decisions) into two halves. The in-repo half — comparing recaptured board screenshots against the reference SOURCE (`kanban.css`/`table.css`/`widgets.css` and the composites) with pixel measurements — stays a checkable task under T12 itself. This row is the half no session in this repo can close: the operator installing both plugins in one vault and comparing them directly |
-| 38 | Not an operator complaint — the operator-only half of `037-timeline-gantt-port`'s AC-007 criterion ("fresh reviewer's side-by-side screenshot read"), split out because the vendored reference carries no image files an in-repo session could compare captures against | `037-timeline-gantt-port` | **Not started — awaiting the operator. Never tick this row.** | 2026-09-04: `037/acceptance-criteria.md` AC-007's Verification cell was amended (an orchestrator decision, reversible default, recorded in `037/acceptance-criteria.md`'s Closure Statement and `037/goal.md`'s operator rows) into two halves, the same way `038`'s T12 was the same day. The in-repo half — comparing recaptured timeline screenshots against the reference SOURCE (`GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css`) with pixel measurements — stays a checkable item under AC-007 itself. This row is the half no session in this repo can close: the operator installing both plugins in one vault and comparing them directly |
+| 38 | Not an operator complaint — the operator-only half of `037-timeline-gantt-port`'s AC-007 criterion ("fresh reviewer's side-by-side screenshot read"), split out because the vendored reference carries no image files an in-repo session could compare captures against | `037-timeline-gantt-port` | **Not started — awaiting the operator. Never tick this row.** | 2026-09-04: `037/acceptance-criteria.md` AC-007's Verification cell was amended (an orchestrator decision, reversible default, recorded in `037/acceptance-criteria.md`'s Closure Statement and `037/goal.md`'s operator rows) into two halves, the same way `038`'s T12 was the same day. The in-repo half — comparing recaptured timeline screenshots against the reference SOURCE (`GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css`) with pixel measurements — stays a checkable item under AC-007 itself. **In-repo half MET 2026-09-04** (fresh reviewer, `30c4b746`, ran none of the gantt legs, `037/tasks.md` T048): 60 of 60 `pm-gantt-*` classes matched with zero divergence, the CSS copy is byte-faithful, and geometry matched exactly. This row is the half no session in this repo can close: the operator installing both plugins in one vault and comparing them directly |
+| 39 | Not an operator complaint — a fresh ruling this ask surfaced: whether to keep the milestone label overpainting the month-band label on the gantt's default render path (reference-faithful by construction) or reinstate a local anti-collision fix there | `037-timeline-gantt-port` | **Not started — awaiting the operator. Never tick this row.** | 2026-09-04: the fresh reviewer confirming row 38's in-repo half (`30c4b746`) also found `GanttHeaderRenderer`'s month-band label (`y=18`) and `GanttTaskBarRenderer`'s milestone label (`y=14`) painting on the same header SVG in the reference itself, so the overpaint the 1:1 copy reproduces is the reference's own design, not a defect this port introduced. This packet's own 1.4.9/1.4.10 local fix addressed a *different* overpaint (a milestone label crowded by the next bar in its lane) and is superseded on the default render path, not extended to this one — recorded as `037/tasks.md` T050, `037/goal.md`'s operator rows, and `037/implementation-summary.md`'s Key Decisions. This row is the operator's call: keep the reference-faithful shape as shipped, or ask for the local fix back |
 
 ### What the table says as a whole
 
@@ -593,8 +607,8 @@ are not part of the port.
 
 | Planned phase | Folder | What it ports | Status |
 |---|---|---|---|
-| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, shipped **1.4.4** (**0.0.9**); open-row fixes closed three of four `fa58c7f`+`b29bf7f`, reconciled `65fb7dd`, shipped **1.4.9** (**0.0.14**); the day-scale row closed after that cut, leg `7ca6cc2`, shipped **1.4.10** (**0.0.15**). **Reopened 2026-09-04 for a 1:1 gantt copy at the operator's request** — REQ-007 in `037`'s `spec.md`. **The 1:1 copy has now landed:** TypeScript leg `d30ea78` (GanttView/Header/Renderer/TaskBar/DragHandler/TimelineConfig adapted under MIT; scroll-position preservation added; no local undo/redo equivalent) + CSS leg `2a6d98f` (gantt.css copied verbatim; the off-by-default local-extensions `db-timeline-*` rules restored; touch-target ratchet 9974→320, merged tree 367), merged and reconciled onto main in `972c2cd`/`a00ad31`, released as **0.0.17** (`839712b`) and installed to the iCloud vault. Not operator-confirmed. A fresh visual review is in progress; a fidelity pass follows it |
-| 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Landed `b9e2321` + `a6fcd31`, shipped **1.4.5** (**0.0.10**); hover/drag/drop-target/empty-column row closed `7e36671`, shipped **1.4.8** (**0.0.13**). **Reopened 2026-09-04 for a 1:1 board copy at the operator's request** — REQ-007 in `038`'s `spec.md`. **The 1:1 copy has now landed:** TypeScript leg `1c5f465` (structure copied from Project Manager's KanbanView/Column/Card; a real drag bug found and fixed — cross-column drops never updated the status field) + CSS leg `4b4b404` (kanban.css copied verbatim under MIT), merged and reconciled onto main in `854c748`, released as **0.0.16** (`46a8525`) and installed to the iCloud vault. Not operator-confirmed. A fresh reviewer (T12) confirmed byte-identical stylesheet and exact geometry but found divergences now being fixed on `worktrees/027-board-fidelity`: palette names painted as inline colors and illegible in dark mode, the due chip left-aligned because the avatar stack was conditional, a "Sub" chip on every card, a missing badge icon, per-card priority strip, milestone/recurrence chips and due-soon tier, unscoped copied selectors that could style a co-installed Project Manager, and an extra 24px host inset. T12 stays open until that lands |
+| 1. Timeline and gantt | `037-timeline-gantt-port` | Their timeline and gantt surface, into our timeline renderer | Landed `0262386` + `55bff9b`, shipped **1.4.4** (**0.0.9**); open-row fixes closed three of four `fa58c7f`+`b29bf7f`, reconciled `65fb7dd`, shipped **1.4.9** (**0.0.14**); the day-scale row closed after that cut, leg `7ca6cc2`, shipped **1.4.10** (**0.0.15**). **Reopened 2026-09-04 for a 1:1 gantt copy at the operator's request** — REQ-007 in `037`'s `spec.md`. The 1:1 copy landed (TypeScript `d30ea78` + CSS `2a6d98f`, merged `972c2cd`/`a00ad31`), released as **0.0.17** (`839712b`). A fresh reviewer (T12's gantt counterpart, AC-007) found real fidelity divergences against the reference; that pass landed too (`119f5936`+`8c563a35`, reconciled `5fd4fc7d`, trued up `6d12740a`), released as **0.0.19** (`07f4500f`), followed by a residual-behaviour leg (week-label modes, the depends-elsewhere menu, add-subtask, undo/redo keys) and a closing leg (eight code + three fixture defects, `9e4d4b04`), both riding **0.0.20** (`ccc946c3`). **AC-007's in-repo half is now MET** by a fresh reviewer (`30c4b746`, `037/tasks.md` T048): 60/60 `pm-gantt-*` classes match with zero divergence, the CSS copy is byte-faithful, geometry matches exactly. That same read surfaced one operator-only ruling, not a defect: whether to keep the reference-faithful milestone-label/month-band overpaint on the default render path or reinstate a local fix (row 39 above). Not operator-confirmed on device. Open: AC-007's operator half (row 38) and the overpaint ruling (row 39) — both the operator's alone |
+| 2. Board | `038-board-kanban-port` | Their board surface, into our board renderer | Landed `b9e2321` + `a6fcd31`, shipped **1.4.5** (**0.0.10**); hover/drag/drop-target/empty-column row closed `7e36671`, shipped **1.4.8** (**0.0.13**). **Reopened 2026-09-04 for a 1:1 board copy at the operator's request** — REQ-007 in `038`'s `spec.md`. The 1:1 copy landed (TypeScript `1c5f465` + CSS `4b4b404`, merged `854c748`), released as **0.0.16** (`46a8525`). A fresh reviewer (T12) found real fidelity divergences against the reference — an inline-color palette, a left-aligned due chip, a stray "Sub" chip, missing badge icon/priority strip/milestone/recurrence chips/due-soon tier, unscoped selectors, an extra 24px host inset; that pass landed too (`a6abd0a9`+`cb6ef827`, reconciled `01883cf8`, trued up `b1e75124`), released as **0.0.18** (`96f878a5`), with its own closing fixes riding **0.0.19**/**0.0.20**. **T12's in-repo half is now MET** by a fourth fresh reviewer (`c563f08`): all fourteen carried-forward elements matched to the pixel against the reference source; T12 itself stays unticked. Not operator-confirmed on device. Open: T12's operator half (row 37) — the operator's alone |
 | 3. Calendar | `039-calendar-parity-port` | Their calendar surface, into our calendar renderer | Landed `57043e7` + `1588576` + `d8a2508`, shipped **1.4.6**. Not operator-confirmed; open defect rows live in `039`'s `goal.md` |
 | 4. Subtask model | `040-subtask-tree-port` | Their subtask model, into our data model | Landed `1d611db` + `00b7bd2`, shipped **1.4.7** (`214f6bd`); drag-reorder write-path row closed `535373a`, riding **1.4.8** (pending). Not operator-confirmed; open defect rows live in `040`'s `goal.md` |
 | 5. Shared UI and UX | `041-shared-ui-ux-port` | Their shared primitives, composites and interaction grammar | Landed `cb9aedf` + `25ae3a9`, shipped **1.4.6**; reduced-motion row closed `3f143df`+`a251a43`, reconciled `471860d`, riding **1.4.9** (pending). Not operator-confirmed; open rows in `041`'s `goal.md` now closed |
@@ -638,7 +652,17 @@ cut** (`07f4500f`), carrying `037`'s gantt fidelity pass (`119f5936`+`8c563a35`,
 chain, due-tier and badge-icon fidelity (`2cddc7cf`+`d896f90e`) and the responsive host padding,
 photograph avatars and milestone chips (`595dc283`+`7d5b3f90`, reconciled `fe42955d`).
 `manifest.json`, `package.json` and `versions.json` on main read **0.0.19**, and both tags are on
-`origin`. The cadence continues at **0.0.20** onward — always `0.0.N`, never a second `.N.N`.
+`origin`. **0.0.20 is cut** (`ccc946c3`), carrying: `037`'s gantt residual-behaviour pass — week-label
+modes, the depends-elsewhere menu, add-subtask through the record-creation path, and the reference's
+document-level undo/redo keys (`3c3d7123`, reconciled `1a6c8123`) — and its closing leg — persistence
+for two settings, the slot-duration gate, and the AC-007 reviewer's eight code plus three fixture
+fixes (`6d4b6223`, reconciled `999ea1c8`); `038`'s board T12 in-repo half MET by a fourth fresh
+reviewer (`4565ece9`, reconciled `4d7b657f`) and its host-inset fix (`595dc283`, reconciled
+`fe42955d`); `043`'s constructed panel/chrome/field fixture families, closing the parent DONE table's
+row 6 (`c4c74669`, reconciled `6fa715e5`/`2506bb2f`/`2242fa0a`, ticked `a78000ce`); and a full-tree
+capture refresh that returned `screenshots-fresh` to green (`349e22c4`). `manifest.json`,
+`package.json` and `versions.json` on main read **0.0.20**, and the tag is on `origin`. The cadence
+continues at **0.0.21** onward — always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
 folder (`.../obsidian/plugins/note-database`) with a `.backup-<old>` beside it. What each renumbered
@@ -653,9 +677,11 @@ touch-floor fix `a3781ae`), 0.0.16, was `038`'s board one-to-one copy, kanban st
 stylesheet, merged and reconciled in `854c748`, cut in `46a8525`, and **0.0.17**, the current cut —
 `037`'s gantt one-to-one copy, TypeScript structure and stylesheet, merged and reconciled in
 `972c2cd`/`a00ad31`, cut in `839712b`; **0.0.18**, `038`'s board fidelity pass, cut in `96f878a5`;
-and **0.0.19**, the current cut — `037`'s gantt fidelity pass plus the board's closing fixes, cut in
-`07f4500f`. The `0.0.16` through `0.0.19` tags are all present on `origin`. None of 0.0.7 through
-0.0.19 is operator-confirmed yet.
+and **0.0.19**, `037`'s gantt fidelity pass plus the board's closing fixes, cut in `07f4500f`; and
+**0.0.20**, the current cut — `037`'s gantt residual-behaviour and closing legs, `038`'s T12 in-repo
+close and inset fix, and `043`'s constructed fixture families, cut in `ccc946c3`. The `0.0.16`
+through `0.0.20` tags are all present on `origin`. None of 0.0.7 through 0.0.20 is operator-confirmed
+yet.
 
 **Release-mechanics gotcha, surfaced during the rename:** `.github/workflows/release.yml`
 auto-creates a GitHub release on any `*.*.*` tag push, and it raced the manual tag-recreation pass —

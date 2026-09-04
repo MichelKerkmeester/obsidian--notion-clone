@@ -853,6 +853,65 @@ P2-A/B/C/D/E/H) and three fixture items, each fixed red-first per the reviewer's
 
 ---
 
+<!-- ANCHOR:phase-8 -->
+## Phase 8: AC-007 In-Repo Confirmation and Residual Dispositions (2026-09-04, T048-T051)
+
+This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing leg (T039-T047,
+`9e4d4b04`) landed. The reviewer ran none of the gantt legs.
+
+- [ ] **T048** Fresh AC-007 in-repo verifier reads the recaptured timeline screenshots against the
+      reference SOURCE with pixel measurements — REQ-007.
+      **In-repo half MET 2026-09-04 (fresh reviewer, `30c4b746`, ran none of the gantt legs):** 60
+      of 60 `pm-gantt-*` classes match the reference with zero divergence either direction
+      (`grep`'d from `calendar-timeline-renderer.ts`'s `createDiv`/`createEl`/`ganttSvgElement`
+      calls against `gantt.css`/`widgets.css`/`table.css`/`utilities.css`'s selectors); the copied
+      CSS is byte-faithful (`gantt.css`'s 278 lines plus the widgets/utilities/table companion
+      blocks); geometry measured from the recaptured screenshots matches the reference exactly —
+      label column 280px desktop / 160px phone, row height 44px, header 56px, day-unit widths
+      44/22/9/5/2px across the five scales, bar padding 8px, bar height 28px, corner radius 7px,
+      milestone diamond 24px across, progress fill 62%, dependency-arrow marker 8x8 with `refX` 6 /
+      `refY` 3; all seven of T023-T033's own closing-leg tests still exist and pass (39/39 across
+      the four suites they name, tick parity 120/120), `npx tsc --noEmit` exit 0. Before-value for
+      this same criterion: the first fresh read (`a00ad31`) found seventeen divergences (D1-D17);
+      the second (`a78000c`) found two (P1-A, P1-B); this read found zero. The operator's own vault
+      side-by-side compare remains open — tracked as row 38 in the parent `../roadmap.md` §4 and as
+      an operator-only row in this packet's `goal.md`, never ticked by an agent. T048 stays
+      unticked until both halves close, mirroring `038-board-kanban-port`'s own T12.
+- [x] **T049** [P2-F disposition] Invalid-date rows keep a row band and no bar — accepted
+      adaptation, not a reference divergence (`src/views/calendar-timeline-renderer.ts:~1298-1300`).
+      REQ-003's local invalid-event repair is preserved unchanged by the 1:1 port: an invalid-date
+      row still renders its row band with no bar, exactly as the pre-port renderer did, and the
+      reference has no invalid-date case of its own to diverge from. No code change; recorded here
+      because the fresh reviewer surfaced it and no prior task named it.
+- [x] **T050** [P2-G disposition] Milestone label overpaints the month-band label on the default
+      render path — reference-faithful by construction, not a regression; OPERATOR DECISION added.
+      `GanttHeaderRenderer`'s month-band label paints at `y=18` and `GanttTaskBarRenderer`'s
+      milestone label at `y=14`, on the same header SVG — the overpaint is a property of the
+      reference's own two renderers sharing one coordinate space, reproduced faithfully by the 1:1
+      copy, not a defect this port introduced. The 1.4.9/1.4.10 local fix this packet's own
+      `spec.md` Status field records (`resolveTimelineMilestoneLabelPlacement`, moving a crowded
+      label above its bar) is superseded by the verbatim copy on the default render path and no
+      longer runs there (it still applies inside the gated `renderTimelineLocal` extensions path).
+      Keeping the reference-faithful overpaint versus reinstating a local anti-collision fix on the
+      default path is an operator call, not an agent one — added as row 39 (never-tick) in the
+      parent `../roadmap.md` §4 and as a new operator-only row in this packet's `goal.md`. No code
+      change; this task closes by recording the disposition and adding both rows, not by resolving
+      the decision.
+- [x] **T051** [P2-I disposition] Fixture band parity — already closed by T047(b), never named by
+      id. The per-band month-parity gap the reviewer flagged is the same defect T047's own part (b)
+      already fixed (`renderGanttMonthBands` deriving each band's own month/year for both label and
+      parity class, `tools/screenshots/scenarios/temporal.mjs:1050-1074`) — confirmed unchanged and
+      still green (`temporal-tick-parity.test.mjs` 120/120). No further code change; this task
+      exists only to give the disposition a task id, since T047's own entry never cited "P2-I".
+      *Follow-up noted, not actioned this leg:* the doc comment at
+      `calendar-timeline-renderer.ts:~884` describing the label row's children omits the
+      depends-elsewhere chip T035 added; a comment-only edit re-keys 56 render-assertion captures
+      by content hash, so it is deferred to the next real code change that touches that file rather
+      than paid for on its own here.
+<!-- /ANCHOR:phase-8 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 

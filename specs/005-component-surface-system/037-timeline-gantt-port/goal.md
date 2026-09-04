@@ -10,15 +10,15 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T16:35:00Z"
-    last_updated_by: "gantt-ac007-wording-amendment"
-    recent_action: "Closed AC-007 reviewer's 8 code + 3 fixture defects (T039-T047)"
-    next_safe_action: "Await a fresh AC-007 reviewer read"
+    last_updated_at: "2026-09-04T15:20:00Z"
+    last_updated_by: "gantt-ac007-in-repo-confirmation"
+    recent_action: "AC-007 in-repo half MET (T048); added the milestone-overpaint operator row"
+    next_safe_action: "Await the operator's vault compare and the overpaint keep-vs-revert ruling"
     blockers:
-      - "Not operator-confirmed: the gantt has not been checked on iOS"
-      - "Seven product/harness defects from verification round nine remain open (see Completion Criteria)"
-      - "2026-09-04: operator judged the landed legs not a close-enough copy; REQ-007's 1:1 leg pair has not started"
-      - "2026-09-04: the operator vault-comparison row (Completion Criteria, added this amendment) can only be closed by the operator; nothing in this repository can close it"
+      - "Not operator-confirmed: the gantt has not been checked on iOS (0.0.16-0.0.20 all installed)"
+      - "AC-007's operator half (roadmap.md §4 row 38): only the operator can run the vault compare"
+      - "Milestone-overpaint keep-vs-revert call (roadmap.md §4 row 39, new): operator-only ruling"
+      - "T003, T009, T013, T014 and the CHK-* checklist rows in tasks.md predate the 1:1 amendment"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "037-timeline-gantt-port"
       parent_session_id: null
-    completion_pct: 53
+    completion_pct: 50
     open_questions:
       - "Whether the dependency-link seam persists as note frontmatter or a derived/computed field"
     answered_questions:
@@ -203,16 +203,21 @@ Frozen choices. Changing one is an amendment.
       language, bars, milestones, progress, dependency arrows, drag and resize behaviour, and the
       same defaults for row height and unit widths — proven by a DOM-structure parity test and a
       fresh reviewer's side-by-side screenshot read against the reference or the operator's vault
-      comparison (REQ-007, added 2026-09-04). **Not started.** Today's observed baseline
-      (2026-09-04, this session's read of `calendar-timeline-renderer.ts`/
+      comparison (REQ-007, added 2026-09-04). **In-repo half MET 2026-09-04** (fresh reviewer,
+      `30c4b746`, ran none of the gantt legs, `tasks.md` T048): 60 of 60 `pm-gantt-*` classes match
+      the reference with zero divergence, the CSS copy is byte-faithful, and measured geometry
+      (label width, row/header height, day-unit widths, bar padding/height/radius, milestone
+      diamond, progress fill, link marker) matches the reference exactly — full evidence in
+      `tasks.md` T048 and `acceptance-criteria.md` AC-007. Baseline before the leg pair started, now
+      superseded (2026-09-04, that session's read of `calendar-timeline-renderer.ts`/
       `calendar-timeline-model.ts`): `db-timeline-*` classes (not the reference's vocabulary), five
       scales (day/week/month/quarter/year) at 60/100/80/15/4px unit-width defaults
       (`getTimelineColumnWidthSpec`, `calendar-timeline-model.ts:183-201` — confirmed against this
       directive's own dispatch numbers), a viewport-centred window
       (`resolveTimelineDayCentredStartMinutes` and `getTimelineViewportWindow`), and a scale
       trigger button with sibling link buttons — a local composition rewritten from the reference's
-      behavior contract, not its DOM/class copy. Red to record: a DOM-structure parity test,
-      written and observed failing before the leg pair starts.
+      behavior contract, not its DOM/class copy. This row still stays unticked: the operator's vault
+      compare below has not run, and per D3 only that closes it.
 - [ ] **The operator compares the rewritten timeline against obsidian-pm's gantt side by side in
       the vault where both plugins are installed.** Only the operator closes this row; nothing in
       this tree can close it. Added 2026-09-04 (amendment, orchestrator decision, reversible
@@ -221,8 +226,21 @@ Frozen choices. Changing one is an amendment.
       screenshot files — it carries none, so that half of AC-007 cannot be met from this repo
       alone, the same problem `038-board-kanban-port`'s T12 named the same day. This row is the
       operator half AC-007 cannot close from an in-repo session; the in-repo half (captures vs.
-      the reference SOURCE, pixel-measured) stays a checkable item under `tasks.md`'s AC-007
-      closing pass. Also recorded as row 38 in the parent `../roadmap.md` §4 operator table.
+      the reference SOURCE, pixel-measured) closed 2026-09-04 (see the row above). Also recorded as
+      row 38 in the parent `../roadmap.md` §4 operator table.
+- [ ] **The operator rules on the milestone label overpainting the month-band label on the default
+      render path.** Only the operator closes this row; nothing in this tree can close it. Added
+      2026-09-04 (`tasks.md` T050, a fresh AC-007 reviewer's P2-G finding): `GanttHeaderRenderer`'s
+      month-band label paints at `y=18` and `GanttTaskBarRenderer`'s milestone label at `y=14`, on
+      the same header SVG, so the overpaint is a property of the reference's own two renderers
+      sharing one coordinate space — reproduced faithfully by the 1:1 copy, not a defect this port
+      introduced. This packet's own `spec.md` Status field records a 1.4.9/1.4.10 local fix for a
+      different overpaint (a milestone label crowded by the *next bar in its lane*,
+      `resolveTimelineMilestoneLabelPlacement`); that fix is superseded on the default render path
+      by the verbatim copy and no longer runs there (it still applies inside the gated
+      `renderTimelineLocal` extensions path). Keep the reference-faithful header/milestone overpaint
+      as shipped, or reinstate a local anti-collision adjustment on the default path too — the
+      operator's call. Also recorded as row 39 in the parent `../roadmap.md` §4 operator table.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -243,6 +261,7 @@ Frozen choices. Changing one is an amendment.
 | Leg c: the `.is-label-above` stylesheet rules, and the screenshot fixture rebuilt to call the changed model code | Three of four photographed | `styles.css` under an acquired-and-released `css-lane` hold (`32148b7b7646` -> `4f74f3bd0b1c`, release names all 27 changed captures); `temporal.mjs` now takes its title, first-tick anchor, day column width and milestone placement from the viewport window instead of frozen constants, and `temporal-tick-parity.test.mjs` binds each mirror to the real export. Two independent mutations observed red and restored byte-identically: forcing the placement mirror to `"inline"` (5 failed) and mutating the title mirror's same-month branch (1 failed). Gate: tsc=0, vitest=89 files/913 tests (908 + main's 5 board additions), lint=169 (= baseline), scan-comments=0, touch-targets under=264 vs the 279 baseline, `npm run gate` 25 green twice. Title, tick-clip and milestone rows are capture-confirmed; the day row's centring half is not — see the two fixture-fidelity rows below. |
 | Leg d: closed both day-branch fixture-fidelity gaps below — centred window, `HH` tick label | Four of four photographed | `temporal.mjs`'s `timelineViewportWindow` takes `now` and centres the day branch through the same clamp `resolveTimelineDayCentredStartMinutes` uses; `timelineTicksFor`'s day branch drops the `":00"` suffix. `temporal-tick-parity.test.mjs` gained window- and tick-label-parity assertions per device width, red-first (4 of 118 failed: `startMinutes` 0 vs 60/402px-mobile 480, labels `"HH:00"` vs `"HH"`), green after (118/118). No `styles.css` edit; `css-lane.json` release names all 16 recaptured PNGs (4 real, 12 verified encoder noise). Gate: tsc=0, vitest=93 files/929 tests, lint:tools=0, scan-comments=0, `npm run gate` 25 green. |
 | AC-007 fresh-reviewer closing leg (`tasks.md` T039-T047): persistence, slot-duration gate, label-row order, Layout heading, is-active/is-linking scoping, coarse-pointer CSS scoping, drag-restore, subtask-creation rollback, three fixture fidelity gaps | Eight code defects + three fixture defects fixed, all photographed | Every item red-first (exact failing assertions on the T039-T047 rows). Gate: tsc=0, vitest=101 files/1037 tests, lint=172 (= baseline), lint:tools=0, scan-comments=0. `css-lane.json` release names all 26 changed captures (T044); `npm run gate` 25 green (first run: 24 green/1 red — `evidence`, 8 stale artefacts re-run through their own generating tools). Committed `9e4d4b04`. AC-007's own Verification cell amended into in-repo/operator halves (see `acceptance-criteria.md`); AC-007 itself stays `Unmet`, left for a fresh reviewer's final read. |
+| AC-007 in-repo confirmation and residual dispositions (`tasks.md` T048-T051) | In-repo half MET; three residual items dispositioned, no code change | Fresh reviewer (`30c4b746`, ran none of the gantt legs) found zero divergence: 60/60 `pm-gantt-*` classes matched, CSS byte-faithful, geometry matched exactly; seven closing-leg tests still pass (39/39, tick parity 120/120), tsc=0. T049 (P2-F): invalid-date rows keep a row band and no bar — accepted adaptation. T050 (P2-G): milestone label overpaints the month-band label on the default path — reference-faithful by construction; new operator row added (row 39 above, and `../roadmap.md` §4). T051 (P2-I): fixture band parity already closed by T047(b), given a task id. Doc-only pass; no code changed, `npm run gate` not re-run by this leg. |
 
 ### Deviations and findings
 
@@ -283,4 +302,26 @@ reference files onto our renderer, then `cli-codex` verbatim CSS copy and fixtur
 first via a DOM-structure parity test (T019), then a fresh in-runtime verifier reading captures
 side by side with the reference's own screenshots or the operator's vault comparison. No code has
 changed yet this pass — this is the documentation of the amendment, not its implementation.
+
+### 2026-09-04 — Amendment: AC-007 in-repo half MET; milestone-overpaint operator row added
+
+A fresh reviewer (`30c4b746`, ran none of this packet's legs) confirmed the in-repo half of the
+REQ-007 completion criterion and AC-007's own split evidence bar: zero divergence across 60/60
+`pm-gantt-*` classes, a byte-faithful `gantt.css` copy, and geometry matching the reference exactly
+(full evidence on the REQ-007 row above, `tasks.md` T048, and `acceptance-criteria.md` AC-007).
+That row and AC-007 both stay unticked/`Unmet` per D3 — the operator's own vault compare has not
+run. The same read surfaced a genuinely new finding, not a regression of any prior fix: on the
+default (1:1) render path, the milestone label overpaints the month-band label, because
+`GanttHeaderRenderer` and `GanttTaskBarRenderer` paint at `y=18` and `y=14` on the same header SVG
+in the reference itself — reproduced faithfully by the port. This is a keep-vs-revert call for the
+operator, not an agent one, so a new completion criterion is added above, unticked, alongside the
+existing vault-compare row (row 39 in the parent `../roadmap.md` §4, mirroring row 38's own
+never-tick pattern). This adds one row to the Completion Criteria tree (19 -> 20 total items);
+ticked count is unchanged at 10, so `completion_pct` moves from its recorded 53 to **10/20 = 50**
+(recomputed directly from the checklist above, both sections combined). `tasks.md` gains T048-T051
+for the same reason: T048 documents the in-repo confirmation, T049/T051 record two residual
+dispositions with no code change owed (an accepted invalid-date adaptation and an already-closed
+fixture-parity item never given an id), and T050 records the milestone-overpaint disposition and
+adds the new row. No code changed this pass — this is a confirmation and a disposition record, not
+an implementation.
 <!-- /ANCHOR:log -->

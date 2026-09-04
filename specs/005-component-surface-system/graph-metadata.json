@@ -290,7 +290,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-04T13:22:44.268Z",
+    "last_save_at": "2026-09-04T16:40:43.996Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -298,11 +298,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:4ff6ca9f4591ccf30e149a75eb4d1d6b14accbaced9bebc865aaf453468277b9",
+    "source_fingerprint": "sha256:55595a0f77fe003f732916f7c8bba2675e5ea93359a59fa28af0f948de361f66",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "dd799827e3766c5cf337fc494a9c175285f03f63c81f75c59bc45d66a5f5e33c",
-      "handover.md": "85c835d137599d2ed145b09fca4a38713399562f15addfc1ddf685ec7ce8a322"
+      "spec.md": "4492b09afc9bcc18d7e3aa416cbc2c32fd97b37198e4809f616b0e64d29d2b10",
+      "handover.md": "0c4d828f4442b0c9561fa256430d7ac500f7451b72272780c0bcf2c066a239de"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"

@@ -11,14 +11,15 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T16:50:00Z"
-    last_updated_by: "gantt-close-landing"
-    recent_action: "Rebased and landed the AC-007 closing fixes onto main"
-    next_safe_action: "Await a fresh AC-007 reviewer read on main"
+    last_updated_at: "2026-09-04T15:20:00Z"
+    last_updated_by: "gantt-ac007-in-repo-confirmation"
+    recent_action: "AC-007 in-repo half MET (T048); dispositioned P2-F/P2-G/P2-I (T049-T051)"
+    next_safe_action: "Await the operator's vault compare and the overpaint keep-vs-revert ruling"
     blockers:
-      - "Not operator-confirmed: the gantt has not been checked on iOS"
-      - "T003, T009, T013, T014 and the CHK-* checklist rows in tasks.md predate the 1:1 amendment and remain open — out of scope for the CSS-leg dispatch that closed T021/T022, and out of scope for the T034-T038 residual-behaviour leg"
-      - "AC-007's operator vault-comparison half (goal.md operator rows, parent roadmap.md §4 row 38) can only be closed by the operator"
+      - "Not operator-confirmed: the gantt has not been checked on iOS (0.0.16-0.0.20 all installed)"
+      - "T003, T009, T013, T014 and the CHK-* rows in tasks.md predate the 1:1 amendment, remain open"
+      - "AC-007's operator vault-compare (roadmap.md §4 row 38) can only be closed by the operator"
+      - "Milestone-overpaint keep-vs-revert call (roadmap.md §4 row 39, new) is operator-only"
     key_files:
       - "src/views/calendar-timeline-renderer.ts"
       - "src/views/database-view.ts"
@@ -188,6 +189,7 @@ reconciliation, 25/25 green after.
 | Touch-targets baseline raised 215 -> 279 accepted without a new exemption | A/B against a clean HEAD showed the 64 extra are five pre-existing 20px timeline classes now measured across four new scale scenarios, not a new class; the link dot is a real 28x28 element |
 | Eleven round-nine defects recorded as open rather than fixed in this leg | The landing round's own scope was the six-item closure gate (module map, link seam, keep-local behaviours, css-lane, gate, validate); newly found defects are tracked in `goal.md` §3 rather than silently expanding this leg's scope |
 | **2026-09-04, orchestrator decision (reversible default):** amend AC-007's Verification cell from "fresh reviewer's side-by-side screenshot read" into an in-repo half (captures vs. the reference SOURCE, pixel-measured) plus an operator half (vault side-by-side, tracked as a never-tick row in `goal.md` and the parent `../roadmap.md` §4) | The vendored reference at `specs/context/obsidian-pm-main` carries zero screenshot files, so no in-repo session can meet the original wording's "against the reference's own screenshots" half — the same defect `038-board-kanban-port`'s T12 named the same day, fixed the same way. The operator may restore the original wording at any time; nothing here is a disposition change and AC-007 itself stays `Unmet` |
+| **2026-09-04, orchestrator decision (records an open question, does not resolve it):** the milestone label overpainting the month-band label on the default render path is left as shipped, reference-faithful, pending an operator ruling recorded as a new never-tick row (`goal.md`, `../roadmap.md` §4 row 39) rather than fixed locally | `GanttHeaderRenderer`'s month-band label and `GanttTaskBarRenderer`'s milestone label paint at `y=18`/`y=14` on the same header SVG in the reference itself, so the overpaint is the reference's own design, faithfully copied — not a defect introduced by this port. This packet's own 1.4.9/1.4.10 fix addressed a different overpaint (a milestone label crowded by the next bar in its lane) and is superseded on the default path, not extended to this one, because REQ-007's 1:1 mandate does not itself decide whether faithfulness or local polish wins here |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -246,6 +248,8 @@ reconciliation, 25/25 green after.
 | Second post-rebase reconciliation (`origin/main` moved again mid-landing: constructed fixture families, the board-inset fix, and its own timeline/board capture reconciliations) | `styles.css` auto-merged clean again, moving to a new merged hash (`28b394491fdb`); manifest grew to 528 scenarios. Recapture found 4 real content-changed captures this time — all 4 `constructed-timeline-toolbar-options` variants — because main independently landed a per-field-type row-icon change to the options popover; opened and read all 4, confirming the new icons (calendar/tag/scale/hash/palette per row) compose correctly with this leg's own Week label row (`#` icon, still at the documented position). 6 further files moved bytes only (re-encode noise, restored to `HEAD`). `npx tsc --noEmit` exit 0; `npx vitest run` 1023/1023; `npm run lint` 172 (unchanged); `scan-comments` PASS; `touch-targets.mjs` re-measured three times, stable at fixture `199/279` and constructed `1223/1223`, 0 new either pass; `npm run gate` 25/25 green |
 | AC-007 fresh-reviewer closing leg (2026-09-04, in-runtime, `9e4d4b04`) — 8 code defects + 3 fixture defects, each red-first | **P1-A** persistence: `data-source.test.ts` "round-trips timelineLocalExtensions and timelineWeekLabel…" — `AssertionError: expected undefined to be true` (`:135`); fixed in `parseViewConfig`/`toViewPayload` (`data-source.ts:1095-1096,1318-1319`) and the embedded codeblock path (`embedded-database-renderer.ts:3832-3833`). **P1-B** slot-duration gate: `AssertionError: … to not include 'Time slot duration'` (`calendar-timeline-toolbar-renderer.test.ts:108`); fixed by gating on `timelineLocalExtensions === true && timelineScale === "day"` (`:242`). **P2-A** label-row order: `AssertionError: expected 4 to be less than 3` (`calendar-timeline-gantt.test.ts:1141`); elsewhere chip moved before the progress span (`calendar-timeline-renderer.ts:950-976`). **P2-B** Layout heading wiped by its own `empty()`: `AssertionError: … to include 'Layout'` (`calendar-timeline-toolbar-renderer.test.ts:134`); a nested content div now scopes the rebuild below the heading (`:160-164`). **P2-C** `is-active`/`is-linking` on the pm-gantt tree: `AssertionError: … not to contain 'is-active'` (`calendar-timeline-gantt.test.ts:862`); both now gate on `this.timelineRoot?.hasClass("db-timeline")` (`calendar-timeline-renderer.ts:2140`). **P2-D** coarse-pointer CSS unscoped: `styles.css:18090-18108` selectors now carry `.note-database-container`, matching the entry rule; CSS lane acquire→edit→release (`e357f63d13ac`, all 26 changed captures named). **P2-E** failed date-drag save left the bar dragged: `AssertionError: expected '1647' to be '1656'` (`calendar-timeline-gantt.test.ts:987`); `restore()` now runs in the rejection catch (`:1621-1624`). **P2-H** `createSubtaskRecord` orphan risk: the child-creation promise rejected uncaught (`database-view.test.ts:381`); a `try`/`catch` now trashes the child and drops the stray history entry on a parent-write throw (`database-view.ts:10936` region). **Fixtures** (`temporal.mjs`): 280px label column on every device (should be 160px phone) — red `temporal-tick-parity.test.mjs:531`; month bands labelled with the window's start month/array-index parity instead of each band's own month — red `:511`, before/after screenshots confirm "FEB 26"×2 → "MAR 26"/"APR 26"; Week-scale toolbar fixture showed a day-only "Slot duration" row — red `:142`. All three fixed, `temporal-tick-parity.test.mjs` 120/120. **Full verification:** `npx tsc --noEmit` exit 0; `npx vitest run` 101 files/1037 tests; `npm run lint` 172 (= baseline, no new finding in any touched file); `npm run lint:tools` 0; `scan-comments` PASS (398 files); `npm run screenshots` run twice (528 entries each; the first restore batch mistakenly reverted 5 genuinely-changed captures, caught before commit and corrected by a second full recapture + narrower restore); 6 representative before/after pairs read directly beside their `HEAD` copies, 7 genuinely unrelated re-encode/drift captures restored to `HEAD`. `npm run gate`: first run 24 green/1 red (`evidence`, 8 `tools/live/*.json` artefacts stale against T044's new `styles.css` hash); each re-run through its own generating tool per `evidence.mjs`'s own instruction; second run 25/25 green |
 | Post-rebase reconciliation (`worktrees/034-gantt-close` onto `origin/main` at `5beb1671`, held until a parallel `worktrees/035-captures-refresh` leg landed `349e22c4`'s full-tree screenshot refresh first) | `styles.css` auto-merged clean: the AC-007 closing leg's `.note-database-container` hit-area scoping (~18090) applied cleanly on top of main's unrelated post-`a78000c` history; merged hash `e357f63d13ac` exactly matches this branch's own pre-rebase local hash, confirming main carried no further edit to the same bytes. `tools/lane/css-lane.json` merged as main's 223-entry history plus this branch's own acquire+release pair (already carrying `e357f63d13ac` and the full 26-capture note), then a new reconciliation release entry appended naming the 6 captures re-opened this session. `screenshots/manifest.json` rebuilt from a fresh 528-entry recapture: all 26 of the branch's own timeline captures reproduced byte-identical to what was already committed (0 further git diff); 10 more files the recapture moved were pixelHash/layoutHash-identical to `HEAD` (the established `constructed-owned-menu`/`constructed-icon-picker`/`constructed-sort-panel-calendar`/`constructed-record-detail`/board-family re-encode noise prior legs already named) and restored to `HEAD` bytes; every entry's `sourceHashes.styles.css` moved `28b394491fdb` → `e357f63d13ac` globally. `npx tsc --noEmit` exit 0; `npx vitest run` 1037/1037; `npm run lint` 172 (unchanged); `npm run lint:tools` clean; `scan-comments` PASS; `npm run screenshots:verify` 0 stale; `npm run gate` 25/25 green; `touch-targets.mjs` re-measured three times, stable at fixture `279`/constructed `1223`, 0 new each pass |
+| AC-007 in-repo confirmation (2026-09-04, fresh reviewer, `30c4b746`, ran none of the gantt legs, `tasks.md` T048) | 60 of 60 `pm-gantt-*` classes matched the reference with zero divergence either direction (`grep`'d from `calendar-timeline-renderer.ts`'s `createDiv`/`createEl`/`ganttSvgElement` calls against `gantt.css`/`widgets.css`/`table.css`/`utilities.css`'s selectors); the copied CSS is byte-faithful (`gantt.css`'s 278 lines plus the widgets/utilities/table companion blocks); geometry measured from the recaptured screenshots matched the reference exactly — label column 280px desktop / 160px phone, row height 44px, header 56px, day-unit widths 44/22/9/5/2px, bar padding 8px, bar height 28px, corner radius 7px, milestone diamond 24px across, progress fill 62%, dependency-arrow marker 8x8 with `refX` 6 / `refY` 3. All seven of T023-T033's own closing-leg tests still exist and pass (39/39 across the four suites they name, tick parity 120/120); `npx tsc --noEmit` exit 0. Before-value for this same criterion: the first fresh read (`a00ad31`) found seventeen divergences (D1-D17); the second (`a78000c`) found two (P1-A, P1-B); this read found zero. No code changed; the operator's own vault side-by-side compare (roadmap.md §4 row 38) remains open |
+| Residual dispositions, no code change (T049-T051, same session) | **P2-F** (invalid-date rows keep a row band and no bar) — accepted adaptation: REQ-003's local invalid-event repair is preserved unchanged by the 1:1 port, and the reference has no invalid-date case of its own to diverge from. **P2-G** (milestone label overpaints the month-band label on the default render path) — reference-faithful by construction: `GanttHeaderRenderer`'s month-band label paints at `y=18` and `GanttTaskBarRenderer`'s milestone label at `y=14` on the same header SVG in the reference itself; the 1.4.9/1.4.10 local fix for a *different* overpaint (a milestone label crowded by the next bar in its lane) is superseded on the default path and no longer runs there. Recorded as a new operator-only row (`goal.md`, `../roadmap.md` §4 row 39) rather than fixed — keep-vs-revert is the operator's call. **P2-I** (fixture band parity) — already closed by T047(b) (`renderGanttMonthBands` deriving each band's own month/year), confirmed still green (`temporal-tick-parity.test.mjs` 120/120) and given a task id for the first time |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -281,6 +285,21 @@ reconciliation, 25/25 green after.
    today-centred content stays in frame.
 10. **Pre-existing duplicated CSS.** `.db-timeline-event.is-all-day` remains defined at two `styles.css`
     blocks; not introduced by this port.
+12. **Invalid-date rows render a row band with no bar (P2-F, accepted adaptation, not a defect).**
+    REQ-003's local invalid-event repair is preserved unchanged by the 1:1 port
+    (`src/views/calendar-timeline-renderer.ts:~1298-1300`); the reference has no invalid-date case
+    of its own to diverge from, so this is this repository's own data-model handling, not a
+    fidelity gap. No action owed.
+13. **Milestone label overpaints the month-band label on the default render path (P2-G,
+    reference-faithful by construction; operator decision pending).** `GanttHeaderRenderer`'s
+    month-band label paints at `y=18` and `GanttTaskBarRenderer`'s milestone label at `y=14`, on
+    the same header SVG, in the reference itself — reproduced faithfully by the 1:1 copy. This is
+    a different overpaint from item 6 above (which fixes a milestone label crowded by the *next
+    bar in its lane*, still true and unaffected); item 6's fix is superseded on the default render
+    path and no longer runs there (it still applies inside the gated `renderTimelineLocal`
+    extensions path). Keep the reference-faithful overpaint as shipped, or reinstate a local
+    anti-collision adjustment on the default path too — recorded as a new operator-only row
+    (`goal.md`, `../roadmap.md` §4 row 39), not resolved here.
 <!-- /ANCHOR:limitations -->
 
 ---
@@ -343,6 +362,19 @@ drive the elsewhere-menu click or the undo keys was investigated and declined: t
 harness's `Menu` stub is a deliberate `outOfScope` throw, and its timeline action bag has no host
 history stack behind it — both behaviours are proven by the vitest seams instead. T003/T009/T013/T014
 and the CHK-* rows remain the only items still open.
+
+**T048-T051 are now closed** (2026-09-04, doc-only, no code change): a fresh reviewer (`30c4b746`,
+ran none of the gantt legs) confirmed AC-007's in-repo half MET — 60/60 `pm-gantt-*` classes
+matched with zero divergence, the CSS copy is byte-faithful, and geometry matched exactly (T048).
+The same read surfaced three residual items no prior task had named: T049 dispositions an
+accepted invalid-date adaptation (P2-F, no fix owed); T050 dispositions a newly found,
+reference-faithful header/milestone-label overpaint on the default render path (P2-G) as an
+operator keep-vs-revert call, adding row 39 to the parent `../roadmap.md` §4 and a matching
+operator-only row to `goal.md`; T051 gives an already-closed fixture-parity fix (T047(b)) a task
+id it never had (P2-I). **What remains before the whole packet can claim `[x]` on every task**:
+T003, T009, T013, T014 and the CHK-* checklist rows (unchanged from the prior leg), plus the two
+operator-only rows — the vault side-by-side compare (row 38) and the milestone-overpaint ruling
+(row 39, new) — neither of which any agent can close.
 <!-- /ANCHOR:next-leg -->
 
 ---

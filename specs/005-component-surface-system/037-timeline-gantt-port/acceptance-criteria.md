@@ -9,11 +9,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T16:35:00Z"
-    last_updated_by: "gantt-ac007-wording-amendment"
-    recent_action: "Amended AC-007 verification cell; closed reviewer's 11 defects"
-    next_safe_action: "Await a fresh AC-007 reviewer read"
-    blockers: []
+    last_updated_at: "2026-09-04T15:20:00Z"
+    last_updated_by: "gantt-ac007-in-repo-confirmation"
+    recent_action: "Confirmed AC-007's in-repo half MET (tasks.md T048); dispositioned P2-F/G/I"
+    next_safe_action: "Await the operator's vault side-by-side compare"
+    blockers:
+      - "AC-007's operator half (roadmap.md §4 row 38, goal.md operator rows) can only be closed by the operator"
     key_files:
       - "spec.md"
       - "goal.md"
@@ -58,7 +59,7 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-004 | REQ-004 | Given any code comment this phase writes, When reviewed, Then it carries no spec path, phase number, task id, or requirement id | `grep` scan of the changed diff + pre-commit hook | Unmet | - |
 | AC-005 | REQ-005 | Given `styles.css` is lane-held, When `db-timeline-*` rules are edited, Then the lane was acquired first and released only after a read recapture naming the changed captures | `tools/lane/css-lane.json` history entry + `reviewed` array | Unmet | - |
 | AC-006 | REQ-006 | Given the packet's full changed-file set, When `npm run gate` runs, Then it reports `gate: PASS` and exit 0, observed by a fresh in-runtime agent (not a delegate's self-report) | `npm run gate` output + exit code, read directly | Unmet | - |
-| AC-007 | REQ-007 | Given `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css` (added 2026-09-04), When the 1:1 leg pair lands, Then the timeline's DOM structure, class vocabulary, visual language, interactions, and row-height/unit-width defaults match the reference, and every named local extension renders default-off unless a setting is turned on | DOM-structure parity test + (amended 2026-09-04) two halves: **in-repo** — a fresh session that ran none of this packet's legs compares the recaptured captures against the reference SOURCE (`GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css`) with pixel measurements; **operator** — the operator compares the two plugins side by side in the vault where both are installed, tracked as its own row in the parent `../roadmap.md` §4 and in this packet's `goal.md` operator rows, never ticked by an agent | Unmet — today's timeline renders `db-timeline-*` classes (not the reference's vocabulary), five scales at 60/100/80/15/4px unit-width defaults, a viewport-centred window, and a scale trigger button with sibling link buttons; a local rewrite, not a DOM/class copy. Left unmet for a final fresh read after the 2026-09-04 closing leg (`tasks.md` T039-T047) lands — that leg fixed eight code defects and three fixture defects the prior fresh reviewer found, but did not itself re-run the AC-007 read | - |
+| AC-007 | REQ-007 | Given `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css` (added 2026-09-04), When the 1:1 leg pair lands, Then the timeline's DOM structure, class vocabulary, visual language, interactions, and row-height/unit-width defaults match the reference, and every named local extension renders default-off unless a setting is turned on | DOM-structure parity test + (amended 2026-09-04) two halves: **in-repo** — a fresh session that ran none of this packet's legs compares the recaptured captures against the reference SOURCE (`GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css`) with pixel measurements; **operator** — the operator compares the two plugins side by side in the vault where both are installed, tracked as its own row in the parent `../roadmap.md` §4 and in this packet's `goal.md` operator rows, never ticked by an agent | Unmet — **in-repo half MET 2026-09-04** (fresh reviewer, `30c4b746`, ran none of the gantt legs, `tasks.md` T048): 60 of 60 `pm-gantt-*` classes match the reference with zero divergence either direction; the copied CSS is byte-faithful (`gantt.css`'s 278 lines plus the widgets/utilities/table companion blocks); geometry measured from the recaptured screenshots matches the reference exactly — label column 280px desktop / 160px phone, row height 44px, header 56px, day-unit widths 44/22/9/5/2px, bar padding 8px, bar height 28px, corner radius 7px, milestone diamond 24px across, progress fill 62%, dependency-arrow marker 8x8 with `refX` 6 / `refY` 3; all seven of the prior closing leg's own tests still pass (39/39 across the four suites, tick parity 120/120), `npx tsc --noEmit` exit 0. Before-value for this same read: the first fresh read (`a00ad31`) found seventeen divergences (D1-D17); the second (`a78000c`) found two (P1-A, P1-B); this read found zero. **Still unmet overall** — the operator half (the operator's own vault side-by-side compare) has not run; tracked as row 38 in the parent `../roadmap.md` §4 and as an operator-only row in this packet's `goal.md`, never ticked by an agent, per D3 (shipped, verified, and operator-confirmed are three states) | - |
 
 ### Status values
 
@@ -101,4 +102,17 @@ side-by-side), mirroring the board packet's own amendment. This is a wording cor
 disposition change: AC-007 stays `Unmet`, and no row in this table is ticked by this amendment. The
 operator half is recorded as its own never-tick row in the parent `../roadmap.md` §4 and in this
 packet's `goal.md` operator rows, since the operator checklist builder reads phase `goal.md` files.
+
+**Amendment 2026-09-04 (AC-007 in-repo confirmation):** a fresh reviewer (`30c4b746`, ran none of
+this packet's legs) closed the in-repo half of the split above — zero divergence across 60/60
+`pm-gantt-*` classes, a byte-faithful CSS copy, and geometry matching the reference exactly (full
+evidence in the row above and `tasks.md` T048). This is a disposition change for the in-repo half
+only: AC-007's `Status` cell stays `Unmet` in this table per D3, because the operator half (the
+vault side-by-side compare, row 38 in the parent `../roadmap.md` §4) has not run. The same read
+also surfaced two residual dispositions with no code change owed — invalid-date rows keeping a row
+band and no bar (accepted adaptation, `tasks.md` T049) and the milestone label overpainting the
+month-band label on the default render path (reference-faithful by construction, an operator
+decision recorded as a new row 39 in `../roadmap.md` §4 and in `goal.md`'s operator rows,
+`tasks.md` T050) — and one already-closed item, the per-band fixture month parity T047(b) had
+already fixed (`tasks.md` T051).
 <!-- /ANCHOR:closure -->

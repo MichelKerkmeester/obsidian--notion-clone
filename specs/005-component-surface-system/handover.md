@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 043 T030 landed and done-audit-11 ticked DONE row 6, taking the parent to 5 of 7 = 71 — rows 1 and 2 (operator device confirmation) are the only open ones left. Both fidelity passes shipped: board as 0.0.18, gantt as 0.0.19. Two legs stay in flight outside main, board T12's closing leg (worktrees/033) and a gantt behaviour pass (worktrees/032). The operator owes device confirmation and the 043 AC-002 ruling."
+description: "Resume point: release 0.0.20 is live at ccc946c3, carrying gantt's residual-behaviour and closing legs, board T12's in-repo close, and 043's constructed fixture families. Both 1:1 ports' in-repo comparison halves are now MET (gantt AC-007 at 30c4b746, board T12 at c563f08). Nothing is queued in-repo; every remaining row (rows 1-2 device confirmation, T12/AC-007 vault compares, the 043 AC-002 ruling, a new milestone-overpaint call) is the operator's alone."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,21 +10,22 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T13:17:14Z"
-    last_updated_by: "done-audit-11"
-    recent_action: "Done-audit-11 ticked DONE row 6 after T030 landed; parent goes 4 of 7 to 5 of 7"
-    next_safe_action: "Operator confirms 0.0.16-0.0.19 on device; 043 AC-002 ruling still owed"
+    last_updated_at: "2026-09-04T15:20:00Z"
+    last_updated_by: "orchestrate-handover-15"
+    recent_action: "AC-007 in-repo half MET (30c4b746); 0.0.20 shipped; board T12 in-repo half MET"
+    next_safe_action: "Await operator: device confirmations, vault compares, AC-002 and overpaint rulings"
     blockers:
-      - "operator confirmation owed: reports 29-36, the five ported surfaces, and 0.0.16 through 0.0.19"
-      - "board T12's operator half owed: compare the board against obsidian-pm's kanban in the vault"
-      - "board T12 closing leg on worktrees/033-board-t12; not on main at 2242fa0"
-      - "gantt behaviour pass landing from worktrees/032-gantt-residual; not on main at 2242fa0"
-      - "043's AC-002 ruling owed: amend it to the inside-mount measurement, or take determinism"
+      - "Operator device confirmation owed: reports 29-36, five ported surfaces, 0.0.16-0.0.20"
+      - "043 AC-002 ruling owed: inside-mount scrollTop measurement vs. determinism basis"
+      - "Board T12's operator half owed: vault compare vs obsidian-pm kanban (roadmap.md row 37)"
+      - "Gantt AC-007's operator half owed: vault compare vs obsidian-pm gantt (roadmap.md row 38)"
+      - "Milestone-overpaint keep-vs-revert ruling owed (roadmap.md row 39, new)"
+      - "Operator to enable Project Manager on phone, Projects folder set to \"PM Compare Test\""
     key_files:
       - "goal.md"
       - "roadmap.md"
-      - "043-constructed-capture/tasks.md"
-      - "043-constructed-capture/implementation-summary.md"
+      - "037-timeline-gantt-port/tasks.md"
+      - "037-timeline-gantt-port/acceptance-criteria.md"
       - "038-board-kanban-port/tasks.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -33,6 +34,7 @@ _memory:
     completion_pct: 71
     open_questions:
       - "043 AC-002: amend the criterion to the inside-mount scrollTop measurement, or accept determinism as the basis"
+      - "Milestone-overpaint (roadmap.md row 39): keep the reference-faithful shape, or reinstate a local anti-collision fix on the gantt's default render path"
     answered_questions:
       - "The 036 research loop cannot run in the main checkout while a sibling code phase is dirty; it now runs in a worktree. Synthesis landed at 036/research/research.md; lineage ledgers stay untracked by .gitignore"
       - "Landing discipline for a port phase: verify in the worktree, commit on the worktree branch, land to main only after the CSS/display leg is verified there, and release from a clean clone"
@@ -50,6 +52,8 @@ _memory:
       - "Done-audit-11 TICKED DONE row 6 on main at 2242fa0 after 043 T030 landed, taking the parent to 5 of 7 = 71. T030 gave 46 of the 51 fixtureOf-less fixtures a production-mounted constructed counterpart (26 new renderer values, 13 options, 43 capture scenarios, 172 captures read), so 71 fixtures now hold 66 fixtureOf declarations and 5 without. Both lanes constructed pass went 21 -> 31 -> 73 scenarios, wider than the 71-fixture pass it supplements: touch-targets exit 0 three runs identical, constructed 24788 elements across 73 and 1223 under the 28px floor against a 1223 baseline (was 422/422 across 31), fixture 1123/71/199 against 279 (was 1450/71/264, the drop being styles.css moving under the board and gantt ports); unstyled-links exit 0, constructed 1476 links across 73 with 0 UA-default findings (was 72 across 31). done-audit-10 caveat that the ratchet was decided by timing is retired at its cause — T030 swept the body-portal teardown that had each scenario measuring the previous one stacked panels. The 5 that cannot be constructed (three DbModal panels the stub refuses, the MarkdownRenderChild-hosted selection status bar, the mid-gesture board drag classes) do not keep the row open: the criterion is conjunctive and asks for a harness value a device would not supply. Two reach a lane only as 2 and 3 of the 199 undeclared under-floor rows, which consume ratchet headroom rather than create it; one contributes nothing; the status bar product claims are asserted on production output by the placement lane; and board-drop-language, the one load-bearing case (replay.mjs:600, held on exact equality), supplies two class names that board-renderer-parity.test.ts asserts on a real BoardRenderer under real drag events in the tests lane. The five stay a coverage limit — a red the corpus cannot raise — recorded against row 3 ledger, not absorbed by the tick"
       - "Correction to done-audit-10 found by re-running its reasoning: its leg (b) does not hold. The 13 action-bag return-type annotations live in render-assertion-harness.ts, not render-assertions.mjs where it cited them, and no gate lane typechecks them — root tsconfig.json includes src/**/*.ts only and lint:tools runs eslint over tools/**/*.mjs, so the .ts harness is neither typechecked nor linted. BAGS is a hand-maintained expected list compared against the harness own bag keys with no enforced binding to src/views. The conclusion still stands on its other two legs (the harness refuses DOM without a bundled-renderer provenance marker; the coverage total is read live from src/views) plus done-audit-7 inertness finding, re-verified: render-assertions.mjs names actions only in a comment and the two lanes reference an action bag 0 times each. An unenforced shape list can only under-assert"
       - "2026-09-04: 037's gantt 1:1 leg landed (TypeScript d30ea78, CSS 2a6d98f, merged 972c2cd/a00ad31) and shipped 0.0.17 (839712b), installed to iCloud alongside 038's already-shipped 0.0.16 board 1:1 (TypeScript 1c5f465, CSS 4b4b404, merged 854c748). A fresh reviewer (T12) found real fidelity divergences in the board copy against the reference — an inline-color palette illegible in dark mode, a left-aligned due chip, a stray 'Sub' chip, a missing badge icon/priority strip/milestone/recurrence chips/due-soon tier, unscoped selectors, and an extra 24px host inset — now being fixed on worktrees/027-board-fidelity; T12 stays open until that lands. A gantt visual review is separately in progress, with its own fidelity pass to follow. A T030 leg on worktrees/028-constructed-chrome is constructing the panel-/chrome-/field- fixture families that keep 043's row 6 fixture half open. Main is clean at 839712b; next release is 0.0.18"
+      - "2026-09-04: worktrees 022-035 all landed on main (026 version reset, 022 state variants, 023 board, 024 gantt, 025 lanes, 027 board fidelity, 028 constructed families, 029 gantt fidelity, 030 board close, 031 board inset, 032 gantt behaviours, 033 board T12 close, 034 gantt close, 035 captures refresh); none is an ancestor gap on main anymore, and all are the operator's to remove through sk-git"
+      - "2026-09-04: release 0.0.20 (ccc946c3) carries gantt's residual-behaviour leg (week-label modes, elsewhere menu, add-subtask, undo/redo keys), gantt's closing leg (persistence, slot-duration gate, eight code + three fixture fixes), board T12's in-repo close, board's host-inset fix, and 043's constructed panel/chrome/field fixture families. A fresh reviewer (30c4b746) then confirmed gantt AC-007's in-repo half MET (60/60 pm-gantt-* classes, zero divergence) and surfaced one new operator-only finding: the milestone label overpaints the month-band label on the default render path, reference-faithful by construction — recorded as roadmap.md row 39, not fixed"
 ---
 # Session Handover: Component Surface System
 
@@ -59,84 +63,55 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-As of 2026-09-04, releases 0.0.7 through 0.0.19 (0.0.7-0.0.15 formerly 1.4.2 through 1.4.10,
-renumbered this session — `roadmap.md` §5.3) are live on GitHub and installed into the iCloud vault
-plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
-Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it. **0.0.16**
-(`46a8525`) carries `038`'s board one-to-one copy and **0.0.17** (`839712b`) `037`'s gantt one-to-one
-copy; **0.0.18** (`96f878a5`) then carries `038`'s board fidelity pass, and **0.0.19** (`07f4500f`)
-`037`'s gantt fidelity pass together with the board's closing fixes. All four tags are on `origin`.
-`main` at `2242fa0` reads **0.0.19**; the next cut is **0.0.20**.
+As of 2026-09-04, releases 0.0.7 through **0.0.20** (0.0.7-0.0.15 formerly 1.4.2 through 1.4.10,
+renumbered earlier this session — `roadmap.md` §5.3) are live on GitHub and installed into the
+iCloud vault plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
+Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it. `038`'s board
+one-to-one copy shipped as **0.0.16** (`46a8525`), `037`'s gantt one-to-one copy as **0.0.17**
+(`839712b`), the board fidelity pass as **0.0.18** (`96f878a5`), the gantt fidelity pass plus the
+board's closing fixes as **0.0.19** (`07f4500f`). **0.0.20 is now cut** (`ccc946c3`), carrying
+`037`'s residual-behaviour leg (week-label modes, the depends-elsewhere menu, add-subtask, undo/
+redo keys) and closing leg (persistence, slot-duration gate, eight code plus three fixture fixes),
+`038`'s T12 in-repo close and host-inset fix, and `043`'s constructed panel/chrome/field fixture
+families. `main` is at `ccc946c3`, pushed, working tree clean; the next cut is **0.0.21**.
 
 All five obsidian-pm port phases (037-041) are landed and shipped, and every open product row they
 carried is closed. Both harness phases the parent's DONE table opened are landed too. `043` is now
-merged across six legs on main at `2242fa0`: the structural landing (`2ab4942`), typed data and
-real icons (`0af4ca6`, reconciled `bf67475`), table and chart typing (`425d552`, T027), the state
-variants (`d363456`, T028, reconciled `dc67803`), the widened constructed lanes (`122a959`, T029,
-reconciled `ce72379`), and the constructed fixture families (`c4c7466`+`64db8d5`+`6fa715e`, T030,
-trued up onto the gantt and board fidelity passes in `d94e11f`/`2506bb2`/`2242fa0`). Of the 71
-hand-authored fixtures, **66** now carry a `fixtureOf` declaration onto a production-mounted
-constructed counterpart and **5** cannot — and both lanes' own constructed pass reads **73**
-scenarios, wider than the fixture pass it supplements.
+merged across seven legs on main: the structural landing (`2ab4942`), typed data and real icons
+(`0af4ca6`, reconciled `bf67475`), table and chart typing (`425d552`, T027), the state variants
+(`d363456`, T028), the widened constructed lanes (`122a959`, T029), the constructed fixture
+families (`c4c7466`+`64db8d5`+`6fa715e`, T030), and this session's panel/chrome/field families
+(`c4c74669`, reconciled `6fa715e5`/`2506bb2f`/`2242fa0a`, ticked `a78000ce`). Of the 71
+hand-authored fixtures, **66** carry a `fixtureOf` declaration onto a production-mounted
+constructed counterpart and **5** cannot — a structural coverage gap recorded against row 3's
+ledger, not a defect (three `DbModal` panels the stub refuses out of scope, the
+`MarkdownRenderChild`-hosted status bar, and one mid-gesture board drag class already covered by a
+real-DOM test).
 
-**The parent DONE table is 5 of 7 = 71.** Rows 3, 4, 5, 6 and 7 hold; rows 1 and 2 are the
-operator's and are now the only open rows in it. **Row 6 was ticked on main at `2242fa0` as
-`done-audit-11`**, after `043` T030 constructed the fixture families `done-audit-10` had re-scoped
-it to. What closed, each check against the value it replaced: fixtures with no constructed
-counterpart **51 -> 5**, read by importing `scenarios.mjs` and filtering rather than grepping (71
-fixtures, 66 with `fixtureOf`, 5 without); both lanes' constructed pass **21 -> 31 -> 73**
-(`SCENARIOS` 21 + `STATE_SCENARIOS` 52 = `SCENARIOS_WITH_STATES` 73, 35 distinct `renderer` values);
-`node tools/live/touch-targets.mjs` `$?` `0` on three consecutive runs returning byte-identical
-output — constructed **24788** elements across **73** scenarios and **1223** under the 28px floor
-against a baseline of **1223** (was 422/422 across 31), fixture **1123/71/199** against 279 (was
-1450/71/264, the drop being main's board and gantt ports moving `styles.css`, not a fixture edit);
-`node tools/live/unstyled-links.mjs` `$?` `0` — constructed **1476** links across **73** and **0**
-user-agent-default findings (was 72 across 31). `done-audit-10`'s "the ratchet is decided by timing"
-caveat is retired at its cause rather than inherited: T030 added the body-portal teardown sweep that
-had each scenario measuring every earlier scenario's stacked panels.
+**The parent DONE table stays 5 of 7 = 71.** Rows 3, 4, 5, 6 and 7 hold; rows 1 and 2
+(operator device confirmation) are the only open rows in it, and nothing this session touched
+moves that count — the DONE table tracks the parent program, not either port's own comparison
+criterion.
 
-**Why the five that cannot be constructed do not keep the row open.** They are
-`panel-computed-cleanup-modal`, `panel-invalid-events-modal` and `panel-base-import-modal` (all
-`DbModal extends Modal`, which `obsidian-stub.mjs:202` refuses as out-of-scope),
-`chrome-selection-status-bar` (a `MarkdownRenderChild` host whose state exists only mid-gesture) and
-`board-drop-language` (drag classes added only by live `dragstart`/`dragover` handlers). The
-criterion is conjunctive — a green must rest on a harness value **that a device would not supply** —
-and `done-audit-7` already set the test for a named class member when it ruled the stubbed action
-bags a declared residual. Applied to each: two of the five reach a lane's arithmetic only as 2 and 3
-of the 199 undeclared under-floor rows, which *consume* ratchet headroom (`fixtureFailed` is
-`undeclared.length > allowed`, so a fixture manufactures reds here and never greens); one
-contributes nothing to either lane; the status bar's product claims are asserted on production
-output by the placement lane, which builds the bar through `renderSelectionStatusBar`; and
-`board-drop-language`, the one genuinely load-bearing case (`replay.mjs:600`, held on exact
-equality), supplies two class names that `board-renderer-parity.test.ts` asserts on a real
-`BoardRenderer` under real drag events inside the `tests` lane. What the tick does **not** claim: the
-five stay a structural coverage gap, a red the corpus cannot raise, recorded against row 3's ledger.
+**Both 1:1 ports' in-repo comparison halves are now MET.** `038`'s board T12 was MET by a fourth
+fresh reviewer (`c563f08`, `roadmap.md` row 37 entry): all fourteen carried-forward elements
+matched to the pixel against the reference source; T12 itself stays unticked because the
+operator's own vault compare (row 37) has not run. `037`'s gantt AC-007 was MET today by a fresh
+reviewer (`30c4b746`, ran none of the gantt legs, `037/tasks.md` T048): 60 of 60 `pm-gantt-*`
+classes matched with zero divergence, the copied CSS is byte-faithful, and every measured geometry
+value (label width, row/header height, day-unit widths, bar padding/height/radius, milestone
+diamond, progress fill, link marker) matched the reference exactly. AC-007 itself stays `Unmet`
+per D3 — the operator's own vault compare (row 38) has not run either. That same gantt read
+surfaced one new, genuinely reference-faithful finding rather than a defect: the milestone label
+overpaints the month-band label on the default render path, because the reference's own
+`GanttHeaderRenderer`/`GanttTaskBarRenderer` paint at `y=18`/`y=14` on the same header SVG. This is
+recorded as a new never-tick operator row — `roadmap.md` §4 row 39, and an operator-only row in
+`037/goal.md` — not fixed, since keep-vs-revert is the operator's call, not an agent's.
 
-**Both 1:1 reopen lanes and both fidelity passes have landed and shipped.** At the operator's
-request, `037` and `038` were reopened for one-to-one copies of obsidian-pm's gantt and board
-surfaces (REQ-007 in each child's `spec.md`). `038`'s board leg landed first, merged and reconciled
-onto main in `854c748` and cut as **0.0.16** (`46a8525`); `037`'s gantt leg followed (TypeScript
-`d30ea78`, CSS `2a6d98f`, merged `972c2cd`/`a00ad31`) and was cut as **0.0.17** (`839712b`). A fresh
-reviewer (T12) then found real fidelity divergences in the board copy against the reference —
-palette names painted as inline colors and illegible in dark mode, a left-aligned due chip, a stray
-"Sub" chip, a missing badge icon/priority strip/milestone/recurrence chips/due-soon tier, selectors
-unscoped enough to style a co-installed Project Manager, and an extra 24px host inset. **That pass
-has landed and shipped as 0.0.18** (`a6abd0a9`+`cb6ef827`, reconciled `01883cf8`, trued up
-`b1e75124`, cut `96f878a5`), with its closing fixes following in `2cddc7cf`+`d896f90e` (kanban
-height chain, due-tier and badge-icon fidelity) and `595dc283`+`7d5b3f90` (responsive host padding,
-photograph avatars, milestone chips). **`037`'s gantt fidelity pass landed and shipped as 0.0.19**
-(`119f5936`+`8c563a35`, reconciled `5fd4fc7d`, trued up `6d12740a`, cut `07f4500f`). Board `T12`'s
-in-repo half is now met by a fourth fresh read, and `c563f089` mirrored its operator half into
-`038`'s own `goal.md` as an operator-only row so `build-operator-checklist.mjs` surfaces it; T12
-itself stays unticked because that operator comparison is owed.
-
-Main is at `2242fa0` (`043`'s T030 reconciliation onto the board fidelity work), working tree clean
-as of this pass — the three `touch-targets` runs and the `unstyled-links` run this audit made
-reproduce HEAD's committed stamps exactly, so they left no `tools/live/*.json` dirt. Two legs run
-outside main and neither is an ancestor of it: **`worktrees/033-board-t12`** carries board T12's
-closing leg, and **`worktrees/032-gantt-residual`** a gantt behaviour pass. No DONE row, release or
-operator row moves on their account until they land and are verified in-runtime.
-of.
+Nothing is queued in the main checkout. The two legs the prior handover carried in flight
+(`worktrees/033-board-t12` and `worktrees/032-gantt-residual`) landed this session, along with
+every other open worktree (022 through 035); none is an ancestor gap on main, and all are the
+operator's to remove through `sk-git` once no longer needed for reference.
 <!-- /ANCHOR:handover-summary -->
 
 ---
@@ -144,25 +119,32 @@ of.
 <!-- ANCHOR:context-transfer -->
 ## 2. NEXT SAFE ACTION: OPERATOR CONFIRMS AND RULES
 
-No code lane is queued in the main checkout itself; the two remaining legs run in worktrees outside
-it (below). With `done-audit-11` ticking DONE row 6, **rows 1 and 2 are the only open rows in the
-parent table, and both are the operator's** — no agent can close either. Two decisions are theirs,
-not an agent's. First, `043`'s AC-002: the readiness wait is real inside the mount (`scrollTop`
-moves 0 to 376 across one frame), but the screenshot command flushes that frame before it
-rasterises, so a photograph can never show the difference the criterion asks for. Amend the
-criterion to the inside-mount measurement, or accept determinism as its basis. Second, device
-confirmation: reports 29-36, the five ported surfaces, and now all four of `038`'s board one-to-one
-copy (0.0.16), `037`'s gantt one-to-one copy (0.0.17), the board fidelity pass (0.0.18) and the
-gantt fidelity pass (0.0.19). Each confirmation closes its `roadmap.md` §4 row; each "still broken"
-reopens it with the device fact given, not an assumption. All four releases are installed to the
-iCloud vault, so no install step blocks any of them — and unlike the last handover, a confirmation
-today is against the post-fidelity-pass copies. Board `T12`'s operator half (comparing the board
-against obsidian-pm's kanban in the vault where both are installed) is now surfaced in
-`operator-checklist.md` and is part of the same ask.
+No code lane is queued anywhere — main and every worktree are settled. **Rows 1 and 2 of the
+parent DONE table are the only open rows in it, and both are the operator's.** Beyond the DONE
+table, four further items sit in `roadmap.md` §4 as never-tick operator rows, none of which any
+agent can close on its own judgment:
 
-Candidate next work is bounded, not open-ended: board T12's closing leg on
-`worktrees/033-board-t12`, the gantt behaviour pass landing from `worktrees/032-gantt-residual`,
-whatever the operator's confirmations reopen, and whatever AC-002's ruling requires. Nothing else is
+1. **Device confirmation** — reports 29-36, the five ported surfaces, and all five of `038`'s
+   board one-to-one copy (0.0.16), `037`'s gantt one-to-one copy (0.0.17), the board fidelity pass
+   (0.0.18), the gantt fidelity pass (0.0.19), and the residual-behaviour/closing/T12-close
+   release (0.0.20). Each confirmation closes its `roadmap.md` §4 row; each "still broken" reopens
+   it with the device fact given, not an assumption. Every release is already installed to the
+   iCloud vault, so no install step blocks any of them.
+2. **`043`'s AC-002 ruling** — the readiness wait is real inside the mount (`scrollTop` moves 0 to
+   376 across one frame), but the screenshot command flushes that frame before it rasterises, so a
+   photograph can never show the difference the criterion asks for. Amend the criterion to the
+   inside-mount measurement, or accept determinism as its basis.
+3. **Board T12's operator half (row 37)** — compare the board against obsidian-pm's kanban side by
+   side in the vault where both are installed; the in-repo half is already MET.
+4. **Gantt AC-007's operator half (row 38)** — the same compare for the gantt; the in-repo half is
+   already MET.
+5. **The milestone-overpaint ruling (row 39, new)** — keep the reference-faithful overpaint the
+   1:1 gantt copy reproduces, or ask for a local anti-collision fix on the default render path.
+
+The vault comparisons (3 and 4) need Project Manager enabled on the phone with its Projects folder
+set to `PM Compare Test`, per the operator's own setup.
+
+Candidate next work is bounded entirely by what the operator's answers reopen — nothing else is
 queued.
 <!-- /ANCHOR:context-transfer -->
 
@@ -171,26 +153,17 @@ queued.
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-Two legs are in flight; neither is landed on main yet, and neither blocks the other.
+Nothing in-repo is open except the operator rows above.
 
-1. **`worktrees/033-board-t12`** — board `T12`'s closing leg. The in-repo half is already met by a
-   fourth fresh read, and `c563f089` mirrored the operator half into `038`'s `goal.md` as an
-   operator-only row; land the remainder under the usual discipline once verified there.
-2. **`worktrees/032-gantt-residual`** — the gantt behaviour pass following `037`'s fidelity leg.
-   Land it the same way; re-run the lanes on the merged tree rather than carrying the branch's own
-   numbers, since the last two rebases each moved a lane total.
-3. Ask the operator to confirm reports 29-36, the five ported surfaces, and all four of 0.0.16,
-   0.0.17, 0.0.18 and 0.0.19 on iOS — every one is already installed, so no install step blocks
-   this — plus board T12's operator half, the side-by-side vault comparison against obsidian-pm's
-   kanban, now listed in `operator-checklist.md`.
-4. Bring the AC-002 wording decision to the operator; do not amend or tick it without their answer.
-5. Record each answer in `roadmap.md` §4: confirmed rows close, "still broken" rows reopen with
-   the device fact given. An agent never closes an operator row on its own judgment.
-6. DONE row 6 is ticked and needs no further audit. What it explicitly does NOT cover is the
-   coverage limit it names: the five unconstructable fixtures are a red the corpus cannot raise,
-   which belongs to row 3's ledger and `043`'s Known Limitations, not to row 6.
-7. Offer to remove the finished worktrees through sk-git once the operator confirms they are no
-   longer needed for reference.
+1. Read this handover in full before touching anything.
+2. Run `npm run gate` from a clean `main` checkout and confirm 25/25 green before assuming the
+   tree is exactly as described here — a resume never trusts a stale gate claim.
+3. Wait for the operator's answers to the five items in §2. Record each one where it is tracked
+   (`roadmap.md` §4 for the never-tick rows, the DONE table for rows 1-2) as it arrives — an agent
+   never closes an operator row on its own judgment, and a "still broken" answer reopens the row
+   with the device fact given rather than being argued with.
+4. Once the operator confirms the finished worktrees (022-035) are no longer needed for reference,
+   offer to remove them through `sk-git`.
 <!-- /ANCHOR:session-notes -->
 
 ---
@@ -296,4 +269,9 @@ Two legs are in flight; neither is landed on main yet, and neither blocks the ot
   path. The same popover can also take Obsidian's real bottom-sheet presentation on a phone
   (`isMobileBottomSheet`) instead of an anchored panel — a genuine device difference to expect and
   confirm by reading both captures, not a defect.
+- A verbatim reference copy reproduces the reference's own visual quirks along with its structure.
+  The gantt's milestone-label/month-band overpaint looked like a regression until reading the
+  reference source itself showed both labels painting on the same header SVG at fixed `y` offsets
+  in `GanttView`'s own code — a faithful copy is not obligated to be prettier than what it copies,
+  and that distinction is an operator call, not a defect to silently patch over.
 <!-- /ANCHOR:next-session -->
