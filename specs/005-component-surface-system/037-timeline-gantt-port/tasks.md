@@ -944,6 +944,39 @@ This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing 
       `checkbox-appearance`, `checkbox-inventory`, `design-conformance`, `engine-parity`,
       `surface-census`, `token-census`, `view-census` — re-measured by re-running each tool, no
       number hand-edited).
+- [ ] **T053** Reference-capture comparison, 2026-09-04 — the gantt read against a CAPTURE of the
+      reference, not against its source. T048's in-repo half measured our port against
+      `gantt.css` and the vendored TypeScript. This leg photographs the vendored plugin itself:
+      `screenshots/project-manager/reference-gantt{,-subtask}-{desktop,mobile}-{dark,light}.png`,
+      the same bench project our `constructed-timeline` captures show, mounted through the shared
+      obsidian stub (`043-constructed-capture` T031, commit `bd3e2c0a`). Measurements below are from
+      the desktop/dark pair at 2880x1800 and DPR 2, so one CSS pixel is two image pixels. The row
+      stays unticked because it records a comparison and two open dispositions, not a fix.
+
+| Element | Ours | Reference | Verdict |
+|---------|------|-----------|---------|
+| Controls bar | Day/Week/Month/Quarter/Year segmented with Week active, Today / Expand all / Collapse all right | identical set and order | match |
+| Whole-view inset | 24 CSS px further right; the right-hand group ~32 px further left | flush at 16 px | host: `.note-database-container` padding plus its `scrollbar-gutter: stable`. Our kanban cancels this with a negative margin; the gantt does not |
+| Label column width | 280 px desktop | 280 px | match |
+| Header height / row height | 56 / 44 | 56 / 44 | exact — the label-column separators land on the SAME y in both (113, 157, 201, 245, ...) |
+| Chart grid | a sampled vertical gridline column differs in 0 of 86,141 px | — | pixel-identical |
+| Week bands and month label | W33-W39 plus `SEP 26`, same x | same | match (best cross-correlation at dx 0) |
+| Today line and diamond | red dashed line and diamond at the header edge, same x | same | match |
+| Bar geometry | one day = 22 px at week granularity, padding 8, radius 7 | same | match |
+| Bar / milestone / label-dot colour | bar `var(--interactive-accent)` at 0.4 = rgb(61,64,108); dot `var(--text-muted)` | one colour for both, `#8a94a0` = rgb(73,77,82) | data model: our timeline has no per-status colour, and the reference cannot express its absence — `resolveProjectConfig`'s `withInUseExtras` mints its FALLBACK_COLOR for every in-use id, so it never reaches its own `--interactive-accent` fallback. The reference paints bar and dot from one colour; our port splits them |
+| Progress fill | rows 0/4/8/12/16, same geometry | same | match |
+| Dependency arrows | 3 curved dashed edges, 8x8 arrowhead, same anchors | same | match |
+| Milestone label over the month band | present | present | reference-faithful, already dispositioned as T050 |
+| Phone | label column 160 px, chart ~230 px, four week bands and every bar visible | label column stays 280 px, chart squeezed to ~90 px | our documented phone adaptation; the reference has none. This is the whole of the 10.4% (dark) and 36.0% (light) phone difference |
+| Subtask variant | collapse diamond on row-0, two indented children, 62% | same | match |
+
+      NO (d) FIDELITY GAP FOUND ON THE GANTT: every geometric value the reference draws, our port
+      draws at the same pixel. Both open items above are dispositions rather than defects — the
+      colour split is a data-model consequence recorded here for the first time against a real
+      reference render, and the phone label width is this packet's own deliberate divergence. The
+      two P2 gaps this comparison did find are both on the kanban and belong to
+      `../038-board-kanban-port` T31. The operator's own vault side-by-side compare (parent
+      `../roadmap.md` row 38) is untouched by this leg and stays open.
 <!-- /ANCHOR:phase-8 -->
 
 ---

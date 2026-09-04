@@ -636,6 +636,46 @@ _memory:
       a new release entry names all 11 content-changed captures across T29/T30 (`check-lane` exit
       0, "release names all 11 changed capture(s)"). `tsc` 0, `vitest` 1010/1010 (100 files), `lint`
       172 (unchanged), `lint:tools` clean, `scan-comments` PASS, `npm run gate` 25 green / 0 red.
+- [ ] **T31** Reference-capture comparison, 2026-09-04 — the board read against a CAPTURE of the
+      reference rather than its source. `screenshots/project-manager/reference-kanban{,-subtask}-
+      {desktop,mobile}-{dark,light}.png` photograph the vendored plugin rendering the same bench
+      project our `constructed-board` captures show, mounted through the shared obsidian stub
+      (`../043-constructed-capture` T031, commit `bd3e2c0a`). Measurements are from the
+      desktop/dark pair at 2880x1800 and DPR 2, so one CSS pixel is two image pixels. Unticked: it
+      records a comparison and two P2 gaps, neither fixed here.
+
+| Element | Ours | Reference | Verdict |
+|---------|------|-----------|---------|
+| Column width / gap | 280 / 14 | 280 / 14 | exact — edges at 32/312, 326/606, 620/900, 914/1194 in both |
+| Board left inset | 32 px | 32 px | match; `.pm-kanban-board`'s negative margin cancels the container padding exactly |
+| Board right clip | 1416 px | 1424 px | host: 8 px, the container's right padding and scrollbar gutter |
+| Column topbar | 3 px at y 32-35, opacity .5 | identical y and rule | match; colour differs |
+| Header badge | 13 px / 600, glyph band y 49.0-61.0 | identical band | exact |
+| Count chip | pill y 45.0-64.0 (19 px), text 50.5-58.5 | pill 45.0-62.0 (17 px), text 49.5-57.5 | **(d) P2 — 2 px taller** |
+| Column header height | 2 px taller; everything below shifts 2 px down | — | **(d) P2**, the same cause |
+| Card padding / gaps | `.pm-kanban-cards` 6/10, body 10/12, gaps 8/7 | identical declarations | match |
+| Card title | 12 px / 500 / 1.45 inside `.pm-kanban-card-title-row` | identical (`widgets.css:81`) | match |
+| Priority strip | 3 px, opacity .5, on the urgent/high rows, omitted for medium/low | identical rule, identical row set | match; colour differs |
+| Hours chip | `0.5h`, `37.5h`, `74.5h`, ... | identical | match |
+| Avatar stack | two `sm` avatars, same initials and overlap | same | match |
+| Due chip text / position | same | same | match |
+| Overdue state | red on odd rows only | red on every past-due row outside the terminal lane | data model: our port reads completion from a checkbox column, which the bench fills on `i % 2 === 0`; the reference reads the status config's `complete` flag. Not a rendering difference |
+| Tag row | none | none | match by construction — the bench has no tags column, so the fixture leaves `tags` empty rather than inventing one |
+| Lane label | raw group value | same | match |
+| Lane and priority colours | harness palette through `--status-color-fg-*` | its own DEFAULT_STATUSES / DEFAULT_PRIORITIES hexes | recorded fixture difference: our colour is a palette NAME resolved through a token defined in `styles.css`, which the reference page deliberately does not load |
+| Subtask variant | parent chip `row-0`, `Sub` chip, 62% progress bar, lane counts 6/3/3/3 | same | match |
+
+      TWO (d) GAPS, both P2, neither fixed here because `styles.css` is outside this leg's scope:
+      (1) the column header renders 2 CSS px taller than the reference's. `.note-database-container`
+      sets `line-height: var(--db-font-md-line-height)` (1.45, `styles.css:826`) and every
+      descendant inherits it; `.pm-kanban-col-count` sets no line-height of its own in either copy,
+      so our count pill measures 19 px against the reference's 17 and pushes the header — and every
+      card under it — down by 2 px (confirmed by cross-correlation: the best match between the two
+      card regions is at -2 CSS px). A one-declaration fix on the chip. (2) The reference's
+      `::-webkit-scrollbar` / `-thumb` / `-track` rules for `.pm-kanban-board` and
+      `.pm-kanban-cards` were never copied; our stylesheet carries that block for `.pm-gantt-right`
+      alone. Invisible in these captures because the columns do not scroll, which is why no earlier
+      source read caught it. Everything else on the card and column is pixel-faithful.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->
