@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T21:38:08.211Z",
+  "measuredAt": "2026-09-04T23:33:03.433Z",
   "inputs": {
-    "styles.css": "719ba0fca8e1",
+    "styles.css": "6c7a7c42f694",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -78,7 +78,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "360x520",
+      "rect": "360x503",
       "scenarios": [
         "add-view-popover",
         "chrome-utilities-popover"
@@ -164,7 +164,6 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
-        "add-view-popover",
         "chrome-utilities-popover",
         "chrome-utilities-popover",
         "chrome-utilities-popover",
@@ -197,7 +196,6 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
-        "add-view-popover",
         "chrome-utilities-popover",
         "chrome-utilities-popover",
         "chrome-utilities-popover",
@@ -224,7 +222,6 @@
       "role": null,
       "rect": "63x16",
       "scenarios": [
-        "add-view-popover",
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
