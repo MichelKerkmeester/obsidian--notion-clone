@@ -51,7 +51,12 @@ window.__stateMarkers = (scenario) => {
     result = {
     mounted: true,
     subtaskToggle: !!container.querySelector(".db-subtask-toggle, .db-subtask-event-toggle, .pm-collapse-toggle"),
-    subtaskProgress: !!container.querySelector(".db-subtask-progress, .db-timeline-subtask-progress, .pm-gantt-label-progress"),
+    subtaskProgress: !!container.querySelector(".db-subtask-progress, .db-timeline-subtask-progress")
+      // The timeline bench's own per-row fixture gives every fourth row a genuine progress
+      // value (60%) independent of subtaskTree, so ".pm-gantt-label-progress" alone is not
+      // specific to a subtask; applyCaptureSubtaskTree overwrites that same row to 62%, a
+      // value the bench fixture never produces on its own.
+      || Array.from(container.querySelectorAll(".pm-gantt-label-progress")).some((el) => el.textContent === "62%"),
     subtaskDepthChild: !!container.querySelector('[data-subtask-depth="1"]')
       || (() => {
         const rows = Array.from(container.querySelectorAll(".pm-gantt-label-row[data-task-id]"));

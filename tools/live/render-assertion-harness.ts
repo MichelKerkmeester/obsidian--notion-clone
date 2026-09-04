@@ -1729,9 +1729,17 @@ function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionR
 // db-subtask-* markup: `.pm-collapse-toggle` for the expand/collapse control, `.pm-gantt-label-progress`
 // for the percentage chip, and no depth attribute at all — depth is an inline `padding-left` on
 // `.pm-gantt-label-row`, matched here as the tallest indent exceeding the shallowest row's own.
+// `.pm-gantt-label-progress` alone is not specific to a subtask: the timeline bench's own
+// per-row fixture (`timeline-render-bench.ts`, `i % 4 === 0`) gives every fourth row, including
+// row 0, a genuine progress value (60%) independent of `subtaskTree`. `applyCaptureSubtaskTree`
+// overwrites that same row's progress to 62% (a value the bench fixture never produces on its
+// own), so matching that exact text distinguishes the synthetic subtask aggregation from the
+// bench's own unrelated progress fixture.
 function subtaskTreeAssertion(container: HTMLElement, kind: "board" | "timeline"): AssertionResult {
   const toggle = container.querySelector(kind === "board" ? ".db-subtask-toggle" : ".pm-collapse-toggle");
-  const progress = container.querySelector(kind === "board" ? ".db-subtask-progress" : ".pm-gantt-label-progress");
+  const progress = kind === "board"
+    ? container.querySelector(".db-subtask-progress")
+    : Array.from(container.querySelectorAll(".pm-gantt-label-progress")).find((el) => el.textContent === "62%");
   const depthChild = kind === "board"
     ? container.querySelector('[data-subtask-depth="1"]')
     : (() => {
