@@ -9,12 +9,11 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T08:11:42Z"
-    last_updated_by: "in-runtime-code-agent"
-    recent_action: "T029 landed: touch-targets/unstyled-links constructed pass widened 21 -> 31 scenarios"
-    next_safe_action: "Rule on AC-002; fresh audit re-reads row 6 against T029's widened pass"
-    blockers:
-      - "AC-002 unmeetable as written, needs a phase ruling (Known Limitations 1)"
+    last_updated_at: "2026-09-04T17:30:00Z"
+    last_updated_by: "in-runtime-doc-agent"
+    recent_action: "AC-002 marked Met on the operator's determinism ruling (2026-09-04)"
+    next_safe_action: "Fresh audit re-reads row 6 against T029's widened pass"
+    blockers: []
     key_files:
       - "tools/live/render-assertion-harness.ts"
       - "tools/live/render-assertion-bundle.mjs"
@@ -32,7 +31,6 @@ _memory:
       parent_session_id: null
     completion_pct: 79
     open_questions:
-      - "AC-002: pixel-difference basis, or inside-mount layout determinism basis?"
       - "Does the shared manifest stand, or does AC-006's separate file still apply?"
       - "Does parent row 6 tick now that touch-targets/unstyled-links' own constructed pass covers all ten state variants (T029), or does another residual keep it open? Left to a fresh audit (parent D4)."
     answered_questions:
@@ -41,6 +39,7 @@ _memory:
       - "Does captureData's real CellRenderer add forced layout reads to the table's row loop? No — measured 3 of 3 connected reads, bound 8, identical to captureData:false at the same 2000-row shape."
       - "Can all 13 of the parent's row-6 fixture-only scenarios be constructed through real production code paths? Yes — all 13, none left fixture-only (T028)."
       - "Does widening touch-targets/unstyled-links' own constructed pass to the ten state variants make the link lane's sample non-vacuous? Yes — 144 links across 31 scenarios, 0 UA-default findings (T029), superseding the prior 'widening alone would not make it non-vacuous' concern."
+      - "AC-002: pixel-difference basis, or inside-mount layout determinism basis? Operator ruling 2026-09-04: accept determinism; AC-002 is now Met, the pixel-difference wording superseded."
 ---
 # Implementation Summary
 
@@ -433,17 +432,19 @@ Every exit code below was read from `$?` directly.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **AC-002's criterion cannot be met through the capture path, and this is measured rather than
-   argued.** The criterion asks for a capture taken with the readiness wait removed to differ from
-   one taken with it present. It does not: `constructed-calendar-week` at 0 frames produced
-   `265f58faa024` / `f46ff021c4b2` / `2ea63aecd959` / `afcbb4870a24`, the same four hashes the
-   two-frame run recorded. The reason is that the screenshot command itself flushes pending
-   animation frames before rasterising, so a one-frame correction can never be photographed
-   pre-application. The correction is real: inside the mount, `scrollTop` moves 0 -> 376 across one
-   frame. The wait's demonstrated effect is that the layout measured before the screenshot describes
-   the same frame the pixels do. The criterion needs an operator ruling — amend it to the
-   inside-mount measurement, or accept determinism as the basis. It is left `Unmet` rather than
-   quietly reinterpreted.
+1. **RESOLVED (operator ruling, 2026-09-04).** AC-002's criterion as originally worded could not be
+   met through the capture path, and this was measured rather than argued. The criterion asked for a
+   capture taken with the readiness wait removed to differ from one taken with it present. It did
+   not: `constructed-calendar-week` at 0 frames produced `265f58faa024` / `f46ff021c4b2` /
+   `2ea63aecd959` / `afcbb4870a24`, the same four hashes the two-frame run recorded. The reason is
+   that the screenshot command itself flushes pending animation frames before rasterising, so a
+   one-frame correction can never be photographed pre-application. The correction is real: inside the
+   mount, `scrollTop` moves 0 -> 376 across one frame. The wait's demonstrated effect is that the
+   layout measured before the screenshot describes the same frame the pixels do. **The operator ruled
+   2026-09-04: accept determinism as the basis** — two full capture runs (Verification above)
+   reproducing identical `pixelHash`/`layoutHash` for all entries across both runs, plus
+   `screenshots:verify` reporting 528 entries current against HEAD `e8e44cc6`. The pixel-difference
+   wording is superseded and AC-002 is now `Met` (`acceptance-criteria.md`).
 2. **RESOLVED (T006).** The constructed list used to be a weak photograph with the phone one close
    to empty — 37 DOM rows below the fold at the 1600-row bench shape, the phone capture showing the
    total header over empty ground. `ScenarioSpec.captureData` (opt-in, `constructed-scenarios.mjs`

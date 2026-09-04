@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T02:10:00Z"
-    last_updated_by: "in-runtime-verifier"
-    recent_action: "AC-001 and AC-010 marked Met from in-runtime evidence"
-    next_safe_action: "Rule on AC-002, then decide whether AC-006 stands"
+    last_updated_at: "2026-09-04T17:30:00Z"
+    last_updated_by: "in-runtime-doc-agent"
+    recent_action: "AC-002 marked Met on the operator's determinism ruling (2026-09-04)"
+    next_safe_action: "Decide whether AC-006 stands"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-ac"
       parent_session_id: null
-    completion_pct: 18
+    completion_pct: 27
     open_questions: []
     answered_questions: []
 ---
@@ -55,7 +55,7 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
 | AC-001 | REQ-001 | Given `capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous markup string (`capture.mjs:108-133`), When a constructed scenario type is added that mounts through `buildRenderAssertionBundle()`/`runRenderAssertions()`, Then a constructed capture exists whose bundle input list (`built.metafile.inputs`) includes the real `src/views/*` renderer source, not a second implementation. | Observed in-runtime: two full detached `npm run screenshots` runs produced 36 constructed entries marked `source: "constructed"`, each naming its renderer; `prepareConstructedBundle()` throws when `buildRenderAssertionBundle`'s `missingSources` is non-empty, so a bundle that dropped a shipped renderer fails the run. All 36 PNGs opened and read; they show the production renderers, not fixture markup. Was 0. | Met | - |
-| AC-002 | REQ-002 | Given `calendar-renderer.ts` and `calendar-timeline-renderer.ts` schedule a post-render layout correction via `window.requestAnimationFrame` (workday scroll, popover reposition, timeline group-width), When a constructed capture of one of these views is taken with the readiness wait removed and again with it present, Then the two captures differ (`pixelHash` or `layoutHash`), proving the wait changes what is photographed rather than being decorative. | Run, and the criterion failed on its own terms rather than the implementation failing: `constructed-calendar-week` captured with `READY_ANIMATION_FRAMES` set to 0 gives pixelHash 265f58faa024 / f46ff021c4b2 / 2ea63aecd959 / afcbb4870a24, identical to the two-frame run on all four entries, because the screenshot command flushes pending animation frames before rasterising. The correction is real: inside the mount, `.note-database-container` scrollTop reads 0 synchronously after mount returns and 376 one frame later. Needs an amendment to the inside-mount basis, or an explicit acceptance of determinism (0 of 36 entries moved across two full runs) as the basis. | Unmet | - |
+| AC-002 | REQ-002 | Given `calendar-renderer.ts` and `calendar-timeline-renderer.ts` schedule a post-render layout correction via `window.requestAnimationFrame` (workday scroll, popover reposition, timeline group-width), When a constructed capture of one of these views is taken with the readiness wait removed and again with it present, Then the two captures differ (`pixelHash` or `layoutHash`), proving the wait changes what is photographed rather than being decorative. | Run, and the criterion failed on its own terms rather than the implementation failing: `constructed-calendar-week` captured with `READY_ANIMATION_FRAMES` set to 0 gives pixelHash 265f58faa024 / f46ff021c4b2 / 2ea63aecd959 / afcbb4870a24, identical to the two-frame run on all four entries, because the screenshot command flushes pending animation frames before rasterising. The correction is real: inside the mount, `.note-database-container` scrollTop reads 0 synchronously after mount returns and 376 one frame later. **Operator ruling 2026-09-04: determinism accepted as the basis; the animation-frame wording is superseded.** Basis: two full capture runs (`implementation-summary.md` Verification) reproducing identical `pixelHash`/`layoutHash` for all entries across both runs, and `screenshots:verify` reporting 528 entries current against HEAD `e8e44cc6`. | Met | - |
 | AC-003 | REQ-003 | Given `ScenarioSpec.scale` is typed `"month" \| "week" \| "day"` (calendar-only, `render-assertion-harness.ts`), When the type and the timeline construction branch are extended to accept all five shipped scales, Then a scenario naming each of `day`, `week`, `month`, `quarter`, `year` constructs `CalendarTimelineRenderer` at that scale, and `node tools/live/render-assertions.mjs` continues to exit 0 for every previously-registered scenario, unchanged. | `node tools/live/render-assertions.mjs`, `$?`; before/after diff of its per-scenario output for existing entries | Unmet | - |
 | AC-004 | REQ-004 | Given the constructed mount path's row/column counts are hardcoded to the perf-bench shape (1600-2000 rows, `render-assertion-harness.ts:106-160`), When an opt-in capture-sized data option is added, Then a constructed capture using the option shows a row count comparable to the fixture it declares (`scenarios/shared.mjs`'s curated ~12-20 rows), and `render-assertions.mjs`/`touch-targets.mjs`/`unstyled-links.mjs` produce byte-identical output to today when the option is omitted. | Row count in the captured DOM (`layoutHash` element count) for the option-enabled path; before/after run of the three existing checks with the option unused | Unmet | - |
 | AC-005 | REQ-005 | Given no capture has ever photographed a constructed `ChartRenderer` or a constructed calendar `day` scale (both real, confirmed coverage gaps — `grep` across `scenarios/*.mjs` returns no chart-view fixture, no `calendar-day` fixture), When the 13-scenario registry (list, table, board, gallery, calendar×3, timeline×5, chart) is captured desktop + phone, both themes, Then `screenshots/constructed-manifest.json` carries 52 entries and every one of the 13 renderer/scale combinations is represented at least once. | `screenshots/constructed-manifest.json` entry count and distinct renderer/scale coverage, read directly | Unmet | - |
@@ -91,8 +91,8 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Two of eleven are `Met` (AC-001, AC-010) and nine remain open. The constructed capture exists and is
-verified, but the packet's own scope is only partly delivered: no separate
+Three of eleven are `Met` (AC-001, AC-002, AC-010) and eight remain open. The constructed capture
+exists and is verified, but the packet's own scope is only partly delivered: no separate
 `screenshots/constructed-manifest.json` (AC-005, AC-006), no `declared-fixtures.mjs` (AC-007 —
 the mapping landed as `fixtureOf` on the fixtures instead), no harness timeline scale or
 capture-sized data option (AC-003, AC-004), no `verify.mjs` DECLARED staleness inheritance (AC-009)
@@ -103,7 +103,7 @@ unnamed constructed capture, because the constructed entries share the fixture m
 criterion's effect is achieved; its stated mechanism (widening `contentChangedCaptures()` to read a
 second file) is not, and will only be needed if AC-006 is upheld.
 
-AC-002 is blocked on a decision rather than on work, and the decision is recorded in
-`implementation-summary.md` §Known Limitations 1. Do not close this packet by quietly restating that
-criterion; either amend it with a reason or accept the determinism basis explicitly.
+AC-002 was blocked on a decision rather than on work. The operator ruled 2026-09-04: determinism is
+the accepted basis, the animation-frame wording is superseded, and the row is now `Met` — see the
+Verification cell above and `implementation-summary.md` §Known Limitations 1.
 <!-- /ANCHOR:closure -->

@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: release 0.0.20 is live at ccc946c3, carrying gantt's residual-behaviour and closing legs, board T12's in-repo close, and 043's constructed fixture families. Both 1:1 ports' in-repo comparison halves are now MET (gantt AC-007 at 30c4b746, board T12 at c563f08). Nothing is queued in-repo; every remaining row (rows 1-2 device confirmation, T12/AC-007 vault compares, the 043 AC-002 ruling, a new milestone-overpaint call) is the operator's alone."
+description: "Resume point: release 0.0.20 is live at ccc946c3. Operator answered 2026-09-04 ~17:30 CEST: rows 34-36 reopened (still broken on 0.0.20; fix leg on worktrees/036-sheet-freeze), rows 37-38 redirected to an in-repo screenshot compare (worktrees/037-reference-captures), row 39 decided (reinstate the local milestone-label fix; worktrees/038-milestone-labels), and 043's AC-002 is now Met on the accepted determinism basis. Remaining: rows 1-2 device confirmation and the three new legs."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,17 +10,15 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T15:20:00Z"
+    last_updated_at: "2026-09-04T17:34:00Z"
     last_updated_by: "orchestrate-handover-15"
-    recent_action: "AC-007 in-repo half MET (30c4b746); 0.0.20 shipped; board T12 in-repo half MET"
-    next_safe_action: "Await operator: device confirmations, vault compares, AC-002 and overpaint rulings"
+    recent_action: "Operator answered 2026-09-04: 34-36 reopened, 37-38 in-repo, 39 decided, AC-002 Met"
+    next_safe_action: "Await operator: device confirm rows 1-2 + fix (036) + captures (037) + label fix (038)"
     blockers:
-      - "Operator device confirmation owed: reports 29-36, five ported surfaces, 0.0.16-0.0.20"
-      - "043 AC-002 ruling owed: inside-mount scrollTop measurement vs. determinism basis"
-      - "Board T12's operator half owed: vault compare vs obsidian-pm kanban (roadmap.md row 37)"
-      - "Gantt AC-007's operator half owed: vault compare vs obsidian-pm gantt (roadmap.md row 38)"
-      - "Milestone-overpaint keep-vs-revert ruling owed (roadmap.md row 39, new)"
-      - "Operator to enable Project Manager on phone, Projects folder set to \"PM Compare Test\""
+      - "Operator device confirmation owed: reports 29-33, five ported surfaces, 0.0.16-0.0.20"
+      - "Reports 34-36 reopened (operator, 2026-09-04): add filter/add sort still break/freeze on 0.0.20; fix leg on worktrees/036-sheet-freeze (owner 031)"
+      - "Rows 37-38 in-repo captures owed: recapture Project Manager's board+gantt views into screenshots/, leg on worktrees/037-reference-captures (harness, 043)"
+      - "Row 39 milestone-label fix owed: reinstate the local anti-collision fix on the default gantt, amendment to 037 REQ-007, leg on worktrees/038-milestone-labels"
     key_files:
       - "goal.md"
       - "roadmap.md"
@@ -32,10 +30,11 @@ _memory:
       session_id: "surface-system-handover"
       parent_session_id: null
     completion_pct: 71
-    open_questions:
-      - "043 AC-002: amend the criterion to the inside-mount scrollTop measurement, or accept determinism as the basis"
-      - "Milestone-overpaint (roadmap.md row 39): keep the reference-faithful shape, or reinstate a local anti-collision fix on the gantt's default render path"
+    open_questions: []
     answered_questions:
+      - "2026-09-04 ~17:30 CEST, operator answered four questions. (1) Reports 29-36 on 0.0.20: add filter/add sort still breaks or freezes the app on mobile — rows 34-36 reopened, fix leg on worktrees/036-sheet-freeze (owner 031); rows 29-33 unchanged, not mentioned. (2) Rows 37-38 (board/gantt vs. Project Manager): capture Project Manager's own board and gantt views into screenshots/ so the comparison is done in-repo, leg on worktrees/037-reference-captures (harness, 043); rows close when a fresh reviewer compares our captures against the reference captures. (3) Row 39 (milestone-overpaint): reinstate the local fix (raise crowded milestone labels) on the default gantt, amendment to 037's REQ-007, leg on worktrees/038-milestone-labels. (4) 043 AC-002: accept determinism (recommended) — the row is now Met, the animation-frame wording superseded"
+      - "043 AC-002: amend the criterion to the inside-mount scrollTop measurement, or accept determinism as the basis? Operator ruling 2026-09-04: accept determinism; AC-002 is now Met"
+      - "Milestone-overpaint (roadmap.md row 39): keep the reference-faithful shape, or reinstate a local anti-collision fix on the gantt's default render path? Operator decided 2026-09-04: reinstate the local fix, amendment to REQ-007"
       - "The 036 research loop cannot run in the main checkout while a sibling code phase is dirty; it now runs in a worktree. Synthesis landed at 036/research/research.md; lineage ledgers stay untracked by .gitignore"
       - "Landing discipline for a port phase: verify in the worktree, commit on the worktree branch, land to main only after the CSS/display leg is verified there, and release from a clean clone"
       - "All five obsidian-pm port phases (037-041) are landed on main and shipped: 1.4.4 (037), 1.4.5 (038), 1.4.6 (039, 041), 1.4.7 (040), 1.4.8 (038, 040 open-row fixes), 1.4.9 (037, 041 open-row fixes), 1.4.10 (037's last open row plus the 042 touch-floor fix). Every open product row from all five phases is now closed"
@@ -108,6 +107,19 @@ overpaints the month-band label on the default render path, because the referenc
 recorded as a new never-tick operator row — `roadmap.md` §4 row 39, and an operator-only row in
 `037/goal.md` — not fixed, since keep-vs-revert is the operator's call, not an agent's.
 
+**Operator answered 2026-09-04 ~17:30 CEST**, resolving four of the open items above. Reports
+34-36 (add filter/add sort) still break or freeze the app on mobile on 0.0.20 — reopened, not
+device-confirmed; the fix leg moves to `worktrees/036-sheet-freeze` (owner `031`). Rows 37 and
+38's own vault compares are redirected: rather than the operator installing both plugins in one
+vault, the harness now captures Project Manager's own board and gantt views into `screenshots/`
+so a fresh reviewer can compare in-repo — leg `worktrees/037-reference-captures` (`043`'s
+harness); both rows close only when that reviewer runs. Row 39 is decided — reinstate the local
+anti-collision fix that raises crowded milestone labels on the default gantt render path, as an
+amendment to `037`'s REQ-007 — leg `worktrees/038-milestone-labels`. And `043`'s AC-002 is now
+`Met`: the operator accepted determinism as the basis (two full capture runs, 0 of 36 constructed
+entries moved; `screenshots:verify` 528 entries current at `e8e44cc6`), superseding the
+pixel-difference wording.
+
 Nothing is queued in the main checkout. The two legs the prior handover carried in flight
 (`worktrees/033-board-t12` and `worktrees/032-gantt-residual`) landed this session, along with
 every other open worktree (022 through 035); none is an ancestor gap on main, and all are the
@@ -121,28 +133,30 @@ operator's to remove through `sk-git` once no longer needed for reference.
 
 No code lane is queued anywhere — main and every worktree are settled. **Rows 1 and 2 of the
 parent DONE table are the only open rows in it, and both are the operator's.** Beyond the DONE
-table, four further items sit in `roadmap.md` §4 as never-tick operator rows, none of which any
-agent can close on its own judgment:
+table, three further items sit in `roadmap.md` §4 as never-tick or operator-answered rows, none of
+which any agent can close on its own judgment:
 
-1. **Device confirmation** — reports 29-36, the five ported surfaces, and all five of `038`'s
+1. **Device confirmation** — reports 29-33, the five ported surfaces, and all five of `038`'s
    board one-to-one copy (0.0.16), `037`'s gantt one-to-one copy (0.0.17), the board fidelity pass
    (0.0.18), the gantt fidelity pass (0.0.19), and the residual-behaviour/closing/T12-close
    release (0.0.20). Each confirmation closes its `roadmap.md` §4 row; each "still broken" reopens
    it with the device fact given, not an assumption. Every release is already installed to the
-   iCloud vault, so no install step blocks any of them.
-2. **`043`'s AC-002 ruling** — the readiness wait is real inside the mount (`scrollTop` moves 0 to
-   376 across one frame), but the screenshot command flushes that frame before it rasterises, so a
-   photograph can never show the difference the criterion asks for. Amend the criterion to the
-   inside-mount measurement, or accept determinism as its basis.
-3. **Board T12's operator half (row 37)** — compare the board against obsidian-pm's kanban side by
-   side in the vault where both are installed; the in-repo half is already MET.
-4. **Gantt AC-007's operator half (row 38)** — the same compare for the gantt; the in-repo half is
-   already MET.
-5. **The milestone-overpaint ruling (row 39, new)** — keep the reference-faithful overpaint the
-   1:1 gantt copy reproduces, or ask for a local anti-collision fix on the default render path.
+   iCloud vault, so no install step blocks any of them. Reports 34-36 are already answered —
+   negatively, see item 2.
+2. **Reports 34-36 (reopened)** — the operator reports add filter/add sort still break or freeze
+   the app on mobile on 0.0.20. Fix leg on `worktrees/036-sheet-freeze` (owner `031`); the rows
+   stay open until a fresh device confirmation follows the next fix.
+3. **Rows 37-38's in-repo captures** — the operator redirected both vault compares: capture
+   Project Manager's own board and gantt views into `screenshots/` so a fresh reviewer can compare
+   our captures against the reference captures in-repo, rather than the operator installing both
+   plugins in one vault. Leg on `worktrees/037-reference-captures` (harness, `043`); both rows
+   close only when that reviewer runs.
+4. **Row 39's milestone-label fix** — decided: reinstate the local anti-collision fix (raise
+   crowded milestone labels) on the default gantt render path, as an amendment to `037`'s REQ-007.
+   Leg on `worktrees/038-milestone-labels`; the row stays open until it lands and is verified.
 
-The vault comparisons (3 and 4) need Project Manager enabled on the phone with its Projects folder
-set to `PM Compare Test`, per the operator's own setup.
+`043`'s AC-002 ruling is now settled (determinism accepted, `acceptance-criteria.md`) and is no
+longer an open item here.
 
 Candidate next work is bounded entirely by what the operator's answers reopen — nothing else is
 queued.
@@ -158,10 +172,12 @@ Nothing in-repo is open except the operator rows above.
 1. Read this handover in full before touching anything.
 2. Run `npm run gate` from a clean `main` checkout and confirm 25/25 green before assuming the
    tree is exactly as described here — a resume never trusts a stale gate claim.
-3. Wait for the operator's answers to the five items in §2. Record each one where it is tracked
-   (`roadmap.md` §4 for the never-tick rows, the DONE table for rows 1-2) as it arrives — an agent
-   never closes an operator row on its own judgment, and a "still broken" answer reopens the row
-   with the device fact given rather than being argued with.
+3. The operator answered the four items in §2 on 2026-09-04 ~17:30 CEST (recorded above and in
+   `roadmap.md` §4). Three legs are now named but not yet dispatched: `worktrees/036-sheet-freeze`
+   (reports 34-36), `worktrees/037-reference-captures` (rows 37-38), and
+   `worktrees/038-milestone-labels` (row 39). Still owed from the operator: device confirmation on
+   the DONE table's rows 1-2 and reports 29-33 — record each as it arrives, and a "still broken"
+   answer reopens the row with the device fact given rather than being argued with.
 4. Once the operator confirms the finished worktrees (022-035) are no longer needed for reference,
    offer to remove them through `sk-git`.
 <!-- /ANCHOR:session-notes -->

@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T04:45:00Z"
-    last_updated_by: "in-runtime-code-agent"
-    recent_action: "T028 landed: all 13 row-6 fixtures now constructed"
-    next_safe_action: "Rule on AC-002; fresh audit re-reads row 6"
+    last_updated_at: "2026-09-04T17:30:00Z"
+    last_updated_by: "in-runtime-doc-agent"
+    recent_action: "AC-002 marked Met on the operator's determinism ruling (2026-09-04)"
+    next_safe_action: "Fresh audit re-reads row 6"
     blockers:
-      - "AC-002 as written cannot be satisfied through the capture path — needs a phase ruling before it can be ticked or amended"
       - "table and chart constructed captures remain untyped by design (table's stubbed renderCell, chart's no per-row field)"
       - "touch-targets.mjs/unstyled-links.mjs's own constructed pass does not yet cover T028's 10 new per-state scenarios"
     key_files:
@@ -34,6 +33,7 @@ _memory:
       - "Is fixture-vs-constructed parity pixel-equal on aligned data, or structural-equal on the harness's own shape (spec.md §12, resolved by tasks.md T003)"
     answered_questions:
       - "Does the capture-sized data option need real types, or is row count alone sufficient? Row count alone is not sufficient — T006 bundles the reduction with named, coloured select options, otherwise the smaller dataset would still be untyped placeholder text."
+      - "Does AC-002 amend to the inside-mount measurement, or accept determinism as its basis? Operator ruling 2026-09-04: accept determinism; AC-002 is now Met."
 ---
 # Goal: Constructed Capture
 
@@ -162,7 +162,7 @@ and findings belong here.
 | Seam investigation (capture.mjs, render-assertion-bundle.mjs, render-assertion-harness.ts) | Done | `spec.md` §2, `plan.md` §3 — read in full, not summarised; confirmed `capture.mjs` has zero constructed-mount code, confirmed the timeline-scale gap in `ScenarioSpec`, confirmed the row/column shape mismatch between the fixture and bench pipelines |
 | Fixture-vs-constructed scenario audit | Done | `plan.md`'s Architecture table — 70 total fixtures in `scenarios.mjs` (`node -e` count), 21 in the `views` group, 11 mappable to a constructed scenario, 13 staying fixture-only, 2 genuine coverage gaps (chart, calendar-day) with no prior fixture at all |
 | Constructed scenario type in `capture.mjs` | Done | tasks.md T007 — nine `constructed-<view>` scenarios reusing `buildRenderAssertionBundle`; 36 captures read in-runtime |
-| Readiness signal | Done, criterion disputed | tasks.md T008 — `onMounted` + provenance, then 2 frames. The wait is real (scrollTop 0 -> 376 across one frame) but the pixel-difference criterion is unmeetable through the capture path; AC-002 needs a ruling |
+| Readiness signal | Done, AC-002 Met | tasks.md T008 — `onMounted` + provenance, then 2 frames. The wait is real (scrollTop 0 -> 376 across one frame); the pixel-difference criterion was unmeetable through the capture path, and the operator ruled 2026-09-04 to accept determinism as the basis instead |
 | Timeline scale + capture-sized data harness extension | Done | tasks.md T004-T006 — `ScenarioSpec.scale`/`.captureData` land in `render-assertion-harness.ts`; `render-assertions.mjs`/`touch-targets.mjs`/`unstyled-links.mjs` all exit 0 with unchanged fixture-pass numbers and the constructed-pass scenario count growing 17 -> 21; 28 of 36 constructed captures recaptured with typed data and real icons, two full detached runs 0/36 changed between them |
 | 13-scenario constructed manifest | Partial, deviated | tasks.md T009 — 9 scenarios landed as 36 entries inside the shared `screenshots/manifest.json`; the separate 52-entry file of AC-005/AC-006 does not exist |
 | `declared-fixtures.mjs` | Deviated | tasks.md T010 — the mapping landed as `fixtureOf` on 7 fixtures instead of a separate map; the 4 timeline-scale pairs stay undeclared per D4 |
