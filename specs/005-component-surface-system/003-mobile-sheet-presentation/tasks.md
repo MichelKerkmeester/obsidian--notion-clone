@@ -14,6 +14,11 @@ contextType: "planning"
 **Reconciled against evidence on 2026-09-02: 7 ticked with citations, 20 left open (0 not done by
 decision, 2 operator-owned, rest unfound).**
 
+**2026-09-04: five rows added below for two operator reports landed on separate branches — T28-T32
+(Stage 7, the settings sheet, report 41) and T33-T34 (Stage 8, the column-width adjuster, reports
+40/40b, renumbered from an original T28/T29 to avoid colliding with Stage 7's own numbers when the
+two branches landed on `main` independently); the reconciliation count above predates all five.**
+
 ---
 
 <!-- ANCHOR:notation -->
@@ -220,6 +225,115 @@ more than the 1.35px fallback artefact, no later claim in this spec means anythi
       1280x900 profile through the same producer: `isSheet:false`, `closeButton:false`, panel still
       the scroller (`panelScrolls:true`, `bodyScrolls:false`, body `overflow-y: visible`), row still
       `grid-template-columns: 116px 152px`.
+
+### Stage 8 — the column-width adjuster, from operator reports 40/40b
+
+- [x] **T33** Present the column-width adjuster as a shared bottom sheet on a phone — operator report 2026-09-04.
+      *Evidence to close:* The adjuster mounts through the shared sheet host with the shared sheet
+      tree; the bare-strip vocabulary is gone
+      **Evidence:** RED first: the new suite at `src/views/column-width.test.ts:123-184` ran
+      **7 failed | 7 passed** against the pre-change tree (2026-09-04 20:48, `npx vitest run
+      src/views/column-width.test.ts`) — no `openColumnWidthAdjuster`, no shared sheet-host
+      calls, no shared header/range/preset classes. GREEN from the final state: the same suite
+      passes **14/14**. The adjuster now lives in `src/views/column-width.ts`:
+      `:366` `openColumnWidthAdjuster` builds the shared body (header `:376` `db-panel-header` +
+      `:379` `db-cell-edit-close`, range `:388` `db-view-config-range`, presets `:413`
+      `db-new-placement` / `:419` `db-new-placement-option` with `is-active`/`aria-checked`),
+      and the phone branch calls the same shared host the owned menus do — `:522`
+      `applySheetChrome(panel, true, { scrimCapturesPointer: true })`, `:523` `placeSheet`,
+      `:524` `keepSheetPlaced`, `:525` `playSheetEntrance`, `:526`
+      `attachSheetDragToDismiss(panel, close)`, `:530` `installPopoverAutoClose` (overlay-stack
+      Escape + scrim tap). `database-view.ts:11398` now delegates to it and no longer builds the
+      bare strip; the old classes (`db-mobile-column-width-title`, `-slider`, `-value-row`) are
+      absent from both files, asserted at `column-width.test.ts:155-159`. Auto now clears the
+      explicit width instead of pinning the measured one (`column-width.ts:463-471`). The CSS
+      lane (styling the sheet tree) is not part of this row.
+
+- [x] **T34** CSS lane for T33's adjuster, plus the keyboard-follow report and a root-caused
+      desktop regression T33 introduced — operator reports 2026-09-04 (report-40, report-40b/addendum).
+      *Evidence to close:* The four operator-reported/inferred defects each have a red-then-green
+      proof: the bare-strip look, the missing close-button chrome, the range/presets rows not
+      filling their own row, and the keyboard not following the focused field.
+      **Evidence:**
+
+      *Claims verified before touching anything:* `npx tsc --noEmit` 0; `npx vitest run`
+      1044/1044 (101 files); `npm run lint` 172 problems (159 errors, 13 warnings), matching the
+      pre-existing baseline exactly; `node tools/naming/scan-comments.mjs` PASS; `main.js` clean
+      — T33's claims held.
+
+      *The 044 phase this dispatch named does not exist in this worktree* (only `000`-`043` are
+      present at base `c6b5f11`); evidence below is written into this packet instead, per the
+      dispatch's own fallback.
+
+      *CSS-lane fixes, `styles.css`:* removed the six now-orphaned rules T33's new body markup no
+      longer emits (`db-mobile-column-width-title`, `-value-row`, `-slider`, `-value`,
+      `-presets`, `-preset`, formerly ~19965-20026). Added `.db-mobile-column-width-panel
+      .db-cell-edit-close { display: none }` plus a `.db-mobile-bottom-sheet` variant
+      (`:19989-20011`) mirroring the record-detail pairing — without it the close button matched
+      no rule at all (only `.db-cell-edit-popover`/`.db-record-detail-panel` scope it) and would
+      have painted with the browser's bare default chrome. Added
+      `.note-database-container .db-panel-row .db-view-config-range, ... .db-new-placement {
+      flex: 1 1 auto; width: 100% }` (`:20025-20031`) and `.db-view-config-number { flex: 0 0
+      64px }` plus a range padding reset (`:20039-20046`) — `.db-panel-row`'s own generic `input`
+      rule (written for the filter/sort dropdowns) was winning on specificity and neither the
+      slider/number row nor the four-button preset group filled their row before this; both had
+      always been a grid track or a plain block child elsewhere and never needed their own growth.
+
+      *A second, more severe defect found and fixed while closing the first:* the panel is
+      created on `doc.body` directly (`column-width.ts:371`) and never takes
+      `setSheetMount`'s move branch that would otherwise add `.note-database-container` for it —
+      on EITHER presentation — so the new shared-class body from T33 matched nothing at all and
+      would have shipped a different, more silent kind of unstyled surface than the strip it
+      replaced. Fixed at `column-width.ts:382` (`panel.addClass("note-database-container")`).
+      That alone then regressed the DESKTOP presentation: `.note-database-container`'s own
+      `position: relative` (styles.css:822) was beating the panel's `position: fixed` at equal
+      specificity — confirmed with a live Playwright DOM dump of the real bundled `column-width.ts`
+      (`computed position: relative`, panel laid out at `y=900` on a 900px-tall desktop viewport,
+      100% below the fold) — and fixed with `position: fixed !important` at `styles.css:19952`,
+      mirroring how `.db-mobile-bottom-sheet` already forces the same property for every phone
+      sheet that carries this exact class combination.
+
+      *Keyboard-follow, red then green:* a new permanent lane check,
+      `tools/storybook/verify-placement.mjs:2373-2528` ("the column-width adjuster follows the
+      keyboard"), mounts the real `openColumnWidthAdjuster` on a 390×844 hasTouch/isMobile/is-phone
+      page, focuses the width number field, and drives both arms — `--keyboard-height` (host-declared)
+      and a raw `visualViewport.height` shrink (host-silent) — asserting the panel's bottom edge and
+      the focused field both clear a 331px keyboard (the height measured off the operator's own
+      report-40b screenshot) and return to the floor once it closes. A negative control proves the
+      checks are not vacuous: the pre-fix panel's own rectangle (`position: fixed; bottom: 0` and
+      nothing else, `verify-placement.mjs:2459-2475`) is driven through the identical simulation and
+      confirmed to stay parked at the screen bottom rather than clearing the keyboard — a
+      pin-and-drive control on the real panel does not work here, because `keepSheetPlaced`
+      resubscribes to the very `resize`/`visualViewport` events the drive dispatches and overwrites
+      any pinned override before it can be read. `node tools/storybook/verify-placement.mjs`:
+      401/402 checks passed (1 pre-existing declared red, unrelated), exit 0 — run twice, once
+      before the desktop position fix (green already, since the check only drives the phone
+      presentation) and once after (unchanged).
+
+      *Captures read beside the sort sheet (`sort-panel-desktop-dark.png`):* the adjuster is now a
+      proper card — rounded top corners, grab handle, header row, and (on the phone captures) a
+      44×44 `x` close button matching the record-detail sheet's chrome — not the flat, edge-to-edge
+      strip report-40 showed. The slider spans the row and the "150" value sits in a fixed 64px box
+      beside it rather than each shrinking to content. The four presets (`Auto`/`Narrow`/`Medium`/
+      `Wide`) span the row as one segmented group with `Auto` highlighted, matching the reference
+      `db-new-placement` group's look. `constructed-column-width-adjuster-desktop-{dark,light}.png`
+      confirm the desktop fixed-panel presentation is visible and correctly bottom-docked (root-cause
+      fix above); `panel-column-width-sheet-mobile-{dark,light}.png` is the new hand fixture,
+      `constructed-column-width-adjuster-mobile-{dark,light}.png` the real-renderer capture that
+      supersedes it. 6 new files; 7 more the same recapture moved were confirmed pixelHash-identical
+      to HEAD (byte-only re-encode noise plus the pre-existing `field-icon-picker-desktop`
+      Chrome/OS drift this lane's own prior releases already name) and restored to HEAD bytes,
+      manifest entries reset to HEAD's `bytes`/`pixelHash`/`layoutHash` for those 7 while every
+      entry's `sourceHashes.styles.css` carries the current fingerprint. `npm run screenshots:verify`:
+      534 entries match their sources, none blank or identical across themes, 0 stale.
+
+      *Full-suite re-verify after every fix:* `npx tsc --noEmit` 0; `npx vitest run` 1045/1045
+      (102 files, +1 for the new `note-database-container` regression test at
+      `column-width.test.ts:186-191`); `npm run lint` 172 (unchanged baseline); `scan-comments`
+      PASS; `npm run gate`: 25/25 green, including `evidence` (8 artefacts — `cascade-audit`,
+      `checkbox-appearance`, `checkbox-inventory`, `design-conformance`, `engine-parity`,
+      `surface-census`, `token-census`, `view-census` — re-run by hand to re-stamp their
+      `styles.css` fingerprint after it changed; none reported a new defect).
 
 <!-- /ANCHOR:phase-2 -->
 ---

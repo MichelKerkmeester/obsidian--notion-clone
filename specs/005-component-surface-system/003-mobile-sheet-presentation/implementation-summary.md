@@ -324,3 +324,30 @@ delivered at all (003, 007) — against zero task closure, zero sign-off and zer
 It is not 100 and cannot be: per decision D3 only operator confirmation closes anything.
 
 <!-- /ANCHOR:limitations -->
+
+---
+
+## Addendum — 2026-09-04: the column-width adjuster joins the sheet family (T28, T29)
+
+Operator reports 2026-09-04 (report-40, report-40b/addendum) named a fifth surface still outside
+this phase's scope: the column-width adjuster (`src/views/column-width.ts`) presented as a bare
+fixed strip — no scrim, no grab handle, no header — and the software keyboard covered it outright
+while the width field was focused, with no way to see the column being resized.
+
+T28 moved the adjuster onto the exact shared sheet host this phase built (`applySheetChrome`,
+`placeSheet`, `keepSheetPlaced`, `playSheetEntrance`, `attachSheetDragToDismiss`,
+`installPopoverAutoClose`) and onto the shared panel-family body markup (`db-panel-header`,
+`db-cell-edit-close`, `db-panel-row`, `db-view-config-range`/`-number`, `db-new-placement`). T29
+closed the CSS lane that markup needed, found and fixed a second defect the move introduced (the
+panel never carried `.note-database-container`, so none of the shared classes could match at all —
+and once fixed, exposed a THIRD, pre-existing-shaped conflict: `.note-database-container`'s own
+`position: relative` beat the panel's `position: fixed` on desktop), and added a permanent
+keyboard-follow lane check with a working negative control. Full evidence, file:line citations and
+verification commands are in `tasks.md` T28 and T29.
+
+This does not change the 70% or the requirement table above — REQ-003/007 are still undelivered and
+nothing here is operator-confirmed on a handset — but it is the clearest demonstration yet of why
+REQ-002's "the outcome is measured green, the mechanism is untouched" note matters: `placeSheet` and
+`keepSheetPlaced` generalised correctly to a THIRD producer with zero changes to either function,
+and the keyboard-follow lane's negative control had to be built around the fact that
+`keepSheetPlaced` is now robust enough to defeat a naive pin-and-drive attack on itself.
