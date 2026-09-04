@@ -908,6 +908,42 @@ This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing 
       depends-elsewhere chip T035 added; a comment-only edit re-keys 56 render-assertion captures
       by content hash, so it is deferred to the next real code change that touches that file rather
       than paid for on its own here.
+- [x] **T052** [T050 resolution] Operator decided (2026-09-04, `roadmap.md` §4 row 39): "Reinstate
+      local fix" — a local anti-collision fix for the milestone-label-over-band-label overpaint is
+      reinstated on the reference gantt's default render path. This is REQ-007's one deliberate
+      divergence from the 1:1 copy, recorded in `acceptance-criteria.md`'s AC-007 divergence list.
+      Red first: a new `calendar-timeline-gantt.test.ts` case places a milestone due on a visible
+      month's first day (its centred label lands 16px from that band's own left-anchored label) and
+      asserts the milestone label leaves the reference's plain `y=14` baseline and carries a raised
+      modifier — failed at `y="14"` against the unmodified renderer.
+      Ported (not copied verbatim, since the reference has no such case to copy from) the
+      estimate-then-move shape `resolveTimelineMilestoneLabelPlacement`/
+      `getTimelineMilestoneLabelWidthUnits` (`calendar-timeline-model.ts`) already use for the local
+      renderer's own milestone-vs-next-bar collision: `renderGanttMonthBands`/`renderGanttYearBands`
+      (`calendar-timeline-renderer.ts:1250-1301`) now return each band label's own x/text instead of
+      only drawing it, threaded through the five per-scale header dispatchers (`:1092-1244`) to
+      `renderGanttMilestoneLabels` (`:1519-1570`), which estimates both labels' spans by character
+      count (no real text metrics exist for an unmounted SVG string) and, when they overlap, moves
+      the milestone label from `y=14` to `y=8` and adds `.pm-gantt-milestone-label--raised` (new
+      `styles.css` rule, CSS lane `037-timeline-gantt-port`: a background-color text stroke for
+      legibility). The guide line's own start needed no matching change — it always begins at the
+      header's bottom edge, never inside the 0-24 band strip the raised label stays within.
+      The hand-authored `temporal.mjs` fixture (`timeline-view-*` captures) was checked against the
+      same crowd heuristic across all five scales/two devices and produces no collision in any of
+      them, so it needed no update — confirmed unchanged by the recapture.
+      10 real content-changed captures (`constructed-timeline{,-day,-subtask}` × desktop/mobile ×
+      dark/light where applicable) opened and read directly: "row-1"'s milestone label (bench date
+      lands on a September month boundary) now stacks cleanly above "SEP 26" instead of overpainting
+      it, confirmed against the HEAD-committed PNG before/after. `pixelHash` read all ten as
+      unchanged (its coarse tolerance misses a ~6px baseline move); `layoutHash` and a direct visual
+      read both confirmed the change, so all ten are named in the CSS lane release regardless of
+      what the hash comparator required (`tools/lane/css-lane.json` release note, this session).
+      `npx tsc --noEmit` exit 0; `npx vitest run` 1038/1038 (101 files, was 1037); `npm run lint` 172
+      (unchanged baseline); `npm run lint:tools` clean; `scan-comments` PASS; `npm run gate` 25/25
+      green (8 evidence artefacts the `styles.css` edit staled — `cascade-audit`,
+      `checkbox-appearance`, `checkbox-inventory`, `design-conformance`, `engine-parity`,
+      `surface-census`, `token-census`, `view-census` — re-measured by re-running each tool, no
+      number hand-edited).
 <!-- /ANCHOR:phase-8 -->
 
 ---

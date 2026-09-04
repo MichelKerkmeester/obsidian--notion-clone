@@ -115,4 +115,25 @@ month-band label on the default render path (reference-faithful by construction,
 decision recorded as a new row 39 in `../roadmap.md` §4 and in `goal.md`'s operator rows,
 `tasks.md` T050) — and one already-closed item, the per-band fixture month parity T047(b) had
 already fixed (`tasks.md` T051).
+
+**Amendment 2026-09-04 (REQ-007 divergence list — operator ruling on row 39):** the operator
+decided "Reinstate local fix" for the milestone-label-over-band-label overpaint `tasks.md` T050
+left open. This is REQ-007's one deliberate divergence from the reference gantt, recorded here so
+AC-007's own "60 of 60 `pm-gantt-*` classes match with zero divergence" reading in the row above
+is not read as still zero-divergence after this session:
+
+- **REQ-007-DIV-1 — milestone label anti-collision (local addition, not present in the
+  reference).** `GanttHeaderRenderer`'s month/year band label (`y=18`) and `GanttTaskBarRenderer`'s
+  milestone label (`y=14`) paint on the same header SVG with no anti-collision between them in the
+  reference source itself (confirmed against `specs/context/obsidian-pm-main`, which carries no
+  case in its own fixtures that would have needed one). `renderGanttMilestoneLabels`
+  (`calendar-timeline-renderer.ts:1519-1570`) now estimates both labels' spans by character count
+  and, when a milestone's label would overlap a band label, moves it from `y=14` to `y=8` and adds
+  a `.pm-gantt-milestone-label--raised` modifier (new `styles.css` rule) — reinstating, for this
+  one different collision pair, the estimate-then-move shape the pre-port local renderer's
+  `resolveTimelineMilestoneLabelPlacement` already used for milestone-vs-next-bar crowding. Full
+  evidence (red test, ported rule, captures read): `tasks.md` T052.
+
+This divergence does not change AC-007's `Status` cell in the row above, which stays `Unmet` per
+D3 pending the operator's own vault side-by-side compare (row 38 in `../roadmap.md` §4).
 <!-- /ANCHOR:closure -->
