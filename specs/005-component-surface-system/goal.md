@@ -1778,4 +1778,28 @@ Also re-confirmed unchanged: `BAGS` holds exactly 13 keys, none of them the tool
 and 2 are the operator's and are now the only open rows in the table. `roadmap.md` §5, §5.3 and
 `handover.md` updated to match.
 
+### Final-state proof (2026-09-04, main 7e1dd4c8)
+
+A fresh verifier ran every objective check this parent's completion criteria name, from the current
+tree — not carried from `done-audit-11`'s landing pass. `HEAD` moved to `534240b2` partway through
+this run on a concurrent `roadmap.md` commit (renumbering the operator-report release wording); it
+touches no `src/` or `tools/` file, so the numbers below hold for the tree both shas produced. No
+stray gate/capture/headless process before the run: `pgrep -f "node tools/gate.mjs|capture.mjs|
+--headless"` returned empty. Every `$?` below was read directly, never through a pipe.
+
+| Command | Summary | Exit |
+|---|---|---|
+| `SURFACE_PHASE=037-timeline-gantt-port npm run gate` | `gate: PASS — 25 green, 0 red for a declared reason` | 0 |
+| `SURFACE_PHASE=038-board-kanban-port npm run gate` | `gate: PASS — 25 green, 0 red for a declared reason` | 0 |
+| `SURFACE_PHASE=043-constructed-capture npm run gate` | `gate: PASS — 25 green, 0 red for a declared reason` | 0 |
+| `npm run gate` (bare) | `gate: PASS — 25 green, 0 red for a declared reason` | 0 |
+| `npm run replay` | `replay: PASS — all 28 results still hold` | 0 |
+| `NODE_PRESERVE_SYMLINKS=1 bash "$(realpath .opencode)/skills/system-spec-kit/scripts/spec/validate.sh" specs/005-component-surface-system --strict` | first `RESULT:` line `PASSED`; parent `Summary: Errors: 0  Warnings: 1` (the one warning is `FRONTMATTER_MEMORY_BLOCK` flagging `goal.md`'s and `handover.md`'s continuity-block byte size — advisory, not an error) | 0 |
+| `node tools/live/render-assertions.mjs` | `render-assertions: PASS — the shipped renderers built the asserted structure in headless Chrome`; `tools/live/renderer-coverage.json` stamps `constructed: 7, total: 22` — all seven `DatabaseViewType` values (list, table, board, gallery, calendar month/week/day, timeline day/month/quarter/year, chart) each have a production renderer constructed and asserted | 0 |
+| `npm run screenshots:verify` | `screenshots current: 528 entries match their sources, and none is blank or identical across themes` | 0 |
+
+All eight runs are green, no lane exempted or worked around to reach this. This entry re-confirms
+rows 3, 4, 5, 6 and 7 on the tree as it stands today; it adds no evidence toward rows 1 or 2, which
+stay the operator's device confirmation alone. `completion_pct` unchanged at **5 of 7 = 71**.
+
 <!-- /ANCHOR:log -->
