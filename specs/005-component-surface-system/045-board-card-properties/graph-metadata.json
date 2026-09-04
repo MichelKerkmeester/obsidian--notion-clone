@@ -50,13 +50,17 @@
       "src/views/board-renderer.ts",
       "src/data/types.ts",
       "src/views/toolbar-renderer.ts",
-      "src/views/database-view.ts",
+      "src/data/board-card-fields.ts",
+      "src/views/board-card-fields.ts",
+      "src/data/data-source.ts",
+      "src/views/board-card-properties-panel.ts",
+      "src/views/view-config-panel-renderer.ts",
       "src/views/embedded-database-renderer.ts",
       "src/i18n.ts",
-      "src/views/board-renderer-hierarchy.test.ts",
-      "tools/live/render-assertion-harness.ts",
-      "tools/screenshots/constructed-scenarios.mjs",
-      "src/views/README.md"
+      "src/views/board-card-fields.test.ts",
+      "src/views/board-card-properties-panel.stories.ts",
+      "tools/screenshots/constructed-capture.test.mjs",
+      "src/views/database-view.ts"
     ],
     "entities": [
       {
@@ -114,9 +118,27 @@
         "source": "derived"
       },
       {
-        "name": "database-view.ts",
+        "name": "board-card-fields.ts",
         "kind": "code",
-        "path": "src/views/database-view.ts",
+        "path": "src/data/board-card-fields.ts",
+        "source": "derived"
+      },
+      {
+        "name": "data-source.ts",
+        "kind": "code",
+        "path": "src/data/data-source.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-card-properties-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
         "source": "derived"
       },
       {
@@ -132,27 +154,27 @@
         "source": "derived"
       },
       {
-        "name": "board-renderer-hierarchy.test.ts",
+        "name": "board-card-fields.test.ts",
         "kind": "test",
-        "path": "src/views/board-renderer-hierarchy.test.ts",
+        "path": "src/views/board-card-fields.test.ts",
         "source": "derived"
       },
       {
-        "name": "render-assertion-harness.ts",
+        "name": "board-card-properties-panel.stories.ts",
         "kind": "code",
-        "path": "tools/live/render-assertion-harness.ts",
+        "path": "src/views/board-card-properties-panel.stories.ts",
         "source": "derived"
       },
       {
-        "name": "constructed-scenarios.mjs",
+        "name": "constructed-capture.test.mjs",
         "kind": "file",
-        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "path": "tools/screenshots/constructed-capture.test.mjs",
         "source": "derived"
       },
       {
-        "name": "README.md",
-        "kind": "doc",
-        "path": "src/views/README.md",
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
@@ -184,29 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Component Surface System",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator asked, verbatim: \"Also make it possible to adjust visible properties in board card",
     "created_at": "2026-09-04T19:01:24Z",
-    "last_save_at": "2026-09-04T19:10:51.142Z",
+    "last_save_at": "2026-09-04T22:37:12.875Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:80485edc791db1b0cb90b32f8f788909fec59188718f58faae5228e24d0033aa",
+    "source_fingerprint": "sha256:b2fc1387390b7f03943cf8796445e565f40ddbec24f6e8e6b23ee303c508b1b2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "7218f27f59835fd41295fffb2ff6afab25f8126fb0959e94aa08be3028df5479",
       "plan.md": "aaf4ae6fbf8a21541c940331be940256a0ed77330bac44ae78e276ad1bfda386",
-      "tasks.md": "50e26e77780dbcd7d568811223502a1944fa1e36db1bc3669ba6839a0435ba95",
-      "implementation-summary.md": "479da57c5797725b50162968afe931dc3dbd1de4a950c858f95528795d71d240"
+      "tasks.md": "283ba2c42258ea1c1b441f5be26cbc738764cba80852ce7cc9125a07890ffc96",
+      "implementation-summary.md": "417feacfea2daa576a38828b056eedb3c6debf6361c3d4ee7c93356e776be904"
     },
     "last_active_child_id": null,
     "last_active_at": null

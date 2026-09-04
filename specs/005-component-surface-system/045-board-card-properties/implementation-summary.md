@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Board Card Properties"
-description: "Nothing is built yet. This records the opening state — the three rules that decide a board card's fields today, and the reference slot map the new control must not disturb."
+description: "A per-view field list lands on ViewConfig, a resolver replaces the board's inline three-rule filter, and a Properties panel edits it — proved byte-identical for existing views and untouched for the default reference board."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -10,21 +10,27 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Recorded the opening state; no code has changed"
-    next_safe_action: "Design the persisted shape (tasks.md T003)"
+    last_updated_at: "2026-09-05T00:50:00.000Z"
+    last_updated_by: "code-verification-pass"
+    recent_action: "Verified the landing, fixed a resolver gap, closed T011/T012 and the gate"
+    next_safe_action: "T013 (photographed scenario) and T014 (roadmap update)"
     blockers:
-      - "Nothing implemented; this document is the pre-work baseline"
+      - "AC-005's named verification method (a 044 sheet-grammar lane row) does not exist in this tree yet"
+      - "AC-006 is operator-only"
     key_files:
       - "src/views/board-renderer.ts"
+      - "src/views/board-card-fields.ts"
+      - "src/views/board-card-properties-panel.ts"
       - "src/data/types.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-045-summary"
+      session_id: "surface-system-045-verify"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
+    completion_pct: 85
+    open_questions:
+      - "Does the gallery share this mechanism, or get its own?"
+      - "Does the Properties control also reach the reference card's five semantic slots, or only the local extension card?"
+      - "Should hiding a field on cards also offer to hide it in the table?"
     answered_questions: []
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
@@ -41,7 +47,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 045-board-card-properties |
-| **Completed** | Not complete — opened 2026-09-04 |
+| **Completed** | Not complete — REQ-001..004, 007, 008 met; REQ-005/006's sheet-grammar check and REQ-001's operator sign-off (AC-006) remain |
 | **Level** | 2 |
 <!-- /ANCHOR:metadata -->
 
@@ -50,33 +56,78 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** This records the state the packet opened against, read from the tree at `c6b5f11`.
+A board view now persists its own ordered, per-field visibility list, and the card renders exactly
+that list. An existing view with no stored list keeps the pre-change behaviour, proven by a capture
+pair rather than asserted from a unit test. The default (`boardExtensionsEnabled` off) reference
+board is untouched — the resolver has one call site, inside `renderCard`, and `renderReferenceCard`
+is not it.
 
-### Opening measurements
+### What shipped
 
-- `src/views/board-renderer.ts:1439` — `const columns = this.actions.getColumns(config)`. Every view
-  binds that action to the same `getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns)`
-  (`src/views/database-view.ts:477`, `:808`, `:833`, `:865`), so a board card's candidate field set
-  *is* the table's visible-column set.
-- `src/views/board-renderer.ts:1478-1483` — the candidates are then filtered by three rules: not the
-  title field, not the grouped or subgrouped field, and not any `select` or `status` column. The
-  last exists because `renderCardTitleChips` (`:1475`) renders those beside the title instead.
-- `src/data/types.ts:454` — `ViewConfig` already carries `hiddenColumns` (`:517`), `columnOrder`
-  (`:513`), `showEmptyFields` (`:566`), `boardImageField` (`:499`) and `titleField` (`:555`). Four
-  overlapping visibility concepts before this phase adds anything.
-- `src/views/board-renderer.ts:222` — `this.boardExtensions = config.boardExtensionsEnabled === true`.
-  The default board is the one-to-one reference copy; the local `db-board-card` renderer only runs
-  when the flag is on.
-- `src/views/board-renderer.ts:552` — `getReferenceCardFields` resolves exactly five semantic slots:
-  `time`, `progress`, `due`, `tags`, `people`. `specs/context/obsidian-pm-main/src/ui/composites/KanbanCard.ts:10`
-  `KanbanCardProps` names the same shape, plus `priorityColor`, `parentTitle` and
-  `descriptionPreview`. That fixed set is the boundary REQ-007 protects.
+- **Persisted shape** — `ViewConfig.boardCardFields?: { key: string; visible: boolean }[]`
+  (`src/data/types.ts`), absent by default, absent meaning "derive." Parsed by
+  `parseBoardCardFields` (`src/data/board-card-fields.ts`), reused by both the vault-backed
+  `DataSource` round trip and the embedded-renderer's local persistence path.
+- **Resolver** — `resolveBoardCardFields`/`listBoardCardFields` (`src/views/board-card-fields.ts`).
+  With the list absent, reproduces the pre-change filter (title/grouped/select-status exclusion
+  plus the table's `hiddenColumns`) *and* the host's `getVisibleColumns` auto-hide of a column with
+  no value on any current row — the first landing missed that last piece; see Corrections below.
+  With a list present, returns the stored order filtered to schema keys that still exist, silently
+  dropping a deleted key and appending a new schema key hidden.
+- **Renderer swap** — `board-renderer.ts`'s `renderCard` calls the resolver instead of filtering
+  `getColumns(config)` inline; the board no longer reads the table's `hiddenColumns` once a list is
+  stored. `renderReferenceCard` is unchanged.
+- **Properties panel** — `board-card-properties-panel.ts`: Cover and Title as fixed readonly rows,
+  then one reorderable row per field (drag handle + `db-mobile-reorder-controls` up/down, both
+  present, toggled by the existing `.is-phone` CSS the column manager already ships), a checkbox,
+  a type icon, the field name. Read-only in a `codeblock` embed. Mounted into
+  `ViewConfigPanelRenderer`'s shared `.db-view-config-body`, the same tree the desktop popover and
+  the phone bottom sheet both present.
+- **i18n** — `viewConfig.cardProperties` / `undo.boardCardFieldsConfig` in `en`, `zh-CN`, `zh-TW`.
+- **CSS** — `styles.css`: a five-track override of the reused `.db-column-manager-row` grid, scoped
+  to `.db-view-config-panel`, for the desktop and `.is-phone` cases (the shared row's three trailing
+  action tracks have no equivalent here, and were narrowing the name column for nothing). Every
+  other visual (section title, readonly rows, checkbox/type-icon/name cells) reuses existing
+  `.db-view-config-*`/`.db-column-*` classes unchanged.
+- **Storybook** — `board-card-properties-panel.stories.ts` (`Editable`, `ReadOnly`).
+
+### Corrections made during verification
+
+The uncommitted landing this session inherited passed `tsc`, `vitest` and `lint` at their claimed
+numbers, but the derived (list-absent) resolver path checked only the static `hiddenColumns` array,
+not the full `getVisibleColumns` input `tasks.md` T001 names. `getVisibleColumns` also auto-hides a
+column with no value on any current row (gated on no active search/filter narrowing); a column like
+that is invisible in `hiddenColumns` but was previously never shown on a card, so a view with
+`showEmptyFields` on and a schema field nobody had filled in yet would have surfaced a field on
+upgrade that never appeared before — a real REQ-004 gap. Fixed by capturing the host's real
+`getColumns(config)` result once per render (`BoardRenderer.legacyVisibleColumnKeys`, computed only
+when the list is absent, so the O(rows) scan the fix in `028-remaining-freezes` removed stays
+removed for the per-card path) and threading it through `BoardCardFieldContext.visibleKeys`, which
+`isDerivedVisible` defers to when present. Proven by a new differential test that fails against the
+unfixed code and a `board-renderer-hierarchy.test.ts` case verified red before the fix landed.
+
+Also added: a round-trip test for the embedded-renderer's `copyConfigToSourceView` persistence path
+(the vault-backed `DataSource` path already had one; the embed path had none for any board field,
+this or prior), a differential schema shape where the title is the only column, and a test proving
+two views over one database produce different card fields while neither's `hiddenColumns` moves
+(AC-001). None of this changed the shipped behaviour beyond the migration-fidelity fix above.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| (none) | — | No source file has changed. The documents in this folder are the only artifacts so far. |
+| `src/data/types.ts` | Modify | `BoardCardField`, `ViewConfig.boardCardFields` |
+| `src/data/board-card-fields.ts` | New | `parseBoardCardFields`, shared by both persist paths |
+| `src/data/data-source.ts` | Modify | Parse/serialize `boardCardFields` (legacy, view, payload, key list) |
+| `src/views/board-card-fields.ts` | New | The resolver: `resolveBoardCardFields`, `listBoardCardFields`, `toBoardCardFieldList` |
+| `src/views/board-renderer.ts` | Modify | `renderCard`/`renderCardTitleChips` use the resolver; `legacyVisibleColumnKeys` for migration fidelity |
+| `src/views/board-card-properties-panel.ts` | New | The Properties panel (desktop popover + phone sheet, same tree) |
+| `src/views/view-config-panel-renderer.ts` | Modify | Mounts the panel in `renderBoardSettings`, `isViewReadOnly` action |
+| `src/views/embedded-database-renderer.ts` | Modify | `isViewReadOnly` for codeblock embeds, `boardCardFields` in `copyConfigToSourceView` |
+| `src/i18n.ts` | Modify | Labels, 3 locales |
+| `styles.css` | Modify | Scoped `.db-column-manager-row` track override for this panel only |
+| `src/views/board-card-fields.test.ts`, `board-card-properties-panel.test.ts`, `board-renderer-hierarchy.test.ts`, `board-renderer-parity.test.ts`, `data-source.test.ts`, `embedded-database-renderer.test.ts` | New/Modify | Coverage for all of the above |
+| `src/views/board-card-properties-panel.stories.ts` | New | Storybook coverage (`story-coverage` gate lane) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -84,10 +135,18 @@ _memory:
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. `plan.md` §3 sets the order: the persisted shape and the resolver land first with a
-differential test proving the absent-list path reproduces today's three rules, then the renderer
-swaps, then the control is built on top. The migration is proved by a capture pair rather than a
-unit test, because a card that quietly loses a field passes every test anyone would write here.
+Delivered in `plan.md` §3's order: the persisted shape and the resolver first, with the differential
+test proving the absent-list path reproduces today's rules; then the renderer swap; then the
+Properties panel on top. The migration claim was proved by a capture pair (`tasks.md` T011) rather
+than by the unit test alone — `npm run screenshots` re-ran the full 544-scenario suite, and every
+existing board capture moved neither `pixelHash` nor `layoutHash`. Six unrelated PNGs moved by bytes
+only (re-encode noise the CSS lane edit's `styles.css` fingerprint bump touched incidentally); all
+six were confirmed unchanged and restored to their HEAD-committed bytes rather than recommitted.
+`node tools/live/render-assertions.mjs` (bundled-renderer DOM assertions in headless Chrome) and
+`board-renderer-parity.test.ts` proved REQ-007's reference-path boundary (T012). `npm run gate`
+closed at 25 green, 0 red, after two fixes the verification pass found: a missing Storybook story
+for the new panel module, and eight `tools/live/*.json` evidence artefacts stale against the moved
+`styles.css` fingerprint (re-run, not edited).
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -101,6 +160,8 @@ unit test, because a card that quietly loses a field passes every test anyone wo
 | Absent list means "derive today's behaviour" | An upgrade that changes every existing board card at once is the worst outcome available here, and it is also the easiest one to ship by accident. |
 | Confine the control behind `boardExtensionsEnabled` | `038` spent four review rounds proving the default board matches the reference to the pixel. A properties list reaching that path would undo it, so the flag that already gates local extensions gates this one too. |
 | Record gallery as a question | The renderer has the same shape and probably generalises. The operator asked for the board, and widening on a guess is how a packet stops being checkable. |
+| Reuse `.db-column-manager-row` rather than write new panel-row CSS | The Properties list is structurally the same row shape (drag/checkbox/type/name) the column manager already ships and has already been reviewed; a five-track override for the two unused trailing tracks was the only CSS this packet needed. |
+| Keep one `getColumns(config)` call for migration fidelity, at render granularity not card granularity | The derived path must reproduce `getVisibleColumns`'s auto-hide-of-empty-columns behaviour to satisfy REQ-004 for a view with `showEmptyFields` on, but `028-remaining-freezes` removed a per-card `getVisibleColumns` scan for a documented performance reason (NFR-P01). Computing it once in `render()` and caching it for the render pass satisfies both. |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -110,10 +171,16 @@ unit test, because a card that quietly loses a field passes every test anyone wo
 
 | Check | Result |
 |-------|--------|
-| `validate.sh 045-board-card-properties --strict` | Run at authoring time; see the packet commit |
-| `npm run gate` | Not run — no source change to gate |
-| Differential test for the resolver | Does not exist yet (tasks.md T010) |
-| Operator device confirmation | Not sought; the control is not built |
+| `npx tsc --noEmit` | exit 0 |
+| `npx vitest run` | 1091/1091 tests, 105/105 files |
+| `npm run lint` | exit 1, 172 problems — unchanged pre-045 baseline (confirmed by stashing this diff on the rebased tree); not a `npm run gate` lane |
+| `node tools/naming/scan-comments.mjs` | PASS, 0 findings |
+| `npm run screenshots` + `npm run screenshots:verify` | 544/544 current; 0 board captures moved pixelHash/layoutHash |
+| `node tools/live/render-assertions.mjs` | PASS — board/file-view and board/embed scenarios structurally intact |
+| `npm run gate` | PASS — 25 green, 0 red |
+| `validate.sh 045-board-card-properties --strict` | Run at authoring time and again at this verification pass; see the packet commit |
+| Differential test for the resolver | `board-card-fields.test.ts`, 5 schema shapes including a title-only schema |
+| Operator device confirmation | Not sought (AC-006 is operator-only) |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -121,14 +188,25 @@ unit test, because a card that quietly loses a field passes every test anyone wo
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **The phone control is blocked on `044`.** T007 waits for the sheet row grammar; the desktop
-   popover does not, so the phase is not idle.
-2. **Gallery is out of scope by decision, not by analysis.** `gallery-renderer.ts:361` builds its
+1. **No photographed non-default state (T013).** No existing capture scenario mounts
+   `ViewConfigPanelRenderer`/`renderBoardCardProperties` for a board view — the harness's one
+   `view-config` scenario is table-only. The panel has a Storybook story and thorough unit coverage
+   instead. Building the constructed scenario needs a board-typed branch in
+   `render-assertion-harness.ts`'s `view-config` case, a matching hand fixture, and updates to the
+   two hardcoded scenario-id arrays in `tools/screenshots/constructed-capture.test.mjs`.
+2. **AC-005's named verification lane doesn't exist yet.** Its Verification cell asks for a `044`
+   `sheet-grammar` lane row; `044-phone-sheet-alignment` has not landed that infrastructure. The
+   phone row grammar is verified by code identity with the already-shipped column manager and by
+   unit tests instead, but the row stays `Unmet` rather than claim a check that could not run.
+3. **`../roadmap.md` §5 not updated (T014).** Left for the next update to this parent packet.
+4. **Gallery is out of scope by decision, not by analysis.** `gallery-renderer.ts:361` builds its
    meta grid the same way and would benefit; whether it shares the mechanism is `spec.md` §10's
    first open question.
-3. **Whether the control should reach the reference card's five slots is unresolved.** REQ-007 says
+5. **Whether the control should reach the reference card's five slots is unresolved.** REQ-007 says
    the reference path must not diverge. Whether a *mapping* control over those slots counts as
    divergence is a judgment recorded for the operator, not decided here.
+6. **Whether hiding a card field should also offer to hide the table column is unresolved**, per
+   `spec.md` §10 — recorded deliberately rather than decided.
 <!-- /ANCHOR:limitations -->
 
 ---
