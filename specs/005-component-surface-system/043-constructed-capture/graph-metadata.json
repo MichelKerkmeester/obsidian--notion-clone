@@ -210,7 +210,7 @@
     ],
     "causal_summary": "`tools/screenshots/capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous",
     "created_at": "2026-09-04T00:45:06Z",
-    "last_save_at": "2026-09-04T11:41:15.442Z",
+    "last_save_at": "2026-09-04T12:42:54.133Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5eae9c4f349276d023aaaa6fde4a792ab99e9fd1e399a04ef15a9a377da692d9",
+    "source_fingerprint": "sha256:1fb4cc87f1117be1d22d90c68c41b46c5a5ea47edbd110732403c0ce371bf41d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b3771fe811fca839f455d4c5248f1069baa5b0241326504b5d81b09efa58f82c",
       "plan.md": "179bc41334877b704c5a6bc1036ce38bdae1e852335fd4507eef372a2a5cd8e1",
-      "tasks.md": "c919020efd82e27312e57f92673ce9e27b8fb551ea9d8e81f5213c2e5941b757",
-      "implementation-summary.md": "308625075d1f0451367d676661ad564d4643b86c7a231d9ba094cbfa1e63cd82"
+      "tasks.md": "1d64c21fa1386e88effa1f2285f0c53d1237edf95cfe65ed254699582ef60493",
+      "implementation-summary.md": "7f9aea2bf27b7d9d84659af2837a011194cdf9891671c2b843892fccb45e85f4"
     },
     "last_active_child_id": null,
     "last_active_at": null

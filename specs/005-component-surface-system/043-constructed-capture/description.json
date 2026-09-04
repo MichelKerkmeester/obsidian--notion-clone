@@ -1,17 +1,27 @@
 {
+  "level": "3",
   "specFolder": "005-component-surface-system/043-constructed-capture",
-  "description": "Phase 1: constructed-capture",
+  "description": "`tools/screenshots/capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous",
   "keywords": [
-    "phase",
-    "constructed-capture"
+    "tools",
+    "screenshots",
+    "capture",
+    "mjs",
+    "accepts",
+    "only",
+    "scenario",
+    "whose",
+    "html",
+    "device",
+    "returns",
+    "synchronous"
   ],
-  "lastUpdated": "2026-09-04T00:45:07.217Z",
+  "lastUpdated": "2026-09-04T12:40:00.842Z",
   "specId": "043",
   "folderSlug": "constructed-capture",
   "parentChain": [
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "3"
+  "memoryNameHistory": []
 }
