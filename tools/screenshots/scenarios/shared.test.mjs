@@ -341,6 +341,28 @@ describe("subtask screenshot fixture parity", () => {
     expect(styles).toMatch(/@media \(max-width: 760px\)\s*\{\s*\.note-database-container\s*\{[^}]*--db-container-padding-inline:\s*12px;/);
   });
 
+  it("resets the inherited container line-height on the ported kanban block", () => {
+    // `.note-database-container` sets `line-height: var(--db-font-md-line-height)` (1.45) for
+    // this plugin's own UI, but the reference project this board is a one-to-one port of never
+    // sets a line-height on its kanban tree at all — every element it leaves unset computes to
+    // the UA default `normal` (~1.2). Without a reset, ported elements that also leave
+    // line-height unset (the count pill, the subtask parent line) inherit the host's 1.45
+    // instead, growing 2-3px taller than the reference and shifting everything below them. The
+    // compound `.note-database-container.pm-kanban-view` selector is the one place this can be
+    // cancelled once for the whole tree, the same selector the flex/overflow height chain above
+    // already uses.
+    // Two separate rule blocks share this exact compound selector (the shadow/border token
+    // block above it, and the layout block below); match whichever one carries the reset
+    // rather than assuming block order.
+    const kanbanViewRules = [...styles.matchAll(/\.note-database-container\.pm-kanban-view\s*\{[^}]*\}/g)].map((m) => m[0]);
+    expect(kanbanViewRules.some((rule) => /line-height:\s*normal;/.test(rule))).toBe(true);
+    // Elements the reference DOES author with their own line-height keep it — the reset must
+    // only fill in the gap, never override an explicit reference value.
+    expect(styles).toMatch(/\.note-database-container \.pm-kanban-card-title\s*\{[^}]*line-height:\s*1\.45;/);
+    expect(styles).toMatch(/\.note-database-container \.pm-kanban-card-description\s*\{[^}]*line-height:\s*1\.4;/);
+    expect(styles).toMatch(/\.note-database-container \.pm-chip\s*\{[^}]*line-height:\s*1\.5;/);
+  });
+
   it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {
     // The five scale captures exist to show an un-related bar; the tree has its own scenario.
     for (const lane of TL_LANES) {

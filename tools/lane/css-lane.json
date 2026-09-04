@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "6c7a7c42f694",
+  "baselineHash": "e191ebb917cd",
   "baselineCommit": "5beb1671076bcaa917b2ede6e83eab520ce89ec7",
   "history": [
     {
@@ -2777,6 +2777,59 @@
       "hash": "d42c0da16fad",
       "reviewed": [],
       "note": "No capture in the current suite photographs the board Properties panel — no existing scenario mounts ViewConfigPanelRenderer/renderBoardCardProperties for a board view, so this edit's own surface has zero coverage to review; reviewed is empty because there is nothing captured to open. `npm run screenshots` after this edit moved 6 files by bytes only (constructed-owned-menu-mobile-dark, constructed-record-detail-desktop-dark, constructed-sort-panel-calendar-mobile-light, board-mobile-desktop-dark, board-view-desktop-dark, board-view-mobile-light); all six were confirmed pixelHash/layoutHash-identical to HEAD via check-lane.mjs and restored to HEAD-committed bytes, with their manifest bytes field corrected to the restored file's real size and sourceHashes left at the current fingerprint. Every other board capture (constructed-board, constructed-board-subtask, constructed-board-empty-column, constructed-board-extensions, chrome-board-extensions-selection, board-drop-language, board-subtask-tree) moved neither bytes nor hash. `npm run screenshots:verify` reports 544/544 current, none blank or theme-identical. A hand fixture plus a constructed scenario for the Properties panel itself (045 tasks.md T013) was not added this session — deferred, named as an open item rather than fabricated."
+    },
+    {
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-05T01:00:00.000Z",
+      "hash": "719ba0fca8e1"
+    },
+    {
+      "event": "edit",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-05T01:00:00.000Z",
+      "hash": "e191ebb917cd",
+      "note": "A fresh reviewer traced three board fidelity gaps (count pill 19px vs 17px/header 2px taller, subtask parent line 2-3px taller per card compounding down the column, hours-row baseline low) to one cause: .note-database-container sets line-height: var(--db-font-md-line-height) (1.45) and the reference this kanban block is ported from never sets a line-height on that tree at all, so every ported pm-* element the reference leaves unset (count pill, subtask parent line) was inheriting 1.45 instead of the UA normal (~1.2) the reference computes to. Added line-height: normal to .note-database-container.pm-kanban-view (the same compound selector the flex/overflow height chain already uses), which the whole subtree inherits; elements that already set their own value (.pm-kanban-card-title 1.45, .pm-kanban-card-description 1.4, .pm-chip 1.5) are unaffected. Audited the gantt block for the same pattern: its only non-SVG text (left-pane label/progress) sits in JS-fixed-height rows and its bars/ticks/labels are SVG text that ignores CSS line-height entirely, so the same inheritance never moves a gantt pixel — matches the reviewer's zero-gap finding, no gantt edit made."
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-05T01:00:00.000Z",
+      "hash": "e191ebb917cd",
+      "reviewed": [
+        "screenshots/notion-clone/components/board-drop-language-desktop-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-desktop-light.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-light.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-mobile-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-mobile-dark.png",
+        "screenshots/notion-clone/views/board-mobile-mobile-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-light.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-light.png",
+        "screenshots/notion-clone/views/board-view-mobile-dark.png",
+        "screenshots/notion-clone/views/board-view-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
+      ],
+      "note": "All 32 real content-changed captures (pixelHash moved) opened and read at both themes/devices where applicable. Measured directly against reference-kanban(-subtask) and against the HEAD-committed PNGs: backlog column count pill 38->34 physical px (19->17 CSS px at deviceScaleFactor 2), matching the reference pill exactly (desktop dark/light and mobile light all confirmed at the same 34-physical-px/17-CSS-px height); subtask child card (row-1) full border-to-border height 254->248 physical px (127->124 CSS px), again matching the reference capture exactly; the hours-row band and every band below it in that card now sit at the identical absolute pixel y-range as the reference (476-490/525-540/574-575 physical, bit-for-bit), versus a 4-10 physical px low offset before the fix. Non-subtask card (row-0) title/hours/avatar bands also now match the reference bit-for-bit (152-159/188-206/239-254), confirming the P3 hours-baseline gap was the header-height delta propagating downward, not a separate defect. Three of the run-moved captures (constructed-owned-menu-mobile-dark, constructed-record-detail-desktop-dark, constructed-sort-panel-calendar-mobile-light) were pixelHash/layoutHash-identical to HEAD and were restored to HEAD-committed bytes; their manifest sourceHashes still carry the current styles.css fingerprint. Zero gantt captures moved. Rebased across the settings sheet, column-width sheet, WebKit sheet, reference-capture, milestone-label and screenshots-folders-split landings (355d24ff -> 933308a5f9fc): styles.css auto-merged clean (this leg's only touch is the .pm-kanban-view line-height: normal addition, confirmed by a clean diff against origin/main); the 32 reviewed captures moved from their pre-split screenshots/<group>/ paths to screenshots/notion-clone/<group>/ to follow the 042-screenshots-folders split that landed underneath this leg, content unchanged by the move. tsc clean; vitest full suite green including the red-then-green stylesheet-contract test (shared.test.mjs) asserting the reset rule and the three elements that keep their own explicit line-height. RECONCILED AGAIN (2026-09-05, landing worktrees/046-board-line-height) across the list hide-and-migrate and 045-board-card-properties landings underneath this leg: styles.css merged clean a second time (this leg only touches .pm-kanban-view; 045 only touches .db-view-config-panel .db-column-manager-row), moving the tracked hash to e191ebb917cd (045's d42c0da16fad plus this leg's own edit); the 32 reviewed captures above were re-measured against the same reference and read identically. tsc 0; vitest 1110/1110 (107 files); lint 172 (unchanged); lint:tools clean; scan-comments PASS; npm run screenshots 554 entries, 0 failures; npm run screenshots:verify 0 stale; npm run gate 25 green / 0 red."
     }
   ],
   "outstanding": [

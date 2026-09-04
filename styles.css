@@ -8964,6 +8964,14 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* The reference never sets its own line-height on this tree, so every element it leaves
+     unset computes to the UA default `normal` (~1.2). Left alone, this compound selector's
+     ancestor (.note-database-container) inherits its own 1.45 down into the copied kanban
+     block, growing the count pill and the subtask parent line 2-3px taller than the reference.
+     Resetting once here is enough for the whole subtree; the few elements the reference DOES
+     author with an explicit line-height (.pm-kanban-card-title, .pm-kanban-card-description,
+     .pm-chip) set their own value below this and are unaffected. */
+  line-height: normal;
 }
 
 .note-database-container .pm-kanban-board {
