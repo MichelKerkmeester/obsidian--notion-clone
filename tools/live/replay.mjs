@@ -28,6 +28,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
+import { timelineDynamicFixture } from "../screenshots/scenarios/temporal.mjs";
 import { stamp } from "./evidence.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -670,6 +671,31 @@ const CLAIMS = [
         const positionOk = getComputedStyle(content).position === "absolute";
         return (rowGapOk ? 1 : 0) + (positionOk ? 1 : 0);
       });
+    },
+  },
+  {
+    phase: "037-timeline-gantt-port",
+    claim: "the day fixture centres its window on the pinned now and labels each tick the bare hour, not an HH:00 clock string",
+    was: 0,
+    recorded: 574,
+    // 7ca6cc2 was 037's last open row: the day-scale fixture never centred on `now` (both device
+    // widths opened at startMinutes 0) and its tick label carried a ":00" suffix
+    // buildTimelineTicks()'s own day branch never emits. `was` is this measure re-run on the
+    // landing commit's parent tree: every day-scale tick still read "HH:00" (0 of 34 labels bare)
+    // and both widths still opened at startMinutes 0 (sum 0), for a total of 0.
+    async measure(page) {
+      const s = SCENARIOS.find((x) => x.id === "timeline-view-day");
+      if (!s) return -1;
+      let plainLabels = 0;
+      let startMinutesSum = 0;
+      for (const device of [{ id: "desktop", width: 1440 }, { id: "mobile", width: 402 }]) {
+        await load(page, s.html(device));
+        plainLabels += await page.evaluate(() =>
+          [...document.querySelectorAll(".db-timeline-tick-date")]
+            .filter((el) => /^\d\d$/.test(el.textContent.trim())).length);
+        startMinutesSum += timelineDynamicFixture("day", device).startMinutes;
+      }
+      return plainLabels + startMinutesSum;
     },
   },
 ];

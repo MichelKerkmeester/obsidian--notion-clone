@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-04T00:39:26.958Z",
+  "measuredAt": "2026-09-04T00:58:55.559Z",
   "inputs": {
     "styles.css": "c32661e8c089",
     "tools/screenshots/theme.css": "115be5a71b07",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-    "tools/live/replay.mjs": "7d8d200341a5"
+    "tools/live/replay.mjs": "e3835f07ceda"
   },
   "claims": [
     {
@@ -222,6 +222,14 @@
       "was": 0,
       "recorded": 2,
       "actual": 2,
+      "held": true
+    },
+    {
+      "phase": "037-timeline-gantt-port",
+      "claim": "the day fixture centres its window on the pinned now and labels each tick the bare hour, not an HH:00 clock string",
+      "was": 0,
+      "recorded": 574,
+      "actual": 574,
       "held": true
     }
   ],

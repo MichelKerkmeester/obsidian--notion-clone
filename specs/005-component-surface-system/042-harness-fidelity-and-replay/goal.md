@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
-    last_updated_at: "2026-09-04T01:41:43Z"
-    last_updated_by: "verifier"
-    recent_action: "Reconciled 042 docs during rebase: manifest-compare fix + 6 open-row replay claims merged"
+    last_updated_at: "2026-09-04T02:55:00Z"
+    last_updated_by: "replay-third-pass"
+    recent_action: "T025: replay claim added for 7ca6cc2 (037's last open row); 28 claims held"
     next_safe_action: "External lane per D14, then in-runtime gate verification with Chrome (tasks.md T019-T023)"
     blockers: []
     key_files:
@@ -101,6 +101,19 @@ Frozen choices. Changing one is an amendment.
       pass made to its own dispatch brief: the brief's prose swapped `3f143df` and `a251a43`'s
       descriptions, and the claims here are written against the two commits' actual diffs and the
       parent `goal.md` log, not the swapped prose.
+
+      **2026-09-04, later still: the one remaining `037` open row added.** The parent's re-audit
+      named `7ca6cc2` — `037`'s fourth and last open row, the day-scale fixture centring on the
+      pinned `now` and its `HH` tick-label suffix — as the one landed result still uncovered.
+      **Still Met, now 28 claims.** `node tools/live/replay.mjs`, `$?` read directly: `0`,
+      `reversed: 0`. The new entry measures both device widths through the exported helpers
+      (`SCENARIOS.find(id === "timeline-view-day").html(device)` for the tick labels,
+      `timelineDynamicFixture("day", device).startMinutes` for the centring), pre-fix -> recorded:
+      `7ca6cc2: 0 -> 574` (desktop 23 labels + startMinutes 60, mobile 11 labels + startMinutes
+      480), re-measured on `7ca6cc2^` extracted via `git archive` and run against a real launched
+      Chrome per `measure-prefix.mjs`'s method. Mutation control: moving this entry's `recorded`
+      to `999` gave **exit 1, "replay: FAIL — 1 result(s) reversed"**, restored and re-verified
+      green. `tasks.md` T025 carries the full evidence.
 - [x] Every row-6 dependency (pinned `runtime-vars.css` calendar formula, `touch-targets.mjs` /
       `unstyled-links.mjs` fixture reads, `theme.css`'s absent `.mod-cta`) is removed or declared
       with the criterion it cannot prove. **Met.** Removed, each against its recorded pre-fix state:

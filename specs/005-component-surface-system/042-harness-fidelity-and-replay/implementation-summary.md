@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/042-harness-fidelity-and-replay"
-    last_updated_at: "2026-09-04T01:41:43Z"
-    last_updated_by: "verifier"
-    recent_action: "Reconciled 042 docs during rebase: manifest-compare fix + 6 open-row replay claims merged"
+    last_updated_at: "2026-09-04T02:55:00Z"
+    last_updated_by: "replay-third-pass"
+    recent_action: "T025: replay claim added for 7ca6cc2 (037's last open row); 28 claims held"
     next_safe_action: "External lane per D14, then in-runtime gate verification with Chrome (tasks.md T019-T023)"
     blockers: []
     key_files:
@@ -44,7 +44,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 042-harness-fidelity-and-replay |
-| **Completed** | Phase 2 complete — all of T001-T018 landed, including the manifest-compare fix (T017/T018). Phase 3 verification (T019-T023) is tracked separately in `tasks.md`. |
+| **Completed** | Phase 2 complete — all of T001-T018, T024 and T025 landed, including the manifest-compare fix (T017/T018) and the replay claim for `7ca6cc2` (T025). Phase 3 verification (T019-T023) is tracked separately in `tasks.md`; T021 (external lane) remains open. |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -104,6 +104,24 @@ branch, the milestone placement helper, or the 32px phone day-column branch exis
 T024 carries the full per-entry evidence and one correction: the dispatch that requested this pass
 had `3f143df` and `a251a43`'s descriptions swapped in its prose; the claims here are written
 against the two commits' actual diffs, verified with `git show` against the parent `goal.md` log.
+
+### Replay, third pass: the one remaining `037` open row
+
+The parent `goal.md` re-audit named one landed result the second pass missed: `7ca6cc2`, `037`'s
+fourth and last open row. It centred `temporal.mjs`'s day-scale fixture on the pinned "now" and
+exported `timelineTicksFor` so the tick label matches `buildTimelineTicks()`'s own day branch — the
+bare zero-padded hour, not a fixture-only `"HH:00"` clock string. `replay.mjs` now carries 28
+claims. The new entry measures both device widths through the exported helpers —
+`SCENARIOS.find(id === "timeline-view-day").html(device)` for the tick labels,
+`timelineDynamicFixture("day", device).startMinutes` for the centring — and sums a count of
+bare-hour labels (`/^\d\d$/`) with the two widths' `startMinutes`. Pre-fix -> recorded:
+`7ca6cc2: 0 -> 574` (desktop 23 labels + startMinutes 60, mobile 11 labels + startMinutes 480). The
+pre-fix number was measured on `7ca6cc2^`, extracted with `git archive 7ca6cc2^ -- styles.css
+tools/screenshots | tar -x` into a scratch directory and run against a real launched Chrome, per
+`measure-prefix.mjs`'s method: every day-scale tick still read `"HH:00"` and both widths still
+opened uncentred at `startMinutes` 0. `tasks.md` T025 carries the full evidence, including the
+mutation control (`recorded` moved to `999`, replay reported `FAIL — 1 result(s) reversed`, exit
+`1`; restored and re-verified `PASS — all 28 results still hold`, exit `0`).
 
 ### Row-6 harness dependencies
 
@@ -190,8 +208,8 @@ restored rather than committed.
 | `tools/live/render-scenario-utils.mjs` | Created | The two pure helpers the runner uses for labels and the coverage count |
 | `tools/live/render-scenario-utils.test.mjs` | Created | Covers both helpers, including the scale label and the one-renderer-many-scenarios count |
 | `tools/live/renderer-coverage.json` | Modified | Coverage stamp, 6 → 7 distinct renderers of 22 |
-| `tools/live/replay.mjs` | Modified | Thirteen new claims, the runtime-artefact reader, and the claim-set ratchet; second pass added six more for the open-row fixes shipped after `037`-`041` landed |
-| `tools/live/replay.json` | Modified | Stamp of the 21-claim run; second pass re-stamped at 27 claims |
+| `tools/live/replay.mjs` | Modified | Thirteen new claims, the runtime-artefact reader, and the claim-set ratchet; second pass added six more for the open-row fixes shipped after `037`-`041` landed; third pass imports `timelineDynamicFixture` and adds the `7ca6cc2` day-fixture-centring claim |
+| `tools/live/replay.json` | Modified | Stamp of the 21-claim run; second pass re-stamped at 27 claims; third pass re-stamped at 28 claims |
 | `tools/live/sheet-rebuild.mjs` | Modified | Records per-case `checks` with the pre-fix failure text replay reads |
 | `tools/live/sheet-teardown.mjs` | Modified | The same, for the teardown lane |
 | `tools/live/unstyled-links.json` | Modified | Re-stamped after `theme.css` moved |
@@ -277,6 +295,15 @@ to their committed bytes while moving two different ones — and were restored r
 | `node tools/live/replay.mjs` (second pass, six open-row-fix claims added) | PASS — exit 0, 27 claims, `reversed: 0`; was 21 claims before this pass |
 | Replay pre-fix audit, second pass (`<sha>^` re-measure, all 6 new entries) | PASS — 6 of 6 return a value differing from their recorded number: `7e36671: 0 -> 2`, `535373a: 0 -> 2`, `a251a43: 0 -> 1`, `3f143df: 0 -> 1`, `fa58c7f: 0 -> 4`, `b29bf7f: 0 -> 2` |
 | Replay negative control, second pass — `535373a`'s `recorded` moved by one | PASS — exit 1, "replay: FAIL — 1 result(s) reversed since the phase that measured them"; restored and re-verified green |
+| `node tools/live/replay.mjs` (third pass, `7ca6cc2` claim added) | PASS — exit 0, 28 claims, `reversed: 0`; was 27 claims before this pass |
+| Replay pre-fix audit, third pass (`7ca6cc2^` re-measure via `git archive`, real Chrome, `measure-prefix.mjs` method) | PASS — returns a value differing from the recorded number: `7ca6cc2: 0 -> 574` |
+| Replay negative control, third pass — `7ca6cc2`'s `recorded` moved from `574` to `999` | PASS — exit 1, "replay: FAIL — 1 result(s) reversed since the phase that measured them"; restored and re-verified `PASS — all 28 results still hold`, exit 0 |
+| `node tools/naming/scan-comments.mjs`, third pass | PASS — exit 0, 389 files, 0 missing banners, 0 commented-out lines |
+| `npx tsc --noEmit`, third pass | PASS — exit 0 |
+| `npx vitest run tools/screenshots/scenarios/temporal-tick-parity.test.mjs`, third pass | PASS — exit 0, 118 tests |
+| `npx vitest run`, third pass | PASS — exit 0, 96 files, 953 tests |
+| `npm run lint:tools`, third pass | PASS — exit 0 |
+| `SURFACE_PHASE=042-harness-fidelity-and-replay npm run gate`, third pass | PASS — exit 0, 25 green / 0 red, `pgrep` for stray Chrome empty before both runs |
 | `node tools/naming/scan-comments.mjs`, second pass | PASS — exit 0, 381 files, 0 missing banners, 0 commented-out lines |
 | `npx tsc --noEmit`, second pass | PASS — exit 0 |
 | `npx vitest run`, second pass | PASS — exit 0, 93 files, 925 tests |
