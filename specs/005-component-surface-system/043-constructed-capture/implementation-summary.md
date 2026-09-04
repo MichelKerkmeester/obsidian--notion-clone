@@ -9,27 +9,29 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T02:10:00Z"
-    last_updated_by: "in-runtime-verifier"
-    recent_action: "T026: landing doc written; gate PASS 25 green"
-    next_safe_action: "Rule on AC-002, then tasks.md T004-T006"
+    last_updated_at: "2026-09-04T04:45:00Z"
+    last_updated_by: "in-runtime-code-agent"
+    recent_action: "T004-T006 landed: captureData typed data + real icons on 9 views"
+    next_safe_action: "Rule on AC-002; then T002, T009-T012, T016"
     blockers:
-      - "AC-002 as written cannot be satisfied through the capture path — needs a phase ruling (see Known Limitations 1)"
+      - "AC-002 unmeetable as written, needs a phase ruling (Known Limitations 1)"
+      - "table/chart stay untyped: stubbed renderCell, no per-row chart field"
     key_files:
-      - "tools/screenshots/capture.mjs"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/live/typed-data-assertions.mjs"
+      - "tools/storybook/obsidian-stub.mjs"
       - "tools/screenshots/constructed-scenarios.mjs"
-      - "tools/screenshots/manifest-schema.mjs"
-      - "screenshots/manifest.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-impl-summary"
       parent_session_id: null
-    completion_pct: 45
+    completion_pct: 62
     open_questions:
-      - "Is the readiness wait's criterion pixel difference (unmeetable, measured) or inside-mount layout determinism (measured, 0 -> 376 across one frame)?"
-      - "Does the shared manifest stand, or is the separate screenshots/constructed-manifest.json of AC-006 still required?"
+      - "AC-002: pixel-difference basis, or inside-mount layout determinism basis?"
+      - "Does the shared manifest stand, or does AC-006's separate file still apply?"
     answered_questions:
-      - "Can a fixture and its constructed counterpart be pixel-equal at the bench shape? No — all 7 declared pairs differ, and the data shapes make equality impossible until the capture-sized option lands."
+      - "Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ."
+      - "Row count alone enough for row 6? No, captureData also types columns."
 ---
 # Implementation Summary
 
@@ -87,6 +89,36 @@ renderer's own post-render correction; the timeline draws its week window with a
 tick, weekend fills, dependency dots and two milestone diamonds; the chart draws a five-bar count
 aggregation that agrees with the board's five columns.
 
+### Typed data and real icons (T004-T006)
+
+The nine captures above were structurally real but typographically hollow: every bench column was
+`"text"`, so no select pill, checkbox, date, currency figure or completed strikethrough ever
+appeared, and every icon drew the stub's placeholder diamond — the gap the parent's DONE row 6
+stayed open on. `ScenarioSpec.captureData` (`render-assertion-harness.ts`) is the fix: an opt-in,
+default-off field that swaps the harness's 1600-2000-row `"text"` structural-cost shape for an
+18-row, fully-filled `"mixed"`-type one on the list, board, gallery, calendar and timeline
+branches, with select/status/multi-select columns pointed at a small named, coloured option set
+instead of the bench's placeholder value (which matches no configured option and always hits the
+renderer's grey no-match fallback). `constructed-scenarios.mjs` is the only caller that turns it
+on. Table and chart are unchanged by design: table's harness bag renders every cell through a stub
+(`renderCell: (td, row, col) => td.setText(...)`, deliberately cost-isolating, not type-aware) the
+option does not reach, and chart draws an aggregation with no per-row field to type.
+
+Separately, `obsidian-stub.mjs`'s `setIcon` now draws a real inline SVG for the icon names the
+render-assertion bundle actually mounts (traced by grepping the BUILT bundle for every `setIcon(…)`
+call site, including the two nav-button helpers that forward their icon through a parameter) —
+21 names, hand-drawn lucide-style paths, since this project has no `lucide`/`lucide-static`
+dependency to inline by name. An id outside that set still gets the original text placeholder, so
+nothing silently goes blank.
+
+T004/T005 gave the timeline branch the same five-scale reach the calendar branch already had:
+`ScenarioSpec.scale` widened to `"day"|"week"|"month"|"quarter"|"year"`, the timeline branch reads
+it directly, and `render-assertion-bundle.mjs`'s shared `SCENARIOS` gained the four scales the week
+entry did not already cover. This is the shared list `render-assertions.mjs`, `touch-targets.mjs`
+and `unstyled-links.mjs` all read — not `constructed-scenarios.mjs`'s nine-capture registry, which
+is unchanged (still nine, still week-scale timeline only; the four extra scales are covered by the
+structural-assertion and touch-target lanes, not by a tenth-through-thirteenth screenshot).
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -98,6 +130,15 @@ aggregation that agrees with the board's five columns.
 | `tools/screenshots/scenarios.mjs` | Modified | Header now states the two scenario kinds and the `fixtureOf` declaration |
 | `tools/screenshots/scenarios/core.mjs` | Modified | `fixtureOf` on the list, table, board and gallery fixtures |
 | `tools/screenshots/scenarios/temporal.mjs` | Modified | `fixtureOf` on the calendar month, calendar week and week-scale timeline fixtures |
+| `tools/live/render-assertion-harness.ts` | Modified (T004-T006) | `ScenarioSpec.scale` widened to five values, `.captureData` added; the list/board/gallery/calendar/timeline branches read both; `applyCaptureOptions`/`applyCaptureGroupPalette` and the `CAPTURE_ROWS`/`CAPTURE_FILL`/`CAPTURE_OPTIONS` constants |
+| `tools/live/render-assertion-bundle.mjs` | Modified (T005) | Four new timeline-scale entries in the shared `SCENARIOS` list |
+| `tools/screenshots/constructed-scenarios.mjs` | Modified (T006) | Every constructed spec now sets `captureData: true` |
+| `tools/storybook/obsidian-stub.mjs` | Modified | `setIcon` draws real SVG for 21 traced icon names; text placeholder retained as the fallback |
+| `tools/live/typed-data-assertions.mjs` | Created | Live check: mounts `list/file-view` with and without `captureData`, asserting the three typed markers appear only when it is on — the negative control proving the option is what produces them |
+| `tools/live/touch-targets-constructed-baseline.json` | Modified | `under` raised 335 -> 367 with a `raiseHistory` entry recording which three already-known classes grew and by how much, once T005's four new timeline scenarios exposed more instances of them |
+| `tools/lane/css-lane.json` | Modified | New release entry naming the 28 constructed captures whose `pixelHash` changed (table and chart unchanged) |
+| `screenshots/views/constructed-*.png` | Modified | 28 of the 36 constructed captures recaptured with typed data and real icons |
+| `screenshots/manifest.json`, `screenshots/README.md` | Modified | Re-stamped after the recapture |
 | `screenshots/views/constructed-*.png` | Created | The 36 constructed captures |
 | `screenshots/manifest.json`, `screenshots/README.md` | Modified | 312 entries (276 fixture + 36 constructed); `fixtureOf` recorded on the 28 declared fixture entries |
 | `tools/lane/css-lane.json` | Modified | Release entry for this phase naming all 36 reviewed captures |
@@ -168,6 +209,28 @@ Every exit code below was read from `$?` directly.
 | 36 constructed PNGs opened and read | Done. Nine views x 2 devices x 2 themes; every theme pair differs by `pixelHash`; two weak pictures named in Known Limitations |
 | Readiness negative control | Inside the mount, `.note-database-container` `scrollTop` reads 0 synchronously after mount returns and 376 after one frame. Through a separate CDP evaluate it already reads 376. Captures taken with the wait set to 0 frames are `pixelHash`-identical to the two-frame captures on all four calendar-week entries. |
 | `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this phase |
+
+**T004-T006 landing (typed data, real icons, timeline scale), every exit code read from `$?` directly:**
+
+| Check | Result |
+|-------|--------|
+| Red: `typed-data-assertions.mjs` on the pre-T006 harness (git-stashed) | FAIL, exit 1 — `captureData: true` showed 0 of 3 typed markers on `list/file-view` |
+| Green: `typed-data-assertions.mjs` after restoring | PASS, exit 0 — all 3 markers present with `captureData: true`, all 3 absent with it unset, on the same scenario |
+| `node tools/live/render-assertions.mjs` | PASS, exit 0 — 21 scenarios (17 + T005's 4), bag-shape comparison unchanged for every pre-existing key |
+| `node tools/live/touch-targets.mjs` | PASS, exit 0 — fixture 264/279 unchanged; constructed 21 scenarios (was 17), 367/367 after honestly raising the constructed baseline (`raiseHistory`: 3 already-known timeline classes grew by 32, no new class) |
+| `node tools/live/unstyled-links.mjs` | PASS, exit 0 — fixture 112 links across 70 scenarios unchanged; constructed 21 scenarios (was 17) |
+| `npx tsc --noEmit` | PASS, exit 0 |
+| `npx vitest run` | PASS, exit 0 — 97 files / 961 tests, unchanged (this landing's new check is a live script, not a vitest suite) |
+| `npm run lint:tools` | PASS, exit 0 |
+| `npm run lint` | exit 1, 172 problems — identical to the HEAD baseline; `src/` untouched |
+| `node tools/naming/scan-comments.mjs` | PASS, exit 0 |
+| Full capture run x2 (detached) | 312 entries each; 0 of 36 constructed entries changed `pixelHash`/`layoutHash` between the two runs |
+| `node tools/screenshots/verify.mjs` | PASS, exit 0 — 312 entries current, none blank or theme-identical |
+| `node tools/lane/check-lane.mjs` | PASS, exit 0 — a new release entry names all 28 captures whose `pixelHash` changed (table and chart unchanged); `styles.css` untouched, `baselineHash` unchanged |
+| `SURFACE_PHASE=043-constructed-capture npm run gate` | PASS, exit 0 — 25 green, 0 red |
+| 9 constructed views read on desktop + phone | Done. list/board/gallery/calendar month·week·day/timeline show named select pills, checkboxes, currency, relation cells, real icons; table/chart unchanged (see Known Limitations 3) |
+| Declared `fixtureOf` pairs re-compared | All 7 read on both sides. Fixtures still show curated, named content (specific subscription names, multi-day/timed events, category grouping) the bench's generated `row-N` shape does not reproduce; the difference that remains is data richness and structure, not typed-vs-untyped rendering, which is now closed for 5 of the 7 (table's constructed side stays untyped; gallery's constructed side has no cover-image field configured, so it never shows the fixture's empty-cover placeholder state) |
+| `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this landing either |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -186,26 +249,33 @@ Every exit code below was read from `$?` directly.
    the same frame the pixels do. The criterion needs an operator ruling — amend it to the
    inside-mount measurement, or accept determinism as the basis. It is left `Unmet` rather than
    quietly reinterpreted.
-2. **The constructed list is a weak photograph, and the phone one is close to empty.** The renderer
-   mounts and its provenance marker passes, but its virtual window lands below the fold in this
-   host: 37 rows exist in the DOM on desktop with the first at y=675 in a 900px viewport, and 38 on
-   the phone with the first at y=1964 in an 874px viewport. So the phone capture shows the total
-   header over empty ground. This is the 1600-row bench shape meeting a host with no bounded scroll
-   height, and it is the clearest argument for the capture-sized data option (T006/AC-004) being
-   required rather than polish.
-3. **The bench data is untyped, so the constructed captures prove structure and not type
-   rendering.** Every bench column is `"text"`, so no select pill, date format, currency or
-   completed-strikethrough appears — where the fixtures show all four. Every Obsidian icon also
-   draws as the stub's placeholder diamond. The fixtures remain the authority for type rendering and
-   icon fidelity, all 70 stay registered and captured, and the 13 named fixture-only entries were
-   re-checked as present in both the registry and the manifest.
+2. **RESOLVED (T006).** The constructed list used to be a weak photograph with the phone one close
+   to empty — 37 DOM rows below the fold at the 1600-row bench shape, the phone capture showing the
+   total header over empty ground. `ScenarioSpec.captureData` (opt-in, `constructed-scenarios.mjs`
+   the only caller) drops the row count to 18 at full fill for list/board/gallery/calendar/timeline;
+   the phone list capture now shows real rows from the first frame. Left as history rather than
+   deleted: this was the observed-red evidence T006's own task row cites.
+3. **PARTIALLY RESOLVED (T004-T006).** Seven of the nine constructed views (list, board, gallery,
+   calendar month/week/day, timeline) now show typed rendering — a named, coloured select pill
+   (`col.statusOptions` rather than the grey no-match fallback), a checked checkbox, a formatted
+   currency figure, a relation/link cell, and — on the calendar and timeline captures — a real
+   struck-through completed row wherever the capture-sized checkbox column reads true. Every
+   Obsidian icon across all nine views now draws a real hand-drawn SVG glyph for the 21 icon names
+   the render-assertion bundle actually mounts, rather than the stub's placeholder diamond. Table
+   and chart remain untyped: table's harness bag renders every cell through a stub
+   (`renderCell: (td, row, col) => td.setText(...)`) the option does not reach, by the same
+   deliberate cost-isolating design its own bench file documents, and chart draws an aggregation
+   with no per-row field to type. The fixtures remain the sole authority for those two views' typed
+   rendering; all 70 fixtures stay registered and captured, unaffected by this change.
 4. **Constructed entries live in the shared manifest, not `screenshots/constructed-manifest.json`.**
    AC-005 and AC-006 are unmet as written. The count is 36 rather than 52, and the separation the
    plan asked for does not exist.
-5. **The timeline is captured at the week scale only.** `render-assertion-harness.ts` hardcodes
-   `makeTimelineConfig(columns, "week")` and `ScenarioSpec.scale` is still calendar-only, so the
-   quarter and year scales cannot be requested. T004-T006 are untouched; the three existing harness
-   consumers are therefore also untouched, which is why their numbers are unchanged.
+5. **PARTIALLY RESOLVED (T004-T005).** `render-assertion-bundle.mjs`'s shared `SCENARIOS` list —
+   what `render-assertions.mjs`, `touch-targets.mjs` and `unstyled-links.mjs` read — now carries all
+   five timeline scales; `ScenarioSpec.scale` is widened and the timeline branch reads it instead of
+   hardcoding `"week"`. `constructed-scenarios.mjs`'s nine-capture registry is unchanged and still
+   registers only the week scale: growing it to cover day/month/quarter/year as actual screenshots
+   is T009 (register 13 constructed scenarios), which stays open and out of this task's scope.
 6. **The later wiring is not done.** `declared-fixtures.mjs` (T010), the `verify.mjs` DECLARED
    staleness inheritance (T011), the explicit `check-lane` widening (T012) and the
    fixture-constructed parity test (T016) remain open. Three of the four lanes read the constructed

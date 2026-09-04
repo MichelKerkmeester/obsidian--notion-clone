@@ -1,9 +1,21 @@
 {
-  "under": 335,
+  "under": 367,
   "floor": 28,
   "recorded": "2026-09-04",
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
   "smallest": "db-calendar-week-allday-more at 67x13",
+  "raiseHistory": {
+    "recorded": "2026-09-04",
+    "what": "335 -> 367, and the ratchet is raised, not lowered, mirroring the fixture baseline's own 037 precedent (`touch-targets-baseline.json`'s `lastTriage`): render-assertion-bundle.mjs's SCENARIOS gained four timeline-scale entries (timeline-day/file-view, timeline-month/file-view, timeline-quarter/file-view, timeline-year/file-view) so the timeline branch could read ScenarioSpec.scale instead of hardcoding \"week\". Each new scenario mounts the same timeline nav chrome the week/file-view scenario already mounted and this baseline already carried — db-timeline-create-button, db-timeline-nav-button, db-timeline-scale-menu — so the three grow, not a new class arrives.",
+    "perClass": [
+      { "class": "db-timeline-create-button", "before": 1, "after": 5 },
+      { "class": "db-timeline-nav-button", "before": 12, "after": 36 },
+      { "class": "db-timeline-scale-menu", "before": 2, "after": 6 }
+    ],
+    "totalBefore": 335,
+    "totalAfter": 367,
+    "verification": "Every other class held its exact prior count — db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-calendar-week-allday-more 16, db-table-footer-trigger 32 — confirmed by re-running `node tools/live/touch-targets.mjs --json` and diffing the per-class counts against this file's own prior `note`. 367 - 335 = 32 = (5-1) + (36-12) + (6-2), the three timeline classes' growth and nothing else; render-assertions.mjs's bag-shape comparison and unstyled-links.mjs's fixture-pass numbers were unaffected by the same four scenarios. No styles.css or src/views change accompanies this raise."
+  },
   "lastTriage": {
     "recorded": "2026-09-04",
     "what": "db-row-insert-button, db-gallery-card-open and db-timeline-mobile-menu-button raised to the 28px floor by adding them to styles.css's existing `@media (pointer: coarse) { min-width: 28px; min-height: 28px; }` block (styles.css:21456-21469), the same idiom already used for db-list-row-open/db-source-rule-icon-button. No width, height, or position property changed on any of the three; the coarse-pointer minimum floats above the visual size only where a coarse pointer is present.",

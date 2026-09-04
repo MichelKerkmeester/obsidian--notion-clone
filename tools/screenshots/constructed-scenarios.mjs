@@ -168,7 +168,16 @@ function constructedSources(rendererFile, benchFile) {
 }
 
 function constructedScenario(view, opts) {
-  const spec = { renderer: opts.renderer, bag: "file-view", ...(opts.scale ? { scale: opts.scale } : {}) };
+  // captureData is the harness's own opt-in (render-assertion-harness.ts's ScenarioSpec): a
+  // small "mixed"-type dataset sized like the hand-written fixtures rather than the 1600-2000-row
+  // structural-cost shape the assertion/touch-target/unstyled-links lanes measure. A capture
+  // exists to show what the shipped types render as, so it is the one caller that turns this on.
+  const spec = {
+    renderer: opts.renderer,
+    bag: "file-view",
+    ...(opts.scale ? { scale: opts.scale } : {}),
+    captureData: true,
+  };
   return {
     id: `constructed-${view}`,
     title: opts.title,

@@ -23,19 +23,62 @@
 // ───────────────────────────────────────────────────────────────────
 
 /**
- * A labelled placeholder rather than the real glyph.
+ * Real glyphs for the icons the render-assertion bundle actually mounts, a labelled placeholder
+ * for everything else.
  *
- * Obsidian ships Lucide and injects the SVG at runtime. Reproducing that here
- * would mean vendoring an icon set to make a catalogue look prettier, while
- * hiding which icon a component actually asked for. The placeholder carries
- * the icon id, which is the reviewable fact.
+ * Obsidian ships Lucide and injects the SVG at runtime; this project does not depend on Lucide
+ * (`node_modules` carries no `lucide`/`lucide-static` package), so there is nothing to inline by
+ * name. A text placeholder proved which icon a component asked for but drew nothing a screenshot
+ * could recognise as a glyph — which is exactly what left the constructed captures unable to show
+ * that a real icon renders, not only that some icon was requested. This carries hand-drawn
+ * lucide-style paths for the icon names actually reachable from the render-assertion bundle's
+ * mounted renderers, traced by grepping the BUILT bundle for every `setIcon(...)` call site
+ * (including the two nav-button helpers that forward their icon through a parameter) rather than
+ * guessed from source. An id outside that set still gets the original placeholder, so a story or
+ * a capture reaching an icon this stub does not know stays reviewable rather than silently blank.
  */
+const REAL_ICONS = {
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  "chevron-down": '<path d="m6 9 6 6 6-6"/>',
+  "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+  "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+  "chevrons-left": '<path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/>',
+  "chevrons-right": '<path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/>',
+  "arrow-left": '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
+  "arrow-right": '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  "more-vertical": '<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',
+  "grip-vertical": '<circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>'
+    + '<circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>',
+  "maximize-2": '<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>',
+  copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>'
+    + '<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+  "external-link": '<path d="M15 3h6v6"/><path d="M10 14 21 3"/>'
+    + '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+  database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+  "bar-chart": '<line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/>',
+  "calendar-days": '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'
+    + '<path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/>',
+  "alert-triangle": '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>'
+    + '<path d="M12 9v4"/><path d="M12 17h.01"/>',
+  "file-text": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+  image: '<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/>'
+    + '<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
+};
+
 export function setIcon(parent, iconId) {
   const el = parent.ownerDocument.createElement("span");
   el.className = "db-story-icon";
   el.setAttribute("data-icon", iconId);
   el.setAttribute("aria-hidden", "true");
-  el.textContent = "◆";
+  const paths = REAL_ICONS[iconId];
+  if (paths) {
+    el.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" `
+      + `stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+  } else {
+    el.textContent = "◆";
+  }
   parent.appendChild(el);
   return el;
 }

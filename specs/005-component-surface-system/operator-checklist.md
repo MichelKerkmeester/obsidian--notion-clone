@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-04: **44 phases**, **6 with nothing left**, **80 rows** waiting on a device.
+Derived 2026-09-04: **44 phases**, **6 with nothing left**, **78 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -193,11 +193,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `SettingsTab.display()` exposes the reconciled default-view/editor/save and board/timeline display vocabulary, localized through `src/i18n.ts` (AC-007).
 - [ ] Toggle-button `aria-expanded`/`is-open` state and the board's roving keyboard match the reconciled active/focus language verified at `chrome.css:124-170` (AC-008).
 
-## 043-constructed-capture — 4/11
+## 043-constructed-capture — 6/11
 
 - [ ] A readiness signal gates every constructed capture, proven to matter by a negative control (capture with the wait removed differs from capture with it present, for at least one of the calendar week/day or timeline views). Today: N/A — no constructed capture exists to gate.
-- [ ] `render-assertion-harness.ts` can construct the timeline at all five shipped scales.
-- [ ] The constructed mount path has an opt-in capture-sized data option, and the three existing consumers are unchanged when it is not used. Today: 0 — no such option exists; every constructed render uses the fixed perf-bench shape (`LIST_ROWS = 1600`, `TABLE_ROWS = 2000`, `CALENDAR_ROWS`/`TIMELINE_ROWS`/`BOARD_ROWS`/`GALLERY_ROWS` = 1600, all at 30% fill, `render-assertion-harness.ts:106-160`), unconditionally.
 - [ ] `screenshots/constructed-manifest.json` carries 52 entries (13 scenarios × 2 devices × 2 themes) covering every registered view. Today: the file does not exist. `test -f screenshots/constructed-manifest.json` fails.
 - [ ] `declared-fixtures.mjs` names every fixture a constructed capture supersedes, and every fixture that stays fixture-only. Today: the file does not exist, and the mapping is currently only prose in `plan.md` §3 — 11 DECLARED entries, 2 net-new (chart, calendar-day), 13 named fixture-only.
 - [ ] screenshots-fresh (`verify.mjs`) judges a DECLARED scenario's staleness against the constructed capture's `sourceHashes`. Today: N/A — `verify.mjs` iterates only `scenarios.mjs`'s `SCENARIOS` (`tools/screenshots/verify.mjs:41`); no DECLARED concept exists yet for it to read.

@@ -59,7 +59,7 @@ import {
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
 import type { App } from "obsidian";
-import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
+import type { ColumnDef, RowData, StatusOptionDef, ViewConfig } from "../../src/data/types";
 import {
   makeColumns as makeListColumns,
   makeRows as makeListRows,
@@ -166,9 +166,21 @@ export const MAX_CHART_LAYOUT_READS = 48;
 export interface ScenarioSpec {
   renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery" | "chart";
   bag: "file-view" | "embed";
-  /** The calendar scale to construct. Month is the reported surface; week and day draw a
-   *  narrower window and are covered here because the calendar ships all three. */
-  scale?: "month" | "week" | "day";
+  /** The calendar scale to construct (month/week/day) or the timeline scale to construct
+   *  (day/week/month/quarter/year) — whichever the named `renderer` owns. A ScenarioSpec names
+   *  one renderer, so the two scale sets never need this field at once. Calendar defaults to
+   *  "month" when omitted; timeline defaults to "week", its own implicit behaviour before this
+   *  field existed. */
+  scale?: "month" | "week" | "day" | "quarter" | "year";
+  /**
+   * Opt-in: swaps the harness's own 1600-2000-row "text" structural-cost shape for a small
+   * "mixed"-type dataset sized like the hand-written fixtures (`scenarios/shared.mjs`'s ~20-row
+   * ROWS) — select, checkbox, date, currency, relation. Off by default so `render-assertions.mjs`,
+   * `touch-targets.mjs` and `unstyled-links.mjs` keep measuring the shape their bounds were
+   * calibrated against; `capture.mjs` is the only caller that turns it on, because a capture
+   * proves what the shipped types render as, not how many layout reads a freeze-scale render costs.
+   */
+  captureData?: boolean;
 }
 
 export interface AssertionResult {
@@ -181,6 +193,72 @@ export interface ScenarioOutcome {
   scenario: ScenarioSpec;
   bagKeys: string[];
   results: AssertionResult[];
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 2B. CAPTURE-SIZED TYPED DATA (opt-in — see ScenarioSpec.captureData)
+// ───────────────────────────────────────────────────────────────────
+
+// A row count in the fixtures' own range rather than the freeze-scale shape above: the constructed
+// list capture mounted 37 DOM rows below the fold at 1600 rows with no bounded scroll height in the
+// capture host, which is a picture of an empty page, not of the renderer.
+export const CAPTURE_ROWS = 18;
+// Every filled cell rather than the structural-cost benches' sparse fill: a capture exists to show
+// what a select pill, a checkbox and a currency figure look like, and a mostly-empty row shows
+// mostly placeholders instead.
+const CAPTURE_FILL = 1;
+
+// A small, named set rather than one colour per row. `col.type === "select"` under the benches'
+// "mixed" kind produces a placeholder value ("${key}-${i}") that matches no configured option, so
+// the renderer takes its real grey no-match fallback — accurate, but not the state a capture of a
+// configured database exists to show. A repeated set of five is what a real select column looks
+// like; giving every row its own value would prove the fallback, not the feature. Short, single
+// words rather than "In progress": a multi-select cell shows two side by side, and the longer
+// label overflowed the column at the bench's own width — the same words board-render-bench's own
+// GROUP_KEYS already use for the same reason.
+const CAPTURE_OPTIONS: StatusOptionDef[] = [
+  { value: "Backlog", color: "gray" },
+  { value: "Doing", color: "blue" },
+  { value: "Review", color: "purple" },
+  { value: "Done", color: "green" },
+  { value: "Blocked", color: "red" },
+];
+
+/**
+ * Points every "mixed"-kind select/status/multi-select column (besides `excludeKey`, a caller's
+ * own group field whose values grouping logic reads by identity) at `CAPTURE_OPTIONS` and
+ * rewrites the rows' values to match, in place. Only touches keys the row already carries, so the
+ * fill-rate gaps the bench decided stay gaps.
+ */
+function applyCaptureOptions(columns: ColumnDef[], rows: RowData[], excludeKey?: string): void {
+  const optionColumns = columns.filter(
+    (col) => (col.type === "select" || col.type === "status" || col.type === "multi-select") && col.key !== excludeKey,
+  );
+  for (const col of optionColumns) col.statusOptions = CAPTURE_OPTIONS;
+  rows.forEach((row, i) => {
+    const frontmatter = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+    for (const col of optionColumns) {
+      if (!(col.key in frontmatter)) continue;
+      frontmatter[col.key] = col.type === "multi-select"
+        ? [CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].value, CAPTURE_OPTIONS[(i + 2) % CAPTURE_OPTIONS.length].value]
+        : CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].value;
+    }
+  });
+}
+
+/**
+ * The board's own group field carries values the bench decides (`GROUP_KEYS`, not exported), so
+ * this derives a palette from whatever distinct values are actually present rather than
+ * duplicating that list here — a copy that drifted out of sync would silently stop colouring the
+ * column instead of failing loudly.
+ */
+function applyCaptureGroupPalette(columns: ColumnDef[], rows: RowData[], groupKey: string): void {
+  const col = columns.find((candidate) => candidate.key === groupKey);
+  if (!col) return;
+  const distinct = [...new Set(rows.map((row) =>
+    (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[groupKey]))]
+    .filter((value): value is string => typeof value === "string");
+  col.statusOptions = distinct.map((value, i) => ({ value, color: CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].color }));
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -1116,8 +1194,13 @@ export function runRenderAssertions(
   let bagKeys: string[] = [];
 
   if (scenario.renderer === "list") {
-    const columns = makeListColumns(LIST_COLUMNS, "text");
-    const rows = makeListRows(LIST_ROWS, columns, LIST_FILL);
+    const columns = makeListColumns(LIST_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const rows = makeListRows(
+      scenario.captureData ? CAPTURE_ROWS : LIST_ROWS,
+      columns,
+      scenario.captureData ? CAPTURE_FILL : LIST_FILL,
+    );
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
     const config = makeListConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewListBag(columns) : embedListBag(columns);
     bagKeys = Object.keys(bag).sort();
@@ -1143,8 +1226,17 @@ export function runRenderAssertions(
       });
     }
   } else if (scenario.renderer === "board") {
-    const columns = makeBoardColumns(BOARD_COLUMNS, "text");
-    const rows = makeBoardRows(BOARD_ROWS, columns, BOARD_FILL, BOARD_GROUPS);
+    const columns = makeBoardColumns(BOARD_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const rows = makeBoardRows(
+      scenario.captureData ? CAPTURE_ROWS : BOARD_ROWS,
+      columns,
+      scenario.captureData ? CAPTURE_FILL : BOARD_FILL,
+      BOARD_GROUPS,
+    );
+    if (scenario.captureData) {
+      applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
+      applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
+    }
     const groups = makeBoardGroups(rows, BOARD_GROUPS);
     const config = makeBoardConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewBoardBag(columns) : embedBoardBag(columns);
@@ -1169,8 +1261,13 @@ export function runRenderAssertions(
       });
     }
   } else if (scenario.renderer === "gallery") {
-    const columns = makeGalleryColumns(GALLERY_COLUMNS, "text");
-    const rows = makeGalleryRows(GALLERY_ROWS, columns, GALLERY_FILL);
+    const columns = makeGalleryColumns(GALLERY_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const rows = makeGalleryRows(
+      scenario.captureData ? CAPTURE_ROWS : GALLERY_ROWS,
+      columns,
+      scenario.captureData ? CAPTURE_FILL : GALLERY_FILL,
+    );
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
     const config = makeGalleryConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewGalleryBag(columns) : embedGalleryBag(columns);
     bagKeys = Object.keys(bag).sort();
@@ -1194,9 +1291,20 @@ export function runRenderAssertions(
       });
     }
   } else if (scenario.renderer === "calendar") {
-    const scale = scenario.scale || "month";
-    const columns = makeCalendarColumns(CALENDAR_COLUMNS, "text");
-    const rows = makeCalendarRows(CALENDAR_ROWS, columns, CALENDAR_FILL);
+    // Narrowed rather than cast: ScenarioSpec.scale is shared with the timeline branch's five
+    // scales, and a calendar scenario is only ever constructed with its own three (see
+    // render-assertion-bundle.mjs's SCENARIOS and constructed-scenarios.mjs's registry), so a
+    // "quarter"/"year" value here would be a construction bug — this falls back to "month" rather
+    // than passing an out-of-range scale to `makeCalendarConfig`.
+    const scale: "month" | "week" | "day" =
+      scenario.scale === "week" || scenario.scale === "day" ? scenario.scale : "month";
+    const columns = makeCalendarColumns(CALENDAR_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const rows = makeCalendarRows(
+      scenario.captureData ? CAPTURE_ROWS : CALENDAR_ROWS,
+      columns,
+      scenario.captureData ? CAPTURE_FILL : CALENDAR_FILL,
+    );
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
     const config = makeCalendarConfig(columns, scale);
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
     bagKeys = Object.keys(bag).sort();
@@ -1259,9 +1367,18 @@ export function runRenderAssertions(
       });
     }
   } else if (scenario.renderer === "timeline") {
-    const columns = makeTimelineColumns(TIMELINE_COLUMNS, "text");
-    const rows = makeTimelineRows(TIMELINE_ROWS, columns, TIMELINE_FILL);
-    const config = makeTimelineConfig(columns, "week");
+    // Timeline owns the full five-scale set ScenarioSpec.scale carries, so unlike the calendar
+    // branch this reads it directly rather than narrowing — every value in the union is one the
+    // bench's own makeConfig already accepts. "week" is the implicit default this field replaces.
+    const timelineScale = scenario.scale ?? "week";
+    const columns = makeTimelineColumns(TIMELINE_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const rows = makeTimelineRows(
+      scenario.captureData ? CAPTURE_ROWS : TIMELINE_ROWS,
+      columns,
+      scenario.captureData ? CAPTURE_FILL : TIMELINE_FILL,
+    );
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
+    const config = makeTimelineConfig(columns, timelineScale);
     const bag = scenario.bag === "file-view" ? fileViewTimelineBag() : embedTimelineBag();
     bagKeys = Object.keys(bag).sort();
     const renderer = new CalendarTimelineRenderer(bag);

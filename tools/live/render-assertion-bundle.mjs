@@ -52,6 +52,12 @@ export const SCENARIOS = [
   { name: "calendar-day/embed", renderer: "calendar", bag: "embed", scale: "day" },
   { name: "timeline/file-view", renderer: "timeline", bag: "file-view" },
   { name: "timeline/embed", renderer: "timeline", bag: "embed" },
+  // The remaining four scales the timeline ships. "week" is already covered by the implicit
+  // entry above (ScenarioSpec.scale defaults to "week"), so this is the other four, not five.
+  { name: "timeline-day/file-view", renderer: "timeline", bag: "file-view", scale: "day" },
+  { name: "timeline-month/file-view", renderer: "timeline", bag: "file-view", scale: "month" },
+  { name: "timeline-quarter/file-view", renderer: "timeline", bag: "file-view", scale: "quarter" },
+  { name: "timeline-year/file-view", renderer: "timeline", bag: "file-view", scale: "year" },
   { name: "chart/file-view", renderer: "chart", bag: "file-view" },
 ];
 
