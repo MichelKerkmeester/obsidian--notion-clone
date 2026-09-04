@@ -17,7 +17,6 @@ import { SortRule, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
-import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { createDropdownField } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
@@ -57,13 +56,23 @@ export class SortPanelRenderer {
     actions: SortPanelActions,
     anchorEl?: HTMLElement
   ): void {
-    const savedScroll = this.panelEl?.scrollTop ?? 0;
-    const wasOpen = Boolean(this.panelEl?.isConnected);
+    // A rebuild refills the panel it already has; only an opening creates one.
+    //
+    // Every rebuild used to destroy the node and build a replacement, on every add, remove, toggle
+    // and background refresh. The node is the surface's identity to everything outside this class:
+    // the overlay stack's idea of "inside", the sheet module's memory of where the panel came from,
+    // the entrance's record that it has already played, and — on a touch device — the element a
+    // tap's delayed click is delivered to. Replacing it invalidated all four at once, and each was
+    // then patched back one at a time: a resolver so the stack could re-find the panel, a flag so
+    // the entrance would not replay. Refilling the node it already has removes the cause those
+    // patches were treating, and the press that began inside the sheet still has a sheet to land in.
+    const retained = this.panelEl?.isConnected ? this.panelEl : null;
+    const savedScroll = retained?.scrollTop ?? 0;
     this.removeFocusTrap?.();
     this.removeFocusTrap = null;
-    this.panelEl?.remove();
-    this.panelEl = null;
     if (!visible) {
+      this.panelEl?.remove();
+      this.panelEl = null;
       this.anchorEl = null;
       return;
     }
@@ -76,17 +85,20 @@ export class SortPanelRenderer {
     // identically. Compared against each other rather than read, five of six dimensions diverged —
     // no role, no accessible name, focus left outside the panel, Escape did nothing, and Tab walked
     // straight out of it. A reader who opened Sort with a keyboard could not close it.
-    const panel = containerEl.createDiv({
-      cls: "db-sort-panel db-filter-panel",
-      attr: { id: "db-sort-panel", role: "dialog", "aria-label": t("toolbar.sort") },
-    });
-    panel.tabIndex = -1;
-    const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
-    if (header?.parentElement) header.parentElement.insertBefore(panel, header.nextSibling);
+    let panel: HTMLElement;
+    if (retained) {
+      panel = retained;
+      panel.empty();
+    } else {
+      panel = containerEl.createDiv({
+        cls: "db-sort-panel db-filter-panel",
+        attr: { id: "db-sort-panel", role: "dialog", "aria-label": t("toolbar.sort") },
+      });
+      panel.tabIndex = -1;
+      const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
+      if (header?.parentElement) header.parentElement.insertBefore(panel, header.nextSibling);
+    }
     this.panelEl = panel;
-    // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
-    // is what keeps the sheet from replaying its rise and moving out from under the thumb.
-    if (wasOpen) carrySheetEntrance(panel);
     this.removeFocusTrap = trapFocus(panel, {
       onEscape: () => {
         actions.close();

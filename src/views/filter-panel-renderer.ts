@@ -22,7 +22,6 @@ import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "..
 import { t } from "../i18n";
 import { createDropdownField } from "./dropdown-field";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
-import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
@@ -149,35 +148,38 @@ export class FilterPanelRenderer {
     actions: FilterPanelActions,
     anchorEl?: HTMLElement
   ): void {
-    const savedScroll = this.panelEl?.scrollTop ?? 0;
-    const wasOpen = Boolean(this.panelEl?.isConnected);
+    // A rebuild refills the panel it already has; only an opening creates one. The sort panel
+    // carries the same shape and the same reason for it.
+    const retained = this.panelEl?.isConnected ? this.panelEl : null;
+    const savedScroll = retained?.scrollTop ?? 0;
     closeActiveDateValuePicker(containerEl.ownerDocument);
-    if (this.panelEl) {
-      this.removeFocusTrap?.();
-      this.removeFocusTrap = null;
-      this.panelEl.remove();
-      this.panelEl = null;
-    }
+    this.removeFocusTrap?.();
+    this.removeFocusTrap = null;
     if (!visible) {
+      this.panelEl?.remove();
+      this.panelEl = null;
       this.anchorEl = null;
       this.flushPendingRefresh(actions);
       return;
     }
     if (anchorEl?.isConnected) this.anchorEl = anchorEl;
 
-    const panel = containerEl.createDiv({
-      cls: "db-filter-panel",
-      attr: { id: "db-filter-panel", role: "dialog", "aria-label": t("toolbar.filter") },
-    });
-    panel.tabIndex = -1;
-    const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
-    if (header?.parentElement) {
-      header.parentElement.insertBefore(panel, header.nextSibling);
+    let panel: HTMLElement;
+    if (retained) {
+      panel = retained;
+      panel.empty();
+    } else {
+      panel = containerEl.createDiv({
+        cls: "db-filter-panel",
+        attr: { id: "db-filter-panel", role: "dialog", "aria-label": t("toolbar.filter") },
+      });
+      panel.tabIndex = -1;
+      const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
+      if (header?.parentElement) {
+        header.parentElement.insertBefore(panel, header.nextSibling);
+      }
     }
     this.panelEl = panel;
-    // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
-    // is what keeps the sheet from replaying its rise and moving out from under the thumb.
-    if (wasOpen) carrySheetEntrance(panel);
     this.removeFocusTrap = trapFocus(panel, {
       onEscape: () => {
         actions.close();

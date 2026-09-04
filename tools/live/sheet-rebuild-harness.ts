@@ -339,14 +339,18 @@ function runBindingAblation(doc: Document): RebuildResult[] {
 /**
  * A tap that lands inside a panel this rebuild just replaced must not read as an outside tap.
  *
- * The sort and filter panels do not repopulate their existing node like the group sheet above —
- * `render()` removes the whole panel and builds a fresh one on every add/toggle/remove
- * (sort-panel-renderer.ts, filter-panel-renderer.ts both call `panelEl.remove(); panelEl = null`
- * before creating the replacement). The overlay stack's outside-pointerdown check tests
- * `surface.panel.contains(target)` against whatever node it registered, and nothing re-registers
- * after a rebuild — so the first change to either panel leaves the stack holding a detached node
- * no live tap can ever be "inside" again, and the very next tap reads as outside and closes the
- * sheet mid-edit.
+ * The sort and filter panels used to replace their node outright on every add/toggle/remove, and
+ * the overlay stack's outside-pointerdown check tested `surface.panel.contains(target)` against
+ * whatever node it registered — so the first change to either panel left the stack holding a
+ * detached node no live tap could ever be "inside" again, and the very next tap read as outside and
+ * closed the sheet mid-edit. Both ends of that have since moved: the stack re-resolves through
+ * `getPanel()`, and the panels refill the node they already have.
+ *
+ * The case still runs, and still on the same subject, because either end alone would let it back.
+ * What the staging guard reads had to change with the producer: node identity USED to mean "a
+ * rebuild happened", and now means the opposite, so the guard asks whether the panel's CONTENT was
+ * rebuilt instead. A guard that still demanded a new node would silently stop staging anything and
+ * report a green run as a proof.
  *
  * WHY THIS DRIVES THE REAL REGISTRATION PATH. `installHeaderPopoverAutoClose` in database-view.ts
  * is what wires these panels to the stack, and it does so through `installPopoverAutoClose`
@@ -357,7 +361,7 @@ function runBindingAblation(doc: Document): RebuildResult[] {
 function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
   const rowLabel = (rebuilt: boolean, stillOpen: boolean): RebuildResult["detail"] =>
     !rebuilt
-      ? "the add action never rebuilt the panel, so this run proves nothing about registration"
+      ? "the add action never rebuilt the panel's contents, so this run proves nothing about registration"
       : stillOpen
         ? "a tap inside the rebuilt panel stayed inside the sheet"
         : "a tap inside the panel the rebuild just created read as OUTSIDE and closed the sheet"
@@ -387,9 +391,11 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
     // The tap the operator reports first: it lands inside the panel the stack actually registered,
     // so it works and rebuilds the panel underneath the still-open sheet.
     const addBtn = openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+    const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
-    const rebuilt = Boolean(rebuiltPanel && rebuiltPanel !== openPanel);
+    const rebuilt = Boolean(rebuiltPanel)
+      && (rebuiltPanel?.querySelectorAll(".db-panel-row").length ?? 0) > rowsBefore;
 
     // The tap that follows: anywhere inside the panel the rebuild just created. A real device
     // delivers this as pointerdown before click, and the stack's outside-pointerdown listener runs
@@ -402,7 +408,7 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
     root.remove();
     return {
       surface: "sort sheet (real SortPanelRenderer, add-sort)",
-      rebuildShape: "remove-then-recreate",
+      rebuildShape: "refill-in-place",
       barBeforeRebuild: rebuilt,
       barAfterRebuild: stillOpen,
       pass: rebuilt && stillOpen,
@@ -435,9 +441,11 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
 
     const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
       .find((btn) => /condition/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+    const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
-    const rebuilt = Boolean(rebuiltPanel && rebuiltPanel !== openPanel);
+    const rebuilt = Boolean(rebuiltPanel)
+      && (rebuiltPanel?.querySelectorAll(".db-panel-row").length ?? 0) > rowsBefore;
 
     const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
     secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
@@ -446,7 +454,7 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
     root.remove();
     return {
       surface: "filter sheet (real FilterPanelRenderer, add-condition)",
-      rebuildShape: "remove-then-recreate",
+      rebuildShape: "refill-in-place",
       barBeforeRebuild: rebuilt,
       barAfterRebuild: stillOpen,
       pass: rebuilt && stillOpen,
@@ -492,9 +500,11 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
 
     const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
       .find((btn) => /condition/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+    const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
-    const rebuilt = Boolean(rebuiltPanel && rebuiltPanel !== openPanel);
+    const rebuilt = Boolean(rebuiltPanel)
+      && (rebuiltPanel?.querySelectorAll(".db-panel-row").length ?? 0) > rowsBefore;
 
     const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
     secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
@@ -503,7 +513,7 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
     root.remove();
     return {
       surface: "embedded filter sheet (real FilterPanelRenderer, portalled on phone)",
-      rebuildShape: "remove-then-recreate",
+      rebuildShape: "refill-in-place",
       barBeforeRebuild: rebuilt,
       barAfterRebuild: stillOpen,
       pass: rebuilt && stillOpen,
@@ -742,6 +752,7 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
     close: () => { scenario.open = false; renderPanel(); },
   });
 
+  panel.setAttribute("data-probe-panel", PANEL_IDENTITY);
   activeAddRow = scenario;
   return { ready: true, detail: `${kind} sheet open` };
 }
@@ -758,7 +769,21 @@ export interface AddRowProbe {
   isSheet: boolean;
   visibility: string | null;
   onBody: boolean;
+  /**
+   * The mark put on the panel node when the sheet opened, read back from whatever node the owner
+   * now calls its panel.
+   *
+   * Null means the owner replaced the node rather than refilling it. That is not cosmetic on a
+   * touch device: the compatibility click a tap produces is delivered to the element the touch
+   * started on, and when that element has left the document the engine retargets it — with the
+   * panel gone there is no ancestor left inside the surface to retarget to, so a press that began
+   * inside the sheet arrives somewhere outside it.
+   */
+  panelIdentity: string | null;
 }
+
+/** The mark, so a replaced node is distinguishable from a refilled one. */
+const PANEL_IDENTITY = "sheet-open-1";
 
 /**
  * Rebuild the toolbar behind an open surface, changing nothing else.
@@ -794,6 +819,7 @@ export function readAddRowProbe(doc: Document): AddRowProbe {
     sheets: doc.body.querySelectorAll(".db-mobile-bottom-sheet").length,
     scrims: doc.body.querySelectorAll(".db-mobile-sheet-scrim").length,
     panelTop: panel ? panel.getBoundingClientRect().top : null,
+    panelIdentity: panel?.getAttribute("data-probe-panel") ?? null,
     isSheet: Boolean(panel?.classList.contains("db-mobile-bottom-sheet")),
     visibility: panel && doc.defaultView
       ? doc.defaultView.getComputedStyle(panel).visibility

@@ -252,6 +252,22 @@ async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName)
           : `${tapped.rules} rule(s) after the tap (open: ${tapped.open}, sheet: ${tapped.isSheet})`
             + " — the control does nothing, which is what the operator reported",
       });
+
+      // The node, not just the result. A tap on a touch device produces its click on a delay, and
+      // the engine delivers that click to the element the touch started on — so what matters is
+      // whether anything of the surface the press began in is still in the document when it
+      // arrives. A rebuild that replaces the panel outright leaves nothing to retarget to inside
+      // the sheet, and a press that began inside it arrives outside. Emulation cannot produce that
+      // delay, so the property is asserted directly rather than through a symptom.
+      const identityHeld = tapped.panelIdentity !== null;
+      checks.push({
+        name: `${engineName}: the ${kind} sheet keeps its own node across the rebuild`,
+        pass: identityHeld,
+        detail: identityHeld
+          ? "the panel the press began in is the panel that is still there afterwards"
+          : "the rebuild replaced the panel node — the element a delayed click would be retargeted"
+            + " into no longer exists, so a press that began inside the sheet can arrive outside it",
+      });
     }
     await phonePage.close();
     for (const error of engineErrors) {
