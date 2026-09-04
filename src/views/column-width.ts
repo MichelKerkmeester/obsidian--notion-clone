@@ -1,7 +1,8 @@
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    column-width
 // COMPONENT: Estimates on-screen pixel widths for column headers and
-//            cell content, used by manual width resolution and auto-fit.
+//            cell content, used by manual width resolution and auto-fit,
+//            plus the width-adjuster sheet that resizes a table column.
 // ───────────────────────────────────────────────────────────────────
 //
 // Two measurement paths exist because canvas `measureText` needs a real
@@ -21,6 +22,12 @@ import { InlineMarkdownNode, parseInlineMarkdown, inlineMarkdownToPlainText } fr
 import { parseTextLink } from "../data/text-link";
 import { isTextLinkScheme } from "../data/text-link-scheme";
 import { getRelationDisplayLabel, parseRelationValues } from "../data/relation-links";
+import { setIcon } from "obsidian";
+import { t } from "../i18n";
+import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
+import { installPopoverAutoClose } from "./popover-auto-close";
+import { isMobileBottomSheet, keepSheetPlaced, placeSheet } from "./popover-position";
+import { syncTableColumnLayouts } from "./table-column-layout-sync";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. PUBLIC WIDTH HELPERS
@@ -313,4 +320,230 @@ function estimateTextFallback(text: string, fontSize: number, fontWeight = 400, 
   }, 0);
   const weightScale = fontWeight >= 600 ? 1.08 : 1;
   return base * weightScale * (italic ? 1.02 : 1);
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 7. THE WIDTH ADJUSTER
+// ───────────────────────────────────────────────────────────────────
+
+const COLUMN_WIDTH_MIN = 60;
+const COLUMN_WIDTH_MAX = 360;
+const COLUMN_WIDTH_PRESETS = [
+  { key: "narrow", width: 100 },
+  { key: "medium", width: 150 },
+  { key: "wide", width: 240 },
+] as const;
+
+function clampColumnWidth(value: number, min: number, max: number): number {
+  if (!Number.isFinite(value)) return min;
+  return Math.min(Math.max(Math.round(value), min), max);
+}
+
+export interface ColumnWidthAdjusterOptions {
+  /** The container that owns the table being resized; the live re-layout target. */
+  root: HTMLElement;
+  /** The column whose width is being adjusted. */
+  col: ColumnDef;
+  /** The live view config; widths are written here and re-laid out immediately. */
+  config: ViewConfig;
+  /** Commit a dirty width change (schedule the save and name the undo step). */
+  persist(): void;
+}
+
+/**
+ * Open the column-width adjuster: a shared bottom sheet on a phone, the fixed bottom panel it has
+ * always been on desktop, both built from the same body markup.
+ *
+ * The phone presentation goes through the shared sheet host exactly like the owned menus do —
+ * sheet chrome and portal, docked placement that follows the keyboard, the entrance, and the
+ * drag handle — with the overlay stack owning dismissal, so Escape and a tap on the scrim close
+ * it the same way they close every other sheet. The desktop presentation keeps its fixed panel
+ * and its own backdrop; the scrim would be wrong there, and the panel's own rules already draw
+ * the backdrop.
+ *
+ * Returns the close function; the caller owns it and must run it when the view goes away.
+ */
+export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): () => void {
+  const { root, col, config } = options;
+  const doc = root.ownerDocument;
+  const sheet = isMobileBottomSheet(doc);
+
+  const backdrop = sheet ? null : doc.body.createDiv({ cls: "db-mobile-column-width-backdrop" });
+  const panel = doc.body.createDiv({ cls: "db-mobile-column-width-panel" });
+  // The body below is built from the shared panel-family classes (`db-panel-header`,
+  // `db-panel-row`, `db-view-config-range`, `db-new-placement`...), and every one of those rules
+  // is written `.note-database-container .db-thing`. Filter, Sort and the view-config panel keep
+  // matching after their own portal because they are BUILT inside the container and
+  // `setSheetMount`'s move branch re-adds the class on the way to the body; this panel is created
+  // on `doc.body` directly and never takes that branch, on either presentation, so without this
+  // the shared classes above render as unstyled blocks and buttons — the operator's "bare strip"
+  // report, reproduced by a different cause. The container's own `height: 100%` is corrected in
+  // the stylesheet, right beside the rule it corrects.
+  panel.addClass("note-database-container");
+
+  // The same header grammar every other sheet carries: a title row with the close control on the
+  // right, so the adjuster reads as part of the family rather than as a bare strip.
+  const header = panel.createDiv({ cls: "db-panel-header" });
+  header.createDiv({ cls: "db-panel-title", text: t("columnWidth.adjustTitle", { name: col.label || col.key }) });
+  const closeBtn = header.createEl("button", {
+    cls: "db-cell-edit-close",
+    attr: { type: "button", "aria-label": t("common.close") },
+  });
+  setIcon(closeBtn, "x");
+
+  // The shared range control: slider and typed value side by side in one row. Dragging cannot
+  // hit an exact number, and matching a column to a known width is the whole reason someone
+  // opens this panel.
+  const widthRow = panel.createDiv({ cls: "db-panel-row" });
+  const control = widthRow.createDiv({ cls: "db-view-config-range" });
+  const slider = control.createEl("input", {
+    attr: {
+      type: "range",
+      min: String(COLUMN_WIDTH_MIN),
+      max: String(COLUMN_WIDTH_MAX),
+      step: "1",
+      "aria-label": t("menu.adjustColumnWidth"),
+    },
+  });
+  const valueEl = control.createEl("input", {
+    cls: "db-view-config-number",
+    attr: {
+      type: "number",
+      inputmode: "numeric",
+      min: String(COLUMN_WIDTH_MIN),
+      step: "1",
+      "aria-label": t("menu.adjustColumnWidth"),
+    },
+  });
+
+  // The presets are the same exclusive-choice group the new-record placement uses: equal options
+  // with one selected, so the current mode is visible instead of four flat tiles.
+  const presetsRow = panel.createDiv({ cls: "db-panel-row" });
+  const group = presetsRow.createDiv({
+    cls: "db-new-placement",
+    attr: { role: "group", "aria-label": t("menu.adjustColumnWidth") },
+  });
+  const presetButtons: Array<{ button: HTMLButtonElement; mode: "auto" | "width"; width: number }> = [];
+  const addPresetButton = (mode: "auto" | "width", width: number, label: string): void => {
+    const button = group.createEl("button", {
+      cls: "db-new-placement-option",
+      text: label,
+      attr: { type: "button", role: "radio", "aria-checked": "false" },
+    });
+    presetButtons.push({ button, mode, width });
+  };
+  const presetLabels: Record<(typeof COLUMN_WIDTH_PRESETS)[number]["key"], string> = {
+    narrow: t("columnWidth.narrow"),
+    medium: t("columnWidth.medium"),
+    wide: t("columnWidth.wide"),
+  };
+  addPresetButton("auto", 0, t("columnWidth.auto"));
+  for (const preset of COLUMN_WIDTH_PRESETS) {
+    addPresetButton("width", preset.width, presetLabels[preset.key]);
+  }
+
+  let dirty = false;
+  let closed = false;
+
+  const explicitWidth = (): number | null => config.columnWidths?.[col.key] ?? null;
+  const fallbackWidth = (): number => col.width ?? config.defaultColumnWidth ?? 150;
+
+  const reflect = (width: number): void => {
+    const max = Math.max(COLUMN_WIDTH_MAX, Math.ceil(width));
+    slider.max = String(max);
+    slider.value = String(clampColumnWidth(width, COLUMN_WIDTH_MIN, max));
+    // Never rewrite the field the user is typing into. Half-entered values are below the minimum
+    // by definition, so echoing the clamped result back would eat their keystrokes.
+    if (doc.activeElement !== valueEl) valueEl.value = String(Math.round(width));
+    const explicit = explicitWidth();
+    const auto = explicit === null;
+    for (const { button, mode, width: presetWidth } of presetButtons) {
+      const selected = mode === "auto" ? auto : !auto && explicit === presetWidth;
+      button.setAttribute("aria-checked", String(selected));
+      button.toggleClass("is-active", selected);
+    }
+  };
+
+  const applyWidth = (width: number): void => {
+    if (!Number.isFinite(width)) return;
+    const nextWidth = Math.round(Math.max(COLUMN_WIDTH_MIN, width));
+    config.columnWidths = { ...(config.columnWidths || {}), [col.key]: nextWidth };
+    dirty = true;
+    reflect(nextWidth);
+    syncTableColumnLayouts(root, config);
+  };
+
+  // Auto means "let the column size itself": remove the explicit width so the column's own width
+  // or the view default applies, rather than pinning whatever was measured at open time.
+  const clearWidth = (): void => {
+    if (explicitWidth() === null) return;
+    const next = { ...(config.columnWidths || {}) };
+    delete next[col.key];
+    config.columnWidths = next;
+    dirty = true;
+    reflect(fallbackWidth());
+    syncTableColumnLayouts(root, config);
+  };
+
+  slider.oninput = () => applyWidth(Number(slider.value));
+  slider.onchange = () => options.persist();
+  valueEl.oninput = () => {
+    const typed = Number(valueEl.value);
+    // An empty or part-typed field is not a width yet; wait rather than snapping to the minimum.
+    if (valueEl.value.trim() === "" || !Number.isFinite(typed)) return;
+    applyWidth(typed);
+  };
+  valueEl.onchange = () => {
+    applyWidth(Number(valueEl.value));
+    // Commit echoes the clamped result back, which is the point at which the user should see
+    // the value their input actually resolved to.
+    valueEl.value = String(config.columnWidths?.[col.key] ?? COLUMN_WIDTH_MIN);
+    options.persist();
+  };
+  for (const { button, mode, width: presetWidth } of presetButtons) {
+    button.onclick = () => {
+      if (mode === "auto") clearWidth();
+      else applyWidth(presetWidth);
+      options.persist();
+    };
+  }
+
+  let releaseDrag: (() => void) | undefined;
+  let releasePlacement: (() => void) | undefined;
+  let removeAutoClose: (() => void) | undefined;
+
+  const close = (): void => {
+    if (closed) return;
+    closed = true;
+    if (dirty) options.persist();
+    releaseDrag?.();
+    releasePlacement?.();
+    removeAutoClose?.();
+    // Take the sheet chrome down before the node goes: the backdrop is a body sibling, so
+    // removing the panel alone would leave the app dimmed behind a surface that is no longer there.
+    if (panel.hasClass("db-mobile-bottom-sheet")) applySheetChrome(panel, false);
+    panel.remove();
+    backdrop?.remove();
+  };
+
+  if (sheet) {
+    // The shared scrim is the backdrop here, and it takes the tap: dismissing the adjuster must
+    // not also edit a cell underneath on the way out.
+    applySheetChrome(panel, true, { scrimCapturesPointer: true });
+    placeSheet(panel);
+    releasePlacement = keepSheetPlaced(panel);
+    playSheetEntrance(panel);
+    releaseDrag = attachSheetDragToDismiss(panel, close);
+  }
+  // One owner for dismissal on both presentations: the overlay stack answers Escape and any
+  // press outside the panel — the scrim on a phone, the backdrop on desktop.
+  removeAutoClose = installPopoverAutoClose({ panel, close });
+
+  closeBtn.onclick = (event) => {
+    event.stopPropagation();
+    close();
+  };
+
+  reflect(fallbackWidth());
+  return close;
 }

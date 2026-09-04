@@ -713,6 +713,16 @@ ColumnManagerRenderer's own render over the table bench's sixteen columns with o
 
 Sources: `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 
+### Column width adjuster (constructed)
+
+openColumnWidthAdjuster's own module entry over a real currency column from the table bench. On the phone device isMobileBottomSheet's own check turns it into the shared bottom sheet (chrome, placement, entrance, drag-to-dismiss); on desktop it stays the fixed panel it has always been. Both presentations share the panel-family body markup photographed here, not a bespoke strip.
+
+| dark | light |
+|---|---|
+| ![constructed-column-width-adjuster dark](panels/constructed-column-width-adjuster-mobile-dark.png) | ![constructed-column-width-adjuster light](panels/constructed-column-width-adjuster-mobile-light.png) |
+
+Sources: `src/views/column-width.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/popover-auto-close.ts`
+
 ### Filter panel with active conditions (constructed)
 
 FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.
@@ -812,6 +822,16 @@ One row per property: drag handle, visibility checkbox, type icon, name with its
 | ![panel-column-manager dark](panels/panel-column-manager-mobile-dark.png) | ![panel-column-manager light](panels/panel-column-manager-mobile-light.png) |
 
 Sources: `src/views/column-manager-renderer.ts`, `src/views/property-type-icon.ts`
+
+### Column width adjuster — mobile bottom sheet
+
+The adjuster mounts through the shared sheet host (applySheetChrome, placeSheet, attachSheetDragToDismiss) with the same panel-family body every other sheet in this file uses: db-panel-header with a db-cell-edit-close close button, a db-panel-row holding the shared db-view-config-range/db-view-config-number slider-and-value, and a second db-panel-row holding the db-new-placement preset group. No explicit width is set, so Auto is the selected preset and the field shows the column's fallback width.
+
+| dark | light |
+|---|---|
+| ![panel-column-width-sheet dark](panels/panel-column-width-sheet-mobile-dark.png) | ![panel-column-width-sheet light](panels/panel-column-width-sheet-mobile-light.png) |
+
+Sources: `src/views/column-width.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`
 
 ### Filter panel with active conditions
 

@@ -535,6 +535,20 @@ export const CONSTRUCTED_SCENARIOS = [
     note: "ColumnManagerRenderer's own render over the table bench's sixteen columns with one "
       + "hidden, so the select-all checkbox sits in its real indeterminate state.",
   }),
+  constructedScenario("column-width-adjuster", {
+    renderer: "column-width-adjuster",
+    group: "panels",
+    capture: "viewport",
+    title: "Column width adjuster (constructed)",
+    fixtureOf: "panel-column-width-sheet",
+    sources: constructedSources("src/views/column-width.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/mobile-bottom-sheet.ts", "src/views/popover-position.ts", "src/views/popover-auto-close.ts"]),
+    note: "openColumnWidthAdjuster's own module entry over a real currency column from the table "
+      + "bench. On the phone device isMobileBottomSheet's own check turns it into the shared "
+      + "bottom sheet (chrome, placement, entrance, drag-to-dismiss); on desktop it stays the "
+      + "fixed panel it has always been. Both presentations share the panel-family body markup "
+      + "photographed here, not a bespoke strip.",
+  }),
   constructedScenario("record-detail", {
     renderer: "record-detail",
     group: "panels",

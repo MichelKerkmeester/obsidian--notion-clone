@@ -169,7 +169,7 @@ import { saveZipWithPicker } from "../data/export-save-target";
 import { getEffectiveFilterRules } from "../data/filter-rules";
 import { appendLeaf, buildViewFilterTree, getRequiredViewFilterLeaves } from "../data/view-filter-tree";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { estimateAutoColumnWidth } from "./column-width";
+import { estimateAutoColumnWidth, openColumnWidthAdjuster } from "./column-width";
 import { createRenderedTextWidthMeasurer } from "./inline-markdown-renderer";
 import { isHTMLElement } from "./dom-guards";
 import { attachLongPress, isTouchDevice, observeTouchEnvironment } from "../data/touch-environment";
@@ -191,7 +191,6 @@ import {
   setupTitleCellTap,
   syncTableRecordPeek,
 } from "./table-record-peek";
-import { syncTableColumnLayouts } from "./table-column-layout-sync";
 import { type ResolvedOpenTarget, resolveRecordOpenTarget } from "./record-open-target";
 import { hasRelationValue, planRelationTargetChange } from "../data/relation-target-change";
 import { highlightSearchMatches, renderSearchHighlightedText } from "./search-highlight";
@@ -228,21 +227,9 @@ import {
 
 const MAX_SOURCE_RULE_MATCH_TEXT_LENGTH = 10000;
 const NEW_COLUMN_HIGHLIGHT_MS = 2200;
-const MOBILE_COLUMN_WIDTH_MIN = 60;
-const MOBILE_COLUMN_WIDTH_MAX = 360;
-const MOBILE_COLUMN_WIDTH_PRESETS = [
-  { key: "narrow", width: 100 },
-  { key: "medium", width: 150 },
-  { key: "wide", width: 240 },
-] as const;
 
 function filtersEqual(left: FilterRule, right: FilterRule): boolean {
   return left.field === right.field && left.op === right.op && (left.value || "") === (right.value || "");
-}
-
-function clampColumnWidth(value: number, min: number, max: number): number {
-  if (!Number.isFinite(value)) return min;
-  return Math.min(Math.max(Math.round(value), min), max);
 }
 
 function propertyTypeChangeTargetsEntry(entry: { sourcePath: string; config: DatabaseConfig }, change: PropertyTypeConflictChange): boolean {
@@ -11403,127 +11390,20 @@ export class DatabaseView extends FileView {
 
   private showMobileColumnWidthPanel(col: ColumnDef): void {
     const config = this.getConfig();
-    const root = this.containerEl_;
-    if (!config || !root) return;
+    if (!config || !this.containerEl_) return;
     this.closeMobileColumnWidthPanel();
-
-    const doc = root.ownerDocument;
-    const backdrop = doc.body.createDiv({ cls: "db-mobile-column-width-backdrop" });
-    const panel = doc.body.createDiv({ cls: "db-mobile-column-width-panel" });
-    const title = panel.createDiv({
-      cls: "db-mobile-column-width-title",
-      text: t("columnWidth.adjustTitle", { name: col.label || col.key }),
-    });
-    title.setAttr("aria-live", "polite");
-
-    const valueRow = panel.createDiv({ cls: "db-mobile-column-width-value-row" });
-    const slider = valueRow.createEl("input", {
-      cls: "db-mobile-column-width-slider",
-      attr: {
-        type: "range",
-        min: String(MOBILE_COLUMN_WIDTH_MIN),
-        max: String(MOBILE_COLUMN_WIDTH_MAX),
-        step: "1",
-        "aria-label": t("menu.adjustColumnWidth"),
+    // The panel itself — sheet on a phone, fixed panel on desktop — lives in the column-width
+    // module with the rest of the width logic; this view only supplies the parts that belong to
+    // it: the config to write and the save to schedule.
+    this.mobileColumnWidthPanelCleanup = openColumnWidthAdjuster({
+      root: this.containerEl_,
+      col,
+      config,
+      persist: () => {
+        this.pendingUndoLabel = t("undo.columnWidthConfig");
+        this.scheduleConfigSave();
       },
     });
-    // A typed pixel value, not just a slider: dragging cannot hit an exact number, and matching a
-    // column to a known width is the whole reason someone opens this panel.
-    const valueEl = valueRow.createEl("input", {
-      cls: "db-mobile-column-width-value",
-      attr: {
-        type: "number",
-        inputmode: "numeric",
-        min: String(MOBILE_COLUMN_WIDTH_MIN),
-        step: "1",
-        "aria-label": t("menu.adjustColumnWidth"),
-      },
-    });
-
-    const presets = panel.createDiv({ cls: "db-mobile-column-width-presets" });
-    const autoButton = presets.createEl("button", {
-      cls: "db-mobile-column-width-preset",
-      text: t("columnWidth.auto"),
-      attr: { type: "button" },
-    });
-    for (const preset of MOBILE_COLUMN_WIDTH_PRESETS) {
-      const button = presets.createEl("button", {
-        cls: "db-mobile-column-width-preset",
-        text: t(`columnWidth.${preset.key}`),
-        attr: { type: "button" },
-      });
-      button.onclick = () => {
-        applyWidth(preset.width);
-        persist();
-      };
-    }
-
-    let dirty = false;
-    const setSliderValue = (width: number) => {
-      const max = Math.max(MOBILE_COLUMN_WIDTH_MAX, Math.ceil(width));
-      slider.max = String(max);
-      slider.value = String(clampColumnWidth(width, MOBILE_COLUMN_WIDTH_MIN, max));
-      // Never rewrite the field the user is typing into. Half-entered values are below the
-      // minimum by definition, so echoing the clamped result back would eat their keystrokes.
-      if (valueEl.ownerDocument.activeElement !== valueEl) {
-        valueEl.value = String(Math.round(width));
-      }
-    };
-    const applyWidth = (width: number) => {
-      if (!Number.isFinite(width)) return;
-      const nextWidth = Math.round(Math.max(MOBILE_COLUMN_WIDTH_MIN, width));
-      config.columnWidths = { ...(config.columnWidths || {}), [col.key]: nextWidth };
-      dirty = true;
-      setSliderValue(nextWidth);
-      syncTableColumnLayouts(root, config);
-    };
-    const persist = () => {
-      if (!dirty) return;
-      this.pendingUndoLabel = t("undo.columnWidthConfig");
-      this.scheduleConfigSave();
-      dirty = false;
-    };
-    const close = () => {
-      persist();
-      cleanup();
-    };
-    const cleanup = () => {
-      backdrop.remove();
-      panel.remove();
-      doc.removeEventListener("keydown", onKeydown, true);
-      if (this.mobileColumnWidthPanelCleanup === close) {
-        this.mobileColumnWidthPanelCleanup = undefined;
-      }
-    };
-    const onKeydown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      close();
-    };
-
-    slider.oninput = () => applyWidth(Number(slider.value));
-    slider.onchange = () => persist();
-    valueEl.oninput = () => {
-      const typed = Number(valueEl.value);
-      // An empty or part-typed field is not a width yet; wait rather than snapping to the minimum.
-      if (valueEl.value.trim() === "" || !Number.isFinite(typed)) return;
-      applyWidth(typed);
-    };
-    valueEl.onchange = () => {
-      applyWidth(Number(valueEl.value));
-      // Commit echoes the clamped result back, which is the point at which the user should see
-      // the value their input actually resolved to.
-      valueEl.value = String(config.columnWidths?.[col.key] ?? MOBILE_COLUMN_WIDTH_MIN);
-      persist();
-    };
-    autoButton.onclick = () => {
-      applyWidth(this.calculateAutoColumnWidth(col, this.rows));
-      persist();
-    };
-    backdrop.onclick = () => close();
-    doc.addEventListener("keydown", onKeydown, true);
-    this.mobileColumnWidthPanelCleanup = close;
-    setSliderValue(config.columnWidths?.[col.key] || col.width || config.defaultColumnWidth || 150);
   }
 
   private closeMobileColumnWidthPanel(): void {

@@ -28,6 +28,7 @@ export const CONSTRUCTED_RENDERERS = [
   "calendar-toolbar", "timeline-toolbar", "chart-toolbar",
   "toolbar", "active-view-controls", "active-rule-popover", "filter-panel", "sort-panel",
   "view-config", "column-manager", "record-detail", "record-detail-body", "record-peek",
+  "column-width-adjuster",
   "summary", "owned-menu", "cell-editors", "date-picker", "icon-picker", "color-picker",
   "relation-values", "file-fields", "number-display", "record-icon", "dropdown",
   "empty-state", "column-header", "group-selection-controls", "card-covers",

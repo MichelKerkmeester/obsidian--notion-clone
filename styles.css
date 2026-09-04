@@ -20171,7 +20171,13 @@ body.pm-resize-active * {
 }
 
 .db-mobile-column-width-panel {
-  position: fixed;
+  /* !important because the panel also carries `.note-database-container` (added in
+     `column-width.ts`, explained below) whose own rule declares `position: relative` at equal
+     specificity — measured losing the cascade to it on the desktop presentation, which has no
+     `.db-mobile-bottom-sheet` class to force `position: fixed` back the way the phone sheet
+     already does. Without this the panel laid out in normal flow after #shot's own full-height
+     content and rendered 900px below the fold — invisible, not merely misplaced. */
+  position: fixed !important;
   left: 0;
   right: 0;
   bottom: 0;
@@ -20190,67 +20196,80 @@ body.pm-resize-active * {
   font-family: var(--font-interface);
 }
 
-.db-mobile-column-width-title {
-  min-width: 0;
-  overflow: hidden;
-  font-size: var(--db-font-md);
-  font-weight: 600;
-  line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* The panel now also carries `.note-database-container`, added in `column-width.ts` so the shared
+   panel-family classes below (`.note-database-container .db-panel-header` and its neighbours) can
+   reach it at all — this panel is created on `doc.body` directly, never inside the container, so it
+   never takes the portal path that would otherwise add that class for it. `.note-database-container`
+   also carries `height: 100%`, meant for the view's own scroll container; on a `position: fixed`
+   element anchored only by `bottom: 0` that resolves `top` to 0 as well, stretching this small panel
+   over the full screen. The same pairing already has this exact fix for the phone sheet chrome
+   (`.db-mobile-bottom-sheet.note-database-container`, above); this is the desktop-and-phone-both
+   equivalent for the panel's own class. */
+.db-mobile-column-width-panel.note-database-container {
+  height: auto !important;
 }
 
-.db-mobile-column-width-value-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 72px;
+/* Record detail panel's own close-button pairing, reused rather than re-derived: hidden by default
+   so the desktop fixed panel keeps its plain header, shown and sized for a thumb once the panel is
+   the phone sheet. Without a rule scoped to this surface `.db-cell-edit-close` matches nothing here
+   at all — its only other rules are scoped to `.db-cell-edit-popover` and `.db-record-detail-panel`
+   — and the button would paint with the browser's bare default chrome. */
+.db-mobile-column-width-panel .db-cell-edit-close {
+  display: none;
+}
+
+.db-mobile-column-width-panel.db-mobile-bottom-sheet .db-cell-edit-close {
+  display: inline-flex;
   align-items: center;
-  gap: var(--db-space-4);
-}
-
-.db-mobile-column-width-slider {
-  width: 100%;
-  min-width: 0;
-}
-
-/* A typed field rather than a readout, so it needs a real input's affordances while staying as
-   quiet as the label it replaced. */
-.db-mobile-column-width-value {
-  width: 100%;
-  min-width: 0;
-  padding: 4px 6px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-sm);
-  background: var(--background-primary);
-  color: var(--text-normal);
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-}
-
-.db-mobile-column-width-value:focus-visible {
-  outline: none;
-  border-color: var(--interactive-accent);
-}
-
-.db-mobile-column-width-presets {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.db-mobile-column-width-preset {
-  min-width: 0;
-  min-height: 34px;
-  padding: 0 8px;
-  border: 1px solid var(--background-modifier-border);
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
   border-radius: var(--db-radius-md);
-  background: var(--background-secondary);
-  color: var(--text-normal);
-  font-size: 13px;
+  background: transparent;
+  color: var(--text-muted);
 }
 
-.db-mobile-column-width-preset:active {
+.db-mobile-column-width-panel.db-mobile-bottom-sheet .db-cell-edit-close:active {
   background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.db-mobile-column-width-panel.db-mobile-bottom-sheet .db-cell-edit-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* The range row and the presets row are each a single child of a `.db-panel-row`, and
+   `.db-panel-row` is a flex container with no `flex-grow` of its own children stated anywhere —
+   filter and sort rows fill it because THEY carry `flex: 1 1 0` themselves. `.db-view-config-range`
+   and `.db-new-placement` do not: on the view-config sheet the range sits in a CSS grid's `1fr`
+   track, and the placement group is a plain block child of a non-flex panel, so both fill their row
+   by construction and neither has ever needed to state its own growth. Nested inside `.db-panel-row`
+   for the first time here, each shrinks to its content's min-content instead — a slider a few dozen
+   pixels wide and a four-button group bunched at the row's left edge, not the full-width row every
+   other panel in this family shows. */
+.note-database-container .db-panel-row .db-view-config-range,
+.note-database-container .db-panel-row .db-new-placement {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+/* `.db-panel-row input` (§21, above) gives every input inside a panel row a 28px bordered box for
+   the filter/sort dropdowns it was written for, and it wins the number field's own `width: 64px` on
+   specificity — `flex-basis: 0` from that rule overrides a plain `width`, so the field grows exactly
+   as much as the slider beside it instead of staying a compact 64px box. The slider is unaffected
+   there (`.db-view-config-range input[type="range"]` already outranks it) but picks up the same
+   rule's `padding: 0 8px`, insetting the track by 16px total that the view-config sheet's slider —
+   outside any `.db-panel-row` — never carries. */
+.note-database-container .db-panel-row .db-view-config-number {
+  flex: 0 0 64px;
+}
+
+.note-database-container .db-panel-row .db-view-config-range input[type="range"] {
+  padding: 0;
 }
 
 .is-phone .note-database-container .db-board-card,

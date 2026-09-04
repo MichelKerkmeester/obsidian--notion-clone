@@ -109,6 +109,7 @@ import { FilterPanelRenderer, type FilterPanelActions } from "../../src/views/fi
 import { SortPanelRenderer, type SortPanelActions } from "../../src/views/sort-panel-renderer";
 import { ViewConfigPanelRenderer, type ViewConfigPanelActions } from "../../src/views/view-config-panel-renderer";
 import { ColumnManagerRenderer, type ColumnManagerActions } from "../../src/views/column-manager-renderer";
+import { openColumnWidthAdjuster } from "../../src/views/column-width";
 import {
   openRecordDetailPanel,
   closeRecordDetailPanel,
@@ -209,6 +210,7 @@ export interface ScenarioSpec {
     | "calendar-toolbar" | "timeline-toolbar" | "chart-toolbar"
     | "toolbar" | "active-view-controls" | "active-rule-popover" | "filter-panel" | "sort-panel"
     | "view-config" | "column-manager" | "record-detail" | "record-detail-body" | "record-peek"
+    | "column-width-adjuster"
     | "summary" | "owned-menu" | "cell-editors" | "date-picker" | "icon-picker" | "color-picker"
     | "relation-values" | "file-fields" | "number-display" | "record-icon" | "dropdown"
     | "empty-state" | "column-header" | "group-selection-controls" | "card-covers";
@@ -2195,6 +2197,26 @@ function recordPeekAssertions(container: HTMLElement): AssertionResult[] {
   return results;
 }
 
+function columnWidthAdjusterAssertions(doc: Document): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = doc.querySelector(".db-mobile-column-width-panel");
+  results.push({
+    name: "the adjuster drew the shared header and the shared range row",
+    pass: Boolean(panel?.querySelector(".db-panel-header .db-panel-title"))
+      && Boolean(panel?.querySelector(".db-cell-edit-close"))
+      && Boolean(panel?.querySelector(".db-view-config-range input[type=\"range\"]"))
+      && Boolean(panel?.querySelector(".db-view-config-number")),
+    detail: panel ? "header, close button and range row present" : "no .db-mobile-column-width-panel",
+  });
+  const presets = panel?.querySelectorAll(".db-new-placement-option").length ?? 0;
+  results.push({
+    name: "the adjuster drew all four presets, one of them selected",
+    pass: presets === 4 && Boolean(panel?.querySelector('.db-new-placement-option[aria-checked="true"]')),
+    detail: `${presets} preset(s), a checked one ${panel?.querySelector('.db-new-placement-option[aria-checked="true"]') ? "present" : "missing"}`,
+  });
+  return results;
+}
+
 function summaryAssertions(container: HTMLElement, ruleCount: number): AssertionResult[] {
   const results: AssertionResult[] = [];
   const summary = container.querySelector(".db-summary");
@@ -2383,6 +2405,11 @@ function armPerRowReadAtRenderEntry(
 // has already handed the container back — still sees the surface its scenario opened.
 let leftoverOwnedMenu: { close: () => void } | null = null;
 let leftoverIconPickerClose: (() => void) | null = null;
+// The adjuster mounts on document.body the same way the owned menu does, and its close is what
+// releases keepSheetPlaced's visualViewport/resize subscriptions and the overlay-stack
+// registration — the sweep below would remove the node but leave those listening on a page the
+// next scenario reuses.
+let leftoverColumnWidthClose: (() => void) | null = null;
 // A branch that has to re-enter a state after the runner's own teardown schedules the re-entry on
 // the next task. The measurement lanes mount every scenario into one page, so a timer still
 // pending when the next scenario mounts would land inside that scenario's DOM instead — the
@@ -2412,6 +2439,8 @@ export function runRenderAssertions(
   const results: AssertionResult[] = [];
   leftoverOwnedMenu?.close();
   leftoverOwnedMenu = null;
+  leftoverColumnWidthClose?.();
+  leftoverColumnWidthClose = null;
   closeRecordDetailPanel();
   closeActiveOptionColorPicker(host.ownerDocument);
   leftoverIconPickerClose?.();
@@ -3128,6 +3157,27 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "record-peek"));
     if (results[0].pass) results.push(...recordPeekAssertions(container));
+  } else if (scenario.renderer === "column-width-adjuster") {
+    // The column-width adjuster: openColumnWidthAdjuster's own module entry over a real column
+    // from the table bench. It mounts on document.body the same way the owned menu does — never
+    // as a child of `container` — so the marker rides the panel element itself and the assertions
+    // query the body, not the container. On a phone device isMobileBottomSheet's own check turns
+    // it into the shared bottom sheet; on desktop it stays the fixed panel.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const config = { ...makeTableConfig(columns), schema: { columns, computedFields: [] } } as ViewConfig;
+    const col = columnOfType(columns, "currency") ?? columns[1];
+    leftoverColumnWidthClose = openColumnWidthAdjuster({
+      root: container,
+      col,
+      config,
+      persist: () => undefined,
+    });
+    const adjusterPanel = container.ownerDocument.querySelector(".db-mobile-column-width-panel");
+    adjusterPanel?.setAttribute(PROVENANCE_ATTR, "column-width-adjuster");
+    bagKeys = [];
+
+    results.push(provenanceResult(adjusterPanel as HTMLElement ?? container, "column-width-adjuster"));
+    if (results[0].pass) results.push(...columnWidthAdjusterAssertions(container.ownerDocument));
   } else if (scenario.renderer === "summary") {
     // The summary row: SummaryRenderer.render with a config whose summaryRules name real
     // columns, and the onChange hook that makes the rule items draggable and clickable.

@@ -582,6 +582,53 @@ Cancel before the renewal date or it bills for another year. Support answer on w
           </div>`),
   },
   {
+    id: "panel-column-width-sheet",
+    title: "Column width adjuster — mobile bottom sheet",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    devices: ["mobile"],
+    fixtureOf: "constructed-column-width-adjuster",
+    // Photographed on the phone only, for the same reason the record-detail sheet is: this
+    // markup is the shared bottom-sheet presentation, and the desktop pass would stretch it
+    // across a window the plugin never presents it in — the desktop form is the same body inside
+    // the fixed panel shape .db-mobile-column-width-panel already carries without a sheet.
+    sources: ["src/views/column-width.ts", "src/views/mobile-bottom-sheet.ts", "src/views/popover-position.ts"],
+    note: "The adjuster mounts through the shared sheet host (applySheetChrome, placeSheet, "
+      + "attachSheetDragToDismiss) with the same panel-family body every other sheet in this file "
+      + "uses: db-panel-header with a db-cell-edit-close close button, a db-panel-row holding the "
+      + "shared db-view-config-range/db-view-config-number slider-and-value, and a second "
+      + "db-panel-row holding the db-new-placement preset group. No explicit width is set, so Auto "
+      + "is the selected preset and the field shows the column's fallback width.",
+    html: () => {
+      const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-mobile-column-width-panel db-mobile-bottom-sheet is-visible">
+          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="db-panel-header">
+            <div class="db-panel-title">Adjust "Cost"</div>
+            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-view-config-range">
+              <input type="range" min="60" max="360" step="1" value="150" aria-label="Adjust column width">
+              <input type="number" class="db-view-config-number" inputmode="numeric" min="60" step="1" value="150" aria-label="Adjust column width">
+            </div>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-new-placement" role="group" aria-label="Adjust column width">
+              <button type="button" class="db-new-placement-option is-active" role="radio" aria-checked="true">Auto</button>
+              <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Narrow</button>
+              <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Medium</button>
+              <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Wide</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    },
+  },
+  {
     id: "panel-record-peek",
     title: "Table record peek",
     group: "panels",

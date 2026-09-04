@@ -135,6 +135,7 @@ import { ListRenderer, reservesColumnsOnWrappingLine } from "${join(REPO, "src/v
 import { DatabaseView } from "${join(REPO, "src/views/database-view")}";
 import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-database-renderer")}";
 import { getColumnDisplayType, isEmptyValue } from "${join(REPO, "src/data/column-display")}";
+import { openColumnWidthAdjuster } from "${join(REPO, "src/views/column-width")}";
 import { formatEuroCurrency, formatEuroNumber } from "${join(REPO, "src/data/euro-format")}";
 globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
 globalThis.__tall = { openRecordDetailPanel, closeRecordDetailPanel, mountNoteBodyRegion };
@@ -154,6 +155,7 @@ globalThis.__columns = { ColumnManagerRenderer };
 globalThis.__panels = { FilterPanelRenderer, SortPanelRenderer };
 globalThis.__registry = { SURFACE_REGISTRY, renderDateValuePicker, closeActiveDateValuePicker };
 globalThis.__table = { TableRenderer };
+globalThis.__columnWidth = { openColumnWidthAdjuster };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -2366,6 +2368,163 @@ const reducedResults = await section("the sheet entrance under reduced motion", 
   return out;
 }));
 await reducedPhone.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 5c2. PHONE — the column-width adjuster follows the keyboard
+// ───────────────────────────────────────────────────────────────────
+//
+// Two operator reports, one phone, 2026-09-04. The first screenshot showed the adjuster as a bare
+// strip glued to the bottom of the screen — no scrim, no grab bar, no header — unlike every other
+// sheet in the plugin; the second showed the numeric keyboard covering that same strip outright
+// while the width field was focused, with no way to see the column being resized. The fix moved the
+// adjuster onto the shared sheet host (`applySheetChrome`, `placeSheet`, `keepSheetPlaced`) the same
+// way every other phone sheet in this file is already proven to dock and to follow a keyboard; this
+// section proves it for THIS producer specifically, the same way `sheet-rebuild` and `sheet-teardown`
+// check each real producer rather than trusting that calling the shared functions once is enough.
+//
+// The negative control below is a fixture, not a pinned style: `keepSheetPlaced` resubscribes to
+// the very `resize`/`visualViewport` events this section dispatches to simulate a keyboard, so an
+// override written to the real panel's `bottom` is overwritten again by the mechanism on the next
+// of those events, before anything reads it. That self-healing is correct and it defeats a
+// pin-and-drive control. What proves the assertions can fail instead is the exact rectangle the
+// pre-fix panel drew — `position: fixed; bottom: 0` and nothing else — carried through the same
+// keyboard simulation.
+const columnWidthPhone = await browser.newPage({
+  reducedMotion: "reduce",
+  viewport: { width: 390, height: 844 },
+  hasTouch: true,
+  isMobile: true,
+});
+await columnWidthPhone.setContent(page_html.replace("<body>", phoneBody));
+await columnWidthPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await columnWidthPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await columnWidthPhone.addScriptTag({ content: positionerJs });
+
+const columnWidthKeyboardResults = await section(
+  "the column-width adjuster follows the keyboard",
+  () => columnWidthPhone.evaluate(async () => {
+    const out = [];
+    const { openColumnWidthAdjuster } = globalThis.__columnWidth;
+    const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const host = document.body.createDiv({ cls: "note-database-container" });
+    const col = { key: "amount", label: "Amount", width: 150 };
+    const config = { schema: { columns: [col] }, columnWidths: {}, defaultColumnWidth: 150 };
+    let persistCount = 0;
+    const close = openColumnWidthAdjuster({ root: host, col, config, persist: () => { persistCount += 1; } });
+
+    const panel = document.querySelector(".db-mobile-column-width-panel");
+    const numberField = panel ? panel.querySelector('input[type="number"]') : null;
+    out.push({
+      name: "the adjuster mounts as the shared sheet, with the field the keyboard checks focus",
+      pass: Boolean(panel) && panel.classList.contains("db-mobile-bottom-sheet") && Boolean(numberField),
+      detail: `panel=${panel ? panel.className : "(none)"} numberField=${Boolean(numberField)}`,
+    });
+
+    numberField.focus();
+    const restingBox = panel.getBoundingClientRect();
+    out.push({
+      name: "with no keyboard the adjuster still sits on the viewport floor",
+      pass: Math.abs(restingBox.bottom - window.innerHeight) <= 1,
+      detail: `bottom=${restingBox.bottom.toFixed(0)} viewport=${window.innerHeight} `
+        + "(this must not move — only the keyboard cases below should)",
+    });
+
+    // The same 331px keyboard height every other check in this file drives, measured off the
+    // operator's own screenshot rather than invented for this section.
+    const KEYBOARD = 331;
+
+    // ── the host declares a keyboard ──
+    document.documentElement.style.setProperty("--keyboard-height", `${KEYBOARD}px`);
+    window.dispatchEvent(new window.Event("resize"));
+    await settle();
+    const hostFloor = window.innerHeight - KEYBOARD;
+    const hostPanelBox = panel.getBoundingClientRect();
+    const hostFieldBox = numberField.getBoundingClientRect();
+    out.push({
+      name: "the adjuster clears a keyboard the host reports",
+      pass: Math.abs(hostPanelBox.bottom - hostFloor) <= 2,
+      detail: `panel bottom=${hostPanelBox.bottom.toFixed(0)} want=${hostFloor} `
+        + `(keyboard covers ${hostFloor}..${window.innerHeight})`,
+    });
+    out.push({
+      name: "the focused width field stays visible above a keyboard the host reports",
+      pass: hostFieldBox.bottom <= hostFloor + 1 && hostFieldBox.top >= -1,
+      detail: `field ${hostFieldBox.top.toFixed(0)}-${hostFieldBox.bottom.toFixed(0)}px floor=${hostFloor}px`,
+    });
+    // The control: the pre-fix panel's own rectangle, carried through the identical drive above,
+    // still active. A bare fixed-and-docked surface reading as clearing the keyboard here would
+    // mean the two "clears the keyboard" checks above are not testing anything and this section
+    // could not be trusted.
+    const staleHost = document.body.createDiv({ cls: "note-database-container" });
+    const stalePanel = staleHost.createDiv({});
+    stalePanel.setCssProps({ position: "fixed", left: "0px", right: "0px", bottom: "0px" });
+    const staleField = stalePanel.createEl("input", { attr: { type: "number" } });
+    staleField.focus();
+    await settle();
+    const staleBox = stalePanel.getBoundingClientRect();
+    out.push({
+      name: "control: a panel that does not follow the keyboard fails the same check",
+      pass: Math.abs(staleBox.bottom - hostFloor) > 4,
+      detail: `pre-fix-shaped panel bottom=${staleBox.bottom.toFixed(0)} keyboard floor=${hostFloor}px `
+        + "(this must stay parked at the screen bottom rather than clearing the keyboard)",
+    });
+    staleHost.remove();
+
+    document.documentElement.style.removeProperty("--keyboard-height");
+    window.dispatchEvent(new window.Event("resize"));
+    await settle();
+
+    // ── the device shrinks visualViewport, host silent ──
+    //
+    // The same two-arm split `keyboard-inset.test.ts` and the sheet/selection-bar section above
+    // both draw: writing `--keyboard-height` only proves the host-reported arm, and a platform that
+    // shrinks the visual viewport without publishing anything is the gap that arm cannot see.
+    const restingVisualHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    Object.defineProperty(window.visualViewport, "height", {
+      configurable: true,
+      get: () => restingVisualHeight - KEYBOARD,
+    });
+    window.visualViewport.dispatchEvent(new window.Event("resize"));
+    await settle();
+    const deviceFloor = window.innerHeight - KEYBOARD;
+    const devicePanelBox = panel.getBoundingClientRect();
+    const deviceFieldBox = numberField.getBoundingClientRect();
+    out.push({
+      name: "the adjuster clears a keyboard no host reported",
+      pass: Math.abs(devicePanelBox.bottom - deviceFloor) <= 2,
+      detail: `panel bottom=${devicePanelBox.bottom.toFixed(0)} want=${deviceFloor} `
+        + `(visualViewport shrunk to ${window.visualViewport.height})`,
+    });
+    out.push({
+      name: "the focused width field stays visible above a keyboard no host reported",
+      pass: deviceFieldBox.bottom <= deviceFloor + 1 && deviceFieldBox.top >= -1,
+      detail: `field ${deviceFieldBox.top.toFixed(0)}-${deviceFieldBox.bottom.toFixed(0)}px floor=${deviceFloor}px`,
+    });
+    delete window.visualViewport.height;
+    window.visualViewport.dispatchEvent(new window.Event("resize"));
+    await settle();
+
+    const closedBox = panel.getBoundingClientRect();
+    out.push({
+      name: "the adjuster returns to the floor once the keyboard closes",
+      pass: Math.abs(closedBox.bottom - window.innerHeight) <= 1,
+      detail: `bottom=${closedBox.bottom.toFixed(0)} viewport=${window.innerHeight}`,
+    });
+
+    close();
+    out.push({
+      name: "closing the adjuster leaves no sheet chrome behind",
+      pass: !document.querySelector(".db-mobile-column-width-panel")
+        && !document.querySelector(".db-mobile-sheet-scrim"),
+      detail: `panel=${Boolean(document.querySelector(".db-mobile-column-width-panel"))} `
+        + `scrim=${Boolean(document.querySelector(".db-mobile-sheet-scrim"))} persisted=${persistCount}x`,
+    });
+    host.remove();
+    return out;
+  }),
+);
+await columnWidthPhone.close();
 
 // ───────────────────────────────────────────────────────────────────
 // 5d. DESKTOP — the menu must not have become a sheet
@@ -10951,7 +11110,7 @@ await section("a view-switcher row on a phone carries one trailing control", asy
       + `been cut. Before the control existed this measured 0`);
 });
 
-results.push(...tallSheetResults, ...dockResults, ...viewRowResults, ...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
+results.push(...tallSheetResults, ...dockResults, ...viewRowResults, ...phoneResults, ...menuResults, ...columnWidthKeyboardResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);

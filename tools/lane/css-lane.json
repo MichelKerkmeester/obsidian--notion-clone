@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "46c11786dc49",
+  "baselineHash": "719ba0fca8e1",
   "baselineCommit": "5beb1671076bcaa917b2ede6e83eab520ce89ec7",
   "history": [
     {
@@ -2635,6 +2635,28 @@
         "screenshots/views/constructed-timeline-subtask-mobile-light.png"
       ],
       "note": "Operator amendment to REQ-007 (roadmap.md row 39): raise a milestone label off the month/year band label baseline on the reference gantt header when the two would overpaint (GanttHeaderRenderer y=18, GanttTaskBarRenderer y=14, same header SVG) — renderGanttMilestoneLabels now estimates both labels by character count and, when their spans overlap, moves the milestone label to y=8 and adds .pm-gantt-milestone-label--raised (a background-color text stroke for legibility). New styles.css rule only; the reference gantt.css copy is untouched. All 10 real content-changed captures opened and read this session, both themes/devices where applicable: constructed-timeline (week scale, default) and constructed-timeline-day (day scale) both show row-1s milestone label cleanly stacked above the SEP 26 month-band label instead of overpainting it (before/after compared directly against the HEAD-committed PNG); constructed-timeline-subtask shows the same fix with the parent/child indent unaffected. pixelHash read these as unchanged (its coarse tolerance misses a ~6px text-baseline move) while layoutHash and a direct visual read both confirmed the change — reviewed by opening every file, not by trusting the hash. Six further files the recapture moved (constructed-owned-menu-mobile-dark, field-icon-picker-desktop-dark/light, constructed-record-detail-desktop-dark, constructed-sort-panel-calendar-mobile-light, board-view-desktop-dark) were confirmed pixelHash-identical to HEAD except field-icon-picker (this environment doc-documented Chrome/OS drift, unrelated to any code here, same handling every prior release gave it) and restored to HEAD-committed bytes rather than recommitted; manifest.json bytes/pixelHash/layoutHash for those six reset to HEAD values while sourceHashes carry the current fingerprint. The hand-authored temporal.mjs fixture (timeline-view-* captures) was checked against the same crowd heuristic and produces no collision in any of its five scales/two devices, so it needed no update — confirmed unchanged in this recapture. tsc 0; vitest 1038/1038 (101 files); lint 172 (unchanged baseline); lint:tools clean; scan-comments PASS."
+    },
+    {
+      "event": "acquire",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-09-04T19:12:56.543Z",
+      "hash": "e357f63d13ac",
+      "note": "Operator report 2026-09-04 (report-40/40b): the phone column-width adjuster read as a bare fixed strip unlike every other sheet, and the numeric keyboard covered it while typing. 003 T28 (devin, uncommitted at pickup) moved the adjuster onto the shared sheet host and the shared panel-family body markup (db-panel-header/db-panel-title/db-cell-edit-close, db-panel-row, db-view-config-range/db-view-config-number, db-new-placement/-option) but never gave the panel the .note-database-container class those rules require — it mounts on doc.body directly and never takes setSheetMounts portal path that would otherwise add it, so the shared classes matched nothing and the fix would have shipped a different kind of unstyled surface. Acquiring to: add note-database-container to the panel plus its height:100% correction, give db-cell-edit-close a rule scoped to this surface mirroring record-detail, fix the range/number row and the presets group so each fills its .db-panel-row instead of shrinking to content, and retire the now-orphaned db-mobile-column-width-title/-slider/-value/-preset* rules the new body markup no longer emits."
+    },
+    {
+      "event": "release",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-09-04T19:47:24.491Z",
+      "hash": "396eef7cb42b",
+      "reviewed": [
+        "screenshots/panels/panel-column-width-sheet-mobile-dark.png",
+        "screenshots/panels/panel-column-width-sheet-mobile-light.png",
+        "screenshots/panels/constructed-column-width-adjuster-desktop-dark.png",
+        "screenshots/panels/constructed-column-width-adjuster-desktop-light.png",
+        "screenshots/panels/constructed-column-width-adjuster-mobile-dark.png",
+        "screenshots/panels/constructed-column-width-adjuster-mobile-light.png"
+      ],
+      "note": "Fixed the adjuster's CSS lane: neutralised the now-orphaned db-mobile-column-width-title/-slider/-value/-preset* rules T28's body markup no longer emits; gave db-cell-edit-close a rule scoped to this surface mirroring the record-detail pairing (hidden by default, shown and sized once the panel is the phone sheet); made .db-view-config-range and .db-new-placement fill their .db-panel-row instead of shrinking to content (both were a plain grid track or a plain block child elsewhere and never needed their own growth before); gave .db-view-config-number a fixed 64px flex-basis and the range slider a padding reset, since .db-panel-row input (written for the filter/sort dropdowns) was overriding both on specificity. Root-caused a second, more severe defect while fixing the first: the panel now also carries .note-database-container (see 003 T28's tasks.md row) so the shared classes above can match at all, and .note-database-container's own position: relative rule was beating the panel's position: fixed at equal specificity on the desktop (non-sheet) presentation -- confirmed via a live Playwright DOM dump (computed position read relative, the panel laid out at y=900 on a 900px viewport, fully below the fold) -- fixed with position: fixed !important, mirroring how .db-mobile-bottom-sheet already forces the same property for exactly this class carried by every phone sheet."
     },
     {
       "event": "release",
