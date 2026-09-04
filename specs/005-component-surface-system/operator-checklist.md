@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-04: **44 phases**, **6 with nothing left**, **78 rows** waiting on a device.
+Derived 2026-09-04: **44 phases**, **6 with nothing left**, **80 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -155,7 +155,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The loop reached 20 iterations, or converged earlier with the convergence reason recorded in `research/lineages/<lineage>/convergence-report.md`.
 - [ ] An in-runtime spot-check of 10 randomly selected citations from the module map finds all 10 true against the file on disk — line exists, and its content matches what the map claims about it.
 
-## 037-timeline-gantt-port — 10/17
+## 037-timeline-gantt-port — 10/18
 
 - [ ] Zero-width mount fallback: `getTimelineViewportUnitCount` returns `undefined` when the measured content width is 0 (hidden or collapsed container at mount); `buildTimelineModel` then falls back to the calendar-boundary window with no centring, recovering only on the next resize.
 - [ ] Invalid interactive nesting: `span[role=button][tabindex=0]` inside `button.db-timeline-event` (renderer ~:623) — flagged for `041-shared-ui-ux-port`.
@@ -164,13 +164,15 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Year scale at 4px/day carries almost no readable labels at phone width: one tick label survives; bar titles are illegible slivers.
 - [ ] Harness note: the capture frame (`#shot`) carries 16px padding, so the captured container is 1408/370 wide, not 1440/402; the fixture's device-width comment is wrong by 16px a side and the right edge overflows by up to 8 columns at year desktop. Low priority; today-centred content stays in frame.
 - [ ] `.db-timeline-event.is-all-day` remains duplicated at two `styles.css` blocks — pre-existing, not introduced by this port.
+- [ ] The timeline view renders as a one-to-one copy of obsidian-pm's gantt — same DOM structure and class vocabulary as `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/ `TimelineConfig.ts` mapped to `RowData`, the same visual language copied verbatim from `gantt.css` where its rules apply (MIT notice on the copied block), the same header/scale language, bars, milestones, progress, dependency arrows, drag and resize behaviour, and the same defaults for row height and unit widths — proven by a DOM-structure parity test and a fresh reviewer's side-by-side screenshot read against the reference or the operator's vault comparison (REQ-007, added 2026-09-04). Not started. Today's observed baseline (2026-09-04, this session's read of `calendar-timeline-renderer.ts`/ `calendar-timeline-model.ts`): `db-timeline-*` classes (not the reference's vocabulary), five scales (day/week/month/quarter/year) at 60/100/80/15/4px unit-width defaults (`getTimelineColumnWidthSpec`, `calendar-timeline-model.ts:183-201` — confirmed against this directive's own dispatch numbers), a viewport-centred window (`resolveTimelineDayCentredStartMinutes` and `getTimelineViewportWindow`), and a scale trigger button with sibling link buttons — a local composition rewritten from the reference's behavior contract, not its DOM/class copy. Red to record: a DOM-structure parity test, written and observed failing before the leg pair starts.
 
-## 038-board-kanban-port — 3/8
+## 038-board-kanban-port — 3/9
 
 - [ ] Every local extension named in REQ-005 (WIP/visible counts, swimlanes, summaries, conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, cover-target scheme safety) passes the same check before and after the rewrite. Not started. Red to record: today's passing state of each, captured by `plan.md` step 1, before any rewrite line lands.
 - [ ] Card identity, drag/drop payloads, and the path/batch-order transaction are unchanged in contract (REQ-003). Not started. Red to record: today's drag-drop matrix (same-group, cross-group, blank-space) run once, before the rewrite, as the baseline the post-rewrite run must match.
 - [ ] `npm run gate` exits 0, `$?` read directly. Not started as a goal-level criterion — no pre-existing red is on record for this exact check against this packet, so it is not ticked here per this program's `scan-failing-values` discipline, even though it is true today (observed directly 2026-09-03: exit 0, 25 green / 0 red, both `SURFACE_PHASE=038-board-kanban-port npm run gate` and bare `npm run gate` — see `tasks.md` T7, which this evidence closes).
 - [ ] `validate.sh specs/005-component-surface-system/038-board-kanban-port --strict` reports Errors: 0. Not started as a goal-level criterion — `validate.sh --strict` already returned `RESULT: PASSED` before either leg landed (confirmed 2026-09-03 by stashing this session's edits and re-running), so there is no red to record for this exact claim; it remains true today (`RESULT: PASSED`, `Errors: 0`, `Warnings: 1` — pre-existing `COMPLEXITY_MATCH` note, unrelated to this pass) but is left unticked here for the same reason as the gate row above.
+- [ ] The board view renders as a one-to-one copy of obsidian-pm's kanban — same DOM structure and class vocabulary as `KanbanView.ts`/`KanbanColumn.ts`/`KanbanCard.ts` mapped to `RowData`, the same visual language copied verbatim from `kanban.css` where its rules apply (MIT notice on the copied block), the same interactions, and the same density/column-width defaults — proven by the T9 DOM-structure parity test and a fresh reviewer's side-by-side screenshot read against the reference or the operator's vault comparison. Not started. Today's observed baseline (2026-09-04, this session's read of `board-renderer.ts`/`styles.css`): `db-board-*` classes (not the reference's vocabulary), five status columns rendered at a 280px default width (`getBoardColumnWidth`, `board-renderer.ts:1699`; not the 320px this directive's dispatch named — corrected here against the read source) with a priority strip, parent chip, title-row chips and a meta grid — a local composition restyled from the reference's visual language, not its DOM/class copy. Red to record: T9's parity test, written and observed failing before the leg pair starts.
 - [ ] The operator opens a board on device and confirms the rewritten card/column visual language and drag/drop reads correctly on their own database. Only the operator closes this row; nothing in this tree can close it. Not a report-driven row — no operator report (29-33) named the board surface directly, so this is a proactive confirmation ask, not a defect closure.
 
 ## 039-calendar-parity-port — 5/6

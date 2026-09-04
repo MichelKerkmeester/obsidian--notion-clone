@@ -97,6 +97,20 @@ and task state. The gate order below is fixed by `036-obsidian-pm-ui-harvest/res
 5. **Screenshot scales.** Recapture screenshots at all five zoom levels (day/week/month/quarter/year) and
    read them before claiming a visual match to `gantt.css:1-17`, `:237-277`.
 6. **`npm run gate`.** Run the full gate; read `tools/lane/gate-logs/<lane>.log` for any red lane.
+7. **Amendment 2026-09-04: the 1:1 port leg pair (REQ-007).** Runs red first — a DOM-structure
+   parity test that walks the reference's `GanttView` output shape is written to fail against the
+   current renderer before any port line lands. Then: (a) an external `cli-devin` leg ports
+   `GanttView.ts`, `GanttHeaderRenderer.ts`, `GanttTaskBarRenderer.ts` and `TimelineConfig.ts`'s
+   DOM structure and class vocabulary 1:1 onto `calendar-timeline-renderer.ts`, mapped to
+   `RowData`; (b) an external `cli-codex` leg copies `gantt.css` verbatim where its rules apply
+   into the `css-lane`-held `styles.css` `db-timeline-*` region (MIT notice attached to the copied
+   block, per `goal.md` D6's supersession) and updates the screenshot fixtures to match; (c) a
+   fresh in-runtime verifier — not either delegate's own report — reads the recaptured screenshots
+   side by side with the reference's own screenshots or the operator's vault comparison, and
+   re-runs the DOM-structure parity test to green. Local extensions (visible-window rendering,
+   unscheduled backlog, invalid-event repair, group/lane limits, touch menu, keyboard link
+   buttons, the viewport-centred window) move behind a new default-off setting rather than being
+   removed.
 
 ### External lane order (D14, `../goal.md` §"directive")
 

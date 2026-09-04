@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from 036's adoption plan row 2"
-    next_safe_action: "Record today's board behaviour before any rewrite line lands"
+    last_updated_at: "2026-09-04T07:30:00Z"
+    last_updated_by: "board-1to1-amendment"
+    recent_action: "Added the 1:1 port leg pair and red-first DOM parity step"
+    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
     blockers: []
     key_files: ["spec.md", "goal.md"]
     session_dedup:
@@ -54,6 +54,19 @@ drop matrix → keyboard/touch/cover → screenshot → `npm run gate`.
    changed capture rather than trusting a diff count (parent trap: "a file count is the wrong
    instrument for capture churn").
 6. **`npm run gate`.** Exit 0, `$?` read directly, not through a pipe.
+7. **Amendment 2026-09-04: the 1:1 port leg pair (REQ-007).** Runs red first — a DOM-structure
+   parity test that walks the reference's `KanbanView`/`KanbanColumn`/`KanbanCard` output shape
+   is written to fail against the current renderer before any port line lands. Then:
+   (a) an external `cli-devin` leg ports `KanbanView.ts`, `KanbanColumn.ts` and `KanbanCard.ts`'s
+   DOM structure and class vocabulary 1:1 onto `board-renderer.ts`, mapped to `RowData` and
+   keeping `RowData.file.path` identity (REQ-003); (b) an external `cli-codex` leg copies
+   `kanban.css` verbatim where its rules apply into the `css-lane`-held `styles.css` §17 BOARD
+   VIEW section (MIT notice attached to the copied block, per `goal.md` D1's supersession) and
+   updates the screenshot fixtures to match; (c) a fresh in-runtime verifier — not either
+   delegate's own report — reads the recaptured screenshots side by side with the reference's own
+   screenshots or the operator's vault comparison, and re-runs the DOM-structure parity test to
+   green. Local extensions (WIP, swimlanes, summaries, cover images, path-keyed batch order,
+   touch-mode menus) move behind a new default-off setting rather than being removed.
 <!-- /ANCHOR:summary -->
 
 <!-- ANCHOR:architecture -->
@@ -65,7 +78,10 @@ worktree); then `gpt-5.6-luna` at `model_reasoning_effort=xhigh` or `max`, `serv
 through `cli-codex` or `cli-opencode`; then in-runtime verification by a fresh agent that runs the
 browser gate and `validate.sh` itself — a delegate's report is a claim until that fresh read
 confirms it (D4, parent D14). Before composing any `cli-devin` or `cli-codex` prompt, read that
-CLI's own `SKILL.md` under `.opencode/skills/cli-external-orchestration/` first.
+CLI's own `SKILL.md` under `.opencode/skills/cli-external-orchestration/` first. **The step 7 leg
+pair (REQ-007, amendment 2026-09-04) follows this same order**: `cli-devin` for the TypeScript
+structure port, `cli-codex` for the verbatim CSS copy and fixture update, then the fresh in-runtime
+verifier reads captures side by side with the reference.
 
 **CSS lane (`styles.css` §17 BOARD VIEW).** Acquire the holder and history entry in
 `tools/lane/css-lane.json` before editing any line in the section; the `css-lane` gate lane

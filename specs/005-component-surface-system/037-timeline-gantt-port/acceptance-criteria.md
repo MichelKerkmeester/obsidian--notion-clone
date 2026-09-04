@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-02T23:55:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Authored the six closure-gate criteria for the timeline port"
-    next_safe_action: "Meet, waive or supersede the open criteria once implementation starts"
+    last_updated_at: "2026-09-04T07:35:00Z"
+    last_updated_by: "gantt-1to1-amendment"
+    recent_action: "Added AC-007 for the operator's 1:1 gantt copy directive"
+    next_safe_action: "Dispatch devin leg: port GanttView 1:1"
     blockers: []
     key_files:
       - "spec.md"
@@ -58,6 +58,7 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-004 | REQ-004 | Given any code comment this phase writes, When reviewed, Then it carries no spec path, phase number, task id, or requirement id | `grep` scan of the changed diff + pre-commit hook | Unmet | - |
 | AC-005 | REQ-005 | Given `styles.css` is lane-held, When `db-timeline-*` rules are edited, Then the lane was acquired first and released only after a read recapture naming the changed captures | `tools/lane/css-lane.json` history entry + `reviewed` array | Unmet | - |
 | AC-006 | REQ-006 | Given the packet's full changed-file set, When `npm run gate` runs, Then it reports `gate: PASS` and exit 0, observed by a fresh in-runtime agent (not a delegate's self-report) | `npm run gate` output + exit code, read directly | Unmet | - |
+| AC-007 | REQ-007 | Given `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`/`gantt.css` (added 2026-09-04), When the 1:1 leg pair lands, Then the timeline's DOM structure, class vocabulary, visual language, interactions, and row-height/unit-width defaults match the reference, and every named local extension renders default-off unless a setting is turned on | DOM-structure parity test + fresh reviewer's side-by-side screenshot read | Unmet — today's timeline renders `db-timeline-*` classes (not the reference's vocabulary), five scales at 60/100/80/15/4px unit-width defaults, a viewport-centred window, and a scale trigger button with sibling link buttons; a local rewrite, not a DOM/class copy | - |
 
 ### Status values
 
@@ -84,8 +85,9 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Not yet — every criterion above is `Unmet` because implementation has not started. This document was
-authored alongside `spec.md`, `plan.md`, `tasks.md`, and `goal.md` to define the closure gate before the
-port begins, per D3 (shipped, verified, and operator-confirmed are three states; none of the six rows above
-has reached even the first).
+Not yet — every criterion above is `Unmet` in this document's own `Status` column, pending a pass that
+reconciles it against the landed legs and open defect rows tracked in `goal.md` §3. AC-007 was added
+2026-09-04 (`spec.md` REQ-007, operator directive) for the 1:1 reference-copy amendment and is `Unmet`
+against today's observed baseline recorded in its row above; none of the seven rows has reached `Met` in
+this document, per D3 (shipped, verified, and operator-confirmed are three states).
 <!-- /ANCHOR:closure -->

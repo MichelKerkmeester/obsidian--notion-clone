@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T07:00:00Z"
-    last_updated_by: "done-audit-8"
-    recent_action: "T027 closes table/chart; row 6 narrows to 13 fixtures, row-4 dep"
-    next_safe_action: "Operator confirms 29–36 and five surfaces on iOS; rules on 043 AC-002"
+    last_updated_at: "2026-09-04T07:35:00Z"
+    last_updated_by: "board-gantt-1to1-reopened"
+    recent_action: "Reopened 037+038 for 1:1 reference copies at operator request"
+    next_safe_action: "Dispatch devin legs: port GanttView and KanbanView structure 1:1"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -22,7 +22,8 @@ _memory:
       - "Reports 30-33: recorded in 62c4fe7, owners 001, 022, 022, 010; the fix is uncommitted"
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
-      - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
+      - "037 landed (0262386+55bff9b); release 1.4.4 pending; reopened 2026-09-04 for a 1:1 gantt copy, REQ-007"
+      - "038 landed (b9e2321+a6fcd31); release 1.4.5 pending; reopened 2026-09-04 for a 1:1 board copy, REQ-007"
       - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
     key_files:
       - "roadmap.md"
@@ -1240,4 +1241,25 @@ solely the 13 fixture-only scenarios and the fact that they feed a piece of row 
 `completion_pct` stays **4 of 7 = 57**: rows 3, 4, 5 and 7 hold, rows 1 and 2 stay open on operator
 device confirmation, row 6 stays open on the narrower list above. `roadmap.md` §5's `043` bullet,
 `spec.md`'s two Phase Documentation Map rows and `handover.md` updated to match.
+
+### 2026-09-04T07:35:00Z: `037` and `038` reopened for a 1:1 reference copy at the operator's request
+
+Two operator directives landed the same minute. First, verbatim: "We should copy their board view
+1:1 the one from project manager" — the operator installed obsidian-pm 2.1.0 beside this plugin in
+the iCloud vault with a comparison project and judged `038`'s landed legs (`b9e2321`, `a6fcd31`,
+column/card composition restyled from `kanban.css`) not close enough. Second, same pattern for the
+timeline: "Same for timeline" — apply the identical amendment to `037` against
+`obsidian-pm-main`'s `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/
+`TimelineConfig.ts`/`gantt.css`. Both child packets gain a new P0 requirement (REQ-007) and a
+superseded decision record (`goal.md` D6) reopening the prior "rewrite, not copy" disposition for
+DOM structure, class vocabulary, and visual language specifically — card/task identity
+(`RowData.file.path`) and every local extension named in each packet's own REQ-003/REQ-005 stay
+unchanged, moving behind a new default-off setting rather than being dropped. Both packets plan the
+same leg pair: a `cli-devin` TypeScript structure port, a `cli-codex` verbatim CSS copy plus
+fixture update (MIT notice attached to each copied block), and a fresh in-runtime verifier reading
+recaptured screenshots side by side with the reference or the operator's vault comparison — red
+first, via a DOM-structure parity test against each reference view's own output shape. `roadmap.md`
+§5.2 rows 037 and 038 are marked reopened above. No implementation has landed for either leg pair
+yet; this entry and the two child packets' own `spec.md`/`plan.md`/`tasks.md`/`goal.md`/
+`acceptance-criteria.md`/`implementation-summary.md` document the amendment, not its execution.
 <!-- /ANCHOR:log -->

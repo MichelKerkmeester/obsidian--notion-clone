@@ -110,6 +110,35 @@ contextType: "general"
 
 ---
 
+<!-- ANCHOR:phase-4 -->
+## Phase 4: 1:1 Reference Port (Amendment 2026-09-04, REQ-007)
+
+- [ ] T019 Write a red-first DOM-structure parity test walking the reference's `GanttView` output
+      shape — REQ-007.
+      — evidence to close: the test is observed failing against the current (pre-amendment)
+      renderer before any port line lands, naming the exact structural gap.
+- [ ] T020 `cli-devin` leg: port `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/
+      `TimelineConfig.ts`'s DOM structure and class vocabulary 1:1 onto
+      `calendar-timeline-renderer.ts` — REQ-007, REQ-002, REQ-003.
+      — evidence to close: T019's parity test turns green; the dependency-link seam and
+      visible-window/backlog/invalid-event/group-limit behavior named in REQ-002/REQ-003 are
+      unchanged by hunk-range inspection of the diff.
+- [ ] T021 `cli-codex` leg: copy `gantt.css` verbatim where its rules apply into the
+      `css-lane`-held `styles.css` `db-timeline-*` region, with the MIT notice attached to the
+      copied block, and update the screenshot fixtures to match — REQ-007.
+      — evidence to close: `css-lane` acquired before the edit and released only after a
+      recapture that is actually read; local extensions (visible-window rendering, unscheduled
+      backlog, invalid-event repair, group/lane limits, touch menu, keyboard link buttons, the
+      viewport-centred window) render only behind a new default-off setting.
+- [ ] T022 Fresh in-runtime verifier reads the recaptured timeline screenshots side by side with
+      the reference's own screenshots or the operator's vault comparison — REQ-007.
+      — evidence to close: a session that did not run T020/T021 opens both sets of captures and
+      states, per element, whether structure/class/visual language/row-height/unit-width defaults
+      match; T019's parity test re-run green by this same fresh session.
+<!-- /ANCHOR:phase-4 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 

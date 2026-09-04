@@ -11,13 +11,14 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T01:35:00Z"
-    last_updated_by: "leg-d-landed"
-    recent_action: "Landed leg d: centred day-scale fixture on pinned now, fixed HH tick label; 4/4 rows shot"
-    next_safe_action: "Pick up next open row: zero-width mount fallback or year-scale phone width"
+    last_updated_at: "2026-09-04T07:35:00Z"
+    last_updated_by: "gantt-1to1-amendment"
+    recent_action: "Recorded the operator's 1:1 gantt copy directive as a next leg"
+    next_safe_action: "Dispatch devin leg: port GanttView 1:1"
     blockers:
       - "Not operator-confirmed: the gantt has not been checked on iOS"
       - "Seven product/harness defects from verification round nine remain open (see goal.md Completion Criteria)"
+      - "2026-09-04: operator judged the landed legs not a close-enough copy; REQ-007's 1:1 leg pair has not started"
     key_files:
       - "src/views/calendar-timeline-renderer.ts"
       - "src/data/calendar-timeline-model.ts"
@@ -192,6 +193,46 @@ toolchain's known encoder noise before being named in the same `css-lane.json` r
 10. **Pre-existing duplicated CSS.** `.db-timeline-event.is-all-day` remains defined at two `styles.css`
     blocks; not introduced by this port.
 <!-- /ANCHOR:limitations -->
+
+---
+
+<!-- ANCHOR:next-leg -->
+## Next Leg
+
+**Amendment 2026-09-04, operator directive (verbatim): "Same for timeline"**, issued the same
+minute as the equivalent board directive. The operator installed obsidian-pm 2.1.0 beside this
+plugin in the iCloud vault and ran a side-by-side comparison; the landed legs above and their
+round-nine fixes rewrote the reference's behavior contract into local geometry rather than
+reproducing `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`'s
+DOM structure and class vocabulary, and that fell short of the comparison. `spec.md` REQ-007 and
+`goal.md` D6 record the amendment and its supersession of the prior "rewrite, never copied"
+disposition for structure and visual language; `acceptance-criteria.md` AC-007 and `tasks.md`
+T019-T022 are the new closure gate.
+
+**Today's observed baseline** (read directly this session, not carried over): `db-timeline-*`
+classes, five scales (day/week/month/quarter/year) at 60/100/80/15/4px unit-width defaults
+(`getTimelineColumnWidthSpec`, `calendar-timeline-model.ts:183-201` — confirmed against this
+directive's own dispatch numbers), a viewport-centred window, and a scale trigger button with
+sibling link buttons.
+
+**Plan for the next leg pair**, red first:
+1. **T019** — write a DOM-structure parity test walking the reference's `GanttView` output shape;
+   observe it fail against today's renderer.
+2. **T020** — `cli-devin` leg: port the four reference files' DOM structure and class vocabulary
+   1:1 onto `calendar-timeline-renderer.ts`, mapped to `RowData` (the dependency-link seam and
+   visible-window/backlog/invalid-event/group-limit behavior stay unchanged, REQ-002/REQ-003).
+3. **T021** — `cli-codex` leg: copy `gantt.css` verbatim where its rules apply into the
+   `css-lane`-held `styles.css` `db-timeline-*` region (MIT notice attached to the copied block)
+   and update the screenshot fixtures; local extensions (visible-window rendering, unscheduled
+   backlog, invalid-event repair, group/lane limits, touch menu, keyboard link buttons, the
+   viewport-centred window) move behind a new default-off setting.
+4. **T022** — a fresh in-runtime verifier (not T020/T021's own report) reads the recaptured
+   screenshots side by side with the reference's own screenshots or the operator's vault
+   comparison, and re-runs T019's parity test to green.
+
+No implementation has landed for this leg yet; this section documents the amendment and its plan
+only.
+<!-- /ANCHOR:next-leg -->
 
 ---
 

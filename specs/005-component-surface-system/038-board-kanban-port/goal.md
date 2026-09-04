@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-03T21:00:00Z"
-    last_updated_by: "board-empty-drop-language-captured"
-    recent_action: "Captured empty-column/drop-language; ticked hover/drag/drop-target row"
-    next_safe_action: "Record a T1 pre-rewrite baseline, then close the remaining criteria"
+    last_updated_at: "2026-09-04T07:30:00Z"
+    last_updated_by: "board-1to1-amendment"
+    recent_action: "Superseded keep-local disposition; added the 1:1 copy criterion"
+    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038-goal"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 38
     open_questions: []
     answered_questions: []
 ---
@@ -46,6 +46,7 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
 | D3 | A local extension with no reference equivalent is a requirement to preserve, not a gap to fill from the reference. Checked before and after the rewrite, per `plan.md`'s first step. |
 | D4 | Shipped, verified and operator-confirmed differ. Only the third closes a row (parent `goal.md` D3). |
 | D5 | A fresh reviewer verifies; the delegate order and in-runtime verification follow the parent's D14. |
+| D6 | **Amendment 2026-09-04 (operator directive, verbatim: "We should copy their board view 1:1 the one from project manager"), superseding D1 for structure and visual language.** D1's "rewrite, not copy" stance is no longer sufficient: the operator installed obsidian-pm 2.1.0 beside this plugin, ran a side-by-side comparison, and judged the ported column/card composition (legs `b9e2321`/`a6fcd31`, restyled from `kanban.css`) not close enough. The board now targets a one-to-one DOM structure, class vocabulary, and verbatim-copied CSS (MIT notice attached), per `spec.md` REQ-007. D1's "rewrite, not copy" language is superseded for structure/visual language only; D2 (path identity) and D3 (local extensions checked, now default-off rather than always-on) are unchanged. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -123,6 +124,20 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
       `COMPLEXITY_MATCH` note, unrelated to this pass) but is left unticked here for the same
       reason as the gate row above.
 
+- [ ] The board view renders as a one-to-one copy of obsidian-pm's kanban — same DOM structure and
+      class vocabulary as `KanbanView.ts`/`KanbanColumn.ts`/`KanbanCard.ts` mapped to `RowData`,
+      the same visual language copied verbatim from `kanban.css` where its rules apply (MIT notice
+      on the copied block), the same interactions, and the same density/column-width defaults —
+      proven by the T9 DOM-structure parity test and a fresh reviewer's side-by-side screenshot
+      read against the reference or the operator's vault comparison. **Not started.** Today's
+      observed baseline (2026-09-04, this session's read of `board-renderer.ts`/`styles.css`):
+      `db-board-*` classes (not the reference's vocabulary), five status columns rendered at a
+      280px default width (`getBoardColumnWidth`, `board-renderer.ts:1699`; not the 320px this
+      directive's dispatch named — corrected here against the read source) with a priority strip,
+      parent chip, title-row chips and a meta grid — a local composition restyled from the
+      reference's visual language, not its DOM/class copy. Red to record: T9's parity test,
+      written and observed failing before the leg pair starts.
+
 ### Operator-only rows
 
 - [ ] **The operator opens a board on device and confirms the rewritten card/column visual
@@ -178,4 +193,24 @@ encoder noise). `npm run gate`: 25 green / 0 red. This still leaves the local-ex
 the drag-drop matrix baseline, and the `:hover` pointer-lift rule (a real CSS pseudo-class, not a
 class a fixture can apply) unproven; `tasks.md` T1-T4 and the two remaining `goal.md` criteria stay
 open for that reason.
+
+**2026-09-04 — Amendment: operator directive supersedes the keep-local disposition (D6).** The
+operator installed obsidian-pm 2.1.0 beside this plugin in the iCloud vault, ran a side-by-side
+comparison, and directed: "We should copy their board view 1:1 the one from project manager."
+Both landed legs restyled our own column/card composition from `kanban.css`'s visual intent (D1's
+"rewrite, not copy") rather than reproducing the reference's DOM structure and class vocabulary,
+which the operator judged not close enough. `spec.md` REQ-007 adds the 1:1 requirement (structure,
+class vocabulary, verbatim CSS with its MIT notice, interactions, density/column-width defaults);
+local extensions move behind a new default-off setting instead of always rendering. One new
+completion criterion is added above, unticked, with today's observed baseline recorded against a
+direct read of `board-renderer.ts`/`styles.css`: five `db-board-column` lanes at a 280px default
+width (`getBoardColumnWidth`, `board-renderer.ts:1699`), not the 320px this directive's dispatch
+named — the discrepancy is flagged here rather than silently corrected away. This lowers
+`completion_pct` from 3/7 non-operator rows (43%) to 3/8 (38%); `tasks.md` gains T9-T12 for the
+same reason, lowering its own ratio from 3/8 (38%) to 3/12 (25%). Plan: a new leg pair (`cli-devin`
+TypeScript port of the three reference files onto our renderer, then `cli-codex` verbatim CSS copy
+and fixture update), red first via T9's DOM-structure parity test, then a fresh in-runtime
+verifier reading captures side by side with the reference's own screenshots or the operator's
+vault comparison. No code has changed yet this pass — this is the documentation of the amendment,
+not its implementation.
 <!-- /ANCHOR:log -->

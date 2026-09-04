@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-03T10:40:00Z"
-    last_updated_by: "board-legs-landed"
-    recent_action: "Verified legs b9e2321/a6fcd31; ticked T5-T7 and 3 goal criteria"
-    next_safe_action: "Record a T1 pre-rewrite baseline, then close the remaining rows"
+    last_updated_at: "2026-09-04T07:30:00Z"
+    last_updated_by: "board-1to1-amendment"
+    recent_action: "Amended 038 for a 1:1 board copy per operator directive"
+    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
     blockers: []
     key_files: ["../036-obsidian-pm-ui-harvest/research/research.md", "goal.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 33
+    completion_pct: 31
     open_questions: []
     answered_questions: []
 ---
@@ -42,8 +42,8 @@ _memory:
 |---|---|
 | **Spec Folder** | 038-board-kanban-port |
 | **Level** | 2 — `recommend-level.sh --loc 950 --files 10 --architectural` scores 65/100 at 82% confidence (mid-range of the catalog's 800-1,100 LOC estimate, 10 files touched across renderer/data/styles, architectural because the port re-seams card identity onto `RowData.file.path`). Matches the sibling port-adjacent phases' own Level 2 shape (`031-sheet-lifecycle-ownership`, `033-list-virtualisation`). |
-| **Status** | Landed (partial) — both legs committed (`b9e2321`, `a6fcd31`): the column/card information hierarchy is ported and styled under `--db-*` tokens, and `npm run gate` re-runs green (25/25, exit 0). Hover/drag/drop visual language, the per-extension re-check, and the drag-drop matrix re-run are coded or untouched but not yet proven by any fixture. Not operator-confirmed — see `implementation-summary.md`. |
-| **Complexity** | 65/100, confidence 82% |
+| **Status** | **Reopened 2026-09-04 for a 1:1 board copy at the operator's request** — the two landed legs (`b9e2321`, `a6fcd31`) restyled our own column/card composition from `kanban.css` rather than reproducing the reference's DOM and class vocabulary, and the operator judged that not close enough on a side-by-side comparison against obsidian-pm 2.1.0 installed beside this plugin. REQ-007 below supersedes the prior keep-local disposition for structure and visual language; local extensions now default off. `npm run gate` was last green (25/25, exit 0) against the pre-amendment renderer; a DOM-structure parity test against the reference's `KanbanView` output shape is owed before any port line lands (plan.md step 7). Not operator-confirmed — see `implementation-summary.md`. |
+| **Complexity** | 65/100, confidence 82% (pre-amendment; not rescored for REQ-007) |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -126,6 +126,7 @@ merges into.
 | REQ-002 | Hover/drag/drop visual language (raised card, hover lift, drop-target highlight, column drop tint) is adopted per catalog rows 10-11, rewritten into `--db-*` tokens inside the existing `styles.css` §17 BOARD VIEW section — no parallel stylesheet, no new class-name public contract. |
 | REQ-003 | Card identity stays `RowData.file.path` (`board-renderer.ts:764`, `data-note-database-row-path`), never the reference's `task.id`; every drag/drop payload and the path/batch-order transaction (`resolveBoardContainerDropOrder`, `moveCardAndOrder`) is preserved and not narrowed by the port. |
 | REQ-004 | No spec path, phase number, task id, or requirement id appears in any code comment this phase writes (Comment Hygiene HARD BLOCK). |
+| REQ-007 | **Amendment 2026-09-04 (operator directive, verbatim: "We should copy their board view 1:1 the one from project manager").** The board view renders as a one-to-one copy of obsidian-pm's kanban: the same DOM structure and class vocabulary as `src/views/KanbanView.ts`, `src/ui/composites/KanbanColumn.ts` and `KanbanCard.ts` (mapped to `RowData`; card identity stays `RowData.file.path`, REQ-003 unchanged), the same visual language as `src/styles/kanban.css` copied verbatim where the reference's rules apply (MIT notice attached to the copied block), the same interactions (drag between columns, drop language, card click opening the note, description hydration), and the same density and column-width defaults. Local extensions (WIP limits, swimlanes, summaries, cover images, path-keyed batch order, touch-mode menus) stay in the code but render only where the reference has an equivalent or where a setting turns them on, **default off** — so the default board is indistinguishable from the reference apart from data. This supersedes the prior "adapt fields, adopt the information hierarchy, do not copy" disposition (REQ-001/REQ-002 above and every "Rewrite"/"Adopt" cell in the module-map table in §2) for structure and visual language specifically; REQ-003 (path identity) and REQ-005 (local-extension preservation, now behind a default-off setting) are unchanged. |
 
 ### P1 - Required (complete OR user-approved deferral)
 
@@ -151,6 +152,9 @@ merges into.
   covering same-group, cross-group, and blank-space drop.
 - **SC-003**: `npm run gate` exits 0, and the board/gallery layout-read negative control (REQ-006)
   stays armed and passing.
+- **SC-004** (REQ-007, added 2026-09-04): A DOM-structure parity test that walks the reference's
+  `KanbanView`/`KanbanColumn`/`KanbanCard` output shape passes against our board renderer, and every
+  local extension named in REQ-007 renders default-off unless a setting is turned on.
 <!-- /ANCHOR:success-criteria -->
 
 ---
@@ -164,6 +168,7 @@ merges into.
 | Risk | Card identity drifts toward the reference's `task.id` during the rewrite | Breaks every path-keyed local contract (selection, drag, order, cover targeting) | REQ-003 is P0 and named explicitly; every drag/drop citation above is checked against `file.path` |
 | Dependency | `research/research.md` §2 and its cited `file:line`s stay accurate; source tree at `specs/context/obsidian-pm-main` remains read-only reference | A moved reference line invalidates a citation silently | Re-read the cited ranges at rewrite time, not only at spec time (already done for every citation above) |
 | Dependency | `styles.css` lane (`tools/lane/css-lane.json`) must be acquired before any edit to section 17 | Unclaimed edit is refused by the `css-lane` gate lane | `plan.md` names acquire/release as an explicit step |
+| Risk (added 2026-09-04) | REQ-007's verbatim CSS copy narrows the local action contract's *visibility* by default while the code stays present | An operator or a downstream reader could mistake "default off" for "removed" | REQ-007 states explicitly that every named local extension stays in the code and gains a setting; `acceptance-criteria.md` AC-9 checks the setting exists and defaults off |
 <!-- /ANCHOR:risks -->
 
 ---

@@ -10,13 +10,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T01:35:00Z"
-    last_updated_by: "leg-d-landed"
-    recent_action: "Landed leg d: centred day-scale fixture on pinned now, fixed HH tick label; 4/4 rows shot"
-    next_safe_action: "Pick up next open row: zero-width mount fallback or year-scale phone width"
+    last_updated_at: "2026-09-04T07:35:00Z"
+    last_updated_by: "gantt-1to1-amendment"
+    recent_action: "Superseded rewrite-only disposition; added the 1:1 copy criterion"
+    next_safe_action: "Dispatch devin leg: port GanttView 1:1"
     blockers:
       - "Not operator-confirmed: the gantt has not been checked on iOS"
       - "Seven product/harness defects from verification round nine remain open (see Completion Criteria)"
+      - "2026-09-04: operator judged the landed legs not a close-enough copy; REQ-007's 1:1 leg pair has not started"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -25,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "037-timeline-gantt-port"
       parent_session_id: null
-    completion_pct: 38
+    completion_pct: 56
     open_questions:
       - "Whether the dependency-link seam persists as note frontmatter or a derived/computed field"
     answered_questions:
@@ -61,6 +62,7 @@ Frozen choices. Changing one is an amendment.
 | D3 | Shipped, verified, and operator-confirmed are three states; only the third closes a row. This packet's own closure needs `npm run gate` observed green by a fresh in-runtime agent, not a delegate's report. |
 | D4 | The dependency-link seam is new local surface — no local dependency renderer exists before this packet — and must reject same-side, duplicate, missing-task, and cycle links, matching `GanttLinkHandler.ts:56-67`, `:77-97`. |
 | D5 | External lane order follows the parent goal's D14: (a) `cli-devin` `deepseek-v4-flash-max`, (b) `gpt-5.6-luna` via `cli-codex`/`cli-opencode`, (c) in-runtime fresh verifier runs the browser gate and `validate.sh` itself. |
+| D6 | **Amendment 2026-09-04 (operator directive, verbatim: "Same for timeline"), superseding D1 for structure and visual language.** D1's "rewrite, never copy" stance is no longer sufficient: the operator installed obsidian-pm 2.1.0 beside this plugin, ran a side-by-side comparison, and — in the same minute as the equivalent board directive — judged the ported timeline geometry/controls/bars (legs `0262386`/`55bff9b` plus the round-nine fixes) not close enough. The timeline now targets a one-to-one DOM structure, class vocabulary, and verbatim-copied CSS (MIT notice attached), per `spec.md` REQ-007. D1's "rewrite, never copied" language is superseded for structure/visual language only; D2 (table/sheets/formulas stay local, eager-SVG dropped) and D4 (the dependency-link seam's rejection rules) are unchanged, and local extensions from D2's "keep local" list move behind a default-off setting instead of always rendering. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -193,6 +195,23 @@ Frozen choices. Changing one is an amendment.
       overflows by up to 8 columns at year desktop. Low priority; today-centred content stays in frame.
 - [ ] `.db-timeline-event.is-all-day` remains duplicated at two `styles.css` blocks — pre-existing, not
       introduced by this port.
+- [ ] The timeline view renders as a one-to-one copy of obsidian-pm's gantt — same DOM structure and
+      class vocabulary as `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/
+      `TimelineConfig.ts` mapped to `RowData`, the same visual language copied verbatim from
+      `gantt.css` where its rules apply (MIT notice on the copied block), the same header/scale
+      language, bars, milestones, progress, dependency arrows, drag and resize behaviour, and the
+      same defaults for row height and unit widths — proven by a DOM-structure parity test and a
+      fresh reviewer's side-by-side screenshot read against the reference or the operator's vault
+      comparison (REQ-007, added 2026-09-04). **Not started.** Today's observed baseline
+      (2026-09-04, this session's read of `calendar-timeline-renderer.ts`/
+      `calendar-timeline-model.ts`): `db-timeline-*` classes (not the reference's vocabulary), five
+      scales (day/week/month/quarter/year) at 60/100/80/15/4px unit-width defaults
+      (`getTimelineColumnWidthSpec`, `calendar-timeline-model.ts:183-201` — confirmed against this
+      directive's own dispatch numbers), a viewport-centred window
+      (`resolveTimelineDayCentredStartMinutes` and `getTimelineViewportWindow`), and a scale
+      trigger button with sibling link buttons — a local composition rewritten from the reference's
+      behavior contract, not its DOM/class copy. Red to record: a DOM-structure parity test,
+      written and observed failing before the leg pair starts.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -227,4 +246,29 @@ Frozen choices. Changing one is an amendment.
 | Leg c: the fixture's day window never centres on the current hour | `timelineViewportWindow`'s day branch returns `startMinutes: TL_DAY_START_MINUTES` (0) and its comment still asserts that day scale never centres. The model gained `resolveTimelineDayCentredStartMinutes` (`calendar-timeline-model.ts:441-445`), reached from `getTimelineAnchorStartMinutes` (`:1151-1155`) whenever `getTimelineViewportWindow` is passed a `now` — which the renderer always passes (`calendar-timeline-renderer.ts:325` -> `calendar-timeline-model.ts:689`). The parity test calls `getTimelineViewportWindow` without `now`, so its `expect(mirrored.startMinutes).toBe(real.startMinutes)` is satisfied on the legacy branch and never exercises the centring one. This is why the day row above stays half capture-pending. **Closed in leg d** — see the Progress row above. |
 | Leg c: `.db-timeline-events` `row-gap` is the one edit not scoped to `.is-label-above` | The lifted label is absolutely positioned above its bar, so its clearance can only come from the lane's own row gap; 4px is smaller than an 11px/1.3 label plus its 4px offset. Raising the gap to `var(--db-space-8)` changes lane rhythm on every timeline capture, at every scale and both devices, which is why all 24 timeline PNGs were read rather than the four the fixes name: every lane stays legible, and no bar, dot, toggle or create row moved. Both new numbers are existing tokens (`--db-space-8` 24px at `styles.css:52`, `--db-font-xs` 11px at `:53`); `z-index: 8` sits one step above the timeline block's existing 0-7 ladder. |
 | Leg c: `checkbox-appearance` reports one board checkbox below the 3:1 non-text minimum | Not introduced here and not a gate check. `db-board-card-checkbox` measures 2.99:1 in `board-drop-language`, a scenario that arrived on `main` in `7e36671`; `main`'s own `checkbox-appearance.json` was stamped at 68 fixtures, before those scenarios existed, so this re-run is the first measurement that includes them. This leg's stylesheet diff contains no board, checkbox, field, panel or chrome selector. `engine-parity` likewise exits 1 with 51 differences — byte-identical to the list `main`'s artefact already records, and naming no timeline element. Both belong to whoever owns the board leg. |
+
+### 2026-09-04 — Amendment: operator directive supersedes the rewrite-only disposition (D6)
+
+The operator installed obsidian-pm 2.1.0 beside this plugin in the iCloud vault, ran a side-by-side
+comparison, and directed — same minute as the equivalent board directive — "Same for timeline."
+The landed legs and their round-nine fixes rewrote the reference's behavior contract into local
+geometry rather than reproducing `GanttView.ts`/`GanttHeaderRenderer.ts`/
+`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`'s DOM structure and class vocabulary, which the
+operator judged not close enough. `spec.md` REQ-007 adds the 1:1 requirement (structure, class
+vocabulary, verbatim CSS with its MIT notice, header/scale language, bars, milestones, progress,
+dependency arrows, drag/resize, row-height/unit-width defaults); local extensions move behind a
+new default-off setting instead of always rendering. One new completion criterion is added above,
+unticked, with today's observed baseline recorded against a direct read of
+`calendar-timeline-renderer.ts`/`calendar-timeline-model.ts`: `db-timeline-*` classes, five scales
+at 60/100/80/15/4px unit-width defaults (`getTimelineColumnWidthSpec`), a viewport-centred window,
+and a scale trigger button with sibling link buttons — confirmed against this directive's own
+dispatch numbers, unlike the board packet's 320px figure, which a direct code read corrected to
+280px. This adds one row to the Completion Criteria tree (17 -> 18 total items); ticked count is
+unchanged at 10, so `completion_pct` moves from its recorded 38 to **10/18 = 56** (recomputed
+directly from the checklist above, both sections combined, rather than carried over). `tasks.md`
+gains T019-T022 for the same reason. Plan: a new leg pair (`cli-devin` TypeScript port of the four
+reference files onto our renderer, then `cli-codex` verbatim CSS copy and fixture update), red
+first via a DOM-structure parity test (T019), then a fresh in-runtime verifier reading captures
+side by side with the reference's own screenshots or the operator's vault comparison. No code has
+changed yet this pass — this is the documentation of the amendment, not its implementation.
 <!-- /ANCHOR:log -->

@@ -22,7 +22,7 @@ contextType: "planning"
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | **Partial — landed and verified in `0262386` + `55bff9b`; release 1.4.4 outstanding; 6 of 17 criteria; awaiting operator confirmation on device.** The original six-item closure gate is met; eleven defects found in verification round nine (header/axis mismatch at quarter+year, zero-width mount fallback, span-in-button nesting, overlapping link dots, low-contrast progress-fill meta, milestone-label overpaint, clipped leading axis label on mobile, unusable day/year scale at phone width, a harness padding note, and the pre-existing duplicated `.is-all-day` CSS block) are open rows, per `goal.md` §3. Was *Draft*. |
+| **Status** | **Reopened 2026-09-04 for a 1:1 gantt copy at the operator's request** — the landed legs (`0262386`, `55bff9b`) and their open-row fixes rewrote the reference's behavior contract into local geometry rather than reproducing `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/`TimelineConfig.ts`'s DOM structure and class vocabulary, which the operator judged not close enough on a side-by-side comparison against obsidian-pm 2.1.0 installed beside this plugin ("Same for timeline", same minute as the board directive). REQ-007 below supersedes the prior rewrite-only disposition for structure and visual language; local extensions now default off. Prior state: landed and verified in `0262386` + `55bff9b`, release 1.4.4 released, then 1.4.9/1.4.10 resolved all four open defect rows found in verification round nine (header/axis mismatch, zero-width mount fallback, span-in-button nesting, overlapping link dots, low-contrast progress-fill meta, milestone-label overpaint, clipped leading axis label, unusable day/year scale at phone width, a harness padding note, and the pre-existing duplicated `.is-all-day` CSS block), per `goal.md` §3. A DOM-structure parity test against the reference's `GanttView` output shape is owed before any port line lands (plan.md). Not operator-confirmed. |
 | **Created** | 2026-09-02 |
 | **Branch** | none (skip-branch) |
 | **Parent Spec** | `../spec.md` |
@@ -163,6 +163,7 @@ and lane limits are not to be dropped.
 | REQ-002 | The dependency-link seam (`GanttLinkHandler.ts:56-67`, `:77-97`) is implemented as a new local data/action seam off `calendar-timeline-renderer.ts:158-170`, rejecting same-side, duplicate, missing-task, and cycle links, with no direct local dependency renderer existing before this packet. |
 | REQ-003 | Visible-window rendering (`calendar-timeline-renderer.ts:391-445`), unscheduled backlog, invalid-event repair, and group/lane limits are unchanged in behavior after the port; the reference's eager-SVG strategy (`GanttView.ts:185-190`) is not adopted. |
 | REQ-004 | No spec path, phase number, task id, or requirement id appears in any code comment this phase writes (Comment Hygiene HARD BLOCK). |
+| REQ-007 | **Amendment 2026-09-04 (operator directive, verbatim: "Same for timeline", following the same-minute board directive).** The timeline view renders as a one-to-one copy of obsidian-pm's gantt: the same DOM structure and class vocabulary as `src/views/gantt/GanttView.ts`, `GanttHeaderRenderer.ts`, `GanttTaskBarRenderer.ts` and `TimelineConfig.ts` (mapped to `RowData`), the same visual language as `src/styles/gantt.css` copied verbatim where the reference's rules apply (MIT notice attached to the copied block), the same header/scale language, bars, milestones, progress, dependency arrows, drag and resize behaviour, and the same defaults for row height and unit widths. Local extensions (visible-window rendering, unscheduled backlog, invalid-event repair, group/lane limits, touch menu, keyboard link buttons, the viewport-centred window) stay in the code but render only where the reference has an equivalent or behind a setting, **default off** — so the default timeline is indistinguishable from the reference apart from data. This supersedes the prior "rewrite (never copied)" disposition (REQ-001 above and every module-map row in §3) for structure and visual language specifically; REQ-002 (dependency-link seam) and REQ-003 (local-extension preservation, now behind a default-off setting) are unchanged. |
 
 ### P1 - Required (complete OR user-approved deferral)
 
@@ -186,6 +187,9 @@ and lane limits are not to be dropped.
 - **SC-002**: The dependency-link seam rejects same-side, duplicate, missing-task, and cycle links, matching
   `GanttLinkHandler.ts:56-67`, `:77-97`.
 - **SC-003**: `npm run gate` reports `gate: PASS` and exit 0 for this packet's changed files.
+- **SC-004** (REQ-007, added 2026-09-04): A DOM-structure parity test that walks the reference's
+  `GanttView` output shape passes against our timeline renderer, and every local extension named
+  in REQ-007 renders default-off unless a setting is turned on.
 <!-- /ANCHOR:success-criteria -->
 
 ---
@@ -199,6 +203,7 @@ and lane limits are not to be dropped.
 | Risk | `styles.css` is lane-held | An unclaimed edit is refused by gate lane `css-lane` | Acquire `tools/lane/css-lane.json` before editing, release after a read recapture, per `plan.md` §4 |
 | Risk | No local dependency-link renderer exists yet | The link seam is new surface, not a like-for-like port | REQ-002 scopes it explicitly as a new seam, tested against the reference's four rejection cases |
 | Dependency | `specs/context/obsidian-pm-main` staying present and unedited | Citations become unverifiable if the source moves | Read-only reference tree; this packet never writes to `specs/context/` |
+| Risk (added 2026-09-04) | REQ-007's verbatim CSS copy narrows the local action contract's *visibility* by default while the code stays present | An operator or a downstream reader could mistake "default off" for "removed" | REQ-007 states explicitly that every named local extension stays in the code and gains a setting; `acceptance-criteria.md` AC-007 checks the setting exists and defaults off |
 <!-- /ANCHOR:risks -->
 
 ---

@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-02T23:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened from 036's adoption plan row 2"
-    next_safe_action: "Record today's board behaviour before any rewrite line lands"
+    last_updated_at: "2026-09-04T07:30:00Z"
+    last_updated_by: "board-1to1-amendment"
+    recent_action: "Added AC-9 for the operator's 1:1 board copy directive"
+    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
     blockers: []
     key_files: ["spec.md", "goal.md"]
     session_dedup:
@@ -44,6 +44,7 @@ whose control has not been observed failing is not met, however green it looks.
 | AC-6 | Board/gallery layout-read negative control | armed and passing, same counts as `026`/`c5566db` | armed today per `tools/live/renderer-coverage.json`; post-rewrite re-check owed |
 | AC-7 | `SURFACE_PHASE=038-board-kanban-port npm run gate` | exit 0 | not yet run under this phase's own `SURFACE_PHASE` |
 | AC-8 | Operator opens a board on device | confirms rewritten card/column visual language and drag/drop | unknown — **only the operator closes this** |
+| AC-9 | 1:1 DOM structure/class vocabulary/CSS/interactions/density/column-width against `KanbanView.ts`/`KanbanColumn.ts`/`KanbanCard.ts`/`kanban.css` (REQ-007, added 2026-09-04) | T9's DOM-structure parity test passes; local extensions render only default-off or where the reference has an equivalent | not started — today's board renders `db-board-*` classes (not the reference's vocabulary), five `db-board-column` lanes at a 280px default width (`board-renderer.ts:1699`; the operator's dispatch named 320px, corrected here against a direct code read), with a priority strip, parent chip, title-row chips and a meta grid, all local composition restyled from `kanban.css`'s visual intent rather than its DOM/class copy |
 <!-- /ANCHOR:criteria -->
 
 ---
@@ -53,8 +54,9 @@ whose control has not been observed failing is not met, however green it looks.
 
 Shipped, verified and operator-confirmed are three different things and only the third closes a
 defect (parent `goal.md` D3). A number is quoted with the command that produced it and the exit
-code read directly, never through a pipe. No code or CSS block in this phase is copied verbatim
-from `obsidian-pm-main`; every disposition in `spec.md` is `rewrite`, so no MIT notice is owed
-here — if a later revision copies a substantial block, the full notice from
-`specs/context/obsidian-pm-main/LICENSE:1-21` lands at that point, per `goal.md` D1.
+code read directly, never through a pipe. **Amended 2026-09-04 (REQ-007, `goal.md` D6):** the
+`rewrite`-only disposition is superseded for structure and visual language — the leg pair copies
+`kanban.css` verbatim where its rules apply, so the copied block MUST carry the full MIT notice
+from `specs/context/obsidian-pm-main/LICENSE:1-21`. Every requirement outside REQ-007 (card
+identity, action contract, local extensions) keeps its `rewrite` disposition unchanged.
 <!-- /ANCHOR:evidence -->

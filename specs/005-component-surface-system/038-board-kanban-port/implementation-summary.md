@@ -11,13 +11,14 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-03T10:40:00Z"
-    last_updated_by: "board-legs-landed"
-    recent_action: "Verified legs b9e2321/a6fcd31; ticked T5-T7 and 3 goal criteria"
-    next_safe_action: "Record a T1 pre-rewrite baseline, then close T1-T4 and remaining criteria"
+    last_updated_at: "2026-09-04T07:30:00Z"
+    last_updated_by: "board-1to1-amendment"
+    recent_action: "Recorded the operator's 1:1 board copy directive as a next leg"
+    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
     blockers:
       - "Not operator-confirmed: release 1.4.5 has not been cut yet"
       - "Hover, drag, drop-target and the empty-column slot are coded but depicted by no fixture"
+      - "2026-09-04: operator judged the landed legs not a close-enough copy; REQ-007's 1:1 leg pair has not started"
     key_files:
       - "src/views/board-renderer.ts"
       - "src/views/board-renderer-hierarchy.test.ts"
@@ -229,5 +230,43 @@ directly.
    board on device (`tasks.md` T8, `goal.md`/`acceptance-criteria.md` AC-8) — the only row that
    can close it.
 <!-- /ANCHOR:limitations -->
+
+---
+
+<!-- ANCHOR:next-leg -->
+## Next Leg
+
+**Amendment 2026-09-04, operator directive (verbatim): "We should copy their board view 1:1 the
+one from project manager."** The operator installed obsidian-pm 2.1.0 beside this plugin in the
+iCloud vault and ran a side-by-side comparison; both landed legs above restyled our own
+column/card composition from `kanban.css`'s visual intent rather than reproducing the reference's
+DOM structure and class vocabulary, and that fell short of the comparison. `spec.md` REQ-007 and
+`goal.md` D6 record the amendment and its supersession of the prior "rewrite, not copy"
+disposition for structure and visual language; `acceptance-criteria.md` AC-9 and `tasks.md`
+T9-T12 are the new closure gate.
+
+**Today's observed baseline** (read directly this session, not carried over): `db-board-*`
+classes, five `db-board-column` lanes at a 280px default width (`getBoardColumnWidth`,
+`board-renderer.ts:1699`) — not the 320px the amendment's dispatch named, a discrepancy flagged
+rather than silently corrected — each rendering a priority strip, parent chip, title-row chips
+and a meta grid.
+
+**Plan for the next leg pair**, red first:
+1. **T9** — write a DOM-structure parity test walking the reference's
+   `KanbanView`/`KanbanColumn`/`KanbanCard` output shape; observe it fail against today's renderer.
+2. **T10** — `cli-devin` leg: port the three reference files' DOM structure and class vocabulary
+   1:1 onto `board-renderer.ts`, mapped to `RowData` (card identity stays `RowData.file.path`,
+   REQ-003 unchanged).
+3. **T11** — `cli-codex` leg: copy `kanban.css` verbatim where its rules apply into the
+   `css-lane`-held `styles.css` §17 BOARD VIEW section (MIT notice attached to the copied block)
+   and update the screenshot fixtures; local extensions (WIP, swimlanes, summaries, cover images,
+   path-keyed batch order, touch-mode menus) move behind a new default-off setting.
+4. **T12** — a fresh in-runtime verifier (not T10/T11's own report) reads the recaptured
+   screenshots side by side with the reference's own screenshots or the operator's vault
+   comparison, and re-runs T9's parity test to green.
+
+No implementation has landed for this leg yet; this section documents the amendment and its plan
+only.
+<!-- /ANCHOR:next-leg -->
 
 ---

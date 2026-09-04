@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-03T10:40:00Z"
-    last_updated_by: "board-legs-landed"
-    recent_action: "Verified legs b9e2321/a6fcd31; ticked T5-T7 and 3 goal criteria"
-    next_safe_action: "Record a T1 pre-rewrite baseline, then close T1-T4"
+    last_updated_at: "2026-09-04T07:30:00Z"
+    last_updated_by: "board-1to1-amendment"
+    recent_action: "Added T9-T12 for the operator's 1:1 board copy directive"
+    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 38
+    completion_pct: 25
     open_questions: []
     answered_questions: []
 ---
@@ -78,6 +78,28 @@ _memory:
 - [ ] **T8** The operator opens a board on device and confirms the rewritten visual language and
       drag/drop.
       *Evidence to close:* the operator says so. Nothing else closes this.
+- [ ] **T9** Write a red-first DOM-structure parity test walking the reference's
+      `KanbanView`/`KanbanColumn`/`KanbanCard` output shape — REQ-007.
+      *Evidence to close:* the test is observed failing against the current (pre-amendment)
+      renderer before any port line lands, naming the exact structural gap (missing wrapper
+      elements, absent reference class names, or column/card nesting that does not match).
+- [ ] **T10** `cli-devin` leg: port `KanbanView.ts`/`KanbanColumn.ts`/`KanbanCard.ts`'s DOM
+      structure and class vocabulary 1:1 onto `board-renderer.ts` — REQ-007, REQ-003.
+      *Evidence to close:* T9's parity test turns green; `RowData.file.path` identity and every
+      drag/drop payload named in REQ-003 are unchanged by hunk-range inspection of the diff.
+- [ ] **T11** `cli-codex` leg: copy `kanban.css` verbatim where its rules apply into the
+      `css-lane`-held `styles.css` §17 BOARD VIEW section, with the MIT notice attached to the
+      copied block, and update the screenshot fixtures to match — REQ-007.
+      *Evidence to close:* `css-lane` acquired before the edit and released only after a
+      recapture that is actually read; the copied block carries its MIT notice per `goal.md` D1's
+      supersession; local extensions (WIP, swimlanes, summaries, cover images, path-keyed batch
+      order, touch-mode menus) render only behind a new default-off setting.
+- [ ] **T12** Fresh in-runtime verifier reads the recaptured board screenshots side by side with
+      the reference's own screenshots or the operator's vault comparison — REQ-007.
+      *Evidence to close:* a session that did not run T10/T11 opens both sets of captures and
+      states, per element, whether structure/class/visual language/density/column-width match;
+      T9's parity test re-run green by this same fresh session, not carried over from T10/T11's
+      own claim.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->
