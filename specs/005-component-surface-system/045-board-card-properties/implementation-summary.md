@@ -181,6 +181,7 @@ for the new panel module, and eight `tools/live/*.json` evidence artefacts stale
 | `validate.sh 045-board-card-properties --strict` | Run at authoring time and again at this verification pass; see the packet commit |
 | Differential test for the resolver | `board-card-fields.test.ts`, 5 schema shapes including a title-only schema |
 | Operator device confirmation | Not sought (AC-006 is operator-only) |
+| Post-rebase reconciliation, landing on main | Rebased onto `origin/main` after the list hide-and-migrate landing (`e466696b`) and the screenshots symlink-ignore fix (`6328c9cb`). `src/`, `styles.css` and `tools/lane/css-lane.json` auto-merged or were resolved during the rebase (`view-config-panel-renderer.ts`: this phase's Properties section landed inside main's `.db-view-config-body` and alongside main's list-type filtering, both auto-merged clean; `css-lane.json`: main's 237-entry history plus this phase's own 3 unique `045` entries appended, `baselineHash` recomputed on the merged stylesheet at `6c7a7c42f694`). Full recapture (`npm run screenshots`, 554 entries) found zero real content-changed captures of this phase's own making: both `board-view` captures came back pixelHash/layoutHash-identical to HEAD (re-encode noise, restored) and two `constructed-board` captures were opened and read to confirm the default card fields render unchanged. 24 further captures — every `constructed-timeline` and `reference-gantt` scenario — reproduced new, but *stable*, pixel content across two isolated single-scenario reruns each, traced to `calendar-timeline-renderer.ts`'s and the vendored plugin's own real-clock "today" positioning rather than to any file this phase touches; restored to HEAD's bytes/pixelHash/layoutHash with `sourceHashes` left at their post-merge values, the same treatment `037-timeline-gantt-port`'s own post-rebase reconciliation used for the equivalent drift. 16 `tools/live/*.json` evidence artefacts re-stamped against the merged tree (8 stale after the rebase kept main's stamps, 8 more refreshed by the gate's own run); every payload's counts/totals held their prior baseline except `engine-parity`'s known cross-engine gap, which moved from 51 to 42 on its own unrelated remeasurement. `npx tsc --noEmit` exit 0; `npx vitest run` 109 files / 1135 tests; `npm run lint` 172 (pre-existing baseline, unchanged); `npm run lint:tools` exit 0; `scan-comments` PASS across 418 files; `story:smoke` 20 stories x 2 themes, 0 errors; `screenshots:verify` 0 stale; `npm run gate` 25 green. Landed `ff1dacec`, pushed to `origin/main`. |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -198,7 +199,9 @@ for the new panel module, and eight `tools/live/*.json` evidence artefacts stale
    `sheet-grammar` lane row; `044-phone-sheet-alignment` has not landed that infrastructure. The
    phone row grammar is verified by code identity with the already-shipped column manager and by
    unit tests instead, but the row stays `Unmet` rather than claim a check that could not run.
-3. **`../roadmap.md` §5 not updated (T014).** Left for the next update to this parent packet.
+3. ~~`../roadmap.md` §5 not updated (T014).~~ **Closed post-landing** (see Verification's
+   reconciliation row below): `../roadmap.md` §5.A's `045` row and prose, and `../spec.md`'s two
+   Phase Documentation Map rows, now read Landed on main.
 4. **Gallery is out of scope by decision, not by analysis.** `gallery-renderer.ts:361` builds its
    meta grid the same way and would benefit; whether it shares the mechanism is `spec.md` §10's
    first open question.

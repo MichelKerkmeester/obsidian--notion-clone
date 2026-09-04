@@ -602,7 +602,7 @@ done | sort -n
 | `042-harness-fidelity-and-replay` | **100%** — 6/6 | Shipped + verified — 6 of 6 | Harness fidelity and replay; found and fixed a real 28px touch-floor defect shipped as `a3781ae` in 1.4.10. Not operator-relevant. |
 | `043-constructed-capture` | **55%** — 6/11 | Landed (partial) | Constructed capture through T030; parent DONE row 6 ticked at `2242fa0`. **T031, the Project Manager reference captures, landed on main** (`295401ad`, reconciled `04814e24`) under `screenshots/project-manager/`, closing rows 37/38's in-repo half. Five rows open here. |
 | `044-phone-sheet-alignment` | **0%** — 0/7 | Opened 2026-09-04, Level 2, legs landing | Phone sheet grammar for reports 40, 41 and 43. The settings sheet (`dbdec603`) and column-width sheet (`8bcb11f3`) both shipped in 0.0.21; T005-T007 landed. T003/T004/T008-T012 (grammar contract, shared header, add-view sheet, record peek, gantt's owned menu, suggest modals, `group-order-modal.ts` removed) are under verification on `worktrees/043-sheet-alignment-2`, rebasing onto 0.0.21 — a P0 in the modal chrome helper was caught and fixed there; four of five conflicted files are resolved but unstaged, `tasks.md` still carries live conflict markers. 0 of 7 ticked pending that verification. |
-| `045-board-card-properties` | **0%** — 0/6 | Opened 2026-09-04, Level 2, implemented, verifying | Per-view ordered property list for board cards, behind the existing `boardExtensionsEnabled` flag. Implemented (resolver, persisted list, Properties panel); a verifier is running on `worktrees/045-board-card-properties`. 0 of 6 ticked pending that verification. |
+| `045-board-card-properties` | **0%** — 0/6 | Shipped on main `ff1dacec` | Per-view ordered property list for board cards, behind the existing `boardExtensionsEnabled` flag. Resolver, persisted list and Properties panel landed, rebased onto main clean (`npm run gate` 25/25). AC-005/T013 wait for `044`'s sheet-grammar lane to exist before they can be checked. Open questions: does gallery share the mechanism, and should hiding a card field also hide it in the table. |
 | `046-linked-views-notion-parity` | **0%** — 0/7 | Opened 2026-09-04, Level 3, not started | Linked views to Notion parity, from report 42. ADR-001 (may an embed write) was asked of the operator 2026-09-04 and remains unanswered — a precondition, not a discovery. 0 of 7. |
 
 **Program: 306/409 = 75%**, derived across all 47 phases on 2026-09-04. The figure
@@ -616,16 +616,15 @@ gathers all 103 of them in one place.
 
 **Three phases opened 2026-09-04 from the operator's evening pass** (reports 40-43): `044`'s
 settings and column-width sheet legs shipped in 0.0.21 and its remaining legs are verifying on
-`worktrees/043-sheet-alignment-2`; `045` is implemented and verifying on
-`worktrees/045-board-card-properties`; `046` has no leg yet and is blocked on the operator's
-ADR-001 ruling.
+`worktrees/043-sheet-alignment-2`; `045` shipped on main (`ff1dacec`); `046` has no leg yet and is
+blocked on the operator's ADR-001 ruling.
 
 **Legs in flight and not on main**: `worktrees/046-board-line-height` (the board's line-height
 gaps from the fresh in-repo side-by-side, §4A row 37/38 continuity), `worktrees/043-sheet-alignment-2`
-(`044`'s remaining legs, rebasing onto 0.0.21), `worktrees/045-board-card-properties` (`045`
-verification) and `worktrees/044-list-hide-migrate` (`006-list-view-deprecation`'s hide-and-migrate
-leg). `worktrees/042-screenshots-folders`, the capture-folder split, has landed (`7d95a882`+`aa049b45`,
-reconciled `933308a5`) — see §1's Seventh reconciliation note.
+(`044`'s remaining legs, rebasing onto 0.0.21) and `worktrees/044-list-hide-migrate`
+(`006-list-view-deprecation`'s hide-and-migrate leg). `worktrees/042-screenshots-folders`, the
+capture-folder split, has landed (`7d95a882`+`aa049b45`, reconciled `933308a5`) — see §1's Seventh
+reconciliation note.
 
 **`006-list-view-deprecation` is a sibling packet, not a phase here.** It retires the list view
 outright on the operator's 2026-09-04 instruction, using `030-gallery-view-deprecation` as its

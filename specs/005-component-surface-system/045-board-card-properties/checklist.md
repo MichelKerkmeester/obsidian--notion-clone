@@ -157,8 +157,9 @@ ticked from a passing test alone.
 - [x] CHK-041 [P1] The resolver's comment says why the board stopped reading the table's hidden
       columns — `board-card-fields.ts`'s module header: "That made hiding a table column silently
       edit every card. This resolver is the only decision now..."
-- [ ] CHK-042 [P1] `../roadmap.md` §5 carries the measured result — not done this session (`tasks.md`
-      T014); out of this dispatch's named scope, left as a named follow-up
+- [x] CHK-042 [P1] `../roadmap.md` §5 carries the measured result — done post-landing (`tasks.md`
+      T014): §5.A's `045` row and the two prose paragraphs naming its worktree now read Landed on
+      main `ff1dacec`, with AC-005/T013's `044` sheet-grammar wait and the two open questions named
 - [ ] CHK-043 [P2] `src/views/README.md` names the resolver as the card field-set owner — not done.
       `README.md` is a high-level overview pointing to `CODE.md` for detail, and `CODE.md` lists
       renderer categories in PascalCase (`BoardRenderer.ts`) rather than individual utility modules
@@ -185,7 +186,7 @@ ticked from a passing test alone.
 | Category | Total | Verified |
 |----------|-------|----------|
 | P0 Items | 13 | 12/13 — CHK-020 open (AC-005 unmet) |
-| P1 Items | 15 | 13/15 — CHK-024, CHK-042 open |
+| P1 Items | 15 | 14/15 — CHK-024 open |
 | P2 Items | 1 | 0/1 — CHK-043 not done, reason recorded |
 
 The original totals recorded here (11/14/1) undercounted the checklist's own items; corrected to
