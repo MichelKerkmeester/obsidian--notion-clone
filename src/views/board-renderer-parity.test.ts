@@ -494,8 +494,9 @@ describe("pm-kanban view and column shell parity", () => {
     expect(column).toContain('class="pm-kanban-col"');
     expect(column).toContain('class="pm-kanban-col-header"');
     expect(column).toContain('class="pm-kanban-cards"');
-    // The badge icon span leads the label, matching the renderer's default-icon slot.
-    expect(column).toContain('class="pm-kanban-col-badge-icon"');
+    // No badge icon span: the option model carries no per-option icon field, matching the
+    // reference's text-only else-branch (KanbanColumn.ts:52-57).
+    expect(column).not.toContain('class="pm-kanban-col-badge-icon"');
     // A palette-name tone resolves through the theme-aware token, not the raw name.
     expect(column).toContain("var(--status-color-fg-blue)");
     expect(column).not.toContain('style="color: blue;"');
@@ -507,12 +508,17 @@ describe("pm-kanban view and column shell parity", () => {
     // The strip is opt-in and unrelated to the group tone; without a priority-bearing state the
     // fixture omits it exactly as the renderer does with no priority column mapped.
     expect(fixtureBoardCard(fixtureRows[0], "")).not.toContain("pm-kanban-card-priority-bar");
-    // The footer avatar stack is unconditional, and the due chip carries the near-tier class
+    // The footer avatar stack is unconditional, and the due chip carries the overdue-tier class
     // contract when the fixture is asked to depict it.
     expect(fixtureBoardCard(fixtureRows[0], "")).toContain('class="pm-avatar-stack"');
-    const nearCard = fixtureBoardCard(fixtureRows[0], "", { dueUrgency: "near" });
-    expect(nearCard).toContain("pm-chip--solid");
-    expect(nearCard).toContain("var(--color-orange)");
+    const overdueCard = fixtureBoardCard(fixtureRows[0], "", { dueUrgency: "overdue" });
+    expect(overdueCard).toContain("pm-chip--solid");
+    expect(overdueCard).toContain("pm-chip--strong");
+    expect(overdueCard).toContain("var(--color-red)");
+    // The kanban call site only ever passes `overdue: boolean` to the card (KanbanCard.ts:97);
+    // the near tier exists in the reference's dueChip.ts primitive but no kanban call site
+    // reaches it, so an explicit near request renders plain, matching the renderer.
+    expect(fixtureBoardCard(fixtureRows[0], "", { dueUrgency: "near" })).not.toContain("pm-chip--solid");
   });
 
   it("renders the reference view and board wrappers", () => {
@@ -547,12 +553,12 @@ describe("pm-kanban view and column shell parity", () => {
     expect(badge).not.toBeNull();
     expect(badge?.textContent).toBe("To Do");
     expect(badge?.style.color).toBe("var(--status-color-fg-blue)");
-    // The reference renders the badge icon span from the status icon; the
-    // option model here has no per-option icon field, so the span always
-    // takes the default status icon.
-    const badgeIcon = badge?.querySelector<MockElement>(":scope > .pm-kanban-col-badge-icon");
-    expect(badgeIcon).not.toBeNull();
-    expect(setIcon).toHaveBeenCalledWith(badgeIcon, "circle-dot");
+    // The reference only renders the badge icon span when the status carries an icon
+    // (KanbanColumn.ts:52-57: `if (props.status.icon && isIconName(...))`); the option model
+    // here has no per-option icon field, so the faithful else-branch is text-only, with no
+    // icon span standing in for a status icon that was never authored.
+    expect(badge?.querySelector(":scope > .pm-kanban-col-badge-icon")).toBeNull();
+    expect(setIcon).not.toHaveBeenCalledWith(expect.anything(), "circle-dot");
 
     const headerRight = titleRow?.querySelector<MockElement>(":scope > .pm-kanban-col-header-right");
     expect(headerRight).not.toBeNull();
@@ -852,14 +858,17 @@ describe("pm-kanban reference fidelity pass", () => {
     expect(firstCardOf(container, "Tasks/Once.md").querySelector(".pm-kanban-card-title-row .pm-chip")).toBeNull();
   });
 
-  it("renders a due chip due within three days as the near tier", () => {
+  it("never surfaces the near urgency tier the kanban call site does not reach", () => {
+    // The reference's dueChip.ts primitive supports a near tier, but KanbanView.ts collapses
+    // urgency to a plain boolean before it ever reaches KanbanCard (KanbanView.ts:126
+    // `overdue: dueUrgency(...) === 'overdue'`, then KanbanCard.ts:97
+    // `props.overdue ? 'overdue' : 'normal'`) — a due-in-two-days task renders plain on the
+    // board, exactly as the reference's own kanban card does.
     const rows = [rowInTodo("Tasks/Near.md", "Near", { status: "To Do", due: isoDaysFromNow(2) })];
     const container = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
 
     const chip = container.querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-    expect(chip.className).toContain("pm-chip--solid");
-    expect(chip.className).not.toContain("pm-chip--strong");
-    expect(chip.style["--pm-chip-color"]).toBe("var(--color-orange)");
+    expect(chip.className).not.toContain("pm-chip--solid");
   });
 
   it("suppresses the due chip's urgency tiers once the row's checkbox column marks it complete", () => {

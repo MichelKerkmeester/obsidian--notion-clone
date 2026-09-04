@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, subtaskBoardCard } from "./shared.mjs";
 import { TIMELINE_FIXTURES, TL_LANES, TL_SUBTASK_LANES, timelineEvent } from "./temporal.mjs";
+import { CORE_SCENARIOS } from "./core.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MARKUP TREE
@@ -177,13 +178,38 @@ describe("subtask screenshot fixture parity", () => {
     const body = findDescendant(card, "pm-kanban-card-body");
     expectDirectChildOrder(card, ["pm-kanban-card-priority-bar", "pm-kanban-card-body"], "the subtask card");
     expectDirectChildOrder(body, ["pm-kanban-card-title-row", "pm-chip", "pm-kanban-card-tags", "pm-progress", "pm-kanban-card-footer"], "the subtask card body");
-    const childMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1 });
+    const childMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name });
     expect(childMarkup).toContain("pm-kanban-card-parent");
     expect(childMarkup).not.toContain("db-board-");
     expect(boardRenderer).toContain("db-subtask-toggle");
     expect(boardRenderer).toContain("db-subtask-progress-derived");
     expect(boardRenderer).toContain("db-subtask-progress-explicit");
     expect(boardRenderer).toContain("db-subtask-add-input");
+  });
+
+  it("gates the Sub chip on an actual child depth, not on the card being the subtask helper's output", () => {
+    // The reference only renders the Sub chip for `task.type === 'subtask'` (KanbanCard.ts:60-67);
+    // the parent/root card the helper also draws (depth 0) must not carry it.
+    const rootCard = findDescendant(parseMarkup(subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 })), "pm-kanban-card");
+    const rootTitleRow = findDescendant(rootCard, "pm-kanban-card-title-row");
+    expect(findDescendant(rootTitleRow, "pm-chip")).toBeNull();
+
+    const childCard = findDescendant(
+      parseMarkup(subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name })),
+      "pm-kanban-card",
+    );
+    const childTitleRow = findDescendant(childCard, "pm-kanban-card-title-row");
+    expect(findDescendant(childTitleRow, "pm-chip")).not.toBeNull();
+  });
+
+  it("prints the parent card's title on the child card's parent line, not the enclosing column's name", () => {
+    // The reference prints the parent TASK's title (KanbanCard.ts:44-46 `props.parentTitle`),
+    // not the group/column the board-subtask-tree scenario's own lane happens to share a name
+    // with ("Projects" is this scenario's column label, coincidentally also the old default).
+    const scenario = CORE_SCENARIOS.find((s) => s.id === "board-subtask-tree");
+    const html = scenario.html();
+    expect(html).toContain(`class="pm-kanban-card-parent">${SUBTASK_FIXTURE_ROWS.parent.name}</span>`);
+    expect(html).not.toContain('class="pm-kanban-card-parent">Projects</span>');
   });
 
   it("keeps every new class in the hand-written board and timeline states styled and sourced", () => {
@@ -217,6 +243,18 @@ describe("subtask screenshot fixture parity", () => {
     expect(boardRenderer).toContain("db-subtask-progress-derived");
     expect(boardRenderer).toContain("db-subtask-progress-explicit");
     expect(boardRenderer).toContain("db-subtask-add-input");
+  });
+
+  it("scopes the view-level flex/overflow height chain to the compound container+view selector", () => {
+    // board-renderer.ts's renderReferenceBoard adds `pm-kanban-view` to the same element that
+    // database-view.ts / embedded-database-renderer.ts already classed `note-database-container`
+    // — never a descendant — so a descendant-only selector never matches and `.pm-kanban-board`'s
+    // `flex: 1; min-height: 0` has no flex parent to size against.
+    expect(boardRenderer).toMatch(/container\.addClass\("pm-kanban-view"\)/);
+    expect(styles).toMatch(/\.note-database-container\.pm-kanban-view\s*\{[^}]*display:\s*flex;[^}]*flex-direction:\s*column;[^}]*height:\s*100%;/);
+    // A solo descendant-only selector for this rule (no compound alternative) would silently
+    // reintroduce the dead rule; it must not stand alone as its own rule opener anywhere.
+    expect(styles).not.toMatch(/(?:^|\n)\.note-database-container \.pm-kanban-view\s*\{/);
   });
 
   it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {

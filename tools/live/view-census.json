@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T10:12:29.738Z",
+  "measuredAt": "2026-09-04T11:00:44.051Z",
   "inputs": {
-    "styles.css": "276e1094c61c",
+    "styles.css": "5da6ee888482",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -362,8 +362,8 @@
   "totals": {
     "fixtures": 71,
     "escaping": 641,
-    "growing": 291,
-    "scrolling": 350,
+    "growing": 301,
+    "scrolling": 340,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 40
@@ -443,7 +443,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -498,7 +498,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -531,7 +531,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -564,7 +564,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -793,7 +793,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -2836,7 +2836,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -2847,7 +2847,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -2858,7 +2858,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3573,7 +3573,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -3617,7 +3617,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -3639,7 +3639,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -3661,7 +3661,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -3879,7 +3879,7 @@
       "cls": "pm-kanban-board",
       "parentCls": "note-database-container.pm-kanban-view",
       "by": 16,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -5493,7 +5493,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5504,7 +5504,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5515,7 +5515,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6720,7 +6720,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6731,7 +6731,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6742,7 +6742,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7573,7 +7573,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7584,7 +7584,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7595,7 +7595,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },

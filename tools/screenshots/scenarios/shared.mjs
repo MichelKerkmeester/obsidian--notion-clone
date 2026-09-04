@@ -274,11 +274,12 @@ const pmCardFields = (row) => `
         ${[row.category, row.payment].filter(Boolean).map((tag) => pmChip(tag, { variant: "outline", tag })).join("")}
       </div>`;
 
-/** The due chip's urgency tiers, matching the renderer's getReferenceDueUrgency: past due paints
- *  solid strong red, due within three days paints solid orange, anything else stays plain. */
+/** The due chip's urgency, matching the renderer's getReferenceDueUrgency: past due paints solid
+ *  strong red, anything else stays plain — the reference's dueChip.ts primitive also supports a
+ *  near tier, but the kanban call site collapses to a boolean before it ever reaches the card
+ *  (KanbanView.ts:126, KanbanCard.ts:97), so this fixture never paints it either. */
 const pmDueChip = (label, urgency = "normal") => {
   if (urgency === "overdue") return pmChip(label, { size: "sm", variant: "solid", color: "var(--color-red)", strong: true });
-  if (urgency === "near") return pmChip(label, { size: "sm", variant: "solid", color: "var(--color-orange)" });
   return pmChip(label, { size: "sm" });
 };
 
@@ -317,7 +318,11 @@ export const SUBTASK_FIXTURE_ROWS = {
 
 export const subtaskBoardCard = (r, {
   depth = 0,
-  parent = "Projects",
+  // No default: the renderer prints the actual parent TASK's title (KanbanCard.ts:44-46), which
+  // this helper has no way to derive on its own — a coincidental string here (the old default,
+  // "Projects", also happened to be a plausible column name) would silently paper over a caller
+  // that forgot to pass the real one. Callers rendering a depth > 0 card must pass it explicitly.
+  parent = "",
   done = 0,
   total = 0,
   explicit = null,
@@ -334,7 +339,7 @@ export const subtaskBoardCard = (r, {
       ${depth > 0 && parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
       <div class="pm-kanban-card-title-row">
         <span class="pm-kanban-card-title">${r.name}</span>
-        <span class="pm-chip pm-chip--solid pm-chip--sm" style="--pm-chip-color: var(--color-green);"><span class="pm-chip-label">Sub</span></span>
+        ${depth > 0 ? `<span class="pm-chip pm-chip--solid pm-chip--sm" style="--pm-chip-color: var(--color-green);"><span class="pm-chip-label">Sub</span></span>` : ""}
       </div>
       ${pmCardFields(r)}
       ${progressValue > 0 ? `<div class="pm-progress pm-progress--sm"><div class="pm-progress-track"><div class="pm-progress-fill" style="width: ${Math.max(0, Math.min(100, progressValue))}%;"></div></div></div>` : ""}
@@ -357,7 +362,7 @@ export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnCla
     <div class="pm-kanban-col-header"${resolvedTone ? ` style="--col-color: ${resolvedTone};"` : ""}>
       <div class="pm-kanban-col-topbar"${resolvedTone ? ` style="background: ${resolvedTone};"` : ""}></div>
       <div class="pm-kanban-col-title-row">
-        <span class="pm-kanban-col-badge"${resolvedTone ? ` style="color: ${resolvedTone};"` : ""}><span class="pm-kanban-col-badge-icon">${ICONS["circle-dot"]}</span>${title}</span>
+        <span class="pm-kanban-col-badge"${resolvedTone ? ` style="color: ${resolvedTone};"` : ""}>${title}</span>
         <div class="pm-kanban-col-header-right"><span class="pm-kanban-col-count">${rows.length}</span></div>
       </div>
     </div>

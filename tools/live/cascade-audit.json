@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T10:10:55.207Z",
+  "measuredAt": "2026-09-04T10:59:05.216Z",
   "inputs": {
-    "styles.css": "276e1094c61c",
+    "styles.css": "5da6ee888482",
     "tools/live/cascade-audit.mjs": "59b8f50917f8"
   },
   "sheetLines": 22414,
@@ -1136,7 +1136,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .pm-kanban-view",
+      "selector": ".note-database-container.pm-kanban-view",
       "context": "",
       "count": 2,
       "lines": [

@@ -62,16 +62,13 @@ export const CORE_SCENARIOS = [
         <div class="pm-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat), OPTION_TONES[cat], {
-              // Figma demonstrates a priority-bearing card and Sketch the due chip's near tier,
-              // both forced rather than derived from mapped data or the wall clock so the
-              // capture stays reproducible; no other card here carries either state, since this
-              // schema maps no priority column.
+              // Figma demonstrates a priority-bearing card, forced rather than derived from
+              // mapped data so the capture stays reproducible; no other card here carries a
+              // priority, since this schema maps no priority column. The kanban call site never
+              // reaches the reference's due-chip near tier (KanbanView.ts:126), so no card here
+              // demonstrates it either.
               cardRenderer: cat === "Design"
-                ? (row) => boardCard(row, "", row.name === "Figma"
-                  ? { priorityColor: "red" }
-                  : row.name === "Sketch"
-                    ? { dueUrgency: "near" }
-                    : {})
+                ? (row) => boardCard(row, "", row.name === "Figma" ? { priorityColor: "red" } : {})
                 : undefined,
             }))
             .join("")}
@@ -91,8 +88,8 @@ export const CORE_SCENARIOS = [
         <div class="pm-kanban-board">
           ${subtaskBoardColumn("Projects", [
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0, children: true, done: 1, total: 2, explicit: 62, value: 62 }),
-            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1 }),
-            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.launch, { depth: 1 }),
+            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name }),
+            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.launch, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name }),
           ], "purple")}
           ${boardColumn("Design", ROWS.filter((r) => r.category === "Design"))}
         </div>

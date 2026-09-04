@@ -67,10 +67,6 @@ const GROUP_MIME = "application/x-note-database-group";
  *  calendar/timeline search results panel caps its own list, with a trailing count row for the rest. */
 const MOVE_UNDER_CANDIDATE_LIMIT = 20;
 const ROW_BATCH_MIME = "application/x-note-database-row-batch";
-/** The badge icon for a column whose option carries no icon of its own — the
- *  status dot, standing in for the reference's per-status icon slot, which
- *  the option model here has no field for. */
-const REFERENCE_STATUS_ICON = "circle-dot";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TYPES
@@ -335,11 +331,9 @@ export class BoardRenderer {
     if (resolvedColor) topBar.setCssStyles({ background: resolvedColor });
     const titleRow = header.createDiv({ cls: "pm-kanban-col-title-row" });
     const badge = titleRow.createSpan({ cls: "pm-kanban-col-badge" });
-    // The reference's badge-icon slot precedes the label; the option model
-    // here has no per-option icon field, so the slot always takes the
-    // default status icon.
-    const badgeIcon = badge.createSpan({ cls: "pm-kanban-col-badge-icon" });
-    setIcon(badgeIcon, REFERENCE_STATUS_ICON);
+    // The reference only renders the badge-icon span when the status carries an icon
+    // (KanbanColumn.ts:52-57); the option model here has no per-option icon field, so the
+    // faithful else-branch is text-only, with no icon span standing in for one.
     badge.appendText(formatGroupKeyDisplay(config, groupField, group.key));
     if (resolvedColor) badge.style.color = resolvedColor;
     const headerRight = titleRow.createDiv({ cls: "pm-kanban-col-header-right" });
@@ -547,11 +541,7 @@ export class BoardRenderer {
         this.renderReferenceChip(footer, {
           label: referenceFormatDateShort(due),
           size: "sm",
-          ...(urgency === "overdue"
-            ? { variant: "solid" as const, color: "var(--color-red)", strong: true }
-            : urgency === "near"
-              ? { variant: "solid" as const, color: "var(--color-orange)" }
-              : {}),
+          ...(urgency === "overdue" ? { variant: "solid" as const, color: "var(--color-red)", strong: true } : {}),
         });
       }
     }
@@ -682,11 +672,14 @@ export class BoardRenderer {
     return toBooleanValue(row.frontmatter[checkboxColumn.key]);
   }
 
-  /** Due urgency tiers copied from the reference: a past date reads overdue,
-   *  a date within three days reads near, anything else plain — and a
-   *  terminal row is always plain (utils.ts:80-83: "Terminal tasks are
-   *  never urgent"). */
-  private getReferenceDueUrgency(due: string, row: RowData, config: ViewConfig): "normal" | "near" | "overdue" {
+  /** Due urgency copied from the reference's kanban call site, not its dueChip.ts primitive:
+   *  the primitive supports a near tier (used by the table/list views), but KanbanView.ts
+   *  collapses urgency to a plain boolean before it ever reaches the card
+   *  (KanbanView.ts:126 `overdue: dueUrgency(...) === 'overdue'`, then KanbanCard.ts:97
+   *  `props.overdue ? 'overdue' : 'normal'`) — so the board only ever distinguishes overdue
+   *  from everything else. A terminal row is always plain (utils.ts:80-83: "Terminal tasks
+   *  are never urgent"). */
+  private getReferenceDueUrgency(due: string, row: RowData, config: ViewConfig): "normal" | "overdue" {
     if (this.isReferenceRowCompleted(row, config)) return "normal";
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(due);
     if (!match) return "normal";
@@ -694,8 +687,7 @@ export class BoardRenderer {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const days = Math.round((dueDate.getTime() - today.getTime()) / 86_400_000);
-    if (days < 0) return "overdue";
-    return days < 3 ? "near" : "normal";
+    return days < 0 ? "overdue" : "normal";
   }
 
   /** Reproduces the reference Chip's DOM from its builder calls: a span with

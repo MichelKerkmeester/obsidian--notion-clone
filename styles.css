@@ -8955,7 +8955,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   --pm-shadow-ambient: rgba(0, 0, 0, 0.15);
 }
 
-.note-database-container .pm-kanban-view {
+.note-database-container.pm-kanban-view {
   overflow: hidden;
   display: flex;
   flex-direction: column;
