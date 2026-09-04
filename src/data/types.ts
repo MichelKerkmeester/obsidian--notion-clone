@@ -346,6 +346,8 @@ export type ChartValueAxisRange = "auto" | "zero-based" | "custom";
 export type ChartReferenceLineType = "constant" | "average" | "median" | "min" | "max";
 export type ChartReferenceLineStyle = "solid" | "dashed" | "dotted";
 export type TimelineScale = "day" | "week" | "month" | "quarter" | "year";
+/** Week-scale header label mode, matching the reference gantt's setting (week number is its default). */
+export type GanttWeekLabel = "weekNumber" | "dateRange" | "both";
 export type GroupOrderMode = "text-asc" | "text-desc" | "number-asc" | "number-desc" | "date-asc" | "date-desc" | "checkbox-false-first" | "checkbox-true-first" | "option-asc" | "option-desc" | "multi-select-priority";
 export const NO_TITLE_FIELD = "__none";
 
@@ -699,6 +701,8 @@ export interface ViewConfig {
   timelineColorField?: string;
   /** Timeline scale / window span: day=hourly single day, week/month/quarter=daily columns (quarter uses weekly ticks). Week is the default. */
   timelineScale?: TimelineScale;
+  /** Week-scale header label mode: week number (reference default), date range, or both. */
+  timelineWeekLabel?: GanttWeekLabel;
   /** Anchor date (YYYY-MM-DD) the visible window is centered on; defaults to today. */
   timelineAnchor?: string;
   /** Start minute of the active day-scale timeline window. Only used when timelineScale is "day". */

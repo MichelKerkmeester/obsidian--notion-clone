@@ -28,8 +28,14 @@ import { CalendarTimelineRenderer, CalendarTimelineRendererActions } from "./cal
 import { buildTimelineRangeGeometry } from "../data/calendar-timeline-model";
 import { addDateKeyDays, getLocalDateKey } from "../data/calendar-date-time";
 import type { CalendarEventDateChange } from "../data/calendar-interaction-model";
-import type { RowData, ViewConfig } from "../data/types";
+import type { GanttWeekLabel, RowData, TimelineScale, ViewConfig } from "../data/types";
 import { t } from "../i18n";
+
+/** Menu instances the renderer created, for the depends-elsewhere chip assertions. */
+const mockMenus: Array<{
+  items: Array<{ setTitle: (title: string) => unknown; setIcon: (icon: string) => unknown; onClick: (handler: () => void) => unknown; title: string; icon: string; handler: () => void }>;
+  showAtMouseEvent: ReturnType<typeof vi.fn>;
+}> = [];
 
 vi.mock("obsidian", () => ({
   Notice: class {},
@@ -37,6 +43,30 @@ vi.mock("obsidian", () => ({
   setTooltip: vi.fn(),
   TFile: class {},
   Platform: { isMobile: false, isTablet: false },
+  Menu: class {
+    public items: Array<{ setTitle: (title: string) => unknown; setIcon: (icon: string) => unknown; onClick: (handler: () => void) => unknown; title: string; icon: string; handler: () => void }> = [];
+    public showAtMouseEvent = vi.fn();
+    constructor() {
+      mockMenus.push(this);
+    }
+    addItem(callback: (item: {
+      setTitle: (title: string) => unknown;
+      setIcon: (icon: string) => unknown;
+      onClick: (handler: () => void) => unknown;
+    }) => void): unknown {
+      const item = {
+        setTitle: (title: string) => { item.title = title; return item; },
+        setIcon: (icon: string) => { item.icon = icon; return item; },
+        onClick: (handler: () => void) => { item.handler = handler; return item; },
+        title: "",
+        icon: "",
+        handler: () => {},
+      };
+      this.items.push(item);
+      callback(item);
+      return this;
+    }
+  },
 }));
 
 /** Test-only event dispatch surface for the interaction tests: the renderer binds
@@ -280,7 +310,7 @@ function makeRow(path: string, frontmatter: Record<string, unknown>): RowData {
   };
 }
 
-function makeConfig(scale: "day" | "month"): ViewConfig {
+function makeConfig(scale: TimelineScale): ViewConfig {
   return {
     schema: {
       columns: [
@@ -424,6 +454,49 @@ function referenceVerticalGridlines(cfg: RangeLike, scale: "day" | "month"): num
   return count;
 }
 
+/** ISO-8601 week number, mirroring the renderer's ganttWeekNumber (Temporal weekOfYear equivalent). */
+function isoWeekNumber(date: Date): number {
+  const target = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const dayNum = (target.getUTCDay() + 6) % 7;
+  target.setUTCDate(target.getUTCDate() - dayNum + 3);
+  const firstThursday = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
+  const firstDayNum = (firstThursday.getUTCDay() + 6) % 7;
+  firstThursday.setUTCDate(firstThursday.getUTCDate() - firstDayNum + 3);
+  return 1 + Math.round((target.getTime() - firstThursday.getTime()) / 604800000);
+}
+
+/** Reference week label in one of the three modes: W{n}, the date range, or both
+ *  (GanttHeaderRenderer.formatWeekLabel / formatDateRange; same-month uses an en
+ *  dash, cross-month a spaced en dash). */
+function referenceWeekLabel(weekStart: Date, days: number, mode: GanttWeekLabel): string {
+  const weekNum = isoWeekNumber(weekStart);
+  if (mode === "weekNumber") return `W${weekNum}`;
+  const end = addUtcDays(weekStart, days - 1);
+  const startMonth = monthShort(weekStart);
+  const range = weekStart.getUTCMonth() === end.getUTCMonth()
+    ? `${startMonth} ${weekStart.getUTCDate()}–${end.getUTCDate()}`
+    : `${startMonth} ${weekStart.getUTCDate()} – ${monthShort(end)} ${end.getUTCDate()}`;
+  if (mode === "dateRange") return range;
+  return `W${weekNum}: ${range}`;
+}
+
+/** Reference week-header labels in render order (GanttHeaderRenderer.renderWeekHeader loop). */
+function referenceWeekLabels(cfg: RangeLike, mode: GanttWeekLabel): string[] {
+  const labels: string[] = [];
+  const start = new Date(`${cfg.startDateKey}T00:00:00Z`);
+  const dow = start.getUTCDay() === 0 ? 7 : start.getUTCDay();
+  const offsetToMonday = dow === 1 ? 0 : 8 - dow;
+  if (offsetToMonday > 0) {
+    labels.push(referenceWeekLabel(start, offsetToMonday, mode));
+  }
+  for (let i = offsetToMonday; i < cfg.totalDays; i += 7) {
+    const date = addUtcDays(start, i);
+    const daysInWeek = Math.min(7, cfg.totalDays - i);
+    labels.push(referenceWeekLabel(date, daysInWeek, mode));
+  }
+  return labels;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 5. TESTS
 // ───────────────────────────────────────────────────────────────────
@@ -472,10 +545,10 @@ describe("timeline gantt DOM-structure parity", () => {
     delete (globalThis as Record<string, unknown>).window;
   });
 
-  function renderGantt(scale: "day" | "month"): { tree: string; container: MockElement; config: ViewConfig } {
+  function renderGantt(scale: TimelineScale, actions: MockActions = makeActions()): { tree: string; container: MockElement; config: ViewConfig } {
     const config = makeConfig(scale);
     const container = new MockElement("div");
-    const renderer = new CalendarTimelineRenderer(makeActions());
+    const renderer = new CalendarTimelineRenderer(actions);
     renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
     const root = container.children[0];
     return { tree: serializeTree(root), container: root, config };
@@ -958,5 +1031,193 @@ describe("timeline gantt DOM-structure parity", () => {
     const headerSvg = container.children[1].children[2].children[0].children[0];
     const label = headerSvg.children.find((child) => child.className === "pm-gantt-milestone-label");
     expect(label?.getAttribute("x")).toBe(String(expectedCx));
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // 7. WEEK-LABEL MODES (reference GanttHeaderRenderer.formatWeekLabel)
+  // ─────────────────────────────────────────────────────────────────
+
+  it("renders the three reference week-label modes in the week header, defaulting to week number", () => {
+    // Fixed dates so the formats are deterministic: the padded/min-spanned week
+    // range always contains both a same-month week (en dash) and a cross-month
+    // week (spaced en dash), and the today-anchored range keeps the today line.
+    const fixedRows = [
+      makeRow("Alpha.md", { start: "2026-03-28", due: "2026-04-02" }),
+      makeRow("Beta.md", { start: "2026-04-10", due: "2026-04-12" }),
+    ];
+    const config = makeConfig("week");
+    const range = buildTimelineRangeGeometry(fixedRows, config, "week");
+
+    const weekLabels = (container: MockElement): string[] => {
+      const headerSvg = container.children[1].children[2].children[0].children[0];
+      return headerSvg.children[0].children
+        .filter((child) => child.className === "pm-gantt-header-week")
+        .map((child) => child.text ?? "");
+    };
+
+    const renderMode = (mode: GanttWeekLabel): MockElement => {
+      const modeConfig = makeConfig("week");
+      modeConfig.timelineWeekLabel = mode;
+      const container = new MockElement("div");
+      const renderer = new CalendarTimelineRenderer(makeActions());
+      renderer.renderTimeline(container as unknown as HTMLElement, modeConfig, fixedRows);
+      return container.children[0];
+    };
+
+    // An unset config renders the reference default: week numbers only.
+    const defaultContainer = new MockElement("div");
+    new CalendarTimelineRenderer(makeActions()).renderTimeline(defaultContainer as unknown as HTMLElement, config, fixedRows);
+    expect(weekLabels(defaultContainer.children[0])).toEqual(referenceWeekLabels(range, "weekNumber"));
+
+    const dateRangeContainer = renderMode("dateRange");
+    expect(weekLabels(dateRangeContainer)).toEqual(referenceWeekLabels(range, "dateRange"));
+    // The two reference formats both occur: same-month "Mar 21–22" and cross-month "Mar 30 – Apr 5".
+    const renderedDateRanges = weekLabels(dateRangeContainer);
+    expect(renderedDateRanges.some((label) => /^[A-Z][a-z]{2} \d+–\d+$/.test(label))).toBe(true);
+    expect(renderedDateRanges.some((label) => /^[A-Z][a-z]{2} \d+ – [A-Z][a-z]{2} \d+$/.test(label))).toBe(true);
+
+    expect(weekLabels(renderMode("both"))).toEqual(referenceWeekLabels(range, "both"));
+    expect(weekLabels(renderMode("both"))[0]).toMatch(/^W\d+: /);
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // 8. DEPENDS-ELSEWHERE MENU (reference TaskLabelRenderer chip menu)
+  // ─────────────────────────────────────────────────────────────────
+
+  it("opens the reference dependency menu from the depends-elsewhere chip, opening each file on click", () => {
+    const rowsWithElsewhere = makeFixtureRows().map((row) => ({ ...row }));
+    // Alpha depends on Beta (in view, draws an arrow) plus two files outside the view.
+    rowsWithElsewhere[0].frontmatter = {
+      ...rowsWithElsewhere[0].frontmatter,
+      dependencies: ["Beta.md", "Projects/Outside.md", "AlsoOutside.md"],
+    };
+    const opened: string[] = [];
+    const actions = makeActions();
+    actions.openDependencyFile = (path) => { opened.push(path); };
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rowsWithElsewhere);
+
+    const leftBody = container.children[0].children[1].children[0].children[1];
+    const alphaRow = leftBody.children[0];
+    const chip = alphaRow.children.find((child) => child.className.includes("pm-chip"));
+    expect(chip).toBeDefined();
+
+    mockMenus.length = 0;
+    chip!.dispatch("click", clickEvent());
+
+    expect(mockMenus).toHaveLength(1);
+    const menu = mockMenus[0];
+    expect(menu.items).toHaveLength(2);
+    expect(menu.items.map((item) => item.title)).toEqual(["Projects/Outside", "AlsoOutside"]);
+    expect(menu.items.every((item) => item.icon === "link-2")).toBe(true);
+    expect(menu.showAtMouseEvent).toHaveBeenCalledTimes(1);
+
+    menu.items[0].handler();
+    menu.items[1].handler();
+    expect(opened).toEqual(["Projects/Outside.md", "AlsoOutside.md"]);
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // 9. ADD-SUBTASK SEAM (reference TaskLabelRenderer add-subtask button)
+  // ─────────────────────────────────────────────────────────────────
+
+  it("routes the label-row plus button to the create-subtask seam with the parent row", () => {
+    const created: RowData[] = [];
+    const actions = makeActions();
+    actions.createSubtaskRecord = (row) => { created.push(row); };
+    let rowMenus = 0;
+    actions.showRowMenu = () => { rowMenus += 1; };
+
+    const { container } = renderGantt("month", actions);
+    const leftBody = container.children[1].children[0].children[1];
+    const alphaRow = leftBody.children[0];
+    const plus = alphaRow.children.find((child) => child.className.includes("pm-icon-btn"));
+    expect(plus).toBeDefined();
+    plus!.dispatch("click", clickEvent());
+
+    expect(created.map((row) => row.file.path)).toEqual(["Alpha.md"]);
+    expect(rowMenus).toBe(0);
+  });
+
+  it("keeps the row menu as the plus-button fallback when no create-subtask seam exists", () => {
+    let rowMenus = 0;
+    const actions = makeActions();
+    actions.showRowMenu = () => { rowMenus += 1; };
+
+    const { container } = renderGantt("month", actions);
+    const leftBody = container.children[1].children[0].children[1];
+    const alphaRow = leftBody.children[0];
+    const plus = alphaRow.children.find((child) => child.className.includes("pm-icon-btn"));
+    plus!.dispatch("click", clickEvent());
+
+    expect(rowMenus).toBe(1);
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // 10. UNDO/REDO KEYS (reference GanttView onKeyDown)
+  // ─────────────────────────────────────────────────────────────────
+
+  it("routes Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y to the host history stack through the actions seam", () => {
+    const calls: Array<"undo" | "redo"> = [];
+    const actions = makeActions();
+    actions.undoGanttEdit = (direction) => { calls.push(direction); };
+    const container = new MockElement("div", "workspace-leaf mod-active");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, makeConfig("month"), rows);
+
+    const keydown = (event: Record<string, unknown>) => testWindow.activeDocument.dispatch("keydown", event);
+    keydown({ key: "z", ctrlKey: true, preventDefault: () => undefined });
+    keydown({ key: "z", ctrlKey: true, shiftKey: true, preventDefault: () => undefined });
+    keydown({ key: "y", metaKey: true, preventDefault: () => undefined });
+    expect(calls).toEqual(["undo", "redo", "redo"]);
+
+    // Without a mod key the handler leaves the event alone.
+    keydown({ key: "z", preventDefault: () => undefined });
+    keydown({ key: "y", preventDefault: () => undefined });
+    expect(calls).toEqual(["undo", "redo", "redo"]);
+  });
+
+  it("ignores the undo/redo keys outside the active leaf and while a drag is in progress, like the reference", () => {
+    const calls: Array<"undo" | "redo"> = [];
+    const actions = makeActions();
+    actions.undoGanttEdit = (direction) => { calls.push(direction); };
+
+    // No mod-active leaf: nothing reaches the seam.
+    const inactiveContainer = new MockElement("div");
+    const inactiveRenderer = new CalendarTimelineRenderer(actions);
+    inactiveRenderer.renderTimeline(inactiveContainer as unknown as HTMLElement, makeConfig("month"), rows);
+    testWindow.activeDocument.dispatch("keydown", { key: "z", ctrlKey: true, preventDefault: () => undefined });
+    expect(calls).toHaveLength(0);
+
+    // A drag in progress suppresses the keys, matching the reference's drag guard.
+    const container = new MockElement("div", "workspace-leaf mod-active");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, makeConfig("month"), rows);
+    const alphaHandles = ganttBarGroups(container.children[0])[0].children.filter((child) => child.className === "pm-gantt-drag-handle");
+    alphaHandles[1].dispatch("mousedown", { button: 0, clientX: 500, stopPropagation: () => undefined, preventDefault: () => undefined });
+    testWindow.activeDocument.dispatch("keydown", { key: "z", ctrlKey: true, preventDefault: () => undefined });
+    expect(calls).toHaveLength(0);
+    testWindow.activeDocument.dispatch("mouseup", {});
+  });
+
+  it("does not hijack the undo/redo keys while an input, inline editor or modal has focus", () => {
+    const calls: Array<"undo" | "redo"> = [];
+    const actions = makeActions();
+    actions.undoGanttEdit = (direction) => { calls.push(direction); };
+    const container = new MockElement("div", "workspace-leaf mod-active");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, makeConfig("month"), rows);
+
+    const documentWithFocus = testWindow.activeDocument as { activeElement?: unknown };
+    const previous = documentWithFocus.activeElement;
+    documentWithFocus.activeElement = { closest: () => ({}) };
+    try {
+      testWindow.activeDocument.dispatch("keydown", { key: "z", ctrlKey: true, preventDefault: () => undefined });
+      expect(calls).toHaveLength(0);
+    } finally {
+      documentWithFocus.activeElement = previous;
+    }
   });
 });

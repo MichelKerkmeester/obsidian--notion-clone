@@ -31,6 +31,7 @@ import {
   resolveTimelineViewportUnitCount,
 } from "../../../src/data/calendar-timeline-model";
 import {
+  TEMPORAL_SCENARIOS,
   TIMELINE_FIXTURES,
   TL_LANES,
   timelineAxisBands,
@@ -101,6 +102,44 @@ describe("timeline screenshot event markup mirrors the renderer", () => {
     expect(first).toContain('data-first-tick="true"');
     expect(interior).not.toContain('data-first-tick="true"');
     expect(source).toContain('class: "pm-gantt-header-day"');
+  });
+});
+
+describe("timeline toolbar options fixture mirrors the week-label select", () => {
+  // The constructed scenario mounts the real popover and needs no hand mirror, but the
+  // hand-written "timeline-toolbar-options" fixture is still captured alongside it, so a row
+  // the real renderer added has to be added here too, class-for-class, or the hand fixture
+  // depicts a popover the shipped code no longer renders.
+  const source = readFileSync(resolve(process.cwd(), "src/views/calendar-timeline-toolbar-renderer.ts"), "utf8");
+  const scenario = TEMPORAL_SCENARIOS.find((s) => s.id === "timeline-toolbar-options");
+
+  it("registers the timeline-toolbar-options scenario", () => {
+    expect(scenario).toBeDefined();
+  });
+
+  it("shows the reference week-label select, defaulting to week number, using the shared dropdown-row markup", () => {
+    const markup = scenario.html();
+    expect(markup).toContain('class="db-dropdown-field db-chart-options-dropdown has-current-icon"');
+    expect(markup).toContain('<span class="db-dropdown-field-label">Week label</span>');
+    expect(markup).toContain('<span class="db-dropdown-field-value">Week number</span>');
+    // Placed after the local-extensions column-width controls and before the day-scale slot
+    // duration row, the same order renderLayoutContent() emits them in.
+    const localExtensionsAt = markup.indexOf("Local extensions");
+    const columnWidthAt = markup.indexOf("Column width");
+    const weekLabelAt = markup.indexOf("Week label");
+    const slotDurationAt = markup.indexOf("Slot duration");
+    expect(localExtensionsAt).toBeGreaterThan(-1);
+    expect(columnWidthAt).toBeGreaterThan(localExtensionsAt);
+    expect(weekLabelAt).toBeGreaterThan(columnWidthAt);
+    expect(slotDurationAt).toBeGreaterThan(weekLabelAt);
+  });
+
+  it("keeps the week-label select's i18n keys and default in the renderer source", () => {
+    expect(source).toContain('t("viewConfig.timelineWeekLabel")');
+    expect(source).toContain('t("viewConfig.timelineWeekLabel.weekNumber")');
+    expect(source).toContain('t("viewConfig.timelineWeekLabel.dateRange")');
+    expect(source).toContain('t("viewConfig.timelineWeekLabel.both")');
+    expect(source).toContain('config.timelineWeekLabel || "weekNumber"');
   });
 });
 

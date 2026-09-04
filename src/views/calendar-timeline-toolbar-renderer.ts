@@ -226,6 +226,15 @@ export class CalendarTimelineToolbarRenderer {
         });
       }
     }
+    // The week-scale header label mode (reference ganttWeekLabel setting).
+    this.renderSelect(layout, t("viewConfig.timelineWeekLabel"), [
+      { value: "weekNumber", text: t("viewConfig.timelineWeekLabel.weekNumber") },
+      { value: "dateRange", text: t("viewConfig.timelineWeekLabel.dateRange") },
+      { value: "both", text: t("viewConfig.timelineWeekLabel.both") },
+    ], config.timelineWeekLabel || "weekNumber", (value) => {
+      config.timelineWeekLabel = value === "weekNumber" || value === "dateRange" || value === "both" ? value : undefined;
+      actions.onChange(t("undo.timelineWeekLabelConfig"));
+    }, "hash");
     if (config.timelineScale === "day") {
       this.renderSelect(layout, t("viewConfig.calendarWeekSlotDuration"), [
         { value: "15", text: t("viewConfig.calendarWeekSlotDuration.15") },

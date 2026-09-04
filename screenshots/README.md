@@ -1283,7 +1283,7 @@ Sources: `src/views/calendar-timeline-renderer.ts`, `src/data/subtask-relation.t
 
 ### Timeline settings popover
 
-The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).
+The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting.
 
 | dark | light |
 |---|---|

@@ -15,7 +15,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Notice, setIcon, setTooltip } from "obsidian";
+import { Menu, Notice, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
@@ -39,7 +39,7 @@ import {
 import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveDayMoveChange, resolveDayRangeResize, resolveTimelineLinkChange, resolveTimedDragRange, TimelineDependencyGraph, TimelineLinkClick, TimelineLinkResolution } from "../data/calendar-interaction-model";
 import { CalendarTimelineSearchVisibleRange, timelineHourRange } from "../data/calendar-timeline-search-results";
 import { formatDateRangeDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/date-time-format";
-import { RowData, TimelineScale, ViewConfig } from "../data/types";
+import { GanttWeekLabel, RowData, TimelineScale, ViewConfig } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
 import { buildSubtaskRelation } from "../data/subtask-relation";
 import { planSubtaskMove } from "../data/subtask-serialize";
@@ -231,6 +231,16 @@ export interface CalendarTimelineRendererActions {
    *  replace one write plus one render per parent row (the reference mutates in place,
    *  persists once, and re-renders once). */
   setSubtaskCollapsedMany?(rows: RowData[], collapsed: boolean): void | Promise<void>;
+  /** Opens the note at the given vault path; the depends-elsewhere chip menu jumps to
+   *  each external dependency's file with this. */
+  openDependencyFile?(path: string): void | Promise<void>;
+  /** Creates a new record pre-linked as a subtask of the given parent through the host's
+   *  record-creation path (parentId set, the parent's subtaskIds list gains the child),
+   *  mirroring the reference's add-subtask modal. */
+  createSubtaskRecord?(parent: RowData): void | Promise<void>;
+  /** Reference gantt undo/redo keys against the host's record-edit history stack; absent
+   *  on hosts with no such history (read-only embeds), where the keys are left alone. */
+  undoGanttEdit?(direction: "undo" | "redo"): void | Promise<void>;
   updateTimelineAnchor?(dateKey: string, label?: string, timeMinutes?: number): void;
   updateTimelineScale?(scale: TimelineScale, label?: string): boolean | Promise<boolean> | void;
   updateTimelineDependency?(predecessor: RowData, successor: RowData, dependencies: string[]): void | Promise<void>;
@@ -738,7 +748,7 @@ export class CalendarTimelineRenderer {
     addRow.style.height = `${GANTT_ROW_HEIGHT}px`;
     this.renderGanttAddButton(addRow, config);
 
-    this.renderGanttHeader(headerSvgEl, cfg);
+    this.renderGanttHeader(headerSvgEl, cfg, config);
     const grid = this.ganttSvgElement("g", { class: "pm-gantt-grid" });
     svgEl.appendChild(grid);
     this.renderGanttGrid(grid, cfg, totalRows);
@@ -750,8 +760,10 @@ export class CalendarTimelineRenderer {
     this.renderGanttMilestoneLabels(svgEl, headerSvgEl, cfg, visibleRows, eventByPath);
 
     const syncSpacer = this.setupGanttScrollSync(leftPanel, leftBody, rightPanel);
-    // Escape must reach the in-progress link from anywhere in the leaf, like the
-    // reference's document-level keydown (gated on the leaf being the active one).
+    // Escape and the undo/redo keys must reach this view from anywhere in the leaf,
+    // like the reference's document-level keydown (gated on the leaf being the active
+    // one). The history keys route to the host's record-edit stack, and an input,
+    // inline editor or modal keeps its own undo, so the host's shortcut guard applies.
     const isGanttActive = (): boolean => {
       const leafEl = container.closest(".workspace-leaf");
       return leafEl?.classList.contains("mod-active") ?? false;
@@ -761,6 +773,23 @@ export class CalendarTimelineRenderer {
       if (event.key === "Escape" && this.timelineLinkSelection) {
         event.preventDefault();
         this.cancelTimelineLink();
+        return;
+      }
+      if (this.ganttDragState.isDragging) return;
+      const mod = event.ctrlKey || event.metaKey;
+      if (!mod || !this.actions.undoGanttEdit) return;
+      const active = window.activeDocument?.activeElement;
+      const editing = active != null
+        && typeof (active as HTMLElement).closest === "function"
+        && (active as HTMLElement).closest("input, textarea, select, .db-cell-editing, .db-cell-popover-editing, .modal") != null;
+      if (editing) return;
+      const key = event.key.toLowerCase();
+      if (key === "z" && !event.shiftKey) {
+        event.preventDefault();
+        void this.actions.undoGanttEdit("undo");
+      } else if ((key === "z" && event.shiftKey) || key === "y") {
+        event.preventDefault();
+        void this.actions.undoGanttEdit("redo");
       }
     };
     window.activeDocument.addEventListener("keydown", onKeyDown);
@@ -927,15 +956,38 @@ export class CalendarTimelineRenderer {
         const chip = el.createSpan({ cls: "pm-chip pm-chip--plain pm-chip--sm" });
         chip.createSpan({ cls: "pm-chip-label", text: t("timeline.dependsElsewhere", { count: elsewhere.length }) });
         setTooltip(chip, elsewhere.join("\n"), { delay: 100 });
+        // A predecessor outside this view draws no arrow, so the chip lists each one
+        // in a menu that jumps to its file, like the reference's chip menu.
+        chip.addEventListener("click", (mouseEvent) => {
+          mouseEvent.stopPropagation();
+          const menu = new Menu();
+          for (const path of elsewhere) {
+            menu.addItem((item) =>
+              item
+                .setTitle(path.replace(/\.md$/i, ""))
+                .setIcon("link-2")
+                .onClick(() => {
+                  void this.actions.openDependencyFile?.(path);
+                })
+            );
+          }
+          menu.showAtMouseEvent(mouseEvent);
+        });
       }
       // The reference's IconButton shape (ExtraButtonComponent): a div carrying
-      // clickable-icon/extra-setting-button plus the reveal-on-hover modifier.
+      // clickable-icon/extra-setting-button plus the reveal-on-hover modifier. The
+      // click opens the host's record creation with the parent pre-linked, like the
+      // reference's add-subtask modal; the row menu stays as fallback.
       const addSubtask = el.createDiv({ cls: "clickable-icon extra-setting-button pm-icon-btn pm-icon-btn--hover-only" });
       setIcon(addSubtask, "plus");
       setTooltip(addSubtask, t("timeline.addSubtask"), { delay: 100 });
       addSubtask.addEventListener("click", (mouseEvent) => {
         mouseEvent.preventDefault();
         mouseEvent.stopPropagation();
+        if (this.actions.createSubtaskRecord) {
+          void this.actions.createSubtaskRecord(row);
+          return;
+        }
         this.actions.showRowMenu?.(mouseEvent, row);
       });
     }
@@ -999,12 +1051,12 @@ export class CalendarTimelineRenderer {
 
   /** Header svg: background, band fills, per-scale labels and ticks.
    *  Adapted from GanttHeaderRenderer.renderTimelineHeader and the per-scale renderers. */
-  private renderGanttHeader(headerSvgEl: HTMLElement, cfg: GanttTimelineCfg): void {
+  private renderGanttHeader(headerSvgEl: HTMLElement, cfg: GanttTimelineCfg, config: ViewConfig): void {
     const g = this.ganttSvgElement("g", { class: "pm-gantt-header" });
     g.appendChild(this.ganttSvgElement("rect", { x: 0, y: 0, width: cfg.totalWidth, height: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-bg" }));
     const { granularity } = cfg;
     if (granularity === "day") this.renderGanttDayHeader(g, cfg);
-    else if (granularity === "week") this.renderGanttWeekHeader(g, cfg);
+    else if (granularity === "week") this.renderGanttWeekHeader(g, cfg, config);
     else if (granularity === "month") this.renderGanttMonthHeader(g, cfg);
     else if (granularity === "quarter") this.renderGanttQuarterHeader(g, cfg);
     else this.renderGanttYearHeader(g, cfg);
@@ -1031,9 +1083,11 @@ export class CalendarTimelineRenderer {
   }
 
   /** Week header: month-top bands, Monday-aligned week labels and ticks. Adapted from
-   *  GanttHeaderRenderer.renderWeekHeader (week-label mode stays at the reference default). */
-  private renderGanttWeekHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
+   *  GanttHeaderRenderer.renderWeekHeader; the label mode is the reference's
+   *  ganttWeekLabel setting (week-number default, date range, or both). */
+  private renderGanttWeekHeader(g: HTMLElement, cfg: GanttTimelineCfg, config: ViewConfig): void {
     this.renderGanttMonthBands(g, 0, 24, cfg);
+    const labelMode: GanttWeekLabel = config.timelineWeekLabel || "weekNumber";
     const start = this.ganttDateAt(cfg.startDateKey, 0);
     const dow = start.getUTCDay() === 0 ? 7 : start.getUTCDay();
     const offsetToMonday = dow === 1 ? 0 : 8 - dow;
@@ -1041,7 +1095,7 @@ export class CalendarTimelineRenderer {
       const weekNum = this.ganttWeekNumber(start);
       const w = offsetToMonday * cfg.dayWidth;
       const text = this.ganttSvgElement("text", { x: w / 2, y: 44, class: "pm-gantt-header-week" });
-      text.setText(`W${weekNum}`);
+      text.setText(this.formatGanttWeekLabel(start, offsetToMonday, weekNum, labelMode));
       g.appendChild(text);
     }
     let i = offsetToMonday;
@@ -1052,11 +1106,31 @@ export class CalendarTimelineRenderer {
       const daysInWeek = Math.min(7, cfg.totalDays - i);
       const w = daysInWeek * cfg.dayWidth;
       const text = this.ganttSvgElement("text", { x: x + w / 2, y: 44, class: "pm-gantt-header-week" });
-      text.setText(`W${weekNum}`);
+      text.setText(this.formatGanttWeekLabel(d, daysInWeek, weekNum, labelMode));
       g.appendChild(text);
       g.appendChild(this.ganttSvgElement("line", { x1: x, y1: 24, x2: x, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
       i += 7;
     }
+  }
+
+  /** Week label in the reference's three modes: W{n}, the date range, or both. Adapted from
+   *  GanttHeaderRenderer.formatWeekLabel/formatDateRange (same-month en dash, cross-month
+   *  spaced en dash). */
+  private formatGanttWeekLabel(weekStart: Date, days: number, weekNum: number, mode: GanttWeekLabel): string {
+    if (mode === "weekNumber") return `W${weekNum}`;
+    const range = this.formatGanttWeekDateRange(weekStart, days);
+    if (mode === "dateRange") return range;
+    return `W${weekNum}: ${range}`;
+  }
+
+  private formatGanttWeekDateRange(weekStart: Date, days: number): string {
+    const end = addUtcDays(weekStart, days - 1);
+    const startMonth = this.ganttMonthLabel(weekStart);
+    if (weekStart.getUTCMonth() === end.getUTCMonth()) {
+      return `${startMonth} ${weekStart.getUTCDate()}–${end.getUTCDate()}`;
+    }
+    const endMonth = this.ganttMonthLabel(end);
+    return `${startMonth} ${weekStart.getUTCDate()} – ${endMonth} ${end.getUTCDate()}`;
   }
 
   /** Month header: year bands, month labels and ticks. Adapted from

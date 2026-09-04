@@ -109,11 +109,19 @@ vi.mock("../i18n", () => ({
 // 2. HARNESS
 // ───────────────────────────────────────────────────────────────────
 
+interface TestHistoryEntry {
+  type: string;
+  label: string;
+  changes?: Array<{ file: TFile; path: string; key: string; oldValue: unknown; oldExists: boolean; newValue: unknown }>;
+  createdFiles?: Array<{ path: string }>;
+}
+
 interface DatabaseViewHarness {
   boardRenderer: { actions: BoardRendererActions };
   calendarTimelineRenderer: { actions: CalendarTimelineRendererActions };
   rows: RowData[];
   instanceId: string;
+  historyStack: TestHistoryEntry[];
   refresh(options?: { viewport?: unknown }): void;
 }
 
@@ -121,6 +129,7 @@ interface FakeDataSource {
   getViewDefFiles(): { file: TFile; config: DatabaseConfig }[];
   updateFrontmatter: Mock<(file: TFile, updates: Record<string, unknown>, context?: DataWriteContext) => Promise<void>>;
   updateViewDefFile: Mock<(file: TFile, config: DatabaseConfig, mutation?: unknown) => Promise<void>>;
+  createNote: Mock<(folder: string, filename: string, frontmatter: Record<string, unknown>, context?: DataWriteContext, body?: string) => Promise<TFile>>;
   onDataChanged(): () => void;
   onViewConfigChanged(): () => void;
   invalidateRecordCache(): void;
@@ -184,6 +193,13 @@ function createView(): { harness: DatabaseViewHarness; dataSource: FakeDataSourc
     getViewDefFiles: () => [{ file: dbFile, config: dbConfig }],
     updateFrontmatter: vi.fn(async () => {}),
     updateViewDefFile: vi.fn(async () => {}),
+    createNote: vi.fn(async (_folder: string, _filename: string, _frontmatter: Record<string, unknown>, _context?: DataWriteContext, _body?: string) => {
+      const file = new TFile();
+      file.path = "Tasks/new-child.md";
+      file.name = "new-child.md";
+      file.basename = "new-child";
+      return file;
+    }),
     onDataChanged: () => () => {},
     onViewConfigChanged: () => () => {},
     invalidateRecordCache: vi.fn(),
@@ -303,5 +319,53 @@ describe("DatabaseView subtask host bindings", () => {
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
     expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
+  });
+
+  it("createSubtaskRecord creates the child note pre-linked and appends it to the parent's subtaskIds", async () => {
+    const { harness, dataSource } = createView();
+    const parent = harness.rows[0]; // root.md, subtaskIds ["a.md", "b.md"]
+
+    await harness.calendarTimelineRenderer.actions.createSubtaskRecord?.(parent);
+
+    expect(dataSource.createNote).toHaveBeenCalledTimes(1);
+    const createdFrontmatter = dataSource.createNote.mock.calls[0][2];
+    expect(createdFrontmatter.parentId).toBe("root.md");
+    expect(createdFrontmatter.subtaskRank).toBeTruthy();
+
+    // The parent's list gains the created child through the relation write path —
+    // the null-deletes shape for the relation keys the parent does not carry —
+    // never a second create and never a guessed path.
+    expect(dataSource.updateFrontmatter).toHaveBeenCalledTimes(1);
+    const [parentFile, updates] = dataSource.updateFrontmatter.mock.calls[0];
+    expect(parentFile.path).toBe("root.md");
+    expect(updates).toEqual({
+      parentId: null,
+      subtaskIds: ["a.md", "b.md", "Tasks/new-child.md"],
+      subtaskRank: null,
+      collapsed: null,
+    });
+  });
+
+  it("createSubtaskRecord folds the parent's subtaskIds write into the same history entry as the file creation, so one undo reverts both", async () => {
+    const { harness } = createView();
+    const parent = harness.rows[0]; // root.md, subtaskIds ["a.md", "b.md"]
+
+    await harness.calendarTimelineRenderer.actions.createSubtaskRecord?.(parent);
+
+    // A separate, untracked parent write here would let Ctrl+Z delete the created
+    // child while leaving its path stranded in the parent's subtaskIds — one undo
+    // step must revert the file creation and the parent's list together.
+    expect(harness.historyStack).toHaveLength(1);
+    const entry = harness.historyStack[0];
+    expect(entry.type).toBe("cells");
+    expect(entry.createdFiles).toEqual([{ path: "Tasks/new-child.md" }]);
+    expect(entry.changes).toEqual([{
+      file: parent.file,
+      path: "root.md",
+      key: "subtaskIds",
+      oldValue: ["a.md", "b.md"],
+      oldExists: true,
+      newValue: ["a.md", "b.md", "Tasks/new-child.md"],
+    }]);
   });
 });

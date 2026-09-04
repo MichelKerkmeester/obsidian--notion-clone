@@ -66,6 +66,8 @@ const ICON = {
   smilePlus:
     '<path d="M22 11v1a10 10 0 1 1-9-10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01M16 5h6"/>',
   plus: '<path d="M5 12h14M12 5v14"/>',
+  // The timeline's week-label select (renderGanttWeekHeader's ganttWeekLabel setting).
+  hash: '<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>',
   // Reserved for calendar controls that use the same directional glyphs.
   arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
   arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
@@ -1559,7 +1561,7 @@ export const TEMPORAL_SCENARIOS = [
     width: 640,
     sources: ["src/views/calendar-timeline-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     fixtureOf: "constructed-timeline-toolbar-options",
-    note: "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).",
+    note: "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting.",
     captureCss: `.note-database-container .db-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
       <div class="note-database-container">
@@ -1577,6 +1579,7 @@ export const TEMPORAL_SCENARIOS = [
               ${switchRow(ICON.code, "Local extensions", true)}
               ${switchRow(ICON.columns, "Custom column width", true)}
               ${rangeRow("Column width", 72, 24, 240, 1, "db-calendar-timeline-range-row")}
+              ${dropdownRow(ICON.hash, "Week label", "Week number")}
               ${dropdownRow(ICON.clock, "Slot duration", "30 minutes")}`)}
             ${section("Style", `
               ${dropdownRow(ICON.palette, "Event colour", "Category")}

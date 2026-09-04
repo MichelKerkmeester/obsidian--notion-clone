@@ -216,6 +216,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.config, row),
     toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.config, row, collapsed),
     setSubtaskCollapsedMany: (rows, collapsed) => this.setSubtaskCollapsedMany(this.config, rows, collapsed),
+    // Navigation, not a mutation: the depends-elsewhere chip menu jumps to the dependency
+    // file exactly like openRow opens a record, so it stays available in the read-only embed.
+    openDependencyFile: (path) => {
+      const file = this.app.vault.getAbstractFileByPath(normalizePath(path));
+      if (file instanceof TFile) this.dataSource.openNote(file);
+    },
     isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
     toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),

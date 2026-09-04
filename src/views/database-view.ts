@@ -69,8 +69,9 @@ import { buildGroupTree, flattenGroupTree } from "../data/multi-field-grouping";
 import { getDisplayGroupFields } from "../data/multi-group-display";
 import { isEmptyGroupId, moveMultiSelectGroupValue } from "../data/multi-select";
 import { generateRanks, rankBetween, rebalanceRanks, resolveNewEntryRankBounds } from "../data/manual-order";
-import { toFrontmatterUpdates } from "../data/subtask-serialize";
-import type { SubtaskMovePlan, SubtaskMoveRequest } from "../data/types";
+import { toFrontmatterUpdates, writeRelationFields } from "../data/subtask-serialize";
+import { readRelationFields } from "../data/subtask-hydrate";
+import type { SubtaskMovePlan, SubtaskMoveRequest, SubtaskWrite } from "../data/types";
 import { CellEditSession, CellOptionTransaction, CellRenderer } from "./cell-renderer";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { ColumnMenu, ColumnMenuOptions } from "./column-menu";
@@ -429,6 +430,15 @@ export class DatabaseView extends FileView {
     isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.getConfig(), row),
     toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.getConfig(), row, collapsed),
     setSubtaskCollapsedMany: (rows, collapsed) => this.setSubtaskCollapsedMany(this.getConfig(), rows, collapsed),
+    openDependencyFile: (path) => {
+      const file = this.app.vault.getAbstractFileByPath(normalizePath(path));
+      if (file instanceof TFile) void this.app.workspace.getLeaf("tab").openFile(file);
+    },
+    createSubtaskRecord: (parent) => this.createSubtaskRecord(parent),
+    undoGanttEdit: (direction) => {
+      if (direction === "undo") void this.undoLastEdit();
+      else void this.redoLastEdit();
+    },
     isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
     toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
@@ -10911,6 +10921,55 @@ export class DatabaseView extends FileView {
     }
     this.pendingUndoLabel = t("undo.editCell");
     await this.refreshAfterSave();
+  }
+
+  /** Create a new record pre-linked as a subtask of `parent`, through the shared record-creation
+   *  path: the child is born with parentId (and a placement rank) in its frontmatter, then the
+   *  parent's subtaskIds list gains the child through the relation write path. parentId alone is
+   *  authoritative for membership, so the child is visible from the creation render; the list
+   *  append pins sibling order the way the reference's add-subtask modal does.
+   *
+   *  createBlankEntry pushes its own single-file "created" history entry for the child; folded
+   *  in-place into a "cells" entry that also carries the parent's subtaskIds change, so one Ctrl+Z
+   *  reverts both. Left as two separate entries, undoing only the file creation would trash the
+   *  child while leaving its path stranded in the parent's subtaskIds. */
+  private async createSubtaskRecord(parent: RowData): Promise<void> {
+    const parentFields = readRelationFields(parent.frontmatter);
+    const siblings = this.rows.filter((row) => readRelationFields(row.frontmatter).parentId === parent.file.path);
+    const lastRank = siblings.length > 0
+      ? readRelationFields(siblings[siblings.length - 1].frontmatter).subtaskRank ?? undefined
+      : undefined;
+    const newRank = rankBetween(lastRank, undefined);
+    const defaults: Record<string, unknown> = { parentId: parent.file.path };
+    if (newRank) defaults.subtaskRank = newRank;
+    const file = await this.createBlankEntry(defaults);
+    if (!file) return;
+    const oldSubtaskIds = parentFields.subtaskIds;
+    const newSubtaskIds = [...oldSubtaskIds, file.path];
+    const write: SubtaskWrite = {
+      path: parent.file.path,
+      frontmatter: writeRelationFields(parent.frontmatter, {
+        ...parentFields,
+        subtaskIds: newSubtaskIds,
+      }),
+    };
+    await this.dataSource.updateFrontmatter(parent.file, toFrontmatterUpdates(write), { sourceInstanceId: this.instanceId });
+    const created = this.historyStack[0];
+    if (created?.type === "created" && created.file.path === file.path) {
+      this.historyStack[0] = {
+        type: "cells",
+        label: created.label,
+        createdFiles: [created.file],
+        changes: [{
+          file: parent.file,
+          path: parent.file.path,
+          key: "subtaskIds",
+          oldValue: this.cloneFillValue(oldSubtaskIds),
+          oldExists: Object.prototype.hasOwnProperty.call(parent.frontmatter, "subtaskIds"),
+          newValue: this.cloneFillValue(newSubtaskIds),
+        }],
+      };
+    }
   }
 
   /**

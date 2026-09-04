@@ -117,7 +117,7 @@ interface FakeDataSource {
   invalidateRecordCache(): void;
   mutateFrontmatter(): Promise<void>;
   getRecordsForConfig(): unknown[];
-  openNote(): void;
+  openNote: Mock<(file: TFile) => void>;
 }
 
 // The stub is what `window` points at once installed, so its timers cannot
@@ -369,5 +369,15 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
     expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
+  });
+
+  it("openDependencyFile opens the dependency note through the embed's open-note path", () => {
+    const { harness, dataSource } = createRenderer();
+
+    void harness.calendarTimelineRenderer.actions.openDependencyFile?.("db.md");
+
+    const openNote = vi.mocked(dataSource).openNote;
+    expect(openNote).toHaveBeenCalledTimes(1);
+    expect(openNote).toHaveBeenCalledWith(expect.objectContaining({ path: "db.md" }));
   });
 });
