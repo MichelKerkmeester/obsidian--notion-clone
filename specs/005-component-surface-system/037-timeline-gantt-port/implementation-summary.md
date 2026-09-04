@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T08:20:00Z"
-    last_updated_by: "gantt-css-lane-verifier"
-    recent_action: "Verified and closed the cli-codex CSS leg (T021/T022)"
+    last_updated_at: "2026-09-04T11:30:00Z"
+    last_updated_by: "gantt-rebase-landing"
+    recent_action: "Rebased onto main board port, reconciled css-lane/touch-targets/evidence, landed to main"
     next_safe_action: "Close T003/T009/T013/T014 and the CHK-* checklist rows"
     blockers:
       - "Not operator-confirmed: the gantt has not been checked on iOS"
@@ -99,9 +99,9 @@ the pre-existing duplicated `.db-timeline-event.is-all-day` CSS block.
 | `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Modified | Leg c: binds each new fixture mirror to the real model export it mirrors. Leg d: adds day-scale window- and tick-label-parity assertions against a pinned `now`, and corrects a downstream test assumption the centring made stale |
 | `tools/screenshots/scenarios/shared.test.mjs` | Modified | Leg e (T021, 1:1 amendment): subtask/dependency contract assertions moved from the retired `db-subtask-event`/`has-subtask-children`/`db-timeline-subtask-progress` classes to the default render's `pm-gantt-bar-group`/`pm-gantt-bar`/`pm-gantt-bar-progress`/`pm-gantt-drag-handle`/`pm-gantt-link-dot` |
 | `tools/screenshots/theme.css` | Modified | Leg e: stood `--color-red` in (TRANSCRIBED from the installed Obsidian 1.13.4 `app.css`), fixing the today-line/today-diamond's UNSUPPLIED-token black paint |
-| `tools/live/replay.mjs` | Modified | Leg e: reselectored 3 stale `db-timeline-*` claims to the current `pm-gantt-*` vocabulary and reworded 1 (weekend-fill scope) to the reference's own day-only invariant; no recorded number changed except the reworded claim's text |
-| `tools/live/touch-targets-constructed-baseline.json` | Modified | Leg e: ratchet lowered 9974 → 320 with a `lowerHistory` entry after the coarse-pointer hit-area rule closed the shortfall the TypeScript leg's raise had documented |
-| `tools/lane/css-lane.json` | Modified | Leg e: release entry naming the 30 captures the CSS/theme edits moved, `baselineHash` advanced to the new `styles.css` hash |
+| `tools/live/replay.mjs` | Modified | Leg e: reselectored 3 stale `db-timeline-*` claims to the current `pm-gantt-*` vocabulary and reworded 1 (weekend-fill scope) to the reference's own day-only invariant; no recorded number changed except the reworded claim's text. Leg f: merged with main's own board-claim rewrite of the same two subtask-tree checks (board's `[data-subtask-depth]`, timeline's `padding-left`), no number changed |
+| `tools/live/touch-targets-constructed-baseline.json` | Modified | Leg e: ratchet lowered 9974 → 320 with a `lowerHistory` entry after the coarse-pointer hit-area rule closed the shortfall the TypeScript leg's raise had documented. Leg f: re-measured on the merged tree to 367 (kept both this leg's and main's state-variant derivation in a new `mergeReconciliation` entry) |
+| `tools/lane/css-lane.json` | Modified | Leg e: release entry naming the 30 captures the CSS/theme edits moved, `baselineHash` advanced to the new `styles.css` hash. Leg f: merged with main's own history, `baselineHash` recomputed on the merged stylesheet, new release entry names the 4 captures a post-rebase recapture found content-changed |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -185,6 +185,7 @@ re-recording the numbers.
 | `css-lane` (leg e) | `baselineHash` moved `c32661e8c089` → `20d8ee6827be`; release names all 30 changed captures; `check-lane` exit 0 |
 | `replay` reconciliation (leg e) | 4 claims the pre-fixture-rewrite `db-timeline-*` vocabulary made stale — 2 reselectored to `.pm-gantt-*` and reproduced their original recorded numbers exactly (0; 574); 2 (subtask-tree depth marker) updated to test the correct per-surface marker (board's `[data-subtask-depth]` vs. timeline's `padding-left` indentation) since the default `pm-gantt` label row never carried that attribute; 1 (weekend-fill scope) reworded to the reference's actual, verified invariant (`GanttRenderer.ts:43`) after confirming the fixture's pinned date (2026-03-25, a Wednesday) makes the old wording unsatisfiable under any faithful implementation. `node tools/live/replay.mjs`: PASS, all 28 claims hold |
 | Full re-verification (leg e) | `npx tsc --noEmit` exit 0; `npx vitest run` 964/964; `npm run lint` 172 (unchanged from HEAD baseline); `npm run lint:tools` exit 0 (fixed two pre-existing dead-parameter errors in `temporal.mjs`); `scan-comments` PASS; `SURFACE_PHASE=037-timeline-gantt-port npm run gate` 25/25 green |
+| Post-rebase reconciliation (leg f, onto main's one-to-one board port and its ten constructed state variants, `f5983a4`, merge-base `65238ad`) | `styles.css` gained a new merged hash (`d3c6cc3e8453`) — the gantt.css and kanban.css copies sit in disjoint MIT-notice blocks, both kept verbatim. `touch-targets.mjs`: `[constructed] under = 367` against a freshly-recorded 367 baseline, not leg e's own 320 — the state-variant leg's 55-control raise and leg e's 47-control retirement of the local timeline-nav classes wash back to the shared pre-either-leg base of 367 (per-class math in `touch-targets-constructed-baseline.json`'s new `mergeReconciliation` entry, which keeps both derivations rather than discarding either). `css-lane.json`: history merged, `baselineHash` recomputed on the merged stylesheet, new release entry names 4 `constructed-timeline-subtask-*` captures a fresh recapture found content-changed (all read, matching the reference); one further capture moved bytes only (encoder noise, restored to `HEAD`). `npx tsc --noEmit` exit 0; `npx vitest run` 984/984; `npm run lint` 172 (unchanged); `scan-comments` PASS; `SURFACE_PHASE=037-timeline-gantt-port npm run gate` 25/25 green |
 <!-- /ANCHOR:verification -->
 
 ---

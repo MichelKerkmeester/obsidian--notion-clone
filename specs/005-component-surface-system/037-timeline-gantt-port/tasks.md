@@ -306,6 +306,20 @@ contextType: "general"
       class (weekend fill widening past day, or header/grid/today disappearing) without asserting
       something the reference's own design makes impossible. `node tools/live/replay.mjs`: PASS,
       all 28 claims hold.
+      Post-rebase reconciliation (onto main's one-to-one board kanban port and its ten
+      constructed state variants, `f5983a4`, merge-base `65238ad`): `styles.css` gained a new
+      merged hash (`d3c6cc3e8453`) since the two legs' regions are disjoint MIT-notice blocks;
+      re-measured directly on the merged tree rather than carried forward — `under` 367 against
+      a freshly-recorded 367 baseline (not this leg's own 320: the state-variant leg's 55-control
+      raise and this leg's 47-control retirement of the local timeline-nav classes wash back to
+      the shared pre-either-leg base of 367, verified per class and recorded in
+      `touch-targets-constructed-baseline.json`'s new `mergeReconciliation` entry, which keeps
+      both this leg's `raiseHistory`/`lowerHistory` and the state-variant leg's own raise
+      alongside it). `tools/lane/css-lane.json`: merged history, `baselineHash` recomputed, a new
+      release entry names the 4 `constructed-timeline-subtask-*` captures a fresh recapture found
+      content-changed (all read, matching the reference); one further capture moved bytes but not
+      pixel content (encoder noise, restored to `HEAD`). `SURFACE_PHASE=037-timeline-gantt-port
+      npm run gate`: 25/25 green on the rebased tree.
 - [x] T022 Fresh in-runtime verifier reads the recaptured timeline screenshots side by side with
       the reference's own screenshots or the operator's vault comparison — REQ-007.
       — evidence to close: a session that did not run T020/T021 opens both sets of captures and
