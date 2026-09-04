@@ -46,9 +46,10 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, lstatSync, mkdtempSync, mkdirSync, rmSync, cpSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
@@ -73,22 +74,148 @@ const hash = (rel) => {
 };
 
 /**
- * Does an ignore rule in this repo's own .gitignore disown `rel`? git check-ignore answers
- * from the pattern alone — it never requires the path to exist on disk — so this works the
- * same whether the vendored tree is checked out beside this repo or missing entirely.
+ * Walks `rel`'s path segments from the top, looking for the first one that exists on disk as a
+ * symlink (relative to `repoRoot`). Returns its path (relative to `repoRoot`), or null when
+ * nothing along the chain is a symlink — including when the chain stops existing altogether,
+ * since there is nothing left for git to trip over from that point down.
+ */
+function firstSymlinkAncestor(rel, repoRoot) {
+  const segments = rel.split("/").filter(Boolean);
+  let acc = "";
+  for (const segment of segments) {
+    acc = acc ? `${acc}/${segment}` : segment;
+    let stats;
+    try {
+      stats = lstatSync(join(repoRoot, acc));
+    } catch {
+      return null;
+    }
+    if (stats.isSymbolicLink()) return acc;
+  }
+  return null;
+}
+
+// Keyed by `${repoRoot}::${ancestorRel}` so a run touching many files behind the same
+// symlinked vendor tree pays the scratch-repo cost in isAncestorIgnoredAcrossSymlink() once,
+// not once per source.
+const symlinkIgnoreCache = new Map();
+
+/**
+ * git refuses to answer whether a directory-only .gitignore rule (a pattern ending in "/",
+ * like this repo's `specs/**\/context/`) covers a path that crosses an existing symlink — and
+ * it refuses in two different ways depending on how you ask. Naming anything *beyond* the link
+ * is a hard "fatal: pathspec ... is beyond a symbolic link". Naming the link itself doesn't
+ * crash, but doesn't tell the truth either: git classifies a path's directory-ness from its own
+ * lstat type, and a symlink's type is "symlink", never "directory", so a rule written to match
+ * directories silently never matches it — regardless of what it points at, and regardless of
+ * whether that target is itself a plain directory sitting inside this very repository (which,
+ * for every worktree this program creates, it is: `specs/context` here is a symlink back to
+ * the main checkout's own `specs/context`, an ordinary gitignored directory there).
+ *
+ * The question that actually needs answering — would this rule match `ancestorRel` if it were
+ * a plain directory, wherever its target really lives — is answered by asking git that exact
+ * question from a place where nothing needs crossing: a throwaway repo that mirrors only the
+ * .gitignore files that could apply to `ancestorRel` (root-to-parent, the same cascade git
+ * itself would consult) and a real, non-symlink directory at the identical relative path. That
+ * reuses git's own pattern matcher — including `**`, negation, and per-directory overrides —
+ * rather than reimplementing gitignore's glob syntax by hand, and it works whether the real
+ * symlink's target sits inside this repository, inside some other repository, or nowhere a
+ * repository has ever been.
+ */
+function isAncestorIgnoredAcrossSymlink(ancestorRel, repoRoot) {
+  const cacheKey = `${repoRoot}::${ancestorRel}`;
+  if (symlinkIgnoreCache.has(cacheKey)) return symlinkIgnoreCache.get(cacheKey);
+
+  let result = false;
+  let scratch;
+  try {
+    scratch = mkdtempSync(join(tmpdir(), "verify-ignore-"));
+    execFileSync("git", ["-c", "core.excludesFile=/dev/null", "init", "-q"], {
+      cwd: scratch,
+      stdio: "ignore",
+    });
+
+    // Mirror every .gitignore from the repo root down to ancestorRel's own directory — the
+    // same cascade git consults when deciding whether a directory is ignored.
+    const segments = ancestorRel.split("/");
+    let prefix = "";
+    for (const segment of segments) {
+      const gitignoreRel = prefix ? join(prefix, ".gitignore") : ".gitignore";
+      const sourceGitignore = join(repoRoot, gitignoreRel);
+      if (existsSync(sourceGitignore)) {
+        const destDir = prefix ? join(scratch, prefix) : scratch;
+        mkdirSync(destDir, { recursive: true });
+        cpSync(sourceGitignore, join(scratch, gitignoreRel));
+      }
+      prefix = prefix ? `${prefix}/${segment}` : segment;
+    }
+
+    // The ancestor itself, as the plain directory it would need to be for a mustbedir rule to
+    // ever match — not the symlink it actually is in the real worktree.
+    mkdirSync(join(scratch, ancestorRel), { recursive: true });
+
+    execFileSync(
+      "git",
+      ["-c", "core.excludesFile=/dev/null", "check-ignore", "-q", "--", ancestorRel],
+      { cwd: scratch, stdio: "ignore" },
+    );
+    result = true;
+  } catch {
+    result = false;
+  } finally {
+    if (scratch) {
+      try {
+        rmSync(scratch, { recursive: true, force: true });
+      } catch {
+        // Best-effort cleanup only; a leftover temp directory is not a correctness problem.
+      }
+    }
+  }
+
+  symlinkIgnoreCache.set(cacheKey, result);
+  return result;
+}
+
+/**
+ * Does an ignore rule in this repo's own .gitignore disown `rel`? For an ordinary path this is
+ * exactly `git check-ignore`, unchanged, and it works the same whether the vendored tree is
+ * checked out beside this repo or missing entirely: the pattern alone decides, and git never
+ * requires the path to exist on disk to answer.
+ *
+ * The one case plain `git check-ignore` cannot answer honestly is a path that crosses a
+ * symlink (see isAncestorIgnoredAcrossSymlink for why git itself refuses this one). That case
+ * is detected — not guessed at from git's error text — by walking `rel`'s own ancestors on
+ * disk, and only takes the slower scratch-repo path when one of them genuinely is a symlink.
+ *
+ * A tracked file is never "ignored" even behind a symlinked ancestor — `git ls-files` doesn't
+ * share check-ignore's symlink restriction, so that stays a plain, direct question.
  *
  * Any failure to ask (git absent, not a repo, an unreadable path) answers "no" rather than
  * "yes": without a confirmed ignore rule behind it, an absent source stays a real MISSING
  * SOURCE. That is the fail-closed default this check already had, kept for every path this
  * function cannot positively clear.
  */
-export function isGitIgnored(rel) {
+export function isGitIgnored(rel, { repoRoot = REPO } = {}) {
   try {
-    execFileSync("git", ["check-ignore", "-q", "--", rel], { cwd: REPO, stdio: "ignore" });
+    execFileSync("git", ["check-ignore", "-q", "--", rel], { cwd: repoRoot, stdio: "ignore" });
     return true;
   } catch {
-    return false;
+    // Falls through: either genuinely not ignored, or ignored in a way git refuses to confirm
+    // directly because the path crosses a symlink — checked next.
   }
+
+  const symlinkAncestor = firstSymlinkAncestor(rel, repoRoot);
+  if (symlinkAncestor === null) return false;
+
+  try {
+    const tracked = execFileSync("git", ["ls-files", "--", rel], { cwd: repoRoot, encoding: "utf8" });
+    if (tracked.trim().length > 0) return false;
+  } catch {
+    // An unexpected ls-files failure is treated as "could not confirm tracked", not as a
+    // reason to trust an unverified path — fall through to the symlink-ancestor check.
+  }
+
+  return isAncestorIgnoredAcrossSymlink(symlinkAncestor, repoRoot);
 }
 
 /**
