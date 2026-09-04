@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T07:35:00Z"
-    last_updated_by: "board-gantt-1to1-reopened"
-    recent_action: "Reopened 037+038 for 1:1 reference copies at operator request"
-    next_safe_action: "Dispatch devin legs: port GanttView and KanbanView structure 1:1"
+    last_updated_at: "2026-09-04T07:20:00Z"
+    last_updated_by: "done-audit-9"
+    recent_action: "Done-audit-9 re-read DONE row 6 on the merged T028 tree; stays open, narrowed a fifth time"
+    next_safe_action: "Widen the shared SCENARIOS list to T028's ten state variants, then rebaseline"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -25,7 +25,9 @@ _memory:
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; reopened 2026-09-04 for a 1:1 gantt copy, REQ-007"
       - "038 landed (b9e2321+a6fcd31); release 1.4.5 pending; reopened 2026-09-04 for a 1:1 board copy, REQ-007"
       - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
-      - "043 T028 (worktree/022-constructed-state-variants, unmerged): all 13 row-6 fixture-only scenarios now have a constructed counterpart; row 6 narrowed a fourth time, left unticked for a fresh audit per D4"
+      - "043 T028 merged (d363456+dc67803): all 13 row-6 fixtures now have a constructed counterpart; css-lane, screenshots-fresh and device-parity cross-check all 13"
+      - "done-audit-9 keeps row 6 open on ten of those states: absent from render-assertion-bundle.mjs's 21-entry SCENARIOS, so touch-targets and unstyled-links see fixture markup only"
+      - "1:1 legs unmerged: 038 board on worktrees/023-board-one-to-one (1c5f465), 037 gantt on worktrees/024-gantt-one-to-one (d30ea78+9bd044a); both CSS legs open, main unaffected"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -484,6 +486,67 @@ resolve them silently.
       3, 4, 5 and 7 hold, rows 1 and 2 stay open on operator device confirmation, row 6 stays open,
       narrowed a fourth time. Full evidence: `043/tasks.md` T028, `043/goal.md`'s own T028 log entry,
       `043/implementation-summary.md`'s T028 verification table and Known Limitations item 6.
+
+      **Re-verified 2026-09-04T07:20:00Z (done-audit-9), narrowed a fifth time, stays open.** T028
+      merged to main in `d363456`, reconciled in `dc67803`. Every number below was measured on that
+      merged tree by this audit, never carried from the landing pass. **What closed.** All 13 named
+      fixture-only scenarios now carry a `fixtureOf` declaration:
+      `grep -c fixtureOf tools/screenshots/scenarios/*.mjs` reads **20** (chrome.mjs 3, core.mjs 9,
+      temporal.mjs 8), was **7**; `screenshots/manifest.json` holds **352** entries and **19**
+      distinct constructed scenarios, was **312** and **9**; **20** fixture ids carry `fixtureOf`
+      and **50** do not, was **7** and **63** — the 13 are exactly that difference, each read out of
+      the manifest by id rather than counted in aggregate, each present on all four device/theme
+      entries. Three of the five lanes this row has named since `done-audit-4` are consequently
+      cross-checked for all 13 inside their own input set, each lane run to completion here and its
+      `$?` read directly: `device-parity` (`node tools/live/capture-device-parity.mjs`) `0`, **87
+      pairs, 0 identical against a recorded baseline of 4** — was **77** pairs at `425d552`, and the
+      ten new constructed state ids are individually confirmed captured on both `desktop` and
+      `mobile`; `screenshots-fresh` (`npm run screenshots:verify`) `0`, **352 entries match their
+      sources**, was **312**; `css-lane` (`node tools/lane/check-lane.mjs`) `0`, stylesheet unchanged
+      at `c32661e8c089`, "release names all 0 changed capture(s)".
+
+      **What does not close, and is the entire residual.** `touch-targets` and `unstyled-links` never
+      read the manifest. Their constructed pass iterates `render-assertion-bundle.mjs`'s exported
+      `SCENARIOS` — read line by line, a **21**-entry list that sets none of T028's new `ScenarioSpec`
+      fields (`subtaskTree`, `sparseFields`, `emptyState`, `chartVariant`, `miniCalendar`) and names
+      none of its three new toolbar `renderer` values. The ten new states exist only in
+      `constructed-scenarios.mjs`'s capture registry, a different list neither lane imports.
+      Measured, not inferred: `node tools/live/touch-targets.mjs`, `$?` read directly `0` —
+      "[fixture] 1450 interactive element(s) across **70** scenario(s)", "[constructed] 56538 across
+      **21** production-renderer scenario(s)", 264 under against a fixture baseline of 279 and 367
+      under against a constructed baseline of 367; `node tools/live/unstyled-links.mjs`, `$?` `0` —
+      "[fixture] 112 link(s) across **70** scenario(s)", "[constructed] 0 link(s) across **21**
+      production-renderer scenario(s)". Both JSON records are field-for-field identical to their
+      state at `425d552`, before T028 (`git show 425d552:tools/live/touch-targets.json` and
+      `...unstyled-links.json`: fixture 1450/70/264, constructed 56538/21/367; links 112/70 and
+      0/21). That is the strongest available proof T028 moved nothing in these two lanes — a widened
+      constructed pass could not have left the count at 21.
+
+      Three of the 13 are nonetheless covered in-lane for `touch-targets`:
+      `table-mobile`/`list-mobile`/`board-mobile` declare `constructed-table`/`-list`/`-board`, which
+      ARE in the 21-entry list, and that lane mounts its whole constructed pass in one page at
+      `viewport: 390x844`, `hasTouch`, `isMobile`, body class `is-phone` — the phone condition those
+      three fixtures exist to depict. The residual is therefore **ten** scenarios against **two**
+      lanes, not 13 against five. Separately, already declared under D6 and re-confirmed rather than
+      newly found: `unstyled-links`' constructed pass returns an empty sample (0 links) for all 21
+      scenarios because the shared list sets no `captureData`, so widening it alone would not make
+      that half non-vacuous.
+
+      **Stays open.** T028's own note left one question for a fresh reviewer: whether a
+      manifest-level counterpart satisfies this row regardless of which lane algorithmically reads
+      it. It does not, on the criterion's own words. The row tests whether a green *depends* on a
+      harness-supplied value, not whether a counterpart exists somewhere in the tree. A PNG in
+      `device-parity`'s input set never enters `touch-targets`' `under` count; those two lane exit
+      codes are still computed in part over ten hand-authored fixtures with no constructed
+      measurement anywhere in their own arithmetic, and both are among the 25 lanes ticked row 4's
+      "exits 0" sums. That is the identical "declared-and-bounded dependency is still a dependency"
+      reading `done-audit-4`, `-6` and `-8` applied; loosening it on the first pass that would
+      benefit from the looser reading is the exact failure the first criterion in this table was
+      rewritten to record. What closes it is small and named: add the ten state variants to
+      `render-assertion-bundle.mjs`'s `SCENARIOS` — the harness options they need already exist and
+      are exercised red-first by `tools/live/constructed-state-assertions.mjs` — then rebaseline
+      `touch-targets-constructed-baseline.json`. `completion_pct` stays **4 of 7 = 57**: rows 3, 4, 5
+      and 7 hold, rows 1 and 2 are the operator's, row 6 stays open on ten scenarios and two lanes.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1330,4 +1393,52 @@ that produced the evidence, the residual question — whether `touch-targets.mjs
 own constructed pass not yet including these ten new per-state entries still disqualifies the tick,
 given a manifest-level constructed counterpart now exists for all 13 — is left for that fresh audit.
 `completion_pct` stays **4 of 7 = 57**, unchanged.
+
+### Done-audit-9, 2026-09-04T07:20:00Z: T028 merged, row 6 re-audited, narrowed a fifth time to ten scenarios and two lanes
+
+A fresh audit re-read row 6 against the merged tree (`d363456`, reconciled `dc67803`), answering the
+one question T028's landing note deliberately left open. Everything below was measured here, not
+carried: `grep -c fixtureOf tools/screenshots/scenarios/*.mjs` **20**, was 7; `screenshots/
+manifest.json` **352** entries and **19** constructed scenarios, was 312 and 9; **20** fixture ids
+with `fixtureOf` and **50** without, was 7 and 63; all 13 named fixture-only ids confirmed by id,
+each on all four device/theme entries.
+
+Three of the five lanes this row has named since `done-audit-4` are now cross-checked for all 13
+inside their own input set — `device-parity` **87 pairs** (was 77 at `425d552`), `screenshots-fresh`
+**352 entries match their sources** (was 312), `css-lane` exit 0 with the stylesheet unchanged. The
+other two are not, and that is the whole residual. `touch-targets` and `unstyled-links` never read
+the manifest: their constructed pass iterates `render-assertion-bundle.mjs`'s exported `SCENARIOS`,
+a 21-entry list carrying none of T028's new `ScenarioSpec` fields and none of its three toolbar
+`renderer` values, while the ten new states live only in `constructed-scenarios.mjs`'s capture
+registry, which neither lane imports. Both lanes were run: `touch-targets` exit 0, fixture 1450
+elements across 70 scenarios / constructed 56538 across **21**; `unstyled-links` exit 0, fixture 112
+links across 70 / constructed 0 across **21**. Both JSON records are field-for-field identical to
+`425d552`, before T028 — a widened constructed pass could not have left the count at 21.
+
+The ruling, since this is exactly what a fresh reviewer was left to decide: a manifest-level
+counterpart does not satisfy the row regardless of which lane reads it. The criterion tests whether a
+green *depends* on a harness-supplied value, not whether a counterpart exists somewhere in the tree,
+and a PNG in `device-parity`'s input set never enters `touch-targets`' `under` count. `done-audit-4`,
+`-6` and `-8` all read a declared-and-bounded dependency as still a dependency; loosening that on the
+first pass that would benefit from the looser reading is the failure this table's own first criterion
+was rewritten to record. **Row 6 stays open**, narrowed a fifth time — from 13 scenarios across five
+lanes to **ten** scenarios across **two**, since `table-mobile`/`list-mobile`/`board-mobile` are
+covered in-lane by `touch-targets`, which mounts its whole constructed pass at 390x844 with
+`is-phone`. Closing move, named and small: add the ten state variants to
+`render-assertion-bundle.mjs`'s `SCENARIOS` (their harness options already exist, exercised red-first
+by `constructed-state-assertions.mjs`), then rebaseline `touch-targets-constructed-baseline.json`.
+Re-confirmed as a separate, already-declared D6 condition: `unstyled-links`' constructed pass is an
+empty sample (0 links) for all 21 scenarios, so widening alone would not make that half non-vacuous.
+`completion_pct` stays **4 of 7 = 57**. `roadmap.md` §5 and §5.2, `spec.md`'s two Phase Documentation
+Map rows and `handover.md` updated to match.
+
+### 2026-09-04: two 1:1 reopen lanes in flight, both unmerged
+
+Recorded as in-progress fact, not as landed work. `038`'s board 1:1 leg sits on
+`worktrees/023-board-one-to-one` at `1c5f465` (the TypeScript structure port; a drag defect was found
+and fixed on that branch, its CSS leg under verification). `037`'s gantt 1:1 leg sits on
+`worktrees/024-gantt-one-to-one` at `d30ea78` + `9bd044a` (TypeScript leg landed, CSS leg in
+progress). Verified here rather than assumed: `git merge-base --is-ancestor` reports neither branch
+tip is an ancestor of main's `dc67803`, so **main is unaffected by both**, and no DONE-table row,
+release, or operator row moves on their account until they land and are verified in-runtime.
 <!-- /ANCHOR:log -->
