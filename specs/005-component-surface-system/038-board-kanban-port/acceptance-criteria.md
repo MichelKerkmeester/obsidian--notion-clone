@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T07:30:00Z"
-    last_updated_by: "board-1to1-amendment"
-    recent_action: "Added AC-9 for the operator's 1:1 board copy directive"
-    next_safe_action: "Dispatch devin leg: port KanbanView/Column/Card structure 1:1"
+    last_updated_at: "2026-09-04T15:40:00Z"
+    last_updated_by: "board-tokens-and-priority-column"
+    recent_action: "Refreshed AC-1-AC-7, AC-9 Today columns to post-port state"
+    next_safe_action: "Operator vault compare (roadmap.md row 37), then T8"
     blockers: []
-    key_files: ["spec.md", "goal.md"]
+    key_files: ["spec.md", "goal.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038-ac"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 89
     open_questions: []
     answered_questions: []
 ---
@@ -36,15 +36,15 @@ whose control has not been observed failing is not met, however green it looks.
 
 | ID | Measured | Threshold | Today |
 |----|----------|-----------|-------|
-| AC-1 | Card information hierarchy against catalog rows 5, 8 | matches reference shape on paired screenshot read | not rewritten — current field order/density unrecorded, T1 owed |
-| AC-2 | Hover/drag/drop visual language against catalog rows 10-11 | matches reference intent under `--db-*` tokens | not rewritten — current `.db-board-card`/`.db-board-column` rules unchanged since before this phase |
-| AC-3 | Card identity | `RowData.file.path`, never `task.id` | unchanged today (baseline, nothing to regress from yet) |
-| AC-4 | Local extensions (WIP, swimlanes, summaries, conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, cover safety) | pass before and after rewrite | passing today (pre-rewrite baseline); post-rewrite re-check owed |
-| AC-5 | Drag-drop matrix (same-group, cross-group, blank-space) | identical before/after | not yet run as a named baseline |
-| AC-6 | Board/gallery layout-read negative control | armed and passing, same counts as `026`/`c5566db` | armed today per `tools/live/renderer-coverage.json`; post-rewrite re-check owed |
-| AC-7 | `SURFACE_PHASE=038-board-kanban-port npm run gate` | exit 0 | not yet run under this phase's own `SURFACE_PHASE` |
+| AC-1 | Card information hierarchy against catalog rows 5, 8 | matches reference shape on paired screenshot read | **Refreshed 2026-09-04.** Rewritten — `renderReferenceColumn`/`renderReferenceCard` (`board-renderer.ts:315-388`, `:391-548`) match the reference's `KanbanColumn`/`KanbanCard` hierarchy one-to-one (T9/T10 parity port, T13-T21/T26-T30 fidelity passes); `board-renderer-parity.test.ts` 30/30 green. A fifth fresh T12 reviewer (`c563f08`, ran none of the board legs) matched all fourteen carried-forward elements to the pixel against the reference source. T1's "record before any rewrite" evidence is superseded rather than owed — the port already landed and matched clean, so there is no pre-rewrite state left to compare against. |
+| AC-2 | Hover/drag/drop visual language against catalog rows 10-11 | matches reference intent under `--db-*` tokens | **Refreshed 2026-09-04.** Rewritten — `.pm-kanban-col`/`.pm-kanban-card` rules (`styles.css:8909-9072`) are `kanban.css` copied verbatim under its MIT notice (T11, `goal.md` D6's supersession of the `rewrite`-only disposition), reading the reference's own `--pm-*` tokens rather than the `--db-*` family this threshold was written against — a token-family divergence from the original wording, left unedited per this session's scope, worth a future amendment. Drag/drop re-proven by `board-renderer-parity.test.ts`'s drop-cycle tests (same-group keep-in-place, cross-group, blank-space fallback) including T10's `CARD_FROM_GROUP_MIME` fix; the matrix reads identically to the pre-rewrite baseline every test in the suite pins. |
+| AC-3 | Card identity | `RowData.file.path`, never `task.id` | **Refreshed 2026-09-04.** Unchanged and verified through the full port — `data-task-id`/`data-note-database-row-path` both carry `row.file.path` (`board-renderer.ts:406-407`), dragstart writes `CARD_MIME`/`text/plain` = path, the drop resolves through `resolveBoardContainerDropOrder`/`moveCardAndOrder`; `task.id` appears nowhere in the identity path. |
+| AC-4 | Local extensions (WIP, swimlanes, summaries, conditional formatting, multi-select, roving keyboard, edge auto-scroll, blank-space drop, touch long-press, cover safety) | pass before and after rewrite | **Refreshed 2026-09-04.** Passing on both paths — extensions render only under the default-off `ViewConfig.boardExtensionsEnabled` (`src/data/types.ts:501`, `board-renderer.ts:222`); the pre-rewrite `db-board-*` suite still runs and passes in extension mode (`board-renderer-hierarchy.test.ts:409-412`), and the reference (default) path's own suite passes independently (`board-renderer-parity.test.ts` 30/30). Extension-mode code is untouched by the port, so there is no separate pre/post pair left to reconcile. |
+| AC-5 | Drag-drop matrix (same-group, cross-group, blank-space) | identical before/after | **Refreshed 2026-09-04.** Named and passing — `board-renderer-parity.test.ts`'s drop-cycle tests cover same-group/cross-group/blank-space, including T10's real dragstart-to-drop cycle test that caught and fixed a `CARD_FROM_GROUP_MIME` gap (cross-column drags silently failed to update the row's group field; same-column drags spuriously reordered) before this criterion could have honestly read green. 30/30 green today. |
+| AC-6 | Board/gallery layout-read negative control | armed and passing, same counts as `026`/`c5566db` | **Refreshed 2026-09-04.** Armed and passing — the `board/file-view`/`board/embed` control (`RENDER_READ_CONTROL=per-item`) went silently inert after the port (its old seam, `applyConditionalFormat`, is extension-only and the reference card path never calls it) and was re-armed against `getColumns`, the bag member the reference path does call once per card (T12). Disarmed (default) reads 8, matching the standing bound; armed reads 1601, confirming the control fires. `tools/live/renderer-coverage.json` re-stamped fresh this session. |
+| AC-7 | `SURFACE_PHASE=038-board-kanban-port npm run gate` | exit 0 | **Refreshed 2026-09-04.** Exits 0 — 25 green / 0 red, re-run and read directly this session (`$?` read directly, not through a pipe); first closed 2026-09-03 (T7), reconfirmed by every fidelity pass through T30. |
 | AC-8 | Operator opens a board on device | confirms rewritten card/column visual language and drag/drop | unknown — **only the operator closes this** |
-| AC-9 | 1:1 DOM structure/class vocabulary/CSS/interactions/density/column-width against `KanbanView.ts`/`KanbanColumn.ts`/`KanbanCard.ts`/`kanban.css` (REQ-007, added 2026-09-04) | T9's DOM-structure parity test passes; local extensions render only default-off or where the reference has an equivalent | not started — today's board renders `db-board-*` classes (not the reference's vocabulary), five `db-board-column` lanes at a 280px default width (`board-renderer.ts:1699`; the operator's dispatch named 320px, corrected here against a direct code read), with a priority strip, parent chip, title-row chips and a meta grid, all local composition restyled from `kanban.css`'s visual intent rather than its DOM/class copy |
+| AC-9 | 1:1 DOM structure/class vocabulary/CSS/interactions/density/column-width against `KanbanView.ts`/`KanbanColumn.ts`/`KanbanCard.ts`/`kanban.css` (REQ-007, added 2026-09-04) | T9's DOM-structure parity test passes; local extensions render only default-off or where the reference has an equivalent | **Refreshed 2026-09-04.** T9's parity test passes 30/30 (`board-renderer-parity.test.ts`). The default (no-setting) board renders the reference tree — `pm-kanban-view` container (`board-renderer.ts:306`), `pm-kanban-board` (`:307`), `pm-kanban-col` at a 280px fixed width (`styles.css:8992-8996`, unchanged from this row's original citation), the full card hierarchy (`:391-548`: priority bar, parent chip, title-row chips, meta grid, avatar stack, due chip). Local extensions render only under the default-off `boardExtensionsEnabled` (`:222`); the pre-port `db-board-*` vocabulary stays live in extension mode only. A fifth fresh T12 reviewer (`c563f08`) matched all fourteen carried-forward elements to the pixel against the reference source (T12's in-repo half, `tasks.md`); the operator's own vault side-by-side compare remains open (`../roadmap.md` §4 row 37). |
 <!-- /ANCHOR:criteria -->
 
 ---

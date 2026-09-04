@@ -11,26 +11,26 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T12:15:00Z"
-    last_updated_by: "board-inset-and-fixture-coverage"
-    recent_action: "Closed T26-T28: host-padding token, avatar/milestone/recurrence coverage, T12 bar amendment"
-    next_safe_action: "Dispatch a board-legs-free session for T12 in-repo compare; operator half is roadmap row 37"
+    last_updated_at: "2026-09-04T15:40:00Z"
+    last_updated_by: "board-tokens-and-priority-column"
+    recent_action: "Closed T29-T30 (host tokens, bench priority column); T12 in-repo half MET"
+    next_safe_action: "Operator vault compare (roadmap.md row 37), then T8"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
-      - "T12's amended evidence bar still needs a session that ran none of the board legs to perform the in-repo source-pixel comparison half; the operator vault-compare half (roadmap.md row 37) is not this repo's to close"
+      - "T12's operator vault-compare half (roadmap.md row 37) is not this repo's to close — the in-repo source-pixel half is now MET"
       - "T8 (operator device confirmation) is the only row that closes the packet"
     key_files:
       - "src/views/board-renderer.ts"
       - "styles.css"
-      - "tools/screenshots/scenarios/shared.mjs"
-      - "tools/screenshots/scenarios/core.mjs"
+      - "tools/screenshots/theme.css"
       - "tools/bench/board-render-bench.ts"
+      - "tools/live/render-assertion-harness.ts"
       - "tools/lane/css-lane.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "038-board-kanban-port"
       parent_session_id: null
-    completion_pct: 79
+    completion_pct: 80
     open_questions: []
     answered_questions:
       - "Card identity stays RowData.file.path throughout: no hunk in either landed commit touches drag/drop, WIP/visible-count, swimlane, summary, conditional-formatting or touch-mode identifiers (confirmed by re-reading both diffs' added lines)."
@@ -49,9 +49,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 038-board-kanban-port |
-| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port, T13-T21 fidelity passes, T22-T25 and T26-T28 closing fixes for two later fresh T12 reads' divergences); T12's amended two-part comparison (needs a session that ran none of the board legs) and T8 (operator confirmation) are open |
+| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port, T13-T21 fidelity passes, T22-T25 and T26-T30 closing fixes for three later fresh T12 reads' divergences); T12's in-repo half is now MET, its operator half (roadmap row 37) and T8 (operator device confirmation) are the two rows left open |
 | **Level** | 2 |
-| **Completion** | `tasks.md` 22/28 rows closed (T5-T7, T9-T11, T13-T28; 79%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite, T13-T28 fidelity passes) — the remaining gap is a still-unmet evidence-independence requirement (T12's own comparison read must come from a session that ran none of the board legs), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed, the four REQ-007 divergences a later fresh T12 read found and T22-T25 closed, and a fourth fresh T12 read's host-padding bug, fixture-coverage gap and evidence-bar amendment that T26-T28 closed. |
+| **Completion** | `tasks.md` 24/30 rows closed (T5-T7, T9-T11, T13-T30; 80%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite, T13-T30 fidelity passes) — T12's in-repo half closed this session, leaving only the operator-owned evidence (vault compare, device confirmation), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed, the four REQ-007 divergences a later fresh T12 read found and T22-T25 closed, a fourth fresh T12 read's host-padding bug/fixture-coverage gap/evidence-bar amendment that T26-T28 closed, and a fifth fresh T12 read's two missing host tokens and unphotographed priority strip that T29-T30 closed. |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -644,6 +644,74 @@ fourth fresh T12 read found, which is not the same evidence T12's own (amended) 
 T12 stays open. The operator's vault side-by-side half is `../roadmap.md` §4 row 37 and is not
 this repo's to close. T8 (operator device confirmation) remains the only row that closes the
 packet.
+
+**2026-09-04, T29-T30 landed (this session, in-runtime — the external delegation lane was
+occupied, scope bounded to this dispatch's four numbered items).** A fifth fresh T12 reviewer (at
+`c563f08`, ran none of the board legs) ruled T12's in-repo half MET — all fourteen carried-forward
+elements matched the reference to the pixel, `board-renderer-parity.test.ts` re-run green 30/30,
+the copied `kanban.css`/`table.css`/`widgets.css` block diffed mechanically against `styles.css`
+(56 rules byte-verbatim, 3 documented deltas) — and left three P2 items plus the T12 tick itself.
+
+Two of `theme.css`'s host stand-in tokens were missing (T29): `--color-red`/`--color-orange`/
+`--color-green` existed, `--color-purple`/`--color-blue` did not, so the board's milestone (M) and
+recurrence (R) chips — which set `--pm-chip-color` inline to `var(--color-purple)`/
+`var(--color-blue)` (`renderReferenceChip`, never through a stylesheet rule) — were
+guaranteed-invalid at computed-value time and painted with no fill in every capture that forces
+one (`board-view`'s Adobe Creative Cloud/Sketch cards; `constructed-board`'s bench schema carries
+no milestone/recurrence field, so it was unaffected either way). Transcribed light `#7852ee`/
+`#086ddd`, dark `#a882ff`/`#027aff` from the installed Obsidian 1.13.4 `app.css` (extracted via
+`@electron/asar`; the app's own `package.json` reads `1.13.4`, not the `1.13.7` the neighbouring
+red/orange/green comments cite — read directly this session), same comment style as the existing
+three. Proven red first: `pinned-values-baseline.json`'s `unsupplied` map pruned to the current
+five-token reality (also dropping a stale `--color-green` entry the map still carried after
+`theme.css` had already stood it in, an unrelated staleness fixed in passing since this session
+was editing the same map), then `scan-pinned-values.mjs` run with `theme.css` stashed to its
+pre-session state — FAIL, `--color-blue`/`--color-purple` both "not in the baseline" (a genuine
+read at `styles.css:13290`/`:13299`, an unrelated formula-editor token chain); green after
+restoring the edit.
+
+No bench column was ever named "priority" (T30), so `getReferencePriorityColumn`'s case-insensitive
+match never resolved for a production capture and the reference's card-top priority strip was
+never photographed outside the hand-written `board-view` fixture's explicitly forced
+`priorityColor` prop. `board-render-bench.ts`'s one mixed-kind `"select"` column (index 3) re-keyed
+to `"priority"`, mirroring the existing people rename — no column added, count unchanged at 21.
+`render-assertion-harness.ts`'s `applyCaptureOptions` was overwriting every select/status/
+multi-select column, priority included, to a generic five-name capture palette that never matches
+the reference's `medium`/`low`/`none` omission (`isReferenceLowPriorityTier`) — every card would
+have striped instead of only some — so the priority key was excluded from that overwrite and a new
+`applyCapturePriorityTiers` gives it its own four-tier `urgent`/`high`/`medium`/`low` palette,
+cycling `CAPTURE_ROWS` (18) through it. Proven red first: a new `constructed-board-priority` case
+in `constructed-state-assertions.mjs` asserted 10 of 18 constructed-board cards carry
+`pm-kanban-card-priority-bar` (five urgent + five high rows of eighteen) — FAIL at 0 with both
+files stashed to `HEAD`, PASS at 10/18 restored. Six unrelated `constructed-board-subtask`/
+`constructed-timeline-subtask` marker failures in the same check file (subtask toggle/progress/
+depth) were confirmed pre-existing at pristine `c563f08` `HEAD` before any of this session's edits
+— out of this leg's scope, left unfixed.
+
+All 11 content-changed captures were recaptured and read this session: `board-view`'s M chip reads
+purple and R chip blue in both themes; `constructed-board`/`constructed-board-subtask` show a 3px
+card-top strip on exactly the urgent/high-tier cards in every column and none on medium/low cards
+— confirmed by pixel-sampling the backlog column's four tiers directly against the expected
+50%-opacity `--status-color-fg-*` blend, since the strip is visually subtle at normal viewing size
+(`styles.css:9083-9086`: `height: 3px; opacity: 0.5`) and easy to misjudge by eye alone. One
+capture (`board-view-desktop-dark.png`) moved bytes only — identical `pixelHash`/`layoutHash` to
+`HEAD` — restored to committed bytes, `manifest.json`'s `bytes` field corrected to the restored
+file's actual size (`HEAD`'s own recorded `bytes` value was already 20 bytes off the committed
+blob's true size, a small pre-existing inaccuracy, left alone). `tools/lane/css-lane.json`:
+`styles.css` untouched, hash unchanged; a new release entry names all 11 content-changed captures
+(`check-lane` exit 0). `npx tsc --noEmit` exit 0; `npx vitest run` 1010/1010 (100 files); `npm run
+lint` 172 problems (159 errors, 13 warnings), unchanged from the pre-session baseline; `npm run
+lint:tools` clean; `node tools/naming/scan-comments.mjs` PASS; `SURFACE_PHASE=038-board-kanban-port
+npm run gate` 25 green / 0 red, exit 0, read directly.
+
+`acceptance-criteria.md`'s AC-1 through AC-7 and AC-9 "Today" columns were refreshed to this
+post-port state with file:line evidence this same session (AC-8 unchanged, still operator-only);
+`tasks.md`'s T12 entry gained a dated note closing its in-repo half while leaving the operator half
+(`../roadmap.md` §4 row 37) and T8 explicitly open.
+
+**Not closed by this session:** the operator's vault side-by-side compare (`../roadmap.md` §4 row
+37) is not this repo's to close, and T8 (operator device confirmation) remains the only row that
+closes the packet.
 <!-- /ANCHOR:next-leg -->
 
 ---

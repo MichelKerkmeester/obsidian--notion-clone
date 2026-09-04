@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T10:54:00Z"
-    last_updated_by: "board-closing-fixes"
-    recent_action: "Closed T22-T25 (height-chain selector, due-chip near tier, Sub-chip/parent-title, badge icon)"
-    next_safe_action: "Dispatch fresh session for T12 visual comparison, then T8"
+    last_updated_at: "2026-09-04T15:40:00Z"
+    last_updated_by: "board-tokens-and-priority-column"
+    recent_action: "Closed T26-T30 (host tokens, bench priority column); T12 in-repo half MET"
+    next_safe_action: "Operator vault compare (roadmap.md row 37), then T8"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 76
+    completion_pct: 80
     open_questions: []
     answered_questions: []
 ---
@@ -225,6 +225,22 @@ _memory:
       exit 0. **Not closed:** the visual-language/density/column-width comparison this row also
       asks for has no styled reference-vocabulary capture to compare against yet — that half
       waits on T11.
+      **In-repo half MET 2026-09-04 (fifth fresh reviewer, c563f08, ran none of the board legs):**
+      the amended in-repo half of this row's evidence bar closes. All fourteen carried-forward
+      elements (topbar, badge icon, priority strip, parent chip, Sub chip, tags, hours chip,
+      progress bar, avatar stack, due chip, milestone/recurrence chips, drag/drop affordance,
+      empty-column shape, mobile column width) measured against the reference source and matched
+      to the pixel; `board-renderer-parity.test.ts` re-run green 30/30 by this session, not carried
+      over from T10/T11/T22-T28's own claims; the copied `kanban.css`/`table.css`/`widgets.css`
+      block diffed mechanically against `styles.css` — 56 rules byte-verbatim, 3 documented deltas
+      (the host-container scoping prefix, the `--pm-shadow-ambient` split T11 already recorded, and
+      the `--db-container-padding-inline` token T26 introduced). Before-value: the prior fresh read
+      at `854c748` found three P1s (T26's padding bug among them, already closed). This same session
+      then read three P2 items against the reference and this repo's own harness, closed as T29/T30
+      below (the fourth, this note, is doc-only). **Still open:** the operator's own vault
+      side-by-side comparison — `../roadmap.md` §4 row 37, never agent-tickable — and T8 (operator
+      device confirmation). T12 itself stays unticked until both close; this leg ran in-runtime
+      (bounded scope: this dispatch's four numbered items).
 - [x] **T13** Palette names no longer paint as inline CSS keywords — REQ-007 fidelity pass (A).
       *Evidence to close:* `board-renderer-parity.test.ts`'s column-shell test asserts
       `var(--status-color-fg-blue)` for `--col-color`, the topbar background and the badge color;
@@ -553,6 +569,72 @@ _memory:
       2026-09-04; the operator half added as row 37 in the parent `../roadmap.md` §4 operator
       table, explicitly marked never-tick. T12 itself stays unticked — a final fresh read follows
       this leg.
+- [x] **T29** Transcribe the two missing host tokens the board's milestone/recurrence chips read —
+      REQ-007 fidelity pass (Q), a fifth fresh T12 reviewer's item 1 (P2). This leg ran in-runtime
+      (bounded scope: this dispatch's four numbered items).
+      *Evidence to close:* `tools/screenshots/theme.css` transcribed Obsidian's palette only
+      partially — `--color-red`/`--color-orange`/`--color-green` existed, `--color-purple`/
+      `--color-blue` did not, so `board-renderer.ts`'s inline `--pm-chip-color: var(--color-purple)`/
+      `var(--color-blue)` (`renderReferenceChip`, milestone M / recurrence R chips) was
+      guaranteed-invalid at computed-value time and both chips painted with no fill in every
+      capture that forces one (`board-view`, `core.mjs`'s Adobe Creative Cloud/Sketch cards; the
+      Sub chip, T14's green, rendered correctly beside them). Red first:
+      `pinned-values-baseline.json`'s `unsupplied` map pruned of `--color-blue`/`--color-purple`
+      (and a stale `--color-green` entry already supplied, unrelated staleness fixed in passing
+      since this session was editing the same map) to the current five-token reality, then
+      `node tools/screenshots/scan-pinned-values.mjs` run with `theme.css` stashed to its
+      pre-session state — FAIL, `UNSUPPLIED — --color-blue: 1 declaration(s), not in the baseline`
+      and the same line for `--color-purple` (`styles.css:13290`/`:13299`, an unrelated
+      formula-editor token chain sharing the same two bare `var()` reads); green after restoring
+      the edit, 5 unsupplied against a baseline of 7. Transcribed light `#7852ee`/`#086ddd`, dark
+      `#a882ff`/`#027aff` from the installed Obsidian 1.13.4 `app.css` (extracted via
+      `@electron/asar`; `obsidian.asar`'s own `package.json` reads `1.13.4`, not the `1.13.7` the
+      neighbouring red/orange/green comments cite — read directly this session, not carried over),
+      same comment style as the existing three. `board-view-{desktop,mobile}-{dark,light}.png`
+      recaptured and read: the M chip now reads purple and the R chip blue in both themes;
+      `constructed-board*` carries no milestone/recurrence data in the bench schema, so those
+      captures were unaffected by this token (T30's priority column is the change they show).
+      `tsc` 0, `vitest` 1010/1010, `lint` 172 (unchanged), `scan-comments` PASS, `npm run gate` 25
+      green / 0 red.
+- [x] **T30** Give the board bench a priority column so a production capture shows the per-card
+      priority strip — REQ-007 fidelity pass (R), a fifth fresh T12 reviewer's item 2 (P2). This
+      leg ran in-runtime (bounded scope: this dispatch's four numbered items).
+      *Evidence to close:* `tools/bench/board-render-bench.ts` had no column named "priority", so
+      `getReferencePriorityColumn`'s case-insensitive match never resolved and no production
+      capture (`constructed-board`/`constructed-board-subtask`) ever showed the reference's
+      card-top priority strip — only the hand-written `board-view` fixture demonstrated it, via an
+      explicit forced `priorityColor` prop unrelated to the bench. Red first: a new
+      `constructed-board-priority` case in `tools/live/constructed-state-assertions.mjs` asserted
+      10 of 18 constructed-board cards carry `pm-kanban-card-priority-bar` (five urgent + five high
+      rows of eighteen, cycling `urgent/high/medium/low` in that order) — FAIL at 0 with
+      `board-render-bench.ts` and `render-assertion-harness.ts` stashed to HEAD, PASS at 10/18
+      restored. `makeColumns`' one mixed-kind `"select"` column (index 3, `PRIORITY_COLUMN_INDEX`)
+      re-keyed to `"priority"`, mirroring the existing people rename (index 4, `"multi-select"`) —
+      no column added, no other name touched, count unchanged at 21. `render-assertion-harness.ts`'s
+      `applyCaptureOptions` was overwriting every select/status/multi-select column (the priority
+      rename included) to a generic five-name capture palette that never matches the reference's
+      `medium`/`low`/`none` omission (`isReferenceLowPriorityTier`), which would have striped every
+      card instead of only some; excluded the `"priority"` key from that overwrite and added
+      `applyCapturePriorityTiers`, giving the column its own four-tier palette and cycling
+      `CAPTURE_ROWS` (18) through it. `constructed-board`/`constructed-board-subtask`
+      (`{desktop,mobile}-{dark,light}`, 8 captures) recaptured and read: a 3px card-top strip
+      appears on exactly the urgent/high-tier cards in every column and no strip on medium/low
+      cards, confirmed by pixel-sampling the backlog column's four tiers directly against the
+      expected 50%-opacity `--status-color-fg-*` blend (row-0 urgent measured ~`(142,116,116)`
+      against red's computed blend, row-5 high ~`(142,123,100)` against orange's, row-10/row-15
+      medium/low flat background, no spike) since the strip is visually subtle at normal viewing
+      size (`styles.css:9083-9086`: `height: 3px; opacity: 0.5`). One capture
+      (`board-view-desktop-dark.png`) moved bytes only across this leg's full recapture — same
+      `pixelHash`/`layoutHash` as `HEAD`, restored to committed bytes, `manifest.json`'s `bytes`
+      field corrected to the restored file's actual size (`HEAD`'s own manifest `bytes` value was
+      already 20 bytes off the committed blob's true size, pre-existing, left alone). Six unrelated
+      `constructed-board-subtask`/`constructed-timeline-subtask` marker failures in
+      `constructed-state-assertions.mjs` (subtask toggle/progress/depth markers) confirmed
+      pre-existing at pristine `c563f08` `HEAD` before any of this session's edits — out of this
+      leg's scope, left unfixed. `tools/lane/css-lane.json`: `styles.css` untouched, hash unchanged;
+      a new release entry names all 11 content-changed captures across T29/T30 (`check-lane` exit
+      0, "release names all 11 changed capture(s)"). `tsc` 0, `vitest` 1010/1010 (100 files), `lint`
+      172 (unchanged), `lint:tools` clean, `scan-comments` PASS, `npm run gate` 25 green / 0 red.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->
