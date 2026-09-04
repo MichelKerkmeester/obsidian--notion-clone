@@ -590,6 +590,14 @@ Every exit code below was read from `$?` directly.
    open, is left to a fresh audit rather than decided here (parent D4).
 7. **One dispatch leg did not run.** T019 (the second external pass) was skipped; this landing went
    straight from the first dispatched leg to in-runtime verification.
+8. **Provenance note, 2026-09-04.** On the operator's instruction, every capture under
+   `screenshots/` (all 528 entries this packet's own evidence counts) moved from
+   `screenshots/<group>/` to `screenshots/notion-clone/<group>/` — a pure `git mv`, zero pixel or
+   hash change, verified by re-running `screenshots:verify` and the full gate against the moved
+   tree. A second root, `screenshots/project-manager/`, is reserved beside it for a concurrent
+   phase's reference captures; this packet did not create that content. Every `screenshots/...`
+   path cited above this note, and everywhere else in this packet's docs, predates the move and
+   resolves by prefixing `notion-clone/` after `screenshots/`.
 <!-- /ANCHOR:limitations -->
 
 ---

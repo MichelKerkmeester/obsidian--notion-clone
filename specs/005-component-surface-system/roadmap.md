@@ -64,6 +64,16 @@ trued up to say so; row 29's 1.4.1 mention got the same `(now 0.0.6)` gloss for 
 the seven rows changed open/confirmed state — they stay open, not operator-confirmed, exactly as
 before. Only §4 changed; the rest carry their own dates.
 
+**Sixth reconciliation note, 2026-09-04.** On the operator's instruction, every capture under
+`screenshots/` moved from `screenshots/<group>/` to `screenshots/notion-clone/<group>/` — a pure
+`git mv` across all 528 entries, zero pixel or hash change, verified by re-running
+`screenshots:verify` and the full gate against the moved tree. A second root,
+`screenshots/project-manager/`, is reserved beside it for `037`'s Project Manager reference
+captures, landing separately. Every `screenshots/...` path cited anywhere in this program's specs
+before this date predates the move and resolves by prefixing `notion-clone/` after `screenshots/`;
+this note is the only rewrite, no historical path citation was edited. Only this note changed;
+the rest of the file carries its own dates.
+
 **What this file does not do.** It does not resolve disagreements between a phase's own documents.
 Where they disagree, §7 names both readings and leaves the decision to the operator.
 <!-- /ANCHOR:metadata -->
