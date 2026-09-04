@@ -51,16 +51,16 @@
       "src/views/database-view.ts",
       "src/settings.ts",
       "src/views/modals/db-modal.ts",
-      "tools/gate.mjs",
+      "src/views/sheet-grammar.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/live/sheet-teardown.mjs",
+      "tools/screenshots/manifest-schema.mjs",
+      "src/views/sort-panel-renderer.ts",
       "src/views/toolbar-renderer.ts",
-      "src/views/owned-menu.ts",
-      "src/views/icon-picker-popover.ts",
-      "src/views/option-color-picker.ts",
-      "src/views/column-menu.ts",
-      "src/i18n.ts",
-      "src/views/mobile-bottom-sheet.stories.ts",
-      "tools/live/touch-targets.mjs",
-      "tools/storybook/verify-placement.mjs"
+      "src/views/view-config-panel-renderer.ts",
+      "src/views/table-record-peek.ts",
+      "src/views/calendar-timeline-renderer.ts",
+      "src/main.ts"
     ],
     "entities": [
       {
@@ -124,9 +124,33 @@
         "source": "derived"
       },
       {
-        "name": "gate.mjs",
+        "name": "sheet-grammar.ts",
+        "kind": "code",
+        "path": "src/views/sheet-grammar.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
         "kind": "file",
-        "path": "tools/gate.mjs",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-teardown.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-teardown.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest-schema.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/manifest-schema.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
         "source": "derived"
       },
       {
@@ -136,51 +160,27 @@
         "source": "derived"
       },
       {
-        "name": "owned-menu.ts",
+        "name": "view-config-panel-renderer.ts",
         "kind": "code",
-        "path": "src/views/owned-menu.ts",
+        "path": "src/views/view-config-panel-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "icon-picker-popover.ts",
+        "name": "table-record-peek.ts",
         "kind": "code",
-        "path": "src/views/icon-picker-popover.ts",
+        "path": "src/views/table-record-peek.ts",
         "source": "derived"
       },
       {
-        "name": "option-color-picker.ts",
+        "name": "calendar-timeline-renderer.ts",
         "kind": "code",
-        "path": "src/views/option-color-picker.ts",
+        "path": "src/views/calendar-timeline-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "column-menu.ts",
+        "name": "main.ts",
         "kind": "code",
-        "path": "src/views/column-menu.ts",
-        "source": "derived"
-      },
-      {
-        "name": "i18n.ts",
-        "kind": "code",
-        "path": "src/i18n.ts",
-        "source": "derived"
-      },
-      {
-        "name": "mobile-bottom-sheet.stories.ts",
-        "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.stories.ts",
-        "source": "derived"
-      },
-      {
-        "name": "touch-targets.mjs",
-        "kind": "file",
-        "path": "tools/live/touch-targets.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
+        "path": "src/main.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three operator reports arrived inside eight minutes on 2026-09-04 and they are one defect seen from",
     "created_at": "2026-09-04T18:46:24Z",
-    "last_save_at": "2026-09-04T21:44:34.564Z",
+    "last_save_at": "2026-09-04T23:48:52.966Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3e479cf3e33c47fceaa1111df2b2c89feec371c57a53ad7467cfbb4bb3052b32",
+    "source_fingerprint": "sha256:5c74bd1aa0f1df50a53dbe4d48f52212502d1976a5a654d08ec99c7f3acc2ce7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ed71bcf8935d979b00674f7294f3ae0abf8a77a5d13b09b12ae4aba4b00be253",
       "plan.md": "220be2579bff6607d196d9b02b0b4b8426c00cc4e1ac6b1a987ea42efb64cff2",
-      "tasks.md": "2a0d5e7053bd17892d20ba746ccf1c8ddce1def7654aaf68827899e1e5eb8c41",
-      "implementation-summary.md": "0e23474a4a4f6f6abdb11cc34b75af3b13f1bd3a278017881056332984d081c7"
+      "tasks.md": "0b76b50be994e2623cfbdf58ab915549e425f817428e40caad20853aba0b1594",
+      "implementation-summary.md": "160510afa069373281a5cfb0018f981c317126378563c4077a3c249284539085"
     },
     "last_active_child_id": null,
     "last_active_at": null
