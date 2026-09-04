@@ -247,7 +247,8 @@ export const CONSTRUCTED_SCENARIOS = [
     renderer: "chart",
     title: "Chart view (constructed)",
     sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
-    note: "The shipped chart renderer over the board bench's five-group count aggregation.",
+    note: "The shipped chart renderer over the board bench's five status groups, summing a "
+      + "per-row currency/number column into each bar rather than only counting rows.",
   }),
 ];
 

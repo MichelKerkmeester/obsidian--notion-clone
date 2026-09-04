@@ -1781,6 +1781,23 @@
         "screenshots/views/constructed-list-mobile-light.png"
       ],
       "note": "Reconciliation release, not a CSS edit \u2014 styles.css is still untouched (git diff --stat styles.css empty, baselineHash still c32661e8c089). This rebases the typed-data-and-icons commit (c86fdb9) onto main's list mount-order fix (cf562e3, #shot detached before mount). Only the 4 constructed-list captures moved content: they now show both fixes together \u2014 row-0 seated directly under the header (the mount fix) AND the named select pill, checked checkbox, formatted currency and relation chip (the typed captureData wiring) \u2014 verified by reading all four in both themes. The other 24 typed constructed captures (board, calendar month/week/day, gallery, timeline) carry over byte-identical from c86fdb9's own commit: 0 git diff against HEAD, since the mount bug only ever affected the list view's offsetTop read. table and chart stay untyped by design, unaffected either way. Two full detached recapture runs after the rebase reproduced identical pixelHash/layoutHash for all 36 constructed entries and all 312 total \u2014 determinism proven, not assumed. 9 fixture captures (chrome-owned-menu-sheet-mobile-light, panel-record-detail-sheet-mobile-dark, timeline-subtask-tree-mobile-dark/light, timeline-view-day-desktop-light/mobile-dark, timeline-view-month-desktop-dark/light/mobile-dark) moved bytes only \u2014 pre-existing encoder-noise re-encodes, pixelHash unchanged \u2014 and were restored to their committed HEAD bytes rather than recommitted. manifest.json also had a pre-existing bytes-field staleness on those 9 plus timeline-subtask-tree-desktop-light and timeline-view-year-desktop-dark (recorded byte count did not match the already-committed file, predating this session); corrected to the real file size on disk for all 11, no pixel content involved."
+    },
+    {
+      "event": "release",
+      "phase": "043-constructed-capture",
+      "at": "2026-09-04T04:05:05.857Z",
+      "hash": "c32661e8c089",
+      "reviewed": [
+        "screenshots/views/constructed-chart-desktop-dark.png",
+        "screenshots/views/constructed-chart-desktop-light.png",
+        "screenshots/views/constructed-chart-mobile-dark.png",
+        "screenshots/views/constructed-chart-mobile-light.png",
+        "screenshots/views/constructed-table-desktop-dark.png",
+        "screenshots/views/constructed-table-desktop-light.png",
+        "screenshots/views/constructed-table-mobile-dark.png",
+        "screenshots/views/constructed-table-mobile-light.png"
+      ],
+      "note": "Not a CSS edit \u2014 styles.css is still untouched (git diff --stat styles.css empty, baselineHash still c32661e8c089). Closes the last two items of the parent goal.md DONE row 6: table's cell renderer bag now routes through the production CellRenderer (src/views/cell-renderer.ts) when ScenarioSpec.captureData is on, instead of the plain-text stub, so the eight changed captures show a named select pill, a checked checkbox, a formatted currency figure, a real date, and a relation chip with a real (not placeholder) icon; chart now aggregates a per-row number/currency column with chartAggregation: \"sum\" instead of \"count\", so its five bars carry genuinely varying per-row-derived sums rather than a flat row count. Table stays at its full 2000-row bench shape (no window to protect, unlike list). All eight captures were opened and read on both desktop and phone before this entry was written. Two full detached capture runs reproduced identical pixelHash/layoutHash for all 36 constructed entries (0 changed between runs), so the change is deterministic. No other capture moved: diffed against the prior committed manifest, exactly these 8 of 312 entries changed."
     }
   ],
   "outstanding": [

@@ -625,7 +625,7 @@ Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts
 
 ### Chart view (constructed)
 
-The shipped chart renderer over the board bench's five-group count aggregation.
+The shipped chart renderer over the board bench's five status groups, summing a per-row currency/number column into each bar rather than only counting rows.
 
 | dark | light |
 |---|---|

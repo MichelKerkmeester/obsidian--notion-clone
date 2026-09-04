@@ -9,29 +9,30 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T04:45:00Z"
+    last_updated_at: "2026-09-04T06:15:00Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "T004-T006 landed: captureData typed data + real icons on 9 views"
+    recent_action: "T027 landed: table CellRenderer + chart value field"
     next_safe_action: "Rule on AC-002; then T002, T009-T012, T016"
     blockers:
       - "AC-002 unmeetable as written, needs a phase ruling (Known Limitations 1)"
-      - "table/chart stay untyped: stubbed renderCell, no per-row chart field"
     key_files:
       - "tools/live/render-assertion-harness.ts"
       - "tools/live/typed-data-assertions.mjs"
       - "tools/storybook/obsidian-stub.mjs"
       - "tools/screenshots/constructed-scenarios.mjs"
+      - "tools/bench/table-render-bench.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-impl-summary"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 66
     open_questions:
       - "AC-002: pixel-difference basis, or inside-mount layout determinism basis?"
       - "Does the shared manifest stand, or does AC-006's separate file still apply?"
     answered_questions:
       - "Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ."
       - "Row count alone enough for row 6? No, captureData also types columns."
+      - "Does captureData's real CellRenderer add forced layout reads to the table's row loop? No — measured 3 of 3 connected reads, bound 8, identical to captureData:false at the same 2000-row shape."
 ---
 # Implementation Summary
 
@@ -143,6 +144,13 @@ structural-assertion and touch-target lanes, not by a tenth-through-thirteenth s
 | `screenshots/manifest.json`, `screenshots/README.md` | Modified | 312 entries (276 fixture + 36 constructed); `fixtureOf` recorded on the 28 declared fixture entries |
 | `tools/lane/css-lane.json` | Modified | Release entry for this phase naming all 36 reviewed captures |
 | `tools/live/*.json` | Modified | Re-stamped evidence after `scenarios.mjs` moved |
+| `tools/bench/table-render-bench.ts` | Modified (T027) | `makeColumns` gained a `"text" \| "mixed"` kind parameter (`MIXED_TYPES`/`valueForType`, mirroring every other bench); `makeRows` calls `valueForType` unconditionally, behaviour-identical to the prior `${col.key}-${i}` for "text" |
+| `tools/live/render-assertion-harness.ts` | Modified (T027) | `fileViewTableBag`/`embedTableBag` take a `captureData` flag and route `renderCell` through a new `makeCaptureCellRenderer()` (a real `CellRenderer`) instead of the plain-text stub; the table branch passes `"mixed"` columns and calls `applyCaptureOptions` when captureData is on; the chart branch picks a `number`/`currency` value column, force-fills it, and switches `chartAggregation` to `"sum"`; `chartAssertions` gained a `config` parameter and a value-field-resolves assertion; `ScenarioOutcome` gained `chartValueField` |
+| `tools/screenshots/constructed-scenarios.mjs` | Modified (T027) | Chart scenario's `note` text updated from "count aggregation" to "summing a per-row currency/number column" |
+| `tools/live/typed-data-assertions.mjs` | Modified (T027) | Extended from one scenario (`constructed-list`) to three (`+constructed-table`, `+constructed-chart`), each with its own marker set; table adds date and relation-icon markers, chart reads `chartValueField` off the harness's own return value rather than the DOM |
+| `tools/lane/css-lane.json` | Modified (T027) | New release entry naming the 8 captures (table + chart, both devices/themes) whose `pixelHash` changed; `styles.css` untouched, `baselineHash` unchanged |
+| `screenshots/views/constructed-table-*.png`, `screenshots/views/constructed-chart-*.png` | Modified (T027) | The last 8 of the 36 constructed captures to gain typed rendering |
+| `screenshots/manifest.json`, `screenshots/README.md` | Modified (T027) | Re-stamped after the recapture; 8 `bytes` fields on unrelated fixtures corrected back to their committed values after their encoder-noise-only re-encodes were restored rather than recommitted |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -179,6 +187,8 @@ included — reproduced the same `pixelHash` and `layoutHash`.
 | Constructed entries share `screenshots/manifest.json` rather than a separate file | Deviates from AC-006 and `plan.md`. It was not chosen on the merits — the dispatched leg was scoped to the shared manifest, and the landing pass kept it because the shared file is what `check-lane`, `verify.mjs` and `capture-device-parity` already read, which is why three of them picked the constructed captures up with no code change at all. Recorded as a deviation, not as a resolution: AC-006 is still open. |
 | Nine scenarios, not thirteen | The four extra timeline scales need `ScenarioSpec` to carry a timeline scale, which the harness does not yet do (T004). `makeTimelineConfig(columns, "week")` is hardcoded, so `constructed-timeline` is the week scale and says so. |
 | `fixtureOf` on the fixture, rather than a `declared-fixtures.mjs` map | Deviates from AC-007. The declaration sits next to the markup it describes, so a fixture and its claim cannot drift apart in separate files. Seven of the eleven planned pairs are declared; the four timeline-scale pairs are not, because D4 forbids declaring a supersession the constructed capture does not actually reproduce. |
+| Table routes through a real `CellRenderer`, not a second stub | The bag's own `renderCell` stub is deliberately cost-isolating for the structural bench, and duplicating `cell-renderer.ts`'s status/checkbox/currency/date/relation branches inline would drift from the shipped behaviour the capture exists to prove. `database-view.ts`'s own file-view wiring is mirrored exactly: no live `DataSource`/`App` (neither is read by the display branches this exercises), `isReadOnly` left at its default `false`. |
+| Chart's value column is force-filled rather than left at the board bench's sparse fill | `CHART_FILL` stays `BOARD_FILL` (30%) for every other column, matching the bench's own shape. Left sparse, the specific column the aggregation reads coincided with two of five groups' row indices and zeroed their bars — real, but the option exists to prove marks are exercised, and two empty bars proves that weakly. Filling only the one column the aggregation reads keeps the rest of the bench's shape untouched. |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -231,6 +241,31 @@ Every exit code below was read from `$?` directly.
 | 9 constructed views read on desktop + phone | Done. list/board/gallery/calendar month·week·day/timeline show named select pills, checkboxes, currency, relation cells, real icons; table/chart unchanged (see Known Limitations 3) |
 | Declared `fixtureOf` pairs re-compared | All 7 read on both sides. Fixtures still show curated, named content (specific subscription names, multi-day/timed events, category grouping) the bench's generated `row-N` shape does not reproduce; the difference that remains is data richness and structure, not typed-vs-untyped rendering, which is now closed for 5 of the 7 (table's constructed side stays untyped; gallery's constructed side has no cover-image field configured, so it never shows the fixture's empty-cover placeholder state) |
 | `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this landing either |
+
+**T027 landing (table's production cell renderer, chart's per-row value field — DONE row 6's last two open items), every exit code read from `$?` directly:**
+
+| Check | Result |
+|-------|--------|
+| Red: `typed-data-assertions.mjs` extended with `constructed-table`/`constructed-chart` cases, run against the pre-T027 tree (`git stash` on `table-render-bench.ts`/`render-assertion-harness.ts` only) | FAIL, exit 1 — 6 of 6 new assertions failed: table's `namedSelectPill`/`checkedCheckbox`/`currency`/`dateValue`/`relationIcon` all false under `captureData: true`, chart's `perRowValueField` false under the same |
+| Green: same script after restoring | PASS, exit 0 — all 6 present under `captureData: true`, all absent under `captureData: false`, on the same three scenarios; `constructed-list`'s original 3 markers unaffected |
+| Read-bound measurement (table's real `CellRenderer` vs. the stub, at the unreduced 2000-row shape) | Dedicated in-runtime mount of `{renderer: "table", bag: "file-view", captureData: true}}`: `"3 of 3 layout reads... bound 8"` / `"3 layout reads... bound 8"` — identical to the `captureData: false` numbers already on record. Zero forced reads added. |
+| `node tools/live/render-assertions.mjs` | PASS, exit 0 — unaffected by construction: no entry in `render-assertion-bundle.mjs`'s shared `SCENARIOS` sets `captureData` on `table`/`chart` |
+| `node tools/live/touch-targets.mjs` | PASS, exit 0 — fixture 264/279 and constructed 367/367 unchanged |
+| `node tools/live/unstyled-links.mjs` | PASS, exit 0 — fixture 112 links across 70 scenarios unchanged |
+| `npx tsc --noEmit` | PASS, exit 0 |
+| `npx vitest run` | PASS, exit 0 — 97 files / 961 tests, unchanged |
+| `npm run lint:tools` | PASS, exit 0 |
+| `npm run lint` | exit 1, 172 problems — identical to the HEAD baseline; `src/` untouched |
+| `node tools/naming/scan-comments.mjs` | PASS, exit 0 |
+| Full capture run x2 (detached) | 312 entries each; 0 of 36 constructed entries changed `pixelHash`/`layoutHash` between the two runs |
+| `node tools/screenshots/verify.mjs` | PASS, exit 0 — 312 entries current, none blank or theme-identical |
+| `node tools/lane/check-lane.mjs` | Observed red first: FAIL, exit 1, "8 changed capture(s) this release does not name". After the release entry named all 8: PASS, exit 0; `styles.css` untouched, `baselineHash` unchanged |
+| `node tools/live/capture-device-parity.mjs` | PASS, exit 0 — 77 pairs, 0 identical against a baseline of 4, unchanged |
+| `node tools/live/evidence.mjs --check-all` | Observed red first: exit 0 but reporting 2 of 16 stale (`touch-targets.json`, `unstyled-links.json`, after `render-assertion-harness.ts` moved). After re-running their writers: 16 of 16 fresh |
+| `SURFACE_PHASE=043-constructed-capture npm run gate` and bare `npm run gate` | PASS, exit 0 — 25 green, 0 red, both |
+| 8 changed constructed PNGs (table + chart, both devices, both themes) opened and read | Done. Table: named select pills, checked/unchecked checkbox, formatted currency, real dates, a relation chip with a real `file-text` icon. Chart: five bars with genuinely varying summed values (`"Sum of month by Status"`) instead of a flat row-count tally; before the per-column force-fill, the first read showed 2 of 5 bars at zero (real, but an unconvincing proof of "marks exercised") — recorded and then closed by filling only the one column the aggregation reads, not the bench's general shape |
+| `node tools/naming/scan-failing-values.mjs` | PASS, exit 0 — baseline 145 unchanged before this task's own tick was added |
+| `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this landing either |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -255,18 +290,27 @@ Every exit code below was read from `$?` directly.
    the only caller) drops the row count to 18 at full fill for list/board/gallery/calendar/timeline;
    the phone list capture now shows real rows from the first frame. Left as history rather than
    deleted: this was the observed-red evidence T006's own task row cites.
-3. **PARTIALLY RESOLVED (T004-T006).** Seven of the nine constructed views (list, board, gallery,
-   calendar month/week/day, timeline) now show typed rendering — a named, coloured select pill
-   (`col.statusOptions` rather than the grey no-match fallback), a checked checkbox, a formatted
-   currency figure, a relation/link cell, and — on the calendar and timeline captures — a real
-   struck-through completed row wherever the capture-sized checkbox column reads true. Every
-   Obsidian icon across all nine views now draws a real hand-drawn SVG glyph for the 21 icon names
-   the render-assertion bundle actually mounts, rather than the stub's placeholder diamond. Table
-   and chart remain untyped: table's harness bag renders every cell through a stub
-   (`renderCell: (td, row, col) => td.setText(...)`) the option does not reach, by the same
-   deliberate cost-isolating design its own bench file documents, and chart draws an aggregation
-   with no per-row field to type. The fixtures remain the sole authority for those two views' typed
-   rendering; all 70 fixtures stay registered and captured, unaffected by this change.
+3. **RESOLVED (T004-T006, T027).** All nine constructed views now show typed rendering. T004-T006
+   covered list, board, gallery, calendar month/week/day and timeline — a named, coloured select
+   pill (`col.statusOptions` rather than the grey no-match fallback), a checked checkbox, a
+   formatted currency figure, a relation/link cell, and — on the calendar and timeline captures —
+   a real struck-through completed row wherever the capture-sized checkbox column reads true.
+   Every Obsidian icon across all nine views draws a real hand-drawn SVG glyph for the 21 icon
+   names the render-assertion bundle actually mounts, rather than the stub's placeholder diamond.
+   T027 closed the remaining two: table's `fileViewTableBag`/`embedTableBag`
+   (`render-assertion-harness.ts:362`, `:397`) now swap `renderCell` for a `CellRenderer` instance
+   when `captureData` is on — the same class `database-view.ts` and `embedded-database-renderer.ts`
+   wire into their own `renderCell` action — so a typed table cell shows the identical named select
+   pill, checkbox, currency figure, date and relation chip (with a real, not placeholder, icon) the
+   other five views already had; table stays at its full 2000-row bench shape rather than the
+   fixture-sized one, since it has no window to protect and a dedicated in-runtime measurement
+   confirmed the real cell renderer adds zero forced layout reads to the row loop. Chart's
+   `chartAggregation` switches from `"count"` to `"sum"` over the first `number`/`currency` column
+   `MIXED_TYPES` produced, force-filled on every row so the board bench's own sparse fill cannot
+   coincidentally zero out a group's bar, so its five marks now carry genuinely varying per-row
+   sums rather than a flat row tally. The fixtures are no longer the sole authority for any of the
+   nine views' typed rendering; all 70 fixtures stay registered and captured, unaffected by this
+   change.
 4. **Constructed entries live in the shared manifest, not `screenshots/constructed-manifest.json`.**
    AC-005 and AC-006 are unmet as written. The count is 36 rather than 52, and the separation the
    plan asked for does not exist.

@@ -52,6 +52,7 @@
 
 import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
 import { TableRenderer, type TableRendererActions } from "../../src/views/table-renderer";
+import { CellRenderer } from "../../src/views/cell-renderer";
 import { CalendarRenderer, type CalendarRendererActions } from "../../src/views/calendar-renderer";
 import { ChartRenderer, type ChartRendererActions } from "../../src/views/chart-renderer";
 import {
@@ -59,6 +60,7 @@ import {
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
 import type { App } from "obsidian";
+import type { DataSource } from "../../src/data/data-source";
 import type { ColumnDef, RowData, StatusOptionDef, ViewConfig } from "../../src/data/types";
 import {
   makeColumns as makeListColumns,
@@ -179,6 +181,12 @@ export interface ScenarioSpec {
    * `touch-targets.mjs` and `unstyled-links.mjs` keep measuring the shape their bounds were
    * calibrated against; `capture.mjs` is the only caller that turns it on, because a capture
    * proves what the shipped types render as, not how many layout reads a freeze-scale render costs.
+   * The table branch reads it too, but for the cell renderer rather than the row shape: table
+   * keeps its full row count and instead routes cells through the production `CellRenderer` (the
+   * same class the file-view and embed hosts wire into their own `renderCell` action) so a typed
+   * column paints its real pill/checkbox/currency/date/relation display instead of the bench's
+   * plain-text stub. The chart branch reads it to pick a per-row value column and switch off
+   * `count` aggregation, since `count` needs no per-row field to draw its bars.
    */
   captureData?: boolean;
 }
@@ -193,6 +201,13 @@ export interface ScenarioOutcome {
   scenario: ScenarioSpec;
   bagKeys: string[];
   results: AssertionResult[];
+  /** The chart branch's own per-row value column key, when captureData wired one. Undefined for
+   *  every other renderer and for a chart scenario that left captureData off — exposed here
+   *  rather than only through an assertion's pass/fail, since a caller proving the OPTION is what
+   *  produced it (the same negative-control shape typed-data-assertions.mjs already uses for the
+   *  list scenario) needs a value that actually differs between the two states, not an invariant
+   *  that stays true either way. */
+  chartValueField?: string;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -261,6 +276,24 @@ function applyCaptureGroupPalette(columns: ColumnDef[], rows: RowData[], groupKe
   col.statusOptions = distinct.map((value, i) => ({ value, color: CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].color }));
 }
 
+/**
+ * The table branch's captureData path routes cells through this instead of the bench's stub
+ * writer — the same `CellRenderer` class `database-view.ts` and `embedded-database-renderer.ts`
+ * wire into their own `renderCell` action, constructed with no live `DataSource` or `App`. Neither
+ * is read by the typed display branches this exists to exercise (status/select, checkbox,
+ * currency, date, relation): `this.dataSource` is only touched by rename/rollup-config/edit-commit
+ * paths, none of which a static capture ever triggers, and `this.app` is optional everywhere it's
+ * read (the relation renderer's own header comment documents the same "no app, resolve nothing"
+ * tolerance every other renderer in this harness already depends on). `isReadOnly` is left at its
+ * default `false`, matching `database-view.ts`'s own file-view wiring, which is also why the
+ * default `openNote` (calling through `dataSource`) is left alone rather than stubbed — the same
+ * choice `embedded-database-renderer.ts` makes for its own embed wiring, and a static capture
+ * never fires the click that would reach it.
+ */
+function makeCaptureCellRenderer(): CellRenderer {
+  return new CellRenderer(undefined as unknown as DataSource, async () => undefined);
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 3. HOST ACTION BAGS
 // ───────────────────────────────────────────────────────────────────
@@ -326,7 +359,10 @@ function embedListBag(columns: ColumnDef[]): ListRendererActions {
   };
 }
 
-function fileViewTableBag(columns: ColumnDef[]): TableRendererActions {
+function fileViewTableBag(columns: ColumnDef[], captureData?: boolean): TableRendererActions {
+  // Only built when a scenario actually reads it — the 2000-row structural path never pays for a
+  // CellRenderer it never calls.
+  const cellRenderer = captureData ? makeCaptureCellRenderer() : undefined;
   return {
     getVisibleColumns: () => columns,
     isRowSelected: () => false,
@@ -335,7 +371,9 @@ function fileViewTableBag(columns: ColumnDef[]): TableRendererActions {
     toggleRowsSelected: () => undefined,
     setupColumnHeader: (th, col) => { th.setText(col.label); },
     setupRow: () => undefined,
-    renderCell: (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
+    renderCell: cellRenderer
+      ? (td, row, col) => cellRenderer.renderCell(td, row, col)
+      : (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
     captureInteractionSnapshot: () => undefined,
     restoreInteractionSnapshot: () => undefined,
     renderRecordIcon: () => null,
@@ -356,7 +394,8 @@ function fileViewTableBag(columns: ColumnDef[]): TableRendererActions {
   };
 }
 
-function embedTableBag(columns: ColumnDef[]): TableRendererActions {
+function embedTableBag(columns: ColumnDef[], captureData?: boolean): TableRendererActions {
+  const cellRenderer = captureData ? makeCaptureCellRenderer() : undefined;
   return {
     getVisibleColumns: () => columns,
     isRowSelected: () => false,
@@ -365,7 +404,9 @@ function embedTableBag(columns: ColumnDef[]): TableRendererActions {
     toggleRowsSelected: () => undefined,
     setupColumnHeader: (th, col) => { th.setText(col.label); },
     setupRow: () => undefined,
-    renderCell: (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
+    renderCell: cellRenderer
+      ? (td, row, col) => cellRenderer.renderCell(td, row, col)
+      : (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
     renderRecordIcon: () => null,
     renderGroupSummaries: () => undefined,
     applyConditionalFormat: () => undefined,
@@ -1098,7 +1139,7 @@ function weekAssertions(container: HTMLElement, scale: "week" | "day"): Assertio
   return results;
 }
 
-function chartAssertions(container: HTMLElement): AssertionResult[] {
+function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionResult[] {
   const results: AssertionResult[] = [];
   const roots = container.querySelectorAll<HTMLElement>(".db-chart").length;
   const empties = container.querySelectorAll<HTMLElement>(".db-chart-empty, .db-chart-number").length;
@@ -1120,6 +1161,20 @@ function chartAssertions(container: HTMLElement): AssertionResult[] {
     name: "the chart drew a non-empty title",
     pass: titles === 1,
     detail: `${titles} non-empty .db-chart-title element(s), want 1`,
+  });
+  // Vacuously true when no value field is configured (a plain "count" chart needs none) — the
+  // point is to catch a value field that names a column that does not exist or is not numeric,
+  // which "the chart drew its root" above would not catch on its own: an aggregation that silently
+  // treats a bad field as always-zero still draws a root, a canvas and a title.
+  const valueColumn = config.chartValueField
+    ? config.schema.columns.find((col) => col.key === config.chartValueField)
+    : undefined;
+  results.push({
+    name: "a configured value field resolves to a numeric column",
+    pass: !config.chartValueField || (valueColumn?.type === "number" || valueColumn?.type === "currency"),
+    detail: config.chartValueField
+      ? `chartValueField "${config.chartValueField}" resolves to type ${valueColumn?.type ?? "missing"}`
+      : "no chartValueField configured — this scenario's aggregation needs none",
   });
   return results;
 }
@@ -1192,6 +1247,7 @@ export function runRenderAssertions(
   const container = host.createDiv({ cls: "note-database-container" });
   const app = undefined as unknown as App;
   let bagKeys: string[] = [];
+  let chartValueField: string | undefined;
 
   if (scenario.renderer === "list") {
     const columns = makeListColumns(LIST_COLUMNS, scenario.captureData ? "mixed" : "text");
@@ -1333,13 +1389,34 @@ export function runRenderAssertions(
       });
     }
   } else if (scenario.renderer === "chart") {
-    const columns = makeBoardColumns(CHART_COLUMNS, "text");
+    const columns = makeBoardColumns(CHART_COLUMNS, scenario.captureData ? "mixed" : "text");
     const rows = makeBoardRows(CHART_ROWS, columns, CHART_FILL, CHART_GROUPS);
+    // "count" needs no per-row field — every row just adds one to its group's tally, which is why
+    // the chart never had one before. A per-row value column is what a configured sum/avg chart
+    // actually reads, so captureData picks the first number/currency column MIXED_TYPES produced
+    // (never the reserved group field, which is always "select") and switches the aggregation to
+    // "sum" so that column's value feeds every bar rather than sitting unread.
+    const valueColumn = scenario.captureData
+      ? columns.find((col) => col.type === "number" || col.type === "currency")
+      : undefined;
+    chartValueField = valueColumn?.key;
+    if (valueColumn) {
+      // The board bench's own sparse fill (CHART_FILL = BOARD_FILL, 30%) can land entirely
+      // outside a particular group's row indices, summing that group's bar to zero — a real
+      // number, but one that proves nothing about the marks this option exists to exercise. A
+      // dedicated fill for the one column the aggregation reads keeps every group's bar real
+      // without changing the bench's general fill shape for every other column.
+      const key = valueColumn.key;
+      rows.forEach((row, i) => {
+        (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[key] = i * 37 + 0.5;
+      });
+    }
     const config = {
       ...makeBoardConfig(columns),
       viewType: "chart",
       chartType: "bar",
-      chartAggregation: "count",
+      chartAggregation: valueColumn ? "sum" : "count",
+      chartValueField: valueColumn?.key,
       chartGroupField: BOARD_GROUP_FIELD,
       schema: { columns, computedFields: [] },
     } as ViewConfig;
@@ -1356,7 +1433,7 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "chart-renderer"));
     if (results[0].pass) {
-      results.push(...chartAssertions(container));
+      results.push(...chartAssertions(container, config));
       results.push({
         name: "no forced layout inside the chart build",
         pass: layoutReads <= MAX_CHART_LAYOUT_READS,
@@ -1403,10 +1480,17 @@ export function runRenderAssertions(
     // this leaks one of each per scenario into the run that follows.
     renderer.destroy();
   } else {
-    const columns = makeTableColumns(TABLE_COLUMNS);
+    // Row count stays at the bench's own 2000 regardless of captureData — the table has no
+    // window, so every row becomes a real <tr> either way, and the constructed capture's own note
+    // already keeps it at this shape rather than a reduced one. Only the column types change: a
+    // typed column paints through the real CellRenderer below instead of the plain-text stub.
+    const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
     const rows = makeTableRows(TABLE_ROWS, columns);
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
     const config = makeTableConfig(columns);
-    const bag = scenario.bag === "file-view" ? fileViewTableBag(columns) : embedTableBag(columns);
+    const bag = scenario.bag === "file-view"
+      ? fileViewTableBag(columns, scenario.captureData)
+      : embedTableBag(columns, scenario.captureData);
     bagKeys = Object.keys(bag).sort();
     if (control === "per-item") armPerItemRead(bag);
     const renderer = new TableRenderer(bag);
@@ -1469,5 +1553,5 @@ export function runRenderAssertions(
   if (onMounted) onMounted(container, results);
 
   container.remove();
-  return { scenario, bagKeys, results };
+  return { scenario, bagKeys, results, chartValueField };
 }

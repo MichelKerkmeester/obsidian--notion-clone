@@ -38,19 +38,42 @@ const COLUMN_COUNTS = [4, 16];
 const ROW_COUNTS = [100, 500, 1000, 2000];
 const REPEATS = 5;
 
-/** Exported for the assertion harness, which must render the same measured shape the bench times. */
-export function makeColumns(count: number): ColumnDef[] {
+// The types a capture of a configured table actually holds. Unused by `runBench` itself — the
+// perf sweep stays on "text" so cell content cost never confounds the structural number — but the
+// assertion harness's captureData option (render-assertion-harness.ts) needs the real renderer's
+// typed branches (a select pill, a checkbox, a currency figure, a relation chip) exercised rather
+// than the stub writer this file's cost-isolation depends on.
+const MIXED_TYPES: ColumnDef["type"][] = [
+  "text", "number", "date", "select", "multi-select", "checkbox", "relation", "currency",
+];
+
+function valueForType(col: ColumnDef, i: number): unknown {
+  switch (col.type) {
+    case "number": case "currency": return i * 37 + 0.5;
+    case "date": case "datetime": return `2026-0${(i % 9) + 1}-1${i % 9}`;
+    case "checkbox": return i % 2 === 0;
+    case "multi-select": return [`tag-${i % 5}`, `tag-${(i + 2) % 5}`];
+    case "relation": return `[[notes/row-${i % 20}]]`;
+    default: return `${col.key}-${i}`;
+  }
+}
+
+/** Exported for the assertion harness, which must render the same measured shape the bench times.
+ *  "mixed" rotates every column but the first through MIXED_TYPES; the key/label naming stays
+ *  `field${i}` either way, so a caller indexing by key (the harness's own column-alignment
+ *  assertion) keeps finding the same column regardless of kind. */
+export function makeColumns(count: number, kind: "text" | "mixed" = "text"): ColumnDef[] {
   return Array.from({ length: count }, (_unused, i) => ({
     key: i === 0 ? "file.name" : `field${i}`,
     label: i === 0 ? "Name" : `Field ${i}`,
-    type: "text",
+    type: kind === "mixed" && i > 0 ? MIXED_TYPES[i % MIXED_TYPES.length] : "text",
   })) as ColumnDef[];
 }
 
 export function makeRows(count: number, columns: ColumnDef[]): RowData[] {
   return Array.from({ length: count }, (_unused, i) => {
     const frontmatter: Record<string, unknown> = {};
-    for (const col of columns) frontmatter[col.key] = `${col.key}-${i}`;
+    for (const col of columns) frontmatter[col.key] = valueForType(col, i);
     return {
       file: { path: `notes/row-${i}.md`, basename: `row-${i}`, name: `row-${i}.md` },
       frontmatter,

@@ -11,15 +11,18 @@
 // checked checkbox or a formatted currency figure actually look like. `ScenarioSpec.captureData`
 // (render-assertion-harness.ts) is the fix: opt-in "mixed" columns at a fixture-sized row count,
 // with select columns pointed at named, coloured options instead of the bench's placeholder value.
+// The table branch reads the same option for its cell renderer rather than its row shape, and the
+// chart branch reads it to pick a per-row value column instead of a plain row count.
 //
 // This check proves the option does something, the same way the readiness wait's negative
-// control does: it mounts the identical list scenario twice, once with `captureData` on and once
+// control does: it mounts each scenario below twice, once with `captureData` on and once
 // without, and asserts the markers appear ONLY on the "on" side. A check that only asserted the
 // "on" side could pass by coincidence — a stray grey badge, an unrelated checkbox — with no proof
 // the OPTION is what produced it.
 //
 // Usage: node tools/live/typed-data-assertions.mjs
-// Exit:  0 when captureData:true shows every typed marker and captureData:false shows none.
+// Exit:  0 when captureData:true shows every typed marker for every scenario below and
+//        captureData:false shows none of them.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -37,14 +40,41 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 // 2. BUNDLE
 // ───────────────────────────────────────────────────────────────────
 
-// Mounts the given scenario, reads the three markers off the DOM before the harness removes the
-// container, and reports which were present. A checked checkbox is asked for directly rather than
+// Mounts the given scenario and reads its markers off the DOM (or, for the chart, off the
+// harness's own return value — Chart.js draws to a canvas, which a DOM query cannot read) before
+// the harness removes the container. A checked checkbox is asked for directly rather than
 // counted, because the assertion is "at least one renders checked", not "every checkbox is".
+//
+// List and table share the select/checkbox/currency shape but not the class names: the card-based
+// list renders through card-field-renderer.ts (".db-card-field-number"), the table through
+// cell-renderer.ts's own numeric-cell class (".db-numeric-value"). The table adds a date marker
+// (no date column exists at the "text" shape, so its class only appears here) and a relation-icon
+// marker — the SVG the stub's real-icon table draws inside a relation chip, not the placeholder
+// "◆" text an untraced icon name would leave, which is what proves the chip's icon is real rather
+// than merely present.
+//
+// The chart has no per-item DOM at all: a bar chart's marks live inside a <canvas>. Its marker is
+// therefore the harness's own `chartValueField` field on the return value — the per-row column key
+// the render branch resolved before calling Chart.js — rather than anything read off the page.
 const { work, missingSources } = await buildRenderAssertionBundle(`
 window.__typedMarkers = (scenario) => {
   let container = null;
-  runRenderAssertions(document.body, scenario, "", (mounted) => { container = mounted; });
+  const outcome = runRenderAssertions(document.body, scenario, "", (mounted) => { container = mounted; });
   if (!container) return { mounted: false };
+  if (scenario.renderer === "chart") {
+    return { mounted: true, perRowValueField: !!outcome.chartValueField };
+  }
+  if (scenario.renderer === "table") {
+    return {
+      mounted: true,
+      namedSelectPill: !!container.querySelector(".status-badge:not(.status-color-gray)"),
+      checkedCheckbox: !!container.querySelector(".db-checkbox-field:checked"),
+      currency: Array.from(container.querySelectorAll(".db-numeric-value"))
+        .some((el) => el.textContent.includes("\\u20ac")),
+      dateValue: !!container.querySelector(".db-date-value"),
+      relationIcon: !!container.querySelector(".db-relation-link-icon svg"),
+    };
+  }
   return {
     mounted: true,
     namedSelectPill: !!container.querySelector(".status-badge:not(.status-color-gray)"),
@@ -81,6 +111,15 @@ function findChrome() {
   throw new Error("typed-data-assertions: no Chrome/Chromium found. Set SCREENSHOT_CHROME.");
 }
 
+// Every renderer this program's own DONE row 6 still names as untyped: list already proved the
+// option (kept here as the original negative control), table just gained the production
+// CellRenderer, and chart just gained a per-row value column.
+const SCENARIOS_UNDER_TEST = [
+  { id: "constructed-list", renderer: "list", bag: "file-view" },
+  { id: "constructed-table", renderer: "table", bag: "file-view" },
+  { id: "constructed-chart", renderer: "chart", bag: "file-view" },
+];
+
 const failures = [];
 let browser;
 try {
@@ -90,34 +129,37 @@ try {
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await page.goto(`file://${join(work, "index.html")}`);
 
-  const withoutCaptureData = await page.evaluate((scenario) => window.__typedMarkers(scenario), {
-    renderer: "list", bag: "file-view",
-  });
-  const withCaptureData = await page.evaluate((scenario) => window.__typedMarkers(scenario), {
-    renderer: "list", bag: "file-view", captureData: true,
-  });
+  for (const { id, renderer, bag } of SCENARIOS_UNDER_TEST) {
+    const withoutCaptureData = await page.evaluate((scenario) => window.__typedMarkers(scenario), {
+      renderer, bag,
+    });
+    const withCaptureData = await page.evaluate((scenario) => window.__typedMarkers(scenario), {
+      renderer, bag, captureData: true,
+    });
+
+    console.log(`typed-data-assertions: ${id} mounted twice — the default shape and the capture-sized one\n`);
+
+    const cases = [
+      { label: "captureData: false (default, unchanged)", markers: withoutCaptureData, wantMarkers: false },
+      { label: "captureData: true (constructed captures)", markers: withCaptureData, wantMarkers: true },
+    ];
+    for (const { label, markers, wantMarkers } of cases) {
+      if (!markers.mounted) {
+        failures.push(`${id} — ${label}: did not mount`);
+        console.log(`  FAIL  ${id} — ${label} — did not mount`);
+        continue;
+      }
+      for (const [marker, present] of Object.entries(markers)) {
+        if (marker === "mounted") continue;
+        const ok = present === wantMarkers;
+        if (!ok) failures.push(`${id} — ${label}: ${marker} was ${present}, wanted ${wantMarkers}`);
+        console.log(`  ${ok ? "PASS" : "FAIL"}  ${id} — ${label} — ${marker}: ${present}`);
+      }
+    }
+    console.log("");
+  }
   await page.close();
   for (const error of pageErrors) failures.push(`page error: ${error}`);
-
-  console.log("typed-data-assertions: constructed-list mounted twice — the default shape and the capture-sized one\n");
-
-  const cases = [
-    { label: "captureData: false (default, unchanged)", markers: withoutCaptureData, wantMarkers: false },
-    { label: "captureData: true (constructed captures)", markers: withCaptureData, wantMarkers: true },
-  ];
-  for (const { label, markers, wantMarkers } of cases) {
-    if (!markers.mounted) {
-      failures.push(`${label}: did not mount`);
-      console.log(`  FAIL  ${label} — did not mount`);
-      continue;
-    }
-    for (const [marker, present] of Object.entries(markers)) {
-      if (marker === "mounted") continue;
-      const ok = present === wantMarkers;
-      if (!ok) failures.push(`${label}: ${marker} was ${present}, wanted ${wantMarkers}`);
-      console.log(`  ${ok ? "PASS" : "FAIL"}  ${label} — ${marker}: ${present}`);
-    }
-  }
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
 } finally {
@@ -135,7 +177,8 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("\ntyped-data-assertions: PASS — captureData:true renders a named select pill, a checked");
-console.log("  checkbox and a formatted currency figure; captureData:false renders none of them,");
-console.log("  which is the negative control proving the markers come from the option, not chance.");
+console.log("\ntyped-data-assertions: PASS — captureData:true renders every typed marker for list, table");
+console.log("  and chart (select pill, checkbox, currency, date, relation icon, per-row chart value");
+console.log("  field); captureData:false renders none of them, which is the negative control proving");
+console.log("  the markers come from the option, not chance.");
 process.exit(0);
