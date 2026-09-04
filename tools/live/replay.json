@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-04T08:54:55.295Z",
+  "measuredAt": "2026-09-04T09:25:47.882Z",
   "inputs": {
-    "styles.css": "b7de3b6fb54a",
+    "styles.css": "d3c6cc3e8453",
     "tools/screenshots/theme.css": "88cea2ea664d",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "58d76c0d94e9"
+    "tools/live/replay.mjs": "7950ec88efa2"
   },
   "claims": [
     {
@@ -106,7 +106,7 @@
     },
     {
       "phase": "037-timeline-gantt-port",
-      "claim": "all five timeline scales carry the ported header, grid, weekend and today fills",
+      "claim": "all five timeline scales carry the ported header, grid and today fills, and weekend fill stays scoped to the day scale the reference restricts it to",
       "was": 0,
       "recorded": 5,
       "actual": 5,

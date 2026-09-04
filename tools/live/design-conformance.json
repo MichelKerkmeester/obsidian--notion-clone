@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T07:47:43.891Z",
+  "measuredAt": "2026-09-04T09:22:55.050Z",
   "inputs": {
-    "styles.css": "b7de3b6fb54a",
+    "styles.css": "d3c6cc3e8453",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "6cae246726c0"
   },
@@ -119,9 +119,9 @@
     "src/views/calendar-renderer.ts:862  .db-calendar-day-popover-events",
     "src/views/calendar-renderer.ts:1812  .db-calendar-mini-popover",
     "src/views/calendar-renderer.ts:2256  .db-calendar-scale-menu",
-    "src/views/calendar-timeline-renderer.ts:1310  .db-timeline-scale-menu",
-    "src/views/calendar-timeline-renderer.ts:1435  .db-calendar-mini-popover",
-    "src/views/calendar-timeline-renderer.ts:2340  .db-timeline-mobile-menu-button",
+    "src/views/calendar-timeline-renderer.ts:2573  .db-timeline-scale-menu",
+    "src/views/calendar-timeline-renderer.ts:2698  .db-calendar-mini-popover",
+    "src/views/calendar-timeline-renderer.ts:3603  .db-timeline-mobile-menu-button",
     "src/views/calendar-timeline-toolbar-renderer.ts:67  .db-calendar-timeline-options-popover",
     "src/views/calendar-timeline-toolbar-renderer.ts:69  .db-panel-header",
     "src/views/calendar-timeline-toolbar-renderer.ts:70  .db-panel-title",

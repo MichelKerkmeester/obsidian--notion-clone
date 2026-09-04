@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "b7de3b6fb54a",
+  "baselineHash": "d3c6cc3e8453",
   "baselineCommit": "421995b3790a0e6486e72bfcd3280e1fe7101562",
   "history": [
     {
@@ -1981,6 +1981,19 @@
         "screenshots/views/timeline-view-year-mobile-dark.png",
         "screenshots/views/timeline-view-year-mobile-light.png"
       ]
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T11:30:00.000Z",
+      "hash": "d3c6cc3e8453",
+      "reviewed": [
+        "screenshots/views/constructed-timeline-subtask-desktop-dark.png",
+        "screenshots/views/constructed-timeline-subtask-desktop-light.png",
+        "screenshots/views/constructed-timeline-subtask-mobile-dark.png",
+        "screenshots/views/constructed-timeline-subtask-mobile-light.png"
+      ],
+      "note": "Reconciliation release, not a new CSS edit \u2014 rebasing worktrees/024-gantt-one-to-one (this phase's ganttPortRaiseHistory/ganttPortLowerHistory, ending at hash 20d8ee6827be) onto main after main absorbed the board kanban port plus its ten constructed state variants moved styles.css to a new merged hash (d3c6cc3e8453, both regions disjoint and kept verbatim: the gantt.css copy and the board's kanban.css copy sit in separate MIT-notice blocks). A full recapture (npm run screenshots, 356 entries) plus check-lane's own pixelHash/layoutHash compare against the pre-rebase committed manifest found exactly 4 content-changed captures, all four opened and read this session (both themes, both devices): the constructed-timeline-subtask scenario's parent row (row-0) now shows the collapse-toggle diamond and 62% progress label from the T040 subtask-tree work, indented children (row-1, row-2) below it, unchanged from before the rebase in every visual respect \u2014 the CSS leg's own coarse-pointer hit-area rule and the reference gantt.css block are both present and unaffected by the board's disjoint kanban block. One further capture (screenshots/views/board-mobile-mobile-light.png) moved bytes on this recapture but not pixelHash/layoutHash \u2014 pre-existing encoder-noise re-encode, restored to its committed HEAD bytes rather than recommitted, manifest.json's bytes field corrected to the real 61279-byte file size on disk, matching this lane's established handling. field-icon-picker-desktop-dark/light, flagged as environment-drift-prone by earlier releases on this lane, did not move on this recapture at all (clean against HEAD). All four constructed-timeline-subtask reads plus the four constructed-timeline and two timeline-view captures read separately this session (controls bar, label column, SVG header/grid/bars, progress fill, milestone diamond, dependency arrow, today line) confirm the gantt still renders fully styled post-merge."
     }
   ],
   "outstanding": [

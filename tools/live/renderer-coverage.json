@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-09-04T08:55:51.738Z",
+  "measuredAt": "2026-09-04T09:26:45.213Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "c3e6fdf5ad7c",
-    "tools/live/render-assertion-harness.ts": "459125d464ee",
+    "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
     "src/views/list-renderer.ts": "722b433d196c",
     "src/views/table-renderer.ts": "2044cea151d8",
     "src/views/board-renderer.ts": "7ae9f2b7f12e",
     "src/views/gallery-renderer.ts": "c7d6e9216f39",
     "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
-    "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
+    "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
     "src/views/chart-renderer.ts": "1a9fef67b5de",
     "tools/bench/list-render-bench.ts": "af7fa1913bbb",
     "tools/bench/table-render-bench.ts": "0169d83c5b51",

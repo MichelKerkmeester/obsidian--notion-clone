@@ -1,45 +1,265 @@
 {
-  "under": 320,
+  "under": 367,
   "floor": 28,
   "recorded": "2026-09-04",
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
-  "smallest": "db-calendar-week-allday-more at 67x13",
-  "lowerHistory": {
+  "smallest": "db-calendar-options-trigger at 24x8",
+  "stateVariantRaiseHistory": {
     "recorded": "2026-09-04",
-    "what": "9974 -> 320 for the 037-timeline-gantt-port REQ-007 CSS leg (the gantt.css one-to-one copy landing after the TypeScript leg raised this baseline to 9974). The reference's own controls bar and per-row add-subtask affordance are bare Obsidian `clickable-icon`/`pm-prop-add` buttons with no bespoke sizing, so the raise above documented them as real shortfalls the CSS leg would need to address. This leg adds a `@media (pointer: coarse) { .pm-gantt-controls button.clickable-icon, .pm-gantt-label-row button.pm-icon-btn, .pm-gantt-add-row button.pm-prop-add { min-width: 28px; min-height: 28px; } }` block (styles.css, beside the ported gantt.css rules) — a coarse-pointer hit-area floor, not a visual resize, the same idiom already used elsewhere in this file (see lastTriage below). No `width`/`height` changed on any pm-gantt-* selector; the reference bar/label/grid dimensions this leg copied 1:1 are untouched.",
+    "what": "367 -> 422, the second raise recorded here (the first, 335 -> 367 on the same date, added the timeline's four extra scale scenarios and is preserved in this file's git history rather than restated). touch-targets.mjs and unstyled-links.mjs stopped reading render-assertion-bundle.mjs's SCENARIOS directly and now read the new SCENARIOS_WITH_STATES export, which appends the ten per-view state variants T028 built (a subtask tree on board/timeline, sparse fields on list, a no-date-field empty state and the mini-calendar popover on calendar, the chart's number and empty-state variants, and the three toolbar settings popovers). Was 21 constructed scenarios for both lanes, now 31.",
     "perClass": [
-      { "class": "clickable-icon", "before": 9648, "after": 0 },
-      { "class": "pm-prop-add", "before": 6, "after": 0 }
+      {
+        "class": "db-calendar-month-segment",
+        "before": 200,
+        "after": 218
+      },
+      {
+        "class": "db-timeline-create-button",
+        "before": 5,
+        "after": 6
+      },
+      {
+        "class": "db-timeline-nav-button",
+        "before": 36,
+        "after": 42
+      },
+      {
+        "class": "db-timeline-scale-menu",
+        "before": 6,
+        "after": 7
+      },
+      {
+        "class": "db-calendar-mini-nav",
+        "before": 0,
+        "after": 2
+      },
+      {
+        "class": "db-calendar-mini-title",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "class": "db-calendar-mini-today",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "class": "db-calendar-options-trigger",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "class": "db-calendar-timeline-options-trigger",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "class": "db-chart-options-trigger",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "class": "db-toggle-switch",
+        "before": 0,
+        "after": 10
+      },
+      {
+        "class": "db-view-config-number",
+        "before": 0,
+        "after": 12
+      }
     ],
-    "totalBefore": 9974,
-    "totalAfter": 320,
-    "verification": "Re-ran `node tools/live/touch-targets.mjs --json` against the current tree and diffed the constructed pass's undeclared array by class: db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-calendar-week-allday-more 16 and db-table-footer-trigger 32 held their exact counts (320 total, unchanged from before the pm-gantt port), and clickable-icon/pm-prop-add both dropped to 0 — no class newly appeared. 320 is exactly this baseline's pre-port total (367) minus the three retired local-nav classes the TypeScript leg's raiseHistory already accounted for (db-timeline-create-button 5, db-timeline-nav-button 36, db-timeline-scale-menu 6; 367 - 47 = 320), confirming the hit-area rule removed the full clickable-icon/pm-prop-add shortfall the raise introduced and nothing else moved. `node tools/live/touch-targets.mjs` (non-JSON): fixture pass unchanged (198 under, baseline 279); constructed pass 320 under this (now-lowered) baseline, exit 0."
+    "totalBefore": 367,
+    "totalAfter": 422,
+    "verification": "Attributed per new scenario by mounting only STATE_SCENARIOS (the ten new entries) in isolation and measuring each one's own undeclared rows, then confirmed additive against the full 31-scenario run: board-subtask-tree, list-sparse-fields, calendar-empty-state, chrome-chart-number and chrome-chart-empty each clear the floor entirely (0 under). timeline-subtask-tree re-mounts the timeline's own nav chrome and contributes the three timeline-class deltas above (+1/+6/+1) and nothing else. calendar-mini-calendar re-mounts a full month grid at the small capture-sized dataset (contributing +18 db-calendar-month-segment) plus its own three mini-popover button classes (2/1/1). The three toolbar-popover scenarios (calendar-toolbar-options, timeline-toolbar-options, chrome-chart-options-popover) each open only their own settings panel via togglePopover \u2014 not a full renderer \u2014 contributing one visually-hidden anchor-trigger button apiece (all under floor by design, 24x8) plus their panel's own toggle-switch and numeric-input controls (1/4, 3/4, 6/4). Sum of the ten scenarios' own under-floor counts is 0+8+0+22+0+0+0+6+8+11 = 55 = 422 - 367. Every pre-existing class not listed above (db-calendar-more-events 56, db-calendar-week-allday-date 16, db-calendar-week-allday-more 16, db-table-footer-trigger 32) held its exact prior count, confirmed by diffing this run's per-class breakdown against a `git stash`-isolated run of the pre-change code on the same tree. render-assertions.mjs is unaffected by construction: it still imports SCENARIOS (the original 21-entry export, unchanged), never SCENARIOS_WITH_STATES, so its BAGS lookup and coverage ratchet never see the three new toolbar `renderer` values. No styles.css or src/views change accompanies this raise. Note: touch-targets.mjs's printed/JSON `scenario` tag for the seven new entries that reuse an existing renderer/bag pair (board, timeline, list, calendar x2, chart x2) prints via the shared scenarioLabel() helper, which collides with the pre-existing plain scenario's own label (e.g. both read `calendar/file-view`) since scenarioLabel() keys only on renderer/bag/scale; this file's own perClass attribution above was computed directly against each ScenarioSpec instead, so it is unaffected. unstyled-links.mjs does not share this limitation \u2014 it tags constructed rows with `scenario.name`, which is unique per entry."
   },
-  "raiseHistory": {
+  "stateVariantRebaseReconciliation": {
     "recorded": "2026-09-04",
-    "what": "367 -> 9974, and the ratchet is raised, not lowered, for the 037-timeline-gantt-port REQ-007 1:1 reference-copy leg: the timeline's default render (timelineLocalExtensions unset/false) switched from the local db-timeline-* markup to a structural copy of obsidian-pm's GanttView/GanttHeaderRenderer/GanttTaskBarRenderer/TimelineConfig DOM tree and class vocabulary. The reference's own controls bar and per-row add-subtask affordance are bare Obsidian `clickable-icon` buttons with no bespoke sizing (the reference's own gantt.css carries no rule for them, and this plugin's styles.css does not size `clickable-icon` either — that class's real touch size in a live vault comes from Obsidian's own core stylesheet, which this harness does not load), so at the bench's 1600-row fixture scale, across the six timeline scenarios render-assertion-bundle.mjs mounts (timeline/file-view, timeline/embed, timeline-day/file-view, timeline-month/file-view, timeline-quarter/file-view, timeline-year/file-view), the per-row add-subtask button and the eight-button controls bar (five scale buttons, Today, Expand all, Collapse all) multiply to a large but structurally expected count. This mirrors the fixture baseline's own precedent for `clickable-icon` (already tracked there as a real, un-declared shortfall, not exempted) rather than inventing a new DECLARED entry for it. Three classes tied to the retired local nav chrome (db-timeline-create-button, db-timeline-nav-button, db-timeline-scale-menu) disappear from this pass because the default render no longer mounts that chrome; local-extension mode (timelineLocalExtensions: true) still renders it, unmeasured here. No styles.css change accompanies this raise; the CSS leg for the ported gantt.css block is a separate, later leg (spec.md REQ-005/T021) and is expected to leave this count of interactive elements unchanged (it styles borders/fills/typography, not button dimensions).",
+    "what": "worktrees/025-row6-state-lanes was rebased onto main after main absorbed the one-to-one board port (854c748, 46a8525), which touched render-assertion-harness.ts and the tools/live/*.json evidence stamps but not this file or render-assertion-bundle.mjs. This file's own `raiseHistory` above (367 -> 422) auto-merged cleanly onto main, carrying no conflict, so re-measurement was to confirm the number still held rather than to resolve one.",
+    "reMeasured": 422,
+    "matchesRaiseHistory": true,
+    "measuredTotalBeforeRebase": 57060,
+    "measuredTotalAfterRebase": 50462,
+    "unstyledLinksConstructedBeforeRebase": 144,
+    "unstyledLinksConstructedAfterRebase": 72,
+    "verification": "`node tools/live/touch-targets.mjs` on the rebased tree: constructed pass reports 422 under the 28px floor against a recorded baseline of 422 (fixture pass 264 against 279, unaffected), exit 0, PASS in both passes. The board port changed no styles.css class this file's perClass breakdown names and mounted no additional constructed scenario, so an unchanged count was the expected outcome, now confirmed rather than assumed. The total interactive-element count the constructed pass scans dropped 57060 -> 50462 (stable across two independent runs), and `node tools/live/unstyled-links.mjs`'s constructed link total dropped 144 -> 72 in step \u2014 both consistent with the board port rewriting the kanban structure one-to-one, neither a regression: the pass/fail-relevant numbers (422 under-floor, 0 UA-default link findings) are exactly unchanged."
+  },
+  "ganttPortRaiseHistory": {
+    "recorded": "2026-09-04",
+    "what": "367 -> 9974, and the ratchet is raised, not lowered, for the 037-timeline-gantt-port REQ-007 1:1 reference-copy leg: the timeline's default render (timelineLocalExtensions unset/false) switched from the local db-timeline-* markup to a structural copy of obsidian-pm's GanttView/GanttHeaderRenderer/GanttTaskBarRenderer/TimelineConfig DOM tree and class vocabulary. The reference's own controls bar and per-row add-subtask affordance are bare Obsidian `clickable-icon` buttons with no bespoke sizing (the reference's own gantt.css carries no rule for them, and this plugin's styles.css does not size `clickable-icon` either \u2014 that class's real touch size in a live vault comes from Obsidian's own core stylesheet, which this harness does not load), so at the bench's 1600-row fixture scale, across the six timeline scenarios render-assertion-bundle.mjs mounts (timeline/file-view, timeline/embed, timeline-day/file-view, timeline-month/file-view, timeline-quarter/file-view, timeline-year/file-view), the per-row add-subtask button and the eight-button controls bar (five scale buttons, Today, Expand all, Collapse all) multiply to a large but structurally expected count. This mirrors the fixture baseline's own precedent for `clickable-icon` (already tracked there as a real, un-declared shortfall, not exempted) rather than inventing a new DECLARED entry for it. Three classes tied to the retired local nav chrome (db-timeline-create-button, db-timeline-nav-button, db-timeline-scale-menu) disappear from this pass because the default render no longer mounts that chrome; local-extension mode (timelineLocalExtensions: true) still renders it, unmeasured here. No styles.css change accompanies this raise; the CSS leg for the ported gantt.css block is a separate, later leg (spec.md REQ-005/T021) and is expected to leave this count of interactive elements unchanged (it styles borders/fills/typography, not button dimensions).",
     "perClass": [
-      { "class": "clickable-icon", "before": 0, "after": 9648 },
-      { "class": "pm-prop-add", "before": 0, "after": 6 },
-      { "class": "db-timeline-create-button", "before": 5, "after": 0 },
-      { "class": "db-timeline-nav-button", "before": 36, "after": 0 },
-      { "class": "db-timeline-scale-menu", "before": 6, "after": 0 }
+      {
+        "class": "clickable-icon",
+        "before": 0,
+        "after": 9648
+      },
+      {
+        "class": "pm-prop-add",
+        "before": 0,
+        "after": 6
+      },
+      {
+        "class": "db-timeline-create-button",
+        "before": 5,
+        "after": 0
+      },
+      {
+        "class": "db-timeline-nav-button",
+        "before": 36,
+        "after": 0
+      },
+      {
+        "class": "db-timeline-scale-menu",
+        "before": 6,
+        "after": 0
+      }
     ],
     "totalBefore": 367,
     "totalAfter": 9974,
-    "verification": "Every other class held its exact prior count — db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-table-footer-trigger 32, db-calendar-week-allday-more 16 — confirmed by re-running `node tools/live/touch-targets.mjs --json` and diffing the per-class counts against this file's own prior perClass/note. 9974 - 367 = 9607 = 9648 (new clickable-icon) + 6 (new pm-prop-add) - 5 - 36 - 6 (the three retired timeline-nav classes), and 9648 clickable-icon = 6 timeline scenarios x 1608 (1600 per-row add-subtask buttons + 8 controls-bar buttons); pm-prop-add's 6 = 6 scenarios x 1 add-task button. render-assertions.mjs's bag-shape comparison and unstyled-links.mjs's fixture-pass numbers were unaffected by the same six scenarios."
+    "verification": "Every other class held its exact prior count \u2014 db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-table-footer-trigger 32, db-calendar-week-allday-more 16 \u2014 confirmed by re-running `node tools/live/touch-targets.mjs --json` and diffing the per-class counts against this file's own prior perClass/note. 9974 - 367 = 9607 = 9648 (new clickable-icon) + 6 (new pm-prop-add) - 5 - 36 - 6 (the three retired timeline-nav classes), and 9648 clickable-icon = 6 timeline scenarios x 1608 (1600 per-row add-subtask buttons + 8 controls-bar buttons); pm-prop-add's 6 = 6 scenarios x 1 add-task button. render-assertions.mjs's bag-shape comparison and unstyled-links.mjs's fixture-pass numbers were unaffected by the same six scenarios."
+  },
+  "ganttPortLowerHistory": {
+    "recorded": "2026-09-04",
+    "what": "9974 -> 320 for the 037-timeline-gantt-port REQ-007 CSS leg (the gantt.css one-to-one copy landing after the TypeScript leg raised this baseline to 9974). The reference's own controls bar and per-row add-subtask affordance are bare Obsidian `clickable-icon`/`pm-prop-add` buttons with no bespoke sizing, so the raise above documented them as real shortfalls the CSS leg would need to address. This leg adds a `@media (pointer: coarse) { .pm-gantt-controls button.clickable-icon, .pm-gantt-label-row button.pm-icon-btn, .pm-gantt-add-row button.pm-prop-add { min-width: 28px; min-height: 28px; } }` block (styles.css, beside the ported gantt.css rules) \u2014 a coarse-pointer hit-area floor, not a visual resize, the same idiom already used elsewhere in this file (see lastTriage below). No `width`/`height` changed on any pm-gantt-* selector; the reference bar/label/grid dimensions this leg copied 1:1 are untouched.",
+    "perClass": [
+      {
+        "class": "clickable-icon",
+        "before": 9648,
+        "after": 0
+      },
+      {
+        "class": "pm-prop-add",
+        "before": 6,
+        "after": 0
+      }
+    ],
+    "totalBefore": 9974,
+    "totalAfter": 320,
+    "verification": "Re-ran `node tools/live/touch-targets.mjs --json` against the current tree and diffed the constructed pass's undeclared array by class: db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-calendar-week-allday-more 16 and db-table-footer-trigger 32 held their exact counts (320 total, unchanged from before the pm-gantt port), and clickable-icon/pm-prop-add both dropped to 0 \u2014 no class newly appeared. 320 is exactly this baseline's pre-port total (367) minus the three retired local-nav classes the TypeScript leg's raiseHistory already accounted for (db-timeline-create-button 5, db-timeline-nav-button 36, db-timeline-scale-menu 6; 367 - 47 = 320), confirming the hit-area rule removed the full clickable-icon/pm-prop-add shortfall the raise introduced and nothing else moved. `node tools/live/touch-targets.mjs` (non-JSON): fixture pass unchanged (198 under, baseline 279); constructed pass 320 under this (now-lowered) baseline, exit 0."
+  },
+  "mergeReconciliation": {
+    "recorded": "2026-09-04",
+    "what": "worktrees/024-gantt-one-to-one (037-timeline-gantt-port, this file's ganttPortRaiseHistory/ganttPortLowerHistory above, ending at 320) was rebased onto main after main absorbed the board kanban port plus its ten constructed state variants (stateVariantRaiseHistory/stateVariantRebaseReconciliation above, 367 -> 422, +55). The two derivations move the same 367 base in directions that mostly do not overlap: the state-variant raise's 55 controls break down as 47 outside the timeline (db-calendar-month-segment +18, db-calendar-mini-nav +2, db-calendar-mini-title +1, db-calendar-mini-today +1, db-calendar-options-trigger +1, db-calendar-timeline-options-trigger +1, db-chart-options-trigger +1, db-toggle-switch +10, db-view-config-number +12) plus 8 on the three local timeline-nav classes the state-variant leg found still live at the time (db-timeline-create-button +1, db-timeline-nav-button +6, db-timeline-scale-menu +1, going 5/36/6 -> 6/42/7). The gantt port's CSS leg makes those same three classes vanish from the constructed pass entirely on the merged tree (-47: 5 db-timeline-create-button + 36 db-timeline-nav-button + 6 db-timeline-scale-menu, their ORIGINAL 367-baseline counts, not the state-variant leg's raised ones) once the default timeline render switches every one of the 31 constructed scenarios (state variants included) to the reference's clickable-icon/pm-prop-add vocabulary, which the gantt port's own coarse-pointer hit-area rule already keeps at or above the 28px floor. Re-running the state-variant classes' math on the merged tree (200->218 db-calendar-month-segment, 0->2/1/1/1/1/1/10/12 for the other eight) reproduced exactly the state-variant leg's own 47 non-timeline deltas, confirming that leg's math still holds post-merge; only its 8 timeline-class deltas are now moot because their base classes no longer render.",
+    "derivation": "320 (the gantt port's own pre-rebase baseline, all three retired timeline-nav classes already excluded) + 47 (the state-variant leg's classes outside the timeline, unaffected by the gantt port) = 367, matching the merged tree's measured total exactly. Equivalently from the shared 367 base: +55 (full state-variant raise) - 55 (the state-variant leg's own three timeline-nav deltas, 8, are irrelevant once merged since the CSS leg removes all 47 of those classes' original instances, not just the 8 the state-variant leg added) does not net cleanly to a single formula across three legs; the class-by-class perClass table above is the source of truth, and totalAfter is the tool's own fresh count, not an arithmetic combination that risks double-counting.",
+    "perClass": [
+      {
+        "class": "db-calendar-month-segment",
+        "mergedTree": 218,
+        "origin": "stateVariantRaiseHistory (200 -> 218)"
+      },
+      {
+        "class": "db-calendar-mini-nav",
+        "mergedTree": 2,
+        "origin": "stateVariantRaiseHistory (0 -> 2)"
+      },
+      {
+        "class": "db-calendar-mini-title",
+        "mergedTree": 1,
+        "origin": "stateVariantRaiseHistory (0 -> 1)"
+      },
+      {
+        "class": "db-calendar-mini-today",
+        "mergedTree": 1,
+        "origin": "stateVariantRaiseHistory (0 -> 1)"
+      },
+      {
+        "class": "db-calendar-options-trigger",
+        "mergedTree": 1,
+        "origin": "stateVariantRaiseHistory (0 -> 1)"
+      },
+      {
+        "class": "db-calendar-timeline-options-trigger",
+        "mergedTree": 1,
+        "origin": "stateVariantRaiseHistory (0 -> 1)"
+      },
+      {
+        "class": "db-chart-options-trigger",
+        "mergedTree": 1,
+        "origin": "stateVariantRaiseHistory (0 -> 1)"
+      },
+      {
+        "class": "db-toggle-switch",
+        "mergedTree": 10,
+        "origin": "stateVariantRaiseHistory (0 -> 10)"
+      },
+      {
+        "class": "db-view-config-number",
+        "mergedTree": 12,
+        "origin": "stateVariantRaiseHistory (0 -> 12)"
+      },
+      {
+        "class": "db-calendar-more-events",
+        "mergedTree": 56,
+        "origin": "pre-existing, unchanged by either leg"
+      },
+      {
+        "class": "db-table-footer-trigger",
+        "mergedTree": 32,
+        "origin": "pre-existing, unchanged by either leg"
+      },
+      {
+        "class": "db-calendar-week-allday-more",
+        "mergedTree": 16,
+        "origin": "pre-existing, unchanged by either leg"
+      },
+      {
+        "class": "db-calendar-week-allday-date",
+        "mergedTree": 16,
+        "origin": "pre-existing, unchanged by either leg"
+      },
+      {
+        "class": "db-timeline-create-button",
+        "mergedTree": 0,
+        "origin": "ganttPortLowerHistory: retired on the merged default render (was 5 in the shared 367 base, 6 after the state-variant raise)"
+      },
+      {
+        "class": "db-timeline-nav-button",
+        "mergedTree": 0,
+        "origin": "ganttPortLowerHistory: retired on the merged default render (was 36 in the shared 367 base, 42 after the state-variant raise)"
+      },
+      {
+        "class": "db-timeline-scale-menu",
+        "mergedTree": 0,
+        "origin": "ganttPortLowerHistory: retired on the merged default render (was 6 in the shared 367 base, 7 after the state-variant raise)"
+      },
+      {
+        "class": "clickable-icon",
+        "mergedTree": 0,
+        "origin": "ganttPortRaiseHistory/ganttPortLowerHistory: raised to 9648 by the TypeScript leg, then dropped back to 0 by the CSS leg coarse-pointer rule"
+      },
+      {
+        "class": "pm-prop-add",
+        "mergedTree": 0,
+        "origin": "ganttPortRaiseHistory/ganttPortLowerHistory: raised to 6 by the TypeScript leg, then dropped back to 0 by the CSS leg coarse-pointer rule"
+      }
+    ],
+    "totalBefore": 320,
+    "totalAfter": 367,
+    "verification": "node tools/live/touch-targets.mjs on the rebased+merged tree: constructed pass reports 367 under the 28px floor across 31 scenarios (fixture pass unaffected, 1158 measured / 71 scenarios rendered, separate from this constructed-only baseline). Per-class counts diffed against this file's own stateVariantRaiseHistory/ganttPortLowerHistory perClass tables and confirmed exact matches for every recurring and newly-added class (perClass table above); the smallest control is db-calendar-options-trigger at 24x8, matching stateVariantRaiseHistory's own smallest rather than ganttPortLowerHistory's (db-calendar-week-allday-more at 67x13), because the state variants are present on this merged tree and the gantt port's own reference-vocabulary buttons (clickable-icon/pm-prop-add) are both fully covered by the CSS leg's coarse-pointer rule and absent from the undeclared list. This baseline (367) is set to the fresh measured total, not derived by arithmetic, to avoid compounding rounding or double-counting risk across three independent legs' histories."
   },
   "lastTriage": {
     "recorded": "2026-09-04",
     "what": "db-row-insert-button, db-gallery-card-open and db-timeline-mobile-menu-button raised to the 28px floor by adding them to styles.css's existing `@media (pointer: coarse) { min-width: 28px; min-height: 28px; }` block (styles.css:21456-21469), the same idiom already used for db-list-row-open/db-source-rule-icon-button. No width, height, or position property changed on any of the three; the coarse-pointer minimum floats above the visual size only where a coarse pointer is present.",
     "perClass": [
-      { "class": "db-row-insert-button", "before": 3998, "after": 0 },
-      { "class": "db-gallery-card-open", "before": 3200, "after": 0 },
-      { "class": "db-timeline-mobile-menu-button", "before": 960, "after": 0 }
+      {
+        "class": "db-row-insert-button",
+        "before": 3998,
+        "after": 0
+      },
+      {
+        "class": "db-gallery-card-open",
+        "before": 3200,
+        "after": 0
+      },
+      {
+        "class": "db-timeline-mobile-menu-button",
+        "before": 960,
+        "after": 0
+      }
     ],
     "totalBefore": 8493,
     "totalAfter": 335,
-    "verification": "None of the three classes are ever mounted by any scenarios.mjs fixture (grepped the fixture corpus for all three selectors: zero hits), so a full detached `npm run screenshots` recapture of all 276 entries could not and did not move a single pixel these controls draw — check-lane's content compare (pixelHash/layoutHash) reported 0 of 276 entries content-changed; the 9 that moved bytes were pre-existing encoder-noise re-encodes, confirmed unrelated and restored to their committed bytes rather than recommitted. `node tools/live/touch-targets.mjs`: fixture pass unchanged (264 under, same as its own baseline); constructed pass dropped from 8493 to 335 under the (now-lowered) baseline, exit 0."
+    "verification": "None of the three classes are ever mounted by any scenarios.mjs fixture (grepped the fixture corpus for all three selectors: zero hits), so a full detached `npm run screenshots` recapture of all 276 entries could not and did not move a single pixel these controls draw \u2014 check-lane's content compare (pixelHash/layoutHash) reported 0 of 276 entries content-changed; the 9 that moved bytes were pre-existing encoder-noise re-encodes, confirmed unrelated and restored to their committed bytes rather than recommitted. `node tools/live/touch-targets.mjs`: fixture pass unchanged (264 under, same as its own baseline); constructed pass dropped from 8493 to 335 under the (now-lowered) baseline, exit 0."
   },
-  "note": "The constructed pass first ran against no baseline at all (2026-09-03) and measured 8503 under-floor controls across 12 classes, red before any fix or declaration existed. Five of the twelve were newly discovered here — invisible to the fixture pass because no scenarios.mjs fixture mounts them: db-row-insert-button (22x22, 3998 instances — the table's hover-to-insert-row button, repeated at every row gap in the 2000-row bench table), db-gallery-card-open (24x24, 3200 instances — the gallery card's open button), db-timeline-mobile-menu-button (22x22, 960 instances — the timeline's phone-only overflow menu button, ironically missing the floor its own name promises), db-board-pagination-dot (12x12, 10 instances) and db-calendar-week-allday-more (67x13, 16 instances). db-board-pagination-dot is declared, not counted here: its `::before` inset is -16px on every side of a 12px dot, a 44px effective hit area a bounding box does not see (styles.css:19696-19699), the same shape as the checkbox exemption in touch-targets.mjs's DECLARED list, which now names it. The remaining four (8493 = 8503 - 10) were real, recorded here rather than fixed. A fix was drafted and verified for three of them the first time this pass ran, then reverted rather than landed because landing it would have invalidated the sourceHashes on eight unrelated census/audit artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census, token-census, view-census); re-stamping surfaced that two of the eight — checkbox-appearance (a pre-existing 2.99:1 border-contrast shortfall on a board-drop-language fixture) and engine-parity (pre-existing Chrome/WebKit width differences, 520 vs 512, on unrelated fixtures) — fail for reasons that predate any touch-target work, confirmed by running both against the untouched tree: identical failing output. Those two remain a different scope's problem (WCAG contrast and cross-engine tolerance, not touch targets) and are recorded unchanged rather than fixed incidentally. This time the fix was landed: see `lastTriage` above for the applied change, the per-class before/after count, and the verification that produced them. db-calendar-week-allday-more (67x13, a real `<button>` inside the week/day all-day overflow row) was never a fix candidate for this pass regardless: raising its height sits inside the calendar's CSS-grid all-day row track (`grid-row` positioning shared with event-segment bars), an area this program's own history already flags as fragile (the runtime-vars.css calendar-formula finding), so it stays deferred pending a dedicated pass with its own capture verification. The other 7 recurring classes (db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-table-footer-trigger 32, db-timeline-create-button 1, db-timeline-nav-button 12, db-timeline-scale-menu 2 — 319 total) are the same shortfalls the fixture baseline already tracks, now also counted at the scale a real renderer repeats them; 319 + db-calendar-week-allday-more's 16 = 335, the new baseline."
+  "note": "The constructed pass first ran against no baseline at all (2026-09-03) and measured 8503 under-floor controls across 12 classes, red before any fix or declaration existed. Five of the twelve were newly discovered here \u2014 invisible to the fixture pass because no scenarios.mjs fixture mounts them: db-row-insert-button (22x22, 3998 instances \u2014 the table's hover-to-insert-row button, repeated at every row gap in the 2000-row bench table), db-gallery-card-open (24x24, 3200 instances \u2014 the gallery card's open button), db-timeline-mobile-menu-button (22x22, 960 instances \u2014 the timeline's phone-only overflow menu button, ironically missing the floor its own name promises), db-board-pagination-dot (12x12, 10 instances) and db-calendar-week-allday-more (67x13, 16 instances). db-board-pagination-dot is declared, not counted here: its `::before` inset is -16px on every side of a 12px dot, a 44px effective hit area a bounding box does not see (styles.css:19696-19699), the same shape as the checkbox exemption in touch-targets.mjs's DECLARED list, which now names it. The remaining four (8493 = 8503 - 10) were real, recorded here rather than fixed. A fix was drafted and verified for three of them the first time this pass ran, then reverted rather than landed because landing it would have invalidated the sourceHashes on eight unrelated census/audit artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census, token-census, view-census); re-stamping surfaced that two of the eight \u2014 checkbox-appearance (a pre-existing 2.99:1 border-contrast shortfall on a board-drop-language fixture) and engine-parity (pre-existing Chrome/WebKit width differences, 520 vs 512, on unrelated fixtures) \u2014 fail for reasons that predate any touch-target work, confirmed by running both against the untouched tree: identical failing output. Those two remain a different scope's problem (WCAG contrast and cross-engine tolerance, not touch targets) and are recorded unchanged rather than fixed incidentally. This time the fix was landed: see `lastTriage` above for the applied change, the per-class before/after count, and the verification that produced them. db-calendar-week-allday-more (67x13, a real `<button>` inside the week/day all-day overflow row) was never a fix candidate for this pass regardless: raising its height sits inside the calendar's CSS-grid all-day row track (`grid-row` positioning shared with event-segment bars), an area this program's own history already flags as fragile (the runtime-vars.css calendar-formula finding), so it stays deferred pending a dedicated pass with its own capture verification. The other 7 recurring classes (db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-table-footer-trigger 32, db-timeline-create-button 1, db-timeline-nav-button 12, db-timeline-scale-menu 2 \u2014 319 total) are the same shortfalls the fixture baseline already tracks, now also counted at the scale a real renderer repeats them; 319 + db-calendar-week-allday-more's 16 = 335, the new baseline."
 }

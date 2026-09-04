@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-09-04T07:47:54.511Z",
+  "measuredAt": "2026-09-04T09:23:05.543Z",
   "inputs": {
-    "styles.css": "b7de3b6fb54a",
+    "styles.css": "d3c6cc3e8453",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
-    "rendered": 84,
+    "rendered": 81,
     "buildable": 214,
     "declared": 5,
     "renderedOnly": 0,
-    "buildableNotRendered": 130,
+    "buildableNotRendered": 133,
     "untokened": 0,
-    "unroled": 84
+    "unroled": 81
   },
   "rendered": {
     "db-column-menu-trigger": {
@@ -708,51 +708,6 @@
         "chrome-chart-options-popover",
         "chrome-chart-options-popover",
         "chrome-chart-options-popover"
-      ]
-    },
-    "db-timeline-scale-menu": {
-      "cls": "db-timeline-scale-menu",
-      "mountParent": "db-timeline-scale-control",
-      "tokens": true,
-      "role": null,
-      "rect": "0x0",
-      "scenarios": [
-        "timeline-view-day",
-        "timeline-view",
-        "timeline-view-month",
-        "timeline-view-quarter",
-        "timeline-view-year",
-        "timeline-subtask-tree"
-      ]
-    },
-    "db-timeline-scale-menu-label": {
-      "cls": "db-timeline-scale-menu-label",
-      "mountParent": "db-timeline-scale-menu",
-      "tokens": true,
-      "role": null,
-      "rect": "0x0",
-      "scenarios": [
-        "timeline-view-day",
-        "timeline-view",
-        "timeline-view-month",
-        "timeline-view-quarter",
-        "timeline-view-year",
-        "timeline-subtask-tree"
-      ]
-    },
-    "db-timeline-scale-menu-chevron": {
-      "cls": "db-timeline-scale-menu-chevron",
-      "mountParent": "db-timeline-scale-menu",
-      "tokens": true,
-      "role": null,
-      "rect": "0x0",
-      "scenarios": [
-        "timeline-view-day",
-        "timeline-view",
-        "timeline-view-month",
-        "timeline-view-quarter",
-        "timeline-view-year",
-        "timeline-subtask-tree"
       ]
     },
     "db-calendar-timeline-options-popover": {
@@ -1455,6 +1410,9 @@
     "db-calendar-day-popover-events",
     "db-calendar-week-allday-popover",
     "db-calendar-scale-popover",
+    "db-timeline-scale-menu",
+    "db-timeline-scale-menu-label",
+    "db-timeline-scale-menu-chevron",
     "db-timeline-scale-popover",
     "db-timeline-mini-popover",
     "db-timeline-mobile-menu-button",
