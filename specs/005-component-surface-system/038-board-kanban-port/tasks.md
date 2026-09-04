@@ -184,10 +184,18 @@ _memory:
       green / 0 red.
 - [ ] **T12** Fresh in-runtime verifier reads the recaptured board screenshots side by side with
       the reference's own screenshots or the operator's vault comparison — REQ-007.
-      *Evidence to close:* a session that did not run T10/T11 opens both sets of captures and
-      states, per element, whether structure/class/visual language/density/column-width match;
-      T9's parity test re-run green by this same fresh session, not carried over from T10/T11's
-      own claim.
+      *Evidence to close (amended 2026-09-04):* a fresh session that ran none of the board legs
+      compares the captures against the reference SOURCE (`kanban.css`/`table.css`/`widgets.css`
+      and the composites) with pixel measurements, AND the operator compares the two plugins
+      side by side in the vault where both are installed. T9's parity test re-run green by this
+      same fresh session, not carried over from T10/T11's own claim.
+      *Why amended:* the original wording ("opens both sets of captures") assumed the vendored
+      reference carries its own screenshot files; it carries zero image files, so that half of
+      the criterion cannot be met from this repo alone. Recorded as an orchestrator decision
+      (reversible default — the operator may restore the original wording) in
+      `implementation-summary.md`'s Key Decisions, dated 2026-09-04; the operator's vault-compare
+      half is tracked as its own row in the parent `../roadmap.md` §4 operator table, never ticked
+      by an agent.
       **Partial 2026-09-04 (structure/class leg; visual half still blocked on T11):** a session
       that ran neither T10 nor T11 re-verified T9's parity test independently — stashed
       `board-renderer.ts` alone, confirmed 20/20 red against the pre-port renderer (first failure
@@ -323,7 +331,10 @@ _memory:
       (`var(--db-space-8)`, the same token the container's padding reads) cancels it without
       touching the container's padding or the toolbar. Deleted the dead `.pm-content--kanban` rule
       (grep-confirmed nothing emits the class); kept `.pm-kanban-col-badge-icon`, which the badge
-      icon span now genuinely uses. `tools/lane/css-lane.json`: acquired, edited, and released as
+      icon span now genuinely uses. **Stale as of T25:** T25 later removed the badge icon span
+      itself (the option model has no per-option icon field to display), so this rule is dead
+      again — kept, this time as part of the verbatim reference-CSS copy rather than a rule a
+      local span still reaches. `tools/lane/css-lane.json`: acquired, edited, and released as
       holder `038-board-kanban-port`, naming all 28 content-changed captures (`check-lane` exit 0).
       All 28 read this session, both themes: badge icon present, topbar/badge/priority-strip
       colors resolve through the token and stay legible in dark, Sub chip only on children, due
@@ -454,6 +465,94 @@ _memory:
       `boardColumn`. Green after; every board capture read this session (both themes) shows a
       text-only badge. If a per-option icon field is ever added to the schema, the reference's
       conditional branch — not this removal — is what should come back.
+- [x] **T26** Track the responsive host padding through one token instead of a hardcoded margin —
+      REQ-007 fidelity pass (N), a fourth fresh T12 reviewer's item 1 (P1). This leg ran
+      in-runtime (the external delegation lane was occupied; scope bounded to this dispatch's four
+      numbered items).
+      *Evidence to close:* new test `cancels the host's inline padding through the same token the
+      mobile breakpoint overrides` (`tools/screenshots/scenarios/shared.test.mjs`); ran red against
+      the pre-fix rule text — `.pm-kanban-board`'s margin still read `var(--db-space-8)` directly,
+      confirmed by stashing only the `styles.css` edit and re-running — and green after.
+      `.note-database-container`'s own inline padding cancelled `.pm-kanban-board`'s negative
+      margin with a hardcoded `var(--db-space-8)` (24px), but `@media (max-width: 760px)` drops
+      that padding to 12px without touching the margin, so below 760px the margin over-cancelled
+      by 12px. Introduced `--db-container-padding-inline` on `.note-database-container` (default
+      `var(--db-space-8)`, `styles.css:~810`); the base padding shorthand and
+      `.pm-kanban-board`'s `margin-left`/`margin-right` (`:~8984`) both read it, and the 760px
+      media query now overrides the token itself (`--db-container-padding-inline: 12px`) instead
+      of hardcoding the padding shorthand in isolation, so the two can never drift apart again.
+      Measured on the recaptured `board-view-mobile-{light,dark}` and
+      `constructed-board-mobile-light` PNGs (before: HEAD's committed bytes; after: this session's
+      recapture) by scanning the page-background-to-column-background colour transition at
+      identical y-rows: device-px 40→64 (CSS 20px→32px) in both themes and both scenarios.
+      Subtracting the capture harness's own constant 16px `#shot` wrapper padding
+      (`tools/screenshots/theme.css:194-200`, present in every capture regardless of this fix)
+      reconciles that to exactly **4px before, 16px after** — matching this T12 reviewer's own
+      numbers. Right edge: the whole board shifted 12px right into position, so the second
+      column's visible sliver widened by the same 12px rather than staying clipped short.
+- [x] **T27** Cover the avatar stack, the milestone/recurrence chips and the renderer's short-form
+      due dates, none of which any fixture or constructed capture showed before this leg —
+      REQ-007 fidelity pass (O), a fourth fresh T12 reviewer's item 2 (P2 coverage). Not a
+      red/green defect fix: the renderer already built these correctly (T14, T18); no fixture and
+      no bench column ever exercised the code paths.
+      *Evidence to close:* four new tests in `shared.test.mjs` (`renders the milestone and
+      recurrence type chips…`, `builds an initialed avatar per person…`, `formats the due chip
+      through the renderer's short-date conversion…`, plus the extended fixture-contract case);
+      the first three ran red against the pre-change `shared.mjs` (stashed and restored to
+      confirm) — no `--pm-chip-color` for milestone/recurrence, the avatar stack held raw
+      `row.people` text in one fixed-colour span instead of per-person initialed avatars with a
+      `pm-avatar--more` overflow slot, and the due chip echoed the fixture's long-literal date
+      unconverted — green after. `shared.mjs`: `boardCard` now reads `r.milestone`/`r.recurring`
+      for the reference's fixed-order M/R chips (`pm-chip pm-chip--solid pm-chip--sm`,
+      `var(--color-purple)`/`var(--color-blue)`, mirroring `board-renderer.ts:448-476`); the
+      single-avatar stub is replaced by `pmAvatarStack` (up to 3 initialed, per-name-coloured
+      avatars plus overflow past 3, mirroring `:522-535`); a new `pmShortDate` helper converts
+      `pmDueChip`'s label to `referenceFormatDateShort`'s "Mon D" shape (`:2491-2496`) instead of
+      the fixture's long literal, without touching `ROWS`/`SUBTASK_FIXTURE_ROWS`'s own `.renew`
+      values (read elsewhere by table/list/panel/calendar scenarios at their original long form).
+      `core.mjs`'s `board-view` Design column forces Adobe Creative Cloud (milestone), Sketch
+      (recurring) and Framer (4 people, showing the `+1` overflow avatar) so a board capture
+      demonstrates all three for the first time; read this session, both themes. Separately,
+      `tools/bench/board-render-bench.ts`'s `makeColumns` re-keys its one `"mixed"`-kind
+      multi-select column (index 4, previously `"subscriptions"`) to `"people"` so
+      `board-renderer.ts`'s own `/people|person|assignee|owner/i` column match resolves for
+      `constructed-board`/`constructed-board-subtask` too — the real `BoardRenderer`, not just the
+      hand fixture, now paints the avatar stack; no column added (count unchanged at 21 plus the
+      pushed group field), no other `REPORTED_COLUMNS` entry touched, chart
+      (`CHART_COLUMNS=BOARD_COLUMNS`) unaffected since its value column is picked by type, not
+      key. Read this session on `constructed-board-{desktop,mobile}-{light,dark}`: initialed
+      avatars in per-name-hashed colours on every card (values still generic multi-select
+      placeholders, not real names — cosmetic, not a correctness gap, since the goal was
+      exercising the real render path). `board-subtask-tree`/`constructed-board-subtask` (both
+      themes) confirmed short-form dates (`Jan 4`, `Aug 21`, `Mar 12`, `Mar 28`, `Apr 18/20/22`) in
+      place of the prior long literals.
+- [x] **T28** Correct three stale or inaccurate notes a fourth fresh T12 reviewer's items 3 and 4
+      surfaced, and amend T12's own evidence bar to what an in-repo session can actually check —
+      REQ-007 fidelity pass (P). Doc-only; no red/green framing applies.
+      *Evidence to close:* (1) `core.mjs`'s `board-drop-language` note claimed a before/after
+      insertion line neither the reference nor the ported card-reorder path draws — the reference
+      reorders live by moving the dragged card's own element ahead of or behind its neighbour on
+      dragover (`attachReferenceDropHandlers`, `board-renderer.ts:349-353`); the
+      `db-board-drop-indicator` line exists only on the unrelated legacy `db-board-card` path this
+      scenario never depicts (confirmed by grep: `renderReferenceCard`, the path this scenario's
+      classes belong to, has no dragover listener at all). Note corrected and the inert
+      `dropPlacement` argument dropped from the one call site that passed it — `boardCard` never
+      destructured it, proven already by the existing `keeps insertion feedback on the reference
+      container…` test, which stays unchanged. (2) This file's own line ~300-325 (T21's landing
+      note) and `tools/lane/css-lane.json`'s matching T21 release note both still claimed
+      `.pm-kanban-col-badge-icon` "genuinely uses" the badge icon span after T25 (closed earlier in
+      this file) removed that span — both corrected with a dated stale-as-of-T25 note: the rule
+      stays in `styles.css` as part of the verbatim reference-CSS copy, not because a local span
+      still reaches it. (3) T12's own evidence bar ("opens both sets of captures") cannot be met
+      in-repo — the vendored reference carries zero image files. Amended to two halves: a fresh
+      session compares the captures against the reference SOURCE
+      (`kanban.css`/`table.css`/`widgets.css` and the composites) with pixel measurements
+      in-repo, AND the operator compares the two plugins side by side in the vault where both are
+      installed. Recorded as an orchestrator decision (reversible default, the operator may
+      restore the original wording) in `implementation-summary.md`'s Key Decisions, dated
+      2026-09-04; the operator half added as row 37 in the parent `../roadmap.md` §4 operator
+      table, explicitly marked never-tick. T12 itself stays unticked — a final fresh read follows
+      this leg.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

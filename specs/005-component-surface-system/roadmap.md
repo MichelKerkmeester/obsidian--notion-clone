@@ -194,7 +194,10 @@ the sort sheet's add-sort control, the filter sheet's Add condition, and the cla
 (controls inside a sheet that mutate the sheet's own content close or crash it) — raising the count
 to thirty-five, owner 031. 2026-09-03 ~07:10 CEST: rows 34-36 fixed in `85ff504` — the overlay
 stack's outside-pointerdown check held a stale panel reference across an in-panel rebuild; a
-`getPanel()` resolver fixes it — release 1.4.3 pending, not operator-confirmed.*
+`getPanel()` resolver fixes it — release 1.4.3 pending, not operator-confirmed. 2026-09-04: row
+37 added, raising the count to thirty-six — not an operator report but the operator-only half of
+`038-board-kanban-port`'s T12 criterion, split out because the vendored reference carries no
+image files an in-repo session could compare against.*
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -250,6 +253,7 @@ not this note, is what should move them.
 | 34 | *"add sort button is broken in sort sheet"* | `031` | **Fixed in 85ff504 (owner 031); release 1.4.3 pending; NOT operator-confirmed; open** | Overlay stack held the sort panel's node captured at register() time; the first in-panel rebuild (add-sort) left it stale, so the next tap read as an outside press and closed the sheet mid-edit. `OverlaySurfaceOptions.getPanel()` now re-resolves the live node on every dismissal check. Red observed in `sheet-rebuild.mjs` with `overlay-stack.ts` reverted; green after. Not released, not device-confirmed |
 | 35 | *"filter add condition closes / crashes it"*, then *"filter table sheet"* | `031` | **Fixed in 85ff504 (owner 031); release 1.4.3 pending; NOT operator-confirmed; open** | Same mechanism as row 34, on the filter panel: Add condition rebuilds the panel node, the overlay stack's captured reference went stale, and the next tap dismissed the sheet. Same `getPanel()` fix. Red observed in `sheet-rebuild.mjs` for the filter case; green after. Not released, not device-confirmed |
 | 36 | *"a lot of sheets have that"* — a named class, not a single symptom | `031` | **Fixed in 85ff504 (owner 031); release 1.4.3 pending; NOT operator-confirmed; open** | The named class is the same seam as rows 34-35 plus a second half on the embedded surface: `database-view.ts` and `embedded-database-renderer.ts` used a container-scoped `querySelector` for sort/filter/view-config/column-manager panels, which never matched once `mobile-bottom-sheet.ts` portals the sheet onto `document.body` — dismissal never registered there at all. Both renderers now pass their own `getPanel()` resolver. Not released, not device-confirmed |
+| 37 | Not an operator complaint — the operator-only half of `038-board-kanban-port`'s T12 criterion ("compare the two plugins side by side in the vault where both are installed"), split out because the vendored reference carries no image files an in-repo session could compare captures against | `038-board-kanban-port` | **Not started — awaiting the operator. Never tick this row.** | 2026-09-04: `038/tasks.md` T12 was amended (an orchestrator decision, reversible default, recorded in `038/implementation-summary.md`'s Key Decisions) into two halves. The in-repo half — comparing recaptured board screenshots against the reference SOURCE (`kanban.css`/`table.css`/`widgets.css` and the composites) with pixel measurements — stays a checkable task under T12 itself. This row is the half no session in this repo can close: the operator installing both plugins in one vault and comparing them directly |
 
 ### What the table says as a whole
 

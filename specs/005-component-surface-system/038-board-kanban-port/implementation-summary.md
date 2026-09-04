@@ -11,25 +11,26 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T10:55:00Z"
-    last_updated_by: "board-closing-fixes"
-    recent_action: "Closed T22-T25 (height-chain selector, due-chip near tier, Sub-chip/parent-title, badge icon)"
-    next_safe_action: "Dispatch fresh session for T12 visual comparison, then T8"
+    last_updated_at: "2026-09-04T12:15:00Z"
+    last_updated_by: "board-inset-and-fixture-coverage"
+    recent_action: "Closed T26-T28: host-padding token, avatar/milestone/recurrence coverage, T12 bar amendment"
+    next_safe_action: "Dispatch a board-legs-free session for T12 in-repo compare; operator half is roadmap row 37"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
-      - "T12's visual-language/density/column-width comparison still needs a session that ran neither T10 nor T11, per its own evidence bar -- this leg fixed the divergences that read found but is not itself that read"
+      - "T12's amended evidence bar still needs a session that ran none of the board legs to perform the in-repo source-pixel comparison half; the operator vault-compare half (roadmap.md row 37) is not this repo's to close"
       - "T8 (operator device confirmation) is the only row that closes the packet"
     key_files:
       - "src/views/board-renderer.ts"
-      - "src/views/board-renderer-parity.test.ts"
-      - "tools/live/render-assertion-harness.ts"
-      - "tools/lane/css-lane.json"
       - "styles.css"
+      - "tools/screenshots/scenarios/shared.mjs"
+      - "tools/screenshots/scenarios/core.mjs"
+      - "tools/bench/board-render-bench.ts"
+      - "tools/lane/css-lane.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "038-board-kanban-port"
       parent_session_id: null
-    completion_pct: 76
+    completion_pct: 79
     open_questions: []
     answered_questions:
       - "Card identity stays RowData.file.path throughout: no hunk in either landed commit touches drag/drop, WIP/visible-count, swimlane, summary, conditional-formatting or touch-mode identifiers (confirmed by re-reading both diffs' added lines)."
@@ -48,9 +49,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 038-board-kanban-port |
-| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port, T13-T21 fidelity passes, T22-T25 closing fixes for a fresh T12 read's four divergences); T12's visual-language/density/column-width half (needs a session that ran neither T10 nor T11) and T8 (operator confirmation) are open |
+| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port, T13-T21 fidelity passes, T22-T25 and T26-T28 closing fixes for two later fresh T12 reads' divergences); T12's amended two-part comparison (needs a session that ran none of the board legs) and T8 (operator confirmation) are open |
 | **Level** | 2 |
-| **Completion** | `tasks.md` 19/25 rows closed (T5-T7, T9-T11, T13-T25; 76%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite, T13-T25 fidelity passes) — the remaining gap is a still-unmet evidence-independence requirement (T12's own comparison read must come from a session that ran neither T10 nor T11), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed, and the four REQ-007 divergences a later fresh T12 read found and T22-T25 closed. |
+| **Completion** | `tasks.md` 22/28 rows closed (T5-T7, T9-T11, T13-T28; 79%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite, T13-T28 fidelity passes) — the remaining gap is a still-unmet evidence-independence requirement (T12's own comparison read must come from a session that ran none of the board legs), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed, the four REQ-007 divergences a later fresh T12 read found and T22-T25 closed, and a fourth fresh T12 read's host-padding bug, fixture-coverage gap and evidence-bar amendment that T26-T28 closed. |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -180,6 +181,7 @@ directly.
 | Depict the drag/drop-target/empty-column states as additive fixture options, not a rewrite of `boardCard`/`boardColumn` | The existing scenarios' markup has to stay byte-identical so `board-view`/`board-mobile`/`board-subtask-tree` are proven unaffected; `dragState`, `dropPlacement`, `columnClass` and `cardRenderer` all default to producing the exact prior output, verified by re-running the full suite before and after (868/869, then 869/869 after the manifest caught up) |
 | Depict only the classes the drag handlers add on dragstart/dragover (`is-dragging`, `is-drop-target`, `db-board-drop-indicator`), not the `:hover` pointer-lift rule | `.db-board-card:hover` (`styles.css:9257-9262`) is a real CSS pseudo-class under `@media (hover: hover)`, not a class `renderCard` ever applies; a static fixture can depict a class the renderer sets, not a live pointer state, so this stays a genuine gap rather than something this pass silently claimed |
 | Tick the one `goal.md` row this evidence closes (`Hover/drag/drop visual language`) rather than inventing a second checkbox for "empty column" | `goal.md` names exactly one criterion covering all four states (raised card, hover lift, drop-target tint, column drop highlight) and `tasks.md` T3 separately requires the full drag-drop matrix re-proof this pass does not attempt; splitting the criterion in the doc would misstate what `goal.md` actually asks |
+| **(2026-09-04)** Amend `tasks.md` T12's evidence bar from "opens both sets of captures" to "compares the captures against the reference SOURCE (`kanban.css`/`table.css`/`widgets.css` and the composites) with pixel measurements, AND the operator compares the two plugins side by side in the vault where both are installed" — reversible default, the operator may restore the original wording | The vendored reference carries zero image files, so "opens both sets of captures" cannot be met from this repo alone; the source-file half stays checkable in-runtime, and the visual-comparison half moves to the operator, tracked as a new row in the parent `../roadmap.md` §4 operator table rather than an agent-tickable task |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -216,6 +218,12 @@ directly.
 | `node tools/lane/check-lane.mjs` (this pass) | "release names all 28 changed capture(s)", exit 0 |
 | `node tools/live/evidence.mjs --check-all` (this pass) | 9 stale (8 census/audit artefacts + `capture-device-parity.json`) on first run against the new `styles.css`/manifest hash; all 9 re-run; 16/16 fresh on re-check |
 | `npx tsc --noEmit` / `npx vitest run` / `npm run lint` / `scan-comments` / `npm run gate` (this pass) | 0 / 996/996 (99 files) / 172 (unchanged baseline) / PASS / 25 green, 0 red |
+| T26 red-first (`shared.test.mjs`) | Red — `.pm-kanban-board`'s margin still read `var(--db-space-8)` directly, confirmed by stashing only the `styles.css` edit; green after routing both the margin and the mobile-breakpoint padding through `--db-container-padding-inline` |
+| T26 phone-inset pixel measurement, before (`HEAD`) vs after (this pass) | `board-view-mobile-{light,dark}` and `constructed-board-mobile-light`: page-to-column colour transition at device-px 40 -> 64 (CSS 20px -> 32px) in every case; minus the capture harness's constant 16px `#shot` padding, 4px -> 16px, matching the fourth T12 reviewer's own numbers |
+| T27 red-first (`shared.test.mjs`, 4 new/extended cases) | Red on 3 of 4 against the pre-change `shared.mjs` (stashed and restored to confirm) — no milestone/recurrence `--pm-chip-color`, single fixed-colour avatar span instead of initialed multi-avatar stack, due chip echoed the long literal unconverted; green after |
+| `constructed-board`/`constructed-board-subtask` avatar-stack read, both themes | Real `BoardRenderer` (not the hand fixture) paints initialed avatars once `tools/bench/board-render-bench.ts`'s one `"mixed"` multi-select column is keyed `"people"`; column count and every other `REPORTED_COLUMNS` entry unchanged |
+| Manifest-staleness self-correction | An initial full revert of the 2 byte-only-noise `manifest.json` entries to `HEAD` (including `sourceHashes.styles.css`) made `npm run screenshots:verify` report them `STALE` against the committed `styles.css` hash; caught before committing, fixed by keeping this run's fresh `sourceHashes` and correcting only `bytes` to the restored file's size — `screenshots:verify` then read 356/356 fresh |
+| `npm run gate` (this pass, after the manifest fix and the 8 evidence artefacts above) | 25 green / 0 red, exit 0 read directly |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -239,6 +247,13 @@ directly.
 4. **Not operator-confirmed.** Release 1.4.5 has not shipped and the operator has not opened a
    board on device (`tasks.md` T8, `goal.md`/`acceptance-criteria.md` AC-8) — the only row that
    can close it.
+5. **`constructed-board`'s avatar values are generic multi-select placeholders, not real names.**
+   `tools/bench/board-render-bench.ts`'s re-keyed `"people"` column exercises the real avatar-stack
+   render path (initials, per-name colour, overflow) for the first time, but its values still come
+   from the bench's own generic capture-option words (e.g. "Backlog"/"Doing") rather than authored
+   names — cosmetic, since the goal was proving the code path renders through production, not
+   supplying realistic content. A dedicated name list would need excluding the column from the
+   harness's generic option-rewrite step, which was out of scope for a "cheaply" opt-in fix.
 <!-- /ANCHOR:limitations -->
 
 ---
@@ -552,10 +567,83 @@ run` 996/996 (99 files); `npm run lint` 172 problems (159 errors, 13 warnings), 
 pre-session baseline; `node tools/naming/scan-comments.mjs` PASS; `npm run gate`
 (`SURFACE_PHASE=038-board-kanban-port`) 25 green / 0 red, exit 0 read directly.
 
-**Not closed by this session:** T12's visual-language/density/column-width comparison still needs
-a session that ran neither T10 nor T11 to perform that specific read — this session fixed four
-named divergences T12 already found, which is not the same evidence T12's own row asks for, so
-T12 stays open. T8 (operator device confirmation) remains the only row that closes the packet.
+**2026-09-04, T26-T28 landed (this session, in-runtime — the external delegation lane was
+occupied, scope bounded to this dispatch's four numbered items).** A fourth fresh T12 reviewer
+(at `d896f90`, on top of T22-T25) confirmed structure, vocabulary, density and column width match
+the reference and left four items: a P1 responsive-padding bug, a P2 fixture-coverage gap, two
+stale documentation notes, and T12's own evidence bar naming a criterion this repo cannot meet.
+
+`.pm-kanban-board`'s negative margin (T26) cancelled `.note-database-container`'s own inline
+padding with a hardcoded `var(--db-space-8)` (24px); the `@media (max-width: 760px)` block drops
+that padding to 12px without touching the margin, so below 760px the margin over-cancelled by
+12px — measured 4px phone inset instead of the reference's 16px, right edge short by the same
+12px. Fixed by routing both declarations through a new `--db-container-padding-inline` custom
+property (default `var(--db-space-8)`), overridden to `12px` at the same breakpoint instead of
+the padding shorthand being hardcoded in isolation — the margin now tracks whatever the padding
+actually is at every breakpoint, proven by a new stylesheet-text test run red (stashed) then
+green. Verified on the recaptured mobile PNGs by pixel-scanning the page-to-column colour
+transition (device-px 40→64 in both themes) and reconciling the capture harness's own constant
+16px `#shot` wrapper padding: exactly 4px before, 16px after, matching this reviewer's numbers.
+
+No fixture or constructed capture showed the avatar stack, the milestone `M` chip or the
+recurrence `R` chip (T27) — the renderer already built all three correctly (T14, T18); nothing
+exercised the code paths. `shared.mjs`'s `boardCard` gained `r.milestone`/`r.recurring` chip
+support and a real initialed multi-avatar stack (replacing a single-avatar stub that printed raw
+`row.people` text) plus a `pmShortDate` helper so the due chip matches the renderer's "Mon D"
+form instead of the fixture's long literal; `core.mjs`'s `board-view` Design column now forces
+one card each for milestone, recurring and a 4-person stack (showing the `+1` overflow avatar).
+Separately, `tools/bench/board-render-bench.ts` re-keys its one `"mixed"`-kind multi-select
+column to `"people"` (no column added, no other name touched) so `constructed-board`'s real
+`BoardRenderer` paints the stack too, not just the hand fixture. Four new tests prove all of it,
+two run stashed-then-restored to confirm red first.
+
+Two stale notes (T28): this file's own T21 entry and `tools/lane/css-lane.json`'s matching
+release both still claimed the badge-icon span "genuinely uses" `.pm-kanban-col-badge-icon`
+after T25 (closed earlier in this file) removed that span — both corrected with a dated
+stale-as-of-T25 note; the rule stays in `styles.css` as part of the verbatim reference-CSS copy.
+`core.mjs`'s `board-drop-language` note wrongly claimed a before/after insertion line neither the
+reference nor the ported card-reorder path draws (the reference moves the dragged element itself;
+the actual `db-board-drop-indicator` line belongs to the unrelated legacy `db-board-card` path this
+scenario never depicts) — note corrected, the inert `dropPlacement` argument dropped.
+
+T12's own evidence bar ("opens both sets of captures") cannot be met in-repo: the vendored
+reference carries zero image files. Amended to two halves — a fresh session compares the
+captures against the reference SOURCE (`kanban.css`/`table.css`/`widgets.css` and the composites)
+with pixel measurements in-repo, AND the operator compares the two plugins side by side in the
+vault where both are installed — recorded as a reversible-default orchestrator decision above
+under Key Decisions, with the operator half tracked as its own never-tick row (37) in the parent
+`../roadmap.md` §4 operator table rather than folded into an agent-tickable task. T12 itself stays
+unticked.
+
+All 28 content-changed captures were recaptured and read, both themes/devices: every board
+capture's first column sits at 16px from the container edge, not 4px; `board-view` and
+`constructed-board` show the avatar stack, the `M` chip and the `R` chip for the first time;
+`board-subtask-tree`/`constructed-board-subtask` show short-form due dates; `board-drop-language`
+shows only the column-level tint and the dragged card's own lift, no third-card markup. Two
+pre-existing byte-only-noise captures (`field-icon-picker-desktop-{dark,light}`, this lane's own
+prior releases already document the Chrome/OS re-encode drift) were restored to committed `HEAD`
+bytes; their `manifest.json` entries kept this run's fresh `sourceHashes`/`pixelHash`/`layoutHash`
+(only `bytes` corrected to the restored file's actual size), matching `screenshots:verify`'s
+freshness check rather than reverting the whole entry to stale `HEAD` source hashes — an earlier
+draft of this same release briefly reverted the full entry, which `screenshots:verify` correctly
+flagged stale against the committed `styles.css` hash, caught and fixed before the gate re-ran.
+`tools/lane/css-lane.json`: acquired and released as holder `038-board-kanban-port`, naming all
+28 content-changed captures (`check-lane` exit 0, "release names all 28 changed capture(s)"). The
+evidence lane needed the same 8 artefacts this packet has re-stamped before (cascade-audit,
+checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census,
+token-census, view-census), all re-run against the new `styles.css` hash. `npx tsc --noEmit` exit
+0; `npx vitest run` 1000/1000 (99 files, 4 new/extended in this leg); `npm run lint` 172 problems
+(159 errors, 13 warnings), unchanged from the pre-session baseline; `node
+tools/naming/scan-comments.mjs` PASS; `npm run gate` (`SURFACE_PHASE=038-board-kanban-port`) 25
+green / 0 red, exit 0, read directly after the manifest-staleness fix above.
+
+**Not closed by this session:** T12's amended two-part comparison — the in-repo source-pixel half
+against `kanban.css`/`table.css`/`widgets.css` and the composites — still needs a session that ran
+none of the board legs to perform that specific read; this session fixed the bugs and gaps a
+fourth fresh T12 read found, which is not the same evidence T12's own (amended) row asks for, so
+T12 stays open. The operator's vault side-by-side half is `../roadmap.md` §4 row 37 and is not
+this repo's to close. T8 (operator device confirmation) remains the only row that closes the
+packet.
 <!-- /ANCHOR:next-leg -->
 
 ---
