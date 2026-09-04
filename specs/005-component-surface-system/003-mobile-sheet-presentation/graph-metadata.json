@@ -52,13 +52,15 @@
       "tools/screenshots/runtime-vars.css",
       "tools/storybook/verify-placement.mjs",
       "tools/live/probe.mjs",
+      "src/views/view-config-panel-renderer.ts",
+      "tools/live/sheet-rebuild-harness.ts",
+      "tools/live/sheet-rebuild.mjs",
       "src/views/popover-position.ts",
       "src/data/touch-environment.ts",
       "src/views/modals/db-modal.ts",
       "src/views/database-view.ts",
       "src/main.ts",
-      "src/views/image-file-suggest-modal.ts",
-      "src/views/markdown-file-suggest-modal.ts"
+      "src/views/image-file-suggest-modal.ts"
     ],
     "entities": [
       {
@@ -128,6 +130,24 @@
         "source": "derived"
       },
       {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild-harness.ts",
+        "kind": "code",
+        "path": "tools/live/sheet-rebuild-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
         "name": "popover-position.ts",
         "kind": "code",
         "path": "src/views/popover-position.ts",
@@ -164,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "markdown-file-suggest-modal.ts",
-        "kind": "code",
-        "path": "src/views/markdown-file-suggest-modal.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -189,18 +203,6 @@
       },
       {
         "name": "Critical Dependencies",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -224,8 +226,8 @@
     "source_doc_hashes": {
       "spec.md": "8c9f1ddc5110c8025b3949545d76e71dd07ca5fc8e1a5c99387e4803ca953096",
       "plan.md": "0ef850a840ccabeab5fa2f1318ec826096a89f85123882e01a2ee03461e0b1f2",
-      "tasks.md": "6a4f320493b964471a784fb213b206d192493d1d5a97284590a17b9aa90e7407",
-      "implementation-summary.md": "d0989564726ac7b139cb2aff0eeaf783695947eddac1f28129ed1eda90e2a419"
+      "tasks.md": "fbf55a18a617531c5fd1de223a1c9cecfecc93f39bfd15d2b52fd4f35782dbe3",
+      "implementation-summary.md": "257f82048af8d763b8f14e53df49620e557bb402436796602023f61e633d75eb"
     },
     "last_active_child_id": null,
     "last_active_at": null

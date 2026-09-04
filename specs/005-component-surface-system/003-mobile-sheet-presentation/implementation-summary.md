@@ -10,12 +10,13 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/003-mobile-sheet-presentation"
-    last_updated_at: "2026-08-30T18:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Portal, scrim, sheet layer and grab band recorded from git and the lane journal; 0% drift closed"
-    next_safe_action: "Sweep 600-760px on both sheet paths, the evidence REQ-003 needs before collapsing"
+    last_updated_at: "2026-09-04T20:05:00Z"
+    last_updated_by: "debug-agent"
+    recent_action: "Settings sheet chrome lifted out of its own scroller; close control added"
+    next_safe_action: "Operator opens the database settings on a phone, scrolls it, and drags the handle"
     accepted_shortfalls:
       - "Record-sheet grab band 32px against the operator's 48px ask; accepted after the fit was measured"
+      - "The settings sheet source-rule actions stay icon-only at a 44px target rather than becoming labelled rows; labelling them would change the add-database modal, which shares the renderer"
     blockers:
       - "No operator confirmation that a sheet covers the navbar on a real handset"
     key_files:
@@ -30,6 +31,7 @@ _memory:
     completion_pct: 50
     open_questions:
       - "Does REQ-002 stand as written now that sheets bypass the shared bounds rather than delete it"
+      - "The settings sheet title is now 16px while the sort and filter sheet titles are still 13px, which 016 already recorded as off the type scale. Raising theirs moves captures for surfaces nobody reported"
     answered_questions:
       - "The portal is required; paint containment on the workspace leaf defeats every z-index"
 ---
@@ -81,6 +83,61 @@ takes presses aimed at the sheet's own title and header actions.
 | `tools/screenshots/runtime-vars.css` | Modified | Pin removed so a capture shows the computed offset |
 | `tools/storybook/verify-placement.mjs` | Modified | Leaf containment modelled; checks that drive the positioner |
 | `tools/live/probe.mjs` | Created | Reads the host navbar's z-index from the running app |
+
+### The settings sheet, from operator report 41
+
+Reported on a 393px phone as two problems: the grab handle would not dismiss the sheet, and the
+body was the desktop two-column grid squeezed onto a phone rather than the grammar the sort, filter
+and view-config sheets use.
+
+**The gesture was cleared first, and it is not the defect.** On a 390x844 profile with `hasTouch`,
+`isMobile` and `is-phone`, a real 120px drag on the handle — driven by `page.mouse` and again by
+`Input.dispatchTouchEvent`, through the browser's own input pipeline rather than as a synthesised
+`PointerEvent` — moved the sheet `matrix(1, 0, 0, 1, 0, 110)` and dismissed it, both fresh and after
+a re-render. The 016 repair holds on this surface.
+
+**The root cause is reach.** `positionToolbarPopover` makes the panel itself the scroll container,
+and both the grab bar (`mobile-bottom-sheet.ts:86`, `panel.prepend(handle)`) and the header
+(`view-config-panel-renderer.ts:303`) are ordinary in-flow children of it. The settings sheet is the
+one toolbar panel whose content always overflows — **1461px of content in a 760px sheet** — so the
+content carries the chrome off the top edge as it scrolls, and the grab band shrinks one pixel per
+pixel of scroll:
+
+| `scrollTop` | grab band, before | grab band, after | a press at the bar's centre, before |
+|---|---|---|---|
+| 0 | 48px | 48px | the handle |
+| 8 | 40px | 48px | the handle |
+| 16 | 32px | 48px | the handle |
+| 20 | 28px | 48px | **the scrim** |
+| 40 | 8px | 48px | the scrim |
+| 300 | **0px** | 48px | **nothing** |
+
+The header goes with it: 176px above the sheet's own top edge at 200px of scroll. Past 48px of
+scroll the sheet is open, covering the screen, with no title, no close and no target any press can
+use. The menu sheets fit inside the cap, which is why four rounds of sheet work never met this.
+
+| # | Delivered | Evidence |
+|---|---|---|
+| 9 | **The chrome leaves the scroller.** `render()` builds a `.db-view-config-body` region and writes every section into it; the sheet rules make the panel a column flexbox with `overflow-y: hidden !important` while that region scrolls with `overscroll-behavior: contain` and `min-height: 0`. The shape is the record sheet's, which solved the same problem the same way | `src/views/view-config-panel-renderer.ts`, `styles.css` (`.db-view-config-panel.db-mobile-bottom-sheet`); `2b6f319b` |
+| 10 | **The red is in the shared lane, not in a scratch probe.** `sheet-rebuild` gained a chrome-reachability case that builds the real `ViewConfigPanelRenderer` as a sheet and sweeps the band with `elementFromPoint` down the sheet's centre line, before and after a 200px scroll | `tools/live/sheet-rebuild-harness.ts`, `tools/live/sheet-rebuild.mjs`; `2b6f319b` |
+| 11 | **A close control in the header**, 44x44, drawn only when `isMobileBottomSheet` is true, dismissing through `overlayStack.dismissPanel` — the same close the backdrop, Escape and the drag gesture all run through, rather than a private one | `renderSheetClose`; `2b6f319b` |
+| 12 | **The body in the shared grammar on the phone.** One full-width control per padded row with the label above it and a hairline between neighbours, inputs at `--db-font-lg`, helper text as the shared hint row, section headers on the sheet inset, 44px icon actions, the template engine as a dropdown row | `styles.css`, all rules scoped to `.db-view-config-panel.db-mobile-bottom-sheet`; `2b6f319b` |
+
+**Measured after the fix.** The band holds at **48px at every scroll offset tested** — 8, 16, 20,
+24, 40 and 300 — against 40/32/28/24/8/0 before, and the header stays at 24px from the sheet's top
+edge. A real `Input.dispatchTouchEvent` 120px drag dismisses the sheet **at `scrollTop 300`**, where
+the press could not previously land at all. The close button reads
+`{"found":true,"box":{"w":44,"h":44},"closed":true,"gone":true}` after a 400px scroll.
+
+**Desktop negative control**, taken on a 1280x900 profile through the same producer: `isSheet:false`,
+`closeButton:false`, the panel still its own scroller (`panelScrolls:true`, `bodyScrolls:false`, body
+`overflow-y: visible`), the row still `grid-template-columns: 116px 152px`.
+
+**One defect was introduced and caught by reading the capture rather than by a gate.** Scoping
+`align-items: center` to `.db-view-config-field` also hit the stacked variant, which is a column —
+so the source-rules editor, its empty state and its three action buttons came off the left margin
+and floated mid-sheet. Both that and `flex: 1 1 auto` on the first child were taken back for the
+stack. No lane failed on it; the picture did.
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -145,6 +202,23 @@ Run from the final state on 2026-08-30, exit codes read from `$?` without a pipe
 |---|---|
 | `npm run gate` | **16 green, 0 red, exit 0** |
 | `node tools/storybook/verify-placement.mjs` | **218/223, 5 red for a declared reason, exit 0** |
+
+Re-run from the final state on 2026-09-04, after the settings-sheet work:
+
+| Gate | Result |
+|---|---|
+| `npm run gate` | **PASS — 25 green, 0 red for a declared reason** |
+| `npx tsc --noEmit` | green |
+| `npx vitest run` | **101 files, 1037 tests, all passed** |
+| `npm run lint` | **172 problems**, the standing baseline, unmoved |
+| `npm run lint:tools` | clean |
+| `node tools/naming/scan-comments.mjs` | PASS, 398 files |
+
+The `evidence` lane went red on the first run — eight artefacts measured against the previous
+`styles.css` — and was cleared by re-running each tool that wrote one rather than by editing a
+number. `engine-parity` exits 1 on 51 Chrome-versus-WebKit disagreements, and its artefact records
+the identical 71 fixtures and 51 differences at `HEAD`, so that verdict is the pre-existing state and
+not this work.
 
 **The total is not the 216 written elsewhere in this packet, and the reason is dated rather than
 environmental.** Commit `ff3d241` added seven card/cell numeric-formatting checks, one of which is

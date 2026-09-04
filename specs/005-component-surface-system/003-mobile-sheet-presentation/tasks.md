@@ -138,6 +138,89 @@ more than the 1.35px fallback artefact, no later claim in this spec means anythi
 - [ ] **T21** Confirm the fix covers the keyboard on the *next* field, not only the first — REQ-005.
       *Evidence to close:* Two consecutive field commits, then a `visualViewport` reduction, still repositions
 
+### Stage 7 — the settings sheet, from operator report 41
+
+- [x] **T28** Find why the settings sheet's grab handle does not dismiss it, driving the shipped
+      path at phone conditions rather than reading the gesture again — REQ-001, REQ-004.
+      *Evidence to close:* A number for the grab target, taken on the surface the operator reported,
+      not on the menu sheets every earlier round measured
+      **Evidence:** the gesture is not the defect and was cleared first: on a 390x844 phone profile
+      with `hasTouch`, `isMobile` and `is-phone`, a real 120px drag on the handle — driven by
+      `page.mouse` and again by `Input.dispatchTouchEvent` through the browser's own input pipeline
+      — moved the sheet `matrix(1, 0, 0, 1, 0, 110)` and dismissed it, **both on a fresh sheet and
+      after a re-render**. So the 016 repair holds here.
+      **The root cause is reach, not wiring.** `positionToolbarPopover` makes the panel itself the
+      scroll container (`src/views/popover-position.ts:157` writes `overflow-y: auto`, and
+      `styles.css:214` re-declares it on the sheet class), while the grab bar is prepended as an
+      ordinary in-flow child of that same panel (`src/views/mobile-bottom-sheet.ts:86`
+      `panel.prepend(handle)`) and the header is built as another
+      (`src/views/view-config-panel-renderer.ts:303`). So the content carries both off the top edge
+      as it scrolls. **The settings sheet is the one toolbar panel whose content always overflows**
+      — measured, `1461px of content in a 760px sheet` — and the grab band shrinks one pixel per
+      pixel of scroll:
+
+      | `scrollTop` | grab band | what a press at the bar's centre hits |
+      | --- | --- | --- |
+      | 0 | 48px | the handle |
+      | 8 | 40px | the handle |
+      | 16 | 32px | the handle |
+      | 20 | 28px | **the scrim** |
+      | 40 | 8px | the scrim |
+      | 300 | **0px** | **nothing** |
+
+      The header goes with it: at 200px of scroll it sits **176px above the sheet's own top edge**.
+      Past 48px of scroll the sheet is open, covering the screen, and carries no title, no close and
+      no target any press can use to start the gesture. That is the operator's *"cant properly
+      close, drag handler doesnt work"*, and no earlier round saw it because the menu sheets fit.
+- [x] **T29** Put the red in the shared lane before fixing it — REQ-001.
+      *Evidence to close:* The lane fails on the shipped tree, with the numbers in its own output
+      **Evidence:** `tools/live/sheet-rebuild.mjs` gained a chrome-reachability case
+      (`sheet-rebuild-harness.ts` `openSettingsSheetForReach` / `measureSettingsSheetReach`), which
+      builds the real `ViewConfigPanelRenderer` as a sheet and sweeps the band with
+      `elementFromPoint` down the sheet's centre line before and after a 200px scroll. **Watched red
+      on the shipped tree**, verbatim:
+      `FAIL  settings sheet chrome survives its own scroll   1461px of content in a 760px sheet`
+      `- settings sheet chrome survives its own scroll: the grab band went from 48px to ZERO after a`
+      `200px scroll, and the header went from 24px to -176px relative to the sheet's top edge — the`
+      `sheet is open, covering the screen, and nothing on it can close it`
+      Staged and measured across a **settled** entrance, because a sheet measured in the render's own
+      turn is still at `translateY(100%)` — the first version of this case read `null` at every sweep
+      coordinate and accused the product of a missing bar that was merely below the fold.
+- [x] **T30** Fix at the producer: the sheet's chrome stops scrolling — REQ-001, REQ-004.
+      *Evidence to close:* The band survives a scroll, and a real drag still dismisses from there
+      **Evidence:** the shape is the record sheet's, which solved the same problem the same way
+      (`styles.css` `.db-record-detail-panel.db-mobile-bottom-sheet` and its
+      `.db-record-detail-scroll`). `render()` now builds a `.db-view-config-body` region and writes
+      every section into it, and the sheet rules make the panel a column flexbox with
+      `overflow-y: hidden !important` while that region scrolls. Lane green with numbers:
+      `PASS  settings sheet chrome survives its own scroll   1943px of content in a 670px sheet`
+      `— the band held at 48px through a 200px scroll (48px at rest), and the header stayed put at`
+      `24px from the sheet's top edge`.
+      **The gesture, not just the band:** a real `Input.dispatchTouchEvent` 120px drag on the handle
+      dismissed the sheet at `scrollTop 0` **and at `scrollTop 300`**, where before the press could
+      not land at all. The band sweep now reads **48px at every scroll offset** — 8, 16, 20, 24, 40
+      and 300 — against 40/32/28/24/8/0 before.
+- [x] **T31** Give the sheet the close control its grammar names — REQ-004.
+      *Evidence to close:* A control in the header, at the phone target size, that closes through the
+      shared dismissal rather than a private one
+      **Evidence:** `renderSheetClose` adds an `x` button to `.db-panel-header-actions`, drawn only
+      when `isMobileBottomSheet` is true so the anchored panel is untouched. Dismissal is handed to
+      `overlayStack.dismissPanel`, which is the same close the backdrop, Escape and the drag gesture
+      all run through. Measured: **44x44**, found and closing after a 400px scroll
+      (`{"found":true,"box":{"w":44,"h":44},"closed":true,"gone":true}`).
+- [x] **T32** Re-lay the sheet body in the shared grammar — REQ-004.
+      *Evidence to close:* One control per padded row on the phone, desktop byte-identical in shape
+      **Evidence:** stylesheet only, every rule scoped to `.db-view-config-panel.db-mobile-bottom-sheet`:
+      the row becomes one full-width column with the label above it, a 44px minimum height and a
+      hairline between neighbours; inputs, textareas and dropdowns go full width at
+      `--db-font-lg` (16px, the step that also stops iOS zooming a focused field and fighting the
+      sheet's own keyboard avoidance); helper text becomes the shared hint row; section headers take
+      the sheet's inset and open each group with a divider; the two icon actions go from 26px to
+      44px; the template engine becomes a dropdown row. **Desktop negative control**, measured on a
+      1280x900 profile through the same producer: `isSheet:false`, `closeButton:false`, panel still
+      the scroller (`panelScrolls:true`, `bodyScrolls:false`, body `overflow-y: visible`), row still
+      `grid-template-columns: 116px 152px`.
+
 <!-- /ANCHOR:phase-2 -->
 ---
 
