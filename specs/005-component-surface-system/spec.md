@@ -161,6 +161,7 @@ are counted separately.
 | port-plan | `040-subtask-tree-port` (Level 3, raised over `recommend-level.sh`'s L1 — see its `spec.md` §1) | Port obsidian-pm-main's recursive subtask model — normalized parent index, cycle-safe move/reorder, depth/expand UI — into this repo's per-note frontmatter model near one-to-one | **Landed (partial)** `1d611db` + `00b7bd2`, release 1.4.7 pending, not operator-confirmed |
 | port-plan | `041-shared-ui-ux-port` (Level 2) | Rewrite obsidian-pm's shared token, primitive, motion and settings language into this repository's `db-*` surfaces without replacing the local bottom sheet | **Landed (partial)** `cb9aedf` + `25ae3a9`, release pending, not operator-confirmed |
 | audit-driven | `042-harness-fidelity-and-replay` (Level 3) | Chart and calendar week/day renderer coverage (DONE-row 3); replay backfill for report 29, reports 34-36 and phases `037`-`041` (DONE-row 5); the row-6 harness-dependency audit — pinned `runtime-vars.css` calendar formula, `touch-targets.mjs`/`unstyled-links.mjs` fixture reads, `theme.css`'s absent `.mod-cta`, plus the capture manifest's byte-level (non-content-hash) compare | Landed `7e9fd27`: chart and calendar week/day render-assertion scenarios with owned controls; 21 replay claims, three delegating to the sheet lanes; `runtime-vars.css` and `theme.css` pinned to product values; criterion 5 manifest compare open, a lane is on it; not operator-relevant |
+| seam-driven | `043-constructed-capture` (Level 3) | `042` left DONE-row 6 open on five fixture-only gate lanes (css-lane, screenshots-fresh, device-parity, plus the fixture pass of two constructed-pass-supplemented checks). This phase gives `capture.mjs` a constructed scenario type that reuses `042`'s bundle/mount seam, photographs at least one scenario per registered view (list, table, board, gallery, calendar's three scales, timeline's five scales, chart), declares which existing fixtures it supersedes, and rewires css-lane/screenshots-fresh/device-parity to read the constructed capture where one exists | Opened 2026-09-04, not started |
 
 **Rows for `020`-`028` and `030`-`034` are missing from this table.** Those folders exist and this
 map otherwise stops at `029`. The gap is recorded rather than filled by whoever noticed it, since
@@ -415,7 +416,7 @@ would have been valid.
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
 | 42 | 042-harness-fidelity-and-replay/ | Chart and calendar week/day renderer coverage, replay backfill for every landed result since `005`, and the row-6 harness-dependency audit | Opened 2026-09-03, not started |
-
+| 43 | 043-constructed-capture/ | Photograph the constructed production renderers (reusing `042`'s bundle/mount seam) for at least one scenario per registered view, declare the fixtures they supersede, and wire css-lane, screenshots-fresh and device-parity to read the constructed capture where one exists | Opened 2026-09-04, not started |
 ### Phase Transition Rules
 
 - Each phase MUST pass `validate.sh` independently before the next phase begins
@@ -428,4 +429,5 @@ would have been valid.
 | From | To | Criteria | Verification |
 |------|-----|----------|--------------|
 | 041-shared-ui-ux-port | 042-harness-fidelity-and-replay | None — `042` is audit-driven (opened from the parent's own 2026-09-03 DONE-table audit), not blocked on `041`'s release | n/a |
+| 042-harness-fidelity-and-replay | 043-constructed-capture | None — `043` is seam-driven (opened from `042`'s own investigation of `capture.mjs`'s fixture-only scenario type), not blocked on `042`'s release | n/a |
 <!-- /ANCHOR:phase-map -->
