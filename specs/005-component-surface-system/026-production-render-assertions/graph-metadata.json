@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Fourteen gate checks and none of them constructs a renderer the plugin ships, so a quadratic freeze reached a user through every one. This phase turns the existing production-renderer bench mechanism into a gated assertion harness covering both hosts' action bags.",
     "created_at": "2026-08-30T16:49:40.898Z",
-    "last_save_at": "2026-09-02T20:10:06.857Z",
+    "last_save_at": "2026-09-04T20:07:56.489Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,10 +218,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3497c4aa40bddb95bb88a5c7f5dff94b895b19174736840efe08f9e69917b0bf",
+    "source_fingerprint": "sha256:573c10b5a8134ae515c9086797e7fcea7e5ea71e8fd484e56702fafe813144bc",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9e6b044b85eb256a1e14249972e25b01cd9d169d50c8ee46c318c2466d44bb48",
+      "spec.md": "01a65affbccdcc3561090264decabffc169db947e30b9d214dc85850b034f998",
       "plan.md": "51d2eefbc538f36f49247564f736a9ed95b9e84e92fc8554a7dae8dd8a6b5082",
       "tasks.md": "cdcdc3eb0f1fd05a5c712f3b4e8ab108e8263fee939035819b75c8af656b8633",
       "implementation-summary.md": "d0996969c57eb22d76401dfc6fe6dea562fb3ee437554dddb14442c9fbdeb1e6"

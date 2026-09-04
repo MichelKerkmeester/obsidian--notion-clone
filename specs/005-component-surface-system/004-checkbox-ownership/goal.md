@@ -1,20 +1,70 @@
-**Phase 004 — Checkbox ownership**
+---
+title: "Goal: Checkbox Ownership"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "004 goal"
+  - "checkbox ownership goal"
+  - "checkbox ownership directive"
+  - "packet goal"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/004-checkbox-ownership"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Operator opens a board on a phone and sees squares"
+    blockers:
+      - "Operator device confirmation is the only row left"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-004-goal"
+      parent_session_id: null
+    completion_pct: 88
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Checkbox Ownership
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** One checkbox factory owns every checkbox's appearance, so a surface cannot acquire a round one by being mounted somewhere nobody styled.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Runs second, right after `000`.** Needs only the harness, not the factory. Takes the `styles.css` lane at Phase 3, releases it at Phase 6.
 
 **THE DEFECT.** The operator still sees round checkboxes on board cards, board columns, board subgroups, gallery cards, gallery groups, list rows, list groups and the selection-clear box. The previous attempt styled `.db-checkbox-cell input[type="checkbox"]` — the boolean **cell** — and called it done.
 
 **BUILD.** `createCheckbox(parent, { role })` with **unconditional base appearance**. The role chooses **size only**. Never keyed to an ancestor — ancestor-keyed styling is precisely why 11 of 12 were missed.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | `createCheckbox(parent, { role })` carries an **unconditional base appearance**. The role chooses size only. |
+| D2 | Appearance is never keyed to an ancestor. Ancestor-keyed styling is precisely why 11 of 12 checkbox families were missed by the previous attempt, which styled the boolean **cell** and called it done. |
+| D3 | The defect is visible shape, so a named human opens every changed PNG and signs off in `checklist.md`. A machine that never opens an image cannot close this phase. |
+| D4 | The lane is taken at Phase 3 and released at Phase 6, after a full recapture of every family in every state, that human sign-off, `008`'s early replay re-asserting `000` — the program's first lane handoff, and the first real test of whether the replay works at all — and cascade re-confirmation, because replacing four ancestor-scoped rules with one unconditional rule moves the specificity landscape. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../design-system.md`, `../adversarial-review.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **LANE.** Take at Phase 3, release at Phase 6, and only after all four in order: (1) full recapture of every family in every state, `screenshots:verify` exit 0; (2) a **named human** opening every changed PNG and signing off in `checklist.md` — the defect is *visible shape*, and a machine that never opens an image cannot close it; (3) **`008`'s early replay re-asserting `000`** against the tree you released. This is the program's first lane handoff and the first real test of whether the replay works at all — a failure here is a finding about the replay as much as about you; (4) cascade re-confirmation — you are replacing four ancestor-scoped rules with one unconditional rule, so the specificity landscape moves and a previously losing declaration can start winning.
@@ -23,6 +73,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs second, right after `000`.** N
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE — every one measured, thresholded, failing value recorded, negative control named.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — not zero
@@ -198,6 +250,8 @@ says in its own words. Rows in `acceptance-criteria.md` § Harness-dependence au
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES.** Every `styles.css:NNNN` and `src/**/*.ts:NNNN` below was correct on 2026-08-29; `000` deletes dead blocks before you start. Find the four `appearance: none` selectors with `rg -n 'appearance: none' styles.css` and read each hit's selector; find the five dangerous sites with `rg -n 'type: "checkbox"' src/views/` and read the two lines above each hit. When the command and the number disagree, the command is right.
 
 **YOUR HARNESS MUST HAVE THE STYLESHEET OR NOTHING HERE IS MEASURABLE.** `verify-placement.mjs:220` loads `styles.css` on the **phone** page only. Every criterion you have reads a **computed** value — `appearance`, `border-radius`, box size — and on a stylesheet-less page all twelve families compute the platform default. The harness would report them uniformly broken and your fix would look like it changed nothing. That is not a false pass, it makes the packet unmeasurable. `000` fixes this; no desktop number recorded before it is admissible. And `.storybook/preview.ts:55` wraps every story in `.note-database-container` — the very ancestor four of these rules are scoped to — so a story in the wrapper cannot show the ancestor dependency at all. Measure at the production mount, cross-check against `009`.

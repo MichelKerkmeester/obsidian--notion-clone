@@ -1,20 +1,71 @@
-**Phase 003 — Mobile sheet presentation**
+---
+title: "Goal: Mobile Sheet Presentation"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "003 goal"
+  - "mobile sheet presentation goal"
+  - "mobile sheet presentation directive"
+  - "packet goal"
+importance_tier: "critical"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/003-mobile-sheet-presentation"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Operator opens a sheet on their phone and it covers the nav bar"
+    blockers:
+      - "Operator device confirmation is the only row left"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "sheet-and-dropdown-inventory.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-003-goal"
+      parent_session_id: null
+    completion_pct: 88
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Mobile Sheet Presentation
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Sheets on the phone overlay Obsidian's own bottom navigation bar, through a portal and a lease rather than through a number.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Runs sixth.** The riskiest change in the program — it moves surfaces to a different place in the document. Takes the `styles.css` lane at Phase 4, releases it at Phase 6.
 
 **THE HEADLINE, IN THE OPERATOR'S WORDS.** Sheets must **overlay Obsidian's native bottom navigation bar**. Today they start above it, which they call extremely bad UX. This is the requirement the phase is judged on.
 
 **IT IS A PORTAL, NOT A Z-INDEX.** Hit test: a sheet inside `.note-database-container` at `z-index: 9999` — `elementFromPoint` over the navbar returns `DIV.mobile-navbar`. The same node cloned to `document.body` returns the sheet. **No number fixes this.** And portalling strips the design tokens, which is why this phase is hard-coupled to `000`'s token boundary.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | Sheets **overlay** the host's bottom navigation bar. Today they start above it, which the operator calls extremely bad UX, and that is the requirement this phase is judged on. |
+| D2 | It is a portal, not a z-index: a sheet inside `.note-database-container` loses the hit test at 9999 and wins it cloned to `document.body`. **No number fixes this.** Portalling strips the design tokens, which is what hard-couples this phase to `000`'s token boundary. |
+| D3 | Delete the `is-phone` bounds branch rather than adjusting it — but measure the blast radius first, because every anchored popover shares it, not only sheets. |
+| D4 | A sheet must survive its anchor being destroyed, through `000`'s logical `AnchorRef` lease: resolve by identity at each renderer commit, hold a bounded pending state, then close or fall back. Never retain the last rectangle indefinitely. |
+| D5 | The lane is taken at Phase 4 and released at Phase 6, after a full recapture **with a navbar present** — a condition no capture had ever had — a named human sign-off, `008`'s replay re-asserting `000`, `004`, `005`, `001` and `002`, and cascade re-confirmation. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../design-system.md`, `../adversarial-review.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **LANE.** Take at Phase 4, release at Phase 6, and only after all four in order: (1) full recapture **with a navbar present** — a condition no capture has ever had — `screenshots:verify` exit 0; (2) a **named human** opening every changed PNG and signing off in `checklist.md`. This matters more here than anywhere: `runtime-vars.css:43` pinned `--db-mobile-sheet-bottom` to `0px` for every capture ever taken, so no existing capture could have shown this defect and the reviewer has no prior image to compare against; (3) **`008`'s early replay re-asserting `000`, `004`, `005`, `001` and `002`** — you are moving surfaces to a different place in the document, which changes stacking and containment for everything mounted near them; (4) cascade re-confirmation for every duplicated selector you touched.
@@ -23,6 +74,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs sixth.** The riskiest change i
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -148,6 +201,8 @@ the host's variable. What is **not** spent is the every-popover deletion bullet:
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES.** Every `styles.css:NNNN` and `src/**/*.ts:NNNN` below was correct on 2026-08-29; three phases edit `styles.css` before you start. `acceptance-criteria.md` carries the resolution table — symbol plus the `rg` command. When the command and the number disagree, the command is right. Record moved numbers old to new.
 
 **DELETE, DON'T ADJUST.** `getVisiblePopoverBounds` has an `is-phone` branch that **subtracts** navbar height and safe-area inset from the bottom bound. It exists to avoid the navbar; the operator wants to cover it. **But it is shared by every anchored popover, not just sheets** — measure that blast radius before the deletion, not after.

@@ -204,7 +204,7 @@
     ],
     "causal_summary": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
     "created_at": "2026-08-29T12:37:20.727Z",
-    "last_save_at": "2026-09-02T14:17:15.542Z",
+    "last_save_at": "2026-09-04T20:07:56.179Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,7 +215,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6ee3243a692c045b382629dd860edb1720b8503cb0e9ba355b548bbb080fdf11",
+    "source_fingerprint": "sha256:8b73fe9b98cde479303fe830d7d962e1450fc0341caa32cf639218fdf245429c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "35bc6a8bc35d8de77295a9d61351300d8d73a4c6982c767f0ace836c35e6bab6",

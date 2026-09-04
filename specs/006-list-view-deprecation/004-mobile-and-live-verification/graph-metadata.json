@@ -17,7 +17,10 @@
       "006 phase 004 plan",
       "006 phase 004 tasks",
       "006 phase 004 criteria",
-      "ac-26 device verification"
+      "ac-26 device verification",
+      "006 004 goal",
+      "mobile live verification superseded",
+      "converted list verification history"
     ],
     "key_topics": [
       "phase",
@@ -40,6 +43,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "checklist.md",
       "tools/storybook/verify-placement.mjs"
     ],
@@ -66,6 +70,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -175,20 +185,27 @@
         "kind": "key_phrase",
         "path": "acceptance-criteria.md",
         "source": "derived"
+      },
+      {
+        "name": "Decisions Frozen",
+        "kind": "proper_noun",
+        "path": "goal.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "SUPERSEDED 2026-09-04 (ClickUp direction, replaced by the list-view deprecation). Phone layout and touch targets, the two deferred guards, and the only evidence that closes the packet: the operator opens the plugin and confirms the screen changed.",
     "created_at": "2026-08-30T10:00:33.643Z",
-    "last_save_at": "2026-09-04T19:45:30.669Z",
+    "last_save_at": "2026-09-04T20:07:56.868Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "acceptance-criteria.md"
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:5c42f8f5cd75cf063a16fbf08a98e08b0a8f2074c9e565ba8b80083842f513dc",
+    "source_fingerprint": "sha256:05036471219f3271380b435abfb89bc597b703a13dc62027c2f249b35ef3df3d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "5463dbab680aab450b0f4da11a8cce71d504247f0b468b9e8bf8a426a148cb72",

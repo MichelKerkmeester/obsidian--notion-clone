@@ -1,3 +1,13 @@
+---
+title: "Acceptance Criteria: Desktop Dropdown Placement"
+description: "Every acceptance criterion for desktop dropdown placement, each with its threshold, its recorded failing number and its negative control."
+trigger_phrases:
+  - "015 acceptance criteria"
+  - "desktop dropdown placement criteria"
+  - "dropdown viewport origin measurement"
+importance_tier: "important"
+contextType: "implementation"
+---
 # Acceptance Criteria: Desktop Dropdown Placement
 
 Each criterion carries a number with a threshold, was demonstrated failing on the unfixed tree with

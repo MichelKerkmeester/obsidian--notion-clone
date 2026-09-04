@@ -1,20 +1,70 @@
-**Phase 009 — Live verification**
+---
+title: "Goal: Live Verification"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "009 goal"
+  - "live verification goal"
+  - "live verification directive"
+  - "packet goal"
+importance_tier: "critical"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/009-live-verification"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Round-trip obsidian eval, then reproduce the known body-mount divergence live"
+    blockers:
+      - "The probe cannot open the real app from this repository; only the operator's device closes it"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-009-goal"
+      parent_session_id: null
+    completion_pct: 33
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Live Verification
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Ask the running application a question and get a number back, so `000` can no longer certify its own instrument.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **This phase runs FIRST, before 000.** It used to be parallel and gate nothing. An independent review found the reason that was wrong.
 
 **WHY IT MOVED TO THE FRONT.** `000` repairs the harness — adds a `.mobile-navbar`, loads `styles.css` on the desktop page, unpins four runtime values, inverts a CI assertion — and then measures its own repairs **through that same harness**. Its negative controls run inside the instrument it just rewrote. A repair that is wrong in a way that makes everything pass is indistinguishable from a correct one. **That is 1.3.1's failure mode in a new costume.**
 
 The running app is the one measurement surface `000` cannot edit. **This phase is that instrument, and `000`'s harness-truth claims are gated on agreeing with it.** A harness number and a live number that disagree is a blocking failure for `000` — resolved by finding which instrument is wrong, never by preferring the convenient one.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | **This phase runs FIRST, before `000`.** It used to be parallel and gate nothing; an independent review found the reason that was wrong. |
+| D2 | `000` repairs the harness and then measures its own repairs through that same harness, so its negative controls run inside the instrument it just rewrote. A repair that is wrong in a way that makes everything pass is indistinguishable from a correct one. |
+| D3 | The running app is the one measurement surface `000` cannot edit. A harness number and a live number that disagree is a **blocking failure** for `000`, resolved by finding which instrument is wrong, never by preferring the convenient one. |
+| D4 | Two stop conditions, in order: the transport round-trips, and the probe reproduces a defect already known to exist. **Agreement is a failure** — it means the probe measured one node twice, read a stale frame, or resolved against the wrong document. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../adversarial-review.md`, `../architecture-findings.md`, `../roadmap.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **TWO STOP CONDITIONS, IN ORDER.**
@@ -25,6 +75,8 @@ The running app is the one measurement surface `000` cannot edit. **This phase i
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -109,6 +161,8 @@ evidence in this folder or in a lane.*
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **DESKTOP: THE GAP IS CLOSEABLE, AND CHEAPLY.** Obsidian ships an **undocumented CLI with a renderer `eval`**. `/usr/local/bin/obsidian` symlinks into the app bundle, `"cli": true` is already set in the operator's config, and the bundle registers **73 handlers** — including `eval`, `dev:dom`, `dev:css`, `dev:cdp`, `dev:screenshot`, `dev:mobile` and `command`. `eval` runs `await window.eval(code)` in the renderer and returns the JSON-stringified result.
 
 That is `getComputedStyle`, `getBoundingClientRect` and `document.elementFromPoint`, in the real app, from a shell, with an exit code — at the real mount point, with the real theme and the real `.mobile-navbar`. It closes the exact hole that let every fixture lie.

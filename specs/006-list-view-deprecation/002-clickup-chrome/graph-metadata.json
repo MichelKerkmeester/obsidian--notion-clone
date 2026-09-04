@@ -20,9 +20,9 @@
       "006 phase 002 tasks",
       "006 phase 002 criteria",
       "chrome negative controls",
-      "006 phase 002 adr",
-      "sort indicator badge",
-      "select pill width"
+      "006 002 goal",
+      "clickup chrome superseded",
+      "list chrome history"
     ],
     "key_topics": [
       "phase",
@@ -45,6 +45,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "decision-record.md",
       "checklist.md",
       "tools/lane/css-lane.json",
@@ -73,6 +74,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -188,17 +195,11 @@
         "kind": "proper_noun",
         "path": "acceptance-criteria.md",
         "source": "derived"
-      },
-      {
-        "name": "colour",
-        "kind": "key_phrase",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "SUPERSEDED 2026-09-04 (ClickUp direction, replaced by the list-view deprecation). The visual language: row rhythm and dividers, group header pill and count, the reserved leading gutter, chip and pill cell treatments, empty-cell placeholders, density. Every value from the existing token scale. The phase most able to pass while nothing changes on screen.",
     "created_at": "2026-08-30T10:00:32.765Z",
-    "last_save_at": "2026-09-04T19:45:29.387Z",
+    "last_save_at": "2026-09-04T20:07:56.847Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,9 +207,10 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:1f0b2673904d88811764fb0265863389ae802e29eaec80ac1990930046baf071",
+    "source_fingerprint": "sha256:48f1c014ce5ef3beaf9273489be732885d218ee8637cdeba5e74e7d7c430f2e1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "61926d1816c4473fb614d8ec2025bccde21cc920531db007461936e076b54d78",

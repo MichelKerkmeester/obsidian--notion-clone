@@ -1,10 +1,45 @@
-**Phase 007 — Architecture research (standing, off-path)**
+---
+title: "Goal: Architecture Research"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "007 goal"
+  - "architecture research goal"
+  - "architecture research directive"
+  - "packet goal"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/007-architecture-research"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Leave closed; consult it, and re-run only on its stated trigger"
+    blockers: []
+    key_files:
+      - "../architecture-findings.md"
+      - "harvest.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-007-goal"
+      parent_session_id: null
+    completion_pct: 100
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Architecture Research
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** A standing, off-path architecture study the program consults: it gates nothing, and its output has to stay trustworthy rather than current.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Not a program phase.** It gates nothing and appears in no execution order. It exists to be consulted and re-run.
 
 **WHAT IT PRODUCED THAT CHANGED THE PROGRAM.**
@@ -13,11 +48,26 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Not a program phase.** It gates not
 - **The architecture correction** — `overlay-stack.ts` and `interaction-scope.ts` already exist; `openSurface()` must **extend** that seam, not run beside it.
 - **The 9-step migration order** that adds an adapter before removing anything.
 - **The anchor ownership model** — a logical lease, with the DOM node as a render-epoch cache.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | **Not a program phase.** It gates nothing and appears in no execution order. It exists to be consulted and re-run. |
+| D2 | No browser ran in its lineage, so every browser-specific conclusion is a **proof obligation, not an observed result**. `009` is what turns those obligations into numbers, and that stated limit is why the document is trustworthy. |
+| D3 | The four original acceptance rules are necessary and **not sufficient for a stateful surface**. Five dimensions are added: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation. |
+| D4 | `openSurface()` **extends** the existing `overlay-stack.ts` / `interaction-scope.ts` seam rather than running beside it, and the 9-step migration order adds an adapter before removing anything. |
+| D5 | Re-run it when a criterion fails twice without a new hypothesis, or when an architecture decision in `000` is contested. Otherwise leave it closed. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **ITS OWN STATED LIMIT, WHICH IS WHY IT IS TRUSTWORTHY.** No browser ran in that lineage. Every browser-specific conclusion is marked a **proof obligation, not an observed result**. Treat it that way; `009` is what turns those obligations into numbers.
 
 **RE-RUN IT WHEN** a criterion fails twice without a new hypothesis, or an architecture decision in `000` is contested. Otherwise leave it closed.
@@ -42,6 +92,8 @@ while succeeding, and both reported success with exit 0 while producing nothing.
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **STATUS: COMPLETE — two lineages, not one.** The second was missing from this record until a later pass listed the folder.
 
 - `luna-xhigh` — 10 iterations, GPT-5.6 LUNA at xhigh, forced depth with no early convergence.

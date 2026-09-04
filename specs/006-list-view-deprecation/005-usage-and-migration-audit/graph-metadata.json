@@ -22,7 +22,7 @@
       "implementation tasks",
       "verification checklist",
       "task dependencies",
-      "implementation summary"
+      "006 005 goal"
     ],
     "key_topics": [
       "list",
@@ -44,6 +44,7 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "goal.md",
       "implementation-summary.md",
       "src/views/list-renderer.ts",
       "src/views/card-field-renderer.ts",
@@ -77,6 +78,12 @@
         "name": "tasks.md",
         "kind": "doc",
         "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -198,26 +205,21 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The deprecation cannot start by deleting, because `viewType: \"list\"` is written into vault files and",
     "created_at": "2026-09-04T19:33:25Z",
-    "last_save_at": "2026-09-04T19:44:34.230Z",
+    "last_save_at": "2026-09-04T20:07:56.876Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
+      "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ab4e95ec17b4534e0509df6e4865a98cda42e45abf521c1fbc307af7f649eec7",
+    "source_fingerprint": "sha256:818371cb9382599d205fac88e724a42bd3815a8eceeee6955d1233918916a4a6",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "69bf2ff95020d444bc9ec072c56d9f39745ef7f2cd4030e7a297c779190dac95",

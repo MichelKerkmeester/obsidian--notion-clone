@@ -1,3 +1,13 @@
+---
+title: "Acceptance Criteria: Desktop Select Checkbox Placement"
+description: "Every acceptance criterion for the desktop select checkbox, each with its threshold, its recorded failing number and its negative control."
+trigger_phrases:
+  - "014 acceptance criteria"
+  - "desktop select checkbox criteria"
+  - "checkbox clearance threshold"
+importance_tier: "important"
+contextType: "implementation"
+---
 # Acceptance Criteria: Desktop Select Checkbox Placement
 
 Each criterion carries a number with a threshold, was demonstrated failing on the unfixed tree with

@@ -207,7 +207,7 @@
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-09-02T14:16:06.540Z",
+    "last_save_at": "2026-09-04T20:07:56.249Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,7 +218,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:18defb7b2f35274c5f29109facedb537f3ea28a57ccacf5646e7693062cc6906",
+    "source_fingerprint": "sha256:05bd88a999666c860ee5b1ee7db39351f7dfb978c8227adc184a384395924e52",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "beb54a75ddc4d932724ac6c30b816e3831a998e800b8966179afedb42f5f6230",

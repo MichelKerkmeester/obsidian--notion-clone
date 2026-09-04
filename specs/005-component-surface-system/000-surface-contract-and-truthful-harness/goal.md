@@ -1,20 +1,70 @@
-**Phase 000 — Surface contract and truthful harness**
+---
+title: "Goal: Surface Contract and Truthful Harness"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "000 goal"
+  - "surface contract goal"
+  - "surface contract directive"
+  - "packet goal"
+importance_tier: "critical"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/000-surface-contract-and-truthful-harness"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Close the four harness-reachable rows; the fifth is the operator's"
+    blockers:
+      - "009's live probe does not exist, so no harness number has a live number to agree with"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-000-goal"
+      parent_session_id: null
+    completion_pct: 50
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Surface Contract and Truthful Harness
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Declare one surface contract, and repair the harness far enough that a surface's real appearance is measurable rather than supplied by the wrapper the story runs in.
+
 Repo `~/MEGA/Development/Obsidian Plugin`, branch `main`. **This phase blocks the other seven — and it now runs AFTER `009`.** Holds the `styles.css` lane.
 
 **WHY.** A surface's appearance is decided by where it was mounted. Tokens are declared on nine selectors (`styles.css:19-27`); `.db-owned-menu` is the **only** body-portal surface missing from that list. Measured: **29/29 probed overlay classes compute differently on `document.body` vs inside `.note-database-container`; 25/29 carry no tokens there.** Menus ship square-cornered at 14px where the design says 8px and 13px. Five `var(--db-*)` uses on that subtree have no fallback.
 
 **AND NO HARNESS CAN SEE IT.** `.storybook/preview.ts` wraps every story in the container that supplies the tokens. The screenshot fixtures do the same. No harness contains a `.mobile-navbar`.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | A surface's appearance is decided by where it was mounted. `.db-surface` joins the token-root selector list, because a body-portal surface missing from it renders untokenised no matter what it declares. |
+| D2 | No harness that wraps every story in the token container can see this defect. Repairing the instrument is part of this phase, not a precondition of it. |
+| D3 | This phase blocks the other seven and runs AFTER `009`. An instrument cannot certify its own repair, and the negative controls would otherwise run inside the thing they test. |
+| D4 | One phase holds `styles.css`. It is released only after a full recapture and a named human opening the changed PNGs — `screenshots:verify` never opens an image, so it can never be that step. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../adversarial-review.md`, `../architecture-findings.md`, `../design-system.md`, `../roadmap.md`, then this folder's `spec.md` and `acceptance-criteria.md`. Cite them; never restate them.
 
 **LANE.** One phase holds `styles.css`. Release only after full recapture **and a human looking at the PNGs**.
@@ -23,6 +73,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`, branch `main`. **This phase blocks th
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was one prose paragraph, so this packet — the one that sets
@@ -152,6 +204,8 @@ classification in `acceptance-criteria.md` § Harness-dependence audit.
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **THE THING THAT CHANGED: YOU CANNOT BE YOUR OWN INSTRUMENT.**
 
 This phase repairs the harness in Stage 1 and then asserts its own criteria through that repaired harness. Every negative control runs inside the instrument this phase just rewrote. A repair that is subtly wrong in a way that makes all the checks pass is indistinguishable from a correct one — **1.3.1's failure mode with a different wrapper supplying the illusion.**

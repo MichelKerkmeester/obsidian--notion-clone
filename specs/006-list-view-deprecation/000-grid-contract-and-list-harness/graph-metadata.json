@@ -22,7 +22,7 @@
       "tripwire arming tasks",
       "006 phase 000 criteria",
       "ac-31 ac-32 tripwire",
-      "006 phase 000 adr"
+      "006 000 goal"
     ],
     "key_topics": [
       "phase",
@@ -45,6 +45,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "decision-record.md",
       "checklist.md",
       "tools/lane/css-lane.json",
@@ -74,6 +75,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -189,17 +196,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Acceptance Criteria",
-        "kind": "proper_noun",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "SUPERSEDED 2026-09-04 (ClickUp direction, replaced by the list-view deprecation). Deliver the isGridView predicate, re-derive the guard table off a stable anchor, build the two view-semantic guard tripwires before any guard is converted, make verify-placement.mjs render a real list, and record every failing number this packet will later claim to fix.",
     "created_at": "2026-08-30T10:00:31.771Z",
-    "last_save_at": "2026-09-04T19:45:28.037Z",
+    "last_save_at": "2026-09-04T20:07:56.821Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,9 +208,10 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:b36254996385bcf2fecadc33346dad65d977eb13cb904afc5eef987d68e8f2f6",
+    "source_fingerprint": "sha256:9fef07fc1e916167c7a0addd98bde3d30950964c0f190a35a31c998266f72d65",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "eea22520d21fbd274fe9905244884e8bf9b637c681c6a024b19bdde90588f1d1",

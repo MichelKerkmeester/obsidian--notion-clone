@@ -16,7 +16,10 @@
       "selection sync defect",
       "006 phase 003 plan",
       "006 phase 003 tasks",
-      "006 phase 003 criteria"
+      "006 phase 003 criteria",
+      "006 003 goal",
+      "group affordances superseded",
+      "list selection semantics history"
     ],
     "key_topics": [
       "phase",
@@ -28,9 +31,9 @@
       "plan",
       "tasks",
       "criteria",
-      "superseded",
-      "clickup",
-      "direction"
+      "goal",
+      "affordances",
+      "superseded"
     ],
     "importance_tier": "critical",
     "status": "planned",
@@ -39,6 +42,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "checklist.md",
       "tools/storybook/verify-placement.mjs"
     ],
@@ -65,6 +69,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -180,26 +190,21 @@
         "kind": "heading",
         "path": "acceptance-criteria.md",
         "source": "derived"
-      },
-      {
-        "name": "2.1 AC-22 — the criterion must cross a surface boundary",
-        "kind": "heading",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "SUPERSEDED 2026-09-04 (ClickUp direction, replaced by the list-view deprecation). Wire and reach the per-group create row, the group count, and the selection-sync defect that leaves the list group checkbox stale after any change from another surface.",
     "created_at": "2026-08-30T10:00:33.202Z",
-    "last_save_at": "2026-09-04T19:45:30.029Z",
+    "last_save_at": "2026-09-04T20:07:56.857Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "acceptance-criteria.md"
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:ef2a5bfd756b5ccdabdedd19516829c7ea7ef727848c7b73effac491a9b399aa",
+    "source_fingerprint": "sha256:456261dd786925f27af1860e48ffe3e58246b1861d3d0bea90fa10db34c35d3e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ea0c9656048613bf418a133742a31c8979a5052ceccd1ed8e71d17b7aeca5de5",

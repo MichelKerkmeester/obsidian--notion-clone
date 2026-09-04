@@ -45,6 +45,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "implementation-summary.md",
       "tools/live/list-window.mjs",
       "tools/live/list-window.json",
@@ -59,8 +60,7 @@
       "src/views/card-field-renderer.ts",
       "tools/gate.mjs",
       "src/views/database-view.ts",
-      "src/data/types.ts",
-      "screenshots/manifest.json"
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -85,6 +85,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "After `006` nobody can reach the list, but the code and everything that measures it are still there",
     "created_at": "2026-09-04T19:33:27Z",
-    "last_save_at": "2026-09-04T19:44:35.569Z",
+    "last_save_at": "2026-09-04T20:07:56.894Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,9 +218,10 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:afd5fde751cd2476dca16016d9242e6b61ad0fbcddd9865d3a66cb2a37a895e1",
+    "source_fingerprint": "sha256:03d995e1ee293b6db08adbe8894efdea8412407afd2474779dc47cb1d75b37c0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b246daba8c4fac27078b5e6c8c31f1ea292fe301135ea5944db36ec82e6df94d",

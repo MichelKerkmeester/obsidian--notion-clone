@@ -208,7 +208,7 @@
     ],
     "causal_summary": "The sheet starts above the Obsidian bottom navigation bar instead of covering it",
     "created_at": "2026-08-29T12:41:53.187Z",
-    "last_save_at": "2026-09-02T14:14:26.980Z",
+    "last_save_at": "2026-09-04T20:07:56.196Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,7 +219,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8f74b412ff9f968e2378b46a066863412b914f96ad88793bd82a7418bb389220",
+    "source_fingerprint": "sha256:4d6453776704fba7a06df9012e953a033c1779dbd5186cd0b8f780f189ef390f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8c9f1ddc5110c8025b3949545d76e71dd07ca5fc8e1a5c99387e4803ca953096",

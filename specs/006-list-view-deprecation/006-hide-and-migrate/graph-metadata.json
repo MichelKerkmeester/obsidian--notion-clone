@@ -22,7 +22,7 @@
       "implementation tasks",
       "verification checklist",
       "task dependencies",
-      "implementation summary"
+      "006 006 goal"
     ],
     "key_topics": [
       "hide",
@@ -44,6 +44,7 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "goal.md",
       "implementation-summary.md",
       "src/data/gallery-migration.ts",
       "src/views/toolbar-renderer.ts",
@@ -70,6 +71,12 @@
         "name": "tasks.md",
         "kind": "doc",
         "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -191,26 +198,21 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`viewType` is a persisted union written into vault files (`src/data/types.ts:317`), so the list",
     "created_at": "2026-09-04T19:33:26Z",
-    "last_save_at": "2026-09-04T19:44:34.854Z",
+    "last_save_at": "2026-09-04T20:07:56.884Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
+      "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f1472d859e168abbf587486d41f9e1b60a2934a0fe40b0586f5a795bbaa32d25",
+    "source_fingerprint": "sha256:a516ab705369979e4f1315a4465e18c284fb40601cf137c4828c6bd65db1f61d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "691a922f91332a9d5e7fb37ace3bb7be226252256f25fcffe704b7fce47dfaa3",

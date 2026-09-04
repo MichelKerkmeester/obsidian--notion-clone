@@ -1,20 +1,70 @@
-**Phase 008 — Integration and release observability**
+---
+title: "Goal: Integration and Release Observability"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "008 goal"
+  - "integration and release observability goal"
+  - "integration and release observability directive"
+  - "packet goal"
+importance_tier: "critical"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/008-integration-and-release-observability"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Rehearse the red device review blocking a green pipeline"
+    blockers:
+      - "The rehearsal has never run: the pipeline has been green while operator rows stayed open"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-008-goal"
+      parent_session_id: null
+    completion_pct: 60
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Integration and Release Observability
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Build the cross-phase replay that re-asserts every landed result after a later stylesheet edit, and make a release refuse to ship an unnamed changed capture.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Ships in two parts on two schedules.** Part A lands early, before `001` starts, and gates every lane handoff from `000`'s release onward. Part B runs last and is the only phase permitted to delete a compatibility path.
 
 **WHY THIS PHASE EXISTS.** **No child phase can know that a later stylesheet edit preserved its result.** `styles.css` is one serialized lane, 19,261 lines (`wc -l styles.css`), fingerprinted by all 196 captures, and every phase holds it in turn. A phase that measures its surfaces green, releases the lane, and then watches three more phases edit the same file has proven something about a tree that no longer exists. This file already contains **87 duplicated selectors and 124 silently overridden values** — reversal is not hypothetical here, it is the documented norm.
 
 **WHY IT SPLIT IN TWO.** As first written, this replay was the program's only cross-phase gate **and it did not exist until the very end**. `000` could close, `002` could reverse its token root four weeks later, and nothing would fire until release (`../adversarial-review.md` F7). A gate delivered after the work it guards is a report, not a gate.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | It ships in two parts on two schedules. Part A lands early, before `001` starts, and gates every lane handoff from `000`'s release onward; Part B runs last and is the only phase permitted to delete a compatibility path. |
+| D2 | **No child phase can know that a later stylesheet edit preserved its result.** `styles.css` is one serialized lane of 19,261 lines carrying 87 duplicated selectors and 124 silently overridden values, so reversal is the documented norm rather than a hypothetical. |
+| D3 | A gate delivered after the work it guards is a report, not a gate. That is why it split in two: as first written, the replay did not exist until the very end. |
+| D4 | It blocks every lane release by `004`, `005`, `001`, `002`, `003`, `006` and by `008` itself. It **does not** block `000` — it cannot exist before `000`'s registry does, and that window is carried by `000`'s own controls and the `009` live cross-check. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../adversarial-review.md`, `../roadmap.md`, `../design-system.md`, then this folder's `spec.md` (§3 for the split, §4B and §4C for the two mechanisms) and `acceptance-criteria.md`.
 
 **Blocks:** every lane release by `004`, `005`, `001`, `002`, `003`, `006` and by `008` itself. **Does not block `000`** — it cannot exist before `000`'s registry does; that window is carried by `000`'s own controls and the `009` live cross-check.
@@ -23,6 +73,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Ships in two parts on two schedules
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -173,6 +225,8 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **PART A — THE HANDOFF REPLAY. Lands before `001` starts. Runs at EVERY lane handoff.**
 
 It re-asserts **every previously-closed phase's criteria against the CURRENT tree**. Minimal by construction — recorded criteria, registry equality and cascade winners, not the full grid — because a handoff gate that takes an hour is a handoff gate that gets skipped, and this repo already has that scar.

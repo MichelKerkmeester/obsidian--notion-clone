@@ -1,3 +1,13 @@
+---
+title: "Acceptance Criteria: Touch Row Range Selection"
+description: "Every acceptance criterion for touch row range selection, each with its threshold, its recorded failing number and its negative control."
+trigger_phrases:
+  - "017 acceptance criteria"
+  - "touch row range selection criteria"
+  - "pointer gesture threshold"
+importance_tier: "important"
+contextType: "implementation"
+---
 # Acceptance Criteria: Touch Row Range Selection
 
 Each criterion carries a number with a threshold, was demonstrated failing on a deliberately broken

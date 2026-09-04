@@ -1,20 +1,70 @@
-**Phase 002 — Properties panel**
+---
+title: "Goal: Properties Panel"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "002 goal"
+  - "properties panel goal"
+  - "properties panel directive"
+  - "packet goal"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/002-properties-panel"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Operator opens Properties on a phone and reads every property name"
+    blockers:
+      - "Operator device confirmation is the only row left"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-002-goal"
+      parent_session_id: null
+    completion_pct: 86
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Properties Panel
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Rebuild the properties panel on one row template so a property name is readable at any width and no rule can disagree with another about which child is which.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fifth**, after `001` solves placement. Takes the `styles.css` lane at Phase 3, releases it at Phase 5.
 
 **THE DEFECT.** The operator calls this the worst surface in the plugin. Property names are right-aligned and clipped past the panel edge, a trash icon sits on its own row per property, and the panel runs the full screen height.
 
 **BUILD.** One row template with **named grid areas**, not a positional track list. Positional tracks are exactly what let two rules disagree about which child is which.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | One row template with **named grid areas**, never a positional track list. Positional tracks are exactly what let two rules disagree about which child is which. |
+| D2 | No desktop number is recorded before `000` repairs the desktop page. The desktop defect is a cascade defect, so on a stylesheet-less page it cannot appear at all and the harness reports a clean row. A number taken before that repair is discarded, not re-used. |
+| D3 | The lane is taken at Phase 3 and released at Phase 5, after recapture at both viewports and 3, 12 and 40 properties, a named human sign-off, `008`'s replay re-asserting `000`, `004`, `005` and `001`, and cascade re-confirmation. |
+| D4 | Cascade re-confirmation records the computed winner of **both** collapsed duplicate pairs, before and after. This packet exists because two such pairs were never reconciled; a third is not left behind. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../design-system.md`, `../adversarial-review.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **NO DESKTOP NUMBER BEFORE `000` FIXES THE DESKTOP PAGE.** `verify-placement.mjs:220` loads `styles.css` on the **phone** page only. Your desktop defect *is* a cascade defect — 8 children into 7 tracks happens only because one selector hides the arrows and a later identical one shows them — so **on a stylesheet-less page it cannot appear at all** and the harness would report a clean row. B1, B2 and B6 are desktop reads. A number recorded before that repair is discarded, not re-used.
@@ -25,6 +75,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fifth**, after `001` solves pl
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -164,6 +216,8 @@ so the name is squeezed harder, not less. Rows in `acceptance-criteria.md` § Ha
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES — AND HERE IT BITES HARDEST.** Every `styles.css:NNNN` below was correct on 2026-08-29; `000` then deletes dead blocks and `001` edits the file before you start. Your whole desktop argument is *which of two identical selectors comes later*, and the phone argument is the same shape. A stale number silently inverts that reading. Re-resolve both pairs with `rg -n 'db-mobile-reorder-controls' styles.css` and `rg -n '\.is-phone \.note-database-container \.db-column-manager-row' styles.css`, and **read the hits in order**. Record moved numbers old to new.
 
 **ROOT-CAUSED, DESKTOP.** `styles.css:2036` hides `.db-mobile-reorder-controls`; `styles.css:18776` — same selector, later — sets `display: inline-flex`. Mobile-only arrows therefore render on desktop, giving the row **8 children against 7 declared grid tracks**. Measured: **row height 52px against a declared `min-height: 30px`**, trash button wrapped onto an implicit second row.

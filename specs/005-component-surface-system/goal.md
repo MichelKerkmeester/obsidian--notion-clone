@@ -10,26 +10,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T13:17:14Z"
-    last_updated_by: "done-audit-11"
-    recent_action: "Done-audit-11 ticked row 6 after T030 paired 46 of the 51 unpaired fixtures"
-    next_safe_action: "Operator confirms 0.0.16-0.0.19 on device; rows 1 and 2 are the only open ones"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Gave every phase a nested goal and referenced them all from this DONE table"
+    next_safe_action: "Land the WebKit sheet fix, the column-width and settings sheets, and cut 0.0.21"
     blockers:
-      - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
-      - "No renderer is asserted against a live Obsidian host"
-      - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on device"
-      - "Report 29 (P0): fixed in 98da630 and 0c92f4d, released in 1.4.1; per-row confirmation is owed"
-      - "Reports 30-33: recorded in 62c4fe7, owners 001, 022, 022, 010; the fix is uncommitted"
-      - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
-      - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
-      - "037 landed (0262386+55bff9b); release 1.4.4 pending; reopened 2026-09-04 for a 1:1 gantt copy, REQ-007"
-      - "038 landed (b9e2321+a6fcd31); release 1.4.5 pending; reopened 2026-09-04 for a 1:1 board copy, REQ-007"
-      - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
-      - "043 T028 merged (d363456+dc67803): all 13 row-6 fixtures now have a constructed counterpart; css-lane, screenshots-fresh and device-parity cross-check all 13"
-      - "done-audit-10: T029 closed those ten, both lanes now read 31; row 6 re-scoped to the fixture half, 42 of 71 hand-authored scenarios with no constructed counterpart in-lane"
-      - "done-audit-11: T030 paired 46 of the 51; row 6 TICKED at 2242fa0, 5 fixtures stay unconstructable by design and no criterion's green rests on them"
-      - "1:1 legs shipped: board 0.0.16+0.0.18, gantt 0.0.17+0.0.19; board T12 in-repo half met at c563f08, its operator half still owed"
-      - "only rows 1 and 2 remain, both operator device confirmation: reports 29-36, the five ported surfaces, releases 0.0.16-0.0.19"
+      - "Only DONE rows 1 and 2 remain, both operator device confirmation: reports 29-43 and the five ported surfaces"
+      - "031 reopened: entrance fix landed (c96467c9); a second bug is in flight on branches/001-sheet-webkit, a toolbar rebuild drops the sheet"
+      - "044, 045, 046 opened 2026-09-04 from reports 40-43 and have landed nothing"
+      - "043 T031 is done on worktrees/037-reference-captures, not on main"
+      - "006-list-view-deprecation has four live children, none started"
+      - "Earlier blockers are in the LOG and roadmap.md rather than here"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -43,12 +34,11 @@ _memory:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
-      - "Every phase 000-026 now carries its own goal.md"
-      - "The timeline froze on a per-event touch probe; the calendar does not scale with row count at all"
-      - "The deep review ran and returned FAIL: P0=1, P1=7, P2=7, release-blocking, against 1.3.9"
-      - "Eleven of its fifteen findings are documentation drift inside this packet's own files"
-      - "Operator shape: 1,000-3,000 rows at 80-100% fill. The 2,000ms budget breaks at 1,300 rows"
-      - "The scope exclusion on output number format means the formula editor's only, so report 7 is in scope"
+      - "Every phase 000-046 now carries its own goal.md, and this DONE table references each open one"
+      - "The timeline froze on a per-event touch probe; the calendar does not scale with rows"
+      - "The deep review returned FAIL against 1.3.9: P0=1, P1=7, P2=7; 11 of 15 findings were doc drift in this packet"
+      - "Operator shape: 1,000-3,000 rows at 80-100% fill; the 2,000ms budget breaks at 1,300"
+      - "The output-number-format exclusion is the formula editor's only, so report 7 is in scope"
       - "The editable note body is accepted; its writer already goes through the per-file queue"
 ---
 # Goal: Component Surface System
@@ -778,6 +768,35 @@ resolve them silently.
       redirected to a file rather than piped. First `RESULT:` line for the parent is `PASSED`,
       all 43 recursively-validated folders report `RESULT: PASSED`, 0 `RESULT: FAILED`,
       `Summary: Errors: 0  Warnings: 0`.
+
+### The phase subgoals this table stands on
+
+**The seven rows above are the program's own. They do not close a phase.** Each open phase carries
+its own `goal.md` with its own completion criteria, and that document — not a summary of it — is
+what decides whether the phase is done. This table is the reference, added 2026-09-04 so a reader
+of the parent can reach every open subgoal without walking the tree.
+
+**Precedence.** The decisions in §1 outrank child detail; child detail outranks any summary of it,
+including this table. Where a row here and a child's own `goal.md` disagree, **the child is right
+and this row is a defect.**
+
+| Open phase | Its goal document | What its criteria ask for, in one line | Derived |
+|---|---|---|---|
+| `043-constructed-capture` (T031) | [`043-constructed-capture/goal.md`](043-constructed-capture/goal.md) | A readiness signal proven by a negative control, `declared-fixtures.mjs` naming every superseded fixture, screenshots-fresh judging a DECLARED scenario against its constructed counterpart, and a fixture-versus-constructed `pixelHash` parity check. **T031, the Project Manager reference captures under `screenshots/project-manager/`, is done on `worktrees/037-reference-captures` and not on main.** | 6/11 |
+| `044-phone-sheet-alignment` | [`044-phone-sheet-alignment/goal.md`](044-phone-sheet-alignment/goal.md) | Zero phone bottom-sheet surfaces bypassing `applySheetChrome` (today 3), the column-width adjuster carrying all seven grammar elements (today 0), a focused field staying inside the reduced `visualViewport`, the settings sheet closing from its grab band with no label wrapping, the Add view sheet on a shared row type (today 0 of its controls), a green `sheet-grammar` lane that does not yet exist, and the operator reading all three sheets as aligned on iOS. | 0/7 |
+| `045-board-card-properties` | [`045-board-card-properties/goal.md`](045-board-card-properties/goal.md) | One per-view ordered property list with per-field visibility, the renderer moved onto it, an upgrade with no stored list leaving every existing card byte-identical, a stored list having zero effect on `038`'s one-to-one reference path, and the operator arranging a card's properties on a phone and reading it as close to Notion's. | 0/6 |
+| `046-linked-views-notion-parity` | [`046-linked-views-notion-parity/goal.md`](046-linked-views-notion-parity/goal.md) | The embed unboxed from its ancestor-walk clip, the duplicate `db-header` and its hide-the-title chevron gone, ADR-001 (may an embed write) taken before the four `persistMode === "codeblock"` read-only gates are touched, a linked view movable to another page, a create flow writing the fence `serializeCodeBlockReference` already builds, and the operator reading the Overview page's nested views as real databases. | 0/7 |
+| **`006-list-view-deprecation`** — a **sibling packet**, not a phase here | [`../006-list-view-deprecation/goal.md`](../006-list-view-deprecation/goal.md) | No surface offering list, a list-configured vault opening as a table with the same columns once with a notice, `list-renderer.ts` gone, the `list-window` lane **removed not skipped** with `npm run gate` at 0, the coverage floor lowered with its reason beside the number, `033-list-virtualisation` and `024-list-view-freeze` closed against the retirement, and the operator reporting a migrated vault. Its four live children each carry their own goal; see [`../006-list-view-deprecation/roadmap.md`](../006-list-view-deprecation/roadmap.md). | 0/7 |
+
+**Every other phase's subgoal is reachable the same way**, at `<phase>/goal.md`. The full inventory
+with a derived figure and a current state per phase is `roadmap.md` §5.A, and the 103 rows that only
+a device can close are gathered in `operator-checklist.md`.
+
+**What this table does not change.** Rows 1 and 2 above are the operator's and stay unticked; rows 3
+to 7 stay ticked on the evidence recorded under each. A phase subgoal closing does not tick a row
+here, and a row here does not close a phase — that separation is D3 (shipped, verified and
+operator-confirmed differ) applied to the parent's own table.
+
 <!-- /ANCHOR:completion -->
 
 ---

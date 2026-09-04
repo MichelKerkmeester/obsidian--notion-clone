@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: release 0.0.20 is live at ccc946c3. Operator answered 2026-09-04 ~17:30 CEST: rows 34-36 reopened (still broken on 0.0.20; fix leg on worktrees/036-sheet-freeze), rows 37-38 redirected to an in-repo screenshot compare (worktrees/037-reference-captures), row 39 decided (reinstate the local milestone-label fix; worktrees/038-milestone-labels), and 043's AC-002 is now Met on the accepted determinism basis. Remaining: rows 1-2 device confirmation and the three new legs."
+description: "Resume point: main is at ab116959, release 0.0.20 is the shipped build, and 0.0.21 is the next cut. Five legs are in flight and none is on main: 037 reference captures, 039 column-width sheet, 040 settings sheet, the WebKit sheet fix on branches/001-sheet-webkit (worktree 036), and 042 screenshots folder split. Every phase 000-046 now carries a nested goal.md and the parent DONE table references each open one. PAUSED on operator instruction until the goal prompt is set."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,19 +10,19 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T20:05:00Z"
+    last_updated_at: "2026-09-04T21:10:00Z"
     last_updated_by: "orchestrate-handover-16"
-    recent_action: "Opened 044, 045, 046; converted 006 into a phased list deprecation"
-    next_safe_action: "Run 006/005 list audit; answer 046 ADR-001; land 044 shared chrome"
+    recent_action: "Gave every phase a nested goal, referenced them from the parent goal, drafted the goal prompt"
+    next_safe_action: "PAUSED: operator sets the goal prompt first. Then land the WebKit sheet fix and cut 0.0.21"
     blockers:
-      - "Operator device confirmation owed: reports 29-33, five ported surfaces, 0.0.16-0.0.20"
-      - "Reports 34-36 reopened (operator, 2026-09-04): add filter/add sort still break/freeze on 0.0.20; fix leg on worktrees/036-sheet-freeze (owner 031)"
-      - "Rows 37-38 in-repo captures owed: recapture Project Manager's board+gantt views into screenshots/, leg on worktrees/037-reference-captures (harness, 043)"
-      - "Row 39 milestone-label fix owed: reinstate the local anti-collision fix on the default gantt, amendment to 037 REQ-007, leg on worktrees/038-milestone-labels"
-      - "044 opened: reports 40/41/43 phone sheet grammar; legs on worktrees/039 and 040"
-      - "045 opened: board card properties; must not move 038 reference parity"
-      - "046 opened: embed chrome/width parity, move and create; ADR-001 needs the operator"
-      - "006 converted to list deprecation; list must also leave the 013 add-view picker"
+      - "PAUSED on operator instruction 2026-09-04 20:45: goal-prompt.md is drafted and awaits the operator setting it"
+      - "Operator device confirmation owed: reports 29-33, the five ported surfaces, releases 0.0.16-0.0.20"
+      - "IN FLIGHT, not on main: branches/001-sheet-webkit (worktree .worktrees/036-sheet-freeze) — the entrance fix landed as c96467c9 but a second bug remains, a toolbar rebuild drops the sheet (c5a9a8b5, ca2eb5c0, 8f14a21f)"
+      - "IN FLIGHT, not on main: worktrees/039-column-width-sheet and worktrees/040-settings-sheet, both 044's, both must consume the shared sheet chrome rather than inventing a local fix"
+      - "IN FLIGHT, not on main: worktrees/037-reference-captures (043 T031, Project Manager captures under screenshots/project-manager/) and worktrees/042-screenshots-folders (the notion-clone/ + project-manager/ split)"
+      - "0.0.21 is the next cut and is blocked on the WebKit sheet fix plus the two sheet legs landing"
+      - "044's Add view sheet leg (report 43) is not started; 045 and 046 have no leg at all"
+      - "006-list-view-deprecation has four live children and none has started; its 005 audit runs first"
     key_files:
       - "goal.md"
       - "roadmap.md"
@@ -124,46 +124,65 @@ amendment to `037`'s REQ-007 — leg `worktrees/038-milestone-labels`. And `043`
 entries moved; `screenshots:verify` 528 entries current at `e8e44cc6`), superseding the
 pixel-difference wording.
 
-Nothing is queued in the main checkout. The two legs the prior handover carried in flight
-(`worktrees/033-board-t12` and `worktrees/032-gantt-residual`) landed this session, along with
-every other open worktree (022 through 035); none is an ancestor gap on main, and all are the
-operator's to remove through `sk-git` once no longer needed for reference.
+**2026-09-04 evening: main is at `ab116959` and clean, and FIVE legs are in flight.** The
+sentence this paragraph used to carry — *nothing is queued in the main checkout* — was true at
+~17:30 CEST and is not true now. The operator's evening pass (reports 40-43) opened three phases
+and two of them were dispatched immediately.
+
+| Leg | Branch / worktree | Carries | On main? |
+|---|---|---|---|
+| WebKit sheet fix | `branches/001-sheet-webkit` (worktree `.worktrees/036-sheet-freeze`, tip `8f14a21f`) | `031`'s **second** bug. The entrance fix already landed on main (`c96467c9`, reconciled `4c6b2c78`, recorded `ec24f9a`); this branch adds the one it does not reach — a toolbar rebuild behind an open sheet leaves the panel holding a dead anchor and the next placement un-portals the sheet (`c5a9a8b5`), plus the panels replacing their own node so a touch's delayed click retargets outside the surface (`ca2eb5c0`), plus a device report for what emulation cannot reproduce (`8f14a21f`) | **No** |
+| Column-width sheet | `worktrees/039-column-width-sheet` (`c6b5f113`) | `044`'s report-40 leg: the adjuster carries 0 of the 7 grammar elements today, and the keyboard covers it | **No** |
+| Settings sheet | `worktrees/040-settings-sheet` (`c6b5f113`) | `044`'s report-41 leg: the grab band does nothing and the desktop two-column `Setting` grid is squeezed onto 390pt | **No** |
+| Reference captures | `worktrees/037-reference-captures` (`2d1df59d`) | `043` T031: Project Manager's own kanban and gantt photographed under `screenshots/project-manager/`, 16 new PNGs, all opened and read beside their `referenceOf` twin. Closes rows 37 and 38's in-repo half | **No** |
+| Screenshots folder split | `worktrees/042-screenshots-folders` (`82a1da76`) | Our captures move under `screenshots/notion-clone/` and the harness roots on capture sources. Lands **last**, because every other leg writes captures | **No** |
+
+`worktrees/041-sheet-webkit-research` (`07f4c594`) is already merged and is not a pending leg.
+`worktrees/038-milestone-labels` landed as `1358927` (row 39, decided: reinstate the local
+anti-collision fix) and ships in **0.0.21**. Worktrees 022-035 all landed earlier and are the
+operator's to remove through `sk-git`.
+
+**Every phase now carries a nested goal.** `000`-`009` were the last ten in the old shape — no
+frontmatter, no `D`-rows — and were backfilled this pass without touching a criterion or a piece of
+evidence. All nine children of `006-list-view-deprecation` gained one for the first time. The
+parent `goal.md`'s DONE table now REFERENCES every open phase subgoal by path, and `roadmap.md`
+§5.A lists all 47 phases with a derived figure and a current state.
 <!-- /ANCHOR:handover-summary -->
 
 ---
 
 <!-- ANCHOR:context-transfer -->
-## 2. NEXT SAFE ACTION: OPERATOR CONFIRMS AND RULES
+## 2. NEXT SAFE ACTION: THE OPERATOR SETS THE GOAL PROMPT
 
-No code lane is queued anywhere — main and every worktree are settled. **Rows 1 and 2 of the
-parent DONE table are the only open rows in it, and both are the operator's.** Beyond the DONE
-table, three further items sit in `roadmap.md` §4 as never-tick or operator-answered rows, none of
-which any agent can close on its own judgment:
+**PAUSED.** Operator instruction, 2026-09-04 20:45, verbatim: *"When all planned, phases created
+and updated make sure each has nested goal and roadmap is updated and you update parent goal that
+references all phase subgoals and send that in chat (max 4k chars) pause until I've set it."*
 
-1. **Device confirmation** — reports 29-33, the five ported surfaces, and all five of `038`'s
-   board one-to-one copy (0.0.16), `037`'s gantt one-to-one copy (0.0.17), the board fidelity pass
-   (0.0.18), the gantt fidelity pass (0.0.19), and the residual-behaviour/closing/T12-close
-   release (0.0.20). Each confirmation closes its `roadmap.md` §4 row; each "still broken" reopens
-   it with the device fact given, not an assumption. Every release is already installed to the
-   iCloud vault, so no install step blocks any of them. Reports 34-36 are already answered —
-   negatively, see item 2.
-2. **Reports 34-36 (reopened)** — the operator reports add filter/add sort still break or freeze
-   the app on mobile on 0.0.20. Fix leg on `worktrees/036-sheet-freeze` (owner `031`); the rows
-   stay open until a fresh device confirmation follows the next fix.
-3. **Rows 37-38's in-repo captures** — the operator redirected both vault compares: capture
-   Project Manager's own board and gantt views into `screenshots/` so a fresh reviewer can compare
-   our captures against the reference captures in-repo, rather than the operator installing both
-   plugins in one vault. Leg on `worktrees/037-reference-captures` (harness, `043`); both rows
-   close only when that reviewer runs.
-4. **Row 39's milestone-label fix** — decided: reinstate the local anti-collision fix (raise
-   crowded milestone labels) on the default gantt render path, as an amendment to `037`'s REQ-007.
-   Leg on `worktrees/038-milestone-labels`; the row stays open until it lands and is verified.
+That work is done. [`goal-prompt.md`](goal-prompt.md) is the drafted prompt, under 4,000
+characters. **Nothing in the order of work below starts until the operator has set it.**
 
-`043`'s AC-002 ruling is now settled (determinism accepted, `acceptance-criteria.md`) and is no
-longer an open item here.
+Once it is set, the order is:
 
-Candidate next work is bounded entirely by what the operator's answers reopen — nothing else is
-queued.
+1. **Land the WebKit sheet fix, the column-width sheet and the settings sheet, then cut 0.0.21.**
+   The three touch the same module and must not land as three independent guesses at the sheet
+   chrome — `044`'s D2 is that an element a consumer can forget is one some consumer will forget.
+2. **Reference captures (`043` T031) land**, and a fresh reviewer reads them beside our one-to-one
+   copies. That closes `roadmap.md` §4 rows 37 and 38's in-repo half.
+3. **The screenshots folder split lands last**, because every other leg writes captures and
+   rebasing a moved tree under them is the expensive order.
+4. **`044`'s remaining phone-sheet work**, ranked by
+   `003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md` rather than by report order.
+5. **`006-list-view-deprecation`'s children `005` -> `006` -> `007` -> `008`**, in that order and
+   not negotiable.
+6. **`045-board-card-properties`**, behind the existing `boardExtensionsEnabled` flag.
+7. **`046-linked-views-notion-parity`**, and ADR-001 (may an embed write) is the operator's to
+   answer before the four read-only gates are touched.
+
+**Still owed from the operator regardless of the above**: device confirmation on reports 29-43 and
+the five ported surfaces, across releases 0.0.16-0.0.20. Each confirmation closes its `roadmap.md`
+§4 row; a "still broken" answer reopens the row with the device fact given, never argued with.
+**No agent ticks an operator row.**
+
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -171,19 +190,21 @@ queued.
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-Nothing in-repo is open except the operator rows above.
+**Read §2 first. This session is paused and the pause is the first instruction, not a note.**
 
 1. Read this handover in full before touching anything.
-2. Run `npm run gate` from a clean `main` checkout and confirm 25/25 green before assuming the
-   tree is exactly as described here — a resume never trusts a stale gate claim.
-3. The operator answered the four items in §2 on 2026-09-04 ~17:30 CEST (recorded above and in
-   `roadmap.md` §4). Three legs are now named but not yet dispatched: `worktrees/036-sheet-freeze`
-   (reports 34-36), `worktrees/037-reference-captures` (rows 37-38), and
-   `worktrees/038-milestone-labels` (row 39). Still owed from the operator: device confirmation on
-   the DONE table's rows 1-2 and reports 29-33 — record each as it arrives, and a "still broken"
-   answer reopens the row with the device fact given rather than being argued with.
-4. Once the operator confirms the finished worktrees (022-035) are no longer needed for reference,
-   offer to remove them through `sk-git`.
+2. Confirm the operator has set the goal prompt. If not, stop here and say so — the pause is not
+   satisfied by the prompt existing on disk.
+3. Run `npm run gate` from a clean `main` checkout and confirm 25/25 green before assuming the tree
+   is as described here. A resume never trusts a stale gate claim.
+4. Five legs are in flight and none is on main (§1's table). **Check each branch's tip before
+   assuming its state** — three of them were dispatched this evening and moved after the last
+   audit.
+5. Work the order in §2, which the goal prompt also carries. Land, gate-green, ship; a phase is not
+   done because its lane is green — D3 keeps shipped, verified and operator-confirmed apart.
+6. Once the operator confirms the finished worktrees (022-035, 037-042 as they land) are no longer
+   needed for reference, offer to remove them through `sk-git`.
+
 <!-- /ANCHOR:session-notes -->
 
 ---

@@ -1,20 +1,71 @@
-**Phase 006 — Record open target**
+---
+title: "Goal: Record Open Target"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "006 goal"
+  - "record open target goal"
+  - "record open target directive"
+  - "packet goal"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/006-record-open-target"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Operator clicks Open and reads the note"
+    blockers:
+      - "Operator device confirmation is the only row left"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-006-goal"
+      parent_session_id: null
+    completion_pct: 86
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Record Open Target
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Opening a record gives the actual page — a side panel, a full page, or the phone sheet — chosen by one resolver rather than by whichever call site was reached.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Runs seventh**, last of the feature phases. Depends on `003` — the phone answer needs the portal. Takes the `styles.css` lane at Stage 5, releases it at Stage 7.
 
 **THE DEFECT.** On desktop, "Open" in the table shows a small card listing properties. The operator wants **the actual page** — a side panel or a full-page modal.
 
 **THIS IS A PRODUCT DECISION, NOT A STYLING FIX.** It needs a policy and a setting, which is why it is its own phase rather than a bullet inside `001`.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | "Open" gives **the actual page**, a side panel or a full-page modal, not a small card listing properties. |
+| D2 | This is a product decision needing a policy and a setting, which is why it is its own phase rather than a bullet inside `001`. |
+| D3 | It depends on `003`: the phone answer needs the portal, so it cannot land first. |
+| D4 | Research gate: if a criterion fails twice without a new hypothesis, read AnyType and AppFlowy under `external/` for how a side-peek and a full-page open differ in **behaviour only**. Never copy code, CSS values or token scales. Notion is the visual target, not a source. |
+| D5 | The lane is taken at Stage 5 and released at Stage 7, after one recapture per target in both themes, a named human sign-off, `008`'s replay re-asserting `000`, `004`, `005`, `001`, `002` and `003` — the last cheap chance to catch a cascade reversal — and cascade re-confirmation, because replacing the literal `998` with a declared tier changes stacking for anything that sat between the two values. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../design-system.md`, `../adversarial-review.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **RESEARCH GATE.** If a criterion fails twice without a new hypothesis, read AnyType and AppFlowy under `external/` for how a side-peek and a full-page open differ in behaviour. Behaviour only — never copy code, CSS values or token scales. Notion is the visual target, not a source.
@@ -25,6 +76,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs seventh**, last of the feature
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -165,6 +218,8 @@ a vault this harness does not have, and the leaf-lifetime row, which remains `00
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES.** Every `styles.css:NNNN` and `src/**/*.ts:NNNN` below was correct on 2026-08-29; five phases edit `styles.css` before you start. `acceptance-criteria.md` carries the resolution table. **The `998` is the exception worth stating: its *value* is the evidence, not its address** — it is the literal that beats two declared tiers.
 
 **A6 CANNOT BE EVALUATED WITHOUT THE CASCADE.** `verify-placement.mjs:220` loads `styles.css` on the **phone** page only. Your entire A6 finding is that `z-index: 998` beats `--db-layer-popover: 100` and `--db-layer-submenu: 110` — and **on a page with no stylesheet no z-index applies to anything**, so the hit test returns whatever DOM order gives and tells you nothing. A3's phone half is safe; its desktop comparison is not, and AC-002's `elementFromPoint` is subject to the same rule. `000` fixes the load; no desktop number recorded before it is admissible.

@@ -1,20 +1,70 @@
-**Phase 005 — Content row rhythm**
+---
+title: "Goal: Content Row Rhythm"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "005 goal"
+  - "content row rhythm goal"
+  - "content row rhythm directive"
+  - "packet goal"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/005-content-row-rhythm"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Operator scrolls a list and the rows do not jitter"
+    blockers:
+      - "Operator device confirmation is the only row left"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-005-goal"
+      parent_session_id: null
+    completion_pct: 86
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Content Row Rhythm
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Declare an intrinsic-sizing contract so a list row and a calendar filter bubble are answered by one decision about who owns the size.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Runs third.** No overlay dependency — take the CSS lane while it is free or this never gets scheduled. Take it at Stage 4, release it at Stage 7.
 
 **TWO DEFECTS, ONE QUESTION.** List rows are ragged; calendar filter bubbles overflow their container. Both ask: **does the container own the size, or the child?** One sizing decision fixes both, and they touch the same CSS regions. Split only if different people ship them.
 
 **BUILD.** An intrinsic-sizing contract: `min-width: 0` discipline, a declared row rhythm, and an explicit scroller-vs-grower decision per container.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | Ragged list rows and overflowing calendar filter bubbles are one question, not two: **does the container own the size, or the child?** One sizing decision fixes both, and they touch the same CSS regions. |
+| D2 | The contract is intrinsic sizing: `min-width: 0` discipline, a declared row rhythm, and an explicit scroller-versus-grower decision per container. |
+| D3 | The lane is taken at Stage 4 and released at Stage 7, after a recapture that is meaningful only once Stage 1 has removed `--db-card-field-width` and `--db-timeline-row` from `runtime-vars.css`, a named human sign-off, `008`'s replay re-asserting `000` and `004`, and cascade re-confirmation citing `000`'s cascade audit per deletion. |
+| D4 | `004` unblocks from `000` on the same edge and also edits `styles.css`. **The two are serialized by this rule and nothing else** — there is no lock file. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../design-system.md`, `../adversarial-review.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **LANE.** Take at Stage 4, release at Stage 7, and only after all four in order: (1) full recapture at four widths per view, both themes — meaningful only once Stage 1 has removed `--db-card-field-width` and `--db-timeline-row` from `runtime-vars.css`, since until then list fields render 30px narrow and every timeline band collapses to `auto`; (2) a **named human** opening every changed PNG and signing off in `checklist.md` — `screenshots:verify` never opens an image; (3) **`008`'s early replay re-asserting `000` and `004`** against the tree you released — you are collapsing seven rail blocks that render in **all seven view types**, so the blast radius is the whole application chrome; (4) cascade re-confirmation, each deletion citing its entry in `000`'s cascade audit, because a block that looks dead here has already been shown elsewhere in this stylesheet to be load-bearing through a duplicate class.
@@ -25,6 +75,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs third.** No overlay dependency
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -143,6 +195,8 @@ varies its content rather than that it has a host. Rows in `acceptance-criteria.
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **YOUR DESKTOP HARNESS HAS NO CASCADE, AND THAT IS THIS PHASE'S BIGGEST EXPOSURE.** `verify-placement.mjs:220` is the only `addStyleTag` call for `styles.css` and it targets the **phone** page. **The desktop page is already running a "render without the stylesheet" substitution and reporting green** — the exact substitution your own AC-013 exists to catch, running permanently and unlabelled. On such a page `.db-list-row` has no `min-height`, no `--db-*` token resolves, the rail has no `overflow-x`, and **A6's sweep finds zero elements: a clean pass that means nothing.** `000` fixes the load. Until it has, **no desktop number here is admissible**, and one recorded before the repair is discarded rather than re-used. **A8 is the gate that proves it landed** and is written as a probe for a value that cannot exist without the stylesheet, precisely so it can fail.
 
 **RESOLVED 2026-09-02, and the paragraph above is kept as the exposure the phase was opened on.** The load landed: `verify-placement.mjs:316` adds `styles.css` plus `HOST_BARE_CONTROLS` to the desktop page, and every other page it builds does the same. The desktop numbers this packet records are therefore admissible, and the substitution described above is no longer running.

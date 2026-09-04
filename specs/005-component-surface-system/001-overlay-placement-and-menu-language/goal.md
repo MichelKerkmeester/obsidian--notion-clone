@@ -1,20 +1,70 @@
-**Phase 001 — Overlay placement and menu language**
+---
+title: "Goal: Overlay Placement and Menu Language"
+description: "The durable directive this packet executes against, and the criteria that decide when it is done."
+trigger_phrases:
+  - "001 goal"
+  - "overlay placement goal"
+  - "overlay placement directive"
+  - "packet goal"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/001-overlay-placement-and-menu-language"
+    last_updated_at: "2026-09-04T21:10:00Z"
+    last_updated_by: "phase-goal-backfill"
+    recent_action: "Backfilled the house goal shape; criteria and evidence untouched"
+    next_safe_action: "Operator opens three dropdowns and reads them as one family"
+    blockers:
+      - "The overlay census has not run"
+    key_files:
+      - "spec.md"
+      - "acceptance-criteria.md"
+      - "../roadmap.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-001-goal"
+      parent_session_id: null
+    completion_pct: 89
+    open_questions: []
+    answered_questions: []
+---
+# Goal: Overlay Placement and Menu Language
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
 
 ---
 
 <!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Dropdowns land where their trigger is and read as one family, through roles the surface declares rather than through a builder per menu.
+
 Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fourth**, after `000`, `004`, `005`. Takes the `styles.css` lane at Phase 5, releases it at Phase 7.
 
 **THE DEFECTS.** Dropdowns land in the wrong place and look unrelated to each other. "More tools" clips at the panel edge. Filter and Sort sit adjacent in the same toolbar and share no design language.
 
 **BUILD.** Roles from `000` as `data-db-surface`. Sizing per role — **292px is the one menu width that reads correctly today**; the 520px default that makes a four-item menu absurd stops being reachable. Retire the hand-rolled builders. Make `submenu` actually open a submenu, through the same mechanism as its parent.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment. Each is a restatement of this phase's own
+directive above, not a new commitment.
+
+| ID | Decision |
+|----|----------|
+| D1 | Roles come from `000` and are carried as `data-db-surface`. Sizing is per role, never per call site. |
+| D2 | 292px is the one menu width that reads correctly today. The 520px default that makes a four-item menu absurd stops being reachable. |
+| D3 | The hand-rolled builders are retired, and `submenu` opens a submenu through the same mechanism as its parent rather than a second one beside it. |
+| D4 | The lane is taken at Phase 5 and released at Phase 7, and only after all four in order: full recapture at four widths by sidebar state, a named human signing off in `checklist.md`, `008`'s early replay re-asserting `000`, `004` and `005`, and cascade re-confirmation for every duplicated selector touched. |
 <!-- /ANCHOR:directive -->
 
 ---
 
 <!-- ANCHOR:binding -->
+## 2. BINDING
+
 **READ FIRST:** `../architecture-findings.md`, `../design-system.md`, `../adversarial-review.md`, then this folder's `spec.md` and `acceptance-criteria.md`.
 
 **LANE.** Take at Phase 5, release at Phase 7, and only after all four in order: (1) full recapture at 4 widths x sidebar states, `screenshots:verify` exit 0; (2) a **named human** opening every changed PNG and signing off in `checklist.md` — `screenshots:verify` never opens an image, so it can never be this step; (3) **`008`'s early replay re-asserting `000`, `004` and `005`** against the tree you released, because they closed against a snapshot you just edited and nothing obliges your edit to preserve their results; (4) cascade re-confirmation for every duplicated selector you touched. A phase that closed earlier and fails to re-close at this handoff blocks your release.
@@ -23,6 +73,8 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fourth**, after `000`, `004`, 
 ---
 
 <!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
 **ACCEPTANCE.**
 
 *Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
@@ -180,6 +232,8 @@ outright. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 ---
 
 <!-- ANCHOR:log -->
+## 4. LOG
+
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES.** `styles.css` is 19,261 lines and `000` deletes dead blocks before you start. Every `styles.css:NNNN` here was correct on 2026-08-29 and is kept as evidence about the tree on that date. `acceptance-criteria.md` carries the resolution table — selector plus the `rg` command. **When the command and the number disagree, the command is right.** Record moved numbers old to new; never silently correct one.
 
 **NO DESKTOP NUMBER BEFORE `000` FIXES THE DESKTOP PAGE.** `verify-placement.mjs:220` loads `styles.css` on the **phone** page only, so every desktop geometry result today is measured in a document with no plugin cascade — structurally irrelevant. A1, A2, A4, A5, A6 and A7 are all desktop reads. A number recorded before that repair is discarded, not re-used. A harness number that disagrees with `009`'s live probe is a blocking failure.
