@@ -50,6 +50,21 @@ describe("the changed set is the images, read from git", () => {
     const changed = changedCaptures(` M screenshots/manifest.json\n M screenshots/README.md\n M ${BOARD}\n`);
     expect(changed).toEqual([BOARD]);
   });
+
+  it("does not count a clean rename — a capture-root move — as a change owed a review", () => {
+    // `git mv` with the bytes untouched reports status `R ` (no `M`), e.g. moving every capture
+    // from screenshots/<group>/ to screenshots/notion-clone/<group>/ in one commit. Only a rename
+    // that also edits the file (`RM`) should count.
+    const renamedOnly = `R  screenshots/views/board-view-desktop-light.png -> screenshots/notion-clone/views/board-view-desktop-light.png\n`;
+    expect(changedCaptures(renamedOnly)).toEqual([]);
+  });
+
+  it("counts a rename that also edited the file", () => {
+    const renamedAndEdited = `RM screenshots/views/board-view-desktop-light.png -> screenshots/notion-clone/views/board-view-desktop-light.png\n`;
+    expect(changedCaptures(renamedAndEdited)).toEqual([
+      "screenshots/notion-clone/views/board-view-desktop-light.png",
+    ]);
+  });
 });
 
 // ───────────────────────────────────────────────────────────────────

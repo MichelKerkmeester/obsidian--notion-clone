@@ -34,7 +34,7 @@ describe("manifest schema", () => {
       bag: "file-view",
       theme: "dark",
       device: "desktop",
-      file: "screenshots/views/constructed-list-desktop-dark.png",
+      file: "screenshots/notion-clone/views/constructed-list-desktop-dark.png",
       pixelHash: "0123456789ab",
       sourceHashes: { "src/views/list-renderer.ts": "0123456789ab" },
     };
@@ -47,7 +47,7 @@ describe("manifest schema", () => {
       source: "constructed",
       theme: "dark",
       device: "desktop",
-      file: "screenshots/views/constructed-list-desktop-dark.png",
+      file: "screenshots/notion-clone/views/constructed-list-desktop-dark.png",
       pixelHash: "0123456789ab",
       sourceHashes: {},
     };

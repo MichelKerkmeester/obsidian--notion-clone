@@ -27,7 +27,7 @@
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { stamp } from "./evidence.mjs";
 
@@ -41,22 +41,30 @@ const BASELINE_PATH = join(REPO, "tools/live/device-parity-baseline.json");
 
 const digest = (file) => createHash("sha256").update(readFileSync(file)).digest("hex");
 
+// Captures sit under a per-source root (screenshots/notion-clone/<group>/, eventually also
+// screenshots/project-manager/<group>/) rather than directly under screenshots/<group>/, so this
+// walks to whatever depth the PNGs actually live at instead of assuming one fixed level.
+function collectPngs(dir, out = []) {
+  for (const entry of readdirSync(dir)) {
+    const abs = join(dir, entry);
+    if (statSync(abs).isDirectory()) collectPngs(abs, out);
+    else if (entry.endsWith(".png")) out.push(abs);
+  }
+  return out;
+}
+
 const identical = [];
 let pairs = 0;
 
-for (const group of readdirSync(SHOTS)) {
-  const dir = join(SHOTS, group);
-  if (!existsSync(dir) || !statSync(dir).isDirectory()) continue;
-  for (const name of readdirSync(dir)) {
-    if (!name.endsWith("-mobile-dark.png")) continue;
-    const twin = name.replace("-mobile-dark.png", "-desktop-dark.png");
-    const mobile = join(dir, name);
-    const desktop = join(dir, twin);
-    if (!existsSync(desktop)) continue;
-    pairs += 1;
-    if (digest(mobile) === digest(desktop)) {
-      identical.push(name.replace("-mobile-dark.png", ""));
-    }
+for (const mobile of collectPngs(SHOTS)) {
+  const name = mobile.split("/").pop();
+  if (!name.endsWith("-mobile-dark.png")) continue;
+  const twin = name.replace("-mobile-dark.png", "-desktop-dark.png");
+  const desktop = join(dirname(mobile), twin);
+  if (!existsSync(desktop)) continue;
+  pairs += 1;
+  if (digest(mobile) === digest(desktop)) {
+    identical.push(name.replace("-mobile-dark.png", ""));
   }
 }
 

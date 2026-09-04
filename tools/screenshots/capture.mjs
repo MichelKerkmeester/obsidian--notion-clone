@@ -36,7 +36,7 @@ import {
   disposeReferenceBundle,
   prepareReferenceBundle,
 } from "./reference-scenarios.mjs";
-import { validateManifestEntry } from "./manifest-schema.mjs";
+import { captureRootFor, validateManifestEntry } from "./manifest-schema.mjs";
 import { pixelHash } from "./pixel-hash.mjs";
 
 // This page does not reproduce the workspace leaf, and unlike the placement harness it does not
@@ -248,6 +248,14 @@ async function main() {
 
   try {
     for (const scenario of list) {
+      // Which top-level directory this scenario's captures land under — our own fixtures and
+      // constructed renders under notion-clone/<group>/; a reference capture's group IS
+      // project-manager, already its own directory, so it takes no further root prefix.
+      const root = captureRootFor(scenario);
+      const relFor = (deviceId, theme) => {
+        const base = `${scenario.group}/${scenario.id}-${deviceId}-${theme}.png`;
+        return root ? `${root}/${base}` : base;
+      };
       // A surface that only exists on one device gets photographed on that device only.
       //
       // Both mobile bottom sheets were captured on a 1440px desktop frame as well, where the sheet
@@ -277,7 +285,7 @@ async function main() {
           // would record an empty box as a successful capture.
           const mounted = await scenario.mount(page, device, theme);
           if (!mounted) {
-            failures.push(`${scenario.group}/${scenario.id}-${device.id}-${theme}.png: `
+            failures.push(`${relFor(device.id, theme)}: `
               + "renderer never signalled ready — refusing to photograph an unmounted view");
             console.log(`  NOTREADY ${scenario.id}-${device.id}-${theme}`);
             await page.close();
@@ -300,12 +308,12 @@ async function main() {
         const LIMIT = 12000;
         if (!box || box.width > LIMIT || box.height > LIMIT) {
           const size = box ? `${Math.round(box.width)}x${Math.round(box.height)}` : "unmeasurable";
-          failures.push(`${scenario.group}/${scenario.id}-${device.id}-${theme}.png: refused, renders ${size}px (limit ${LIMIT})`);
+          failures.push(`${relFor(device.id, theme)}: refused, renders ${size}px (limit ${LIMIT})`);
           console.log(`  OVERSIZE ${scenario.id}-${device.id}-${theme}: ${size}px`);
           await page.close();
           continue;
         }
-        const rel = `${scenario.group}/${scenario.id}-${device.id}-${theme}.png`;
+        const rel = relFor(device.id, theme);
         const dest = join(OUT, rel);
         mkdirSync(dirname(dest), { recursive: true });
         let layout = null;

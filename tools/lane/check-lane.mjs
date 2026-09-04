@@ -100,6 +100,12 @@ function parseChangedCaptures(porcelain) {
     const code = line.slice(0, 2);
     const modified = code.includes("M");
     const untracked = code === "??";
+    // A clean rename — `git mv` with the bytes untouched, reported as `R ` with no `M` — is
+    // deliberately NOT counted here. It carries neither code, so it falls through this guard: the
+    // picture did not change, only its path did, and that is not a review a release owes. This is
+    // load-bearing for a capture-root move (e.g. screenshots/<group>/ -> screenshots/notion-clone/
+    // <group>/): the whole tree renames in one commit and none of it should demand re-sign-off.
+    // Only a rename that ALSO edits the file (status `RM`) reaches the branch below.
     if (!modified && !untracked) continue;
     // A rename is reported as `old -> new`; the file that exists now is the one a
     // reviewer can open.

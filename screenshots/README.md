@@ -15,7 +15,7 @@ Settings above, actions below, one row grammar for both the seven types and the 
 
 | dark | light |
 |---|---|
-| ![add-view-popover dark](components/add-view-popover-mobile-dark.png) | ![add-view-popover light](components/add-view-popover-mobile-light.png) |
+| ![add-view-popover dark](notion-clone/components/add-view-popover-mobile-dark.png) | ![add-view-popover light](notion-clone/components/add-view-popover-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`
 
@@ -25,7 +25,7 @@ A frozen mid-drag frame, reordering a card inside its own column: the cards cont
 
 | dark | light |
 |---|---|
-| ![board-drop-language dark](components/board-drop-language-mobile-dark.png) | ![board-drop-language light](components/board-drop-language-mobile-light.png) |
+| ![board-drop-language dark](notion-clone/components/board-drop-language-mobile-dark.png) | ![board-drop-language light](notion-clone/components/board-drop-language-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`
 
@@ -35,7 +35,7 @@ A populated lane beside an empty lane, preserving the rendered column header, ze
 
 | dark | light |
 |---|---|
-| ![board-empty-column dark](components/board-empty-column-mobile-dark.png) | ![board-empty-column light](components/board-empty-column-mobile-light.png) |
+| ![board-empty-column dark](notion-clone/components/board-empty-column-mobile-dark.png) | ![board-empty-column light](notion-clone/components/board-empty-column-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`
 
@@ -45,7 +45,7 @@ The empty cover, in the board's card and the gallery's. Both draw the same Lucid
 
 | dark | light |
 |---|---|
-| ![card-cover-states dark](components/card-cover-states-mobile-dark.png) | ![card-cover-states light](components/card-cover-states-mobile-light.png) |
+| ![card-cover-states dark](notion-clone/components/card-cover-states-mobile-dark.png) | ![card-cover-states light](notion-clone/components/card-cover-states-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `src/views/gallery-renderer.ts`
 
@@ -55,7 +55,7 @@ Editing one chip opens the filter panel's single-rule editor: field, operator an
 
 | dark | light |
 |---|---|
-| ![chrome-active-rule-popover-filter dark](components/chrome-active-rule-popover-filter-mobile-dark.png) | ![chrome-active-rule-popover-filter light](components/chrome-active-rule-popover-filter-mobile-light.png) |
+| ![chrome-active-rule-popover-filter dark](notion-clone/components/chrome-active-rule-popover-filter-mobile-dark.png) | ![chrome-active-rule-popover-filter light](notion-clone/components/chrome-active-rule-popover-filter-mobile-light.png) |
 
 Sources: `src/views/active-rule-popover-renderer.ts`, `src/views/filter-panel-renderer.ts`
 
@@ -65,7 +65,7 @@ The sort variant adds db-sort-panel and drops the drag handle and reorder button
 
 | dark | light |
 |---|---|
-| ![chrome-active-rule-popover-sort dark](components/chrome-active-rule-popover-sort-mobile-dark.png) | ![chrome-active-rule-popover-sort light](components/chrome-active-rule-popover-sort-mobile-light.png) |
+| ![chrome-active-rule-popover-sort dark](notion-clone/components/chrome-active-rule-popover-sort-mobile-dark.png) | ![chrome-active-rule-popover-sort light](notion-clone/components/chrome-active-rule-popover-sort-mobile-light.png) |
 
 Sources: `src/views/active-rule-popover-renderer.ts`, `src/views/sort-panel-renderer.ts`
 
@@ -75,7 +75,7 @@ The rail lives in the header below the toolbar. Sort chips come first and carry 
 
 | dark | light |
 |---|---|
-| ![chrome-active-view-controls dark](components/chrome-active-view-controls-mobile-dark.png) | ![chrome-active-view-controls light](components/chrome-active-view-controls-mobile-light.png) |
+| ![chrome-active-view-controls dark](notion-clone/components/chrome-active-view-controls-mobile-dark.png) | ![chrome-active-view-controls light](notion-clone/components/chrome-active-view-controls-mobile-light.png) |
 
 Sources: `src/views/active-view-controls-renderer.ts`
 
@@ -85,7 +85,7 @@ The row-role select box the extensions board draws on a column header (select-al
 
 | dark | light |
 |---|---|
-| ![chrome-board-extensions-selection dark](components/chrome-board-extensions-selection-mobile-dark.png) | ![chrome-board-extensions-selection light](components/chrome-board-extensions-selection-mobile-light.png) |
+| ![chrome-board-extensions-selection dark](notion-clone/components/chrome-board-extensions-selection-mobile-dark.png) | ![chrome-board-extensions-selection light](notion-clone/components/chrome-board-extensions-selection-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`
 
@@ -95,7 +95,7 @@ Every other chart type is a Chart.js canvas painted at runtime, so this recovery
 
 | dark | light |
 |---|---|
-| ![chrome-chart-empty dark](components/chrome-chart-empty-mobile-dark.png) | ![chrome-chart-empty light](components/chrome-chart-empty-mobile-light.png) |
+| ![chrome-chart-empty dark](notion-clone/components/chrome-chart-empty-mobile-dark.png) | ![chrome-chart-empty light](notion-clone/components/chrome-chart-empty-mobile-light.png) |
 
 Sources: `src/views/chart-renderer.ts`
 
@@ -105,7 +105,7 @@ The one chart type the stylesheet draws in full: renderNumber writes three divs 
 
 | dark | light |
 |---|---|
-| ![chrome-chart-number dark](components/chrome-chart-number-mobile-dark.png) | ![chrome-chart-number light](components/chrome-chart-number-mobile-light.png) |
+| ![chrome-chart-number dark](notion-clone/components/chrome-chart-number-mobile-dark.png) | ![chrome-chart-number light](notion-clone/components/chrome-chart-number-mobile-light.png) |
 
 Sources: `src/views/chart-renderer.ts`
 
@@ -115,7 +115,7 @@ What the chart view uses instead of a toolbar of its own: the chart-options butt
 
 | dark | light |
 |---|---|
-| ![chrome-chart-options-popover dark](components/chrome-chart-options-popover-mobile-dark.png) | ![chrome-chart-options-popover light](components/chrome-chart-options-popover-mobile-light.png) |
+| ![chrome-chart-options-popover dark](notion-clone/components/chrome-chart-options-popover-mobile-dark.png) | ![chrome-chart-options-popover light](notion-clone/components/chrome-chart-options-popover-mobile-light.png) |
 
 Sources: `src/views/chart-toolbar-renderer.ts`
 
@@ -125,7 +125,7 @@ Every group field here is option-typed, so every divider title is a colored stat
 
 | dark | light |
 |---|---|
-| ![chrome-group-header-row dark](components/chrome-group-header-row-mobile-dark.png) | ![chrome-group-header-row light](components/chrome-group-header-row-mobile-light.png) |
+| ![chrome-group-header-row dark](notion-clone/components/chrome-group-header-row-mobile-dark.png) | ![chrome-group-header-row light](notion-clone/components/chrome-group-header-row-mobile-light.png) |
 
 Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `src/views/summary-renderer.ts`
 
@@ -135,7 +135,7 @@ The whole-group selection box from the list, the gallery and a board subgroup. O
 
 | dark | light |
 |---|---|
-| ![chrome-group-selection-controls dark](components/chrome-group-selection-controls-mobile-dark.png) | ![chrome-group-selection-controls light](components/chrome-group-selection-controls-mobile-light.png) |
+| ![chrome-group-selection-controls dark](notion-clone/components/chrome-group-selection-controls-mobile-dark.png) | ![chrome-group-selection-controls light](notion-clone/components/chrome-group-selection-controls-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`
 
@@ -145,7 +145,7 @@ Deliberately not wrapped in note-database-container: this menu mounts on documen
 
 | dark | light |
 |---|---|
-| ![chrome-owned-menu dark](components/chrome-owned-menu-mobile-dark.png) | ![chrome-owned-menu light](components/chrome-owned-menu-mobile-light.png) |
+| ![chrome-owned-menu dark](notion-clone/components/chrome-owned-menu-mobile-dark.png) | ![chrome-owned-menu light](notion-clone/components/chrome-owned-menu-mobile-light.png) |
 
 Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`
 
@@ -155,7 +155,7 @@ The phone form of the owned menu. Rows share one left edge with the icon in a fi
 
 | dark | light |
 |---|---|
-| ![chrome-owned-menu-sheet dark](components/chrome-owned-menu-sheet-mobile-dark.png) | ![chrome-owned-menu-sheet light](components/chrome-owned-menu-sheet-mobile-light.png) |
+| ![chrome-owned-menu-sheet dark](notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png) | ![chrome-owned-menu-sheet light](notion-clone/components/chrome-owned-menu-sheet-mobile-light.png) |
 
 Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
 
@@ -165,7 +165,7 @@ The bar that appears while table cells are selected. Its checkbox clears the sel
 
 | dark | light |
 |---|---|
-| ![chrome-selection-status-bar dark](components/chrome-selection-status-bar-mobile-dark.png) | ![chrome-selection-status-bar light](components/chrome-selection-status-bar-mobile-light.png) |
+| ![chrome-selection-status-bar dark](notion-clone/components/chrome-selection-status-bar-mobile-dark.png) | ![chrome-selection-status-bar light](notion-clone/components/chrome-selection-status-bar-mobile-light.png) |
 
 Sources: `src/views/embedded-database-renderer.ts`
 
@@ -175,7 +175,7 @@ Total is always present; each configured summary rule is a draggable, clickable 
 
 | dark | light |
 |---|---|
-| ![chrome-summary-row dark](components/chrome-summary-row-mobile-dark.png) | ![chrome-summary-row light](components/chrome-summary-row-mobile-light.png) |
+| ![chrome-summary-row dark](notion-clone/components/chrome-summary-row-mobile-dark.png) | ![chrome-summary-row light](notion-clone/components/chrome-summary-row-mobile-light.png) |
 
 Sources: `src/views/summary-renderer.ts`
 
@@ -185,7 +185,7 @@ A column with summary rules stacks each kind over its result; a column without o
 
 | dark | light |
 |---|---|
-| ![chrome-table-footer dark](components/chrome-table-footer-mobile-dark.png) | ![chrome-table-footer light](components/chrome-table-footer-mobile-light.png) |
+| ![chrome-table-footer dark](notion-clone/components/chrome-table-footer-mobile-dark.png) | ![chrome-table-footer light](notion-clone/components/chrome-table-footer-mobile-light.png) |
 
 Sources: `src/views/table-footer-renderer.ts`, `src/views/table-renderer.ts`
 
@@ -195,7 +195,7 @@ View switcher on the left; query, properties, utilities and creation clusters on
 
 | dark | light |
 |---|---|
-| ![chrome-toolbar dark](components/chrome-toolbar-mobile-dark.png) | ![chrome-toolbar light](components/chrome-toolbar-mobile-light.png) |
+| ![chrome-toolbar dark](notion-clone/components/chrome-toolbar-mobile-dark.png) | ![chrome-toolbar light](notion-clone/components/chrome-toolbar-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`
 
@@ -205,7 +205,7 @@ The wrap is 28px wide at rest and widens to 150px under is-active; the clear but
 
 | dark | light |
 |---|---|
-| ![chrome-toolbar-search dark](components/chrome-toolbar-search-mobile-dark.png) | ![chrome-toolbar-search light](components/chrome-toolbar-search-mobile-light.png) |
+| ![chrome-toolbar-search dark](notion-clone/components/chrome-toolbar-search-mobile-dark.png) | ![chrome-toolbar-search light](notion-clone/components/chrome-toolbar-search-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`
 
@@ -215,7 +215,7 @@ The toolbar's overflow menu. Rows come from the shared createMenuRow but carry d
 
 | dark | light |
 |---|---|
-| ![chrome-utilities-popover dark](components/chrome-utilities-popover-mobile-dark.png) | ![chrome-utilities-popover light](components/chrome-utilities-popover-mobile-light.png) |
+| ![chrome-utilities-popover dark](notion-clone/components/chrome-utilities-popover-mobile-dark.png) | ![chrome-utilities-popover light](notion-clone/components/chrome-utilities-popover-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`, `src/views/menu-row.ts`
 
@@ -225,7 +225,7 @@ The active tab carries is-active; the ⋯ tab appears only once the toolbar has 
 
 | dark | light |
 |---|---|
-| ![chrome-view-switcher dark](components/chrome-view-switcher-mobile-dark.png) | ![chrome-view-switcher light](components/chrome-view-switcher-mobile-light.png) |
+| ![chrome-view-switcher dark](notion-clone/components/chrome-view-switcher-mobile-dark.png) | ![chrome-view-switcher light](notion-clone/components/chrome-view-switcher-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`
 
@@ -235,7 +235,7 @@ ActiveRulePopoverRenderer's own toggleFilter against a real anchor, with the pan
 
 | dark | light |
 |---|---|
-| ![constructed-active-rule-filter dark](components/constructed-active-rule-filter-mobile-dark.png) | ![constructed-active-rule-filter light](components/constructed-active-rule-filter-mobile-light.png) |
+| ![constructed-active-rule-filter dark](notion-clone/components/constructed-active-rule-filter-mobile-dark.png) | ![constructed-active-rule-filter light](notion-clone/components/constructed-active-rule-filter-mobile-light.png) |
 
 Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
@@ -245,7 +245,7 @@ The sort twin of the filter popover: toggleSort against a real anchor with SortP
 
 | dark | light |
 |---|---|
-| ![constructed-active-rule-sort dark](components/constructed-active-rule-sort-mobile-dark.png) | ![constructed-active-rule-sort light](components/constructed-active-rule-sort-mobile-light.png) |
+| ![constructed-active-rule-sort dark](notion-clone/components/constructed-active-rule-sort-mobile-dark.png) | ![constructed-active-rule-sort light](notion-clone/components/constructed-active-rule-sort-mobile-light.png) |
 
 Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/sort-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
@@ -255,7 +255,7 @@ ActiveViewControlsRenderer's own render over a state with two effective filters 
 
 | dark | light |
 |---|---|
-| ![constructed-active-view-controls dark](components/constructed-active-view-controls-mobile-dark.png) | ![constructed-active-view-controls light](components/constructed-active-view-controls-mobile-light.png) |
+| ![constructed-active-view-controls dark](notion-clone/components/constructed-active-view-controls-mobile-dark.png) | ![constructed-active-view-controls light](notion-clone/components/constructed-active-view-controls-mobile-light.png) |
 
 Sources: `src/views/active-view-controls-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`
 
@@ -265,7 +265,7 @@ The reference board with one configured select option no row carries, backfilled
 
 | dark | light |
 |---|---|
-| ![constructed-board-empty-column dark](components/constructed-board-empty-column-mobile-dark.png) | ![constructed-board-empty-column light](components/constructed-board-empty-column-mobile-light.png) |
+| ![constructed-board-empty-column dark](notion-clone/components/constructed-board-empty-column-mobile-dark.png) | ![constructed-board-empty-column light](notion-clone/components/constructed-board-empty-column-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/group-visibility.ts`
 
@@ -275,7 +275,7 @@ The extensions board (boardExtensionsEnabled), which is the only surface that dr
 
 | dark | light |
 |---|---|
-| ![constructed-board-extensions dark](components/constructed-board-extensions-mobile-dark.png) | ![constructed-board-extensions light](components/constructed-board-extensions-mobile-light.png) |
+| ![constructed-board-extensions dark](notion-clone/components/constructed-board-extensions-mobile-dark.png) | ![constructed-board-extensions light](notion-clone/components/constructed-board-extensions-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -285,7 +285,7 @@ CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time 
 
 | dark | light |
 |---|---|
-| ![constructed-calendar-toolbar-options dark](components/constructed-calendar-toolbar-options-mobile-dark.png) | ![constructed-calendar-toolbar-options light](components/constructed-calendar-toolbar-options-mobile-light.png) |
+| ![constructed-calendar-toolbar-options dark](notion-clone/components/constructed-calendar-toolbar-options-mobile-dark.png) | ![constructed-calendar-toolbar-options light](notion-clone/components/constructed-calendar-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/calendar-toolbar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
@@ -295,7 +295,7 @@ The empty cover in both card views: each renderer with an image field the rows r
 
 | dark | light |
 |---|---|
-| ![constructed-card-covers dark](components/constructed-card-covers-mobile-dark.png) | ![constructed-card-covers light](components/constructed-card-covers-mobile-light.png) |
+| ![constructed-card-covers dark](notion-clone/components/constructed-card-covers-mobile-dark.png) | ![constructed-card-covers light](notion-clone/components/constructed-card-covers-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`
 
@@ -305,7 +305,7 @@ ChartToolbarRenderer's own togglePopover(); captured full-page for the same posi
 
 | dark | light |
 |---|---|
-| ![constructed-chart-toolbar-options dark](components/constructed-chart-toolbar-options-mobile-dark.png) | ![constructed-chart-toolbar-options light](components/constructed-chart-toolbar-options-mobile-light.png) |
+| ![constructed-chart-toolbar-options dark](notion-clone/components/constructed-chart-toolbar-options-mobile-dark.png) | ![constructed-chart-toolbar-options light](notion-clone/components/constructed-chart-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/chart-toolbar-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/popover-position.ts`
 
@@ -315,7 +315,7 @@ The header cell the table renderer builds with ColumnHeaderController.setup appl
 
 | dark | light |
 |---|---|
-| ![constructed-column-header dark](components/constructed-column-header-mobile-dark.png) | ![constructed-column-header light](components/constructed-column-header-mobile-light.png) |
+| ![constructed-column-header dark](notion-clone/components/constructed-column-header-mobile-dark.png) | ![constructed-column-header light](notion-clone/components/constructed-column-header-mobile-light.png) |
 
 Sources: `src/views/column-header-controller.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -325,7 +325,7 @@ openDropdownMenu's own entry with a selected option, a plain one and a disabled 
 
 | dark | light |
 |---|---|
-| ![constructed-dropdown dark](components/constructed-dropdown-mobile-dark.png) | ![constructed-dropdown light](components/constructed-dropdown-mobile-light.png) |
+| ![constructed-dropdown dark](notion-clone/components/constructed-dropdown-mobile-dark.png) | ![constructed-dropdown light](notion-clone/components/constructed-dropdown-mobile-light.png) |
 
 Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -335,7 +335,7 @@ One role, three views: the whole-group selection box from the list, the gallery 
 
 | dark | light |
 |---|---|
-| ![constructed-group-selection-controls dark](components/constructed-group-selection-controls-mobile-dark.png) | ![constructed-group-selection-controls light](components/constructed-group-selection-controls-mobile-light.png) |
+| ![constructed-group-selection-controls dark](notion-clone/components/constructed-group-selection-controls-mobile-dark.png) | ![constructed-group-selection-controls light](notion-clone/components/constructed-group-selection-controls-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`
 
@@ -345,7 +345,7 @@ createOwnedMenu's own entry with rows built through the handle's addRow the way 
 
 | dark | light |
 |---|---|
-| ![constructed-owned-menu dark](components/constructed-owned-menu-mobile-dark.png) | ![constructed-owned-menu light](components/constructed-owned-menu-mobile-light.png) |
+| ![constructed-owned-menu dark](notion-clone/components/constructed-owned-menu-mobile-dark.png) | ![constructed-owned-menu light](notion-clone/components/constructed-owned-menu-mobile-light.png) |
 
 Sources: `src/views/owned-menu.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
 
@@ -355,7 +355,7 @@ SummaryRenderer's own render with the onChange hook that makes the rule items dr
 
 | dark | light |
 |---|---|
-| ![constructed-summary dark](components/constructed-summary-mobile-dark.png) | ![constructed-summary light](components/constructed-summary-mobile-light.png) |
+| ![constructed-summary dark](notion-clone/components/constructed-summary-mobile-dark.png) | ![constructed-summary light](notion-clone/components/constructed-summary-mobile-light.png) |
 
 Sources: `src/views/summary-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -365,7 +365,7 @@ The constructed table with summary rules configured on a currency, a date and a 
 
 | dark | light |
 |---|---|
-| ![constructed-table-footer dark](components/constructed-table-footer-mobile-dark.png) | ![constructed-table-footer light](components/constructed-table-footer-mobile-light.png) |
+| ![constructed-table-footer dark](notion-clone/components/constructed-table-footer-mobile-dark.png) | ![constructed-table-footer light](notion-clone/components/constructed-table-footer-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/table-footer-renderer.ts`, `src/views/cell-renderer.ts`
 
@@ -375,7 +375,7 @@ renderGroupedTable's own entry over a two-level group tree with summary rules, s
 
 | dark | light |
 |---|---|
-| ![constructed-table-grouped dark](components/constructed-table-grouped-mobile-dark.png) | ![constructed-table-grouped light](components/constructed-table-grouped-mobile-light.png) |
+| ![constructed-table-grouped dark](notion-clone/components/constructed-table-grouped-mobile-dark.png) | ![constructed-table-grouped light](notion-clone/components/constructed-table-grouped-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/group-label-renderer.ts`, `src/views/summary-renderer.ts`
 
@@ -385,7 +385,7 @@ CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for th
 
 | dark | light |
 |---|---|
-| ![constructed-timeline-toolbar-options dark](components/constructed-timeline-toolbar-options-mobile-dark.png) | ![constructed-timeline-toolbar-options light](components/constructed-timeline-toolbar-options-mobile-light.png) |
+| ![constructed-timeline-toolbar-options dark](notion-clone/components/constructed-timeline-toolbar-options-mobile-dark.png) | ![constructed-timeline-toolbar-options light](notion-clone/components/constructed-timeline-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
@@ -395,7 +395,7 @@ ToolbarRenderer's own render over a one-view database: heading, view tabs, and t
 
 | dark | light |
 |---|---|
-| ![constructed-toolbar dark](components/constructed-toolbar-mobile-dark.png) | ![constructed-toolbar light](components/constructed-toolbar-mobile-light.png) |
+| ![constructed-toolbar dark](notion-clone/components/constructed-toolbar-mobile-dark.png) | ![constructed-toolbar light](notion-clone/components/constructed-toolbar-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -405,7 +405,7 @@ The view-tab plus button clicked, opening the add-view popover through showAddVi
 
 | dark | light |
 |---|---|
-| ![constructed-toolbar-add-view dark](components/constructed-toolbar-add-view-mobile-dark.png) | ![constructed-toolbar-add-view light](components/constructed-toolbar-add-view-mobile-light.png) |
+| ![constructed-toolbar-add-view dark](notion-clone/components/constructed-toolbar-add-view-mobile-dark.png) | ![constructed-toolbar-add-view light](notion-clone/components/constructed-toolbar-add-view-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/popover-position.ts`
 
@@ -415,7 +415,7 @@ The same toolbar with the view state's search text set, which is the real input 
 
 | dark | light |
 |---|---|
-| ![constructed-toolbar-search dark](components/constructed-toolbar-search-mobile-dark.png) | ![constructed-toolbar-search light](components/constructed-toolbar-search-mobile-light.png) |
+| ![constructed-toolbar-search dark](notion-clone/components/constructed-toolbar-search-mobile-dark.png) | ![constructed-toolbar-search light](notion-clone/components/constructed-toolbar-search-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -425,7 +425,7 @@ The toolbar's More-tools button clicked, opening the utilities popover through r
 
 | dark | light |
 |---|---|
-| ![constructed-toolbar-utilities dark](components/constructed-toolbar-utilities-mobile-dark.png) | ![constructed-toolbar-utilities light](components/constructed-toolbar-utilities-mobile-light.png) |
+| ![constructed-toolbar-utilities dark](notion-clone/components/constructed-toolbar-utilities-mobile-dark.png) | ![constructed-toolbar-utilities light](notion-clone/components/constructed-toolbar-utilities-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/popover-position.ts`
 
@@ -435,7 +435,7 @@ A disabled option is dimmed and carries a tooltip rather than inline explanatory
 
 | dark | light |
 |---|---|
-| ![dropdown-field dark](components/dropdown-field-mobile-dark.png) | ![dropdown-field light](components/dropdown-field-mobile-light.png) |
+| ![dropdown-field dark](notion-clone/components/dropdown-field-mobile-dark.png) | ![dropdown-field light](notion-clone/components/dropdown-field-mobile-light.png) |
 
 Sources: `src/views/dropdown-field.ts`
 
@@ -445,7 +445,7 @@ The include box in the base-import column table. Same field role as every other 
 
 | dark | light |
 |---|---|
-| ![panel-base-import-modal dark](components/panel-base-import-modal-mobile-dark.png) | ![panel-base-import-modal light](components/panel-base-import-modal-mobile-light.png) |
+| ![panel-base-import-modal dark](notion-clone/components/panel-base-import-modal-mobile-dark.png) | ![panel-base-import-modal light](notion-clone/components/panel-base-import-modal-mobile-light.png) |
 
 Sources: `src/views/modals/base-import-confirm-modal.ts`
 
@@ -455,7 +455,7 @@ The one checkbox family that mounts under the modal root instead of the view con
 
 | dark | light |
 |---|---|
-| ![panel-computed-cleanup-modal dark](components/panel-computed-cleanup-modal-mobile-dark.png) | ![panel-computed-cleanup-modal light](components/panel-computed-cleanup-modal-mobile-light.png) |
+| ![panel-computed-cleanup-modal dark](notion-clone/components/panel-computed-cleanup-modal-mobile-dark.png) | ![panel-computed-cleanup-modal light](notion-clone/components/panel-computed-cleanup-modal-mobile-light.png) |
 
 Sources: `src/views/modals/computed-frontmatter-cleanup-modal.ts`
 
@@ -465,7 +465,7 @@ The select box in the invalid-events grid. It carries placement of its own — c
 
 | dark | light |
 |---|---|
-| ![panel-invalid-events-modal dark](components/panel-invalid-events-modal-mobile-dark.png) | ![panel-invalid-events-modal light](components/panel-invalid-events-modal-mobile-light.png) |
+| ![panel-invalid-events-modal dark](notion-clone/components/panel-invalid-events-modal-mobile-dark.png) | ![panel-invalid-events-modal light](notion-clone/components/panel-invalid-events-modal-mobile-light.png) |
 
 Sources: `src/views/modals/invalid-time-events-modal.ts`
 
@@ -475,7 +475,7 @@ The menu trigger sits inline after the label and the label truncates before it m
 
 | dark | light |
 |---|---|
-| ![table-column-header dark](components/table-column-header-mobile-dark.png) | ![table-column-header light](components/table-column-header-mobile-light.png) |
+| ![table-column-header dark](notion-clone/components/table-column-header-mobile-dark.png) | ![table-column-header light](notion-clone/components/table-column-header-mobile-light.png) |
 
 Sources: `src/views/column-header-controller.ts`
 
@@ -487,7 +487,7 @@ The same startEdit entry on a select cell, opening the option-list editor over t
 
 | dark | light |
 |---|---|
-| ![constructed-cell-editor-select dark](fields/constructed-cell-editor-select-mobile-dark.png) | ![constructed-cell-editor-select light](fields/constructed-cell-editor-select-mobile-light.png) |
+| ![constructed-cell-editor-select dark](notion-clone/fields/constructed-cell-editor-select-mobile-dark.png) | ![constructed-cell-editor-select light](notion-clone/fields/constructed-cell-editor-select-mobile-light.png) |
 
 Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/column-types.ts`
 
@@ -497,7 +497,7 @@ CellRenderer's own startEdit — the entry database-view.ts wires into its editC
 
 | dark | light |
 |---|---|
-| ![constructed-cell-editor-text dark](fields/constructed-cell-editor-text-mobile-dark.png) | ![constructed-cell-editor-text light](fields/constructed-cell-editor-text-mobile-light.png) |
+| ![constructed-cell-editor-text dark](notion-clone/fields/constructed-cell-editor-text-mobile-dark.png) | ![constructed-cell-editor-text light](notion-clone/fields/constructed-cell-editor-text-mobile-light.png) |
 
 Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -507,7 +507,7 @@ renderDateValuePicker's own trigger clicked, opening the popover through the mod
 
 | dark | light |
 |---|---|
-| ![constructed-date-picker dark](fields/constructed-date-picker-mobile-dark.png) | ![constructed-date-picker light](fields/constructed-date-picker-mobile-light.png) |
+| ![constructed-date-picker dark](notion-clone/fields/constructed-date-picker-mobile-dark.png) | ![constructed-date-picker light](notion-clone/fields/constructed-date-picker-mobile-light.png) |
 
 Sources: `src/views/date-value-picker.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
 
@@ -517,7 +517,7 @@ The datetime twin: the same trigger with the includeTime flag, adding the hour a
 
 | dark | light |
 |---|---|
-| ![constructed-date-picker-datetime dark](fields/constructed-date-picker-datetime-mobile-dark.png) | ![constructed-date-picker-datetime light](fields/constructed-date-picker-datetime-mobile-light.png) |
+| ![constructed-date-picker-datetime dark](notion-clone/fields/constructed-date-picker-datetime-mobile-dark.png) | ![constructed-date-picker-datetime light](notion-clone/fields/constructed-date-picker-datetime-mobile-light.png) |
 
 Sources: `src/views/date-value-picker.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
 
@@ -527,7 +527,7 @@ renderSpecialFileFieldValue's own dispatch for the file.tags badges and the link
 
 | dark | light |
 |---|---|
-| ![constructed-file-fields dark](fields/constructed-file-fields-mobile-dark.png) | ![constructed-file-fields light](fields/constructed-file-fields-mobile-light.png) |
+| ![constructed-file-fields dark](notion-clone/fields/constructed-file-fields-mobile-dark.png) | ![constructed-file-fields light](notion-clone/fields/constructed-file-fields-mobile-light.png) |
 
 Sources: `src/views/file-field-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -537,7 +537,7 @@ openIconPickerPopover's own entry with a lucide current token, which is what the
 
 | dark | light |
 |---|---|
-| ![constructed-icon-picker dark](fields/constructed-icon-picker-mobile-dark.png) | ![constructed-icon-picker light](fields/constructed-icon-picker-mobile-light.png) |
+| ![constructed-icon-picker dark](notion-clone/fields/constructed-icon-picker-mobile-dark.png) | ![constructed-icon-picker light](notion-clone/fields/constructed-icon-picker-mobile-light.png) |
 
 Sources: `src/views/icon-picker-popover.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/record-icon-renderer.ts`
 
@@ -547,7 +547,7 @@ renderRating, renderProgress and renderProgressRing's own entries, one style per
 
 | dark | light |
 |---|---|
-| ![constructed-number-displays dark](fields/constructed-number-displays-mobile-dark.png) | ![constructed-number-displays light](fields/constructed-number-displays-mobile-light.png) |
+| ![constructed-number-displays dark](notion-clone/fields/constructed-number-displays-mobile-dark.png) | ![constructed-number-displays light](notion-clone/fields/constructed-number-displays-mobile-light.png) |
 
 Sources: `src/views/number-display-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/number-display.ts`
 
@@ -557,7 +557,7 @@ openOptionColorPicker's own entry with the current colour that rings the matchin
 
 | dark | light |
 |---|---|
-| ![constructed-option-color-picker dark](fields/constructed-option-color-picker-mobile-dark.png) | ![constructed-option-color-picker light](fields/constructed-option-color-picker-mobile-light.png) |
+| ![constructed-option-color-picker dark](notion-clone/fields/constructed-option-color-picker-mobile-dark.png) | ![constructed-option-color-picker light](notion-clone/fields/constructed-option-color-picker-mobile-light.png) |
 
 Sources: `src/views/option-color-picker.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/status-colors.ts`
 
@@ -567,7 +567,7 @@ The table's 28px icon gutter with a real renderRecordIcon bag member and an emoj
 
 | dark | light |
 |---|---|
-| ![constructed-record-icon dark](fields/constructed-record-icon-mobile-dark.png) | ![constructed-record-icon light](fields/constructed-record-icon-mobile-light.png) |
+| ![constructed-record-icon dark](notion-clone/fields/constructed-record-icon-mobile-dark.png) | ![constructed-record-icon light](notion-clone/fields/constructed-record-icon-mobile-light.png) |
 
 Sources: `src/views/record-icon-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/table-renderer.ts`, `src/views/cell-renderer.ts`, `src/data/record-icon.ts`
 
@@ -577,7 +577,7 @@ renderRelationValue's own entry with no App, the module's documented no-vault mo
 
 | dark | light |
 |---|---|
-| ![constructed-relation-values dark](fields/constructed-relation-values-mobile-dark.png) | ![constructed-relation-values light](fields/constructed-relation-values-mobile-light.png) |
+| ![constructed-relation-values dark](notion-clone/fields/constructed-relation-values-mobile-dark.png) | ![constructed-relation-values light](notion-clone/fields/constructed-relation-values-mobile-light.png) |
 
 Sources: `src/views/relation-value-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -587,7 +587,7 @@ A configured table whose option columns carry one value per status colour, with 
 
 | dark | light |
 |---|---|
-| ![constructed-status-colors dark](fields/constructed-status-colors-mobile-dark.png) | ![constructed-status-colors light](fields/constructed-status-colors-mobile-light.png) |
+| ![constructed-status-colors dark](notion-clone/fields/constructed-status-colors-mobile-dark.png) | ![constructed-status-colors light](notion-clone/fields/constructed-status-colors-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/cell-renderer.ts`, `src/data/status-colors.ts`
 
@@ -597,7 +597,7 @@ Each row carries a drag handle, a colour dot that opens the colour picker, the c
 
 | dark | light |
 |---|---|
-| ![field-cell-edit-select dark](fields/field-cell-edit-select-mobile-dark.png) | ![field-cell-edit-select light](fields/field-cell-edit-select-mobile-light.png) |
+| ![field-cell-edit-select dark](notion-clone/fields/field-cell-edit-select-mobile-dark.png) | ![field-cell-edit-select light](notion-clone/fields/field-cell-edit-select-mobile-light.png) |
 
 Sources: `src/views/cell-renderer.ts`, `src/data/column-types.ts`
 
@@ -607,7 +607,7 @@ Both editors keep the cell's rendered value visible underneath. The multi-line e
 
 | dark | light |
 |---|---|
-| ![field-cell-edit-text dark](fields/field-cell-edit-text-mobile-dark.png) | ![field-cell-edit-text light](fields/field-cell-edit-text-mobile-light.png) |
+| ![field-cell-edit-text dark](notion-clone/fields/field-cell-edit-text-mobile-dark.png) | ![field-cell-edit-text light](notion-clone/fields/field-cell-edit-text-mobile-light.png) |
 
 Sources: `src/views/cell-renderer.ts`
 
@@ -617,7 +617,7 @@ The trigger shows the committed value; the popover stacks quick dates, the three
 
 | dark | light |
 |---|---|
-| ![field-date-value-picker dark](fields/field-date-value-picker-mobile-dark.png) | ![field-date-value-picker light](fields/field-date-value-picker-mobile-light.png) |
+| ![field-date-value-picker dark](notion-clone/fields/field-date-value-picker-mobile-dark.png) | ![field-date-value-picker light](notion-clone/fields/field-date-value-picker-mobile-light.png) |
 
 Sources: `src/views/date-value-picker.ts`, `src/views/calendar-mini-calendar-renderer.ts`
 
@@ -627,7 +627,7 @@ A datetime column adds hour and minute segments after the date, and the trigger 
 
 | dark | light |
 |---|---|
-| ![field-date-value-picker-datetime dark](fields/field-date-value-picker-datetime-mobile-dark.png) | ![field-date-value-picker-datetime light](fields/field-date-value-picker-datetime-mobile-light.png) |
+| ![field-date-value-picker-datetime dark](notion-clone/fields/field-date-value-picker-datetime-mobile-dark.png) | ![field-date-value-picker-datetime light](notion-clone/fields/field-date-value-picker-datetime-mobile-light.png) |
 
 Sources: `src/views/date-value-picker.ts`, `src/views/calendar-mini-calendar-renderer.ts`
 
@@ -637,7 +637,7 @@ file.tags render as status badges, link-list fields as compact chips, and file.f
 
 | dark | light |
 |---|---|
-| ![field-file-fields dark](fields/field-file-fields-mobile-dark.png) | ![field-file-fields light](fields/field-file-fields-mobile-light.png) |
+| ![field-file-fields dark](notion-clone/fields/field-file-fields-mobile-dark.png) | ![field-file-fields light](notion-clone/fields/field-file-fields-mobile-light.png) |
 
 Sources: `src/views/file-field-renderer.ts`
 
@@ -647,7 +647,7 @@ The Icons tab adds the colour strip; the picker is created on document.body, so 
 
 | dark | light |
 |---|---|
-| ![field-icon-picker dark](fields/field-icon-picker-mobile-dark.png) | ![field-icon-picker light](fields/field-icon-picker-mobile-light.png) |
+| ![field-icon-picker dark](notion-clone/fields/field-icon-picker-mobile-dark.png) | ![field-icon-picker light](notion-clone/fields/field-icon-picker-mobile-light.png) |
 
 Sources: `src/views/icon-picker-popover.ts`, `src/views/record-icon-renderer.ts`
 
@@ -657,7 +657,7 @@ Rating, progress bar and progress ring all tint through db-num-color-*, which se
 
 | dark | light |
 |---|---|
-| ![field-number-displays dark](fields/field-number-displays-mobile-dark.png) | ![field-number-displays light](fields/field-number-displays-mobile-light.png) |
+| ![field-number-displays dark](notion-clone/fields/field-number-displays-mobile-dark.png) | ![field-number-displays light](notion-clone/fields/field-number-displays-mobile-light.png) |
 
 Sources: `src/views/number-display-renderer.ts`, `src/data/number-display.ts`
 
@@ -667,7 +667,7 @@ Sixteen swatches in the persisted order, the current colour ringed. Opened from 
 
 | dark | light |
 |---|---|
-| ![field-option-color-picker dark](fields/field-option-color-picker-mobile-dark.png) | ![field-option-color-picker light](fields/field-option-color-picker-mobile-light.png) |
+| ![field-option-color-picker dark](notion-clone/fields/field-option-color-picker-mobile-dark.png) | ![field-option-color-picker light](notion-clone/fields/field-option-color-picker-mobile-light.png) |
 
 Sources: `src/views/option-color-picker.ts`, `src/data/status-colors.ts`
 
@@ -677,7 +677,7 @@ The table puts record icons in a 28px gutter column of their own, whose header i
 
 | dark | light |
 |---|---|
-| ![field-record-icon dark](fields/field-record-icon-mobile-dark.png) | ![field-record-icon light](fields/field-record-icon-mobile-light.png) |
+| ![field-record-icon dark](notion-clone/fields/field-record-icon-mobile-dark.png) | ![field-record-icon light](notion-clone/fields/field-record-icon-mobile-light.png) |
 
 Sources: `src/views/record-icon-renderer.ts`, `src/views/table-renderer.ts`, `src/data/record-icon.ts`
 
@@ -687,7 +687,7 @@ A resolved target renders file-text on a tinted chip; a target the metadata cach
 
 | dark | light |
 |---|---|
-| ![field-relation-values dark](fields/field-relation-values-mobile-dark.png) | ![field-relation-values light](fields/field-relation-values-mobile-light.png) |
+| ![field-relation-values dark](notion-clone/fields/field-relation-values-mobile-dark.png) | ![field-relation-values light](notion-clone/fields/field-relation-values-mobile-light.png) |
 
 Sources: `src/views/relation-value-renderer.ts`
 
@@ -697,7 +697,7 @@ The strip is the whole colour vocabulary — every select, status, multi-select 
 
 | dark | light |
 |---|---|
-| ![field-status-colors dark](fields/field-status-colors-mobile-dark.png) | ![field-status-colors light](fields/field-status-colors-mobile-light.png) |
+| ![field-status-colors dark](notion-clone/fields/field-status-colors-mobile-dark.png) | ![field-status-colors light](notion-clone/fields/field-status-colors-mobile-light.png) |
 
 Sources: `src/data/status-colors.ts`, `src/views/cell-renderer.ts`
 
@@ -709,7 +709,7 @@ ColumnManagerRenderer's own render over the table bench's sixteen columns with o
 
 | dark | light |
 |---|---|
-| ![constructed-column-manager dark](panels/constructed-column-manager-mobile-dark.png) | ![constructed-column-manager light](panels/constructed-column-manager-mobile-light.png) |
+| ![constructed-column-manager dark](notion-clone/panels/constructed-column-manager-mobile-dark.png) | ![constructed-column-manager light](notion-clone/panels/constructed-column-manager-mobile-light.png) |
 
 Sources: `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 
@@ -719,7 +719,7 @@ openColumnWidthAdjuster's own module entry over a real currency column from the 
 
 | dark | light |
 |---|---|
-| ![constructed-column-width-adjuster dark](panels/constructed-column-width-adjuster-mobile-dark.png) | ![constructed-column-width-adjuster light](panels/constructed-column-width-adjuster-mobile-light.png) |
+| ![constructed-column-width-adjuster dark](notion-clone/panels/constructed-column-width-adjuster-mobile-dark.png) | ![constructed-column-width-adjuster light](notion-clone/panels/constructed-column-width-adjuster-mobile-light.png) |
 
 Sources: `src/views/column-width.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/popover-auto-close.ts`
 
@@ -729,7 +729,7 @@ FilterPanelRenderer's own render over a flat AND group of three rules, so the pa
 
 | dark | light |
 |---|---|
-| ![constructed-filter-panel dark](panels/constructed-filter-panel-mobile-dark.png) | ![constructed-filter-panel light](panels/constructed-filter-panel-mobile-light.png) |
+| ![constructed-filter-panel dark](notion-clone/panels/constructed-filter-panel-mobile-dark.png) | ![constructed-filter-panel light](notion-clone/panels/constructed-filter-panel-mobile-light.png) |
 
 Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/date-value-picker.ts`, `src/data/view-filter-tree.ts`
 
@@ -739,7 +739,7 @@ The same renderer over a tree that holds a NOT node and an inner OR group — th
 
 | dark | light |
 |---|---|
-| ![constructed-filter-panel-nested dark](panels/constructed-filter-panel-nested-mobile-dark.png) | ![constructed-filter-panel-nested light](panels/constructed-filter-panel-nested-mobile-light.png) |
+| ![constructed-filter-panel-nested dark](notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png) | ![constructed-filter-panel-nested light](notion-clone/panels/constructed-filter-panel-nested-mobile-light.png) |
 
 Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/data/view-filter-tree.ts`
 
@@ -749,7 +749,7 @@ openRecordDetailPanel's own entry against a real anchor over a capture-sized boa
 
 | dark | light |
 |---|---|
-| ![constructed-record-detail dark](panels/constructed-record-detail-mobile-dark.png) | ![constructed-record-detail light](panels/constructed-record-detail-mobile-light.png) |
+| ![constructed-record-detail dark](notion-clone/panels/constructed-record-detail-mobile-dark.png) | ![constructed-record-detail light](notion-clone/panels/constructed-record-detail-mobile-light.png) |
 
 Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/popover-position.ts`, `src/views/mobile-bottom-sheet.ts`
 
@@ -759,7 +759,7 @@ mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered bod
 
 | dark | light |
 |---|---|
-| ![constructed-record-detail-body-editing dark](panels/constructed-record-detail-body-editing-mobile-dark.png) | ![constructed-record-detail-body-editing light](panels/constructed-record-detail-body-editing-mobile-light.png) |
+| ![constructed-record-detail-body-editing dark](notion-clone/panels/constructed-record-detail-body-editing-mobile-dark.png) | ![constructed-record-detail-body-editing light](notion-clone/panels/constructed-record-detail-body-editing-mobile-light.png) |
 
 Sources: `src/views/note-body-region.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -769,7 +769,7 @@ The same region over an empty body, drawing the placeholder line the module writ
 
 | dark | light |
 |---|---|
-| ![constructed-record-detail-body-empty dark](panels/constructed-record-detail-body-empty-mobile-dark.png) | ![constructed-record-detail-body-empty light](panels/constructed-record-detail-body-empty-mobile-light.png) |
+| ![constructed-record-detail-body-empty dark](notion-clone/panels/constructed-record-detail-body-empty-mobile-dark.png) | ![constructed-record-detail-body-empty light](notion-clone/panels/constructed-record-detail-body-empty-mobile-light.png) |
 
 Sources: `src/views/note-body-region.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -779,7 +779,7 @@ openTableRecordPeek's own entry docked beside the real table it opens from, with
 
 | dark | light |
 |---|---|
-| ![constructed-record-peek dark](panels/constructed-record-peek-mobile-dark.png) | ![constructed-record-peek light](panels/constructed-record-peek-mobile-light.png) |
+| ![constructed-record-peek dark](notion-clone/panels/constructed-record-peek-mobile-dark.png) | ![constructed-record-peek light](notion-clone/panels/constructed-record-peek-mobile-light.png) |
 
 Sources: `src/views/table-record-peek.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/table-renderer.ts`, `src/views/cell-renderer.ts`
 
@@ -789,7 +789,7 @@ SortPanelRenderer's own render over two real rules, with the first rule's move-u
 
 | dark | light |
 |---|---|
-| ![constructed-sort-panel dark](panels/constructed-sort-panel-mobile-dark.png) | ![constructed-sort-panel light](panels/constructed-sort-panel-mobile-light.png) |
+| ![constructed-sort-panel dark](notion-clone/panels/constructed-sort-panel-mobile-dark.png) | ![constructed-sort-panel light](notion-clone/panels/constructed-sort-panel-mobile-light.png) |
 
 Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
 
@@ -799,7 +799,7 @@ The calendar view's sort panel: the renderer reads config.viewType === "calendar
 
 | dark | light |
 |---|---|
-| ![constructed-sort-panel-calendar dark](panels/constructed-sort-panel-calendar-mobile-dark.png) | ![constructed-sort-panel-calendar light](panels/constructed-sort-panel-calendar-mobile-light.png) |
+| ![constructed-sort-panel-calendar dark](notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png) | ![constructed-sort-panel-calendar light](notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png) |
 
 Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -809,7 +809,7 @@ ViewConfigPanelRenderer's own render for a table view with a one-view database, 
 
 | dark | light |
 |---|---|
-| ![constructed-view-config dark](panels/constructed-view-config-mobile-dark.png) | ![constructed-view-config light](panels/constructed-view-config-mobile-light.png) |
+| ![constructed-view-config dark](notion-clone/panels/constructed-view-config-mobile-dark.png) | ![constructed-view-config light](notion-clone/panels/constructed-view-config-mobile-light.png) |
 
 Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
 
@@ -819,7 +819,7 @@ One row per property: drag handle, visibility checkbox, type icon, name with its
 
 | dark | light |
 |---|---|
-| ![panel-column-manager dark](panels/panel-column-manager-mobile-dark.png) | ![panel-column-manager light](panels/panel-column-manager-mobile-light.png) |
+| ![panel-column-manager dark](notion-clone/panels/panel-column-manager-mobile-dark.png) | ![panel-column-manager light](notion-clone/panels/panel-column-manager-mobile-light.png) |
 
 Sources: `src/views/column-manager-renderer.ts`, `src/views/property-type-icon.ts`
 
@@ -829,7 +829,7 @@ The adjuster mounts through the shared sheet host (applySheetChrome, placeSheet,
 
 | dark | light |
 |---|---|
-| ![panel-column-width-sheet dark](panels/panel-column-width-sheet-mobile-dark.png) | ![panel-column-width-sheet light](panels/panel-column-width-sheet-mobile-light.png) |
+| ![panel-column-width-sheet dark](notion-clone/panels/panel-column-width-sheet-mobile-dark.png) | ![panel-column-width-sheet light](notion-clone/panels/panel-column-width-sheet-mobile-light.png) |
 
 Sources: `src/views/column-width.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`
 
@@ -839,7 +839,7 @@ Three conditions build a group node, so the panel header drops its AND/OR button
 
 | dark | light |
 |---|---|
-| ![panel-filter-conditions dark](panels/panel-filter-conditions-mobile-dark.png) | ![panel-filter-conditions light](panels/panel-filter-conditions-mobile-light.png) |
+| ![panel-filter-conditions dark](notion-clone/panels/panel-filter-conditions-mobile-dark.png) | ![panel-filter-conditions light](notion-clone/panels/panel-filter-conditions-mobile-light.png) |
 
 Sources: `src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
@@ -849,7 +849,7 @@ Nesting stops at three levels: the innermost rows lose their add-group button be
 
 | dark | light |
 |---|---|
-| ![panel-filter-nested-group dark](panels/panel-filter-nested-group-mobile-dark.png) | ![panel-filter-nested-group light](panels/panel-filter-nested-group-mobile-light.png) |
+| ![panel-filter-nested-group dark](notion-clone/panels/panel-filter-nested-group-mobile-dark.png) | ![panel-filter-nested-group light](notion-clone/panels/panel-filter-nested-group-mobile-light.png) |
 
 Sources: `src/views/filter-panel-renderer.ts`, `src/data/view-filter-tree.ts`
 
@@ -859,7 +859,7 @@ Opened from a calendar or timeline event card. Fields are click-to-edit; an empt
 
 | dark | light |
 |---|---|
-| ![panel-record-detail dark](panels/panel-record-detail-mobile-dark.png) | ![panel-record-detail light](panels/panel-record-detail-mobile-light.png) |
+| ![panel-record-detail dark](notion-clone/panels/panel-record-detail-mobile-dark.png) | ![panel-record-detail light](notion-clone/panels/panel-record-detail-mobile-light.png) |
 
 Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`, `src/views/note-body-region.ts`
 
@@ -869,7 +869,7 @@ The phone form of the record detail panel. positionToolbarPopover renders it as 
 
 | dark | light |
 |---|---|
-| ![panel-record-detail-sheet dark](panels/panel-record-detail-sheet-mobile-dark.png) | ![panel-record-detail-sheet light](panels/panel-record-detail-sheet-mobile-light.png) |
+| ![panel-record-detail-sheet dark](notion-clone/panels/panel-record-detail-sheet-mobile-dark.png) | ![panel-record-detail-sheet light](notion-clone/panels/panel-record-detail-sheet-mobile-light.png) |
 
 Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`, `src/views/note-body-region.ts`
 
@@ -879,7 +879,7 @@ Tapping the rendered body swaps it for a textarea. The box grows to its content 
 
 | dark | light |
 |---|---|
-| ![panel-record-detail-sheet-body-editing dark](panels/panel-record-detail-sheet-body-editing-mobile-dark.png) | ![panel-record-detail-sheet-body-editing light](panels/panel-record-detail-sheet-body-editing-mobile-light.png) |
+| ![panel-record-detail-sheet-body-editing dark](notion-clone/panels/panel-record-detail-sheet-body-editing-mobile-dark.png) | ![panel-record-detail-sheet-body-editing light](notion-clone/panels/panel-record-detail-sheet-body-editing-mobile-light.png) |
 
 Sources: `src/views/record-detail-panel.ts`, `src/views/note-body-region.ts`
 
@@ -889,7 +889,7 @@ A record whose note has frontmatter and nothing else. One faint line rather than
 
 | dark | light |
 |---|---|
-| ![panel-record-detail-sheet-body-empty dark](panels/panel-record-detail-sheet-body-empty-mobile-dark.png) | ![panel-record-detail-sheet-body-empty light](panels/panel-record-detail-sheet-body-empty-mobile-light.png) |
+| ![panel-record-detail-sheet-body-empty dark](notion-clone/panels/panel-record-detail-sheet-body-empty-mobile-dark.png) | ![panel-record-detail-sheet-body-empty light](notion-clone/panels/panel-record-detail-sheet-body-empty-mobile-light.png) |
 
 Sources: `src/views/record-detail-panel.ts`, `src/views/note-body-region.ts`
 
@@ -899,7 +899,7 @@ Docks against the right edge of the table it was opened from. Values are display
 
 | dark | light |
 |---|---|
-| ![panel-record-peek dark](panels/panel-record-peek-mobile-dark.png) | ![panel-record-peek light](panels/panel-record-peek-mobile-light.png) |
+| ![panel-record-peek dark](notion-clone/panels/panel-record-peek-mobile-dark.png) | ![panel-record-peek light](notion-clone/panels/panel-record-peek-mobile-light.png) |
 
 Sources: `src/views/table-record-peek.ts`, `src/views/table-renderer.ts`
 
@@ -909,7 +909,7 @@ Calendar views add a hint above the empty state because layout order wins over u
 
 | dark | light |
 |---|---|
-| ![panel-sort-calendar-empty dark](panels/panel-sort-calendar-empty-mobile-dark.png) | ![panel-sort-calendar-empty light](panels/panel-sort-calendar-empty-mobile-light.png) |
+| ![panel-sort-calendar-empty dark](notion-clone/panels/panel-sort-calendar-empty-mobile-dark.png) | ![panel-sort-calendar-empty light](notion-clone/panels/panel-sort-calendar-empty-mobile-light.png) |
 
 Sources: `src/views/sort-panel-renderer.ts`
 
@@ -919,7 +919,7 @@ Rows are draggable; the first rule's move-up and the last rule's move-down are d
 
 | dark | light |
 |---|---|
-| ![panel-sort-rules dark](panels/panel-sort-rules-mobile-dark.png) | ![panel-sort-rules light](panels/panel-sort-rules-mobile-light.png) |
+| ![panel-sort-rules dark](notion-clone/panels/panel-sort-rules-mobile-dark.png) | ![panel-sort-rules light](notion-clone/panels/panel-sort-rules-mobile-light.png) |
 
 Sources: `src/views/sort-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
@@ -929,7 +929,7 @@ The top of the panel for a table view: database-scoped rows above the section di
 
 | dark | light |
 |---|---|
-| ![panel-view-config dark](panels/panel-view-config-mobile-dark.png) | ![panel-view-config light](panels/panel-view-config-mobile-light.png) |
+| ![panel-view-config dark](notion-clone/panels/panel-view-config-mobile-dark.png) | ![panel-view-config light](notion-clone/panels/panel-view-config-mobile-light.png) |
 
 Sources: `src/views/view-config-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
@@ -983,7 +983,7 @@ EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture
 
 | dark | light |
 |---|---|
-| ![constructed-empty-state dark](states/constructed-empty-state-mobile-dark.png) | ![constructed-empty-state light](states/constructed-empty-state-mobile-light.png) |
+| ![constructed-empty-state dark](notion-clone/states/constructed-empty-state-mobile-dark.png) | ![constructed-empty-state light](notion-clone/states/constructed-empty-state-mobile-light.png) |
 
 Sources: `src/views/empty-state-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -991,7 +991,7 @@ Sources: `src/views/empty-state-renderer.ts`, `tools/bench/table-render-bench.ts
 
 | dark | light |
 |---|---|
-| ![empty-state dark](states/empty-state-mobile-dark.png) | ![empty-state light](states/empty-state-mobile-light.png) |
+| ![empty-state dark](notion-clone/states/empty-state-mobile-dark.png) | ![empty-state light](notion-clone/states/empty-state-mobile-light.png) |
 
 Sources: `src/views/empty-state-renderer.ts`
 
@@ -1003,7 +1003,7 @@ The reference board inside the default-width container: its fixed-width columns 
 
 | dark | light |
 |---|---|
-| ![board-mobile dark](views/board-mobile-mobile-dark.png) | ![board-mobile light](views/board-mobile-mobile-light.png) |
+| ![board-mobile dark](notion-clone/views/board-mobile-mobile-dark.png) | ![board-mobile light](notion-clone/views/board-mobile-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `src/views/card-field-renderer.ts`
 
@@ -1013,7 +1013,7 @@ A parent and two child cards beside an ordinary lane, using the same card, title
 
 | dark | light |
 |---|---|
-| ![board-subtask-tree dark](views/board-subtask-tree-mobile-dark.png) | ![board-subtask-tree light](views/board-subtask-tree-mobile-light.png) |
+| ![board-subtask-tree dark](notion-clone/views/board-subtask-tree-mobile-dark.png) | ![board-subtask-tree light](notion-clone/views/board-subtask-tree-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
@@ -1021,7 +1021,7 @@ Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src
 
 | dark | light |
 |---|---|
-| ![board-view dark](views/board-view-mobile-dark.png) | ![board-view light](views/board-view-mobile-light.png) |
+| ![board-view dark](notion-clone/views/board-view-mobile-dark.png) | ![board-view light](notion-clone/views/board-view-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`
 
@@ -1031,7 +1031,7 @@ renderEmpty() returns before .db-calendar is ever created, so the card lands as 
 
 | dark | light |
 |---|---|
-| ![calendar-empty-state dark](views/calendar-empty-state-mobile-dark.png) | ![calendar-empty-state light](views/calendar-empty-state-mobile-light.png) |
+| ![calendar-empty-state dark](notion-clone/views/calendar-empty-state-mobile-dark.png) | ![calendar-empty-state light](notion-clone/views/calendar-empty-state-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `src/views/empty-state-renderer.ts`
 
@@ -1041,7 +1041,7 @@ Days with events carry a short accent underline; the visible week reads as the s
 
 | dark | light |
 |---|---|
-| ![calendar-mini-calendar dark](views/calendar-mini-calendar-mobile-dark.png) | ![calendar-mini-calendar light](views/calendar-mini-calendar-mobile-light.png) |
+| ![calendar-mini-calendar dark](notion-clone/views/calendar-mini-calendar-mobile-dark.png) | ![calendar-mini-calendar light](notion-clone/views/calendar-mini-calendar-mobile-light.png) |
 
 Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/calendar-renderer.ts`
 
@@ -1051,7 +1051,7 @@ Multi-day all-day bars, timed events, weekend headers, a completed milestone tre
 
 | dark | light |
 |---|---|
-| ![calendar-month-view dark](views/calendar-month-view-mobile-dark.png) | ![calendar-month-view light](views/calendar-month-view-mobile-light.png) |
+| ![calendar-month-view dark](notion-clone/views/calendar-month-view-mobile-dark.png) | ![calendar-month-view light](notion-clone/views/calendar-month-view-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`
 
@@ -1061,7 +1061,7 @@ The Time section only exists in week and day scale; the setup preview card below
 
 | dark | light |
 |---|---|
-| ![calendar-toolbar-options dark](views/calendar-toolbar-options-mobile-dark.png) | ![calendar-toolbar-options light](views/calendar-toolbar-options-mobile-light.png) |
+| ![calendar-toolbar-options dark](notion-clone/views/calendar-toolbar-options-mobile-dark.png) | ![calendar-toolbar-options light](notion-clone/views/calendar-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/calendar-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
@@ -1071,7 +1071,7 @@ Sticky day header and all-day strip over the 08–16 time grid; weekend columns,
 
 | dark | light |
 |---|---|
-| ![calendar-week-time-grid dark](views/calendar-week-time-grid-mobile-dark.png) | ![calendar-week-time-grid light](views/calendar-week-time-grid-mobile-light.png) |
+| ![calendar-week-time-grid dark](notion-clone/views/calendar-week-time-grid-mobile-dark.png) | ![calendar-week-time-grid light](notion-clone/views/calendar-week-time-grid-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`
 
@@ -1081,7 +1081,7 @@ The shipped board renderer at the bench shape: 1600 rows into five status column
 
 | dark | light |
 |---|---|
-| ![constructed-board dark](views/constructed-board-mobile-dark.png) | ![constructed-board light](views/constructed-board-mobile-light.png) |
+| ![constructed-board dark](notion-clone/views/constructed-board-mobile-dark.png) | ![constructed-board light](notion-clone/views/constructed-board-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1091,7 +1091,7 @@ The shipped board renderer with the first capture-sized row wired into a parent 
 
 | dark | light |
 |---|---|
-| ![constructed-board-subtask dark](views/constructed-board-subtask-mobile-dark.png) | ![constructed-board-subtask light](views/constructed-board-subtask-mobile-light.png) |
+| ![constructed-board-subtask dark](notion-clone/views/constructed-board-subtask-mobile-dark.png) | ![constructed-board-subtask light](notion-clone/views/constructed-board-subtask-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
@@ -1101,7 +1101,7 @@ The shipped day time grid, scrolled to the workday by the renderer's own post-re
 
 | dark | light |
 |---|---|
-| ![constructed-calendar-day dark](views/constructed-calendar-day-mobile-dark.png) | ![constructed-calendar-day light](views/constructed-calendar-day-mobile-light.png) |
+| ![constructed-calendar-day dark](notion-clone/views/constructed-calendar-day-mobile-dark.png) | ![constructed-calendar-day light](notion-clone/views/constructed-calendar-day-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1111,7 +1111,7 @@ The shipped calendar renderer with every date-typed column removed from its sche
 
 | dark | light |
 |---|---|
-| ![constructed-calendar-empty dark](views/constructed-calendar-empty-mobile-dark.png) | ![constructed-calendar-empty light](views/constructed-calendar-empty-mobile-light.png) |
+| ![constructed-calendar-empty dark](notion-clone/views/constructed-calendar-empty-mobile-dark.png) | ![constructed-calendar-empty light](notion-clone/views/constructed-calendar-empty-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/empty-state-renderer.ts`
 
@@ -1121,7 +1121,7 @@ The shipped month calendar with its own mini date-picker trigger clicked, openin
 
 | dark | light |
 |---|---|
-| ![constructed-calendar-mini dark](views/constructed-calendar-mini-mobile-dark.png) | ![constructed-calendar-mini light](views/constructed-calendar-mini-mobile-light.png) |
+| ![constructed-calendar-mini dark](notion-clone/views/constructed-calendar-mini-mobile-dark.png) | ![constructed-calendar-mini light](notion-clone/views/constructed-calendar-mini-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
 
@@ -1131,7 +1131,7 @@ The shipped month grid anchored on the bench's event dates, with its unscheduled
 
 | dark | light |
 |---|---|
-| ![constructed-calendar-month dark](views/constructed-calendar-month-mobile-dark.png) | ![constructed-calendar-month light](views/constructed-calendar-month-mobile-light.png) |
+| ![constructed-calendar-month dark](notion-clone/views/constructed-calendar-month-mobile-dark.png) | ![constructed-calendar-month light](notion-clone/views/constructed-calendar-month-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1141,7 +1141,7 @@ The shipped week time grid, scrolled to the workday by the renderer's own post-r
 
 | dark | light |
 |---|---|
-| ![constructed-calendar-week dark](views/constructed-calendar-week-mobile-dark.png) | ![constructed-calendar-week light](views/constructed-calendar-week-mobile-light.png) |
+| ![constructed-calendar-week dark](notion-clone/views/constructed-calendar-week-mobile-dark.png) | ![constructed-calendar-week light](notion-clone/views/constructed-calendar-week-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1151,7 +1151,7 @@ The shipped chart renderer over the board bench's five status groups, summing a 
 
 | dark | light |
 |---|---|
-| ![constructed-chart dark](views/constructed-chart-mobile-dark.png) | ![constructed-chart light](views/constructed-chart-mobile-light.png) |
+| ![constructed-chart dark](notion-clone/views/constructed-chart-mobile-dark.png) | ![constructed-chart light](notion-clone/views/constructed-chart-mobile-light.png) |
 
 Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1161,7 +1161,7 @@ The shipped chart renderer's allGroupsHidden empty state, reached by hiding ever
 
 | dark | light |
 |---|---|
-| ![constructed-chart-empty dark](views/constructed-chart-empty-mobile-dark.png) | ![constructed-chart-empty light](views/constructed-chart-empty-mobile-light.png) |
+| ![constructed-chart-empty dark](notion-clone/views/constructed-chart-empty-mobile-dark.png) | ![constructed-chart-empty light](notion-clone/views/constructed-chart-empty-mobile-light.png) |
 
 Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1171,7 +1171,7 @@ The shipped chart renderer's renderNumber branch (chartType: "number"), the one 
 
 | dark | light |
 |---|---|
-| ![constructed-chart-number dark](views/constructed-chart-number-mobile-dark.png) | ![constructed-chart-number light](views/constructed-chart-number-mobile-light.png) |
+| ![constructed-chart-number dark](notion-clone/views/constructed-chart-number-mobile-dark.png) | ![constructed-chart-number light](notion-clone/views/constructed-chart-number-mobile-light.png) |
 
 Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1181,7 +1181,7 @@ The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid
 
 | dark | light |
 |---|---|
-| ![constructed-gallery dark](views/constructed-gallery-mobile-dark.png) | ![constructed-gallery light](views/constructed-gallery-mobile-light.png) |
+| ![constructed-gallery dark](notion-clone/views/constructed-gallery-mobile-dark.png) | ![constructed-gallery light](notion-clone/views/constructed-gallery-mobile-light.png) |
 
 Sources: `src/views/gallery-renderer.ts`, `tools/bench/gallery-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1191,7 +1191,7 @@ The shipped list renderer at the harness's bench shape (1600 rows, 30% fill), wi
 
 | dark | light |
 |---|---|
-| ![constructed-list dark](views/constructed-list-mobile-dark.png) | ![constructed-list light](views/constructed-list-mobile-light.png) |
+| ![constructed-list dark](notion-clone/views/constructed-list-mobile-dark.png) | ![constructed-list light](notion-clone/views/constructed-list-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1201,7 +1201,7 @@ The shipped list renderer with a deterministic, spread subset of frontmatter key
 
 | dark | light |
 |---|---|
-| ![constructed-list-sparse dark](views/constructed-list-sparse-mobile-dark.png) | ![constructed-list-sparse light](views/constructed-list-sparse-mobile-light.png) |
+| ![constructed-list-sparse dark](notion-clone/views/constructed-list-sparse-mobile-dark.png) | ![constructed-list-sparse light](notion-clone/views/constructed-list-sparse-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1211,7 +1211,7 @@ The shipped table renderer at the bench's sixteen-column shape, over the capture
 
 | dark | light |
 |---|---|
-| ![constructed-table dark](views/constructed-table-mobile-dark.png) | ![constructed-table light](views/constructed-table-mobile-light.png) |
+| ![constructed-table dark](notion-clone/views/constructed-table-mobile-dark.png) | ![constructed-table light](notion-clone/views/constructed-table-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1221,7 +1221,7 @@ The shipped week-scale timeline at the bench shape, with the renderer's own grou
 
 | dark | light |
 |---|---|
-| ![constructed-timeline dark](views/constructed-timeline-mobile-dark.png) | ![constructed-timeline light](views/constructed-timeline-mobile-light.png) |
+| ![constructed-timeline dark](notion-clone/views/constructed-timeline-mobile-dark.png) | ![constructed-timeline light](notion-clone/views/constructed-timeline-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1231,7 +1231,7 @@ The shipped timeline renderer at its day scale, the scale the fixture this super
 
 | dark | light |
 |---|---|
-| ![constructed-timeline-day dark](views/constructed-timeline-day-mobile-dark.png) | ![constructed-timeline-day light](views/constructed-timeline-day-mobile-light.png) |
+| ![constructed-timeline-day dark](notion-clone/views/constructed-timeline-day-mobile-dark.png) | ![constructed-timeline-day light](notion-clone/views/constructed-timeline-day-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1241,7 +1241,7 @@ The shipped timeline renderer at its month scale.
 
 | dark | light |
 |---|---|
-| ![constructed-timeline-month dark](views/constructed-timeline-month-mobile-dark.png) | ![constructed-timeline-month light](views/constructed-timeline-month-mobile-light.png) |
+| ![constructed-timeline-month dark](notion-clone/views/constructed-timeline-month-mobile-dark.png) | ![constructed-timeline-month light](notion-clone/views/constructed-timeline-month-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1251,7 +1251,7 @@ The shipped timeline renderer at its quarter scale.
 
 | dark | light |
 |---|---|
-| ![constructed-timeline-quarter dark](views/constructed-timeline-quarter-mobile-dark.png) | ![constructed-timeline-quarter light](views/constructed-timeline-quarter-mobile-light.png) |
+| ![constructed-timeline-quarter dark](notion-clone/views/constructed-timeline-quarter-mobile-dark.png) | ![constructed-timeline-quarter light](notion-clone/views/constructed-timeline-quarter-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1261,7 +1261,7 @@ The shipped week-scale timeline with the first capture-sized row wired into the 
 
 | dark | light |
 |---|---|
-| ![constructed-timeline-subtask dark](views/constructed-timeline-subtask-mobile-dark.png) | ![constructed-timeline-subtask light](views/constructed-timeline-subtask-mobile-light.png) |
+| ![constructed-timeline-subtask dark](notion-clone/views/constructed-timeline-subtask-mobile-dark.png) | ![constructed-timeline-subtask light](notion-clone/views/constructed-timeline-subtask-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
@@ -1271,7 +1271,7 @@ The shipped timeline renderer at its year scale.
 
 | dark | light |
 |---|---|
-| ![constructed-timeline-year dark](views/constructed-timeline-year-mobile-dark.png) | ![constructed-timeline-year light](views/constructed-timeline-year-mobile-light.png) |
+| ![constructed-timeline-year dark](notion-clone/views/constructed-timeline-year-mobile-dark.png) | ![constructed-timeline-year light](notion-clone/views/constructed-timeline-year-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -1281,7 +1281,7 @@ A gallery whose image field is configured but whose rows resolve no image: every
 
 | dark | light |
 |---|---|
-| ![gallery-view dark](views/gallery-view-mobile-dark.png) | ![gallery-view light](views/gallery-view-mobile-light.png) |
+| ![gallery-view dark](notion-clone/views/gallery-view-mobile-dark.png) | ![gallery-view light](notion-clone/views/gallery-view-mobile-light.png) |
 
 Sources: `src/views/gallery-renderer.ts`, `src/views/card-field-renderer.ts`
 
@@ -1291,7 +1291,7 @@ The list row the renderer builds: controls, a title line and a meta row of fixed
 
 | dark | light |
 |---|---|
-| ![list-mobile dark](views/list-mobile-mobile-dark.png) | ![list-mobile light](views/list-mobile-mobile-light.png) |
+| ![list-mobile dark](notion-clone/views/list-mobile-mobile-dark.png) | ![list-mobile light](notion-clone/views/list-mobile-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
@@ -1301,7 +1301,7 @@ The shape every other list fixture cannot produce: each row missing a different 
 
 | dark | light |
 |---|---|
-| ![list-sparse-fields dark](views/list-sparse-fields-mobile-dark.png) | ![list-sparse-fields light](views/list-sparse-fields-mobile-light.png) |
+| ![list-sparse-fields dark](notion-clone/views/list-sparse-fields-mobile-dark.png) | ![list-sparse-fields light](notion-clone/views/list-sparse-fields-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`
 
@@ -1311,7 +1311,7 @@ The desktop list row, controls included. The row checkbox is not a phone-only co
 
 | dark | light |
 |---|---|
-| ![list-view dark](views/list-view-mobile-dark.png) | ![list-view light](views/list-view-mobile-light.png) |
+| ![list-view dark](notion-clone/views/list-view-mobile-dark.png) | ![list-view light](notion-clone/views/list-view-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
@@ -1321,7 +1321,7 @@ The full table the renderer builds: a select gutter, a record-icon gutter and a 
 
 | dark | light |
 |---|---|
-| ![table-mobile dark](views/table-mobile-mobile-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
+| ![table-mobile dark](notion-clone/views/table-mobile-mobile-dark.png) | ![table-mobile light](notion-clone/views/table-mobile-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`, `src/views/cell-renderer.ts`, `src/views/file-title-display.ts`, `src/views/table-record-peek.ts`, `styles.css`
 
@@ -1329,7 +1329,7 @@ Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`,
 
 | dark | light |
 |---|---|
-| ![table-view dark](views/table-view-mobile-dark.png) | ![table-view light](views/table-view-mobile-light.png) |
+| ![table-view dark](notion-clone/views/table-view-mobile-dark.png) | ![table-view light](notion-clone/views/table-view-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `src/views/column-header-controller.ts`, `src/views/cell-renderer.ts`
 
@@ -1339,7 +1339,7 @@ The week scale's own bars re-read as a tree: the parent keeps its collapse affor
 
 | dark | light |
 |---|---|
-| ![timeline-subtask-tree dark](views/timeline-subtask-tree-mobile-dark.png) | ![timeline-subtask-tree light](views/timeline-subtask-tree-mobile-light.png) |
+| ![timeline-subtask-tree dark](notion-clone/views/timeline-subtask-tree-mobile-dark.png) | ![timeline-subtask-tree light](notion-clone/views/timeline-subtask-tree-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
@@ -1349,7 +1349,7 @@ The layout section gates the local-extension column widths: the custom column wi
 
 | dark | light |
 |---|---|
-| ![timeline-toolbar-options dark](views/timeline-toolbar-options-mobile-dark.png) | ![timeline-toolbar-options light](views/timeline-toolbar-options-mobile-light.png) |
+| ![timeline-toolbar-options dark](notion-clone/views/timeline-toolbar-options-mobile-dark.png) | ![timeline-toolbar-options light](notion-clone/views/timeline-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
@@ -1359,7 +1359,7 @@ Week scale with boundary ticks, weekend fills, progress, milestone and dependenc
 
 | dark | light |
 |---|---|
-| ![timeline-view dark](views/timeline-view-mobile-dark.png) | ![timeline-view light](views/timeline-view-mobile-light.png) |
+| ![timeline-view dark](notion-clone/views/timeline-view-mobile-dark.png) | ![timeline-view light](notion-clone/views/timeline-view-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`
 
@@ -1369,7 +1369,7 @@ Day scale with boundary ticks, weekend fills, progress, milestone and dependency
 
 | dark | light |
 |---|---|
-| ![timeline-view-day dark](views/timeline-view-day-mobile-dark.png) | ![timeline-view-day light](views/timeline-view-day-mobile-light.png) |
+| ![timeline-view-day dark](notion-clone/views/timeline-view-day-mobile-dark.png) | ![timeline-view-day light](notion-clone/views/timeline-view-day-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`
 
@@ -1379,7 +1379,7 @@ Month scale with boundary ticks, weekend fills, progress, milestone and dependen
 
 | dark | light |
 |---|---|
-| ![timeline-view-month dark](views/timeline-view-month-mobile-dark.png) | ![timeline-view-month light](views/timeline-view-month-mobile-light.png) |
+| ![timeline-view-month dark](notion-clone/views/timeline-view-month-mobile-dark.png) | ![timeline-view-month light](notion-clone/views/timeline-view-month-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`
 
@@ -1389,7 +1389,7 @@ Quarter scale with boundary ticks, weekend fills, progress, milestone and depend
 
 | dark | light |
 |---|---|
-| ![timeline-view-quarter dark](views/timeline-view-quarter-mobile-dark.png) | ![timeline-view-quarter light](views/timeline-view-quarter-mobile-light.png) |
+| ![timeline-view-quarter dark](notion-clone/views/timeline-view-quarter-mobile-dark.png) | ![timeline-view-quarter light](notion-clone/views/timeline-view-quarter-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`
 
@@ -1399,6 +1399,6 @@ Year scale with boundary ticks, weekend fills, progress, milestone and dependenc
 
 | dark | light |
 |---|---|
-| ![timeline-view-year dark](views/timeline-view-year-mobile-dark.png) | ![timeline-view-year light](views/timeline-view-year-mobile-light.png) |
+| ![timeline-view-year dark](notion-clone/views/timeline-view-year-mobile-dark.png) | ![timeline-view-year light](notion-clone/views/timeline-view-year-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`

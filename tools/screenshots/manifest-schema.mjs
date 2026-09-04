@@ -23,6 +23,18 @@
 // ───────────────────────────────────────────────────────────────────
 
 export const MANIFEST_SOURCES = ["fixture", "constructed", "reference"];
+// The top-level directory a non-reference capture is written under. Our own fixtures and
+// constructed renders photograph this plugin and live under screenshots/notion-clone/<group>/,
+// kept apart from a reference capture (`scenario.source === "reference"`), which photographs a
+// different product entirely. A reference scenario's `group` is already "project-manager" (see
+// the reference validation below), so it takes no further root prefix and stays flat at
+// screenshots/project-manager/<file> rather than nesting under this root too.
+export const CAPTURE_ROOT = "notion-clone";
+/** The capture root a raw scenario definition (not a manifest entry) writes under, or "" for a
+ * reference scenario, whose own group is already the directory it writes to. */
+export function captureRootFor(scenario) {
+  return scenario && scenario.source === "reference" ? "" : CAPTURE_ROOT;
+}
 export const CONSTRUCTED_RENDERERS = [
   "list", "table", "board", "gallery", "calendar", "timeline", "chart",
   "calendar-toolbar", "timeline-toolbar", "chart-toolbar",
@@ -49,6 +61,13 @@ export function validateManifestEntry(entry) {
   }
   if (typeof entry.file !== "string" || entry.file.length === 0) {
     problems.push(`entry ${entry.id ?? "?"} has no file`);
+  } else {
+    const wantPrefix = entry.source === "reference"
+      ? "screenshots/project-manager/"
+      : `screenshots/${CAPTURE_ROOT}/`;
+    if (!entry.file.startsWith(wantPrefix)) {
+      problems.push(`entry ${entry.id ?? "?"} has file ${JSON.stringify(entry.file)}, want ${wantPrefix}...`);
+    }
   }
   if (entry.theme !== "dark" && entry.theme !== "light") {
     problems.push(`entry ${entry.id ?? "?"} has theme ${JSON.stringify(entry.theme)}, want dark or light`);

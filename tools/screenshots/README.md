@@ -27,6 +27,12 @@ Fingerprints, not image bytes, are compared: re-rendering on a different Chrome 
 antialiasing by a pixel, so a byte comparison would report drift everywhere while missing a real
 change captured on the same machine.
 
+Every capture lands under a per-source root — `screenshots/notion-clone/<group>/` for this
+plugin's own fixtures and constructed renders, `screenshots/project-manager/<group>/` for a
+reference scenario (`scenario.source === "reference"`) — so the two capture sets never interleave
+on disk. `manifest-schema.mjs` owns the root list (`CAPTURE_ROOTS`) and picks the root per scenario
+(`captureRootFor`).
+
 ---
 
 ## 2. QUICK START
