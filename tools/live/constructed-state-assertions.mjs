@@ -50,9 +50,14 @@ window.__stateMarkers = (scenario) => {
       .map((el) => [...el.classList].find((cls) => cls.startsWith("status-color-")) || ""));
     result = {
     mounted: true,
-    subtaskToggle: !!container.querySelector(".db-subtask-toggle, .db-subtask-event-toggle"),
-    subtaskProgress: !!container.querySelector(".db-subtask-progress, .db-timeline-subtask-progress"),
-    subtaskDepthChild: !!container.querySelector('[data-subtask-depth="1"]'),
+    subtaskToggle: !!container.querySelector(".db-subtask-toggle, .db-subtask-event-toggle, .pm-collapse-toggle"),
+    subtaskProgress: !!container.querySelector(".db-subtask-progress, .db-timeline-subtask-progress, .pm-gantt-label-progress"),
+    subtaskDepthChild: !!container.querySelector('[data-subtask-depth="1"]')
+      || (() => {
+        const rows = Array.from(container.querySelectorAll(".pm-gantt-label-row[data-task-id]"));
+        const indents = rows.map((row) => parseInt(row.style.paddingLeft || "0", 10));
+        return indents.length > 1 && Math.max(...indents) > Math.min(...indents);
+      })(),
     placeholderField: !!container.querySelector(".db-list-field.is-placeholder"),
     emptyDateReason: !!container.querySelector('[data-empty-reason="no-date-field"]'),
     calendarGrid: !!container.querySelector(".db-calendar"),

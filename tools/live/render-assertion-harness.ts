@@ -1724,10 +1724,24 @@ function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionR
   return results;
 }
 
+// The timeline's default render is the one-to-one reference gantt tree (config.timelineLocalExtensions
+// unset), which carries subtask affordances under its own vocabulary rather than the local
+// db-subtask-* markup: `.pm-collapse-toggle` for the expand/collapse control, `.pm-gantt-label-progress`
+// for the percentage chip, and no depth attribute at all — depth is an inline `padding-left` on
+// `.pm-gantt-label-row`, matched here as the tallest indent exceeding the shallowest row's own.
 function subtaskTreeAssertion(container: HTMLElement, kind: "board" | "timeline"): AssertionResult {
-  const toggle = container.querySelector(kind === "board" ? ".db-subtask-toggle" : ".db-subtask-event-toggle");
-  const progress = container.querySelector(kind === "board" ? ".db-subtask-progress" : ".db-timeline-subtask-progress");
-  const depthChild = container.querySelector('[data-subtask-depth="1"]');
+  const toggle = container.querySelector(kind === "board" ? ".db-subtask-toggle" : ".pm-collapse-toggle");
+  const progress = container.querySelector(kind === "board" ? ".db-subtask-progress" : ".pm-gantt-label-progress");
+  const depthChild = kind === "board"
+    ? container.querySelector('[data-subtask-depth="1"]')
+    : (() => {
+      // `[data-task-id]` excludes the trailing add-task row (`.pm-gantt-add-row`), which shares
+      // the `.pm-gantt-label-row` class but carries no `padding-left` at all — an unset style
+      // that would otherwise read as its own, spurious "depth".
+      const rows = Array.from(container.querySelectorAll<HTMLElement>(".pm-gantt-label-row[data-task-id]"));
+      const indents = rows.map((row) => parseInt(row.style.paddingLeft || "0", 10));
+      return indents.length > 1 && Math.max(...indents) > Math.min(...indents);
+    })();
   const pass = Boolean(toggle) && Boolean(progress) && Boolean(depthChild);
   return {
     name: `the ${kind} drew its subtask tree`,
