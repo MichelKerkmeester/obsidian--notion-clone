@@ -9,17 +9,20 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-04T06:15:00Z"
+    last_updated_at: "2026-09-04T08:11:42Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "T028 landed: all 13 row-6 fixtures now constructed"
-    next_safe_action: "Rule on AC-002; fresh audit re-reads row 6"
+    recent_action: "T029 landed: touch-targets/unstyled-links constructed pass widened 21 -> 31 scenarios"
+    next_safe_action: "Rule on AC-002; fresh audit re-reads row 6 against T029's widened pass"
     blockers:
       - "AC-002 unmeetable as written, needs a phase ruling (Known Limitations 1)"
-      - "touch-targets.mjs/unstyled-links.mjs's own constructed pass does not yet cover T028's 10 new per-state scenarios (Known Limitations 6)"
     key_files:
       - "tools/live/render-assertion-harness.ts"
+      - "tools/live/render-assertion-bundle.mjs"
       - "tools/live/typed-data-assertions.mjs"
       - "tools/live/constructed-state-assertions.mjs"
+      - "tools/live/touch-targets.mjs"
+      - "tools/live/unstyled-links.mjs"
+      - "tools/live/touch-targets-constructed-baseline.json"
       - "tools/storybook/obsidian-stub.mjs"
       - "tools/screenshots/constructed-scenarios.mjs"
       - "tools/bench/table-render-bench.ts"
@@ -27,16 +30,17 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-impl-summary"
       parent_session_id: null
-    completion_pct: 78
+    completion_pct: 79
     open_questions:
       - "AC-002: pixel-difference basis, or inside-mount layout determinism basis?"
       - "Does the shared manifest stand, or does AC-006's separate file still apply?"
-      - "Does parent row 6 tick now that all 13 fixture-only scenarios have a constructed counterpart, or does the touch-targets/unstyled-links wiring gap keep it open? Left to a fresh audit (parent D4)."
+      - "Does parent row 6 tick now that touch-targets/unstyled-links' own constructed pass covers all ten state variants (T029), or does another residual keep it open? Left to a fresh audit (parent D4)."
     answered_questions:
       - "Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ."
       - "Row count alone enough for row 6? No, captureData also types columns."
       - "Does captureData's real CellRenderer add forced layout reads to the table's row loop? No — measured 3 of 3 connected reads, bound 8, identical to captureData:false at the same 2000-row shape."
       - "Can all 13 of the parent's row-6 fixture-only scenarios be constructed through real production code paths? Yes — all 13, none left fixture-only (T028)."
+      - "Does widening touch-targets/unstyled-links' own constructed pass to the ten state variants make the link lane's sample non-vacuous? Yes — 144 links across 31 scenarios, 0 UA-default findings (T029), superseding the prior 'widening alone would not make it non-vacuous' concern."
 ---
 # Implementation Summary
 
@@ -206,6 +210,9 @@ work was called done, rather than trusting the assertion script's PASS alone.
 | `tools/lane/css-lane.json` | Modified (T028) | New release entry naming the 40 new captures; `styles.css` untouched, `baselineHash` unchanged |
 | `screenshots/views/*`, `screenshots/components/*` | Created (T028) | 40 new constructed captures (10 scenarios x 2 devices x 2 themes) |
 | `screenshots/manifest.json`, `screenshots/README.md` | Modified (T028) | 352 entries; 10 `bytes` fields on unrelated fixtures corrected back to their committed values after their encoder-noise-only re-encodes were restored rather than recommitted |
+| `tools/live/render-assertion-bundle.mjs` | Modified (T029) | `STATE_SCENARIOS` (the ten per-state entries) and `SCENARIOS_WITH_STATES = [...SCENARIOS, ...STATE_SCENARIOS]` added; `SCENARIOS` itself left unwidened since `render-assertions.mjs`'s `BAGS` table has no entry for the three new toolbar `renderer` values |
+| `tools/live/touch-targets.mjs`, `tools/live/unstyled-links.mjs` | Modified (T029) | Both import `SCENARIOS_WITH_STATES` instead of `SCENARIOS` for their own constructed pass — 21 scenarios widened to 31 |
+| `tools/live/touch-targets-constructed-baseline.json` | Modified (T029) | `under` raised 367 -> 422 with a `raiseHistory` entry attributing all 55 new under-floor controls to the ten state variants, per class and per scenario |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -345,6 +352,20 @@ Every exit code below was read from `$?` directly.
 | `SURFACE_PHASE=043-constructed-capture npm run gate` and bare `npm run gate` | PASS, exit 0 — 25 green, both |
 | 40 new constructed PNGs opened and read | Done. All 10 scenarios on both desktop and phone. A real defect (the `miniCalendar` option silently dropped by `constructedScenario()`'s spec builder) was caught only by this read, after the assertion script had already reported green through a hand-built spec that bypassed the bug |
 | `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this landing either |
+
+**T029 landing (touch-targets/unstyled-links' own constructed pass widened to the ten state variants — closes T028's own flagged gap), every exit code read from `$?` directly:**
+
+| Check | Result |
+|-------|--------|
+| Before, re-measured fresh on `3463c37` (not carried from a prior run) | `touch-targets.mjs`: `[constructed] 56538 across 21 production-renderer scenario(s)`, `under` 367 against a baseline of 367. `unstyled-links.mjs`: `[constructed] 0 link(s) across 21` |
+| After | `touch-targets.mjs`: `[constructed] 57060 across 31`, `under` 422 against a rebaselined 422 (367 -> 422, +55, additive per class in `touch-targets-constructed-baseline.json`'s `raiseHistory`). `unstyled-links.mjs`: `[constructed] 144 link(s) across 31`, 0 UA-default findings |
+| `npx tsc --noEmit` | PASS, exit 0 |
+| `npx vitest run` | PASS, exit 0 — 97 files / 961 tests, unchanged |
+| `npm run lint` | exit 1, 172 problems — byte-identical to the HEAD baseline; `src/`/`styles.css` untouched |
+| `node tools/naming/scan-comments.mjs` | PASS, exit 0 |
+| `SURFACE_PHASE=043-constructed-capture npm run gate` | PASS, exit 0 — 25 green |
+| `render-assertions.mjs` | Unaffected by construction — still imports the original unwidened `SCENARIOS` (21 entries), never `SCENARIOS_WITH_STATES`, so its `BAGS` lookup never sees the three new toolbar `renderer` values |
+| Residual, out of scope | touch-targets' printed `scenario` label collides for 7 of the 10 state variants (`scenarioLabel()` keys only on renderer/bag/scale — cosmetic, no pass/fail effect); two `field-icon-picker` desktop captures showed stable Chrome antialiasing drift on a fresh recapture, restored to HEAD bytes rather than recommitted |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -399,19 +420,27 @@ Every exit code below was read from `$?` directly.
    hardcoding `"week"`. `constructed-scenarios.mjs`'s nine-capture registry is unchanged and still
    registers only the week scale: growing it to cover day/month/quarter/year as actual screenshots
    is T009 (register 13 constructed scenarios), which stays open and out of this task's scope.
-6. **The later wiring is not done.** `declared-fixtures.mjs` (T010), the `verify.mjs` DECLARED
+6. **PARTIALLY RESOLVED (T029).** `declared-fixtures.mjs` (T010), the `verify.mjs` DECLARED
    staleness inheritance (T011), the explicit `check-lane` widening (T012) and the
-   fixture-constructed parity test (T016) remain open. Three of the four lanes read the constructed
-   captures already because the entries share the fixture manifest, but that is a consequence of the
-   shared-file deviation rather than the wiring the plan specified. **T028 narrows this further but
-   does not close it:** all thirteen of the parent's row-6 fixture-only scenarios now have a
-   constructed counterpart in the shared manifest, cross-checked by hand. What is still genuinely
-   open is that `touch-targets.mjs`/`unstyled-links.mjs`'s own constructed pass
+   fixture-constructed parity test (T016) remain open. Three of the four manifest-reading lanes read
+   the constructed captures already because the entries share the fixture manifest, but that is a
+   consequence of the shared-file deviation rather than the wiring the plan specified. T028 narrowed
+   the gap further: all thirteen of the parent's row-6 fixture-only scenarios now have a constructed
+   counterpart in the shared manifest, cross-checked by hand. What T028 left open — that
+   `touch-targets.mjs`/`unstyled-links.mjs`'s own constructed pass
    (`render-assertion-bundle.mjs`'s shared `SCENARIOS`, distinct from `constructed-scenarios.mjs`'s
-   `CONSTRUCTED_SCENARIOS`) was not widened to include the ten new per-state entries, so those two
-   lanes' own internal fixture-vs-constructed cross-check does not yet reach them. Whether that gap
-   still keeps parent row 6 open, given a manifest-level counterpart now exists, is left to a fresh
-   audit rather than decided here (parent D4).
+   `CONSTRUCTED_SCENARIOS`) did not yet include the ten new per-state entries — is now closed by
+   T029: both lanes import a new `SCENARIOS_WITH_STATES` export (`SCENARIOS` plus the ten
+   `STATE_SCENARIOS` entries) instead of the bare `SCENARIOS`, so their own internal
+   fixture-vs-constructed cross-check reaches all 31. This also supersedes the standing prediction
+   that widening alone would not make `unstyled-links.mjs`'s constructed pass non-vacuous: seven of
+   the ten state variants set `captureData`, so the constructed link count moved from an empty
+   sample (0 links across 21) to a real one (144 links across 31, 0 UA-default findings). `SCENARIOS`
+   itself stays unwidened — `render-assertions.mjs` also reads it, and its `BAGS` table has no entry
+   for the three new toolbar `renderer` values these ten entries add, so merging them there would
+   throw on an undefined bag shape; `render-assertions.mjs` keeps reading the original 21 by
+   construction, unaffected. Whether this closes parent row 6 outright, or another residual keeps it
+   open, is left to a fresh audit rather than decided here (parent D4).
 7. **One dispatch leg did not run.** T019 (the second external pass) was skipped; this landing went
    straight from the first dispatched leg to in-runtime verification.
 <!-- /ANCHOR:limitations -->
