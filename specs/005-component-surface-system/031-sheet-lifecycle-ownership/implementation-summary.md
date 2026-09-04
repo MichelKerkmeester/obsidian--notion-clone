@@ -410,11 +410,13 @@ from 1037; `npm run lint` **172**, the recorded baseline; `npm run lint:tools` 0
 `verify-placement` **393/394**, the one red declared and unrelated;
 `SURFACE_PHASE=031-sheet-lifecycle-ownership npm run gate` **PASS — 25 green, 0 red** at exit 0.
 
-**Trued up after reconciling with `main` (rebase onto `ab116959`, 2026-09-04).** The upstream
+**Trued up after reconciling with `main` (rebase onto `ab116959`, then a second rebase onto
+`62e7e5c1` once main moved again before the push landed, both 2026-09-04).** The upstream
 entrance fix (`c96467c9`) had already landed with identical `src/` content, so the two branch
-commits carrying it collapsed to empty and dropped; the four numbered commits above kept their
-subject but took new SHAs: `4d2e1fa5` (anchor gate), `57e4a246` (placement control), `98b937ed`
-(retained-node rebuild), `ddd0d140` (sheet trace). `npx tsc --noEmit` 0; `npx vitest run`
+commits carrying it collapsed to empty and dropped; the five numbered commits above kept their
+subject but took new SHAs across the two rebases: `9f31bf6f` (anchor gate), `6336417b` (placement
+control), `8140a1ae` (retained-node rebuild), `c12817a8` (sheet trace), `efb5b54f`
+(pointerdown-pinned dismissal). Landed on main as `9ecb5fff`. `npx tsc --noEmit` 0; `npx vitest run`
 **1044 passed**, up from 1042 (`main`'s own concurrent work between the fork point and today's tip
 added the difference, not this packet); `npm run lint` **172**, unchanged; `npm run lint:tools` 0;
 `scan-comments` `PASS`; `sheet-rebuild` **31 checks green across Chrome and WebKit**, exit 0;
