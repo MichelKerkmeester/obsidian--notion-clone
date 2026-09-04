@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T06:40:00Z"
-    last_updated_by: "done-audit-4"
-    recent_action: "042 re-audit: row 5 needs 7ca6cc2 claim; row 6 open on 5 lanes"
-    next_safe_action: "Add a replay claim for 7ca6cc2; operator device confirms; T021 external lane"
+    last_updated_at: "2026-09-04T09:10:00Z"
+    last_updated_by: "done-audit-5"
+    recent_action: "Ticked row 5: 8a79ff8 closed the replay gap; 28 held, pct 57"
+    next_safe_action: "Land 043 leg a; operator confirms on iOS"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -23,7 +23,7 @@ _memory:
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
-      - "042: row 5 open on 7ca6cc2's missing replay claim; row 6 open on 5 fixture-backed gate lanes"
+      - "042 landed; row 5 closed by 8a79ff8's replay claim (28 held, reversed 0); row 6 open on 5 fixture-backed gate lanes, 043-constructed-capture opened for it, devin leg a in flight"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -32,7 +32,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 57
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
@@ -190,7 +190,7 @@ resolve them silently.
       capture.mjs|tools/gate.mjs"` empty before each run. `SURFACE_PHASE=042-harness-fidelity-
       and-replay npm run gate`, `$?` read directly: `0`, 25 green, 0 red. Bare `npm run gate`,
       `$?` read directly: `0`, the same 25 green, 0 red.
-- [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
+- [x] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
       `npm run replay` passes today — 8 of 8 held, exit 0 — but observed red: N/A — no earlier
       count recorded. `tools/live/replay.json`'s history carries no run where a claim's `held` was
       `false`, and the parent log records no earlier held-count either, so this tick has no red to
@@ -239,6 +239,17 @@ resolve them silently.
       closes a documented open row in another phase's ledger the way `7e36671` did, and
       `replay.mjs` holding a claim against its own construction would be circular — the
       instrument cannot certify itself. Stays open on `7ca6cc2` alone.
+      **Ticked 2026-09-04T09:10:00Z (done-audit-5).** The last gap closed: `7ca6cc2`'s fix
+      (`037`'s day-scale fixture centring on the pinned `now`, dropped `HH` tick-label suffix) got
+      its missing claim in `8a79ff8`. The claim measures two-digit day tick labels plus centred
+      start minutes across both device widths: pre-fix `0`, recorded `574`. `node
+      tools/live/replay.mjs`, `$?` read directly: `0`, "replay: PASS — all 28 results still hold",
+      `reversed: 0` read from `replay.json` — 28 claims, up from 27. Every landed product result
+      and every open-row fix this program has named now carries a claim with a differing pre-fix
+      number; three lifecycle claims (report 29's sheet-chrome/pointercancel fix, reports 34-36's
+      overlay-stack fix) delegate to the sheet-teardown/sheet-rebuild lanes by design, proven
+      non-vacuous by negative controls rather than a numeric diff, per this row's earlier audit.
+      Was 8 claims covering phases `000` through `005` only, 2026-09-03 audit; now 28.
 - [ ] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
       **Ticked 2026-09-02, on an observed red verified in-runtime and committed as `c5566db`.** The
@@ -1001,4 +1012,24 @@ the same 3-of-7 basis. `roadmap.md` §5's `042` bullet updated to name the three
 the prior audit (27-claim replay incl. the six open-row fixes `5fa0b0c`; the pixel-hash manifest
 compare `bea1b1c`; the constructed-renderer touch-target/link measures `8759399`) and the two
 remaining gaps (`7ca6cc2` for row 5; the fixture passes for row 6).
+
+### Done-audit-5, 2026-09-04T09:10:00Z: row 5 ticked, row 6 stays open, 043 opened
+
+A fresh in-runtime audit re-checked §3 row 5 against `8a79ff8` (main, equal to origin at `c2de984`).
+`7ca6cc2` (`037`'s fourth and last open product row, the day-scale fixture centring) had landed
+with no replay claim; `8a79ff8` adds it, measuring two-digit day tick labels plus centred start
+minutes across both device widths, pre-fix `0`, recorded `574`. `node tools/live/replay.mjs`,
+`$?` read directly: `0`, "replay: PASS — all 28 results still hold", `reversed: 0`. Every landed
+product result and every open-row fix this program has named now carries a claim with a differing
+pre-fix number; the three lifecycle claims for reports 29 and 34-36 delegate to the sheet-teardown
+and sheet-rebuild lanes by design, already proven non-vacuous by negative control rather than a
+numeric diff. **Row 5 ticked.** Row 6 stays open on the fixture passes of the same five gate lanes
+(`touch-targets`, `unstyled-links`, `css-lane`, `screenshots-fresh`, `device-parity`) done-audit-4
+narrowed it to; `043-constructed-capture` (Level 3) was opened for exactly that dependency, `c2de984`,
+and a devin initial pass is running against it. Rows 1 and 2 stay open on the operator's own
+device confirmation, unrelated to either phase. `completion_pct` recomputed 4 of 7 ÷ 7 = **57**
+(was 43): rows 3, 4, 5 and 7 now hold — 3, 4 and 7 held over from the prior audit, row 5 is the
+one that moved. `roadmap.md` §5's `042` bullet updated to record the lanes landed since the prior
+audit and the `043` row opened for the remainder; §5.3's release cadence line updated through
+1.4.10.
 <!-- /ANCHOR:log -->

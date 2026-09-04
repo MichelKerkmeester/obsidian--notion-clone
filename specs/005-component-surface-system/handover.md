@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: five obsidian-pm port phases shipped through 1.4.8, 1.4.9 cutting from a clean clone; 042 harness fidelity and replay is in verification for the parent DONE table's remaining open rows."
+description: "Resume point: five obsidian-pm port phases and every open row they carried are shipped through 1.4.10; 042 harness fidelity and replay landed; 043 constructed-capture is open with a devin initial pass running for the parent DONE table's last open row."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,34 +10,32 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T02:10:00Z"
-    last_updated_by: "orchestrate-handover-8"
-    recent_action: "Verifying 042 harness fidelity leg a before landing"
-    next_safe_action: "Land 042 leg a; then DONE rows 3, 5, 6 re-audit; operator confirms on iOS"
+    last_updated_at: "2026-09-04T09:10:00Z"
+    last_updated_by: "orchestrate-handover-9"
+    recent_action: "042 landed thru 1.4.10; 043 leg a running in worktree 017"
+    next_safe_action: "Verify and land 043 leg a; operator confirms on iOS"
     blockers:
       - "operator confirmation owed"
-      - "042 in verification"
+      - "043 in flight"
     key_files:
       - "goal.md"
       - "roadmap.md"
-      - "042-harness-fidelity-and-replay/goal.md"
+      - "043-constructed-capture/goal.md"
+      - "043-constructed-capture/plan.md"
       - "042-harness-fidelity-and-replay/implementation-summary.md"
-      - "037-timeline-gantt-port/goal.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
       parent_session_id: null
-    completion_pct: 29
+    completion_pct: 57
     open_questions: []
     answered_questions:
       - "The 036 research loop cannot run in the main checkout while a sibling code phase is dirty; it now runs in a worktree. Synthesis landed at 036/research/research.md; lineage ledgers stay untracked by .gitignore"
-      - "1.4.3 fixed a bottom-sheet control that rebuilt its own content and closed the sheet: the overlay-stack seam was missing a live panel resolver. Fix 85ff504, built and gated from a clean clone"
-      - "1.4.4 shipped the 037 gantt port (0262386 range geometry, 55bff9b scales/milestones/progress/link affordance, bump da1b8be); 037 sits at 35 on its own basis with 11 open defect rows recorded"
-      - "1.4.6 shipped 041 shared UI/UX (cb9aedf empty states/toggle/default view, 25ae3a9 shared tokens/focus/motion) and 039 calendar parity (57043e7 completion/weekends, 1588576 styling, d8a2508 reconcile with main); bump a81115d. Roadmap still holds 35 rows, parent completion 57; parent map rows for 037, 038, 039, 041 read landed (partial), not operator-confirmed"
       - "Landing discipline for a port phase: verify in the worktree, commit on the worktree branch, land to main only after the CSS/display leg is verified there, and release from a clean clone"
-      - "2026-09-03 23:10: 040's subtask tree finished its paused rebase, landed at 1d611db (data layer) plus 00b7bd2 (display leg), and released as 1.4.7 (214f6bd). All five obsidian-pm port phases (037-041) are now landed on main and shipped: 1.4.4 (037), 1.4.5 (038), 1.4.6 (039, 041), 1.4.7 (040). main confirmed equal to origin/main at be9491b; worktrees 003-006 removable through sk-git"
-      - "2026-09-03T23:40: a fresh in-runtime audit re-read goal.md's own 7-row DONE checklist against its exact wording and dropped completion_pct from 57 to 29 (2 of 7 ticked, D13 basis). Rows 3, 5, 6 open: row 3 is no gate lane constructing chart or calendar week/day; row 5 is replay covering only phases 000-005; row 6 is four device-dependent harness gaps (a pinned calendar viewport formula, stubbed action bags, fixture-backed gate lanes, and theme.css missing .mod-cta). Rows 1-2 stay open on operator/device confirmation, unrelated to 042. Phase 042-harness-fidelity-and-replay (Level 3) opened same day to close rows 3, 5, 6"
-      - "2026-09-04: 038's empty-column/drop-language row closed (7e36671), 040's same-parent reorder closed through the one write path with a new host harness (535373a, both ADRs Accepted); release 1.4.8 cut from those commits. 041's last open row (reduced motion not reaching an owned-menu descendant) closed on main in three commits (a251a43, 3f143df fixed a placement-lane regression the first fix caused, 471860d reconciled onto 1.4.8). 037 landed three of four remaining rows (fa58c7f, b29bf7f, 65fb7dd); the day-scale row stays capture-pending on two fixture gaps. Neither landing moves completion_pct off 29 (D13). 1.4.9 is cutting from a clean clone carrying both landings; every release now also installs into the iCloud vault plugin folder with a .backup-<old> beside it, per the operator's 2026-09-03 request. 042's devin leg a delivered chart/week/day render-assertion scenarios with owned controls (armed reds 1630/14/1600, bounds 48/8/8), thirteen replay entries, and the runtime-vars/theme.css harness fixes; a first verifier rejected six vacuous replay entries and missing comment banners, codex fixed both, and a second Opus verifier is now verifying in .worktrees/011-harness-fidelity-and-replay with landing authority, filling 042's implementation-summary.md before committing"
+      - "All five obsidian-pm port phases (037-041) are landed on main and shipped: 1.4.4 (037), 1.4.5 (038), 1.4.6 (039, 041), 1.4.7 (040), 1.4.8 (038, 040 open-row fixes), 1.4.9 (037, 041 open-row fixes), 1.4.10 (037's last open row plus the 042 touch-floor fix). Every open product row from all five phases is now closed"
+      - "2026-09-04: 042-harness-fidelity-and-replay landed on main. Chart and calendar week/day now construct their production renderers (DONE row 3). node tools/live/replay.mjs holds 28 claims, reversed 0, after 8a79ff8 added the last one for 7ca6cc2's day-scale fixture centring (DONE row 5). check-lane.mjs compares captures by pixel hash, not raw bytes. touch-targets.mjs and unstyled-links.mjs gained a constructed-renderer pass alongside their fixture pass; the one real defect it found (a missing 28px touch floor on the row-insert, gallery-open and timeline-menu buttons) shipped as a3781ae in 1.4.10"
+      - "Parent DONE table is now 4 of 7 = 57 (rows 3, 4, 5, 7). Row 6 stays open: css-lane, screenshots-fresh and device-parity still read hand-written fixtures for five gate lanes. 043-constructed-capture (Level 3) opened for that remainder; rows 1-2 stay open on operator device confirmation, unrelated to either phase"
+      - "043's devin initial pass (leg a) is running in .worktrees/017-constructed-capture, dispatch prompt at scratchpad/devin-043.prompt. On return a fresh Opus verifier rebases onto main, verifies with Chrome, fills the Level 3 packet's implementation-summary.md before any tasks.md/checklist.md ticks, and commits on the branch; landing to main follows only after that verification, then fast-forward, gate, push"
 ---
 # Session Handover: Component Surface System
 
@@ -47,54 +45,50 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-As of 2026-09-04 02:10 CEST, releases 1.4.2-1.4.8 are live; 1.4.9 is cutting from a clean clone
-with 037's timeline open-row fixes and 041's reduced-motion fix. Every release now also installs
-into the iCloud vault plugin folder (`.../obsidian/plugins/note-database`) with a `.backup-<old>`
-beside it, per the operator's 2026-09-03 request.
+As of 2026-09-04 09:10 CEST, releases 1.4.2 through 1.4.10 are live on GitHub and installed into
+the iCloud vault plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
+Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it. Every push
+went out right after its release.
 
-The parent DONE table (goal.md's 7-row checklist) was re-audited on 2026-09-03 and dropped to 29
-(2 of 7 ticked, D13 basis). Rows 1-2 stay open on operator/device confirmation. Rows 3, 5, 6 are
-open on harness gaps: row 3 is chart and calendar week/day with no production-renderer gate check,
-row 5 is `npm run replay` covering only phases 000-005, row 6 is four device-dependent harness
-gaps (stale calendar viewport formula, stubbed actions, fixture-backed gate lanes, missing
-`.mod-cta`). Phase `042-harness-fidelity-and-replay` (Level 3) opened to close them.
+All five obsidian-pm port phases (037-041) are landed and shipped, and every open product row they
+carried is now closed. 037's day-scale fixture centring, the last of its four rows, closed in
+1.4.10.
 
-Devin's leg a delivered chart/week/day render-assertion scenarios with owned controls (armed reds
-1630/14/1600, bounds 48/8/8), thirteen replay entries, and the runtime-vars/theme.css harness
-fixes. A first verifier rejected six vacuous replay entries and missing comment banners; codex
-fixed both. A second Opus verifier is now verifying in `.worktrees/011-harness-fidelity-and-
-replay` with landing authority, and will fill 042's `implementation-summary.md` before committing.
+042-harness-fidelity-and-replay (Level 3) landed. Chart and calendar week/day now construct their
+production renderers. `node tools/live/replay.mjs` holds 28 claims, reversed 0. The capture manifest
+compares by pixel hash instead of raw bytes. Touch-target and unstyled-link measures now run against
+the constructed renderers too, alongside their existing fixture pass, and the one real defect that
+pass found (a missing 28px touch floor on the row-insert, gallery-open and timeline-menu buttons)
+shipped in 1.4.10. The capture theme pins production defaults for the calendar viewport formula and
+the host's `.mod-cta` rule.
 
-Since the last handover, four rows closed: 038's empty-column/drop-language captures (7e36671),
-040's same-parent reorder through a new host harness (535373a, ADRs Accepted), 041's reduced
-motion (a251a43, 3f143df, 471860d), and three of 037's four rows (fa58c7f, b29bf7f, 65fb7dd);
-037's day-scale row stays capture-pending. None of this moves completion_pct off 29.
+The parent DONE table (goal.md's 7-row checklist) is 4 of 7 = 57: rows 3, 4, 5 and 7 hold. Row 6
+stays open: css-lane, screenshots-fresh and device-parity still read hand-written fixtures for five
+gate lanes. `043-constructed-capture` (Level 3) opened for exactly that gap, and a devin initial
+pass (leg a) is running in `.worktrees/017-constructed-capture`. Rows 1 and 2 stay open on operator
+device confirmation, unrelated to either phase.
 
-Worktrees 003-010 are merged or finished; 011 is active for 042. Removing the finished ones is the
-operator's call, through sk-git. Main is clean and equal to origin/main at 79cb2bf.
+Worktrees 003 through 018 are merged or finished except 017, active for 043. Removing the finished
+ones is the operator's call, through sk-git. Main is clean and equal to origin/main at `c2de984`.
 <!-- /ANCHOR:handover-summary -->
 
 ---
 
 <!-- ANCHOR:context-transfer -->
-## 2. NEXT SAFE ACTION: LAND 042, THEN RE-AUDIT THE DONE TABLE
+## 2. NEXT SAFE ACTION: LAND 043, THEN OPERATOR CONFIRMATION
 
-The next safe action is not a fresh code lane. Worktree 011's Opus verifier is mid-verification on
-042's leg a; let it finish, then land it: fill `implementation-summary.md`, tick
-`tasks.md`/`checklist.md` with evidence, commit on the worktree's own branch, and land to main
-only after the leg is verified there.
+The next safe action is not a fresh code lane. Worktree 017's devin leg a is running; let it finish,
+then verify and land it: a fresh Opus verifier rebases onto main, verifies with Chrome, fills
+`implementation-summary.md`, ticks `tasks.md`/`checklist.md` with evidence, and commits on the
+worktree's own branch before fast-forwarding main, gating, and pushing.
 
-Once 042 lands, re-audit DONE rows 3, 5, 6 against the merged tree before ticking any of them;
-landing the phase is not itself proof a row closes. Re-derive each row against its own wording and
-update goal.md's DONE table and completion_pct accordingly. Rows 1-2 move only on operator device
-confirmation, not on 042.
+Once 043 lands, re-audit DONE row 6 against the merged tree before ticking it; landing the phase is
+not itself proof the row closes. Re-derive the row against its own wording and update goal.md and
+completion_pct accordingly.
 
-The operator still owes device confirmation of reports 29-36 and the five ported surfaces on
-1.4.9, once it ships and installs. Each confirmation closes its roadmap.md §4 row; each "still
-broken" reopens it with the device fact given, not an assumption.
-
-037's day-scale row stays open pending a capture that closes its two recorded fixture gaps; it is
-outside 042's scope and can wait.
+The operator still owes device confirmation of reports 29-36 and the five ported surfaces on 1.4.10,
+once it installs. Each confirmation closes its roadmap.md §4 row; each "still broken" reopens it
+with the device fact given, not an assumption.
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -102,18 +96,18 @@ outside 042's scope and can wait.
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-1. Check worktree 011's verification status and 042's `implementation-summary.md` before assuming
-   the leg is ready to land.
-2. Land 042 per the standing sequence: verify in the worktree, commit on its own branch, land to
-   main only after the last leg is verified there, gate main, push, release.
-3. Re-audit DONE rows 3, 5, 6 against the merged tree; update goal.md and completion_pct on the
-   re-derived basis, not by assuming the landing alone closes them.
-4. Confirm 1.4.9 shipped and that the iCloud vault install completed with its `.backup-<old>`.
-5. Ask the operator to confirm reports 29-36 and the five ported surfaces on iOS, on 1.4.9.
+1. Check worktree 017's devin status and 043's `implementation-summary.md` before assuming leg a is
+   ready to verify.
+2. Verify in the worktree with Chrome, fill `implementation-summary.md`, tick `tasks.md`/
+   `checklist.md` with evidence, commit on the worktree's own branch.
+3. Land to main: fast-forward, gate main, push.
+4. Re-audit DONE row 6 against the merged tree; update goal.md and completion_pct on the re-derived
+   basis, not by assuming the landing alone closes it.
+5. Ask the operator to confirm reports 29-36 and the five ported surfaces on iOS, on 1.4.10.
 6. Record each answer in roadmap.md §4: confirmed rows close, "still broken" rows reopen with the
    device fact given. An agent never closes an operator row on its own judgment.
-7. Once 042 and operator confirmation are both settled, pick the next item: 037's day-scale
-   capture gap, or open a fresh spec-folder decision (Gate 3) for a new packet.
+7. Once 043 and operator confirmation are both settled, pick the next item or open a fresh
+   spec-folder decision (Gate 3) for a new packet.
 <!-- /ANCHOR:session-notes -->
 
 ---
@@ -157,4 +151,6 @@ outside 042's scope and can wait.
 - Every new file under `tools/` needs its comment banners, or the gate goes red.
 - A completion figure is re-read fresh each audit against its criterion's own wording; a looser
   reading than the text is the same failure as a stricter one, pointed the other way.
+- The capture harness compares captures by pixel hash now, not raw bytes or a file count; open the
+  image when a hash moves, and read `layoutHash` before treating a byte change as a moved element.
 <!-- /ANCHOR:next-session -->
