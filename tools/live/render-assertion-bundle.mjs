@@ -61,12 +61,14 @@ export const SCENARIOS = [
   { name: "chart/file-view", renderer: "chart", bag: "file-view" },
 ];
 
-// Ten per-view state variants: the same ScenarioSpec fields constructed-state-assertions.mjs
-// already proves mount a real per-state marker (a subtask tree, sparse fields, a no-date-field
-// empty state, the two non-bar chart variants, the mini-calendar popover, and the three toolbar
-// settings popovers). Exported separately from SCENARIOS rather than merged into it: render-
-// assertions.mjs also reads SCENARIOS, and its BAGS table has no entry for the three toolbar
-// `renderer` values these add, so merging them there would look up an undefined bag shape and
+// The per-view state variants and the non-renderer surfaces: the same ScenarioSpec fields
+// constructed-state-assertions.mjs proves mount a real per-state marker (a subtask tree, sparse
+// fields, a no-date-field empty state, the two non-bar chart variants, the mini-calendar popover,
+// the three toolbar settings popovers, the toolbar and its popovers, the anchored panels, the
+// field editors and pickers, and the value renderers). Exported separately from SCENARIOS rather
+// than merged into it: render-assertions.mjs also reads SCENARIOS, and its BAGS table has no
+// entry for the non-renderer `renderer` values these add (or for the renderer/bag pairs they
+// reuse under state options), so merging them there would look up an undefined bag shape and
 // throw. touch-targets.mjs and unstyled-links.mjs measure DOM geometry and link colour, not
 // action-bag membership, so that constraint does not apply to them.
 export const STATE_SCENARIOS = [
@@ -80,6 +82,54 @@ export const STATE_SCENARIOS = [
   { name: "calendar-toolbar-options/file-view", renderer: "calendar-toolbar", bag: "file-view" },
   { name: "timeline-toolbar-options/file-view", renderer: "timeline-toolbar", bag: "file-view" },
   { name: "chrome-chart-options-popover/file-view", renderer: "chart-toolbar", bag: "file-view" },
+  // The toolbar and its popovers.
+  { name: "chrome-toolbar/file-view", renderer: "toolbar", bag: "file-view", captureData: true },
+  { name: "chrome-toolbar-search/file-view", renderer: "toolbar", bag: "file-view", captureData: true, searchText: "notion" },
+  { name: "chrome-toolbar-utilities/file-view", renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "utilities" },
+  { name: "chrome-toolbar-add-view/file-view", renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "add-view" },
+  { name: "chrome-active-view-controls/file-view", renderer: "active-view-controls", bag: "file-view", captureData: true },
+  { name: "chrome-active-rule-filter/file-view", renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "filter" },
+  { name: "chrome-active-rule-sort/file-view", renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "sort" },
+  // The anchored panels.
+  { name: "panel-filter-conditions/file-view", renderer: "filter-panel", bag: "file-view", captureData: true },
+  { name: "panel-filter-nested/file-view", renderer: "filter-panel", bag: "file-view", captureData: true, filterDepth: "nested" },
+  { name: "panel-sort-rules/file-view", renderer: "sort-panel", bag: "file-view", captureData: true },
+  { name: "panel-sort-calendar-empty/file-view", renderer: "sort-panel", bag: "file-view", captureData: true, calendarHint: true },
+  { name: "panel-view-config/file-view", renderer: "view-config", bag: "file-view", captureData: true },
+  { name: "panel-column-manager/file-view", renderer: "column-manager", bag: "file-view", captureData: true },
+  { name: "panel-record-detail/file-view", renderer: "record-detail", bag: "file-view", captureData: true },
+  { name: "panel-record-detail-body-editing/file-view", renderer: "record-detail-body", bag: "file-view", recordBodyVariant: "editing" },
+  { name: "panel-record-detail-body-empty/file-view", renderer: "record-detail-body", bag: "file-view", recordBodyVariant: "empty" },
+  { name: "panel-record-peek/file-view", renderer: "record-peek", bag: "file-view", captureData: true },
+  // The chrome surfaces.
+  { name: "chrome-table-footer/file-view", renderer: "table", bag: "file-view", captureData: true, tableFooter: true },
+  { name: "chrome-table-grouped/file-view", renderer: "table", bag: "file-view", captureData: true, tableGroups: true },
+  { name: "chrome-summary/file-view", renderer: "summary", bag: "file-view", captureData: true },
+  { name: "chrome-owned-menu/file-view", renderer: "owned-menu", bag: "file-view" },
+  { name: "chrome-group-selection-controls/file-view", renderer: "group-selection-controls", bag: "file-view", captureData: true },
+  { name: "chrome-card-covers/file-view", renderer: "card-covers", bag: "file-view", captureData: true },
+  // The field editors, pickers and value renderers.
+  { name: "field-cell-editors-text/file-view", renderer: "cell-editors", bag: "file-view", captureData: true },
+  { name: "field-cell-editors-select/file-view", renderer: "cell-editors", bag: "file-view", captureData: true, editorKind: "select" },
+  { name: "field-date-picker/file-view", renderer: "date-picker", bag: "file-view" },
+  { name: "field-date-picker-datetime/file-view", renderer: "date-picker", bag: "file-view", includeTime: true },
+  { name: "field-icon-picker/file-view", renderer: "icon-picker", bag: "file-view" },
+  { name: "field-option-color-picker/file-view", renderer: "color-picker", bag: "file-view" },
+  { name: "field-relation-values/file-view", renderer: "relation-values", bag: "file-view", captureData: true },
+  { name: "field-file-fields/file-view", renderer: "file-fields", bag: "file-view", captureData: true },
+  { name: "field-number-displays/file-view", renderer: "number-display", bag: "file-view" },
+  { name: "field-record-icon/file-view", renderer: "record-icon", bag: "file-view", captureData: true },
+  { name: "field-status-colors/file-view", renderer: "table", bag: "file-view", captureData: true, fullStatusPalette: true },
+  // The core components.
+  { name: "core-dropdown-field/file-view", renderer: "dropdown", bag: "file-view" },
+  { name: "core-empty-state/file-view", renderer: "empty-state", bag: "file-view" },
+  { name: "core-column-header/file-view", renderer: "column-header", bag: "file-view", captureData: true },
+  { name: "table-column-headers/file-view", renderer: "table", bag: "file-view", captureData: true, columnHeaderController: true, longHeaderLabel: true },
+  // The board/gallery state variants.
+  { name: "board-empty-column/file-view", renderer: "board", bag: "file-view", captureData: true, boardEmptyColumn: true },
+  { name: "board-extensions-selection/file-view", renderer: "board", bag: "file-view", captureData: true, boardExtensions: true },
+  { name: "board-covers/file-view", renderer: "board", bag: "file-view", captureData: true, boardExtensions: true, boardImageField: true },
+  { name: "gallery-covers/file-view", renderer: "gallery", bag: "file-view", captureData: true, galleryImageField: true },
 ];
 
 // touch-targets.mjs and unstyled-links.mjs's own constructed pass: every scenario SCENARIOS

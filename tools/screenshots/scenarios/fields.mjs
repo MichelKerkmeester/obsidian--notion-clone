@@ -214,6 +214,7 @@ export const FIELDS_SCENARIOS = [
     title: "Text cell in edit state",
     group: "fields",
     width: 560,
+    fixtureOf: "constructed-cell-editor-text",
     sources: ["src/views/cell-renderer.ts"],
     note: "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
     captureCss: STATIC_POPOVERS,
@@ -247,6 +248,7 @@ export const FIELDS_SCENARIOS = [
     title: "Select cell in edit state",
     group: "fields",
     width: 460,
+    fixtureOf: "constructed-cell-editor-select",
     sources: ["src/views/cell-renderer.ts", "src/data/column-types.ts"],
     note: "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
     captureCss: STATIC_POPOVERS,
@@ -275,6 +277,7 @@ export const FIELDS_SCENARIOS = [
     title: "Date value picker",
     group: "fields",
     width: 320,
+    fixtureOf: "constructed-date-picker",
     sources: ["src/views/date-value-picker.ts", "src/views/calendar-mini-calendar-renderer.ts"],
     note: "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
     captureCss: STATIC_DATE_POPOVER,
@@ -321,6 +324,7 @@ export const FIELDS_SCENARIOS = [
     title: "Date value picker with time",
     group: "fields",
     width: 320,
+    fixtureOf: "constructed-date-picker-datetime",
     sources: ["src/views/date-value-picker.ts", "src/views/calendar-mini-calendar-renderer.ts"],
     note: "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
     captureCss: STATIC_DATE_POPOVER,
@@ -371,6 +375,7 @@ export const FIELDS_SCENARIOS = [
     title: "Icon picker popover",
     group: "fields",
     width: 350,
+    fixtureOf: "constructed-icon-picker",
     sources: ["src/views/icon-picker-popover.ts", "src/views/record-icon-renderer.ts"],
     note: "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
     // Fixed to the viewport and anchored to the icon it was opened from. Nothing anchors
@@ -430,6 +435,7 @@ export const FIELDS_SCENARIOS = [
     title: "Option colour picker",
     group: "fields",
     width: 156,
+    fixtureOf: "constructed-option-color-picker",
     sources: ["src/views/option-color-picker.ts", "src/data/status-colors.ts"],
     note: "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
     captureCss: `.db-color-picker-popup { position: static !important; top: auto !important; left: auto !important; }`,
@@ -445,6 +451,7 @@ export const FIELDS_SCENARIOS = [
     title: "Relation values, resolved and broken",
     group: "fields",
     width: 640,
+    fixtureOf: "constructed-relation-values",
     sources: ["src/views/relation-value-renderer.ts"],
     note: "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
     html: () => `
@@ -479,6 +486,7 @@ export const FIELDS_SCENARIOS = [
     title: "File fields",
     group: "fields",
     width: 640,
+    fixtureOf: "constructed-file-fields",
     sources: ["src/views/file-field-renderer.ts"],
     note: "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
     html: () => `
@@ -515,6 +523,7 @@ export const FIELDS_SCENARIOS = [
     title: "Number display styles",
     group: "fields",
     width: 560,
+    fixtureOf: "constructed-number-displays",
     sources: ["src/views/number-display-renderer.ts", "src/data/number-display.ts"],
     note: "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
     html: () => `
@@ -541,6 +550,7 @@ export const FIELDS_SCENARIOS = [
     title: "Record icon",
     group: "fields",
     width: 560,
+    fixtureOf: "constructed-record-icon",
     sources: ["src/views/record-icon-renderer.ts", "src/views/table-renderer.ts", "src/data/record-icon.ts"],
     note: "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
     html: () => {
@@ -583,6 +593,7 @@ export const FIELDS_SCENARIOS = [
     title: "Status colour range",
     group: "fields",
     width: 820,
+    fixtureOf: "constructed-status-colors",
     sources: ["src/data/status-colors.ts", "src/views/cell-renderer.ts"],
     // Every badge fill in this vocabulary is `color-mix(<hue> 24%, transparent)`, so what a chip
     // looks like is decided by what is behind it. Element captures use a transparent ground on

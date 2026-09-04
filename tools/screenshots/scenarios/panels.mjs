@@ -210,6 +210,7 @@ export const PANEL_SCENARIOS = [
     title: "Filter panel with active conditions",
     group: "panels",
     width: 600,
+    fixtureOf: "constructed-filter-panel",
     sources: ["src/views/filter-panel-renderer.ts", "src/views/dropdown-field.ts"],
     note: "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
     captureCss: ANCHORED_PANEL_CSS,
@@ -234,6 +235,7 @@ export const PANEL_SCENARIOS = [
     title: "Filter panel with a nested group and a NOT",
     group: "panels",
     width: 640,
+    fixtureOf: "constructed-filter-panel-nested",
     sources: ["src/views/filter-panel-renderer.ts", "src/data/view-filter-tree.ts"],
     note: "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
     captureCss: ANCHORED_PANEL_CSS,
@@ -275,6 +277,7 @@ export const PANEL_SCENARIOS = [
     title: "Sort panel with two rules",
     group: "panels",
     width: 560,
+    fixtureOf: "constructed-sort-panel",
     sources: ["src/views/sort-panel-renderer.ts", "src/views/dropdown-field.ts"],
     note: "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
     captureCss: ANCHORED_PANEL_CSS,
@@ -303,6 +306,7 @@ export const PANEL_SCENARIOS = [
     title: "Sort panel with no rules, calendar hint",
     group: "panels",
     width: 560,
+    fixtureOf: "constructed-sort-panel-calendar",
     sources: ["src/views/sort-panel-renderer.ts"],
     note: "Calendar views add a hint above the empty state because layout order wins over user sort.",
     captureCss: ANCHORED_PANEL_CSS,
@@ -321,6 +325,7 @@ export const PANEL_SCENARIOS = [
     title: "View configuration panel",
     group: "panels",
     width: 520,
+    fixtureOf: "constructed-view-config",
     sources: ["src/views/view-config-panel-renderer.ts", "src/views/dropdown-field.ts"],
     note: "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
     captureCss: ANCHORED_PANEL_CSS,
@@ -387,6 +392,7 @@ export const PANEL_SCENARIOS = [
     title: "Column manager",
     group: "panels",
     width: 600,
+    fixtureOf: "constructed-column-manager",
     sources: ["src/views/column-manager-renderer.ts", "src/views/property-type-icon.ts"],
     note: "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
     captureCss: ANCHORED_PANEL_CSS,
@@ -438,6 +444,7 @@ export const PANEL_SCENARIOS = [
     title: "Record detail panel",
     group: "panels",
     width: 392,
+    fixtureOf: "constructed-record-detail",
     sources: [
       "src/views/record-detail-panel.ts",
       "src/views/card-field-renderer.ts",
@@ -490,6 +497,7 @@ export const PANEL_SCENARIOS = [
     group: "panels",
     width: 402,
     capture: "viewport",
+    fixtureOf: "constructed-record-detail",
     // Photographed on the phone only, for the reason the owned-menu sheet carries: the desktop pass
     // stretched a phone bottom sheet across a 1440px window the plugin never presents it in.
     devices: ["mobile"],
@@ -540,6 +548,7 @@ export const PANEL_SCENARIOS = [
     group: "panels",
     width: 402,
     capture: "viewport",
+    fixtureOf: "constructed-record-detail-body-editing",
     sources: ["src/views/record-detail-panel.ts", "src/views/note-body-region.ts"],
     note: "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
     // The height is pinned to the content because nothing runs the auto-fit here. It is the height
@@ -559,6 +568,7 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     group: "panels",
     width: 402,
     capture: "viewport",
+    fixtureOf: "constructed-record-detail-body-empty",
     sources: ["src/views/record-detail-panel.ts", "src/views/note-body-region.ts"],
     note: "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
     html: () => sheetWithBody(`
@@ -571,6 +581,7 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     title: "Table record peek",
     group: "panels",
     width: 1100,
+    fixtureOf: "constructed-record-peek",
     sources: ["src/views/table-record-peek.ts", "src/views/table-renderer.ts"],
     note: "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
     // No captureCss: the peek is absolute against .note-database-container, which is

@@ -102,6 +102,39 @@ import {
   makeRows as makeTimelineRows,
   makeConfig as makeTimelineConfig,
 } from "../bench/timeline-render-bench";
+import { ToolbarRenderer, type ToolbarActions, type ToolbarViewEntry } from "../../src/views/toolbar-renderer";
+import { ActiveViewControlsRenderer, type ActiveViewControlsActions } from "../../src/views/active-view-controls-renderer";
+import { ActiveRulePopoverRenderer } from "../../src/views/active-rule-popover-renderer";
+import { FilterPanelRenderer, type FilterPanelActions } from "../../src/views/filter-panel-renderer";
+import { SortPanelRenderer, type SortPanelActions } from "../../src/views/sort-panel-renderer";
+import { ViewConfigPanelRenderer, type ViewConfigPanelActions } from "../../src/views/view-config-panel-renderer";
+import { ColumnManagerRenderer, type ColumnManagerActions } from "../../src/views/column-manager-renderer";
+import {
+  openRecordDetailPanel,
+  closeRecordDetailPanel,
+  type RecordDetailActions,
+} from "../../src/views/record-detail-panel";
+import { mountNoteBodyRegion } from "../../src/views/note-body-region";
+import { openTableRecordPeek } from "../../src/views/table-record-peek";
+import { SummaryRenderer } from "../../src/views/summary-renderer";
+import { createOwnedMenu } from "../../src/views/owned-menu";
+import { renderDateValuePicker } from "../../src/views/date-value-picker";
+import { openIconPickerPopover } from "../../src/views/icon-picker-popover";
+import { openOptionColorPicker, closeActiveOptionColorPicker } from "../../src/views/option-color-picker";
+import { renderRelationValue } from "../../src/views/relation-value-renderer";
+import { renderSpecialFileFieldValue } from "../../src/views/file-field-renderer";
+import { renderRating, renderProgress, renderProgressRing } from "../../src/views/number-display-renderer";
+import { renderRecordIcon } from "../../src/views/record-icon-renderer";
+import { openDropdownMenu } from "../../src/views/dropdown-field";
+import { EmptyStateRenderer } from "../../src/views/empty-state-renderer";
+import { ColumnHeaderController, type ColumnHeaderActions } from "../../src/views/column-header-controller";
+import { withEmptyOptionGroups } from "../../src/data/group-visibility";
+import type { DatabaseConfig, RecordSchema } from "../../src/data/types";
+import type { DatabaseViewState } from "../../src/views/view-state-store";
+import type { BoardGroup } from "../../src/views/board-renderer";
+import type { TableGroup } from "../../src/views/table-renderer";
+import type { ListGroup } from "../../src/views/list-renderer";
+import type { GalleryGroup } from "../../src/views/gallery-renderer";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SHAPES UNDER TEST
@@ -173,7 +206,12 @@ export const MAX_CHART_LAYOUT_READS = 48;
 
 export interface ScenarioSpec {
   renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery" | "chart"
-    | "calendar-toolbar" | "timeline-toolbar" | "chart-toolbar";
+    | "calendar-toolbar" | "timeline-toolbar" | "chart-toolbar"
+    | "toolbar" | "active-view-controls" | "active-rule-popover" | "filter-panel" | "sort-panel"
+    | "view-config" | "column-manager" | "record-detail" | "record-detail-body" | "record-peek"
+    | "summary" | "owned-menu" | "cell-editors" | "date-picker" | "icon-picker" | "color-picker"
+    | "relation-values" | "file-fields" | "number-display" | "record-icon" | "dropdown"
+    | "empty-state" | "column-header" | "group-selection-controls" | "card-covers";
   bag: "file-view" | "embed";
   /** The calendar scale to construct (month/week/day) or the timeline scale to construct
    *  (day/week/month/quarter/year) — whichever the named `renderer` owns. A ScenarioSpec names
@@ -235,6 +273,132 @@ export interface ScenarioSpec {
    * default; every existing consumer is unaffected.
    */
   miniCalendar?: boolean;
+  /**
+   * Opt-in, renderer "toolbar" only: after the toolbar mounts, clicks one of its own trigger
+   * buttons to open the surface it owns — "utilities" clicks the More-tools button
+   * (`renderUtilitiesOverflowButton`'s own onclick), "add-view" clicks the view-tab plus button
+   * (`showAddViewMenu`'s own onclick). The same anchors a device tap reaches; nothing is
+   * hand-applied. Undefined leaves the toolbar closed, which is what the plain toolbar
+   * scenarios photograph.
+   */
+  toolbarPopover?: "utilities" | "add-view";
+  /**
+   * Opt-in, renderer "toolbar" only: the search text `renderSearch` reads from the view state.
+   * A non-empty value is what widens the collapsed 28px wrap into its active state and reveals
+   * the clear button — the real `DatabaseViewState.searchText` a typed query produces. Defaults
+   * to the empty string every state starts with.
+   */
+  searchText?: string;
+  /**
+   * Opt-in, renderer "active-view-controls" only: which chip groups the state carries.
+   * "filter" renders the filter group alone, "sort" the sort group alone, "both" the shared
+   * rail with sort chips first and the AND/OR logic button between the groups. Defaults to
+   * "both", the only shape the fixture this supersedes photographs.
+   */
+  rules?: "filter" | "sort" | "both";
+  /**
+   * Opt-in, renderer "active-rule-popover" only: which single-rule editor the popover opens —
+   * `ActiveRulePopoverRenderer.toggleFilter` or `toggleSort`, the same entries the chip row's
+   * edit buttons call.
+   */
+  ruleKind?: "filter" | "sort";
+  /**
+   * Opt-in, renderer "filter-panel" only: how deep the filter tree the panel renders is. "flat"
+   * is a single AND group of leaf rules (the panel header drops its own logic button, because
+   * the group carries it); "nested" is a group holding a NOT node and an inner OR group — the
+   * deepest shape `MAX_FILTER_GROUP_DEPTH` allows for the wrapped subtree. Defaults to "flat".
+   */
+  filterDepth?: "flat" | "nested";
+  /**
+   * Opt-in, renderer "sort-panel" only: renders the calendar-layout hint above the empty state.
+   * `SortPanelRenderer` reads `config.viewType === "calendar"` to decide, so this sets that real
+   * config value and leaves the rule list empty, which is the only state the hint appears in.
+   */
+  calendarHint?: boolean;
+  /**
+   * Opt-in, renderer "record-detail-body" only: which note-body mode `mountNoteBodyRegion`
+   * mounts. "empty" is a record whose note is only frontmatter (the placeholder line);
+   * "editing" is the region after `beginEdit` swapped the rendered body for its textarea;
+   * "read" is a rendered body with content. Defaults to "read".
+   */
+  recordBodyVariant?: "empty" | "editing" | "read";
+  /**
+   * Opt-in, renderer "cell-editors" only: which cell editor `CellRenderer.startEdit` opens on
+   * the constructed row. "text" opens the markdown textarea editor (with its format toolbar) on
+   * one cell and the single-line number editor on another; "select" opens the option-list
+   * editor. Defaults to "text".
+   */
+  editorKind?: "text" | "select";
+  /**
+   * Opt-in, renderer "date-picker" only: whether the picker's column type is datetime. Sets the
+   * `includeTime` flag the trigger reads for its clock icon and the popover reads for its hour
+   * and minute segments.
+   */
+  includeTime?: boolean;
+  /**
+   * Opt-in, renderer "board" only: `boardExtensionsEnabled` — the real config flag that switches
+   * the board from the reference kanban vocabulary to the plugin's own extension classes
+   * (`db-board`, `db-board-column-checkbox`, `db-board-card-checkbox`, the card tree with
+   * covers). Off by default, matching the board every existing consumer constructs.
+   */
+  boardExtensions?: boolean;
+  /**
+   * Opt-in, renderer "board" only, read with `boardExtensions`: sets `boardImageField` to a real
+   * schema column the rows resolve no image for, so `renderCover` draws its placeholder cover on
+   * every card — the empty-cover state, which is the only one a capture without a vault can show.
+   */
+  boardImageField?: boolean;
+  /**
+   * Opt-in, renderer "board" only: appends an empty group through the same
+   * `withEmptyOptionGroups` call the hosts make, by configuring one select option the rows never
+   * carry. The reference board then renders a column with a header, a zero count and an empty
+   * cards container beside the populated lanes.
+   */
+  boardEmptyColumn?: boolean;
+  /**
+   * Opt-in, renderer "gallery" only: sets `galleryImageField` to a real schema column the rows
+   * resolve no image for, so `renderCover` draws its placeholder cover on every card.
+   */
+  galleryImageField?: boolean;
+  /**
+   * Opt-in, renderer "table" only: renders the grouped table instead of the flat one — the
+   * `renderGroupedTable` public entry the host calls when a group field is configured, with a
+   * two-level group tree and per-group summary rules so the divider rows carry their badges and
+   * computed totals.
+   */
+  tableGroups?: boolean;
+  /**
+   * Opt-in, renderer "table" only: configures `summaryRules` for a currency (sum + average), a
+   * date (earliest) and a select (unique) column, so the footer the table renders after its body
+   * stacks real calculated results instead of the + Calculate hints alone.
+   */
+  tableFooter?: boolean;
+  /**
+   * Opt-in, renderer "table" only: points the table's select/status/multi-select columns at a
+   * sixteen-colour option palette and gives one multi-select row every value, so a single capture
+   * shows the whole `status-color-*` vocabulary as the renderer paints it.
+   */
+  fullStatusPalette?: boolean;
+  /**
+   * Opt-in, renderer "table" only: `showRecordIcon` plus a real `renderRecordIcon` bag member,
+   * so the table draws its 28px icon gutter and each row's icon span. Token variety is bounded
+   * by the bundle: Obsidian's `getIconIds` is out of scope, so lucide tokens degrade to the
+   * default file-text fallback and only emoji tokens render their own variant.
+   */
+  recordIconColumn?: boolean;
+  /**
+   * Opt-in, renderer "table" only: wires the `setupColumnHeader` bag member to a real
+   * `ColumnHeaderController.setup` — the same wiring `database-view.ts` uses — so every header
+   * carries its production menu trigger, resize handle and drag affordances instead of the
+   * plain-text stub.
+   */
+  columnHeaderController?: boolean;
+  /**
+   * Opt-in, renderer "table" only: stretches one column's label past the header width, the
+   * truncation state the column-header fixture exists to photograph. Read together with
+   * `columnHeaderController`.
+   */
+  longHeaderLabel?: boolean;
 }
 
 export interface AssertionResult {
@@ -264,6 +428,8 @@ export interface ScenarioOutcome {
 // list capture mounted 37 DOM rows below the fold at 1600 rows with no bounded scroll height in the
 // capture host, which is a picture of an empty page, not of the renderer.
 export const CAPTURE_ROWS = 18;
+/** Rows for a capture whose subject sits under the table: few enough that a phone frames both. */
+const FOOTER_CAPTURE_ROWS = 6;
 // Every filled cell rather than the structural-cost benches' sparse fill: a capture exists to show
 // what a select pill, a checkbox and a currency figure look like, and a mostly-empty row shows
 // mostly placeholders instead.
@@ -284,6 +450,17 @@ const CAPTURE_OPTIONS: StatusOptionDef[] = [
   { value: "Done", color: "green" },
   { value: "Blocked", color: "red" },
 ];
+
+/**
+ * Gives every row an empty metadata cache, in place. `resolveCoverImage` reads `row.cache` first
+ * and only reaches for `app.metadataCache` when the row has none — and this harness renders
+ * without an App, so a cover-drawing scenario that leaves the cache unset throws rather than
+ * rendering. An empty cache is also the honest state: no embed resolves an image, which is the
+ * only cover state a render without a vault can reach.
+ */
+function applyEmptyMetadataCache(rows: RowData[]): void {
+  for (const row of rows) (row as unknown as { cache?: unknown }).cache = {};
+}
 
 /**
  * Points every "mixed"-kind select/status/multi-select column (besides `excludeKey`, a caller's
@@ -894,6 +1071,204 @@ function tagTimelineToolbarRenders(): void {
   };
 }
 
+function tagToolbarRenders(): void {
+  const original = ToolbarRenderer.prototype.render;
+  ToolbarRenderer.prototype.render = function taggedToolbarRender(
+    containerEl: HTMLElement,
+    viewEntries: ToolbarViewEntry[],
+    currentDbIndex: number,
+    currentViewIndex: number,
+    state: DatabaseViewState,
+    actions: ToolbarActions,
+  ): void {
+    original.call(this, containerEl, viewEntries, currentDbIndex, currentViewIndex, state, actions);
+    containerEl.setAttribute(PROVENANCE_ATTR, "toolbar-renderer");
+  };
+}
+
+function tagActiveViewControlsRenders(): void {
+  const original = ActiveViewControlsRenderer.prototype.render;
+  ActiveViewControlsRenderer.prototype.render = function taggedRender(
+    containerEl: HTMLElement,
+    config: ViewConfig,
+    state: DatabaseViewState,
+    actions: ActiveViewControlsActions,
+  ): void {
+    original.call(this, containerEl, config, state, actions);
+    containerEl.setAttribute(PROVENANCE_ATTR, "active-view-controls-renderer");
+  };
+}
+
+function tagActiveRulePopoverRenders(): void {
+  const patch = (key: "toggleFilter" | "toggleSort"): void => {
+    const original = ActiveRulePopoverRenderer.prototype[key];
+    ActiveRulePopoverRenderer.prototype[key] = function taggedToggle(
+      this: ActiveRulePopoverRenderer,
+      options: { containerEl: HTMLElement },
+    ): void {
+      (original as (options: { containerEl: HTMLElement }) => void).call(this, options);
+      options.containerEl.setAttribute(PROVENANCE_ATTR, "active-rule-popover-renderer");
+    };
+  };
+  patch("toggleFilter");
+  patch("toggleSort");
+}
+
+function tagFilterPanelRenders(): void {
+  const original = FilterPanelRenderer.prototype.render;
+  FilterPanelRenderer.prototype.render = function taggedRender(
+    containerEl: HTMLElement,
+    visible: boolean,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions,
+    anchorEl?: HTMLElement,
+  ): void {
+    original.call(this, containerEl, visible, state, config, actions, anchorEl);
+    containerEl.setAttribute(PROVENANCE_ATTR, "filter-panel-renderer");
+  };
+}
+
+function tagSortPanelRenders(): void {
+  const original = SortPanelRenderer.prototype.render;
+  SortPanelRenderer.prototype.render = function taggedRender(
+    containerEl: HTMLElement,
+    visible: boolean,
+    config: ViewConfig,
+    state: DatabaseViewState,
+    actions: SortPanelActions,
+    anchorEl?: HTMLElement,
+  ): void {
+    original.call(this, containerEl, visible, config, state, actions, anchorEl);
+    containerEl.setAttribute(PROVENANCE_ATTR, "sort-panel-renderer");
+  };
+}
+
+function tagViewConfigRenders(): void {
+  const original = ViewConfigPanelRenderer.prototype.render;
+  ViewConfigPanelRenderer.prototype.render = function taggedRender(
+    containerEl: HTMLElement,
+    visible: boolean,
+    config: ViewConfig | undefined,
+    actions: ViewConfigPanelActions,
+    anchorEl?: HTMLElement,
+  ): void {
+    original.call(this, containerEl, visible, config, actions, anchorEl);
+    containerEl.setAttribute(PROVENANCE_ATTR, "view-config-panel-renderer");
+  };
+}
+
+function tagColumnManagerRenders(): void {
+  const original = ColumnManagerRenderer.prototype.render;
+  ColumnManagerRenderer.prototype.render = function taggedRender(
+    containerEl: HTMLElement,
+    visible: boolean,
+    config: ViewConfig,
+    state: DatabaseViewState,
+    columns: ColumnDef[],
+    actions: ColumnManagerActions,
+    anchorEl?: HTMLElement,
+  ): void {
+    original.call(this, containerEl, visible, config, state, columns, actions, anchorEl);
+    containerEl.setAttribute(PROVENANCE_ATTR, "column-manager-renderer");
+  };
+}
+
+function tagTableGroupedRenders(): void {
+  const original = TableRenderer.prototype.renderGroupedTable;
+  TableRenderer.prototype.renderGroupedTable = function taggedRenderGroupedTable(
+    containerEl: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+    groups: TableGroup[],
+    groupField?: string,
+    emptyState?: unknown,
+  ): void {
+    original.call(this, containerEl, config, rows, groups, groupField, emptyState);
+    containerEl.setAttribute(PROVENANCE_ATTR, "table-renderer");
+  };
+}
+
+function tagSummaryRenders(): void {
+  const original = SummaryRenderer.prototype.render;
+  SummaryRenderer.prototype.render = function taggedRender(
+    containerEl: HTMLElement,
+    rows: RowData[],
+    config?: ViewConfig,
+    database?: unknown,
+    options?: unknown,
+  ): void {
+    original.call(this, containerEl, rows, config, database, options);
+    containerEl.setAttribute(PROVENANCE_ATTR, "summary-renderer");
+  };
+}
+
+function tagEmptyStateRenders(): void {
+  const patch = (key: "renderCard" | "renderHero"): void => {
+    const original = EmptyStateRenderer.prototype[key];
+    EmptyStateRenderer.prototype[key] = function taggedRender(
+      this: EmptyStateRenderer,
+      container: HTMLElement,
+    ): HTMLElement {
+      const built = (original as (container: HTMLElement, options: never) => HTMLElement)
+        .call(this, container, arguments[1]);
+      container.setAttribute(PROVENANCE_ATTR, "empty-state-renderer");
+      return built;
+    };
+  };
+  patch("renderCard");
+  patch("renderHero");
+}
+
+function tagColumnHeaderSetups(): void {
+  const original = ColumnHeaderController.prototype.setup;
+  ColumnHeaderController.prototype.setup = function taggedSetup(th: HTMLElement, col: ColumnDef): void {
+    original.call(this, th, col);
+    th.closest(".note-database-container")?.setAttribute(PROVENANCE_ATTR, "column-header-controller");
+  };
+}
+
+function tagCellStartEdits(): void {
+  const original = CellRenderer.prototype.startEdit;
+  CellRenderer.prototype.startEdit = function taggedStartEdit(
+    target: HTMLElement,
+    row: RowData,
+    col: ColumnDef,
+    ...rest: unknown[]
+  ): void {
+    original.call(this, target, row, col, ...rest);
+    target.closest(".note-database-container")?.setAttribute(PROVENANCE_ATTR, "cell-renderer");
+  };
+}
+
+function tagListGroupedRenders(): void {
+  const original = ListRenderer.prototype.renderGrouped;
+  ListRenderer.prototype.renderGrouped = function taggedRenderGrouped(
+    container: HTMLElement,
+    config: ViewConfig,
+    groups: ListGroup[],
+    groupField: string,
+    emptyState?: unknown,
+  ): void {
+    original.call(this, container, config, groups, groupField, emptyState);
+    container.setAttribute(PROVENANCE_ATTR, "list-renderer");
+  };
+}
+
+function tagGalleryGroupedRenders(): void {
+  const original = GalleryRenderer.prototype.renderGrouped;
+  GalleryRenderer.prototype.renderGrouped = function taggedRenderGrouped(
+    container: HTMLElement,
+    config: ViewConfig,
+    groups: GalleryGroup[],
+    groupField: string,
+    emptyState?: unknown,
+  ): void {
+    original.call(this, container, config, groups, groupField, emptyState);
+    container.setAttribute(PROVENANCE_ATTR, "gallery-renderer");
+  };
+}
+
 // Armed once at module load, in the browser only: the harness is bundled into
 // the render entry and never runs outside it.
 tagListRenders();
@@ -906,6 +1281,20 @@ tagChartRenders();
 tagChartToolbarRenders();
 tagCalendarToolbarRenders();
 tagTimelineToolbarRenders();
+tagToolbarRenders();
+tagActiveViewControlsRenders();
+tagActiveRulePopoverRenders();
+tagFilterPanelRenders();
+tagSortPanelRenders();
+tagViewConfigRenders();
+tagColumnManagerRenders();
+tagTableGroupedRenders();
+tagSummaryRenders();
+tagEmptyStateRenders();
+tagColumnHeaderSetups();
+tagCellStartEdits();
+tagListGroupedRenders();
+tagGalleryGroupedRenders();
 
 function provenanceResult(container: HTMLElement, expected: string): AssertionResult {
   const marker = container.getAttribute(PROVENANCE_ATTR);
@@ -1404,6 +1793,442 @@ function toolbarPopoverAssertion(container: HTMLElement, selector: string): Asse
   };
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 6B. SURFACE BUILDERS
+// ───────────────────────────────────────────────────────────────────
+//
+// The toolbar, panel, popover and field surfaces read the same capture-sized typed dataset the
+// view branches build, but each one's public entry takes a different wrapper: the panels and
+// popovers take a view state object, the toolbar takes a database entry list, the field editors
+// take a row. These helpers build those wrappers from the benches' own columns and rows so the
+// branches stay data-shaped rather than each inventing its own.
+
+/** The first non-name column of a type, for the surfaces that need one specific column kind. */
+function columnOfType(columns: ColumnDef[], type: ColumnDef["type"]): ColumnDef | undefined {
+  return columns.find((col) => col.key !== "file.name" && col.type === type);
+}
+
+/** The view state every toolbar/panel surface reads, with the given members overlaid. */
+function makeSurfaceState(overrides: Partial<DatabaseViewState> = {}): DatabaseViewState {
+  return {
+    searchText: "",
+    statusFilter: "",
+    groupByField: "",
+    filters: [],
+    hiddenColumns: new Set(),
+    filterLogic: "and",
+    sortColumn: undefined,
+    sortDirection: "asc",
+    sortRules: [],
+    ...overrides,
+  };
+}
+
+/** A one-view database over the given schema, the shape ToolbarRenderer.render takes entries of. */
+function makeSurfaceDatabase(columns: ColumnDef[], view: ViewConfig): DatabaseConfig {
+  return {
+    id: "bench",
+    name: "Bench",
+    sourceFolder: "notes",
+    schema: { columns, computedFields: [] } as unknown as RecordSchema,
+    computedSyncMode: "manual",
+    views: [view],
+  } as DatabaseConfig;
+}
+
+/**
+ * A real, connected anchor for the anchored panels and popovers. The production positioners
+ * refuse a detached anchor (`positionToolbarPopover` returns without placing), so the surfaces
+ * get a button the way a toolbar gives them one — visually hidden so the capture shows only the
+ * panel, at the top-left inside the container where a real toolbar button would sit.
+ */
+function makeHiddenAnchor(container: HTMLElement, cls: string): HTMLElement {
+  // A span, not a button: the anchored surfaces only read this element's box to position
+  // themselves, and a harness-only button would be counted as a real under-floor control by the
+  // touch-target lane, which measures this same bundle.
+  return container.createEl("span", {
+    cls,
+    attr: {
+      "aria-hidden": "true",
+      style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
+    },
+  });
+}
+
+/** The toolbar's action bag, every required member present and none of them doing work. */
+function makeToolbarActions(): ToolbarActions {
+  return {
+    selectDatabase: () => undefined,
+    moveDatabase: () => undefined,
+    selectViewInView: () => undefined,
+    addView: () => undefined,
+    deleteView: () => undefined,
+    renameView: () => undefined,
+    setViewIcon: () => undefined,
+    moveView: () => undefined,
+    renameDatabase: () => undefined,
+    updateDatabaseDescription: () => undefined,
+    editDatabaseIcon: () => undefined,
+    editViewIcon: () => undefined,
+    showDatabaseIcon: true,
+    toggleDatabaseIcon: () => undefined,
+    addDatabase: () => undefined,
+    deleteDatabase: () => undefined,
+    copyCurrentDatabase: () => undefined,
+    copyCurrentView: () => undefined,
+    copyViewCode: () => undefined,
+    openDatabaseFile: () => undefined,
+    exportData: () => undefined,
+    exportCsvMarkdownZip: () => undefined,
+    setViewType: () => undefined,
+    setDisplayWidth: () => undefined,
+    setSearchText: () => undefined,
+    onSearchFocus: () => undefined,
+    setGroupByField: () => undefined,
+    setGroupOrderMode: () => undefined,
+    setShowEmptyGroups: () => undefined,
+    setGroupDateMode: () => undefined,
+    setGroupRowLimit: () => undefined,
+    setBoardSubgroupEnabled: () => undefined,
+    setBoardSubgroupField: () => undefined,
+    toggleViewConfig: () => undefined,
+    configureGroupOrder: () => undefined,
+    toggleSortPanel: () => undefined,
+    toggleChartOptions: () => undefined,
+    toggleCalendarOptions: () => undefined,
+    updateViewConfig: () => undefined,
+    updateTimelineScale: () => undefined,
+    syncComputedFields: () => undefined,
+    refreshDatabase: () => undefined,
+    toggleFilterPanel: () => undefined,
+    toggleColumnManager: () => undefined,
+    closeToolbarPopovers: () => undefined,
+    openFullView: () => undefined,
+    createEntry: () => undefined,
+    getCreateEntryPosition: () => undefined,
+    getTimelineInvalidEventCount: () => 0,
+    openTimelineInvalidEvents: () => undefined,
+    createRecordIconField: () => undefined,
+    setDefaultTemplate: () => undefined,
+    createEntryFromTemplate: () => undefined,
+    showDatabaseChrome: true,
+  };
+}
+
+/** The capture-sized typed dataset the panel branches share: list columns, 18 rows, full fill. */
+function makeSurfaceListData(): { columns: ColumnDef[]; rows: RowData[] } {
+  const columns = makeListColumns(LIST_COLUMNS, "mixed");
+  const rows = makeListRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
+  applyCaptureOptions(columns, rows);
+  return { columns, rows };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 6C. SURFACE ASSERTIONS
+// ───────────────────────────────────────────────────────────────────
+
+function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const tabs = container.querySelectorAll(".db-view-tab").length;
+  results.push({
+    name: "the toolbar drew its view tabs and clusters",
+    pass: Boolean(container.querySelector(".db-toolbar")) && tabs > 0
+      && Boolean(container.querySelector(".db-toolbar-right")),
+    detail: `${tabs} view tab(s), query/properties/utilities/creation clusters `
+      + `${container.querySelectorAll(".db-toolbar-cluster").length} present`,
+  });
+  if (scenario.toolbarPopover === "utilities") {
+    results.push(toolbarPopoverAssertion(container, ".db-toolbar-utilities-popover"));
+  }
+  if (scenario.toolbarPopover === "add-view") {
+    results.push(toolbarPopoverAssertion(container, ".db-add-view-popover"));
+  }
+  if (scenario.searchText) {
+    const active = container.querySelector(".db-search-control.is-active");
+    const hasText = container.querySelector<HTMLInputElement>(".db-search-input")?.value === scenario.searchText;
+    results.push({
+      name: "the search control widened for its text",
+      pass: Boolean(active) && hasText,
+      detail: active ? `is-active present, input holds "${scenario.searchText}"`
+        : "the search wrap stayed collapsed despite the state's search text",
+    });
+  }
+  return results;
+}
+
+function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const rail = container.querySelector(".db-active-view-controls");
+  const chips = container.querySelectorAll(".db-active-control-chip").length;
+  results.push({
+    name: "the active-view-controls rail drew its chips",
+    pass: Boolean(rail) && chips > 0,
+    detail: `${chips} chip(s) in ${container.querySelectorAll(".db-active-control-group").length} group(s)`,
+  });
+  if (scenario.rules !== "sort") {
+    results.push({
+      name: "two filters show the AND/OR logic button",
+      pass: Boolean(container.querySelector(".db-active-control-logic")),
+      detail: container.querySelector(".db-active-control-logic") ? "logic button present"
+        : "logic button missing — the filter group renders it only when more than one rule is effective",
+    });
+  }
+  return results;
+}
+
+function activeRulePopoverAssertions(container: HTMLElement, kind: "filter" | "sort"): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-active-rule-popover");
+  const fieldDropdown = container.querySelector(kind === "filter"
+    ? ".db-filter-field-dropdown" : ".db-sort-field-dropdown");
+  const valueDropdown = container.querySelector(kind === "filter"
+    ? ".db-filter-value-dropdown" : ".db-sort-direction-dropdown");
+  results.push({
+    name: `the active-rule popover opened its ${kind} single-rule editor`,
+    pass: Boolean(panel) && Boolean(fieldDropdown) && Boolean(valueDropdown),
+    detail: [panel && "panel", fieldDropdown && "field dropdown", valueDropdown && "value dropdown"]
+      .filter(Boolean).join(", ") || "neither the panel nor its dropdowns mounted",
+  });
+  results.push({
+    name: "the single-rule editor carries no remove button",
+    pass: panel !== null && panel.querySelectorAll("button.db-panel-button").length === 0,
+    detail: panel ? `${panel.querySelectorAll("button.db-panel-button").length} remove button(s), want 0` : "no panel",
+  });
+  return results;
+}
+
+function filterPanelAssertions(container: HTMLElement, nested: boolean): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-filter-panel");
+  results.push({
+    name: "the filter panel drew its tree",
+    pass: panel !== null && Boolean(panel.querySelector(".db-source-rule-node")),
+    detail: panel ? "panel and at least one rule node present" : "no .db-filter-panel",
+  });
+  results.push({
+    name: nested ? "the nested tree drew its NOT node and inner OR group"
+      : "the flat tree draws its leaves without a NOT node",
+    pass: nested
+      ? Boolean(panel?.querySelector(".db-source-rule-not"))
+        && Boolean(panel?.querySelector('.db-source-rule-logic[title*="OR"], .db-source-rule-logic'))
+      : !panel?.querySelector(".db-source-rule-not") && panel?.querySelectorAll(".db-panel-row").length === 3,
+    detail: nested
+      ? `${panel?.querySelectorAll(".db-source-rule-not").length} NOT node(s), `
+        + `${panel?.querySelectorAll(".db-source-rule-group").length} group(s)`
+      : `${panel?.querySelectorAll(".db-panel-row").length} leaf row(s), `
+        + `${panel?.querySelectorAll(".db-source-rule-not").length} NOT node(s)`,
+  });
+  return results;
+}
+
+function sortPanelAssertions(container: HTMLElement, calendarHint: boolean): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-sort-panel");
+  results.push({
+    name: "the sort panel drew its rules",
+    pass: panel !== null && Boolean(panel.querySelector(".db-sort-rule-row")),
+    detail: `${panel?.querySelectorAll(".db-sort-rule-row").length ?? 0} rule row(s)`,
+  });
+  const firstUp = panel?.querySelector<HTMLButtonElement>(".db-sort-rule-row button[title='Move up']");
+  results.push({
+    name: "the first rule's move-up control is disabled",
+    pass: firstUp ? firstUp.disabled : false,
+    detail: firstUp ? `disabled=${firstUp.disabled}` : "no move-up control",
+  });
+  if (calendarHint) {
+    results.push({
+      name: "the calendar view drew its layout hint above the empty state",
+      pass: Boolean(panel?.querySelector(".db-panel-hint")) && Boolean(panel?.querySelector(".db-panel-empty")),
+      detail: panel ? `${panel.querySelectorAll(".db-panel-hint").length} hint(s), `
+        + `${panel.querySelectorAll(".db-panel-empty").length} empty state(s)` : "no panel",
+    });
+  }
+  return results;
+}
+
+function viewConfigAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-view-config-panel");
+  results.push({
+    name: "the view-config panel drew its database and view sections",
+    pass: panel !== null
+      && Boolean(panel.querySelector('.db-view-config-section-title[data-scope="database"]'))
+      && Boolean(panel.querySelector('.db-view-config-section-title[data-scope="view"]')),
+    detail: panel ? `${panel.querySelectorAll(".db-view-config-row").length} config row(s)`
+      : "no .db-view-config-panel",
+  });
+  return results;
+}
+
+function columnManagerAssertions(container: HTMLElement, columns: ColumnDef[]): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-column-manager");
+  const rows = panel?.querySelectorAll(".db-column-manager-row").length ?? 0;
+  results.push({
+    name: "the column manager drew one row per property",
+    pass: Boolean(panel) && rows === columns.length,
+    detail: `${rows} row(s) for ${columns.length} column(s)`,
+  });
+  results.push({
+    name: "the column manager drew its add-property row",
+    pass: Boolean(panel?.querySelector(".db-column-manager-add-row")),
+    detail: panel?.querySelector(".db-column-manager-add-row") ? "add row present" : "add row missing",
+  });
+  return results;
+}
+
+function recordDetailAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-record-detail-panel");
+  results.push({
+    name: "the record detail panel drew its header and fields",
+    pass: Boolean(panel?.querySelector(".db-record-detail-header"))
+      && Boolean(panel?.querySelector(".db-record-detail-fields")),
+    detail: panel ? `${panel.querySelectorAll(".db-record-detail-field").length} field(s)`
+      : "no .db-record-detail-panel",
+  });
+  results.push({
+    name: "the panel carries the sheet chrome on a phone and the close button",
+    pass: Boolean(panel?.querySelector(".db-cell-edit-close")),
+    detail: panel?.querySelector(".db-cell-edit-close") ? "close button present" : "close button missing",
+  });
+  return results;
+}
+
+function recordDetailBodyAssertions(container: HTMLElement, variant: "empty" | "editing" | "read"): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const body = container.querySelector(".db-record-detail-body");
+  const rendered = body?.querySelector(".db-record-detail-body-rendered");
+  const editor = body?.querySelector(".db-record-detail-body-editor");
+  const pass = variant === "editing"
+    ? Boolean(body?.classList.contains("is-editing")) && Boolean(editor)
+    : variant === "empty"
+      ? Boolean(rendered?.classList.contains("is-empty")) && (rendered?.textContent || "").trim().length > 0
+      : Boolean(rendered) && (rendered?.textContent || "").trim().length > 0;
+  results.push({
+    name: `the note body region mounted its ${variant} mode`,
+    pass,
+    detail: variant === "editing"
+      ? `${body ? "is-editing on the region" : "no region"}, editor ${editor ? "present" : "missing"}`
+      : `${rendered ? "rendered body" : "no rendered body"}${rendered?.classList.contains("is-empty") ? " (empty placeholder)" : ""}`,
+  });
+  return results;
+}
+
+function recordPeekAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-record-peek-panel");
+  results.push({
+    name: "the record peek docked its panel beside the table",
+    pass: Boolean(panel?.querySelector(".db-record-peek-header"))
+      && Boolean(panel?.querySelector(".db-record-peek-properties")),
+    detail: panel ? `${panel.querySelectorAll(".db-record-peek-field").length} peek field(s)`
+      : "no .db-record-peek-panel",
+  });
+  results.push({
+    name: "the peek carries its hidden-properties disclosure",
+    pass: Boolean(panel?.querySelector(".db-record-peek-hidden-toggle")),
+    detail: panel?.querySelector(".db-record-peek-hidden-toggle") ? "disclosure present" : "disclosure missing",
+  });
+  return results;
+}
+
+function summaryAssertions(container: HTMLElement, ruleCount: number): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const summary = container.querySelector(".db-summary");
+  const items = summary?.querySelectorAll(".db-summary-item").length ?? 0;
+  results.push({
+    name: "the summary row drew its total and its rules",
+    pass: Boolean(summary) && items >= 1 + ruleCount,
+    detail: `${items} item(s), want at least ${1 + ruleCount} (total + ${ruleCount} rule(s))`,
+  });
+  return results;
+}
+
+function ownedMenuAssertions(doc: Document, wantSheet: boolean): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const menu = doc.querySelector(".db-owned-menu");
+  results.push({
+    name: "the owned menu mounted on the document body",
+    pass: Boolean(menu) && menu.querySelectorAll(".db-menu-item").length > 0,
+    detail: menu ? `${menu.querySelectorAll(".db-menu-item").length} menu row(s)` : "no .db-owned-menu",
+  });
+  if (wantSheet) {
+    results.push({
+      name: "the phone menu carries the bottom-sheet chrome",
+      pass: Boolean(menu?.classList.contains("db-mobile-bottom-sheet")),
+      detail: menu?.classList.contains("db-mobile-bottom-sheet") ? "sheet classes present"
+        : "menu mounted as a popover, not a sheet",
+    });
+  }
+  return results;
+}
+
+function cellEditorAssertions(container: HTMLElement, kind: "text" | "select"): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  if (kind === "text") {
+    const textPopover = container.querySelector('.db-cell-edit-popover[data-note-database-editor-kind="text"]');
+    const linePopover = container.querySelector(".db-cell-line-edit-popover");
+    results.push({
+      name: "the text editor opened its markdown toolbar and textarea",
+      pass: Boolean(textPopover?.querySelector(".db-md-toolbar")) && Boolean(textPopover?.querySelector("textarea.db-cell-textarea")),
+      detail: textPopover ? "popover with toolbar and textarea present" : "no text-edit popover",
+    });
+    results.push({
+      name: "the number cell opened its single-line editor",
+      pass: Boolean(linePopover?.querySelector("input.db-cell-line-input")),
+      detail: linePopover ? "line editor present" : "no line-edit popover",
+    });
+  } else {
+    const optionPopover = container.querySelector(".db-cell-option-popover");
+    results.push({
+      name: "the select cell opened its option list",
+      pass: Boolean(optionPopover?.querySelector(".db-cell-option-item")),
+      detail: optionPopover ? `${optionPopover.querySelectorAll(".db-cell-option-item").length} option row(s)`
+        : "no .db-cell-option-popover",
+    });
+  }
+  return results;
+}
+
+function datePickerAssertions(container: HTMLElement, includeTime: boolean): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const popover = container.querySelector(".db-date-value-popover");
+  const trigger = container.querySelector(".db-date-value-field");
+  results.push({
+    name: "the date trigger click opened its value popover",
+    pass: Boolean(trigger) && Boolean(popover?.querySelector(".db-calendar-mini-grid")),
+    detail: popover ? "popover with mini calendar present" : "no .db-date-value-popover",
+  });
+  if (includeTime) {
+    results.push({
+      name: "the datetime picker drew its time segments",
+      pass: Boolean(popover?.classList.contains("is-datetime")) && Boolean(popover?.querySelector(".db-hour-seg")),
+      detail: popover?.classList.contains("is-datetime") ? "is-datetime and hour segment present"
+        : "datetime flag missing from the popover",
+    });
+  }
+  return results;
+}
+
+function bodySurfaceAssertion(container: HTMLElement, selector: string, name: string): AssertionResult {
+  return {
+    name,
+    pass: Boolean(container.querySelector(selector)),
+    detail: container.querySelector(selector) ? `${selector} present` : `${selector} missing`,
+  };
+}
+
+function multiMarkerAssertion(container: HTMLElement, markers: string[], name: string): AssertionResult {
+  const found = markers.filter((selector) => container.querySelector(selector));
+  return {
+    name,
+    pass: found.length === markers.length,
+    detail: `${found.length}/${markers.length} markers present`
+      + (found.length === markers.length ? "" : `; missing: ${markers.filter((s) => !found.includes(s)).join(", ")}`),
+  };
+}
+
 function timelineAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
   // The bench leaves timelineLocalExtensions unset, so the renderer's default path is the
@@ -1481,6 +2306,41 @@ function armPerRowReadAtRenderEntry(
   };
 }
 
+// The measurement lanes mount every scenario in one page, and the surfaces that portal to the
+// document body (a phone sheet, a menu, a picker, an anchored panel) would otherwise accumulate
+// across mounts and be measured by every scenario that follows. The production open entries close
+// their own predecessors, but nothing closes them when the NEXT scenario is a different surface,
+// so the harness closes the previous mount's body surfaces before each new one — the same
+// lifecycle obligation the runner already has for its own container.
+//
+// The named closes below run first, so each surface that owns a teardown gets it (listeners
+// unbound, sheet chrome unwound, focus returned). The body sweep after them is the backstop for
+// every surface that has no exported close: a panel this file would otherwise have to enumerate
+// one by one, and a new one nobody remembered to add. Both run at the START of the next mount
+// rather than at the end of this one, so a capture — which photographs the page after the runner
+// has already handed the container back — still sees the surface its scenario opened.
+let leftoverOwnedMenu: { close: () => void } | null = null;
+let leftoverIconPickerClose: (() => void) | null = null;
+// A branch that has to re-enter a state after the runner's own teardown schedules the re-entry on
+// the next task. The measurement lanes mount every scenario into one page, so a timer still
+// pending when the next scenario mounts would land inside that scenario's DOM instead — the
+// mounts would stop being independent, and a lane measuring one of them would read another's.
+let leftoverDeferred: number | null = null;
+// The body children a page carries before any scenario mounts: its own scaffolding, never a
+// renderer's output. Captured on the first mount, since the harness is loaded before the page
+// has one.
+let pristineBodyChildren: Set<Element> | null = null;
+
+function sweepPortaledSurfaces(doc: Document): void {
+  if (!pristineBodyChildren) {
+    pristineBodyChildren = new Set(Array.from(doc.body.children));
+    return;
+  }
+  for (const el of Array.from(doc.body.children)) {
+    if (!pristineBodyChildren.has(el)) el.remove();
+  }
+}
+
 export function runRenderAssertions(
   host: HTMLElement,
   scenario: ScenarioSpec,
@@ -1488,6 +2348,15 @@ export function runRenderAssertions(
   onMounted?: (container: HTMLElement, results: AssertionResult[]) => void,
 ): ScenarioOutcome {
   const results: AssertionResult[] = [];
+  leftoverOwnedMenu?.close();
+  leftoverOwnedMenu = null;
+  closeRecordDetailPanel();
+  closeActiveOptionColorPicker(host.ownerDocument);
+  leftoverIconPickerClose?.();
+  leftoverIconPickerClose = null;
+  if (leftoverDeferred !== null) window.clearTimeout(leftoverDeferred);
+  leftoverDeferred = null;
+  sweepPortaledSurfaces(host.ownerDocument);
   const container = host.createDiv({ cls: "note-database-container" });
   const app = undefined as unknown as App;
   let bagKeys: string[] = [];
@@ -1542,8 +2411,34 @@ export function runRenderAssertions(
       applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
       if (scenario.subtaskTree) applyCaptureSubtaskTree(rows, BOARD_GROUP_FIELD);
     }
-    const groups = makeBoardGroups(rows, BOARD_GROUPS);
-    const config = makeBoardConfig(columns);
+    let groups = makeBoardGroups(rows, BOARD_GROUPS);
+    const config = {
+      ...makeBoardConfig(columns),
+      ...(scenario.boardExtensions ? { boardExtensionsEnabled: true } : {}),
+      ...(scenario.boardImageField ? { boardImageField: columnOfType(columns, "text")?.key } : {}),
+    } as ViewConfig;
+    if (scenario.boardImageField) applyEmptyMetadataCache(rows);
+    if (scenario.boardEmptyColumn) {
+      // The empty lane comes from the same data call the hosts make: a configured select option
+      // no row carries is backfilled as a zero-row group. The group column's options are the
+      // values the rows actually hold plus one that none of them do.
+      const groupCol = columns.find((col) => col.key === BOARD_GROUP_FIELD);
+      if (groupCol) {
+        const distinct = [...new Set(rows.map((row) =>
+          String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[BOARD_GROUP_FIELD])))];
+        groupCol.statusOptions = [...distinct, "empty-lane"]
+          .map((value, i) => ({ value, color: CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].color }));
+        groups = withEmptyOptionGroups(config, BOARD_GROUP_FIELD, groups);
+        // withEmptyOptionGroups appends, so the backfilled lane is always last. A board scrolls
+        // horizontally and an element capture crops to the viewport, which drew the lane this
+        // scenario exists for off the right edge: five full lanes and none of the state. The lane
+        // is still the one production built — only which end of the row it is drawn at is chosen.
+        const emptyAt = groups.findIndex((group) => group.count === 0);
+        if (emptyAt > 0) {
+          groups = [groups[emptyAt], ...groups.filter((_unused, i) => i !== emptyAt)];
+        }
+      }
+    }
     const bag = scenario.bag === "file-view" ? fileViewBoardBag(columns) : embedBoardBag(columns);
     bagKeys = Object.keys(bag).sort();
     if (control === "per-item") {
@@ -1558,9 +2453,28 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "board-renderer"));
     if (results[0].pass) {
-      results.push(...boardAssertions(container, rows));
+      if (scenario.boardExtensions) {
+        results.push(multiMarkerAssertion(container,
+          [".db-board", ".db-board-column", ".db-board-card"],
+          "the extensions board drew its columns and cards"));
+        if (scenario.boardImageField) {
+          results.push(multiMarkerAssertion(container,
+            [".db-board-card-cover.is-empty", ".db-board-card-cover-placeholder"],
+            "the board cards drew their empty covers"));
+        }
+      } else if (scenario.boardEmptyColumn) {
+        const columnsEls = Array.from(container.querySelectorAll<HTMLElement>(".pm-kanban-col"));
+        const empties = columnsEls.filter((col) => col.querySelectorAll(".pm-kanban-card").length === 0);
+        results.push({
+          name: "the board drew an empty column beside its populated lanes",
+          pass: columnsEls.length === BOARD_GROUPS + 1 && empties.length === 1,
+          detail: `${columnsEls.length} column(s), ${empties.length} with zero cards`,
+        });
+      } else {
+        results.push(...boardAssertions(container, rows));
+      }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
-      results.push({
+      if (!scenario.boardExtensions) results.push({
         name: "no forced layout inside the card loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
         detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
@@ -1577,7 +2491,11 @@ export function runRenderAssertions(
       scenario.captureData ? CAPTURE_FILL : GALLERY_FILL,
     );
     if (scenario.captureData) applyCaptureOptions(columns, rows);
-    const config = makeGalleryConfig(columns);
+    const config = {
+      ...makeGalleryConfig(columns),
+      ...(scenario.galleryImageField ? { galleryImageField: columnOfType(columns, "text")?.key } : {}),
+    } as ViewConfig;
+    if (scenario.galleryImageField) applyEmptyMetadataCache(rows);
     const bag = scenario.bag === "file-view" ? fileViewGalleryBag(columns) : embedGalleryBag(columns);
     bagKeys = Object.keys(bag).sort();
     if (control === "per-item") armPerItemRead(bag);
@@ -1590,6 +2508,11 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "gallery-renderer"));
     if (results[0].pass) {
       results.push(...galleryAssertions(container, rows));
+      if (scenario.galleryImageField) {
+        results.push(multiMarkerAssertion(container,
+          [".db-gallery-cover.is-empty", ".db-gallery-cover-placeholder"],
+          "the gallery cards drew their empty covers"));
+      }
       results.push({
         name: "no forced layout inside the card loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -1738,6 +2661,24 @@ export function runRenderAssertions(
       if (scenario.subtaskTree) applyCaptureSubtaskTree(rows);
     }
     const config = makeTimelineConfig(columns, timelineScale);
+    if (timelineScale === "day") {
+      // The day scale is a datetime-field state. normalizeTimelineDayScale rewrites the config
+      // back to "week" whenever the timeline's own date field is a plain date column, so a bench
+      // whose event field is `date` photographs the week scale under a day-scale name. Giving the
+      // field the type and the times production requires is what actually reaches the scale.
+      const eventKey = (config as unknown as { timelineStartDateField?: string }).timelineStartDateField;
+      const eventColumn = eventKey ? columns.find((col) => col.key === eventKey) : undefined;
+      if (eventKey && eventColumn) {
+        eventColumn.type = "datetime";
+        rows.forEach((row, i) => {
+          const frontmatter = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+          const value = frontmatter[eventKey];
+          if (typeof value === "string" && !value.includes("T")) {
+            frontmatter[eventKey] = `${value}T${String(8 + (i % 9)).padStart(2, "0")}:00`;
+          }
+        });
+      }
+    }
     const bag = scenario.bag === "file-view" ? fileViewTimelineBag() : embedTimelineBag();
     bagKeys = Object.keys(bag).sort();
     const renderer = new CalendarTimelineRenderer(bag);
@@ -1786,13 +2727,7 @@ export function runRenderAssertions(
       chartGroupField: BOARD_GROUP_FIELD,
       schema: { columns, computedFields: [] },
     } as ViewConfig;
-    const anchor = container.createEl("button", {
-      cls: "db-chart-options-trigger",
-      attr: {
-        type: "button",
-        style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
-      },
-    });
+    const anchor = makeHiddenAnchor(container, "db-chart-options-trigger");
     const toolbar = new ChartToolbarRenderer();
     const actions: ChartToolbarActions = { onChange: () => undefined };
     bagKeys = Object.keys(actions).sort();
@@ -1807,13 +2742,7 @@ export function runRenderAssertions(
     const rows = makeCalendarRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
     applyCaptureOptions(columns, rows);
     const config = makeCalendarConfig(columns, "week");
-    const anchor = container.createEl("button", {
-      cls: "db-calendar-options-trigger",
-      attr: {
-        type: "button",
-        style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
-      },
-    });
+    const anchor = makeHiddenAnchor(container, "db-calendar-options-trigger");
     const toolbar = new CalendarToolbarRenderer();
     const actions: CalendarToolbarActions = { onChange: () => undefined };
     bagKeys = Object.keys(actions).sort();
@@ -1830,13 +2759,7 @@ export function runRenderAssertions(
     const rows = makeTimelineRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
     applyCaptureOptions(columns, rows);
     const config: ViewConfig = { ...makeTimelineConfig(columns, "week"), viewType: "timeline" };
-    const anchor = container.createEl("button", {
-      cls: "db-calendar-timeline-options-trigger",
-      attr: {
-        type: "button",
-        style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
-      },
-    });
+    const anchor = makeHiddenAnchor(container, "db-calendar-timeline-options-trigger");
     const toolbar = new CalendarTimelineToolbarRenderer();
     const actions: CalendarTimelineToolbarActions = { onChange: () => undefined };
     bagKeys = Object.keys(actions).sort();
@@ -1844,38 +2767,902 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "timeline-toolbar-renderer"));
     if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-calendar-timeline-options-popover"));
-  } else {
-    // Row count stays at the bench's own 2000 regardless of captureData — the table has no
-    // window, so every row becomes a real <tr> either way, and the constructed capture's own note
-    // already keeps it at this shape rather than a reduced one. Only the column types change: a
-    // typed column paints through the real CellRenderer below instead of the plain-text stub.
-    const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
+  } else if (scenario.renderer === "toolbar") {
+    // The full toolbar: ToolbarRenderer.render with a one-view database over the table bench's
+    // typed columns. The popover states ride the toolbar's own trigger buttons — the same
+    // onclick handlers a device tap reaches — rather than a separate mount. `showDatabaseChrome`
+    // is the file-view shape: heading, view tabs, and the four right-hand clusters.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
     const rows = makeTableRows(TABLE_ROWS, columns);
-    if (scenario.captureData) applyCaptureOptions(columns, rows);
-    const config = makeTableConfig(columns);
-    const bag = scenario.bag === "file-view"
-      ? fileViewTableBag(columns, scenario.captureData)
-      : embedTableBag(columns, scenario.captureData);
-    bagKeys = Object.keys(bag).sort();
-    if (control === "per-item") armPerItemRead(bag);
-    const renderer = new TableRenderer(bag);
+    applyCaptureOptions(columns, rows);
+    const config = { ...makeTableConfig(columns), viewType: "table" } as ViewConfig;
+    const db = makeSurfaceDatabase(columns, config);
+    const state = makeSurfaceState({ searchText: scenario.searchText ?? "" });
+    const actions = makeToolbarActions();
+    bagKeys = Object.keys(actions).sort();
+    const renderer = new ToolbarRenderer();
+    renderer.render(container, [{ config: db, sourcePath: "notes" }], 0, 0, state, actions);
+    if (scenario.toolbarPopover === "utilities") {
+      (container.querySelector<HTMLButtonElement>(".db-toolbar-more-btn"))?.click();
+    } else if (scenario.toolbarPopover === "add-view") {
+      (container.querySelector<HTMLButtonElement>(".db-view-tab-add"))?.click();
+    }
 
-    const stopCounting = countRowAppendsToConnectedNodes();
-    const stopReads = countLayoutReadsSplit();
+    results.push(provenanceResult(container, "toolbar-renderer"));
+    if (results[0].pass) results.push(...toolbarAssertions(container, scenario));
+  } else if (scenario.renderer === "active-view-controls") {
+    // The chip rail lives inside the header the toolbar builds, so the branch supplies the
+    // minimal header host the renderer requires (it refuses to render without one) and the
+    // state the chips summarise: effective filter rules and sort rules over real columns.
+    const { columns } = makeSurfaceListData();
+    const config = { ...makeListConfig(columns), viewType: "list" } as ViewConfig;
+    const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
+    const currencyCol = columnOfType(columns, "currency");
+    const dateCol = columnOfType(columns, "date");
+    const filters: Array<{ field: string; op: "eq"; value: string }> = selectCols.slice(0, 2)
+      .map((col, i) => ({ field: col.key, op: "eq" as const, value: ["Backlog", "Doing"][i] }));
+    const sortRules = currencyCol && dateCol
+      ? [{ field: currencyCol.key, direction: "desc" as const }, { field: dateCol.key, direction: "asc" as const }]
+      : [];
+    const state = makeSurfaceState({
+      ...(scenario.rules === "sort" ? {} : { filters }),
+      ...(scenario.rules === "filter" ? {} : { sortRules }),
+    });
+    const actions: ActiveViewControlsActions = {
+      editFilter: () => undefined,
+      editSort: () => undefined,
+      removeFilter: () => undefined,
+      removeSort: () => undefined,
+      toggleFilterLogic: () => undefined,
+      clearAll: () => undefined,
+    };
+    bagKeys = Object.keys(actions).sort();
+    container.createDiv({ cls: "db-header" });
+    const renderer = new ActiveViewControlsRenderer();
+    renderer.render(container, config, state, actions);
+
+    results.push(provenanceResult(container, "active-view-controls-renderer"));
+    if (results[0].pass) results.push(...chipRailAssertions(container, scenario));
+  } else if (scenario.renderer === "active-rule-popover") {
+    // The single-rule popover the chip row's edit buttons open: ActiveRulePopoverRenderer's own
+    // toggleFilter/toggleSort against a real anchor, with the panel's editor delegated to the
+    // filter or sort renderer's renderSingleRuleEditor.
+    const { columns } = makeSurfaceListData();
+    const config = makeListConfig(columns);
+    const anchor = makeHiddenAnchor(container, "db-active-rule-anchor");
+    const close = (): void => undefined;
+    if (scenario.ruleKind === "sort") {
+      const currencyCol = columnOfType(columns, "currency");
+      const state = makeSurfaceState({ sortRules: [{ field: currencyCol?.key ?? "file.name", direction: "asc" }] });
+      const renderer = new SortPanelRenderer();
+      const actions: SortPanelActions = { save: close, refresh: close, close };
+      bagKeys = Object.keys(actions).sort();
+      new ActiveRulePopoverRenderer().toggleSort({
+        containerEl: container, anchorEl: anchor, index: 0, state, config, renderer, actions, onClose: close,
+      });
+      results.push(provenanceResult(container, "active-rule-popover-renderer"));
+      if (results[0].pass) results.push(...activeRulePopoverAssertions(container, "sort"));
+    } else {
+      const selectCol = columnOfType(columns, "select");
+      const state = makeSurfaceState({ filters: [{ field: selectCol?.key ?? "file.name", op: "eq", value: "Backlog" }] });
+      const renderer = new FilterPanelRenderer();
+      const actions: FilterPanelActions = { saveState: close, refresh: close, close };
+      bagKeys = Object.keys(actions).sort();
+      new ActiveRulePopoverRenderer().toggleFilter({
+        containerEl: container, anchorEl: anchor, index: 0, state, config, renderer, actions, onClose: close,
+      });
+      results.push(provenanceResult(container, "active-rule-popover-renderer"));
+      if (results[0].pass) results.push(...activeRulePopoverAssertions(container, "filter"));
+    }
+  } else if (scenario.renderer === "filter-panel") {
+    // The filter panel over a real filter tree: flat rules build the single AND group the panel
+    // header defers its logic button to, the nested tree exercises the NOT node and the inner
+    // OR group at the depth the panel's own wrap rules allow.
+    const { columns } = makeSurfaceListData();
+    const config = makeListConfig(columns);
+    const anchor = makeHiddenAnchor(container, "db-filter-anchor");
+    const actions: FilterPanelActions = { saveState: () => undefined, refresh: () => undefined, close: () => undefined };
+    bagKeys = Object.keys(actions).sort();
+    const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
+    const currencyCol = columnOfType(columns, "currency");
+    const dateCol = columnOfType(columns, "date");
+    const state = scenario.filterDepth === "nested" && selectCols.length >= 2 && currencyCol
+      ? makeSurfaceState({
+          filterTree: {
+            type: "group",
+            logic: "and",
+            rules: [
+              { field: selectCols[0].key, op: "eq", value: "Backlog" },
+              { type: "not", rule: { field: selectCols[1].key, op: "eq", value: "Doing" } },
+              {
+                type: "group",
+                logic: "or",
+                rules: [
+                  { field: currencyCol.key, op: "gt", value: "50" },
+                  ...(selectCols[2] ? [{ field: selectCols[2].key, op: "eq" as const, value: "Review" }] : []),
+                ],
+              },
+            ],
+          },
+        })
+      : makeSurfaceState({
+          filters: [
+            ...(selectCols[0] ? [{ field: selectCols[0].key, op: "eq" as const, value: "Backlog" }] : []),
+            ...(currencyCol ? [{ field: currencyCol.key, op: "gt" as const, value: "20" }] : []),
+            ...(dateCol ? [{ field: dateCol.key, op: "notempty" as const, value: "" }] : []),
+          ],
+        });
+    const renderer = new FilterPanelRenderer();
+    renderer.render(container, true, state, config, actions, anchor);
+
+    results.push(provenanceResult(container, "filter-panel-renderer"));
+    if (results[0].pass) results.push(...filterPanelAssertions(container, scenario.filterDepth === "nested"));
+  } else if (scenario.renderer === "sort-panel") {
+    // The sort panel: two rules with their reorder controls, or — under calendarHint — the
+    // calendar-layout hint above the empty state, the only state the hint appears in.
+    const { columns } = makeSurfaceListData();
+    const currencyCol = columnOfType(columns, "currency");
+    const dateCol = columnOfType(columns, "date");
+    const config = scenario.calendarHint
+      ? { ...makeListConfig(columns), viewType: "calendar" } as ViewConfig
+      : makeListConfig(columns);
+    const state = scenario.calendarHint
+      ? makeSurfaceState()
+      : makeSurfaceState({
+          sortRules: [
+            ...(currencyCol ? [{ field: currencyCol.key, direction: "desc" as const }] : []),
+            ...(dateCol ? [{ field: dateCol.key, direction: "asc" as const }] : []),
+          ],
+        });
+    const actions: SortPanelActions = { save: () => undefined, refresh: () => undefined, close: () => undefined };
+    bagKeys = Object.keys(actions).sort();
+    const renderer = new SortPanelRenderer();
+    renderer.render(container, true, config, state, actions, makeHiddenAnchor(container, "db-sort-anchor"));
+
+    results.push(provenanceResult(container, "sort-panel-renderer"));
+    if (results[0].pass) results.push(...sortPanelAssertions(container, Boolean(scenario.calendarHint)));
+  } else if (scenario.renderer === "view-config") {
+    // The settings panel for a table view with a one-view database: the database-scoped rows
+    // render because actions.database is present, the view-scoped rows from the config. The
+    // bench's config shape puts columns at the top level, but the settings panel reads the real
+    // ViewConfig schema, so this branch wraps the bench data in that shape.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(TABLE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    const config = {
+      ...makeTableConfig(columns),
+      viewType: "table",
+      schema: { columns, computedFields: [] },
+    } as ViewConfig;
+    const db = makeSurfaceDatabase(columns, config);
+    const actions: ViewConfigPanelActions = {
+      app: undefined as unknown as App,
+      onChange: () => undefined,
+      database: db,
+    };
+    bagKeys = Object.keys(actions).sort();
+    const renderer = new ViewConfigPanelRenderer();
+    renderer.render(container, true, config, actions, makeHiddenAnchor(container, "db-view-config-anchor"));
+
+    results.push(provenanceResult(container, "view-config-panel-renderer"));
+    if (results[0].pass) results.push(...viewConfigAssertions(container));
+  } else if (scenario.renderer === "column-manager") {
+    // The properties panel: one row per schema column, with a hidden column so the select-all
+    // checkbox sits in its real indeterminate state.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(TABLE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    const config = { ...makeTableConfig(columns), schema: { columns, computedFields: [] } } as ViewConfig;
+    const state = makeSurfaceState({ hiddenColumns: new Set(columns.length > 2 ? [columns[2].key] : []) });
+    const actions: ColumnManagerActions = {
+      close: () => undefined,
+      setColumnVisible: () => undefined,
+      setColumnsVisible: () => undefined,
+      setAllColumnsVisible: () => undefined,
+      moveColumn: () => undefined,
+      moveColumnTo: () => undefined,
+      toggleColumnWrap: () => undefined,
+      editColumn: () => undefined,
+      addColumn: () => undefined,
+      addFileFieldColumn: () => undefined,
+      deleteColumn: () => undefined,
+    };
+    bagKeys = Object.keys(actions).sort();
+    const renderer = new ColumnManagerRenderer();
+    renderer.render(container, true, config, state, columns, actions, makeHiddenAnchor(container, "db-column-manager-anchor"));
+
+    results.push(provenanceResult(container, "column-manager-renderer"));
+    if (results[0].pass) results.push(...columnManagerAssertions(container, columns));
+  } else if (scenario.renderer === "record-detail") {
+    // The record panel: openRecordDetailPanel's own module entry against a real anchor. The
+    // note body is absent on purpose — mounting it requires the readNoteBody action, which
+    // constructs an obsidian Component the shared stub refuses — so this photographs the panel
+    // chrome and its typed fields. The phone device pass turns it into the bottom sheet through
+    // positionToolbarPopover's own is-phone branch.
+    const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
+    const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
+    applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
+    const config = { ...makeBoardConfig(columns), showEmptyFields: true } as ViewConfig;
+    const row = rows[0];
+    if (row) {
+      const fm = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+      const blankKey = columns.find((col) => col.key !== "file.name" && col.type === "text")?.key;
+      if (blankKey) delete fm[blankKey];
+    }
+    const anchor = makeHiddenAnchor(container, "db-record-detail-anchor");
+    const actions: RecordDetailActions = {
+      editCell: () => undefined,
+      openRow: () => undefined,
+    };
+    bagKeys = Object.keys(actions).sort();
+    openRecordDetailPanel({
+      anchorEl: anchor,
+      host: container,
+      row,
+      columns,
+      config,
+      app: undefined as unknown as App,
+      actions,
+    });
+    container.setAttribute(PROVENANCE_ATTR, "record-detail-panel");
+
+    results.push(provenanceResult(container, "record-detail-panel"));
+    if (results[0].pass) results.push(...recordDetailAssertions(container));
+  } else if (scenario.renderer === "record-detail-body") {
+    // The note body region on its own: mountNoteBodyRegion's public entry with the renderer
+    // injected the module's contract requires (the real MarkdownRenderer has no standalone
+    // build; the harness's injected renderer writes the markdown as text). The marker lands on
+    // the region's own element, which is the one the production call built.
+    const variant = scenario.recordBodyVariant ?? "read";
+    const body = variant === "empty" ? "" : "## Cancellation\n\nCancel before the renewal date.";
+    const region = mountNoteBodyRegion({
+      parent: container,
+      body,
+      renderMarkdown: (target, markdown) => { target.textContent = markdown; },
+      onCommit: () => undefined,
+      placeholder: "Write a note…",
+      commitDelayMs: 60000,
+    });
+    if (variant === "editing") {
+      region.beginEdit();
+      // The region's edit mode is focus-held by contract: the textarea's own blur handler
+      // commits and returns to the rendered body. The runner removes the mounted container
+      // after its hook, and removing a focused element fires blur, which would photograph the
+      // body as read — so the edit is re-entered on the next task, after the teardown, through
+      // the same public beginEdit the tap handler calls.
+      leftoverDeferred = window.setTimeout(() => {
+        leftoverDeferred = null;
+        if (!region.isEditing()) region.beginEdit();
+      }, 0);
+    }
+    container.setAttribute(PROVENANCE_ATTR, "record-detail-body");
+
+    results.push(provenanceResult(container, "record-detail-body"));
+    if (results[0].pass) results.push(...recordDetailBodyAssertions(container, variant));
+  } else if (scenario.renderer === "record-peek") {
+    // The table's record peek: a real table beneath it (the surface it docks against), then
+    // openTableRecordPeek's own module entry for the first row.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(CAPTURE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    const config = { ...makeTableConfig(columns), schema: { columns, computedFields: [] } } as ViewConfig;
+    const bag = fileViewTableBag(columns, true);
+    bagKeys = Object.keys(bag).sort();
+    const renderer = new TableRenderer(bag);
     renderer.renderTable(container, config, rows);
-    const reads = stopReads();
-    const rowAppends = stopCounting();
+    const anchor = makeHiddenAnchor(container, "db-record-peek-anchor");
+    openTableRecordPeek({
+      anchor,
+      row: rows[0],
+      config,
+      visibleColumns: columns,
+      allColumns: columns,
+      container,
+      returnFocus: () => undefined,
+      renderRecordIcon: () => null,
+    });
+    container.setAttribute(PROVENANCE_ATTR, "record-peek");
+
+    results.push(provenanceResult(container, "record-peek"));
+    if (results[0].pass) results.push(...recordPeekAssertions(container));
+  } else if (scenario.renderer === "summary") {
+    // The summary row: SummaryRenderer.render with a config whose summaryRules name real
+    // columns, and the onChange hook that makes the rule items draggable and clickable.
+    const { columns, rows } = makeSurfaceListData();
+    const currencyCol = columnOfType(columns, "currency");
+    const selectCol = columnOfType(columns, "select");
+    const config = {
+      ...makeListConfig(columns),
+      summaryRules: [
+        ...(currencyCol ? [{ field: currencyCol.key, summary: "sum" }, { field: currencyCol.key, summary: "avg" }] : []),
+        ...(selectCol ? [{ field: selectCol.key, summary: "unique" }] : []),
+      ],
+    } as ViewConfig;
+    const renderer = new SummaryRenderer();
+    renderer.render(container, rows, config, undefined, { onChange: () => undefined });
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "summary-renderer"));
+    if (results[0].pass) results.push(...summaryAssertions(container, 3));
+  } else if (scenario.renderer === "owned-menu") {
+    // The context-menu shell: createOwnedMenu's own entry, rows built through the handle's own
+    // addRow the way ColumnMenu builds them. The menu mounts on document.body by design (the
+    // module creates it there), so the marker rides the menu element itself and the assertions
+    // query the body. On a phone device the showAt placement applies the bottom-sheet chrome.
+    const menu = createOwnedMenu(container.ownerDocument, { onClose: () => undefined });
+    menu.addSection("Column");
+    menu.addRow({ icon: "arrow-up-down", label: "Sort ascending", selected: true });
+    menu.addRow({ icon: "list-filter", label: "Filter on this column", selected: true });
+    menu.addRow({ icon: "columns-3", label: "Property type", value: "Select", submenu: true });
+    menu.addSeparator();
+    menu.addRow({ icon: "copy", label: "Duplicate property" });
+    menu.addRow({ icon: "group", label: "Group by this column", disabled: true });
+    menu.addRow({ icon: "trash", label: "Delete property", warning: true });
+    menu.showAt({ anchor: makeHiddenAnchor(container, "db-owned-menu-anchor") });
+    menu.el.setAttribute(PROVENANCE_ATTR, "owned-menu");
+    leftoverOwnedMenu = menu;
+    bagKeys = [];
+
+    results.push(provenanceResult(menu.el, "owned-menu"));
+    if (results[0].pass) {
+      results.push(...ownedMenuAssertions(container.ownerDocument, false));
+    }
+  } else if (scenario.renderer === "cell-editors") {
+    // The in-cell editors: the table the shipped TableRenderer builds — its own <td>, carrying
+    // only the classes CellRenderer's renderCell decides rather than any this harness applies —
+    // then startEdit, the same public entry database-view.ts wires into its editCell action, on
+    // the cells the fixture photographs. Each editor gets its own CellRenderer instance because
+    // an instance tracks its own open editor, which is what lets one frame hold the markdown
+    // text editor and the number line editor at once.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(CAPTURE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    const textCol = columns.find((col) => col.type === "text" && col.key !== "file.name");
+    if (textCol) textCol.textRenderMode = "markdown";
+    const numberCol = columnOfType(columns, "number") ?? columnOfType(columns, "currency");
+    const selectCol = columnOfType(columns, "select");
+    const config = makeTableConfig(columns);
+    const bag = fileViewTableBag(columns, true);
+    bagKeys = Object.keys(bag).sort();
+    new TableRenderer(bag).renderTable(container, config, rows);
+    const row = rows[0];
+    const cellFor = (col?: ColumnDef): HTMLElement | null => (col
+      ? container.querySelector<HTMLElement>(`td[data-note-database-column-key="${col.key}"]`)
+      : null);
+    if (scenario.editorKind === "select") {
+      const selectTd = cellFor(selectCol);
+      if (selectTd && selectCol) makeCaptureCellRenderer().startEdit(selectTd, row, selectCol);
+    } else {
+      const textTd = cellFor(textCol);
+      if (textTd && textCol) makeCaptureCellRenderer().startEdit(textTd, row, textCol);
+      const numberTd = cellFor(numberCol);
+      if (numberTd && numberCol) makeCaptureCellRenderer().startEdit(numberTd, row, numberCol);
+    }
+
+    results.push(provenanceResult(container, "cell-renderer"));
+    if (results[0].pass) results.push(...cellEditorAssertions(container, scenario.editorKind === "select" ? "select" : "text"));
+  } else if (scenario.renderer === "date-picker") {
+    // The date value picker: renderDateValuePicker builds the trigger, and clicking it fires the
+    // module's own open handler — the same tap a device makes — which mounts the popover inside
+    // the container.
+    const trigger = renderDateValuePicker({
+      parent: container,
+      value: "2026-08-21T09:30",
+      includeTime: Boolean(scenario.includeTime),
+      onChange: () => undefined,
+    });
+    trigger.click();
+    container.setAttribute(PROVENANCE_ATTR, "date-picker");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "date-picker"));
+    if (results[0].pass) results.push(...datePickerAssertions(container, Boolean(scenario.includeTime)));
+  } else if (scenario.renderer === "icon-picker") {
+    // The icon picker: openIconPickerPopover's own entry. The current token starts with
+    // "lucide:", which is what the module reads to open its Icons tab (with the colour strip)
+    // instead of Emoji. The panel mounts on document.body, so the marker rides the container the
+    // anchor lives in and the assertions query the body.
+    const anchor = makeHiddenAnchor(container, "db-icon-picker-anchor");
+    leftoverIconPickerClose = openIconPickerPopover({
+      anchor,
+      current: "lucide:x@blue",
+      onSelect: async () => undefined,
+      onConfigureField: () => undefined,
+    });
+    container.setAttribute(PROVENANCE_ATTR, "icon-picker");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "icon-picker"));
+    if (results[0].pass) {
+      const popover = container.ownerDocument.querySelector(".db-icon-picker-popover");
+      results.push({
+        name: "the picker opened on its Icons tab with the colour strip",
+        pass: Boolean(popover?.querySelector(".db-icon-picker-colors"))
+          && Boolean(popover?.querySelector(".db-icon-picker-grid")),
+        detail: popover ? "Icons tab, colour strip and icon grid present" : "no .db-icon-picker-popover on the body",
+      });
+    }
+  } else if (scenario.renderer === "color-picker") {
+    // The option colour picker: openOptionColorPicker's own entry, opened with the current
+    // colour that rings the matching swatch. Mounts on document.body like the icon picker.
+    const anchor = makeHiddenAnchor(container, "db-color-picker-anchor");
+    openOptionColorPicker(anchor, "blue", () => undefined);
+    container.setAttribute(PROVENANCE_ATTR, "color-picker");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "color-picker"));
+    if (results[0].pass) {
+      const popup = container.ownerDocument.querySelector(".db-color-picker-popup");
+      results.push({
+        name: "the colour picker drew its sixteen swatches with the current one selected",
+        pass: Boolean(popup) && popup.querySelectorAll(".db-color-picker-swatch").length === 16
+          && Boolean(popup?.querySelector(".db-color-picker-swatch.is-selected")),
+        detail: popup ? `${popup.querySelectorAll(".db-color-picker-swatch").length} swatch(es)` : "no .db-color-picker-popup",
+      });
+    }
+  } else if (scenario.renderer === "relation-values") {
+    // The relation chips: renderRelationValue's own entry with no App, which is the module's
+    // documented no-vault mode where every target renders as resolved — the unresolved state
+    // needs a live metadata cache and stays fixture-only.
+    const row = makeBoardRows(1, [{
+      key: "file.name", label: "Name", type: "text",
+    } as ColumnDef], 1, 1)[0];
+    renderRelationValue(container, undefined, row, ["[[Design tooling]]", "[[Q3 budget]]"]);
+    container.setAttribute(PROVENANCE_ATTR, "relation-value-renderer");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "relation-value-renderer"));
+    if (results[0].pass) results.push(multiMarkerAssertion(container,
+      [".db-relation-values", ".db-relation-link", ".db-relation-link-label"], "the relation chips rendered"));
+  } else if (scenario.renderer === "file-fields") {
+    // The file pseudo-columns: renderSpecialFileFieldValue's own dispatch for file.tags and the
+    // link-list key, over a real table row. The per-tag remove buttons render only when the
+    // context asks for them, the same writable-cell shape the table passes.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(TABLE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    const table = container.createEl("table", { cls: "db-table" });
+    const rowEl = table.createEl("tbody").createEl("tr");
+    const fileCol: ColumnDef = { key: "file.tags", label: "Tags", type: "text" } as ColumnDef;
+    const linkCol: ColumnDef = { key: "file.links", label: "Outlinks", type: "text" } as ColumnDef;
+    const tagsTd = rowEl.createEl("td");
+    renderSpecialFileFieldValue(tagsTd, undefined, rows[0], fileCol, ["design", "saas"], { onRemoveTag: () => undefined });
+    const linksTd = rowEl.createEl("td");
+    renderSpecialFileFieldValue(linksTd, undefined, rows[0], linkCol, ["[[Design tooling]]", "[[Q3 budget]]"]);
+    container.setAttribute(PROVENANCE_ATTR, "file-field-renderer");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "file-field-renderer"));
+    if (results[0].pass) {
+      results.push(multiMarkerAssertion(container,
+        [".db-file-tags .status-badge.db-file-tag-badge", ".db-file-link-list .internal-link"],
+        "the file tags and link list rendered"));
+    }
+  } else if (scenario.renderer === "number-display") {
+    // The three number display styles: renderRating/renderProgress/renderProgressRing's own
+    // entries into a table of rows, one style per row the way the cell renderer calls them.
+    const table = container.createEl("table", { cls: "db-table" });
+    const tbody = table.createEl("tbody");
+    const styleRow = (label: string, build: (td: HTMLElement) => void): void => {
+      const tr = tbody.createEl("tr");
+      tr.createEl("td", { text: label });
+      const valueTd = tr.createEl("td", { cls: "db-numeric-value" });
+      build(valueTd);
+    };
+    styleRow("Rating", (td) => renderRating(td, 62.5));
+    styleRow("Rating outline", (td) => renderRating(td, 40, { ratingStyle: "outline" }));
+    styleRow("Rating emoji", (td) => renderRating(td, 80, { ratingSymbol: "emoji" }));
+    styleRow("Progress", (td) => renderProgress(td, 72));
+    styleRow("Progress tinted", (td) => renderProgress(td, 34, { color: "orange" }));
+    styleRow("Ring", (td) => renderProgressRing(td, 72));
+    styleRow("Ring tinted", (td) => renderProgressRing(td, 96, { color: "green" }));
+    container.setAttribute(PROVENANCE_ATTR, "number-display-renderer");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "number-display-renderer"));
+    if (results[0].pass) {
+      results.push(multiMarkerAssertion(container,
+        [".db-cell-rating", ".db-cell-progress", ".db-cell-progress-ring", ".db-num-color-orange", ".db-num-color-green"],
+        "the rating, progress and ring styles rendered"));
+    }
+  } else if (scenario.renderer === "record-icon") {
+    // The record-icon gutter: a real table with showRecordIcon and a real renderRecordIcon bag
+    // member, mirroring database-view.ts's wiring. One row carries an emoji token (the variant
+    // that needs no icon registry); the others plain text, which is the default fallback the
+    // bundle can draw — lucide tokens need Obsidian's getIconIds and degrade to that same
+    // fallback here.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(CAPTURE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    const iconKey = columns.find((col) => col.key !== "file.name" && col.type === "text")?.key;
+    if (iconKey) {
+      const fm = (rows[0] as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+      fm[iconKey] = "☁️";
+    }
+    const config = {
+      ...makeTableConfig(columns),
+      showRecordIcon: true,
+      recordIconFieldOverrideEnabled: true,
+      recordIconField: iconKey,
+    } as ViewConfig;
+    const bag = fileViewTableBag(columns, true);
+    bag.renderRecordIcon = (parent, row, cfg) => renderRecordIcon(
+      parent,
+      iconKey ? row.frontmatter[iconKey] : undefined,
+      { compact: true, editable: true, tooltip: "Icon" },
+    );
+    bagKeys = Object.keys(bag).sort();
+    const renderer = new TableRenderer(bag);
+    renderer.renderTable(container, config, rows);
 
     results.push(provenanceResult(container, "table-renderer"));
     if (results[0].pass) {
-      results.push(...tableAssertions(container, rows, columns));
+      results.push(multiMarkerAssertion(container,
+        [".db-record-icon-colgroup", ".db-record-icon.is-compact", ".db-record-icon.is-default", ".db-record-icon-emoji"],
+        "the record-icon gutter rendered with its default and emoji variants"));
+    }
+  } else if (scenario.renderer === "dropdown") {
+    // The dropdown popover: openDropdownMenu's own entry, the same call the column manager's
+    // add-file-property button makes. The disabled option carries the reason the fixture's
+    // tooltip exists to surface.
+    const anchor = makeHiddenAnchor(container, "db-dropdown-anchor");
+    openDropdownMenu({
+      anchor,
+      label: "Aggregate",
+      options: [
+        { value: "sum", text: "Sum", section: "Aggregate" },
+        { value: "avg", text: "Average", section: "Aggregate" },
+        { value: "rollup", text: "Rollup", section: "Aggregate", disabled: true, disabledReason: "Rollup needs a numeric target field" },
+      ],
+      value: "sum",
+      onChange: () => undefined,
+    });
+    container.setAttribute(PROVENANCE_ATTR, "dropdown-field");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "dropdown-field"));
+    if (results[0].pass) {
+      results.push(multiMarkerAssertion(container,
+        [".db-dropdown-popover", ".db-dropdown-option.is-selected", ".db-dropdown-option.is-disabled"],
+        "the dropdown popover rendered its options with the selected and disabled states"));
+    }
+  } else if (scenario.renderer === "empty-state") {
+    // The no-columns empty card: EmptyStateRenderer.renderCard's own entry. The fixture this
+    // supersedes wrapped the card vocabulary in the hero's wrapper — a composite no single
+    // renderer emits — so the constructed counterpart is the real card shape with the same copy.
+    const renderer = new EmptyStateRenderer();
+    renderer.renderCard(container, {
+      reason: "no-columns",
+      title: "No properties yet",
+      message: "Add a property to start describing these notes.",
+      actions: [
+        { label: "Add property", primary: true, onClick: async () => undefined },
+        { label: "Learn more", onClick: async () => undefined },
+      ],
+    });
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "empty-state-renderer"));
+    if (results[0].pass) {
+      results.push(multiMarkerAssertion(container,
+        [".db-empty-card", ".db-empty-card-title", ".db-empty-action.mod-cta"],
+        "the empty card rendered with its actions"));
+    }
+  } else if (scenario.renderer === "column-header") {
+    // The column header affordances: the header cells the shipped TableRenderer builds, with
+    // ColumnHeaderController.setup wired into the renderer's own setupColumnHeader action — the
+    // wiring database-view.ts uses — so the picture is the header the table emits, property-type
+    // icon and label included, rather than one this harness drew. One label is long enough to
+    // truncate, the state the fixture exists to photograph.
+    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    const rows = makeTableRows(CAPTURE_ROWS, columns);
+    applyCaptureOptions(columns, rows);
+    columns[1].label = "A deliberately long column name that must truncate";
+    const config = makeTableConfig(columns);
+    const controller = new ColumnHeaderController({
+      getConfig: () => config,
+      ensureColumnOrder: () => undefined,
+      showContextMenu: () => undefined,
+      sortByColumn: () => undefined,
+      saveConfig: () => undefined,
+      setUndoLabel: () => undefined,
+      refresh: () => undefined,
+    } satisfies ColumnHeaderActions);
+    // The controller tags the container mid-render and renderTable's own tag replaces it on the
+    // way out, so the controller's marker is read where it is written: inside the action the
+    // renderer calls.
+    const controllerMarks: string[] = [];
+    const bag: TableRendererActions = {
+      ...fileViewTableBag(columns, true),
+      setupColumnHeader: (th, col) => {
+        controller.setup(th, col);
+        const marker = th.closest(".note-database-container")?.getAttribute(PROVENANCE_ATTR);
+        if (marker) controllerMarks.push(marker);
+      },
+    };
+    bagKeys = Object.keys(bag).sort();
+    new TableRenderer(bag).renderTable(container, config, rows);
+
+    results.push(provenanceResult(container, "table-renderer"));
+    if (results[0].pass) {
       results.push({
-        name: "no row appended to a connected table",
-        pass: rowAppends === 0,
-        detail: rowAppends === 0
-          ? "the row body is built off-document and attached once"
-          : `${rowAppends} row(s) appended to a connected table — per-insertion layout is back`,
+        name: "the controller ran inside the renderer's own setupColumnHeader action",
+        pass: controllerMarks.includes("column-header-controller"),
+        detail: controllerMarks.length
+          ? `${controllerMarks.length} header(s) tagged ${controllerMarks[0]}`
+          : "no header carried the column-header-controller marker",
       });
+      results.push(multiMarkerAssertion(container,
+        [".db-column-menu-trigger", ".db-resize-handle", ".db-th-content .db-th-label", ".db-th-content .db-property-icon"],
+        "the column headers carry their menu triggers, resize handles and property-type icons"));
+    }
+  } else if (scenario.renderer === "group-selection-controls") {
+    // One role, three views: the whole-group selection box from the list, the gallery and the
+    // extensions board's column header, each through its renderer's own grouped entry so the
+    // picture can show a divergence the way one header beside another can. The board's subgroup
+    // box the fixture depicted no longer exists on the shipped board — the subgroup surface is
+    // the swimlane lane header, which carries no box — so the board's whole-group box is its
+    // column-header checkbox.
+    const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
+    const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
+    applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
+    applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
+    const groups = makeBoardGroups(rows, BOARD_GROUPS);
+    const listHost = container.createDiv({ cls: "db-group-selection-host" });
+    const galleryHost = container.createDiv({ cls: "db-group-selection-host" });
+    const boardHost = container.createDiv({ cls: "db-group-selection-host" });
+    const listRenderer = new ListRenderer(undefined as unknown as App, fileViewListBag(columns));
+    listRenderer.renderGrouped(listHost, { ...makeBoardConfig(columns), viewType: "list" } as ViewConfig,
+      groups.map((g) => ({ key: g.key, rows: g.rows, count: g.count })), BOARD_GROUP_FIELD);
+    const galleryRenderer = new GalleryRenderer(undefined as unknown as App, fileViewGalleryBag(columns));
+    galleryRenderer.renderGrouped(galleryHost, { ...makeBoardConfig(columns), viewType: "gallery" } as ViewConfig,
+      groups.map((g) => ({ key: g.key, rows: g.rows, count: g.count })), BOARD_GROUP_FIELD);
+    const boardRenderer = new BoardRenderer(undefined as unknown as App, fileViewBoardBag(columns));
+    boardRenderer.render(boardHost, {
+      ...makeBoardConfig(columns),
+      viewType: "board",
+      boardExtensionsEnabled: true,
+    } as ViewConfig, groups, BOARD_GROUP_FIELD);
+    bagKeys = [];
+
+    const markers = [
+      ["list", listHost.getAttribute(PROVENANCE_ATTR)],
+      ["gallery", galleryHost.getAttribute(PROVENANCE_ATTR)],
+      ["board", boardHost.getAttribute(PROVENANCE_ATTR)],
+    ];
+    results.push({
+      name: "all three grouped renders mounted through their production entries",
+      pass: markers.every(([, marker]) => marker !== null),
+      detail: markers.map(([name, marker]) => `${name}:${marker ?? "none"}`).join(", "),
+    });
+    if (results[0].pass) {
+      results.push(multiMarkerAssertion(container,
+        [".db-list-group-checkbox", ".db-gallery-group-checkbox", ".db-board-column-checkbox"],
+        "the whole-group selection boxes rendered in all three views"));
+    }
+  } else if (scenario.renderer === "card-covers") {
+    // The empty card cover in the two card views: board with its extensions vocabulary and an
+    // image field the rows resolve nothing for, gallery with the same — the only cover state a
+    // capture without a vault can show.
+    const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
+    const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
+    applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
+    applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
+    const groups = makeBoardGroups(rows, BOARD_GROUPS);
+    applyEmptyMetadataCache(rows);
+    const imageKey = columnOfType(columns, "text")?.key;
+    const boardHost = container.createDiv({ cls: "db-cover-host" });
+    const galleryHost = container.createDiv({ cls: "db-cover-host" });
+    const boardRenderer = new BoardRenderer(undefined as unknown as App, fileViewBoardBag(columns));
+    boardRenderer.render(boardHost, {
+      ...makeBoardConfig(columns),
+      viewType: "board",
+      boardExtensionsEnabled: true,
+      boardImageField: imageKey,
+    } as ViewConfig, groups, BOARD_GROUP_FIELD);
+    const galleryRenderer = new GalleryRenderer(undefined as unknown as App, fileViewGalleryBag(columns));
+    galleryRenderer.render(galleryHost, {
+      ...makeBoardConfig(columns),
+      viewType: "gallery",
+      galleryImageField: imageKey,
+    } as ViewConfig, rows);
+    bagKeys = [];
+
+    const markers = [
+      ["board", boardHost.getAttribute(PROVENANCE_ATTR)],
+      ["gallery", galleryHost.getAttribute(PROVENANCE_ATTR)],
+    ];
+    results.push({
+      name: "both card views mounted through their production entries",
+      pass: markers.every(([, marker]) => marker !== null),
+      detail: markers.map(([name, marker]) => `${name}:${marker ?? "none"}`).join(", "),
+    });
+    if (results[0].pass) {
+      results.push(multiMarkerAssertion(container,
+        [".db-board-card-cover.is-empty .db-board-card-cover-placeholder", ".db-gallery-cover.is-empty .db-gallery-cover-placeholder"],
+        "the empty cover rendered in the board card and the gallery card"));
+    }
+  } else {
+    // captureData sizes the data as well as typing it, the way it already does for list, board
+    // and gallery. The table has no window, so every row becomes a real <tr>: at the bench's 2000
+    // the container measures over 80,000px tall, which no element-mode capture can photograph and
+    // which repeats one under-floor control thousands of times in the touch-target lane without
+    // saying anything the first row did not. The structural-cost shape stays the lanes' own
+    // no-captureData scenarios, which still mount 2000 rows here.
+    const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
+    // The footer sits under the last row, and a phone crops the table at its own viewport height:
+    // at the capture row count the row the scenario exists to show falls below the fold, so the
+    // footer variant takes the shorter set that fits both devices.
+    const captureRowCount = scenario.tableFooter ? FOOTER_CAPTURE_ROWS : CAPTURE_ROWS;
+    const rows = makeTableRows(scenario.captureData ? captureRowCount : TABLE_ROWS, columns);
+    if (scenario.captureData) applyCaptureOptions(columns, rows);
+    const currencyCol = columnOfType(columns, "currency") ?? columnOfType(columns, "number");
+    const dateCol = columnOfType(columns, "date");
+    const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
+    const textCol = columnOfType(columns, "text");
+    if (scenario.longHeaderLabel && columns[1]) {
+      columns[1].label = "A deliberately long column name that must truncate";
+    }
+    if (scenario.fullStatusPalette) {
+      // The whole sixteen-colour vocabulary: point every option column at one option per colour
+      // and give a single multi-select row every value, so one table shows the full range the
+      // way the fixture's strip does.
+      const colors = ["gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink",
+        "red", "slate", "cyan", "teal", "lime", "indigo", "violet", "rose"] as const;
+      const palette = colors.map((color, i) => ({ value: `tone-${i}`, color }));
+      for (const col of columns) {
+        if (col.type === "select" || col.type === "status" || col.type === "multi-select") {
+          col.statusOptions = palette;
+        }
+      }
+      const multi = columns.find((col) => col.type === "multi-select");
+      if (multi) {
+        const row = rows[rows.length - 1];
+        const fm = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+        fm[multi.key] = palette.map((option) => option.value);
+      }
+      for (const col of selectCols) {
+        rows.forEach((row, i) => {
+          const fm = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+          if (col.key in fm) fm[col.key] = palette[i % palette.length].value;
+        });
+      }
+    }
+    const config = {
+      ...makeTableConfig(columns),
+      // The bench's config shape puts columns at the top level, but the footer, the group
+      // divider rows and the peek read the real ViewConfig schema. Supplying it is inert for
+      // every renderer path that reads the bench shape instead.
+      schema: { columns, computedFields: [] },
+      ...(scenario.tableFooter ? {
+        summaryRules: [
+          ...(currencyCol ? [
+            { field: currencyCol.key, summary: "sum" },
+            { field: currencyCol.key, summary: "avg" },
+          ] : []),
+          ...(dateCol ? [{ field: dateCol.key, summary: "earliest" }] : []),
+          ...(selectCols[0] ? [{ field: selectCols[0].key, summary: "unique" }] : []),
+        ],
+      } : {}),
+      ...(scenario.recordIconColumn ? {
+        showRecordIcon: true,
+        recordIconFieldOverrideEnabled: true,
+        recordIconField: textCol?.key,
+      } : {}),
+    } as ViewConfig;
+    const bag = scenario.bag === "file-view"
+      ? fileViewTableBag(columns, scenario.captureData)
+      : embedTableBag(columns, scenario.captureData);
+    if (scenario.columnHeaderController) {
+      const controller = new ColumnHeaderController({
+        getConfig: () => config,
+        ensureColumnOrder: () => undefined,
+        showContextMenu: () => undefined,
+        sortByColumn: () => undefined,
+        saveConfig: () => undefined,
+        setUndoLabel: () => undefined,
+        refresh: () => undefined,
+      } satisfies ColumnHeaderActions);
+      bag.setupColumnHeader = (th, col) => controller.setup(th, col);
+    }
+    if (scenario.recordIconColumn) {
+      const iconKey = textCol?.key;
+      const fm0 = (rows[0] as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+      if (iconKey) fm0[iconKey] = "☁️";
+      bag.renderRecordIcon = (parent, row, cfg) => renderRecordIcon(
+        parent,
+        iconKey ? row.frontmatter[iconKey] : undefined,
+        { compact: true, editable: true, tooltip: "Icon" },
+      );
+    }
+    if (scenario.tableGroups) {
+      // The grouped table: a two-level tree over the capture rows (a parent group, one child
+      // subgroup), with summary rules so the divider rows carry their computed totals. The
+      // group field is a real select column whose configured options colour the badges.
+      const groupField = selectCols[0]?.key;
+      const groupCol = selectCols[0];
+      const subField = selectCols[1]?.key;
+      const topKeys = [...new Set(rows.map((row) =>
+        String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[groupField])))];
+      if (groupCol) {
+        groupCol.statusOptions = topKeys.map((value, i) =>
+          ({ value, color: CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].color }));
+      }
+      const top = topKeys[0];
+      const topRows = rows.filter((row) =>
+        String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[groupField]) === top);
+      const second = topKeys[1];
+      const secondRows = rows.filter((row) =>
+        String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[groupField]) === second);
+      const subGroups: TableGroup[] = subField && topRows.length > 0
+        ? [...new Set(topRows.map((row) =>
+            String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[subField] ?? "")))]
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((key) => {
+              const subRows = topRows.filter((row) =>
+                String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[subField]) === key);
+              return { key, rows: subRows, count: subRows.length, depth: 1, field: subField };
+            })
+        : [];
+      const groups: TableGroup[] = [
+        { key: top, rows: topRows, count: topRows.length, depth: 0, field: groupField, children: subGroups.length ? subGroups : undefined },
+        { key: second, rows: secondRows, count: secondRows.length, depth: 0, field: groupField },
+      ].filter((group) => group.key !== "undefined");
+      bagKeys = Object.keys(bag).sort();
+      const renderer = new TableRenderer(bag);
+      renderer.renderGroupedTable(container, config, rows, groups, groupField);
+
+      results.push(provenanceResult(container, "table-renderer"));
+      if (results[0].pass) {
+        results.push(multiMarkerAssertion(container,
+          [".db-grouped-table", "tr.db-group-divider-row", ".db-group-divider-row .status-badge", ".db-group-summary-item"],
+          "the grouped table drew its divider rows with badges and summaries"));
+      }
+      // The grouped table owns no layout-bound assertion: the per-row guards above are
+      // calibrated on the flat body loop and the grouped path is the host's shape, not the
+      // measured one.
+    } else {
+      bagKeys = Object.keys(bag).sort();
+      if (control === "per-item") armPerItemRead(bag);
+      const renderer = new TableRenderer(bag);
+
+      const stopCounting = countRowAppendsToConnectedNodes();
+      const stopReads = countLayoutReadsSplit();
+      renderer.renderTable(container, config, rows);
+      const reads = stopReads();
+      const rowAppends = stopCounting();
+
+      results.push(provenanceResult(container, "table-renderer"));
+      if (results[0].pass) {
+        results.push(...tableAssertions(container, rows, columns));
+        if (scenario.tableFooter) {
+          results.push(multiMarkerAssertion(container,
+            ["tfoot.db-table-footer", ".db-table-footer-trigger.has-calculation", ".db-table-footer-kind"],
+            "the footer rendered its calculated aggregates"));
+        }
+        if (scenario.fullStatusPalette) {
+          const badgeColors = new Set(Array.from(container.querySelectorAll<HTMLElement>(
+            ".status-badge[data-status-color], .status-badge[class*='status-color-']",
+          )).map((el) => [...el.classList].find((cls) => cls.startsWith("status-color-")) || ""));
+          results.push({
+            name: "the palette spans the sixteen status colours",
+            pass: badgeColors.size >= 16,
+            detail: `${badgeColors.size} distinct status-color-* class(es) painted`,
+          });
+        }
+        if (scenario.recordIconColumn) {
+          results.push(multiMarkerAssertion(container,
+            [".db-record-icon-colgroup", ".db-record-icon.is-compact", ".db-record-icon.is-default", ".db-record-icon-emoji"],
+            "the record-icon gutter rendered with its default and emoji variants"));
+        }
+        results.push({
+          name: "no row appended to a connected table",
+          pass: rowAppends === 0,
+          detail: rowAppends === 0
+            ? "the row body is built off-document and attached once"
+            : `${rowAppends} row(s) appended to a connected table — per-insertion layout is back`,
+        });
       // `028` asked for "the per-item forced layout is gone from board-renderer.ts and
       // table-renderer.ts" and recorded that the bound it specified would fail the shipped table,
       // because the table reads per row against a DETACHED body and those reads flush nothing. The
@@ -1909,6 +3696,7 @@ export function runRenderAssertions(
             ? " — reads scale with rows, which is the quadratic shape that froze the app"
             : " (the touch probe and the width question are the legitimate O(1) reads)"),
       });
+    }
     }
   }
 

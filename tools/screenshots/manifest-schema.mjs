@@ -23,9 +23,14 @@ export const MANIFEST_SOURCES = ["fixture", "constructed"];
 export const CONSTRUCTED_RENDERERS = [
   "list", "table", "board", "gallery", "calendar", "timeline", "chart",
   "calendar-toolbar", "timeline-toolbar", "chart-toolbar",
+  "toolbar", "active-view-controls", "active-rule-popover", "filter-panel", "sort-panel",
+  "view-config", "column-manager", "record-detail", "record-detail-body", "record-peek",
+  "summary", "owned-menu", "cell-editors", "date-picker", "icon-picker", "color-picker",
+  "relation-values", "file-fields", "number-display", "record-icon", "dropdown",
+  "empty-state", "column-header", "group-selection-controls", "card-covers",
 ];
 export const CONSTRUCTED_BAGS = ["file-view", "embed"];
-export const CONSTRUCTED_SCALES = ["month", "week", "day"];
+export const CONSTRUCTED_SCALES = ["month", "week", "day", "quarter", "year"];
 
 export function validateManifestEntry(entry) {
   const problems = [];

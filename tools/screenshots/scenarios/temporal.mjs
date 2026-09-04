@@ -1334,9 +1334,9 @@ const timelineScaleScenario = (scale, overrides = {}) => {
     group: "views",
     width: 1100,
     sources: overrides.sources || ["src/views/calendar-timeline-renderer.ts"],
-    // The plain week-scale fixture is the state the constructed timeline capture photographs;
-    // the other scales and the subtask-tree variant are not reproduced by it and stay fixture-only.
-    fixtureOf: overrides.fixtureOf || (scale === "week" && !overrides.id ? "constructed-timeline" : undefined),
+    // Every scale has a constructed counterpart now: the week-scale fixture maps to the plain
+    // constructed timeline capture, the other four scales to their own constructed captures.
+    fixtureOf: overrides.fixtureOf || (scale === "week" ? "constructed-timeline" : `constructed-timeline-${scale}`),
     note: overrides.note || (`${label} scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. `
       + `The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.`),
     html: (device) => {

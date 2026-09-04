@@ -195,6 +195,23 @@ export function installObsidianDomShim(target = globalThis) {
     });
     installed += 1;
   }
+  // Obsidian also declares element constructors as globals; the renderers call the prototype
+  // methods almost everywhere, but at least one call site builds a detached element with the
+  // bare form (`createDiv({ cls })`) and appends it itself. The global mirrors the prototype's
+  // info handling with no parent to attach to.
+  const globals = {
+    createDiv(info, callback) {
+      const el = target.document.createElement("div");
+      applyInfo(el, info);
+      if (callback) callback(el);
+      return el;
+    },
+  };
+  for (const [name, fn] of Object.entries(globals)) {
+    if (name in target) continue;
+    Object.defineProperty(target, name, { value: fn, writable: true, configurable: true });
+    installed += 1;
+  }
   for (const proto of prototypes) {
     if (!proto) continue;
     for (const [name, fn] of Object.entries(extensions)) {

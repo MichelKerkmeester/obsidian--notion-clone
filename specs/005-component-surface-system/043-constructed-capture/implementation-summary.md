@@ -168,6 +168,56 @@ underlying harness branch correct. The popover was genuinely absent from
 is why every one of the 40 new captures was opened and read on both desktop and phone before this
 work was called done, rather than trusting the assertion script's PASS alone.
 
+### The remaining fixture families, constructed (T030)
+
+Row 6's residual after `done-audit-10` was the 51 hand-written fixtures with no `fixtureOf`. Of
+those, 46 now have a constructed counterpart and 5 are recorded as unreachable, each with a reason
+checked against source rather than assumed: three panels are hosted by `DbModal`, which extends the
+obsidian `Modal` the shared stub refuses; `chrome-selection-status-bar` lives on an
+`EmbeddedDatabaseRenderer` that extends `MarkdownRenderChild` and shows a state that only exists
+mid-gesture; `board-drop-language`'s classes are added by live `dragstart`/`dragover` handlers.
+Four of the 46 carry a documented partial bound (the record panel's note body, the relation
+renderer's unresolved variant, the record-icon gutter's lucide tokens, the view switcher's
+ResizeObserver-measured overflow tab).
+
+Reading the pictures found five things the marker assertions could not, which is the whole reason
+this program reads them:
+
+- **The day scale was the week scale.** `constructed-timeline-day` was pixel-identical to
+  `constructed-timeline`. Production's own `normalizeTimelineDayScale` rewrites a day-scale config
+  back to week whenever the timeline's date field is a plain `date` column, so the bench's field
+  made the scale unreachable. The branch now gives that field the `datetime` type and the times the
+  scale needs; the capture reads `February 2 2026` over hour columns with the Day chip active.
+- **The empty lane was off-screen.** `withEmptyOptionGroups` appends its backfilled group, and a
+  board scrolls horizontally, so `constructed-board-empty-column` framed five populated lanes and
+  not the one it exists for. The lane production built is now drawn first.
+- **The footer was below the fold.** `constructed-table-footer` on the phone cropped above its own
+  footer row; that scenario takes a shorter row set both devices can frame.
+- **Rows of diamonds.** A runtime census over every constructed scenario found 62 icon ids the
+  toolbar, its popovers, the anchored panels and the field editors reach that the shim's 21-icon
+  set — traced when only the view renderers mounted — did not carry. All 62 added; the census
+  re-runs to zero placeholders.
+- **Two scenarios crashed the lanes.** `board-covers` and `gallery-covers` threw in
+  `resolveCoverImage` (`app.metadataCache` on a harness with no App), taking `touch-targets.mjs`
+  and `unstyled-links.mjs` down with them. One `applyEmptyMetadataCache` helper now serves all
+  three cover paths.
+
+Two harness defects were fixed on the way. Surfaces that portal to `document.body` were never torn
+down, so each scenario measured every earlier scenario's panel too — ten stacked panels by the tenth
+panel scenario. That made the constructed touch-target lane non-deterministic (1457, 1471, 1558,
+1584, 1601, 1623 across six runs of one tree; the pre-existing 31 scenarios alone at 419/429/429
+against a recorded 422, so the ratchet main carries was already decided by timing). The runner now
+sweeps every body child a mount added, at the start of the next mount so a capture still
+photographs its own surface; three passes over one page and two independent lane runs now return
+the same total. Separately, the hidden anchors the harness creates for popovers to position against
+were `<button>`s, which the touch-target lane counted as production controls; they are spans now.
+
+Two branches were rebuilt to stop hand-writing markup production owns: the in-cell editors render
+through `TableRenderer`, so the `db-cell db-editable-cell` classes are `CellRenderer.renderCell`'s
+decision rather than the harness's, and the column header wires `ColumnHeaderController.setup` into
+the renderer's own `setupColumnHeader` action — which also restored the property-type icon the
+hand-built header had omitted.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -272,6 +322,14 @@ Every exit code below was read from `$?` directly.
 | Static-path regression | 0 of 276 fixture entries changed `pixelHash` or `layoutHash` against the committed manifest |
 | `node tools/screenshots/verify.mjs` | PASS, exit 0 — 312 entries match their sources, none blank or theme-identical |
 | `node tools/lane/check-lane.mjs` | Observed red first: FAIL, exit 1, "36 changed capture(s) this release does not name". After the release entry named all 36: PASS, exit 0 |
+| T030 `node tools/live/constructed-state-assertions.mjs` | PASS, exit 0 — 69 PASS, 0 FAIL |
+| T030 capture run | 528 entries, 0 FAILED, 0 CLIPPED; 172 new, 17 pre-existing constructed moved, 22 byte-only re-encodes restored to HEAD |
+| T030 capture reads | all 172 new captures opened and read beside their `fixtureOf` fixture; 5 defects found this way and recaptured |
+| T030 `node tools/live/touch-targets.mjs` | PASS, exit 0 — constructed 31 scenarios / 422 under floor before, 73 / 1278 after; baseline raised to 1278 with per-class attribution |
+| T030 lane determinism | three passes over one page and two independent runs all report 1278 (was 1457-1623 before the body sweep) |
+| T030 `node tools/live/unstyled-links.mjs` | PASS, exit 0 — constructed 31 scenarios / 72 links before, 73 / 1476 after, 0 user-agent link colours |
+| T030 `node tools/lane/check-lane.mjs` | Red first: FAIL, "189 changed capture(s) this release does not name". After the release named all 189: PASS, "release names all 189 changed capture(s)" |
+| T030 `npm run gate` | PASS, exit 0 — 25 green, 0 red, no exemption |
 | `node tools/live/render-assertions.mjs` | PASS, exit 0 |
 | `node tools/live/touch-targets.mjs` | PASS, exit 0 — 70 fixture scenarios, 17 constructed, baselines 279 / 335 unchanged |
 | `node tools/live/unstyled-links.mjs` | PASS, exit 0 — 112 fixture links, constructed pass an honest empty sample |

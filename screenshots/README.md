@@ -229,6 +229,56 @@ The active tab carries is-active; the ⋯ tab appears only once the toolbar has 
 
 Sources: `src/views/toolbar-renderer.ts`
 
+### Active rule popover — filter (constructed)
+
+ActiveRulePopoverRenderer's own toggleFilter against a real anchor, with the panel built by FilterPanelRenderer's renderSingleRuleEditor; captured full-page for its position: fixed placement.
+
+| dark | light |
+|---|---|
+| ![constructed-active-rule-filter dark](components/constructed-active-rule-filter-mobile-dark.png) | ![constructed-active-rule-filter light](components/constructed-active-rule-filter-mobile-light.png) |
+
+Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+
+### Active rule popover — sort (constructed)
+
+The sort twin of the filter popover: toggleSort against a real anchor with SortPanelRenderer's renderSingleRuleEditor; captured full-page for the same reason.
+
+| dark | light |
+|---|---|
+| ![constructed-active-rule-sort dark](components/constructed-active-rule-sort-mobile-dark.png) | ![constructed-active-rule-sort light](components/constructed-active-rule-sort-mobile-light.png) |
+
+Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/sort-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+
+### Active filter and sort chips (constructed)
+
+ActiveViewControlsRenderer's own render over a state with two effective filters and two sorts, so the AND logic button sits between the groups exactly as the chip row draws it.
+
+| dark | light |
+|---|---|
+| ![constructed-active-view-controls dark](components/constructed-active-view-controls-mobile-dark.png) | ![constructed-active-view-controls light](components/constructed-active-view-controls-mobile-light.png) |
+
+Sources: `src/views/active-view-controls-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`
+
+### Board view — empty column (constructed)
+
+The reference board with one configured select option no row carries, backfilled as a zero-row column through the same withEmptyOptionGroups call the hosts make.
+
+| dark | light |
+|---|---|
+| ![constructed-board-empty-column dark](components/constructed-board-empty-column-mobile-dark.png) | ![constructed-board-empty-column light](components/constructed-board-empty-column-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/group-visibility.ts`
+
+### Board extensions selection controls (constructed)
+
+The extensions board (boardExtensionsEnabled), which is the only surface that draws the column-header and card selection boxes; the default board reproduces the reference kanban card, which has none.
+
+| dark | light |
+|---|---|
+| ![constructed-board-extensions dark](components/constructed-board-extensions-mobile-dark.png) | ![constructed-board-extensions light](components/constructed-board-extensions-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
 ### Calendar settings popover (constructed)
 
 CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.
@@ -238,6 +288,16 @@ CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time 
 | ![constructed-calendar-toolbar-options dark](components/constructed-calendar-toolbar-options-mobile-dark.png) | ![constructed-calendar-toolbar-options light](components/constructed-calendar-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/calendar-toolbar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+
+### Card covers, board and gallery (constructed)
+
+The empty cover in both card views: each renderer with an image field the rows resolve nothing for, which is the only cover state a capture without a vault can show. Framing bound: a board of covered cards already fills the viewport an element capture crops to, so the picture holds the board host; the gallery's empty cover is asserted by constructed-state-assertions rather than photographed here.
+
+| dark | light |
+|---|---|
+| ![constructed-card-covers dark](components/constructed-card-covers-mobile-dark.png) | ![constructed-card-covers light](components/constructed-card-covers-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`
 
 ### Chart options popover (constructed)
 
@@ -249,6 +309,76 @@ ChartToolbarRenderer's own togglePopover(); captured full-page for the same posi
 
 Sources: `src/views/chart-toolbar-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/popover-position.ts`
 
+### Column header affordances (constructed)
+
+The header cell the table renderer builds with ColumnHeaderController.setup applied — the call database-view.ts wires into its setupColumnHeader action — with one label long enough to truncate.
+
+| dark | light |
+|---|---|
+| ![constructed-column-header dark](components/constructed-column-header-mobile-dark.png) | ![constructed-column-header light](components/constructed-column-header-mobile-light.png) |
+
+Sources: `src/views/column-header-controller.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Dropdown with disabled option (constructed)
+
+openDropdownMenu's own entry with a selected option, a plain one and a disabled one carrying the reason its tooltip exists to surface.
+
+| dark | light |
+|---|---|
+| ![constructed-dropdown dark](components/constructed-dropdown-mobile-dark.png) | ![constructed-dropdown light](components/constructed-dropdown-mobile-light.png) |
+
+Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Group selection controls (constructed)
+
+One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.
+
+| dark | light |
+|---|---|
+| ![constructed-group-selection-controls dark](components/constructed-group-selection-controls-mobile-dark.png) | ![constructed-group-selection-controls light](components/constructed-group-selection-controls-mobile-light.png) |
+
+Sources: `src/views/list-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`
+
+### Owned menu — the shell every context menu uses (constructed)
+
+createOwnedMenu's own entry with rows built through the handle's addRow the way ColumnMenu builds them. The menu mounts on document.body by design, so the capture is full-page; the phone device pass becomes the bottom-sheet presentation through the module's own showAt placement. Supersedes the desktop menu and the phone sheet fixtures together.
+
+| dark | light |
+|---|---|
+| ![constructed-owned-menu dark](components/constructed-owned-menu-mobile-dark.png) | ![constructed-owned-menu light](components/constructed-owned-menu-mobile-light.png) |
+
+Sources: `src/views/owned-menu.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
+
+### Summary row (constructed)
+
+SummaryRenderer's own render with the onChange hook that makes the rule items draggable and clickable, over the same three rule kinds the grouped table uses.
+
+| dark | light |
+|---|---|
+| ![constructed-summary dark](components/constructed-summary-mobile-dark.png) | ![constructed-summary light](components/constructed-summary-mobile-light.png) |
+
+Sources: `src/views/summary-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Table footer aggregates (constructed)
+
+The constructed table with summary rules configured on a currency, a date and a select column, so the footer the table renders stacks real calculated results.
+
+| dark | light |
+|---|---|
+| ![constructed-table-footer dark](components/constructed-table-footer-mobile-dark.png) | ![constructed-table-footer light](components/constructed-table-footer-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/table-footer-renderer.ts`, `src/views/cell-renderer.ts`
+
+### Grouped table header rows (constructed)
+
+renderGroupedTable's own entry over a two-level group tree with summary rules, so the divider rows carry their coloured badges at both depths and their computed totals.
+
+| dark | light |
+|---|---|
+| ![constructed-table-grouped dark](components/constructed-table-grouped-mobile-dark.png) | ![constructed-table-grouped light](components/constructed-table-grouped-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/group-label-renderer.ts`, `src/views/summary-renderer.ts`
+
 ### Timeline settings popover (constructed)
 
 CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.
@@ -258,6 +388,46 @@ CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for th
 | ![constructed-timeline-toolbar-options dark](components/constructed-timeline-toolbar-options-mobile-dark.png) | ![constructed-timeline-toolbar-options light](components/constructed-timeline-toolbar-options-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+
+### Main toolbar (constructed)
+
+ToolbarRenderer's own render over a one-view database: heading, view tabs, and the query, properties, utilities and creation clusters. The view-switcher fixture this also supersedes showed the tabs alone; here they sit in the header that owns them.
+
+| dark | light |
+|---|---|
+| ![constructed-toolbar dark](components/constructed-toolbar-mobile-dark.png) | ![constructed-toolbar light](components/constructed-toolbar-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Add view popover (constructed)
+
+The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's own onclick; captured full-page for the same position: fixed reason as the utilities popover.
+
+| dark | light |
+|---|---|
+| ![constructed-toolbar-add-view dark](components/constructed-toolbar-add-view-mobile-dark.png) | ![constructed-toolbar-add-view light](components/constructed-toolbar-add-view-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/popover-position.ts`
+
+### Toolbar search, active (constructed)
+
+The same toolbar with the view state's search text set, which is the real input that widens the collapsed wrap and reveals the clear button. The collapsed wrap is in frame in the plain toolbar capture.
+
+| dark | light |
+|---|---|
+| ![constructed-toolbar-search dark](components/constructed-toolbar-search-mobile-dark.png) | ![constructed-toolbar-search light](components/constructed-toolbar-search-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### More-tools dropdown (constructed)
+
+The toolbar's More-tools button clicked, opening the utilities popover through renderUtilitiesOverflowButton's own onclick; captured full-page because the popover positions itself with position: fixed.
+
+| dark | light |
+|---|---|
+| ![constructed-toolbar-utilities dark](components/constructed-toolbar-utilities-mobile-dark.png) | ![constructed-toolbar-utilities light](components/constructed-toolbar-utilities-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/popover-position.ts`
 
 ### Dropdown with disabled option
 
@@ -310,6 +480,116 @@ The menu trigger sits inline after the label and the label truncates before it m
 Sources: `src/views/column-header-controller.ts`
 
 ## fields
+
+### Select cell in edit state (constructed)
+
+The same startEdit entry on a select cell, opening the option-list editor over the column's own configured options. Captured full-page for the same positioning reason.
+
+| dark | light |
+|---|---|
+| ![constructed-cell-editor-select dark](fields/constructed-cell-editor-select-mobile-dark.png) | ![constructed-cell-editor-select light](fields/constructed-cell-editor-select-mobile-light.png) |
+
+Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/column-types.ts`
+
+### Text cell in edit state (constructed)
+
+CellRenderer's own startEdit — the entry database-view.ts wires into its editCell action — opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.
+
+| dark | light |
+|---|---|
+| ![constructed-cell-editor-text dark](fields/constructed-cell-editor-text-mobile-dark.png) | ![constructed-cell-editor-text light](fields/constructed-cell-editor-text-mobile-light.png) |
+
+Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Date value picker (constructed)
+
+renderDateValuePicker's own trigger clicked, opening the popover through the module's own open handler with its presets, segments and the flat mini calendar.
+
+| dark | light |
+|---|---|
+| ![constructed-date-picker dark](fields/constructed-date-picker-mobile-dark.png) | ![constructed-date-picker light](fields/constructed-date-picker-mobile-light.png) |
+
+Sources: `src/views/date-value-picker.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
+
+### Date value picker with time (constructed)
+
+The datetime twin: the same trigger with the includeTime flag, adding the hour and minute segments and the clock icon.
+
+| dark | light |
+|---|---|
+| ![constructed-date-picker-datetime dark](fields/constructed-date-picker-datetime-mobile-dark.png) | ![constructed-date-picker-datetime light](fields/constructed-date-picker-datetime-mobile-light.png) |
+
+Sources: `src/views/date-value-picker.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
+
+### File fields (constructed)
+
+renderSpecialFileFieldValue's own dispatch for the file.tags badges and the link-list column, with the per-tag remove buttons the writable-cell context draws.
+
+| dark | light |
+|---|---|
+| ![constructed-file-fields dark](fields/constructed-file-fields-mobile-dark.png) | ![constructed-file-fields light](fields/constructed-file-fields-mobile-light.png) |
+
+Sources: `src/views/file-field-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Icon picker popover (constructed)
+
+openIconPickerPopover's own entry with a lucide current token, which is what the module reads to open its Icons tab with the colour strip. The panel mounts on document.body, so the capture is full-page.
+
+| dark | light |
+|---|---|
+| ![constructed-icon-picker dark](fields/constructed-icon-picker-mobile-dark.png) | ![constructed-icon-picker light](fields/constructed-icon-picker-mobile-light.png) |
+
+Sources: `src/views/icon-picker-popover.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/record-icon-renderer.ts`
+
+### Number display styles (constructed)
+
+renderRating, renderProgress and renderProgressRing's own entries, one style per row including the tinted variants that paint through the db-num-color-* classes.
+
+| dark | light |
+|---|---|
+| ![constructed-number-displays dark](fields/constructed-number-displays-mobile-dark.png) | ![constructed-number-displays light](fields/constructed-number-displays-mobile-light.png) |
+
+Sources: `src/views/number-display-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/number-display.ts`
+
+### Option colour picker (constructed)
+
+openOptionColorPicker's own entry with the current colour that rings the matching swatch. Mounts on document.body like the icon picker, so the capture is full-page.
+
+| dark | light |
+|---|---|
+| ![constructed-option-color-picker dark](fields/constructed-option-color-picker-mobile-dark.png) | ![constructed-option-color-picker light](fields/constructed-option-color-picker-mobile-light.png) |
+
+Sources: `src/views/option-color-picker.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/status-colors.ts`
+
+### Record icon (constructed)
+
+The table's 28px icon gutter with a real renderRecordIcon bag member and an emoji token on one row. Coloured lucide tokens need Obsidian's getIconIds and degrade to the default fallback here, which is also what unparsed values draw.
+
+| dark | light |
+|---|---|
+| ![constructed-record-icon dark](fields/constructed-record-icon-mobile-dark.png) | ![constructed-record-icon light](fields/constructed-record-icon-mobile-light.png) |
+
+Sources: `src/views/record-icon-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/table-renderer.ts`, `src/views/cell-renderer.ts`, `src/data/record-icon.ts`
+
+### Relation values (constructed)
+
+renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved — the unresolved state needs a live metadata cache and stays fixture-only.
+
+| dark | light |
+|---|---|
+| ![constructed-relation-values dark](fields/constructed-relation-values-mobile-dark.png) | ![constructed-relation-values light](fields/constructed-relation-values-mobile-light.png) |
+
+Sources: `src/views/relation-value-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Status colour range (constructed)
+
+A configured table whose option columns carry one value per status colour, with a multi-select row holding all sixteen, so the whole vocabulary renders as the renderer paints it.
+
+| dark | light |
+|---|---|
+| ![constructed-status-colors dark](fields/constructed-status-colors-mobile-dark.png) | ![constructed-status-colors light](fields/constructed-status-colors-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/cell-renderer.ts`, `src/data/status-colors.ts`
 
 ### Select cell in edit state
 
@@ -423,6 +703,106 @@ Sources: `src/data/status-colors.ts`, `src/views/cell-renderer.ts`
 
 ## panels
 
+### Column manager (constructed)
+
+ColumnManagerRenderer's own render over the table bench's sixteen columns with one hidden, so the select-all checkbox sits in its real indeterminate state.
+
+| dark | light |
+|---|---|
+| ![constructed-column-manager dark](panels/constructed-column-manager-mobile-dark.png) | ![constructed-column-manager light](panels/constructed-column-manager-mobile-light.png) |
+
+Sources: `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
+### Filter panel with active conditions (constructed)
+
+FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.
+
+| dark | light |
+|---|---|
+| ![constructed-filter-panel dark](panels/constructed-filter-panel-mobile-dark.png) | ![constructed-filter-panel light](panels/constructed-filter-panel-mobile-light.png) |
+
+Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/date-value-picker.ts`, `src/data/view-filter-tree.ts`
+
+### Filter panel with a nested group and a NOT (constructed)
+
+The same renderer over a tree that holds a NOT node and an inner OR group — the nesting depth the panel's own wrap rules allow for a wrapped subtree.
+
+| dark | light |
+|---|---|
+| ![constructed-filter-panel-nested dark](panels/constructed-filter-panel-nested-mobile-dark.png) | ![constructed-filter-panel-nested light](panels/constructed-filter-panel-nested-mobile-light.png) |
+
+Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/data/view-filter-tree.ts`
+
+### Record detail panel (constructed)
+
+openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.
+
+| dark | light |
+|---|---|
+| ![constructed-record-detail dark](panels/constructed-record-detail-mobile-dark.png) | ![constructed-record-detail light](panels/constructed-record-detail-mobile-light.png) |
+
+Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/popover-position.ts`, `src/views/mobile-bottom-sheet.ts`
+
+### Record detail — note body being typed (constructed)
+
+mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires — the real MarkdownRenderer has no standalone build — so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.
+
+| dark | light |
+|---|---|
+| ![constructed-record-detail-body-editing dark](panels/constructed-record-detail-body-editing-mobile-dark.png) | ![constructed-record-detail-body-editing light](panels/constructed-record-detail-body-editing-mobile-light.png) |
+
+Sources: `src/views/note-body-region.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Record detail — note body not written yet (constructed)
+
+The same region over an empty body, drawing the placeholder line the module writes when a note has frontmatter and nothing else.
+
+| dark | light |
+|---|---|
+| ![constructed-record-detail-body-empty dark](panels/constructed-record-detail-body-empty-mobile-dark.png) | ![constructed-record-detail-body-empty light](panels/constructed-record-detail-body-empty-mobile-light.png) |
+
+Sources: `src/views/note-body-region.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Table record peek (constructed)
+
+openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.
+
+| dark | light |
+|---|---|
+| ![constructed-record-peek dark](panels/constructed-record-peek-mobile-dark.png) | ![constructed-record-peek light](panels/constructed-record-peek-mobile-light.png) |
+
+Sources: `src/views/table-record-peek.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/table-renderer.ts`, `src/views/cell-renderer.ts`
+
+### Sort panel with two rules (constructed)
+
+SortPanelRenderer's own render over two real rules, with the first rule's move-up and the last rule's move-down disabled by the renderer itself.
+
+| dark | light |
+|---|---|
+| ![constructed-sort-panel dark](panels/constructed-sort-panel-mobile-dark.png) | ![constructed-sort-panel light](panels/constructed-sort-panel-mobile-light.png) |
+
+Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
+
+### Sort panel with no rules, calendar hint (constructed)
+
+The calendar view's sort panel: the renderer reads config.viewType === "calendar" and draws its layout hint above the empty state — the only state the hint appears in.
+
+| dark | light |
+|---|---|
+| ![constructed-sort-panel-calendar dark](panels/constructed-sort-panel-calendar-mobile-dark.png) | ![constructed-sort-panel-calendar light](panels/constructed-sort-panel-calendar-mobile-light.png) |
+
+Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### View configuration panel (constructed)
+
+ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.
+
+| dark | light |
+|---|---|
+| ![constructed-view-config dark](panels/constructed-view-config-mobile-dark.png) | ![constructed-view-config light](panels/constructed-view-config-mobile-light.png) |
+
+Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
+
 ### Column manager
 
 One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.
@@ -534,6 +914,16 @@ The top of the panel for a table view: database-scoped rows above the section di
 Sources: `src/views/view-config-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
 ## states
+
+### Empty state (constructed)
+
+EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper — a composite no single renderer emits — so the constructed picture is the real card shape.
+
+| dark | light |
+|---|---|
+| ![constructed-empty-state dark](states/constructed-empty-state-mobile-dark.png) | ![constructed-empty-state light](states/constructed-empty-state-mobile-light.png) |
+
+Sources: `src/views/empty-state-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### Empty state
 
@@ -755,7 +1145,7 @@ Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tool
 
 ### Table view (constructed)
 
-The shipped table renderer at the bench's sixteen-column, 2000-row shape.
+The shipped table renderer at the bench's sixteen-column shape, over the capture-sized row set captureData selects.
 
 | dark | light |
 |---|---|
@@ -773,6 +1163,36 @@ The shipped week-scale timeline at the bench shape, with the renderer's own grou
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Timeline day scale (constructed)
+
+The shipped timeline renderer at its day scale, the scale the fixture this supersedes photographed as hand-written markup.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline-day dark](views/constructed-timeline-day-mobile-dark.png) | ![constructed-timeline-day light](views/constructed-timeline-day-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Timeline month scale (constructed)
+
+The shipped timeline renderer at its month scale.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline-month dark](views/constructed-timeline-month-mobile-dark.png) | ![constructed-timeline-month light](views/constructed-timeline-month-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Timeline quarter scale (constructed)
+
+The shipped timeline renderer at its quarter scale.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline-quarter dark](views/constructed-timeline-quarter-mobile-dark.png) | ![constructed-timeline-quarter light](views/constructed-timeline-quarter-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
 ### Timeline view — subtask tree (constructed)
 
 The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.
@@ -782,6 +1202,16 @@ The shipped week-scale timeline with the first capture-sized row wired into the 
 | ![constructed-timeline-subtask dark](views/constructed-timeline-subtask-mobile-dark.png) | ![constructed-timeline-subtask light](views/constructed-timeline-subtask-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
+
+### Timeline year scale (constructed)
+
+The shipped timeline renderer at its year scale.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline-year dark](views/constructed-timeline-year-mobile-dark.png) | ![constructed-timeline-year light](views/constructed-timeline-year-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### Gallery view
 

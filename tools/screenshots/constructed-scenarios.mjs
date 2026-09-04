@@ -167,38 +167,53 @@ function constructedSources(rendererFile, benchFile) {
   return [rendererFile, benchFile, ...SHARED_CONSTRUCTED_SOURCES];
 }
 
+// The harness's own ScenarioSpec options a capture may declare, passed through unchanged. Each
+// is additive and off by default; the harness branch that reads it is the only consumer, so a
+// scenario that declares an option a branch does not know about would be caught by the state
+// assertions rather than silently ignored.
+const SPEC_OPTIONS = [
+  "subtaskTree", "sparseFields", "emptyState", "chartVariant", "miniCalendar",
+  "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
+  "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
+  "boardEmptyColumn", "galleryImageField", "tableGroups", "tableFooter", "fullStatusPalette",
+  "recordIconColumn", "columnHeaderController", "longHeaderLabel",
+];
+
 function constructedScenario(view, opts) {
   // captureData is the harness's own opt-in (render-assertion-harness.ts's ScenarioSpec): a
   // small "mixed"-type dataset sized like the hand-written fixtures rather than the 1600-2000-row
   // structural-cost shape the assertion/touch-target/unstyled-links lanes measure. A capture
   // exists to show what the shipped types render as, so it is the one caller that turns this on.
-  // subtaskTree/sparseFields/emptyState/chartVariant are the same harness's own per-view state
-  // options — additive, opt-in, and passed through unchanged when a scenario declares one.
+  // The other options in SPEC_OPTIONS are the same harness's own per-surface state options —
+  // additive, opt-in, and passed through unchanged when a scenario declares one.
   const spec = {
     renderer: opts.renderer,
     bag: "file-view",
     ...(opts.scale ? { scale: opts.scale } : {}),
     ...(opts.captureData === false ? {} : { captureData: true }),
-    ...(opts.subtaskTree ? { subtaskTree: true } : {}),
-    ...(opts.sparseFields ? { sparseFields: true } : {}),
-    ...(opts.emptyState ? { emptyState: true } : {}),
-    ...(opts.chartVariant ? { chartVariant: opts.chartVariant } : {}),
-    ...(opts.miniCalendar ? { miniCalendar: true } : {}),
+    ...Object.fromEntries(SPEC_OPTIONS
+      .filter((key) => opts[key] !== undefined)
+      .map((key) => [key, opts[key]])),
   };
   return {
     id: `constructed-${view}`,
     title: opts.title,
-    // Component-grouped captures (the three toolbar popovers) open a real, JS-positioned
-    // `position: fixed` panel — an element-scoped shot of `#shot` cannot see it, since fixed
-    // positioning escapes `#shot`'s own flow-based bounding box, so those declare "viewport" to
-    // photograph the full page the popover actually paints onto (capture.mjs's own `page.screenshot()`
-    // branch for non-element modes) rather than an "element" crop that would clip it to nothing.
+    // Component-grouped captures (the toolbar popovers, the anchored panels and the field
+    // editors) open a real, JS-positioned surface — `position: fixed` panels escape `#shot`'s own
+    // flow-based bounding box, phone sheets portal to the body, and the menu/picker mounts on
+    // document.body by design — so those declare "viewport" to photograph the full page the
+    // surface actually paints onto (capture.mjs's own `page.screenshot()` branch for non-element
+    // modes) rather than an "element" crop that would clip it to nothing.
     group: opts.group || "views",
     ...(opts.capture ? { capture: opts.capture } : {}),
     sources: opts.sources,
     renderer: opts.renderer,
     bag: "file-view",
     ...(opts.scale ? { scale: opts.scale } : {}),
+    // The fixture this constructed capture supersedes as the authority for the state it
+    // photographs; the fixture side declares the same relationship, so the manifest records it
+    // on both entries.
+    ...(opts.fixtureOf ? { fixtureOf: opts.fixtureOf } : {}),
     note: opts.note,
     mount: async (page, device, theme) => mountConstructed(page, device, theme, spec),
   };
@@ -215,7 +230,8 @@ export const CONSTRUCTED_SCENARIOS = [
     renderer: "table",
     title: "Table view (constructed)",
     sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts"),
-    note: "The shipped table renderer at the bench's sixteen-column, 2000-row shape.",
+    note: "The shipped table renderer at the bench's sixteen-column shape, over the capture-sized "
+      + "row set captureData selects.",
   }),
   constructedScenario("board", {
     renderer: "board",
@@ -360,6 +376,508 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/views/popover-position.ts"]),
     note: "ChartToolbarRenderer's own togglePopover(); captured full-page for the same "
       + "position: fixed reason as the other two settings popovers.",
+  }),
+
+  // ── The toolbar and the surfaces its own buttons open: the plain toolbar, the search control
+  // widened by its state's text, and the two popovers reached by clicking the toolbar's own
+  // trigger buttons — the same anchors a device tap reaches, never a hand-applied class.
+
+  constructedScenario("toolbar", {
+    renderer: "toolbar",
+    group: "components",
+    title: "Main toolbar (constructed)",
+    fixtureOf: "chrome-toolbar",
+    sources: constructedSources("src/views/toolbar-renderer.ts", "tools/bench/table-render-bench.ts"),
+    note: "ToolbarRenderer's own render over a one-view database: heading, view tabs, and the "
+      + "query, properties, utilities and creation clusters. The view-switcher fixture this also "
+      + "supersedes showed the tabs alone; here they sit in the header that owns them.",
+  }),
+  constructedScenario("toolbar-search", {
+    renderer: "toolbar",
+    searchText: "notion",
+    group: "components",
+    title: "Toolbar search, active (constructed)",
+    fixtureOf: "chrome-toolbar-search",
+    sources: constructedSources("src/views/toolbar-renderer.ts", "tools/bench/table-render-bench.ts"),
+    note: "The same toolbar with the view state's search text set, which is the real input that "
+      + "widens the collapsed wrap and reveals the clear button. The collapsed wrap is in frame "
+      + "in the plain toolbar capture.",
+  }),
+  constructedScenario("toolbar-utilities", {
+    renderer: "toolbar",
+    toolbarPopover: "utilities",
+    group: "components",
+    capture: "viewport",
+    title: "More-tools dropdown (constructed)",
+    fixtureOf: "chrome-utilities-popover",
+    sources: constructedSources("src/views/toolbar-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/menu-row.ts", "src/views/popover-position.ts"]),
+    note: "The toolbar's More-tools button clicked, opening the utilities popover through "
+      + "renderUtilitiesOverflowButton's own onclick; captured full-page because the popover "
+      + "positions itself with position: fixed.",
+  }),
+  constructedScenario("toolbar-add-view", {
+    renderer: "toolbar",
+    toolbarPopover: "add-view",
+    group: "components",
+    capture: "viewport",
+    title: "Add view popover (constructed)",
+    fixtureOf: "add-view-popover",
+    sources: constructedSources("src/views/toolbar-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/menu-row.ts", "src/views/popover-position.ts"]),
+    note: "The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's "
+      + "own onclick; captured full-page for the same position: fixed reason as the utilities popover.",
+  }),
+  constructedScenario("active-view-controls", {
+    renderer: "active-view-controls",
+    group: "components",
+    title: "Active filter and sort chips (constructed)",
+    fixtureOf: "chrome-active-view-controls",
+    sources: constructedSources("src/views/active-view-controls-renderer.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/filter-panel-renderer.ts"]),
+    note: "ActiveViewControlsRenderer's own render over a state with two effective filters and "
+      + "two sorts, so the AND logic button sits between the groups exactly as the chip row draws it.",
+  }),
+  constructedScenario("active-rule-filter", {
+    renderer: "active-rule-popover",
+    ruleKind: "filter",
+    group: "components",
+    capture: "viewport",
+    title: "Active rule popover — filter (constructed)",
+    fixtureOf: "chrome-active-rule-popover-filter",
+    sources: constructedSources("src/views/active-rule-popover-renderer.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/filter-panel-renderer.ts", "src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
+    note: "ActiveRulePopoverRenderer's own toggleFilter against a real anchor, with the panel "
+      + "built by FilterPanelRenderer's renderSingleRuleEditor; captured full-page for its "
+      + "position: fixed placement.",
+  }),
+  constructedScenario("active-rule-sort", {
+    renderer: "active-rule-popover",
+    ruleKind: "sort",
+    group: "components",
+    capture: "viewport",
+    title: "Active rule popover — sort (constructed)",
+    fixtureOf: "chrome-active-rule-popover-sort",
+    sources: constructedSources("src/views/active-rule-popover-renderer.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/sort-panel-renderer.ts", "src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
+    note: "The sort twin of the filter popover: toggleSort against a real anchor with "
+      + "SortPanelRenderer's renderSingleRuleEditor; captured full-page for the same reason.",
+  }),
+
+  // ── The anchored panels, each opened through its own renderer's public render entry against a
+  // real anchor. All of them position themselves with position: fixed (or portal to the body as
+  // a phone sheet), so every one is captured full-page.
+
+  constructedScenario("filter-panel", {
+    renderer: "filter-panel",
+    group: "panels",
+    capture: "viewport",
+    title: "Filter panel with active conditions (constructed)",
+    fixtureOf: "panel-filter-conditions",
+    sources: constructedSources("src/views/filter-panel-renderer.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/dropdown-field.ts", "src/views/date-value-picker.ts", "src/data/view-filter-tree.ts"]),
+    note: "FilterPanelRenderer's own render over a flat AND group of three rules, so the panel "
+      + "header defers its logic button to the group's own dropdown.",
+  }),
+  constructedScenario("filter-panel-nested", {
+    renderer: "filter-panel",
+    filterDepth: "nested",
+    group: "panels",
+    capture: "viewport",
+    title: "Filter panel with a nested group and a NOT (constructed)",
+    fixtureOf: "panel-filter-nested-group",
+    sources: constructedSources("src/views/filter-panel-renderer.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/dropdown-field.ts", "src/data/view-filter-tree.ts"]),
+    note: "The same renderer over a tree that holds a NOT node and an inner OR group — the "
+      + "nesting depth the panel's own wrap rules allow for a wrapped subtree.",
+  }),
+  constructedScenario("sort-panel", {
+    renderer: "sort-panel",
+    group: "panels",
+    capture: "viewport",
+    title: "Sort panel with two rules (constructed)",
+    fixtureOf: "panel-sort-rules",
+    sources: constructedSources("src/views/sort-panel-renderer.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/dropdown-field.ts"]),
+    note: "SortPanelRenderer's own render over two real rules, with the first rule's move-up and "
+      + "the last rule's move-down disabled by the renderer itself.",
+  }),
+  constructedScenario("sort-panel-calendar", {
+    renderer: "sort-panel",
+    calendarHint: true,
+    group: "panels",
+    capture: "viewport",
+    title: "Sort panel with no rules, calendar hint (constructed)",
+    fixtureOf: "panel-sort-calendar-empty",
+    sources: constructedSources("src/views/sort-panel-renderer.ts", "tools/bench/list-render-bench.ts"),
+    note: "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" "
+      + "and draws its layout hint above the empty state — the only state the hint appears in.",
+  }),
+  constructedScenario("view-config", {
+    renderer: "view-config",
+    group: "panels",
+    capture: "viewport",
+    title: "View configuration panel (constructed)",
+    fixtureOf: "panel-view-config",
+    sources: constructedSources("src/views/view-config-panel-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/dropdown-field.ts"]),
+    note: "ViewConfigPanelRenderer's own render for a table view with a one-view database, so "
+      + "both the database-scoped and the view-scoped sections draw.",
+  }),
+  constructedScenario("column-manager", {
+    renderer: "column-manager",
+    group: "panels",
+    capture: "viewport",
+    title: "Column manager (constructed)",
+    fixtureOf: "panel-column-manager",
+    sources: constructedSources("src/views/column-manager-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/property-type-icon.ts", "src/views/checkbox.ts"]),
+    note: "ColumnManagerRenderer's own render over the table bench's sixteen columns with one "
+      + "hidden, so the select-all checkbox sits in its real indeterminate state.",
+  }),
+  constructedScenario("record-detail", {
+    renderer: "record-detail",
+    group: "panels",
+    capture: "viewport",
+    title: "Record detail panel (constructed)",
+    fixtureOf: "panel-record-detail",
+    sources: constructedSources("src/views/record-detail-panel.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/card-field-renderer.ts", "src/views/popover-position.ts", "src/views/mobile-bottom-sheet.ts"]),
+    note: "openRecordDetailPanel's own entry against a real anchor over a capture-sized board "
+      + "row: the panel chrome and its typed fields. The note body is absent — mounting it needs "
+      + "a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through "
+      + "positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone "
+      + "sheet fixtures together.",
+  }),
+  constructedScenario("record-detail-body-editing", {
+    renderer: "record-detail-body",
+    recordBodyVariant: "editing",
+    group: "panels",
+    capture: "viewport",
+    title: "Record detail — note body being typed (constructed)",
+    fixtureOf: "panel-record-detail-sheet-body-editing",
+    sources: constructedSources("src/views/note-body-region.ts", "tools/bench/board-render-bench.ts"),
+    note: "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for "
+      + "its textarea. The markdown-to-DOM renderer is the injected one the module's contract "
+      + "requires — the real MarkdownRenderer has no standalone build — so the region's modes are "
+      + "production and the content inside them is not. The editor's blur-commits contract means "
+      + "the mount re-enters edit mode after its teardown, so the picture shows the textarea "
+      + "rather than the body it would fall back to.",
+  }),
+  constructedScenario("record-detail-body-empty", {
+    renderer: "record-detail-body",
+    recordBodyVariant: "empty",
+    group: "panels",
+    capture: "viewport",
+    title: "Record detail — note body not written yet (constructed)",
+    fixtureOf: "panel-record-detail-sheet-body-empty",
+    sources: constructedSources("src/views/note-body-region.ts", "tools/bench/board-render-bench.ts"),
+    note: "The same region over an empty body, drawing the placeholder line the module writes "
+      + "when a note has frontmatter and nothing else.",
+  }),
+  constructedScenario("record-peek", {
+    renderer: "record-peek",
+    group: "panels",
+    capture: "viewport",
+    title: "Table record peek (constructed)",
+    fixtureOf: "panel-record-peek",
+    sources: constructedSources("src/views/table-record-peek.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/table-renderer.ts", "src/views/cell-renderer.ts"]),
+    note: "openTableRecordPeek's own entry docked beside the real table it opens from, with the "
+      + "row's typed values rendered through the peek's own property renderer.",
+  }),
+
+  // ── The chrome surfaces that ride a real table or row.
+
+  constructedScenario("table-footer", {
+    renderer: "table",
+    tableFooter: true,
+    group: "components",
+    title: "Table footer aggregates (constructed)",
+    fixtureOf: "chrome-table-footer",
+    sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/table-footer-renderer.ts", "src/views/cell-renderer.ts"]),
+    note: "The constructed table with summary rules configured on a currency, a date and a select "
+      + "column, so the footer the table renders stacks real calculated results.",
+  }),
+  constructedScenario("table-grouped", {
+    renderer: "table",
+    tableGroups: true,
+    group: "components",
+    title: "Grouped table header rows (constructed)",
+    fixtureOf: "chrome-group-header-row",
+    sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/group-label-renderer.ts", "src/views/summary-renderer.ts"]),
+    note: "renderGroupedTable's own entry over a two-level group tree with summary rules, so the "
+      + "divider rows carry their coloured badges at both depths and their computed totals.",
+  }),
+  constructedScenario("summary", {
+    renderer: "summary",
+    group: "components",
+    title: "Summary row (constructed)",
+    fixtureOf: "chrome-summary-row",
+    sources: constructedSources("src/views/summary-renderer.ts", "tools/bench/list-render-bench.ts"),
+    note: "SummaryRenderer's own render with the onChange hook that makes the rule items "
+      + "draggable and clickable, over the same three rule kinds the grouped table uses.",
+  }),
+  constructedScenario("owned-menu", {
+    renderer: "owned-menu",
+    group: "components",
+    capture: "viewport",
+    title: "Owned menu — the shell every context menu uses (constructed)",
+    fixtureOf: "chrome-owned-menu",
+    sources: constructedSources("src/views/owned-menu.ts", "tools/bench/list-render-bench.ts")
+      .concat(["src/views/menu-row.ts", "src/views/mobile-bottom-sheet.ts"]),
+    note: "createOwnedMenu's own entry with rows built through the handle's addRow the way "
+      + "ColumnMenu builds them. The menu mounts on document.body by design, so the capture is "
+      + "full-page; the phone device pass becomes the bottom-sheet presentation through the "
+      + "module's own showAt placement. Supersedes the desktop menu and the phone sheet fixtures "
+      + "together.",
+  }),
+  constructedScenario("group-selection-controls", {
+    renderer: "group-selection-controls",
+    group: "components",
+    title: "Group selection controls (constructed)",
+    fixtureOf: "chrome-group-selection-controls",
+    sources: constructedSources("src/views/list-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/gallery-renderer.ts", "src/views/board-renderer.ts", "src/views/group-label-renderer.ts"]),
+    note: "One role, three views: the whole-group selection box from the list, the gallery and "
+      + "the extensions board's column header, each through its renderer's own grouped entry. The "
+      + "fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface "
+      + "is the swimlane lane header, which carries no box. Framing bound: three real grouped "
+      + "renders do not fit one viewport, and an element capture crops to it, so the picture holds "
+      + "the list host and as much of the next as fits; the gallery and board boxes are asserted "
+      + "by constructed-state-assertions rather than photographed here.",
+  }),
+  constructedScenario("card-covers", {
+    renderer: "card-covers",
+    group: "components",
+    title: "Card covers, board and gallery (constructed)",
+    fixtureOf: "card-cover-states",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/gallery-renderer.ts"]),
+    note: "The empty cover in both card views: each renderer with an image field the rows resolve "
+      + "nothing for, which is the only cover state a capture without a vault can show. Framing "
+      + "bound: a board of covered cards already fills the viewport an element capture crops to, "
+      + "so the picture holds the board host; the gallery's empty cover is asserted by "
+      + "constructed-state-assertions rather than photographed here.",
+  }),
+
+  // ── The field editors, pickers and value renderers.
+
+  constructedScenario("cell-editor-text", {
+    renderer: "cell-editors",
+    editorKind: "text",
+    group: "fields",
+    capture: "viewport",
+    title: "Text cell in edit state (constructed)",
+    fixtureOf: "field-cell-edit-text",
+    sources: constructedSources("src/views/cell-renderer.ts", "tools/bench/table-render-bench.ts"),
+    note: "CellRenderer's own startEdit — the entry database-view.ts wires into its editCell "
+      + "action — opened on a markdown text cell (toolbar and textarea) and on a number cell "
+      + "(single-line editor). Captured full-page because the editors position themselves "
+      + "against the cell.",
+  }),
+  constructedScenario("cell-editor-select", {
+    renderer: "cell-editors",
+    editorKind: "select",
+    group: "fields",
+    capture: "viewport",
+    title: "Select cell in edit state (constructed)",
+    fixtureOf: "field-cell-edit-select",
+    sources: constructedSources("src/views/cell-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/data/column-types.ts"]),
+    note: "The same startEdit entry on a select cell, opening the option-list editor over the "
+      + "column's own configured options. Captured full-page for the same positioning reason.",
+  }),
+  constructedScenario("date-picker", {
+    renderer: "date-picker",
+    group: "fields",
+    capture: "viewport",
+    title: "Date value picker (constructed)",
+    fixtureOf: "field-date-value-picker",
+    sources: constructedSources("src/views/date-value-picker.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/calendar-mini-calendar-renderer.ts"]),
+    note: "renderDateValuePicker's own trigger clicked, opening the popover through the module's "
+      + "own open handler with its presets, segments and the flat mini calendar.",
+  }),
+  constructedScenario("date-picker-datetime", {
+    renderer: "date-picker",
+    includeTime: true,
+    group: "fields",
+    capture: "viewport",
+    title: "Date value picker with time (constructed)",
+    fixtureOf: "field-date-value-picker-datetime",
+    sources: constructedSources("src/views/date-value-picker.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/calendar-mini-calendar-renderer.ts"]),
+    note: "The datetime twin: the same trigger with the includeTime flag, adding the hour and "
+      + "minute segments and the clock icon.",
+  }),
+  constructedScenario("icon-picker", {
+    renderer: "icon-picker",
+    group: "fields",
+    capture: "viewport",
+    title: "Icon picker popover (constructed)",
+    fixtureOf: "field-icon-picker",
+    sources: constructedSources("src/views/icon-picker-popover.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/record-icon-renderer.ts"]),
+    note: "openIconPickerPopover's own entry with a lucide current token, which is what the "
+      + "module reads to open its Icons tab with the colour strip. The panel mounts on "
+      + "document.body, so the capture is full-page.",
+  }),
+  constructedScenario("option-color-picker", {
+    renderer: "color-picker",
+    group: "fields",
+    capture: "viewport",
+    title: "Option colour picker (constructed)",
+    fixtureOf: "field-option-color-picker",
+    sources: constructedSources("src/views/option-color-picker.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/data/status-colors.ts"]),
+    note: "openOptionColorPicker's own entry with the current colour that rings the matching "
+      + "swatch. Mounts on document.body like the icon picker, so the capture is full-page.",
+  }),
+  constructedScenario("relation-values", {
+    renderer: "relation-values",
+    group: "fields",
+    title: "Relation values (constructed)",
+    fixtureOf: "field-relation-values",
+    sources: constructedSources("src/views/relation-value-renderer.ts", "tools/bench/board-render-bench.ts"),
+    note: "renderRelationValue's own entry with no App, the module's documented no-vault mode in "
+      + "which every target renders as resolved — the unresolved state needs a live metadata "
+      + "cache and stays fixture-only.",
+  }),
+  constructedScenario("file-fields", {
+    renderer: "file-fields",
+    group: "fields",
+    title: "File fields (constructed)",
+    fixtureOf: "field-file-fields",
+    sources: constructedSources("src/views/file-field-renderer.ts", "tools/bench/table-render-bench.ts"),
+    note: "renderSpecialFileFieldValue's own dispatch for the file.tags badges and the link-list "
+      + "column, with the per-tag remove buttons the writable-cell context draws.",
+  }),
+  constructedScenario("number-displays", {
+    renderer: "number-display",
+    group: "fields",
+    title: "Number display styles (constructed)",
+    fixtureOf: "field-number-displays",
+    sources: constructedSources("src/views/number-display-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/data/number-display.ts"]),
+    note: "renderRating, renderProgress and renderProgressRing's own entries, one style per row "
+      + "including the tinted variants that paint through the db-num-color-* classes.",
+  }),
+  constructedScenario("record-icon", {
+    renderer: "record-icon",
+    group: "fields",
+    title: "Record icon (constructed)",
+    fixtureOf: "field-record-icon",
+    sources: constructedSources("src/views/record-icon-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/table-renderer.ts", "src/views/cell-renderer.ts", "src/data/record-icon.ts"]),
+    note: "The table's 28px icon gutter with a real renderRecordIcon bag member and an emoji "
+      + "token on one row. Coloured lucide tokens need Obsidian's getIconIds and degrade to the "
+      + "default fallback here, which is also what unparsed values draw.",
+  }),
+  constructedScenario("status-colors", {
+    renderer: "table",
+    fullStatusPalette: true,
+    group: "fields",
+    title: "Status colour range (constructed)",
+    fixtureOf: "field-status-colors",
+    sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/cell-renderer.ts", "src/data/status-colors.ts"]),
+    note: "A configured table whose option columns carry one value per status colour, with a "
+      + "multi-select row holding all sixteen, so the whole vocabulary renders as the renderer "
+      + "paints it.",
+  }),
+
+  // ── The core components.
+
+  constructedScenario("dropdown", {
+    renderer: "dropdown",
+    group: "components",
+    capture: "viewport",
+    title: "Dropdown with disabled option (constructed)",
+    fixtureOf: "dropdown-field",
+    sources: constructedSources("src/views/dropdown-field.ts", "tools/bench/table-render-bench.ts"),
+    note: "openDropdownMenu's own entry with a selected option, a plain one and a disabled one "
+      + "carrying the reason its tooltip exists to surface.",
+  }),
+  constructedScenario("empty-state", {
+    renderer: "empty-state",
+    group: "states",
+    title: "Empty state (constructed)",
+    fixtureOf: "empty-state",
+    sources: constructedSources("src/views/empty-state-renderer.ts", "tools/bench/table-render-bench.ts"),
+    note: "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's "
+      + "copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper — a "
+      + "composite no single renderer emits — so the constructed picture is the real card shape.",
+  }),
+  constructedScenario("column-header", {
+    renderer: "column-header",
+    group: "components",
+    title: "Column header affordances (constructed)",
+    fixtureOf: "table-column-header",
+    sources: constructedSources("src/views/column-header-controller.ts", "tools/bench/table-render-bench.ts"),
+    note: "The header cell the table renderer builds with ColumnHeaderController.setup applied — "
+      + "the call database-view.ts wires into its setupColumnHeader action — with one label long "
+      + "enough to truncate.",
+  }),
+
+  // ── The board state variants and the remaining timeline scales.
+
+  constructedScenario("board-empty-column", {
+    renderer: "board",
+    boardEmptyColumn: true,
+    group: "components",
+    title: "Board view — empty column (constructed)",
+    fixtureOf: "board-empty-column",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/data/group-visibility.ts"]),
+    note: "The reference board with one configured select option no row carries, backfilled as a "
+      + "zero-row column through the same withEmptyOptionGroups call the hosts make.",
+  }),
+  constructedScenario("board-extensions", {
+    renderer: "board",
+    boardExtensions: true,
+    group: "components",
+    title: "Board extensions selection controls (constructed)",
+    fixtureOf: "chrome-board-extensions-selection",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts"),
+    note: "The extensions board (boardExtensionsEnabled), which is the only surface that draws "
+      + "the column-header and card selection boxes; the default board reproduces the reference "
+      + "kanban card, which has none.",
+  }),
+  constructedScenario("timeline-day", {
+    renderer: "timeline",
+    scale: "day",
+    title: "Timeline day scale (constructed)",
+    fixtureOf: "timeline-view-day",
+    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
+    note: "The shipped timeline renderer at its day scale, the scale the fixture this supersedes "
+      + "photographed as hand-written markup.",
+  }),
+  constructedScenario("timeline-month", {
+    renderer: "timeline",
+    scale: "month",
+    title: "Timeline month scale (constructed)",
+    fixtureOf: "timeline-view-month",
+    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
+    note: "The shipped timeline renderer at its month scale.",
+  }),
+  constructedScenario("timeline-quarter", {
+    renderer: "timeline",
+    scale: "quarter",
+    title: "Timeline quarter scale (constructed)",
+    fixtureOf: "timeline-view-quarter",
+    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
+    note: "The shipped timeline renderer at its quarter scale.",
+  }),
+  constructedScenario("timeline-year", {
+    renderer: "timeline",
+    scale: "year",
+    title: "Timeline year scale (constructed)",
+    fixtureOf: "timeline-view-year",
+    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
+    note: "The shipped timeline renderer at its year scale.",
   }),
 ];
 

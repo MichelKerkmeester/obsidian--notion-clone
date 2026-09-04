@@ -32,6 +32,7 @@ export const CORE_SCENARIOS = [
     title: "Column header affordances",
     group: "components",
     width: 620,
+    fixtureOf: "constructed-column-header",
     sources: ["src/views/column-header-controller.ts"],
     note: "The menu trigger sits inline after the label and the label truncates before it moves.",
     html: () => `
@@ -110,6 +111,7 @@ export const CORE_SCENARIOS = [
     title: "Board view — empty column",
     group: "components",
     width: 660,
+    fixtureOf: "constructed-board-empty-column",
     sources: ["src/views/board-renderer.ts"],
     note: "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
     html: () => `
@@ -218,6 +220,7 @@ export const CORE_SCENARIOS = [
     id: "add-view-popover",
     title: "Add view popover",
     group: "components",
+    fixtureOf: "constructed-toolbar-add-view",
     // The width the stylesheet actually gives this panel, plus the 16px the capture box frames it
     // with on each side. It read 292 — narrower than the surface — and `#shot` is `overflow:
     // hidden`, so the capture cut 84px off the right: the three inputs ran out of the frame and the
@@ -288,6 +291,7 @@ export const CORE_SCENARIOS = [
     title: "Dropdown with disabled option",
     group: "components",
     width: 380,
+    fixtureOf: "constructed-dropdown",
     sources: ["src/views/dropdown-field.ts"],
     note: "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
     html: () => {
@@ -329,6 +333,7 @@ export const CORE_SCENARIOS = [
     title: "Empty state",
     group: "states",
     width: 720,
+    fixtureOf: "constructed-empty-state",
     sources: ["src/views/empty-state-renderer.ts"],
     html: () => `
       <div class="note-database-container">
@@ -462,6 +467,7 @@ export const CORE_SCENARIOS = [
     title: "Card covers, board and gallery",
     group: "components",
     width: 620,
+    fixtureOf: "constructed-card-covers",
     sources: ["src/views/board-renderer.ts", "src/views/gallery-renderer.ts"],
     // Two families that were in source and in no fixture. `renderCover` runs in both card views
     // whenever an image field is configured, and every capture in this corpus was of a view with

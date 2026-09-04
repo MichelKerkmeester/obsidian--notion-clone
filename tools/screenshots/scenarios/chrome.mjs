@@ -352,6 +352,7 @@ export const CHROME_SCENARIOS = [
     title: "Main toolbar",
     group: "components",
     width: 1100,
+    fixtureOf: "constructed-toolbar",
     sources: ["src/views/toolbar-renderer.ts"],
     note: "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
     html: () => `
@@ -377,6 +378,7 @@ export const CHROME_SCENARIOS = [
     title: "View switcher tablist",
     group: "components",
     width: 760,
+    fixtureOf: "constructed-toolbar",
     sources: ["src/views/toolbar-renderer.ts"],
     note: "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
     html: () => `
@@ -404,6 +406,7 @@ export const CHROME_SCENARIOS = [
     title: "Toolbar search, collapsed and expanded",
     group: "components",
     width: 340,
+    fixtureOf: "constructed-toolbar-search",
     sources: ["src/views/toolbar-renderer.ts"],
     note: "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
     html: () => `
@@ -423,6 +426,7 @@ export const CHROME_SCENARIOS = [
     title: "Active filter and sort chips",
     group: "components",
     width: 900,
+    fixtureOf: "constructed-active-view-controls",
     sources: ["src/views/active-view-controls-renderer.ts"],
     note: "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
     html: () => {
@@ -465,6 +469,7 @@ export const CHROME_SCENARIOS = [
     title: "More-tools dropdown",
     group: "components",
     width: 420,
+    fixtureOf: "constructed-toolbar-utilities",
     sources: ["src/views/toolbar-renderer.ts", "src/views/menu-row.ts"],
     note: "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
     captureCss: `.note-database-container .db-toolbar-utilities-popover { ${IN_FLOW_PANEL} }`,
@@ -486,6 +491,7 @@ export const CHROME_SCENARIOS = [
     title: "Active rule popover — filter",
     group: "components",
     width: 620,
+    fixtureOf: "constructed-active-rule-filter",
     sources: ["src/views/active-rule-popover-renderer.ts", "src/views/filter-panel-renderer.ts"],
     note: "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
     // Anchored to the chip that opened it, so it leaves the flow and the capture box collapses.
@@ -505,6 +511,7 @@ export const CHROME_SCENARIOS = [
     id: "chrome-active-rule-popover-sort",
     title: "Active rule popover — sort",
     group: "components",
+    fixtureOf: "constructed-active-rule-sort",
     // 538px of surface plus the 16px the capture box frames it with on each side. It read 480,
     // which cropped 74px: "Descending" was photographed as "Des" and the field chip, which is
     // `flex: 1 1 0`, stretched into the space the cut hid. The panel inherits the filter panel's
@@ -528,6 +535,7 @@ export const CHROME_SCENARIOS = [
     title: "Table footer aggregates",
     group: "components",
     width: 1100,
+    fixtureOf: "constructed-table-footer",
     sources: ["src/views/table-footer-renderer.ts", "src/views/table-renderer.ts"],
     note: "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
     html: () => `
@@ -556,6 +564,7 @@ export const CHROME_SCENARIOS = [
     title: "Grouped table header rows",
     group: "components",
     width: 1100,
+    fixtureOf: "constructed-table-grouped",
     sources: ["src/views/group-label-renderer.ts", "src/views/table-renderer.ts", "src/views/summary-renderer.ts"],
     note: "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
     html: () => {
@@ -585,6 +594,7 @@ export const CHROME_SCENARIOS = [
     title: "Summary row",
     group: "components",
     width: 760,
+    fixtureOf: "constructed-summary",
     sources: ["src/views/summary-renderer.ts"],
     note: "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
     html: () => `
@@ -685,6 +695,7 @@ export const CHROME_SCENARIOS = [
     title: "Owned menu — the shell every context menu uses",
     group: "components",
     width: 420,
+    fixtureOf: "constructed-owned-menu",
     sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts"],
     note: "Deliberately not wrapped in note-database-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.",
     // The destructive row carries its icon here as it does in the sheet below. `ColumnMenu` builds
@@ -726,6 +737,7 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 402,
     capture: "viewport",
+    fixtureOf: "constructed-owned-menu",
     // Photographed on the phone only. This surface exists because a phone gets it; the desktop pass
     // put the same markup in a 1440px frame with `is-phone` absent, so the sheet spanned the whole
     // window above 900px of empty page. Nothing in the product presents that, and the row grammar
@@ -782,6 +794,7 @@ export const CHROME_SCENARIOS = [
     title: "Group selection controls",
     group: "components",
     width: 620,
+    fixtureOf: "constructed-group-selection-controls",
     sources: ["src/views/list-renderer.ts", "src/views/gallery-renderer.ts", "src/views/board-renderer.ts"],
     // Three families that existed in source and in no fixture: renderGroupCheckbox in the list and
     // the gallery, and renderSubgroup in the board. Nothing photographed them and no check could
@@ -803,6 +816,7 @@ export const CHROME_SCENARIOS = [
     title: "Board extensions selection controls",
     group: "components",
     width: 320,
+    fixtureOf: "constructed-board-extensions",
     sources: ["src/views/board-renderer.ts"],
     // The board's own card and column-header checkboxes only render when boardExtensionsEnabled
     // is on; the default board reproduces the reference kanban card, which has none. Reachable
