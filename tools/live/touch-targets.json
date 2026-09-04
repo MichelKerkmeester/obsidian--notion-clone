@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-09-04T09:26:57.210Z",
+  "measuredAt": "2026-09-04T10:14:05.365Z",
   "inputs": {
     "tools/live/touch-targets.mjs": "80a06fb02715",
     "tools/live/touch-target-measure.mjs": "d6c67abc678a",
     "tools/live/render-assertion-bundle.mjs": "b615d790829f",
     "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "styles.css": "d3c6cc3e8453"
+    "styles.css": "276e1094c61c"
   },
   "fixture": {
     "measured": 1158,
