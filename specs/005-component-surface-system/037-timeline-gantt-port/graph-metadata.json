@@ -56,6 +56,9 @@
       "tools/screenshots/capture.mjs",
       "tools/lane/css-lane.json",
       ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
+      "src/views/calendar-timeline-gantt.test.ts",
+      "tools/live/render-assertion-harness.ts",
+      "tools/live/touch-targets-constructed-baseline.json",
       "src/views/calendar-timeline-hour-column.test.ts"
     ],
     "entities": [
@@ -150,6 +153,24 @@
         "source": "derived"
       },
       {
+        "name": "calendar-timeline-gantt.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-timeline-gantt.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-constructed-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-constructed-baseline.json",
+        "source": "derived"
+      },
+      {
         "name": "calendar-timeline-hour-column.test.ts",
         "kind": "test",
         "path": "src/views/calendar-timeline-hour-column.test.ts",
@@ -184,29 +205,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Scope Boundary",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`src/views/calendar-timeline-renderer.ts` (2,390 lines) already owns an action contract, CSS-unit geometry,",
     "created_at": "2026-09-02T21:51:11Z",
-    "last_save_at": "2026-09-04T05:16:42.388Z",
+    "last_save_at": "2026-09-04T06:33:44.373Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,12 +220,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4b86deab9d77681295905377df63646bf4d6ae41166adbe4345d88b9fadc9fcd",
+    "source_fingerprint": "sha256:fe86a14a0091e8bc19a76fd70c993043961d9f01687afaa213562b275e10e609",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b9140d5482409deda96a10c515a8979982896d4047231912fda1cd632e7f3651",
       "plan.md": "e809a1bfd52e382aa4f4b09b7f50fbaf595c2ddae07c020223abdec629c602d1",
-      "tasks.md": "5d18815d2acd73476b59a87d280488e504654e6346e02478120881cf8d67958e",
+      "tasks.md": "55337b7421ba7d68de2ceadef281647a0a47d6be91d71a05712b2957918873af",
       "implementation-summary.md": "8d215e6de7d5b9a65f8e396c34b7aa7b2a0eaab6731f3ef168201ac757bc9afe"
     },
     "last_active_child_id": null,
