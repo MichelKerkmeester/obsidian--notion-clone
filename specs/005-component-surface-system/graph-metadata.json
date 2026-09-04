@@ -83,7 +83,8 @@
     "005-component-surface-system/041-shared-ui-ux-port",
     "005-component-surface-system/042-harness-fidelity-and-replay",
     "005-component-surface-system/043-constructed-capture",
-    "005-component-surface-system/044-phone-sheet-alignment"
+    "005-component-surface-system/044-phone-sheet-alignment",
+    "005-component-surface-system/045-board-card-properties"
   ],
   "manual": {
     "depends_on": [],
@@ -291,7 +292,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-04T18:59:22.027Z",
+    "last_save_at": "2026-09-04T19:10:58.187Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -299,11 +300,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:734737a0ded5c3cfb6b282e430647476debd9416b15e1c7c2ee83ea296a2037a",
+    "source_fingerprint": "sha256:7f68781138bdbd43503cc700992c053863c44d3812e1f340341fcc7081dbf3de",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ccc1ff15f377b33931e9861af610f39cc85b91466de1bebe49c8cd616ba04083",
-      "handover.md": "cb1ec4bead2e7aaf202bf833f8206ebd4812b88d823422916b30aa476120ddcf"
+      "spec.md": "99064a224d10a152fcf9bd30bc9ba41dbdad9ba782609bd05407aeef9cac38e6",
+      "handover.md": "06b9c9090a81a03243a77136657147fb07ecf32d33864ed640b41efe1217bc8e"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"

@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/045-board-card-properties",
+  "description": "Phase 1: board-card-properties",
+  "keywords": [
+    "phase",
+    "board-card-properties"
+  ],
+  "lastUpdated": "2026-09-04T19:01:24.768Z",
+  "specId": "045",
+  "folderSlug": "board-card-properties",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

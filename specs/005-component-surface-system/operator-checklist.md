@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-04: **45 phases**, **6 with nothing left**, **90 rows** waiting on a device.
+Derived 2026-09-04: **46 phases**, **6 with nothing left**, **96 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -215,6 +215,15 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The Add view sheet renders every control on a shared row type, with Title property as a dropdown row. Today: 0 controls on a row type — three bare inputs, a select rendered as a text input, a bare checkbox and a flat icon list.
 - [ ] `npm run gate` exits 0 with `sheet-grammar` registered, and the negative control was observed red on one surface and green again after restore. Today: the lane does not exist.
 - [ ] The operator opens the column-width adjuster, the settings sheet and the Add view sheet on iOS and reports each as aligned with the other sheets. Only the operator closes this row; nothing in this repository can.
+
+## 045-board-card-properties — 0/6
+
+- [ ] Two board views over one database render different card field sets in different orders, with the database's table column visibility unchanged. Today: not expressible — `board-renderer.ts:1439` reads the same `getVisibleColumns` result the table reads.
+- [ ] A `status` column can be made to render in the card's meta grid. Today: impossible — `board-renderer.ts:1481-1482` removes every `select` and `status` column from the grid unconditionally, routing them to the title chips instead.
+- [ ] An existing view with no stored list renders a byte-identical card after the change.
+- [ ] With `boardExtensionsEnabled` off, a stored properties list has zero effect and `038`'s board parity fixtures are unchanged. Today: trivially true; the point is that it stays true.
+- [ ] The Properties control opens on desktop and on the phone, the phone one built from `044`'s sheet row grammar with an explicit move affordance. Today: the control does not exist.
+- [ ] The operator arranges a board card's properties on a phone and reports it as close to Notion's. Only the operator closes this row.
 
 ## Nothing left to check
 
