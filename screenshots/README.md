@@ -345,7 +345,7 @@ A config built as viewType: "list" (listCompactFields included, the real Punch L
 
 | dark | light |
 |---|---|
-| ![constructed-list-migrated dark](components/constructed-list-migrated-mobile-dark.png) | ![constructed-list-migrated light](components/constructed-list-migrated-mobile-light.png) |
+| ![constructed-list-migrated dark](notion-clone/components/constructed-list-migrated-mobile-dark.png) | ![constructed-list-migrated light](notion-clone/components/constructed-list-migrated-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/list-migration.ts`, `src/views/list-renderer.ts`
 

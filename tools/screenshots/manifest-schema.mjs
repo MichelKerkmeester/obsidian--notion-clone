@@ -25,15 +25,17 @@
 export const MANIFEST_SOURCES = ["fixture", "constructed", "reference"];
 // The top-level directory a non-reference capture is written under. Our own fixtures and
 // constructed renders photograph this plugin and live under screenshots/notion-clone/<group>/,
-// kept apart from a reference capture (`scenario.source === "reference"`), which photographs a
+// kept apart from a reference capture (`scenario.kind === "reference"`), which photographs a
 // different product entirely. A reference scenario's `group` is already "project-manager" (see
 // the reference validation below), so it takes no further root prefix and stays flat at
 // screenshots/project-manager/<file> rather than nesting under this root too.
 export const CAPTURE_ROOT = "notion-clone";
 /** The capture root a raw scenario definition (not a manifest entry) writes under, or "" for a
- * reference scenario, whose own group is already the directory it writes to. */
+ * reference scenario, whose own group is already the directory it writes to. A raw scenario
+ * carries `kind: "reference"` (capture.mjs's own marker, see its manifest-entry `source` write);
+ * only the written manifest entry carries `source`, which this function never receives. */
 export function captureRootFor(scenario) {
-  return scenario && scenario.source === "reference" ? "" : CAPTURE_ROOT;
+  return scenario && scenario.kind === "reference" ? "" : CAPTURE_ROOT;
 }
 export const CONSTRUCTED_RENDERERS = [
   "list", "table", "board", "gallery", "calendar", "timeline", "chart",
