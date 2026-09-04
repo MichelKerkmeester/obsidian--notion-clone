@@ -1,10 +1,19 @@
 {
-  "measuredAt": "2026-09-04T00:05:29.073Z",
+  "measuredAt": "2026-09-04T00:19:55.112Z",
   "inputs": {
     "styles.css": "4c7b8b627ab9",
     "tools/screenshots/theme.css": "115be5a71b07",
-    "tools/live/unstyled-links.mjs": "58854cd67e97"
+    "tools/live/unstyled-links.mjs": "acfd54ccfe35",
+    "tools/live/unstyled-links-measure.mjs": "d7730f407670",
+    "tools/live/render-assertion-bundle.mjs": "f828b191d328",
+    "tools/live/render-assertion-harness.ts": "56bb492339d0"
   },
-  "links": 112,
-  "scenarios": 70
+  "fixture": {
+    "links": 112,
+    "scenarios": 70
+  },
+  "constructed": {
+    "links": 0,
+    "scenarios": 17
+  }
 }
