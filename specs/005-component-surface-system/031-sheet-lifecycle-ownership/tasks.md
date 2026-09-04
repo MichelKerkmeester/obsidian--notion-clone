@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-02T20:10:00Z"
-    last_updated_by: "report-29-verifier"
-    recent_action: "T12 closed: a long press consumes its compatibility click"
-    next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
+    last_updated_at: "2026-09-04T18:20:00Z"
+    last_updated_by: "reports-34-36-second-pass"
+    recent_action: "T14 closed: a panel rebuild no longer replays the sheet entrance"
+    next_safe_action: "The operator adds a sort rule and a filter condition on the phone"
     blockers: []
     key_files: ["plan.md", "spec.md"]
     session_dedup:
@@ -19,7 +19,7 @@ _memory:
       parent_session_id: null
     completion_pct: 83
     open_questions: []
-    answered_questions: ["The owned menu is the one producer that cleans up, so it is the parity reference", "A gesture consumes forward, on events not yet dispatched, not backward"]
+    answered_questions: ["The owned menu is the one producer that cleans up, so it is the parity reference", "A gesture consumes forward, on events not yet dispatched, not backward", "The entrance is keyed to the node, so a rebuild replays it; only the owner can tell the two apart"]
 ---
 # Tasks: Sheet Lifecycle Ownership
 
@@ -207,6 +207,46 @@ _memory:
       click onto the backdrop, so it cannot observe this either way; WebKit delivers it to the
       original target, which is where the defect lives.
 
+- [x] **T14** Stop a panel rebuild replaying the sheet's entrance — reports 34-36, second pass.
+      *Closed.* The overlay-stack resolver in `85ff504` was a real fix and was not the whole one:
+      the operator still reported add-sort and add-condition misbehaving on 0.0.20. The remaining
+      mechanism is `playSheetEntrance` (`mobile-bottom-sheet.ts`), which skips only when the node
+      already carries `is-visible`. All four header panels rebuild by removing their node outright
+      and building a fresh one — on every add, remove, toggle, and on any background `refresh()`
+      that lands while they are open — so the replacement had never entered and replayed the whole
+      rise from below the fold.
+      *Red observed first*, driving the real renderers with a real touch on a 390x844 phone page:
+      after one tap on "+ Add sort" the panel's top edge went **708 to 844 and back over ~280ms**;
+      five taps at ONE coordinate 120ms apart added **2 of 5** rules on the sort sheet and **1 of 5**
+      on the filter sheet, the strays landing on the grab bar, on a rule row's icon, and on a field
+      dropdown the tap opened. Green after: deepest 711 and 699, **5 of 5** on both.
+      *What isolates it:* the same five taps with the transition disabled added five before the fix.
+      One variable, and it is the entrance.
+      *Not a hang, and the report's word for it is still fair.* The main thread was never saturated
+      — worst timer delay 0.1ms across the rapid taps, no page errors, one sheet and one backdrop
+      throughout. What the operator meets is a surface that jumps out from under the thumb and a
+      quarter-second after every edit in which the whole screen is tap-swallowing backdrop, so a tap
+      anywhere closes the sheet mid-edit. That is the "add condition closed the filter sheet" row.
+      *Closed by:* `carrySheetEntrance()` beside `playSheetEntrance`, called by all four panel
+      renderers where they alone know a replacement node is a rebuild rather than an opening.
+      *Guarded by:* four new `sheet-rebuild` cases driven by real touch, plus the control below.
+- [x] **T15** A control that refuses the wrong fix.
+      *Closed.* Deleting the entrance would pass both T14 checks and would be wrong — the sheet is
+      supposed to rise when it OPENS. `sheet-rebuild` now asserts that a genuinely opening sheet is
+      first seen at the viewport floor and settles above it (844 then 708 on an 844px screen). It
+      passes on the shipped tree and on the fixed one, and **goes red when `playSheetEntrance` is
+      ablated** — watched, not assumed: `the entrance no longer runs on an open (deepest 708)`.
+      *Also fixed here, in the harness rather than the product:* the staging first accepted the
+      first frames of an entrance as "settled", because two identical samples are what the start of
+      a rise looks like too. Settling now means unmoving AND on screen, and the tracker takes its
+      first sample synchronously rather than on the first frame — 830 against 844 for the same
+      surface, which is the whole of the deepest point it exists to see.
+- [ ] **T16** The operator adds a sort rule and a filter condition on the phone without the sheet
+      jumping or closing.
+      *Evidence to close:* the operator says so. The bench drives Chromium; it can prove the sheet
+      holds still and that five taps at one point all land, and it cannot prove what a thumb on
+      WebKit meets.
+
 **Proposed and refuted, so it is not a task.** Pruning a registered sheet by its class as well as by
 connectedness guards a state nothing can reach: `mobile-bottom-sheet.ts:48` is the only writer of the
 class in `src/`, and `applySheetChrome(panel, false)` deregisters the panel on the same call. The
@@ -249,7 +289,7 @@ an open sheet, for which holding the backdrop up is correct. Reasoning and its t
 <!-- ANCHOR:completion -->
 ## COMPLETION
 
-Complete when T10 closes. Every other task is a precondition for asking.
+Complete when T10, T13 and T16 close. Every other task is a precondition for asking.
 <!-- /ANCHOR:completion -->
 
 <!-- ANCHOR:cross-refs -->

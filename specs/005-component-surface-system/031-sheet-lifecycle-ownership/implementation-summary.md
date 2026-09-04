@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-02T19:30:00Z"
-    last_updated_by: "report-29-second-mechanism"
-    recent_action: "Long press consumes its compat click; class-prune refuted, not built"
-    next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
+    last_updated_at: "2026-09-04T18:20:00Z"
+    last_updated_by: "reports-34-36-second-pass"
+    recent_action: "A panel rebuild no longer replays the sheet entrance; four surfaces, one line each"
+    next_safe_action: "The operator adds a sort rule and a filter condition on the phone"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -27,6 +27,7 @@ _memory:
       - "Does a returned disposer still earn its place now the watcher makes callers correct?"
     answered_questions:
       - "The watcher closes the defect without changing any producer"
+      - "The entrance is keyed to the node, so a rebuild replays it; only the owner can tell a rebuild from an opening"
       - "A sheet still on the body is an open sheet; holding the backdrop for it is correct"
       - "The long press consumed nothing; it now swallows the click it caused"
 ---
@@ -44,7 +45,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 6 of 8 criteria met. Everything implementable is in; the two open rows need the operator's device |
+| **Status** | In progress — 6 of 8 criteria met. Everything implementable is in; the three open rows need the operator's device |
 | **State** | Committed; gate 18 green, exit 0 **at the time — a past run**. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
@@ -208,6 +209,12 @@ packet's own lens turned on its own instrument.
 | The portalled-lookup defect is real | Reproduced before fixing, on a phone viewport with the real renderer: reopen left 2 panels, close removed 0, backdrop still up. Desktop clean in the same run |
 | Its guard discriminates | Reverting both renderers turns the two new real-renderer cases red with the exact duplicate message, while the six modelled cases stay green |
 | The sheet reaches the overlay stack | One case asserts all three parts together: the container selector finds nothing, the retained reference finds the sheet, and `dismissPanel` returns true |
+| The entrance replay is the cause | Observed **red first** with a real touch: sort 708 -> 844, filter 699 -> 844; five taps at one point added 2 of 5 and 1 of 5. Green after: deepest 711 and 699, 5 of 5 on both |
+| It is the entrance and nothing else | The same five taps with the transition disabled added five **before** the fix — one variable |
+| The fix cannot be "delete the entrance" | A control asserts an opening sheet still rises (first seen 844, settles 708). It passes before and after, and goes red when `playSheetEntrance` is ablated |
+| It is not a hang | Worst timer delay 0.1ms across the rapid taps, no page errors, 1 sheet and 1 backdrop throughout |
+| Gate, from the final state | `npm run gate` — **25 green, exit 0**; `npx vitest run` 1037 passed; `npx tsc --noEmit` 0; lint 172, the unchanged baseline |
+| Captures | Re-captured and read: the sort and filter panels are **pixel-identical**, which is the right answer for a change to timing rather than paint |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -295,6 +302,46 @@ gone.**
 
 The brief's second proposed change was refuted rather than built; see `goal.md`'s entry and §5.
 This pass implemented and verified in one runtime because all three external lanes were unavailable.
+### The sheet that moved under the thumb — reports 34-36, second pass (2026-09-04)
+
+The overlay-stack resolver in `85ff504` was a real fix for a real defect and was not the whole one.
+On 0.0.20 the operator still reported add-sort and add-condition breaking the sheet on the phone.
+
+**`playSheetEntrance` is keyed to the NODE.** It skips only when the panel already carries
+`is-visible`, which is a correct rule for the question it can see. What it cannot see is that all
+four header panels rebuild by *removing* their node and building a fresh one — on every add, remove,
+toggle, and on any background `refresh()` that lands while they are open. A fresh node has never
+entered, so an edit inside an open sheet replayed the whole 260ms rise from below the fold.
+
+**Measured on a 390x844 phone page, driving the real renderers with a real touch.** One tap on
+"+ Add sort" and the panel's top edge went **708 to 844 and back over ~280ms**. Five taps at ONE
+coordinate, 120ms apart, added **two** rules on the sort sheet and **one** on the filter sheet; the
+strays landed on the grab bar, on a rule row's icon, and on a field dropdown the tap opened. With the
+transition disabled the same five taps added five — one variable, and it is the entrance.
+
+**It is not a hang, and the operator's word for it is still fair.** The main thread was never
+saturated: worst timer delay 0.1ms across the rapid taps, no page errors, one sheet and one backdrop
+throughout. What a phone meets is a surface that jumps out from under the thumb, and a quarter-second
+after every edit in which the entire screen is tap-swallowing backdrop — so a tap anywhere in that
+window closes the sheet mid-edit, which is exactly the "add condition closed the filter sheet" row.
+
+**The fix is one line per producer.** Only the owner knows a replacement node is a rebuild rather
+than an opening, so `carrySheetEntrance()` lets it say so, leaving the node in the same class pair
+`playSheetEntrance` finishes with rather than in a third state of its own. All four panels carry it,
+because all four share the shape — the two that were not reported reach the same defect through a
+background refresh rather than through a control of their own.
+
+**The larger fix was named and not built.** Retaining the node across a rebuild — `empty()` and
+repopulate, the shape `record-detail-panel.ts` and the group popover already use — would remove this
+defect at its source and take the position-loop resubscription, the mount churn and the focus churn
+with it. It is a much wider change across four renderers with real regression risk at the mount
+identity, and three of those renderers pass `panel.parentElement` as the container on some paths,
+which is `document.body` once the sheet portals. Recorded here rather than folded in.
+
+**What the bench proves, and what it does not.** It drives Chromium. It can show the sheet holds
+still through a rebuild and that five taps at one coordinate all land; it cannot show what a thumb on
+WebKit meets, and the device row stays open.
+
 <!-- /ANCHOR:limitations -->
 
 ---
@@ -317,6 +364,9 @@ This pass implemented and verified in one runtime because all three external lan
 | A brief's two changes, one of which was already answered here | The second proposed change — prune a registered sheet by its class — would guard a state `applySheetChrome` cannot produce, and its red came from a bench asserting that an OPEN sheet should lose its backdrop. This packet had already made and reverted that exact inversion in the compounding case. It was not built, and the reasoning is written down so the next pass does not arrive at it a third time |
 | The bench that could not see its own fix | The long-press script was offered as the red for the click swallow, but its `doc:click` line is the backdrop's click, not the row's — Blink re-hit-tests, and the row's listeners recorded nothing in either run. The fix is real and the script cannot observe it. The unit case models WebKit's delivery instead, and the device row is what actually closes it |
 | Implemented and verified in one runtime | The plan sends implementation out to an external lane so the verifier is not the author. All three lanes were unavailable, so this pass is both. Recorded as the weaker arrangement rather than left implicit |
+| A fix that was real and not whole | `85ff504` fixed the overlay stack holding a node the rebuild had replaced, and the operator still reported the same controls broken. The second mechanism was in the same rebuild and a different module. A report that survives a fix is evidence about the diagnosis, not about the operator |
+| The harness accepted a moving sheet as settled | Two identical samples are also what the START of an entrance looks like, so the first staging read its coordinate off a surface about to leave and one case passed for the wrong reason. Settling now means unmoving AND on screen. This is the same error the drag cases already paid for once, in a new place |
+| The tracker missed the point it existed to see | It sampled from the first animation frame, by which time the surface had already left its start state — 830 against 844 for the same sheet. An entrance commits its start state during the call that begins it, so the first sample has to be synchronous |
 | The gate's `evidence` lane self-heals | It checks artefact freshness at lane 9, and lanes 11, 16, 17 and 18 re-stamp their own artefacts afterwards. So the first run after a source change reds and the second greens with no human action. The re-stamps are genuine re-measurements, so nothing is hidden — but "just run it again" is the wrong habit to teach, and moving the lane last would fix it. Left for the packet that owns the gate |
 <!-- /ANCHOR:decisions -->
 
