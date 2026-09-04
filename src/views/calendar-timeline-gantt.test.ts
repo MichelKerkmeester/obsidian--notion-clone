@@ -841,11 +841,26 @@ describe("timeline gantt DOM-structure parity", () => {
     // Same-side rejection: the reference returns with the first dot still armed.
     beta.right.dispatch("click", clickEvent());
     expect(alphaRight.className).toContain("pm-gantt-link-dot--active");
-    expect(alphaRight.className).toContain("is-active");
 
     // A real second click still commits and clears the selection.
     beta.left.dispatch("click", clickEvent());
     expect(alphaRight.className).not.toContain("pm-gantt-link-dot--active");
+  });
+
+  it("writes only the reference's own dot-highlight class on the pm-gantt tree, not the local-extension is-active/is-linking pair, matching GanttLinkHandler.ts", () => {
+    const { container } = renderGantt("month");
+    const barGroups = ganttBarGroups(container);
+    const alphaRight = ganttDots(barGroups[0]).right;
+
+    alphaRight.dispatch("click", clickEvent());
+
+    // GanttLinkHandler.ts toggles only pm-gantt-link-dot--active on the dot itself; it
+    // never touches a root-level "linking" class. Both is-active (styles.css scopes it
+    // to .db-timeline-link-dot) and is-linking (scoped to .db-timeline) are local-
+    // extension classes with no matching rule on the pm-gantt-view tree.
+    expect(alphaRight.className).toContain("pm-gantt-link-dot--active");
+    expect(alphaRight.className).not.toContain("is-active");
+    expect(container.className).not.toContain("is-linking");
   });
 
   it("cancels an in-progress link with Escape from the document, like the reference", () => {
@@ -943,6 +958,34 @@ describe("timeline gantt DOM-structure parity", () => {
     expect(writes[0].cell).toBe("start");
     expect(writes[0].change.changedEdge).toBe("start");
     expect(writes[0].change.endDateKey).toBeUndefined();
+  });
+
+  it("restores the bar to its pre-drag position when the date save is rejected, matching GanttDragHandler.ts's restore()", async () => {
+    const actions = makeActions();
+    actions.updateEventDates = () => Promise.reject(new Error("save failed"));
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
+
+    const barGroup = ganttBarGroups(container.children[0])[0];
+    const bar = barGroup.children[0];
+    const initialX = bar.getAttribute("x");
+    const initialWidth = bar.getAttribute("width");
+    const handles = barGroup.children.filter((child) => child.className === "pm-gantt-drag-handle");
+
+    handles[0].dispatch("mousedown", { button: 0, clientX: 500, stopPropagation: () => undefined, preventDefault: () => undefined });
+    testWindow.activeDocument.dispatch("mousemove", { clientX: 491 });
+    // Mid-drag the bar tracks the pointer, away from where it started.
+    expect(bar.getAttribute("x")).not.toBe(initialX);
+    testWindow.activeDocument.dispatch("mouseup", {});
+
+    // Let the rejected updateEventDates promise's .catch() run.
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(bar.getAttribute("x")).toBe(initialX);
+    expect(bar.getAttribute("width")).toBe(initialWidth);
   });
 
   it("batches expand/collapse all through one persistence call when the view offers it", () => {
@@ -1117,6 +1160,28 @@ describe("timeline gantt DOM-structure parity", () => {
     menu.items[0].handler();
     menu.items[1].handler();
     expect(opened).toEqual(["Projects/Outside.md", "AlsoOutside.md"]);
+  });
+
+  it("orders the depends-elsewhere chip before the progress span, matching TaskLabelRenderer.ts's child order", () => {
+    const rowsWithElsewhere = makeFixtureRows().map((row) => ({ ...row }));
+    // Alpha already carries progress: 40; add one dependency outside the view so the
+    // label row renders both the chip and the progress span in the same pass.
+    rowsWithElsewhere[0].frontmatter = {
+      ...rowsWithElsewhere[0].frontmatter,
+      dependencies: ["Beta.md", "Projects/Outside.md"],
+    };
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(makeActions());
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rowsWithElsewhere);
+
+    const leftBody = container.children[0].children[1].children[0].children[1];
+    const alphaRow = leftBody.children[0];
+    const chipIndex = alphaRow.children.findIndex((child) => child.className.includes("pm-chip"));
+    const progressIndex = alphaRow.children.findIndex((child) => child.className.includes("pm-gantt-label-progress"));
+    expect(chipIndex).toBeGreaterThanOrEqual(0);
+    expect(progressIndex).toBeGreaterThanOrEqual(0);
+    expect(chipIndex).toBeLessThan(progressIndex);
   });
 
   // ─────────────────────────────────────────────────────────────────

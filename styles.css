@@ -18085,24 +18085,27 @@ body.pm-resize-active * {
  * IconButton/ExtraButtonComponent shape), not a button — the two selectors
  * below were rewritten from button.clickable-icon/button.pm-icon-btn, which
  * stopped matching either element, to the tag/class combination each one
- * actually renders now.
+ * actually renders now. Unlike the verbatim gantt.css rules around it, this
+ * hit-area rule is a local addition, so every selector carries the same
+ * .note-database-container scope the entry rule (17628) gives .pm-gantt-view,
+ * rather than matching the real obsidian-pm plugin's identical classes too.
  */
 @media (pointer: coarse) {
-  .pm-gantt-controls button,
-  .pm-gantt-label-row .clickable-icon,
-  .pm-gantt-add-row button.pm-prop-add {
+  .note-database-container .pm-gantt-controls button,
+  .note-database-container .pm-gantt-label-row .clickable-icon,
+  .note-database-container .pm-gantt-add-row button.pm-prop-add {
     min-width: 28px;
     min-height: 28px;
   }
 
-  .pm-gantt-resize-handle {
+  .note-database-container .pm-gantt-resize-handle {
     width: 28px;
     margin-left: -12px;
     margin-right: -12px;
   }
 
-  .pm-gantt-drag-handle,
-  .pm-gantt-link-dot {
+  .note-database-container .pm-gantt-drag-handle,
+  .note-database-container .pm-gantt-link-dot {
     stroke: transparent;
     stroke-width: 20px;
   }

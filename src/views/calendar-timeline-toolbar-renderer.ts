@@ -158,7 +158,11 @@ export class CalendarTimelineToolbarRenderer {
     }, "rows-3");
 
     const layout = this.createSection(panel, t("timeline.layoutSection"));
-    this.renderLayoutContent(layout, config, actions);
+    // renderLayoutContent rebuilds its own subtree on every gate/scale toggle (see its own
+    // comment); a nested content div keeps that empty()/rebuild scoped below the heading
+    // createSection just added, instead of wiping the heading along with the fields.
+    const layoutContent = layout.createDiv({ cls: "db-chart-options-section-content" });
+    this.renderLayoutContent(layoutContent, config, actions);
 
     const style = this.createSection(panel, t("chart.optionsStyle"));
     this.renderSelect(style, t("viewConfig.eventColorField"), this.getColorFieldOptions(config), config.timelineColorField || "", (value) => {
@@ -235,7 +239,7 @@ export class CalendarTimelineToolbarRenderer {
       config.timelineWeekLabel = value === "weekNumber" || value === "dateRange" || value === "both" ? value : undefined;
       actions.onChange(t("undo.timelineWeekLabelConfig"));
     }, "hash");
-    if (config.timelineScale === "day") {
+    if (config.timelineLocalExtensions === true && config.timelineScale === "day") {
       this.renderSelect(layout, t("viewConfig.calendarWeekSlotDuration"), [
         { value: "15", text: t("viewConfig.calendarWeekSlotDuration.15") },
         { value: "30", text: t("viewConfig.calendarWeekSlotDuration.30") },

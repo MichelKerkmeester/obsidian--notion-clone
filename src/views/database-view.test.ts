@@ -130,6 +130,7 @@ interface FakeDataSource {
   updateFrontmatter: Mock<(file: TFile, updates: Record<string, unknown>, context?: DataWriteContext) => Promise<void>>;
   updateViewDefFile: Mock<(file: TFile, config: DatabaseConfig, mutation?: unknown) => Promise<void>>;
   createNote: Mock<(folder: string, filename: string, frontmatter: Record<string, unknown>, context?: DataWriteContext, body?: string) => Promise<TFile>>;
+  trashNote: Mock<(file: TFile, context?: DataWriteContext) => Promise<void>>;
   onDataChanged(): () => void;
   onViewConfigChanged(): () => void;
   invalidateRecordCache(): void;
@@ -200,6 +201,7 @@ function createView(): { harness: DatabaseViewHarness; dataSource: FakeDataSourc
       file.basename = "new-child";
       return file;
     }),
+    trashNote: vi.fn(async () => {}),
     onDataChanged: () => () => {},
     onViewConfigChanged: () => () => {},
     invalidateRecordCache: vi.fn(),
@@ -367,5 +369,23 @@ describe("DatabaseView subtask host bindings", () => {
       oldExists: true,
       newValue: ["a.md", "b.md", "Tasks/new-child.md"],
     }]);
+  });
+
+  it("createSubtaskRecord rolls back the created child and reports the failure when the parent link write throws, instead of orphaning it", async () => {
+    const { harness, dataSource } = createView();
+    const parent = harness.rows[0]; // root.md, subtaskIds ["a.md", "b.md"]
+    dataSource.updateFrontmatter.mockRejectedValueOnce(new Error("disk full"));
+
+    // The child file creation itself must not throw back at the caller —
+    // the failure is a parent-link write, handled inside createSubtaskRecord.
+    await expect(harness.calendarTimelineRenderer.actions.createSubtaskRecord?.(parent)).resolves.toBeUndefined();
+
+    // Revert: the just-created child is trashed rather than left dangling
+    // with a parentId pointing at a parent that never listed it back.
+    expect(dataSource.trashNote).toHaveBeenCalledTimes(1);
+    expect(dataSource.trashNote.mock.calls[0][0].path).toBe("Tasks/new-child.md");
+
+    // No stray "created" undo entry survives for a file that no longer exists.
+    expect(harness.historyStack).toHaveLength(0);
   });
 });

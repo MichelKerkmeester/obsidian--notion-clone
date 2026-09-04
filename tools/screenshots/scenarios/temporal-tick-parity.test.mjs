@@ -122,16 +122,24 @@ describe("timeline toolbar options fixture mirrors the week-label select", () =>
     expect(markup).toContain('class="db-dropdown-field db-chart-options-dropdown has-current-icon"');
     expect(markup).toContain('<span class="db-dropdown-field-label">Week label</span>');
     expect(markup).toContain('<span class="db-dropdown-field-value">Week number</span>');
-    // Placed after the local-extensions column-width controls and before the day-scale slot
-    // duration row, the same order renderLayoutContent() emits them in.
+    // Placed after the local-extensions column-width controls, the same order
+    // renderLayoutContent() emits them in.
     const localExtensionsAt = markup.indexOf("Local extensions");
     const columnWidthAt = markup.indexOf("Column width");
     const weekLabelAt = markup.indexOf("Week label");
-    const slotDurationAt = markup.indexOf("Slot duration");
     expect(localExtensionsAt).toBeGreaterThan(-1);
     expect(columnWidthAt).toBeGreaterThan(localExtensionsAt);
     expect(weekLabelAt).toBeGreaterThan(columnWidthAt);
-    expect(slotDurationAt).toBeGreaterThan(weekLabelAt);
+  });
+
+  it("hides the day-scale slot-duration row at the fixture's Week scale, like renderLayoutContent's own gate", () => {
+    // renderLayoutContent only renders the slot-duration select when
+    // timelineLocalExtensions is on AND timelineScale is "day" (P1-B); this fixture's own
+    // Data section depicts "Timeline scale: Week", so the row must not appear here even
+    // though local extensions are on.
+    const markup = scenario.html();
+    expect(markup).toContain('<span class="db-dropdown-field-value">Week</span>');
+    expect(markup).not.toContain("Slot duration");
   });
 
   it("keeps the week-label select's i18n keys and default in the renderer source", () => {
@@ -499,6 +507,47 @@ describe("timeline day-scale header mirrors the reference gantt day header", () 
     const source = readFileSync(resolve(process.cwd(), "src/views/calendar-timeline-renderer.ts"), "utf8");
     expect(source).toContain("pm-gantt-header-month-top");
     expect(source).toContain("pm-gantt-header-year");
+  });
+
+  it("labels a month band with its own month/year and matches month parity, not the window's start month or the band's array index", () => {
+    // The week fixture (2026-03-23 -> 2026-04-05) crosses into April; buildTimelineAxisBands
+    // gives that partial month its own band, offset 9 days past the window's own start — so
+    // the reference (renderGanttMonthBands, calendar-timeline-renderer.ts:1192-1210) reads
+    // that band's own month (April, "Apr 26") and its own month parity (index 3, odd), not
+    // the window-start month (March) or the single band's trivial array-index parity (even).
+    const header = timelineGanttHeader(TIMELINE_FIXTURES.week);
+    expect(header).toContain(">Apr 26<");
+    expect(header).not.toContain(">Mar 26<");
+    expect(header).toContain('class="pm-gantt-band-odd"');
+    expect(header).not.toContain('class="pm-gantt-band-even"');
+  });
+});
+
+describe("timeline gantt label column narrows on the phone fixture, like the renderer", () => {
+  // The renderer starts the label column at GANTT_LABEL_PHONE_WIDTH (160px) when the host
+  // marks is-phone, and at GANTT_LABEL_WIDTH (280px, the reference default) otherwise
+  // (calendar-timeline-renderer.ts:68-71, 712-716) — a fixed 280px on every device leaves
+  // only ~110px of chart at the 402px mobile capture width.
+  const scenario = TEMPORAL_SCENARIOS.find((s) => s.id === "timeline-view");
+
+  it("registers the timeline-view scenario", () => {
+    expect(scenario).toBeDefined();
+  });
+
+  it("uses the 160px phone width on the mobile fixture", () => {
+    const markup = scenario.html({ id: "mobile", width: 402 });
+    expect(markup).toContain('class="pm-gantt-left" style="width: 160px; min-width: 160px"');
+  });
+
+  it("keeps the 280px reference default on the desktop fixture", () => {
+    const markup = scenario.html({ id: "desktop", width: 1440 });
+    expect(markup).toContain('class="pm-gantt-left" style="width: 280px; min-width: 280px"');
+  });
+
+  it("keeps both label-column widths in the renderer source", () => {
+    const source = readFileSync(resolve(process.cwd(), "src/views/calendar-timeline-renderer.ts"), "utf8");
+    expect(source).toContain("GANTT_LABEL_PHONE_WIDTH = 160");
+    expect(source).toContain("GANTT_LABEL_WIDTH = TIMELINE_REFERENCE_LABEL_WIDTH");
   });
 });
 

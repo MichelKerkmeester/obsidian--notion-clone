@@ -947,10 +947,6 @@ export class CalendarTimelineRenderer {
         if (this.actions.openRecordDetail) this.actions.openRecordDetail(titleEl, row);
         else this.actions.openRow(row);
       });
-      const progress = this.resolveGanttEventProgress(event, row);
-      if (progress > 0) {
-        el.createSpan({ cls: "pm-gantt-label-progress", text: `${Math.round(progress)}%` });
-      }
       const elsewhere = this.getGanttElsewhereDependencies(row);
       if (elsewhere.length > 0) {
         const chip = el.createSpan({ cls: "pm-chip pm-chip--plain pm-chip--sm" });
@@ -973,6 +969,10 @@ export class CalendarTimelineRenderer {
           }
           menu.showAtMouseEvent(mouseEvent);
         });
+      }
+      const progress = this.resolveGanttEventProgress(event, row);
+      if (progress > 0) {
+        el.createSpan({ cls: "pm-gantt-label-progress", text: `${Math.round(progress)}%` });
       }
       // The reference's IconButton shape (ExtraButtonComponent): a div carrying
       // clickable-icon/extra-setting-button plus the reveal-on-hover modifier. The
@@ -1616,7 +1616,12 @@ export class CalendarTimelineRenderer {
         }
         const result = this.actions.updateEventDates(this.ganttDragState.dragRow, change);
         if (result) {
-          void Promise.resolve(result).catch(() => new Notice(t("timeline.dateSaveFailed")));
+          // A rejected save otherwise leaves the bar sitting at the dragged position
+          // with no record of the change; the reference's restore() puts it back.
+          void Promise.resolve(result).catch(() => {
+            restore();
+            new Notice(t("timeline.dateSaveFailed"));
+          });
         }
       };
 
@@ -2127,8 +2132,15 @@ export class CalendarTimelineRenderer {
       this.timelineLinkSelection = resolution.click;
       this.timelineLinkSelectionEl?.removeClass("is-active");
       this.timelineLinkSelectionEl = dot;
-      dot?.addClass("is-active");
-      this.timelineRoot?.addClass("is-linking");
+      // is-active/is-linking are local-extension CSS (styles.css scopes both to
+      // .db-timeline); the reference pm-gantt tree has its own dot highlight
+      // (pm-gantt-link-dot--active, applied by the caller) and no root-level
+      // "linking" class at all (GanttLinkHandler.ts), so writing these two here
+      // would be dead weight on that tree.
+      if (this.timelineRoot?.hasClass("db-timeline")) {
+        dot?.addClass("is-active");
+        this.timelineRoot.addClass("is-linking");
+      }
       return;
     }
     if (resolution.kind === "rejected") {

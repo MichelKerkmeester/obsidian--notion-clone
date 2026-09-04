@@ -116,6 +116,38 @@ describe("DataSource view filter tree persistence", () => {
     expect(emptyPayload.groupByFields).toBeUndefined();
   });
 
+  it("round-trips timelineLocalExtensions and timelineWeekLabel through toViewPayload/parseViewConfig", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "timeline",
+          sourceFolder: "",
+          timelineLocalExtensions: true,
+          timelineWeekLabel: "dateRange",
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+    expect(view.timelineLocalExtensions).toBe(true);
+    expect(view.timelineWeekLabel).toBe("dateRange");
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.timelineLocalExtensions).toBe(true);
+    expect(payload.timelineWeekLabel).toBe("dateRange");
+
+    const reparsed = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [payload] },
+    });
+    expect(reparsed!.views[0].timelineLocalExtensions).toBe(true);
+    expect(reparsed!.views[0].timelineWeekLabel).toBe("dateRange");
+  });
+
   it("round-trips the per-view subtask collapse override and omits an empty map", () => {
     const dataSource = source();
     const parsed = dataSource.parseDatabaseConfig({

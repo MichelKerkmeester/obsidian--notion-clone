@@ -10953,7 +10953,24 @@ export class DatabaseView extends FileView {
         subtaskIds: newSubtaskIds,
       }),
     };
-    await this.dataSource.updateFrontmatter(parent.file, toFrontmatterUpdates(write), { sourceInstanceId: this.instanceId });
+    try {
+      await this.dataSource.updateFrontmatter(parent.file, toFrontmatterUpdates(write), { sourceInstanceId: this.instanceId });
+    } catch (err) {
+      // The child note already exists and points at the parent (parentId in its own
+      // frontmatter); a failed parent-side write would otherwise leave it dangling —
+      // not listed in the parent's subtaskIds and with no undo entry describing it,
+      // since createBlankEntry already pushed one for the file alone. Revert the file
+      // and drop that stray entry rather than let the failure surface as a silent gap.
+      const created = this.historyStack[0];
+      if (created?.type === "created" && created.file.path === file.path) this.historyStack.shift();
+      try {
+        await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
+      } catch (rollbackErr) {
+        console.error("Note Database: failed to roll back created subtask after the parent link write failed", rollbackErr);
+      }
+      new Notice(t("errors.createFailed", { error: String(err) }));
+      return;
+    }
     const created = this.historyStack[0];
     if (created?.type === "created" && created.file.path === file.path) {
       this.historyStack[0] = {

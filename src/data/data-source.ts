@@ -1092,6 +1092,8 @@ export class DataSource {
       timelineAnchorTimeMinutes: this.parseCalendarMinute(v["timelineAnchorTimeMinutes"]),
       timelineColumnSizeMode: v["timelineColumnSizeMode"] === "custom" ? "custom" : undefined,
       timelineCustomUnitWidth: typeof v["timelineCustomUnitWidth"] === "number" ? v["timelineCustomUnitWidth"] : undefined,
+      timelineWeekLabel: v["timelineWeekLabel"] === "weekNumber" || v["timelineWeekLabel"] === "dateRange" || v["timelineWeekLabel"] === "both" ? v["timelineWeekLabel"] : undefined,
+      timelineLocalExtensions: v["timelineLocalExtensions"] === true,
       sortColumn: safeString(v["sortColumn"]) || undefined,
       sortDirection: v["sortDirection"] === "desc" ? "desc" : "asc" as const,
       sortRules: Array.isArray(v["sortRules"]) ? v["sortRules"] as SortRule[] : undefined,
@@ -1313,6 +1315,8 @@ export class DataSource {
       timelineAnchorTimeMinutes: view.timelineAnchorTimeMinutes,
       timelineColumnSizeMode: view.timelineColumnSizeMode || "",
       timelineCustomUnitWidth: typeof view.timelineCustomUnitWidth === "number" ? view.timelineCustomUnitWidth : undefined,
+      timelineWeekLabel: view.timelineWeekLabel || "",
+      timelineLocalExtensions: view.timelineLocalExtensions === true,
       viewStates: view.viewStates || {},
     };
   }

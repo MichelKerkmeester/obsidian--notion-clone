@@ -3829,6 +3829,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.timelineAnchorTimeMinutes = this.config.timelineAnchorTimeMinutes;
     origView.timelineColumnSizeMode = this.config.timelineColumnSizeMode;
     origView.timelineCustomUnitWidth = this.config.timelineCustomUnitWidth;
+    origView.timelineWeekLabel = this.config.timelineWeekLabel;
+    origView.timelineLocalExtensions = this.config.timelineLocalExtensions;
     origView.showEmptyFields = this.config.showEmptyFields;
     origView.columnOrder = this.config.columnOrder;
     origView.columnWidths = this.config.columnWidths;

@@ -1047,13 +1047,23 @@ export const timelineGanttHeader = (fixture) => {
   const children = [
     timelineGanttSvg("rect", { x: 0, y: 0, width: totalWidth, height: 56, class: "pm-gantt-header-bg" }),
   ];
-  const bands = fixture.scale === "day" || fixture.scale === "week"
-    ? timelineAxisBands(fixture).map((band) => ({
-      x: band.offset * fixture.width,
-      width: band.span * fixture.width,
-      label: band.label,
-      year: new Date(fixture.start + "T00:00:00Z").getUTCFullYear(),
-    }))
+  const isMonthBandScale = fixture.scale === "day" || fixture.scale === "week";
+  const bands = isMonthBandScale
+    ? timelineAxisBands(fixture).map((band) => {
+      // band.offset is the day count from the window's own start to this band's own
+      // month-start (renderGanttMonthBands, calendar-timeline-renderer.ts:1192-1210
+      // walks the same monthStart forward one band at a time) — reconstructing that date
+      // per band, rather than reusing the window's own start month for every band, is
+      // what keeps a month-crossing window's later bands labelled correctly.
+      const bandDate = timelineAddUtcDays(new Date(fixture.start + "T00:00:00Z"), band.offset);
+      return {
+        x: band.offset * fixture.width,
+        width: band.span * fixture.width,
+        label: band.label,
+        month: bandDate.getUTCMonth(),
+        year: bandDate.getUTCFullYear(),
+      };
+    })
     : timelineGanttYearBands(fixture);
   bands.forEach((band, index) => {
     children.push(timelineGanttSvg("rect", {
@@ -1061,14 +1071,14 @@ export const timelineGanttHeader = (fixture) => {
       y: 0,
       width: band.width,
       height: 24,
-      class: index % 2 === 0 ? "pm-gantt-band-even" : "pm-gantt-band-odd",
+      class: (isMonthBandScale ? band.month % 2 === 0 : index % 2 === 0) ? "pm-gantt-band-even" : "pm-gantt-band-odd",
     }));
     children.push(timelineGanttHeaderText(
-      fixture.scale === "day" || fixture.scale === "week" ? "pm-gantt-header-month-top" : "pm-gantt-header-year",
+      isMonthBandScale ? "pm-gantt-header-month-top" : "pm-gantt-header-year",
       band.x + 6,
       18,
-      fixture.scale === "day" || fixture.scale === "week"
-        ? TL_MONTH_ABBR[new Date(fixture.start + "T00:00:00Z").getUTCMonth()] + " " + String(band.year).slice(-2)
+      isMonthBandScale
+        ? TL_MONTH_ABBR[band.month] + " " + String(band.year).slice(-2)
         : band.label,
     ));
   });
@@ -1182,6 +1192,12 @@ export const timelineAxisBands = (fixture) =>
    device width with no side margin, and there is no live container here to measure directly. */
 const TL_DEVICE_WIDTH = { desktop: 1440, mobile: 402 };
 
+/* Mirrors GANTT_LABEL_WIDTH / GANTT_LABEL_PHONE_WIDTH (calendar-timeline-renderer.ts:66-71):
+   the reference's 280px default leaves only ~110px of chart at the 402px mobile capture
+   width, so the label column starts narrower on the phone fixture, same as production. */
+const TL_LABEL_WIDTH = 280;
+const TL_LABEL_WIDTH_PHONE = 160;
+
 /* The reference gantt's day width is fixed per scale (TimelineConfig DAY_WIDTH), with no
    phone branch — the local path's viewport-aware column widths are gated behind
    timelineLocalExtensions and are not what these fixtures photograph. */
@@ -1217,6 +1233,7 @@ export const timelineDynamicFixture = (scale, device) => {
     todayOffsetUnits: window.todayOffsetUnits,
     title: title.main,
     titleYear: title.year,
+    isMobile: device?.id === "mobile",
   };
 };
 
@@ -1291,7 +1308,8 @@ const timelineScaleScenario = (scale, overrides = {}) => {
       '<div class="pm-gantt-view">',
       controls,
       '<div class="pm-gantt-wrapper">',
-      '<div class="pm-gantt-left" style="width: 280px; min-width: 280px">',
+      '<div class="pm-gantt-left" style="width: ' + (fixture.isMobile ? TL_LABEL_WIDTH_PHONE : TL_LABEL_WIDTH)
+        + 'px; min-width: ' + (fixture.isMobile ? TL_LABEL_WIDTH_PHONE : TL_LABEL_WIDTH) + 'px">',
       '<div class="pm-gantt-left-header" style="height: 56px"><span class="pm-gantt-left-header-label">Task</span></div>',
       '<div class="pm-gantt-left-body">',
       rows.map((row) => timelineGanttLabelRow(row)).join(""),
@@ -1561,7 +1579,7 @@ export const TEMPORAL_SCENARIOS = [
     width: 640,
     sources: ["src/views/calendar-timeline-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     fixtureOf: "constructed-timeline-toolbar-options",
-    note: "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting.",
+    note: "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.",
     captureCss: `.note-database-container .db-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
       <div class="note-database-container">
@@ -1579,8 +1597,7 @@ export const TEMPORAL_SCENARIOS = [
               ${switchRow(ICON.code, "Local extensions", true)}
               ${switchRow(ICON.columns, "Custom column width", true)}
               ${rangeRow("Column width", 72, 24, 240, 1, "db-calendar-timeline-range-row")}
-              ${dropdownRow(ICON.hash, "Week label", "Week number")}
-              ${dropdownRow(ICON.clock, "Slot duration", "30 minutes")}`)}
+              ${dropdownRow(ICON.hash, "Week label", "Week number")}`)}
             ${section("Style", `
               ${dropdownRow(ICON.palette, "Event colour", "Category")}
               ${switchRow(ICON.smilePlus, "Show record icon", true)}`)}
