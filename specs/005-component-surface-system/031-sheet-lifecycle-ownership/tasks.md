@@ -268,7 +268,7 @@ _memory:
       disconnected one a recovery frame and then hid the surface — which for a sheet means
       un-portalling it off the body and taking its backdrop with it. The sheet branch of `place()`
       calls `placeSheet`, which reads the viewport and nothing else.
-      *Closed by:* `c5a9a8b5` — the sheet branch answers ahead of every question about the anchor,
+      *Closed by:* `4d2e1fa5` — the sheet branch answers ahead of every question about the anchor,
       and only the anchored branch may refuse without one.
       *Guarded by:* eight new `sheet-rebuild` cases that run in **Chrome and WebKit** on an emulated
       iPhone. 8 red before, 0 after.
@@ -282,7 +282,7 @@ _memory:
       true of an anchored popover and false of a docked full-width surface. The freeze it was
       written for keeps its guard, moved to the event that actually means the surface is gone: the
       panel leaving the document, which `sheet-teardown` already asserts across 11 producers and
-      which is now stated in `verify-placement` too. `bac255ac`; placement 393/394, the one red
+      which is now stated in `verify-placement` too. `57e4a246`; placement 393/394, the one red
       declared and unrelated.
 - [x] **T19** Rebuild the panels into the node they already have.
       *Closed.* The sort and filter panels replaced their node outright on every add, remove,
@@ -298,7 +298,7 @@ _memory:
       press began in is the panel still there afterwards.
       *Also retires* `carrySheetEntrance` at these two call sites — a refilled node still carries
       `is-visible`, so T14's entrance no-ops for the reason it always did rather than because a flag
-      says so. `ca2eb5c0`.
+      says so. `98b937ed`.
       *Harness honesty:* the three registration cases kept their subject and changed their staging
       guard. Node identity used to mean "a rebuild happened" and now means the opposite, so they ask
       whether the panel's contents were rebuilt. Left alone, they would have quietly stopped staging
@@ -317,7 +317,7 @@ _memory:
       it on the clipboard, because there is no console to read on a phone.
       *It records tags, ids and classes and nothing else* — no text, value or path — and a source
       guard in `sheet-trace.test.ts` pins that, because the operator is being asked to paste it into
-      a conversation. `8f14a21f`.
+      a conversation. `ddd0d140`.
       *The fork it exists to settle:* did the tap never reach the control, or did it reach the
       control and something moved the surface afterwards.
 - [ ] **T21** The operator adds a sort rule and a filter condition on iOS without the sheet

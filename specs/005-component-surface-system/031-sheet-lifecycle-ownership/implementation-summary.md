@@ -410,6 +410,17 @@ from 1037; `npm run lint` **172**, the recorded baseline; `npm run lint:tools` 0
 `verify-placement` **393/394**, the one red declared and unrelated;
 `SURFACE_PHASE=031-sheet-lifecycle-ownership npm run gate` **PASS — 25 green, 0 red** at exit 0.
 
+**Trued up after reconciling with `main` (rebase onto `ab116959`, 2026-09-04).** The upstream
+entrance fix (`c96467c9`) had already landed with identical `src/` content, so the two branch
+commits carrying it collapsed to empty and dropped; the four numbered commits above kept their
+subject but took new SHAs: `4d2e1fa5` (anchor gate), `57e4a246` (placement control), `98b937ed`
+(retained-node rebuild), `ddd0d140` (sheet trace). `npx tsc --noEmit` 0; `npx vitest run`
+**1044 passed**, up from 1042 (`main`'s own concurrent work between the fork point and today's tip
+added the difference, not this packet); `npm run lint` **172**, unchanged; `npm run lint:tools` 0;
+`scan-comments` `PASS`; `sheet-rebuild` **31 checks green across Chrome and WebKit**, exit 0;
+`verify-placement` **393/394**, unchanged; `npm run gate` **PASS — 25 green, 0 red** at exit 0;
+`npm run screenshots:verify` 528 entries, 0 stale.
+
 <!-- /ANCHOR:limitations -->
 
 ---
