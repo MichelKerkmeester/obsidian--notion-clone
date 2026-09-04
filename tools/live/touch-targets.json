@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-04T13:05:01.214Z",
+  "measuredAt": "2026-09-04T13:21:49.875Z",
   "inputs": {
     "tools/live/touch-targets.mjs": "80a06fb02715",
     "tools/live/touch-target-measure.mjs": "d6c67abc678a",
@@ -9,17 +9,17 @@
     "styles.css": "28b394491fdb"
   },
   "fixture": {
-    "measured": 1123,
+    "measured": 1124,
     "scenarios": 71,
     "under": 199,
-    "betweenFloors": 580,
+    "betweenFloors": 581,
     "classes": 29
   },
   "constructed": {
-    "measured": 24788,
+    "measured": 24789,
     "scenarios": 73,
     "under": 1223,
-    "betweenFloors": 14334,
+    "betweenFloors": 14335,
     "classes": 26
   }
 }
