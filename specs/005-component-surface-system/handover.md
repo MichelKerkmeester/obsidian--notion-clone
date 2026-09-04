@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 043's fifth leg (T029) is merged, so touch-targets and unstyled-links read 31 constructed scenarios instead of 21 and row 6's tracked residual is closed; done-audit-10 re-read the row on main and keeps it open, re-scoped to the fixture half of those two lanes. 038's board 1:1 shipped as 0.0.16; 037's gantt 1:1 is landing. The operator owes device confirmation and the 043 AC-002 ruling."
+description: "Resume point: 038's board 1:1 shipped as 0.0.16 and 037's gantt 1:1 shipped as 0.0.17, both installed to iCloud. Four legs are now in flight: board fidelity fixes (worktrees/027), a T030 leg constructing row 6's remaining fixture families (worktrees/028), and the gantt copy's visual review plus the fidelity pass that follows it. The operator owes device confirmation and the 043 AC-002 ruling."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,15 +10,16 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T09:13:25Z"
-    last_updated_by: "done-audit-10"
-    recent_action: "T029 widened both constructed lanes 21 -> 31; done-audit-10 re-read row 6, still open"
-    next_safe_action: "Operator confirms 0.0.16 on device and rules on 043 AC-002; gantt 1:1 lands next"
+    last_updated_at: "2026-09-04T09:42:16Z"
+    last_updated_by: "orchestrate-handover-14"
+    recent_action: "Board 1:1 shipped 0.0.16, gantt 1:1 shipped 0.0.17; fidelity/review passes now in flight"
+    next_safe_action: "Operator confirms 0.0.16/0.0.17 on device; 043 AC-002 ruling still owed"
     blockers:
-      - "operator confirmation owed: reports 29-36, the five ported surfaces, and 0.0.16's board copy"
-      - "row 6 re-scoped: 42 of 71 fixture scenarios have no constructed counterpart in either lane"
+      - "operator confirmation owed: reports 29-36, the five ported surfaces, and both 0.0.16 and 0.0.17"
+      - "038 board fidelity divergences open on worktrees/027-board-fidelity; T12 stays open until landed"
+      - "037 gantt one-to-one visual review in progress; a fidelity pass follows it"
+      - "row 6 fixture half open; T030 constructs panel-/chrome-/field- families on worktrees/028-constructed-chrome"
       - "043's AC-002 ruling owed: amend the criterion to the inside-mount measurement, or accept determinism as its basis"
-      - "038's board 1:1 shipped as 0.0.16; 037's gantt 1:1 is landing from worktrees/024 (7617f85)"
     key_files:
       - "goal.md"
       - "roadmap.md"
@@ -46,6 +47,7 @@ _memory:
       - "043 T029 is merged to main (122a959, reconciled ce72379, numbers trued up in 65238ad): render-assertion-bundle.mjs gained a STATE_SCENARIOS array and a SCENARIOS_WITH_STATES export, and touch-targets/unstyled-links import the latter, so their constructed pass reads 31 scenarios instead of 21. touch-targets constructed 50462 elements across 31, 422 under the 28px floor against a rebaselined 422 (was 367/367); unstyled-links constructed 72 links across 31 with 0 UA-default findings, was 0 links across 21 — the empty-sample prediction is superseded because 7 of the ten state variants set captureData. SCENARIOS itself stays at 21 by necessity: render-assertions.mjs's BAGS table has 13 keys and none of them is the toolbar triple, so a merged list throws a TypeError at the bag-shape comparison rather than failing a check"
       - "Done-audit-10 ruled on row 6 after T029 and it stays open, re-scoped rather than narrowed again. What closed is exactly what done-audit-9 named. What keeps it open is the fixture half of the same two lanes: both exit codes still require a fixture pass over 71 hand-authored scenarios, 20 carry fixtureOf and 51 do not, and 42 of those 51 are the panel-/chrome-/field- and popover families no constructed scenario in either lane mounts — neither lane reads fixtureOf, which is consumed only through screenshots/manifest.json, so the constructed pass supplements the fixture pass without validating any individual fixture. That is done-audit-3's class (3) in the part done-audit-6's fixtureOf bound set aside rather than closed. Separately checked and clean: render-assertions.mjs, still reading the 21, leaves no criterion green on a harness-supplied value — it refuses DOM without a bundled-renderer provenance marker, its 13 action bags are return-type-annotated against the shipped *RendererActions interfaces so tsc binds them to src/views, and its coverage total is read live from src/views. completion_pct stays 57"
       - "2026-09-04, operator decision 'renumber our history': the version scheme restarted after the fork from pangy9/obsidian-note-database (fork point upstream 1.2.8). Upstream's seventeen tags (1.0.0-1.2.8) were removed from origin; our fifteen post-fork releases were re-tagged on the same commits and recreated on GitHub with the same builds, only the asset manifest's version field rewritten: 1.2.8-euro.1 through 1.4.10 now read 0.0.1 through 0.0.15 (Latest) in order. manifest.json/package.json/versions.json on main (6f81eb8) and the iCloud install both now read 0.0.15; the iCloud manifest carries a backup of the pre-rename 1.4.10 manifest. The next release is 0.0.16 (board + gantt one-to-one copies), then 0.0.17 onward, always 0.0.N. .github/workflows/release.yml auto-creates a release on any *.*.* tag push and raced the manual recreation, briefly leaving five releases wrong before they were fixed; future releases must push the tag and wait for CI, or create with gh and expect CI to fail with 'already exists'"
+      - "2026-09-04: 037's gantt 1:1 leg landed (TypeScript d30ea78, CSS 2a6d98f, merged 972c2cd/a00ad31) and shipped 0.0.17 (839712b), installed to iCloud alongside 038's already-shipped 0.0.16 board 1:1 (TypeScript 1c5f465, CSS 4b4b404, merged 854c748). A fresh reviewer (T12) found real fidelity divergences in the board copy against the reference — an inline-color palette illegible in dark mode, a left-aligned due chip, a stray 'Sub' chip, a missing badge icon/priority strip/milestone/recurrence chips/due-soon tier, unscoped selectors, and an extra 24px host inset — now being fixed on worktrees/027-board-fidelity; T12 stays open until that lands. A gantt visual review is separately in progress, with its own fidelity pass to follow. A T030 leg on worktrees/028-constructed-chrome is constructing the panel-/chrome-/field- fixture families that keep 043's row 6 fixture half open. Main is clean at 839712b; next release is 0.0.18"
 ---
 # Session Handover: Component Surface System
 
@@ -55,13 +57,13 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-As of 2026-09-04, releases 0.0.7 through 0.0.15 (formerly 1.4.2 through 1.4.10, renumbered this
-session — `roadmap.md` §5.3) are live on GitHub and installed into the iCloud vault plugin folder
-(`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
-Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it. **0.0.16 is
-cut** (`46a8525`, tag present on `origin`, verified with `git ls-remote --tags`), carrying `038`'s
-board one-to-one copy; `main` reads 0.0.16, the iCloud install still reads 0.0.15, and the next cut
-is 0.0.17.
+As of 2026-09-04, releases 0.0.7 through 0.0.17 (0.0.7-0.0.15 formerly 1.4.2 through 1.4.10,
+renumbered this session — `roadmap.md` §5.3) are live on GitHub and installed into the iCloud vault
+plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
+Kerkmeester/.obsidian/plugins/note-database`), each with a `.backup-<old>` beside it. **0.0.16**
+(`46a8525`) carries `038`'s board one-to-one copy; **0.0.17** (`839712b`) carries `037`'s gantt
+one-to-one copy. Both tags are present on `origin`, verified with `git ls-remote --tags`. `main` and
+the iCloud install both read **0.0.17**; the next cut is **0.0.18**.
 
 All five obsidian-pm port phases (037-041) are landed and shipped, and every open product row they
 carried is closed. Both harness phases the parent's DONE table opened are landed too. `043` is now
@@ -99,26 +101,34 @@ mount seam for builders that are not view renderers, which does not exist yet), 
 pass out of the exit condition and keep it as a reported-not-enforced number beside the constructed
 one.
 
-**One 1:1 reopen lane has landed, the other is landing.** At the operator's request, `037` and `038`
-were reopened for one-to-one copies of obsidian-pm's gantt and board surfaces (REQ-007 in each
-child's `spec.md`). `038`'s board leg is **done**: both legs verified on
-`worktrees/023-board-one-to-one`, merged and reconciled onto main in `854c748`, and cut as release
-**0.0.16** in `46a8525`. Its arrival is visible in this audit's own numbers — the constructed pass's
-scanned element total moved 57060 -> 50462 and its constructed link total 144 -> 72 with the
-pass/fail figures unmoved, and the port added the 71st fixture scenario
-(`chrome-board-extensions-selection`, `d921404`) straight into the set with no constructed
-counterpart. `037`'s gantt leg is **landing**, not landed: `worktrees/024-gantt-one-to-one` at
-`7617f85` (TypeScript leg `d30ea78`+`9bd044a`, CSS leg recorded in `2a6d98f`+`7617f85`), and main
-does not carry it yet — no DONE row, release, or operator row moves on its account until it lands
-and is verified in-runtime.
+**Both 1:1 reopen lanes have landed and shipped; fidelity and review passes are now in flight.** At
+the operator's request, `037` and `038` were reopened for one-to-one copies of obsidian-pm's gantt
+and board surfaces (REQ-007 in each child's `spec.md`). `038`'s board leg landed first: both legs
+verified on `worktrees/023-board-one-to-one`, merged and reconciled onto main in `854c748`, and cut
+as release **0.0.16** (`46a8525`). Its arrival is visible in done-audit-10's own numbers — the
+constructed pass's scanned element total moved 57060 -> 50462 and its constructed link total 144 ->
+72 with the pass/fail figures unmoved, and the port added the 71st fixture scenario
+(`chrome-board-extensions-selection`, `d921404`) with no constructed counterpart. A fresh reviewer
+(T12) then found real fidelity divergences against the reference: palette names painted as inline
+colors and illegible in dark mode, the due chip left-aligned (the avatar stack was conditional), a
+stray "Sub" chip, a missing badge icon/priority strip/milestone/recurrence chips/due-soon tier,
+copied selectors unscoped enough to style a co-installed Project Manager, and an extra 24px host
+inset — now being fixed on `worktrees/027-board-fidelity`; T12 stays open until that lands. `037`'s
+gantt leg landed next: TypeScript leg `d30ea78` (GanttView/Header/Renderer/TaskBar/DragHandler/
+TimelineConfig adapted under MIT; scroll-position preservation added; no local undo/redo
+equivalent), CSS leg `2a6d98f` (gantt.css copied verbatim; the off-by-default local-extensions
+`db-timeline-*` rules restored), merged and reconciled onto main in `972c2cd`/`a00ad31`, and cut as
+release **0.0.17** (`839712b`). Both releases are installed to the iCloud vault. A fresh visual
+review of the gantt copy is in progress; a fidelity pass follows it, the same shape as `038`'s.
+Separately, a T030 leg on `worktrees/028-constructed-chrome` is constructing the
+`panel-*`/`chrome-*`/`field-*` families that keep DONE row 6's fixture half open (above).
 
-Main is at `65238ad`, gate 25 green as of the landing pass. The working-tree dirt is
-`tools/live/*.json` rewritten by this audit's lane runs, left uncommitted deliberately.
-`unstyled-links.json` differs from HEAD in its `measuredAt` timestamp alone. `touch-targets.json`
-does **not**: HEAD's stamp (from the `ce72379` run) reads constructed `50444`/`under 417`, and two
-runs here both read `50462`/`under 422` on identical `inputs` hashes with no `src/` commit between
-them. Both clear the 422 baseline, but the baseline equals the higher value, so the ratchet is on
-its ceiling — record the spread before treating either number as the lane's.
+Main is at `839712b` (the 0.0.17 release cut), working tree clean as of this pass — no uncommitted
+`tools/live/*.json` dirt remains. `65238ad`, the tree done-audit-10 read, is an ancestor eight
+commits back; the gantt port's own recapture (`view-census.json`, `touch-targets.json`,
+`touch-targets-constructed-baseline.json`, `unstyled-links.json`, `replay.json` among them) landed
+committed on the way to `839712b`, so unlike `65238ad` there is nothing left to record the spread
+of.
 <!-- /ANCHOR:handover-summary -->
 
 ---
@@ -126,19 +136,23 @@ its ceiling — record the spread before treating either number as the lane's.
 <!-- ANCHOR:context-transfer -->
 ## 2. NEXT SAFE ACTION: OPERATOR CONFIRMS AND RULES
 
-No code lane is queued in the main checkout. Two decisions are the operator's, not an agent's.
-First, `043`'s AC-002: the readiness wait is real inside the mount (`scrollTop` moves 0 to 376
-across one frame), but the screenshot command flushes that frame before it rasterises, so a
-photograph can never show the difference the criterion asks for. Amend the criterion to the
-inside-mount measurement, or accept determinism as its basis. Second, device confirmation: reports
-29-36, the five ported surfaces, and now `038`'s board one-to-one copy in 0.0.16. Each confirmation
-closes its `roadmap.md` §4 row; each "still broken" reopens it with the device fact given, not an
-assumption. 0.0.16 is cut but the iCloud install still reads 0.0.15, so installing it is the
-prerequisite for confirming the board copy.
+No code lane is queued in the main checkout itself; `027` and `028` run their fidelity/T030 legs in
+worktrees outside it, and the gantt review is pending its own worktree (below, all four). Two
+decisions are the operator's, not an agent's. First, `043`'s AC-002: the
+readiness wait is real inside the mount (`scrollTop` moves 0 to 376 across one frame), but the
+screenshot command flushes that frame before it rasterises, so a photograph can never show the
+difference the criterion asks for. Amend the criterion to the inside-mount measurement, or accept
+determinism as its basis. Second, device confirmation: reports 29-36, the five ported surfaces, and
+now both `038`'s board one-to-one copy (0.0.16) and `037`'s gantt one-to-one copy (0.0.17). Each
+confirmation closes its `roadmap.md` §4 row; each "still broken" reopens it with the device fact
+given, not an assumption. Both releases are already installed to the iCloud vault, so there is no
+install step blocking either confirmation — though `027`'s and the gantt review's fidelity fixes are
+still landing, so an operator confirmation today would be against the pre-fidelity-pass copy.
 
-Candidate next work is bounded, not open-ended: landing `037`'s gantt 1:1 leg from its worktree
-under the usual discipline and cutting 0.0.17, row 6's re-scoped closing move above, whatever the
-operator's confirmations reopen, and whatever AC-002's ruling requires. Nothing else is queued.
+Candidate next work is bounded, not open-ended: `027`'s board fidelity fixes landing, the gantt
+copy's visual review and its own fidelity pass following it, `028`'s T030 leg giving row 6's
+remaining fixture families a constructed counterpart, whatever the operator's confirmations reopen,
+and whatever AC-002's ruling requires. Nothing else is queued.
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -146,23 +160,30 @@ operator's confirmations reopen, and whatever AC-002's ruling requires. Nothing 
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-1. Install 0.0.16 into the iCloud vault plugin folder (it still reads 0.0.15), then ask the
-   operator to confirm reports 29-36, the five ported surfaces, and `038`'s board 1:1 copy on iOS.
-2. Bring the AC-002 wording decision to the operator; do not amend or tick it without their
-   answer.
-3. Record each answer in `roadmap.md` §4: confirmed rows close, "still broken" rows reopen with
+Four legs are in flight; none is landed on main yet, and none blocks the others.
+
+1. **`worktrees/027-board-fidelity`** — fix the divergences T12's fresh review found against the
+   board reference (inline-color palette illegible in dark mode, left-aligned due chip, stray "Sub"
+   chip, missing badge/priority/milestone/recurrence/due-soon affordances, unscoped selectors, extra
+   24px host inset). Land under the usual discipline once verified there.
+2. **`worktrees/028-constructed-chrome`** — T030's leg giving the `panel-*`/`chrome-*`/`field-*`
+   fixture families a constructed counterpart in `touch-targets` and `unstyled-links`, so DONE row
+   6's fixture half narrows again once landed and re-audited.
+3. **Gantt one-to-one visual review** — the same review pass `038` already went through, now due for
+   `037`'s copy; run it before opening a fidelity worktree so any divergences it finds are known
+   before that leg starts.
+4. **Gantt one-to-one fidelity pass** — follows the review above once it names what to fix; no
+   worktree opened yet.
+
+5. Once `027` lands, ask the operator to confirm reports 29-36, the five ported surfaces, and both
+   `038`'s board 1:1 copy and `037`'s gantt 1:1 copy on iOS — both releases (0.0.16, 0.0.17) are
+   already installed, so no install step blocks this.
+6. Bring the AC-002 wording decision to the operator; do not amend or tick it without their answer.
+7. Record each answer in `roadmap.md` §4: confirmed rows close, "still broken" rows reopen with
    the device fact given. An agent never closes an operator row on its own judgment.
-4. Land `037`'s gantt 1:1 leg from `worktrees/024-gantt-one-to-one` (`7617f85`) under the usual
-   discipline — verify in the worktree, fast-forward main, gate main, push, release from a clean
-   clone as 0.0.17 — and never report it as landed against main until `git merge-base
-   --is-ancestor` says so. `038`'s board leg is already merged (`854c748`) and shipped (0.0.16).
-5. Row 6's re-scoped closing move, when a lane is free: give the `panel-*`/`chrome-*`/`field-*` and
-   popover surfaces a constructed counterpart inside `touch-targets` and `unstyled-links`
-   themselves — their builders are not view renderers, so this needs a mount seam the harness does
-   not have — or take the fixture pass out of those two lanes' exit conditions and keep it as a
-   reported-not-enforced number. Then let a fresh audit, not the implementing pass, re-read the
-   row (D4).
-6. Offer to remove the finished worktrees (003-022) through sk-git once the operator confirms
+8. Row 6's re-scoped closing move is `028`'s T030 leg (above); once it lands, let a fresh audit, not
+   the implementing pass, re-read the row.
+9. Offer to remove the finished worktrees (003-026) through sk-git once the operator confirms
    they are no longer needed for reference.
 <!-- /ANCHOR:session-notes -->
 
