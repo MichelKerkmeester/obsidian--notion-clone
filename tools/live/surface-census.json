@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T11:00:29.962Z",
+  "measuredAt": "2026-09-04T11:58:57.736Z",
   "inputs": {
-    "styles.css": "5da6ee888482",
+    "styles.css": "bd780d064dd4",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -715,7 +715,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "538x513",
+      "rect": "538x547",
       "scenarios": [
         "timeline-toolbar-options"
       ]
@@ -1283,7 +1283,7 @@
       "mountParent": "db-icon-picker-scroll",
       "tokens": true,
       "role": null,
-      "rect": "286x65",
+      "rect": "275x65",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1294,7 +1294,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "286x15",
+      "rect": "275x15",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1305,7 +1305,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "286x44",
+      "rect": "275x44",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"

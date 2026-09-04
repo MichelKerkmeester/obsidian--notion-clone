@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T10:59:18.284Z",
+  "measuredAt": "2026-09-04T11:58:51.020Z",
   "inputs": {
-    "styles.css": "5da6ee888482",
+    "styles.css": "bd780d064dd4",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -33,7 +33,7 @@
   "sites": [
     {
       "file": "src/views/calendar-timeline-toolbar-renderer.ts",
-      "line": 311,
+      "line": 320,
       "chain": [
         "db-chart-options-row db-calendar-range-row db-calendar-timeline-range-row"
       ],

@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-04T10:59:17.424Z",
+  "measuredAt": "2026-09-04T11:59:37.859Z",
   "inputs": {
-    "styles.css": "5da6ee888482",
+    "styles.css": "bd780d064dd4",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "checkboxes": 204,
+    "checkboxes": 205,
     "fixtures": 71,
-    "owned": 204,
+    "owned": 205,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 204,
+    "appearanceSelfOwned": 205,
     "tokenDependent": 194,
     "platformBox": 0,
     "distinctShapes": 4,
@@ -21,7 +21,7 @@
     "mountGroups": 7,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 204,
+    "boxesUnderHostProfiles": 205,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0
@@ -30,7 +30,7 @@
     "16x16 r=4px": 150,
     "18x18 r=4px": 20,
     "28x28 r=4px": 24,
-    "34x18 r=9999px": 10
+    "34x18 r=9999px": 11
   },
   "states": [
     {
@@ -2401,6 +2401,28 @@
     {
       "scenario": "timeline-toolbar-options",
       "index": 2,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-calendar-timeline-options-popover db-chart-options-popover",
+        "db-calendar-timeline-options-content",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": null
+    },
+    {
+      "scenario": "timeline-toolbar-options",
+      "index": 3,
       "classes": [
         "db-toggle-switch"
       ],

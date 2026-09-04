@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-04T11:01:18.818Z",
+  "measuredAt": "2026-09-04T12:04:44.414Z",
   "inputs": {
-    "styles.css": "5da6ee888482",
+    "styles.css": "bd780d064dd4",
     "tools/screenshots/theme.css": "88cea2ea664d",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "7950ec88efa2"
+    "tools/live/replay.mjs": "a452daf81652"
   },
   "claims": [
     {
@@ -226,10 +226,10 @@
     },
     {
       "phase": "037-timeline-gantt-port",
-      "claim": "the day fixture centres its window on the pinned now and labels each tick the bare hour, not an HH:00 clock string",
+      "claim": "the day fixture's tick label is the bare, unpadded day-of-month the reference gantt draws (GanttHeaderRenderer.renderDayHeader's String(d.day)), not the local extensions' hour-of-day grammar this fixture used to mirror",
       "was": 0,
-      "recorded": 574,
-      "actual": 574,
+      "recorded": 39,
+      "actual": 39,
       "held": true
     }
   ],
