@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-09-04T20:33:42.760Z",
+  "measuredAt": "2026-09-04T21:38:08.211Z",
   "inputs": {
-    "styles.css": "46c11786dc49",
+    "styles.css": "719ba0fca8e1",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
-    "rendered": 81,
+    "rendered": 82,
     "buildable": 214,
     "declared": 5,
     "renderedOnly": 0,
-    "buildableNotRendered": 133,
+    "buildableNotRendered": 132,
     "untokened": 0,
-    "unroled": 81
+    "unroled": 82
   },
   "rendered": {
     "db-column-menu-trigger": {
@@ -100,6 +100,7 @@
         "panel-sort-calendar-empty",
         "panel-view-config",
         "panel-column-manager",
+        "panel-column-width-sheet",
         "chrome-utilities-popover",
         "chrome-chart-options-popover"
       ]
@@ -120,6 +121,7 @@
         "panel-sort-calendar-empty",
         "panel-view-config",
         "panel-column-manager",
+        "panel-column-width-sheet",
         "chrome-utilities-popover",
         "chrome-chart-options-popover"
       ]
@@ -747,6 +749,8 @@
         "panel-filter-nested-group",
         "panel-sort-rules",
         "panel-sort-rules",
+        "panel-column-width-sheet",
+        "panel-column-width-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort"
       ]
@@ -904,7 +908,18 @@
         "panel-record-detail-sheet",
         "panel-record-detail-sheet-body-editing",
         "panel-record-detail-sheet-body-empty",
+        "panel-column-width-sheet",
         "chrome-owned-menu-sheet"
+      ]
+    },
+    "db-mobile-column-width-panel": {
+      "cls": "db-mobile-column-width-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "1440x225",
+      "scenarios": [
+        "panel-column-width-sheet"
       ]
     },
     "db-record-peek-panel": {
@@ -1448,9 +1463,9 @@
     "db-number-style-menu-ring-track",
     "db-number-style-menu-ring-arc",
     "db-column-menu-subpopover",
+    "db-mobile-bottom-sheet",
     "db-group-order-popover",
     "db-calendar-search-results-popover",
-    "db-mobile-column-width-panel",
     "db-date-value-popover",
     "db-dropdown-field-disabled-reason",
     "db-dropdown-search",
@@ -1467,7 +1482,6 @@
     "db-panel-date-value",
     "db-filter-value-dropdown",
     "db-icon-picker-empty",
-    "db-mobile-bottom-sheet",
     "db-mobile-sheet-scrim",
     "db-modal-dropdown",
     "db-base-import-type-dropdown",

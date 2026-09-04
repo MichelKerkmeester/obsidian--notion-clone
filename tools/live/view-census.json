@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T20:33:54.160Z",
+  "measuredAt": "2026-09-04T21:38:22.099Z",
   "inputs": {
-    "styles.css": "46c11786dc49",
+    "styles.css": "719ba0fca8e1",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,9 +360,9 @@
     }
   ],
   "totals": {
-    "fixtures": 71,
-    "escaping": 633,
-    "growing": 301,
+    "fixtures": 72,
+    "escaping": 637,
+    "growing": 305,
     "scrolling": 332,
     "rhythmGroups": 20,
     "ragged": 0,
@@ -2340,6 +2340,17 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "panel-column-width-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-mobile-column-width-panel.db-mobile-bottom-sheet",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
       "scrolls": false,
@@ -5015,6 +5026,17 @@
     },
     {
       "width": 402,
+      "fixture": "panel-column-width-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-mobile-column-width-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-peek",
       "kind": "escaping",
       "tag": "button",
@@ -6462,6 +6484,17 @@
     },
     {
       "width": 768,
+      "fixture": "panel-column-width-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-mobile-column-width-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 40,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-peek",
       "kind": "escaping",
       "tag": "div",
@@ -7315,6 +7348,17 @@
     },
     {
       "width": 1440,
+      "fixture": "panel-column-width-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-mobile-column-width-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 340,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
       "fixture": "panel-record-peek",
       "kind": "escaping",
       "tag": "div",
@@ -7726,6 +7770,11 @@
     },
     {
       "width": 320,
+      "fixture": "panel-column-width-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-record-peek",
       "probe": "4px"
     },
@@ -8081,6 +8130,11 @@
     },
     {
       "width": 402,
+      "fixture": "panel-column-width-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-peek",
       "probe": "4px"
     },
@@ -8436,6 +8490,11 @@
     },
     {
       "width": 768,
+      "fixture": "panel-column-width-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-peek",
       "probe": "4px"
     },
@@ -8787,6 +8846,11 @@
     {
       "width": 1440,
       "fixture": "panel-record-detail-sheet-body-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-column-width-sheet",
       "probe": "4px"
     },
     {

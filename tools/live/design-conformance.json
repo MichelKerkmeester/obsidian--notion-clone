@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T20:51:22.725Z",
+  "measuredAt": "2026-09-04T21:35:40.721Z",
   "inputs": {
-    "styles.css": "46c11786dc49",
+    "styles.css": "719ba0fca8e1",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "e33b0768ec48"
   },
@@ -9,7 +9,7 @@
     {
       "name": "contract scan — surfaces created without a declared role",
       "enforced": false,
-      "value": 194,
+      "value": 198,
       "target": 0,
       "note": "counted, not gated: gating today would fail on known debt",
       "gated": false,
@@ -160,10 +160,14 @@
     "src/views/column-manager-renderer.ts:167  .db-panel-header-actions",
     "src/views/column-menu.ts:233  .db-dropdown-section-title",
     "src/views/column-menu.ts:368  .db-column-menu-back",
-    "src/views/database-view.ts:3125  .db-group-order-popover",
-    "src/views/database-view.ts:3239  .db-panel-button",
-    "src/views/database-view.ts:6983  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:11412  .db-mobile-column-width-panel",
+    "src/views/column-width.ts:372  .db-mobile-column-width-panel",
+    "src/views/column-width.ts:386  .db-panel-header",
+    "src/views/column-width.ts:387  .db-panel-title",
+    "src/views/column-width.ts:397  .db-panel-row",
+    "src/views/column-width.ts:421  .db-panel-row",
+    "src/views/database-view.ts:3112  .db-group-order-popover",
+    "src/views/database-view.ts:3226  .db-panel-button",
+    "src/views/database-view.ts:6970  .db-calendar-search-results-popover",
     "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:206  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:115  .db-dropdown-field-text",

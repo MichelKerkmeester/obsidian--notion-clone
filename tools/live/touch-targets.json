@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-09-04T21:08:20.300Z",
+  "measuredAt": "2026-09-04T21:48:29.614Z",
   "inputs": {
     "tools/live/touch-targets.mjs": "80a06fb02715",
     "tools/live/touch-target-measure.mjs": "d6c67abc678a",
     "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
-    "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
+    "tools/live/render-assertion-harness.ts": "b83fdbd47fd2",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "styles.css": "46c11786dc49"
+    "styles.css": "719ba0fca8e1"
   },
   "fixture": {
-    "measured": 1123,
-    "scenarios": 71,
+    "measured": 1130,
+    "scenarios": 72,
     "under": 199,
-    "betweenFloors": 580,
+    "betweenFloors": 586,
     "classes": 29
   },
   "constructed": {
