@@ -854,7 +854,7 @@ P2-A/B/C/D/E/H) and three fixture items, each fixed red-first per the reviewer's
 ---
 
 <!-- ANCHOR:phase-8 -->
-## Phase 8: AC-007 In-Repo Confirmation and Residual Dispositions (2026-09-04, T048-T051)
+## Phase 8: AC-007 In-Repo Confirmation and Residual Dispositions (2026-09-04, T048-T053)
 
 This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing leg (T039-T047,
 `9e4d4b04`) landed. The reviewer ran none of the gantt legs.
