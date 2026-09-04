@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "e191ebb917cd",
+  "baselineHash": "0785e72944dd",
   "baselineCommit": "5beb1671076bcaa917b2ede6e83eab520ce89ec7",
   "history": [
     {
@@ -2830,6 +2830,52 @@
         "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
       ],
       "note": "All 32 real content-changed captures (pixelHash moved) opened and read at both themes/devices where applicable. Measured directly against reference-kanban(-subtask) and against the HEAD-committed PNGs: backlog column count pill 38->34 physical px (19->17 CSS px at deviceScaleFactor 2), matching the reference pill exactly (desktop dark/light and mobile light all confirmed at the same 34-physical-px/17-CSS-px height); subtask child card (row-1) full border-to-border height 254->248 physical px (127->124 CSS px), again matching the reference capture exactly; the hours-row band and every band below it in that card now sit at the identical absolute pixel y-range as the reference (476-490/525-540/574-575 physical, bit-for-bit), versus a 4-10 physical px low offset before the fix. Non-subtask card (row-0) title/hours/avatar bands also now match the reference bit-for-bit (152-159/188-206/239-254), confirming the P3 hours-baseline gap was the header-height delta propagating downward, not a separate defect. Three of the run-moved captures (constructed-owned-menu-mobile-dark, constructed-record-detail-desktop-dark, constructed-sort-panel-calendar-mobile-light) were pixelHash/layoutHash-identical to HEAD and were restored to HEAD-committed bytes; their manifest sourceHashes still carry the current styles.css fingerprint. Zero gantt captures moved. Rebased across the settings sheet, column-width sheet, WebKit sheet, reference-capture, milestone-label and screenshots-folders-split landings (355d24ff -> 933308a5f9fc): styles.css auto-merged clean (this leg's only touch is the .pm-kanban-view line-height: normal addition, confirmed by a clean diff against origin/main); the 32 reviewed captures moved from their pre-split screenshots/<group>/ paths to screenshots/notion-clone/<group>/ to follow the 042-screenshots-folders split that landed underneath this leg, content unchanged by the move. tsc clean; vitest full suite green including the red-then-green stylesheet-contract test (shared.test.mjs) asserting the reset rule and the three elements that keep their own explicit line-height. RECONCILED AGAIN (2026-09-05, landing worktrees/046-board-line-height) across the list hide-and-migrate and 045-board-card-properties landings underneath this leg: styles.css merged clean a second time (this leg only touches .pm-kanban-view; 045 only touches .db-view-config-panel .db-column-manager-row), moving the tracked hash to e191ebb917cd (045's d42c0da16fad plus this leg's own edit); the 32 reviewed captures above were re-measured against the same reference and read identically. tsc 0; vitest 1110/1110 (107 files); lint 172 (unchanged); lint:tools clean; scan-comments PASS; npm run screenshots 554 entries, 0 failures; npm run screenshots:verify 0 stale; npm run gate 25 green / 0 red."
+    },
+    {
+      "event": "acquire",
+      "phase": "044-phone-sheet-alignment",
+      "at": "2026-09-04T22:55:00.000Z",
+      "hash": "719ba0fca8e1",
+      "note": "Phone sheet grammar: .db-sheet-close 44x44 target in the shared header, .db-add-view-key-field dropdown + db-panel-row fields in the add-view form, header-actions beside the close, safe-area inset for the sheet body where missing. Re-acquired after rebasing onto origin/main's settings-sheet and column-width-sheet landings; baselineHash moved from this phase's own pre-rebase value (cdc0217ad1d7) to 719ba0fca8e1, the hash both legs' own reconciliation releases left in the tree."
+    },
+    {
+      "event": "release",
+      "phase": "044-phone-sheet-alignment",
+      "at": "2026-09-05T00:35:00.000Z",
+      "hash": "0d0d87c3b427",
+      "reviewed": [
+        "screenshots/notion-clone/components/add-view-popover-desktop-dark.png",
+        "screenshots/notion-clone/components/add-view-popover-desktop-light.png",
+        "screenshots/notion-clone/components/add-view-popover-mobile-dark.png",
+        "screenshots/notion-clone/components/add-view-popover-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png"
+      ],
+      "note": "Landed .db-sheet-close (44x44 header close, shared by every createSheetHeader surface), .db-panel-header-actions > auto margin scoped to a direct child of .db-panel-header only (an unscoped first pass broke the cell-editor select popover's unrelated \"Clear\" row, which reuses the same class inside a column-flex container with no header at all -- caught by re-running the full capture and reading constructed-cell-editor-select-mobile-dark beside HEAD, fixed, re-verified both ways), .db-add-view-key-field sizing for the dropdown button that replaced the native select, the group-spacing double-margin on .db-add-view-form > .db-panel-row (verify-placement's 2x group-gap ratio), and .db-panel-header:has(.db-sheet-close)'s own top margin so the grab band's tuned reach stops short of the close button instead of swallowing it (verified with a real hit-test, not assumed). 28 real content-changed captures opened and read (paths above reflect the 042-screenshots-folders notion-clone/ split and the 044-list-hide-migrate release above, both rebased onto after these were first reviewed): add-view/toolbar-add-view show the new header-close, dropdown-not-select key field, chevron rows, and List view withdrawn; filter/filter-nested and sort/sort-calendar show title-left, close-right with no regression to the AND/OR toggle grouping; record-peek shows the phone capture now photographing the record sheet (openRecordDetail hand-off) with the desktop rail unchanged. 46 further files the recapture moved (date-picker, timeline/gantt/reference-gantt, board-mobile family, owned-menu, record-detail) confirmed pixelHash+layoutHash-identical to HEAD or, for the largest cluster (timeline/gantt), confirmed by direct visual read against HEAD (reference-gantt-desktop-dark: pixel-identical apart from a documented sub-pixel label-jitter) -- restored to HEAD bytes, manifest reset to HEAD values, sourceHashes carrying the current fingerprint. touch-targets re-baselined (199 fixture / 1220 constructed) after isolating the count against 044's own branch base and rebase tip: neither number moved across any edit this phase made; the drop from the stale recorded values (279 fixture / 1223 constructed) is fully attributable to work already merged before 044's rebase (037/038/039/040), not to this release. Rebased three times after this release was first written -- onto e0145ac9 (fix(ci): make the capture staleness check pass on a clean checkout), 042-screenshots-folders' notion-clone/ split, and 044-list-hide-migrate's own withdrawal of list from getViewTypeOptions -- styles.css untouched by any of the three, so the 17da75ff5438 hash and every finding above still hold; the add-view fixture and verify-placement's row-count floor were independently fixed the same way by 044-list-hide-migrate and merged as identical content. Also found and fixed while verifying this release: manifest-schema.mjs's captureRootFor() checked scenario.source instead of scenario.kind, which is only set on the finished manifest entry, so it always fell through to the notion-clone root and nested all sixteen project-manager references there too, caught when a full capture run's own validation refused to write the wrong path; regression coverage added in constructed-capture.test.mjs. Two further CSS fixes landed after that first sweep, both caught by verify-placement rather than assumed: (a) .db-add-view-form > .db-panel-row's own margin-bottom and padding double-counted the form's own grid gap and padding, failing the 2x group-gap ratio and the shared-left-edge checks -- zeroed for that context, restoring both. (b) .db-panel-header:has(.db-sheet-close) sits only 25px below the grab handle, inside the shared drag band's already-tuned 40px reach for the owned menu, and a real hit-test found the band answering a press on add-view's close button as a press on the handle instead -- given the header 20px more top margin rather than shrinking the band, which would have detuned it for the owned menu. Both fixes moved styles.css from 17da75ff5438 to 0d0d87c3b427; verify-placement went from 395/403 (7 add-view rows failing on stale row-count/spacing/edge checks plus the close-button swallow) to 402/403 (the same 1 declared red every prior release carries). The header margin-top also reaches the settings sheet, whose close button carries the same db-sheet-close class for grammar conformance (T004's note) -- constructed-view-config-mobile-{dark,light}.png moved a few px of top spacing as a result, read directly and confirmed unbroken; this extends the same swallow protection to a second surface that shares the identical risk shape, not a regression. Recaptured a third time after this: 552 entries, 66 real content-changed (the same 28 plus the 2 view-config mobile captures the header-margin side effect moved, plus 36 timeline/gantt/date-picker files confirmed pixelHash-identical to HEAD or visually identical on direct read and restored), 0 stale. Also rebased a fourth time onto e0e1c568 (specs/006-list-view-deprecation's own list-hide-and-migrate landing), which independently fixed the exact same two facts this release already carried -- the add-view fixture's List row and verify-placement's row-count floor -- merged as identical content with only comment wording to reconcile; toolbar-renderer.ts's now-redundant call-site list filter (superseded by getViewTypeOptions()'s own internal withdrawal) removed. npm run screenshots:verify: 0 stale. npm run gate: pending this same session."
     }
   ],
   "outstanding": [

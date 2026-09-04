@@ -8365,6 +8365,7 @@ export class DatabaseView extends FileView {
         returnFocus: returnFocus ?? (() => anchorEl.focus()),
         renderRecordIcon: (parent, currentRow, currentConfig) =>
           this.renderRowRecordIcon(parent, currentRow, currentConfig),
+        openRecordDetail: (openAnchor, openRow) => this.openRecordDetailPanel(openAnchor, openRow),
       });
       return;
     }

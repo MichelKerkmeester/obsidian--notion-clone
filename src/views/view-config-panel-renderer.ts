@@ -326,11 +326,16 @@ export class ViewConfigPanelRenderer {
    *
    * Only on a sheet. The anchored panel has an anchor to press again and a backdrop-free surface
    * that never trapped anybody, and adding a control there would change a surface nobody reported.
+   *
+   * Carries `db-sheet-close` alongside its own `db-view-config-close`, additively: the sheet-grammar
+   * contract (`sheet-grammar.ts`'s `hasSheetHeader`) checks for that shared class, and this control's
+   * own 44px sizing and dismissal already satisfy the same floor under its own name — the second
+   * class makes that conformance legible to the lane rather than changing what the button does.
    */
   private renderSheetClose(header: HTMLElement, panel: HTMLElement): void {
     const actionsEl = header.createDiv({ cls: "db-panel-header-actions" });
     const close = actionsEl.createEl("button", {
-      cls: "db-icon-only-button db-view-config-close",
+      cls: "db-icon-only-button db-view-config-close db-sheet-close",
       attr: { type: "button", "aria-label": t("common.close") },
     });
     setIcon(close, "x");

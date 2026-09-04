@@ -18,6 +18,7 @@ import { SortRule, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { createDropdownField } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
@@ -109,8 +110,13 @@ export class SortPanelRenderer {
     });
     panel.focus?.({ preventScroll: true });
 
-    const top = panel.createDiv({ cls: "db-panel-header" });
-    top.createSpan({ cls: "db-panel-title", text: t("toolbar.sort") });
+    createSheetHeader(panel, {
+      title: t("toolbar.sort"),
+      onClose: () => {
+        actions.close();
+        this.anchorEl?.focus({ preventScroll: true });
+      },
+    });
     // Calendar layouts reserve lanes/columns for spanning, all-day, and
     // overlapping timed events before applying user sort as a layout tiebreak.
     if (config.viewType === "calendar") {

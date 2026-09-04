@@ -37,6 +37,19 @@ const mockMenus: Array<{
   showAtMouseEvent: ReturnType<typeof vi.fn>;
 }> = [];
 
+/**
+ * Owned-menu instances the renderer created, for the depends-elsewhere chip assertions.
+ *
+ * The chip now opens the house menu rather than Obsidian's, and the owned menu mounts a real
+ * document surface that this node environment cannot construct — the wiring under test is that
+ * the chip builds the rows and shows the menu, which the double records. The menu's own
+ * behaviour has its own module coverage.
+ */
+const mockOwnedMenus = vi.hoisted(() => [] as Array<{
+  rows: Array<{ label: string; icon: string; handler: () => void }>;
+  showAt: ReturnType<typeof vi.fn>;
+}>);
+
 vi.mock("obsidian", () => ({
   Notice: class {},
   setIcon: vi.fn(),
@@ -66,6 +79,25 @@ vi.mock("obsidian", () => ({
       callback(item);
       return this;
     }
+  },
+}));
+
+vi.mock("./owned-menu", () => ({
+  createOwnedMenuForEvent: () => {
+    const menu = {
+      rows: [] as Array<{ label: string; icon: string; handler: () => void }>,
+      showAt: vi.fn(),
+      addRow: (options: { icon?: string; label: string; onClick?: () => void }) => {
+        const row = { label: options.label, icon: options.icon || "", handler: options.onClick || (() => {}) };
+        menu.rows.push(row);
+        return row;
+      },
+      addSeparator: () => undefined,
+      addSection: () => undefined,
+      close: () => undefined,
+    };
+    mockOwnedMenus.push(menu);
+    return menu;
   },
 }));
 
@@ -1178,18 +1210,18 @@ describe("timeline gantt DOM-structure parity", () => {
     const chip = alphaRow.children.find((child) => child.className.includes("pm-chip"));
     expect(chip).toBeDefined();
 
-    mockMenus.length = 0;
+    mockOwnedMenus.length = 0;
     chip!.dispatch("click", clickEvent());
 
-    expect(mockMenus).toHaveLength(1);
-    const menu = mockMenus[0];
-    expect(menu.items).toHaveLength(2);
-    expect(menu.items.map((item) => item.title)).toEqual(["Projects/Outside", "AlsoOutside"]);
-    expect(menu.items.every((item) => item.icon === "link-2")).toBe(true);
-    expect(menu.showAtMouseEvent).toHaveBeenCalledTimes(1);
+    expect(mockOwnedMenus).toHaveLength(1);
+    const menu = mockOwnedMenus[0];
+    expect(menu.rows).toHaveLength(2);
+    expect(menu.rows.map((row) => row.label)).toEqual(["Projects/Outside", "AlsoOutside"]);
+    expect(menu.rows.every((row) => row.icon === "link-2")).toBe(true);
+    expect(menu.showAt).toHaveBeenCalledTimes(1);
 
-    menu.items[0].handler();
-    menu.items[1].handler();
+    menu.rows[0].handler();
+    menu.rows[1].handler();
     expect(opened).toEqual(["Projects/Outside.md", "AlsoOutside.md"]);
   });
 

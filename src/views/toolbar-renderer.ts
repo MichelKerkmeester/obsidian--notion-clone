@@ -22,7 +22,7 @@ import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { createMenuRow, createMenuSection, createMenuSeparator } from "./menu-row";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
-import { applySheetChrome } from "./mobile-bottom-sheet";
+import { applySheetChrome, createSheetHeader } from "./mobile-bottom-sheet";
 import { createOwnedMenu } from "./owned-menu";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { getEffectiveFilterRules } from "../data/filter-rules";
@@ -1271,16 +1271,18 @@ export class ToolbarRenderer {
    * so. The id is generated per field because more than one database can be open, and two labels
    * pointing at the same id would hand both controls to the first one.
    */
-  private createAddViewField(parent: HTMLElement, label: string): { field: HTMLElement; controlId: string } {
+  private createAddViewField(parent: HTMLElement, label: string): { row: HTMLElement; field: HTMLElement; controlId: string } {
     this.addViewFieldSeq += 1;
     const controlId = `db-add-view-field-${this.addViewFieldSeq}`;
-    const field = parent.createDiv({ cls: "db-add-view-field" });
+    // The row is the shared one; the field inside keeps its own caption-above-control layout.
+    const row = parent.createDiv({ cls: "db-panel-row" });
+    const field = row.createDiv({ cls: "db-add-view-field" });
     field.createEl("label", {
       cls: "db-add-view-field-label",
       text: label,
       attr: { for: controlId },
     });
-    return { field, controlId };
+    return { row, field, controlId };
   }
 
   /**
@@ -1352,8 +1354,10 @@ export class ToolbarRenderer {
 
     const panel = root.createDiv({ cls: "db-view-tab-popover db-add-view-popover", attr: { id: "db-add-view-popover", role: "dialog", "aria-label": t("toolbar.addView") } });
     this.viewTabPopover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("toolbar.addView") });
+    createSheetHeader(panel, {
+      title: t("toolbar.addView"),
+      onClose: () => this.closeViewTabPopover(),
+    });
 
     // Settings first, actions second, because the settings modify what the actions produce —
     // reading order follows causal order. What makes the settings skippable is the heading above
@@ -1368,14 +1372,24 @@ export class ToolbarRenderer {
       cls: "db-add-view-name",
       attr: { type: "text", id: nameField.controlId },
     });
+    // The key field is a dropdown row, not a native select: a select renders the OS picker on a
+    // phone while every other control in this sheet opens the shared listbox.
     const keyFieldWrap = this.createAddViewField(form, t("toolbar.viewKeyField"));
-    const keyField = keyFieldWrap.field.createEl("select", {
-      cls: "db-add-view-key-field",
-      attr: { id: keyFieldWrap.controlId },
+    const keyFieldOptions = db.schema.columns
+      .filter((candidate) => candidate.key !== "file.name")
+      .map((column) => ({ value: column.key, text: column.label }));
+    let keyFieldValue = keyFieldOptions[0]?.value ?? "";
+    createDropdownField({
+      parent: keyFieldWrap.field,
+      label: t("toolbar.viewKeyField"),
+      options: keyFieldOptions,
+      value: keyFieldValue,
+      className: "db-add-view-key-field",
+      hideLabel: true,
+      onChange: (value) => {
+        keyFieldValue = value;
+      },
     });
-    for (const column of db.schema.columns.filter((candidate) => candidate.key !== "file.name")) {
-      keyField.createEl("option", { value: column.key, text: column.label });
-    }
     const iconFieldWrap = this.createAddViewField(form, t("toolbar.viewIcon"));
     const iconInput = iconFieldWrap.field.createEl("input", {
       cls: "db-add-view-icon",
@@ -1384,7 +1398,7 @@ export class ToolbarRenderer {
     // Named for what it does rather than for the action it resembles. It seeds the new view from
     // the current one's filters, sorts and column order; the row below makes a same-type copy. Two
     // behaviours that shared one name read as the same control offered twice.
-    const duplicate = form.createEl("label", { cls: "db-add-view-duplicate" });
+    const duplicate = form.createEl("label", { cls: "db-add-view-duplicate db-panel-row" });
     const duplicateInput = createCheckbox(duplicate, { role: "field" });
     duplicate.createSpan({ text: t("toolbar.copyCurrentViewSettings") });
 
@@ -1395,15 +1409,21 @@ export class ToolbarRenderer {
     // grid's one advantage over a list — showing what each layout looks like — was never delivered,
     // while it cost a second row vocabulary, an 11px caption and a boundary no theme token can draw
     // at a visible contrast. A row is the grammar every other menu in the plugin already uses.
+    //
+    // List and gallery are both withdrawn from this picker by getViewTypeOptions() itself (see its
+    // own doc comment): a new database may not arrive at either while its own escape hatch still
+    // lets an existing one keep the type it already has. The row's absence here is asserted by the
+    // sheet grammar lane.
     for (const { value, text, icon } of this.getViewTypeOptions()) {
       createMenuRow(choices, {
         icon,
         label: text,
+        chevron: true,
         onClick: () => {
           actions.addView(value, {
             name: nameInput.value.trim() || undefined,
             icon: iconInput.value.trim() || undefined,
-            keyField: keyField.value || undefined,
+            keyField: keyFieldValue || undefined,
             duplicateCurrent: duplicateInput.checked,
           });
           this.closeViewTabPopover();
@@ -1418,6 +1438,7 @@ export class ToolbarRenderer {
         cls: "db-add-view-duplicate-action",
         icon: "copy",
         label: t("toolbar.duplicateCurrentView"),
+        chevron: true,
         onClick: () => {
           actions.addView(current.viewType || "table", { duplicateCurrent: true, name: nameInput.value.trim() || undefined });
           this.closeViewTabPopover();

@@ -13,13 +13,16 @@
 // springs back.
 
 // ───────────────────────────────────────────────────────────────────
-// 0. IMPORTS
+// 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { setIcon, setTooltip } from "obsidian";
+import { t } from "../i18n";
+import { overlayStack } from "./overlay-stack";
 import { beginSheetGeneration, isSheetTraceEnabled, traceSheet } from "./sheet-trace";
 
 // ───────────────────────────────────────────────────────────────────
-// 1. SHEET CHROME
+// 2. SHEET CHROME
 // ───────────────────────────────────────────────────────────────────
 
 export interface SheetChromeOptions {
@@ -93,7 +96,107 @@ function createSheetHandle(panel: HTMLElement): HTMLElement {
 }
 
 // ───────────────────────────────────────────────────────────────────
-// 1a. THE ENTRANCE
+// 2a. THE HEADER
+// ───────────────────────────────────────────────────────────────────
+
+export interface SheetHeaderOptions {
+  /** The sheet's title, rendered into the header's title slot. */
+  title: string;
+  /**
+   * Dismissal fallback, used only when the sheet is not registered with the overlay stack.
+   *
+   * The close button asks the stack first because the stack owns dismissal: a registered sheet
+   * closes through the same path the backdrop and Escape use, and a second, parallel close would
+   * fight it. An unregistered sheet — a mounted surface in a harness, or a producer that never
+   * wired auto-close — needs this to do anything at all.
+   */
+  onClose?: () => void;
+  /**
+   * Build right-side header controls, before the close button is appended.
+   *
+   * The close button is always the last element in the header so it sits at the far edge
+   * whatever the surface adds beside the title.
+   */
+  beforeClose?(header: HTMLElement): void;
+}
+
+export interface SheetHeaderHandle {
+  header: HTMLElement;
+  titleEl: HTMLElement;
+  closeButton: HTMLButtonElement;
+}
+
+/**
+ * The shared sheet header: title, any surface-owned right-side controls, and the close button.
+ *
+ * One builder so every sheet carries the same header shape and the same close affordance — the
+ * affordance that was missing or hand-built per surface is exactly what the reports named. The
+ * close's 44px target is a stylesheet fact and the touch-target ratchet's to enforce; this
+ * builder only guarantees the control exists and dismisses through the shared path.
+ */
+export function createSheetHeader(panel: HTMLElement, options: SheetHeaderOptions): SheetHeaderHandle {
+  const header = panel.createDiv({ cls: "db-panel-header" });
+  const titleEl = header.createSpan({ cls: "db-panel-title", text: options.title });
+  options.beforeClose?.(header);
+  const closeButton = header.createEl("button", {
+    cls: "db-sheet-close",
+    attr: { type: "button", "aria-label": t("common.close") },
+  });
+  setIcon(closeButton, "x");
+  setTooltip(closeButton, t("common.close"), { delay: 100 });
+  closeButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!overlayStack.dismissPanel(panel, "programmatic")) options.onClose?.();
+  });
+  return { header, titleEl, closeButton };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 2b. THE KEYBOARD INSET VARIABLE
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * The variable the placement loop publishes the keyboard figure to, per open sheet.
+ *
+ * One number per sheet, written on the sheet's own node, so the sheet's CSS and the grammar
+ * contract read a single published value instead of each computing the keyboard itself. The
+ * value is the same figure the host and the visual viewport drive; publishing it on the sheet
+ * does not add a second source of truth, only a second reader.
+ */
+export const SHEET_KEYBOARD_INSET_VAR = "--db-keyboard-inset";
+
+// ───────────────────────────────────────────────────────────────────
+// 2c. HOST MODALS
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Present a host modal inside the shared sheet chrome, and take the chrome down again.
+ *
+ * Obsidian's own modal classes (Modal, FuzzySuggestModal) carry no plugin chrome, so a phone
+ * user gets a centred dialog while every plugin surface beside it is a sheet. The modal element
+ * is a normal element once Obsidian has opened it, so it can wear the sheet chrome like any
+ * other surface — the same move the modal base class already makes for its own subclasses. The
+ * host still owns the modal's contents and lifecycle; this only dresses the element.
+ *
+ * The returned teardown MUST run before Obsidian's own `close()` detaches the host's container —
+ * the caller's `onClose` runs it ahead of `super.onClose()` for exactly that reason. `applySheetChrome`
+ * is what the sheet variant needs: a modal wearing the chrome was portalled to `document.body` out
+ * of the host's `containerEl`, so the host's own teardown no longer holds it, and skipping this call
+ * strands the modal element on the body with the backdrop pinned behind it — `DbModal.onClose` hit
+ * the identical failure and this mirrors that fix rather than reinventing it.
+ */
+export function attachSheetChromeToModal(modalEl: HTMLElement, isSheet: boolean, close: () => void): () => void {
+  applySheetChrome(modalEl, isSheet);
+  const releaseDrag = isSheet ? attachSheetDragToDismiss(modalEl, close) : undefined;
+  return () => {
+    releaseDrag?.();
+    applySheetChrome(modalEl, false);
+  };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 3. THE ENTRANCE
 // ───────────────────────────────────────────────────────────────────
 
 /**

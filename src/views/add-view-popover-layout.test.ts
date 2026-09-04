@@ -160,7 +160,7 @@ describe("add-view surface", () => {
       // The duplicate action is a row too, so the fixture draws one more than there are types.
       expect(drawn).toHaveLength(types.length + 1);
       expect(drawn).toContain("Duplicate current view");
-      // A withdrawn type must not be depicted as available.
+      // Two withdrawn types must not be depicted as available.
       expect(drawn).not.toContain("Gallery view");
       expect(drawn).not.toContain("List view");
       // `common.tableView` -> "Table view", which is the caption the fixture writes out.
@@ -169,6 +169,25 @@ describe("add-view surface", () => {
         const expected = label.charAt(0).toUpperCase() + label.slice(1);
         expect(drawn).toContain(expected);
       }
+    });
+
+    it("gives the key field the shared dropdown, not a native select", () => {
+      // The real surface replaced `<select class="db-add-view-key-field">` with
+      // `createDropdownField` (`toolbar-renderer.ts`) so the field opens the same listbox every
+      // other dropdown in the plugin does instead of the OS picker — the second grammar the sheet
+      // contract exists to catch (`sheet-grammar.ts`'s `hasSharedDropdownRows`). A fixture still
+      // drawing the native element is a picture of a surface nobody ships.
+      const fixture = addViewFixture();
+      expect(fixture).not.toContain("<select");
+      expect(fixture).toContain("db-add-view-key-field");
+      expect(fixture).toContain("db-dropdown-field");
+    });
+
+    it("gives the header the close affordance every sheet grammar carries", () => {
+      // `createSheetHeader` always appends a `db-sheet-close` button; a fixture with a bare
+      // title-only header depicts the surface report 43 complained about, not the one that shipped.
+      const fixture = addViewFixture();
+      expect(fixture).toContain("db-sheet-close");
     });
 
     it("uses the row grammar, not a private tile", () => {

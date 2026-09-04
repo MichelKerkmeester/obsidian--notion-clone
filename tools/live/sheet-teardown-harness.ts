@@ -32,7 +32,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { applySheetChrome } from "../../src/views/mobile-bottom-sheet";
+import { applySheetChrome, attachSheetChromeToModal } from "../../src/views/mobile-bottom-sheet";
 import { DbModal } from "../../src/views/modals/db-modal";
 import { ViewConfigPanelRenderer } from "../../src/views/view-config-panel-renderer";
 import { ColumnManagerRenderer } from "../../src/views/column-manager-renderer";
@@ -215,6 +215,47 @@ async function runDbModalDetachedHostCase(doc: Document): Promise<TeardownResult
       ? `mount produced ${mountedScrim} backdrops, expected 1 — this run proves nothing about teardown`
       : pass
         ? "base close restored the panel before the host wrapper was removed"
+        : `${scrimLeft} backdrop(s) and ${sheetsLeft} sheet(s) left after the host wrapper was removed`,
+  };
+}
+
+/**
+ * The same detached-host shape, through `attachSheetChromeToModal` rather than `DbModal`.
+ *
+ * `DbModal.onClose` takes its own chrome down; the FuzzySuggestModal-based hosts (the file
+ * suggest modals, the Add-view base-file picker) have no such base and instead run whatever
+ * teardown `attachSheetChromeToModal` hands back. That teardown used to be
+ * `attachSheetDragToDismiss`'s release alone, which only unbinds the drag listeners — it never
+ * called `applySheetChrome(modalEl, false)`. The host's own `close()` then detached its container,
+ * which no longer held the portalled modal element, and the modal was left on the body with the
+ * backdrop pinned behind it: the identical freeze `runDbModalDetachedHostCase` exists to catch,
+ * reached through the newer helper instead of the older base class.
+ */
+async function runAttachSheetChromeToModalDetachedHostCase(doc: Document): Promise<TeardownResult> {
+  clearBody(doc);
+  const container = doc.createElement("div");
+  const modal = container.appendChild(doc.createElement("div"));
+  doc.body.appendChild(container);
+  const release = attachSheetChromeToModal(modal, true, () => undefined);
+  const mountedScrim = doc.body.querySelectorAll(SCRIM).length;
+
+  release();
+  container.remove();
+  await settle(doc);
+
+  const scrimLeft = doc.body.querySelectorAll(SCRIM).length;
+  const sheetsLeft = doc.body.querySelectorAll(SHEET).length;
+  const pass = mountedScrim === 1 && scrimLeft === 0 && sheetsLeft === 0;
+  return {
+    producer: "attachSheetChromeToModal with a detached host wrapper",
+    closeShape: "returned teardown before wrapper removal",
+    scrimLeft,
+    sheetsLeft,
+    pass,
+    detail: mountedScrim !== 1
+      ? `mount produced ${mountedScrim} backdrops, expected 1 — this run proves nothing about teardown`
+      : pass
+        ? "the returned teardown restored the panel before the host wrapper was removed"
         : `${scrimLeft} backdrop(s) and ${sheetsLeft} sheet(s) left after the host wrapper was removed`,
   };
 }
@@ -449,6 +490,7 @@ export async function runSheetTeardownParity(doc: Document = document): Promise<
     await runProducer(doc, "add-view sheet", "remove-only"),
     await runCompoundingCase(doc),
     await runDbModalDetachedHostCase(doc),
+    await runAttachSheetChromeToModalDetachedHostCase(doc),
   ];
   // Real renderers, started one at a time: each resets the body, so they must not overlap.
   for (const runCase of headerPanelCases(doc)) results.push(await runCase());

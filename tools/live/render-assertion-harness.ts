@@ -3164,6 +3164,19 @@ export function runRenderAssertions(
       container,
       returnFocus: () => undefined,
       renderRecordIcon: () => null,
+      // On a touch mount the peek hands off to the record sheet — the same hand-off the view
+      // host makes — so a phone scenario photographs the surface a phone actually gets.
+      openRecordDetail: (openAnchor, openRow) => {
+        openRecordDetailPanel({
+          anchorEl: openAnchor,
+          host: container,
+          row: openRow,
+          columns,
+          config,
+          app: undefined as unknown as App,
+          actions: { editCell: () => undefined, openRow: () => undefined },
+        });
+      },
     });
     container.setAttribute(PROVENANCE_ATTR, "record-peek");
 

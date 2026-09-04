@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@e191ebb917cd"
+    "stylesheet": "styles.css@0785e72944dd"
   },
   "scenarios": [
     {
@@ -13,11 +13,11 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "25420cd71fcf",
-      "pixelHash": "e461f845c753",
+      "layoutHash": "e2a77f534001",
+      "pixelHash": "b85ebf503282",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
-        "styles.css": "e191ebb917cd",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -25,7 +25,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 56723,
+      "bytes": 57074,
       "fixtureOf": "constructed-toolbar-add-view"
     },
     {
@@ -38,11 +38,11 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "25420cd71fcf",
-      "pixelHash": "0ba658b67516",
+      "layoutHash": "e2a77f534001",
+      "pixelHash": "0a26294cd357",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
-        "styles.css": "e191ebb917cd",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -50,7 +50,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 57766,
+      "bytes": 58292,
       "fixtureOf": "constructed-toolbar-add-view"
     },
     {
@@ -63,11 +63,11 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "c370fe29f636",
-      "pixelHash": "363cd9689744",
+      "layoutHash": "d2135c27d5a5",
+      "pixelHash": "bafa488eb806",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
-        "styles.css": "e191ebb917cd",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -75,7 +75,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 59671,
+      "bytes": 59918,
       "fixtureOf": "constructed-toolbar-add-view"
     },
     {
@@ -88,11 +88,11 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "c370fe29f636",
-      "pixelHash": "0ee645807be0",
+      "layoutHash": "d2135c27d5a5",
+      "pixelHash": "0bb0563bb990",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
-        "styles.css": "e191ebb917cd",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -100,12 +100,12 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 60711,
+      "bytes": 61057,
       "fixtureOf": "constructed-toolbar-add-view"
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -123,13 +123,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
       "capture": "element",
       "bytes": 39512
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -147,13 +147,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
       "capture": "element",
       "bytes": 40059
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -171,13 +171,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
       "capture": "element",
       "bytes": 36143
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -195,13 +195,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
       "capture": "element",
       "bytes": 36782
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -226,7 +226,7 @@
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -251,7 +251,7 @@
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -276,7 +276,7 @@
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -409,7 +409,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -436,7 +436,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -463,7 +463,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -490,7 +490,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -517,7 +517,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -544,7 +544,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -571,7 +571,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -598,7 +598,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -825,7 +825,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -850,7 +850,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -875,7 +875,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -900,7 +900,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -925,7 +925,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -950,7 +950,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -975,7 +975,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -1000,7 +1000,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -1147,7 +1147,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 27740,
       "fixtureOf": "constructed-table-grouped"
@@ -1176,7 +1176,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 26442,
       "fixtureOf": "constructed-table-grouped"
@@ -1205,7 +1205,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 101544,
       "fixtureOf": "constructed-table-grouped"
@@ -1234,7 +1234,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 99380,
       "fixtureOf": "constructed-table-grouped"
@@ -1357,7 +1357,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -1384,7 +1384,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -1411,7 +1411,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -1438,7 +1438,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -1465,7 +1465,7 @@
     },
     {
       "id": "chrome-owned-menu-sheet",
-      "title": "Owned menu \u2014 the sheet presentation on a phone",
+      "title": "Owned menu — the sheet presentation on a phone",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -1487,14 +1487,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare \u2014 a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
+      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
       "bytes": 36852,
       "fixtureOf": "constructed-owned-menu"
     },
     {
       "id": "chrome-owned-menu-sheet",
-      "title": "Owned menu \u2014 the sheet presentation on a phone",
+      "title": "Owned menu — the sheet presentation on a phone",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -1516,7 +1516,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare \u2014 a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
+      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
       "bytes": 38993,
       "fixtureOf": "constructed-owned-menu"
@@ -2153,7 +2153,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 14459,
       "fixtureOf": "constructed-toolbar"
@@ -2178,7 +2178,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 14944,
       "fixtureOf": "constructed-toolbar"
@@ -2203,7 +2203,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 12555,
       "fixtureOf": "constructed-toolbar"
@@ -2228,14 +2228,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 13038,
       "fixtureOf": "constructed-toolbar"
     },
     {
       "id": "constructed-active-rule-filter",
-      "title": "Active rule popover \u2014 filter (constructed)",
+      "title": "Active rule popover — filter (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -2281,7 +2281,7 @@
     },
     {
       "id": "constructed-active-rule-filter",
-      "title": "Active rule popover \u2014 filter (constructed)",
+      "title": "Active rule popover — filter (constructed)",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -2327,7 +2327,7 @@
     },
     {
       "id": "constructed-active-rule-filter",
-      "title": "Active rule popover \u2014 filter (constructed)",
+      "title": "Active rule popover — filter (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -2373,7 +2373,7 @@
     },
     {
       "id": "constructed-active-rule-filter",
-      "title": "Active rule popover \u2014 filter (constructed)",
+      "title": "Active rule popover — filter (constructed)",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -2419,7 +2419,7 @@
     },
     {
       "id": "constructed-active-rule-sort",
-      "title": "Active rule popover \u2014 sort (constructed)",
+      "title": "Active rule popover — sort (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -2465,7 +2465,7 @@
     },
     {
       "id": "constructed-active-rule-sort",
-      "title": "Active rule popover \u2014 sort (constructed)",
+      "title": "Active rule popover — sort (constructed)",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -2511,7 +2511,7 @@
     },
     {
       "id": "constructed-active-rule-sort",
-      "title": "Active rule popover \u2014 sort (constructed)",
+      "title": "Active rule popover — sort (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -2557,7 +2557,7 @@
     },
     {
       "id": "constructed-active-rule-sort",
-      "title": "Active rule popover \u2014 sort (constructed)",
+      "title": "Active rule popover — sort (constructed)",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -2771,7 +2771,7 @@
     },
     {
       "id": "constructed-board-empty-column",
-      "title": "Board view \u2014 empty column (constructed)",
+      "title": "Board view — empty column (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -2813,7 +2813,7 @@
     },
     {
       "id": "constructed-board-empty-column",
-      "title": "Board view \u2014 empty column (constructed)",
+      "title": "Board view — empty column (constructed)",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -2855,7 +2855,7 @@
     },
     {
       "id": "constructed-board-empty-column",
-      "title": "Board view \u2014 empty column (constructed)",
+      "title": "Board view — empty column (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -2897,7 +2897,7 @@
     },
     {
       "id": "constructed-board-empty-column",
-      "title": "Board view \u2014 empty column (constructed)",
+      "title": "Board view — empty column (constructed)",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -3633,7 +3633,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied \u2014 the call database-view.ts wires into its setupColumnHeader action \u2014 with one label long enough to truncate.",
+      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied — the call database-view.ts wires into its setupColumnHeader action — with one label long enough to truncate.",
       "capture": "element",
       "bytes": 444943,
       "source": "constructed",
@@ -3673,7 +3673,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied \u2014 the call database-view.ts wires into its setupColumnHeader action \u2014 with one label long enough to truncate.",
+      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied — the call database-view.ts wires into its setupColumnHeader action — with one label long enough to truncate.",
       "capture": "element",
       "bytes": 431185,
       "source": "constructed",
@@ -3713,7 +3713,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied \u2014 the call database-view.ts wires into its setupColumnHeader action \u2014 with one label long enough to truncate.",
+      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied — the call database-view.ts wires into its setupColumnHeader action — with one label long enough to truncate.",
       "capture": "element",
       "bytes": 90637,
       "source": "constructed",
@@ -3753,7 +3753,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied \u2014 the call database-view.ts wires into its setupColumnHeader action \u2014 with one label long enough to truncate.",
+      "note": "The header cell the table renderer builds with ColumnHeaderController.setup applied — the call database-view.ts wires into its setupColumnHeader action — with one label long enough to truncate.",
       "capture": "element",
       "bytes": 89816,
       "source": "constructed",
@@ -3959,7 +3959,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board \u2014 the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
+      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
       "capture": "element",
       "bytes": 415649,
       "source": "constructed",
@@ -4005,7 +4005,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board \u2014 the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
+      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
       "capture": "element",
       "bytes": 409326,
       "source": "constructed",
@@ -4051,7 +4051,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board \u2014 the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
+      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
       "capture": "element",
       "bytes": 116837,
       "source": "constructed",
@@ -4097,7 +4097,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board \u2014 the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
+      "note": "One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.",
       "capture": "element",
       "bytes": 113918,
       "source": "constructed",
@@ -4141,7 +4141,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does \u2014 ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
+      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does — ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
       "capture": "element",
       "bytes": 439228,
       "source": "constructed",
@@ -4184,7 +4184,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does \u2014 ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
+      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does — ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
       "capture": "element",
       "bytes": 424796,
       "source": "constructed",
@@ -4227,7 +4227,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does \u2014 ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
+      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does — ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
       "capture": "element",
       "bytes": 117089,
       "source": "constructed",
@@ -4270,7 +4270,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does \u2014 ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
+      "note": "A config built as viewType: \"list\" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does — ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, not a hand-authored one.",
       "capture": "element",
       "bytes": 115872,
       "source": "constructed",
@@ -4279,7 +4279,7 @@
     },
     {
       "id": "constructed-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses (constructed)",
+      "title": "Owned menu — the shell every context menu uses (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -4323,7 +4323,7 @@
     },
     {
       "id": "constructed-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses (constructed)",
+      "title": "Owned menu — the shell every context menu uses (constructed)",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -4367,7 +4367,7 @@
     },
     {
       "id": "constructed-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses (constructed)",
+      "title": "Owned menu — the shell every context menu uses (constructed)",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -4411,7 +4411,7 @@
     },
     {
       "id": "constructed-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses (constructed)",
+      "title": "Owned menu — the shell every context menu uses (constructed)",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -5155,19 +5155,19 @@
         "src/views/menu-row.ts",
         "src/views/popover-position.ts"
       ],
-      "layoutHash": "14114d108465",
-      "pixelHash": "efa87d465c8a",
+      "layoutHash": "dd50930b3d70",
+      "pixelHash": "7706fb7a1caf",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/popover-position.ts": "e33b0768ec48",
-        "styles.css": "e191ebb917cd",
+        "src/views/menu-row.ts": "b94bd7427f0a",
+        "src/views/popover-position.ts": "9523ac9d8791",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5175,7 +5175,7 @@
       },
       "note": "The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's own onclick; captured full-page for the same position: fixed reason as the utilities popover.",
       "capture": "viewport",
-      "bytes": 90066,
+      "bytes": 90549,
       "source": "constructed",
       "renderer": "toolbar",
       "bag": "file-view",
@@ -5199,19 +5199,19 @@
         "src/views/menu-row.ts",
         "src/views/popover-position.ts"
       ],
-      "layoutHash": "14114d108465",
-      "pixelHash": "3f5d077569f5",
+      "layoutHash": "dd50930b3d70",
+      "pixelHash": "a348b7706fbb",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/popover-position.ts": "e33b0768ec48",
-        "styles.css": "e191ebb917cd",
+        "src/views/menu-row.ts": "b94bd7427f0a",
+        "src/views/popover-position.ts": "9523ac9d8791",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5219,7 +5219,7 @@
       },
       "note": "The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's own onclick; captured full-page for the same position: fixed reason as the utilities popover.",
       "capture": "viewport",
-      "bytes": 96239,
+      "bytes": 96816,
       "source": "constructed",
       "renderer": "toolbar",
       "bag": "file-view",
@@ -5244,18 +5244,18 @@
         "src/views/popover-position.ts"
       ],
       "layoutHash": "7b450cb76744",
-      "pixelHash": "608f5ea9573b",
+      "pixelHash": "0bdbc1ad8c0b",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/popover-position.ts": "e33b0768ec48",
-        "styles.css": "e191ebb917cd",
+        "src/views/menu-row.ts": "b94bd7427f0a",
+        "src/views/popover-position.ts": "9523ac9d8791",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5263,7 +5263,7 @@
       },
       "note": "The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's own onclick; captured full-page for the same position: fixed reason as the utilities popover.",
       "capture": "viewport",
-      "bytes": 69721,
+      "bytes": 70188,
       "source": "constructed",
       "renderer": "toolbar",
       "bag": "file-view",
@@ -5288,18 +5288,18 @@
         "src/views/popover-position.ts"
       ],
       "layoutHash": "7b450cb76744",
-      "pixelHash": "faa415897d35",
+      "pixelHash": "21606e66b576",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
+        "src/views/toolbar-renderer.ts": "dca7a1d16d74",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/popover-position.ts": "e33b0768ec48",
-        "styles.css": "e191ebb917cd",
+        "src/views/menu-row.ts": "b94bd7427f0a",
+        "src/views/popover-position.ts": "9523ac9d8791",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -5307,7 +5307,7 @@
       },
       "note": "The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's own onclick; captured full-page for the same position: fixed reason as the utilities popover.",
       "capture": "viewport",
-      "bytes": 71432,
+      "bytes": 72020,
       "source": "constructed",
       "renderer": "toolbar",
       "bag": "file-view",
@@ -6121,7 +6121,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 105506
     },
@@ -6145,7 +6145,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 103836
     },
@@ -6169,7 +6169,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 114369
     },
@@ -6193,7 +6193,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 113768
     },
@@ -6497,7 +6497,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "CellRenderer's own startEdit \u2014 the entry database-view.ts wires into its editCell action \u2014 opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
+      "note": "CellRenderer's own startEdit — the entry database-view.ts wires into its editCell action — opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
       "capture": "viewport",
       "bytes": 447760,
       "source": "constructed",
@@ -6537,7 +6537,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "CellRenderer's own startEdit \u2014 the entry database-view.ts wires into its editCell action \u2014 opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
+      "note": "CellRenderer's own startEdit — the entry database-view.ts wires into its editCell action — opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
       "capture": "viewport",
       "bytes": 441893,
       "source": "constructed",
@@ -6577,7 +6577,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "CellRenderer's own startEdit \u2014 the entry database-view.ts wires into its editCell action \u2014 opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
+      "note": "CellRenderer's own startEdit — the entry database-view.ts wires into its editCell action — opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
       "capture": "viewport",
       "bytes": 113316,
       "source": "constructed",
@@ -6617,7 +6617,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "CellRenderer's own startEdit \u2014 the entry database-view.ts wires into its editCell action \u2014 opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
+      "note": "CellRenderer's own startEdit — the entry database-view.ts wires into its editCell action — opened on a markdown text cell (toolbar and textarea) and on a number cell (single-line editor). Captured full-page because the editors position themselves against the cell.",
       "capture": "viewport",
       "bytes": 118236,
       "source": "constructed",
@@ -7841,7 +7841,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved \u2014 the unresolved state needs a live metadata cache and stays fixture-only.",
+      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved — the unresolved state needs a live metadata cache and stays fixture-only.",
       "capture": "element",
       "bytes": 26944,
       "source": "constructed",
@@ -7881,7 +7881,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved \u2014 the unresolved state needs a live metadata cache and stays fixture-only.",
+      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved — the unresolved state needs a live metadata cache and stays fixture-only.",
       "capture": "element",
       "bytes": 26982,
       "source": "constructed",
@@ -7921,7 +7921,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved \u2014 the unresolved state needs a live metadata cache and stays fixture-only.",
+      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved — the unresolved state needs a live metadata cache and stays fixture-only.",
       "capture": "element",
       "bytes": 15186,
       "source": "constructed",
@@ -7961,7 +7961,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved \u2014 the unresolved state needs a live metadata cache and stays fixture-only.",
+      "note": "renderRelationValue's own entry with no App, the module's documented no-vault mode in which every target renders as resolved — the unresolved state needs a live metadata cache and stays fixture-only.",
       "capture": "element",
       "bytes": 15229,
       "source": "constructed",
@@ -9231,7 +9231,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 350033,
       "fixtureOf": "constructed-status-colors"
@@ -9258,7 +9258,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 328717,
       "fixtureOf": "constructed-status-colors"
@@ -9285,7 +9285,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 184668,
       "fixtureOf": "constructed-status-colors"
@@ -9312,7 +9312,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 178123,
       "fixtureOf": "constructed-status-colors"
@@ -9696,12 +9696,12 @@
         "src/views/date-value-picker.ts",
         "src/data/view-filter-tree.ts"
       ],
-      "layoutHash": "c436d8d5834d",
-      "pixelHash": "e40fb824d6a6",
+      "layoutHash": "9198b8838869",
+      "pixelHash": "4451a8e46abc",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -9709,7 +9709,7 @@
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9717,7 +9717,7 @@
       },
       "note": "FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.",
       "capture": "viewport",
-      "bytes": 54320,
+      "bytes": 54779,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -9742,12 +9742,12 @@
         "src/views/date-value-picker.ts",
         "src/data/view-filter-tree.ts"
       ],
-      "layoutHash": "c436d8d5834d",
-      "pixelHash": "fc3d93ff7cb5",
+      "layoutHash": "9198b8838869",
+      "pixelHash": "2ee42e59850c",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -9755,7 +9755,7 @@
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9763,7 +9763,7 @@
       },
       "note": "FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.",
       "capture": "viewport",
-      "bytes": 58978,
+      "bytes": 59370,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -9789,11 +9789,11 @@
         "src/data/view-filter-tree.ts"
       ],
       "layoutHash": "d6a04a6ed4f6",
-      "pixelHash": "196e31739b2e",
+      "pixelHash": "fcc04b6c819a",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -9801,7 +9801,7 @@
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9809,7 +9809,7 @@
       },
       "note": "FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.",
       "capture": "viewport",
-      "bytes": 47580,
+      "bytes": 47823,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -9835,11 +9835,11 @@
         "src/data/view-filter-tree.ts"
       ],
       "layoutHash": "d6a04a6ed4f6",
-      "pixelHash": "20d973cc8d39",
+      "pixelHash": "a95ecab2ab0d",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -9847,7 +9847,7 @@
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9855,7 +9855,7 @@
       },
       "note": "FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.",
       "capture": "viewport",
-      "bytes": 48604,
+      "bytes": 48902,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -9879,27 +9879,27 @@
         "src/views/dropdown-field.ts",
         "src/data/view-filter-tree.ts"
       ],
-      "layoutHash": "129a10876243",
-      "pixelHash": "dfbb539be22e",
+      "layoutHash": "574ee023694a",
+      "pixelHash": "580e19d404e2",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The same renderer over a tree that holds a NOT node and an inner OR group \u2014 the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
+      "note": "The same renderer over a tree that holds a NOT node and an inner OR group — the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
       "capture": "viewport",
-      "bytes": 66771,
+      "bytes": 67141,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -9923,27 +9923,27 @@
         "src/views/dropdown-field.ts",
         "src/data/view-filter-tree.ts"
       ],
-      "layoutHash": "129a10876243",
-      "pixelHash": "2e9d9bd585b9",
+      "layoutHash": "574ee023694a",
+      "pixelHash": "193b98ca7076",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The same renderer over a tree that holds a NOT node and an inner OR group \u2014 the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
+      "note": "The same renderer over a tree that holds a NOT node and an inner OR group — the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
       "capture": "viewport",
-      "bytes": 71480,
+      "bytes": 71549,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -9968,26 +9968,26 @@
         "src/data/view-filter-tree.ts"
       ],
       "layoutHash": "d6a04a6ed4f6",
-      "pixelHash": "62e202094e8f",
+      "pixelHash": "c76b73c6e396",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The same renderer over a tree that holds a NOT node and an inner OR group \u2014 the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
+      "note": "The same renderer over a tree that holds a NOT node and an inner OR group — the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
       "capture": "viewport",
-      "bytes": 64537,
+      "bytes": 64646,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -10012,26 +10012,26 @@
         "src/data/view-filter-tree.ts"
       ],
       "layoutHash": "d6a04a6ed4f6",
-      "pixelHash": "c43c06a6a552",
+      "pixelHash": "92ce88b1a3fc",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "8cca93f10465",
+        "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The same renderer over a tree that holds a NOT node and an inner OR group \u2014 the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
+      "note": "The same renderer over a tree that holds a NOT node and an inner OR group — the nesting depth the panel's own wrap rules allow for a wrapped subtree.",
       "capture": "viewport",
-      "bytes": 65879,
+      "bytes": 66100,
       "source": "constructed",
       "renderer": "filter-panel",
       "bag": "file-view",
@@ -10039,7 +10039,7 @@
     },
     {
       "id": "constructed-record-detail-body-editing",
-      "title": "Record detail \u2014 note body being typed (constructed)",
+      "title": "Record detail — note body being typed (constructed)",
       "group": "panels",
       "theme": "dark",
       "device": "desktop",
@@ -10069,7 +10069,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires \u2014 the real MarkdownRenderer has no standalone build \u2014 so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
+      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires — the real MarkdownRenderer has no standalone build — so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
       "capture": "viewport",
       "bytes": 35034,
       "source": "constructed",
@@ -10079,7 +10079,7 @@
     },
     {
       "id": "constructed-record-detail-body-editing",
-      "title": "Record detail \u2014 note body being typed (constructed)",
+      "title": "Record detail — note body being typed (constructed)",
       "group": "panels",
       "theme": "light",
       "device": "desktop",
@@ -10109,7 +10109,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires \u2014 the real MarkdownRenderer has no standalone build \u2014 so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
+      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires — the real MarkdownRenderer has no standalone build — so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
       "capture": "viewport",
       "bytes": 34929,
       "source": "constructed",
@@ -10119,7 +10119,7 @@
     },
     {
       "id": "constructed-record-detail-body-editing",
-      "title": "Record detail \u2014 note body being typed (constructed)",
+      "title": "Record detail — note body being typed (constructed)",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -10149,7 +10149,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires \u2014 the real MarkdownRenderer has no standalone build \u2014 so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
+      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires — the real MarkdownRenderer has no standalone build — so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
       "capture": "viewport",
       "bytes": 22997,
       "source": "constructed",
@@ -10159,7 +10159,7 @@
     },
     {
       "id": "constructed-record-detail-body-editing",
-      "title": "Record detail \u2014 note body being typed (constructed)",
+      "title": "Record detail — note body being typed (constructed)",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -10189,7 +10189,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires \u2014 the real MarkdownRenderer has no standalone build \u2014 so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
+      "note": "mountNoteBodyRegion's own entry with beginEdit called, swapping the rendered body for its textarea. The markdown-to-DOM renderer is the injected one the module's contract requires — the real MarkdownRenderer has no standalone build — so the region's modes are production and the content inside them is not. The editor's blur-commits contract means the mount re-enters edit mode after its teardown, so the picture shows the textarea rather than the body it would fall back to.",
       "capture": "viewport",
       "bytes": 22954,
       "source": "constructed",
@@ -10199,7 +10199,7 @@
     },
     {
       "id": "constructed-record-detail-body-empty",
-      "title": "Record detail \u2014 note body not written yet (constructed)",
+      "title": "Record detail — note body not written yet (constructed)",
       "group": "panels",
       "theme": "dark",
       "device": "desktop",
@@ -10239,7 +10239,7 @@
     },
     {
       "id": "constructed-record-detail-body-empty",
-      "title": "Record detail \u2014 note body not written yet (constructed)",
+      "title": "Record detail — note body not written yet (constructed)",
       "group": "panels",
       "theme": "light",
       "device": "desktop",
@@ -10279,7 +10279,7 @@
     },
     {
       "id": "constructed-record-detail-body-empty",
-      "title": "Record detail \u2014 note body not written yet (constructed)",
+      "title": "Record detail — note body not written yet (constructed)",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -10319,7 +10319,7 @@
     },
     {
       "id": "constructed-record-detail-body-empty",
-      "title": "Record detail \u2014 note body not written yet (constructed)",
+      "title": "Record detail — note body not written yet (constructed)",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -10395,7 +10395,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent \u2014 mounting it needs a live MarkdownRenderer \u2014 and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
+      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
       "capture": "viewport",
       "bytes": 133421,
       "source": "constructed",
@@ -10441,7 +10441,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent \u2014 mounting it needs a live MarkdownRenderer \u2014 and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
+      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
       "capture": "viewport",
       "bytes": 136676,
       "source": "constructed",
@@ -10487,7 +10487,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent \u2014 mounting it needs a live MarkdownRenderer \u2014 and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
+      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
       "capture": "viewport",
       "bytes": 66937,
       "source": "constructed",
@@ -10533,7 +10533,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent \u2014 mounting it needs a live MarkdownRenderer \u2014 and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
+      "note": "openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.",
       "capture": "viewport",
       "bytes": 67429,
       "source": "constructed",
@@ -10559,19 +10559,19 @@
         "src/views/table-renderer.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "ac30be5e0179",
-      "pixelHash": "5ff2ed47c041",
+      "layoutHash": "ddc341c8f0f0",
+      "pixelHash": "c189c3cb6d74",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "a08f7a4c7469",
+        "src/views/table-record-peek.ts": "0eebb5973d57",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/cell-renderer.ts": "5b3479897518",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10579,7 +10579,7 @@
       },
       "note": "openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.",
       "capture": "viewport",
-      "bytes": 443276,
+      "bytes": 471866,
       "source": "constructed",
       "renderer": "record-peek",
       "bag": "file-view",
@@ -10603,19 +10603,19 @@
         "src/views/table-renderer.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "ac30be5e0179",
-      "pixelHash": "b4c1fc3321c1",
+      "layoutHash": "ddc341c8f0f0",
+      "pixelHash": "bba1c08e66f2",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "a08f7a4c7469",
+        "src/views/table-record-peek.ts": "0eebb5973d57",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/cell-renderer.ts": "5b3479897518",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10623,7 +10623,7 @@
       },
       "note": "openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.",
       "capture": "viewport",
-      "bytes": 428682,
+      "bytes": 465140,
       "source": "constructed",
       "renderer": "record-peek",
       "bag": "file-view",
@@ -10647,19 +10647,19 @@
         "src/views/table-renderer.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "4e14e372240d",
-      "pixelHash": "f35238d88349",
+      "layoutHash": "2176bf3eb475",
+      "pixelHash": "c1c63fd583e1",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "a08f7a4c7469",
+        "src/views/table-record-peek.ts": "0eebb5973d57",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/cell-renderer.ts": "5b3479897518",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10667,7 +10667,7 @@
       },
       "note": "openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.",
       "capture": "viewport",
-      "bytes": 82563,
+      "bytes": 75315,
       "source": "constructed",
       "renderer": "record-peek",
       "bag": "file-view",
@@ -10691,19 +10691,19 @@
         "src/views/table-renderer.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "4e14e372240d",
-      "pixelHash": "bf45dcbaa159",
+      "layoutHash": "2176bf3eb475",
+      "pixelHash": "1a5b3ddca65b",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "a08f7a4c7469",
+        "src/views/table-record-peek.ts": "0eebb5973d57",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/cell-renderer.ts": "5b3479897518",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10711,7 +10711,7 @@
       },
       "note": "openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.",
       "capture": "viewport",
-      "bytes": 81783,
+      "bytes": 75658,
       "source": "constructed",
       "renderer": "record-peek",
       "bag": "file-view",
@@ -10733,25 +10733,25 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "4a6414063675",
-      "pixelHash": "3e8766f88edb",
+      "layoutHash": "20e6f1017bb7",
+      "pixelHash": "24deeb5dc231",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state \u2014 the only state the hint appears in.",
+      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state — the only state the hint appears in.",
       "capture": "viewport",
-      "bytes": 54066,
+      "bytes": 54936,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -10773,25 +10773,25 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "4a6414063675",
-      "pixelHash": "2edd64123164",
+      "layoutHash": "20e6f1017bb7",
+      "pixelHash": "1913f297ad86",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state \u2014 the only state the hint appears in.",
+      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state — the only state the hint appears in.",
       "capture": "viewport",
-      "bytes": 59255,
+      "bytes": 59955,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -10814,24 +10814,24 @@
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
       "layoutHash": "8c7bd62ea7eb",
-      "pixelHash": "74c37bee1d1d",
+      "pixelHash": "3b610349ebd7",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state \u2014 the only state the hint appears in.",
+      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state — the only state the hint appears in.",
       "capture": "viewport",
-      "bytes": 37349,
+      "bytes": 37632,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -10854,24 +10854,24 @@
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
       "layoutHash": "8c7bd62ea7eb",
-      "pixelHash": "6bc7cdff2232",
+      "pixelHash": "40970f69a73d",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state \u2014 the only state the hint appears in.",
+      "note": "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" and draws its layout hint above the empty state — the only state the hint appears in.",
       "capture": "viewport",
-      "bytes": 38706,
+      "bytes": 38936,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -10894,18 +10894,18 @@
         "tools/storybook/obsidian-dom-shim.mjs",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "0fd877fbc84b",
-      "pixelHash": "44f76e97c66d",
+      "layoutHash": "2a61ba39aaff",
+      "pixelHash": "75ace4328500",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10913,7 +10913,7 @@
       },
       "note": "SortPanelRenderer's own render over two real rules, with the first rule's move-up and the last rule's move-down disabled by the renderer itself.",
       "capture": "viewport",
-      "bytes": 43559,
+      "bytes": 44026,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -10936,18 +10936,18 @@
         "tools/storybook/obsidian-dom-shim.mjs",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "0fd877fbc84b",
-      "pixelHash": "b895facdb02d",
+      "layoutHash": "2a61ba39aaff",
+      "pixelHash": "95210460f998",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10955,7 +10955,7 @@
       },
       "note": "SortPanelRenderer's own render over two real rules, with the first rule's move-up and the last rule's move-down disabled by the renderer itself.",
       "capture": "viewport",
-      "bytes": 47935,
+      "bytes": 48445,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -10979,17 +10979,17 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "8c7bd62ea7eb",
-      "pixelHash": "082aedeadeef",
+      "pixelHash": "37494ce39ecd",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10997,7 +10997,7 @@
       },
       "note": "SortPanelRenderer's own render over two real rules, with the first rule's move-up and the last rule's move-down disabled by the renderer itself.",
       "capture": "viewport",
-      "bytes": 28103,
+      "bytes": 28502,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -11021,17 +11021,17 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "8c7bd62ea7eb",
-      "pixelHash": "4a767d49e4bb",
+      "pixelHash": "dda79f4b8bae",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
+        "src/views/sort-panel-renderer.ts": "3b916d60a109",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11039,7 +11039,7 @@
       },
       "note": "SortPanelRenderer's own render over two real rules, with the first rule's move-up and the last rule's move-down disabled by the renderer itself.",
       "capture": "viewport",
-      "bytes": 28930,
+      "bytes": 29230,
       "source": "constructed",
       "renderer": "sort-panel",
       "bag": "file-view",
@@ -11147,17 +11147,17 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "10f9330d584b",
-      "pixelHash": "a1d9fa661863",
+      "pixelHash": "b0d9742d4eb2",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "e76cf13f66c0",
+        "src/views/view-config-panel-renderer.ts": "00169ab148c3",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11165,7 +11165,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 95067,
+      "bytes": 93438,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -11189,17 +11189,17 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "10f9330d584b",
-      "pixelHash": "145cdbe777ee",
+      "pixelHash": "3e40ae83bb58",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "e76cf13f66c0",
+        "src/views/view-config-panel-renderer.ts": "00169ab148c3",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
+        "tools/live/render-assertion-harness.ts": "36e6200463a0",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
         "tools/screenshots/constructed-scenarios.mjs": "c92f29098e7a",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "e191ebb917cd",
+        "styles.css": "0d0d87c3b427",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11207,7 +11207,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 97914,
+      "bytes": 96475,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -11323,7 +11323,7 @@
     },
     {
       "id": "panel-column-width-sheet",
-      "title": "Column width adjuster \u2014 mobile bottom sheet",
+      "title": "Column width adjuster — mobile bottom sheet",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -11352,7 +11352,7 @@
     },
     {
       "id": "panel-column-width-sheet",
-      "title": "Column width adjuster \u2014 mobile bottom sheet",
+      "title": "Column width adjuster — mobile bottom sheet",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -11619,7 +11619,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 65470,
       "fixtureOf": "constructed-record-detail"
@@ -11648,7 +11648,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 64686,
       "fixtureOf": "constructed-record-detail"
@@ -11677,7 +11677,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 65603,
       "fixtureOf": "constructed-record-detail"
@@ -11706,14 +11706,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 64787,
       "fixtureOf": "constructed-record-detail"
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "dark",
       "device": "desktop",
@@ -11740,7 +11740,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "light",
       "device": "desktop",
@@ -11767,7 +11767,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -11794,7 +11794,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -11821,7 +11821,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "dark",
       "device": "desktop",
@@ -11848,7 +11848,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "light",
       "device": "desktop",
@@ -11875,7 +11875,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -11902,7 +11902,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -11929,7 +11929,7 @@
     },
     {
       "id": "panel-record-detail-sheet",
-      "title": "Record detail \u2014 mobile bottom sheet",
+      "title": "Record detail — mobile bottom sheet",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -11960,7 +11960,7 @@
     },
     {
       "id": "panel-record-detail-sheet",
-      "title": "Record detail \u2014 mobile bottom sheet",
+      "title": "Record detail — mobile bottom sheet",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -12041,60 +12041,6 @@
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
       "bytes": 373162,
-      "fixtureOf": "constructed-record-peek"
-    },
-    {
-      "id": "panel-record-peek",
-      "title": "Table record peek",
-      "group": "panels",
-      "theme": "dark",
-      "device": "mobile",
-      "file": "screenshots/notion-clone/panels/panel-record-peek-mobile-dark.png",
-      "sources": [
-        "src/views/table-record-peek.ts",
-        "src/views/table-renderer.ts"
-      ],
-      "layoutHash": "7ebabf0bd5a2",
-      "pixelHash": "8de3a4f43f4e",
-      "sourceHashes": {
-        "src/views/table-record-peek.ts": "a08f7a4c7469",
-        "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "e191ebb917cd",
-        "tools/screenshots/theme.css": "f30f295f9cf0",
-        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
-        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-        "tools/screenshots/capture.mjs": "a76d71503a11"
-      },
-      "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
-      "capture": "element",
-      "bytes": 45223,
-      "fixtureOf": "constructed-record-peek"
-    },
-    {
-      "id": "panel-record-peek",
-      "title": "Table record peek",
-      "group": "panels",
-      "theme": "light",
-      "device": "mobile",
-      "file": "screenshots/notion-clone/panels/panel-record-peek-mobile-light.png",
-      "sources": [
-        "src/views/table-record-peek.ts",
-        "src/views/table-renderer.ts"
-      ],
-      "layoutHash": "7ebabf0bd5a2",
-      "pixelHash": "d8f9af26fa27",
-      "sourceHashes": {
-        "src/views/table-record-peek.ts": "a08f7a4c7469",
-        "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "e191ebb917cd",
-        "tools/screenshots/theme.css": "f30f295f9cf0",
-        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
-        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-        "tools/screenshots/capture.mjs": "a76d71503a11"
-      },
-      "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
-      "capture": "element",
-      "bytes": 44832,
       "fixtureOf": "constructed-record-peek"
     },
     {
@@ -12445,7 +12391,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper \u2014 a composite no single renderer emits \u2014 so the constructed picture is the real card shape.",
+      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper — a composite no single renderer emits — so the constructed picture is the real card shape.",
       "capture": "element",
       "bytes": 42850,
       "source": "constructed",
@@ -12485,7 +12431,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper \u2014 a composite no single renderer emits \u2014 so the constructed picture is the real card shape.",
+      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper — a composite no single renderer emits — so the constructed picture is the real card shape.",
       "capture": "element",
       "bytes": 43345,
       "source": "constructed",
@@ -12525,7 +12471,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper \u2014 a composite no single renderer emits \u2014 so the constructed picture is the real card shape.",
+      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper — a composite no single renderer emits — so the constructed picture is the real card shape.",
       "capture": "element",
       "bytes": 31002,
       "source": "constructed",
@@ -12565,7 +12511,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper \u2014 a composite no single renderer emits \u2014 so the constructed picture is the real card shape.",
+      "note": "EmptyStateRenderer's renderCard entry for the no-columns reason with the fixture's copy. The fixture it supersedes wrapped the card vocabulary in the hero's wrapper — a composite no single renderer emits — so the constructed picture is the real card shape.",
       "capture": "element",
       "bytes": 31487,
       "source": "constructed",
@@ -12675,7 +12621,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -12704,7 +12650,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -12733,7 +12679,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -12762,7 +12708,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -12791,7 +12737,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -12824,7 +12770,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -12857,7 +12803,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -12890,7 +12836,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -13031,7 +12977,7 @@
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -13051,14 +12997,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 44319,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -13078,14 +13024,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 44567,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -13105,14 +13051,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 33169,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -13132,7 +13078,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 33528,
       "fixtureOf": "constructed-calendar-empty"
@@ -13473,7 +13419,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 123878,
       "fixtureOf": "constructed-calendar-week"
@@ -13498,7 +13444,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 130740,
       "fixtureOf": "constructed-calendar-week"
@@ -13523,7 +13469,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 65725,
       "fixtureOf": "constructed-calendar-week"
@@ -13548,7 +13494,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 69824,
       "fixtureOf": "constructed-calendar-week"
@@ -13711,7 +13657,7 @@
     },
     {
       "id": "constructed-board-subtask",
-      "title": "Board view \u2014 subtask tree (constructed)",
+      "title": "Board view — subtask tree (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -13756,7 +13702,7 @@
     },
     {
       "id": "constructed-board-subtask",
-      "title": "Board view \u2014 subtask tree (constructed)",
+      "title": "Board view — subtask tree (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -13801,7 +13747,7 @@
     },
     {
       "id": "constructed-board-subtask",
-      "title": "Board view \u2014 subtask tree (constructed)",
+      "title": "Board view — subtask tree (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -13846,7 +13792,7 @@
     },
     {
       "id": "constructed-board-subtask",
-      "title": "Board view \u2014 subtask tree (constructed)",
+      "title": "Board view — subtask tree (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -14051,7 +13997,7 @@
     },
     {
       "id": "constructed-calendar-empty",
-      "title": "Calendar view \u2014 no date property (constructed)",
+      "title": "Calendar view — no date property (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -14092,7 +14038,7 @@
     },
     {
       "id": "constructed-calendar-empty",
-      "title": "Calendar view \u2014 no date property (constructed)",
+      "title": "Calendar view — no date property (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -14133,7 +14079,7 @@
     },
     {
       "id": "constructed-calendar-empty",
-      "title": "Calendar view \u2014 no date property (constructed)",
+      "title": "Calendar view — no date property (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -14174,7 +14120,7 @@
     },
     {
       "id": "constructed-calendar-empty",
-      "title": "Calendar view \u2014 no date property (constructed)",
+      "title": "Calendar view — no date property (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -14215,7 +14161,7 @@
     },
     {
       "id": "constructed-calendar-mini",
-      "title": "Calendar view \u2014 mini date-picker popover (constructed)",
+      "title": "Calendar view — mini date-picker popover (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -14256,7 +14202,7 @@
     },
     {
       "id": "constructed-calendar-mini",
-      "title": "Calendar view \u2014 mini date-picker popover (constructed)",
+      "title": "Calendar view — mini date-picker popover (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -14297,7 +14243,7 @@
     },
     {
       "id": "constructed-calendar-mini",
-      "title": "Calendar view \u2014 mini date-picker popover (constructed)",
+      "title": "Calendar view — mini date-picker popover (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -14338,7 +14284,7 @@
     },
     {
       "id": "constructed-calendar-mini",
-      "title": "Calendar view \u2014 mini date-picker popover (constructed)",
+      "title": "Calendar view — mini date-picker popover (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -14777,7 +14723,7 @@
     },
     {
       "id": "constructed-chart-empty",
-      "title": "Chart view \u2014 empty state (constructed)",
+      "title": "Chart view — empty state (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -14816,7 +14762,7 @@
     },
     {
       "id": "constructed-chart-empty",
-      "title": "Chart view \u2014 empty state (constructed)",
+      "title": "Chart view — empty state (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -14855,7 +14801,7 @@
     },
     {
       "id": "constructed-chart-empty",
-      "title": "Chart view \u2014 empty state (constructed)",
+      "title": "Chart view — empty state (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -14894,7 +14840,7 @@
     },
     {
       "id": "constructed-chart-empty",
-      "title": "Chart view \u2014 empty state (constructed)",
+      "title": "Chart view — empty state (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -15011,7 +14957,7 @@
     },
     {
       "id": "constructed-chart-number",
-      "title": "Chart view \u2014 single number (constructed)",
+      "title": "Chart view — single number (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -15050,7 +14996,7 @@
     },
     {
       "id": "constructed-chart-number",
-      "title": "Chart view \u2014 single number (constructed)",
+      "title": "Chart view — single number (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -15089,7 +15035,7 @@
     },
     {
       "id": "constructed-chart-number",
-      "title": "Chart view \u2014 single number (constructed)",
+      "title": "Chart view — single number (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -15128,7 +15074,7 @@
     },
     {
       "id": "constructed-chart-number",
-      "title": "Chart view \u2014 single number (constructed)",
+      "title": "Chart view — single number (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -15479,7 +15425,7 @@
     },
     {
       "id": "constructed-list-sparse",
-      "title": "List view \u2014 sparse fields (constructed)",
+      "title": "List view — sparse fields (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -15518,7 +15464,7 @@
     },
     {
       "id": "constructed-list-sparse",
-      "title": "List view \u2014 sparse fields (constructed)",
+      "title": "List view — sparse fields (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -15557,7 +15503,7 @@
     },
     {
       "id": "constructed-list-sparse",
-      "title": "List view \u2014 sparse fields (constructed)",
+      "title": "List view — sparse fields (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -15596,7 +15542,7 @@
     },
     {
       "id": "constructed-list-sparse",
-      "title": "List view \u2014 sparse fields (constructed)",
+      "title": "List view — sparse fields (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -16439,7 +16385,7 @@
     },
     {
       "id": "constructed-timeline-subtask",
-      "title": "Timeline view \u2014 subtask tree (constructed)",
+      "title": "Timeline view — subtask tree (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -16484,7 +16430,7 @@
     },
     {
       "id": "constructed-timeline-subtask",
-      "title": "Timeline view \u2014 subtask tree (constructed)",
+      "title": "Timeline view — subtask tree (constructed)",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -16529,7 +16475,7 @@
     },
     {
       "id": "constructed-timeline-subtask",
-      "title": "Timeline view \u2014 subtask tree (constructed)",
+      "title": "Timeline view — subtask tree (constructed)",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -16574,7 +16520,7 @@
     },
     {
       "id": "constructed-timeline-subtask",
-      "title": "Timeline view \u2014 subtask tree (constructed)",
+      "title": "Timeline view — subtask tree (constructed)",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -16891,7 +16837,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -16918,7 +16864,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -16945,7 +16891,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -16972,7 +16918,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -17017,7 +16963,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 204157,
       "fixtureOf": "constructed-list-sparse"
@@ -17042,7 +16988,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 205281,
       "fixtureOf": "constructed-list-sparse"
@@ -17067,7 +17013,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 134970,
       "fixtureOf": "constructed-list-sparse"
@@ -17092,7 +17038,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 134831,
       "fixtureOf": "constructed-list-sparse"
@@ -17207,7 +17153,7 @@
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -17236,14 +17182,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 205380,
       "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -17272,14 +17218,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 199902,
       "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -17308,14 +17254,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 59643,
       "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -17344,7 +17290,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 58935,
       "fixtureOf": "constructed-table"
@@ -17467,7 +17413,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -17498,7 +17444,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -17529,7 +17475,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -17560,7 +17506,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -17611,7 +17557,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture \u2014 depicted at Week scale \u2014 omits it even with extensions on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.",
       "capture": "viewport",
       "bytes": 106202,
       "fixtureOf": "constructed-timeline-toolbar-options"
@@ -17638,7 +17584,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture \u2014 depicted at Week scale \u2014 omits it even with extensions on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.",
       "capture": "viewport",
       "bytes": 110862,
       "fixtureOf": "constructed-timeline-toolbar-options"
@@ -17665,7 +17611,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture \u2014 depicted at Week scale \u2014 omits it even with extensions on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.",
       "capture": "viewport",
       "bytes": 86602,
       "fixtureOf": "constructed-timeline-toolbar-options"
@@ -17692,14 +17638,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture \u2014 depicted at Week scale \u2014 omits it even with extensions on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.",
       "capture": "viewport",
       "bytes": 90382,
       "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -17717,14 +17663,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 92375,
       "fixtureOf": "constructed-timeline-day"
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -17742,14 +17688,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 92453,
       "fixtureOf": "constructed-timeline-day"
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -17767,14 +17713,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 61129,
       "fixtureOf": "constructed-timeline-day"
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -17792,14 +17738,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 60951,
       "fixtureOf": "constructed-timeline-day"
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -17817,14 +17763,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 89538,
       "fixtureOf": "constructed-timeline"
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -17842,14 +17788,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 89433,
       "fixtureOf": "constructed-timeline"
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -17867,14 +17813,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 50559,
       "fixtureOf": "constructed-timeline"
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -17892,14 +17838,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 50933,
       "fixtureOf": "constructed-timeline"
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -17917,14 +17863,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 73449,
       "fixtureOf": "constructed-timeline-month"
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -17942,14 +17888,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 73598,
       "fixtureOf": "constructed-timeline-month"
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -17967,14 +17913,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 46689,
       "fixtureOf": "constructed-timeline-month"
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -17992,14 +17938,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 47089,
       "fixtureOf": "constructed-timeline-month"
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -18017,14 +17963,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 73898,
       "fixtureOf": "constructed-timeline-quarter"
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -18042,14 +17988,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 74255,
       "fixtureOf": "constructed-timeline-quarter"
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -18067,14 +18013,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 47747,
       "fixtureOf": "constructed-timeline-quarter"
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -18092,14 +18038,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 48075,
       "fixtureOf": "constructed-timeline-quarter"
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -18117,14 +18063,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 71220,
       "fixtureOf": "constructed-timeline-year"
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -18142,14 +18088,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 71446,
       "fixtureOf": "constructed-timeline-year"
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -18167,14 +18113,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 47367,
       "fixtureOf": "constructed-timeline-year"
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -18192,7 +18138,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame \u2014 the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
       "bytes": 48025,
       "fixtureOf": "constructed-timeline-year"
@@ -18491,7 +18437,7 @@
     },
     {
       "id": "reference-gantt-subtask",
-      "title": "Project Manager gantt \u2014 subtask tree (reference)",
+      "title": "Project Manager gantt — subtask tree (reference)",
       "group": "project-manager",
       "theme": "dark",
       "device": "desktop",
@@ -18564,7 +18510,7 @@
     },
     {
       "id": "reference-gantt-subtask",
-      "title": "Project Manager gantt \u2014 subtask tree (reference)",
+      "title": "Project Manager gantt — subtask tree (reference)",
       "group": "project-manager",
       "theme": "light",
       "device": "desktop",
@@ -18637,7 +18583,7 @@
     },
     {
       "id": "reference-gantt-subtask",
-      "title": "Project Manager gantt \u2014 subtask tree (reference)",
+      "title": "Project Manager gantt — subtask tree (reference)",
       "group": "project-manager",
       "theme": "dark",
       "device": "mobile",
@@ -18710,7 +18656,7 @@
     },
     {
       "id": "reference-gantt-subtask",
-      "title": "Project Manager gantt \u2014 subtask tree (reference)",
+      "title": "Project Manager gantt — subtask tree (reference)",
       "group": "project-manager",
       "theme": "light",
       "device": "mobile",
@@ -18837,7 +18783,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides \u2014 our card matches a tags column by name and the bench carries none.",
+      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides — our card matches a tags column by name and the bench carries none.",
       "capture": "viewport",
       "bytes": 132379,
       "source": "reference",
@@ -18900,7 +18846,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides \u2014 our card matches a tags column by name and the bench carries none.",
+      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides — our card matches a tags column by name and the bench carries none.",
       "capture": "viewport",
       "bytes": 132473,
       "source": "reference",
@@ -18963,7 +18909,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides \u2014 our card matches a tags column by name and the bench carries none.",
+      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides — our card matches a tags column by name and the bench carries none.",
       "capture": "viewport",
       "bytes": 60449,
       "source": "reference",
@@ -19026,7 +18972,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "a76d71503a11"
       },
-      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides \u2014 our card matches a tags column by name and the bench carries none.",
+      "note": "The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides — our card matches a tags column by name and the bench carries none.",
       "capture": "viewport",
       "bytes": 60118,
       "source": "reference",
@@ -19035,7 +18981,7 @@
     },
     {
       "id": "reference-kanban-subtask",
-      "title": "Project Manager kanban \u2014 subtask tree (reference)",
+      "title": "Project Manager kanban — subtask tree (reference)",
       "group": "project-manager",
       "theme": "dark",
       "device": "desktop",
@@ -19098,7 +19044,7 @@
     },
     {
       "id": "reference-kanban-subtask",
-      "title": "Project Manager kanban \u2014 subtask tree (reference)",
+      "title": "Project Manager kanban — subtask tree (reference)",
       "group": "project-manager",
       "theme": "light",
       "device": "desktop",
@@ -19161,7 +19107,7 @@
     },
     {
       "id": "reference-kanban-subtask",
-      "title": "Project Manager kanban \u2014 subtask tree (reference)",
+      "title": "Project Manager kanban — subtask tree (reference)",
       "group": "project-manager",
       "theme": "dark",
       "device": "mobile",
@@ -19224,7 +19170,7 @@
     },
     {
       "id": "reference-kanban-subtask",
-      "title": "Project Manager kanban \u2014 subtask tree (reference)",
+      "title": "Project Manager kanban — subtask tree (reference)",
       "group": "project-manager",
       "theme": "light",
       "device": "mobile",

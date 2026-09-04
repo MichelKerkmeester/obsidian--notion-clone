@@ -19,7 +19,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { isHTMLElement } from "./dom-guards";
-import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance, SHEET_KEYBOARD_INSET_VAR } from "./mobile-bottom-sheet";
 import { overlayStack } from "./overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
@@ -404,6 +404,11 @@ export function placeSheet(
   // re-placement that a visual-viewport event triggers recomputed the same zero every time.
   const keyboard = keyboardInset(view, panel.ownerDocument);
   panel.style.setProperty("--db-mobile-sheet-bottom", `${keyboard}px`);
+  // The same figure, published once per placement on the sheet's own node. The placement loop
+  // above is the sheet's one viewport subscription, so this is where the published value is
+  // written — a second subscription per sheet would answer the same keyboard event twice, and
+  // the sheet's CSS and the grammar contract read the published value instead.
+  panel.style.setProperty(SHEET_KEYBOARD_INSET_VAR, `${keyboard}px`);
   panel.setCssProps({
     position: "fixed",
     left: "0px",

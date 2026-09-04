@@ -15,7 +15,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Menu, Notice, setIcon, setTooltip } from "obsidian";
+import { Notice, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
@@ -988,21 +988,21 @@ export class CalendarTimelineRenderer {
         chip.createSpan({ cls: "pm-chip-label", text: t("timeline.dependsElsewhere", { count: elsewhere.length }) });
         setTooltip(chip, elsewhere.join("\n"), { delay: 100 });
         // A predecessor outside this view draws no arrow, so the chip lists each one
-        // in a menu that jumps to its file, like the reference's chip menu.
+        // in a menu that jumps to its file, like the reference's chip menu. The owned menu is
+        // the house menu: it carries the sheet chrome on a phone, which the native menu cannot.
         chip.addEventListener("click", (mouseEvent) => {
           mouseEvent.stopPropagation();
-          const menu = new Menu();
+          const menu = createOwnedMenuForEvent(mouseEvent);
           for (const path of elsewhere) {
-            menu.addItem((item) =>
-              item
-                .setTitle(path.replace(/\.md$/i, ""))
-                .setIcon("link-2")
-                .onClick(() => {
-                  void this.actions.openDependencyFile?.(path);
-                })
-            );
+            menu.addRow({
+              icon: "link-2",
+              label: path.replace(/\.md$/i, ""),
+              onClick: () => {
+                void this.actions.openDependencyFile?.(path);
+              },
+            });
           }
-          menu.showAtMouseEvent(mouseEvent);
+          menu.showAt({ x: mouseEvent.clientX, y: mouseEvent.clientY });
         });
       }
       const progress = this.resolveGanttEventProgress(event, row);

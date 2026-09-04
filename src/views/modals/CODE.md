@@ -28,7 +28,7 @@ Current state:
 | Intent | Modules |
 |---|---|
 | Creation | `AddDatabaseModal.ts`, `AddDatabaseFlow.ts`, `CreatePropertyModal.ts`, `CreateRecordIconFieldModal.ts` |
-| Editing | `ColumnRenameModal.ts`, `FormulaModal.ts`, `StatusOptionsModal.ts`, `StatusPresetManagerModal.ts`, `GroupOrderModal.ts` |
+| Editing | `ColumnRenameModal.ts`, `FormulaModal.ts`, `StatusOptionsModal.ts`, `StatusPresetManagerModal.ts` |
 | Configuration | `RelationRollupConfigModal.ts`, `CsvMarkdownExportModal.ts` |
 | Confirmation | `ConfirmModal.ts`, `DeleteDatabaseModal.ts`, `BaseImportConfirmModal.ts`, `ComputedFrontmatterCleanupModal.ts`, `InvalidTimeEventsModal.ts`, `PropertyTypeConflictModal.ts` |
 

@@ -634,6 +634,11 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     group: "panels",
     width: 1100,
     fixtureOf: "constructed-record-peek",
+    // Desktop only: on touch, openTableRecordPeek now hands off to the record sheet rather than
+    // opening this docked rail (table-record-peek.ts's openRecordDetail option), so a mobile
+    // capture of this markup would depict a rail phones no longer get. constructed-record-peek's
+    // own mobile capture already photographs the real hand-off — the record sheet, not this panel.
+    devices: ["desktop"],
     sources: ["src/views/table-record-peek.ts", "src/views/table-renderer.ts"],
     note: "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
     // No captureCss: the peek is absolute against .note-database-container, which is

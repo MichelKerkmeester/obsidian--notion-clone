@@ -246,29 +246,40 @@ export const CORE_SCENARIOS = [
     // keeps serving whichever database already is one. This markup is hand-written and cannot
     // import the renderer, so add-view-popover-layout.test.ts holds the two in step instead.
     html: () => {
+      const chevron = glyph('<path d="m9 18 6-6-6-6"/>');
       const row = (label, d) => `
         <button type="button" class="db-menu-item" role="menuitem" aria-checked="false">
           <span class="db-menu-item-icon">${glyph(d)}</span>
           <span class="db-menu-item-label">${label}</span>
+          <span class="db-menu-item-chevron db-menu-item-current">${chevron}</span>
         </button>`;
       const field = (id, label, control) => `
-        <div class="db-add-view-field">
-          <label class="db-add-view-field-label" for="${id}">${label}</label>
-          ${control}
+        <div class="db-panel-row">
+          <div class="db-add-view-field">
+            <label class="db-add-view-field-label" for="${id}">${label}</label>
+            ${control}
+          </div>
         </div>`;
       return `
       <div class="note-database-container">
         <div class="db-view-tab-popover db-add-view-popover" role="dialog" aria-label="Add view">
-          <div class="db-panel-header"><div class="db-panel-title">Add view</div></div>
+          <div class="db-panel-header">
+            <span class="db-panel-title">Add view</span>
+            <button type="button" class="db-sheet-close" aria-label="Close">${glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')}</button>
+          </div>
           <div class="db-menu-section">Options</div>
           <div class="db-add-view-form">
             ${field("db-add-view-field-1", "View name (optional)",
               '<input type="text" class="db-add-view-name" id="db-add-view-field-1">')}
             ${field("db-add-view-field-2", "Title property",
-              '<select class="db-add-view-key-field" id="db-add-view-field-2"><option>Cost</option></select>')}
+              `<button type="button" class="db-dropdown-field db-add-view-key-field" id="db-add-view-field-2" aria-haspopup="listbox" aria-expanded="false">
+                 <span class="db-dropdown-field-icon"></span>
+                 <div class="db-dropdown-field-text"><span class="db-dropdown-field-value">Cost</span></div>
+                 <span class="db-dropdown-field-chevron">${glyph('<path d="m6 9 6 6 6-6"/>')}</span>
+               </button>`)}
             ${field("db-add-view-field-3", "Icon (optional)",
               '<input type="text" class="db-add-view-icon" maxlength="8" id="db-add-view-field-3">')}
-            <label class="db-add-view-duplicate"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>Copy settings from current view</span></label>
+            <label class="db-add-view-duplicate db-panel-row"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>Copy settings from current view</span></label>
           </div>
           <div class="db-menu-separator" role="separator"></div>
           <div class="db-menu-section">Create</div>
@@ -281,6 +292,7 @@ export const CORE_SCENARIOS = [
             <button type="button" class="db-menu-item db-add-view-duplicate-action" role="menuitem" aria-checked="false">
               <span class="db-menu-item-icon">${glyph('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>')}</span>
               <span class="db-menu-item-label">Duplicate current view</span>
+              <span class="db-menu-item-chevron db-menu-item-current">${chevron}</span>
             </button>
           </div>
         </div>

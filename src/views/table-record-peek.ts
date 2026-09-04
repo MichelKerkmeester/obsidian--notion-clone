@@ -47,6 +47,15 @@ export interface OpenTableRecordPeekOptions {
   container: HTMLElement;
   returnFocus?: () => void;
   renderRecordIcon?: (parent: HTMLElement, row: RowData, config: ViewConfig) => HTMLElement | null | void;
+  /**
+   * The record panel opener, used on touch in place of the docked side rail.
+   *
+   * The rail is a desktop affordance: docked beside the row, it dismisses on any scroll or
+   * resize, both of which a phone produces constantly. A touch device gets the editable record
+   * sheet instead — the same surface the panel preference opens — and the rail stays for the
+   * mouse that can use it. Absent, the rail opens as it always did.
+   */
+  openRecordDetail?: (anchorEl: HTMLElement, row: RowData) => void;
 }
 
 interface ActiveTableRecordPeek {
@@ -159,7 +168,16 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
     container,
     returnFocus,
     renderRecordIcon,
+    openRecordDetail,
   } = options;
+  // On touch the rail is replaced by the record sheet, which carries the shared chrome and
+  // survives the scrolls and resizes that dismiss the rail. The caller decides what the sheet
+  // is, because only it has the panel's actions; this module only decides that the rail is a
+  // mouse surface.
+  if (openRecordDetail && isTouchDevice(anchor)) {
+    openRecordDetail(anchor, row);
+    return;
+  }
   const ownerDocument = container.ownerDocument;
   const ownerWindow = ownerDocument.defaultView || window;
   const panel = ownerDocument.createElement("div");

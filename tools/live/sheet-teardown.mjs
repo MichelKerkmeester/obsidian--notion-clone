@@ -43,6 +43,7 @@ const STAMP_PATH = "tools/live/sheet-teardown.json";
 const REFERENCE = "owned menu (reference)";
 const PRE_FIX_FAILURES = new Map([
   ["DbModal with a detached host wrapper", "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed"],
+  ["attachSheetChromeToModal with a detached host wrapper", "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed"],
 ]);
 
 // ───────────────────────────────────────────────────────────────────

@@ -12698,16 +12698,73 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin-bottom: 8px;
 }
 
+/* createSheetHeader's own family — sort, filter, add-view and view-config — sits close enough
+   behind the grab handle on a phone (25px of chrome measured, against the owned menu's 40px the
+   shared drag band was tuned against) that the band reached into it and answered a press on the
+   close button as a press on the handle instead: verified with a real hit-test on the add-view
+   sheet, not assumed. Extra top margin here, rather than shrinking the band, keeps the band's own
+   calibration untouched for the surfaces it already fits and gives this family the same clearance
+   the tuning comment on the band itself describes. */
+.db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close) {
+  margin-top: 20px;
+}
+
 .note-database-container .db-panel-header-actions {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
+/* `createSheetHeader` appends this between the title and the close button, and the header is
+   `justify-content: space-between` for the two-child case (title, close) that every other panel
+   header already has. A third child would take an even three-way split instead of sitting beside
+   the control it belongs with. An auto margin claims the row's free space for itself, which
+   leaves `space-between` nothing left to distribute and packs this against whatever comes after
+   it — the close button — with only the header's own `gap` between them.
+
+   Scoped to a direct child of `.db-panel-header` rather than the bare class: the cell editor's
+   select popover reuses `db-panel-header-actions` for its own "Clear" row inside a column-flex
+   container with no header at all, and the unscoped rule sent that auto margin onto the CROSS
+   axis there instead — shrinking the row to content width and pushing it out past the popover's
+   own edge, which is how a first pass of this fix deleted the Clear button from the screen
+   without deleting a line of markup. */
+.note-database-container .db-panel-header > .db-panel-header-actions {
+  margin-inline-start: auto;
+}
+
 .note-database-container .db-panel-title {
   color: var(--text-normal);
   font-size: 13px;
   font-weight: 600;
+}
+
+/* The header's close button, shared by every sheet `createSheetHeader` builds. 44x44 is the touch
+   target floor this stylesheet already enforces elsewhere (the record-detail sheet's own close,
+   the cell-editor popover's) — sized here rather than left to `.clickable-icon` defaults so a
+   sheet with no other affordance still has a target a thumb can hit. */
+.note-database-container .db-sheet-close {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.note-database-container .db-sheet-close:hover,
+.note-database-container .db-sheet-close:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-sheet-close svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* 列管理：全选/全不选 */
@@ -22208,12 +22265,14 @@ body.is-tablet .note-database-container .db-record-open-btn {
   gap: var(--db-space-2);
 }
 
-/* Full-bleed sizing is meant for the free-text fields and the key-field select. A
+/* Full-bleed sizing is meant for the free-text fields and the key-field dropdown. A
    checkbox caught by a bare `input` selector loses its native box and renders as an
-   empty pill the width of the form, so the toggles are excluded by type. */
+   empty pill the width of the form, so the toggles are excluded by type. The key field
+   is a button built by the shared dropdown factory now, not a native `select` — this
+   targets the class that survives that swap rather than a tag the form no longer has. */
 .note-database-container .db-all-views-search,
 .note-database-container .db-add-view-form input:not([type="checkbox"]):not([type="radio"]),
-.note-database-container .db-add-view-form select {
+.note-database-container .db-add-view-key-field {
   width: 100%;
   min-height: 32px;
   box-sizing: border-box;
@@ -22292,6 +22351,21 @@ body.is-tablet .note-database-container .db-record-open-btn {
   padding: var(--db-space-2) var(--db-space-4) var(--db-space-6);
 }
 
+/* The row wrapper `createAddViewField` gives each field is a grid child here, not a flex-flow row
+   like sort and filter use it for — this form already spaces its children with its own `gap` and
+   insets its own edge with its own `padding`. `.db-panel-row`'s `margin-bottom` and `padding` are
+   for the flow context, and stacking them on top of the grid's own spacing double-counted both:
+   verify-placement measured the within-group gap at 14px (8px gap + the row's own 6px margin) and
+   the trailing space below the last row at 22px (16px padding + that same 6px), short of the 2x
+   ratio the check wants between a group's own trailing space and the gap inside it. Zeroing both
+   here leaves the grid's gap and padding as the only spacing, restoring the 2x ratio exactly (16
+   over 8) and returning the field caption and the checkbox caption to the same left edge as the
+   heading and the row icon beside them, which the row's own 2px padding had also been moving. */
+.note-database-container .db-add-view-form > .db-panel-row {
+  margin-bottom: 0;
+  padding: 0;
+}
+
 /* The settings sit on the same left edge as the group headings and the action rows below them.
    Without this the surface had three insets — heading, field, row — and on a phone, where the rows
    take a wider thumb inset, they diverged further rather than staying in step. */
@@ -22313,7 +22387,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
    reaches 3.2:1. The size is the other half: below 16px iOS zooms the whole page when a field takes
    focus, which is why the same value is pinned on the cell editor. */
 .note-database-container .db-add-view-field input,
-.note-database-container .db-add-view-field select {
+.note-database-container .db-add-view-key-field {
   border: 1px solid var(--db-control-border-strong, #82878e);
   border-radius: var(--db-radius-sm);
   font-size: var(--db-font-lg);

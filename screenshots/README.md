@@ -909,7 +909,7 @@ Docks against the right edge of the table it was opened from. Values are display
 
 | dark | light |
 |---|---|
-| ![panel-record-peek dark](notion-clone/panels/panel-record-peek-mobile-dark.png) | ![panel-record-peek light](notion-clone/panels/panel-record-peek-mobile-light.png) |
+| ![panel-record-peek dark](notion-clone/panels/panel-record-peek-desktop-dark.png) | ![panel-record-peek light](notion-clone/panels/panel-record-peek-desktop-light.png) |
 
 Sources: `src/views/table-record-peek.ts`, `src/views/table-renderer.ts`
 

@@ -56,6 +56,8 @@ export interface MenuRowOptions {
   value?: string;
   /** Draws a chevron and marks the row as opening a submenu. */
   submenu?: boolean;
+  /** Draws the trailing chevron without the submenu semantics. An action row that leads somewhere. */
+  chevron?: boolean;
   selected?: boolean;
   disabled?: boolean;
   /** Destructive action — delete, clear. Renders in the error colour, as the native menu did. */
@@ -107,15 +109,19 @@ export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): Men
     valueEl = row.createSpan({ cls: "db-menu-item-current", text: options.value });
   }
 
-  if (options.submenu) {
+  if (options.submenu || options.chevron) {
     // `margin-left: auto` on the value pushes it right; without a value the chevron needs to do
     // that itself, which is why it carries the trailing class too.
     const chevron = row.createSpan({
       cls: `db-menu-item-chevron${valueEl ? "" : " db-menu-item-current"}`,
     });
     setIcon(chevron, "chevron-right");
-    row.setAttr("aria-haspopup", "true");
-    row.setAttr("aria-expanded", "false");
+    // The submenu claims announce a nested menu; a plain chevron row is a leaf action that
+    // leads somewhere, and must not announce a menu that does not exist.
+    if (options.submenu) {
+      row.setAttr("aria-haspopup", "true");
+      row.setAttr("aria-expanded", "false");
+    }
   }
 
   if (options.disabled) {

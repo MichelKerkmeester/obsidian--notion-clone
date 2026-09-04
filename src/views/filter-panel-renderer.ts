@@ -23,6 +23,7 @@ import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "..
 import { t } from "../i18n";
 import { createDropdownField } from "./dropdown-field";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
@@ -255,21 +256,28 @@ export class FilterPanelRenderer {
     actions: FilterPanelActions,
     tree: SourceRuleNode | undefined
   ): void {
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createSpan({ cls: "db-panel-title", text: t("toolbar.filter") });
-    if (tree && !isFilterLeaf(tree)) return;
-    const right = header.createDiv({ cls: "db-panel-header-actions" });
-    const logicBtn = header.createEl("button", {
-      cls: "db-panel-button",
-      text: state.filterLogic === "and" ? t("panel.and") : t("panel.or"),
+    createSheetHeader(panel, {
+      title: t("toolbar.filter"),
+      onClose: () => {
+        actions.close();
+        this.anchorEl?.focus({ preventScroll: true });
+      },
+      beforeClose: (header) => {
+        if (tree && !isFilterLeaf(tree)) return;
+        const right = header.createDiv({ cls: "db-panel-header-actions" });
+        const logicBtn = header.createEl("button", {
+          cls: "db-panel-button",
+          text: state.filterLogic === "and" ? t("panel.and") : t("panel.or"),
+        });
+        right.appendChild(logicBtn);
+        logicBtn.onclick = () => {
+          state.filterLogic = state.filterLogic === "and" ? "or" : "and";
+          actions.saveState();
+          actions.refresh();
+          this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+        };
+      },
     });
-    right.appendChild(logicBtn);
-    logicBtn.onclick = () => {
-      state.filterLogic = state.filterLogic === "and" ? "or" : "and";
-      actions.saveState();
-      actions.refresh();
-      this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
-    };
   }
 
   private ensureFilterTree(state: DatabaseViewState): SourceRuleNode | undefined {

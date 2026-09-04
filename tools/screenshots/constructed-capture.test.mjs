@@ -15,7 +15,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it } from "vitest";
-import { validateManifestEntry } from "./manifest-schema.mjs";
+import { captureRootFor, validateManifestEntry } from "./manifest-schema.mjs";
 import {
   CONSTRUCTED_SCENARIOS,
   validateConstructedScenario,
@@ -253,5 +253,26 @@ describe("fixture declarations", () => {
       if (!scenario.fixtureOf) continue;
       expect(constructedIds.has(scenario.fixtureOf)).toBe(true);
     }
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 6. CAPTURE ROOT
+// ───────────────────────────────────────────────────────────────────
+
+describe("captureRootFor", () => {
+  // A raw scenario definition (reference-scenarios.mjs) carries `kind: "reference"`; `source` is
+  // a field capture.mjs only attaches to the finished manifest entry afterward. Checking `source`
+  // here read undefined on every raw scenario — reference included — and nested all sixteen
+  // project-manager captures under notion-clone/ until a full run's own manifest-schema
+  // validation refused to write the wrong path (npm run screenshots: "entry reference-kanban has
+  // file screenshots/notion-clone/project-manager/... want screenshots/project-manager/...").
+  it("gives a reference scenario no root prefix", () => {
+    expect(captureRootFor({ kind: "reference", group: "project-manager" })).toBe("");
+  });
+
+  it("gives a fixture or constructed scenario the notion-clone root", () => {
+    expect(captureRootFor({ group: "views" })).toBe("notion-clone");
+    expect(captureRootFor({ kind: "constructed", group: "panels" })).toBe("notion-clone");
   });
 });

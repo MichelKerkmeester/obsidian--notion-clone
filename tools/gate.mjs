@@ -3,8 +3,8 @@
 // COMPONENT: runs every check and returns one verdict
 // ───────────────────────────────────────────────────────────────────
 //
-// There are twenty-one scripts and four scanners that are not scripts at all.
-// Running them meant a shell loop and reading twenty-five exit codes by eye,
+// There are twenty-two scripts and four scanners that are not scripts at all.
+// Running them meant a shell loop and reading twenty-six exit codes by eye,
 // and in this session alone that went wrong four times — three where a pipe made
 // `$?` the pipe's status rather than the command's, and one where a check was
 // simply run, its red exit unread, and the work committed on top.
@@ -80,6 +80,11 @@ const CHECKS = [
   // renderer check here, this one constructs the real renderer instead of grepping its source: a
   // grep cannot tell a call that runs from a call behind a condition that is never true.
   { name: "sheet-rebuild", cmd: ["node", "tools/live/sheet-rebuild.mjs"] },
+  // The phone's sheets share one grammar, and conformance used to be built and never enforced —
+  // three operator reports named the same defect from three surfaces in one evening. This mounts
+  // every registered sheet surface on a phone page and fails on any missing element, with its own
+  // negative control: a check that has never been observed red is not evidence.
+  { name: "sheet-grammar", cmd: ["node", "tools/live/sheet-grammar.mjs"] },
   // The list renders only the rows near the viewport, so most rows have no DOM element at all.
   // Range selection used to order itself by querying the DOM and fell back to the full row list
   // only when that query returned NOTHING — a windowed list is never empty, only incomplete, so a

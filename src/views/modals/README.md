@@ -36,7 +36,6 @@ configuration. See [`CODE.md`](./CODE.md) for which file does which.
 | `FormulaModal.ts` | Edit a formula |
 | `StatusOptionsModal.ts` | Edit status options and colors |
 | `StatusPresetManagerModal.ts` | Manage status presets |
-| `GroupOrderModal.ts` | Reorder groups |
 | `RelationRollupConfigModal.ts` | Configure a relation rollup |
 | `CsvMarkdownExportModal.ts` | Export to CSV and Markdown |
 | `BaseImportConfirmModal.ts` | Confirm properties from an imported Base file |
