@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T12:15:00Z"
-    last_updated_by: "board-fidelity-rebase-landing"
-    recent_action: "Rebased onto main's gantt port, reconciled css-lane/manifest/evidence, landed to main"
-    next_safe_action: "T12 visual-language comparison next, then T8 operator confirmation"
+    last_updated_at: "2026-09-04T10:54:00Z"
+    last_updated_by: "board-closing-fixes"
+    recent_action: "Closed T22-T25 (height-chain selector, due-chip near tier, Sub-chip/parent-title, badge icon)"
+    next_safe_action: "Dispatch fresh session for T12 visual comparison, then T8"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 71
+    completion_pct: 76
     open_questions: []
     answered_questions: []
 ---
@@ -338,6 +338,15 @@ _memory:
       artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance,
       engine-parity, surface-census, token-census, view-census) re-run to re-stamp against the new
       `styles.css` hash — all pass or hold their documented pre-existing baseline.
+      **Addendum 2026-09-04 (in-runtime, not a fresh T12 read — see T22-T25):** the dispatch that
+      landed T13-T21 was itself validated by a T12 fresh-reviewer pass that surfaced four residual
+      divergences this evidence block did not catch (a dead CSS selector the class-vocabulary read
+      above could not see; a due-chip tier and a Sub-chip/parent-line bug the fixture read papered
+      over instead of exposing; the badge-icon choice made here turned out not to be the
+      reference's actual rule). T22-T25 close all four, red-first against the reference source.
+      This leg ran in-runtime rather than external-first because the external lane was occupied
+      and the scope was four bounded fixes — it is not itself a fresh T12 read, so T12 stays open
+      below for the visual-language/density/column-width comparison it still asks for.
       Post-rebase reconciliation (onto main's one-to-one gantt port and its four constructed
       captures, `75eaa34`, merge-base `46a8525`): `styles.css` gained a new merged hash
       (`276e1094c61c`) since the two legs' regions are disjoint — the kanban block scoped under
@@ -362,6 +371,89 @@ _memory:
       still fully styled post-merge. `npx tsc --noEmit` exit 0; `npx vitest run` 993/993 (99
       files); `npm run lint` 172 problems (159 errors, 13 warnings), unchanged; `scan-comments`
       PASS; `npm run gate` 25/25 green, no exemptions.
+- [x] **T22** Fix the dead view-level height-chain selector T12's fresh read surfaced — REQ-007
+      fidelity pass (J).
+      *Evidence to close:* new test `scopes the view-level flex/overflow height chain to the
+      compound container+view selector` (`tools/screenshots/scenarios/shared.test.mjs:248`); ran
+      red — `expected [stylesheet text] to match /\.note-database-container\.pm-kanban-view\s*\{...
+      height:\s*100%;/` — before the fix, because `styles.css`'s view-level rule targeted
+      `.note-database-container .pm-kanban-view` as a descendant selector (space, not compound).
+      board-renderer.ts's `renderReferenceBoard` adds `pm-kanban-view` directly onto the same
+      element `database-view.ts`/`embedded-database-renderer.ts` already classed
+      `note-database-container` (`board-renderer.ts:306`, `database-view.ts:1389`,
+      `embedded-database-renderer.ts:537`) — never a descendant of it — so the rule never matched,
+      and `.pm-kanban-board`'s `flex: 1; min-height: 0` had no flex parent to size against: a
+      shorter column stopped at its own content height instead of stretching to match its taller
+      siblings, leaving visible dead space below the board. Fixed by changing the selector to the
+      compound `.note-database-container.pm-kanban-view` (`styles.css:8958`) — the custom-property
+      block two rules above it already used both forms together for exactly this reason. Green
+      after; also verified visually against `constructed-board`/`constructed-board-subtask` (the
+      real `BoardRenderer` + `database-view.ts` container, both themes): a before/after crop
+      comparison against the committed `HEAD` PNGs shows the `review`/`doing` columns (3 cards)
+      now stretch their background to the frame bottom matching `backlog`/`todo` (4-6 cards),
+      where before they stopped short. `board-mobile`/`constructed-board-mobile` already showed
+      the stretch before and after (a fixed mobile viewport height gives the percentage chain a
+      concrete basis regardless of this selector). `board-view`/`board-empty-column` (desktop,
+      hand-authored fixtures) show no change in that one respect either — their desktop capture
+      context auto-sizes to content rather than a fixed viewport height, so there is no percentage
+      basis there regardless of the selector; pre-existing, unrelated to this fix, not attempted.
+- [x] **T23** Remove the due-chip near tier the kanban call site never reaches — REQ-007 fidelity
+      pass (K).
+      *Evidence to close:* renamed/inverted test `never surfaces the near urgency tier the kanban
+      call site does not reach` (`board-renderer-parity.test.ts:861`); ran red on the original
+      "renders a due chip due within three days as the near tier" assertions — a due-in-two-days
+      row painted `pm-chip--solid`/`var(--color-orange)` — before the fix. The reference's
+      `dueChip.ts` primitive supports `normal`/`near`/`overdue`, and `TableRow.ts:138` does pass
+      the full `dueUrgency(...)` through to the table view, but `KanbanView.ts:126` collapses it to
+      a boolean before `KanbanCard.ts:97` ever sees it (`props.overdue ? 'overdue' : 'normal'`) —
+      the near tier is a deliberate reference design choice for kanban specifically, not an
+      oversight. `getReferenceDueUrgency`'s return type narrowed to `"normal" | "overdue"`
+      (`board-renderer.ts:682-687`) and its `near`-tier branch dropped from the render call
+      (`board-renderer.ts:540-544`); a due-in-two-days row now renders plain, matching the
+      reference. Green after. Companion fixture fix: `tools/screenshots/scenarios/shared.mjs`'s
+      `pmDueChip` dropped its `near` branch (an explicit `near` request now falls through to
+      plain, asserted in `board-renderer-parity.test.ts`'s fixture-contract case) and
+      `core.mjs`'s `board-view` scenario no longer forces Sketch into the near tier. T19's original
+      evidence cited the primitive (`dueChip.ts`), not the card call site — the gap this task
+      closes; a due-soon tier for the board would need its own REQ-007 amendment against
+      `KanbanView.ts:126`, not a silent reintroduction.
+- [x] **T24** Gate the subtask fixture's Sub chip on depth and print the real parent title —
+      REQ-007 fidelity pass (L).
+      *Evidence to close:* two new tests in `tools/screenshots/scenarios/shared.test.mjs`: `gates
+      the Sub chip on an actual child depth, not on the card being the subtask helper's output`
+      (`:190`) and `prints the parent card's title on the child card's parent line, not the
+      enclosing column's name` (`:205`); both ran red before the fix — the root/depth-0 card's
+      title row carried a `pm-chip` (the hard-coded Sub chip) and the child cards' parent line read
+      literally `"Projects"` (the scenario's own column label, and `subtaskBoardCard`'s old
+      default) instead of `"Website redesign"` (`SUBTASK_FIXTURE_ROWS.parent.name`, the actual
+      parent task). The reference gates the chip on `task.type === 'subtask'` and prints
+      `props.parentTitle` from the parent task, never the column (`KanbanCard.ts:44-46,60-67`).
+      Fixed in `shared.mjs`: the Sub-chip span is now `depth > 0 ? ... : ""`, matching the
+      parent-line gate already beside it; the `parent` option's default changed from the
+      coincidental literal `"Projects"` to `""`, so a caller must pass the real title. Updated
+      `core.mjs`'s `board-subtask-tree` scenario's two child-card calls to pass
+      `SUBTASK_FIXTURE_ROWS.parent.name`. Green after; also verified against the real renderer
+      (`constructed-board-subtask`, both themes): the parent card (`row-0`) carries no Sub chip,
+      both children show `row-0` on the parent line plus the Sub chip — this path was already
+      correct in `board-renderer.ts` (`subtaskNode?.parentId` gate, T15), only the screenshot
+      fixture and its scenario callers were wrong.
+- [x] **T25** Drop the badge icon span the reference's option model has no field for — REQ-007
+      fidelity pass (M).
+      *Evidence to close:* three inverted assertions in `board-renderer-parity.test.ts` — the
+      fixture-contract case (`:499`) and the column-shell test (`:560-561`); ran red before the fix
+      — `.pm-kanban-col-badge-icon` was present and `setIcon` was called with `"circle-dot"` on
+      every column, and the fixture's `boardColumn` emitted the same span. T16 (closed earlier in
+      this file) read the reference as always emitting an icon slot; re-reading `KanbanColumn.ts:
+      52-57` shows the icon span is conditional — `if (props.status.icon && isIconName(...))
+      setIcon(...) else badge.setText(formatBadgeText(props.status.icon, props.status.label))` —
+      and `formatBadgeText(undefined, label)` (`utils.ts:137-140`) resolves to the label alone.
+      Since this option model carries no per-option icon field, the faithful branch is always the
+      text-only else — not a permanent icon standing in for one that was never authored. Removed
+      the icon span, the `setIcon` call, and the dead `REFERENCE_STATUS_ICON` constant from
+      `board-renderer.ts` (`:333-337`); removed the matching span from `shared.mjs`'s
+      `boardColumn`. Green after; every board capture read this session (both themes) shows a
+      text-only badge. If a per-option icon field is ever added to the schema, the reference's
+      conditional branch — not this removal — is what should come back.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

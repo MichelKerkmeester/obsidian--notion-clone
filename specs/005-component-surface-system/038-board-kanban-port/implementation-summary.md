@@ -11,13 +11,13 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T12:15:00Z"
-    last_updated_by: "board-fidelity-rebase-landing"
-    recent_action: "Rebased onto main's gantt port, reconciled css-lane/manifest/evidence, landed to main"
-    next_safe_action: "Dispatch a fresh (non-T10/T11) session to close T12 visual half, then T8"
+    last_updated_at: "2026-09-04T10:55:00Z"
+    last_updated_by: "board-closing-fixes"
+    recent_action: "Closed T22-T25 (height-chain selector, due-chip near tier, Sub-chip/parent-title, badge icon)"
+    next_safe_action: "Dispatch fresh session for T12 visual comparison, then T8"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
-      - "T12's visual-language/density/column-width comparison still needs a session that ran neither T10 nor T11, per its own evidence bar -- this session ran T11 and is disqualified from closing it"
+      - "T12's visual-language/density/column-width comparison still needs a session that ran neither T10 nor T11, per its own evidence bar -- this leg fixed the divergences that read found but is not itself that read"
       - "T8 (operator device confirmation) is the only row that closes the packet"
     key_files:
       - "src/views/board-renderer.ts"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "038-board-kanban-port"
       parent_session_id: null
-    completion_pct: 71
+    completion_pct: 76
     open_questions: []
     answered_questions:
       - "Card identity stays RowData.file.path throughout: no hunk in either landed commit touches drag/drop, WIP/visible-count, swimlane, summary, conditional-formatting or touch-mode identifiers (confirmed by re-reading both diffs' added lines)."
@@ -48,9 +48,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 038-board-kanban-port |
-| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port); T12's visual-language/density/column-width half (needs a session that ran neither T10 nor T11) and T8 (operator confirmation) are open |
+| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port, T13-T21 fidelity passes, T22-T25 closing fixes for a fresh T12 read's four divergences); T12's visual-language/density/column-width half (needs a session that ran neither T10 nor T11) and T8 (operator confirmation) are open |
 | **Level** | 2 |
-| **Completion** | `tasks.md` 6/12 rows closed (T5-T7, T9-T11, 50%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite) — the remaining gap is a still-unmet evidence-independence requirement (T12's own comparison read must come from a session that ran neither prior leg), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, and a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed. |
+| **Completion** | `tasks.md` 19/25 rows closed (T5-T7, T9-T11, T13-T25; 76%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite, T13-T25 fidelity passes) — the remaining gap is a still-unmet evidence-independence requirement (T12's own comparison read must come from a session that ran neither T10 nor T11), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed, and the four REQ-007 divergences a later fresh T12 read found and T22-T25 closed. |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -210,6 +210,12 @@ directly.
 | `node tools/live/evidence.mjs --check-all` (this pass) | 1 stale (`capture-device-parity.json`) on first run; `node tools/live/capture-device-parity.mjs` re-run (PASS, 0 newly-identical); 16/16 fresh on re-check |
 | `npm run gate` (this pass) | PASS — 25 green / 0 red, exit 0 read directly |
 | Post-rebase reconciliation (onto main's one-to-one gantt port, `75eaa34`, merge-base `46a8525`) | `styles.css` conflict-free rebase to a new merged hash (`276e1094c61c`); `npm run screenshots` (356 entries) found zero content-changed captures, 5 byte-only re-encode captures restored to `HEAD`; `touch-targets.mjs` re-measure held main's 367; `css-lane.json` merged and closed with a new release entry; 8/16 `tools/live/*.json` evidence artefacts re-stamped; two `constructed-board` and two `constructed-timeline` captures opened and read, both surfaces confirmed still fully styled; `npx tsc --noEmit` exit 0; `npx vitest run` 993/993 (99 files); `npm run lint` 172 (unchanged); `scan-comments` PASS; `npm run gate` 25/25 green |
+| T22-T25 red-first (`board-renderer-parity.test.ts`, `shared.test.mjs`) | Red on all 6 new/inverted assertions before the fix (dead selector, near-tier chip, unconditional Sub chip, literal-column parent line, badge icon x2); green 43/43 after, across both files |
+| `constructed-board`/`constructed-board-subtask` height-chain, before/after `HEAD` crop compare | Shorter columns (3-card `review`/`doing`) now stretch to the frame bottom matching taller siblings, both themes; confirmed against the committed `HEAD` PNGs, not just described |
+| `board-view`/`board-subtask-tree` due-chip and Sub-chip/parent-line read, both themes | Sketch's due chip renders plain (not orange); subtask children show the real parent title plus the Sub chip, the root card carries neither |
+| `node tools/lane/check-lane.mjs` (this pass) | "release names all 28 changed capture(s)", exit 0 |
+| `node tools/live/evidence.mjs --check-all` (this pass) | 9 stale (8 census/audit artefacts + `capture-device-parity.json`) on first run against the new `styles.css`/manifest hash; all 9 re-run; 16/16 fresh on re-check |
+| `npx tsc --noEmit` / `npx vitest run` / `npm run lint` / `scan-comments` / `npm run gate` (this pass) | 0 / 996/996 (99 files) / 172 (unchanged baseline) / PASS / 25 green, 0 red |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -462,6 +468,94 @@ problems (159 errors, 13 warnings), unchanged; `scan-comments` PASS.
 **Not closed by this session:** T12 and T8 remain exactly as the T11 session left them — this
 session touched neither the visual-language/density/column-width surface T12 needs a disqualified
 session to avoid, nor an operator device.
+
+**2026-09-04, T22-T25 landed (this session, in-runtime).** A T12 fresh-reviewer pass (a session
+that ran neither T10 nor T11, per its own evidence bar) re-read the landed port against the
+reference sources and surfaced four residual REQ-007 divergences that the class-vocabulary and
+fixture-contract checks in T13-T21 had not caught. This leg closed all four under `tasks.md`
+T22-T25, each reproduced as a failing assertion against the reference source before the fix. It
+ran in-runtime rather than external-first because the external lane was occupied and the scope
+was four bounded fixes; it is not itself the fresh T12 read, so T12 stays open below for the
+visual-language/density/column-width comparison that row still asks for.
+
+`styles.css`'s view-level flex/overflow/height rule (T22) targeted
+`.note-database-container .pm-kanban-view` as a descendant selector, but
+`board-renderer.ts`/`database-view.ts`/`embedded-database-renderer.ts` all add `pm-kanban-view`
+directly onto the same element already classed `note-database-container` — never a descendant of
+it — so the rule never matched, and `.pm-kanban-board`'s `flex: 1; min-height: 0` had no flex
+parent to size against: a shorter column stopped at its own content height instead of stretching
+to match its taller siblings, the dead space below the board T12's own fresh read did not have
+words for but this session's before/after crop comparison against `HEAD`'s committed PNGs made
+visible. Fixed by switching to the compound `.note-database-container.pm-kanban-view` selector —
+the custom-property block two rules above it already combined both forms for exactly this reason.
+Confirmed against `constructed-board`/`constructed-board-subtask` (the real `BoardRenderer`, both
+themes): the `review`/`doing` columns (3 cards) now stretch to the frame bottom matching their
+taller siblings. Two capture families show no visible change in that one respect, confirmed
+unchanged both before and after this fix (not a regression): `board-mobile`/
+`constructed-board-mobile` already stretched on both sides of the fix (mobile's fixed viewport
+height gives the percentage chain a concrete basis regardless of this selector), and
+`board-view`/`board-empty-column` (desktop, hand-authored fixtures) stretch on neither side
+(their desktop capture context auto-sizes to content rather than a fixed viewport height, leaving
+no percentage basis regardless of the selector) — both are pre-existing capture-harness sizing
+characteristics, not something this fix could or should change.
+
+The due chip's near tier (T23) was reachable in this port, but the reference's kanban call site
+only ever passes a boolean (`KanbanView.ts:126` `overdue: dueUrgency(...) === 'overdue'`, then
+`KanbanCard.ts:97` `props.overdue ? 'overdue' : 'normal'`) — the near tier lives in the
+reference's `dueChip.ts` primitive and reaches only its table/list views (`TableRow.ts:138` does
+pass the full three-tier `dueUrgency(...)` through), a deliberate reference design choice for
+kanban specifically, not an oversight T19 missed. `getReferenceDueUrgency`'s near branch was
+removed from `board-renderer.ts`, the fixture's `pmDueChip` helper, and `core.mjs`'s `board-view`
+scenario (which had forced Sketch into the near tier purely to demonstrate it). T19's original
+evidence had cited the primitive rather than the kanban card call site — the gap this task closes.
+
+The subtask board-card fixture (T24) hard-coded the Sub chip on every card regardless of depth,
+and defaulted its parent-line text to the literal column name `"Projects"` — coincidental with
+this one scenario's own lane label — instead of the parent card's actual title
+(`KanbanCard.ts:44-46,60-67`). `board-renderer.ts` itself already gated the real Sub chip
+correctly (`subtaskNode?.parentId`, T15); only the screenshot fixture and its `core.mjs` callers
+were wrong. Gated the chip on `depth > 0`, matching the parent-line gate already beside it in the
+same template string, and removed the misleading default so callers must pass the real parent
+title; `core.mjs`'s two child-card calls now pass `SUBTASK_FIXTURE_ROWS.parent.name`. Confirmed
+against `board-subtask-tree` and `constructed-board-subtask` (both themes): the root card carries
+no Sub chip, both children show the real parent's title on the parent line plus the chip.
+
+The column badge (T25) always emitted an icon span from a fixed `REFERENCE_STATUS_ICON` constant,
+but the reference only renders one when the status option itself carries an icon
+(`KanbanColumn.ts:52-57`); its else-branch (`formatBadgeText`, `utils.ts:137-140`) is text-only
+when no icon is set, which resolves to the label alone. Since this option model has no
+per-option icon field, the faithful choice — re-reading the reference rather than repeating T16's
+"always emit the default icon" reading — is the text-only else-branch, not a permanent stand-in
+icon. Removed the span, the `setIcon` call, and the dead constant from `board-renderer.ts`; removed
+the matching span from the fixture's `boardColumn`. Confirmed across every board capture read this
+session (both themes): text-only badges throughout.
+
+All 28 content-changed captures were recaptured and read, both themes: the empty column now fills
+the column height as a drop target with no dead space below the board (constructed-board/-subtask;
+element- and hand-fixture-mode captures unaffected as explained above), no badge icon anywhere, the
+Sub chip appears only on children with the real parent's title on the parent line, and no orange
+due chip anywhere. Two housekeeping restores, consistent with this lane's established handling:
+three byte-only re-encode captures (`panel-record-detail-sheet-body-empty` x2,
+`timeline-view-quarter-mobile-light`, pixelHash/layoutHash identical to `HEAD`) and the two
+pre-existing `field-icon-picker-desktop-{dark,light}` Chrome/OS rendering-drift captures (already
+documented as unrelated environment divergence by this lane's own prior releases) were restored to
+committed `HEAD` bytes; their `manifest.json` entries kept the fresh capture run's
+`sourceHashes`/`pixelHash`/`layoutHash` (only `bytes` corrected to the restored file's actual size),
+matching `screenshots:verify`'s freshness check rather than reverting the whole entry to `HEAD`.
+`tools/lane/css-lane.json`: acquired and released as holder `038-board-kanban-port`, naming all 28
+content-changed captures (`check-lane` exit 0, "release names all 28 changed capture(s)"). The
+evidence lane needed the same 8 artefacts this packet has re-stamped before (cascade-audit,
+checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census,
+token-census, view-census) plus `capture-device-parity.json` re-run against the new manifest hash
+— all pass or hold their documented pre-existing baseline. `npx tsc --noEmit` exit 0; `npx vitest
+run` 996/996 (99 files); `npm run lint` 172 problems (159 errors, 13 warnings), unchanged from the
+pre-session baseline; `node tools/naming/scan-comments.mjs` PASS; `npm run gate`
+(`SURFACE_PHASE=038-board-kanban-port`) 25 green / 0 red, exit 0 read directly.
+
+**Not closed by this session:** T12's visual-language/density/column-width comparison still needs
+a session that ran neither T10 nor T11 to perform that specific read — this session fixed four
+named divergences T12 already found, which is not the same evidence T12's own row asks for, so
+T12 stays open. T8 (operator device confirmation) remains the only row that closes the packet.
 <!-- /ANCHOR:next-leg -->
 
 ---
