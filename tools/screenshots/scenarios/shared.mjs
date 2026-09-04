@@ -161,7 +161,7 @@ export const optionPill = (value) => pill(value, optionTone(value));
  *
  * Passing no tone is still a legitimate picture: it is the non-option branch.
  */
-const groupTitle = (cls, title, tone) =>
+export const groupTitle = (cls, title, tone) =>
   `<span class="${cls}">${tone ? pill(title, tone) : title}</span>`;
 
 /**
@@ -243,43 +243,48 @@ export function tableRows() {
     </tr>`).join("");
 }
 
-/**
- * `dragState`/`dropPlacement` mirror the classes `renderCard`'s own dragstart/dragover handlers
- * add to the live card (board-renderer.ts:848 `is-dragging`, :869-870 `is-drop-target`,
- * `updateCardDropIndicator` :1580-1584 the `db-board-drop-indicator` span, appended after the
- * card body the same way `card.createSpan` does at runtime). Omitted, the card renders exactly
- * as it always did — this is additive, not a reshape of the ordinary card.
- */
-export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "Subscriptions", { dragState, dropPlacement } = {}) => {
-  const cardClasses = ["db-board-card", dragState === "dragging" ? "is-dragging" : "", dragState === "drop-target" ? "is-drop-target" : ""]
+const pmChip = (label, { variant, size, tag = false, color, dot = false, strong = false } = {}) => {
+  const classes = [
+    "pm-chip",
+    variant === "solid" ? "pm-chip--solid" : "",
+    variant === "outline" ? "pm-chip--outline" : "",
+    size === "sm" ? "pm-chip--sm" : "",
+    tag ? "pm-chip--tag" : "",
+    strong ? "pm-chip--strong" : "",
+  ].filter(Boolean).join(" ");
+  const style = color ? ` style="--pm-chip-color: ${color};"` : "";
+  return `<span class="${classes}"${style}>${dot ? `<span class="pm-chip-dot"></span>` : ""}<span class="pm-chip-label">${label}</span></span>`;
+};
+
+const pmCardPath = (row, parent = "") => row.path || `${parent ? `${parent}/` : ""}${row.name}.md`;
+
+const pmCardFields = (row) => `
+      ${pmChip(row.hours || "8h", { size: "sm" })}
+      <div class="pm-kanban-card-tags">
+        ${[row.category, row.payment].filter(Boolean).map((tag) => pmChip(tag, { variant: "outline", tag })).join("")}
+      </div>`;
+
+const pmCardFooter = (row) => `
+      <div class="pm-kanban-card-footer">
+        ${row.people ? `<div class="pm-avatar-stack"><span class="pm-avatar pm-avatar--sm" style="background: var(--color-blue);">${row.people}</span></div>` : ""}
+        ${row.renew ? pmChip(row.renew, { size: "sm" }) : ""}
+      </div>`;
+
+export const boardCard = (r, tone = OPTION_TONES[r.category], parent = "", { dragState } = {}) => {
+  const path = pmCardPath(r, parent);
+  const cardClasses = ["pm-kanban-card", dragState === "dragging" ? "pm-kanban-card--dragging" : ""]
     .filter(Boolean).join(" ");
-  const dropIndicator = dropPlacement ? `<span class="db-board-drop-indicator is-${dropPlacement}"></span>` : "";
   return `
-  <div class="${cardClasses}" data-note-database-row-path="${parent ? `${parent}/` : ""}${r.name}.md" title="${parent ? `${parent}/` : ""}${r.name}.md" data-subtask-depth="0" data-subtask-visible="true" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1" style="--db-subtask-depth: 0;">
-    ${tone ? `<div class="db-board-card-priority-strip status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
-    <div class="db-board-card-controls">
-      ${rowCheckbox("db-board-card-checkbox")}
-      <button type="button" class="db-board-card-open" aria-label="Open note">${ICONS.maximize}</button>
-      <button type="button" class="db-card-mobile-move-btn" aria-label="Move">${ICONS.move}</button>
-    </div>
-    <div class="db-board-card-body">
-      ${parent ? `<div class="db-board-card-parent" title="${parent}">${parent}</div>` : ""}
-      <div class="db-record-title-line">
-        <div class="db-board-card-title db-file-title-stacked has-folder-prefix" title="${parent ? `${parent}/` : ""}${r.name}.md">
-          <div class="db-file-title-name">${r.name}</div>
-          <div class="db-file-title-prefix">${parent ? `${parent}/` : ""}</div>
-        </div>
-        <span class="db-board-card-chips">
-          <span class="db-board-card-chip" data-note-database-column-key="cycle">${optionPill(r.cycle)}</span>
-          <span class="db-board-card-chip" data-note-database-column-key="payment">${optionPill(r.payment)}</span>
-        </span>
+  <div class="${cardClasses}" data-task-id="${path}" data-note-database-row-path="${path}">
+    ${tone ? `<div class="pm-kanban-card-priority-bar" style="background: ${tone};"></div>` : ""}
+    <div class="pm-kanban-card-body">
+      ${parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
+      <div class="pm-kanban-card-title-row">
+        <span class="pm-kanban-card-title">${r.name}</span>
       </div>
-      <div class="db-board-card-meta">
-        <div class="db-board-card-field" data-note-database-column-key="cost" role="gridcell"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">${r.cost}</span></div>
-        <div class="db-board-card-field" data-note-database-column-key="renew" role="gridcell"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
-      </div>
+      ${pmCardFields(r)}
+      ${pmCardFooter(r)}
     </div>
-    ${dropIndicator}
   </div>`;
 };
 
@@ -292,113 +297,47 @@ export const SUBTASK_FIXTURE_ROWS = {
 export const subtaskBoardCard = (r, {
   depth = 0,
   parent = "Projects",
-  collapsed = false,
-  children = false,
   done = 0,
   total = 0,
   explicit = null,
   value = null,
 } = {}) => {
-  const progress = explicit != null || total > 0;
-  const summary = total > 0 ? `${done}/${total} subtasks complete` : "";
-  const explicitLabel = explicit != null ? `Explicit progress: ${explicit}%` : "";
+  const progressValue = value ?? explicit ?? (total > 0 ? (done / total) * 100 : 0);
+  const cardPath = pmCardPath(r, parent);
   return `
-  <div class="db-board-card" data-note-database-row-path="${r.path}" title="${r.path}" data-subtask-depth="${depth}" data-subtask-visible="true" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1" style="--db-subtask-depth: ${depth};">
-    <div class="db-board-card-controls">
-      <input type="checkbox" class="db-checkbox db-checkbox-row db-board-card-checkbox" aria-label="Select">
-      <button type="button" class="db-board-card-open" aria-label="Open note">${ICONS.maximize}</button>
-      <button type="button" class="db-card-mobile-move-btn" aria-label="Move">${ICONS.move}</button>
-      ${children ? `<button type="button" class="db-subtask-toggle${collapsed ? " is-collapsed" : ""}" aria-label="${collapsed ? "Expand subtasks" : "Collapse subtasks"}" aria-expanded="${collapsed ? "false" : "true"}"><span class="db-collapse-triangle" aria-hidden="true"></span></button>` : ""}
-    </div>
-    <div class="db-board-card-body">
-      <div class="db-board-card-parent" title="${parent}">${parent}</div>
-      <div class="db-record-title-line">
-        <div class="db-board-card-title db-file-title-stacked has-folder-prefix" title="${r.path}">
-          <div class="db-file-title-name">${r.name}</div>
-          <div class="db-file-title-prefix">${parent}/</div>
-        </div>
-        <span class="db-board-card-chips">
-          <span class="db-board-card-chip" data-note-database-column-key="cycle">${optionPill(r.cycle)}</span>
-          <span class="db-board-card-chip" data-note-database-column-key="payment">${optionPill(r.payment)}</span>
-        </span>
+  <div class="pm-kanban-card" data-task-id="${cardPath}" data-note-database-row-path="${cardPath}">
+    <div class="pm-kanban-card-priority-bar" style="background: purple;"></div>
+    <div class="pm-kanban-card-body">
+      ${depth > 0 && parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
+      <div class="pm-kanban-card-title-row">
+        <span class="pm-kanban-card-title">${r.name}</span>
+        <span class="pm-chip pm-chip--solid pm-chip--sm" style="--pm-chip-color: var(--color-green);"><span class="pm-chip-label">Sub</span></span>
       </div>
-      <div class="db-board-card-meta">
-        <div class="db-board-card-field" data-note-database-column-key="cost" role="gridcell"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">${r.cost}</span></div>
-        <div class="db-board-card-field" data-note-database-column-key="renew" role="gridcell"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
-      </div>
-      ${progress ? `<div class="db-subtask-progress" data-subtask-progress-source="${explicit != null ? "explicit" : "derived"}" aria-label="${[summary, explicitLabel].filter(Boolean).join(" · ")}" style="--db-subtask-progress: ${value ?? explicit ?? 0}">
-        <span class="db-subtask-progress-track" aria-hidden="true"><span class="db-subtask-progress-fill"></span></span>
-        <span class="db-subtask-progress-label">${summary ? `<span class="db-subtask-progress-derived">${summary}</span>` : ""}${summary && explicitLabel ? `<span aria-hidden="true"> · </span>` : ""}${explicitLabel ? `<span class="db-subtask-progress-explicit">${explicitLabel}</span>` : ""}</span>
-      </div>` : ""}
-      ${children ? `<div class="db-subtask-add-row">
-        <input type="text" class="db-subtask-add-input" placeholder="Add subtask…" aria-label="Add subtask to ${r.name}">
-      </div>` : ""}
+      ${pmCardFields(r)}
+      ${progressValue > 0 ? `<div class="pm-progress pm-progress--sm"><div class="pm-progress-track"><div class="pm-progress-fill" style="width: ${Math.max(0, Math.min(100, progressValue))}%;"></div></div></div>` : ""}
+      ${pmCardFooter(r)}
     </div>
   </div>`;
 };
 
-export const subtaskBoardColumn = (title, cards, tone = OPTION_TONES[title]) => `
-  <div class="db-board-column">
-    <div class="db-board-column-header">
-      ${tone ? `<div class="db-board-column-topbar status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
-      <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
-      ${rowCheckbox("db-board-column-checkbox")}
-      <div class="db-board-header-text">
-        ${groupTitle("db-board-column-title", title, tone)}
-        <span class="db-board-count">${cards.length}</span>
-        <button type="button" class="db-board-column-options" aria-label="Column options">${dots}</button>
-      </div>
-    </div>
-    <div class="db-board-column-resize-handle" aria-hidden="true"></div>
-    <div class="db-board-cards" role="rowgroup">${cards.join("")}</div>
-  </div>`;
+export const subtaskBoardColumn = (title, cards, tone = OPTION_TONES[title]) =>
+  boardColumn(title, cards, tone, { cardRenderer: (card) => card });
 
-/**
- * The state `renderColumn`/`renderSubgroup` fall back to when a group's visible-row count is
- * zero and no view-level empty-state override applies (board-renderer.ts:365-374, :621-630):
- * `EmptyStateRenderer.renderCard()` under the "empty-group" reason
- * (empty-state-renderer.ts:199-203, :262-289), with the board's own `db-board-empty-slot` class
- * appended after creation. Copy is `EMPTY_STATE_COPY["empty-group"]`'s real English strings
- * (i18n.ts:1504-1505), not placeholder text — `shared.test.mjs` asserts this against the same
- * `t()` keys the renderer resolves.
- */
-export const boardEmptySlot = () => `
-  <div class="db-empty db-empty-card db-board-empty-slot" data-empty-reason="empty-group">
-    <div class="db-empty-card-icon" aria-hidden="true">${ICONS["folder-open"]}</div>
-    <div class="db-empty-card-content">
-      <h3 class="db-empty-card-title">No records in this group</h3>
-      <p class="db-empty-card-message">This is a valid destination for new or moved records.</p>
-    </div>
-  </div>`;
+export const boardEmptySlot = () => "";
 
-/**
- * A board lane. Its title is `renderGroupLabel`'s too — `board-renderer.ts:314` passes
- * `db-board-column-title` to the same function the list, gallery and subgroup headers use — so an
- * option-typed lane field arrives as a badge here exactly as it does there.
- *
- * An empty `rows` array draws `boardEmptySlot()` in place of a card list, matching the same
- * `visibleCount === 0` branch the renderer takes rather than leaving `.db-board-cards` hollow.
- * `columnClass` and `cardRenderer` are additive escape hatches for the drag/drop-language
- * scenario, which needs the column's own `is-drop-target` class and per-card drag state that a
- * single shared `tone` cannot express; neither is passed by an existing caller, so every other
- * scenario's markup is byte-identical to before.
- */
 export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnClass = "", cardRenderer } = {}) {
   const renderRow = cardRenderer || ((row) => boardCard(row, tone ?? null));
+  const cardsClass = columnClass === "is-drop-target" ? "pm-kanban-cards pm-kanban-drop-target" : "pm-kanban-cards";
   return `
-  <div class="db-board-column${columnClass ? ` ${columnClass}` : ""}">
-    <div class="db-board-column-header">
-      ${tone ? `<div class="db-board-column-topbar status-color-${tone}" data-status-color="${tone}" aria-hidden="true"></div>` : ""}
-      <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
-      ${rowCheckbox("db-board-column-checkbox")}
-      <div class="db-board-header-text">
-        ${groupTitle("db-board-column-title", title, tone)}
-        <span class="db-board-count">${rows.length}</span>
-        <button type="button" class="db-board-column-options" aria-label="Column options">${dots}</button>
+  <div class="pm-kanban-col" data-status="${title}">
+    <div class="pm-kanban-col-header"${tone ? ` style="--col-color: ${tone};"` : ""}>
+      <div class="pm-kanban-col-topbar"${tone ? ` style="background: ${tone};"` : ""}></div>
+      <div class="pm-kanban-col-title-row">
+        <span class="pm-kanban-col-badge"${tone ? ` style="color: ${tone};"` : ""}>${title}</span>
+        <div class="pm-kanban-col-header-right"><span class="pm-kanban-col-count">${rows.length}</span></div>
       </div>
     </div>
-    <div class="db-board-column-resize-handle" aria-hidden="true"></div>
-    <div class="db-board-cards" role="rowgroup">${rows.length ? rows.map(renderRow).join("") : boardEmptySlot()}</div>
+    <div class="${cardsClass}" data-status="${title}">${rows.map(renderRow).join("")}</div>
   </div>`;
 }
 

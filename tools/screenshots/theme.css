@@ -24,6 +24,12 @@
   --text-faint: #999da3;
   --text-on-accent: #ffffff;
   --text-error: #c0392b;
+  /* The board's copied chip-removal rule reads `var(--text-error, var(--color-red))`; with
+     `--color-red` declared nowhere the fallback slot itself was invalid at computed-value time,
+     so the whole declaration dropped — harmless while `--text-error` above always resolves first,
+     but the token stays unsupplied and every other reader of the bare token still fails silently.
+     TRANSCRIBED from the installed application stylesheet of Obsidian 1.13.7, not recalled. */
+  --color-red: #e93147;
   /* The host's warning colour, and the token it resolves through. Thirteen declarations in the
      plugin stylesheet read `var(--text-warning)` with no fallback, so with nothing declaring it
      every one of them was invalid at computed-value time and painted nothing at all — a dashed
@@ -123,6 +129,7 @@
   --text-normal: #dcddde;
   --text-muted: #9a9b9e;
   --text-faint: #6c6f74;
+  --color-red: #fb464c;
   --color-orange: #e9973f;
   --color-green: #44cf6e;
   --text-accent: #a5b4fc;

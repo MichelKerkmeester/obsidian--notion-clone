@@ -58,8 +58,8 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts"],
     fixtureOf: "constructed-board",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-board" role="grid">
+      <div class="note-database-container pm-kanban-view">
+        <div class="pm-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
             .join("")}
@@ -73,13 +73,10 @@ export const CORE_SCENARIOS = [
     width: 620,
     sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
     fixtureOf: "constructed-board-subtask",
-    // Its own lane rather than a sixth column on `board-view`: five columns overflow the widest
-    // capture device, and folding the tree into that scenario would have cost two of the four
-    // category lanes the board's ordinary-card coverage lives in.
-    note: "An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.",
+    note: "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-board" role="grid">
+      <div class="note-database-container pm-kanban-view">
+        <div class="pm-kanban-board">
           ${subtaskBoardColumn("Projects", [
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0, children: true, done: 1, total: 2, explicit: 62, value: 62 }),
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1 }),
@@ -94,11 +91,11 @@ export const CORE_SCENARIOS = [
     title: "Board view — empty column",
     group: "components",
     width: 660,
-    sources: ["src/views/board-renderer.ts", "src/views/empty-state-renderer.ts", "src/i18n.ts"],
-    note: "The empty-group state renderColumn falls back to when a column has zero visible rows and no view-level empty-state override: EmptyStateRenderer's own card, under db-board-empty-slot's dashed-border sizing, beside a populated lane so the zero count and the column's own width hold up next to an ordinary one.",
+    sources: ["src/views/board-renderer.ts"],
+    note: "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-board" role="grid">
+      <div class="note-database-container pm-kanban-view">
+        <div class="pm-kanban-board">
           ${boardColumn("Design", ROWS.filter((r) => r.category === "Design").slice(0, 2))}
           ${boardColumn("Personal", [])}
         </div>
@@ -115,13 +112,13 @@ export const CORE_SCENARIOS = [
       const rows = ROWS.filter((r) => r.category === "Business").slice(0, 3);
       const tone = OPTION_TONES.Business;
       const cardRenderer = (row, index) => {
-        if (index === 1) return boardCard(row, tone, "Subscriptions", { dragState: "dragging" });
-        if (index === 2) return boardCard(row, tone, "Subscriptions", { dragState: "drop-target", dropPlacement: "before" });
+        if (index === 1) return boardCard(row, tone, "", { dragState: "dragging" });
+        if (index === 2) return boardCard(row, tone, "", { dragState: "drop-target", dropPlacement: "before" });
         return boardCard(row, tone);
       };
       return `
-      <div class="note-database-container">
-        <div class="db-board" role="grid">
+      <div class="note-database-container pm-kanban-view">
+        <div class="pm-kanban-board">
           ${boardColumn("Business", rows, tone, { columnClass: "is-drop-target", cardRenderer })}
         </div>
       </div>`;
@@ -435,10 +432,10 @@ export const CORE_SCENARIOS = [
     // Superseded by constructed-board's own mobile-device capture — see table-mobile's note above
     // for why no separate constructed scenario is needed.
     fixtureOf: "constructed-board",
-    note: "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
+    note: "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
     html: () => `
-      <div class="note-database-container db-width-default">
-        <div class="db-board" role="grid">
+      <div class="note-database-container pm-kanban-view db-width-default">
+        <div class="pm-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
             .join("")}

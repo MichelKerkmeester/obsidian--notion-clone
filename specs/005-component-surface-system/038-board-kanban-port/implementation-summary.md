@@ -11,13 +11,13 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T08:20:00Z"
-    last_updated_by: "board-1to1-t12-fresh-verify"
-    recent_action: "T12 fresh-verify: fixed T10 drag/drop group-update gap, re-armed harness control"
-    next_safe_action: "Dispatch cli-codex T11: copy kanban.css into styles.css, rewrite board fixtures"
+    last_updated_at: "2026-09-04T10:10:00Z"
+    last_updated_by: "board-1to1-t11-css-leg"
+    recent_action: "T11 CSS leg closed: kanban.css copied under MIT notice, fixtures rewritten, 5 downstream gate-lane fixes, 25/25 green"
+    next_safe_action: "Dispatch a fresh session (ran neither T10 nor T11) to close T12's visual-language/density/column-width half against the now-styled captures; then T8 operator device confirmation"
     blockers:
       - "Not operator-confirmed: release has not been cut for this leg yet"
-      - "T11 (CSS leg) has not run: the default board renders the reference structure unstyled; visual-language/density/column-width comparison is not possible until it lands"
+      - "T12's visual-language/density/column-width comparison still needs a session that ran neither T10 nor T11, per its own evidence bar -- this session ran T11 and is disqualified from closing it"
       - "T8 (operator device confirmation) is the only row that closes the packet"
     key_files:
       - "src/views/board-renderer.ts"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "038-board-kanban-port"
       parent_session_id: null
-    completion_pct: 42
+    completion_pct: 50
     open_questions: []
     answered_questions:
       - "Card identity stays RowData.file.path throughout: no hunk in either landed commit touches drag/drop, WIP/visible-count, swimlane, summary, conditional-formatting or touch-mode identifiers (confirmed by re-reading both diffs' added lines)."
@@ -48,9 +48,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 038-board-kanban-port |
-| **Completed** | Not yet — REQ-007's 1:1 leg pair is in progress: T9/T10 (structure/class port) and this session's T12 fresh-verify pass have landed; T11 (CSS leg) and T8 (operator confirmation) are open |
+| **Completed** | Not yet — REQ-007's 1:1 leg pair has landed (T9/T10 structure/class port, T11 CSS/fixture port); T12's visual-language/density/column-width half (needs a session that ran neither T10 nor T11) and T8 (operator confirmation) are open |
 | **Level** | 2 |
-| **Completion** | `tasks.md` 5/12 rows closed (T5-T7, T9-T10, 42%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md` (unchanged this pass); the amendment's own 1:1-copy criterion is now partially evidenced — structure/class vocabulary confirmed by a fresh T12 session (this pass), visual-language/density/column-width comparison still blocked on T11. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug this session found in T10's port and fixed. |
+| **Completion** | `tasks.md` 6/12 rows closed (T5-T7, T9-T11, 50%). The two pre-amendment legs' card-hierarchy match and negative-control criteria remain true in `goal.md`; the amendment's own 1:1-copy criterion is now structurally AND visually evidenced (T9/T10 structure/class, T11 CSS one-to-one copy plus fixture rewrite) — the remaining gap is a still-unmet evidence-independence requirement (T12's own comparison read must come from a session that ran neither prior leg), not missing work. See "Next Leg" for the full 2026-09-04 account, including a P0 drag/drop bug T12 found in T10's port, and a progress-bar fixture bug and five downstream gate-lane fixes T11 found and closed. |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -328,10 +328,74 @@ tests); `npm run lint` 172 problems (159 errors, 13 warnings), unchanged from th
 baseline — `board-renderer.ts` still carries its 5 pre-existing problems, the parity test file 0;
 `scan-comments` PASS; `npm run gate` 25 green / 0 red, exit 0 read directly (not through a pipe).
 
-**Not closed by this session:** T11 (the `cli-codex` CSS leg) has not run, so the
-visual-language/density/column-width half of T12's evidence bar has no styled capture to compare
-against the reference yet — only the structural/class half is verified. T8 (operator device
+**Not closed by that session:** T11 (the `cli-codex` CSS leg) had not run, so the
+visual-language/density/column-width half of T12's evidence bar had no styled capture to compare
+against the reference yet — only the structural/class half was verified. T8 (operator device
 confirmation) remains the only row that can close the packet.
+
+**2026-09-04, T11 landed (this session).** `cli-codex` had acquired the `css-lane` and started
+this leg but died mid-edit, leaving `styles.css`, `tools/lane/css-lane.json`,
+`tools/screenshots/scenarios/{core,shared,shared.test}.mjs` and
+`src/views/board-renderer-parity.test.ts` uncommitted and unverified. This session read that
+diff, completed it, and closed T11.
+
+`kanban.css` was copied verbatim where its rules apply (`styles.css:8909-9072`) under an MIT
+notice, alongside the shared card primitives the reference's own `KanbanCard`/`KanbanColumn`
+compose from `table.css` and `widgets.css` (`pm-chip`/`pm-avatar`/`pm-progress` families,
+`pm-kanban-card-title-row`), placed directly ahead of the superseded `db-board-*` block — which
+stays untouched and live, since it's still what `boardExtensionsEnabled` renders. Coverage was
+checked class-for-class: every `pm-kanban-*`/`pm-chip*`/`pm-progress*`/`pm-avatar*` class the
+default render path emits (38, grepped from `board-renderer.ts`) resolves to a rule; only
+`pm-chip-label` carries none, which matches the reference (it inherits from `.pm-chip` there too,
+by the same design).
+
+Two real gaps in the inherited copy were found and fixed, not just noted. `.pm-dragging{opacity:
+.5}` was missing entirely — the renderer adds this class on dragstart (`board-renderer.ts:418`)
+but the reference's `utilities.css` rule for it was never copied, so a dragged card never faded.
+And `--pm-shadow-ambient` had been aliased to the same `--db-border-subtle` token as
+`--pm-ghost-border`, collapsing two tokens the reference keeps deliberately distinct (the border
+flips to a light tint in dark mode so it still reads against a dark background; the shadow stays
+black-tinted, just deeper, because a shadow that goes light-tinted stops reading as a shadow) —
+replaced with the reference's own light/dark split under the codebase's existing
+`.theme-dark .note-database-container` idiom.
+
+The five hand-written board fixtures were finished to the `pm-kanban-*` vocabulary (`cli-codex`
+had this in flight). Reading the recapture caught one real fixture bug this rewrite introduced:
+`subtaskBoardCard`'s progress track and fill used `<span>` where `board-renderer.ts:486-488`
+actually builds `<div>`s, and a `<span>` ignores CSS `width`/`height` by spec — so every subtask
+card's progress bar rendered as a flat, uncoloured line instead of a filled one. Fixed by
+switching both elements to `<div>` and confirmed visually in the recapture (a 62% blue-purple
+fill against the gray track, both themes, both devices).
+
+Finishing the rewrite surfaced five further gaps, all downstream of the same
+`db-board-*` → `pm-kanban-*` swap and all fixed in this session: an ESLint `no-unused-vars` pair
+in a now-dead fixture option; a `var(--color-red)` fallback with no declared token in the capture
+harness's stand-in theme (added, transcribed from the same extracted Obsidian app.css the
+existing `--color-orange`/`--color-green` entries already cite); a `scan-option-tones.mjs` check
+still keyed to the superseded `status-color-*` class convention on the board column title
+(repointed at the still-live `db-board-column-title` the extensions-mode board still writes,
+via a newly-exported shared primitive); five `tools/live/replay.mjs` pinned claims that measured
+the old `db-board-*` fixtures by selector and so read as regressions the moment the fixtures
+changed shape (rewritten to their `pm-kanban-*` equivalents — same intent, new selectors — all 28
+claims now hold); and eight stale `tools/live/*.json` evidence artefacts (re-stamped against the
+current tree). None of the five were board-rendering defects; all were checks written against a
+markup shape T10/T11 intentionally retired for the default board.
+
+`npm run gate` reached 25 green / 0 red only after all of the above; `check-lane` names all 28
+content-changed captures. One capture pair (`field-icon-picker-desktop-{dark,light}`) moved
+`pixelHash` on every recapture in this environment despite no code in this repository touching
+icon-picker anything; an A/B — a fresh capture of committed `1c5f465` in a clean detached
+worktree, in this same environment — reproduced the identical divergence from the committed
+bytes, proving it is a pre-existing Chrome/OS rendering drift and not something this leg caused.
+Restored to committed bytes rather than recommitted, consistent with how this lane already
+handles out-of-scope capture drift. Full class-coverage table, token-mapping rationale, and the
+five gate-lane fixes are in `tools/lane/css-lane.json`'s `038-board-kanban-port` release note
+(2026-09-04T10:05); the same evidence is condensed under `tasks.md` T11.
+
+**Not closed by this session:** T12's visual-language/density/column-width comparison still needs
+a session that ran neither T10 nor T11, per its own evidence bar — this session ran T11 and so
+cannot be the one to close it, even though the captures it needs now exist. T8 (operator device
+confirmation) remains the only row that closes the packet.
 <!-- /ANCHOR:next-leg -->
 
 ---

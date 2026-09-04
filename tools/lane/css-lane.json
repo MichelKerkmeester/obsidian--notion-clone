@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "c32661e8c089",
+  "baselineHash": "b7de3b6fb54a",
   "baselineCommit": "421995b3790a0e6486e72bfcd3280e1fe7101562",
   "history": [
     {
@@ -1860,6 +1860,56 @@
         "screenshots/views/constructed-board-mobile-light.png"
       ],
       "note": "Not a CSS edit \u2014 styles.css is untouched (git diff --stat styles.css empty, baselineHash still c32661e8c089). This is the T10 board port landing: the default board (boardExtensionsEnabled unset) now renders obsidian-pm's pm-kanban-view/pm-kanban-board/pm-kanban-col/pm-kanban-card element tree and class vocabulary instead of the local db-board-* markup, so the four constructed-board captures (mounting the real BoardRenderer through the render-assertion harness, not a hand-written fixture) changed pixelHash. All four were opened and read this session, both themes and both devices: the board now paints as unstyled, top-to-bottom flowing plain text \u2014 group labels (backlog/todo/doing/review) in their inline status color, then each card's title+Sub-chip text, hours, and due date stacked with no column layout, no card boundary, no chip styling \u2014 because no stylesheet rule yet targets the pm-kanban-* classes (that is the codex CSS leg, T11, still open). This is the expected pre-CSS-leg shape, not a regression. The five hand-written board fixture scenarios (board-view, board-subtask-tree, board-empty-column, board-drop-language, board-mobile) still emit the old db-board-* markup by design \u2014 they are unchanged by this leg (0 of their captures moved pixelHash or layoutHash) and are the CSS leg's to rewrite. 13 other captures (chrome-owned-menu-sheet-mobile-light, panel-record-detail-sheet-mobile-dark, and 11 timeline captures) moved bytes only in this recapture (pixelHash/layoutHash unchanged, pre-existing encoder-noise re-encodes) and were restored to their committed HEAD bytes rather than recommitted; manifest.json bytes fields for those 13 were corrected to the real file size on disk, matching this lane's established handling of encoder noise. Two full detached capture runs were performed (the first discarded after a scratch manifest edit mistake); the second run's content-changed set (4 constructed-board captures) is what this entry reviews."
+    },
+    {
+      "event": "acquire",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-04T06:31:02.300Z",
+      "hash": "c32661e8c089"
+    },
+    {
+      "event": "edit",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-04T09:20:00.000Z",
+      "hash": "b7de3b6fb54a",
+      "note": "T11 CSS leg, completing a run a prior session left uncommitted mid-edit. Copied the reference's kanban.css verbatim (all 164 lines, .pm-content--kanban through .pm-kanban-card-parent) plus the shared card primitives the reference's own KanbanCard/KanbanColumn compose from table.css (button.pm-chip-btn/.pm-chip display block, .pm-avatar family, .pm-progress family, .pm-chip family incl. pm-chip-rm) and widgets.css (.pm-kanban-card-title-row), under one MIT-notice block placed directly ahead of the superseded db-board-* section (untouched, still live for boardExtensionsEnabled). Verified class-for-class: every pm-kanban-*/pm-chip*/pm-progress*/pm-avatar* class board-renderer.ts's default (non-extensions) render path emits now has a matching rule (grep-checked, 38 classes, only pm-chip-label unruled by design -- it inherits from .pm-chip in the reference too). Fixed three gaps the prior session's copy left: (1) .pm-dragging{opacity:.5} was missing -- the renderer adds this class on dragstart (board-renderer.ts:418) but utilities.css's rule for it was never copied, so a dragged card never faded; added beside .pm-kanban-card--dragging. (2) --pm-shadow-ambient had been aliased to the same --db-border-subtle token as --pm-ghost-border, collapsing two reference tokens the source keeps deliberately distinct (variables.css: both start at rgba(0,0,0,.06) in light, but ghost-border flips to a light rgba(255,255,255,.06) tint in dark while shadow-ambient stays black-tinted at rgba(0,0,0,.15)) -- aliasing both to a border token whose dark-mode value is light-tinted would have painted the card's hover/drag shadow as a pale halo instead of a shadow in dark mode; replaced with the reference's own light/dark split under .theme-dark .note-database-container (the existing local idiom, styles.css:826) rather than inventing a new db-* token no other rule needs. (3) restored two WHY comments table.css carries (.pm-chip--tag's dot-carries-color note, .pm-chip-rm's core-button-height override note) that the copy had silently dropped. Audited the old db-board-* block (~1133 lines) for cascade leakage onto the new pm-kanban-* tree: none found -- every db-board-* selector requires a db-board-* class, and the default render path never emits one, so the two DOM trees share zero classes and the old block only ever paints when boardExtensionsEnabled is on. tsc/vitest/lint/scan-comments all clean; lint is byte-identical (172 problems, 159 errors, 13 warnings) against a detached 1c5f465 baseline worktree -- no new lint surface from this leg."
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-04T10:05:00.000Z",
+      "hash": "b7de3b6fb54a",
+      "reviewed": [
+        "screenshots/components/board-drop-language-desktop-dark.png",
+        "screenshots/components/board-drop-language-desktop-light.png",
+        "screenshots/components/board-drop-language-mobile-dark.png",
+        "screenshots/components/board-drop-language-mobile-light.png",
+        "screenshots/components/board-empty-column-desktop-dark.png",
+        "screenshots/components/board-empty-column-desktop-light.png",
+        "screenshots/components/board-empty-column-mobile-dark.png",
+        "screenshots/components/board-empty-column-mobile-light.png",
+        "screenshots/components/chrome-board-extensions-selection-desktop-dark.png",
+        "screenshots/components/chrome-board-extensions-selection-desktop-light.png",
+        "screenshots/components/chrome-board-extensions-selection-mobile-dark.png",
+        "screenshots/components/chrome-board-extensions-selection-mobile-light.png",
+        "screenshots/views/board-mobile-desktop-dark.png",
+        "screenshots/views/board-mobile-desktop-light.png",
+        "screenshots/views/board-mobile-mobile-dark.png",
+        "screenshots/views/board-mobile-mobile-light.png",
+        "screenshots/views/board-subtask-tree-desktop-dark.png",
+        "screenshots/views/board-subtask-tree-desktop-light.png",
+        "screenshots/views/board-subtask-tree-mobile-dark.png",
+        "screenshots/views/board-subtask-tree-mobile-light.png",
+        "screenshots/views/board-view-desktop-dark.png",
+        "screenshots/views/board-view-desktop-light.png",
+        "screenshots/views/board-view-mobile-dark.png",
+        "screenshots/views/board-view-mobile-light.png",
+        "screenshots/views/constructed-board-desktop-dark.png",
+        "screenshots/views/constructed-board-desktop-light.png",
+        "screenshots/views/constructed-board-mobile-dark.png",
+        "screenshots/views/constructed-board-mobile-light.png"
+      ],
+      "note": "All 28 content-changed captures were opened and read this session (both themes, both devices where applicable): the board paints as the reference kanban -- five status columns with a colored topbar strip and group badge/count, cards with a top priority strip, title row with an optional solid green Sub chip, outline tag chips, an hours chip, a progress bar (blue-purple fill on gray track), an avatar stack, and a due-date chip. The drag scenario shows the dragged card with an accent-colored border/lift and the target column's cards area tinted; the empty-column scenario shows a hollow cards container with no placeholder, matching the reference (no empty-state affordance exists there). Mobile pages the fixed 280px columns horizontally. Two real defects were caught by this read and fixed before release, not just noted: (1) subtaskBoardCard's progress markup used <span> for pm-progress-track/pm-progress-fill instead of the <div> board-renderer.ts actually creates (board-renderer.ts:486-488) -- spans ignore width/height per CSS, so the fill never painted and every progress bar rendered as a flat, uncolored gray line; switched both to <div>, verified visually (62% blue-purple fill against the gray track) in board-subtask-tree-desktop-light and -mobile-dark. (2) the new chrome-board-extensions-selection fixture originally dropped db-board-column-header and db-board-card-controls on bare divs with no real parent; db-board-column-header is position:sticky with a negative margin that cancels its .db-board-column parent's own padding, so the bare version rendered as a barely-visible sliver -- nested both in their minimal real parent (.db-board-column, .db-board-card) and reverified. field-icon-picker-desktop-dark/light also moved pixelHash on every capture run in this environment (proven deterministic across 4 runs) despite zero relation to this diff -- an A/B against a fresh capture of committed 1c5f465 in a clean worktree, run in this same environment, reproduced the identical divergence from HEAD's committed bytes, proving it is a pre-existing Chrome/OS rendering drift unrelated to any code in this repository. Restored to committed HEAD bytes (pixelHash/layoutHash/bytes reset to match) rather than recommitted, consistent with this lane's established handling of out-of-scope capture drift; sourceHashes.styles.css was left at the current hash since a fresh capture was genuinely attempted against current sources. Also fixed while completing codex's interrupted run: checkbox-family-coverage.test.ts started failing because the rewritten board fixtures dropped db-board-card-checkbox/db-board-column-checkbox (the boardExtensionsEnabled board's own selection controls, unrelated to the reference port but orphaned by the fixture rewrite) -- added the chrome-board-extensions-selection fixture to restore coverage rather than reintroducing checkboxes into the reference card. touch-targets: PASS, 264 fixture / 367 constructed controls under 28px against baselines of 279/367 (no regression, slight improvement from the restored checkbox coverage); no pm-kanban/pm-chip/pm-avatar element appears in the under-floor list. Determinism: 4 full detached capture runs in this session produced identical pixelHash/layoutHash for all 316 entries outside the two known classes (field-icon-picker's proven environment drift, and a handful of pre-existing timeline/chrome/panel captures that move bytes only, unchanged pixelHash/layoutHash, restored to committed bytes each time). `npm run gate` (25 lanes) needed five further fixes beyond the CSS and fixture work above, all downstream of the same reference-vocabulary swap: (1) lint:tools -- subtaskBoardCard still destructured the old collapsed/children options, unused since the toggle/add-row markup they gated no longer exists; dropped both bindings. (2) pinned-values -- the restored .pm-chip-rm:hover comment reads var(--text-error, var(--color-red)), and nothing in tools/screenshots/theme.css declared --color-red, so the fallback slot was invalid at computed-value time; added it (light #e93147, dark #fb464c) transcribed from the same extracted Obsidian 1.13.7 app.css the existing --color-orange/--color-green entries cite, at /private/tmp/asar-x/app.css. (3) option-tones -- its boardColumn HEADERS entry checked for a status-color-* CSS class on db-board-column-title, the old column-title convention; the reference's pm-kanban-col-badge colours by inline style instead, so the entry now calls the shared groupTitle primitive directly (newly exported) against the still-live db-board-column-title class the extensions-mode board still writes through renderGroupLabel. (4) replay -- five pinned claims measured the old db-board-* board-view/board-empty-column/board-drop-language/board-subtask-tree fixtures, which T10's own landing note already flagged as owed to this CSS leg; rewrote each measure() to the equivalent pm-kanban-* structure (full hierarchy check, topbar/priority-bar colour resolution, hollow-empty-column and drop-target/dragging states, and swapping the subtask board's now-real data-subtask-depth-free reference behaviour for its own .pm-kanban-card-parent + .pm-progress markers, leaving timeline-subtask-tree's data-subtask-depth check untouched) -- all 28 claims hold. (5) evidence -- 8 of 16 tracked artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census, token-census, view-census) were stale against the new styles.css hash and unstyled-links against the new theme.css hash; re-ran each tool to re-stamp against the current tree (engine-parity's own 51 Chrome-vs-WebKit differences are the pre-existing, unrelated baseline noted in an earlier release on this lane -- none touch a pm-kanban/pm-chip/pm-avatar element). Full gate: 25 green, 0 red."
     }
   ],
   "outstanding": [

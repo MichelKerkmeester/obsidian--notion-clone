@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-04T08:20:00Z"
-    last_updated_by: "board-1to1-t12-fresh-verify"
-    recent_action: "T12 fresh-verify: fixed T10 drag/drop group-update gap, re-armed harness control"
-    next_safe_action: "Dispatch cli-codex T11: copy kanban.css into styles.css, rewrite board fixtures"
+    last_updated_at: "2026-09-04T10:10:00Z"
+    last_updated_by: "board-1to1-t11-css-leg"
+    recent_action: "T11 CSS leg closed: kanban.css copied under MIT notice, fixtures rewritten, 5 downstream gate-lane fixes, 25/25 green"
+    next_safe_action: "Dispatch a fresh session (ran neither T10 nor T11) to close T12's visual-language/density/column-width half; then T8 operator device confirmation"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-038"
       parent_session_id: null
-    completion_pct: 42
+    completion_pct: 50
     open_questions: []
     answered_questions: []
 ---
@@ -131,13 +131,57 @@ _memory:
       `event.dataTransfer?.setData(CARD_FROM_GROUP_MIME, group.key)` alongside the existing
       `CARD_MIME` write in the card's dragstart handler (`board-renderer.ts:415`) — and both new
       tests now pass; full parity suite re-run green 20/20 (18 original + 2 new).
-- [ ] **T11** `cli-codex` leg: copy `kanban.css` verbatim where its rules apply into the
+- [x] **T11** `cli-codex` leg: copy `kanban.css` verbatim where its rules apply into the
       `css-lane`-held `styles.css` §17 BOARD VIEW section, with the MIT notice attached to the
       copied block, and update the screenshot fixtures to match — REQ-007.
       *Evidence to close:* `css-lane` acquired before the edit and released only after a
       recapture that is actually read; the copied block carries its MIT notice per `goal.md` D1's
       supersession; local extensions (WIP, swimlanes, summaries, cover images, path-keyed batch
       order, touch-mode menus) render only behind a new default-off setting.
+      **Closed 2026-09-04 (completing a run `cli-codex` left uncommitted mid-edit; was: every
+      `pm-kanban-*`/`pm-chip*`/`pm-progress*`/`pm-avatar*` class unstyled, board painted as plain
+      top-to-bottom text with no columns per T12's 2026-09-04 partial note above):** `kanban.css`
+      copied verbatim (`styles.css:8909-9072`, `.pm-content--kanban` through
+      `.pm-kanban-card-parent`) under the MIT notice (`:8911-8931`), plus the shared card
+      primitives the reference's own `KanbanCard`/`KanbanColumn` compose from `table.css`
+      (`button.pm-chip-btn`/`.pm-chip` display block, `.pm-avatar` family, `.pm-progress` family,
+      `.pm-chip` family incl. `.pm-chip-rm`, `styles.css:9073-9297`) and `widgets.css`
+      (`.pm-kanban-card-title-row`, `:9298-9308`), placed directly ahead of the superseded
+      `db-board-*` section (`:9310` on, untouched, still live for `boardExtensionsEnabled`).
+      Class-for-class verified: every class `board-renderer.ts`'s default render path emits (38,
+      grepped) has a matching rule; only `pm-chip-label` carries none, by design — it inherits
+      from `.pm-chip` in the reference too. Two token-mapping gaps `cli-codex`'s copy left were
+      found and fixed: `.pm-dragging{opacity:.5}` was missing (`styles.css:9055-9058`, the
+      renderer adds this class on dragstart at `board-renderer.ts:418` but `utilities.css`'s rule
+      for it was never copied, so a dragged card never faded) and `--pm-shadow-ambient` had been
+      aliased to the same `--db-border-subtle` token as `--pm-ghost-border` (`styles.css:8933-8943`),
+      collapsing two tokens the reference keeps deliberately distinct (`variables.css`: both start
+      at `rgba(0,0,0,.06)` in light, but ghost-border flips to a light `rgba(255,255,255,.06)`
+      tint in dark while shadow-ambient stays black-tinted at `rgba(0,0,0,.15)`) — replaced with
+      the reference's own light/dark split under `.theme-dark .note-database-container` (the
+      existing local idiom, `styles.css:826`) instead of a border token whose dark value would
+      have painted the card's hover/drag shadow as a pale halo. Fixtures (`board-view`,
+      `board-subtask-tree`, `board-empty-column`, `board-drop-language`, `board-mobile`,
+      `board-renderer-parity.test.ts`, `shared.test.mjs`) finished to the `pm-kanban-*`
+      vocabulary; a real fixture bug caught by reading the recapture — `subtaskBoardCard`'s
+      progress track/fill used `<span>` instead of the `<div>` `board-renderer.ts:486-488`
+      actually creates, and spans ignore CSS `width`/`height`, so every progress bar rendered as a
+      flat, uncoloured line (`board-subtask-tree-desktop-light.png`, verified fixed: 62%
+      blue-purple fill against the gray track) — fixed in `shared.mjs:319`. Downstream gate
+      fallout from the same swap, all fixed: `checkbox-family-coverage.test.ts` (the
+      `boardExtensionsEnabled` board's own `db-board-card-checkbox`/`db-board-column-checkbox`
+      lost their only fixture when the rewrite touched `boardCard`/`boardColumn` — added
+      `chrome-board-extensions-selection` in `chrome.mjs`, nested in the real
+      `.db-board-column`/`.db-board-card` parents `db-board-column-header`'s
+      `position: sticky` negative-margin trick needs); `scan-option-tones.mjs`'s `boardColumn`
+      check (still keyed to the superseded `status-color-*` class; repointed at the still-live
+      `db-board-column-title` via the newly-exported `groupTitle` primitive); five
+      `tools/live/replay.mjs` claims pinned to the old `db-board-*` fixtures (rewritten to the
+      `pm-kanban-*` equivalents, all 28 claims hold); 8 stale `tools/live/*.json` evidence
+      artefacts (re-stamped). Full detail, class-coverage table and gate-lane fixes:
+      `tools/lane/css-lane.json`'s `038-board-kanban-port` release note dated 2026-09-04T10:05.
+      `check-lane` exit 0, release names all 28 content-changed captures; `npm run gate` 25
+      green / 0 red.
 - [ ] **T12** Fresh in-runtime verifier reads the recaptured board screenshots side by side with
       the reference's own screenshots or the operator's vault comparison — REQ-007.
       *Evidence to close:* a session that did not run T10/T11 opens both sets of captures and

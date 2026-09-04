@@ -31,13 +31,13 @@ Sources: `src/views/board-renderer.ts`
 
 ### Board view — empty column
 
-The empty-group state renderColumn falls back to when a column has zero visible rows and no view-level empty-state override: EmptyStateRenderer's own card, under db-board-empty-slot's dashed-border sizing, beside a populated lane so the zero count and the column's own width hold up next to an ordinary one.
+A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.
 
 | dark | light |
 |---|---|
 | ![board-empty-column dark](components/board-empty-column-mobile-dark.png) | ![board-empty-column light](components/board-empty-column-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `src/views/empty-state-renderer.ts`, `src/i18n.ts`
+Sources: `src/views/board-renderer.ts`
 
 ### Card covers, board and gallery
 
@@ -78,6 +78,16 @@ The rail lives in the header below the toolbar. Sort chips come first and carry 
 | ![chrome-active-view-controls dark](components/chrome-active-view-controls-mobile-dark.png) | ![chrome-active-view-controls light](components/chrome-active-view-controls-mobile-light.png) |
 
 Sources: `src/views/active-view-controls-renderer.ts`
+
+### Board extensions selection controls
+
+The row-role select box the extensions board draws on a column header (select-all) and on a card, stacked.
+
+| dark | light |
+|---|---|
+| ![chrome-board-extensions-selection dark](components/chrome-board-extensions-selection-mobile-dark.png) | ![chrome-board-extensions-selection light](components/chrome-board-extensions-selection-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`
 
 ### Chart view — empty state
 
@@ -537,7 +547,7 @@ Sources: `src/views/empty-state-renderer.ts`
 
 ### Board view — mobile
 
-The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.
+The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.
 
 | dark | light |
 |---|---|
@@ -547,7 +557,7 @@ Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `sr
 
 ### Board view — subtask tree
 
-An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.
+A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.
 
 | dark | light |
 |---|---|

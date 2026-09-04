@@ -799,6 +799,31 @@ export const CHROME_SCENARIOS = [
       </div>`,
   },
   {
+    id: "chrome-board-extensions-selection",
+    title: "Board extensions selection controls",
+    group: "components",
+    width: 320,
+    sources: ["src/views/board-renderer.ts"],
+    // The board's own card and column-header checkboxes only render when boardExtensionsEnabled
+    // is on; the default board reproduces the reference kanban card, which has none. Reachable
+    // only through this extensions-mode surface, so it needs its own fixture the way the reference
+    // board's card and column families get theirs from the pm-kanban-* fixtures.
+    note: "The row-role select box the extensions board draws on a column header (select-all) and on a card, stacked.",
+    // db-board-column-header is position:sticky with a negative margin that cancels its column
+    // parent's own padding, and db-board-card-controls sits inside the card's padded flow — both
+    // render at the wrong size and position without those real parents, so this nests each
+    // checkbox in the minimal real container rather than dropping the class on a bare div.
+    html: () => `
+      <div class="note-database-container">
+        <div class="db-board-column">
+          <div class="db-board-column-header">${rowCheckbox("db-board-column-checkbox")}</div>
+        </div>
+        <div class="db-board-card">
+          <div class="db-board-card-controls">${rowCheckbox("db-board-card-checkbox")}</div>
+        </div>
+      </div>`,
+  },
+  {
     id: "chrome-selection-status-bar",
     title: "Cell selection status bar",
     group: "components",

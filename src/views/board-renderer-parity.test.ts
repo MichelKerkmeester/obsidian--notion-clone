@@ -32,6 +32,9 @@ import { BoardGroup, BoardRenderer, BoardRendererActions } from "./board-rendere
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { TFile } from "obsidian";
 import type { App } from "obsidian";
+// @ts-expect-error -- a tools-side .mjs fixture with no type declarations; imported so the parity
+// check reads the markup the screenshot capture actually renders rather than reimplementing it.
+import { ROWS as SCREENSHOT_ROWS, boardCard as screenshotBoardCard, boardColumn as screenshotBoardColumn } from "../../tools/screenshots/scenarios/shared.mjs";
 
 vi.mock("obsidian", () => ({
   setIcon: vi.fn(),
@@ -473,7 +476,27 @@ const flush = () => new Promise((resolve) => window.setTimeout(resolve, 0));
 // 5. VIEW / COLUMN SHELL PARITY
 // ───────────────────────────────────────────────────────────────────
 
+// The .mjs fixture module carries no type declarations (see the @ts-expect-error import above),
+// so these narrow casts give the two calls below a concrete signature instead of leaving them
+// (and everything read off their result) typed `any`.
+type FixtureRow = { name: string; path?: string };
+const fixtureRows = SCREENSHOT_ROWS as FixtureRow[];
+const fixtureBoardColumn = screenshotBoardColumn as (title: string, rows: FixtureRow[], tone?: string | null) => string;
+const fixtureBoardCard = screenshotBoardCard as (row: FixtureRow, tone?: string | null) => string;
+
 describe("pm-kanban view and column shell parity", () => {
+  it("keeps the screenshot fixture helpers on the reference class contract", () => {
+    const column = fixtureBoardColumn("To Do", [fixtureRows[0]], "blue");
+    expect(column).toContain('class="pm-kanban-col"');
+    expect(column).toContain('class="pm-kanban-col-header"');
+    expect(column).toContain('class="pm-kanban-cards"');
+
+    const card = fixtureBoardCard(fixtureRows[0], "blue");
+    expect(card).toContain('class="pm-kanban-card"');
+    expect(card).toContain('class="pm-kanban-card-body"');
+    expect(card).not.toContain("db-board-");
+  });
+
   it("renders the reference view and board wrappers", () => {
     const { container, board } = renderBoard();
     // The reference adds the view class to the container itself.

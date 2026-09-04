@@ -345,26 +345,34 @@ const CLAIMS = [
     was: 1,
     recorded: 10,
     // The complete hierarchy is required so a card cannot look present while omitting its content
-    // region or the affordance that opens it.
+    // region or the affordance that opens it. Rewritten for the T11 CSS leg: the default board's
+    // fixtures moved from the local db-board-* markup this claim originally checked to a one-to-one
+    // copy of the reference's pm-kanban-* element tree (T10 landed the renderer; T11 lands the
+    // fixtures and the stylesheet). `recorded` re-measures the same ten-point completeness against
+    // board-view's now pm-kanban-* markup rather than against a tree the fixture no longer builds.
     async measure(page) {
       const s = SCENARIOS.find((x) => x.id === "board-view");
       if (!s) return -1;
       await load(page, s.html());
       return page.evaluate(() => {
-        const column = document.querySelector(".db-board-column");
-        const card = document.querySelector(".db-board-card");
+        const column = document.querySelector(".pm-kanban-col");
+        const card = document.querySelector(".pm-kanban-card");
         if (!column || !card) return 0;
+        const header = column.querySelector(".pm-kanban-col-header");
+        const body = card.querySelector(".pm-kanban-card-body");
+        const titleRow = body?.querySelector(".pm-kanban-card-title-row");
+        const footer = body?.querySelector(".pm-kanban-card-footer");
         const checks = [
-          column.querySelector(".db-board-column-topbar") !== null,
-          card.querySelector(".db-board-card-controls") !== null,
-          card.querySelector(".db-board-card-priority-strip") !== null,
-          card.querySelector(".db-board-card-body") !== null,
-          card.querySelector(".db-board-card-body > .db-board-card-parent") !== null,
-          card.querySelector(".db-board-card-body > .db-record-title-line") !== null,
-          card.querySelector(".db-record-title-line .db-board-card-title") !== null,
-          card.querySelector(".db-record-title-line .db-board-card-chips") !== null,
-          card.querySelector(".db-board-card-meta") !== null,
-          card.querySelectorAll(".db-board-card-meta .db-board-card-field").length >= 2,
+          column.querySelector(".pm-kanban-col-topbar") !== null,
+          header !== null,
+          header?.querySelector(".pm-kanban-col-badge") !== null,
+          header?.querySelector(".pm-kanban-col-count") !== null,
+          card.querySelector(".pm-kanban-card-priority-bar") !== null,
+          body !== null,
+          titleRow !== null,
+          titleRow?.querySelector(".pm-kanban-card-title") !== null,
+          body?.querySelector(".pm-kanban-card-tags") !== null,
+          footer !== null && footer.querySelector(".pm-chip") !== null,
         ];
         return checks.filter(Boolean).length;
       });
@@ -376,13 +384,17 @@ const CLAIMS = [
     was: 2,
     recorded: 0,
     // Both status-colour surfaces must exist before their computed paint can be meaningful.
+    // Rewritten for the T11 CSS leg: the reference board colours its topbar and priority strip
+    // through the same inline `setCssStyles({ background: color })` the reference itself uses,
+    // rather than a `status-color-*` class, so the selectors move to the new element names; the
+    // computed-style check (an unresolved inline colour still paints transparent) is unchanged.
     async measure(page) {
       const s = SCENARIOS.find((x) => x.id === "board-view");
       if (!s) return -1;
       await load(page, s.html());
       return page.evaluate(() => {
         let bad = 0;
-        for (const selector of [".db-board-column-topbar", ".db-board-card-priority-strip"]) {
+        for (const selector of [".pm-kanban-col-topbar", ".pm-kanban-card-priority-bar"]) {
           const elements = [...document.querySelectorAll(selector)];
           if (elements.length === 0) {
             bad += 1;
@@ -456,13 +468,24 @@ const CLAIMS = [
     was: 2,
     recorded: 0,
     // Both rendered surfaces need their depth marker; a missing fixture must count as a failure.
+    // Rewritten for the T11 CSS leg: the reference board never carried a `data-subtask-depth`
+    // attribute (renderReferenceCard sets only data-task-id/data-note-database-row-path) — depth
+    // is shown by a `.pm-kanban-card-parent` label on a child card instead, one-to-one with the
+    // reference's own KanbanCard, and derived progress by `.pm-progress`. timeline-subtask-tree is
+    // untouched by this leg and keeps its own data-subtask-depth attribute unchanged.
     async measure(page) {
+      const checks = {
+        "board-subtask-tree": () =>
+          document.querySelector(".pm-kanban-card-parent") !== null
+          && document.querySelector(".pm-progress") !== null,
+        "timeline-subtask-tree": () => document.querySelectorAll("[data-subtask-depth]").length > 0,
+      };
       let missing = 0;
-      for (const id of ["board-subtask-tree", "timeline-subtask-tree"]) {
+      for (const [id, check] of Object.entries(checks)) {
         const s = SCENARIOS.find((x) => x.id === id);
         if (!s) { missing += 1; continue; }
         await load(page, s.html());
-        missing += await page.evaluate(() => document.querySelectorAll("[data-subtask-depth]").length > 0 ? 0 : 1);
+        missing += (await page.evaluate(check)) ? 0 : 1;
       }
       return missing;
     },
@@ -474,14 +497,21 @@ const CLAIMS = [
     recorded: 2,
     // The surface leg's red was the data layer landing with no view reading it; its green is the
     // two surfaces that now do. The fixtures mirror both, so this holds that both still carry the
-    // tree markup.
+    // tree markup. Rewritten for the T11 CSS leg alongside the claim above: same two markers, same
+    // per-surface predicate.
     async measure(page) {
+      const checks = {
+        "board-subtask-tree": () =>
+          document.querySelector(".pm-kanban-card-parent") !== null
+          && document.querySelector(".pm-progress") !== null,
+        "timeline-subtask-tree": () => document.querySelectorAll("[data-subtask-depth]").length > 0,
+      };
       let surfaces = 0;
-      for (const id of ["board-subtask-tree", "timeline-subtask-tree"]) {
+      for (const [id, check] of Object.entries(checks)) {
         const s = SCENARIOS.find((x) => x.id === id);
         if (!s) continue;
         await load(page, s.html());
-        surfaces += await page.evaluate(() => document.querySelectorAll("[data-subtask-depth]").length > 0 ? 1 : 0);
+        surfaces += (await page.evaluate(check)) ? 1 : 0;
       }
       return surfaces;
     },
@@ -527,22 +557,33 @@ const CLAIMS = [
     was: 0,
     recorded: 2,
     // Neither scenario id existed on the landing commit's parent tree, so SCENARIOS.find returned
-    // undefined for both and this measure could not even load a fixture to check.
+    // undefined for both and this measure could not even load a fixture to check. Rewritten for the
+    // T11 CSS leg: the reference board has no empty-state placeholder (an empty column is just a
+    // hollow .pm-kanban-cards, matching kanban.css) and no separate drop-indicator element (the
+    // reference tints the drop target's cards container and raises the dragged card, both live
+    // classes rather than a synthesised line) — so the check now reads the reference's own two
+    // states instead of the local db-board-* ones this claim originally found.
     async measure(page) {
       let ok = 0;
       const empty = SCENARIOS.find((x) => x.id === "board-empty-column");
       if (empty) {
         await load(page, empty.html());
-        if (await page.evaluate(() => document.querySelector(".db-board-empty-slot") !== null)) ok += 1;
+        const good = await page.evaluate(() => {
+          // The scenario mounts a populated column beside the empty one, so the first
+          // .pm-kanban-cards in document order is not reliably the one under test.
+          const containers = [...document.querySelectorAll(".pm-kanban-cards")];
+          return containers.length > 0
+            && containers.some((el) => el.querySelector(".pm-kanban-card") === null);
+        });
+        if (good) ok += 1;
       }
       const drop = SCENARIOS.find((x) => x.id === "board-drop-language");
       if (drop) {
         await load(page, drop.html());
         const good = await page.evaluate(() => {
-          const column = document.querySelector(".db-board-column.is-drop-target");
-          const dragging = document.querySelector(".db-board-card.is-dragging");
-          const dropTarget = document.querySelector(".db-board-card.is-drop-target");
-          return !!(column && dragging && dropTarget && dropTarget.querySelector(".db-board-drop-indicator"));
+          const dropTarget = document.querySelector(".pm-kanban-drop-target");
+          const dragging = document.querySelector(".pm-kanban-card--dragging");
+          return !!(dropTarget && dragging);
         });
         if (good) ok += 1;
       }

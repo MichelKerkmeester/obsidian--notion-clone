@@ -9,8 +9,7 @@
 
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { t } from "../../../src/i18n";
-import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, boardEmptySlot, subtaskBoardCard } from "./shared.mjs";
+import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, subtaskBoardCard } from "./shared.mjs";
 import { TIMELINE_FIXTURES, TL_LANES, TL_SUBTASK_LANES, timelineEvent } from "./temporal.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -84,108 +83,82 @@ function expectDirectChildOrder(parent, classNames, label) {
 // ───────────────────────────────────────────────────────────────────
 
 describe("board screenshot fixture parity", () => {
-  it("nests the column's header controls under the containers the renderer puts them in", () => {
-    const column = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "db-board-column");
+  it("nests the reference column header under the containers the renderer puts it in", () => {
+    const column = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "pm-kanban-col");
     expectDirectChildOrder(
       column,
-      ["db-board-column-header", "db-board-column-resize-handle", "db-board-cards"],
+      ["pm-kanban-col-header", "pm-kanban-cards"],
       "the column",
     );
-    const header = findDescendant(column, "db-board-column-header");
+    const header = findDescendant(column, "pm-kanban-col-header");
     expectDirectChildOrder(
       header,
-      ["db-board-column-topbar", "db-board-group-toggle", "db-board-column-checkbox", "db-board-header-text"],
+      ["pm-kanban-col-topbar", "pm-kanban-col-title-row"],
       "the column header",
     );
-    const headerText = findDescendant(header, "db-board-header-text");
-    expectDirectChildOrder(
-      headerText,
-      ["db-board-column-title", "db-board-count", "db-board-column-options"],
-      "the header text",
-    );
+    const titleRow = findDescendant(header, "pm-kanban-col-title-row");
+    expectDirectChildOrder(titleRow, ["pm-kanban-col-badge", "pm-kanban-col-header-right"], "the title row");
+    const headerRight = findDescendant(titleRow, "pm-kanban-col-header-right");
+    expectDirectChildOrder(headerRight, ["pm-kanban-col-count"], "the header right area");
   });
 
-  it("nests the card's controls and body content under the containers the renderer puts them in", () => {
+  it("nests the card's priority bar and body content under the reference card", () => {
     const markup = boardCard(ROWS[0], "pink");
-    expect(markup).not.toContain('<div class="db-board-card-title">');
-    const card = findDescendant(parseMarkup(markup), "db-board-card");
+    expect(markup).not.toContain("db-board-");
+    const card = findDescendant(parseMarkup(markup), "pm-kanban-card");
     expectDirectChildOrder(
       card,
-      ["db-board-card-priority-strip", "db-board-card-controls", "db-board-card-body"],
+      ["pm-kanban-card-priority-bar", "pm-kanban-card-body"],
       "the card",
     );
-    const body = findDescendant(card, "db-board-card-body");
+    const body = findDescendant(card, "pm-kanban-card-body");
     expectDirectChildOrder(
       body,
-      ["db-board-card-parent", "db-record-title-line", "db-board-card-meta"],
+      ["pm-kanban-card-title-row", "pm-chip", "pm-kanban-card-tags", "pm-kanban-card-footer"],
       "the card body",
     );
-    const titleLine = findDescendant(body, "db-record-title-line");
-    expectDirectChildOrder(titleLine, ["db-board-card-title", "db-board-card-chips"], "the title line");
+    const titleRow = findDescendant(body, "pm-kanban-card-title-row");
+    expectDirectChildOrder(titleRow, ["pm-kanban-card-title"], "the title row");
   });
 
   it("omits the optional parent and priority nodes when the renderer has no value", () => {
     const card = boardCard(ROWS[0], null, "");
-    expect(card).not.toContain("db-board-card-priority-strip");
-    expect(card).not.toContain("db-board-card-parent");
-    expect(card).toContain("db-file-title-prefix");
+    expect(card).not.toContain("pm-kanban-card-priority-bar");
+    expect(card).not.toContain("pm-kanban-card-parent");
+    expect(card).toContain("pm-kanban-card-title");
   });
 
-  it("draws the empty-group state in place of a card list when a column has no rows", () => {
-    const column = findDescendant(parseMarkup(boardColumn("Personal", [])), "db-board-column");
-    const cards = findDescendant(column, "db-board-cards");
-    expect(findDescendant(cards, "db-board-card"), "the empty column draws no card").toBeNull();
-    const empty = findDescendant(cards, "db-board-empty-slot");
-    expect(empty, "db-board-empty-slot is present").not.toBeNull();
-    expect(empty.classes, "carries the shared empty-card family too").toEqual(
-      expect.arrayContaining(["db-empty", "db-empty-card"]),
-    );
-    const content = findDescendant(empty, "db-empty-card-content");
-    expectDirectChildOrder(empty, ["db-empty-card-icon", "db-empty-card-content"], "the empty slot");
-    expectDirectChildOrder(content, ["db-empty-card-title", "db-empty-card-message"], "the empty content");
-    // A populated column still renders its cards, not the empty slot.
-    expect(boardColumn("Design", [ROWS[0]])).not.toContain("db-board-empty-slot");
+  it("keeps an empty reference column as a hollow cards container", () => {
+    const column = findDescendant(parseMarkup(boardColumn("Personal", [])), "pm-kanban-col");
+    const cards = findDescendant(column, "pm-kanban-cards");
+    expect(findDescendant(cards, "pm-kanban-card"), "the empty column draws no card").toBeNull();
+    expect(cards.children).toHaveLength(0);
+    expect(boardColumn("Design", [ROWS[0]])).toContain("pm-kanban-card");
+    expect(boardColumn("Personal", [])).not.toContain("db-board-empty-slot");
   });
 
-  it("mirrors the empty-group copy the renderer resolves through the same i18n keys", () => {
-    const markup = boardEmptySlot();
-    expect(markup).toContain('data-empty-reason="empty-group"');
-    expect(markup).toContain(t("emptyState.emptyGroupTitle"));
-    expect(markup).toContain(t("emptyState.emptyGroupMessage"));
-  });
-
-  it("puts the column-level dragover class on the column, not a descendant", () => {
-    const plain = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "db-board-column");
-    expect(plain.classes).not.toContain("is-drop-target");
+  it("puts the column-level dragover class on the cards container", () => {
+    const plain = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "pm-kanban-cards");
+    expect(plain.classes).not.toContain("pm-kanban-drop-target");
     const highlighted = findDescendant(
       parseMarkup(boardColumn("Design", [ROWS[0]], "pink", { columnClass: "is-drop-target" })),
-      "db-board-column",
+      "pm-kanban-cards",
     );
-    expect(highlighted.classes).toContain("is-drop-target");
+    expect(highlighted.classes).toContain("pm-kanban-drop-target");
+    expect(findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]], "pink", { columnClass: "is-drop-target" })), "pm-kanban-col").classes)
+      .not.toContain("pm-kanban-drop-target");
   });
 
   it("puts the card-level dragstart class on the card root, raised above its neighbours", () => {
-    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "pink", "Subscriptions", { dragState: "dragging" })), "db-board-card");
-    expect(dragging.classes).toContain("is-dragging");
-    expect(dragging.classes).not.toContain("is-drop-target");
+    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "pink", "", { dragState: "dragging" })), "pm-kanban-card");
+    expect(dragging.classes).toContain("pm-kanban-card--dragging");
+    expect(dragging.classes).not.toContain("pm-kanban-drop-target");
   });
 
-  it("puts the card-level dragover tint and its before/after insertion line after the card body", () => {
-    const target = findDescendant(
-      parseMarkup(boardCard(ROWS[0], "pink", "Subscriptions", { dragState: "drop-target", dropPlacement: "before" })),
-      "db-board-card",
-    );
-    expect(target.classes).toContain("is-drop-target");
-    expect(target.classes).not.toContain("is-dragging");
-    expectDirectChildOrder(target, ["db-board-card-controls", "db-board-card-body", "db-board-drop-indicator"], "the drop-target card");
-    const indicator = findDescendant(target, "db-board-drop-indicator");
-    expect(indicator.classes).toContain("is-before");
-    expect(indicator.classes).not.toContain("is-after");
-    const after = findDescendant(
-      parseMarkup(boardCard(ROWS[0], "pink", "Subscriptions", { dropPlacement: "after" })),
-      "db-board-drop-indicator",
-    );
-    expect(after.classes).toContain("is-after");
+  it("keeps insertion feedback on the reference container rather than inventing a card node", () => {
+    const markup = boardCard(ROWS[0], "pink", "", { dragState: "drop-target", dropPlacement: "before" });
+    expect(markup).not.toContain("pm-kanban-drop-target");
+    expect(markup).not.toContain("db-board-drop-indicator");
   });
 });
 
@@ -196,14 +169,13 @@ describe("subtask screenshot fixture parity", () => {
 
   it("keeps the board hierarchy helper in the renderer's child order", () => {
     const markup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62 });
-    const card = findDescendant(parseMarkup(markup), "db-board-card");
-    const controls = findDescendant(card, "db-board-card-controls");
-    const body = findDescendant(card, "db-board-card-body");
-    expectDirectChildOrder(controls, ["db-board-card-checkbox", "db-board-card-open", "db-card-mobile-move-btn", "db-subtask-toggle"], "the subtask card controls");
-    expectDirectChildOrder(body, ["db-board-card-parent", "db-record-title-line", "db-board-card-meta", "db-subtask-progress", "db-subtask-add-row"], "the subtask card body");
+    const card = findDescendant(parseMarkup(markup), "pm-kanban-card");
+    const body = findDescendant(card, "pm-kanban-card-body");
+    expectDirectChildOrder(card, ["pm-kanban-card-priority-bar", "pm-kanban-card-body"], "the subtask card");
+    expectDirectChildOrder(body, ["pm-kanban-card-title-row", "pm-chip", "pm-kanban-card-tags", "pm-progress", "pm-kanban-card-footer"], "the subtask card body");
     const childMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1 });
-    expect(childMarkup).toContain('data-subtask-depth="1"');
-    expect(childMarkup).toContain("--db-subtask-depth: 1;");
+    expect(childMarkup).toContain("pm-kanban-card-parent");
+    expect(childMarkup).not.toContain("db-board-");
     expect(boardRenderer).toContain("db-subtask-toggle");
     expect(boardRenderer).toContain("db-subtask-progress-derived");
     expect(boardRenderer).toContain("db-subtask-progress-explicit");
@@ -215,15 +187,17 @@ describe("subtask screenshot fixture parity", () => {
     const treeParent = TL_SUBTASK_LANES.find((lane) => lane.key === "business").events[0];
     const timelineMarkup = timelineEvent(treeParent, TIMELINE_FIXTURES.week);
     const contracts = [
-      ["db-subtask-toggle", boardRenderer, boardMarkup],
-      ["db-subtask-progress", boardRenderer, boardMarkup],
-      ["db-subtask-progress-track", boardRenderer, boardMarkup],
-      ["db-subtask-progress-fill", boardRenderer, boardMarkup],
-      ["db-subtask-progress-label", boardRenderer, boardMarkup],
-      ["db-subtask-progress-derived", boardRenderer, boardMarkup],
-      ["db-subtask-progress-explicit", boardRenderer, boardMarkup],
-      ["db-subtask-add-row", boardRenderer, boardMarkup],
-      ["db-subtask-add-input", boardRenderer, boardMarkup],
+      ["pm-kanban-card", boardRenderer, boardMarkup],
+      ["pm-kanban-card-priority-bar", boardRenderer, boardMarkup],
+      ["pm-kanban-card-body", boardRenderer, boardMarkup],
+      ["pm-kanban-card-title-row", boardRenderer, boardMarkup],
+      ["pm-kanban-card-title", boardRenderer, boardMarkup],
+      ["pm-chip", boardRenderer, boardMarkup],
+      ["pm-kanban-card-tags", boardRenderer, boardMarkup],
+      ["pm-progress", boardRenderer, boardMarkup],
+      ["pm-progress-track", boardRenderer, boardMarkup],
+      ["pm-progress-fill", boardRenderer, boardMarkup],
+      ["pm-kanban-card-footer", boardRenderer, boardMarkup],
       ["db-subtask-event", timelineRenderer, timelineMarkup],
       ["has-subtask-children", timelineRenderer, timelineMarkup],
       ["db-subtask-event-toggle", timelineRenderer, timelineMarkup],
@@ -234,6 +208,10 @@ describe("subtask screenshot fixture parity", () => {
       expect(source, `${className} is emitted by its renderer`).toContain(className);
       expect(styles, `${className} has a stylesheet rule`).toContain(`.${className}`);
     }
+    expect(boardRenderer).toContain("db-subtask-toggle");
+    expect(boardRenderer).toContain("db-subtask-progress-derived");
+    expect(boardRenderer).toContain("db-subtask-progress-explicit");
+    expect(boardRenderer).toContain("db-subtask-add-input");
   });
 
   it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {
