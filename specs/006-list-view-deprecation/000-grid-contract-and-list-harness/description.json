@@ -1,0 +1,27 @@
+{
+  "level": "2",
+  "specFolder": "006-list-view-deprecation/000-grid-contract-and-list-harness",
+  "description": "Deliver the isGridView predicate, re-derive the guard table off a stable anchor, build the two view-semantic guard tripwires before any guard is",
+  "keywords": [
+    "deliver",
+    "isgridview",
+    "predicate",
+    "re-derive",
+    "guard",
+    "table",
+    "stable",
+    "anchor",
+    "two",
+    "view-semantic",
+    "tripwires"
+  ],
+  "lastUpdated": "2026-08-30T10:05:25.003Z",
+  "specId": "000",
+  "folderSlug": "grid-contract-and-list-harness",
+  "parentChain": [
+    "public",
+    "006-list-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

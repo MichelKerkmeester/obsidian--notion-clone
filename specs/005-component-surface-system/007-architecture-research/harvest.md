@@ -154,11 +154,11 @@ the archived generation 1. Disposition is against the tree at `3d4d2f2`.
 | H-L05 | Anchor identity is logical, not a DOM node; the node is a render-epoch cache; states run open → anchored → anchor-missing → close | Shipped almost verbatim. `src/views/anchor-ref.ts:22` declares `AnchorState = "open" \| "anchored" \| "anchor-missing" \| "closed"`, and the module header at lines 5-9 states luna's reasoning in the program's own words. 192 lines |
 | H-L06 | A wholesale view refresh must not strand a sheet's scoped lease for scrim, drag handle and scroll suppression | This is luna's single most valuable call, and it was the actual root cause of the program's most-reported defect. `roadmap.md` §4 report 1: the panel's own content render empties the panel, destroying the grab bar the sheet module prepended, so **every re-render silently unbound the gesture**. Measured 60.0px fresh / 0.0px after re-render before, 60.0px / 60.0px after. Owned by `016` |
 | H-L07 | The surface **contract** — roles, mounts, dismissal sets, focus modes, width policy, token keys, producer registry — is separable from any factory that applies it | `src/views/surface-contract.ts` kept in full and measured live when the factory was deleted: covered by `surface-contract.test.ts`, imported by `anchor-ref.ts`, read by two tools. 001 §13 *"The design survives the factory"* |
-| H-L08 | Behaviour study of Anytype and AppFlowy only; never copy code, CSS values or token scales across the MIT / AGPL boundary | [`../architecture-findings.md`](../architecture-findings.md) §10, and restated as a hard block in `../../006-list-view-clickup/plan.md` §2 |
+| H-L08 | Behaviour study of Anytype and AppFlowy only; never copy code, CSS values or token scales across the MIT / AGPL boundary | [`../architecture-findings.md`](../architecture-findings.md) §10, and restated as a hard block in `../../006-list-view-deprecation/plan.md` §2 |
 | H-G01 | Do not rebuild `openSurface`; the retry bar is three numbers and a live importer | `../001-overlay-placement-and-menu-language/spec.md` §13 *What would settle a rebuild*. Enforced by reachability: `design-conformance.mjs` read 3 unwired modules with the factory and 2 without |
-| H-G02 | Guard line numbers in the 006 plan are stale; navigate by enclosing method name | `../../006-list-view-clickup/000-grid-contract-and-list-harness/plan.md` §3 re-anchors the table off the enclosing method name and documents the line number as expected to rot |
-| H-G03 | Seven of eleven guards convert; G8 and G11 are view-semantic and must not; both would pass `tsc` and the unit suite if broken | `../../006-list-view-clickup/plan.md` §3 guard table; `decision-record.md` ADR-001; tripwires AC-31 and AC-32 specified in `000-grid-contract-and-list-harness/plan.md` §3 with the mutant-must-fail gate |
-| H-G04 | Route B — the list becomes a presentation mode of the grid renderer — reached independently from the F1–F29 capability difference | Already decided by the operator and recorded at `../../006-list-view-clickup/decision-record.md` ADR-001. The independent arrival is corroboration, not new information |
+| H-G02 | Guard line numbers in the 006 plan are stale; navigate by enclosing method name | `../../006-list-view-deprecation/000-grid-contract-and-list-harness/plan.md` §3 re-anchors the table off the enclosing method name and documents the line number as expected to rot |
+| H-G03 | Seven of eleven guards convert; G8 and G11 are view-semantic and must not; both would pass `tsc` and the unit suite if broken | `../../006-list-view-deprecation/plan.md` §3 guard table; `decision-record.md` ADR-001; tripwires AC-31 and AC-32 specified in `000-grid-contract-and-list-harness/plan.md` §3 with the mutant-must-fail gate |
+| H-G04 | Route B — the list becomes a presentation mode of the grid renderer — reached independently from the F1–F29 capability difference | Already decided by the operator and recorded at `../../006-list-view-deprecation/decision-record.md` ADR-001. The independent arrival is corroboration, not new information |
 | H-G05 | `styles.css` is one serialized lane and must not be split; the header, the source-order tests and 224 captures all depend on it | `architecture-findings.md`, the lane mechanism at `tools/lane/css-lane.json` with `npm run lane:check` gated at `tools/gate.mjs:47` |
 | H-G06 | S6 camelCase `setCssProps` is already done | `../020-harness-fidelity-repair/spec.md` §7; shim at `tools/storybook/obsidian-dom-shim.mjs:137-139` |
 | H-G07 | The DOM shim was more permissive than the device, so the harness certified code the phone drops | Repaired at `780a736` *fix(harness): stop the test shim from being more permissive than the device*; 020 §7 records that the repair immediately turned a silent drop into a visible `inline=NaNpx` failure |
@@ -196,7 +196,7 @@ the archived generation 1. Disposition is against the tree at `3d4d2f2`.
 ### O1 — The embed host is absent from the packet that is about to change the list
 
 `grep -rn "embedded-database-renderer\|EmbeddedDatabaseRenderer\|embed" --include='*.md'` across
-`specs/006-list-view-clickup/` — parent and all five children — returns **zero matches**.
+`specs/006-list-view-deprecation/` — parent and all five children — returns **zero matches**.
 
 The embed is not a detail. It is a second Obsidian host, 4,069 lines, that constructs its own
 `TableRenderer`, `BoardRenderer`, `GalleryRenderer` and `ListRenderer`
@@ -215,7 +215,7 @@ rows, and every criterion in the packet passes, because every fixture the packet
 view. That is the 1.3.1 failure with a narrower blast radius: a green gate over a surface nobody
 measured.
 
-**The fix is small and is not this agent's to make.** Two rows in `../../006-list-view-clickup/plan.md`
+**The fix is small and is not this agent's to make.** Two rows in `../../006-list-view-deprecation/plan.md`
 §3 — the two dispatch arms with their intended change — and one line in
 `000-grid-contract-and-list-harness/plan.md` §3 turning *the* render-dispatch site into *both*. The
 census that phase already plans to run would then cover it.
@@ -242,7 +242,7 @@ has written down which. Two specific pieces of knowledge are at risk of being de
 
 **The decision needed, before 006 phase 001 starts:** does the grid presentation inherit these two
 results as requirements, or is `ListRenderer` kept and S4 dropped? Not a phase. A paragraph in
-`../../006-list-view-clickup/plan.md`, and a bench run against `TableRenderer` at the same shape.
+`../../006-list-view-deprecation/plan.md`, and a bench run against `TableRenderer` at the same shape.
 
 ### O4 — The doctrine still lists four rules
 
@@ -334,5 +334,5 @@ left unmentioned.
 - Shim repair: [`../020-harness-fidelity-repair/spec.md`](../020-harness-fidelity-repair/spec.md) §7.
 - Criteria doctrine: [`../architecture-findings.md`](../architecture-findings.md) §9.
 - Programme status: [`../roadmap.md`](../roadmap.md) §3, §4, §5.
-- Route B: [`../../006-list-view-clickup/decision-record.md`](../../006-list-view-clickup/decision-record.md) ADR-001.
+- Route B: [`../../006-list-view-deprecation/decision-record.md`](../../006-list-view-deprecation/decision-record.md) ADR-001.
 - Created by this harvest: [`../026-production-render-assertions/`](../026-production-render-assertions/).

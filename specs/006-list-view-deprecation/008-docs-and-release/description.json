@@ -1,0 +1,17 @@
+{
+  "specFolder": "006-list-view-deprecation/008-docs-and-release",
+  "description": "Phase 1: docs-and-release",
+  "keywords": [
+    "phase",
+    "docs-and-release"
+  ],
+  "lastUpdated": "2026-09-04T19:33:28.657Z",
+  "specId": "008",
+  "folderSlug": "docs-and-release",
+  "parentChain": [
+    "006-list-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

@@ -202,8 +202,11 @@ already has — and it is that phase's own work, not this board's.
 fix in 0.0.8 (formerly 1.4.3) and every release since, latest 0.0.20, installed to the iCloud
 vault, but the operator now reports the same symptoms still reproduce on 0.0.20 — reopened, see
 below. A seventeenth — refactoring the list view to
-look like ClickUp — is its own packet at `specs/006-list-view-clickup/`, is not part of
-this program, and does not occupy a row here; the table below runs 1-16 then 18-36 because of it.
+look like ClickUp — was its own packet and does not occupy a row here; the table below runs 1-16
+then 18-36 because of it. **That packet is now a deprecation.** On 2026-09-04 the operator said
+*"Also deprecate list view completely"*, and `specs/006-list-view-deprecation/` was converted from
+the ClickUp direction into a phased list-view retirement. The ClickUp children are kept as
+superseded history rather than deleted.
 *2026-09-02: row 29 added, the first device evidence since 1.3.1, raising the count from
 twenty-seven to twenty-eight; rows 30 to 33 added later the same day from the operator's iOS pass,
 raising it to thirty-two. 2026-09-03 ~06:40 CEST: rows 34-36 added from the iOS operator on 1.4.2 —
@@ -753,7 +756,7 @@ decision that lives only in a conversation gets relitigated by the next agent.
 | **Row height stays 34px.** Density outranks the 44px touch floor | WCAG 2.5.5's 44px target is not met by the table's main-item cell and **cannot be met from CSS** — measured 169×34, and a hit-area expansion is a no-op because the cell clips its overflow and the row below owns everything past the boundary. The only fix was a touch row-height floor, which is the reader's density setting | `012`'s first open question. Closed |
 | **The grab band is accepted at 35px** against the 48px ask | 48px needs a taller sheet header, moving every sheet surface and every capture of it. The alternative, letting the band overlap the header, reintroduces the defect that phase had just fixed | `003/spec.md` "OPERATOR DECISION". Closed. §7.5 notes the recorded number is now disputed; the decision is not |
 | **Row range-select moves behind a long press** | A tap on a row checkbox selected everything between it and the last row touched, on every touch device, because `isTouchDevice` was OR-ed into the range predicate — shift held down with no way to let go | `017`. The gesture is `attachLongPress`, the same object the row menu uses, so threshold, tolerance and haptic are shared rather than matched |
-| **The list view is a presentation mode of the grid**, not a separate view | Scopes `specs/006-list-view-clickup/`, which is outside this program | Named here so this program does not re-open it |
+| ~~**The list view is a presentation mode of the grid**, not a separate view~~ — **superseded 2026-09-04** | Scoped the packet that is now `specs/006-list-view-deprecation/`, outside this program. The operator replaced the direction outright: *"Also deprecate list view completely"*. The Route B decision is kept as history in that packet's `decision-record.md`; it no longer binds | Named here so this program does not re-open either the old direction or the new one |
 
 **Two decisions are still open** and both are `016`'s: whether the phone row label moves from 13px to
 14px to sit on the type scale, and whether the record sheet should survive a window resize instead of

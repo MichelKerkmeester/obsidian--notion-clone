@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "packet_id": "006-list-view-deprecation/006-hide-and-migrate",
+  "spec_folder": "006-list-view-deprecation/006-hide-and-migrate",
+  "parent_id": "006-list-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "hide list view",
+      "migrate list to table",
+      "withdraw list from picker",
+      "006 phase 006",
+      "list withdrawal plan",
+      "list migration module",
+      "gallery pattern reuse",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "hide",
+      "list",
+      "view",
+      "migrate",
+      "table",
+      "withdraw",
+      "picker",
+      "phase",
+      "withdrawal",
+      "plan",
+      "migration",
+      "module"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "src/data/gallery-migration.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
+      "src/i18n.ts",
+      "src/views/list-renderer.ts",
+      "src/data/gallery-migration.test.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.ts",
+        "kind": "code",
+        "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.test.ts",
+        "kind": "test",
+        "path": "src/data/gallery-migration.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Migrate What Exists",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Scope Boundary",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Withdraw",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`viewType` is a persisted union written into vault files (`src/data/types.ts:317`), so the list",
+    "created_at": "2026-09-04T19:33:26Z",
+    "last_save_at": "2026-09-04T19:44:34.854Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:f1472d859e168abbf587486d41f9e1b60a2934a0fe40b0586f5a795bbaa32d25",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "691a922f91332a9d5e7fb37ace3bb7be226252256f25fcffe704b7fce47dfaa3",
+      "plan.md": "13ea795def7ce027ada501ff4f052dddd3b88bf8f5c8c909d4fca29bfdcce78f",
+      "tasks.md": "bf831c7f27c822fb0a3effd6cec25e66d4baf033c3f74352a70feaf32526276e",
+      "implementation-summary.md": "088c04f6941e89064aef58725185f84b92b24dfeef0c5236f9b47f2542ac8634"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

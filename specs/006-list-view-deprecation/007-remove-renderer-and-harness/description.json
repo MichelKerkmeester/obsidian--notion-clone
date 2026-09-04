@@ -1,0 +1,17 @@
+{
+  "specFolder": "006-list-view-deprecation/007-remove-renderer-and-harness",
+  "description": "Phase 1: remove-renderer-and-harness",
+  "keywords": [
+    "phase",
+    "remove-renderer-and-harness"
+  ],
+  "lastUpdated": "2026-09-04T19:33:27.727Z",
+  "specId": "007",
+  "folderSlug": "remove-renderer-and-harness",
+  "parentChain": [
+    "006-list-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

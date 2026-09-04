@@ -1,0 +1,17 @@
+{
+  "specFolder": "006-list-view-deprecation/005-usage-and-migration-audit",
+  "description": "Phase 1: usage-and-migration-audit",
+  "keywords": [
+    "phase",
+    "usage-and-migration-audit"
+  ],
+  "lastUpdated": "2026-09-04T19:33:26.057Z",
+  "specId": "005",
+  "folderSlug": "usage-and-migration-audit",
+  "parentChain": [
+    "006-list-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

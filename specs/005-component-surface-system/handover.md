@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T19:25:00Z"
+    last_updated_at: "2026-09-04T20:05:00Z"
     last_updated_by: "orchestrate-handover-16"
-    recent_action: "Opened phases 044, 045 and 046 from the operator evening pass"
-    next_safe_action: "Answer 046 host-layout question and ADR-001; land 044 shared chrome"
+    recent_action: "Opened 044, 045, 046; converted 006 into a phased list deprecation"
+    next_safe_action: "Run 006/005 list audit; answer 046 ADR-001; land 044 shared chrome"
     blockers:
       - "Operator device confirmation owed: reports 29-33, five ported surfaces, 0.0.16-0.0.20"
       - "Reports 34-36 reopened (operator, 2026-09-04): add filter/add sort still break/freeze on 0.0.20; fix leg on worktrees/036-sheet-freeze (owner 031)"
@@ -22,6 +22,7 @@ _memory:
       - "044 opened: reports 40/41/43 phone sheet grammar; legs on worktrees/039 and 040"
       - "045 opened: board card properties; must not move 038 reference parity"
       - "046 opened: embed chrome/width parity, move and create; ADR-001 needs the operator"
+      - "006 converted to list deprecation; list must also leave the 013 add-view picker"
     key_files:
       - "goal.md"
       - "roadmap.md"

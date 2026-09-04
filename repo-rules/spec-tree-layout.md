@@ -51,7 +51,7 @@ specs/
   003-ui-improvement-build/
   004-component-screenshot-system/
   005-component-surface-system/ ← the active program
-  006-list-view-clickup/
+  006-list-view-deprecation/
   context/                      ← GITIGNORED, vendored third-party source for reference
 ```
 

@@ -1,0 +1,18 @@
+{
+  "level": "3",
+  "specFolder": "006-list-view-deprecation/001-list-grid-structure",
+  "description": "The structural swap.",
+  "keywords": [
+    "structural",
+    "swap"
+  ],
+  "lastUpdated": "2026-08-30T10:05:34.088Z",
+  "specId": "001",
+  "folderSlug": "list-grid-structure",
+  "parentChain": [
+    "public",
+    "006-list-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

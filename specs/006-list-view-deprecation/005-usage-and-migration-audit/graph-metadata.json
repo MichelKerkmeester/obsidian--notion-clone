@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "packet_id": "006-list-view-deprecation/005-usage-and-migration-audit",
+  "spec_folder": "006-list-view-deprecation/005-usage-and-migration-audit",
+  "parent_id": "006-list-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "list usage audit",
+      "list migration target",
+      "list data loss check",
+      "006 phase 005",
+      "list audit plan",
+      "list enumeration",
+      "migration target decision",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "list",
+      "usage",
+      "audit",
+      "migration",
+      "target",
+      "data",
+      "loss",
+      "check",
+      "phase",
+      "plan",
+      "enumeration",
+      "decision"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "src/views/list-renderer.ts",
+      "src/views/card-field-renderer.ts",
+      "tools/live/list-window.mjs",
+      "tools/live/list-window.json",
+      "tools/live/renderer-coverage.json",
+      "tools/bench/list-render-bench.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "src/views/list-reservation.test.ts",
+      "src/views/list-row-contracts.test.ts",
+      "src/data/gallery-migration.ts",
+      "src/data/types.ts",
+      "tools/gate.mjs",
+      "tools/live/replay.mjs",
+      "screenshots/manifest.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-window.mjs",
+        "kind": "file",
+        "path": "tools/live/list-window.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-window.json",
+        "kind": "config",
+        "path": "tools/live/list-window.json",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "list-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/list-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-reservation.test.ts",
+        "kind": "test",
+        "path": "src/views/list-reservation.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-row-contracts.test.ts",
+        "kind": "test",
+        "path": "src/views/list-row-contracts.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.ts",
+        "kind": "code",
+        "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "replay.mjs",
+        "kind": "file",
+        "path": "tools/live/replay.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "List Usage",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Migration Audit",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The deprecation cannot start by deleting, because `viewType: \"list\"` is written into vault files and",
+    "created_at": "2026-09-04T19:33:25Z",
+    "last_save_at": "2026-09-04T19:44:34.230Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:ab4e95ec17b4534e0509df6e4865a98cda42e45abf521c1fbc307af7f649eec7",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "69bf2ff95020d444bc9ec072c56d9f39745ef7f2cd4030e7a297c779190dac95",
+      "plan.md": "e747da061fc9ed38815365a2e3936305ef60232f0933907ee3af313a48fa74be",
+      "tasks.md": "241504dec9ae7c5b6ae95bf804e222293c9c59ee6ce2692d870545a2e99b7843",
+      "implementation-summary.md": "dc8c39f7c28c68c7b008e3c86599f96c22216124115b5c4898c8f41f1391b099"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -128,7 +128,7 @@ surface in the embed than in the file view, and nothing today would report the d
 members is not a rounding error; `openRecordDetail` alone is the row-click behaviour the list exists
 for. This is also the row that carries the finding the harvest could not fix directly: the packet
 that is about to route the list through the grid renderer
-(`../../006-list-view-clickup/`) does not mention the embed host anywhere
+(`../../006-list-view-deprecation/`) does not mention the embed host anywhere
 (`../007-architecture-research/harvest.md` §4 O1).
 
 ### AC-4 — Deleting a row-level affordance moves an asserted number (REQ-004)

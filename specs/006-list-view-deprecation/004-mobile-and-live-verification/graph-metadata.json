@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "packet_id": "006-list-view-deprecation/004-mobile-and-live-verification",
+  "spec_folder": "006-list-view-deprecation/004-mobile-and-live-verification",
+  "parent_id": "006-list-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "006 phase 004",
+      "mobile touch targets list",
+      "live device verification",
+      "006 phase 004 plan",
+      "006 phase 004 tasks",
+      "006 phase 004 criteria",
+      "ac-26 device verification"
+    ],
+    "key_topics": [
+      "phase",
+      "mobile",
+      "touch",
+      "targets",
+      "list",
+      "live",
+      "device",
+      "verification",
+      "plan",
+      "tasks",
+      "criteria",
+      "ac-26"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "checklist.md",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Live Verification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "it",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. METADATA",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "text",
+        "kind": "technology",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "two",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "SUPERSEDED 2026-09-04 (ClickUp direction, replaced by the list-view deprecation). Phone layout and touch targets, the two deferred guards, and the only evidence that closes the packet: the operator opens the plugin and confirms the screen changed.",
+    "created_at": "2026-08-30T10:00:33.643Z",
+    "last_save_at": "2026-09-04T19:45:30.669Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md"
+    ],
+    "source_fingerprint": "sha256:5c42f8f5cd75cf063a16fbf08a98e08b0a8f2074c9e565ba8b80083842f513dc",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "5463dbab680aab450b0f4da11a8cce71d504247f0b468b9e8bf8a426a148cb72",
+      "plan.md": "41e3d2a455a75c67f9c97292354a10e311cb9abe04079eb5bf36b863f5eb362c",
+      "tasks.md": "b3c35c54d63ee32f0f4b65c6e702765fd55cd72b81ac878fb1749484dfb58362"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

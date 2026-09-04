@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "packet_id": "006-list-view-deprecation/008-docs-and-release",
+  "spec_folder": "006-list-view-deprecation/008-docs-and-release",
+  "parent_id": "006-list-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "list removal release",
+      "list deprecation changelog",
+      "006 phase 008",
+      "list removal docs plan",
+      "deprecation release plan",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies",
+      "implementation summary",
+      "what shipped",
+      "list removal release summary"
+    ],
+    "key_topics": [
+      "list",
+      "removal",
+      "release",
+      "deprecation",
+      "changelog",
+      "phase",
+      "docs",
+      "plan",
+      "task",
+      "breakdown",
+      "implementation",
+      "tasks"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "src/i18n.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "List Removal",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Scope Boundary",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Three",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Document",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A removed view that nobody documented is a bug report waiting to be filed",
+    "created_at": "2026-09-04T19:33:28Z",
+    "last_save_at": "2026-09-04T19:44:36.239Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:fe30991a99950b90e58de2656005559dc24964dc0913485722af86382ff10d51",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "fa946099b84a6fdae85884bd24640e10817c05f7cf45b1661d74d22a25705c19",
+      "plan.md": "ee9ad0c3f7d81b983b2ee8ced1e4482129095c46846781bc7fb13efcb8210dbc",
+      "tasks.md": "d372a3e79afc5e338a2a161b2cee5e209db167c91ece51faf35adc7e8e220768",
+      "implementation-summary.md": "b82e3f5149e97840a23a1d491df14d013ccccf263b151a3c5d52820e1fb704b4"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

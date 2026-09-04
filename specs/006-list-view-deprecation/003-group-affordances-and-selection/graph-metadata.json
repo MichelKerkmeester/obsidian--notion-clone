@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "006-list-view-deprecation/003-group-affordances-and-selection",
+  "spec_folder": "006-list-view-deprecation/003-group-affordances-and-selection",
+  "parent_id": "006-list-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "006 phase 003",
+      "group create row",
+      "selection sync defect",
+      "006 phase 003 plan",
+      "006 phase 003 tasks",
+      "006 phase 003 criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "group",
+      "row",
+      "selection",
+      "sync",
+      "defect",
+      "plan",
+      "tasks",
+      "criteria",
+      "superseded",
+      "clickup",
+      "direction"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "checklist.md",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Group Affordances",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "zero",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "text",
+        "kind": "technology",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "that",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. METADATA",
+        "kind": "heading",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. CRITERIA",
+        "kind": "heading",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "2.1 AC-22 — the criterion must cross a surface boundary",
+        "kind": "heading",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "SUPERSEDED 2026-09-04 (ClickUp direction, replaced by the list-view deprecation). Wire and reach the per-group create row, the group count, and the selection-sync defect that leaves the list group checkbox stale after any change from another surface.",
+    "created_at": "2026-08-30T10:00:33.202Z",
+    "last_save_at": "2026-09-04T19:45:30.029Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md"
+    ],
+    "source_fingerprint": "sha256:ef2a5bfd756b5ccdabdedd19516829c7ea7ef727848c7b73effac491a9b399aa",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "ea0c9656048613bf418a133742a31c8979a5052ceccd1ed8e71d17b7aeca5de5",
+      "plan.md": "088574caaa3755df498dfb9f31841cf5e481897a1db27e3e895a50fdac37ad4b",
+      "tasks.md": "4a41bb022be1fbd53b8d6d733f2e0a00c2e3edf76238f5f0e6c865ebc915cebe"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "specFolder": "006-list-view-deprecation/003-group-affordances-and-selection",
+  "description": "Wire and reach the per-group create row, the group count, and the selection-sync defect that leaves the list group checkbox stale after any change",
+  "keywords": [
+    "wire",
+    "reach",
+    "per-group",
+    "row",
+    "group",
+    "count",
+    "selection-sync",
+    "defect",
+    "leaves",
+    "list",
+    "checkbox",
+    "stale",
+    "change"
+  ],
+  "lastUpdated": "2026-08-30T09:55:25.958Z",
+  "specId": "003",
+  "folderSlug": "group-affordances-and-selection",
+  "parentChain": [
+    "public",
+    "006-list-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

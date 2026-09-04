@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "packet_id": "006-list-view-deprecation/007-remove-renderer-and-harness",
+  "spec_folder": "006-list-view-deprecation/007-remove-renderer-and-harness",
+  "parent_id": "006-list-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "remove list renderer",
+      "list-window lane removal",
+      "renderer coverage ratchet floor",
+      "006 phase 007",
+      "list removal plan",
+      "gate lane removal order",
+      "ratchet floor lowering",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies",
+      "acceptance criteria"
+    ],
+    "key_topics": [
+      "remove",
+      "list",
+      "renderer",
+      "list-window",
+      "lane",
+      "removal",
+      "coverage",
+      "ratchet",
+      "floor",
+      "phase",
+      "plan",
+      "gate"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "implementation-summary.md",
+      "tools/live/list-window.mjs",
+      "tools/live/list-window.json",
+      "tools/live/renderer-coverage.json",
+      "src/views/list-renderer.ts",
+      "tools/bench/list-render-bench.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/screenshots/scenarios.mjs",
+      "tools/live/replay.mjs",
+      "src/views/list-reservation.test.ts",
+      "src/views/list-row-contracts.test.ts",
+      "src/views/card-field-renderer.ts",
+      "tools/gate.mjs",
+      "src/views/database-view.ts",
+      "src/data/types.ts",
+      "screenshots/manifest.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "list-window.mjs",
+        "kind": "file",
+        "path": "tools/live/list-window.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-window.json",
+        "kind": "config",
+        "path": "tools/live/list-window.json",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/list-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "replay.mjs",
+        "kind": "file",
+        "path": "tools/live/replay.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-reservation.test.ts",
+        "kind": "test",
+        "path": "src/views/list-reservation.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-row-contracts.test.ts",
+        "kind": "test",
+        "path": "src/views/list-row-contracts.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "List Renderer",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Its Harness",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "After `006` nobody can reach the list, but the code and everything that measures it are still there",
+    "created_at": "2026-09-04T19:33:27Z",
+    "last_save_at": "2026-09-04T19:44:35.569Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:afd5fde751cd2476dca16016d9242e6b61ad0fbcddd9865d3a66cb2a37a895e1",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "b246daba8c4fac27078b5e6c8c31f1ea292fe301135ea5944db36ec82e6df94d",
+      "plan.md": "2fc45ba27fa136cb086a8e88b5daa93b410f91c07c9da769815a1f12e0be3d6a",
+      "tasks.md": "1450b8485dfae6627470e1b9425c042cc0c81708fcef0e6da2e22132e72dba5b",
+      "implementation-summary.md": "5f5ac23d4014cc4f145c8469d88a1a5b323e142119d9f5deafffb64a4e74a4e9"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

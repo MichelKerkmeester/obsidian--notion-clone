@@ -164,7 +164,7 @@ Nothing in the gate could see it, and nothing in the gate can see it come back.
 | Replacing the screenshot harness | Captures answer a different question — what a surface looks like against the shipped stylesheet. This phase does not photograph anything |
 | Taking the `styles.css` lane | No stylesheet edit is needed. A phase that needs the lane to prove a renderer has confused two things |
 | Device or operator confirmation | Headless Chrome is not a phone. `009-live-verification` owns the device transport and `008` owns the release decision |
-| The list-to-grid migration itself | Owned by `../../006-list-view-clickup/`. This phase builds the instrument that migration needs; it changes no product behaviour |
+| The list-to-grid migration itself | Owned by `../../006-list-view-deprecation/`. This phase builds the instrument that migration needs; it changes no product behaviour |
 <!-- /ANCHOR:scope -->
 
 ---
