@@ -2468,6 +2468,21 @@
         "screenshots/views/timeline-toolbar-options-mobile-light.png"
       ],
       "note": "Reconciliation release, not a CSS edit — this leg (037-timeline-gantt-port, T038: week-label modes, dependency menu, subtask creation, undo/redo keys, plus the T034 subtask-undo history fold-in) never touched styles.css; git diff --stat styles.css is empty on this worktree. The prior release's own baselineHash (3110493a1a0e) was already wrong when 4cb21470 (\"feat(timeline): close the one-to-one fidelity gaps\") landed it: that commit's styles.css diff moved the file from d3c6cc3e8453 (its parent's real content) to 26e134e61c3c (its own committed content, confirmed via git show 4cb21470:styles.css | shasum), but the css-lane.json update in the same commit recorded neither value — 3110493a1a0e matches no state of styles.css this repository's history contains. HEAD (046d1338) inherits that error untouched. This release corrects baselineHash to the tree's actual, unchanged content hash (26e134e61c3c) rather than editing the landed commit. check-lane.mjs's own pixelHash/layoutHash comparator against HEAD's manifest narrowed git's 27-file screenshot diff down to these 8 real content changes — all are the new Week label select row (T038, options popover Layout section, both the hand fixture and the real-renderer constructed mount); the other 19 moved bytes only (re-encode noise) and were restored to HEAD bytes rather than named here."
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T13:04:11.000Z",
+      "hash": "bd780d064dd4",
+      "reviewed": [
+        "screenshots/components/constructed-timeline-toolbar-options-desktop-dark.png",
+        "screenshots/components/constructed-timeline-toolbar-options-desktop-light.png",
+        "screenshots/components/constructed-timeline-toolbar-options-mobile-dark.png",
+        "screenshots/components/constructed-timeline-toolbar-options-mobile-light.png",
+        "screenshots/views/constructed-timeline-desktop-dark.png",
+        "screenshots/views/constructed-timeline-desktop-light.png"
+      ],
+      "note": "Reconciliation release, not a CSS edit — rebasing worktrees/032-gantt-residual (this phase's T034-T038 behaviour-parity leg, 48d7ace/abd59de) onto origin/main after main advanced further (038-board-kanban-port's T12 fresh-reviewer close-out, release 0.0.19): git diff --stat styles.css is empty on this rebase, baselineHash stays bd780d064dd4. tools/live/*.json (16 evidence stamps) taken from main; screenshots/manifest.json merged per-entry by scenario id (timeline-toolbar-options/constructed-timeline-toolbar-options from this branch, else main); tools/lane/css-lane.json merged (main's 210-entry history plus this branch's own 2 unique 037 entries appended). Full recapture (npm run screenshots, 356 entries) found zero real content-changed captures: 6 files moved bytes (5 board PNGs plus this file), all confirmed pixelHash/layoutHash-identical to HEAD (re-encode noise) and restored to HEAD bytes; the established field-icon-picker-desktop-{dark,light} drift (real pixelHash/layoutHash delta, unrelated to any pm-gantt-*/pm-hidden selector this leg touches) was likewise restored to HEAD rather than accepted. The 4 constructed-timeline-toolbar-options captures (real mounted popover) and the 2 constructed-timeline captures listed above were opened and read: Week label row present at the documented position (after Local extensions, before Style), and the gantt view shows bars with progress fill, a milestone diamond, dashed dependency arrows and the today line, fully styled. npx tsc --noEmit exit 0; npx vitest run 1019/1019; npm run lint 172 (unchanged); node tools/naming/scan-comments.mjs PASS; touch-targets re-measured three times, stable at fixture 199/279 and constructed 367/367, 0 new both passes; npm run gate 25/25 green."
     }
   ],
   "outstanding": [
