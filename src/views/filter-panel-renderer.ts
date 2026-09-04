@@ -13,6 +13,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { isSheetTraceEnabled, traceSheet } from "./sheet-trace";
 import { setIcon, setTooltip } from "obsidian";
 import { getColumnOptions, isObsidianTagsKey } from "../data/column-types";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -167,6 +168,7 @@ export class FilterPanelRenderer {
     let panel: HTMLElement;
     if (retained) {
       panel = retained;
+      if (isSheetTraceEnabled()) traceSheet("panel-refill", "filter");
       panel.empty();
     } else {
       panel = containerEl.createDiv({

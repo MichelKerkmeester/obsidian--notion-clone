@@ -760,6 +760,14 @@ export interface PluginSettings {
   recordOpenTarget?: string;
   /** Default view type a newly created database opens with. Absent means table. */
   defaultViewType?: DatabaseViewType;
+  /**
+   * Record phone sheet lifecycle events so a device can report what emulation cannot reproduce.
+   *
+   * Off, and absent, for everyone who is not currently diagnosing one. Three sheet fixes have now
+   * been proven in a browser and reported still broken from a phone, and each gap was something the
+   * device does around the touch rather than the touch itself.
+   */
+  debugSheetTrace?: boolean;
 }
 
 export interface TrashedDatabase {

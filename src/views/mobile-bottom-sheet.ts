@@ -13,6 +13,12 @@
 // springs back.
 
 // ───────────────────────────────────────────────────────────────────
+// 0. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { beginSheetGeneration, isSheetTraceEnabled, traceSheet } from "./sheet-trace";
+
+// ───────────────────────────────────────────────────────────────────
 // 1. SHEET CHROME
 // ───────────────────────────────────────────────────────────────────
 
@@ -171,6 +177,9 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // early exit below, and registering only after the move would leave exactly those sheets
     // unknown to the watcher — so the backdrop could be taken down while one was still open.
     sheetsFor(doc).add(panel);
+    // A generation begins when a surface mounts, so a device trace reads as one sheet's whole life
+    // rather than as a stream to be correlated by timestamp afterwards.
+    if (isSheetTraceEnabled()) beginSheetGeneration(panel.className);
     claimBottomDock(doc, "sheet", true);
     watchForSheetRemoval(doc);
     // A surface built on the body is already where a sheet has to be, so there is nothing to move
@@ -209,7 +218,8 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
   // After the prune inside setScrim, so a document that still holds another sheet keeps the claim.
   claimBottomDock(doc, "sheet", sheetsFor(doc).size > 0);
   if (!remembered) {
-    panel.style.removeProperty("--db-mobile-sheet-bottom");
+    if (isSheetTraceEnabled()) traceSheet("sheet-unmount", panel.className);
+  panel.style.removeProperty("--db-mobile-sheet-bottom");
     return;
   }
   originalMount.delete(panel);

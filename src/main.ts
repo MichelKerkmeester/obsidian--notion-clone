@@ -13,6 +13,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { readSheetTrace, setSheetTraceEnabled } from "./views/sheet-trace";
 import { App, Component, FuzzySuggestModal, loadMathJax, MarkdownRenderer, MarkdownView, Modal, Plugin, WorkspaceLeaf, Notice, TFile, normalizePath, parseYaml, stringifyYaml } from "obsidian";
 import { DataSource } from "./data/data-source";
 import { sortDatabaseFileEntries } from "./data/database-file-order";
@@ -224,6 +225,9 @@ export default class NoteDatabasePlugin extends Plugin {
       this.settings = createDefaultSettings();
     }
     setLocale(this.settings.language);
+    // Recording is armed from the saved setting rather than from the toggle alone, so a trace the
+    // operator turned on survives the restart they are usually asked for next.
+    setSheetTraceEnabled(this.settings.debugSheetTrace === true, this.app.workspace.containerEl?.ownerDocument);
 
     // Build our source-rule property picker cache from Obsidian's public metadata cache.
     // Refreshed below as metadata changes; no dependency on types.json/internal registries.
@@ -367,6 +371,24 @@ export default class NoteDatabasePlugin extends Plugin {
       name: t("command.exportCsvMarkdown"),
       callback: async () => {
         await this.exportCurrentViewAsCsvMarkdownZip();
+      },
+    });
+    // The trace is only useful if it can leave the phone. There is no console to read on iOS and no
+    // file the operator can reasonably be talked through exporting, so the whole log goes to the
+    // clipboard as plain text and is pasted back into the conversation that asked for it.
+    this.addCommand({
+      id: "copy-sheet-trace",
+      name: t("command.copySheetTrace"),
+      callback: async () => {
+        const trace = readSheetTrace();
+        try {
+          await navigator.clipboard.writeText(trace);
+          new Notice(trace.split("\n")[0]);
+        } catch {
+          // A clipboard the platform refuses is not a reason to lose the log; showing it is worse
+          // than pasting it and better than nothing.
+          new Notice(trace.slice(0, 1200), 0);
+        }
       },
     });
     this.addCommand({

@@ -13,6 +13,12 @@
 // hands focus back to the surface (or trigger) beneath it.
 
 // ───────────────────────────────────────────────────────────────────
+// 0. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { isSheetTraceEnabled, traceSheet } from "./sheet-trace";
+
+// ───────────────────────────────────────────────────────────────────
 // 1. TYPES
 // ───────────────────────────────────────────────────────────────────
 
@@ -188,6 +194,9 @@ export class OverlayStack {
   }
 
   private dismissSurface(surface: OverlaySurface, reason: OverlayCloseReason): void {
+    // Why a surface went is the fork a device trace exists to settle: a tap that never reached the
+    // control and a tap that reached it and was then undone look identical afterwards.
+    if (isSheetTraceEnabled()) traceSheet("dismiss", `${reason} ${this.livePanel(surface).className}`);
     this.removeSurface(surface, false);
     surface.close(reason);
     if (reason !== "action") this.restoreFocus(surface);

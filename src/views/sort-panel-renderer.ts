@@ -12,6 +12,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { isSheetTraceEnabled, traceSheet } from "./sheet-trace";
 import { setIcon } from "obsidian";
 import { SortRule, ViewConfig } from "../data/types";
 import { t } from "../i18n";
@@ -88,6 +89,7 @@ export class SortPanelRenderer {
     let panel: HTMLElement;
     if (retained) {
       panel = retained;
+      if (isSheetTraceEnabled()) traceSheet("panel-refill", "sort");
       panel.empty();
     } else {
       panel = containerEl.createDiv({

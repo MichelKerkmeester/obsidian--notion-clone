@@ -11,6 +11,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { setSheetTraceEnabled } from "./views/sheet-trace";
 import { App, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
 import NoteDatabasePlugin from "./main";
 import { DatabaseConfig, DatabaseViewType, PluginSettings, TrashedDatabase } from "./data/types";
@@ -192,6 +193,21 @@ export class SettingsTab extends PluginSettingTab {
           .setValue(this.plugin.settings.databaseFilesPreventDuplicateTabs !== false)
           .onChange(async (value) => {
             this.plugin.settings.databaseFilesPreventDuplicateTabs = value;
+            await this.plugin.saveSettings();
+          })
+      );
+    // Kept beside the ordinary toggles rather than hidden, because the person who needs it is the
+    // operator being asked to turn it on, and an instruction that begins "open the console" is one
+    // that cannot be followed on a phone.
+    new Setting(general)
+      .setName(t("settings.debugSheetTrace.name"))
+      .setDesc(t("settings.debugSheetTrace.desc"))
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.debugSheetTrace === true)
+          .onChange(async (value) => {
+            this.plugin.settings.debugSheetTrace = value;
+            setSheetTraceEnabled(value, this.app.workspace.containerEl?.ownerDocument);
             await this.plugin.saveSettings();
           })
       );
