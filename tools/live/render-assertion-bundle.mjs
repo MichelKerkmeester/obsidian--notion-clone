@@ -61,6 +61,32 @@ export const SCENARIOS = [
   { name: "chart/file-view", renderer: "chart", bag: "file-view" },
 ];
 
+// Ten per-view state variants: the same ScenarioSpec fields constructed-state-assertions.mjs
+// already proves mount a real per-state marker (a subtask tree, sparse fields, a no-date-field
+// empty state, the two non-bar chart variants, the mini-calendar popover, and the three toolbar
+// settings popovers). Exported separately from SCENARIOS rather than merged into it: render-
+// assertions.mjs also reads SCENARIOS, and its BAGS table has no entry for the three toolbar
+// `renderer` values these add, so merging them there would look up an undefined bag shape and
+// throw. touch-targets.mjs and unstyled-links.mjs measure DOM geometry and link colour, not
+// action-bag membership, so that constraint does not apply to them.
+export const STATE_SCENARIOS = [
+  { name: "board-subtask-tree/file-view", renderer: "board", bag: "file-view", captureData: true, subtaskTree: true },
+  { name: "timeline-subtask-tree/file-view", renderer: "timeline", bag: "file-view", captureData: true, subtaskTree: true },
+  { name: "list-sparse-fields/file-view", renderer: "list", bag: "file-view", captureData: true, sparseFields: true },
+  { name: "calendar-mini-calendar/file-view", renderer: "calendar", bag: "file-view", captureData: true, miniCalendar: true },
+  { name: "calendar-empty-state/file-view", renderer: "calendar", bag: "file-view", captureData: true, emptyState: true },
+  { name: "chrome-chart-number/file-view", renderer: "chart", bag: "file-view", captureData: true, chartVariant: "number" },
+  { name: "chrome-chart-empty/file-view", renderer: "chart", bag: "file-view", captureData: true, chartVariant: "empty" },
+  { name: "calendar-toolbar-options/file-view", renderer: "calendar-toolbar", bag: "file-view" },
+  { name: "timeline-toolbar-options/file-view", renderer: "timeline-toolbar", bag: "file-view" },
+  { name: "chrome-chart-options-popover/file-view", renderer: "chart-toolbar", bag: "file-view" },
+];
+
+// touch-targets.mjs and unstyled-links.mjs's own constructed pass: every scenario SCENARIOS
+// carries, plus the ten state variants above — the list those two lanes' internal fixture-vs-
+// constructed cross-check reads instead of SCENARIOS alone.
+export const SCENARIOS_WITH_STATES = [...SCENARIOS, ...STATE_SCENARIOS];
+
 export const RENDERER_SOURCES = [
   "src/views/list-renderer.ts",
   "src/views/table-renderer.ts",

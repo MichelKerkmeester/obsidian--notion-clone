@@ -1,20 +1,29 @@
 {
-  "under": 367,
+  "under": 422,
   "floor": 28,
   "recorded": "2026-09-04",
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
-  "smallest": "db-calendar-week-allday-more at 67x13",
+  "smallest": "db-calendar-options-trigger at 24x8",
   "raiseHistory": {
     "recorded": "2026-09-04",
-    "what": "335 -> 367, and the ratchet is raised, not lowered, mirroring the fixture baseline's own 037 precedent (`touch-targets-baseline.json`'s `lastTriage`): render-assertion-bundle.mjs's SCENARIOS gained four timeline-scale entries (timeline-day/file-view, timeline-month/file-view, timeline-quarter/file-view, timeline-year/file-view) so the timeline branch could read ScenarioSpec.scale instead of hardcoding \"week\". Each new scenario mounts the same timeline nav chrome the week/file-view scenario already mounted and this baseline already carried — db-timeline-create-button, db-timeline-nav-button, db-timeline-scale-menu — so the three grow, not a new class arrives.",
+    "what": "367 -> 422, the second raise recorded here (the first, 335 -> 367 on the same date, added the timeline's four extra scale scenarios and is preserved in this file's git history rather than restated). touch-targets.mjs and unstyled-links.mjs stopped reading render-assertion-bundle.mjs's SCENARIOS directly and now read the new SCENARIOS_WITH_STATES export, which appends the ten per-view state variants T028 built (a subtask tree on board/timeline, sparse fields on list, a no-date-field empty state and the mini-calendar popover on calendar, the chart's number and empty-state variants, and the three toolbar settings popovers). Was 21 constructed scenarios for both lanes, now 31.",
     "perClass": [
-      { "class": "db-timeline-create-button", "before": 1, "after": 5 },
-      { "class": "db-timeline-nav-button", "before": 12, "after": 36 },
-      { "class": "db-timeline-scale-menu", "before": 2, "after": 6 }
+      { "class": "db-calendar-month-segment", "before": 200, "after": 218 },
+      { "class": "db-timeline-create-button", "before": 5, "after": 6 },
+      { "class": "db-timeline-nav-button", "before": 36, "after": 42 },
+      { "class": "db-timeline-scale-menu", "before": 6, "after": 7 },
+      { "class": "db-calendar-mini-nav", "before": 0, "after": 2 },
+      { "class": "db-calendar-mini-title", "before": 0, "after": 1 },
+      { "class": "db-calendar-mini-today", "before": 0, "after": 1 },
+      { "class": "db-calendar-options-trigger", "before": 0, "after": 1 },
+      { "class": "db-calendar-timeline-options-trigger", "before": 0, "after": 1 },
+      { "class": "db-chart-options-trigger", "before": 0, "after": 1 },
+      { "class": "db-toggle-switch", "before": 0, "after": 10 },
+      { "class": "db-view-config-number", "before": 0, "after": 12 }
     ],
-    "totalBefore": 335,
-    "totalAfter": 367,
-    "verification": "Every other class held its exact prior count — db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-calendar-week-allday-more 16, db-table-footer-trigger 32 — confirmed by re-running `node tools/live/touch-targets.mjs --json` and diffing the per-class counts against this file's own prior `note`. 367 - 335 = 32 = (5-1) + (36-12) + (6-2), the three timeline classes' growth and nothing else; render-assertions.mjs's bag-shape comparison and unstyled-links.mjs's fixture-pass numbers were unaffected by the same four scenarios. No styles.css or src/views change accompanies this raise."
+    "totalBefore": 367,
+    "totalAfter": 422,
+    "verification": "Attributed per new scenario by mounting only STATE_SCENARIOS (the ten new entries) in isolation and measuring each one's own undeclared rows, then confirmed additive against the full 31-scenario run: board-subtask-tree, list-sparse-fields, calendar-empty-state, chrome-chart-number and chrome-chart-empty each clear the floor entirely (0 under). timeline-subtask-tree re-mounts the timeline's own nav chrome and contributes the three timeline-class deltas above (+1/+6/+1) and nothing else. calendar-mini-calendar re-mounts a full month grid at the small capture-sized dataset (contributing +18 db-calendar-month-segment) plus its own three mini-popover button classes (2/1/1). The three toolbar-popover scenarios (calendar-toolbar-options, timeline-toolbar-options, chrome-chart-options-popover) each open only their own settings panel via togglePopover — not a full renderer — contributing one visually-hidden anchor-trigger button apiece (all under floor by design, 24x8) plus their panel's own toggle-switch and numeric-input controls (1/4, 3/4, 6/4). Sum of the ten scenarios' own under-floor counts is 0+8+0+22+0+0+0+6+8+11 = 55 = 422 - 367. Every pre-existing class not listed above (db-calendar-more-events 56, db-calendar-week-allday-date 16, db-calendar-week-allday-more 16, db-table-footer-trigger 32) held its exact prior count, confirmed by diffing this run's per-class breakdown against a `git stash`-isolated run of the pre-change code on the same tree. render-assertions.mjs is unaffected by construction: it still imports SCENARIOS (the original 21-entry export, unchanged), never SCENARIOS_WITH_STATES, so its BAGS lookup and coverage ratchet never see the three new toolbar `renderer` values. No styles.css or src/views change accompanies this raise. Note: touch-targets.mjs's printed/JSON `scenario` tag for the seven new entries that reuse an existing renderer/bag pair (board, timeline, list, calendar x2, chart x2) prints via the shared scenarioLabel() helper, which collides with the pre-existing plain scenario's own label (e.g. both read `calendar/file-view`) since scenarioLabel() keys only on renderer/bag/scale; this file's own perClass attribution above was computed directly against each ScenarioSpec instead, so it is unaffected. unstyled-links.mjs does not share this limitation — it tags constructed rows with `scenario.name`, which is unique per entry."
   },
   "lastTriage": {
     "recorded": "2026-09-04",

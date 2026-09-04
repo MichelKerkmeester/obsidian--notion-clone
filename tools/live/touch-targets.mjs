@@ -62,7 +62,7 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
-import { buildRenderAssertionBundle, SCENARIOS as RENDERER_SCENARIOS } from "./render-assertion-bundle.mjs";
+import { buildRenderAssertionBundle, SCENARIOS_WITH_STATES as RENDERER_SCENARIOS } from "./render-assertion-bundle.mjs";
 import { scenarioLabel } from "./render-scenario-utils.mjs";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
 import { asPageScript } from "./page-module-script.mjs";
