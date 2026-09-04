@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
     last_updated_at: "2026-09-04T09:55:00Z"
     last_updated_by: "board-1to1-fidelity-pass-2"
-    recent_action: "T20-T21 fidelity pass closed: priority's non-urgent tiers, completion-suppressed due urgency, fixture/stylesheet class-for-class rewrite, host-container scoping, and the board's 16px inset; 28 captures recaptured, read and released through the CSS lane; gate 25/25"
-    next_safe_action: "T12's visual-language/density/column-width comparison and T8 (operator device confirmation) remain the only rows before COMPLETION"
+    recent_action: "T20-T21 closed: priority non-urgent tiers, due-completion suppression, fixture/CSS fidelity"
+    next_safe_action: "T12 visual-language comparison next, then T8 operator confirmation"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
