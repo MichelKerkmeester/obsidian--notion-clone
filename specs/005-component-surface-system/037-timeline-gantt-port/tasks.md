@@ -713,6 +713,146 @@ contextType: "general"
 
 ---
 
+<!-- ANCHOR:phase-7 -->
+## Phase 7: AC-007 Fresh-Reviewer Closing Leg (2026-09-04, in-runtime, bounded closing scope)
+
+This leg ran in-runtime (no external `cli-devin`/`cli-codex` dispatch) against a fresh AC-007
+reviewer's read of `a78000c`: geometry, DOM, class vocabulary and the CSS copy were confirmed
+faithful and every earlier divergence closed; the reviewer left eight code items (P1-A, P1-B,
+P2-A/B/C/D/E/H) and three fixture items, each fixed red-first per the reviewer's own instruction.
+
+- [x] T039 [P1-A] `timelineLocalExtensions`/`timelineWeekLabel` round-trip through `ViewConfig`
+      persistence: neither key was in `data-source.ts`'s explicit parse/serialize key lists, so
+      both settings were dropped on save and undefined on load
+      (`src/data/data-source.ts`, `src/data/data-source.test.ts`, `src/views/embedded-database-renderer.ts`)
+      — red first: `data-source.test.ts` "round-trips timelineLocalExtensions and timelineWeekLabel
+      through toViewPayload/parseViewConfig" — `AssertionError: expected undefined to be true`
+      (`data-source.test.ts:135`, `view.timelineLocalExtensions` came back `undefined` after a
+      `parseDatabaseConfig` round trip). Closed: both keys added beside `timelineScale`/
+      `timelineColumnSizeMode`/`timelineCustomUnitWidth` in `parseViewConfig`
+      (`data-source.ts:1095-1096`) and `toViewPayload` (`data-source.ts:1318-1319`); the same
+      omission existed in the embedded codeblock config path's explicit field copy and was closed
+      there too (`embedded-database-renderer.ts:3832-3833`). Green after: `data-source.test.ts` 5/5.
+- [x] T040 [P1-B] The toolbar's "Slot duration" select rendered at day scale unconditionally; its
+      only consumer, `getTimelineSlotDuration`, is read only inside `renderTimelineLocal` — the
+      row offered a setting the default (reference) render never consults
+      (`src/views/calendar-timeline-toolbar-renderer.ts`, new `calendar-timeline-toolbar-renderer.test.ts`)
+      — red first: "hides the Slot duration row at day scale when local extensions are off" —
+      `AssertionError: expected [ 'Local extensions', … ] to not include 'Time slot duration'`
+      (`calendar-timeline-toolbar-renderer.test.ts:108`). Closed: the row's gate now reads
+      `config.timelineLocalExtensions === true && config.timelineScale === "day"`
+      (`calendar-timeline-toolbar-renderer.ts:242`). Green after: both new gating tests pass
+      (`calendar-timeline-toolbar-renderer.test.ts:99-121`).
+- [x] T041 [P2-A] Label-row child order: the reference (`TaskLabelRenderer.ts:101-128`) emits the
+      elsewhere chip before the progress span; the port emitted progress first
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: "orders the depends-elsewhere chip before the progress span, matching
+      TaskLabelRenderer.ts's child order" — `AssertionError: expected 4 to be less than 3`
+      (`calendar-timeline-gantt.test.ts:1141`, the chip landed after the progress span in Alpha's
+      label row). Closed: the elsewhere-chip block moved above the progress-span block
+      (`calendar-timeline-renderer.ts:950-976`). Green after: `calendar-timeline-gantt.test.ts` 22/22.
+- [x] T042 [P2-B] The popover's "Layout" section heading was created by `createSection` then wiped
+      by `renderLayoutContent`'s own `layout.empty()` on the very next line — pre-existing
+      (`src/views/calendar-timeline-toolbar-renderer.ts`, `calendar-timeline-toolbar-renderer.test.ts`)
+      — red first: "keeps the Layout heading after renderLayoutContent's own empty()/rebuild" —
+      `AssertionError: expected [ 'Data', 'Start date', … ] to include 'Layout'`
+      (`calendar-timeline-toolbar-renderer.test.ts:134`). Closed: a nested
+      `db-chart-options-section-content` div now scopes the empty()/rebuild below the heading
+      `createSection` adds, instead of onto the section that carries it
+      (`calendar-timeline-toolbar-renderer.ts:160-164`). Green after: 3/3.
+- [x] T043 [P2-C] `is-active`/`is-linking` were written onto the pm-gantt tree on every link click,
+      with no matching rule there (`.is-linking` and `.db-timeline-link-dot.is-active` are both
+      scoped to `.db-timeline`, and the reference's own `GanttLinkHandler.ts` toggles only
+      `pm-gantt-link-dot--active` on the dot, never a root "linking" class)
+      (`src/views/calendar-timeline-renderer.ts`, `calendar-timeline-gantt.test.ts`)
+      — red first: "writes only the reference's own dot-highlight class on the pm-gantt tree, not
+      the local-extension is-active/is-linking pair, matching GanttLinkHandler.ts" —
+      `AssertionError: expected 'pm-gantt-link-dot is-active pm-gantt…' not to contain 'is-active'`
+      (`calendar-timeline-gantt.test.ts:862`). Closed: both classes now gate on
+      `this.timelineRoot?.hasClass("db-timeline")` (`calendar-timeline-renderer.ts:2140`), so the
+      default tree keeps only its own `pm-gantt-link-dot--active` highlight. An existing test that
+      had locked in the wart (asserting `is-active` present on the pm-gantt dot) was corrected in
+      the same pass. Green after: `calendar-timeline-gantt.test.ts` 23/23.
+- [x] T044 [P2-D] The coarse-pointer hit-area rule (`styles.css` ~18090-18108) was a local addition
+      (not part of the verbatim `gantt.css` copy) left unscoped, so it would also match a real
+      obsidian-pm plugin's identical classes if installed alongside this one (`styles.css`) — CSS
+      lane: acquired (`tools/lane/css-lane.json` acquire entry, `baselineHash` `28b394491fdb`),
+      edited, recaptured, read, released (`baselineHash` `e357f63d13ac`, `reviewed` naming all 26
+      changed captures). Doc-only framing does not apply here: every selector in the block now
+      carries the `.note-database-container` scope the entry rule (`styles.css:17628`) already
+      gives `.pm-gantt-view` (`styles.css:18090-18108`). `check-lane.mjs` exit 0, "release names
+      all 21 changed capture(s)" (5 of the 26 named moved bytes but not pixelHash/layoutHash, not
+      owed by the release).
+- [x] T045 [P2-E] A failed date-drag save left the bar sitting at the dragged position; the
+      reference (`GanttDragHandler.ts:129-136`) calls `restore()` in the same `catch`
+      (`src/views/calendar-timeline-renderer.ts`, `calendar-timeline-gantt.test.ts`)
+      — red first: "restores the bar to its pre-drag position when the date save is rejected,
+      matching GanttDragHandler.ts's restore()" — `AssertionError: expected '1647' to be '1656'`
+      (`calendar-timeline-gantt.test.ts:987`, the bar's `x` stayed at the dragged value after a
+      rejected `updateEventDates`). Closed: the rejection handler now calls `restore()` before the
+      failure notice (`calendar-timeline-renderer.ts:1621-1624`). Green after:
+      `calendar-timeline-gantt.test.ts` 24/24.
+- [x] T046 [P2-H] `createSubtaskRecord`'s parent-linking write had no error handling: a throw left
+      the just-created child file on disk, pre-linked via its own `parentId`, but never listed in
+      the parent's `subtaskIds`, with `createBlankEntry`'s own `"created"` history entry stranded
+      pointing at it (`src/views/database-view.ts`, `database-view.test.ts`)
+      — red first: "createSubtaskRecord rolls back the created child and reports the failure when
+      the parent link write throws, instead of orphaning it" — the child-creation promise itself
+      rejected back to the caller (`promise rejected "Error: disk full" instead of resolving`,
+      `database-view.test.ts:381`), with no revert and no report. Closed: the parent write is now
+      wrapped in `try`/`catch` (`database-view.ts:10936` region); on throw it drops the stray
+      `"created"` history entry, trashes the child file via `dataSource.trashNote`, and reports
+      `errors.createFailed`. Green after: `database-view.test.ts` 7/7.
+- [x] T047 Fixture fidelity (`tools/screenshots/scenarios/temporal.mjs`,
+      `tools/screenshots/scenarios/temporal-tick-parity.test.mjs`): three divergences from
+      production, each fixed red-first.
+      *(a) Label column width:* the fixture hardcoded `width: 280px` on every device; production
+      starts the label column at 160px on phone (`GANTT_LABEL_PHONE_WIDTH`,
+      `calendar-timeline-renderer.ts:68-71`). Red: "uses the 160px phone width on the mobile
+      fixture" — `AssertionError: expected '<div class="note-database-container">…' to contain
+      'class="pm-gantt-left" style="width: 1…'` (`temporal-tick-parity.test.mjs:531`). Closed:
+      `timelineDynamicFixture` now carries `isMobile`, and `renderBody` picks `TL_LABEL_WIDTH_PHONE`
+      (160) or `TL_LABEL_WIDTH` (280) from it (`temporal.mjs:1193-1198, 1229-1231, 1305-1306`).
+      *(b) Month-band label/parity:* every month band was labelled with the visible window's own
+      start month and coloured by array index, instead of each band's own month and its own month
+      parity (`renderGanttMonthBands`, `calendar-timeline-renderer.ts:1192-1210`). Red: "labels a
+      month band with its own month/year and matches month parity…" —
+      `AssertionError: expected '<g class="pm-gantt-header">…' to contain '>Apr 26<'`
+      (`temporal-tick-parity.test.mjs:511`, the week fixture's April band still read "Mar 26" with
+      the array-index `pm-gantt-band-even` class instead of April's own odd parity). Closed: each
+      mapped band now derives its own `bandDate` from `fixture.start + band.offset` for both the
+      label and the class (`temporal.mjs:1050-1074`). *(c) Slot duration at Week scale:* the
+      `timeline-toolbar-options` hand fixture showed a "Slot duration" row while its own Data
+      section read "Timeline scale: Week" — production only shows that row at day scale (T040).
+      Red: "hides the day-scale slot-duration row at the fixture's Week scale…" —
+      `AssertionError: expected '…' not to contain 'Slot duration'` (`temporal-tick-parity.test.mjs:142`).
+      Closed: the row dropped from the fixture's Layout section (`temporal.mjs:1596-1600`); the
+      Layout heading itself needed no fixture change (T042 was a real-renderer-only bug — the hand
+      fixture's own `section()` helper never wiped it). Green after:
+      `temporal-tick-parity.test.mjs` 120/120.
+      **Verification (all three legs, this session):** `npx tsc --noEmit` exit 0; `npx vitest run`
+      101 files / 1037 tests, 0 failed; `npm run lint` 172 problems (= `172` baseline, no new
+      finding in any file this leg touched); `npm run lint:tools` 0 problems; `node
+      tools/naming/scan-comments.mjs` PASS (398 files, 0 missing banners/sections, 0
+      commented-out lines); `npm run screenshots` 528 entries (run twice — the first restore
+      batch mistakenly included five genuinely-changed timeline captures, corrected by a second
+      full recapture and a narrower restore); pixelHash-compared every moved capture against HEAD
+      and visually read six representative pairs (`timeline-view-day-mobile-{dark}`,
+      `timeline-view-desktop-dark`, `timeline-view-month-mobile-dark`,
+      `timeline-subtask-tree-mobile-dark`, `timeline-toolbar-options-mobile-dark`,
+      `constructed-timeline-toolbar-options-desktop-dark`) beside their `HEAD` copies before
+      trusting the rest to the same deterministic code path; 7 genuinely unrelated re-encode/
+      drift captures (`constructed-owned-menu-mobile-dark`, `constructed-icon-picker-desktop-
+      {dark,light}`, `constructed-record-detail-desktop-dark`,
+      `constructed-sort-panel-calendar-mobile-light`, `board-subtask-tree-mobile-light`,
+      `board-view-desktop-light`) restored to `HEAD` bytes. `npm run gate`: first run 24 green/1
+      red (`evidence`: 8 of 16 `tools/live/*.json` artefacts stale against the new `styles.css`
+      hash from T044's CSS-lane edit); each stale artefact re-run through its own generating tool
+      per `evidence.mjs`'s own instruction; second run 25/25 green. Committed `9e4d4b04`.
+<!-- /ANCHOR:phase-7 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 

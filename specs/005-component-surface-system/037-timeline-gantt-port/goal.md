@@ -10,14 +10,15 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T07:35:00Z"
-    last_updated_by: "gantt-1to1-amendment"
-    recent_action: "Superseded rewrite-only disposition; added the 1:1 copy criterion"
-    next_safe_action: "Dispatch devin leg: port GanttView 1:1"
+    last_updated_at: "2026-09-04T16:35:00Z"
+    last_updated_by: "gantt-ac007-wording-amendment"
+    recent_action: "Closed AC-007 reviewer's 8 code + 3 fixture defects (T039-T047)"
+    next_safe_action: "Await a fresh AC-007 reviewer read"
     blockers:
       - "Not operator-confirmed: the gantt has not been checked on iOS"
       - "Seven product/harness defects from verification round nine remain open (see Completion Criteria)"
       - "2026-09-04: operator judged the landed legs not a close-enough copy; REQ-007's 1:1 leg pair has not started"
+      - "2026-09-04: the operator vault-comparison row (Completion Criteria, added this amendment) can only be closed by the operator; nothing in this repository can close it"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -26,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "037-timeline-gantt-port"
       parent_session_id: null
-    completion_pct: 56
+    completion_pct: 53
     open_questions:
       - "Whether the dependency-link seam persists as note frontmatter or a derived/computed field"
     answered_questions:
@@ -212,6 +213,16 @@ Frozen choices. Changing one is an amendment.
       trigger button with sibling link buttons — a local composition rewritten from the reference's
       behavior contract, not its DOM/class copy. Red to record: a DOM-structure parity test,
       written and observed failing before the leg pair starts.
+- [ ] **The operator compares the rewritten timeline against obsidian-pm's gantt side by side in
+      the vault where both plugins are installed.** Only the operator closes this row; nothing in
+      this tree can close it. Added 2026-09-04 (amendment, orchestrator decision, reversible
+      default): `acceptance-criteria.md` AC-007's Verification cell originally read "fresh
+      reviewer's side-by-side screenshot read", assuming the vendored reference ships its own
+      screenshot files — it carries none, so that half of AC-007 cannot be met from this repo
+      alone, the same problem `038-board-kanban-port`'s T12 named the same day. This row is the
+      operator half AC-007 cannot close from an in-repo session; the in-repo half (captures vs.
+      the reference SOURCE, pixel-measured) stays a checkable item under `tasks.md`'s AC-007
+      closing pass. Also recorded as row 38 in the parent `../roadmap.md` §4 operator table.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -231,6 +242,7 @@ Frozen choices. Changing one is an amendment.
 | Leg b: title/axis, milestone-label, tick-clip and day-scale-phone fixes for four of the open rows above | Fixed, capture pending | Red-first: `calendar-timeline-model.test.ts`, `calendar-title-formatter.test.ts`, `calendar-timeline-tick-label.test.ts` (10 failed / 30 passed, exact assertions recorded on the rows above); green after (40/40); full gate tsc=0, vitest=89 files/881 tests, lint=169 (= baseline), scan-comments=0. Recaptured and read all changed timeline PNGs; see the fixture-independence row below for why none of the four show as visually fixed yet. |
 | Leg c: the `.is-label-above` stylesheet rules, and the screenshot fixture rebuilt to call the changed model code | Three of four photographed | `styles.css` under an acquired-and-released `css-lane` hold (`32148b7b7646` -> `4f74f3bd0b1c`, release names all 27 changed captures); `temporal.mjs` now takes its title, first-tick anchor, day column width and milestone placement from the viewport window instead of frozen constants, and `temporal-tick-parity.test.mjs` binds each mirror to the real export. Two independent mutations observed red and restored byte-identically: forcing the placement mirror to `"inline"` (5 failed) and mutating the title mirror's same-month branch (1 failed). Gate: tsc=0, vitest=89 files/913 tests (908 + main's 5 board additions), lint=169 (= baseline), scan-comments=0, touch-targets under=264 vs the 279 baseline, `npm run gate` 25 green twice. Title, tick-clip and milestone rows are capture-confirmed; the day row's centring half is not — see the two fixture-fidelity rows below. |
 | Leg d: closed both day-branch fixture-fidelity gaps below — centred window, `HH` tick label | Four of four photographed | `temporal.mjs`'s `timelineViewportWindow` takes `now` and centres the day branch through the same clamp `resolveTimelineDayCentredStartMinutes` uses; `timelineTicksFor`'s day branch drops the `":00"` suffix. `temporal-tick-parity.test.mjs` gained window- and tick-label-parity assertions per device width, red-first (4 of 118 failed: `startMinutes` 0 vs 60/402px-mobile 480, labels `"HH:00"` vs `"HH"`), green after (118/118). No `styles.css` edit; `css-lane.json` release names all 16 recaptured PNGs (4 real, 12 verified encoder noise). Gate: tsc=0, vitest=93 files/929 tests, lint:tools=0, scan-comments=0, `npm run gate` 25 green. |
+| AC-007 fresh-reviewer closing leg (`tasks.md` T039-T047): persistence, slot-duration gate, label-row order, Layout heading, is-active/is-linking scoping, coarse-pointer CSS scoping, drag-restore, subtask-creation rollback, three fixture fidelity gaps | Eight code defects + three fixture defects fixed, all photographed | Every item red-first (exact failing assertions on the T039-T047 rows). Gate: tsc=0, vitest=101 files/1037 tests, lint=172 (= baseline), lint:tools=0, scan-comments=0. `css-lane.json` release names all 26 changed captures (T044); `npm run gate` 25 green (first run: 24 green/1 red — `evidence`, 8 stale artefacts re-run through their own generating tools). Committed `9e4d4b04`. AC-007's own Verification cell amended into in-repo/operator halves (see `acceptance-criteria.md`); AC-007 itself stays `Unmet`, left for a fresh reviewer's final read. |
 
 ### Deviations and findings
 

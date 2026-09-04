@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-04: **44 phases**, **6 with nothing left**, **81 rows** waiting on a device.
+Derived 2026-09-04: **44 phases**, **6 with nothing left**, **82 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -155,7 +155,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The loop reached 20 iterations, or converged earlier with the convergence reason recorded in `research/lineages/<lineage>/convergence-report.md`.
 - [ ] An in-runtime spot-check of 10 randomly selected citations from the module map finds all 10 true against the file on disk — line exists, and its content matches what the map claims about it.
 
-## 037-timeline-gantt-port — 10/18
+## 037-timeline-gantt-port — 10/19
 
 - [ ] Zero-width mount fallback: `getTimelineViewportUnitCount` returns `undefined` when the measured content width is 0 (hidden or collapsed container at mount); `buildTimelineModel` then falls back to the calendar-boundary window with no centring, recovering only on the next resize.
 - [ ] Invalid interactive nesting: `span[role=button][tabindex=0]` inside `button.db-timeline-event` (renderer ~:623) — flagged for `041-shared-ui-ux-port`.
@@ -165,6 +165,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Harness note: the capture frame (`#shot`) carries 16px padding, so the captured container is 1408/370 wide, not 1440/402; the fixture's device-width comment is wrong by 16px a side and the right edge overflows by up to 8 columns at year desktop. Low priority; today-centred content stays in frame.
 - [ ] `.db-timeline-event.is-all-day` remains duplicated at two `styles.css` blocks — pre-existing, not introduced by this port.
 - [ ] The timeline view renders as a one-to-one copy of obsidian-pm's gantt — same DOM structure and class vocabulary as `GanttView.ts`/`GanttHeaderRenderer.ts`/`GanttTaskBarRenderer.ts`/ `TimelineConfig.ts` mapped to `RowData`, the same visual language copied verbatim from `gantt.css` where its rules apply (MIT notice on the copied block), the same header/scale language, bars, milestones, progress, dependency arrows, drag and resize behaviour, and the same defaults for row height and unit widths — proven by a DOM-structure parity test and a fresh reviewer's side-by-side screenshot read against the reference or the operator's vault comparison (REQ-007, added 2026-09-04). Not started. Today's observed baseline (2026-09-04, this session's read of `calendar-timeline-renderer.ts`/ `calendar-timeline-model.ts`): `db-timeline-*` classes (not the reference's vocabulary), five scales (day/week/month/quarter/year) at 60/100/80/15/4px unit-width defaults (`getTimelineColumnWidthSpec`, `calendar-timeline-model.ts:183-201` — confirmed against this directive's own dispatch numbers), a viewport-centred window (`resolveTimelineDayCentredStartMinutes` and `getTimelineViewportWindow`), and a scale trigger button with sibling link buttons — a local composition rewritten from the reference's behavior contract, not its DOM/class copy. Red to record: a DOM-structure parity test, written and observed failing before the leg pair starts.
+- [ ] The operator compares the rewritten timeline against obsidian-pm's gantt side by side in the vault where both plugins are installed. Only the operator closes this row; nothing in this tree can close it. Added 2026-09-04 (amendment, orchestrator decision, reversible default): `acceptance-criteria.md` AC-007's Verification cell originally read "fresh reviewer's side-by-side screenshot read", assuming the vendored reference ships its own screenshot files — it carries none, so that half of AC-007 cannot be met from this repo alone, the same problem `038-board-kanban-port`'s T12 named the same day. This row is the operator half AC-007 cannot close from an in-repo session; the in-repo half (captures vs.
 
 ## 038-board-kanban-port — 3/10
 
