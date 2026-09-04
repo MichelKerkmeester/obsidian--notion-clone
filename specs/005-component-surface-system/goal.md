@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T10:40:00Z"
-    last_updated_by: "done-audit-6"
-    recent_action: "Row 6 re-audited: 043 landed, dep declared-bounded, stays open"
-    next_safe_action: "Operator confirms 29–36 and five surfaces on iOS; rule on 043 AC-002"
+    last_updated_at: "2026-09-04T05:40:00Z"
+    last_updated_by: "done-audit-7"
+    recent_action: "Row 6 re-audited: T004-T006 narrows dep to table/chart/13 fixtures"
+    next_safe_action: "Operator confirms 29–36 and five surfaces on iOS; rules on 043 AC-002"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -23,7 +23,7 @@ _memory:
       - "036's port research runs in .worktrees/003-obsidian-pm-harvest"
       - "reports 34-36 fixed in 85ff504 (owner 031); release 1.4.3 pending; device confirmation owed"
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; 11 open defects recorded, not operator-confirmed"
-      - "043 landed 2ab4942; row 6 stays open, narrowed to the fixture-backed typed-state/icon dependency behind css-lane, screenshots-fresh and device-parity; AC-002 needs an operator ruling"
+      - "043 landed 2ab4942, typed data/icons landed 0af4ca6+bf67475; row 6 stays open, narrowed to table's untyped cells, chart's absent per-row typing and 13 fixture-only scenarios; AC-002 needs an operator ruling"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -349,6 +349,39 @@ resolve them silently.
       when an Obsidian stub renders real icons, or the constructed mount gains a typed bench-data
       option (`043/tasks.md` T004-T006, still pending). Observed today: 312 manifest entries, 36
       constructed, 7 of 11 declared pairs, 13 named fixture-only.
+      **Re-verified 2026-09-04T05:40:00Z (done-audit-7), narrowed a second time, stays open.**
+      `0af4ca6`/`bf67475` (main, equal to origin) landed `043`'s T004-T006 after `done-audit-6`
+      audited the tree. Verified directly today, not carried over: `node tools/live/typed-data-
+      assertions.mjs`, `$?` read directly: `0` — 3 of 3 typed markers with `captureData: true`, 0
+      of 3 with it unset, on the same scenario. `REAL_ICONS` in `tools/storybook/obsidian-stub.mjs`
+      carries 21 keys, counted directly. `grep -c fixtureOf tools/screenshots/scenarios/*.mjs`
+      reads 7. For those 7 declared pairs the gap `done-audit-6` stayed open on is closed: both
+      sides now show a real select pill, checkbox, currency figure and icon, so the remaining
+      difference is curated content, not typed-vs-untyped rendering — read as a declared complement
+      per D4 (the default bench data now actually reproduces the same state a device would show),
+      not a device-value dependency. The stubbed action bags stay present but are confirmed inert
+      rather than assumed so: `render-assertions.mjs` only reads `Object.keys(actions).sort()` for
+      a bag-shape comparison and never invokes a member, and `touch-targets.mjs`/`unstyled-
+      links.mjs` reference no action bag at all (`grep` empty) — no capture's `pixelHash`,
+      `layoutHash` or measured geometry can differ because a bag member is a no-op, so this class
+      is a named, declared residual in `042`'s provability record rather than a live dependency.
+      Two gaps do not close, read directly rather than trusted from `043`'s own claim: (1) table's
+      column builder (`render-assertion-harness.ts:1406`, `makeTableColumns(TABLE_COLUMNS)`) takes
+      no `captureData` argument at all, unlike every other renderer branch, so `constructed-table`
+      renders every cell through the plain-text stub regardless of the option — table's fixture
+      (`fixtureOf: "constructed-table"`) stays the only place any check has shown a typed table
+      cell. (2) chart's builder (`:1336`, `makeBoardColumns(CHART_COLUMNS, "text")`) hardcodes
+      `"text"` unconditionally and aggregates rows into bars, so it has no per-row field to type at
+      all, and chart never had a fixture either — a net-new scenario with no typed evidence
+      anywhere. The 13 named fixture-only scenarios stand unchanged and their entries still count
+      toward the same five gate lanes' (`css-lane`, `screenshots-fresh`, `device-parity`,
+      `touch-targets`, `unstyled-links`) green with hand-authored markup, per this row's own
+      "declared-and-bounded dependency is still a dependency" precedent (`done-audit-4`,
+      `done-audit-6`). **Stays open**, narrowed a second time: from the 7-declared-pair
+      typed-state/icon gap `done-audit-6` stayed open on, down to table's permanently untyped
+      cells, chart's absent per-row typing, and the 13 fixture-only scenarios. Observed today: 312
+      manifest entries, 36 constructed, 28 `fixtureOf` entries (7 pairs), 21 real icon names, 3 of 3
+      typed markers, 0 of 312 entries moved on `043`'s own two detached runs.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1088,4 +1121,28 @@ on 1.4.10. `spec.md`'s two Phase Documentation Map rows for `043` updated to mat
 own note requires the row be carried the same in both. `handover.md` refreshed for the same state,
 including the in-flight list-view phone-fold diagnosis lane this pass found already running in a
 separate worktree, unrelated to `043`.
+
+### Done-audit-7, 2026-09-04T05:40:00Z: row 6 re-audited after T004-T006, narrowed to table, chart and 13 fixtures
+
+A fresh audit re-read row 6 against `bf67475` (main, equal to origin), the T004-T006 typed-data-and-
+icons landing (`0af4ca6`, reconciled onto the list mount fix in `bf67475`) that `done-audit-6`
+predates. Verified directly rather than trusted from the child's own claim: `node tools/live/typed-
+data-assertions.mjs` exits 0, 3 of 3 typed markers with `captureData: true`, 0 of 3 without, on the
+same scenario; `REAL_ICONS` in `obsidian-stub.mjs` carries 21 keys; `grep -c fixtureOf tools/
+screenshots/scenarios/*.mjs` reads 7. For the 7 declared pairs, the fixture-versus-constructed gap
+that justified `done-audit-6`'s "stays open" is closed: both sides now show real typed cells and
+real icons, so the remaining difference is curated content, a declared complement rather than a
+device-value dependency. The stubbed action bags stay present but are confirmed inert:
+`render-assertions.mjs` only compares bag key names, never invokes a member, and `touch-
+targets.mjs`/`unstyled-links.mjs` reference no action bag at all, so no capture's green can depend
+on their no-op behaviour. Two gaps do not close, read directly in `render-assertion-harness.ts`:
+table's column builder (`:1406`) takes no `captureData` argument, so `constructed-table` renders
+every cell through the plain-text stub regardless of the option, and table's fixture stays the sole
+typed evidence; chart's builder (`:1336`) hardcodes `"text"` and has no per-row field at all, and
+never had a fixture either. The 13 named fixture-only scenarios are unchanged and still back the
+same five gate lanes' green with hand-authored markup. **Row 6 stays open**, narrowed a second time
+to: table's permanently untyped cells, chart's absent per-row typing, and the 13 fixture-only
+scenarios. `completion_pct` stays **4 of 7 = 57**: rows 3, 4, 5 and 7 hold, rows 1 and 2 stay open
+on operator device confirmation, row 6 stays open on the narrower list above. `roadmap.md` §5's
+`043` bullet, `spec.md`'s two Phase Documentation Map rows and `handover.md` updated to match.
 <!-- /ANCHOR:log -->

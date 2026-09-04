@@ -140,7 +140,7 @@
       "tools/live/unstyled-links.mjs",
       "tools/screenshots/capture.mjs",
       "tools/screenshots/theme.css",
-      "tools/gate.mjs"
+      "tools/storybook/obsidian-stub.mjs"
     ],
     "entities": [
       {
@@ -252,9 +252,9 @@
         "source": "derived"
       },
       {
-        "name": "gate.mjs",
+        "name": "obsidian-stub.mjs",
         "kind": "file",
-        "path": "tools/gate.mjs",
+        "path": "tools/storybook/obsidian-stub.mjs",
         "source": "derived"
       },
       {
@@ -290,7 +290,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-04T02:04:39.672Z",
+    "last_save_at": "2026-09-04T03:32:35.489Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -298,11 +298,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:aac1cdd0b0b2d6ef6057831effabf12297fd43b19127f36e50b01de4824321b5",
+    "source_fingerprint": "sha256:f6452f1e724b894f38a6cde9a98a6f8f65996c7b59e704401a90e30938dab4a8",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7ed73001d0a8ab7926362c3a477eed7c97eb8fd491b4b746c46cda6f5788faa3",
-      "handover.md": "b17a893a433b6d0dc8e27d52c4bddbe58be0e694da344bd26007db8c11ccc331"
+      "spec.md": "fdef13ff17708ae9b24cf14fcef74d177d3675e3cd667721953155c5664f5e60",
+      "handover.md": "5a8fbcfba7d311572316917c4610dea27b522a83e275ca4bcaa149c5ebd25b84"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"
