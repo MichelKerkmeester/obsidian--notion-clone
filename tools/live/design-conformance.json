@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T20:20:20.687Z",
+  "measuredAt": "2026-09-04T20:51:22.725Z",
   "inputs": {
-    "styles.css": "cdc0217ad1d7",
+    "styles.css": "46c11786dc49",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "e33b0768ec48"
   },
@@ -9,7 +9,7 @@
     {
       "name": "contract scan — surfaces created without a declared role",
       "enforced": false,
-      "value": 193,
+      "value": 194,
       "target": 0,
       "note": "counted, not gated: gating today would fail on known debt",
       "gated": false,
@@ -286,10 +286,11 @@
     "src/views/toolbar-renderer.ts:2426  .db-menu-item",
     "src/views/toolbar-renderer.ts:2435  .db-menu-item",
     "src/views/toolbar-renderer.ts:2446  .db-menu-item",
-    "src/views/view-config-panel-renderer.ts:304  .db-view-config-panel",
-    "src/views/view-config-panel-renderer.ts:309  .db-panel-header",
-    "src/views/view-config-panel-renderer.ts:310  .db-panel-title",
-    "src/views/view-config-panel-renderer.ts:324  .db-panel-button",
-    "src/views/view-config-panel-renderer.ts:1414  .db-dropdown-field"
+    "src/views/view-config-panel-renderer.ts:329  .db-panel-header-actions",
+    "src/views/view-config-panel-renderer.ts:359  .db-view-config-panel",
+    "src/views/view-config-panel-renderer.ts:365  .db-panel-header",
+    "src/views/view-config-panel-renderer.ts:366  .db-panel-title",
+    "src/views/view-config-panel-renderer.ts:394  .db-panel-button",
+    "src/views/view-config-panel-renderer.ts:1484  .db-dropdown-field"
   ]
 }
