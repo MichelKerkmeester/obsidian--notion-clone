@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@cdc0217ad1d7"
+    "stylesheet": "styles.css@46c11786dc49"
   },
   "scenarios": [
     {
@@ -10706,10 +10706,10 @@
         "tools/storybook/obsidian-dom-shim.mjs",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "0eb860cc5641",
-      "pixelHash": "7e25dfc8c759",
+      "layoutHash": "db1e9eac0c6e",
+      "pixelHash": "81c2c741a0f9",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -10717,7 +10717,7 @@
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10725,7 +10725,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 175959,
+      "bytes": 178165,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -10748,10 +10748,10 @@
         "tools/storybook/obsidian-dom-shim.mjs",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "0eb860cc5641",
-      "pixelHash": "b2fb8b8e608f",
+      "layoutHash": "db1e9eac0c6e",
+      "pixelHash": "27d86386d0fe",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -10759,7 +10759,7 @@
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10767,7 +10767,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 185502,
+      "bytes": 187753,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -10791,9 +10791,9 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "10f9330d584b",
-      "pixelHash": "107b48937b99",
+      "pixelHash": "a1d9fa661863",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -10801,7 +10801,7 @@
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10809,7 +10809,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 142779,
+      "bytes": 95067,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -10833,9 +10833,9 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "10f9330d584b",
-      "pixelHash": "004c0762d36b",
+      "pixelHash": "145cdbe777ee",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
         "tools/live/render-assertion-harness.ts": "1eeea7d5cbb5",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -10843,7 +10843,7 @@
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -10851,7 +10851,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 147724,
+      "bytes": 97914,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -11902,12 +11902,12 @@
         "src/views/view-config-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "d6f52d619672",
-      "pixelHash": "d291b108dfcb",
+      "layoutHash": "1a38061d0c6a",
+      "pixelHash": "9d65f45a4c3a",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11915,7 +11915,7 @@
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 88918,
+      "bytes": 88724,
       "fixtureOf": "constructed-view-config"
     },
     {
@@ -11929,12 +11929,12 @@
         "src/views/view-config-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "d6f52d619672",
-      "pixelHash": "9b60ee603659",
+      "layoutHash": "1a38061d0c6a",
+      "pixelHash": "cedaf0decc35",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11942,7 +11942,7 @@
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 89699,
+      "bytes": 89510,
       "fixtureOf": "constructed-view-config"
     },
     {
@@ -11956,12 +11956,12 @@
         "src/views/view-config-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "9cc3b3afdac6",
-      "pixelHash": "e744556b6d42",
+      "layoutHash": "d5a1c40d4ef6",
+      "pixelHash": "722b09f9249f",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11969,7 +11969,7 @@
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 85906,
+      "bytes": 85714,
       "fixtureOf": "constructed-view-config"
     },
     {
@@ -11983,12 +11983,12 @@
         "src/views/view-config-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "9cc3b3afdac6",
-      "pixelHash": "9a80dd110574",
+      "layoutHash": "d5a1c40d4ef6",
+      "pixelHash": "ce073ad77796",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "a9ace56d9621",
+        "src/views/view-config-panel-renderer.ts": "7a20aa4b7384",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "cdc0217ad1d7",
+        "styles.css": "e05aa075e0a1",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -11996,7 +11996,7 @@
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 87264,
+      "bytes": 87044,
       "fixtureOf": "constructed-view-config"
     },
     {

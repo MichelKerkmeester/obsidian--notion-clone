@@ -27,8 +27,9 @@ import { getSourceRuleTree, isSourceRuleExpression, isSourceRuleGroup, isSourceR
 import { getVaultProperties, VaultProperty } from "../data/vault-properties";
 import { createConditionalFormatLeaf, getConditionalFormatCondition, isConditionalFormatOperator } from "../data/conditional-format-editor";
 import { t } from "../i18n";
-import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
+import { COMPACT_MENU_POPOVER, isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { carrySheetEntrance } from "./mobile-bottom-sheet";
+import { overlayStack } from "./overlay-stack";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
 import { createCheckbox } from "./checkbox";
@@ -286,6 +287,57 @@ export class ViewConfigPanelRenderer {
     return this.panelEl?.isConnected ? this.panelEl : null;
   }
 
+  /**
+   * Whichever element currently scrolls this panel's content.
+   *
+   * The answer differs by presentation and cannot be assumed: the anchored panel scrolls itself,
+   * and the sheet hands that job to the body region so the grab bar and the header stay put. Asked
+   * of the DOM rather than tracked in a flag, because a rebuild replaces both nodes.
+   */
+  private getScrollHost(): HTMLElement | null {
+    const panel = this.panelEl;
+    if (!panel) return null;
+    const body = panel.querySelector<HTMLElement>(".db-view-config-body");
+    return body && body.scrollHeight > body.clientHeight ? body : panel;
+  }
+
+  /** Put the scroll position back on whichever element took over the scrolling. */
+  private restoreScroll(savedScroll: number): void {
+    if (!savedScroll) return;
+    const host = this.getScrollHost();
+    if (host) host.scrollTop = savedScroll;
+  }
+
+  /**
+   * The sheet's own way out, beside its title.
+   *
+   * A phone sheet closes by a drag from a band at its very top, and that is the whole of it on this
+   * surface today. It is the wrong sole affordance for a form this long: the band is the only
+   * dismissal, it is 48px of a 760px sheet, and the operator reported the sheet as one they could
+   * not close. A button in the header is the answer every other sheet grammar already reaches for.
+   *
+   * Dismissal is not reinvented here. It is handed to the overlay stack, which is the same close
+   * the backdrop, Escape and the drag gesture all run through, so a surface with an owner is closed
+   * by that owner rather than by this button deciding what closing means. A surface that registered
+   * nothing has no owner to ask, and removing the panel is then the honest answer — the sheet
+   * module takes the backdrop down with it.
+   *
+   * Only on a sheet. The anchored panel has an anchor to press again and a backdrop-free surface
+   * that never trapped anybody, and adding a control there would change a surface nobody reported.
+   */
+  private renderSheetClose(header: HTMLElement, panel: HTMLElement): void {
+    const actionsEl = header.createDiv({ cls: "db-panel-header-actions" });
+    const close = actionsEl.createEl("button", {
+      cls: "db-icon-only-button db-view-config-close",
+      attr: { type: "button", "aria-label": t("common.close") },
+    });
+    setIcon(close, "x");
+    close.onclick = () => {
+      if (overlayStack.dismissPanel(panel, "programmatic")) return;
+      panel.remove();
+    };
+  }
+
   render(
     containerEl: HTMLElement,
     visible: boolean,
@@ -293,8 +345,11 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     anchorEl?: HTMLElement
   ): void {
-    const savedScroll = this.panelEl?.scrollTop ?? 0;
     const wasOpen = Boolean(this.panelEl?.isConnected);
+    // Read from whichever element is the scroller. On desktop that is the panel; presented as a
+    // sheet the panel stops scrolling and the body region below takes over, and a save that only
+    // knew about one of them would silently stop restoring on the other.
+    const savedScroll = this.getScrollHost()?.scrollTop ?? 0;
     // Removing it is enough to take the backdrop with it: the sheet module drops the backdrop once
     // the last live sheet leaves the document, so this does not have to remember to say so.
     this.panelEl?.remove();
@@ -306,22 +361,37 @@ export class ViewConfigPanelRenderer {
     // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
     // is what keeps the sheet from replaying its rise and moving out from under the thumb.
     if (wasOpen) carrySheetEntrance(panel);
+    const asSheet = isMobileBottomSheet(panel.ownerDocument);
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
+    if (asSheet) this.renderSheetClose(header, panel);
+
+    // Everything below the header scrolls; the header and the grab bar above it do not.
+    //
+    // This is the shape the record sheet already uses, and the settings sheet is the surface that
+    // needed it most: it is the one toolbar panel whose content always overflows — 1461px of it in
+    // a 760px sheet, measured — and while the panel itself was the scroller, the grab bar and this
+    // header were ordinary in-flow children being carried off the top edge with the content. The
+    // grab band shrank a pixel per pixel of scroll and reached zero at 48px, after which no press
+    // anywhere could start the dismissal gesture and no title was left to say what the sheet was.
+    //
+    // The region exists on desktop too, with no overflow of its own, so the anchored panel keeps
+    // scrolling exactly as it did and only the sheet's rules move the scroller into here.
+    const body = panel.createDiv({ cls: "db-view-config-body" });
 
     if (actions.database) {
-      this.renderSectionTitle(panel, t("viewConfig.databaseSection"), "database");
+      this.renderSectionTitle(body, t("viewConfig.databaseSection"), "database");
       if (actions.isDatabaseReadOnly) {
-        panel.createDiv({ cls: "db-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
+        body.createDiv({ cls: "db-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
       }
-      this.renderDatabaseSettings(panel, actions.database, actions);
+      this.renderDatabaseSettings(body, actions.database, actions);
     }
 
-    this.renderSectionTitle(panel, t("viewConfig.viewSection"), "view");
-    this.renderViewType(panel, config, actions);
+    this.renderSectionTitle(body, t("viewConfig.viewSection"), "view");
+    this.renderViewType(body, config, actions);
     if (actions.onOpenLayoutOptions && ["chart", "calendar", "timeline"].includes(config.viewType || "")) {
       const label = config.viewType === "chart" ? t("chart.options") : config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
-      const layoutOptions = panel.createEl("button", {
+      const layoutOptions = body.createEl("button", {
         cls: "db-view-config-layout-options db-panel-button",
         attr: { type: "button", "aria-label": label },
       });
@@ -329,16 +399,16 @@ export class ViewConfigPanelRenderer {
       layoutOptions.createSpan({ cls: "db-panel-button-label", text: label });
       layoutOptions.onclick = () => actions.onOpenLayoutOptions?.(layoutOptions);
     }
-    this.renderViewSourceRulesSection(panel, config, actions);
+    this.renderViewSourceRulesSection(body, config, actions);
     if (["table", "board", "gallery", "list", "calendar", "timeline"].includes(config.viewType || "table") && actions.database) {
-      this.renderRecordIconSettings(panel, actions.database, config, actions);
+      this.renderRecordIconSettings(body, actions.database, config, actions);
     }
     if (config.viewType !== "chart" && actions.database) {
-      this.renderConditionalFormatting(panel, config, actions.database, actions, actions.isDatabaseReadOnly);
+      this.renderConditionalFormatting(body, config, actions.database, actions, actions.isDatabaseReadOnly);
     }
     const showViewStatusPresets = config.viewType !== "chart" && config.viewType !== "calendar" && config.viewType !== "timeline";
     if (showViewStatusPresets) {
-      this.renderStatusPresetSettings(panel, {
+      this.renderStatusPresetSettings(body, {
         presets: actions.viewStatusPresets || [],
         defaultPresetId: actions.defaultViewStatusPresetId,
         helpText: actions.viewStatusPresetHelpText,
@@ -349,9 +419,9 @@ export class ViewConfigPanelRenderer {
     }
     const isCalendarTimelineView = config.viewType === "calendar" || config.viewType === "timeline";
     if (config.viewType !== "chart" && !isCalendarTimelineView) {
-      this.renderDefaultColumnWidth(panel, config, actions);
+      this.renderDefaultColumnWidth(body, config, actions);
       if (config.viewType === "table") {
-        this.renderSelect(panel, t("viewConfig.rowDensity"), [
+        this.renderSelect(body, t("viewConfig.rowDensity"), [
           { value: "compact", text: t("viewConfig.rowDensity.compact") },
           { value: "default", text: t("viewConfig.rowDensity.default") },
           { value: "comfortable", text: t("viewConfig.rowDensity.comfortable") },
@@ -360,7 +430,7 @@ export class ViewConfigPanelRenderer {
           actions.onChange(t("undo.rowDensityConfig"));
         });
       }
-      this.renderSelect(panel, t("viewConfig.yearDisplayMode"), [
+      this.renderSelect(body, t("viewConfig.yearDisplayMode"), [
         { value: "always", text: t("viewConfig.yearDisplayMode.always") },
         { value: "smart", text: t("viewConfig.yearDisplayMode.smart") },
         { value: "never", text: t("viewConfig.yearDisplayMode.never") },
@@ -370,42 +440,42 @@ export class ViewConfigPanelRenderer {
       });
     }
     if (config.viewType !== "table" && config.viewType !== "chart" && !isCalendarTimelineView) {
-      this.renderTitleField(panel, config, actions);
-      this.renderSwitch(panel, t("viewConfig.showEmptyFields"), config.showEmptyFields === true, (value) => {
+      this.renderTitleField(body, config, actions);
+      this.renderSwitch(body, t("viewConfig.showEmptyFields"), config.showEmptyFields === true, (value) => {
         config.showEmptyFields = value || undefined;
         actions.onChange(t("undo.showEmptyFieldsConfig"));
       });
       if (config.viewType === "list") {
-        this.renderSwitch(panel, t("viewConfig.listCompactFields"), config.listCompactFields === true, (value) => {
+        this.renderSwitch(body, t("viewConfig.listCompactFields"), config.listCompactFields === true, (value) => {
           config.listCompactFields = value || undefined;
           actions.onChange(t("undo.listCompactFieldsConfig"));
         });
       }
     }
     if (config.viewType === "gallery") {
-      this.renderGallerySettings(panel, config, actions);
+      this.renderGallerySettings(body, config, actions);
       positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
-      if (savedScroll) panel.scrollTop = savedScroll;
+      this.restoreScroll(savedScroll);
       return;
     }
     if (config.viewType === "board") {
-      this.renderBoardSettings(panel, config, actions);
+      this.renderBoardSettings(body, config, actions);
       positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
-      if (savedScroll) panel.scrollTop = savedScroll;
+      this.restoreScroll(savedScroll);
       return;
     }
     if (config.viewType === "calendar") {
       positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
-      if (savedScroll) panel.scrollTop = savedScroll;
+      this.restoreScroll(savedScroll);
       return;
     }
     if (config.viewType === "timeline") {
       positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
-      if (savedScroll) panel.scrollTop = savedScroll;
+      this.restoreScroll(savedScroll);
       return;
     }
     positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
-    if (savedScroll) panel.scrollTop = savedScroll;
+    this.restoreScroll(savedScroll);
   }
 
   private renderSectionTitle(panel: HTMLElement, text: string, scope: "database" | "view"): void {

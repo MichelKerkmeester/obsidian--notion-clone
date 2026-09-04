@@ -334,6 +334,10 @@ export const PANEL_SCENARIOS = [
         <div class="db-view-config-panel" id="db-view-config-panel">
           <div class="db-panel-header"><div class="db-panel-title">Settings</div></div>
 
+          <!-- The renderer puts everything below the header in this region so a sheet can scroll it
+               while the header and the grab bar above it stay put. It is inert here: the anchored
+               panel is still its own scroller and this region has no overflow of its own. -->
+          <div class="db-view-config-body">
           <div class="db-view-config-section-title" data-scope="database">Current database</div>
           <div class="db-view-config-row">
             <div class="db-view-config-label">Name</div>
@@ -383,6 +387,7 @@ export const PANEL_SCENARIOS = [
             <div class="db-view-config-field">
               ${dropdownField("db-view-config-dropdown", "Always")}
             </div>
+          </div>
           </div>
         </div>
       </div>`,

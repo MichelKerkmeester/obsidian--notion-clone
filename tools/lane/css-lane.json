@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "cdc0217ad1d7",
+  "baselineHash": "46c11786dc49",
   "baselineCommit": "5beb1671076bcaa917b2ede6e83eab520ce89ec7",
   "history": [
     {
@@ -2660,6 +2660,36 @@
         "screenshots/project-manager/reference-kanban-subtask-mobile-light.png"
       ],
       "note": "Not a CSS edit: styles.css is byte-identical to the lane baseline (e357f63d13ac, confirmed by an empty `git diff styles.css`), and the lane was never acquired. The release exists because this leg adds a capture GROUP - screenshots/project-manager/, 16 PNGs photographing the vendored Project Manager plugin (specs/context/obsidian-pm-main) rendering the same bench project our constructed captures show, so a reviewer can read our one-to-one kanban and gantt ports beside the originals. All 16 were opened and read beside their referenceOf twin (constructed-board, constructed-timeline, constructed-board-subtask, constructed-timeline-subtask) at both devices and both themes; the per-element comparison is recorded in 043 tasks.md T031 and carried into 037 and 038 tasks.md. The reference page loads the vendored plugin's own variables/chrome/table/gantt/kanban/widgets/utilities.css plus the shared theme stand-in, and deliberately does NOT load styles.css, so nothing in this group can be evidence about our stylesheet. Manifest 528 -> 544 entries; the nine other PNGs the run moved were byte-only re-encode noise or the known field-icon-picker jitter and were restored to HEAD together with their manifest bytes/pixelHash/layoutHash, so this release changes no existing capture."
+    },
+    {
+      "event": "acquire",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-09-04T18:54:01.209Z",
+      "hash": "e357f63d13ac"
+    },
+    {
+      "event": "edit",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-09-04T19:54:14.591Z",
+      "hash": "e05aa075e0a1",
+      "note": "the settings sheet keeps its chrome out of its own scroller and re-lays its body in the shared sheet grammar; every rule scoped to .db-view-config-panel.db-mobile-bottom-sheet"
+    },
+    {
+      "event": "release",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-09-04T19:54:14.591Z",
+      "hash": "e05aa075e0a1",
+      "reviewed": [
+        "screenshots/panels/constructed-view-config-desktop-dark.png",
+        "screenshots/panels/constructed-view-config-desktop-light.png",
+        "screenshots/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/panels/constructed-view-config-mobile-light.png",
+        "screenshots/panels/panel-view-config-desktop-dark.png",
+        "screenshots/panels/panel-view-config-desktop-light.png",
+        "screenshots/panels/panel-view-config-mobile-dark.png",
+        "screenshots/panels/panel-view-config-mobile-light.png"
+      ],
+      "note": "Eight view-config captures moved and all eight were opened. The phone pair is the sheet in its new grammar: rounded surface, grab bar, a header row carrying the title and a 44px close, one full-width control per padded row with hairlines, helper text as the hint row. The desktop pair is unchanged in appearance; only the .db-view-config-body wrapper moved its layout hash. Ten other captures the run touched were restored to HEAD, six because they moved bytes without moving pixelHash or layoutHash, and four because they were proved not to belong to this edit: re-capturing them with these changes stashed produced byte-identical output, so that drift predates the lane claim and is not the holder's to sign."
     }
   ],
   "outstanding": [

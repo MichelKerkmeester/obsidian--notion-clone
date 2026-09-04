@@ -53,6 +53,7 @@ const PRE_FIX_FAILURES = new Map([
   ["WebKit: a toolbar rebuild behind the open filter sheet", "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"],
   ["WebKit: the sort sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
   ["WebKit: the filter sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
+  ["settings sheet chrome survives its own scroll", "the grab band went from 48px to ZERO after a 200px scroll — the bar and the header scrolled off the top with the content"],
 ]);
 
 // ───────────────────────────────────────────────────────────────────
@@ -73,7 +74,7 @@ const entry = join(work, "entry.ts");
 
 writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack } from "${resolve(HERE, "sheet-rebuild-harness")}";
+import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack, openSettingsSheetForReach, measureSettingsSheetReach } from "${resolve(HERE, "sheet-rebuild-harness")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
@@ -85,6 +86,8 @@ window.__addRowProbe = () => readAddRowProbe(document);
 window.__rebuildToolbarBehindSheet = () => rebuildToolbarBehindSheet(document);
 window.__trackSheetTop = (ms) => trackSheetTop(document, ms);
 window.__sheetTrack = () => readSheetTrack();
+window.__openSettingsSheetForReach = () => openSettingsSheetForReach(document);
+window.__measureSettingsSheetReach = () => measureSettingsSheetReach(document);
 // The speed rule, exported so this lane can ask it rather than race to produce it.
 window.__sheet = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 `);
@@ -108,6 +111,7 @@ const REQUIRED = [
   "src/views/mobile-bottom-sheet.ts",
   "src/views/sort-panel-renderer.ts",
   "src/views/filter-panel-renderer.ts",
+  "src/views/view-config-panel-renderer.ts",
   "src/views/overlay-stack.ts",
   "src/views/popover-auto-close.ts",
 ];
@@ -442,6 +446,43 @@ try {
   //    doing anything. A tap closing the sheet is the one result that cannot be explained by the
   //    gesture working, which is why it stays.
   const tap = await gesture({ distance: 0, steps: 1, pauseMs: 0 });
+
+  // The chrome-reachability case, staged and measured across a settled entrance. It cannot run
+  // inside `runSheetRebuildParity` for the same reason the gestures above cannot: a sheet measured
+  // in the render's own turn is still below the fold, and every coordinate read there is a
+  // coordinate of somewhere the surface is not.
+  const reachSetup = await page.evaluate(() => window.__openSettingsSheetForReach());
+  if (reachSetup.ready) {
+    // Scoped to THIS sheet's bar, and required on screen as well as still. An unscoped selector
+    // matches whichever sheet a previous case left open — one that settled long ago — and the wait
+    // then returns while the surface being measured is still at `translateY(100%)`, entirely below
+    // the fold. Measured that way: every sweep coordinate answered `null` and the case reported a
+    // missing grab band on a sheet whose bar was merely off-screen.
+    const settled = await page
+      .waitForFunction(() => {
+        const handle = document.querySelector(".db-view-config-panel .db-mobile-bottom-sheet-handle");
+        if (!handle) return false;
+        const y = handle.getBoundingClientRect().y;
+        const still = window.__lastReachY !== undefined && Math.abs(window.__lastReachY - y) < 0.5;
+        window.__lastReachY = y;
+        return still && y >= 0 && y <= window.innerHeight;
+      }, null, { timeout: 4000, polling: "raf" })
+      .then(() => true)
+      .catch(() => false);
+    await page.evaluate(() => { delete window.__lastReachY; });
+    if (!settled) failures.push("the settings sheet never finished its entrance, so its chrome was never measured on screen");
+  }
+  const reach = reachSetup.ready
+    ? await page.evaluate(() => window.__measureSettingsSheetReach())
+    : [{
+      surface: "settings sheet chrome survives its own scroll",
+      rebuildShape: "the sheet scrolls its own content",
+      barBeforeRebuild: false,
+      barAfterRebuild: false,
+      pass: false,
+      detail: `could not stage: ${reachSetup.detail}`,
+    }];
+  results.push(...reach);
 
   dragResult = [
     {

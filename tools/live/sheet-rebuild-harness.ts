@@ -40,6 +40,7 @@ import { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag } from "../../
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
 import { SortPanelRenderer } from "../../src/views/sort-panel-renderer";
 import { FilterPanelRenderer } from "../../src/views/filter-panel-renderer";
+import { ViewConfigPanelRenderer } from "../../src/views/view-config-panel-renderer";
 import { overlayStack } from "../../src/views/overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
@@ -522,6 +523,150 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
   };
 
   return [runSort(), runFilter(), runEmbeddedFilter()];
+}
+
+
+// ───────────────────────────────────────────────────────────────────
+// 4b. THE CHROME HAS TO STAY REACHABLE, NOT MERELY EXIST
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * A grab bar that is present in the DOM but off the screen is the same defect as a missing one.
+ *
+ * Every case above asks whether the bar SURVIVES. None of them asks whether a thumb can still
+ * reach it, and those are different questions the moment a sheet's content is taller than the
+ * sheet. `positionToolbarPopover` makes the panel itself the scroll container, and the bar and the
+ * header are ordinary in-flow children of it — so scrolling the content carries the chrome off the
+ * top edge. The grab band shrinks one pixel per pixel of scroll and reaches zero, at which point no
+ * press anywhere on the screen can start the gesture and the header carrying the title has gone
+ * with it.
+ *
+ * The settings sheet is where this bites, because it is the one toolbar panel whose content always
+ * overflows: the database section alone is longer than the 90svh cap on any phone. The menu sheets
+ * fit, which is why four rounds of sheet work never saw it.
+ *
+ * SPLIT IN TWO ON PURPOSE. The sheet rises from below the fold over an animated entrance, so a box
+ * measured in the same turn as the render is a box that is still off-screen — the flake this lane's
+ * gesture cases already document and gate on. Setup and measurement are separate calls so the
+ * driver can wait for the entrance to settle between them, and the measurement is a sweep with
+ * `elementFromPoint` down the sheet's centre line rather than a reading of the source.
+ */
+let settingsReach: {
+  root: HTMLElement;
+  renderer: ViewConfigPanelRenderer;
+  actions: Parameters<ViewConfigPanelRenderer["render"]>[3];
+  config: Parameters<ViewConfigPanelRenderer["render"]>[2];
+  anchor: HTMLElement;
+} | null = null;
+
+/** Build the real settings sheet and leave it on screen for the measurement that follows. */
+export function openSettingsSheetForReach(doc: Document): DragSetup {
+  for (const stale of Array.from(doc.body.querySelectorAll(".note-database-container, .db-view-config-panel"))) {
+    stale.remove();
+  }
+  const { root, anchor } = makeHarness(doc);
+  const renderer = new ViewConfigPanelRenderer();
+  const database = {
+    id: "db1",
+    name: "Testbed",
+    description: "Mock database exercising every column type and view on desktop and phone.",
+    sourceFolder: "Database Testbed/Records",
+    schema: { columns: [{ key: "status", label: "Status", type: "text" }], computedFields: [] },
+    views: [{ id: "v1", name: "Table", viewType: "table", schema: { columns: [{ key: "status", label: "Status", type: "text" }], computedFields: [] } }],
+  };
+  const config = database.views[0] as unknown as Parameters<ViewConfigPanelRenderer["render"]>[2];
+  const actions = {
+    app: {},
+    database,
+    onChange: () => undefined,
+    onDatabaseChange: () => undefined,
+  } as unknown as Parameters<ViewConfigPanelRenderer["render"]>[3];
+
+  renderer.render(root, true, config, actions, anchor);
+  const panel = renderer.getPanel();
+  if (!panel) {
+    root.remove();
+    return { ready: false, handleBox: null, detail: "the settings panel never rendered" };
+  }
+  settingsReach = { root, renderer, actions, config, anchor };
+  const handle = panel.querySelector<HTMLElement>(HANDLE);
+  if (!handle) return { ready: false, handleBox: null, detail: "the settings sheet has no grab bar at all" };
+  const box = handle.getBoundingClientRect();
+  return {
+    ready: true,
+    handleBox: { x: box.x, y: box.y, width: box.width, height: box.height },
+    detail: "settings sheet open, waiting for its entrance to settle",
+  };
+}
+
+/** Sweep the grab band before and after the sheet scrolls its own content, then tear down. */
+export function measureSettingsSheetReach(doc: Document): RebuildResult[] {
+  const view = doc.defaultView;
+  const panel = settingsReach?.renderer.getPanel();
+  if (!settingsReach || !panel || !view) {
+    return [{
+      surface: "settings sheet chrome survives its own scroll",
+      rebuildShape: "the sheet scrolls its own content",
+      barBeforeRebuild: false,
+      barAfterRebuild: false,
+      pass: false,
+      detail: "the settings sheet was never staged, so this run proves nothing",
+    }];
+  }
+
+  /** How many pixels down from the sheet's own top edge answer a press with the grab bar. */
+  const bandDepth = (): number => {
+    const box = panel.getBoundingClientRect();
+    const x = box.x + box.width / 2;
+    let depth = 0;
+    for (let dy = 0; dy <= 96; dy += 1) {
+      const hit = doc.elementFromPoint(x, box.y + dy);
+      const isBar = hit instanceof view.HTMLElement && hit.classList.contains("db-mobile-bottom-sheet-handle");
+      if (isBar) depth = dy + 1;
+      else if (depth > 0) break;
+    }
+    return depth;
+  };
+
+  // The region the sheet actually scrolls. The panel is the scroller until the chrome is lifted out
+  // of it and a body region takes over, so this is asked rather than assumed — the case then
+  // measures the same surface before and after the fix instead of two different ones.
+  const body = panel.querySelector<HTMLElement>(".db-view-config-body");
+  const scroller = body && body.scrollHeight > body.clientHeight ? body : panel;
+  const contentPx = scroller.scrollHeight;
+  const sheetPx = scroller.clientHeight;
+  const overflows = contentPx > sheetPx;
+
+  const panelTop = panel.getBoundingClientRect().top;
+  const bandAtTop = bandDepth();
+  const headerAtTop = (panel.querySelector<HTMLElement>(".db-panel-header")?.getBoundingClientRect().top ?? panelTop) - panelTop;
+
+  // Far enough that the bar cannot merely be clipped: the whole chrome is above the fold by here.
+  scroller.scrollTop = 200;
+  const bandAfterScroll = bandDepth();
+  const headerAfterScroll = (panel.querySelector<HTMLElement>(".db-panel-header")?.getBoundingClientRect().top ?? panelTop) - panelTop;
+
+  settingsReach.renderer.render(settingsReach.root, false, settingsReach.config, settingsReach.actions, settingsReach.anchor);
+  settingsReach.root.remove();
+  settingsReach = null;
+
+  return [{
+    surface: "settings sheet chrome survives its own scroll",
+    rebuildShape: `${contentPx}px of content in a ${sheetPx}px sheet`,
+    barBeforeRebuild: bandAtTop > 0,
+    barAfterRebuild: bandAfterScroll > 0,
+    pass: overflows && bandAtTop > 0 && bandAfterScroll > 0 && headerAfterScroll <= headerAtTop + 1,
+    detail: !overflows
+      ? "the settings sheet did not overflow, so the scroll this case is about never happened"
+      : bandAtTop === 0
+        ? "no grab band even at rest — the surface, not the scroll, is broken"
+        : bandAfterScroll === 0
+          ? `the grab band went from ${bandAtTop}px to ZERO after a 200px scroll, and the header went`
+            + ` from ${Math.round(headerAtTop)}px to ${Math.round(headerAfterScroll)}px relative to the`
+            + " sheet's top edge — the sheet is open, covering the screen, and nothing on it can close it"
+          : `the band held at ${bandAfterScroll}px through a 200px scroll (${bandAtTop}px at rest)`
+            + `, and the header stayed put at ${Math.round(headerAfterScroll)}px from the sheet's top edge`,
+  }];
 }
 
 export function runSheetRebuildParity(doc: Document = document): RebuildResult[] {
