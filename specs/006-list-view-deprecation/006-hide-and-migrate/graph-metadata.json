@@ -46,13 +46,21 @@
       "tasks.md",
       "goal.md",
       "implementation-summary.md",
-      "src/data/gallery-migration.ts",
+      "tools/screenshots/scenarios/core.mjs",
+      "src/data/list-migration-real-data.test.ts",
+      "src/data/list-migration.ts",
+      "src/data/list-migration.test.ts",
+      "src/views/list-hide-and-migrate.test.ts",
       "src/views/toolbar-renderer.ts",
+      "src/views/view-config-panel-renderer.ts",
       "src/views/database-view.ts",
       "src/views/embedded-database-renderer.ts",
+      "src/main.ts",
+      "src/settings.ts",
+      "src/data/types.ts",
       "src/i18n.ts",
-      "src/views/list-renderer.ts",
-      "src/data/gallery-migration.test.ts"
+      "tools/storybook/verify-placement.mjs",
+      "tools/live/render-assertion-harness.ts"
     ],
     "entities": [
       {
@@ -86,15 +94,45 @@
         "source": "derived"
       },
       {
-        "name": "gallery-migration.ts",
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-migration-real-data.test.ts",
+        "kind": "test",
+        "path": "src/data/list-migration-real-data.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-migration.ts",
         "kind": "code",
-        "path": "src/data/gallery-migration.ts",
+        "path": "src/data/list-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-migration.test.ts",
+        "kind": "test",
+        "path": "src/data/list-migration.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-hide-and-migrate.test.ts",
+        "kind": "test",
+        "path": "src/views/list-hide-and-migrate.test.ts",
         "source": "derived"
       },
       {
         "name": "toolbar-renderer.ts",
         "kind": "code",
         "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
         "source": "derived"
       },
       {
@@ -110,21 +148,39 @@
         "source": "derived"
       },
       {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
         "name": "i18n.ts",
         "kind": "code",
         "path": "src/i18n.ts",
         "source": "derived"
       },
       {
-        "name": "list-renderer.ts",
-        "kind": "code",
-        "path": "src/views/list-renderer.ts",
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
-        "name": "gallery-migration.test.ts",
-        "kind": "test",
-        "path": "src/data/gallery-migration.test.ts",
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
         "source": "derived"
       },
       {
@@ -150,59 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Scope Boundary",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Overview This",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Pattern Withdraw",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`viewType` is a persisted union written into vault files (`src/data/types.ts:317`), so the list",
     "created_at": "2026-09-04T19:33:26Z",
-    "last_save_at": "2026-09-04T20:07:56.884Z",
+    "last_save_at": "2026-09-04T22:04:46.469Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +220,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a516ab705369979e4f1315a4465e18c284fb40601cf137c4828c6bd65db1f61d",
+    "source_fingerprint": "sha256:e1f84b92267ea5ccfb19ef1be277bfc50434ad98fdb3d521fb3f90717750f02c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "691a922f91332a9d5e7fb37ace3bb7be226252256f25fcffe704b7fce47dfaa3",
       "plan.md": "13ea795def7ce027ada501ff4f052dddd3b88bf8f5c8c909d4fca29bfdcce78f",
-      "tasks.md": "bf831c7f27c822fb0a3effd6cec25e66d4baf033c3f74352a70feaf32526276e",
-      "implementation-summary.md": "088c04f6941e89064aef58725185f84b92b24dfeef0c5236f9b47f2542ac8634"
+      "tasks.md": "9b32ce00cd3c27f5e8014266f26ee74d87edea826023ff8f1ed37c72192e4699",
+      "implementation-summary.md": "4386a1ea78808d00d9a6c1253212e6008cf9efd6418da31c117ee8dce8613d0f"
     },
     "last_active_child_id": null,
     "last_active_at": null
