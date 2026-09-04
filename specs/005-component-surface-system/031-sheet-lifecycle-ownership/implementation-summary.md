@@ -342,6 +342,74 @@ which is `document.body` once the sheet portals. Recorded here rather than folde
 still through a rebuild and that five taps at one coordinate all land; it cannot show what a thumb on
 WebKit meets, and the device row stays open.
 
+### The engines were never the variable — reports 34-36, third pass (2026-09-04)
+
+The operator, on a preview carrying the entrance fix, reported the same two controls still dead on
+iOS. The brief's premise was that the earlier work had only ever been proven under Chromium touch
+emulation while the device runs WebKit, so the first thing done was to remove that doubt.
+
+**Chrome and WebKit agree exactly, and neither reproduced it.** Playwright WebKit on an emulated
+iPhone 14 Pro with real touch input, measured against Chromium on the same page: one tap on "+ Add"
+adds one rule; five taps at one coordinate add five; the new row's dropdown opens as a second sheet
+and takes an option; a tap outside closes the sheet and clears the backdrop; a 250ms timer fires
+throughout; no page errors in either engine. The sheet's top edge does not move — deepest sample
+equals the settled top, 527.16 for sort and 514.61 for filter. Verbatim from both engines, the
+five-tap case: `rules: 5, open: true, sheets: 1, scrims: 1, tick: 1`. The dropdown case:
+`menuCount: 1, itemCount: 3, sheets: 2` then `menuCount: 0, sheets: 1, rules: 5`. The outside tap:
+`open: false, sheets: 0, scrims: 0`.
+
+That is a real finding and it is worth stating plainly: **the engine was not the variable.** What no
+harness did was rebuild the toolbar behind an open sheet, and the view does exactly that on roughly
+two dozen paths, most of them background refreshes with nothing on screen to show for them.
+
+**Adding that one step reproduced the operator's report, identically in both engines.** After the
+rebuild and one viewport event: `the sheet went with the anchor (sheet: false, on the body: false,
+visibility: hidden, sheets: 0, backdrops: 0)`, and then the tap at the coordinate the thumb was
+already on: `0 rule(s) after the tap (open: false, sheet: false)`. Eight failures, four per engine.
+
+**Root cause: a phone sheet's presentation was gated on an anchor it never measures.**
+`positionToolbarPopover` refused to run at all without a connected anchor, and `place()` gave a
+disconnected one a recovery frame and then hid the surface — which for a sheet means un-portalling it
+off the body and taking its backdrop with it. But the sheet branch of `place()` calls `placeSheet`,
+which reads the viewport and nothing else. So an ordinary toolbar rebuild armed the trap and the next
+scroll, rotation or keyboard sprang it, and the rebuilt panel then handed the same dead node back to
+the positioner, which returned before it could become a sheet again.
+
+**An existing assertion said the opposite and had to be corrected, not worked around.**
+`verify-placement` asserted that a phone sheet whose anchor died should stop presenting and take its
+backdrop down. Its premise — a sheet with no anchor is unreachable — is true of an anchored popover
+and false of a docked full-width surface. The freeze it was written for is real and keeps its guard,
+moved to the event that actually means the surface is gone: the panel leaving the document, which
+`sheet-teardown` asserts across 11 producers and which `verify-placement` now states directly.
+
+**The node identity was fixed too, as a property rather than a symptom.** The sort and filter panels
+replaced their node on every rebuild, and the node is the surface's identity to the overlay stack,
+the sheet module, the entrance and — on a touch device — the element a tap's delayed click is
+delivered to. Three of those four had been patched back one at a time; the fourth cannot be from
+downstream. No emulator produces the delay, so the lane asserts the property instead: the panel the
+press began in is the panel still there afterwards. Red in both engines, green in both after. This
+also retires `carrySheetEntrance` at those two call sites — a refilled node still carries
+`is-visible`, so the entrance no-ops for the reason it always did rather than because a flag says so.
+
+**And an instrument, because three passes have now ended here.** `debugSheetTrace` is off by default
+and inert while off. It records sheet mounts and unmounts, panel refills, dismissal reasons, the whole
+tap sequence with whether each target is still connected and still inside a sheet, and
+`visualViewport` height, all grouped by a generation that begins at a mount. A "Copy sheet trace"
+command puts it on the clipboard, because there is no console to read on a phone. It records tags,
+ids and classes and nothing else, and a source guard pins that.
+
+**What is now measured, and what is still not.** Both engines, real touch, an emulated iPhone, with
+a negative control on the desktop half and a teardown control on the phone half. Still unmeasurable
+here: the delayed compatibility click iOS produces hundreds of milliseconds after the finger lifts,
+the software keyboard's effect on `visualViewport`, the host's own re-render, and anything WebKit
+paints rather than computes. Those are what the trace exists to report, and the device row stays open.
+
+**Evidence, exit codes read directly.** `npx tsc --noEmit` 0; `npx vitest run` **1042 passed**, up
+from 1037; `npm run lint` **172**, the recorded baseline; `npm run lint:tools` 0; `scan-comments`
+`PASS`; `sheet-rebuild` **31 checks green across Chrome and WebKit**, exit 0, from 8 red;
+`verify-placement` **393/394**, the one red declared and unrelated;
+`SURFACE_PHASE=031-sheet-lifecycle-ownership npm run gate` **PASS — 25 green, 0 red** at exit 0.
+
 <!-- /ANCHOR:limitations -->
 
 ---
@@ -367,6 +435,9 @@ WebKit meets, and the device row stays open.
 | A fix that was real and not whole | `85ff504` fixed the overlay stack holding a node the rebuild had replaced, and the operator still reported the same controls broken. The second mechanism was in the same rebuild and a different module. A report that survives a fix is evidence about the diagnosis, not about the operator |
 | The harness accepted a moving sheet as settled | Two identical samples are also what the START of an entrance looks like, so the first staging read its coordinate off a surface about to leave and one case passed for the wrong reason. Settling now means unmoving AND on screen. This is the same error the drag cases already paid for once, in a new place |
 | The tracker missed the point it existed to see | It sampled from the first animation frame, by which time the surface had already left its start state — 830 against 844 for the same sheet. An entrance commits its start state during the call that begins it, so the first sample has to be synchronous |
+| I inherited the brief's premise and it was wrong | The dispatch said the earlier fix was proven only under Chromium and the device is WebKit, so the first three hypotheses were all engine differences: `transitionend` on a class swap, `-webkit-` transform handling, the iOS click delay landing on a detached node. All three were measured and none reproduced — the engines agree exactly. The premise was worth testing and the answer was worth keeping, but three hypotheses went to it before the question "what does the device DO that the harness does not" got asked |
+| An assertion I had to invert rather than satisfy | `verify-placement` asserted the exact behaviour the fix removes. Satisfying it would have meant keeping the defect; deleting it would have dropped a real freeze guard. The resolution was to find which half of it was load-bearing — the backdrop cannot outlive its sheet — and re-key that to the event that means what the old one only assumed |
+| A concurrent writer in the same working tree | The landing agent for the branch this work sits on was operating in the same checkout, and stashed the in-flight change twice and switched the branch out from under it three times — once mid-commit, so a commit landed on the landing branch and had to be moved. Nothing was lost, because every intermediate state was mirrored outside the tree. Recorded because the recovery cost real time and the lesson is cheap: two agents in one working tree is not a thing to do |
 | The gate's `evidence` lane self-heals | It checks artefact freshness at lane 9, and lanes 11, 16, 17 and 18 re-stamp their own artefacts afterwards. So the first run after a source change reds and the second greens with no human action. The re-stamps are genuine re-measurements, so nothing is hidden — but "just run it again" is the wrong habit to teach, and moving the lane last would fix it. Left for the packet that owns the gate |
 <!-- /ANCHOR:decisions -->
 

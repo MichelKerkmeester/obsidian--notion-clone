@@ -247,6 +247,85 @@ _memory:
       holds still and that five taps at one point all land, and it cannot prove what a thumb on
       WebKit meets.
 
+- [x] **T17** The engines were never the variable — a toolbar rebuild was.
+      *Closed.* T14 was proven under Chromium touch emulation and the operator, on a preview
+      carrying it, reported the same controls still dead on iOS. The first question was whether
+      Chrome and WebKit disagree. **They do not.** Playwright WebKit on an emulated iPhone 14 Pro
+      with real touch input was measured against Chromium on the same page, and the two agree
+      exactly: one tap on "+ Add" adds one rule, five taps add five, the new row's dropdown opens
+      and takes an option, an outside tap closes the sheet and clears the backdrop, no page errors,
+      and a 250ms timer fires throughout. The sheet's top edge does not move
+      (deepest = settled, 527.16 and 514.61). Verbatim, both engines: `rules: 5, open: true,
+      sheets: 1, scrims: 1, tick: 1`.
+      *What the emulation was missing was the EVENT, not the engine.* Nothing in any harness
+      rebuilds the toolbar behind an open sheet, and the view does it on roughly two dozen paths,
+      most of them background refreshes. Adding that one step reproduced the operator's report in
+      **both** engines: `the sheet went with the anchor (sheet: false, on the body: false,
+      visibility: hidden, sheets: 0, backdrops: 0)`, and then `0 rule(s) after the tap (open:
+      false, sheet: false)`.
+      *Root cause:* a phone sheet's presentation was gated on an anchor it never measures.
+      `positionToolbarPopover` refused to run without a connected anchor, and `place()` gave a
+      disconnected one a recovery frame and then hid the surface — which for a sheet means
+      un-portalling it off the body and taking its backdrop with it. The sheet branch of `place()`
+      calls `placeSheet`, which reads the viewport and nothing else.
+      *Closed by:* `c5a9a8b5` — the sheet branch answers ahead of every question about the anchor,
+      and only the anchored branch may refuse without one.
+      *Guarded by:* eight new `sheet-rebuild` cases that run in **Chrome and WebKit** on an emulated
+      iPhone. 8 red before, 0 after.
+- [x] **T18** A control that refuses the wrong fix, and the assertion that had to be inverted.
+      *Closed.* The desktop half is the control: an anchored popover has no coordinate without its
+      trigger and must still hide. It passes in both engines before and after, so the change is
+      narrowed rather than deleted.
+      *An existing assertion said the opposite* and had to be corrected rather than worked around:
+      `verify-placement` asserted "PHONE a sheet whose anchor was destroyed stops presenting AND
+      takes its backdrop with it". Its premise — that a sheet with no anchor is unreachable — is
+      true of an anchored popover and false of a docked full-width surface. The freeze it was
+      written for keeps its guard, moved to the event that actually means the surface is gone: the
+      panel leaving the document, which `sheet-teardown` already asserts across 11 producers and
+      which is now stated in `verify-placement` too. `bac255ac`; placement 393/394, the one red
+      declared and unrelated.
+- [x] **T19** Rebuild the panels into the node they already have.
+      *Closed.* The sort and filter panels replaced their node outright on every add, remove,
+      toggle and background refresh. The node is the surface's identity to everything outside those
+      classes — the overlay stack's idea of "inside", the sheet module's memory of where the panel
+      came from, the entrance's record that it has already played, and, on a touch device, the
+      element a tap's delayed click is delivered to. Three of those four had already been patched
+      back one at a time; the fourth cannot be, downstream.
+      *Red observed first,* in both engines: `the rebuild replaced the panel node — the element a
+      delayed click would be retargeted into no longer exists, so a press that began inside the
+      sheet can arrive outside it`. Green after, both engines.
+      *Asserted as a property, not a symptom,* because no emulator produces the delay: the panel the
+      press began in is the panel still there afterwards.
+      *Also retires* `carrySheetEntrance` at these two call sites — a refilled node still carries
+      `is-visible`, so T14's entrance no-ops for the reason it always did rather than because a flag
+      says so. `ca2eb5c0`.
+      *Harness honesty:* the three registration cases kept their subject and changed their staging
+      guard. Node identity used to mean "a rebuild happened" and now means the opposite, so they ask
+      whether the panel's contents were rebuilt. Left alone, they would have quietly stopped staging
+      anything and reported that as a pass.
+- [x] **T20** Ship the instrument that can answer what the bench cannot.
+      *Closed.* Three fixes for these sheets have now been proven in a browser and reported still
+      broken from the phone. The residue is what the device does AROUND the touch — a click
+      delivered hundreds of milliseconds after the finger left, a viewport that resizes with the
+      keyboard, a host re-render behind the surface — and from the outside every remaining candidate
+      is the same report.
+      *`debugSheetTrace`*, a setting that is off by default and inert while off: no listeners, no
+      allocation, every producer hook behind a boolean read. It records sheet mounts and unmounts,
+      panel refills, dismissal reasons, the whole tap sequence with whether each target is still
+      connected and inside a sheet, and `visualViewport` height. Events carry a generation that
+      begins at a mount, so a trace reads as one surface's life. A "Copy sheet trace" command puts
+      it on the clipboard, because there is no console to read on a phone.
+      *It records tags, ids and classes and nothing else* — no text, value or path — and a source
+      guard in `sheet-trace.test.ts` pins that, because the operator is being asked to paste it into
+      a conversation. `8f14a21f`.
+      *The fork it exists to settle:* did the tap never reach the control, or did it reach the
+      control and something moved the surface afterwards.
+- [ ] **T21** The operator adds a sort rule and a filter condition on iOS without the sheet
+      vanishing, and the trace shows the tap reaching the control.
+      *Evidence to close:* the operator says so, or pastes a trace. Everything above is now measured
+      in the engine the device uses; what remains unmeasurable here is the delayed click, the
+      software keyboard, and the host's own re-render.
+
 **Proposed and refuted, so it is not a task.** Pruning a registered sheet by its class as well as by
 connectedness guards a state nothing can reach: `mobile-bottom-sheet.ts:48` is the only writer of the
 class in `src/`, and `applySheetChrome(panel, false)` deregisters the panel on the same call. The
@@ -289,7 +368,7 @@ an open sheet, for which holding the backdrop up is correct. Reasoning and its t
 <!-- ANCHOR:completion -->
 ## COMPLETION
 
-Complete when T10, T13 and T16 close. Every other task is a precondition for asking.
+Complete when T10, T13, T16 and T21 close. Every other task is a precondition for asking.
 <!-- /ANCHOR:completion -->
 
 <!-- ANCHOR:cross-refs -->
