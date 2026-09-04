@@ -101,7 +101,7 @@
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -119,13 +119,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
       "bytes": 46539
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -143,13 +143,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
       "bytes": 47298
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -167,13 +167,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
       "bytes": 42592
     },
     {
       "id": "board-drop-language",
-      "title": "Board view \u2014 drag and drop-target language",
+      "title": "Board view — drag and drop-target language",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -191,13 +191,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line \u2014 the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
+      "note": "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
       "capture": "element",
       "bytes": 43439
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -221,7 +221,7 @@
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -245,7 +245,7 @@
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -269,7 +269,7 @@
     },
     {
       "id": "board-empty-column",
-      "title": "Board view \u2014 empty column",
+      "title": "Board view — empty column",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -397,7 +397,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -423,7 +423,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -449,7 +449,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -475,7 +475,7 @@
     },
     {
       "id": "chrome-active-rule-popover-filter",
-      "title": "Active rule popover \u2014 filter",
+      "title": "Active rule popover — filter",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -501,7 +501,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -527,7 +527,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -553,7 +553,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -579,7 +579,7 @@
     },
     {
       "id": "chrome-active-rule-popover-sort",
-      "title": "Active rule popover \u2014 sort",
+      "title": "Active rule popover — sort",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -797,7 +797,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -822,7 +822,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -847,7 +847,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -872,7 +872,7 @@
     },
     {
       "id": "chrome-chart-empty",
-      "title": "Chart view \u2014 empty state",
+      "title": "Chart view — empty state",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -897,7 +897,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -922,7 +922,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -947,7 +947,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -972,7 +972,7 @@
     },
     {
       "id": "chrome-chart-number",
-      "title": "Chart view \u2014 single number",
+      "title": "Chart view — single number",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -1119,7 +1119,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 27740
     },
@@ -1147,7 +1147,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 26442
     },
@@ -1175,7 +1175,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 101544
     },
@@ -1203,7 +1203,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Every group field here is option-typed, so every divider title is a colored status badge \u2014 at both nesting depths. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
       "bytes": 99380
     },
@@ -1321,7 +1321,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "dark",
       "device": "desktop",
@@ -1347,7 +1347,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "light",
       "device": "desktop",
@@ -1373,7 +1373,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -1399,7 +1399,7 @@
     },
     {
       "id": "chrome-owned-menu",
-      "title": "Owned menu \u2014 the shell every context menu uses",
+      "title": "Owned menu — the shell every context menu uses",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -1425,7 +1425,7 @@
     },
     {
       "id": "chrome-owned-menu-sheet",
-      "title": "Owned menu \u2014 the sheet presentation on a phone",
+      "title": "Owned menu — the sheet presentation on a phone",
       "group": "components",
       "theme": "dark",
       "device": "mobile",
@@ -1447,13 +1447,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare \u2014 a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
+      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
       "bytes": 36852
     },
     {
       "id": "chrome-owned-menu-sheet",
-      "title": "Owned menu \u2014 the sheet presentation on a phone",
+      "title": "Owned menu — the sheet presentation on a phone",
       "group": "components",
       "theme": "light",
       "device": "mobile",
@@ -1475,7 +1475,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare \u2014 a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
+      "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
       "capture": "viewport",
       "bytes": 38993
     },
@@ -2091,7 +2091,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 14459
     },
@@ -2115,7 +2115,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 14944
     },
@@ -2139,7 +2139,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 12555
     },
@@ -2163,7 +2163,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The active tab carries is-active; the \u22ef tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
+      "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 13038
     },
@@ -2190,15 +2190,15 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2233,15 +2233,15 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2276,15 +2276,15 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2319,15 +2319,15 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2361,14 +2361,14 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2402,14 +2402,14 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2443,14 +2443,14 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2484,14 +2484,14 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2526,15 +2526,15 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2569,15 +2569,15 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2612,15 +2612,15 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2655,15 +2655,15 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -2983,7 +2983,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 105506
     },
@@ -3007,7 +3007,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 103836
     },
@@ -3031,7 +3031,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 114369
     },
@@ -3055,7 +3055,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The select box in the invalid-events grid. It carries placement of its own \u2014 centred in the 28px lead column \u2014 on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+      "note": "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
       "capture": "element",
       "bytes": 113768
     },
@@ -4201,7 +4201,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 350033
     },
@@ -4227,7 +4227,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 328717
     },
@@ -4253,7 +4253,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 184668
     },
@@ -4279,7 +4279,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The strip is the whole colour vocabulary \u2014 every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
       "bytes": 178123
     },
@@ -4619,7 +4619,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 65470
     },
@@ -4647,7 +4647,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 64686
     },
@@ -4675,7 +4675,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 65603
     },
@@ -4703,13 +4703,13 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output \u2014 the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
+      "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
       "bytes": 64787
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "dark",
       "device": "desktop",
@@ -4735,7 +4735,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "light",
       "device": "desktop",
@@ -4761,7 +4761,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -4787,7 +4787,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
-      "title": "Record detail \u2014 note body being typed",
+      "title": "Record detail — note body being typed",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -4813,7 +4813,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "dark",
       "device": "desktop",
@@ -4839,7 +4839,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "light",
       "device": "desktop",
@@ -4865,7 +4865,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -4891,7 +4891,7 @@
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
-      "title": "Record detail \u2014 note body not written yet",
+      "title": "Record detail — note body not written yet",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -4917,7 +4917,7 @@
     },
     {
       "id": "panel-record-detail-sheet",
-      "title": "Record detail \u2014 mobile bottom sheet",
+      "title": "Record detail — mobile bottom sheet",
       "group": "panels",
       "theme": "dark",
       "device": "mobile",
@@ -4947,7 +4947,7 @@
     },
     {
       "id": "panel-record-detail-sheet",
-      "title": "Record detail \u2014 mobile bottom sheet",
+      "title": "Record detail — mobile bottom sheet",
       "group": "panels",
       "theme": "light",
       "device": "mobile",
@@ -5481,7 +5481,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -5510,7 +5510,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -5539,7 +5539,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -5568,7 +5568,7 @@
     },
     {
       "id": "board-mobile",
-      "title": "Board view \u2014 mobile",
+      "title": "Board view — mobile",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -5597,7 +5597,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -5630,7 +5630,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -5663,7 +5663,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -5696,7 +5696,7 @@
     },
     {
       "id": "board-subtask-tree",
-      "title": "Board view \u2014 subtask tree",
+      "title": "Board view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -5751,7 +5751,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 207591,
+      "bytes": 207596,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5805,7 +5805,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 61256,
+      "bytes": 61227,
       "fixtureOf": "constructed-board"
     },
     {
@@ -5837,7 +5837,7 @@
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -5857,14 +5857,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 44319,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -5884,14 +5884,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 44567,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -5911,14 +5911,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 33169,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
-      "title": "Calendar empty state \u2014 no date property",
+      "title": "Calendar empty state — no date property",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -5938,7 +5938,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container \u2014 the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
+      "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
       "bytes": 33528,
       "fixtureOf": "constructed-calendar-empty"
@@ -6279,7 +6279,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 123878,
       "fixtureOf": "constructed-calendar-week"
@@ -6304,7 +6304,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 130740,
       "fixtureOf": "constructed-calendar-week"
@@ -6329,7 +6329,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 65725,
       "fixtureOf": "constructed-calendar-week"
@@ -6354,7 +6354,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Sticky day header and all-day strip over the 08\u201316 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+      "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
       "bytes": 69824,
       "fixtureOf": "constructed-calendar-week"
@@ -6380,7 +6380,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "27b41cb5cf2e",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6419,7 +6419,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "27b41cb5cf2e",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6458,7 +6458,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "27b41cb5cf2e",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6497,7 +6497,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "27b41cb5cf2e",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6534,28 +6534,28 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "59192c1a6d36",
-      "pixelHash": "5f1fbc4bb96d",
+      "layoutHash": "07e6be40da8a",
+      "pixelHash": "d2ef30230bf8",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "04e9a24620e3",
+        "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 450546,
+      "bytes": 122758,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6579,28 +6579,28 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "59192c1a6d36",
-      "pixelHash": "a5a87484d9c4",
+      "layoutHash": "07e6be40da8a",
+      "pixelHash": "f46878678592",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "04e9a24620e3",
+        "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 442076,
+      "bytes": 124817,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6624,28 +6624,28 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "9e62ea15498d",
-      "pixelHash": "b39819967404",
+      "layoutHash": "a2ca19cc066f",
+      "pixelHash": "fd7947667674",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "04e9a24620e3",
+        "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 129342,
+      "bytes": 55885,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6669,28 +6669,28 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "9e62ea15498d",
-      "pixelHash": "557a221c0d76",
+      "layoutHash": "a2ca19cc066f",
+      "pixelHash": "317eaadce6ca",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "04e9a24620e3",
+        "src/views/board-renderer.ts": "7ae9f2b7f12e",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
       "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
       "capture": "viewport",
-      "bytes": 127976,
+      "bytes": 57212,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -6716,7 +6716,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6756,7 +6756,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6796,7 +6796,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6836,7 +6836,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -6877,14 +6877,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/empty-state-renderer.ts": "1830f5fbf67f",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -6918,14 +6918,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/empty-state-renderer.ts": "1830f5fbf67f",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -6959,14 +6959,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/empty-state-renderer.ts": "1830f5fbf67f",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7000,14 +7000,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/empty-state-renderer.ts": "1830f5fbf67f",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7041,14 +7041,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7082,14 +7082,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7123,14 +7123,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7164,14 +7164,14 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7204,7 +7204,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7244,7 +7244,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7284,7 +7284,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7324,7 +7324,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7364,7 +7364,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7404,7 +7404,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7444,7 +7444,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7484,7 +7484,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7524,7 +7524,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7563,7 +7563,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7602,13 +7602,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7641,13 +7641,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7680,13 +7680,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7719,13 +7719,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7758,7 +7758,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7797,7 +7797,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -7836,13 +7836,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7875,13 +7875,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7914,13 +7914,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7953,13 +7953,13 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -7992,7 +7992,7 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8031,7 +8031,7 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8070,7 +8070,7 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8109,7 +8109,7 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8148,7 +8148,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8187,7 +8187,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8226,7 +8226,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8265,7 +8265,7 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8304,13 +8304,13 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8343,13 +8343,13 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8382,13 +8382,13 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8421,13 +8421,13 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8460,7 +8460,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8499,7 +8499,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8538,7 +8538,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8577,7 +8577,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8616,7 +8616,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8655,7 +8655,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8694,7 +8694,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8733,7 +8733,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
@@ -8775,16 +8775,16 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8820,16 +8820,16 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8865,16 +8865,16 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -8910,16 +8910,16 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-harness.ts": "459125d464ee",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "a6548122a5c5",
-        "styles.css": "c32661e8c089",
-        "tools/screenshots/theme.css": "115be5a71b07",
+        "src/i18n.ts": "f3d6bd9aa413",
+        "styles.css": "b7de3b6fb54a",
+        "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
@@ -9041,7 +9041,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -9068,7 +9068,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -9095,7 +9095,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -9122,7 +9122,7 @@
     },
     {
       "id": "list-mobile",
-      "title": "List view \u2014 mobile",
+      "title": "List view — mobile",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -9167,7 +9167,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 204157,
       "fixtureOf": "constructed-list-sparse"
@@ -9192,7 +9192,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 205281,
       "fixtureOf": "constructed-list-sparse"
@@ -9217,7 +9217,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 134970,
       "fixtureOf": "constructed-list-sparse"
@@ -9242,7 +9242,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits \u2014 so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+      "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
       "bytes": 134831,
       "fixtureOf": "constructed-list-sparse"
@@ -9357,7 +9357,7 @@
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -9386,14 +9386,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 205380,
       "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -9422,14 +9422,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 199902,
       "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -9458,14 +9458,14 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 59643,
       "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
-      "title": "Table view \u2014 mobile auto-fit",
+      "title": "Table view — mobile auto-fit",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -9494,7 +9494,7 @@
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell \u2014 a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
+      "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
       "bytes": 58935,
       "fixtureOf": "constructed-table"
@@ -9617,7 +9617,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -9648,7 +9648,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -9674,12 +9674,12 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 148670,
+      "bytes": 148295,
       "fixtureOf": "constructed-timeline-subtask"
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -9710,7 +9710,7 @@
     },
     {
       "id": "timeline-subtask-tree",
-      "title": "Timeline view \u2014 subtask tree",
+      "title": "Timeline view — subtask tree",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -9849,7 +9849,7 @@
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -9873,7 +9873,7 @@
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -9897,7 +9897,7 @@
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -9921,7 +9921,7 @@
     },
     {
       "id": "timeline-view-day",
-      "title": "Timeline view \u2014 Day",
+      "title": "Timeline view — Day",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -9945,7 +9945,7 @@
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -9970,7 +9970,7 @@
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -9990,12 +9990,12 @@
       },
       "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 138427,
+      "bytes": 138062,
       "fixtureOf": "constructed-timeline"
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -10020,7 +10020,7 @@
     },
     {
       "id": "timeline-view",
-      "title": "Timeline view \u2014 Week",
+      "title": "Timeline view — Week",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -10040,12 +10040,12 @@
       },
       "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 79702,
+      "bytes": 78761,
       "fixtureOf": "constructed-timeline"
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -10069,7 +10069,7 @@
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -10093,7 +10093,7 @@
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -10117,7 +10117,7 @@
     },
     {
       "id": "timeline-view-month",
-      "title": "Timeline view \u2014 Month",
+      "title": "Timeline view — Month",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -10141,7 +10141,7 @@
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -10165,7 +10165,7 @@
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -10185,11 +10185,11 @@
       },
       "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 123507
+      "bytes": 123351
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -10213,7 +10213,7 @@
     },
     {
       "id": "timeline-view-quarter",
-      "title": "Timeline view \u2014 Quarter",
+      "title": "Timeline view — Quarter",
       "group": "views",
       "theme": "light",
       "device": "mobile",
@@ -10237,7 +10237,7 @@
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "dark",
       "device": "desktop",
@@ -10257,11 +10257,11 @@
       },
       "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
       "capture": "viewport",
-      "bytes": 105319
+      "bytes": 105337
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "light",
       "device": "desktop",
@@ -10285,7 +10285,7 @@
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "dark",
       "device": "mobile",
@@ -10309,7 +10309,7 @@
     },
     {
       "id": "timeline-view-year",
-      "title": "Timeline view \u2014 Year",
+      "title": "Timeline view — Year",
       "group": "views",
       "theme": "light",
       "device": "mobile",

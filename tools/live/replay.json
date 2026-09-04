@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-04T05:59:49.362Z",
+  "measuredAt": "2026-09-04T08:28:36.142Z",
   "inputs": {
-    "styles.css": "c32661e8c089",
-    "tools/screenshots/theme.css": "115be5a71b07",
+    "styles.css": "b7de3b6fb54a",
+    "tools/screenshots/theme.css": "88cea2ea664d",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "e3835f07ceda"
+    "tools/live/replay.mjs": "58d76c0d94e9"
   },
   "claims": [
     {
