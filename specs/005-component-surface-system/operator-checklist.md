@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-04: **46 phases**, **6 with nothing left**, **96 rows** waiting on a device.
+Derived 2026-09-04: **47 phases**, **6 with nothing left**, **103 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -224,6 +224,16 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] With `boardExtensionsEnabled` off, a stored properties list has zero effect and `038`'s board parity fixtures are unchanged. Today: trivially true; the point is that it stays true.
 - [ ] The Properties control opens on desktop and on the phone, the phone one built from `044`'s sheet row grammar with an explicit move affordance. Today: the control does not exist.
 - [ ] The operator arranges a board card's properties on a phone and reports it as close to Notion's. Only the operator closes this row.
+
+## 046-linked-views-notion-parity — 0/7
+
+- [ ] An embed renders with no card border, no duplicate database title and no expand/collapse chevron. Today: all three present in the operator's `report-42-embedded-view-clipped.png`, where a second "Reports" title sits under the page's own heading.
+- [ ] No table column is clipped in an embed at either captured device width. Today: clipped — the same capture cuts the third column mid-cell. The mechanism is the up-to-eight-ancestor `note-database-embed-codeblock-host` walk at `embedded-database-renderer.ts:600-611`.
+- [ ] ADR-001 has a status other than `Proposed`, and the embed's affordance set matches it.
+- [ ] A linked view moved from one page to another resolves the same database, view and options, and exactly one block exists across the two files. Today: no move exists — cut and paste is the only path.
+- [ ] Creating a linked view takes no clipboard step. Today: clipboard is the only path — `copyCurrentViewCode` (`database-view.ts:3912`) and `copyEmbeddedViewCode` (`embedded-database-renderer.ts:3561`) write the fence and stop.
+- [ ] All sixteen block shapes the current writers can produce round-trip byte-identically, plus the three adversarial rows. Today: untested — no round-trip test exists.
+- [ ] The operator opens the Overview page and reports the nested views as reading like real databases. Only the operator closes this row.
 
 ## Nothing left to check
 

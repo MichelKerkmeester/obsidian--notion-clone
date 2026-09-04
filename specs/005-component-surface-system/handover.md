@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T19:05:00Z"
+    last_updated_at: "2026-09-04T19:25:00Z"
     last_updated_by: "orchestrate-handover-16"
-    recent_action: "Opened 044-phone-sheet-alignment and 045-board-card-properties"
-    next_safe_action: "Dispatch 045 T003-T005; land 044 shared sheet chrome (T004)"
+    recent_action: "Opened phases 044, 045 and 046 from the operator evening pass"
+    next_safe_action: "Answer 046 host-layout question and ADR-001; land 044 shared chrome"
     blockers:
       - "Operator device confirmation owed: reports 29-33, five ported surfaces, 0.0.16-0.0.20"
       - "Reports 34-36 reopened (operator, 2026-09-04): add filter/add sort still break/freeze on 0.0.20; fix leg on worktrees/036-sheet-freeze (owner 031)"
@@ -21,6 +21,7 @@ _memory:
       - "Row 39 milestone-label fix owed: reinstate the local anti-collision fix on the default gantt, amendment to 037 REQ-007, leg on worktrees/038-milestone-labels"
       - "044 opened: reports 40/41/43 phone sheet grammar; legs on worktrees/039 and 040"
       - "045 opened: board card properties; must not move 038 reference parity"
+      - "046 opened: embed chrome/width parity, move and create; ADR-001 needs the operator"
     key_files:
       - "goal.md"
       - "roadmap.md"
