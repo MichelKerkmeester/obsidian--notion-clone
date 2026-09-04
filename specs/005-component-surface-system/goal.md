@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T09:10:50Z"
-    last_updated_by: "done-audit-10"
-    recent_action: "Done-audit-10 read row 6 after T029 widened both constructed lanes 21 -> 31"
-    next_safe_action: "Pair or retire the 42 fixtures the two lanes' fixture pass still gates on"
+    last_updated_at: "2026-09-04T13:17:14Z"
+    last_updated_by: "done-audit-11"
+    recent_action: "Done-audit-11 ticked row 6 after T030 paired 46 of the 51 unpaired fixtures"
+    next_safe_action: "Operator confirms 0.0.16-0.0.19 on device; rows 1 and 2 are the only open ones"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -27,7 +27,9 @@ _memory:
       - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
       - "043 T028 merged (d363456+dc67803): all 13 row-6 fixtures now have a constructed counterpart; css-lane, screenshots-fresh and device-parity cross-check all 13"
       - "done-audit-10: T029 closed those ten, both lanes now read 31; row 6 re-scoped to the fixture half, 42 of 71 hand-authored scenarios with no constructed counterpart in-lane"
-      - "1:1 legs: 038 board merged and shipped 0.0.16 (854c748+46a8525); 037 gantt landing from worktrees/024-gantt-one-to-one (7617f85), CSS leg recorded"
+      - "done-audit-11: T030 paired 46 of the 51; row 6 TICKED at 2242fa0, 5 fixtures stay unconstructable by design and no criterion's green rests on them"
+      - "1:1 legs shipped: board 0.0.16+0.0.18, gantt 0.0.17+0.0.19; board T12 in-repo half met at c563f08, its operator half still owed"
+      - "only rows 1 and 2 remain, both operator device confirmation: reports 29-36, the five ported surfaces, releases 0.0.16-0.0.19"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -36,7 +38,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 57
+    completion_pct: 71
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
@@ -254,7 +256,7 @@ resolve them silently.
       overlay-stack fix) delegate to the sheet-teardown/sheet-rebuild lanes by design, proven
       non-vacuous by negative controls rather than a numeric diff, per this row's earlier audit.
       Was 8 claims covering phases `000` through `005` only, 2026-09-03 audit; now 28.
-- [ ] No criterion's green depends on a value the harness supplies that a device would not — a
+- [x] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
       **Ticked 2026-09-02, on an observed red verified in-runtime and committed as `c5566db`.** The
       board, gallery and table scenarios had no owned negative control, so their green proved the
@@ -646,6 +648,115 @@ resolve them silently.
       a reported-not-enforced number beside the constructed one. `completion_pct` stays **4 of
       7 = 57**: rows 3, 4, 5 and 7 hold, rows 1 and 2 are the operator's, row 6 stays open on the
       fixture half of two lanes.
+
+      **Ticked 2026-09-04T13:17:14Z (done-audit-11), on this row's own words, after `043` T030
+      constructed the fixture families done-audit-10 re-scoped it to.** T030 landed across
+      `c4c7466`+`64db8d5`+`6fa715e` and was trued up onto main's gantt and board fidelity passes in
+      `d94e11f`, `2506bb2` and `2242fa0`. Every number below was measured on main at `2242fa0` by
+      this audit — four lane runs and a source census — never carried from the landing pass.
+
+      **What closed, each check with the value it replaced.** (a) *Fixtures with no constructed
+      counterpart: 51 -> 5.* Read by importing `tools/screenshots/scenarios.mjs` and filtering the
+      array, not by grepping a count that a comment could inflate: **71** fixtures, **66** carry
+      `fixtureOf`, **5** do not. Was 20 paired and 51 unpaired at `65238ad`. (b) *Both lanes'
+      constructed pass: 21 -> 31 -> 73 scenarios.* `render-assertion-bundle.mjs` exports `SCENARIOS`
+      (**21**) plus `STATE_SCENARIOS` (**52**) as `SCENARIOS_WITH_STATES` (**73**), over **35**
+      distinct `renderer` values, and `touch-targets.mjs:65` / `unstyled-links.mjs:40` import the
+      last of those. The constructed pass is now WIDER than the fixture pass it supplements — 73
+      against 71 — which is the first time in this row's history that has been true. (c)
+      *`touch-targets`:* constructed **24788** interactive elements across **73** scenarios, **1223**
+      under the 28px floor against a recorded baseline of **1223**; was **422/422** across **31**,
+      and **367/367** across **21** before that. Run three times, `$?` read directly each time — `0`,
+      `0`, `0` — and all three returned the identical fixture **1123/71/199** and constructed
+      **24788/73/1223**, matching HEAD's committed `tools/live/touch-targets.json` to the digit.
+      (d) *`unstyled-links`:* `$?` `0`, constructed **1476** links across **73** scenarios and **0**
+      user-agent-default findings; was **72** links across **31**, and **0** across **21** before
+      that. (e) *The fixture pass, recorded for the spread rather than skipped:* **1123** elements
+      across **71** scenarios, **199** under against a baseline of **279**; was **1450/71/264** at
+      `65238ad`. The scenario count is unchanged, so the drop is main's board and gantt ports moving
+      `styles.css`, not a fixture edit.
+
+      **done-audit-10's determinism caveat is retired, not inherited.** That audit found the
+      constructed ratchet sitting on its ceiling and *decided by timing* — 417 against a baseline of
+      422 on identical `inputs` hashes with no `src/` commit to explain it, and 1457/1471/1558/1584/
+      1601/1623 across six runs of one tree on T030's own branch. The cause is now named and fixed
+      rather than tolerated: the anchored surfaces that portal to `document.body` were never torn
+      down, so each scenario measured every earlier scenario's panel as well, and the runner now
+      sweeps every body child a mount added. Three runs here return one number. The ratchet still
+      equals its baseline (1223 = 1223), so it has no headroom — but a ceiling a run reproduces is a
+      different object from a ceiling a run rolls for.
+
+      **The ruling, and the five fixtures it turns on.** The criterion is conjunctive: a green must
+      depend on a harness-supplied value *that a device would not supply*. A hand-written mount is
+      the class this row names, but done-audit-7 already set the test for a named class member —
+      the stubbed action bags were ruled a declared residual rather than a live dependency once it
+      was verified in source that no green could move on them. That is the test applied here, to
+      each of the five, and none of them keeps a criterion green on a harness-only value:
+      **`panel-computed-cleanup-modal`** and **`panel-invalid-events-modal`** are the only two of
+      the five that reach either lane's pass/fail arithmetic at all, and they reach it in the wrong
+      direction for this row: `node tools/live/touch-targets.mjs --json` attributes **2** and **3**
+      of the 199 undeclared under-floor rows to them (bare and `mod-warning` buttons at 24px height),
+      which *consume* ratchet headroom rather than create it — `fixtureFailed` is
+      `undeclared.length > allowed` (`touch-targets.mjs:411`), so a fixture can manufacture a red
+      here and never a green. **`panel-base-import-modal`** contributes **0** undeclared rows and
+      **0** link findings; its 5 hits are all on the `DECLARED` allowlist, which is an accepted
+      shortfall, not a green. **`chrome-selection-status-bar`** contributes **0** undeclared rows,
+      and its product claims are asserted on production output by a different lane entirely:
+      `verify-placement.mjs` builds the bar through `DatabaseView.prototype.renderSelectionStatusBar`
+      and `EmbeddedDatabaseRenderer.prototype.renderEmbedSelectionStatusBar` and measures the thumb
+      floor and keyboard clearance on that DOM. The one criterion that names the fixture id at all,
+      `022`'s AC-8, asks for "a fixture that photographs the bar rather than an empty region" — a
+      claim whose subject IS the capture, correctly scoped, not a proxy for a device value.
+      **`board-drop-language`** is the one genuinely load-bearing case and it was checked hardest.
+      It is the only one of the five any executable check names: `replay.mjs:600` loads its
+      hand-written HTML and requires `.pm-kanban-drop-target` and `.pm-kanban-card--dragging`,
+      contributing 1 of the `recorded: 2` on `038`'s empty-column/drop-language claim, and
+      `replay.mjs:827` holds claims on `actual === c.recorded` exactly — so the replay lane's exit
+      code, which ticked row 5 reads and ticked row 4 sums, does strictly depend on that fixture.
+      What it does not depend on is a value a device would withhold: `board-renderer-parity.test.ts`
+      constructs a real `BoardRenderer` from `src/views/board-renderer` and dispatches real
+      `dragstart`, `dragover` and `dragleave` events, asserting those same two class names on the
+      renderer's own output (`:928`, `:939`, `:946`, present at HEAD), inside the `tests` gate lane.
+      The harness value and the production value are the same value, measured twice.
+
+      **What this tick does not claim, said plainly.** The five are still a coverage gap, and the
+      gap is structural rather than deferred: `obsidian-stub.mjs:202` makes `Modal` an
+      `outOfScope()` throw, so the three `DbModal`-hosted panels have no mountable host;
+      `chrome-selection-status-bar`'s host extends `MarkdownRenderChild` and its state exists only
+      mid-gesture; `board-drop-language`'s classes are added by live `dragstart`/`dragover`
+      handlers. Those surfaces are measured on hand-authored geometry and nowhere else, so the two
+      lanes cannot raise a red about them. That is a red the corpus cannot reach, which is a
+      different defect from the one this row polices — this row asks whether a green *rests* on a
+      harness value, and after T030 none does. Recorded as a live coverage limit against row 3's
+      ledger and `043`'s Known Limitations, not silently absorbed by this tick.
+
+      **Two checks that could have kept it open, run rather than assumed.** `render-assertions.mjs`
+      still reads the unwidened **21** (`:54` imports the bare `SCENARIOS`), and its `BAGS` still
+      holds exactly **13** keys with none of `calendar-toolbar/file-view`,
+      `timeline-toolbar/file-view` or `chart-toolbar/file-view` among them — enumerated out of the
+      source again, so the sibling-export constraint T029 recorded is still real and still the
+      reason the merge cannot happen. And **one correction to done-audit-10, found by re-running its
+      own reasoning rather than repeating it.** That audit cleared `render-assertions.mjs` three
+      ways; legs (a) and (c) hold — the harness refuses DOM without a bundled-renderer provenance
+      marker (`render-assertion-harness.ts:1308`) and the coverage total is read live from
+      `src/views` (`render-assertions.mjs:298-301`, `readdirSync` plus `/export class \w*Renderer/`).
+      Leg (b) does not. It claimed the 13 action bags are "return-type-annotated against the shipped
+      `*RendererActions` interfaces so `tsc --noEmit` binds them to `src/views`". The annotations do
+      exist — 13 of them, in `render-assertion-harness.ts`, not in `render-assertions.mjs` where the
+      audit cited them — but no gate lane typechecks them: root `tsconfig.json` includes
+      `src/**/*.ts` only, and `lint:tools` runs eslint over `tools/**/*.mjs`, which excludes the
+      `.ts` harness. So `BAGS` is a hand-maintained expected list compared against the harness's own
+      bag keys (`:277`-`:279`), with no enforced binding to `src/views`. That weakens leg (b) to
+      zero, and the conclusion still stands on the other two plus done-audit-7's inertness finding,
+      re-verified here: `render-assertions.mjs` references `actions` only inside a comment, and
+      `touch-targets.mjs`/`unstyled-links.mjs` reference an action bag **0** times each, so no
+      measured geometry, colour or hash can move on a bag member. An unenforced shape list can only
+      under-assert — a red it fails to raise — which is the same class as the coverage gap above,
+      not a green resting on a device-divergent value.
+
+      `completion_pct` moves to **5 of 7 = 71**, up from 4 of 7 = 57: rows 3, 4, 5, 6 and 7 hold,
+      and rows 1 and 2 stay the operator's — device confirmation of reports 29-36, the five ported
+      surfaces and releases 0.0.16 through 0.0.19.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1589,5 +1700,82 @@ constructed pass's scanned element total dropped 57060 -> 50462 and its construc
 (`chrome-board-extensions-selection`, `d921404`) straight into the set with no constructed
 counterpart. `037`'s gantt one-to-one leg is landing from `worktrees/024-gantt-one-to-one` at
 `7617f85` (TypeScript leg `d30ea78`+`9bd044a`, CSS leg recorded); main does not carry it yet.
+
+### 2026-09-04: both fidelity passes landed and shipped, 0.0.18 and 0.0.19
+
+Recorded as landed fact, measured on main rather than taken from a branch note. `038`'s board
+fidelity pass — the divergences T12's fresh reviewer found against the reference — landed in
+`a6abd0a9`+`cb6ef827`, was reconciled in `01883cf8` and trued up in `b1e75124`, and was cut as
+release **0.0.18** (`96f878a5`); its closing fixes (kanban height chain, due-tier and badge-icon
+fidelity, then the responsive host padding, photograph avatars and milestone chips) landed in
+`2cddc7cf`+`d896f90e` and `595dc283`+`7d5b3f90`, reconciled `fe42955d`. `037`'s gantt fidelity pass
+landed in `119f5936`+`8c563a35`, reconciled `5fd4fc7d`, trued up `6d12740a`, and was cut as release
+**0.0.19** (`07f4500f`). `manifest.json`, `package.json` and `versions.json` on main all read
+**0.0.19**, and the `0.0.18` and `0.0.19` tags are both on `origin`. The next cut is **0.0.20**.
+Board `T12`'s in-repo half is met by a fourth fresh read, and `c563f089` mirrored its operator half
+into `038`'s own `goal.md` as an operator-only row so `build-operator-checklist.mjs` surfaces it;
+the closing leg runs on `worktrees/033-board-t12`, and a gantt behaviour pass is landing from
+`worktrees/032-gantt-residual`. Neither is on main at `2242fa0`, so no row moves on their account.
+
+### Done-audit-11, 2026-09-04T13:17:14Z: `043` T030 lands, row 6 TICKED, the parent goes 5 of 7
+
+A fresh audit re-read row 6 on main at `2242fa0` after `043` T030 (`c4c7466`+`64db8d5`+`6fa715e`,
+trued up onto the gantt and board fidelity passes in `d94e11f`, `2506bb2`, `2242fa0`) constructed
+the fixture families `done-audit-10` re-scoped the row to. Full evidence sits in row 6's own
+checklist paragraph above; this entry is the ruling. **Row 6 ticks**, and the parent DONE table goes
+**5 of 7 = 71** for the first time.
+
+**What closed, with the value each check replaced.** Fixtures with no constructed counterpart
+**51 -> 5**, read by importing `scenarios.mjs` and filtering rather than grepping a count: 71
+fixtures, 66 with `fixtureOf`, 5 without. Both lanes' constructed pass **21 -> 31 -> 73** scenarios
+(`SCENARIOS` 21 + `STATE_SCENARIOS` 52 = `SCENARIOS_WITH_STATES` 73, 35 distinct `renderer` values)
+— wider than the 71-fixture pass it supplements, a first for this row. `touch-targets` `$?` `0`
+three times running with byte-identical output: constructed **24788** elements across **73**,
+**1223** under the 28px floor against a baseline of **1223** (was 422/422 across 31, and 367/367
+across 21); fixture **1123/71/199** against a baseline of 279 (was 1450/71/264, the drop being
+main's board and gantt ports moving `styles.css`). `unstyled-links` `$?` `0`: constructed **1476**
+links across **73** with **0** user-agent-default findings (was 72 across 31, and 0 across 21).
+`done-audit-10`'s "the ratchet is decided by timing" caveat is retired at its cause — T030 swept the
+body-portal teardown that had each scenario measuring the previous one's panels — not inherited.
+
+**Why the five that remain do not keep this row open.** The criterion is conjunctive: a green must
+rest on a harness value *that a device would not supply*. `done-audit-7` already set the test for a
+named class member, ruling the stubbed action bags a declared residual once it was verified in
+source that no green could move on them; that same test, applied to each of the five, clears all
+five. Two of them (`panel-computed-cleanup-modal`, `panel-invalid-events-modal`) reach a lane's
+arithmetic only as 2 and 3 of the 199 undeclared under-floor rows, which consume ratchet headroom —
+`fixtureFailed` is `undeclared.length > allowed`, so a fixture manufactures reds here, never greens.
+`panel-base-import-modal` contributes 0 undeclared rows and 0 findings. `chrome-selection-status-bar`
+contributes 0, and its product claims are asserted on production output by the placement lane, which
+builds the bar through `renderSelectionStatusBar`/`renderEmbedSelectionStatusBar`. Only
+`board-drop-language` is load-bearing — `replay.mjs:600` loads its markup for 1 of a `recorded: 2`
+held on exact equality, so the replay lane's exit code does depend on it — but the value it supplies
+is not one a device withholds: `board-renderer-parity.test.ts` drives real `dragstart`/`dragover`/
+`dragleave` events against a real `BoardRenderer` and asserts the identical two class names, inside
+the `tests` gate lane.
+
+**What the tick does not claim.** The five stay a structural coverage gap — `obsidian-stub.mjs:202`
+makes `Modal` an out-of-scope throw, the status bar's host is a `MarkdownRenderChild` with
+mid-gesture state, and the board's drag classes are added by live handlers — so the two lanes cannot
+raise a red about those surfaces. A red the corpus cannot reach is a different defect from a green
+resting on a harness value, and it is recorded against row 3's coverage ledger rather than absorbed
+here.
+
+**One correction to `done-audit-10`, found by re-running its reasoning rather than repeating it.**
+It cleared `render-assertions.mjs` three ways; (a) and (c) hold, verified again here. (b) does not:
+the 13 action-bag return-type annotations live in `render-assertion-harness.ts`, not in
+`render-assertions.mjs` where it cited them, and **no gate lane typechecks them** — root
+`tsconfig.json` includes `src/**/*.ts` only and `lint:tools` runs eslint over `tools/**/*.mjs`, so
+the `.ts` harness is neither typechecked nor linted. `BAGS` is therefore a hand-maintained list
+compared against the harness's own bag keys with no enforced binding to `src/views`. The conclusion
+survives on (a), (c) and `done-audit-7`'s inertness finding, re-verified: `render-assertions.mjs`
+names `actions` only in a comment and the two lanes reference an action bag 0 times each. An
+unenforced shape list can only under-assert, which is again a missing red rather than a false green.
+Also re-confirmed unchanged: `BAGS` holds exactly 13 keys, none of them the toolbar triple, so
+`SCENARIOS` still cannot absorb `STATE_SCENARIOS`.
+
+`completion_pct` moves to **5 of 7 = 71**, up from 4 of 7 = 57. Rows 3, 4, 5, 6 and 7 hold; rows 1
+and 2 are the operator's and are now the only open rows in the table. `roadmap.md` §5, §5.3 and
+`handover.md` updated to match.
 
 <!-- /ANCHOR:log -->
