@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T14:16:17.145Z",
+  "measuredAt": "2026-09-04T18:11:05.164Z",
   "inputs": {
-    "styles.css": "e357f63d13ac",
+    "styles.css": "cdc0217ad1d7",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -1283,7 +1283,7 @@
       "mountParent": "db-icon-picker-scroll",
       "tokens": true,
       "role": null,
-      "rect": "275x65",
+      "rect": "286x65",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1294,7 +1294,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "275x15",
+      "rect": "286x15",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1305,7 +1305,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "275x44",
+      "rect": "286x44",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"

@@ -80,6 +80,18 @@ const GANTT_LABEL_MIN_WIDTH = 150;
 const GANTT_LABEL_MAX_WIDTH = 600;
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
+// The reference's own two renderers share one header SVG with no anti-collision between them
+// (GanttHeaderRenderer's band label at y=18, GanttTaskBarRenderer's milestone label at y=14) —
+// confirmed against the vendored reference source, which carries no such case in its own
+// fixtures to have needed one. This local addition (operator amendment, not part of the 1:1
+// copy) raises a milestone label that would otherwise land on a band label, reusing the
+// estimate-then-move shape the local renderer's resolveTimelineMilestoneLabelPlacement already
+// uses for its own (different) collision: a character-count width estimate, no real text
+// metrics, because none are available for an unmounted SVG string in this render path.
+const GANTT_MILESTONE_LABEL_Y = 14;
+const GANTT_MILESTONE_LABEL_RAISED_Y = 8;
+const GANTT_HEADER_LABEL_CHAR_WIDTH_PX = 6;
+
 /** Reference-gantt geometry: the padded task-driven range plus the reference day width. */
 interface GanttTimelineCfg {
   startDateKey: string;
@@ -88,6 +100,29 @@ interface GanttTimelineCfg {
   granularity: TimelineScale;
   totalDays: number;
   totalWidth: number;
+}
+
+/** One header top-band label's own left-anchored x and text, as renderGanttMonthBands/
+ *  renderGanttYearBands drew it — the shape renderGanttMilestoneLabels checks a milestone
+ *  label's estimated span against. */
+interface GanttHeaderBandLabel {
+  x: number;
+  text: string;
+}
+
+/** True when a milestone label centred at `x` would visually overlap a header band label,
+ *  estimating both spans by character count (no real text metrics exist for an unmounted SVG
+ *  string). Mirrors the estimate-then-compare shape of resolveTimelineMilestoneLabelPlacement/
+ *  getTimelineMilestoneLabelWidthUnits (calendar-timeline-model.ts) for the local renderer's own
+ *  milestone-vs-next-bar collision — this is the same rule applied to a different pair. */
+function ganttMilestoneLabelCrowdsBand(x: number, text: string, bandLabels: GanttHeaderBandLabel[]): boolean {
+  const halfWidth = (text.length * GANTT_HEADER_LABEL_CHAR_WIDTH_PX) / 2;
+  const milestoneX1 = x - halfWidth;
+  const milestoneX2 = x + halfWidth;
+  return bandLabels.some((band) => {
+    const bandX2 = band.x + band.text.length * GANTT_HEADER_LABEL_CHAR_WIDTH_PX;
+    return milestoneX1 < bandX2 && milestoneX2 > band.x;
+  });
 }
 
 /** Reference-gantt bar drag wiring; mirrors the reference's BarDragOpts. */
@@ -748,7 +783,7 @@ export class CalendarTimelineRenderer {
     addRow.style.height = `${GANTT_ROW_HEIGHT}px`;
     this.renderGanttAddButton(addRow, config);
 
-    this.renderGanttHeader(headerSvgEl, cfg, config);
+    const bandLabels = this.renderGanttHeader(headerSvgEl, cfg, config);
     const grid = this.ganttSvgElement("g", { class: "pm-gantt-grid" });
     svgEl.appendChild(grid);
     this.renderGanttGrid(grid, cfg, totalRows);
@@ -757,7 +792,7 @@ export class CalendarTimelineRenderer {
     svgEl.appendChild(barsGroup);
     this.renderGanttBars(barsGroup, cfg, visibleRows, eventByPath, invalidPaths, config, startField, endField, svgEl);
     this.renderGanttDependencyArrows(svgEl, cfg, visibleRows, eventByPath);
-    this.renderGanttMilestoneLabels(svgEl, headerSvgEl, cfg, visibleRows, eventByPath);
+    this.renderGanttMilestoneLabels(svgEl, headerSvgEl, cfg, visibleRows, eventByPath, bandLabels);
 
     const syncSpacer = this.setupGanttScrollSync(leftPanel, leftBody, rightPanel);
     // Escape and the undo/redo keys must reach this view from anywhere in the leaf,
@@ -1049,24 +1084,28 @@ export class CalendarTimelineRenderer {
       && window.activeDocument?.body?.classList?.contains("is-phone") === true;
   }
 
-  /** Header svg: background, band fills, per-scale labels and ticks.
-   *  Adapted from GanttHeaderRenderer.renderTimelineHeader and the per-scale renderers. */
-  private renderGanttHeader(headerSvgEl: HTMLElement, cfg: GanttTimelineCfg, config: ViewConfig): void {
+  /** Header svg: background, band fills, per-scale labels and ticks. Adapted from
+   *  GanttHeaderRenderer.renderTimelineHeader and the per-scale renderers. Returns the top
+   *  band's own labels (month or year, whichever the granularity draws) so
+   *  renderGanttMilestoneLabels can tell whether a milestone label would land on top of one —
+   *  see that method's own comment for why this exists. */
+  private renderGanttHeader(headerSvgEl: HTMLElement, cfg: GanttTimelineCfg, config: ViewConfig): GanttHeaderBandLabel[] {
     const g = this.ganttSvgElement("g", { class: "pm-gantt-header" });
     g.appendChild(this.ganttSvgElement("rect", { x: 0, y: 0, width: cfg.totalWidth, height: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-bg" }));
     const { granularity } = cfg;
-    if (granularity === "day") this.renderGanttDayHeader(g, cfg);
-    else if (granularity === "week") this.renderGanttWeekHeader(g, cfg, config);
-    else if (granularity === "month") this.renderGanttMonthHeader(g, cfg);
-    else if (granularity === "quarter") this.renderGanttQuarterHeader(g, cfg);
-    else this.renderGanttYearHeader(g, cfg);
+    const bandLabels = granularity === "day" ? this.renderGanttDayHeader(g, cfg)
+      : granularity === "week" ? this.renderGanttWeekHeader(g, cfg, config)
+      : granularity === "month" ? this.renderGanttMonthHeader(g, cfg)
+      : granularity === "quarter" ? this.renderGanttQuarterHeader(g, cfg)
+      : this.renderGanttYearHeader(g, cfg);
     headerSvgEl.appendChild(g);
+    return bandLabels;
   }
 
   /** Day header: month-top bands, weekend fills, day-of-month labels. Adapted from
    *  GanttHeaderRenderer.renderDayHeader. */
-  private renderGanttDayHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
-    this.renderGanttMonthBands(g, 0, 24, cfg);
+  private renderGanttDayHeader(g: HTMLElement, cfg: GanttTimelineCfg): GanttHeaderBandLabel[] {
+    const bandLabels = this.renderGanttMonthBands(g, 0, 24, cfg);
     for (let i = 0; i < cfg.totalDays; i++) {
       const d = this.ganttDateAt(cfg.startDateKey, i);
       const x = i * cfg.dayWidth;
@@ -1080,13 +1119,14 @@ export class CalendarTimelineRenderer {
         g.appendChild(text);
       }
     }
+    return bandLabels;
   }
 
   /** Week header: month-top bands, Monday-aligned week labels and ticks. Adapted from
    *  GanttHeaderRenderer.renderWeekHeader; the label mode is the reference's
    *  ganttWeekLabel setting (week-number default, date range, or both). */
-  private renderGanttWeekHeader(g: HTMLElement, cfg: GanttTimelineCfg, config: ViewConfig): void {
-    this.renderGanttMonthBands(g, 0, 24, cfg);
+  private renderGanttWeekHeader(g: HTMLElement, cfg: GanttTimelineCfg, config: ViewConfig): GanttHeaderBandLabel[] {
+    const bandLabels = this.renderGanttMonthBands(g, 0, 24, cfg);
     const labelMode: GanttWeekLabel = config.timelineWeekLabel || "weekNumber";
     const start = this.ganttDateAt(cfg.startDateKey, 0);
     const dow = start.getUTCDay() === 0 ? 7 : start.getUTCDay();
@@ -1111,6 +1151,7 @@ export class CalendarTimelineRenderer {
       g.appendChild(this.ganttSvgElement("line", { x1: x, y1: 24, x2: x, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
       i += 7;
     }
+    return bandLabels;
   }
 
   /** Week label in the reference's three modes: W{n}, the date range, or both. Adapted from
@@ -1135,8 +1176,8 @@ export class CalendarTimelineRenderer {
 
   /** Month header: year bands, month labels and ticks. Adapted from
    *  GanttHeaderRenderer.renderMonthHeader. */
-  private renderGanttMonthHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
-    this.renderGanttYearBands(g, 0, 24, cfg);
+  private renderGanttMonthHeader(g: HTMLElement, cfg: GanttTimelineCfg): GanttHeaderBandLabel[] {
+    const bandLabels = this.renderGanttYearBands(g, 0, 24, cfg);
     let monthStart = this.ganttMonthStart(cfg.startDateKey);
     while (dateKeyFromUtc(monthStart) < cfg.endDateKey) {
       const nextMonthStart = makeUtcDate(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1);
@@ -1149,12 +1190,13 @@ export class CalendarTimelineRenderer {
       g.appendChild(this.ganttSvgElement("line", { x1, y1: 24, x2: x1, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
       monthStart = nextMonthStart;
     }
+    return bandLabels;
   }
 
   /** Quarter header: year bands, quarter labels. Adapted from
    *  GanttHeaderRenderer.renderQuarterHeader. */
-  private renderGanttQuarterHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
-    this.renderGanttYearBands(g, 0, 24, cfg);
+  private renderGanttQuarterHeader(g: HTMLElement, cfg: GanttTimelineCfg): GanttHeaderBandLabel[] {
+    const bandLabels = this.renderGanttYearBands(g, 0, 24, cfg);
     const start = this.ganttDateAt(cfg.startDateKey, 0);
     let date = makeUtcDate(start.getUTCFullYear(), Math.floor(start.getUTCMonth() / 3) * 3, 1);
     while (dateKeyFromUtc(date) < cfg.endDateKey) {
@@ -1167,12 +1209,13 @@ export class CalendarTimelineRenderer {
       g.appendChild(text);
       date = nextQStart;
     }
+    return bandLabels;
   }
 
   /** Year header: year bands, quarter labels and ticks. Adapted from
    *  GanttHeaderRenderer.renderYearHeader. */
-  private renderGanttYearHeader(g: HTMLElement, cfg: GanttTimelineCfg): void {
-    this.renderGanttYearBands(g, 0, 24, cfg);
+  private renderGanttYearHeader(g: HTMLElement, cfg: GanttTimelineCfg): GanttHeaderBandLabel[] {
+    const bandLabels = this.renderGanttYearBands(g, 0, 24, cfg);
     const start = this.ganttDateAt(cfg.startDateKey, 0);
     let date = makeUtcDate(start.getUTCFullYear(), Math.floor(start.getUTCMonth() / 3) * 3, 1);
     while (dateKeyFromUtc(date) < cfg.endDateKey) {
@@ -1186,10 +1229,14 @@ export class CalendarTimelineRenderer {
       g.appendChild(this.ganttSvgElement("line", { x1, y1: 24, x2: x1, y2: GANTT_HEADER_HEIGHT, class: "pm-gantt-header-tick" }));
       date = nextQStart;
     }
+    return bandLabels;
   }
 
-  /** Month bands across the top band. Adapted from GanttHeaderRenderer.renderMonthBands. */
-  private renderGanttMonthBands(g: HTMLElement, y: number, h: number, cfg: GanttTimelineCfg): void {
+  /** Month bands across the top band. Adapted from GanttHeaderRenderer.renderMonthBands. Returns
+   *  each band label's own x/text so renderGanttMilestoneLabels can check a milestone label
+   *  against the same positions this method just drew, rather than recomputing them. */
+  private renderGanttMonthBands(g: HTMLElement, y: number, h: number, cfg: GanttTimelineCfg): GanttHeaderBandLabel[] {
+    const bandLabels: GanttHeaderBandLabel[] = [];
     let monthStart = this.ganttMonthStart(cfg.startDateKey);
     while (dateKeyFromUtc(monthStart) < cfg.endDateKey) {
       const nextMonthStart = makeUtcDate(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1);
@@ -1203,15 +1250,21 @@ export class CalendarTimelineRenderer {
         height: h,
         class: monthStart.getUTCMonth() % 2 === 0 ? "pm-gantt-band-even" : "pm-gantt-band-odd",
       }));
-      const text = this.ganttSvgElement("text", { x: x1 + 6, y: y + h - 6, class: "pm-gantt-header-month-top" });
-      text.setText(this.ganttMonthTopLabel(monthStart));
+      const labelText = this.ganttMonthTopLabel(monthStart);
+      const labelX = x1 + 6;
+      const text = this.ganttSvgElement("text", { x: labelX, y: y + h - 6, class: "pm-gantt-header-month-top" });
+      text.setText(labelText);
       g.appendChild(text);
+      bandLabels.push({ x: labelX, text: labelText });
       monthStart = nextMonthStart;
     }
+    return bandLabels;
   }
 
-  /** Year bands across the top band. Adapted from GanttHeaderRenderer.renderYearBands. */
-  private renderGanttYearBands(g: HTMLElement, y: number, h: number, cfg: GanttTimelineCfg): void {
+  /** Year bands across the top band. Adapted from GanttHeaderRenderer.renderYearBands. Returns
+   *  each band label's own x/text — see renderGanttMonthBands's comment. */
+  private renderGanttYearBands(g: HTMLElement, y: number, h: number, cfg: GanttTimelineCfg): GanttHeaderBandLabel[] {
+    const bandLabels: GanttHeaderBandLabel[] = [];
     const start = this.ganttDateAt(cfg.startDateKey, 0);
     let date = makeUtcDate(start.getUTCFullYear(), 0, 1);
     while (dateKeyFromUtc(date) < cfg.endDateKey) {
@@ -1225,11 +1278,15 @@ export class CalendarTimelineRenderer {
         height: h,
         class: date.getUTCFullYear() % 2 === 0 ? "pm-gantt-band-even" : "pm-gantt-band-odd",
       }));
-      const text = this.ganttSvgElement("text", { x: x1 + 6, y: y + h - 6, class: "pm-gantt-header-year" });
-      text.setText(String(date.getUTCFullYear()));
+      const labelText = String(date.getUTCFullYear());
+      const labelX = x1 + 6;
+      const text = this.ganttSvgElement("text", { x: labelX, y: y + h - 6, class: "pm-gantt-header-year" });
+      text.setText(labelText);
       g.appendChild(text);
+      bandLabels.push({ x: labelX, text: labelText });
       date = yearEnd;
     }
+    return bandLabels;
   }
 
   /** Grid: weekend fills (day scale), boundary verticals, row horizontals. Adapted from
@@ -1465,6 +1522,7 @@ export class CalendarTimelineRenderer {
     cfg: GanttTimelineCfg,
     visibleRows: RowData[],
     eventByPath: Map<string, CalendarTimelineEvent>,
+    bandLabels: GanttHeaderBandLabel[],
   ): void {
     const milestones = visibleRows
       .map((row) => eventByPath.get(row.file.path))
@@ -1476,6 +1534,9 @@ export class CalendarTimelineRenderer {
       // stay on the marker.
       const x = this.ganttDateToX(cfg, event.endDateKey ?? event.startDateKey) + cfg.dayWidth / 2;
       const totalH = GANTT_HEADER_HEIGHT + visibleRows.length * GANTT_ROW_HEIGHT;
+      // The guide line always starts at the header's own bottom edge (GANTT_HEADER_HEIGHT),
+      // never inside the 0-24 band strip the label move below stays within, so raising the
+      // label never needs a matching change here.
       linesG.appendChild(this.ganttSvgElement("line", {
         x1: x,
         y1: GANTT_HEADER_HEIGHT,
@@ -1486,8 +1547,16 @@ export class CalendarTimelineRenderer {
         "stroke-dasharray": "4 4",
         opacity: 0.4,
       }));
-      const label = this.ganttSvgElement("text", { x, y: 14, "text-anchor": "middle", class: "pm-gantt-milestone-label", fill: this.resolveGanttBarColor(event) });
-      label.setText(event.title.length > 16 ? `${event.title.slice(0, 14)}\u2026` : event.title);
+      const titleText = event.title.length > 16 ? `${event.title.slice(0, 14)}\u2026` : event.title;
+      const crowded = ganttMilestoneLabelCrowdsBand(x, titleText, bandLabels);
+      const label = this.ganttSvgElement("text", {
+        x,
+        y: crowded ? GANTT_MILESTONE_LABEL_RAISED_Y : GANTT_MILESTONE_LABEL_Y,
+        "text-anchor": "middle",
+        class: crowded ? "pm-gantt-milestone-label pm-gantt-milestone-label--raised" : "pm-gantt-milestone-label",
+        fill: this.resolveGanttBarColor(event),
+      });
+      label.setText(titleText);
       headerSvgEl.appendChild(label);
     }
     svgEl.appendChild(linesG);

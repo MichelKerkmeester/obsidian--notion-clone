@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T14:16:26.774Z",
+  "measuredAt": "2026-09-04T18:31:29.060Z",
   "inputs": {
-    "styles.css": "e357f63d13ac",
+    "styles.css": "cdc0217ad1d7",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -2814,7 +2814,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -2825,7 +2825,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -2836,7 +2836,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5449,7 +5449,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5460,7 +5460,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5471,7 +5471,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6654,7 +6654,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6665,7 +6665,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6676,7 +6676,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7485,7 +7485,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7496,7 +7496,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7507,7 +7507,7 @@
       "tag": "button",
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },

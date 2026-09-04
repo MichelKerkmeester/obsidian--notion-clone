@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "e357f63d13ac",
+  "baselineHash": "cdc0217ad1d7",
   "baselineCommit": "5beb1671076bcaa917b2ede6e83eab520ce89ec7",
   "history": [
     {
@@ -2609,6 +2609,32 @@
         "screenshots/views/timeline-subtask-tree-mobile-dark.png"
       ],
       "note": "Reconciliation release, not a CSS edit — landing worktrees/034-gantt-close onto origin/main (5beb1671, past the screenshots-refresh 349e22c4) after ordering held for that refresh to land first. styles.css auto-merged clean: the branch's own hit-area .note-database-container scoping (~18090) applied on top of main's unrelated post-a78000c history, which touched no line in that region; merged hash e357f63d13ac exactly matches the branch's own pre-rebase local hash, confirming main carried no further edit to the same bytes. tools/lane/css-lane.json merged as main's 223-entry history plus the branch's own acquire+release pair (037-timeline-gantt-port, already carrying this exact hash and note); holder/acquiredAt left null. A full recapture (npm run screenshots, 528 entries) confirmed all 26 of the branch's own listed timeline captures reproduced byte-identical to the branch's pre-rebase committed PNGs (git status showed 0 diff against HEAD for all 26 after the run) — 6 re-opened directly this session across the four documented behaviours (phone fixture at 160px with a visible chart on day/month/subtask-tree mobile, per-band MAR 26/APR 26 month labels on desktop week view, and the Week-scale popover on both desktop and mobile showing the Layout heading with no Slot duration row), matching the branch's own release note point for point. 10 further files the recapture moved (constructed-owned-menu-mobile-dark, constructed-icon-picker-desktop-{dark,light}, constructed-sort-panel-calendar-mobile-light, constructed-record-detail-desktop-dark, panel-record-detail-sheet-body-empty-desktop-light, board-mobile-desktop-dark, board-subtask-tree-mobile-light, board-view-desktop-dark, board-view-mobile-light) were confirmed pixelHash-identical to HEAD (re-encode noise, the same families prior 037/038/043 reconciliation releases already named) and restored to HEAD bytes, manifest entries reset to HEAD's values; every entry's sourceHashes.styles.css moved 28b394491fdb->e357f63d13ac globally since the file-wide hash changed, which is expected and not itself a capture concern. tsc 0; vitest 1037/1037; lint 172 (unchanged baseline); lint:tools clean; scan-comments PASS; npm run screenshots:verify 0 stale; npm run gate 25/25 green; touch-targets.mjs re-measured three times: stable at fixture 279/constructed 1223, 0 new each pass."
+    },
+    {
+      "event": "acquire",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T17:49:16.060Z",
+      "hash": "e357f63d13ac",
+      "note": "Operator amendment to REQ-007 (roadmap.md row 39): reinstate a local anti-collision fix for the milestone label overpainting the month/year band label on the reference gantt header, ported from the local renderer resolveTimelineMilestoneLabelPlacement estimate-then-move shape."
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T18:06:39.145Z",
+      "hash": "cdc0217ad1d7",
+      "reviewed": [
+        "screenshots/views/constructed-timeline-day-desktop-dark.png",
+        "screenshots/views/constructed-timeline-day-desktop-light.png",
+        "screenshots/views/constructed-timeline-desktop-dark.png",
+        "screenshots/views/constructed-timeline-desktop-light.png",
+        "screenshots/views/constructed-timeline-mobile-dark.png",
+        "screenshots/views/constructed-timeline-mobile-light.png",
+        "screenshots/views/constructed-timeline-subtask-desktop-dark.png",
+        "screenshots/views/constructed-timeline-subtask-desktop-light.png",
+        "screenshots/views/constructed-timeline-subtask-mobile-dark.png",
+        "screenshots/views/constructed-timeline-subtask-mobile-light.png"
+      ],
+      "note": "Operator amendment to REQ-007 (roadmap.md row 39): raise a milestone label off the month/year band label baseline on the reference gantt header when the two would overpaint (GanttHeaderRenderer y=18, GanttTaskBarRenderer y=14, same header SVG) — renderGanttMilestoneLabels now estimates both labels by character count and, when their spans overlap, moves the milestone label to y=8 and adds .pm-gantt-milestone-label--raised (a background-color text stroke for legibility). New styles.css rule only; the reference gantt.css copy is untouched. All 10 real content-changed captures opened and read this session, both themes/devices where applicable: constructed-timeline (week scale, default) and constructed-timeline-day (day scale) both show row-1s milestone label cleanly stacked above the SEP 26 month-band label instead of overpainting it (before/after compared directly against the HEAD-committed PNG); constructed-timeline-subtask shows the same fix with the parent/child indent unaffected. pixelHash read these as unchanged (its coarse tolerance misses a ~6px text-baseline move) while layoutHash and a direct visual read both confirmed the change — reviewed by opening every file, not by trusting the hash. Six further files the recapture moved (constructed-owned-menu-mobile-dark, field-icon-picker-desktop-dark/light, constructed-record-detail-desktop-dark, constructed-sort-panel-calendar-mobile-light, board-view-desktop-dark) were confirmed pixelHash-identical to HEAD except field-icon-picker (this environment doc-documented Chrome/OS drift, unrelated to any code here, same handling every prior release gave it) and restored to HEAD-committed bytes rather than recommitted; manifest.json bytes/pixelHash/layoutHash for those six reset to HEAD values while sourceHashes carry the current fingerprint. The hand-authored temporal.mjs fixture (timeline-view-* captures) was checked against the same crowd heuristic and produces no collision in any of its five scales/two devices, so it needed no update — confirmed unchanged in this recapture. tsc 0; vitest 1038/1038 (101 files); lint 172 (unchanged baseline); lint:tools clean; scan-comments PASS."
     }
   ],
   "outstanding": [

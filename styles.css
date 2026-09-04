@@ -18059,6 +18059,17 @@ body.pm-resize-active * {
   font-weight: 600;
   letter-spacing: 0.03em;
 }
+/* Local addition (operator amendment, not part of the 1:1 gantt.css copy): the reference's own
+   month/year band label and milestone label share one header SVG with no anti-collision between
+   them (band y=18, milestone y=14). renderGanttMilestoneLabels raises a crowded label's own y
+   attribute and adds this modifier so a paint-order bump is available without moving the label
+   itself twice — the position change already lives on the element, this covers legibility. */
+.pm-gantt-milestone-label--raised {
+  paint-order: stroke;
+  stroke: var(--background-secondary);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
 
 .pm-gantt-bar-icon {
   font-size: 11px;

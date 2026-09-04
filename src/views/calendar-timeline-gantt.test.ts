@@ -1076,6 +1076,37 @@ describe("timeline gantt DOM-structure parity", () => {
     expect(label?.getAttribute("x")).toBe(String(expectedCx));
   });
 
+  it("raises a milestone label off the month-band baseline when the two would overpaint (operator amendment to REQ-007, roadmap.md row 39)", () => {
+    // GanttHeaderRenderer's month-band label paints at bandX1+6/y=18 and GanttTaskBarRenderer's
+    // milestone label at y=14 on the same header SVG — a milestone due on a band's first day
+    // centres its label right beside that band's own left-anchored one. The reference itself
+    // never resolves this (it has no such case in its own fixtures); this is the local
+    // anti-collision this operator amendment asks for, ported from the pre-existing
+    // resolveTimelineMilestoneLabelPlacement estimate-then-move shape used by the local renderer.
+    const config = makeConfig("day");
+    const crowdedRows = [makeRow("Launch.md", { milestone: "milestone", start: "2026-04-01", due: "2026-04-01" })];
+    const range = buildTimelineRangeGeometry(crowdedRows, config, "day");
+    const cfg: RangeLike = { startDateKey: range.startDateKey, endDateKey: range.endDateKey, dayWidth: range.dayWidth, totalDays: range.totalDays };
+    const expectedCx = dateToX(cfg, "2026-04-01") + range.dayWidth / 2;
+
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(makeActions());
+    renderer.renderTimeline(container as unknown as HTMLElement, config, crowdedRows);
+    const root = container.children[0];
+    const headerSvg = root.children[1].children[2].children[0].children[0];
+
+    const bandLabels = headerSvg.children[0].children.filter((child) => child.className === "pm-gantt-header-month-top");
+    expect(bandLabels.some((band) => Math.abs(Number(band.getAttribute("x")) - expectedCx) < 30)).toBe(true);
+
+    const milestoneLabel = headerSvg.children.find((child) => child.className.split(/\s+/).includes("pm-gantt-milestone-label"));
+    expect(milestoneLabel).toBeDefined();
+    expect(milestoneLabel!.getAttribute("x")).toBe(String(expectedCx));
+    // Crowded: the milestone label no longer sits on the reference's plain y=14 baseline that a
+    // nearby band label (y=18) would overpaint, and carries the local raised modifier.
+    expect(milestoneLabel!.getAttribute("y")).not.toBe("14");
+    expect(milestoneLabel!.className).toContain("pm-gantt-milestone-label--raised");
+  });
+
   // ─────────────────────────────────────────────────────────────────
   // 7. WEEK-LABEL MODES (reference GanttHeaderRenderer.formatWeekLabel)
   // ─────────────────────────────────────────────────────────────────
