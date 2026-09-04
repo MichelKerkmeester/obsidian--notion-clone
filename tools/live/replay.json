@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-04T13:20:08.372Z",
+  "measuredAt": "2026-09-04T14:26:24.531Z",
   "inputs": {
     "styles.css": "28b394491fdb",
-    "tools/screenshots/theme.css": "88cea2ea664d",
+    "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
     "tools/live/replay.mjs": "a452daf81652"
