@@ -72,9 +72,10 @@ differences (the bar/label-dot colour and the phone label width) are disposition
 The board came out with line-height-driven gaps instead: `.note-database-container`'s inherited
 1.45 line-height inflates the count chip, the column header and the subtask parent line 2-3px
 taller than the reference, and the reference's `::-webkit-scrollbar` rules for the board and its
-card list were never copied. A fix (`line-height: normal` reset on the kanban host) is in progress,
-uncommitted, on `worktrees/046-board-line-height`; `styles.css` on main is untouched. Rows 37 and
-38 stay open either way, pending the operator's own vault side-by-side.
+card list were never copied. The fix (`line-height: normal` reset on the kanban host) has landed
+on main (`b42abea0`, reconciled `45d000a1`); `constructed-board-desktop-dark.png` read beside
+`reference-kanban-desktop-dark.png` confirms the count pill and every card band now align. Rows 37
+and 38 stay open either way, pending the operator's own vault side-by-side.
 
 **The parent DONE table stays 5 of 7 = 71%** — row 6 ticked at `2242fa0` (done-audit-11); rows 1
 and 2 are the only open rows, both operator device confirmation. Nothing this session touched

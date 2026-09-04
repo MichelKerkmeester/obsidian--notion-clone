@@ -7,12 +7,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
-    last_updated_at: "2026-09-05T00:00:00Z"
+    last_updated_at: "2026-09-05T01:30:00Z"
     last_updated_by: "046-board-line-height"
-    recent_action: "Closed T31 gap (1) via T32; corrected T31 gap (2) scrollbar note"
+    recent_action: "T32's line-height fix landed on main (b42abea0, reconciled 45d000a1); npm run gate 25/25 green"
     next_safe_action: "Operator vault compare (roadmap.md row 37/38), then T8"
-    blockers:
-      - "npm run gate reads 24/25 (screenshots-fresh RED, pre-existing on origin/main before this reconciliation, not owed by this leg) — see acceptance-criteria.md AC-7"
+    blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"

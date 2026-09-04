@@ -595,7 +595,7 @@ done | sort -n
 | `035-visual-pass-product-defects` | **89%** — 16/18 | Shipped + verified, awaiting device | Visual pass product defects; the uncoloured-badge boundary closed at 3.62:1 and 4.29:1. Two rows open, one of them the operator's. |
 | `036-obsidian-pm-ui-harvest` | **60%** — 3/5 | Complete as research; its output is five phases | The 20-iteration harvest merged and its citations were spot-checked. It is why `037`-`041` exist. |
 | `037-timeline-gantt-port` | **50%** — 10/20 | Landed and shipped; reopened, then closed in-repo | Gantt 1:1 copy through 0.0.17/0.0.19/0.0.20; AC-007's in-repo half MET at `30c4b746` (60/60 `pm-gantt-*` classes, zero divergence). **Open: AC-007's operator half (row 38) and the overpaint ruling (row 39, decided and shipped in 0.0.21 at `1358927`).** Its reference captures landed (`295401ad`, reconciled `04814e24`); a fresh in-repo side-by-side against them (`565d86d0`) found zero fidelity gaps on the gantt — its two remaining differences (bar/label-dot colour, phone label width) are dispositions, not defects. |
-| `038-board-kanban-port` | **30%** — 3/10 | Landed and shipped; reopened, then closed in-repo | Board 1:1 copy through 0.0.16/0.0.18/0.0.19/0.0.20; T12's in-repo half MET at `c563f08` (fourteen carried-forward elements matched to the pixel). **Open: T12's operator half (row 37).** The same fresh in-repo side-by-side (`565d86d0`) found line-height-driven gaps on the board: `.note-database-container`'s inherited 1.45 line-height inflates the count chip, the column header and the subtask parent line 2-3px taller than the reference, plus uncopied `::-webkit-scrollbar` rules for the board and card list. Fix in flight on `worktrees/046-board-line-height` (uncommitted `line-height: normal` reset on the kanban host); `styles.css` untouched on main. |
+| `038-board-kanban-port` | **30%** — 3/10 | Landed and shipped; reopened, then closed in-repo | Board 1:1 copy through 0.0.16/0.0.18/0.0.19/0.0.20; T12's in-repo half MET at `c563f08` (fourteen carried-forward elements matched to the pixel). **Open: T12's operator half (row 37).** The same fresh in-repo side-by-side (`565d86d0`) found line-height-driven gaps on the board: `.note-database-container`'s inherited 1.45 line-height inflates the count chip, the column header and the subtask parent line 2-3px taller than the reference, plus uncopied `::-webkit-scrollbar` rules for the board and card list. **Landed** (`b42abea0`, reconciled `45d000a1`): `line-height: normal` reset on the kanban host now ships on main; `screenshots/notion-clone/views/constructed-board-desktop-dark.png` read beside `screenshots/project-manager/reference-kanban-desktop-dark.png` confirms the count pill and every card band align. |
 | `039-calendar-parity-port` | **83%** — 5/6 | Landed and shipped in 1.4.6 | Calendar parity port. Not operator-confirmed; open defect rows live in `039/goal.md`. |
 | `040-subtask-tree-port` | **57%** — 4/7 | Landed and shipped in 1.4.7 | Subtask tree port; the drag-reorder write-path row closed at `535373a`. Not operator-confirmed. |
 | `041-shared-ui-ux-port` | **12%** — 1/8 | Landed and shipped in 1.4.6 | Shared UI and UX port; the reduced-motion row closed at `3f143df`+`a251a43`. Seven of eight rows still open on device confirmation. |
@@ -619,12 +619,14 @@ settings and column-width sheet legs shipped in 0.0.21 and its remaining legs ar
 `worktrees/043-sheet-alignment-2`; `045` shipped on main (`ff1dacec`); `046` has no leg yet and is
 blocked on the operator's ADR-001 ruling.
 
-**Legs in flight and not on main**: `worktrees/046-board-line-height` (the board's line-height
-gaps from the fresh in-repo side-by-side, §4A row 37/38 continuity), `worktrees/043-sheet-alignment-2`
+**Legs in flight and not on main**: `worktrees/043-sheet-alignment-2`
 (`044`'s remaining legs, rebasing onto 0.0.21) and `worktrees/044-list-hide-migrate`
 (`006-list-view-deprecation`'s hide-and-migrate leg). `worktrees/042-screenshots-folders`, the
 capture-folder split, has landed (`7d95a882`+`aa049b45`, reconciled `933308a5`) — see §1's Seventh
-reconciliation note.
+reconciliation note. `worktrees/045-board-card-properties` has shipped on main (`ff1dacec`).
+`worktrees/046-board-line-height` (the board's line-height gaps from the fresh in-repo
+side-by-side, §4A row 37/38 continuity) has also landed (`b42abea0`, reconciled `45d000a1`,
+`4df2720c`).
 
 **`006-list-view-deprecation` is a sibling packet, not a phase here.** It retires the list view
 outright on the operator's 2026-09-04 instruction, using `030-gallery-view-deprecation` as its

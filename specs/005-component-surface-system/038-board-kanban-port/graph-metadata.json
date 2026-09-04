@@ -60,7 +60,7 @@
       "tools/bench/board-render-bench.ts",
       "tools/screenshots/theme.css",
       "tools/live/render-assertion-harness.ts",
-      "tools/live/capture-device-parity.mjs"
+      "tools/screenshots/constructed-scenarios.mjs"
     ],
     "entities": [
       {
@@ -178,9 +178,9 @@
         "source": "derived"
       },
       {
-        "name": "capture-device-parity.mjs",
+        "name": "constructed-scenarios.mjs",
         "kind": "file",
-        "path": "tools/live/capture-device-parity.mjs",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-04T22:10:55.363Z",
+    "last_save_at": "2026-09-04T23:50:54.389Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:551921a6b184465b8d98d45d807ce903cf3bc08f4df2e47f107735bd7370f4e3",
+    "source_fingerprint": "sha256:0f63480b471ae59780f1f6331d6f364de8d4035305f3d4a5bdf62625b77ae1bb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "169448c930dba334c3a4b7e0639eef21eb7fc70f8de0459a37017c5a53352a5a",
       "plan.md": "6519d27a955160cb441921b511e1c005ff2c12ffa3c2756ac5fdb5139479c3e8",
-      "tasks.md": "3150a6dcf814e425bed659b2e10284f4333e3fea8a54352f47bcbcc2210bb4e9",
-      "implementation-summary.md": "f9aa5bc58d8b58aad810fd37dc54381c987d0471c9ce5507379af9dd5a0bb8e5"
+      "tasks.md": "bd668f4234e0c534561da371157035a522e80e733a38b47fd238f368f1cf5504",
+      "implementation-summary.md": "784025b04df831fd859a461da32198aa9ab3ca1ca0c32606b8cf1e46b50b063a"
     },
     "last_active_child_id": null,
     "last_active_at": null
