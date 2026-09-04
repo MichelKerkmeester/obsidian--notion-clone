@@ -11,25 +11,29 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T12:08:25Z"
-    last_updated_by: "gantt-rebase-landing"
-    recent_action: "Rebased onto main board fixes; reconciled css-lane/touch-targets/evidence; gate 25/25 green"
+    last_updated_at: "2026-09-04T12:35:00Z"
+    last_updated_by: "gantt-residual-behaviour-parity"
+    recent_action: "Closed T034-T038: verified devin's seams, fixed subtask-undo history fold-in, gate 25/25 green"
     next_safe_action: "Close T003/T009/T013/T014 and the CHK-* checklist rows"
     blockers:
       - "Not operator-confirmed: the gantt has not been checked on iOS"
-      - "T003, T009, T013, T014 and the CHK-* checklist rows in tasks.md predate the 1:1 amendment and remain open — out of scope for the CSS-leg dispatch that closed T021/T022"
+      - "T003, T009, T013, T014 and the CHK-* checklist rows in tasks.md predate the 1:1 amendment and remain open — out of scope for the CSS-leg dispatch that closed T021/T022, and out of scope for the T034-T038 residual-behaviour leg"
     key_files:
       - "src/views/calendar-timeline-renderer.ts"
+      - "src/views/database-view.ts"
+      - "src/views/embedded-database-renderer.ts"
+      - "src/views/calendar-timeline-toolbar-renderer.ts"
       - "src/data/calendar-timeline-model.ts"
       - "src/data/calendar-interaction-model.ts"
       - "styles.css"
       - "tools/screenshots/scenarios/temporal.mjs"
       - "tools/live/replay.mjs"
+      - "tools/lane/css-lane.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "037-timeline-gantt-port"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 60
     open_questions: []
     answered_questions:
       - "The dependency-link seam persists as an optional persistence action off the local action contract (calendar-timeline-renderer.ts:173), not note frontmatter"
@@ -102,6 +106,11 @@ the pre-existing duplicated `.db-timeline-event.is-all-day` CSS block.
 | `tools/live/replay.mjs` | Modified | Leg e: reselectored 3 stale `db-timeline-*` claims to the current `pm-gantt-*` vocabulary and reworded 1 (weekend-fill scope) to the reference's own day-only invariant; no recorded number changed except the reworded claim's text. Leg f: merged with main's own board-claim rewrite of the same two subtask-tree checks (board's `[data-subtask-depth]`, timeline's `padding-left`), no number changed |
 | `tools/live/touch-targets-constructed-baseline.json` | Modified | Leg e: ratchet lowered 9974 → 320 with a `lowerHistory` entry after the coarse-pointer hit-area rule closed the shortfall the TypeScript leg's raise had documented. Leg f: re-measured on the merged tree to 367 (kept both this leg's and main's state-variant derivation in a new `mergeReconciliation` entry) |
 | `tools/lane/css-lane.json` | Modified | Leg e: release entry naming the 30 captures the CSS/theme edits moved, `baselineHash` advanced to the new `styles.css` hash. Leg f: merged with main's own history, `baselineHash` recomputed on the merged stylesheet, new release entry names the 4 captures a post-rebase recapture found content-changed. Leg h: merged again against main's board-closing-fixes history (207 entries plus this branch's own 2 unique `037` entries), `baselineHash` recomputed on the newly merged stylesheet (`bd780d064dd4`), new release entry names the recapture that found zero real content-changed captures |
+| `src/views/database-view.ts` | Modified | Leg h (T034-T037, `cli-devin`, verified and landed by `4cb21470`): `openDependencyFile`/`createSubtaskRecord`/`undoGanttEdit` action bindings. This leg (T038): folds `createSubtaskRecord`'s parent `subtaskIds` write into `createBlankEntry`'s own history entry so one undo reverts both, closing the wart devin named but did not fix |
+| `src/views/embedded-database-renderer.ts` | Modified | Leg h (T035, `cli-devin`): `openDependencyFile` wired to the read-only embed's open-note path; `createSubtaskRecord`/`undoGanttEdit` deliberately left unwired, matching the `moveSubtask`/`updateEventDates` convention |
+| `src/views/calendar-timeline-toolbar-renderer.ts` | Modified | Leg h (T034, `cli-devin`): added the Week label select to the options popover's Layout section, gated by nothing (visible at every scale, matching the reference's always-visible plugin setting) |
+| `src/data/types.ts` | Modified | Leg h (T034, `cli-devin`): `GanttWeekLabel` type and `ViewConfig.timelineWeekLabel` |
+| `src/i18n.ts` | Modified | Leg h (T034, `cli-devin`): `viewConfig.timelineWeekLabel(.weekNumber/.dateRange/.both)` and `undo.timelineWeekLabelConfig` keys in all three locale blocks |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -138,6 +147,33 @@ local-nav classes, confirming it closed the whole shortfall the port had introdu
 moved. Reconciled four `tools/live/replay.mjs` claims a fixture-vocabulary rewrite (this same leg's
 inheritance) had made stale, tracing each to its actual cause against the reference source rather than
 re-recording the numbers.
+
+Leg h (2026-09-04, T038) verified an external `cli-devin` leg (T034-T037, landed uncommitted, four
+seams: week-label modes, the depends-elsewhere menu, add-subtask, undo/redo keys) fresh rather than
+trusted, and found one wart devin's own tasks.md/implementation-summary never named: undoing a
+created subtask left a dangling id in the parent's `subtaskIds`, because `createBlankEntry`'s own
+single-file history entry for the child carried no representation of the separate `updateFrontmatter`
+write `createSubtaskRecord` made on the parent. Closed red-first by folding the parent's write into
+the same history entry `createBlankEntry` already pushed, so one undo reverts both through the
+existing `applyCellHistoryEntry` replay path — no new replay logic. The `timeline-toolbar-options`
+hand fixture had drifted from the popover it mirrors (missing the new Week label row); extended
+`temporal-tick-parity.test.mjs` red-first and closed it class-for-class against the renderer source,
+confirmed by reading all 4 `constructed-timeline-toolbar-options` (the real mounted popover) and all 4
+`timeline-toolbar-options` captures. The default `weekNumber` render was independently confirmed
+unchanged: `timeline-view-desktop-dark.png` did not move a single byte on the recapture. Investigated
+and declined extending `constructed-state-assertions.mjs` to drive the elsewhere-menu click or the
+undo keys — the render-assertion harness's `obsidian` stub declares `Menu` `outOfScope` (throws on
+construction, a pre-existing, unrelated boundary) and its timeline action bag wires every action as an
+inert no-op with no host history stack behind it, so neither behaviour is provable at that layer;
+both are proven instead by real DOM-event vitest seams against the actual renderer/host classes. The
+recapture surfaced two gate failures pre-dating this leg's own edits, from a bookkeeping gap already
+present at `4cb21470`: its own `css-lane.json` update recorded a `baselineHash` matching no state of
+`styles.css` this repository's history contains (neither its parent's content nor its own committed
+content), which had also staled 8 `tools/live/*.json` evidence artefacts measured against that same
+wrong hash. Neither was hand-edited: `css-lane.json` gained a reconciliation acquire+release pair
+naming the 8 real content-changed captures, and each stale evidence artefact was re-run through its
+own generating tool per `evidence.mjs`'s own instruction. `npm run gate`: 23 green/2 red before the
+reconciliation, 25/25 green after.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -197,6 +233,13 @@ re-recording the numbers.
 | `evidence`/`screenshots-fresh` reconciliation (leg g) | Editing `styles.css` staled 8 `tools/live/*.json` artefacts plus `capture-device-parity.json` (source-hash bookkeeping, not a claim about their content); each re-run via its own tool (`cascade-audit.mjs`, `checkbox-appearance.mjs`, `checkbox-inventory.mjs`, `design-conformance.mjs`, `engine-parity.mjs`, `surface-census.mjs`, `token-census.mjs`, `view-census.mjs`, `capture-device-parity.mjs`) rather than hand-edited, per `evidence.mjs`'s own instruction |
 | `css-lane` (leg g) | Acquired at `d3c6cc3e8453` (no operator had claimed it); released at `3110493a1a0e`, release entry names all 40 changed captures; `check-lane.mjs` exit 0 both held and released |
 | Full re-verification (leg g) | `npx tsc --noEmit` exit 0; `npx vitest run` 994/994 (`75eaa34`'s 988 + T031's 2 seam tests + T033's 4 rollover tests; a throwaway milestone-debug probe used to trace the `eventDate` overflow was run standalone, never landed, and does not figure in this count); `npm run lint` 172 (unchanged); `npm run lint:tools` exit 0 (one `no-unused-vars` on the reworked `replay.mjs` claim, fixed by dropping the unused `page` param rather than an eslint-disable); `scan-comments` PASS (397 files); `SURFACE_PHASE=037-timeline-gantt-port npm run gate` 25/25 green (one transient `tests` timeout from concurrent worktree load, reproduced as flaky in isolation — all 12 tests in the 3 affected files pass standalone — and confirmed clean on the next full `npm run gate` run) |
+| Devin's claims re-verified fresh (leg h, T034-T037) | `npx tsc --noEmit` exit 0; `npx vitest run` 1003/1003 (devin's own claimed count, confirmed before this leg's own edits); `npm run lint` 172 problems, unchanged; `scan-comments` PASS. Each fix read against the reference line-by-line: week-label formats (`GanttHeaderRenderer.ts:8-23`), the keydown teardown/editing-guard (`calendar-timeline-renderer.ts:777-780,796`), the elsewhere-menu's real `openDependencyFile` wiring in both hosts, and the add-subtask relation payload (`database-view.test.ts:316-339`) — all confirmed matching, no corrections needed to T034-T037's own claims |
+| Subtask-undo wart (T038), red-first | Red: "createSubtaskRecord folds the parent's subtaskIds write into the same history entry as the file creation, so one undo reverts both" — `AssertionError: expected 'created' to be 'cells'` (`database-view.test.ts:360`) — the pre-fix `historyStack[0]` was `createBlankEntry`'s own bare `{ type: "created", file }` entry, with the parent's `subtaskIds` write represented nowhere in the undo/redo system. Green after folding it into a `"cells"` entry carrying `createdFiles` plus one `subtaskIds` `CellEditChange` (`database-view.ts:10955-10971`), reusing the existing `applyCellHistoryEntry` replay path unchanged — asserted by `historyStack` shape (`database-view.test.ts:349-368`), not just the forward write the pre-existing test already covered |
+| Fixture-contract (T038), red-first | Red: `expect(markup).toContain('<span class="db-dropdown-field-label">Week label</span>')` failed — `temporal-tick-parity.test.mjs:123`, the hand fixture had no Week label row at all. Green after adding `dropdownRow(ICON.hash, "Week label", "Week number")` in the renderer's own order (`temporal.mjs:1582`); order and i18n keys asserted against the renderer source (`temporal-tick-parity.test.mjs:108-146`, 3 new tests) |
+| Behaviour-not-provable-by-capture disposition (T038) | Extending `constructed-state-assertions.mjs` for the elsewhere-menu click or the undo keys was investigated and declined: `tools/storybook/obsidian-stub.mjs:130` declares `Menu` `outOfScope` (throws on construction, pre-existing and unrelated to this task), and `render-assertion-harness.ts`'s `fileViewTimelineBag()` (`:695-717`) wires every timeline action as an inert no-op with no host `historyStack`, so neither behaviour has anything to assert against at that layer. Both are proven by the real-DOM vitest seams in `calendar-timeline-gantt.test.ts` and `embedded-database-renderer.test.ts` instead |
+| Recapture and read (leg h) | `npm run screenshots` (356 entries). All 4 `constructed-timeline-toolbar-options` (real mounted popover) and all 4 `timeline-toolbar-options` (hand fixture) captures read: Week label row present, `Week number` value, correct position (after Column width, before Slot duration). `timeline-view-desktop-dark.png` (default `weekNumber` render) did not move a single byte on the recapture — independent confirmation the default is unchanged. `pixelHash`-verified 17 further byte-only re-encode captures (board/calendar/table/quarter-scale, unrelated to this leg) restored to `HEAD` bytes, manifest `bytes` hand-patched to the restored files' actual size. `screenshots:verify`: 356/356 current |
+| `css-lane`/`evidence` reconciliation (leg h) | Both pre-dated this leg's own edits: commit `4cb21470`'s own `css-lane.json` update recorded `baselineHash: 3110493a1a0e`, which matches neither its parent commit's `styles.css` content (`d3c6cc3e8453`) nor its own committed content (`26e134e61c3c`, confirmed via `git show 4cb21470:styles.css \| shasum -a 256`) — a bookkeeping error already landed at `HEAD`, not a new edit (`git diff --stat styles.css` empty throughout this leg). Corrected via a reconciliation acquire+release pair (not a hand-edited hash) naming the 8 real content-changed captures; the same wrong hash had staled 8 `tools/live/*.json` evidence artefacts, each re-run through its own generating tool (`cascade-audit.mjs`, `checkbox-appearance.mjs`, `checkbox-inventory.mjs`, `design-conformance.mjs`, `engine-parity.mjs`, `surface-census.mjs`, `token-census.mjs`, `view-census.mjs`) per `evidence.mjs`'s own instruction, never hand-edited |
+| `npm run gate` (leg h) | First run: 23 green, 2 red (`css-lane`, `evidence`, both the pre-existing bookkeeping gap above). After reconciliation: 25/25 green, re-observed on a second full run |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -276,8 +319,24 @@ gaps. T031 (this leg) wired the `setSubtaskCollapsedMany` seam T027 declared but
 missing `pm-hidden` rule, the hit-area selectors T028 orphaned, `.pm-gantt-view`/`.pm-segmented`
 namespace scoping). T033 (found verifying T030's own bench edit) fixed a day-of-month overflow in
 `eventDate()` that was silently dropping most of the bench's rows from the constructed captures,
-and reconciled the one `replay.mjs` claim T030's fixture rewrite broke. T003/T009/T013/T014 and the
-CHK-* rows remain the only items still open.
+and reconciled the one `replay.mjs` claim T030's fixture rewrite broke.
+
+**T034-T038 are now closed** (leg h, 2026-09-04): T034-T037 (an external `cli-devin` leg, landed
+uncommitted — week-label modes, the depends-elsewhere Menu, add-subtask through the record-creation
+path, and the reference's document-level undo/redo keys) were verified fresh rather than trusted
+before being landed: `tsc`/`vitest`/`lint`/`scan-comments` re-run, and every fix read line-by-line
+against the reference source. T038 (this same leg) closed the one wart devin's own tasks.md never
+named — undoing a created subtask left a dangling id in the parent's `subtaskIds`, because the
+parent's relation write carried no history entry of its own; folded into `createBlankEntry`'s own
+entry so one undo reverts both, red-first. Also closed the `timeline-toolbar-options` fixture's drift
+from the popover it mirrors (missing the new Week label row), extended by a red-first fixture-contract
+test, and reconciled a pre-existing `css-lane`/`evidence` bookkeeping gap already landed in `4cb21470`
+(its own `baselineHash` matched no state of `styles.css` this repository's history contains) that
+`npm run gate` surfaced but this leg did not cause. Extending `constructed-state-assertions.mjs` to
+drive the elsewhere-menu click or the undo keys was investigated and declined: the render-assertion
+harness's `Menu` stub is a deliberate `outOfScope` throw, and its timeline action bag has no host
+history stack behind it — both behaviours are proven by the vitest seams instead. T003/T009/T013/T014
+and the CHK-* rows remain the only items still open.
 <!-- /ANCHOR:next-leg -->
 
 ---

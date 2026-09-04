@@ -547,6 +547,172 @@ contextType: "general"
 
 ---
 
+<!-- ANCHOR:phase-6 -->
+## Phase 6: Last Behaviour Divergences (2026-09-04, T034–T038)
+
+- [x] T034 Week label modes: the reference's three `ganttWeekLabel` modes
+      (`GanttHeaderRenderer.ts:8-23`, `types.ts:7,259` — `weekNumber` | `dateRange` | `both`,
+      default `weekNumber`) become a timeline view-config option exposed in the options popover
+      with i18n in all three locale blocks
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-toolbar-renderer.ts`,
+      `src/data/types.ts`, `src/i18n.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: "renders the three reference week-label modes in the week header, defaulting
+      to week number" — `AssertionError: expected [ 'W9', 'W10', 'W11', 'W12', …(26) ] to deeply
+      equal [ 'Mar 1–1', 'Mar 2–8', …(28) ]` — the pre-fix header ignored the config and always
+      emitted `W{n}` (`calendar-timeline-gantt.test.ts:1073`, was
+      `calendar-timeline-renderer.ts:1035-1060`).
+      — closed: `GanttWeekLabel` and `timelineWeekLabel` (`types.ts:350, 705`); the header reads
+      the mode exactly like the reference (`renderGanttWeekHeader` at
+      `calendar-timeline-renderer.ts:1088-1114`, formats at `:1119-1134`, call site `:751` —
+      same-month `"Mar 21–22"` en dash and cross-month `"Mar 30 – Apr 5"` spaced en dash);
+      popover select at `calendar-timeline-toolbar-renderer.ts:229-237`; keys
+      `viewConfig.timelineWeekLabel(.weekNumber/.dateRange/.both)` and
+      `undo.timelineWeekLabelConfig` in all three blocks (`i18n.ts:459, 903-906, 2155, 2575-2578,
+      3827, 4242-4245`). All three formats asserted including both dash formats
+      (`calendar-timeline-gantt.test.ts:1040-1081`).
+- [x] T035 "Depends elsewhere" chip: the tooltip-only chip now opens the reference's Menu
+      (`TaskLabelRenderer.ts:106-123`) listing each external dependency and opening its file on
+      click, through a new `openDependencyFile` action seam implemented in both hosts
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/database-view.ts`,
+      `src/views/embedded-database-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`,
+      `src/views/embedded-database-renderer.test.ts`)
+      — red first: "opens the reference dependency menu from the depends-elsewhere chip, opening
+      each file on click" — `AssertionError: expected [] to have a length of 1 but got +0` — the
+      pre-fix chip only carried a tooltip (`calendar-timeline-gantt.test.ts:1110`, was
+      `calendar-timeline-renderer.ts:925-930`).
+      — closed: chip click builds the Menu with one `link-2` item per path and
+      `showAtMouseEvent` (`calendar-timeline-renderer.ts:954-976`), seam declared at `:236`;
+      `database-view.ts:433-436` opens the note in a tab (precedent `:3687`), the read-only embed
+      navigates through its open-note path (`embedded-database-renderer.ts:219-224`) — navigation
+      is not a record mutation, so it stays wired where `moveSubtask`/`updateEventDates` are
+      deliberately not. Menu items asserted (`calendar-timeline-gantt.test.ts:1087-1120`) plus the
+      embed binding (`embedded-database-renderer.test.ts:374-382`).
+- [x] T036 Add-subtask: the label-row plus button routes to the host's record-creation path with
+      the subtask relation pre-linked (child born with `parentId` + placement rank, then appended
+      to the parent's `subtaskIds`), replacing the generic row-menu call, through a new
+      `createSubtaskRecord` action seam
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/database-view.ts`,
+      `src/views/calendar-timeline-gantt.test.ts`, `src/views/database-view.test.ts`)
+      — red first: "routes the label-row plus button to the create-subtask seam with the parent
+      row" — `AssertionError: expected [] to deeply equal [ 'Alpha.md' ]`
+      (`calendar-timeline-gantt.test.ts:1140`, was
+      `calendar-timeline-renderer.ts:936-940`); host red: "createSubtaskRecord creates the child
+      note pre-linked and appends it to the parent's subtaskIds" —
+      `AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times`
+      (`database-view.test.ts:322`).
+      — closed: plus button prefers the seam with the row menu as fallback
+      (`calendar-timeline-renderer.ts:984-992`, seam at `:240`); `DatabaseView.createSubtaskRecord`
+      creates through `createBlankEntry` with `parentId`/`subtaskRank` defaults, then writes the
+      parent's list through the relation write path (`database-view.ts:437, 10931-10950`); the
+      read-only embed's timeline deliberately does not wire it, matching the existing
+      `moveSubtask`/`updateEventDates` convention (`embedded-database-renderer.ts:213-215`).
+      Seam call and relation payload asserted (`database-view.test.ts:316-339`: created
+      frontmatter `parentId: "root.md"` + rank, parent update
+      `{ parentId: null, subtaskIds: ["a.md","b.md","Tasks/new-child.md"], subtaskRank: null,
+      collapsed: null }`).
+- [x] T037 Undo/redo keys: the reference's document-level Ctrl+Z / Shift+Ctrl+Z / Ctrl+Y
+      (`GanttView.ts:197-217`) wire to this plugin's existing bounded record-edit history stack
+      (`DatabaseView.historyStack`/`redoStack`, `replayHistory`) for date/drag/link changes made
+      from the gantt, through a new `undoGanttEdit` action seam
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/database-view.ts`,
+      `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: "routes Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y to the host history stack through the
+      actions seam" — `AssertionError: expected [] to deeply equal [ 'undo', 'redo', 'redo' ]`
+      (`calendar-timeline-gantt.test.ts:1174`, was `calendar-timeline-renderer.ts:759-765`, the
+      keydown handler only knew Escape; the scope-registered `Mod+z` in
+      `database-view.ts:1441-1443` never fires when focus sits on the gantt's non-focusable
+      bars/SVG, so the reference's document-level gate was the missing piece).
+      — closed: the gantt's document keydown now implements the reference's shape — leaf-active
+      gate, drag-in-progress suppression, `ctrlKey || metaKey` + `z`/`shift+z`/`y` routing to
+      `undoGanttEdit("undo"|"redo")` (`calendar-timeline-renderer.ts:762-796`, seam at `:243`) —
+      plus the host's own editing guard (input/inline-editor/modal keeps its undo, mirroring
+      `handleHistoryShortcut` at `database-view.ts:1644-1653`); `DatabaseView` binds it to
+      `undoLastEdit`/`redoLastEdit` (`database-view.ts:438-441`); the read-only embed has no
+      record-edit history, so the seam stays unwired there and the keys fall through untouched.
+      Seam routing, inactive-leaf/drag suppression and the editing guard asserted
+      (`calendar-timeline-gantt.test.ts:1162-1225`); date drags already push history through
+      `applyCellChanges(…, t("undo.timelineDates"))` (`database-view.ts:4344`), so Ctrl+Z after a
+      gantt drag restores the previous dates through the host stack.
+- [x] T038 Verification pass on an external `cli-devin` leg (T034–T037, landed uncommitted) plus one
+      wart it named but did not close: undoing a created subtask left a dangling id in the parent's
+      `subtaskIds` (`src/views/database-view.ts`, `src/views/database-view.test.ts`,
+      `tools/screenshots/scenarios/temporal.mjs`, `tools/screenshots/scenarios/temporal-tick-parity.test.mjs`)
+      — claims re-verified fresh rather than trusted: `tsc` 0, `vitest` 1003/1003 (devin's own count,
+      confirmed before any further edit), `lint` 172=172 against `046d133`'s own baseline in this
+      worktree, `scan-comments` PASS. Each fix read line-by-line against the reference: week-label
+      formats match `GanttHeaderRenderer.ts:8-23` exactly (same-month en dash, cross-month spaced en
+      dash, `weekNumber` default); the keydown handler is removed on teardown
+      (`calendar-timeline-renderer.ts:796`, pushed onto `ganttCleanupFns`) and does not fire while an
+      editor/input/modal has focus (`:777-780`); the elsewhere-menu items call `openDependencyFile`,
+      which both hosts wire to a real open (`database-view.ts:433-436`,
+      `embedded-database-renderer.ts:219-224`); add-subtask leaves the relation consistent (child
+      `parentId`, parent `subtaskIds`, asserted at `database-view.test.ts:316-339`) — **except** the
+      subtask-undo wart devin's own tasks.md/implementation-summary never named: `createBlankEntry`
+      pushes its own single-file `"created"` history entry for the child
+      (`database-view.ts:4111,4124`), and `createSubtaskRecord`'s separate `updateFrontmatter` call
+      on the parent carried no history entry of its own at all — undoing the file creation trashed
+      the child but left its path stranded in the parent's `subtaskIds`, and the append itself was
+      never undoable in isolation either.
+      — red first: "createSubtaskRecord folds the parent's subtaskIds write into the same history
+      entry as the file creation, so one undo reverts both" —
+      `AssertionError: expected 'created' to be 'cells'` (`database-view.test.ts:360`, the
+      pre-fix `historyStack[0]` stayed the bare `{ type: "created", file }` entry `createBlankEntry`
+      pushed, with the parent write not represented anywhere in it).
+      — closed: after the parent write, `createSubtaskRecord` folds `createBlankEntry`'s own
+      `"created"` entry in place into a `"cells"` entry carrying both `createdFiles` (the child) and
+      a single `subtaskIds` `CellEditChange` (old value pre-append, new value post-append) for the
+      parent (`database-view.ts:10955-10971`) — the existing, already-exercised
+      `applyCellHistoryEntry` replay path (used by every other cell edit's undo/redo) reverts the
+      write before removing the created file on undo, and restores the file before reapplying the
+      write on redo, with no new replay logic needed. One Ctrl+Z now reverts the whole subtask
+      creation atomically; asserted via `historyStack` shape, not just the forward write
+      (`database-view.test.ts:349-368`).
+      Fixture-contract, red first: the `timeline-toolbar-options` hand fixture had no Week label row
+      at all, so `describe("timeline toolbar options fixture mirrors the week-label select", …)` —
+      "shows the reference week-label select, defaulting to week number, using the shared
+      dropdown-row markup" — failed on the first assertion,
+      `expect(markup).toContain('<span class="db-dropdown-field-label">Week label</span>')`
+      (`temporal-tick-parity.test.mjs:123`, added at `:108-146`). Closed by adding
+      `dropdownRow(ICON.hash, "Week label", "Week number")` to the fixture's Layout section, in the
+      real renderer's order — after Column width, before Slot duration
+      (`tools/screenshots/scenarios/temporal.mjs:1582`, `ICON.hash` at `:70`); order and content
+      asserted against the renderer source's own `t("viewConfig.timelineWeekLabel"...)` keys and
+      default (`temporal-tick-parity.test.mjs:120-146`). The constructed
+      `constructed-timeline-toolbar-options` scenario mounts the real popover and needed no fixture
+      change — it showed the new row automatically once recaptured.
+      Behaviours a static capture cannot show: the elsewhere-menu's click-to-open and the undo
+      keys' interaction with a live history stack are proven by the vitest seams above (real DOM
+      event dispatch against the actual renderer/host classes), not by a screenshot. Extending
+      `tools/live/constructed-state-assertions.mjs` to drive either through the render-assertion
+      harness was investigated and declined: the harness's `obsidian` stub declares `Menu` explicitly
+      `outOfScope` (`tools/storybook/obsidian-stub.mjs:130`, throws on construction — a pre-existing,
+      unrelated boundary, not something this task's scope extends), so dispatching the chip's click
+      would throw rather than prove anything; and the harness's `fileViewTimelineBag()`
+      (`tools/live/render-assertion-harness.ts:695-717`) wires every action as an inert `() =>
+      undefined` with no host `historyStack` behind it, so there is no state for an undo to restore
+      even if `undoGanttEdit` were wired in. Recaptured (`npm run screenshots`, 356 entries); read
+      all 4 `constructed-timeline-toolbar-options` and all 4 `timeline-toolbar-options` captures
+      (Week label row present, `Week number` value, correct position) plus `timeline-view-desktop-dark`
+      (untouched by the recapture — not even byte-different — confirming the default `weekNumber`
+      render is unchanged) and the two other week-scale-adjacent captures the recapture moved bytes
+      on (`timeline-view-mobile-{dark,light}`, `timeline-view-quarter-desktop-dark`: `pixelHash`
+      identical to `HEAD`, restored). 17 further byte-only re-encode captures across board/calendar/
+      table (unrelated to this leg) also restored to `HEAD` bytes, manifest `bytes` hand-patched to
+      match. `screenshots:verify`: 356/356 current. Separately, `npm run gate` surfaced two red
+      checks pre-dating this leg's own edits: `css-lane` (the prior release's own `baselineHash`,
+      `3110493a1a0e`, matched no state of `styles.css` this repository's history contains — commit
+      `4cb21470`'s own lane update recorded neither its parent's hash nor its own committed content's
+      hash, `26e134e61c3c`, confirmed via `git show 4cb21470:styles.css | shasum`) and `evidence` (8
+      of 16 `tools/live/*.json` artefacts measured against that same wrong hash). Neither was edited
+      by hand: `css-lane.json` gained a reconciliation acquire+release pair correcting `baselineHash`
+      to the tree's actual, unchanged content hash and naming the 8 real content-changed captures;
+      each stale evidence artefact was re-run through its own generating tool per `evidence.mjs`'s
+      own instruction. `npm run gate`: 25/25 green, re-observed after the reconciliation (first run:
+      23 green, 2 red for the pre-existing reasons above).
+<!-- /ANCHOR:phase-6 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
