@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
     last_updated_at: "2026-09-04T10:10:00Z"
     last_updated_by: "board-1to1-t11-css-leg"
-    recent_action: "T11 CSS leg closed: kanban.css copied under MIT notice, fixtures rewritten, 5 downstream gate-lane fixes, 25/25 green"
-    next_safe_action: "Dispatch a fresh session (ran neither T10 nor T11) to close T12's visual-language/density/column-width half; then T8 operator device confirmation"
+    recent_action: "T11 CSS leg closed: kanban.css copied, fixtures rewritten, gate 25/25 green"
+    next_safe_action: "Dispatch a fresh (non-T10/T11) session to close T12 visual half, then T8"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]
     session_dedup:
