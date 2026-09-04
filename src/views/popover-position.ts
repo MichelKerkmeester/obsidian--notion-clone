@@ -100,7 +100,17 @@ export function positionToolbarPopover(
   anchorEl?: HTMLElement,
   options: ToolbarPopoverPositionOptions = {}
 ): void {
-  if (!anchorEl?.isConnected) return;
+  // Only the anchored branch measures the anchor, so only the anchored branch may refuse without
+  // one. A sheet is docked to the viewport edge and full width; it reads the anchor for nothing.
+  //
+  // Gating both on a live anchor is what made a phone sheet depend on a toolbar button it never
+  // touches. Rebuilding the toolbar behind an open sheet — which the view does on roughly two dozen
+  // paths, most of them background refreshes nobody is watching — left the panel's owner holding a
+  // detached button, and the next rebuild of the panel handed that dead node back to this function.
+  // It returned here, so the replacement panel never became a sheet at all: no portal onto the body,
+  // no backdrop, no placement. The surface the operator was looking at simply stopped existing, and
+  // the control they had just tapped had done nothing they could see.
+  if (!isMobileBottomSheet(panel.ownerDocument) && !anchorEl?.isConnected) return;
 
   const margin = options.margin ?? 12;
   const gap = options.gap ?? 6;
@@ -181,8 +191,13 @@ export function positionToolbarPopover(
   //
   // The chrome comes down with it. A sheet's backdrop is a body-level sibling, not a child, so
   // hiding the panel alone leaves a full-screen scrim swallowing every tap with nothing visible
-  // above it — a frozen app, not a conservative outcome. This decides that an unreachable sheet
+  // above it — a frozen app, not a conservative outcome. This decides that an unreachable surface
   // stops blocking the app, not that the owner's surface is destroyed behind its back.
+  //
+  // A surface presenting AS a sheet no longer arrives here at all: `place` answers from the viewport
+  // and returns above. The chrome call remains for the surface that carries sheet chrome without
+  // being placed as one — a panel opened on a phone and still open at tablet width — which would
+  // otherwise leave that same backdrop behind.
   const hideForDisconnectedAnchor = (): void => {
     panel.setCssProps({ visibility: "hidden" });
     applySheetChrome(panel, false);
@@ -194,6 +209,24 @@ export function positionToolbarPopover(
     // the first setPosition has dirtied layout forces a second flush for a value already known.
     const containingBlock = fixedContainingBlock(panel);
     if (!panel.isConnected) return;
+
+    // The sheet places itself from the viewport, ahead of every question about the anchor, because
+    // none of those questions have an answer it uses.
+    //
+    // This used to sit below the disconnected-anchor branch, and a sheet therefore inherited a rule
+    // written for a surface that hangs off a button: anchor gone, hide the surface. The hide takes
+    // the sheet chrome down with it, so a full-screen docked panel un-portalled itself back into the
+    // container and its backdrop went with it. The trigger was ordinary — any toolbar rebuild behind
+    // an open sheet, then any viewport event at all, which on a phone means a scroll, a rotation, or
+    // the keyboard appearing. Nothing about the sheet had changed and nothing about it was
+    // unmeasurable; it was answering a question asked on another surface's behalf.
+    if (mobileSheet) {
+      const sheetScroll = panel.scrollTop;
+      placeSheet(panel, { margin });
+      panel.scrollTop = sheetScroll;
+      return;
+    }
+
     // An anchor that has been removed cannot be measured, so there is no coordinate this function
     // could write that means anything. Returning quietly — which is what this used to do — leaves
     // the surface painted at wherever the anchor last was, over content that has since been
@@ -212,11 +245,12 @@ export function positionToolbarPopover(
     // something re-resolvable, so a re-render that builds a *new* button is still a dead anchor
     // here and still hides — a frame later than before, which costs nothing and is the price of
     // not destroying the surfaces that were only ever moved.
-    if (!anchorEl.isConnected) {
+    const anchor = anchorEl;
+    if (!anchor?.isConnected) {
       if (anchorRecoveryFrame !== undefined) return;
       anchorRecoveryFrame = view.requestAnimationFrame(() => {
         anchorRecoveryFrame = undefined;
-        if (anchorEl.isConnected) {
+        if (anchor?.isConnected) {
           place();
           return;
         }
@@ -228,7 +262,7 @@ export function positionToolbarPopover(
     const savedPanelScroll = panel.scrollTop;
 
     const bounds = getVisiblePopoverBounds(null);
-    const anchorRect = anchorEl.getBoundingClientRect();
+    const anchorRect = anchor.getBoundingClientRect();
     const maxWidth = Math.max(minWidth, Math.min(maxPreferredWidth, bounds.width - margin * 2));
     const width = Math.min(preferredWidth, maxWidth);
 
@@ -237,11 +271,6 @@ export function positionToolbarPopover(
       "max-width": `${maxWidth}px`,
       "max-height": "",
     });
-    if (mobileSheet) {
-      placeSheet(panel, { margin, bounds });
-      panel.scrollTop = savedPanelScroll;
-      return;
-    }
 
     setPosition(panel, bounds.left + margin, bounds.top + margin, containingBlock, 0, 0);
     const panelRect = panel.getBoundingClientRect();

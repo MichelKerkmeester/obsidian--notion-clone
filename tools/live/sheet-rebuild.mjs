@@ -14,18 +14,23 @@
 // other renderer check in this repo greps a file, and a grep cannot tell a call
 // that runs from a call behind a condition that is never true.
 //
+// The last section runs in Chrome AND WebKit, on an emulated iPhone. Everything
+// above it is Chrome only, which is how a fix could be called proven under phone
+// emulation while the device — WebKit — still showed the defect. Section 3b says
+// what the two engines actually do rather than leaving it assumed.
+//
 // Usage: node tools/live/sheet-rebuild.mjs
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
-import { chromium } from "playwright-core";
+import { chromium, devices, webkit } from "playwright-core";
 import { stamp } from "./evidence.mjs";
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
@@ -40,6 +45,14 @@ const PRE_FIX_FAILURES = new Map([
   ["the filter sheet holds still while it rebuilds", "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"],
   ["five taps on the sort sheet's add control", "2 of 5 taps reached it; the other three landed on a rule row and on two icons"],
   ["five taps on the filter sheet's add control", "2 of 5 taps reached it; one of the strays opened a field dropdown"],
+  ["Chrome: a toolbar rebuild behind the open sort sheet", "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"],
+  ["Chrome: a toolbar rebuild behind the open filter sheet", "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"],
+  ["Chrome: the sort sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
+  ["Chrome: the filter sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
+  ["WebKit: a toolbar rebuild behind the open sort sheet", "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"],
+  ["WebKit: a toolbar rebuild behind the open filter sheet", "the sheet went with the anchor (sheet: false, on the body: false, visibility: hidden, sheets: 0, backdrops: 0)"],
+  ["WebKit: the sort sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
+  ["WebKit: the filter sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
 ]);
 
 // ───────────────────────────────────────────────────────────────────
@@ -60,7 +73,7 @@ const entry = join(work, "entry.ts");
 
 writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, trackSheetTop, readSheetTrack } from "${resolve(HERE, "sheet-rebuild-harness")}";
+import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack } from "${resolve(HERE, "sheet-rebuild-harness")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
@@ -69,6 +82,7 @@ window.__openGroupSheetForDrag = () => openGroupSheetForDrag(document);
 window.__openAddRowSheet = (kind) => openHeaderSheetForAddRow(document, kind);
 window.__openAddRowSheetTracked = (kind, ms) => openHeaderSheetTracked(document, kind, ms);
 window.__addRowProbe = () => readAddRowProbe(document);
+window.__rebuildToolbarBehindSheet = () => rebuildToolbarBehindSheet(document);
 window.__trackSheetTop = (ms) => trackSheetTop(document, ms);
 window.__sheetTrack = () => readSheetTrack();
 // The speed rule, exported so this lane can ask it rather than race to produce it.
@@ -108,6 +122,15 @@ writeFileSync(join(work, "index.html"), `<!doctype html>
 <html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css"></head>
 <body class="theme-dark"><script src="bundle.js"></script></body></html>`);
 
+// A second page for the two-engine section, carrying the same bundle and the same stylesheet with
+// nothing loaded across a directory boundary. WebKit is stricter than Chrome about what a `file://`
+// document may fetch, and a stylesheet that silently fails to load would report every measurement
+// below as an engine disagreement rather than as the missing file it is.
+writeFileSync(join(work, "parity.html"), `<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>${readFileSync(join(REPO, "styles.css"), "utf8")}</style></head>
+<body class="theme-dark"><script>${readFileSync(join(work, "bundle.js"), "utf8")}</script></body></html>`);
+
 // ───────────────────────────────────────────────────────────────────
 // 3. RUN
 // ───────────────────────────────────────────────────────────────────
@@ -131,9 +154,155 @@ const DRAG_PX = 120;
 // the distance is identical and speed is the single thing that differs.
 const SHORT_PX = 40;
 
+// ───────────────────────────────────────────────────────────────────
+// 3b. A TOOLBAR REBUILD BEHIND AN OPEN SHEET, IN BOTH ENGINES
+// ───────────────────────────────────────────────────────────────────
+//
+// Every case above runs in Chrome, and the device runs WebKit. The operator reported these same
+// controls still dead on iOS after a fix that Chrome's touch emulation had called green, so the
+// first question was whether the two engines disagree. They do not — measured, identically, on the
+// case below both before and after the fix — and that answer is worth keeping rather than
+// re-deriving, because "proven under phone emulation" quietly meant "proven in one engine".
+//
+// What the emulation was missing was not the engine. It was the event: nothing in a harness rebuilds
+// the toolbar behind an open sheet, and on a device the view does it constantly. The panel's owner
+// is then holding a button that has left the document, and the next placement — a scroll, a
+// rotation, the keyboard — read that dead anchor and took the sheet down: un-portalled from the
+// body, backdrop removed, `visibility: hidden`. The control the operator was aiming at was on a
+// surface that no longer existed.
+//
+// The negative control is the desktop half. An anchored popover has no answer without its anchor and
+// must still hide; deleting that rule would pass everything above and would be a different defect.
+
+const IPHONE = devices["iPhone 14 Pro"];
+
+/** Settle the sheet, then report where "+ Add" ended up — the coordinate a thumb would aim at. */
+async function settledAddButton(page) {
+  await page.waitForFunction(() => {
+    const probe = window.__addRowProbe();
+    const last = window.__paritySettleTop;
+    window.__paritySettleTop = probe.panelTop;
+    return probe.panelTop !== null
+      && probe.panelTop < window.innerHeight - 1
+      && last !== undefined
+      && Math.abs(last - probe.panelTop) < 0.5;
+  }, null, { timeout: 4000, polling: "raf" });
+  await page.evaluate(() => { delete window.__paritySettleTop; });
+  return page.evaluate(() => window.__addRowProbe());
+}
+
+/** Give the placement its recovery frame, then let the rebuild that follows it finish. */
+async function afterPlacementSettles(page) {
+  await page.evaluate(() => new Promise((done) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => done(undefined)));
+  }));
+  await page.waitForTimeout(120);
+}
+
+async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName) {
+  const checks = [];
+  const browserForEngine = await engine.launch(launchOptions);
+  try {
+    // --- the phone half ---
+    const phone = await browserForEngine.newContext({ ...IPHONE });
+    const phonePage = await phone.newPage();
+    const engineErrors = [];
+    phonePage.on("pageerror", (error) => engineErrors.push(error.message));
+    await phonePage.goto(pageUrl);
+    await phonePage.evaluate(() => document.body.classList.add("is-phone"));
+
+    for (const kind of ["sort", "filter"]) {
+      const setup = await phonePage.evaluate((k) => window.__openAddRowSheet(k), kind);
+      if (!setup.ready) {
+        checks.push({ name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`, pass: false, detail: `could not stage: ${setup.detail}` });
+        continue;
+      }
+      const opened = await settledAddButton(phonePage);
+      if (!opened.addButton || !opened.isSheet) {
+        checks.push({ name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`, pass: false, detail: "could not stage: the sheet never opened with an add control on screen" });
+        continue;
+      }
+
+      const rebuilt = await phonePage.evaluate(() => window.__rebuildToolbarBehindSheet());
+      await afterPlacementSettles(phonePage);
+      const survived = await phonePage.evaluate(() => window.__addRowProbe());
+      const intact = rebuilt && survived.isSheet && survived.onBody
+        && survived.visibility !== "hidden" && survived.sheets === 1 && survived.scrims === 1;
+      checks.push({
+        name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`,
+        pass: intact,
+        detail: !rebuilt ? "could not stage: no sheet was open to rebuild behind"
+          : intact
+            ? "the sheet is still a sheet, still on the body, still visible, and still has its backdrop"
+            : `the sheet went with the anchor (sheet: ${survived.isSheet}, on the body: ${survived.onBody},`
+              + ` visibility: ${survived.visibility}, sheets: ${survived.sheets}, backdrops: ${survived.scrims})`
+              + " — a button it never measures took the surface down",
+      });
+
+      // The consequence, at the coordinate the thumb is already on.
+      await phonePage.touchscreen.tap(opened.addButton.x, opened.addButton.y);
+      await phonePage.waitForTimeout(500);
+      const tapped = await phonePage.evaluate(() => window.__addRowProbe());
+      const landed = tapped.rules === opened.rules + 1 && tapped.open && tapped.isSheet;
+      checks.push({
+        name: `${engineName}: the ${kind} sheet's add control after a toolbar rebuild`,
+        pass: landed,
+        detail: landed
+          ? `the tap reached it: ${tapped.rules} rule(s), sheet still open and still a sheet`
+          : `${tapped.rules} rule(s) after the tap (open: ${tapped.open}, sheet: ${tapped.isSheet})`
+            + " — the control does nothing, which is what the operator reported",
+      });
+    }
+    await phonePage.close();
+    for (const error of engineErrors) {
+      checks.push({ name: `${engineName}: the phone page raised no error`, pass: false, detail: `page error: ${error}` });
+    }
+    await phone.close();
+
+    // --- the negative control, on a desktop viewport ---
+    const desk = await browserForEngine.newContext({ viewport: { width: 1200, height: 900 } });
+    const deskPage = await desk.newPage();
+    await deskPage.goto(pageUrl);
+    const deskSetup = await deskPage.evaluate(() => window.__openAddRowSheet("sort"));
+    if (!deskSetup.ready) {
+      checks.push({ name: `${engineName}: an anchored popover still goes when its anchor does`, pass: false, detail: `could not stage: ${deskSetup.detail}` });
+    } else {
+      const before = await deskPage.evaluate(() => window.__addRowProbe());
+      const rebuilt = await deskPage.evaluate(() => window.__rebuildToolbarBehindSheet());
+      await afterPlacementSettles(deskPage);
+      const after = await deskPage.evaluate(() => window.__addRowProbe());
+      const stillHides = rebuilt && !before.isSheet && after.visibility === "hidden";
+      checks.push({
+        name: `${engineName}: an anchored popover still goes when its anchor does`,
+        pass: stillHides,
+        detail: !rebuilt ? "could not stage: nothing was open to rebuild behind"
+          : before.isSheet ? "the desktop page presented a sheet, so this control measured the wrong surface"
+            : stillHides
+              ? "hidden, as a surface with no anchor left to sit beside should be"
+              : `still showing (visibility: ${after.visibility}) — the dead-anchor rule has been deleted`
+                + " rather than narrowed, and an anchored popover now floats over rebuilt content",
+      });
+    }
+    await deskPage.close();
+    await desk.close();
+  } finally {
+    await browserForEngine.close();
+  }
+  return checks;
+}
+
+async function runToolbarRebuildParity(htmlPath) {
+  const url = `file://${htmlPath}`;
+  return [
+    ...await measureToolbarRebuild(chromium, { executablePath: findChrome() }, url, "Chrome"),
+    ...await measureToolbarRebuild(webkit, {}, url, "WebKit"),
+  ];
+}
+
 let results = null;
 let dragResult = null;
 let addRowResult = null;
+let parityResult = null;
 let browser;
 const failures = [];
 try {
@@ -421,6 +590,8 @@ try {
 
   await page.close();
   for (const error of pageErrors) failures.push(`page error: ${error}`);
+
+  parityResult = await runToolbarRebuildParity(join(work, "parity.html"));
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
 } finally {
@@ -434,7 +605,7 @@ if (!results) {
   process.exit(1);
 }
 
-console.log(`sheet-rebuild: ${results.length} case(s) rebuilt in headless Chrome\n`);
+console.log(`sheet-rebuild: ${results.length} case(s) rebuilt in headless Chrome, and the toolbar-rebuild case in Chrome and WebKit\n`);
 for (const r of results) {
   console.log(`  ${r.pass ? "PASS" : "FAIL"}  ${r.surface.padEnd(44)} ${r.rebuildShape}`);
   console.log(`        bar before: ${r.barBeforeRebuild}, after: ${r.barAfterRebuild} — ${r.detail}`);
@@ -459,6 +630,16 @@ if (dragResult) {
   }
 } else {
   failures.push("the gesture cases never ran, so the drag is unmeasured");
+}
+
+if (parityResult) {
+  for (const p of parityResult) {
+    console.log(`  ${p.pass ? "PASS" : "FAIL"}  ${p.name.padEnd(58)} both engines`);
+    console.log(`        ${p.detail}`);
+    if (!p.pass) failures.push(`${p.name}: ${p.detail}`);
+  }
+} else {
+  failures.push("the two-engine cases never ran, so the sheet is unmeasured in the engine the device uses");
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -491,9 +672,21 @@ const checks = [
     detail,
     preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
   })),
+  ...parityResult.map(({ name, pass, detail }) => ({
+    name,
+    pass,
+    detail,
+    preFixFailure: PRE_FIX_FAILURES.get(name) ?? null,
+  })),
 ];
 
-stamp(STAMP_PATH, { cases: results.length + dragResult.length + addRowResult.length, barsLost: 0, gesturesMeasured: dragResult.length, checks }, [
+stamp(STAMP_PATH, {
+  cases: results.length + dragResult.length + addRowResult.length + parityResult.length,
+  barsLost: 0,
+  gesturesMeasured: dragResult.length,
+  enginesMeasured: ["Chrome", "WebKit"],
+  checks,
+}, [
   "tools/live/sheet-rebuild.mjs",
   "tools/live/sheet-rebuild-harness.ts",
   ...REQUIRED,
@@ -503,5 +696,6 @@ console.log(`\nsheet-rebuild: stamped at ${STAMP_PATH}`);
 console.log("sheet-rebuild: PASS — every rebuilt sheet still has the bar it opened with");
 console.log("  what this does not prove: no Obsidian host is constructed, so the surface is opened");
 console.log("  directly rather than through a real toolbar click. A rebuild path reached on a device");
-console.log("  by some route not modelled here is not covered.");
+console.log("  by some route not modelled here is not covered — and neither is anything WebKit");
+console.log("  paints rather than computes, or anything only a real iOS keyboard produces.");
 process.exit(0);

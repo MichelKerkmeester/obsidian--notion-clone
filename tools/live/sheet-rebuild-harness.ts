@@ -639,6 +639,8 @@ interface AddRowScenario {
   kind: "sort" | "filter";
   rules(): number;
   panel(): HTMLElement | null;
+  /** Rebuild the toolbar and nothing else, the way a background view refresh does. */
+  rebuildToolbar(): void;
   open: boolean;
 }
 
@@ -691,6 +693,7 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
     root,
     kind,
     open: true,
+    rebuildToolbar: () => buildToolbar(),
     rules: () => {
       const held = state as unknown as { sortRules: unknown[]; filters: unknown[] };
       return kind === "sort" ? held.sortRules.length : held.filters.length;
@@ -751,6 +754,31 @@ export interface AddRowProbe {
   sheets: number;
   scrims: number;
   panelTop: number | null;
+  /** Whether the panel is still presenting as a sheet, and whether it can still be seen. */
+  isSheet: boolean;
+  visibility: string | null;
+  onBody: boolean;
+}
+
+/**
+ * Rebuild the toolbar behind an open surface, changing nothing else.
+ *
+ * The view does this on roughly two dozen paths, most of them background refreshes with no
+ * interaction behind them, and only some of them re-render the open panel afterwards. The button
+ * the panel opened against is destroyed and an identical one takes its place, so the panel's owner
+ * is left holding a node that is no longer in the document — while the surface on screen has not
+ * changed at all and the operator has no way to know anything happened.
+ *
+ * Nothing here reaches into the panel. That is the point: this is the event the sheet is supposed
+ * to be indifferent to.
+ */
+export function rebuildToolbarBehindSheet(doc: Document): boolean {
+  if (!activeAddRow) return false;
+  activeAddRow.rebuildToolbar();
+  // The rebuild alone is inert; a placement has to run before anything reads the anchor again. On a
+  // phone that is not a rare event to wait for — a scroll, a rotation, or the keyboard is enough.
+  doc.defaultView?.dispatchEvent(new Event("resize"));
+  return true;
 }
 
 export function readAddRowProbe(doc: Document): AddRowProbe {
@@ -766,6 +794,11 @@ export function readAddRowProbe(doc: Document): AddRowProbe {
     sheets: doc.body.querySelectorAll(".db-mobile-bottom-sheet").length,
     scrims: doc.body.querySelectorAll(".db-mobile-sheet-scrim").length,
     panelTop: panel ? panel.getBoundingClientRect().top : null,
+    isSheet: Boolean(panel?.classList.contains("db-mobile-bottom-sheet")),
+    visibility: panel && doc.defaultView
+      ? doc.defaultView.getComputedStyle(panel).visibility
+      : null,
+    onBody: panel?.parentElement === doc.body,
   };
 }
 
