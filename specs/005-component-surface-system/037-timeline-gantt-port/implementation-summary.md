@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/037-timeline-gantt-port"
-    last_updated_at: "2026-09-04T12:35:00Z"
-    last_updated_by: "gantt-residual-behaviour-parity"
-    recent_action: "Closed T034-T038: verified devin's seams, fixed subtask-undo history fold-in, gate 25/25 green"
+    last_updated_at: "2026-09-04T13:04:11Z"
+    last_updated_by: "gantt-residual-landing"
+    recent_action: "Rebased worktrees/032-gantt-residual onto main; reconciled css-lane/evidence, gate 25/25 green"
     next_safe_action: "Close T003/T009/T013/T014 and the CHK-* checklist rows"
     blockers:
       - "Not operator-confirmed: the gantt has not been checked on iOS"
@@ -240,6 +240,7 @@ reconciliation, 25/25 green after.
 | Recapture and read (leg h) | `npm run screenshots` (356 entries). All 4 `constructed-timeline-toolbar-options` (real mounted popover) and all 4 `timeline-toolbar-options` (hand fixture) captures read: Week label row present, `Week number` value, correct position (after Column width, before Slot duration). `timeline-view-desktop-dark.png` (default `weekNumber` render) did not move a single byte on the recapture — independent confirmation the default is unchanged. `pixelHash`-verified 17 further byte-only re-encode captures (board/calendar/table/quarter-scale, unrelated to this leg) restored to `HEAD` bytes, manifest `bytes` hand-patched to the restored files' actual size. `screenshots:verify`: 356/356 current |
 | `css-lane`/`evidence` reconciliation (leg h) | Both pre-dated this leg's own edits: commit `4cb21470`'s own `css-lane.json` update recorded `baselineHash: 3110493a1a0e`, which matches neither its parent commit's `styles.css` content (`d3c6cc3e8453`) nor its own committed content (`26e134e61c3c`, confirmed via `git show 4cb21470:styles.css \| shasum -a 256`) — a bookkeeping error already landed at `HEAD`, not a new edit (`git diff --stat styles.css` empty throughout this leg). Corrected via a reconciliation acquire+release pair (not a hand-edited hash) naming the 8 real content-changed captures; the same wrong hash had staled 8 `tools/live/*.json` evidence artefacts, each re-run through its own generating tool (`cascade-audit.mjs`, `checkbox-appearance.mjs`, `checkbox-inventory.mjs`, `design-conformance.mjs`, `engine-parity.mjs`, `surface-census.mjs`, `token-census.mjs`, `view-census.mjs`) per `evidence.mjs`'s own instruction, never hand-edited |
 | `npm run gate` (leg h) | First run: 23 green, 2 red (`css-lane`, `evidence`, both the pre-existing bookkeeping gap above). After reconciliation: 25/25 green, re-observed on a second full run |
+| Post-rebase reconciliation (`worktrees/032-gantt-residual` onto `origin/main` after 038-board-kanban-port's T12 close-out and release 0.0.19) | `styles.css` auto-merged clean (`git diff --stat styles.css` empty), `baselineHash` unchanged at `bd780d064dd4`. `tools/live/*.json` (16 evidence stamps) taken from main; `screenshots/manifest.json` merged per-entry by scenario id (`timeline-toolbar-options`/`constructed-timeline-toolbar-options` from this branch, else main); `tools/lane/css-lane.json` merged (main's 210-entry history plus this branch's own 2 unique `037` entries appended). Full recapture (`npm run screenshots`, 356 entries) found zero real content-changed captures: 6 files moved bytes only (5 board PNGs plus the manifest itself), all `pixelHash`/`layoutHash`-identical to `HEAD` and restored to `HEAD` bytes; the established `field-icon-picker-desktop-{dark,light}` drift was likewise restored to `HEAD` rather than accepted. All 4 `constructed-timeline-toolbar-options` and 2 `constructed-timeline` captures opened and read: Week label row present at the documented position, gantt shows bars with progress fill, milestone diamond, dashed dependency arrows and the today line, fully styled. `npx tsc --noEmit` exit 0; `npx vitest run` 1019/1019; `npm run lint` 172 (unchanged); `scan-comments` PASS; `touch-targets.mjs` re-measured three times, stable at fixture `199/279` and constructed `367/367`, 0 new either pass; `npm run gate` 25/25 green, observed twice |
 <!-- /ANCHOR:verification -->
 
 ---
