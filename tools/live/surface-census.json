@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T18:11:05.164Z",
+  "measuredAt": "2026-09-04T20:33:42.760Z",
   "inputs": {
-    "styles.css": "cdc0217ad1d7",
+    "styles.css": "46c11786dc49",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -854,7 +854,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "458x538",
+      "rect": "458x527",
       "scenarios": [
         "panel-view-config"
       ]

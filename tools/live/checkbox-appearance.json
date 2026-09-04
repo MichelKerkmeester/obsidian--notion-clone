@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-04T18:09:53.317Z",
+  "measuredAt": "2026-09-04T20:32:40.201Z",
   "inputs": {
-    "styles.css": "cdc0217ad1d7",
+    "styles.css": "46c11786dc49",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -2451,6 +2451,7 @@
       "chain": [
         "note-database-container",
         "db-view-config-panel",
+        "db-view-config-body",
         "db-view-config-row",
         "db-view-config-field"
       ],
@@ -2472,6 +2473,7 @@
       "chain": [
         "note-database-container",
         "db-view-config-panel",
+        "db-view-config-body",
         "db-view-config-row",
         "db-view-config-field"
       ],

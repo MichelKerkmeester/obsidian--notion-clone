@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-04T18:12:00.269Z",
+  "measuredAt": "2026-09-04T20:33:39.785Z",
   "inputs": {
-    "styles.css": "cdc0217ad1d7",
+    "styles.css": "46c11786dc49",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 71,
-    "differences": 57
+    "differences": 51
   },
   "differences": [
     {
@@ -242,54 +242,6 @@
       "index": 7,
       "notes": [
         "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": ".db-checkbox",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": ".db-checkbox",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": ".db-checkbox",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
       ]
     },
     {
