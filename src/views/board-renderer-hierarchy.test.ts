@@ -475,7 +475,7 @@ function createActions(overrides: Partial<BoardRendererActions> = {}): BoardRend
     areAllRowsSelected: () => false,
     toggleRowsSelected: vi.fn(),
     editCell: vi.fn(),
-    getColumns: () => COLUMNS,
+    getColumns: (cfg) => COLUMNS.filter((column) => !(cfg.hiddenColumns ?? []).includes(column.key)),
     ...overrides,
   };
 }
@@ -629,6 +629,92 @@ describe("board card information hierarchy", () => {
     const meta = card.querySelector<MockElement>(".db-board-card-meta");
 
     expect(meta?.querySelector<MockElement>("[data-note-database-column-key='priority']")).toBeNull();
+  });
+
+  it("builds the meta grid from getColumns minus title, grouped, and select/status", () => {
+    const { board } = renderBoard();
+    const card = board.querySelectorAll<MockElement>(".db-board-card")[0];
+    const meta = card.querySelector<MockElement>(".db-board-card-meta");
+    const keys = (meta?.querySelectorAll<MockElement>("[data-note-database-column-key]") ?? [])
+      .map((el) => el.getAttribute("data-note-database-column-key"));
+
+    expect(keys).not.toContain("file.name");
+    expect(keys).not.toContain("status");
+    expect(keys).not.toContain("priority");
+    expect(keys).toEqual(["hours", "tags", "people", "due", "notes"]);
+  });
+
+  it("omits a persisted hidden column from the derived card field set", () => {
+    const renderer = new BoardRenderer({} as unknown as App, createActions());
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, { ...CONFIG, hiddenColumns: ["notes"] }, GROUPS, "status");
+    const card = container.querySelectorAll<MockElement>(".db-board-card")[0];
+    const meta = card.querySelector<MockElement>(".db-board-card-meta");
+
+    expect(meta?.querySelector<MockElement>("[data-note-database-column-key='notes']")).toBeNull();
+    expect(meta?.querySelector<MockElement>("[data-note-database-column-key='hours']")).not.toBeNull();
+  });
+
+  it("with the list absent, omits a column the host's getColumns already dropped for having no value on any row", () => {
+    // getColumns() is the host's getVisibleColumns() in production, which also drops a column
+    // that is empty on every row — something config.hiddenColumns alone cannot see. The derived
+    // path must defer to that result rather than only checking hiddenColumns, or an upgraded
+    // view with showEmptyFields on would suddenly render a field it never rendered before.
+    const actions = createActions({
+      getColumns: (cfg) => COLUMNS.filter((column) => column.key !== "due" && !(cfg.hiddenColumns ?? []).includes(column.key)),
+    });
+    const renderer = new BoardRenderer({} as unknown as App, actions);
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, { ...CONFIG, showEmptyFields: true }, GROUPS, "status");
+    const card = container.querySelectorAll<MockElement>(".db-board-card")[0];
+    const meta = card.querySelector<MockElement>(".db-board-card-meta");
+
+    expect(meta?.querySelector<MockElement>("[data-note-database-column-key='due']")).toBeNull();
+    expect(meta?.querySelector<MockElement>("[data-note-database-column-key='hours']")).not.toBeNull();
+  });
+
+  it("renders a status column in the meta grid when the stored list makes it visible", () => {
+    const config: ViewConfig = {
+      ...CONFIG,
+      hiddenColumns: ["notes"],
+      boardCardFields: [
+        { key: "status", visible: true },
+        { key: "notes", visible: true },
+        { key: "hours", visible: false },
+      ],
+    };
+    const renderer = new BoardRenderer({} as unknown as App, createActions());
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, config, GROUPS, "status");
+    const card = container.querySelectorAll<MockElement>(".db-board-card")[0];
+    const meta = card.querySelector<MockElement>(".db-board-card-meta");
+    const keys = (meta?.querySelectorAll<MockElement>("[data-note-database-column-key]") ?? [])
+      .map((el) => el.getAttribute("data-note-database-column-key"));
+
+    expect(keys).toContain("status");
+    expect(keys).toContain("notes");
+    expect(keys).not.toContain("hours");
+  });
+
+  it("still renders a title with every stored field toggled off", () => {
+    const config: ViewConfig = {
+      ...CONFIG,
+      boardCardFields: [
+        { key: "hours", visible: false },
+        { key: "tags", visible: false },
+        { key: "people", visible: false },
+        { key: "due", visible: false },
+        { key: "notes", visible: false },
+      ],
+    };
+    const renderer = new BoardRenderer({} as unknown as App, createActions());
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, config, GROUPS, "status");
+    const card = container.querySelectorAll<MockElement>(".db-board-card")[0];
+    const meta = card.querySelector<MockElement>(".db-board-card-meta");
+
+    expect(meta?.querySelectorAll<MockElement>("[data-note-database-column-key]")).toHaveLength(0);
+    expect(card.querySelector<MockElement>(".db-board-card-title")).not.toBeNull();
   });
 
   it("omits the parent chip for a note at the vault root", () => {

@@ -42,6 +42,7 @@ import { openOptionColorPicker } from "./option-color-picker";
 import { MarkdownFileSuggestModal } from "./markdown-file-suggest-modal";
 import { getFilterOperatorsForColumn } from "./filter-panel-renderer";
 import { closeActiveDateValuePicker, renderDateValuePicker } from "./date-value-picker";
+import { boardCardPropertiesContext, renderBoardCardProperties } from "./board-card-properties-panel";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SOURCE RULE MODEL
@@ -265,6 +266,7 @@ export interface ViewConfigPanelActions {
   onDefaultViewStatusPresetChange?(presetId: string): void;
   onManageViewStatusPresets?(): void;
   readonly isDatabaseReadOnly?: boolean;
+  readonly isViewReadOnly?: boolean;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -1975,6 +1977,10 @@ export class ViewConfigPanelRenderer {
     }, setBoardColumnWidth);
 
     this.renderCoverSettings(panel, config, actions, "boardImageField", "boardImageFit", "boardImageAspectRatio", t("undo.boardCoverFieldConfig"), t("undo.boardImageFitConfig"), t("undo.boardCoverRatioConfig"));
+    renderBoardCardProperties(panel, config, {
+      onChange: (label) => actions.onChange(label),
+      readOnly: actions.isViewReadOnly,
+    }, boardCardPropertiesContext(config));
   }
 
   private renderReadonlyField(panel: HTMLElement, label: string, value: string): void {

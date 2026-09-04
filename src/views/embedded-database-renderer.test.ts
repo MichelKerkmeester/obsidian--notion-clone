@@ -371,6 +371,23 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
     expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
   });
 
+  it("copies boardCardFields from the local config into the view-def writer", async () => {
+    const { harness, dataSource, viewConfig } = createRenderer();
+    const localConfig: ViewConfig = {
+      ...viewConfig,
+      boardCardFields: [{ key: "hours", visible: false }, { key: "tags", visible: true }],
+    };
+    harness.config = localConfig;
+
+    (harness as unknown as { saveEmbeddedConfigInBackground(): void }).saveEmbeddedConfigInBackground();
+    await flushBackgroundSave();
+
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
+    expect(writtenDb.views[0]).toBe(viewConfig);
+    expect(writtenDb.views[0].boardCardFields).toEqual(localConfig.boardCardFields);
+  });
+
   it("openDependencyFile opens the dependency note through the embed's open-note path", () => {
     const { harness, dataSource } = createRenderer();
 

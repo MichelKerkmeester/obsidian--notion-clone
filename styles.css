@@ -13052,6 +13052,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-column-manager-row > .db-column-type { grid-column: 4; }
 .note-database-container .db-column-manager-row > .db-column-name-wrap { grid-column: 5; }
 
+/* The board Properties list reuses this row wholesale but has no wrap/edit/delete actions, so the
+   three trailing `auto` tracks never gain a child — only their gaps do, narrowing the name column
+   by three unclaimed gaps' worth of width for no reason. Five tracks, not eight. */
+.note-database-container .db-view-config-panel .db-column-manager-row {
+  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
+}
+
 /* The three trailing actions, claimed rather than auto-placed.
    They were left to fill forward from column 6, which works only while all three render — hide the
    wrap toggle and the other two shift left, which is the exact failure this frame exists to stop.
@@ -20017,6 +20024,12 @@ body.pm-resize-active * {
    order now matches the frame; the phone difference is which column is collapsed, nothing else. */
 .is-phone .note-database-container .db-column-manager-row {
   grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr) auto auto auto;
+}
+
+/* Same reasoning as the desktop override above: the board Properties list has no trailing
+   actions, so the phone frame drops the same three unclaimed tracks. */
+.is-phone .note-database-container .db-view-config-panel .db-column-manager-row {
+  grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr);
 }
 
 .is-phone .note-database-modal .db-status-option-row {

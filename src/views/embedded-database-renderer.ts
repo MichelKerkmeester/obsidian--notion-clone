@@ -2118,6 +2118,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       app: this.app,
       database: this.currentDbConfig,
       isDatabaseReadOnly: true,
+      isViewReadOnly: this.persistMode === "codeblock",
       onChange: () => {
         this.persistEmbeddedConfigLocally(config);
         this.renderResults(config);
@@ -3808,6 +3809,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.showEmptyGroups = this.config.showEmptyGroups;
     origView.collapsedGroups = this.config.collapsedGroups;
     origView.boardCardOrders = this.config.boardCardOrders;
+    origView.boardCardFields = this.config.boardCardFields;
     origView.manualOrder = this.config.manualOrder;
     origView.galleryImageField = this.config.galleryImageField;
     origView.titleField = this.config.titleField;

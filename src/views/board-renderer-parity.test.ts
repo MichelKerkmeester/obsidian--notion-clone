@@ -657,6 +657,32 @@ describe("pm-kanban card tree parity", () => {
     expect(order).toEqual([...order].sort((a, b) => a - b));
   });
 
+  it("maps the reference card to the fixed time, progress, due, tags, and people slots", () => {
+    const card = todoCard();
+    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
+    expect(body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm")?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("2h");
+    expect(body.querySelector<MockElement>(":scope > .pm-kanban-card-tags")).not.toBeNull();
+    expect(body.querySelector<MockElement>(".pm-progress.pm-progress--sm")).not.toBeNull();
+    const footer = body.querySelector<MockElement>(":scope > .pm-kanban-card-footer");
+    expect(footer?.querySelector<MockElement>(".pm-avatar-stack .pm-avatar")).not.toBeNull();
+    expect(footer?.querySelector<MockElement>(".pm-chip .pm-chip-label")?.textContent).toBeTruthy();
+  });
+
+  it("does not let a stored card field list move the reference card's fixed slots", () => {
+    const listed = {
+      ...CONFIG,
+      boardCardFields: [{ key: "hours", visible: false }, { key: "tags", visible: false }],
+    } as ViewConfig;
+    const renderer = new BoardRenderer({} as unknown as App, createActions());
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, listed, GROUPS, "status");
+    const card = container.querySelectorAll<MockElement>(".pm-kanban-card")
+      .find((el) => el.getAttribute("data-note-database-row-path") === CHILD_PATH)!;
+    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
+    expect(body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm")?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("2h");
+    expect(body.querySelector<MockElement>(":scope > .pm-kanban-card-tags")).not.toBeNull();
+  });
+
   it("renders the subtask type chip with the reference chip vocabulary", () => {
     const card = todoCard();
     const chip = card.querySelector<MockElement>(".pm-kanban-card-title-row .pm-chip");

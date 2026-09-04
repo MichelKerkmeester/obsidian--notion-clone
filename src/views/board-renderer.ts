@@ -21,6 +21,7 @@ import { App, Notice, setIcon, setTooltip } from "obsidian";
 import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/column-types";
 import { STATUS_COLORS } from "../data/status-colors";
 import { OPTION_REGISTRATION_COLORS } from "../data/option-registration";
+import { getColumnsInOrder } from "../data/column-config";
 import { isExplicitlySorted } from "../data/manual-order";
 import { getColumnDisplayType } from "../data/column-display";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey } from "../data/file-fields";
@@ -39,6 +40,7 @@ import { clampCardFieldWidth, getFieldWidth } from "./column-width";
 import { renderGroupExpandControls } from "./group-expand-controls";
 import { getGroupVisibleCount } from "../data/group-visibility";
 import { isSameBoardGroup, resolveBoardCardDropIntent, resolveBoardColumnByPoint, resolveBoardContainerDropOrder, type BoardDropCandidate } from "../data/board-container-drop";
+import { resolveBoardCardFields } from "./board-card-fields";
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
 import { openOptionColorPicker } from "./option-color-picker";
@@ -199,6 +201,11 @@ export class BoardRenderer {
    *  touch menus, group controls) render only when the view opts in; the default
    *  layout is the one-to-one kanban copy, which has none of them. */
   private boardExtensions = false;
+  /** The pre-change visible-column set (table hidden state plus the empty-value auto-hide),
+   *  captured once per render so a view with no stored field list keeps rendering the same
+   *  cards it did before the list existed, without re-scanning every row per card. Unset once
+   *  a list is stored — the operator's list is the only input from then on. */
+  private legacyVisibleColumnKeys?: Set<string>;
   /** Bodies hydrated lazily after the first render, keyed by row path. */
   private hydratedDescriptions = new Map<string, string>();
   /** Render arguments replayed once when a lazy description load lands. */
@@ -224,6 +231,9 @@ export class BoardRenderer {
       this.renderReferenceBoard(container, config, groups, groupField);
       return;
     }
+    this.legacyVisibleColumnKeys = config.boardCardFields === undefined
+      ? new Set(this.actions.getColumns(config).map((col) => col.key))
+      : undefined;
     const board = container.createDiv({ cls: "db-board", attr: { role: "grid" } });
     // 缓存当前看板与分组元数据，供拖拽期间实时列命中（方案 A/B）复用。
     this.boardEl = board;
@@ -1436,9 +1446,10 @@ export class BoardRenderer {
       this.renderMobileMoveButton(controls, config, groups, group, row, groupField, subgroupField, subgroupKey);
     }
     this.renderSubtaskToggle(controls, row, subtaskNode, subtaskChildren.length > 0);
-    const columns = this.actions.getColumns(config);
+    const columns = getColumnsInOrder(config);
     const titleField = this.getTitleField(config);
     const groupedFields = new Set([groupField, ...(subgroupField ? [subgroupField] : [])]);
+    const fields = resolveBoardCardFields(config, columns, { groupField, subgroupField, visibleKeys: this.legacyVisibleColumnKeys });
     // The information hierarchy: a context line and the title first, then the
     // field grid. Single-value colored fields (select/status) read as chips
     // beside the title, so they leave the grid and never render twice.
@@ -1472,16 +1483,9 @@ export class BoardRenderer {
         titleEl.textContent = title.text;
         if (title.isEmpty) titleEl.addClass("is-empty-title");
       }
-      this.renderCardTitleChips(titleLine, config, row, titleField, groupedFields);
+      this.renderCardTitleChips(titleLine, config, row, titleField, groupedFields, fields);
     }
     const meta = body.createDiv({ cls: "db-board-card-meta" });
-    const fields = columns.filter(
-      (col) =>
-        col.key !== titleField
-        && !groupedFields.has(col.key)
-        && col.type !== "select"
-        && col.type !== "status",
-    );
     for (const col of fields) {
       const value = this.getCellValue(row, col);
       const displayType = this.getDisplayType(config, col);
@@ -1619,12 +1623,16 @@ export class BoardRenderer {
     row: RowData,
     titleField: string | undefined,
     groupedFields: Set<string>,
+    fields: ColumnDef[],
   ): void {
-    const chipColumns = this.actions.getColumns(config).filter(
+    const visibleKeys = new Set(fields.map((col) => col.key));
+    const chipColumns = getColumnsInOrder(config).filter(
       (col) =>
         (col.type === "select" || col.type === "status")
         && col.key !== titleField
-        && !groupedFields.has(col.key),
+        && !groupedFields.has(col.key)
+        && !visibleKeys.has(col.key)
+        && (config.boardCardFields !== undefined || (this.legacyVisibleColumnKeys?.has(col.key) ?? true)),
     );
     let container: HTMLElement | undefined;
     for (const col of chipColumns) {

@@ -451,6 +451,12 @@ export interface DatabaseConfig {
  * 注意：当前阶段仍保留数据库级属性（sourceFolder、schema 等）以保持子组件兼容性，
  * 后续 commit 会逐步将它们移至 DatabaseConfig 专属访问。
  */
+/** One card-body field: key plus whether it renders. Cover and title are not entries. */
+export interface BoardCardField {
+  key: string;
+  visible: boolean;
+}
+
 export interface ViewConfig {
   id?: string;
   name: string;
@@ -497,6 +503,10 @@ export interface ViewConfig {
   boardColumnWidth?: number;
   /** Board card cover image property. Empty = no cover. */
   boardImageField?: string;
+  /** Per-view card-body field order and visibility. Absent means derive from
+   *  the table's hidden columns plus the title, group, and select/status rules
+   *  so an upgraded view does not change until the operator edits the list. */
+  boardCardFields?: BoardCardField[];
   /** When true, local board extensions (swimlanes, covers, WIP limits, summaries,
    *  batch order, touch menus, empty slots, group controls) render; the default
    *  board is the one-to-one obsidian-pm kanban copy, which has none of them. */

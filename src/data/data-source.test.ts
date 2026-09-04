@@ -148,6 +148,44 @@ describe("DataSource view filter tree persistence", () => {
     expect(reparsed!.views[0].timelineWeekLabel).toBe("dateRange");
   });
 
+  it("round-trips boardCardFields through parseViewConfig, toViewPayload, and the legacy flat path", () => {
+    const dataSource = source();
+    const fields = [
+      { key: "hours", visible: true },
+      { key: "tags", visible: false },
+    ];
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "board",
+          sourceFolder: "",
+          boardCardFields: fields,
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+    expect(view.boardCardFields).toEqual(fields);
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.boardCardFields).toEqual(fields);
+    expect((dataSource as unknown as { legacyViewKeys(): string[] }).legacyViewKeys()).toContain("boardCardFields");
+
+    const reparsed = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [payload] },
+    });
+    expect(reparsed!.views[0].boardCardFields).toEqual(fields);
+
+    const legacy = dataSource.parseDatabaseConfig({
+      database: { viewType: "board", boardCardFields: fields, views: undefined },
+    });
+    expect(legacy?.views[0].boardCardFields).toEqual(fields);
+  });
+
   it("round-trips the per-view subtask collapse override and omits an empty map", () => {
     const dataSource = source();
     const parsed = dataSource.parseDatabaseConfig({

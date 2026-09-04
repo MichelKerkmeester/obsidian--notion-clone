@@ -20,6 +20,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 import { TFile, Vault, MetadataCache, App, normalizePath, parseYaml, stringifyYaml, EventRef, getAllTags } from "obsidian";
+import { parseBoardCardFields } from "./board-card-fields";
 import { ChartReferenceLine, ColumnDef, ConditionalFormatRule, DatabaseConfig, DateGroupMode, FilterRule, NewRecordTemplateConfig, RecordSchema, SortRule, SourceRule, ViewConfig } from "./types";
 import { generateId } from "./types";
 import { evaluateBaseFilterExpression } from "./base-expression";
@@ -801,6 +802,7 @@ export class DataSource {
           galleryImageAspectRatioPreset: this.parseGalleryAspectPreset(source["galleryImageAspectRatioPreset"]),
           galleryImageFit: source["galleryImageFit"] === "contain" ? "contain" : source["galleryImageFit"] === "cover" ? "cover" : undefined,
           boardImageField: safeString(source["boardImageField"]) || undefined,
+          boardCardFields: parseBoardCardFields(source["boardCardFields"]),
           boardImageAspectRatio: typeof source["boardImageAspectRatio"] === "number" ? source["boardImageAspectRatio"] : undefined,
           boardImageFit: source["boardImageFit"] === "contain" ? "contain" : source["boardImageFit"] === "cover" ? "cover" : undefined,
           showEmptyFields: source["showEmptyFields"] === true || (Array.isArray(source["alwaysShowEmptyFields"]) && (source["alwaysShowEmptyFields"] as unknown[]).length > 0),
@@ -981,6 +983,7 @@ export class DataSource {
       galleryImageAspectRatioPreset: this.parseGalleryAspectPreset(v["galleryImageAspectRatioPreset"]),
       galleryImageFit: v["galleryImageFit"] === "contain" ? "contain" : v["galleryImageFit"] === "cover" ? "cover" : undefined,
       boardImageField: safeString(v["boardImageField"]) || undefined,
+      boardCardFields: parseBoardCardFields(v["boardCardFields"]),
       boardImageAspectRatio: typeof v["boardImageAspectRatio"] === "number" ? v["boardImageAspectRatio"] : undefined,
       boardImageFit: v["boardImageFit"] === "contain" ? "contain" : v["boardImageFit"] === "cover" ? "cover" : undefined,
       showEmptyFields: v["showEmptyFields"] === true || (Array.isArray(v["alwaysShowEmptyFields"]) && (v["alwaysShowEmptyFields"] as unknown[]).length > 0),
@@ -1236,6 +1239,7 @@ export class DataSource {
       galleryImageAspectRatioPreset: view.galleryImageAspectRatioPreset,
       galleryImageFit: view.galleryImageFit || "cover",
       boardImageField: view.boardImageField || "",
+      boardCardFields: view.boardCardFields,
       boardImageAspectRatio: view.boardImageAspectRatio || 0.75,
       boardImageFit: view.boardImageFit || "cover",
       showEmptyFields: view.showEmptyFields === true,
@@ -1354,6 +1358,7 @@ export class DataSource {
       "galleryImageAspectRatioPreset",
       "galleryImageFit",
       "boardImageField",
+      "boardCardFields",
       "boardImageAspectRatio",
       "boardImageFit",
       "alwaysShowEmptyFields",
