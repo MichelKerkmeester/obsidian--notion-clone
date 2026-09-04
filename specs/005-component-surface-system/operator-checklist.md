@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-04: **44 phases**, **6 with nothing left**, **83 rows** waiting on a device.
+Derived 2026-09-04: **45 phases**, **6 with nothing left**, **90 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -205,6 +205,16 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `declared-fixtures.mjs` names every fixture a constructed capture supersedes, and every fixture that stays fixture-only. Today: the file does not exist, and the mapping is currently only prose in `plan.md` §3 — 11 DECLARED entries, 2 net-new (chart, calendar-day), 13 named fixture-only.
 - [ ] screenshots-fresh (`verify.mjs`) judges a DECLARED scenario's staleness against the constructed capture's `sourceHashes`. Today: N/A — `verify.mjs` iterates only `scenarios.mjs`'s `SCENARIOS` (`tools/screenshots/verify.mjs:41`); no DECLARED concept exists yet for it to read.
 - [ ] A parity check compares fixture and constructed `pixelHash` for every DECLARED scenario where both exist, stating its comparison basis explicitly. Today: 0 — no such test file exists, and the basis itself is an open question (data-aligned pixel equality vs. structural) pending the capture-sized data option above.
+
+## 044-phone-sheet-alignment — 0/7
+
+- [ ] No surface presenting as a bottom sheet on the phone bypasses `applySheetChrome`.
+- [ ] The column-width adjuster carries all seven grammar elements. Today: 0 of 7 — the operator's capture shows a bare bottom strip, its title starting at x=0 and its slider clipped by the left edge.
+- [ ] A field focused inside a sheet stays inside the reduced `visualViewport` rect, proven by a negative control that places it below the reduced bottom with the inset publisher disabled.
+- [ ] The settings sheet closes from its grab band, and no label in its body wraps against its control. Today: the handle does nothing and "Leave empty to scan the vault root." is clipped at the right edge.
+- [ ] The Add view sheet renders every control on a shared row type, with Title property as a dropdown row. Today: 0 controls on a row type — three bare inputs, a select rendered as a text input, a bare checkbox and a flat icon list.
+- [ ] `npm run gate` exits 0 with `sheet-grammar` registered, and the negative control was observed red on one surface and green again after restore. Today: the lane does not exist.
+- [ ] The operator opens the column-width adjuster, the settings sheet and the Add view sheet on iOS and reports each as aligned with the other sheets. Only the operator closes this row; nothing in this repository can.
 
 ## Nothing left to check
 

@@ -10,15 +10,16 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T17:34:00Z"
-    last_updated_by: "orchestrate-handover-15"
-    recent_action: "Operator answered 2026-09-04: 34-36 reopened, 37-38 in-repo, 39 decided, AC-002 Met"
-    next_safe_action: "Await operator: device confirm rows 1-2 + fix (036) + captures (037) + label fix (038)"
+    last_updated_at: "2026-09-04T18:52:00Z"
+    last_updated_by: "orchestrate-handover-16"
+    recent_action: "Opened 044-phone-sheet-alignment from operator reports 40, 41 and 43"
+    next_safe_action: "Land 044 shared sheet chrome (T004); legs 039/040 must consume it"
     blockers:
       - "Operator device confirmation owed: reports 29-33, five ported surfaces, 0.0.16-0.0.20"
       - "Reports 34-36 reopened (operator, 2026-09-04): add filter/add sort still break/freeze on 0.0.20; fix leg on worktrees/036-sheet-freeze (owner 031)"
       - "Rows 37-38 in-repo captures owed: recapture Project Manager's board+gantt views into screenshots/, leg on worktrees/037-reference-captures (harness, 043)"
       - "Row 39 milestone-label fix owed: reinstate the local anti-collision fix on the default gantt, amendment to 037 REQ-007, leg on worktrees/038-milestone-labels"
+      - "044 opened: reports 40/41/43 phone sheet grammar; legs on worktrees/039 and 040"
     key_files:
       - "goal.md"
       - "roadmap.md"

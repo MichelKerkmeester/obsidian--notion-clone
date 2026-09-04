@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/044-phone-sheet-alignment",
+  "spec_folder": "005-component-surface-system/044-phone-sheet-alignment",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "phone sheet alignment",
+      "044 spec",
+      "sheet grammar conformance",
+      "column width sheet",
+      "settings sheet drag",
+      "phone sheet alignment plan",
+      "sheet grammar conformance plan",
+      "044 plan",
+      "phone sheet alignment tasks",
+      "044 tasks",
+      "sheet grammar tasks",
+      "acceptance criteria"
+    ],
+    "key_topics": [
+      "phone",
+      "sheet",
+      "alignment",
+      "spec",
+      "grammar",
+      "conformance",
+      "column",
+      "width",
+      "settings",
+      "drag",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/database-view.ts",
+      "src/settings.ts",
+      "src/views/modals/db-modal.ts",
+      "tools/gate.mjs",
+      "src/views/toolbar-renderer.ts",
+      "src/views/owned-menu.ts",
+      "src/views/icon-picker-popover.ts",
+      "src/views/option-color-picker.ts",
+      "src/views/column-menu.ts",
+      "src/i18n.ts",
+      "src/views/mobile-bottom-sheet.stories.ts",
+      "tools/live/touch-targets.mjs",
+      "tools/live/touch-targets-constructed-baseline.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "db-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/db-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "icon-picker-popover.ts",
+        "kind": "code",
+        "path": "src/views/icon-picker-popover.ts",
+        "source": "derived"
+      },
+      {
+        "name": "option-color-picker.ts",
+        "kind": "code",
+        "path": "src/views/option-color-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-menu.ts",
+        "kind": "code",
+        "path": "src/views/column-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.stories.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.stories.ts",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets.mjs",
+        "kind": "file",
+        "path": "tools/live/touch-targets.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-constructed-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-constructed-baseline.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phone Sheet Alignment",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Three operator reports arrived inside eight minutes on 2026-09-04 and they are one defect seen from",
+    "created_at": "2026-09-04T18:46:24Z",
+    "last_save_at": "2026-09-04T18:53:48.008Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:38300a9d320d262871efbfda41645d93c3fedeccfb19e2a130a0974682d26ff9",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "ed71bcf8935d979b00674f7294f3ae0abf8a77a5d13b09b12ae4aba4b00be253",
+      "plan.md": "220be2579bff6607d196d9b02b0b4b8426c00cc4e1ac6b1a987ea42efb64cff2",
+      "tasks.md": "42a47d08273e5268c0ba0d922f77b552a7b7552c520f8bce5e3ae9895f784504",
+      "implementation-summary.md": "0e23474a4a4f6f6abdb11cc34b75af3b13f1bd3a278017881056332984d081c7"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}
