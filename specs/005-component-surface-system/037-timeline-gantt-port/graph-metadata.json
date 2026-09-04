@@ -53,13 +53,14 @@
       "src/data/calendar-title-formatter.ts",
       "tools/screenshots/scenarios/temporal.mjs",
       "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
-      "tools/screenshots/capture.mjs",
-      "tools/lane/css-lane.json",
-      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
-      "src/views/calendar-timeline-gantt.test.ts",
-      "tools/live/render-assertion-harness.ts",
+      "tools/screenshots/scenarios/shared.test.mjs",
+      "tools/screenshots/theme.css",
+      "tools/live/replay.mjs",
       "tools/live/touch-targets-constructed-baseline.json",
-      "src/views/calendar-timeline-hour-column.test.ts"
+      "tools/lane/css-lane.json",
+      "tools/screenshots/capture.mjs",
+      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
+      "src/views/calendar-timeline-gantt.test.ts"
     ],
     "entities": [
       {
@@ -135,15 +136,39 @@
         "source": "derived"
       },
       {
-        "name": "capture.mjs",
+        "name": "shared.test.mjs",
         "kind": "file",
-        "path": "tools/screenshots/capture.mjs",
+        "path": "tools/screenshots/scenarios/shared.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
+        "source": "derived"
+      },
+      {
+        "name": "replay.mjs",
+        "kind": "file",
+        "path": "tools/live/replay.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-constructed-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-constructed-baseline.json",
         "source": "derived"
       },
       {
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
         "source": "derived"
       },
       {
@@ -156,24 +181,6 @@
         "name": "calendar-timeline-gantt.test.ts",
         "kind": "test",
         "path": "src/views/calendar-timeline-gantt.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "render-assertion-harness.ts",
-        "kind": "code",
-        "path": "tools/live/render-assertion-harness.ts",
-        "source": "derived"
-      },
-      {
-        "name": "touch-targets-constructed-baseline.json",
-        "kind": "config",
-        "path": "tools/live/touch-targets-constructed-baseline.json",
-        "source": "derived"
-      },
-      {
-        "name": "calendar-timeline-hour-column.test.ts",
-        "kind": "test",
-        "path": "src/views/calendar-timeline-hour-column.test.ts",
         "source": "derived"
       },
       {
@@ -199,17 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`src/views/calendar-timeline-renderer.ts` (2,390 lines) already owns an action contract, CSS-unit geometry,",
     "created_at": "2026-09-02T21:51:11Z",
-    "last_save_at": "2026-09-04T06:33:44.373Z",
+    "last_save_at": "2026-09-04T08:20:36.970Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:fe86a14a0091e8bc19a76fd70c993043961d9f01687afaa213562b275e10e609",
+    "source_fingerprint": "sha256:c8c1bf6b41b7e9b8a08383a7f4196a28b1a593d068e18bb06cc643a1cb4b44b1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b9140d5482409deda96a10c515a8979982896d4047231912fda1cd632e7f3651",
       "plan.md": "e809a1bfd52e382aa4f4b09b7f50fbaf595c2ddae07c020223abdec629c602d1",
-      "tasks.md": "55337b7421ba7d68de2ceadef281647a0a47d6be91d71a05712b2957918873af",
-      "implementation-summary.md": "8d215e6de7d5b9a65f8e396c34b7aa7b2a0eaab6731f3ef168201ac757bc9afe"
+      "tasks.md": "cb13023970eccb4948c3fbf51b58834a6571cacff704c536688224b9ccd99d5c",
+      "implementation-summary.md": "168811801c52dd05cc155555a3f10456e41d2f699690698739300bc3d60efc51"
     },
     "last_active_child_id": null,
     "last_active_at": null
