@@ -27,6 +27,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { CalendarTimelineRenderer, CalendarTimelineRendererActions } from "./calendar-timeline-renderer";
 import { buildTimelineRangeGeometry } from "../data/calendar-timeline-model";
 import { addDateKeyDays, getLocalDateKey } from "../data/calendar-date-time";
+import type { CalendarEventDateChange } from "../data/calendar-interaction-model";
 import type { RowData, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 
@@ -38,11 +39,30 @@ vi.mock("obsidian", () => ({
   Platform: { isMobile: false, isTablet: false },
 }));
 
+/** Test-only event dispatch surface for the interaction tests: the renderer binds
+ *  document-level listeners (drag move/up, Escape) that a real DOM would deliver. */
 class MockDocument {
+  public listeners: Record<string, Array<(event: unknown) => void>> = {};
+  public defaultView: { requestAnimationFrame?: (callback: () => void) => number } | undefined;
+
   createElementNS(_namespace: string, tag: string): MockElement {
     return new MockElement(tag);
   }
-  defaultView: undefined;
+
+  addEventListener(type: string, handler: (event: unknown) => void): void {
+    (this.listeners[type] ??= []).push(handler);
+  }
+
+  removeEventListener(type: string, handler: (event: unknown) => void): void {
+    const list = this.listeners[type];
+    if (!list) return;
+    const index = list.indexOf(handler);
+    if (index >= 0) list.splice(index, 1);
+  }
+
+  dispatch(type: string, event: unknown): void {
+    for (const handler of [...(this.listeners[type] ?? [])]) handler(event);
+  }
 }
 
 class MockElement {
@@ -58,8 +78,13 @@ class MockElement {
   public clientWidth = 800;
   public scrollTop = 0;
   public scrollLeft = 0;
+  public offsetHeight: number | undefined;
+  public clientHeight: number | undefined;
   public text: string | null = null;
   public style: Record<string, string> & { setProperty: (k: string, v: string) => void };
+  public listeners: Record<string, Array<(event: unknown) => void>> = {};
+  public pointerCaptures: number[] = [];
+  public classList: { contains: (cls: string) => boolean };
 
   constructor(tagName = "div", className = "") {
     this.tagName = tagName.toUpperCase();
@@ -68,6 +93,7 @@ class MockElement {
     this.style = Object.assign(styles, {
       setProperty: (k: string, v: string) => { styles[k] = v; },
     });
+    this.classList = { contains: (cls) => this.className.split(/\s+/).includes(cls) };
   }
 
   createDiv(options: { cls?: string; text?: string; attr?: Record<string, string> } = {}): MockElement {
@@ -165,8 +191,32 @@ class MockElement {
     return this.className.split(/\s+/).includes(cls);
   }
 
-  addEventListener(): void {}
-  removeEventListener(): void {}
+  addEventListener(type: string, handler: (event: unknown) => void, _options?: unknown): void {
+    (this.listeners[type] ??= []).push(handler);
+  }
+
+  removeEventListener(type: string, handler: (event: unknown) => void): void {
+    const list = this.listeners[type];
+    if (!list) return;
+    const index = list.indexOf(handler);
+    if (index >= 0) list.splice(index, 1);
+  }
+
+  dispatch(type: string, event: unknown): void {
+    for (const handler of [...(this.listeners[type] ?? [])]) handler(event);
+    // The controls bar wires its buttons through the .onclick property, which a real
+    // DOM invokes on click; the mock mirrors that for the property-assigned handlers.
+    const propertyHandler = (this as unknown as Record<string, unknown>)[`on${type}`];
+    if (typeof propertyHandler === "function") (propertyHandler as (e: unknown) => void)(event);
+  }
+
+  hasListener(type: string): boolean {
+    return (this.listeners[type] ?? []).length > 0;
+  }
+
+  setPointerCapture(pointerId: number): void {
+    this.pointerCaptures.push(pointerId);
+  }
 
   getBoundingClientRect(): { width: number; height: number; top: number; left: number } {
     return { width: this.clientWidth, height: 0, top: 0, left: 0 };
@@ -180,8 +230,10 @@ class MockElement {
     return [];
   }
 
-  closest(_selector: string): MockElement | null {
-    return null;
+  closest(selector: string): MockElement | null {
+    const cls = selector.startsWith(".") ? selector.slice(1) : "";
+    if (cls && this.classList.contains(cls)) return this;
+    return this.parentElement ? this.parentElement.closest(selector) : null;
   }
 }
 
@@ -200,6 +252,18 @@ function makeActions(): MockActions {
     reorderTimelineEvent: () => undefined,
     isGroupCollapsed: () => false,
   };
+}
+
+/** Records updateEventDates changes the way updateCalendarTimelineDates gates them:
+ *  changedEdge "start" writes the start cell only, "end" the end cell only, "both" both. */
+function makeDateWriteSpy(): { actions: MockActions; writes: Array<{ row: RowData; cell: "start" | "end"; change: CalendarEventDateChange }> } {
+  const writes: Array<{ row: RowData; cell: "start" | "end"; change: CalendarEventDateChange }> = [];
+  const actions = makeActions();
+  actions.updateEventDates = (row, change) => {
+    if (change.changedEdge !== "end") writes.push({ row, cell: "start", change });
+    if (change.changedEdge !== "start" && change.endDateKey) writes.push({ row, cell: "end", change });
+  };
+  return { actions, writes };
 }
 
 function makeRow(path: string, frontmatter: Record<string, unknown>): RowData {
@@ -253,7 +317,8 @@ function makeFixtureRows(): RowData[] {
       recurrence: "weekly",
     }),
     makeRow("Beta.md", { due: day(6) }),
-    makeRow("Gamma.md", { milestone: "milestone", due: day(11) }),
+    // Both dates present so the milestone anchor (due preferred) is observable.
+    makeRow("Gamma.md", { milestone: "milestone", start: day(9), due: day(11) }),
     makeRow("Delta.md", {}),
   ];
 }
@@ -366,19 +431,40 @@ function referenceVerticalGridlines(cfg: RangeLike, scale: "day" | "month"): num
 describe("timeline gantt DOM-structure parity", () => {
   const rows = makeFixtureRows();
 
-  beforeAll(() => {
-    // The renderer measures the viewport through window.getComputedStyle; the node
-    // test environment has no window, so the parity check provides the minimum
-    // surface that keeps the measurement path alive.
-    // eslint-disable-next-line obsidianmd/no-global-this -- test-only shim; product code keeps window.
-    (globalThis as Record<string, unknown>).window = {
-      getComputedStyle: () => ({ paddingLeft: "0px", paddingRight: "0px" }),
-      activeDocument: {
-        body: { addClass: () => undefined, removeClass: () => undefined },
-        addEventListener: () => undefined,
-        removeEventListener: () => undefined,
+  // The renderer measures the viewport through window.getComputedStyle, binds document-level
+  // listeners (drag move/up, Escape) and reads body classes (is-phone, pm-resize-active); the
+  // node test environment has no window, so the tests provide the minimum surface that keeps
+  // those paths alive, with dispatch/listener recording for the interaction tests.
+  const testBodyClasses = new Set<string>();
+  const testDocumentListeners: Record<string, Array<(event: unknown) => void>> = {};
+  const testWindow = {
+    getComputedStyle: () => ({ paddingLeft: "0px", paddingRight: "0px" }),
+    requestAnimationFrame: (_callback: () => void) => 1,
+    activeDocument: {
+      body: {
+        addClass: (cls: string) => { testBodyClasses.add(cls); },
+        removeClass: (cls: string) => { testBodyClasses.delete(cls); },
+        classList: { contains: (cls: string) => testBodyClasses.has(cls) },
       },
-    };
+      addEventListener: (type: string, handler: (event: unknown) => void) => {
+        (testDocumentListeners[type] ??= []).push(handler);
+      },
+      removeEventListener: (type: string, handler: (event: unknown) => void) => {
+        const list = testDocumentListeners[type];
+        if (!list) return;
+        const index = list.indexOf(handler);
+        if (index >= 0) list.splice(index, 1);
+      },
+      dispatch: (type: string, event: unknown) => {
+        for (const handler of [...(testDocumentListeners[type] ?? [])]) handler(event);
+      },
+      listenerCount: (type: string) => (testDocumentListeners[type] ?? []).length,
+    },
+  };
+
+  beforeAll(() => {
+    // eslint-disable-next-line obsidianmd/no-global-this -- test-only shim; product code keeps window.
+    (globalThis as Record<string, unknown>).window = testWindow;
   });
 
   afterAll(() => {
@@ -429,15 +515,15 @@ describe("timeline gantt DOM-structure parity", () => {
       "div.pm-gantt-view",
       "  div.pm-gantt-controls",
       "    div.pm-segmented",
-      `      button.clickable-icon[${t("timeline.scaleDay")}]`,
-      `      button.clickable-icon[${t("timeline.scaleWeek")}]`,
-      `      button.clickable-icon.mod-cta[${t("timeline.scaleMonth")}]`,
-      `      button.clickable-icon[${t("timeline.scaleQuarter")}]`,
-      `      button.clickable-icon[${t("timeline.scaleYear")}]`,
+      `      button[${t("timeline.scaleDay")}]`,
+      `      button[${t("timeline.scaleWeek")}]`,
+      `      button.mod-cta[${t("timeline.scaleMonth")}]`,
+      `      button[${t("timeline.scaleQuarter")}]`,
+      `      button[${t("timeline.scaleYear")}]`,
       "    span.pm-gantt-sep",
-      `    button.clickable-icon[${t("timeline.today")}]`,
-      `    button.clickable-icon[${t("timeline.expandAll")}]`,
-      `    button.clickable-icon[${t("timeline.collapseAll")}]`,
+      `    button[${t("timeline.today")}]`,
+      `    button[${t("timeline.expandAll")}]`,
+      `    button[${t("timeline.collapseAll")}]`,
       "  div.pm-gantt-wrapper",
       "    div.pm-gantt-left",
       "      div.pm-gantt-left-header",
@@ -448,27 +534,27 @@ describe("timeline gantt DOM-structure parity", () => {
       "          span.pm-gantt-label-dot",
       "          span.pm-gantt-label-title[Alpha]",
       "          span.pm-gantt-label-progress[40%]",
-      "          button.clickable-icon.pm-icon-btn.pm-icon-btn--hover-only",
+      "          div.clickable-icon.extra-setting-button.pm-icon-btn.pm-icon-btn--hover-only",
       "        div.pm-gantt-label-row",
       "          span.pm-gantt-label-spacer",
       "          span.pm-gantt-label-dot",
       "          span.pm-gantt-label-title[Epsilon]",
-      "          button.clickable-icon.pm-icon-btn.pm-icon-btn--hover-only",
+      "          div.clickable-icon.extra-setting-button.pm-icon-btn.pm-icon-btn--hover-only",
       "        div.pm-gantt-label-row",
       "          span.pm-gantt-label-spacer",
       "          span.pm-gantt-label-dot",
       "          span.pm-gantt-label-title[Beta]",
-      "          button.clickable-icon.pm-icon-btn.pm-icon-btn--hover-only",
+      "          div.clickable-icon.extra-setting-button.pm-icon-btn.pm-icon-btn--hover-only",
       "        div.pm-gantt-label-row",
       "          span.pm-gantt-label-spacer",
       "          span.pm-gantt-label-dot",
       "          span.pm-gantt-label-title[Gamma]",
-      "          button.clickable-icon.pm-icon-btn.pm-icon-btn--hover-only",
+      "          div.clickable-icon.extra-setting-button.pm-icon-btn.pm-icon-btn--hover-only",
       "        div.pm-gantt-label-row",
       "          span.pm-gantt-label-spacer",
       "          span.pm-gantt-label-dot",
       "          span.pm-gantt-label-title[Delta]",
-      "          button.clickable-icon.pm-icon-btn.pm-icon-btn--hover-only",
+      "          div.clickable-icon.extra-setting-button.pm-icon-btn.pm-icon-btn--hover-only",
       "        div.pm-gantt-label-row.pm-gantt-add-row",
       "          button.pm-prop-add",
       "            span.pm-glyph-icon",
@@ -647,5 +733,230 @@ describe("timeline gantt DOM-structure parity", () => {
     const defs = svg.children[0];
     expect(defs.tagName).toBe("DEFS");
     expect(defs.children[0].id).toBe("pm-arrowhead");
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // 6. INTERACTION PARITY (reference GanttLinkHandler / GanttView / GanttDragHandler)
+  // ─────────────────────────────────────────────────────────────────
+
+  function ganttBarGroups(container: MockElement): MockElement[] {
+    const svg = container.children[1].children[2].children[1].children[0];
+    return svg.children[3].children.filter((child) => child.className === "pm-gantt-bar-group");
+  }
+
+  function ganttSvg(container: MockElement): MockElement {
+    return container.children[1].children[2].children[1].children[0];
+  }
+
+  /** Link dots are appended left then right; the last dot child is the right (output) dot. */
+  function ganttDots(barGroup: MockElement): { left: MockElement; right: MockElement } {
+    const dots = barGroup.children.filter((child) => child.className === "pm-gantt-link-dot");
+    return { left: dots[0], right: dots[dots.length - 1] };
+  }
+
+  const clickEvent = () => ({ stopPropagation: () => undefined, preventDefault: () => undefined });
+
+  it("keeps the first link dot armed when the second click is same-side, like the reference", () => {
+    const { container } = renderGantt("month");
+    const barGroups = ganttBarGroups(container);
+    const alphaRight = ganttDots(barGroups[0]).right;
+    const beta = ganttDots(barGroups[2]);
+
+    alphaRight.dispatch("click", clickEvent());
+    expect(alphaRight.className).toContain("pm-gantt-link-dot--active");
+
+    // Same-side rejection: the reference returns with the first dot still armed.
+    beta.right.dispatch("click", clickEvent());
+    expect(alphaRight.className).toContain("pm-gantt-link-dot--active");
+    expect(alphaRight.className).toContain("is-active");
+
+    // A real second click still commits and clears the selection.
+    beta.left.dispatch("click", clickEvent());
+    expect(alphaRight.className).not.toContain("pm-gantt-link-dot--active");
+  });
+
+  it("cancels an in-progress link with Escape from the document, like the reference", () => {
+    const container = new MockElement("div", "workspace-leaf mod-active");
+    const renderer = new CalendarTimelineRenderer(makeActions());
+    renderer.renderTimeline(container as unknown as HTMLElement, makeConfig("month"), rows);
+    const alphaRight = ganttDots(ganttBarGroups(container.children[0])[0]).right;
+    alphaRight.dispatch("click", clickEvent());
+    expect(alphaRight.className).toContain("pm-gantt-link-dot--active");
+
+    testWindow.activeDocument.dispatch("keydown", { key: "Escape", preventDefault: () => undefined });
+    expect(alphaRight.className).not.toContain("pm-gantt-link-dot--active");
+  });
+
+  it("removes the document keydown listener on teardown", () => {
+    const before = testWindow.activeDocument.listenerCount("keydown");
+    const container = new MockElement("div", "workspace-leaf mod-active");
+    const renderer = new CalendarTimelineRenderer(makeActions());
+    renderer.renderTimeline(container as unknown as HTMLElement, makeConfig("month"), rows);
+    expect(testWindow.activeDocument.listenerCount("keydown")).toBe(before + 1);
+    renderer.destroy();
+    expect(testWindow.activeDocument.listenerCount("keydown")).toBe(before);
+  });
+
+  it("defers the left spacer sync to the post-layout frame, like the reference", () => {
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    let queued: (() => void) | null = null;
+    container.ownerDocument.defaultView = {
+      requestAnimationFrame: (callback: () => void) => {
+        queued = callback;
+        return 1;
+      },
+    };
+    const renderer = new CalendarTimelineRenderer(makeActions());
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
+    const wrapper = container.children[0].children[1];
+    const leftBody = wrapper.children[0].children[1];
+    const spacer = leftBody.children[leftBody.children.length - 1];
+    const rightPanel = wrapper.children[2];
+    rightPanel.offsetHeight = 100;
+    rightPanel.clientHeight = 90;
+
+    // Before the frame runs the spacer must not have been measured yet.
+    expect(spacer.style.height).toBeUndefined();
+    expect(queued).not.toBeNull();
+    queued!();
+    expect(spacer.style.height).toBe("10px");
+  });
+
+  it("passes wheel events from the whole left panel to the chart, like the reference", () => {
+    const { container } = renderGantt("month");
+    const wrapper = container.children[1];
+    const leftPanel = wrapper.children[0];
+    const leftBody = leftPanel.children[1];
+    expect(leftPanel.hasListener("wheel")).toBe(true);
+    expect(leftBody.hasListener("wheel")).toBe(false);
+  });
+
+  it("patches only the due date when the right edge is dragged, like the reference", () => {
+    const { actions, writes } = makeDateWriteSpy();
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
+
+    const alphaHandles = ganttBarGroups(container.children[0])[0].children.filter((child) => child.className === "pm-gantt-drag-handle");
+    alphaHandles[1].dispatch("mousedown", { button: 0, clientX: 500, stopPropagation: () => undefined, preventDefault: () => undefined });
+    testWindow.activeDocument.dispatch("mousemove", { clientX: 509 });
+    testWindow.activeDocument.dispatch("mouseup", {});
+
+    expect(writes).toHaveLength(1);
+    expect(writes[0].cell).toBe("end");
+    const change = writes[0].change;
+    expect(change.changedEdge).toBe("end");
+    // The reference patch is { due } only: the start carried in the payload is the bar's
+    // own unchanged start, never a value the drag produced.
+    expect(change.startDateKey).toBe(addDateKeyDays(getLocalDateKey(new Date()), -3));
+    expect(change.endDateKey).toBeDefined();
+  });
+
+  it("patches only the start date when the left edge is dragged, like the reference", () => {
+    const { actions, writes } = makeDateWriteSpy();
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
+
+    const alphaHandles = ganttBarGroups(container.children[0])[0].children.filter((child) => child.className === "pm-gantt-drag-handle");
+    alphaHandles[0].dispatch("mousedown", { button: 0, clientX: 500, stopPropagation: () => undefined, preventDefault: () => undefined });
+    testWindow.activeDocument.dispatch("mousemove", { clientX: 491 });
+    testWindow.activeDocument.dispatch("mouseup", {});
+
+    expect(writes).toHaveLength(1);
+    expect(writes[0].cell).toBe("start");
+    expect(writes[0].change.changedEdge).toBe("start");
+    expect(writes[0].change.endDateKey).toBeUndefined();
+  });
+
+  it("batches expand/collapse all through one persistence call when the view offers it", () => {
+    const batchCalls: Array<{ rows: RowData[]; collapsed: boolean }> = [];
+    const actions = makeActions();
+    let rowToggles = 0;
+    actions.toggleSubtaskCollapsed = () => { rowToggles += 1; };
+    (actions as unknown as Record<string, unknown>).setSubtaskCollapsedMany = (rowsToSet: RowData[], collapsed: boolean) => {
+      batchCalls.push({ rows: rowsToSet, collapsed });
+    };
+
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(actions);
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
+
+    const controls = container.children[0].children[0];
+    const collapseAll = controls.children.find((child) => child.text === t("timeline.collapseAll"));
+    expect(collapseAll).toBeDefined();
+    collapseAll!.dispatch("click", clickEvent());
+
+    expect(batchCalls).toHaveLength(1);
+    expect(batchCalls[0].collapsed).toBe(true);
+    expect(batchCalls[0].rows.map((row) => row.file.path)).toEqual(["Alpha.md"]);
+    expect(rowToggles).toBe(0);
+  });
+
+  it("starts the label column at 160px on phone and 280px on desktop", () => {
+    const { container } = renderGantt("month");
+    const left = container.children[1].children[0];
+    expect(left.style.width).toBe("280px");
+    expect(left.style.minWidth).toBe("280px");
+
+    testBodyClasses.add("is-phone");
+    try {
+      const config = makeConfig("month");
+      const phoneContainer = new MockElement("div");
+      const renderer = new CalendarTimelineRenderer(makeActions());
+      renderer.renderTimeline(phoneContainer as unknown as HTMLElement, config, rows);
+      const phoneLeft = phoneContainer.children[0].children[1].children[0];
+      expect(phoneLeft.style.width).toBe("160px");
+      expect(phoneLeft.style.minWidth).toBe("160px");
+    } finally {
+      testBodyClasses.delete("is-phone");
+    }
+  });
+
+  it("resizes the label column through pointer events with capture", () => {
+    const config = makeConfig("month");
+    const container = new MockElement("div");
+    const renderer = new CalendarTimelineRenderer(makeActions());
+    renderer.renderTimeline(container as unknown as HTMLElement, config, rows);
+    const wrapper = container.children[0].children[1];
+    const leftPanel = wrapper.children[0];
+    const handle = wrapper.children[1];
+    expect(handle.className).toContain("pm-gantt-resize-handle");
+
+    handle.dispatch("pointerdown", { pointerId: 7, clientX: 300, preventDefault: () => undefined });
+    expect(handle.pointerCaptures).toContain(7);
+    expect(testBodyClasses.has("pm-resize-active")).toBe(true);
+
+    handle.dispatch("pointermove", { pointerId: 7, clientX: 360 });
+    expect(leftPanel.style.width).toBe("340px");
+    expect(leftPanel.style.minWidth).toBe("340px");
+
+    handle.dispatch("pointerup", { pointerId: 7 });
+    expect(testBodyClasses.has("pm-resize-active")).toBe(false);
+  });
+
+  it("anchors the milestone on the due date when both dates exist, like the reference", () => {
+    const config = makeConfig("month");
+    const range = buildTimelineRangeGeometry(rows, config, "month");
+    const dayWidth = range.dayWidth;
+    const dueX = dateToX({ startDateKey: range.startDateKey, endDateKey: range.endDateKey, dayWidth, totalDays: range.totalDays }, addDateKeyDays(getLocalDateKey(new Date()), 11));
+    const expectedCx = dueX + dayWidth / 2;
+
+    const { container } = renderGantt("month");
+    const svg = ganttSvg(container);
+    const milestone = svg.children[3].children.find((child) => child.className === "pm-gantt-milestone");
+    expect(milestone).toBeDefined();
+    expect(milestone!.getAttribute("points")).toContain(`${expectedCx},`);
+
+    const guide = svg.children[5].children.find((child) => child.tagName === "LINE");
+    expect(guide?.getAttribute("x1")).toBe(String(expectedCx));
+
+    const headerSvg = container.children[1].children[2].children[0].children[0];
+    const label = headerSvg.children.find((child) => child.className === "pm-gantt-milestone-label");
+    expect(label?.getAttribute("x")).toBe(String(expectedCx));
   });
 });

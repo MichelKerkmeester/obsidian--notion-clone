@@ -65,6 +65,10 @@ const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const GANTT_ROW_HEIGHT = TIMELINE_REFERENCE_ROW_HEIGHT;
 const GANTT_HEADER_HEIGHT = TIMELINE_REFERENCE_HEADER_HEIGHT;
 const GANTT_LABEL_WIDTH = TIMELINE_REFERENCE_LABEL_WIDTH;
+/** Phone start width for the label column: the fixed 280px desktop default leaves only
+ *  ~110px of chart at 402px, so phone starts narrower and the pointer-based resize
+ *  handle can still widen the column on touch. */
+const GANTT_LABEL_PHONE_WIDTH = 160;
 const GANTT_BAR_PADDING = 8;
 const GANTT_BAR_BORDER_RADIUS = 7;
 const GANTT_HANDLE_WIDTH = 8;
@@ -98,6 +102,9 @@ interface GanttBarDragOpts {
   cfg: GanttTimelineCfg;
   startField: string;
   endField: string | undefined;
+  /** The bar's current start date key; a right-edge drag never touches it, so the
+   *  change payload anchors on this instead of re-deriving it from drag geometry. */
+  startDateKey: string;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -220,6 +227,10 @@ export interface CalendarTimelineRendererActions {
    *  by `buildSubtaskRelation`. Returns `undefined` for a row the view has no override for. */
   isSubtaskCollapsed?(row: RowData): boolean | undefined;
   toggleSubtaskCollapsed?(row: RowData, collapsed: boolean): void | Promise<void>;
+  /** Batch collapse/expand for expand-all/collapse-all: one persistence call and one render
+   *  replace one write plus one render per parent row (the reference mutates in place,
+   *  persists once, and re-renders once). */
+  setSubtaskCollapsedMany?(rows: RowData[], collapsed: boolean): void | Promise<void>;
   updateTimelineAnchor?(dateKey: string, label?: string, timeMinutes?: number): void;
   updateTimelineScale?(scale: TimelineScale, label?: string): boolean | Promise<boolean> | void;
   updateTimelineDependency?(predecessor: RowData, successor: RowData, dependencies: string[]): void | Promise<void>;
@@ -289,8 +300,12 @@ export class CalendarTimelineRenderer {
   private emptyStateRenderer = new EmptyStateRenderer();
   /** Cleanup handles for the reference-gantt render path (resize handle, drags, scroll sync). */
   private ganttCleanupFns: (() => void)[] = [];
-  /** Reference-gantt label column width in px, adjustable via the divider. */
-  private ganttLabelWidth = GANTT_LABEL_WIDTH;
+  /** Reference-gantt label column width in px, adjustable via the divider. Starts at the
+   *  desktop constant, or the narrower phone default when the body carries is-phone. */
+  private ganttLabelWidth: number | null = null;
+  /** In-progress label-column resize state (pointer events with capture on the handle). */
+  private ganttResizeStartX: number | null = null;
+  private ganttResizeStartWidth = 0;
   /** Reference-gantt scroll pane, set when the right panel is built (Today button target). */
   private ganttScrollEl: HTMLElement | null = null;
   /** Current reference-gantt range, kept so the Today button can scroll without re-deriving it. */
@@ -684,6 +699,9 @@ export class CalendarTimelineRenderer {
     this.renderGanttControls(root, config, scale);
 
     const wrapper = root.createDiv({ cls: "pm-gantt-wrapper" });
+    // The 280px desktop constant is the reference default; phone starts narrower so the
+    // chart keeps ~110px more, and the touch-friendly handle can still widen the column.
+    this.ganttLabelWidth ??= this.isGanttPhone() ? GANTT_LABEL_PHONE_WIDTH : GANTT_LABEL_WIDTH;
     const leftPanel = wrapper.createDiv({ cls: "pm-gantt-left" });
     leftPanel.style.width = `${this.ganttLabelWidth}px`;
     leftPanel.style.minWidth = `${this.ganttLabelWidth}px`;
@@ -731,19 +749,34 @@ export class CalendarTimelineRenderer {
     this.renderGanttDependencyArrows(svgEl, cfg, visibleRows, eventByPath);
     this.renderGanttMilestoneLabels(svgEl, headerSvgEl, cfg, visibleRows, eventByPath);
 
-    this.setupGanttScrollSync(leftBody, rightPanel);
-    root.addEventListener("keydown", (event) => {
+    const syncSpacer = this.setupGanttScrollSync(leftPanel, leftBody, rightPanel);
+    // Escape must reach the in-progress link from anywhere in the leaf, like the
+    // reference's document-level keydown (gated on the leaf being the active one).
+    const isGanttActive = (): boolean => {
+      const leafEl = container.closest(".workspace-leaf");
+      return leafEl?.classList.contains("mod-active") ?? false;
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!isGanttActive()) return;
       if (event.key === "Escape" && this.timelineLinkSelection) {
         event.preventDefault();
         this.cancelTimelineLink();
       }
-    });
+    };
+    window.activeDocument.addEventListener("keydown", onKeyDown);
+    this.ganttCleanupFns.push(() => window.activeDocument.removeEventListener("keydown", onKeyDown));
     const raf = container.ownerDocument?.defaultView?.requestAnimationFrame
       ?? (typeof window !== "undefined" ? window.requestAnimationFrame : undefined);
+    // The spacer measures the right panel's horizontal scrollbar, which only exists
+    // after layout; sync it in the same post-layout frame that restores the scroll.
     const restoreScroll = () => this.applyGanttPendingScroll(cfg, rightPanel);
     if (typeof raf === "function") {
-      raf(restoreScroll);
+      raf(() => {
+        syncSpacer();
+        restoreScroll();
+      });
     } else {
+      syncSpacer();
       restoreScroll();
     }
   }
@@ -762,7 +795,9 @@ export class CalendarTimelineRenderer {
     };
     const segment = bar.createDiv({ cls: "pm-segmented" });
     for (const level of levels) {
-      const button = segment.createEl("button", { cls: "clickable-icon", text: labels[level], attr: { type: "button" } });
+      // Bare buttons, like the reference's SegmentedControl/ButtonComponent; the
+      // pressed state is the button-mod-cta class setCta() applies.
+      const button = segment.createEl("button", { text: labels[level], attr: { type: "button" } });
       if (level === scale) button.addClass("mod-cta");
       button.onclick = (event) => {
         event.preventDefault();
@@ -771,19 +806,19 @@ export class CalendarTimelineRenderer {
       };
     }
     bar.createSpan({ cls: "pm-gantt-sep" });
-    const today = bar.createEl("button", { cls: "clickable-icon", text: t("timeline.today"), attr: { type: "button" } });
+    const today = bar.createEl("button", { text: t("timeline.today"), attr: { type: "button" } });
     today.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
       if (this.ganttScrollEl) this.scrollGanttToToday(this.ganttCfgForScroll(), this.ganttScrollEl);
     };
-    const expandAll = bar.createEl("button", { cls: "clickable-icon", text: t("timeline.expandAll"), attr: { type: "button" } });
+    const expandAll = bar.createEl("button", { text: t("timeline.expandAll"), attr: { type: "button" } });
     expandAll.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
       this.setGanttAllCollapsed(false);
     };
-    const collapseAll = bar.createEl("button", { cls: "clickable-icon", text: t("timeline.collapseAll"), attr: { type: "button" } });
+    const collapseAll = bar.createEl("button", { text: t("timeline.collapseAll"), attr: { type: "button" } });
     collapseAll.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -792,11 +827,15 @@ export class CalendarTimelineRenderer {
   }
 
   private setGanttAllCollapsed(collapsed: boolean): void {
-    for (const row of this.currentRows) {
-      if ((this.subtaskRelation?.childrenOf.get(row.file.path) || []).length > 0) {
-        void this.actions.toggleSubtaskCollapsed?.(row, collapsed);
-      }
+    const parents = this.currentRows.filter((row) => (this.subtaskRelation?.childrenOf.get(row.file.path) || []).length > 0);
+    if (parents.length === 0) return;
+    // One batched persistence call when the view provides it, so the reference's
+    // mutate-once/render-once shape is not N writes plus N renders.
+    if (this.actions.setSubtaskCollapsedMany) {
+      void this.actions.setSubtaskCollapsedMany(parents, collapsed);
+      return;
     }
+    for (const row of parents) void this.actions.toggleSubtaskCollapsed?.(row, collapsed);
   }
 
   /** The current range, for the Today button; a fresh default keeps the scroll safe if none. */
@@ -889,7 +928,9 @@ export class CalendarTimelineRenderer {
         chip.createSpan({ cls: "pm-chip-label", text: t("timeline.dependsElsewhere", { count: elsewhere.length }) });
         setTooltip(chip, elsewhere.join("\n"), { delay: 100 });
       }
-      const addSubtask = el.createEl("button", { cls: "clickable-icon pm-icon-btn pm-icon-btn--hover-only", attr: { type: "button" } });
+      // The reference's IconButton shape (ExtraButtonComponent): a div carrying
+      // clickable-icon/extra-setting-button plus the reveal-on-hover modifier.
+      const addSubtask = el.createDiv({ cls: "clickable-icon extra-setting-button pm-icon-btn pm-icon-btn--hover-only" });
       setIcon(addSubtask, "plus");
       setTooltip(addSubtask, t("timeline.addSubtask"), { delay: 100 });
       addSubtask.addEventListener("click", (mouseEvent) => {
@@ -914,37 +955,46 @@ export class CalendarTimelineRenderer {
     });
   }
 
-  /** Divider between label column and chart. Adapted from GanttView's resize-handle wiring. */
+  /** Divider between label column and chart. Adapted from GanttView's resize-handle wiring;
+   *  pointer events with capture replace the reference's document mousemove/up so touch can
+   *  drag the handle too (the handle keeps receiving move/up while captured). */
   private setupGanttResizeHandle(wrapper: HTMLElement, leftPanel: HTMLElement): void {
     const resizeHandle = wrapper.createDiv({ cls: "pm-gantt-resize-handle" });
-    let resizing = false;
-    let startX = 0;
-    let startWidth = 0;
-    resizeHandle.addEventListener("mousedown", (e: MouseEvent) => {
+    const onPointerDown = (e: PointerEvent) => {
       e.preventDefault();
-      resizing = true;
-      startX = e.clientX;
-      startWidth = this.ganttLabelWidth;
+      resizeHandle.setPointerCapture?.(e.pointerId);
+      this.ganttResizeStartX = e.clientX;
+      this.ganttResizeStartWidth = this.ganttLabelWidth ?? GANTT_LABEL_WIDTH;
       window.activeDocument.body.addClass("pm-resize-active");
-    });
-    const onMouseMove = (e: MouseEvent) => {
-      if (!resizing) return;
-      const newWidth = Math.max(GANTT_LABEL_MIN_WIDTH, Math.min(GANTT_LABEL_MAX_WIDTH, startWidth + (e.clientX - startX)));
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (this.ganttResizeStartX == null) return;
+      const newWidth = Math.max(GANTT_LABEL_MIN_WIDTH, Math.min(GANTT_LABEL_MAX_WIDTH, this.ganttResizeStartWidth + (e.clientX - this.ganttResizeStartX)));
       this.ganttLabelWidth = newWidth;
       leftPanel.style.width = `${newWidth}px`;
       leftPanel.style.minWidth = `${newWidth}px`;
     };
-    const onMouseUp = () => {
-      if (!resizing) return;
-      resizing = false;
+    const onPointerUp = () => {
+      if (this.ganttResizeStartX == null) return;
+      this.ganttResizeStartX = null;
       window.activeDocument.body.removeClass("pm-resize-active");
     };
-    window.activeDocument.addEventListener("mousemove", onMouseMove);
-    window.activeDocument.addEventListener("mouseup", onMouseUp);
+    resizeHandle.addEventListener("pointerdown", onPointerDown);
+    resizeHandle.addEventListener("pointermove", onPointerMove);
+    resizeHandle.addEventListener("pointerup", onPointerUp);
+    resizeHandle.addEventListener("pointercancel", onPointerUp);
     this.ganttCleanupFns.push(() => {
-      window.activeDocument.removeEventListener("mousemove", onMouseMove);
-      window.activeDocument.removeEventListener("mouseup", onMouseUp);
+      resizeHandle.removeEventListener("pointerdown", onPointerDown);
+      resizeHandle.removeEventListener("pointermove", onPointerMove);
+      resizeHandle.removeEventListener("pointerup", onPointerUp);
+      resizeHandle.removeEventListener("pointercancel", onPointerUp);
     });
+  }
+
+  /** Whether the host marks this layout as phone (Obsidian's is-phone body class). */
+  private isGanttPhone(): boolean {
+    return typeof window !== "undefined"
+      && window.activeDocument?.body?.classList?.contains("is-phone") === true;
   }
 
   /** Header svg: background, band fills, per-scale labels and ticks.
@@ -1233,7 +1283,7 @@ export class CalendarTimelineRenderer {
         const hx = side === "left" ? x : x + width - GANTT_HANDLE_WIDTH;
         const handle = this.ganttSvgElement("rect", { x: hx, y, width: GANTT_HANDLE_WIDTH, height, rx: 3, ry: 3, class: "pm-gantt-drag-handle", cursor: "ew-resize" });
         barGroup.appendChild(handle);
-        this.ganttCleanupFns.push(this.attachGanttBarDrag({ trigger: handle, rect, barGroup, row, side, x, width, cfg, startField, endField }));
+        this.ganttCleanupFns.push(this.attachGanttBarDrag({ trigger: handle, rect, barGroup, row, side, x, width, cfg, startField, endField, startDateKey: event.startDateKey }));
       }
       for (const side of ["left", "right"] as const) {
         const cx = side === "left" ? x - GANTT_LINK_DOT_GAP - GANTT_LINK_DOT_RADIUS : x + width + GANTT_LINK_DOT_GAP + GANTT_LINK_DOT_RADIUS;
@@ -1251,7 +1301,7 @@ export class CalendarTimelineRenderer {
       const hasStart = this.ganttRowHasDate(row, startField, config);
       const hasDue = endField != null && this.ganttRowHasDate(row, endField, config);
       if (hasStart && hasDue) {
-        this.ganttCleanupFns.push(this.attachGanttBarDrag({ trigger: rect, rect, barGroup, row, side: "move", x, width, cfg, startField, endField }));
+        this.ganttCleanupFns.push(this.attachGanttBarDrag({ trigger: rect, rect, barGroup, row, side: "move", x, width, cfg, startField, endField, startDateKey: event.startDateKey }));
         rect.setAttribute("cursor", "grab");
       } else {
         rect.setAttribute("cursor", "pointer");
@@ -1267,16 +1317,18 @@ export class CalendarTimelineRenderer {
     });
   }
 
-  /** Milestone diamond marker. Adapted from GanttTaskBarRenderer.renderMilestoneDiamond. */
+  /** Milestone diamond marker. Adapted from GanttTaskBarRenderer.renderMilestoneDiamond;
+   *  the reference anchors on due ?? start, so the end field wins when both exist. */
   private renderGanttMilestoneDiamond(barsGroup: HTMLElement, cfg: GanttTimelineCfg, event: CalendarTimelineEvent, rowY: number): void {
-    const cx = this.ganttDateToX(cfg, event.startDateKey) + cfg.dayWidth / 2;
+    const dateKey = event.endDateKey ?? event.startDateKey;
+    const cx = this.ganttDateToX(cfg, dateKey) + cfg.dayWidth / 2;
     const cy = rowY + GANTT_ROW_HEIGHT / 2;
     const size = 12;
     const pts = `${cx},${cy - size} ${cx + size},${cy} ${cx},${cy + size} ${cx - size},${cy}`;
     const diamond = this.ganttSvgElement("polygon", { points: pts, fill: this.resolveGanttBarColor(event), opacity: 0.8, class: "pm-gantt-milestone", cursor: "pointer" });
     barsGroup.appendChild(diamond);
     const tt = this.ganttSvgElement("title");
-    tt.setText(t("timeline.milestoneTooltip", { title: event.title, date: event.startDateKey }));
+    tt.setText(t("timeline.milestoneTooltip", { title: event.title, date: dateKey }));
     diamond.appendChild(tt);
     diamond.addEventListener("click", () => {
       if (this.actions.openRecordDetail) this.actions.openRecordDetail(diamond, event.row);
@@ -1346,7 +1398,9 @@ export class CalendarTimelineRenderer {
     if (milestones.length === 0) return;
     const linesG = this.ganttSvgElement("g", { class: "pm-gantt-milestone-labels" });
     for (const event of milestones) {
-      const x = this.ganttDateToX(cfg, event.startDateKey) + cfg.dayWidth / 2;
+      // Same due ?? start anchor as the diamond, so the guide line and its label
+      // stay on the marker.
+      const x = this.ganttDateToX(cfg, event.endDateKey ?? event.startDateKey) + cfg.dayWidth / 2;
       const totalH = GANTT_HEADER_HEIGHT + visibleRows.length * GANTT_ROW_HEIGHT;
       linesG.appendChild(this.ganttSvgElement("line", {
         x1: x,
@@ -1472,11 +1526,14 @@ export class CalendarTimelineRenderer {
         }
         const startDateKey = this.ganttXToDate(cfg, snap(movedX));
         const dueDateKey = addDateKeyDays(this.ganttXToDate(cfg, snap(movedX + movedW)), -1);
+        // The reference patches { start } / { due } / { start, due } per edge. The
+        // change type requires both keys, so the untouched edge carries the bar's
+        // current value as an anchor and changedEdge gates the write to one cell.
         const change: CalendarEventDateChange = {
           startField,
-          startDateKey,
+          startDateKey: side === "right" ? opts.startDateKey : startDateKey,
           endField,
-          endDateKey: side === "right" || side === "move" ? dueDateKey : undefined,
+          endDateKey: side === "left" ? undefined : dueDateKey,
           changedEdge: side === "left" ? "start" : side === "right" ? "end" : "both",
         };
         if (this.actions.isReadOnly || !this.actions.updateEventDates) {
@@ -1542,15 +1599,17 @@ export class CalendarTimelineRenderer {
   }
 
   /** Wheel passthrough and vertical scroll sync between the label column and the chart.
-   *  Adapted from GanttView's left-panel wheel handling and scroll sync. */
-  private setupGanttScrollSync(leftBody: HTMLElement, rightPanel: HTMLElement): void {
+   *  Adapted from GanttView's left-panel wheel handling and scroll sync. The wheel listener
+   *  covers the whole left panel (header included), and the returned syncSpacer runs in the
+   *  renderer's post-layout frame because the scrollbar height only exists after layout. */
+  private setupGanttScrollSync(leftPanel: HTMLElement, leftBody: HTMLElement, rightPanel: HTMLElement): () => void {
     const onLeftWheel = (e: WheelEvent) => {
       rightPanel.scrollTop += e.deltaY;
       rightPanel.scrollLeft += e.deltaX;
       e.preventDefault();
     };
-    leftBody.addEventListener("wheel", onLeftWheel, { passive: false });
-    this.ganttCleanupFns.push(() => leftBody.removeEventListener("wheel", onLeftWheel));
+    leftPanel.addEventListener("wheel", onLeftWheel, { passive: false });
+    this.ganttCleanupFns.push(() => leftPanel.removeEventListener("wheel", onLeftWheel));
     const leftSpacer = leftBody.createDiv();
     leftSpacer.addClass("pm-no-shrink");
     const syncSpacer = () => {
@@ -1561,7 +1620,7 @@ export class CalendarTimelineRenderer {
       syncSpacer();
       leftBody.scrollTop = rightPanel.scrollTop;
     });
-    syncSpacer();
+    return syncSpacer;
   }
 
   /** Center the chart on today, clamped to the range start. Adapted from
@@ -1998,11 +2057,14 @@ export class CalendarTimelineRenderer {
       this.timelineRoot?.addClass("is-linking");
       return;
     }
-    this.clearTimelineLinkSelection();
     if (resolution.kind === "rejected") {
+      // Same-side clicks keep the first dot armed (the reference returns before
+      // cancelling); the other rejections cancel the in-progress link.
+      if (resolution.reason !== "same-side") this.clearTimelineLinkSelection();
       this.showTimelineLinkNotice(resolution);
       return;
     }
+    this.clearTimelineLinkSelection();
     if (resolution.kind !== "committed") return;
     const predecessor = this.rowByPath.get(resolution.predecessorId);
     const successor = this.rowByPath.get(resolution.successorId);

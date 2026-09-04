@@ -428,6 +428,7 @@ export class DatabaseView extends FileView {
     moveSubtask: (request, plan) => this.moveSubtask(request, plan),
     isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.getConfig(), row),
     toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.getConfig(), row, collapsed),
+    setSubtaskCollapsedMany: (rows, collapsed) => this.setSubtaskCollapsedMany(this.getConfig(), rows, collapsed),
     isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
     toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
@@ -10926,6 +10927,21 @@ export class DatabaseView extends FileView {
   private toggleSubtaskCollapsed(config: ViewConfig | undefined, row: RowData, collapsed: boolean): void {
     if (!config) return;
     config.subtaskCollapsed = { ...(config.subtaskCollapsed || {}), [row.file.path]: collapsed };
+    this.pendingUndoLabel = t("undo.groupCollapseConfig");
+    this.scheduleConfigSave();
+    this.refresh();
+  }
+
+  /**
+   * Batch form of `toggleSubtaskCollapsed` for expand-all/collapse-all: one config mutation
+   * covering every row plus one save/refresh, matching the reference's setAllCollapsed
+   * (mutate every task in place, persist once, render once) instead of N writes and N renders.
+   */
+  private setSubtaskCollapsedMany(config: ViewConfig | undefined, rows: RowData[], collapsed: boolean): void {
+    if (!config || rows.length === 0) return;
+    const next = { ...(config.subtaskCollapsed || {}) };
+    for (const row of rows) next[row.file.path] = collapsed;
+    config.subtaskCollapsed = next;
     this.pendingUndoLabel = t("undo.groupCollapseConfig");
     this.scheduleConfigSave();
     this.refresh();

@@ -42,6 +42,7 @@ import {
   CalendarTimelineRenderer,
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
+import { addDateKeyDays, getLocalDateKey } from "../../src/data/calendar-date-time";
 import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
 
 // ───────────────────────────────────────────────────────────────────
@@ -63,9 +64,12 @@ const EVENT_DATE_FIELD = "event_date";
 /** The first day of the drawn span, and how many days the events spread over. The span is
  *  kept short so every event sits inside the viewport-sized window at 390px as well as
  *  1100px — a wider spread would measure the narrow surface drawing fewer events than the
- *  wide one, and report that difference as a speed-up. */
-const EVENT_START = "2026-02-02";
-const EVENT_WINDOW_DAYS = 10;
+ *  wide one, and report that difference as a speed-up. The span is anchored around the
+ *  current date (the render harness does not freeze a "today"): the default render scrolls
+ *  to today on first paint, so a fixed past span would photograph an empty chart. Four days
+ *  back keeps the ten-day window covering today at every offset. */
+const EVENT_START = addDateKeyDays(getLocalDateKey(new Date()), -4);
+export const EVENT_WINDOW_DAYS = 10;
 
 /**
  * Row counts start where the earlier ceiling stopped and go two doublings past it, because a
@@ -120,10 +124,23 @@ function valueForType(col: ColumnDef, i: number): unknown {
   }
 }
 
+/**
+ * The pure day-arithmetic behind `eventDate`, exported so a test can probe month/year
+ * rollover with an explicit worst-case start date rather than depending on whatever "today"
+ * happens to be when the suite runs. `addDateKeyDays` carries real calendar rollover (August
+ * 31 + 1 day is September 1); the day-of-month string arithmetic this replaced did not, and
+ * silently produced out-of-range dates like "2026-08-32" whenever EVENT_START's day-of-month
+ * plus an offset from `i % EVENT_WINDOW_DAYS` crossed the end of its month. An out-of-range
+ * date fails to parse, so `buildCalendarTimelineEvents` drops that row's event — the bar,
+ * milestone diamond or dependency arrow the constructed captures exist to prove never draws.
+ */
+export function eventDateFrom(start: string, i: number): string {
+  return addDateKeyDays(start, i % EVENT_WINDOW_DAYS);
+}
+
 /** A date inside the drawn span, spread across its days rather than piled on one. */
 function eventDate(i: number): string {
-  const day = Number(EVENT_START.slice(8, 10)) + (i % EVENT_WINDOW_DAYS);
-  return `${EVENT_START.slice(0, 8)}${String(day).padStart(2, "0")}`;
+  return eventDateFrom(EVENT_START, i);
 }
 
 /**
@@ -137,6 +154,12 @@ function eventDate(i: number): string {
 export function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
   return Array.from({ length: count }, (_unused, i) => {
     const frontmatter: Record<string, unknown> = { [EVENT_DATE_FIELD]: eventDate(i) };
+    // A sparse, deterministic spread of the affordances the constructed captures must show:
+    // progress fill on every fourth row, a milestone diamond on the first row, and a
+    // dependency arrow from row 0 into row 2 (both near the top of the scrolled-to-today view).
+    if (i % 4 === 0) frontmatter.progress = 60;
+    if (i === 1) frontmatter.milestone = "milestone";
+    if (i % 5 === 0 && i > 0) frontmatter.dependencies = [`notes/row-${i - 1}.md`];
     columns.forEach((col, colIndex) => {
       if (col.key === EVENT_DATE_FIELD || col.key === "file.name") return;
       const filled = fillRate >= 1 || ((i * 7 + colIndex * 3) % 10) < fillRate * 10;
@@ -158,9 +181,10 @@ export function makeConfig(columns: ColumnDef[], scale: TimelineBenchOptions["sc
     calendarScale: "timeline",
     timelineScale: scale,
     timelineStartDateField: EVENT_DATE_FIELD,
-    // Pinned. An unset anchor resolves to today, which would put every fixture event outside
-    // the drawn window: the renderer then draws jump indicators instead of event bars, and the
-    // bench reports a fast timeline that rendered none of the thing it exists to measure.
+    // The gantt's range is task-driven and its first paint scrolls to today, so the
+    // today-relative span above keeps bars on screen. The anchor is inert on the default
+    // path but keeps the local-extension path's window deterministic if a bench ever
+    // enables that gated renderer.
     timelineAnchor: EVENT_START,
     schema: { columns, computedFields: [] },
   } as unknown as ViewConfig;

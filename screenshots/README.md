@@ -853,7 +853,7 @@ Sources: `src/views/calendar-timeline-renderer.ts`, `src/data/subtask-relation.t
 
 ### Timeline settings popover
 
-Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.
+The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).
 
 | dark | light |
 |---|---|
@@ -863,7 +863,7 @@ Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `src/views/dropdown-
 
 ### Timeline view — Week
 
-Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.
+Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
 
 | dark | light |
 |---|---|
@@ -873,7 +873,7 @@ Sources: `src/views/calendar-timeline-renderer.ts`
 
 ### Timeline view — Day
 
-Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.
+Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
 
 | dark | light |
 |---|---|
@@ -883,7 +883,7 @@ Sources: `src/views/calendar-timeline-renderer.ts`
 
 ### Timeline view — Month
 
-Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.
+Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
 
 | dark | light |
 |---|---|
@@ -893,7 +893,7 @@ Sources: `src/views/calendar-timeline-renderer.ts`
 
 ### Timeline view — Quarter
 
-Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.
+Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
 
 | dark | light |
 |---|---|
@@ -903,7 +903,7 @@ Sources: `src/views/calendar-timeline-renderer.ts`
 
 ### Timeline view — Year
 
-Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.
+Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
 
 | dark | light |
 |---|---|

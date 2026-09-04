@@ -28,7 +28,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
-import { timelineDynamicFixture } from "../screenshots/scenarios/temporal.mjs";
+import { timelineDynamicFixture, timelineTicksFor } from "../screenshots/scenarios/temporal.mjs";
 import { stamp } from "./evidence.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -484,12 +484,12 @@ const CLAIMS = [
     was: 2,
     recorded: 0,
     // Both rendered surfaces need their depth marker; a missing fixture must count as a failure.
-    // Both surfaces dropped `data-subtask-depth`: board (T11 CSS leg) shows depth via a
+    // Both surfaces dropped `data-subtask-depth`: the board shows depth via a
     // `.pm-kanban-card-parent` label on a child card and derived progress by `.pm-progress`,
-    // one-to-one with the reference's own KanbanCard; timeline (REQ-007 CSS leg) indents a child
-    // row via an inline `padding-left` computed from the relation's depth instead, matching the
-    // reference's own GanttView label row (`.pm-gantt-label-row`), so a child row's box is >8px
-    // (the base, non-subtask padding) rather than data-attribute-tagged.
+    // one-to-one with the reference's own KanbanCard; the timeline indents a child row via an
+    // inline `padding-left` computed from the relation's depth instead, matching the reference's
+    // own GanttView label row (`.pm-gantt-label-row`), so a child row's box is >8px (the base,
+    // non-subtask padding) rather than data-attribute-tagged.
     async measure(page) {
       const checks = {
         "board-subtask-tree": () =>
@@ -736,31 +736,42 @@ const CLAIMS = [
   },
   {
     phase: "037-timeline-gantt-port",
-    claim: "the day fixture centres its window on the pinned now and labels each tick the bare hour, not an HH:00 clock string",
+    claim: "the day fixture's tick label is the bare, unpadded day-of-month the reference gantt draws (GanttHeaderRenderer.renderDayHeader's String(d.day)), not the local extensions' hour-of-day grammar this fixture used to mirror",
     was: 0,
-    recorded: 574,
-    // 7ca6cc2 was 037's last open row: the day-scale fixture never centred on `now` (both device
-    // widths opened at startMinutes 0) and its tick label carried a ":00" suffix
-    // buildTimelineTicks()'s own day branch never emits. `was` is this measure re-run on the
-    // landing commit's parent tree: every day-scale tick still read "HH:00" (0 of 34 labels bare)
-    // and both widths still opened at startMinutes 0 (sum 0), for a total of 0.
-    // Reselectored for the fixture rewrite: the default render's day-scale hour label is
-    // `.pm-gantt-header-day` (`.db-timeline-tick-date` was the gated extensions path's class and
-    // no longer exists on this fixture); the bare-hour text and startMinutes centring are
-    // unchanged, so the total still reproduces exactly 574.
-    async measure(page) {
-      const s = SCENARIOS.find((x) => x.id === "timeline-view-day");
-      if (!s) return -1;
-      let plainLabels = 0;
-      let startMinutesSum = 0;
+    recorded: 39,
+    // SUPERSEDES the retired "centres its window on the pinned now / bare hour, not HH:00"
+    // claim (was 0, recorded 574): that claim pinned the day-scale fixture to the gated
+    // timelineLocalExtensions path's hour-of-day header (startMinutes-centred, ":00"-suffixed
+    // ticks). The 037 fidelity pass replaced the default day-scale render with a structural
+    // copy of the reference's own day header — one column per day, unpadded day-of-month text
+    // (TimelineConfig.DAY_WIDTH, GanttHeaderRenderer.renderDayHeader) — so `startMinutes` no
+    // longer exists on timelineDynamicFixture's return value at all (temporal.mjs dropped
+    // TL_DAY_START_MINUTES/timelineDayCentredStartMinutes with it) and the old measure's
+    // `fixture.startMinutes` read silently became `undefined`, turning the sum to NaN. That is
+    // this fixture correctly no longer being what the old claim described, not a defect to
+    // restore. `was` is this new measure re-run against the pre-port grammar: every hour label
+    // there is `padStart(2, "0")` — always two digits — so a check for the reference's *unpadded*
+    // single/double-digit day-of-month format (no leading zero) matches none of them, 0 of 34.
+    // `recorded` is the same measure against the current fixture, both device widths, all 12
+    // fixture days each (39 labels total on this pinned-window "Day" fixture — device width
+    // changes which columns are wide enough to carry a label per dayWidth >= 20, not whether the
+    // label itself is unpadded): every one of the 39 rendered labels matches, none carry a
+    // leading zero.
+    async measure() {
+      // No browser page needed: timelineTicksFor is pure fixture arithmetic, unlike the
+      // page.evaluate() probes the other claims in this file run against rendered HTML.
+      let total = 0;
+      let unpadded = 0;
       for (const device of [{ id: "desktop", width: 1440 }, { id: "mobile", width: 402 }]) {
-        await load(page, s.html(device));
-        plainLabels += await page.evaluate(() =>
-          [...document.querySelectorAll(".pm-gantt-header-day")]
-            .filter((el) => /^\d\d$/.test(el.textContent.trim())).length);
-        startMinutesSum += timelineDynamicFixture("day", device).startMinutes;
+        const fixture = timelineDynamicFixture("day", device);
+        for (const tick of timelineTicksFor(fixture)) {
+          total++;
+          if (/^([1-9]|[12]\d|3[01])$/.test(tick.label)) unpadded++;
+        }
       }
-      return plainLabels + startMinutesSum;
+      // A regression that reintroduces zero-padding (or any other label shape) drops `unpadded`
+      // below `total`; -1 guarantees that never coincidentally matches a future recorded value.
+      return unpadded === total ? unpadded : -1;
     },
   },
 ];

@@ -60,6 +60,7 @@ const ICON = {
     '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>' +
     '<rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
   columns: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18"/>',
+  code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
   rows: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/>',
   textCursor: '<path d="M17 22h-1a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4h1M7 22h1a4 4 0 0 0 4-4V6a4 4 0 0 0-4-4H7"/>',
   smilePlus:
@@ -449,11 +450,9 @@ const miniDay = (n, weekIndex) => {
 // 8. TIMELINE
 // ───────────────────────────────────────────────────────────────────
 
-/* A two-week window, 23 March – 5 April 2026, one column per day. The unit width is the
-   week scale's resolveTimelineUnitWidth() default (100px), asserted against the real
-   export in temporal-tick-parity.test.mjs. */
-const TL_UNITS = 14;
-const TL_UNIT_WIDTH = 100;
+/* A two-week window, 23 March – 5 April 2026, one column per day. The unit widths in
+   TIMELINE_FIXTURES are the reference gantt's fixed day widths (44/22/9/5/2), asserted
+   against TIMELINE_RANGE_DAY_WIDTH in temporal-tick-parity.test.mjs. */
 
 const TL_MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -486,28 +485,22 @@ export const timelineEventAbsoluteScale = (event, windowStartKey) => {
 
 /* Mirrors the model's per-event visibility decision. The Gantt bar helper keeps source dates
    available for clipped SVG geometry while this exported mirror records whether the event
-   intersects the mounted window. */
+   intersects the mounted window. Every scale is one column per day, so the visible window is
+   always day units from the fixture start (the day scale draws the reference gantt's day
+   columns, not hour columns). */
 export const timelineEventVisibility = (event, fixture) => {
   const scale = timelineEventAbsoluteScale(event, fixture.start);
-  // Day scale's visible window opens at the fixture's own startMinutes (TL_DAY_START_MINUTES by
-  // default, 0 — midnight), so visibility stays aligned with the tick, band, grid and today-line
-  // calculations that use the same start. This keeps an all-day event at the visible boundary
-  // from receiving a false leading jump and keeps later events out of a window they do not reach.
-  const dayStartMinutes = fixture.startMinutes ?? TL_DAY_START_MINUTES;
-  const visible = fixture.scale === "day"
-    ? { start: dayStartMinutes, end: dayStartMinutes + fixture.units * MINUTES_PER_HOUR }
-    : { start: 0, end: fixture.units * MINUTES_PER_DAY };
+  const visible = { start: 0, end: fixture.units * MINUTES_PER_DAY };
   const renderStart = Math.max(scale.start, visible.start);
   const renderEnd = Math.min(scale.end, visible.end);
   const isClippedStart = scale.start < visible.start;
   const isClippedEnd = scale.end > visible.end;
   const isOverEvent = renderStart < renderEnd;
   if (!isOverEvent) return { bar: null, isClippedStart, isClippedEnd, isOverEvent };
-  const minutesPerUnit = fixture.scale === "day" ? MINUTES_PER_HOUR : MINUTES_PER_DAY;
   return {
     bar: {
-      offset: Math.max(0, (renderStart - visible.start) / minutesPerUnit),
-      span: Math.max(fixture.scale === "day" ? 0.25 : 1, (renderEnd - renderStart) / minutesPerUnit),
+      offset: Math.max(0, (renderStart - visible.start) / MINUTES_PER_DAY),
+      span: Math.max(1, (renderEnd - renderStart) / MINUTES_PER_DAY),
     },
     isClippedStart,
     isClippedEnd,
@@ -662,7 +655,7 @@ const timelineGanttLabelRow = (event) => {
     + '<span class="pm-gantt-label-dot" style="background: var(--status-color-fg-' + (event.tone || "blue") + ')"></span>'
     + '<span class="pm-gantt-label-title">' + title + "</span>"
     + progress
-    + '<button type="button" class="clickable-icon pm-icon-btn pm-icon-btn--hover-only" aria-label="Add subtask">' + glyph(ICON.plus) + "</button>"
+    + '<div class="clickable-icon extra-setting-button pm-icon-btn pm-icon-btn--hover-only" aria-label="Add subtask">' + glyph(ICON.plus) + "</div>"
     + "</div>";
 };
 
@@ -750,12 +743,14 @@ export const TL_SUBTASK_LANES = TL_LANES.map((lane) => lane.key !== "business" ?
 export const TIMELINE_FIXTURES = {
   /* These natural windows keep the date arithmetic used by the standalone tick/band mirrors.
      Each screenshot scenario replaces the window, title and unit width with the mounted
-     viewport's values before rendering, so the header and body describe one window. */
-  day: { scale: "day", label: "Day", units: 12, width: 60, start: "2026-03-25", slot: "30", title: "March 25" },
-  week: { scale: "week", label: "Week", units: TL_UNITS, width: TL_UNIT_WIDTH, start: "2026-03-23", slot: "30", title: "March 23 — April 5" },
-  month: { scale: "month", label: "Month", units: 31, width: 80, start: "2026-03-01", slot: "30", title: "March" },
-  quarter: { scale: "quarter", label: "Quarter", units: 91, width: 15, start: "2026-01-01", slot: "30", title: "January — March" },
-  year: { scale: "year", label: "Year", units: 365, width: 4, start: "2026-01-01", slot: "30", title: "2026" },
+     viewport's values before rendering, so the header and body describe one window. The
+     widths are the reference gantt's fixed per-scale day widths (TimelineConfig's DAY_WIDTH:
+     44/22/9/5/2), which TIMELINE_RANGE_DAY_WIDTH mirrors. */
+  day: { scale: "day", label: "Day", units: 12, width: 44, start: "2026-03-25", slot: "30", title: "March 25" },
+  week: { scale: "week", label: "Week", units: 14, width: 22, start: "2026-03-23", slot: "30", title: "March 23 — April 5" },
+  month: { scale: "month", label: "Month", units: 31, width: 9, start: "2026-03-01", slot: "30", title: "March" },
+  quarter: { scale: "quarter", label: "Quarter", units: 91, width: 5, start: "2026-01-01", slot: "30", title: "January — March" },
+  year: { scale: "year", label: "Year", units: 365, width: 2, start: "2026-01-01", slot: "30", title: "2026" },
 };
 
 const timelineDateKey = (start, offset) => {
@@ -859,16 +854,17 @@ export const timelineTicksForDateRange = (fixture) => {
    uses that offset to span the visible range rather than placing every label at the left edge. */
 export const timelineTicksFor = (fixture) => {
   if (fixture.scale === "day") {
-    // Matches buildTimelineTicks()'s own day branch (calendar-timeline-model.ts:913-931), which
-    // never calls formatTimelineTickLabel: the label is the bare zero-padded hour, not an "HH:00"
-    // clock string — the wider label was fixture-only and never what production draws.
-    const startHour = (fixture.startMinutes ?? TL_DAY_START_MINUTES) / 60;
-    return Array.from({ length: fixture.units }, (_, index) => ({
-      label: String((startHour + index) % 24).padStart(2, "0"),
-      key: fixture.start,
-      boundary: index === 0,
-      offset: index,
-    }));
+    // The reference gantt's day scale is one column per day with an unpadded day-of-month
+    // label (GanttHeaderRenderer.renderDayHeader's String(d.day)); the grid marks Mondays.
+    return Array.from({ length: fixture.units }, (_, index) => {
+      const date = timelineAddUtcDays(new Date(`${fixture.start}T00:00:00Z`), index);
+      return {
+        label: String(date.getUTCDate()),
+        key: date.toISOString().slice(0, 10),
+        boundary: date.getUTCDay() === 1,
+        offset: index,
+      };
+    });
   }
   return timelineTicksForDateRange(fixture);
 };
@@ -901,25 +897,6 @@ const EN_MONTHS_FULL = [
    is built from one of these, not a per-scale hand-picked constant. */
 const TL_PINNED_NOW_MINUTES = 13 * 60 + 45;
 const TL_PINNED_DAY_FRACTION = TL_PINNED_NOW_MINUTES / MINUTES_PER_DAY;
-/* Same pinned "now" as a local Date, for the one call that needs .getHours() rather than a
-   minutes-of-day number: the day-scale centring mirror below reads it exactly the way
-   resolveTimelineDayCentredStartMinutes() reads any other "now" (calendar-timeline-model.ts:
-   441-445). */
-const TL_PINNED_NOW = new Date(2026, 2, 25, 13, 45);
-/* The standalone scenario has no calendarStartHour override, so an uncentred visible day would
-   begin at midnight — still the fallback the tick/band/grid/visibility mirrors share whenever no
-   "now" is given (temporal-tick-parity.test.mjs's legacy-branch parity check), even though the
-   dynamic fixture below always passes one. */
-const TL_DAY_START_MINUTES = 0;
-
-/* Mirrors resolveTimelineDayCentredStartMinutes() (calendar-timeline-model.ts:441-445): centres
-   the pinned "now" hour in the middle of the visible window, clamped so the window stays on the
-   anchor day. */
-const timelineDayCentredStartMinutes = (totalUnits, now) => {
-  const units = Math.max(1, Math.round(totalUnits));
-  const centred = now.getHours() * MINUTES_PER_HOUR - Math.floor(units / 2) * MINUTES_PER_HOUR;
-  return Math.max(0, Math.min(MINUTES_PER_DAY - units * MINUTES_PER_HOUR, centred));
-};
 
 /* Mirrors resolveTimelineViewportUnitCount() (calendar-timeline-model.ts:233-238) exactly,
    including the parameter the earlier pass of this fixture dropped: day scale floors (a partial
@@ -931,31 +908,15 @@ export const timelineResolveViewportUnitCount = (width, unitWidth, scale) => {
   return Math.max(1, scale === "day" ? Math.floor(raw) : Math.ceil(raw));
 };
 
-/* Mirrors getTimelineViewportWindow() for all five scales —
-   the renderer's live "pseudo-infinite" mode, entered whenever buildTimelineModel() is passed a
-   visibleUnitCount (calendar-timeline-model.ts:649-651), which the renderer always has: a live
-   mounted container always reports a width to getTimelineViewportUnitCount()
-   (calendar-timeline-renderer.ts:2419-2426). Day scale centres on `now` exactly like the real
-   branch does whenever the renderer passes one (calendar-timeline-renderer.ts:325 ->
-   calendar-timeline-model.ts:689,1146-1156): omitting `now` keeps the legacy fixed
-   TL_DAY_START_MINUTES start, matching getTimelineViewportWindow()'s own no-clock fallback.
-   Every other scale centres totalUnits on the anchor date, replacing the scale's
-   calendar-boundary window getTimelineWindow() uses. todayOffsetUnits mirrors
-   getTimelineTodayPositionStyle()'s own offset formula (:103-133), not a separate guess, so the
-   today-line this fixture draws lands where the real one would. Exported so the parity test
-   asserts start/units against the real function for all five scales. */
-export const timelineViewportWindow = (scale, anchorKey, totalUnits, now) => {
-  if (scale === "day") {
-    const startMinutes = now != null ? timelineDayCentredStartMinutes(totalUnits, now) : TL_DAY_START_MINUTES;
-    const endOffset = Math.floor((startMinutes + totalUnits * MINUTES_PER_HOUR - 1) / MINUTES_PER_DAY);
-    return {
-      start: anchorKey,
-      end: timelineDateKey(anchorKey, endOffset),
-      units: totalUnits,
-      startMinutes,
-      todayOffsetUnits: (TL_PINNED_NOW_MINUTES - startMinutes) / 60,
-    };
-  }
+/* The fixture's mounted window: totalUnits day columns centred on the anchor date, for every
+   scale including day (the reference gantt draws one column per day at every scale; the local
+   viewport-centred hour window is a gated extension, not the photographed default). The anchor
+   centring keeps today, the bars and the milestone inside the photographed range.
+   todayOffsetUnits mirrors getTimelineTodayPositionStyle()'s own offset formula
+   (calendar-timeline-renderer.ts:103-133), not a separate guess, so the today-line this fixture
+   draws lands where the real one would. Exported so the parity test asserts start/units for all
+   five scales. */
+export const timelineViewportWindow = (anchorKey, totalUnits) => {
   const before = Math.floor((totalUnits - 1) / 2);
   const start = timelineAddUtcDays(new Date(`${anchorKey}T00:00:00Z`), -before);
   return {
@@ -1112,7 +1073,7 @@ export const timelineGanttHeader = (fixture) => {
 
   if (fixture.scale === "day") {
     timelineTicksFor(fixture).forEach((tick, index) => {
-      const key = timelineDateKey(fixture.start, Math.floor((fixture.startMinutes || 0) / 1440) + Math.floor(index / 24));
+      const key = tick.key;
       if (timelineWeekend(key)) {
         children.push(timelineGanttSvg("rect", {
           x: index * fixture.width,
@@ -1165,9 +1126,7 @@ export const timelineGanttGrid = (fixture, totalRows) => {
   const totalHeight = 56 + totalRows * 44;
   const children = [];
   for (let index = 0; index < fixture.units; index++) {
-    const key = fixture.scale === "day"
-      ? timelineDateKey(fixture.start, Math.floor(((fixture.startMinutes || 0) + index * 60) / 1440))
-      : timelineDateKey(fixture.start, index);
+    const key = timelineDateKey(fixture.start, index);
     const date = new Date(key + "T00:00:00Z");
     if (fixture.scale === "day" && timelineWeekend(key)) {
       children.push(timelineGanttSvg("rect", {
@@ -1207,40 +1166,12 @@ export const timelineGanttGrid = (fixture, totalRows) => {
   }
   return timelineGanttSvg("g", { class: "pm-gantt-grid" }, children.join(""));
 };
-const timelinePositiveModulo = (value, modulus) => ((value % modulus) + modulus) % modulus;
-
-/* Mirrors buildTimelineDayBoundaryBands() (calendar-title-formatter.ts:174-193): day scale bands
-   by calendar-day crossing, not by month — a band starts only where the window crosses an actual
-   midnight, so the day already open when the window starts gets no band of its own (only the day
-   it turns into does). TL_DAY_START_MINUTES is 0 (midnight), so offset 0 is itself a boundary and
-   always gets a band; a fixture.startMinutes that were not a multiple of 60 (never the case here)
-   could still open on a short device window that crosses no further midnight at all, in which
-   case the real function returns zero bands beyond that first one, same as here. */
-const timelineDayBoundaryBands = (fixture) => {
-  const start = new Date(`${fixture.start}T00:00:00Z`);
-  const startMinutes = fixture.startMinutes ?? TL_DAY_START_MINUTES;
-  const bands = [];
-  for (let offset = 0; offset < fixture.units; offset++) {
-    const absoluteMinutes = startMinutes + offset * 60;
-    if (timelinePositiveModulo(absoluteMinutes, MINUTES_PER_DAY) !== 0) continue;
-    const dayOffset = Math.floor(absoluteMinutes / MINUTES_PER_DAY);
-    const date = timelineAddUtcDays(start, dayOffset);
-    let nextOffset = fixture.units;
-    for (let probe = offset + 1; probe < fixture.units; probe++) {
-      if (timelinePositiveModulo(startMinutes + probe * 60, MINUTES_PER_DAY) === 0) { nextOffset = probe; break; }
-    }
-    bands.push({ label: `${EN_MONTHS_FULL[date.getUTCMonth()]} ${date.getUTCDate()}`, span: Math.max(1, nextOffset - offset), offset });
-  }
-  return bands;
-};
-
-/* Mirrors buildTimelineAxisBands() (calendar-title-formatter.ts:145-148) exactly: day scale bands
-   by midnight crossing, every other scale by calendar-month crossing — the same real function for
-   all four of week/month/quarter/year, not a per-scale shortcut. */
-export const timelineAxisBands = (fixture) => {
-  if (fixture.scale === "day") return timelineDayBoundaryBands(fixture);
-  return timelineMonthBoundaryBands(fixture.start, timelineDateKey(fixture.start, fixture.units - 1));
-};
+/* Mirrors buildTimelineAxisBands() (calendar-title-formatter.ts:145-148) for the scales the
+   gantt header draws month bands on: calendar-month crossing for every scale, including day —
+   the reference gantt's day and week headers share the same month-top band
+   (GanttHeaderRenderer.renderMonthBands). */
+export const timelineAxisBands = (fixture) =>
+  timelineMonthBoundaryBands(fixture.start, timelineDateKey(fixture.start, fixture.units - 1));
 
 /* Desktop/mobile widths the capture harness actually opens the page at (tools/screenshots/
    capture.mjs's own DEVICES table, :88-91) — the closest available proxy for the "container"
@@ -1248,17 +1179,11 @@ export const timelineAxisBands = (fixture) => {
    "viewport" capture (capture.mjs:96-98, every scenario in this group) fills #shot to the full
    device width with no side margin, and there is no live container here to measure directly. */
 const TL_DEVICE_WIDTH = { desktop: 1440, mobile: 402 };
-const TL_PHONE_VIEWPORT_WIDTH = 560;
-const TL_DAY_PHONE_UNIT_WIDTH = 32;
 
-/* Mirrors the viewport-aware unit-width branch used by the live renderer. */
-export const timelineResolveUnitWidth = (scale, viewportWidth) => {
-  const baseWidth = TIMELINE_FIXTURES[scale].width;
-  if (scale === "day" && Number.isFinite(viewportWidth) && viewportWidth > 0 && viewportWidth < TL_PHONE_VIEWPORT_WIDTH) {
-    return TL_DAY_PHONE_UNIT_WIDTH;
-  }
-  return baseWidth;
-};
+/* The reference gantt's day width is fixed per scale (TimelineConfig DAY_WIDTH), with no
+   phone branch — the local path's viewport-aware column widths are gated behind
+   timelineLocalExtensions and are not what these fixtures photograph. */
+export const timelineResolveUnitWidth = (scale) => TIMELINE_FIXTURES[scale].width;
 
 /* The capture harness opens the outer surface at a fixed device width. Its 24px side padding
    matches the shipped container rhythm, so the fixture uses the same content width when it
@@ -1275,12 +1200,11 @@ export const timelineDynamicFixture = (scale, device) => {
   const base = TIMELINE_FIXTURES[scale];
   const deviceWidth = TL_DEVICE_WIDTH[device?.id === "mobile" ? "mobile" : "desktop"];
   const contentWidth = timelineViewportContentWidth(deviceWidth, TL_CONTAINER_PADDING_PX, TL_CONTAINER_PADDING_PX);
-  const width = timelineResolveUnitWidth(scale, deviceWidth);
+  const width = timelineResolveUnitWidth(scale);
   const units = timelineResolveViewportUnitCount(contentWidth, width, scale);
-  // The anchor is always the pinned "now" date. The title follows this same viewport window,
-  // including a range that crosses month or year boundaries. Passing TL_PINNED_NOW centres day
-  // scale on it exactly as the renderer's own always-on `now` option does.
-  const window = timelineViewportWindow(scale, "2026-03-25", units, TL_PINNED_NOW);
+  // The anchor is always the pinned "now" date. The title follows this same centred window,
+  // including a range that crosses month or year boundaries.
+  const window = timelineViewportWindow("2026-03-25", units);
   const title = timelineTitleParts(scale, window.start, window.end);
   return {
     ...base,
@@ -1288,7 +1212,6 @@ export const timelineDynamicFixture = (scale, device) => {
     start: window.start,
     end: window.end,
     units: window.units,
-    startMinutes: window.startMinutes,
     todayOffsetUnits: window.todayOffsetUnits,
     title: title.main,
     titleYear: title.year,
@@ -1305,13 +1228,13 @@ const timelineScaleScenario = (scale, overrides = {}) => {
     const controls = [
       '<div class="pm-gantt-controls">',
       '<div class="pm-segmented">',
-      Object.values(TIMELINE_FIXTURES).map((option) => '<button type="button" class="clickable-icon'
-        + (option.scale === fixture.scale ? ' mod-cta' : "") + '">' + option.label + "</button>").join(""),
+      Object.values(TIMELINE_FIXTURES).map((option) => '<button type="button"'
+        + (option.scale === fixture.scale ? ' class="mod-cta"' : "") + '>' + option.label + "</button>").join(""),
       "</div>",
       '<span class="pm-gantt-sep"></span>',
-      '<button type="button" class="clickable-icon">Today</button>',
-      '<button type="button" class="clickable-icon">Expand all</button>',
-      '<button type="button" class="clickable-icon">Collapse all</button>',
+      '<button type="button">Today</button>',
+      '<button type="button">Expand all</button>',
+      '<button type="button">Collapse all</button>',
       "</div>",
     ].join("");
 
@@ -1415,7 +1338,7 @@ const timelineScaleScenario = (scale, overrides = {}) => {
     // the other scales and the subtask-tree variant are not reproduced by it and stay fixture-only.
     fixtureOf: overrides.fixtureOf || (scale === "week" && !overrides.id ? "constructed-timeline" : undefined),
     note: overrides.note || (`${label} scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. `
-      + `Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.`),
+      + `The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.`),
     html: (device) => {
       const fixture = timelineDynamicFixture(scale, device);
       return renderBody(fixture, timelineTicksFor(fixture), fixture.todayOffsetUnits);
@@ -1636,7 +1559,7 @@ export const TEMPORAL_SCENARIOS = [
     width: 640,
     sources: ["src/views/calendar-timeline-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     fixtureOf: "constructed-timeline-toolbar-options",
-    note: "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
+    note: "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).",
     captureCss: `.note-database-container .db-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
       <div class="note-database-container">
@@ -1651,6 +1574,7 @@ export const TEMPORAL_SCENARIOS = [
               ${dropdownRow(ICON.calendar, "Year display", "Smart")}
               ${switchRow(ICON.rows, "Show empty fields", false)}`)}
             ${section("Layout", `
+              ${switchRow(ICON.code, "Local extensions", true)}
               ${switchRow(ICON.columns, "Custom column width", true)}
               ${rangeRow("Column width", 72, 24, 240, 1, "db-calendar-timeline-range-row")}
               ${dropdownRow(ICON.clock, "Slot duration", "30 minutes")}`)}

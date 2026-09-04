@@ -192,19 +192,20 @@ contextType: "general"
       pm-gantt-label-rows stacked as plain blocks … SVG header/grid/bars pushed off-viewport"),
       and `tools/live/touch-targets-constructed-baseline.json`'s ratchet stood raised at 9974.
       — closed 2026-09-04 (this leg, `cli-codex` uncommitted work verified and completed by a
-      fresh in-runtime session): `styles.css:17168-17190` MIT notice; `:17192-17203` alias block
+      fresh in-runtime session): `styles.css:17568-17588` MIT notice (line numbers verified by
+      grep on the merged tree; `* MIT License` at `:17569`); `:17590-17604` alias block
       bridging only the two surface tokens the copy consumes (`font-family`/`color`, since the
       reference mounts under `.pm-root` and this plugin mounts under `.note-database-container`) —
       trimmed the reference's own unrelated `--pm-ghost-border`/`--pm-shadow-ambient` kanban/
       time-log tokens the alias originally over-carried, since nothing in the copied block or its
-      companion rules reads them; `:17205-17480` is `gantt.css` lines 1-277 byte-for-byte
-      (`diff -u specs/context/obsidian-pm-main/src/styles/gantt.css <(sed -n '17205,17480p'
-      styles.css)`, zero output); `:17483-17605` is the reference's own drag-handle/link-dot/
+      companion rules reads them; `:17605-17881` is `gantt.css` lines 1-277 byte-for-byte
+      (`diff -u specs/context/obsidian-pm-main/src/styles/gantt.css <(sed -n '17605,17881p'
+      styles.css)`, zero output); `:17883-18030` is the reference's own drag-handle/link-dot/
       milestone/collapse-toggle/add-row companion rules from `widgets.css`/`table.css`, plus two
       rules a render-class-coverage sweep found the fixture/renderer emit with no matching CSS —
-      `.pm-gantt-bar-icon` (`:17591`, from `widgets.css`) and the three
-      `.pm-gantt-label-row--dragging`/`--drop-before`/`--drop-after` states (`:17596-17603`, from
-      `utilities.css`); `:17606-17629` is the coarse-pointer hit-area rule (`min-width`/
+      `.pm-gantt-bar-icon` (`:17991`, from `widgets.css`) and the three
+      `.pm-gantt-label-row--dragging`/`--drop-before`/`--drop-after` states (`:17996-18004`, from
+      `utilities.css`); `:18006-18030` is the coarse-pointer hit-area rule (`min-width`/
       `min-height: 28px` on the controls/label-row/add-row buttons, no `width`/`height` changed).
       Class-coverage check: every `pm-gantt-*` class `grep`'d from
       `src/views/calendar-timeline-renderer.ts`'s `createDiv`/`createEl`/`ganttSvgElement` calls
@@ -346,6 +347,203 @@ contextType: "general"
       `SURFACE_PHASE=037-timeline-gantt-port npm run gate` 25/25 green — all fresh-observed in
       this session, not relayed from T021's own report.
 <!-- /ANCHOR:phase-4 -->
+
+---
+
+<!-- ANCHOR:phase-5 -->
+## Phase 5: Fidelity Pass (Amendment 2026-09-04, fresh-reviewer divergences)
+
+- [x] T023 Same-side link rejection keeps the first dot armed, matching `GanttLinkHandler.ts:56-59`
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: `calendar-timeline-gantt.test.ts` "keeps the first link dot armed when the
+      second click is same-side, like the reference" —
+      `AssertionError: expected 'pm-gantt-link-dot' to contain 'pm-gantt-link-dot--active'` —
+      the pre-fix `handleTimelineLinkClick` cleared the selection before every rejection
+      (was `calendar-timeline-renderer.ts:2001-2005`), so the armed dot lost its highlight.
+      — closed: the rejection branch now returns with the first dot still armed for
+      `same-side` and cancels only for duplicate/missing-task/cycle
+      (`calendar-timeline-renderer.ts:2005-2011`), matching the reference's early return.
+- [x] T024 Escape cancels an in-progress link from the document, gated on the active leaf
+      (`GanttView.ts:197-219`), cleaned up on teardown
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: "cancels an in-progress link with Escape from the document, like the
+      reference" and "removes the document keydown listener on teardown" —
+      `AssertionError: expected 0 to be greater than 0` — the old binding sat on the root
+      element, which has no tabindex and never receives a document-level keydown
+      (was `calendar-timeline-renderer.ts:735-740`).
+      — closed: document-level `keydown` behind the reference's `closest('.workspace-leaf')`
+      `mod-active` gate, removed through `ganttCleanupFns` on the next render and on `destroy`
+      (`calendar-timeline-renderer.ts:734-749`).
+- [x] T025 Left-panel wiring: the spacer sync runs inside the post-layout frame and wheel
+      passthrough covers the whole left panel (`GanttView.ts:230-236, 248-267`)
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: "defers the left spacer sync to the post-layout frame, like the reference" —
+      `AssertionError: expected 'NaNpx' to be undefined` (the pre-fix code measured the
+      scrollbar synchronously, was `calendar-timeline-renderer.ts:1564`) — and "passes wheel
+      events from the whole left panel to the chart, like the reference" —
+      `AssertionError: expected false to be true` (the pre-fix wheel listener sat on
+      `leftBody`, was `:1552`).
+      — closed: `setupGanttScrollSync` now binds wheel on the left panel and returns the
+      `syncSpacer`, invoked by the same RAF that restores the scroll
+      (`calendar-timeline-renderer.ts:734-763, 1567-1590`).
+- [x] T026 Bar-edge drags patch only the changed edge, matching the reference's `{ start }` /
+      `{ due }` / `{ start, due }` patch (`GanttDragHandler.ts:120-127`)
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: the two drag tests ("patches only the due date when the right edge is
+      dragged" / "patches only the start date when the left edge is dragged") failed on the
+      first harness run (`TypeError: Cannot read properties of undefined` — the mock could not
+      dispatch drag events; fixed by giving the test document listener storage). After reading
+      `updateEventDates` (`database-view.ts:4304-4305` gates the writes by `changedEdge`), the
+      write layer already patched one cell per edge, but the right-edge payload still carried a
+      geometry-derived `startDateKey` where the reference's patch is `{ due }` only.
+      — closed: the change payload for a right-edge drag now anchors the type-required start on
+      the event's own start date key, passed in through `GanttBarDragOpts`
+      (`calendar-timeline-renderer.ts:89-104, 1495-1506`; call sites `:1258, 1276`), so the
+      untouched edge is never a value the drag produced; both drag tests pin the contract
+      (one cell written per edge, `changedEdge` correct).
+- [x] T027 Expand/collapse all batches through one persistence call when the view offers it,
+      instead of one async write per parent row (`GanttView.ts:326-331`)
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: "batches expand/collapse all through one persistence call when the view
+      offers it" — `AssertionError: expected [] to have a length of 1 but got +0` — the
+      pre-fix `setGanttAllCollapsed` fired `toggleSubtaskCollapsed` once per parent row
+      (was `calendar-timeline-renderer.ts:794-800`), and each call mutates the config and
+      refreshes the view (`database-view.ts:10926-10932`).
+      — closed: new action seam `setSubtaskCollapsedMany(rows, collapsed)` on
+      `CalendarTimelineRendererActions` (`calendar-timeline-renderer.ts:226-229`), preferred by
+      `setGanttAllCollapsed` (`:818-828`) with the per-row toggle as fallback. The
+      `database-view.ts` implementation of the batch action (one config mutation, one refresh)
+      is out of this leg's file scope and is the orchestrator's next dispatch.
+- [x] T028 Control-bar vocabulary: segmented/today/expand/collapse are bare `<button>`s and the
+      add-subtask control is the reference `IconButton` shape
+      `div.clickable-icon.extra-setting-button.pm-icon-btn` (`SegmentedControl.ts:20-30`,
+      `ButtonComponent`, `IconButton.ts`, `TaskLabelRenderer.ts:130-137`)
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`)
+      — red first: the T019 parity tree —
+      `AssertionError: expected 'div.pm-gantt-view\n  div.pm-gantt-con…' to be
+      'div.pm-gantt-view\n  div.pm-gantt-con…'` — the expected tree asserts the reference
+      shapes; the pre-fix markup carried `clickable-icon` on the buttons and a `<button>`
+      add-subtask (was `calendar-timeline-renderer.ts:765, 774, 780, 786, 892`).
+      — closed: bare buttons with `mod-cta` for the pressed scale (`:763-793`) and the add
+      subtask as the IconButton div with the reveal-on-hover modifier (`:894-898`). The
+      coarse-pointer hit-area rule must follow: its selectors
+      (`styles.css:18011-18012`) still name `button.clickable-icon` / `button.pm-icon-btn`
+      and no longer match — the CSS-lane verifier owns that edit.
+- [x] T029 Dead "Custom column width" control hidden behind the local-extension gate, with a
+      visible `timelineLocalExtensions` toggle in the options popover
+      (`src/views/calendar-timeline-toolbar-renderer.ts`, `src/i18n.ts`,
+      `tools/screenshots/scenarios/temporal.mjs`)
+      — evidence: `timelineCustomUnitWidth` is read only by the local path
+      (`calendar-timeline-model.ts:208-227`, `resolveTimelineUnitWidth`), and the reference
+      gantt has no such control; the popover previously rendered the switch and slider
+      unconditionally (was `calendar-timeline-toolbar-renderer.ts:206-231`). No failing
+      assertion was writable in the leg's named test files (the popover has no DOM test
+      harness in scope), so the red is the dead-path grep rather than a test.
+      — closed: `renderLayoutContent` gates the custom column width rows on
+      `timelineLocalExtensions === true` and renders the new toggle above them
+      (`calendar-timeline-toolbar-renderer.ts:204-228`); i18n keys
+      `viewConfig.timelineLocalExtensions` and `undo.timelineLocalExtensionsConfig` in all
+      three locale blocks (`src/i18n.ts:458, 877, 2149, 2568, 3816, 4230`); the
+      `timeline-toolbar-options` fixture mirrors the new layout section
+      (`temporal.mjs:1640-1658`).
+- [x] T030 Phone label column, milestone anchor, fixtures and bench
+      (`src/views/calendar-timeline-renderer.ts`, `src/views/calendar-timeline-gantt.test.ts`,
+      `tools/screenshots/scenarios/temporal.mjs`,
+      `tools/screenshots/scenarios/temporal-tick-parity.test.mjs`,
+      `tools/bench/timeline-render-bench.ts`)
+      — phone (orchestrator decision D-phone): red first — "starts the label column at 160px on
+      phone and 280px on desktop" — `AssertionError: expected '280px' to be '160px'` — and
+      "resizes the label column through pointer events with capture" —
+      `AssertionError: expected [] to include 7` (the pre-fix handle was mousedown-based and
+      never captured). Closed: `GANTT_LABEL_PHONE_WIDTH` (`calendar-timeline-renderer.ts:68-71`),
+      the label column starts at 160px when the body carries `is-phone` and 280px otherwise
+      (the desktop constant `TIMELINE_REFERENCE_LABEL_WIDTH` is untouched, `:697-703`), and the
+      resize handle is pointer-event based with `setPointerCapture` (`:958-998`) so touch can
+      narrow the column; both asserted in `calendar-timeline-gantt.test.ts`.
+      — milestone anchor: red first — "anchors the milestone on the due date when both dates
+      exist, like the reference" — `AssertionError: expected '1768.5,198 1780.5,210
+      1768.5,222 1756…' to contain '1786.5,'` — the pre-fix diamond anchored on the start field
+      (was `calendar-timeline-renderer.ts:1272, 1349`). Closed: diamond, guide line and label
+      use `endDateKey ?? startDateKey` (`:1322-1331, 1400-1403`), the reference's `due ?? start`
+      (`GanttTaskBarRenderer.ts:278, 313`).
+      — fixtures: `TIMELINE_FIXTURES` unit widths are now the reference/renderer values
+      (day 44 / week 22 / month 9 / quarter 5 / year 2, `temporal.mjs:749-760`), the day scale
+      draws day columns with unpadded day-of-month labels (`:853-870`), the header draws the
+      month/year top band at every scale, and `temporal-tick-parity.test.mjs` imports
+      `TIMELINE_RANGE_DAY_WIDTH` and fails on any of these (`:25, 305-322, 416-459`).
+      — bench: `tools/bench/timeline-render-bench.ts:64-72` anchors the event span around the
+      current date (`EVENT_START = addDateKeyDays(getLocalDateKey(new Date()), -4)`; neither
+      `tools/live/render-assertion-harness.ts` nor `tools/screenshots/capture.mjs` freezes a
+      "today", so a fixed past span is not an option) and `:141-149` spreads progress, a
+      milestone and a dependency through the rows, so the constructed captures show bars,
+      progress, a milestone and an arrow on screen after the first-paint scroll to today.
+      — manifest note: the `timeline-view-*` note text no longer claims the viewport-centred
+      window is production behaviour (`temporal.mjs:1340-1341`); it is fixture geometry, and
+      the local viewport-centred window is gated behind `timelineLocalExtensions`.
+- [x] T031 `setSubtaskCollapsedMany` seam: the batch expand/collapse-all action T027 declared on
+      `CalendarTimelineRendererActions` had no host binding, so `renderer.setGanttAllCollapsed`
+      always fell through to the per-row `toggleSubtaskCollapsed` loop
+      (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
+      `src/views/database-view.test.ts`, `src/views/embedded-database-renderer.test.ts`)
+      — red first, both suites: "setSubtaskCollapsedMany writes every row in one mutation and
+      renders once, unlike N toggleSubtaskCollapsed calls" —
+      `AssertionError: expected undefined to deeply equal { 'root.md': true, 'a.md': true }` —
+      the action was unwired, so `config.subtaskCollapsed` never changed.
+      — closed: `setSubtaskCollapsedMany(config, rows, collapsed)` on both classes builds one
+      merged `config.subtaskCollapsed` map covering every row, then calls
+      `scheduleConfigSave()`/`refresh()` (database-view) or
+      `persistEmbeddedConfigLocally()`/`renderResults()`/`saveEmbeddedConfigInBackground()`
+      (embedded) exactly once — matching the reference's `setAllCollapsed`
+      (`GanttView.ts:326-331`: mutate every task in place, persist once, render once) — and is
+      wired into each class's `calendarTimelineRenderer` actions object only (board keeps the
+      per-row `toggleSubtaskCollapsed`; `CalendarTimelineRendererActions` is the only interface
+      that declares the batch seam).
+- [x] T032 CSS lane fidelity leg (D1, D14, coarse-pointer hit-area) — see `implementation-summary.md`
+      for the full D-finding-to-selector mapping
+      (`styles.css`, `tools/lane/css-lane.json`)
+      — (a) `.pm-hidden`/`.pm-no-shrink`/`body.pm-resize-active`/`.pm-glyph-icon`/
+      `.pm-gantt-right::-webkit-scrollbar*` copied verbatim from the reference's
+      `utilities.css`/`widgets.css`/`task-editor.css` — none existed in `styles.css`, so
+      `preview.addClass("pm-hidden")` (`calendar-timeline-renderer.ts:1355`) never hid the
+      empty-row snap-preview bar, which painted on every undated row from first render (D1).
+      — (b) the coarse-pointer hit-area rule's two selectors
+      (`.pm-gantt-controls button.clickable-icon`, `.pm-gantt-label-row button.pm-icon-btn`)
+      stopped matching once T028 made the controls-bar buttons bare and T023's port made the
+      add-subtask affordance a `div.clickable-icon`; rewritten to
+      `.pm-gantt-controls button` / `.pm-gantt-label-row .clickable-icon` with the same
+      28px floor, no dimension change.
+      — (c) `.pm-gantt-view`'s entry rule (font-family/color) and `.pm-segmented` scoped under
+      `.note-database-container` (descendant form — the class sits on a child of the container,
+      `renderTimeline`'s root is `container.createDiv`, so the compound
+      `.note-database-container.pm-gantt-view` form would never match), the same narrow
+      precedent as the board block's `.pm-kanban-view` custom-property rule (D14) — not a full
+      re-prefix of every `pm-gantt-*` selector in the copied block.
+      — verification: `touch-targets.mjs` constructed pass 367 under 28px, exactly the recorded
+      baseline (0 new) — without (b) this regresses toward the ~9974 shape this file's
+      `ganttPortRaiseHistory` already documents for the same root cause. Lane released
+      (`css-lane.json` history), 40 changed captures named and read.
+- [x] T033 Bench date-overflow fix, found verifying T030's captures: `eventDate(i)`'s
+      day-of-month string arithmetic
+      (`Number(EVENT_START.slice(8,10)) + (i % EVENT_WINDOW_DAYS)`) never rolled into the next
+      month, so the now-today-relative `EVENT_START` silently produced invalid dates like
+      `"2026-08-32"` whenever "today" fell in a month's last 9 days — `normalizeDateKey` then
+      failed to parse them and `buildCalendarTimelineEvents` dropped the row's event entirely,
+      leaving 90% of the constructed-timeline capture's rows with no bar, no milestone, no
+      dependency arrow
+      (`tools/bench/timeline-render-bench.ts`, `tools/bench/timeline-render-bench.test.mjs`)
+      — red first: `eventDateFrom("2026-08-31", 1)` expected `"2026-09-01"`, threw
+      `TypeError: eventDateFrom is not a function` (function did not exist).
+      — closed: `eventDate` now delegates to an exported pure `eventDateFrom(start, i)` built on
+      `addDateKeyDays` (real UTC calendar rollover, already imported for `EVENT_START`) instead
+      of hand-rolled day-string arithmetic; four tests pin month rollover, year rollover, the
+      offset-0 identity, and every offset in the window from a month-end anchor.
+      — also closed the `replay.mjs` claim this fixture rewrite broke: the retired
+      "day fixture centres on pinned now / bare hour, not HH:00" assertion read
+      `timelineDynamicFixture(...).startMinutes`, a field `temporal.mjs` no longer sets since
+      T030 replaced the hour-based day grammar with the reference's day-of-month one — `undefined
+      + number` silently became `NaN`. Replaced with a claim pinning the current grammar
+      (unpadded day-of-month label, 39/39 across both devices), not re-recorded to match NaN.
+<!-- /ANCHOR:phase-5 -->
 
 ---
 

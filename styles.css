@@ -17608,8 +17608,16 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
  * rules below actually consume (font-family/color); the reference's own
  * --pm-ghost-border/--pm-shadow-ambient tokens back kanban/time-log surfaces
  * that are not part of this port and are intentionally left unmapped.
+ * This entry selector is scoped under .note-database-container, the same
+ * narrow treatment the board block (17. BOARD VIEW) gives .pm-kanban-view:
+ * the reference's own class vocabulary (pm-*) is copied verbatim and would
+ * otherwise collide with the real upstream plugin's identical classes if
+ * both are installed. .pm-gantt-view sits on a child of .note-database-
+ * container, not the container itself (renderTimeline's root is
+ * container.createDiv, container already carries note-database-container),
+ * so this is the descendant form rather than the compound one.
  */
-.pm-gantt-view {
+.note-database-container .pm-gantt-view {
   font-family: var(--font-interface);
   color: var(--db-text-primary, var(--text-normal));
 }
@@ -17619,6 +17627,48 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+}
+
+/* WHY: the renderer toggles these five utility classes (pm-hidden on the empty-row snap
+ * preview, pm-no-shrink on the left scroll spacer, body.pm-resize-active while the label
+ * divider drags, pm-glyph-icon on the add-subtask plus glyph, and the right pane's
+ * webkit scrollbar) but the reference only defines them in utilities.css/widgets.css, not
+ * gantt.css, so the one-to-one gantt.css copy above never carried them. Copied here
+ * verbatim from the reference (utilities.css:1-18, widgets.css:1-7, task-editor.css:70-74)
+ * rather than duplicated per-caller, since the renderer already applies the reference's own
+ * class names and no local equivalent exists. Without pm-hidden in particular, the empty-row
+ * preview bar this class hides never gets display:none and paints on every undated row.
+ */
+.pm-hidden {
+  display: none !important;
+}
+.pm-no-shrink {
+  flex-shrink: 0;
+}
+body.pm-resize-active,
+body.pm-resize-active * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+.pm-glyph-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--pm-glyph-color, var(--text-muted));
+  --icon-size: var(--pm-glyph-size, 14px);
+}
+.pm-gantt-right::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.pm-gantt-right::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pm-gantt-right::-webkit-scrollbar-thumb {
+  background: var(--background-modifier-border);
+  border-radius: 99px;
+}
+.pm-gantt-right::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 .pm-gantt-controls {
@@ -17892,8 +17942,10 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
   opacity: 0.5;
 }
 
-/* WHY: the reference Gantt surface mounts these shared affordances beside its copied layout rules. */
-.pm-segmented {
+/* WHY: the reference Gantt surface mounts these shared affordances beside its copied layout
+   rules. Scoped under .note-database-container for the same reason as .pm-gantt-view above:
+   the class is reused verbatim from the upstream reference plugin's own vocabulary. */
+.note-database-container .pm-segmented {
   display: flex;
   gap: 6px;
 }
@@ -18018,10 +18070,18 @@ body.is-mobile .note-database-container > .db-empty-card[data-empty-reason="no-e
 /*
  * WHY: preserve the reference dimensions while giving coarse-pointer users
  * a 28px box for native controls and transparent SVG affordance strokes.
+ * The controls-bar segmented/today/expand/collapse buttons are now bare
+ * <button> elements with no clickable-icon class (matching the reference's
+ * SegmentedControl/ButtonComponent, which never applies it either), and the
+ * add-subtask affordance is now a div.clickable-icon (the reference's
+ * IconButton/ExtraButtonComponent shape), not a button — the two selectors
+ * below were rewritten from button.clickable-icon/button.pm-icon-btn, which
+ * stopped matching either element, to the tag/class combination each one
+ * actually renders now.
  */
 @media (pointer: coarse) {
-  .pm-gantt-controls button.clickable-icon,
-  .pm-gantt-label-row button.pm-icon-btn,
+  .pm-gantt-controls button,
+  .pm-gantt-label-row .clickable-icon,
   .pm-gantt-add-row button.pm-prop-add {
     min-width: 28px;
     min-height: 28px;

@@ -201,21 +201,30 @@ export class CalendarTimelineToolbarRenderer {
     }, "", true);
   }
 
-  /** layout section 内容：自定义列宽开关 + 列宽滑块 + (day)时段粒度。开关列宽只重建本 section，
-   *  不重建 data section（含 invalid 事件提示），避免无效事件提示「calculating→count」闪烁。 */
+  /** layout section 内容：本地扩展开关（默认关）+（开启后）自定义列宽开关/滑块 + (day)时段粒度。
+   *  开关只重建本 section，不重建 data section（含 invalid 事件提示），避免提示「calculating→count」闪烁。 */
   private renderLayoutContent(layout: HTMLElement, config: ViewConfig, actions: CalendarTimelineToolbarActions): void {
     layout.empty();
-    this.renderSwitch(layout, t("viewConfig.customColumnWidth"), config.timelineColumnSizeMode === "custom", (checked) => {
-      config.timelineColumnSizeMode = checked ? "custom" : undefined;
-      actions.onChange(t("undo.timelineColumnWidthConfig"));
-      // 只重建 layout section（让列宽滑块行立即出现/消失），不重建 data section 以免 invalid 提示闪烁
+    // The default render is the reference gantt; the local-extension column widths are
+    // read only by the gated path, so both the gate and its width controls live here.
+    this.renderSwitch(layout, t("viewConfig.timelineLocalExtensions"), config.timelineLocalExtensions === true, (checked) => {
+      config.timelineLocalExtensions = checked || undefined;
+      actions.onChange(t("undo.timelineLocalExtensionsConfig"));
       this.renderLayoutContent(layout, config, actions);
-    }, "columns");
-    if (config.timelineColumnSizeMode === "custom") {
-      this.renderRange(layout, t("timeline.columnWidth"), config.timelineCustomUnitWidth ?? this.defaultUnitWidth(config), this.unitWidthMin(config), this.unitWidthMax(config), 1, (value) => {
-        config.timelineCustomUnitWidth = value;
+    }, "wand-2");
+    if (config.timelineLocalExtensions === true) {
+      this.renderSwitch(layout, t("viewConfig.customColumnWidth"), config.timelineColumnSizeMode === "custom", (checked) => {
+        config.timelineColumnSizeMode = checked ? "custom" : undefined;
         actions.onChange(t("undo.timelineColumnWidthConfig"));
-      });
+        // 只重建 layout section（让列宽滑块行立即出现/消失），不重建 data section 以免 invalid 提示闪烁
+        this.renderLayoutContent(layout, config, actions);
+      }, "columns");
+      if (config.timelineColumnSizeMode === "custom") {
+        this.renderRange(layout, t("timeline.columnWidth"), config.timelineCustomUnitWidth ?? this.defaultUnitWidth(config), this.unitWidthMin(config), this.unitWidthMax(config), 1, (value) => {
+          config.timelineCustomUnitWidth = value;
+          actions.onChange(t("undo.timelineColumnWidthConfig"));
+        });
+      }
     }
     if (config.timelineScale === "day") {
       this.renderSelect(layout, t("viewConfig.calendarWeekSlotDuration"), [

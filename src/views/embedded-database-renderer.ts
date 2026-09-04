@@ -215,6 +215,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // reorderTimelineEvent/updateEventDates: this timeline never enters a drag path to reach it.
     isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.config, row),
     toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.config, row, collapsed),
+    setSubtaskCollapsedMany: (rows, collapsed) => this.setSubtaskCollapsedMany(this.config, rows, collapsed),
     isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
     toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
@@ -2768,6 +2769,21 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private toggleSubtaskCollapsed(config: ViewConfig | undefined, row: RowData, collapsed: boolean): void {
     if (!config) return;
     config.subtaskCollapsed = { ...(config.subtaskCollapsed || {}), [row.file.path]: collapsed };
+    this.persistEmbeddedConfigLocally(config);
+    this.renderResults(config);
+    this.saveEmbeddedConfigInBackground();
+  }
+
+  /**
+   * Batch form of `toggleSubtaskCollapsed` for expand-all/collapse-all: one config mutation
+   * covering every row plus one save/render, matching the reference's setAllCollapsed
+   * (mutate every task in place, persist once, render once) instead of N writes and N renders.
+   */
+  private setSubtaskCollapsedMany(config: ViewConfig | undefined, rows: RowData[], collapsed: boolean): void {
+    if (!config || rows.length === 0) return;
+    const next = { ...(config.subtaskCollapsed || {}) };
+    for (const row of rows) next[row.file.path] = collapsed;
+    config.subtaskCollapsed = next;
     this.persistEmbeddedConfigLocally(config);
     this.renderResults(config);
     this.saveEmbeddedConfigInBackground();

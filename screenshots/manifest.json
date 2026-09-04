@@ -2521,11 +2521,11 @@
         "src/views/dropdown-field.ts",
         "src/views/popover-position.ts"
       ],
-      "layoutHash": "30bbaddfdc84",
-      "pixelHash": "fe74ca2c4868",
+      "layoutHash": "740bb2cfa8e8",
+      "pixelHash": "8aee5e97a525",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -2533,7 +2533,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -2541,7 +2541,7 @@
       },
       "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
       "capture": "viewport",
-      "bytes": 82444,
+      "bytes": 81954,
       "source": "constructed",
       "renderer": "timeline-toolbar",
       "bag": "file-view"
@@ -2564,11 +2564,11 @@
         "src/views/dropdown-field.ts",
         "src/views/popover-position.ts"
       ],
-      "layoutHash": "30bbaddfdc84",
-      "pixelHash": "5ae623f2a27b",
+      "layoutHash": "740bb2cfa8e8",
+      "pixelHash": "879979d39717",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -2576,7 +2576,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -2584,7 +2584,7 @@
       },
       "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
       "capture": "viewport",
-      "bytes": 87720,
+      "bytes": 87129,
       "source": "constructed",
       "renderer": "timeline-toolbar",
       "bag": "file-view"
@@ -2608,10 +2608,10 @@
         "src/views/popover-position.ts"
       ],
       "layoutHash": "9d7def36ea6c",
-      "pixelHash": "881bb596a43f",
+      "pixelHash": "c4e5768bf1db",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -2619,7 +2619,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -2627,7 +2627,7 @@
       },
       "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
       "capture": "viewport",
-      "bytes": 62823,
+      "bytes": 62376,
       "source": "constructed",
       "renderer": "timeline-toolbar",
       "bag": "file-view"
@@ -2651,10 +2651,10 @@
         "src/views/popover-position.ts"
       ],
       "layoutHash": "9d7def36ea6c",
-      "pixelHash": "6bbdb27c698b",
+      "pixelHash": "1d6cffeefc4e",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -2662,7 +2662,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "src/views/popover-position.ts": "6cae246726c0",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -2670,7 +2670,7 @@
       },
       "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
       "capture": "viewport",
-      "bytes": 64385,
+      "bytes": 63900,
       "source": "constructed",
       "renderer": "timeline-toolbar",
       "bag": "file-view"
@@ -8611,17 +8611,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "8edb3f7e6e6c",
-      "pixelHash": "c633fa297f18",
+      "layoutHash": "6c05fbec00e0",
+      "pixelHash": "be56d483cd08",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8629,7 +8629,7 @@
       },
       "note": "The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.",
       "capture": "viewport",
-      "bytes": 89405,
+      "bytes": 112465,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8650,17 +8650,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "8edb3f7e6e6c",
-      "pixelHash": "df753a1eb157",
+      "layoutHash": "6c05fbec00e0",
+      "pixelHash": "0eef8f1d4d20",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8668,7 +8668,7 @@
       },
       "note": "The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.",
       "capture": "viewport",
-      "bytes": 90484,
+      "bytes": 114094,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8689,17 +8689,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "7d8f3c9cfd8f",
-      "pixelHash": "7cd11f99b1a2",
+      "layoutHash": "fb547567ca2d",
+      "pixelHash": "e570e1db5efb",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8707,7 +8707,7 @@
       },
       "note": "The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.",
       "capture": "viewport",
-      "bytes": 60830,
+      "bytes": 78505,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8728,17 +8728,17 @@
         "tools/storybook/obsidian-stub.mjs",
         "tools/storybook/obsidian-dom-shim.mjs"
       ],
-      "layoutHash": "7d8f3c9cfd8f",
-      "pixelHash": "16d1000263e2",
+      "layoutHash": "fb547567ca2d",
+      "pixelHash": "27c0e47dbbcf",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8746,7 +8746,7 @@
       },
       "note": "The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.",
       "capture": "viewport",
-      "bytes": 61406,
+      "bytes": 79646,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8770,11 +8770,11 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "d38c59ea672b",
-      "pixelHash": "c633fa297f18",
+      "layoutHash": "1fc6861eab99",
+      "pixelHash": "be56d483cd08",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -8782,8 +8782,8 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8791,7 +8791,7 @@
       },
       "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
       "capture": "viewport",
-      "bytes": 91215,
+      "bytes": 112693,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8815,11 +8815,11 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "d38c59ea672b",
-      "pixelHash": "4458e439acd1",
+      "layoutHash": "1fc6861eab99",
+      "pixelHash": "04f2616acde3",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -8827,8 +8827,8 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8836,7 +8836,7 @@
       },
       "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
       "capture": "viewport",
-      "bytes": 92302,
+      "bytes": 114309,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8860,11 +8860,11 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "33abd081c8a0",
-      "pixelHash": "462a68ebda50",
+      "layoutHash": "3734a181617a",
+      "pixelHash": "84a962fc13ff",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -8872,8 +8872,8 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8881,7 +8881,7 @@
       },
       "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
       "capture": "viewport",
-      "bytes": 62650,
+      "bytes": 79161,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -8905,11 +8905,11 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "33abd081c8a0",
-      "pixelHash": "f6df4f42c30a",
+      "layoutHash": "3734a181617a",
+      "pixelHash": "821882f44340",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "tools/bench/timeline-render-bench.ts": "d55a09505076",
         "tools/live/render-assertion-harness.ts": "e3936fcaa88d",
         "tools/live/render-assertion-bundle.mjs": "b615d790829f",
         "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
@@ -8917,8 +8917,8 @@
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -8926,7 +8926,7 @@
       },
       "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
       "capture": "viewport",
-      "bytes": 63272,
+      "bytes": 80302,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -9628,14 +9628,14 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "c30315a5321d",
-      "pixelHash": "eaa147173eaa",
+      "layoutHash": "8cfdff80a8c4",
+      "pixelHash": "59d99d585ea7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9643,7 +9643,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 82868,
+      "bytes": 88829,
       "fixtureOf": "constructed-timeline-subtask"
     },
     {
@@ -9659,14 +9659,14 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "c30315a5321d",
-      "pixelHash": "5e90367efc84",
+      "layoutHash": "8cfdff80a8c4",
+      "pixelHash": "cfff2a697cdb",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9674,7 +9674,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 82916,
+      "bytes": 88716,
       "fixtureOf": "constructed-timeline-subtask"
     },
     {
@@ -9690,14 +9690,14 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "29589f6ffd76",
-      "pixelHash": "bab9ad16b6bb",
+      "layoutHash": "a54782e55270",
+      "pixelHash": "36b818859d9d",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9705,7 +9705,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 54620,
+      "bytes": 42196,
       "fixtureOf": "constructed-timeline-subtask"
     },
     {
@@ -9721,14 +9721,14 @@
         "src/data/subtask-serialize.ts",
         "src/i18n.ts"
       ],
-      "layoutHash": "29589f6ffd76",
-      "pixelHash": "0da1b15f1f6d",
+      "layoutHash": "a54782e55270",
+      "pixelHash": "17e0894b4288",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "825ff3b7f70c",
-        "styles.css": "5da6ee888482",
+        "src/i18n.ts": "bcc9bc618e88",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
@@ -9736,7 +9736,7 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 54773,
+      "bytes": 42577,
       "fixtureOf": "constructed-timeline-subtask"
     },
     {
@@ -9750,20 +9750,20 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "128e5eebab9e",
-      "pixelHash": "44c78dbdb3fd",
+      "layoutHash": "2dc986dd5a47",
+      "pixelHash": "27b8c9fe08d9",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).",
       "capture": "viewport",
-      "bytes": 99834,
+      "bytes": 106557,
       "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
@@ -9777,20 +9777,20 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "128e5eebab9e",
-      "pixelHash": "16e3b43591c0",
+      "layoutHash": "2dc986dd5a47",
+      "pixelHash": "c749b9e0db11",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).",
       "capture": "viewport",
-      "bytes": 104347,
+      "bytes": 111126,
       "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
@@ -9804,20 +9804,20 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "79f505119c61",
-      "pixelHash": "cd79e01d83cc",
+      "layoutHash": "8472e270ee2b",
+      "pixelHash": "6584cb6f6e5f",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).",
       "capture": "viewport",
-      "bytes": 81396,
+      "bytes": 86986,
       "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
@@ -9831,20 +9831,20 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "79f505119c61",
-      "pixelHash": "6b2350e69326",
+      "layoutHash": "8472e270ee2b",
+      "pixelHash": "48a577f8940c",
       "sourceHashes": {
-        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/calendar-timeline-toolbar-renderer.ts": "731a3f23ee0b",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "5da6ee888482",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
+      "note": "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them).",
       "capture": "viewport",
-      "bytes": 85339,
+      "bytes": 90647,
       "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
@@ -9857,19 +9857,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "91b88af76e1c",
-      "pixelHash": "ae32fbbbfffc",
+      "layoutHash": "eb8845972bf9",
+      "pixelHash": "69a8df86bf67",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 86621
+      "bytes": 92409
     },
     {
       "id": "timeline-view-day",
@@ -9881,19 +9881,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "91b88af76e1c",
-      "pixelHash": "64620d94b6a3",
+      "layoutHash": "eb8845972bf9",
+      "pixelHash": "390faf8ed51b",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 86770
+      "bytes": 92515
     },
     {
       "id": "timeline-view-day",
@@ -9905,19 +9905,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "b3d7c947a3e6",
-      "pixelHash": "3b9aea40b8a3",
+      "layoutHash": "5d13de74936a",
+      "pixelHash": "540473cb44c4",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 57671
+      "bytes": 43837
     },
     {
       "id": "timeline-view-day",
@@ -9929,19 +9929,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "b3d7c947a3e6",
-      "pixelHash": "d91eeae68ebb",
+      "layoutHash": "5d13de74936a",
+      "pixelHash": "f2be3bd3ac16",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 57460
+      "bytes": 44207
     },
     {
       "id": "timeline-view",
@@ -9953,19 +9953,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "8a61593c2fd8",
-      "pixelHash": "f7171fba0b2b",
+      "layoutHash": "910ed05d9a46",
+      "pixelHash": "93485aec1974",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 82714,
+      "bytes": 88671,
       "fixtureOf": "constructed-timeline"
     },
     {
@@ -9978,19 +9978,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "8a61593c2fd8",
-      "pixelHash": "ee6d4b8e6634",
+      "layoutHash": "910ed05d9a46",
+      "pixelHash": "e723ea8865ca",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 82796,
+      "bytes": 88596,
       "fixtureOf": "constructed-timeline"
     },
     {
@@ -10003,19 +10003,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "f4c28c4a64ee",
-      "pixelHash": "ac1aadb995ba",
+      "layoutHash": "ceff54c9bf62",
+      "pixelHash": "6f8a84b7f432",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 54448,
+      "bytes": 42028,
       "fixtureOf": "constructed-timeline"
     },
     {
@@ -10028,19 +10028,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "f4c28c4a64ee",
-      "pixelHash": "6ae4c0c0dd41",
+      "layoutHash": "ceff54c9bf62",
+      "pixelHash": "05ebe7228ac7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 54594,
+      "bytes": 42408,
       "fixtureOf": "constructed-timeline"
     },
     {
@@ -10053,19 +10053,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "8b868b1b7850",
-      "pixelHash": "54b557cdaa9a",
+      "layoutHash": "33c391b5b54a",
+      "pixelHash": "5e2612e6e061",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 82616
+      "bytes": 73449
     },
     {
       "id": "timeline-view-month",
@@ -10077,19 +10077,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "8b868b1b7850",
-      "pixelHash": "b02783302f54",
+      "layoutHash": "33c391b5b54a",
+      "pixelHash": "971f58c5dae3",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 82569
+      "bytes": 73598
     },
     {
       "id": "timeline-view-month",
@@ -10101,19 +10101,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "eaeedd33310c",
-      "pixelHash": "a1c47456acde",
+      "layoutHash": "48fbaad9788a",
+      "pixelHash": "20c8fe367146",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 48026
+      "bytes": 43335
     },
     {
       "id": "timeline-view-month",
@@ -10125,19 +10125,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "eaeedd33310c",
-      "pixelHash": "4f31a960f1af",
+      "layoutHash": "48fbaad9788a",
+      "pixelHash": "4449a22e3abb",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 48466
+      "bytes": 43733
     },
     {
       "id": "timeline-view-quarter",
@@ -10149,19 +10149,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "69739784dbc9",
-      "pixelHash": "e96791bac846",
+      "layoutHash": "91683bfb2702",
+      "pixelHash": "fd9fe6599a67",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 80669
+      "bytes": 73898
     },
     {
       "id": "timeline-view-quarter",
@@ -10173,19 +10173,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "69739784dbc9",
-      "pixelHash": "ac8aaa7d68ce",
+      "layoutHash": "91683bfb2702",
+      "pixelHash": "970d0cbadca1",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 80705
+      "bytes": 74255
     },
     {
       "id": "timeline-view-quarter",
@@ -10197,19 +10197,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "7bf803450a6e",
-      "pixelHash": "aaa3e3f5c0fc",
+      "layoutHash": "70ab2739f976",
+      "pixelHash": "790066660261",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 44078
+      "bytes": 43652
     },
     {
       "id": "timeline-view-quarter",
@@ -10221,19 +10221,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "7bf803450a6e",
-      "pixelHash": "8ac8d1ff7d30",
+      "layoutHash": "70ab2739f976",
+      "pixelHash": "639d8df5e818",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 44540
+      "bytes": 44028
     },
     {
       "id": "timeline-view-year",
@@ -10245,19 +10245,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "1ebace61a98a",
-      "pixelHash": "565fc0738bc5",
+      "layoutHash": "d89daca6f035",
+      "pixelHash": "9b98c21a5bc7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 69854
+      "bytes": 71220
     },
     {
       "id": "timeline-view-year",
@@ -10269,19 +10269,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "1ebace61a98a",
-      "pixelHash": "0706789dc34d",
+      "layoutHash": "d89daca6f035",
+      "pixelHash": "90dac5756f97",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 70138
+      "bytes": 71446
     },
     {
       "id": "timeline-view-year",
@@ -10293,19 +10293,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "446576f56708",
-      "pixelHash": "c8bdb0652822",
+      "layoutHash": "65e888e40df4",
+      "pixelHash": "07e46b86016e",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 43810
+      "bytes": 45445
     },
     {
       "id": "timeline-view-year",
@@ -10317,19 +10317,19 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "446576f56708",
-      "pixelHash": "baaab67fc501",
+      "layoutHash": "65e888e40df4",
+      "pixelHash": "8afb38d1e837",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "c2e26d7542dc",
-        "styles.css": "5da6ee888482",
+        "src/views/calendar-timeline-renderer.ts": "88cb3deddea1",
+        "styles.css": "3110493a1a0e",
         "tools/screenshots/theme.css": "88cea2ea664d",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
         "tools/screenshots/scenarios.mjs": "4c26fcda113a",
         "tools/screenshots/capture.mjs": "4fda626de932"
       },
-      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. Window and title both follow the live viewport-centred range (getTimelineViewportWindow() and getTimelineTitleWindow(), as production does whenever a real container is mounted), sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame.",
+      "note": "Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 44251
+      "bytes": 46163
     }
   ]
 }

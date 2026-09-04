@@ -25,6 +25,7 @@ import type { WorkspaceLeaf } from "obsidian";
 import { DatabaseView } from "./database-view";
 import { planSubtaskMove, toFrontmatterUpdates } from "../data/subtask-serialize";
 import type { BoardRendererActions, BoardSubtaskMove } from "./board-renderer";
+import type { CalendarTimelineRendererActions } from "./calendar-timeline-renderer";
 
 vi.mock("obsidian", () => {
   class TFileMock {
@@ -110,8 +111,10 @@ vi.mock("../i18n", () => ({
 
 interface DatabaseViewHarness {
   boardRenderer: { actions: BoardRendererActions };
+  calendarTimelineRenderer: { actions: CalendarTimelineRendererActions };
   rows: RowData[];
   instanceId: string;
+  refresh(options?: { viewport?: unknown }): void;
 }
 
 interface FakeDataSource {
@@ -285,5 +288,20 @@ describe("DatabaseView subtask host bindings", () => {
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
     expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "a.md": true });
+  });
+
+  it("setSubtaskCollapsedMany writes every row in one mutation and renders once, unlike N toggleSubtaskCollapsed calls", async () => {
+    const { harness, dataSource, viewConfig } = createView();
+    const parents = [harness.rows[0], harness.rows[1]]; // root.md, a.md
+    const refreshSpy = vi.spyOn(harness, "refresh");
+
+    void harness.calendarTimelineRenderer.actions.setSubtaskCollapsedMany?.(parents, true);
+
+    expect(viewConfig.subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
+    expect(refreshSpy).toHaveBeenCalledTimes(1);
+    await flushConfigWrite();
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
+    expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
   });
 });

@@ -26,6 +26,7 @@ import type { App } from "obsidian";
 import { EmbeddedDatabaseRenderer } from "./embedded-database-renderer";
 import { planSubtaskMove, toFrontmatterUpdates } from "../data/subtask-serialize";
 import type { BoardRendererActions, BoardSubtaskMove } from "./board-renderer";
+import type { CalendarTimelineRendererActions } from "./calendar-timeline-renderer";
 
 vi.mock("obsidian", () => {
   class TFileMock {
@@ -98,11 +99,13 @@ vi.mock("../i18n", () => ({
 
 interface EmbeddedHarness {
   boardRenderer: { actions: BoardRendererActions };
+  calendarTimelineRenderer: { actions: CalendarTimelineRendererActions };
   rows: RowData[];
   config: ViewConfig | undefined;
   currentDbConfig: DatabaseConfig | undefined;
   currentSourcePath: string;
   instanceId: string;
+  renderResults(config: ViewConfig, options?: { viewport?: unknown }): void;
 }
 
 interface FakeDataSource {
@@ -351,5 +354,20 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
     expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "a.md": true });
+  });
+
+  it("setSubtaskCollapsedMany writes every row in one mutation and renders once, unlike N toggleSubtaskCollapsed calls", async () => {
+    const { harness, dataSource, viewConfig } = createRenderer();
+    const parents = [harness.rows[0], harness.rows[1]]; // root.md, a.md
+    const renderSpy = vi.spyOn(harness, "renderResults");
+
+    void harness.calendarTimelineRenderer.actions.setSubtaskCollapsedMany?.(parents, true);
+
+    expect(viewConfig.subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+    await flushBackgroundSave();
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    const writtenDb = dataSource.updateViewDefFile.mock.calls[0][1];
+    expect(writtenDb.views[0].subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
   });
 });

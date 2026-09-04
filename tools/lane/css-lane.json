@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "5da6ee888482",
+  "baselineHash": "bd780d064dd4",
   "baselineCommit": "421995b3790a0e6486e72bfcd3280e1fe7101562",
   "history": [
     {
@@ -2102,6 +2102,61 @@
         "screenshots/views/constructed-board-subtask-mobile-light.png"
       ],
       "note": "T12 fresh-reviewer close-out (4 REQ-007 divergences, all confirmed via a red assertion against the reference source before the fix). (A) .note-database-container .pm-kanban-view (line ~8958) was a descendant-only selector that never matched -- board-renderer.ts / database-view.ts / embedded-database-renderer.ts all addClass(pm-kanban-view) onto the same element already classed note-database-container, never a descendant of it -- so .pm-kanban-board never got a flex parent to size flex:1/min-height:0 against. Changed to the compound .note-database-container.pm-kanban-view selector; verified against constructed-board and constructed-board-subtask (the real BoardRenderer plus database-view.ts container, both themes): a shorter column (review, 3 cards / doing, 3 cards) now stretches its background to match its taller siblings all the way to the frame bottom, where before it stopped at its own content height, confirmed by a before/after crop comparison against HEAD's committed PNGs. Also confirmed on board-mobile and constructed-board-mobile (both themes): mobile captures already showed the stretch (a fixed mobile viewport height gives the percentage chain a concrete basis regardless of this selector), unchanged by this fix. board-view / board-empty-column (desktop, hand-authored fixtures using the same markup) do not show the stretch either before or after this change -- confirmed identical in that one respect across old and new -- because their desktop capture context auto-sizes to content rather than a fixed viewport height, leaving no percentage-height basis regardless of the selector; pre-existing, unrelated to this fix, not attempted here. (B) The due chip near tier (getReferenceDueUrgency, board-renderer.ts) was reachable in this port, but the reference kanban call site only ever passes overdue|normal (KanbanView.ts:126, KanbanCard.ts:97) -- the near tier lives in dueChip.ts and reaches only the reference table/list views. Removed the near branch from getReferenceDueUrgency and the render call, from the shared.mjs pmDueChip fixture helper, and from core.mjs board-view scenario -- Sketch no longer forces a near-tier due chip demo. Verified: board-view (both themes) shows Sketch, March 12 2026 as a plain chip, not orange; constructed-board and constructed-board-subtask show only red overdue chips (wall-clock-derived) or plain, no orange anywhere. (C) tools/screenshots/scenarios/shared.mjs subtaskBoardCard hard-coded the Sub chip on every card regardless of depth, and defaulted parent to the literal string \"Projects\" (coincidentally this scenario's own column name) instead of the parent card's actual title. Gated the Sub chip on depth > 0 to match the parent-line gate already beside it, removed the misleading default (now empty, callers must pass the real parent title), and updated core.mjs board-subtask-tree's two child-card calls to pass SUBTASK_FIXTURE_ROWS.parent.name. Verified: board-subtask-tree and constructed-board-subtask (both themes) -- the root/parent card carries no Sub chip, both children show \"Website redesign\" / \"row-0\" (the real parent title) on the parent line plus the Sub chip. (D) The column badge always emitted an icon span (REFERENCE_STATUS_ICON constant) but the reference only renders one when the status option itself carries an icon (KanbanColumn.ts:52-57), which this option model has no field for. Removed the icon span and the dead constant; the badge is text-only now. Verified across every board capture opened this session, both themes: no icon glyph before any column label. All 28 content-changed captures named above opened and read this session, both themes where applicable. Byte-only re-encode noise (panel-record-detail-sheet-body-empty x2, timeline-view-quarter-mobile-light -- pixelHash/layoutHash identical to HEAD) and the pre-existing field-icon-picker-desktop-{dark,light} Chrome/OS rendering drift (this lane's own prior releases already document it as unrelated environment divergence) were both restored to committed HEAD bytes, their manifest.json entries reset to their HEAD counterparts in full (not just the bytes field) so the manifest stays internally consistent with what is actually on disk. tsc 0, vitest 996/996, lint 172 (byte-identical baseline), scan-comments PASS."
+    },
+    {
+      "event": "acquire",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T10:45:32.306Z",
+      "hash": "d3c6cc3e8453"
+    },
+    {
+      "event": "release",
+      "phase": "037-timeline-gantt-port",
+      "at": "2026-09-04T11:26:54.986Z",
+      "hash": "3110493a1a0e",
+      "reviewed": [
+        "screenshots/components/constructed-timeline-toolbar-options-desktop-dark.png",
+        "screenshots/components/constructed-timeline-toolbar-options-desktop-light.png",
+        "screenshots/components/constructed-timeline-toolbar-options-mobile-dark.png",
+        "screenshots/components/constructed-timeline-toolbar-options-mobile-light.png",
+        "screenshots/views/constructed-timeline-desktop-dark.png",
+        "screenshots/views/constructed-timeline-desktop-light.png",
+        "screenshots/views/constructed-timeline-mobile-dark.png",
+        "screenshots/views/constructed-timeline-mobile-light.png",
+        "screenshots/views/constructed-timeline-subtask-desktop-dark.png",
+        "screenshots/views/constructed-timeline-subtask-desktop-light.png",
+        "screenshots/views/constructed-timeline-subtask-mobile-dark.png",
+        "screenshots/views/constructed-timeline-subtask-mobile-light.png",
+        "screenshots/views/timeline-subtask-tree-desktop-dark.png",
+        "screenshots/views/timeline-subtask-tree-desktop-light.png",
+        "screenshots/views/timeline-subtask-tree-mobile-dark.png",
+        "screenshots/views/timeline-subtask-tree-mobile-light.png",
+        "screenshots/views/timeline-toolbar-options-desktop-dark.png",
+        "screenshots/views/timeline-toolbar-options-desktop-light.png",
+        "screenshots/views/timeline-toolbar-options-mobile-dark.png",
+        "screenshots/views/timeline-toolbar-options-mobile-light.png",
+        "screenshots/views/timeline-view-day-desktop-dark.png",
+        "screenshots/views/timeline-view-day-desktop-light.png",
+        "screenshots/views/timeline-view-day-mobile-dark.png",
+        "screenshots/views/timeline-view-day-mobile-light.png",
+        "screenshots/views/timeline-view-desktop-dark.png",
+        "screenshots/views/timeline-view-desktop-light.png",
+        "screenshots/views/timeline-view-mobile-dark.png",
+        "screenshots/views/timeline-view-mobile-light.png",
+        "screenshots/views/timeline-view-month-desktop-dark.png",
+        "screenshots/views/timeline-view-month-desktop-light.png",
+        "screenshots/views/timeline-view-month-mobile-dark.png",
+        "screenshots/views/timeline-view-month-mobile-light.png",
+        "screenshots/views/timeline-view-quarter-desktop-dark.png",
+        "screenshots/views/timeline-view-quarter-desktop-light.png",
+        "screenshots/views/timeline-view-quarter-mobile-dark.png",
+        "screenshots/views/timeline-view-quarter-mobile-light.png",
+        "screenshots/views/timeline-view-year-desktop-dark.png",
+        "screenshots/views/timeline-view-year-desktop-light.png",
+        "screenshots/views/timeline-view-year-mobile-dark.png",
+        "screenshots/views/timeline-view-year-mobile-light.png"
+      ],
+      "note": "Fidelity-gap CSS leg closing five D-findings against the reference: (a) added the missing utility rules the renderer already toggles but styles.css never defined (.pm-hidden, .pm-no-shrink, body.pm-resize-active, .pm-glyph-icon, .pm-gantt-right::-webkit-scrollbar) — D1: without .pm-hidden the empty-row snap-preview bar painted on every undated row from first render, not just on hover; (b) rewrote the coarse-pointer hit-area rule (.pm-gantt-controls button.clickable-icon / .pm-gantt-label-row button.pm-icon-btn -> .pm-gantt-controls button / .pm-gantt-label-row .clickable-icon) to match the controls bar going bare-button and the add-subtask affordance going div.clickable-icon (the reference IconButton/ExtraButtonComponent shape) in the TS leg, with no dimension change; (c) scoped .pm-gantt-view (the entry rule only, font-family/color) and .pm-segmented under .note-database-container, descendant form rather than compound: the class sits on a child of the container (renderTimeline's root is container.createDiv), not the container itself, so .note-database-container.pm-gantt-view would never have matched — same narrow precedent as the board block's .pm-kanban-view custom-property rule, not a full re-prefix of every pm-gantt-* selector. Also fixed, outside the CSS lane proper but discovered verifying this leg's captures: tools/bench/timeline-render-bench.ts's eventDate() did naive day-of-month string arithmetic with no month/year rollover, so the now-today-relative EVENT_START silently produced invalid dates (\"2026-08-32\") whenever today landed in a month's last 9 days, dropping 90% of bench rows' events entirely (no bar, no milestone, no dependency arrow) -- fixed via addDateKeyDays, red-first in tools/bench/timeline-render-bench.test.mjs. Recaptured (npm run screenshots, 356 entries); all 40 timeline/gantt-scoped PNGs listed in  opened and read this session across every scale (day/week/month/quarter/year), both themes, both devices: bars with progress fill, a milestone diamond, dependency arrows now visible in the renderer (bench) captures; toolbar popover gates the custom-column-width rows behind the local-extensions toggle both ways (off: hidden, on: shown). touch-targets: constructed-pass 367 under 28px, exactly the recorded baseline (0 new) -- the bare-button/div.clickable-icon reshape from the TS leg would have regressed this to ~9974 without (b); confirmed by the identical prior d3-9974-367 shape already in this file's ganttPortRaiseHistory/ganttPortLowerHistory. replay.mjs: one claim broke on this tree for reasons unrelated to this CSS edit -- the day-fixture's old \"centres on pinned now / bare hour, not HH:00\" assertion depended on temporal.mjs's TL_DAY_START_MINUTES/timelineDayCentredStartMinutes, which the fixture rewrite (T023-030) removed entirely in favour of the reference's day-of-month grammar; replaced with a claim pinning the actual current behaviour (unpadded day-of-month label, 39/39 across both devices), documented in replay.mjs beside the retired claim rather than silently re-recorded. Byte-only re-encode noise (board-mobile-mobile-dark/light, board-view-mobile-dark/light, calendar-mini-calendar-mobile-light, board-subtask-tree-desktop-dark, calendar-empty-state-mobile-light across two recapture runs) and field-icon-picker-desktop-dark/light (this lane's established environment-drift-prone capture) restored to HEAD bytes and manifest entries; the six/nine files' styles.css sourceHash was hand-patched to the current hash after confirming via check-lane's own pixelHash/layoutHash comparator that none of them render any selector this leg touched. Full gate: 25/25 green."
     }
   ],
   "outstanding": [
