@@ -79,12 +79,27 @@ const MIXED_TYPES: ColumnDef["type"][] = [
   "text", "number", "date", "select", "multi-select", "checkbox", "relation", "currency",
 ];
 
+// The index of MIXED_TYPES' one "multi-select" entry — a constant, not a magic number repeated
+// below, since board-renderer.ts's people-field match (`getReferenceCardFields`,
+// `/people|person|assignee|owner/i`) only ever finds a multi-select column, and only the first
+// one this loop produces is re-keyed for it.
+const PEOPLE_COLUMN_INDEX = MIXED_TYPES.indexOf("multi-select");
+
 export function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
   const columns = Array.from({ length: count }, (_unused, i) => {
+    const type = kind === "mixed" && i > 0 ? MIXED_TYPES[i % MIXED_TYPES.length] : "text";
+    // Re-keys the bench's first multi-select column to "people" instead of adding a 22nd column:
+    // the reference always constructs the card's avatar stack but leaves it empty without a
+    // mapped people column (T14), so nothing in the bench/capture pipeline ever exercised that
+    // branch. Renaming one existing column (not its type, count, or any other column) is what lets
+    // the real BoardRenderer paint it for `captureData` scenarios (constructed-board/
+    // constructed-board-subtask) without disturbing REPORTED_COLUMNS' other reported names or any
+    // count-based threshold calibrated against this bench's 21 columns.
+    const isPeopleColumn = kind === "mixed" && i === PEOPLE_COLUMN_INDEX;
     const base = {
-      key: i === 0 ? "file.name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
-      label: i === 0 ? "Name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length],
-      type: kind === "mixed" && i > 0 ? MIXED_TYPES[i % MIXED_TYPES.length] : "text",
+      key: i === 0 ? "file.name" : isPeopleColumn ? "people" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
+      label: i === 0 ? "Name" : isPeopleColumn ? "People" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length],
+      type,
     } as ColumnDef;
     if (kind === "mixed" && base.type === "text" && i % 5 === 0) base.textRenderMode = "markdown";
     return base;

@@ -810,11 +810,15 @@
      builds the card as a direct child of this container, before any .db-calendar wrapper
      exists to inherit from. */
   --db-calendar-empty-min-height: 144px;
+  /* The host's own left/right padding, read by anything that has to cancel it (the board's
+     negative margin below, `.db-header`'s bleed) so a responsive change to the padding value
+     stays a single edit instead of a value silently drifting out of sync at one breakpoint. */
+  --db-container-padding-inline: var(--db-space-8);
   height: 100%;
   /* overflow: auto 让容器自身成为滚动容器，表头 sticky 相对于此生效 */
   overflow: auto;
   scrollbar-gutter: stable;
-  padding: 0 var(--db-space-8) var(--db-space-8);
+  padding: 0 var(--db-container-padding-inline) var(--db-space-8);
   position: relative;
   color: var(--text-normal);
   font-family: var(--font-interface);
@@ -8971,14 +8975,18 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   overflow-x: auto;
   overflow-y: hidden;
   box-sizing: border-box;
-  /* The host container carries its own 24px left/right padding, which the toolbar header
+  /* The host container carries its own left/right padding, which the toolbar header
      (`.db-header`, a sibling of this board inside the same container) relies on for its
      negative-margin bleed — zeroing the container's own padding for this view would misalign
      that unrelated element. Canceling the padding on this board alone instead lands the first
      column at its own 16px, matching the reference, without touching the container's padding
-     value or anything else that reads it. */
-  margin-left: calc(-1 * var(--db-space-8));
-  margin-right: calc(-1 * var(--db-space-8));
+     value or anything else that reads it. Reading `--db-container-padding-inline` (inherited
+     from the ancestor `.note-database-container`, not a fixed 24px) instead of the constant
+     token directly keeps this cancellation correct at the mobile breakpoint too, where the
+     container's own padding drops to 12px — a fixed 24px margin here previously over-cancelled
+     it by 12px, pulling the board 12px past the container's own edge. */
+  margin-left: calc(-1 * var(--db-container-padding-inline));
+  margin-right: calc(-1 * var(--db-container-padding-inline));
 }
 
 .note-database-container .pm-kanban-col {
@@ -19531,7 +19539,11 @@ body.pm-resize-active * {
 
 @media (max-width: 760px) {
   .note-database-container {
-    padding: 0 12px 24px;
+    /* Redefining the token (not just the shorthand it feeds) is what keeps the board's
+       negative margin — a descendant reading the same custom property — in sync at this
+       breakpoint; see the token's declaration and `.pm-kanban-board`'s margin comment. */
+    --db-container-padding-inline: 12px;
+    padding: 0 var(--db-container-padding-inline) 24px;
   }
 
   .note-database-container .db-title-row,

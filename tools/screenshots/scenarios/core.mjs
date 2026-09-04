@@ -66,9 +66,19 @@ export const CORE_SCENARIOS = [
               // mapped data so the capture stays reproducible; no other card here carries a
               // priority, since this schema maps no priority column. The kanban call site never
               // reaches the reference's due-chip near tier (KanbanView.ts:126), so no card here
-              // demonstrates it either.
+              // demonstrates it either. Adobe/Sketch/Framer similarly force the milestone chip,
+              // the recurrence chip, and a mapped people column (with a fourth name to also show
+              // the avatar stack's overflow slot) — none of this fixture's rows carry those
+              // fields on their own, and without one forced here no board capture ever painted
+              // them.
               cardRenderer: cat === "Design"
-                ? (row) => boardCard(row, "", row.name === "Figma" ? { priorityColor: "red" } : {})
+                ? (row) => {
+                    if (row.name === "Figma") return boardCard(row, "", { priorityColor: "red" });
+                    if (row.name === "Adobe Creative Cloud") return boardCard({ ...row, milestone: true });
+                    if (row.name === "Sketch") return boardCard({ ...row, recurring: true });
+                    if (row.name === "Framer") return boardCard({ ...row, people: ["Alice Kim", "Bob Diaz", "Cy Chen", "Dana Lee"] });
+                    return boardCard(row);
+                  }
                 : undefined,
             }))
             .join("")}
@@ -116,15 +126,11 @@ export const CORE_SCENARIOS = [
     group: "components",
     width: 620,
     sources: ["src/views/board-renderer.ts"],
-    note: "A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.",
+    note: "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
     html: () => {
       const rows = ROWS.filter((r) => r.category === "Business").slice(0, 3);
       const tone = OPTION_TONES.Business;
-      const cardRenderer = (row, index) => {
-        if (index === 1) return boardCard(row, "", { dragState: "dragging" });
-        if (index === 2) return boardCard(row, "", { dragState: "drop-target", dropPlacement: "before" });
-        return boardCard(row);
-      };
+      const cardRenderer = (row, index) => (index === 1 ? boardCard(row, "", { dragState: "dragging" }) : boardCard(row));
       return `
       <div class="note-database-container pm-kanban-view">
         <div class="pm-kanban-board">

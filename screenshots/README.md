@@ -21,7 +21,7 @@ Sources: `src/views/toolbar-renderer.ts`
 
 ### Board view — drag and drop-target language
 
-A frozen mid-drag frame, reordering a card inside its own column: the column carries the class its own dragover listener adds, the reordered card keeps the dragstart lift, and the hovered card keeps the dragover tint plus the before/after insertion line — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer.
+A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.
 
 | dark | light |
 |---|---|

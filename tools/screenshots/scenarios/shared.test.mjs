@@ -131,6 +131,70 @@ describe("board screenshot fixture parity", () => {
     expect(card).toContain("pm-kanban-card-title");
   });
 
+  it("renders the milestone and recurrence type chips in the reference's fixed order, omitted by default", () => {
+    // board-renderer.ts's fixed order is milestone, subtask, recurrence (`:448-476`); boardCard
+    // never builds a subtask node, so only the two boolean-row-field chips apply here.
+    const plain = boardCard(ROWS[0], "");
+    expect(plain).not.toContain("--pm-chip-color: var(--color-purple)");
+    expect(plain).not.toContain("--pm-chip-color: var(--color-blue)");
+
+    const both = boardCard({ ...ROWS[0], milestone: true, recurring: true }, "");
+    const titleRow = findDescendant(parseMarkup(both), "pm-kanban-card-title-row");
+    const chipChildren = titleRow.children.filter((child) => child.classes.includes("pm-chip"));
+    expect(chipChildren, "exactly the milestone and recurrence chips are direct children").toHaveLength(2);
+    // Two identical "pm-chip" classes can't be told apart by class alone, so the order proof
+    // reads the actual rendered markup instead: the milestone chip's own colour-and-label
+    // sequence has to appear before the recurrence chip's.
+    const milestoneMarkup = '--pm-chip-color: var(--color-purple);"><span class="pm-chip-label">M</span>';
+    const recurrenceMarkup = '--pm-chip-color: var(--color-blue);"><span class="pm-chip-label">R</span>';
+    expect(both).toContain(milestoneMarkup);
+    expect(both).toContain(recurrenceMarkup);
+    expect(both.indexOf(milestoneMarkup)).toBeLessThan(both.indexOf(recurrenceMarkup));
+
+    const milestoneOnly = boardCard({ ...ROWS[0], milestone: true }, "");
+    expect(milestoneOnly).toContain("--pm-chip-color: var(--color-purple)");
+    expect(milestoneOnly).not.toContain("--pm-chip-color: var(--color-blue)");
+  });
+
+  it("builds an initialed avatar per person plus an overflow slot past three, empty without a people column", () => {
+    const empty = boardCard(ROWS[0], "");
+    expect(findDescendant(parseMarkup(empty), "pm-avatar-stack").children).toHaveLength(0);
+
+    const twoPeople = boardCard({ ...ROWS[0], people: ["Alice Kim", "Bob Diaz"] }, "");
+    const stack = findDescendant(parseMarkup(twoPeople), "pm-avatar-stack");
+    expect(stack.children).toHaveLength(2);
+    expect(stack.children.every((avatar) => avatar.classes.includes("pm-avatar") && avatar.classes.includes("pm-avatar--sm"))).toBe(true);
+    expect(twoPeople).toContain(">AK<");
+    expect(twoPeople).toContain(">BD<");
+    expect(twoPeople).not.toContain("pm-avatar--more");
+
+    const fourPeople = boardCard({ ...ROWS[0], people: ["Alice Kim", "Bob Diaz", "Cy Chen", "Dana Lee"] }, "");
+    const overflowStack = findDescendant(parseMarkup(fourPeople), "pm-avatar-stack");
+    expect(overflowStack.children).toHaveLength(4);
+    const overflowAvatar = overflowStack.children[3];
+    expect(overflowAvatar.classes).toContain("pm-avatar--more");
+    expect(fourPeople).toContain(">+1<");
+  });
+
+  it("formats the due chip through the renderer's short-date conversion, not the fixture's long literal", () => {
+    // ROWS/SUBTASK_FIXTURE_ROWS keep long literals ("January 4, 2027") for readability; the
+    // renderer's own referenceFormatDateShort (`board-renderer.ts:2491-2496`) always emits a
+    // short month-day form. Its exact characters are locale-dependent (this suite's own
+    // `board-renderer-parity.test.ts:692` checks the same renderer's due-chip label with
+    // `toBeTruthy()` rather than pinning one locale's text), so this proves the conversion ran —
+    // the long literal is gone and the due chip's label is materially shorter — instead of
+    // asserting one locale's exact output. The due chip is always the last `pm-chip-label` in
+    // the card: `pmCardFooter` renders it after the avatar stack, and the footer is the card
+    // body's last block.
+    expect(ROWS[0].renew).toBe("January 4, 2027");
+    const card = boardCard(ROWS[0], "");
+    expect(card).not.toContain("January 4, 2027");
+    const labels = [...card.matchAll(/class="pm-chip-label">([^<]*)<\/span>/g)].map((m) => m[1]);
+    const dueLabel = labels[labels.length - 1];
+    expect(dueLabel).not.toBe("January 4, 2027");
+    expect(dueLabel.length).toBeLessThan("January 4, 2027".length);
+  });
+
   it("keeps an empty reference column as a hollow cards container", () => {
     const column = findDescendant(parseMarkup(boardColumn("Personal", [])), "pm-kanban-col");
     const cards = findDescendant(column, "pm-kanban-cards");
@@ -214,6 +278,7 @@ describe("subtask screenshot fixture parity", () => {
 
   it("keeps every new class in the hand-written board and timeline states styled and sourced", () => {
     const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62, priorityColor: "purple" });
+    const peopleMarkup = boardCard({ ...ROWS[0], people: ["Alice Kim", "Bob Diaz", "Cy Chen", "Dana Lee"], milestone: true, recurring: true });
     const treeParent = TL_SUBTASK_LANES.find((lane) => lane.key === "business").events[0];
     const timelineMarkup = timelineEvent(treeParent, TIMELINE_FIXTURES.week);
     const contracts = [
@@ -228,6 +293,10 @@ describe("subtask screenshot fixture parity", () => {
       ["pm-progress-track", boardRenderer, boardMarkup],
       ["pm-progress-fill", boardRenderer, boardMarkup],
       ["pm-kanban-card-footer", boardRenderer, boardMarkup],
+      ["pm-avatar-stack", boardRenderer, peopleMarkup],
+      ["pm-avatar", boardRenderer, peopleMarkup],
+      ["pm-avatar--sm", boardRenderer, peopleMarkup],
+      ["pm-avatar--more", boardRenderer, peopleMarkup],
       ["pm-gantt-bar-group", timelineRenderer, timelineMarkup],
       ["pm-gantt-bar", timelineRenderer, timelineMarkup],
       ["pm-gantt-bar-progress", timelineRenderer, timelineMarkup],
@@ -255,6 +324,21 @@ describe("subtask screenshot fixture parity", () => {
     // A solo descendant-only selector for this rule (no compound alternative) would silently
     // reintroduce the dead rule; it must not stand alone as its own rule opener anywhere.
     expect(styles).not.toMatch(/(?:^|\n)\.note-database-container \.pm-kanban-view\s*\{/);
+  });
+
+  it("cancels the host's inline padding through the same token the mobile breakpoint overrides", () => {
+    // `.pm-kanban-board`'s negative margin has to cancel whatever `.note-database-container`'s
+    // own left/right padding actually is, not a value assumed to always be 24px: a hardcoded
+    // `--db-space-8` margin against the 760px breakpoint's narrower padding over-cancelled it by
+    // 12px, pulling the board 12px past the container's own edge (measured as a 4px phone inset
+    // against the reference's 16px, and a clipped right edge). Routing both through one custom
+    // property — inherited by the board from its `.note-database-container` ancestor — keeps
+    // them paired at every breakpoint instead of relying on two literals staying in sync by hand.
+    const kanbanBoardRule = styles.match(/\.note-database-container \.pm-kanban-board\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(kanbanBoardRule).toMatch(/margin-left:\s*calc\(-1 \* var\(--db-container-padding-inline\)\)/);
+    expect(kanbanBoardRule).toMatch(/margin-right:\s*calc\(-1 \* var\(--db-container-padding-inline\)\)/);
+    expect(styles).toMatch(/\.note-database-container\s*\{[^}]*--db-container-padding-inline:\s*var\(--db-space-8\)/);
+    expect(styles).toMatch(/@media \(max-width: 760px\)\s*\{\s*\.note-database-container\s*\{[^}]*--db-container-padding-inline:\s*12px;/);
   });
 
   it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {

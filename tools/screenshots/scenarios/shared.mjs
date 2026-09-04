@@ -274,23 +274,69 @@ const pmCardFields = (row) => `
         ${[row.category, row.payment].filter(Boolean).map((tag) => pmChip(tag, { variant: "outline", tag })).join("")}
       </div>`;
 
+/** "January 4, 2027" -> "Jan 4", matching board-renderer.ts's referenceFormatDateShort (month
+ *  short + day, no year, `board-renderer.ts:2491-2496`) so a captured due chip reads the same
+ *  shape the real renderer emits instead of this fixture's own long-form literal. Parsing and
+ *  formatting both default to the run's local time, so a fixed literal in stays the same day
+ *  out regardless of timezone — no wall-clock read, so the capture stays reproducible. */
+const pmShortDate = (label) => {
+  const date = new Date(label);
+  if (Number.isNaN(date.getTime())) return label;
+  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(date);
+};
+
 /** The due chip's urgency, matching the renderer's getReferenceDueUrgency: past due paints solid
  *  strong red, anything else stays plain — the reference's dueChip.ts primitive also supports a
  *  near tier, but the kanban call site collapses to a boolean before it ever reaches the card
  *  (KanbanView.ts:126, KanbanCard.ts:97), so this fixture never paints it either. */
 const pmDueChip = (label, urgency = "normal") => {
-  if (urgency === "overdue") return pmChip(label, { size: "sm", variant: "solid", color: "var(--color-red)", strong: true });
-  return pmChip(label, { size: "sm" });
+  const short = pmShortDate(label);
+  if (urgency === "overdue") return pmChip(short, { size: "sm", variant: "solid", color: "var(--color-red)", strong: true });
+  return pmChip(short, { size: "sm" });
+};
+
+/** Deterministic per-name fill, echoing board-renderer.ts's referenceStringToColor hash
+ *  (`:2450-2454`) so a captured avatar's background isn't an arbitrary constant. */
+const pmAvatarColor = (name) => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return `hsl(${Math.abs(hash) % 360}, 55%, 45%)`;
+};
+
+/** First+last initials, or the first two characters of a single word — mirrors
+ *  board-renderer.ts's referenceInitialsFor (`:2480-2484`). */
+const pmInitials = (name) => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  const raw = parts.length >= 2 ? parts[0][0] + parts[1][0] : name.slice(0, 2);
+  return raw.toUpperCase();
+};
+
+/** Up to three initialed avatars plus a "+N" overflow slot, mirroring the reference's unconditional
+ *  `new AvatarStack(footer)` (`board-renderer.ts:522-535`): the stack is always constructed, only
+ *  its contents depend on whether a people column is mapped. */
+const pmAvatarStack = (people = []) => {
+  const shown = people.slice(0, 3)
+    .map((name) => `<span class="pm-avatar pm-avatar--sm" style="background: ${pmAvatarColor(name)};" title="${name}">${pmInitials(name)}</span>`)
+    .join("");
+  const overflow = people.length - 3;
+  const more = overflow > 0 ? `<span class="pm-avatar pm-avatar--more pm-avatar--sm">+${overflow}</span>` : "";
+  return `<div class="pm-avatar-stack">${shown}${more}</div>`;
 };
 
 /** The footer always constructs the avatar stack (empty when the row carries no people), which
- *  is what keeps the due chip pushed to the footer's right edge — none of this fixture's rows
- *  map a people column, so the stack renders empty in every capture that uses it. */
+ *  is what keeps the due chip pushed to the footer's right edge. */
 const pmCardFooter = (row, dueUrgency = "normal") => `
       <div class="pm-kanban-card-footer">
-        <div class="pm-avatar-stack">${row.people ? `<span class="pm-avatar pm-avatar--sm" style="background: var(--color-blue);">${row.people}</span>` : ""}</div>
+        ${pmAvatarStack(row.people)}
         ${row.renew ? pmDueChip(row.renew, dueUrgency) : ""}
       </div>`;
+
+/** The reference's fixed type-chip order — milestone, subtask, recurrence
+ *  (`board-renderer.ts:448-476`); boardCard never builds a subtask node, so only the two
+ *  boolean-row-field chips apply here. */
+const pmTypeChips = (row) => `
+        ${row.milestone ? pmChip("M", { size: "sm", variant: "solid", color: "var(--color-purple)" }) : ""}
+        ${row.recurring ? pmChip("R", { size: "sm", variant: "solid", color: "var(--color-blue)" }) : ""}`;
 
 export const boardCard = (r, parent = "", { dragState, priorityColor = null, dueUrgency = "normal" } = {}) => {
   const path = pmCardPath(r, parent);
@@ -302,7 +348,7 @@ export const boardCard = (r, parent = "", { dragState, priorityColor = null, due
     <div class="pm-kanban-card-body">
       ${parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
       <div class="pm-kanban-card-title-row">
-        <span class="pm-kanban-card-title">${r.name}</span>
+        <span class="pm-kanban-card-title">${r.name}</span>${pmTypeChips(r)}
       </div>
       ${pmCardFields(r)}
       ${pmCardFooter(r, dueUrgency)}
