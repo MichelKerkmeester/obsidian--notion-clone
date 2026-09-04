@@ -219,6 +219,36 @@ The active tab carries is-active; the ⋯ tab appears only once the toolbar has 
 
 Sources: `src/views/toolbar-renderer.ts`
 
+### Calendar settings popover (constructed)
+
+CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-toolbar-options dark](components/constructed-calendar-toolbar-options-mobile-dark.png) | ![constructed-calendar-toolbar-options light](components/constructed-calendar-toolbar-options-mobile-light.png) |
+
+Sources: `src/views/calendar-toolbar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+
+### Chart options popover (constructed)
+
+ChartToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the other two settings popovers.
+
+| dark | light |
+|---|---|
+| ![constructed-chart-toolbar-options dark](components/constructed-chart-toolbar-options-mobile-dark.png) | ![constructed-chart-toolbar-options light](components/constructed-chart-toolbar-options-mobile-light.png) |
+
+Sources: `src/views/chart-toolbar-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/popover-position.ts`
+
+### Timeline settings popover (constructed)
+
+CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline-toolbar-options dark](components/constructed-timeline-toolbar-options-mobile-dark.png) | ![constructed-timeline-toolbar-options light](components/constructed-timeline-toolbar-options-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+
 ### Dropdown with disabled option
 
 A disabled option is dimmed and carries a tooltip rather than inline explanatory text.
@@ -593,6 +623,16 @@ The shipped board renderer at the bench shape: 1600 rows into five status column
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Board view — subtask tree (constructed)
+
+The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.
+
+| dark | light |
+|---|---|
+| ![constructed-board-subtask dark](views/constructed-board-subtask-mobile-dark.png) | ![constructed-board-subtask light](views/constructed-board-subtask-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
+
 ### Calendar day view (constructed)
 
 The shipped day time grid, scrolled to the workday by the renderer's own post-render correction.
@@ -602,6 +642,26 @@ The shipped day time grid, scrolled to the workday by the renderer's own post-re
 | ![constructed-calendar-day dark](views/constructed-calendar-day-mobile-dark.png) | ![constructed-calendar-day light](views/constructed-calendar-day-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Calendar view — no date property (constructed)
+
+The shipped calendar renderer with every date-typed column removed from its schema, reproducing renderMonth's real no-date-field early return.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-empty dark](views/constructed-calendar-empty-mobile-dark.png) | ![constructed-calendar-empty light](views/constructed-calendar-empty-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/empty-state-renderer.ts`
+
+### Calendar view — mini date-picker popover (constructed)
+
+The shipped month calendar with its own mini date-picker trigger clicked, opening renderMiniCalendar's real popover rather than a hand-applied class.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-mini dark](views/constructed-calendar-mini-mobile-dark.png) | ![constructed-calendar-mini light](views/constructed-calendar-mini-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
 
 ### Calendar month view (constructed)
 
@@ -633,6 +693,26 @@ The shipped chart renderer over the board bench's five status groups, summing a 
 
 Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Chart view — empty state (constructed)
+
+The shipped chart renderer's allGroupsHidden empty state, reached by hiding every group value the board bench's group field actually produced.
+
+| dark | light |
+|---|---|
+| ![constructed-chart-empty dark](views/constructed-chart-empty-mobile-dark.png) | ![constructed-chart-empty light](views/constructed-chart-empty-mobile-light.png) |
+
+Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Chart view — single number (constructed)
+
+The shipped chart renderer's renderNumber branch (chartType: "number"), the one chart type drawn as three divs instead of a Chart.js canvas.
+
+| dark | light |
+|---|---|
+| ![constructed-chart-number dark](views/constructed-chart-number-mobile-dark.png) | ![constructed-chart-number light](views/constructed-chart-number-mobile-light.png) |
+
+Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
 ### Gallery view (constructed)
 
 The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid.
@@ -650,6 +730,16 @@ The shipped list renderer at the harness's bench shape (1600 rows, 30% fill), wi
 | dark | light |
 |---|---|
 | ![constructed-list dark](views/constructed-list-mobile-dark.png) | ![constructed-list light](views/constructed-list-mobile-light.png) |
+
+Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### List view — sparse fields (constructed)
+
+The shipped list renderer with a deterministic, spread subset of frontmatter keys blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured rather than a fixture's static every-field-present shape.
+
+| dark | light |
+|---|---|
+| ![constructed-list-sparse dark](views/constructed-list-sparse-mobile-dark.png) | ![constructed-list-sparse light](views/constructed-list-sparse-mobile-light.png) |
 
 Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
@@ -672,6 +762,16 @@ The shipped week-scale timeline at the bench shape, with the renderer's own grou
 | ![constructed-timeline dark](views/constructed-timeline-mobile-dark.png) | ![constructed-timeline light](views/constructed-timeline-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Timeline view — subtask tree (constructed)
+
+The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.
+
+| dark | light |
+|---|---|
+| ![constructed-timeline-subtask dark](views/constructed-timeline-subtask-mobile-dark.png) | ![constructed-timeline-subtask light](views/constructed-timeline-subtask-mobile-light.png) |
+
+Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
 ### Gallery view
 

@@ -11,13 +11,15 @@ _memory:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
     last_updated_at: "2026-09-04T06:15:00Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "T027 landed: table CellRenderer + chart value field"
-    next_safe_action: "Rule on AC-002; then T002, T009-T012, T016"
+    recent_action: "T028 landed: all 13 row-6 fixtures now constructed"
+    next_safe_action: "Rule on AC-002; fresh audit re-reads row 6"
     blockers:
       - "AC-002 unmeetable as written, needs a phase ruling (Known Limitations 1)"
+      - "touch-targets.mjs/unstyled-links.mjs's own constructed pass does not yet cover T028's 10 new per-state scenarios (Known Limitations 6)"
     key_files:
       - "tools/live/render-assertion-harness.ts"
       - "tools/live/typed-data-assertions.mjs"
+      - "tools/live/constructed-state-assertions.mjs"
       - "tools/storybook/obsidian-stub.mjs"
       - "tools/screenshots/constructed-scenarios.mjs"
       - "tools/bench/table-render-bench.ts"
@@ -25,14 +27,16 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-impl-summary"
       parent_session_id: null
-    completion_pct: 66
+    completion_pct: 78
     open_questions:
       - "AC-002: pixel-difference basis, or inside-mount layout determinism basis?"
       - "Does the shared manifest stand, or does AC-006's separate file still apply?"
+      - "Does parent row 6 tick now that all 13 fixture-only scenarios have a constructed counterpart, or does the touch-targets/unstyled-links wiring gap keep it open? Left to a fresh audit (parent D4)."
     answered_questions:
       - "Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ."
       - "Row count alone enough for row 6? No, captureData also types columns."
       - "Does captureData's real CellRenderer add forced layout reads to the table's row loop? No — measured 3 of 3 connected reads, bound 8, identical to captureData:false at the same 2000-row shape."
+      - "Can all 13 of the parent's row-6 fixture-only scenarios be constructed through real production code paths? Yes — all 13, none left fixture-only (T028)."
 ---
 # Implementation Summary
 
@@ -120,6 +124,46 @@ and `unstyled-links.mjs` all read — not `constructed-scenarios.mjs`'s nine-cap
 is unchanged (still nine, still week-scale timeline only; the four extra scales are covered by the
 structural-assertion and touch-target lanes, not by a tenth-through-thirteenth screenshot).
 
+### The parent's thirteen row-6 fixture-only scenarios, all now constructed (T028)
+
+The parent `goal.md` row 6 named a bounded, thirteen-entry list of fixture-only scenarios with no
+constructed or device counterpart to cross-check against. All thirteen now have one, each mounted
+through a real production code path rather than a hand-applied class. Three
+(`table-mobile`/`list-mobile`/`board-mobile`) were free: the existing `constructed-table`/`-list`/
+`-board` scenarios already mount at the phone device with `is-phone` applied, so only a `fixtureOf`
+declaration was owed. The other ten needed new, additive `ScenarioSpec` options:
+
+- **`subtaskTree`** (board, timeline) wires the first `captureData` row into a parent with two
+  children via `buildSubtaskRelation`'s own frontmatter keys (`parentId`/`subtaskIds`/`collapsed`/
+  `progress`) — the same input a real vault note gives the relation, not a fabricated DOM shape.
+- **`sparseFields`** (list) blanks a deterministic subset of fields on rows after the first, so
+  `ListRenderer`'s real `shouldReserveColumns` measurement runs — confirmed correct on both the
+  desktop grid (reserves) and the phone flex line (does not, matching production).
+- **`emptyState`** (calendar) strips every date-typed column from the constructed schema, reproducing
+  `renderMonth`'s real no-date-field early return rather than fabricating the empty-state DOM.
+- **`chartVariant: "number" | "empty"`** (chart) sets `chartType: "number"` or hides every group value
+  the board bench's group field actually produced via `chartHiddenGroups` — both real `ViewConfig`
+  shapes a configured chart can reach.
+- **`miniCalendar`** (calendar) clicks the real mini date-picker trigger button
+  (`data-icon="calendar-days"`, the same one a device tap reaches) so `renderMiniCalendar`'s own
+  popover opens through `toggleMiniCalendar`.
+- **Three new `renderer` values** (`calendar-toolbar`, `timeline-toolbar`, `chart-toolbar`) call
+  `CalendarToolbarRenderer`/`CalendarTimelineToolbarRenderer`/`ChartToolbarRenderer`'s own public
+  `togglePopover()` against a visually-hidden, real, connected anchor button. These three are
+  captured full-page (`group: "components"`, `capture: "viewport"`) because their panel positions
+  itself with `position: fixed`/`absolute` and an element-scoped `#shot` crop cannot see it —
+  confirmed correct on both devices, including the real bottom-sheet presentation the same
+  production code takes on the phone.
+
+A genuine defect surfaced only by reading the actual captures, not by the automated assertion
+script: `constructedScenario()`'s spec builder never forwarded `opts.miniCalendar` into the harness
+spec, so the mini-calendar click never fired through the real capture-registry path, even though a
+hand-built spec (used by both the assertion script and a standalone debug harness) proved the
+underlying harness branch correct. The popover was genuinely absent from
+`constructed-calendar-mini-desktop-dark.png`/`-mobile-dark.png` until the one-line fix landed. This
+is why every one of the 40 new captures was opened and read on both desktop and phone before this
+work was called done, rather than trusting the assertion script's PASS alone.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -151,6 +195,17 @@ structural-assertion and touch-target lanes, not by a tenth-through-thirteenth s
 | `tools/lane/css-lane.json` | Modified (T027) | New release entry naming the 8 captures (table + chart, both devices/themes) whose `pixelHash` changed; `styles.css` untouched, `baselineHash` unchanged |
 | `screenshots/views/constructed-table-*.png`, `screenshots/views/constructed-chart-*.png` | Modified (T027) | The last 8 of the 36 constructed captures to gain typed rendering |
 | `screenshots/manifest.json`, `screenshots/README.md` | Modified (T027) | Re-stamped after the recapture; 8 `bytes` fields on unrelated fixtures corrected back to their committed values after their encoder-noise-only re-encodes were restored rather than recommitted |
+| `tools/live/render-assertion-harness.ts` | Modified (T028) | Six new opt-in `ScenarioSpec` fields (`subtaskTree`, `sparseFields`, `emptyState`, `chartVariant`, `miniCalendar`) plus three new `renderer` values (`calendar-toolbar`, `timeline-toolbar`, `chart-toolbar`); three new tag-patch functions on the toolbar renderers' own `togglePopover()`; new helper functions (`applyCaptureSubtaskTree`, `applyCaptureSparseFields`, `allHiddenGroupsFor`) and assertion functions for each new state's marker |
+| `tools/screenshots/constructed-scenarios.mjs` | Modified (T028) | `constructedScenario()` extended to pass through the six new opt-in fields plus a `group`/`capture` override; ten new registry entries |
+| `tools/screenshots/manifest-schema.mjs` | Modified (T028) | `CONSTRUCTED_RENDERERS` enum gained the three new toolbar renderer values, without which the manifest write refuses |
+| `tools/screenshots/constructed-capture.test.mjs` | Modified (T028) | Registry-coverage and fixture-declaration expectations extended to the ten new constructed ids and thirteen new `fixtureOf` pairs |
+| `tools/screenshots/scenarios/core.mjs` | Modified (T028) | `fixtureOf` on `board-subtask-tree`, `table-mobile`, `list-mobile`, `board-mobile`, `list-sparse-fields` |
+| `tools/screenshots/scenarios/temporal.mjs` | Modified (T028) | `fixtureOf` on `timeline-subtask-tree`, `calendar-mini-calendar`, `calendar-empty-state`, `calendar-toolbar-options`, `timeline-toolbar-options` |
+| `tools/screenshots/scenarios/chrome.mjs` | Modified (T028) | `fixtureOf` on `chrome-chart-options-popover`, `chrome-chart-number`, `chrome-chart-empty` |
+| `tools/live/constructed-state-assertions.mjs` | Created (T028) | Red-first live check: six paired boolean-option states, three single-mount toolbar-popover markers, one single-mount mini-calendar marker |
+| `tools/lane/css-lane.json` | Modified (T028) | New release entry naming the 40 new captures; `styles.css` untouched, `baselineHash` unchanged |
+| `screenshots/views/*`, `screenshots/components/*` | Created (T028) | 40 new constructed captures (10 scenarios x 2 devices x 2 themes) |
+| `screenshots/manifest.json`, `screenshots/README.md` | Modified (T028) | 352 entries; 10 `bytes` fields on unrelated fixtures corrected back to their committed values after their encoder-noise-only re-encodes were restored rather than recommitted |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -266,6 +321,30 @@ Every exit code below was read from `$?` directly.
 | 8 changed constructed PNGs (table + chart, both devices, both themes) opened and read | Done. Table: named select pills, checked/unchecked checkbox, formatted currency, real dates, a relation chip with a real `file-text` icon. Chart: five bars with genuinely varying summed values (`"Sum of month by Status"`) instead of a flat row-count tally; before the per-column force-fill, the first read showed 2 of 5 bars at zero (real, but an unconvincing proof of "marks exercised") — recorded and then closed by filling only the one column the aggregation reads, not the bench's general shape |
 | `node tools/naming/scan-failing-values.mjs` | PASS, exit 0 — baseline 145 unchanged before this task's own tick was added |
 | `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this landing either |
+
+**T028 landing (all thirteen of parent row 6's fixture-only scenarios, constructed), every exit code read from `$?` directly:**
+
+| Check | Result |
+|-------|--------|
+| Red: `constructed-state-assertions.mjs` (new) against the pre-T028 harness | FAIL, exit 1 — 16 of 16 failures across nine paired/single cases; every "on" marker false since the states did not exist |
+| Green: same script after implementing the ten harness options and registry entries | PASS, exit 0 — all 16 markers correct, plus a tenth (mini-calendar) single-mount case added in the same pass |
+| `npx tsc --noEmit` | PASS, exit 0 |
+| `npx vitest run` | PASS, exit 0 — 97 files / 961 tests (one pre-existing registry-count test updated for the ten new scenario ids and thirteen new `fixtureOf` pairs) |
+| `npm run lint:tools` | PASS, exit 0 |
+| `npm run lint` | Unaffected — none of this task's touched files appear in its output |
+| `node tools/naming/scan-comments.mjs` | PASS, exit 0 |
+| `node tools/live/render-assertions.mjs` | PASS, exit 0 — unaffected by construction, none of `render-assertion-bundle.mjs`'s shared `SCENARIOS` sets any of the new fields |
+| `node tools/live/touch-targets.mjs` | PASS, exit 0 — fixture 264/279 and constructed 367/367 unchanged |
+| `node tools/live/unstyled-links.mjs` | PASS, exit 0 — fixture 112 links across 70 scenarios unchanged |
+| Full capture run x2 (detached) | 352 entries each; 0 changed `pixelHash`/`layoutHash` between the two runs |
+| Static-path regression | All 312 pre-existing entries (276 fixtures, 36 prior constructed) matched their committed HEAD content exactly — 0 content changes; 10 bytes-only encoder-noise re-encodes restored to committed bytes rather than recommitted |
+| `node tools/screenshots/verify.mjs` | PASS, exit 0 — 352 entries current, none blank or theme-identical |
+| `node tools/lane/check-lane.mjs` | PASS, exit 0 — release entry names all 40 new captures; `styles.css` untouched, `baselineHash` unchanged |
+| `node tools/live/capture-device-parity.mjs` | PASS, exit 0 — 87 pairs, 0 identical against a baseline of 4 |
+| `node tools/live/evidence.mjs --check-all` | PASS, exit 0 — 16 of 16 fresh |
+| `SURFACE_PHASE=043-constructed-capture npm run gate` and bare `npm run gate` | PASS, exit 0 — 25 green, both |
+| 40 new constructed PNGs opened and read | Done. All 10 scenarios on both desktop and phone. A real defect (the `miniCalendar` option silently dropped by `constructedScenario()`'s spec builder) was caught only by this read, after the assertion script had already reported green through a hand-built spec that bypassed the bug |
+| `git diff --stat src/ styles.css` | Empty — no renderer or stylesheet change in this landing either |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -324,7 +403,15 @@ Every exit code below was read from `$?` directly.
    staleness inheritance (T011), the explicit `check-lane` widening (T012) and the
    fixture-constructed parity test (T016) remain open. Three of the four lanes read the constructed
    captures already because the entries share the fixture manifest, but that is a consequence of the
-   shared-file deviation rather than the wiring the plan specified.
+   shared-file deviation rather than the wiring the plan specified. **T028 narrows this further but
+   does not close it:** all thirteen of the parent's row-6 fixture-only scenarios now have a
+   constructed counterpart in the shared manifest, cross-checked by hand. What is still genuinely
+   open is that `touch-targets.mjs`/`unstyled-links.mjs`'s own constructed pass
+   (`render-assertion-bundle.mjs`'s shared `SCENARIOS`, distinct from `constructed-scenarios.mjs`'s
+   `CONSTRUCTED_SCENARIOS`) was not widened to include the ten new per-state entries, so those two
+   lanes' own internal fixture-vs-constructed cross-check does not yet reach them. Whether that gap
+   still keeps parent row 6 open, given a manifest-level counterpart now exists, is left to a fresh
+   audit rather than decided here (parent D4).
 7. **One dispatch leg did not run.** T019 (the second external pass) was skipped; this landing went
    straight from the first dispatched leg to in-runtime verification.
 <!-- /ANCHOR:limitations -->

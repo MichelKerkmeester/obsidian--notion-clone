@@ -25,6 +25,7 @@ _memory:
       - "037 landed (0262386+55bff9b); release 1.4.4 pending; reopened 2026-09-04 for a 1:1 gantt copy, REQ-007"
       - "038 landed (b9e2321+a6fcd31); release 1.4.5 pending; reopened 2026-09-04 for a 1:1 board copy, REQ-007"
       - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
+      - "043 T028 (worktree/022-constructed-state-variants, unmerged): all 13 row-6 fixture-only scenarios now have a constructed counterpart; row 6 narrowed a fourth time, left unticked for a fresh audit per D4"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -442,6 +443,47 @@ resolve them silently.
       constructed, 7 `fixtureOf` entries unchanged, 6 of 6 new typed markers PASS, 13 fixture-only
       ids confirmed against `plan.md`'s named list, 25 total gate lanes with the five named ones
       confirmed among them.
+
+      **Re-verified 2026-09-04, `043` T028 landed on its own worktree branch (not yet merged to
+      main): all 13 of the named fixture-only scenarios now have a constructed counterpart, narrowed
+      a fourth time but not ticked.** Three (`table-mobile`/`list-mobile`/`board-mobile`) needed no
+      new capture: the existing `constructed-table`/`-list`/`-board` scenarios already mount at the
+      phone device with `is-phone` applied (a genuinely distinct mobile `layoutHash` already on
+      record), so only a `fixtureOf` declaration was owed. The other ten
+      (`board-subtask-tree`/`timeline-subtask-tree` via a real `buildSubtaskRelation` parent-and-two-
+      children wiring, `list-sparse-fields` via a deterministic blanked-field subset that exercises
+      `ListRenderer`'s real `shouldReserveColumns` measurement, `calendar-empty-state` via every
+      date-typed column stripped from the schema, `chrome-chart-number`/`chrome-chart-empty` via real
+      `ViewConfig` shapes (`chartType: "number"`, an all-groups `chartHiddenGroups` map),
+      `calendar-mini-calendar` via a real click on the mini date-picker trigger, and
+      `calendar-toolbar-options`/`timeline-toolbar-options`/`chrome-chart-options-popover` via the
+      three toolbar renderers' own public `togglePopover()` against a visually-hidden real anchor
+      button) needed additive `ScenarioSpec` options on `render-assertion-harness.ts`, none of which
+      touch the three existing consumers' own numbers (`render-assertions.mjs`/`touch-
+      targets.mjs`/`unstyled-links.mjs` all exit 0 unchanged, by construction as well as by
+      measurement). A red-first live check (`tools/live/constructed-state-assertions.mjs`, new) FAILed
+      16 of 16 before the harness branches existed and PASSed all after. Two full detached capture
+      runs reproduced identical `pixelHash`/`layoutHash` for all 352 entries; all 312 pre-existing
+      entries matched their committed HEAD content exactly (0 content changes, 10 bytes-only
+      encoder-noise re-encodes restored rather than recommitted); all 40 new captures were opened and
+      read on both desktop and phone. `SURFACE_PHASE=043-constructed-capture npm run gate` and bare
+      `npm run gate` both exit 0, 25 green. **This row still does not tick, per D4 (a fresh reviewer
+      verifies, never self-certify) and per this row's own repeated "check both ways" precedent.** A
+      manifest-level constructed counterpart now exists for all 13 declared via `fixtureOf`, but
+      `touch-targets.mjs`/`unstyled-links.mjs`'s OWN constructed pass
+      (`render-assertion-bundle.mjs`'s shared `SCENARIOS`, the list those two lanes and
+      `render-assertions.mjs` actually read, distinct from `constructed-scenarios.mjs`'s capture
+      registry) was not widened to include these ten new per-state entries — so those two lanes' own
+      internal fixture-vs-constructed cross-check does not yet reach them, even though a device-
+      realistic counterpart demonstrating the identical markers now exists elsewhere in the shared
+      manifest. Whether that residual gap still disqualifies the tick, or whether the row's own
+      wording ("no constructed or device counterpart to cross-check against") is now satisfied by the
+      manifest-level counterpart regardless of which lane algorithmically reads it, is exactly the
+      kind of question this row's history shows should not be decided by the same pass that produced
+      the evidence — left for a fresh audit. `completion_pct` stays **4 of 7 = 57**, unchanged: rows
+      3, 4, 5 and 7 hold, rows 1 and 2 stay open on operator device confirmation, row 6 stays open,
+      narrowed a fourth time. Full evidence: `043/tasks.md` T028, `043/goal.md`'s own T028 log entry,
+      `043/implementation-summary.md`'s T028 verification table and Known Limitations item 6.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1262,4 +1304,30 @@ first, via a DOM-structure parity test against each reference view's own output 
 §5.2 rows 037 and 038 are marked reopened above. No implementation has landed for either leg pair
 yet; this entry and the two child packets' own `spec.md`/`plan.md`/`tasks.md`/`goal.md`/
 `acceptance-criteria.md`/`implementation-summary.md` document the amendment, not its execution.
+
+### 2026-09-04: `043` T028 landed on its own worktree — all 13 of row 6's named fixture-only scenarios now have a constructed counterpart, row 6 narrowed a fourth time and left for a fresh audit
+
+Landed on `worktrees/022-constructed-state-variants`, not yet merged to main. Full detail lives in
+row 6's own checklist paragraph above and in `043`'s own three docs (`tasks.md` T028, `goal.md`'s
+T028 log entry, `implementation-summary.md`'s T028 section); this entry is the pointer, not a
+duplicate. Summary: three of the 13 scenarios (`table-mobile`/`list-mobile`/`board-mobile`) were
+already produced by the existing `constructed-table`/`-list`/`-board` scenarios' own mobile-device
+capture and needed only a `fixtureOf` declaration; the other ten needed additive, off-by-default
+`ScenarioSpec` options on `render-assertion-harness.ts` — none of them changed a number any existing
+consumer (`render-assertions.mjs`/`touch-targets.mjs`/`unstyled-links.mjs`) reports. A red-first live
+check (`tools/live/constructed-state-assertions.mjs`) failed 16 of 16 before the change and passed
+all after. Two full detached capture runs reproduced identical content for all 352 manifest entries;
+all 312 pre-existing entries matched committed HEAD exactly; all 40 new captures were opened and read
+on both devices. A genuine defect (`constructedScenario()`'s spec builder silently dropping
+`opts.miniCalendar`) was found only by that read, after the automated assertion script had already
+reported green through a hand-built spec that bypassed the bug — recorded as the concrete case for
+why this program reads every capture rather than trusting a passing assertion alone.
+`SURFACE_PHASE=043-constructed-capture npm run gate` and bare `npm run gate` both exit 0, 25 green.
+
+**Row 6 is deliberately NOT ticked by this entry.** Per D4 (a fresh reviewer verifies, never
+self-certify) and this row's own five-audit history of narrowing rather than closing on the same pass
+that produced the evidence, the residual question — whether `touch-targets.mjs`/`unstyled-links.mjs`'s
+own constructed pass not yet including these ten new per-state entries still disqualifies the tick,
+given a manifest-level constructed counterpart now exists for all 13 — is left for that fresh audit.
+`completion_pct` stays **4 of 7 = 57**, unchanged.
 <!-- /ANCHOR:log -->

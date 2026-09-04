@@ -172,16 +172,29 @@ function constructedScenario(view, opts) {
   // small "mixed"-type dataset sized like the hand-written fixtures rather than the 1600-2000-row
   // structural-cost shape the assertion/touch-target/unstyled-links lanes measure. A capture
   // exists to show what the shipped types render as, so it is the one caller that turns this on.
+  // subtaskTree/sparseFields/emptyState/chartVariant are the same harness's own per-view state
+  // options — additive, opt-in, and passed through unchanged when a scenario declares one.
   const spec = {
     renderer: opts.renderer,
     bag: "file-view",
     ...(opts.scale ? { scale: opts.scale } : {}),
-    captureData: true,
+    ...(opts.captureData === false ? {} : { captureData: true }),
+    ...(opts.subtaskTree ? { subtaskTree: true } : {}),
+    ...(opts.sparseFields ? { sparseFields: true } : {}),
+    ...(opts.emptyState ? { emptyState: true } : {}),
+    ...(opts.chartVariant ? { chartVariant: opts.chartVariant } : {}),
+    ...(opts.miniCalendar ? { miniCalendar: true } : {}),
   };
   return {
     id: `constructed-${view}`,
     title: opts.title,
-    group: "views",
+    // Component-grouped captures (the three toolbar popovers) open a real, JS-positioned
+    // `position: fixed` panel — an element-scoped shot of `#shot` cannot see it, since fixed
+    // positioning escapes `#shot`'s own flow-based bounding box, so those declare "viewport" to
+    // photograph the full page the popover actually paints onto (capture.mjs's own `page.screenshot()`
+    // branch for non-element modes) rather than an "element" crop that would clip it to nothing.
+    group: opts.group || "views",
+    ...(opts.capture ? { capture: opts.capture } : {}),
     sources: opts.sources,
     renderer: opts.renderer,
     bag: "file-view",
@@ -249,6 +262,104 @@ export const CONSTRUCTED_SCENARIOS = [
     sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
     note: "The shipped chart renderer over the board bench's five status groups, summing a "
       + "per-row currency/number column into each bar rather than only counting rows.",
+  }),
+
+  // ── 043's thirteen fixture-only scenarios: per-view state variants, chart chrome and toolbar
+  // popovers, constructed through the same renderers and — for the popovers — the same real
+  // togglePopover() their production toolbars call, never a hand-applied class. Declared with
+  // fixtureOf from the fixture side (tools/screenshots/scenarios/*.mjs).
+
+  constructedScenario("board-subtask", {
+    renderer: "board",
+    subtaskTree: true,
+    title: "Board view — subtask tree (constructed)",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"]),
+    note: "The shipped board renderer with the first capture-sized row wired into a parent (two "
+      + "children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
+  }),
+  constructedScenario("timeline-subtask", {
+    renderer: "timeline",
+    subtaskTree: true,
+    title: "Timeline view — subtask tree (constructed)",
+    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts")
+      .concat(["src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"]),
+    note: "The shipped week-scale timeline with the first capture-sized row wired into the same "
+      + "parent/two-children relation the board's constructed subtask tree uses.",
+  }),
+  constructedScenario("list-sparse", {
+    renderer: "list",
+    sparseFields: true,
+    title: "List view — sparse fields (constructed)",
+    sources: constructedSources("src/views/list-renderer.ts", "tools/bench/list-render-bench.ts"),
+    note: "The shipped list renderer with a deterministic, spread subset of frontmatter keys "
+      + "blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured "
+      + "rather than a fixture's static every-field-present shape.",
+  }),
+  constructedScenario("calendar-mini", {
+    renderer: "calendar",
+    miniCalendar: true,
+    title: "Calendar view — mini date-picker popover (constructed)",
+    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts")
+      .concat(["src/views/calendar-mini-calendar-renderer.ts"]),
+    note: "The shipped month calendar with its own mini date-picker trigger clicked, opening "
+      + "renderMiniCalendar's real popover rather than a hand-applied class.",
+  }),
+  constructedScenario("calendar-empty", {
+    renderer: "calendar",
+    emptyState: true,
+    title: "Calendar view — no date property (constructed)",
+    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts")
+      .concat(["src/views/empty-state-renderer.ts"]),
+    note: "The shipped calendar renderer with every date-typed column removed from its schema, "
+      + "reproducing renderMonth's real no-date-field early return.",
+  }),
+  constructedScenario("chart-number", {
+    renderer: "chart",
+    chartVariant: "number",
+    title: "Chart view — single number (constructed)",
+    sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
+    note: "The shipped chart renderer's renderNumber branch (chartType: \"number\"), the one chart "
+      + "type drawn as three divs instead of a Chart.js canvas.",
+  }),
+  constructedScenario("chart-empty", {
+    renderer: "chart",
+    chartVariant: "empty",
+    title: "Chart view — empty state (constructed)",
+    sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
+    note: "The shipped chart renderer's allGroupsHidden empty state, reached by hiding every "
+      + "group value the board bench's group field actually produced.",
+  }),
+  constructedScenario("calendar-toolbar-options", {
+    renderer: "calendar-toolbar",
+    group: "components",
+    capture: "viewport",
+    title: "Calendar settings popover (constructed)",
+    sources: constructedSources("src/views/calendar-toolbar-renderer.ts", "tools/bench/calendar-render-bench.ts")
+      .concat(["src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
+    note: "CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section "
+      + "(week/day only) is in frame; captured full-page because the popover positions itself with "
+      + "position: fixed, escaping an element-scoped #shot crop.",
+  }),
+  constructedScenario("timeline-toolbar-options", {
+    renderer: "timeline-toolbar",
+    group: "components",
+    capture: "viewport",
+    title: "Timeline settings popover (constructed)",
+    sources: constructedSources("src/views/calendar-timeline-toolbar-renderer.ts", "tools/bench/timeline-render-bench.ts")
+      .concat(["src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
+    note: "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same "
+      + "position: fixed reason as the calendar settings popover.",
+  }),
+  constructedScenario("chart-toolbar-options", {
+    renderer: "chart-toolbar",
+    group: "components",
+    capture: "viewport",
+    title: "Chart options popover (constructed)",
+    sources: constructedSources("src/views/chart-toolbar-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/popover-position.ts"]),
+    note: "ChartToolbarRenderer's own togglePopover(); captured full-page for the same "
+      + "position: fixed reason as the other two settings popovers.",
   }),
 ];
 

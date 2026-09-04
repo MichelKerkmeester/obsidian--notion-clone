@@ -1168,6 +1168,7 @@ const TIMELINE_SUBTASK_SCENARIO = timelineScaleScenario("week", {
   id: "timeline-subtask-tree",
   title: "Timeline view — subtask tree",
   sources: ["src/views/calendar-timeline-renderer.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
+  fixtureOf: "constructed-timeline-subtask",
   note: "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
 });
 
@@ -1275,6 +1276,7 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 340,
     sources: ["src/views/calendar-mini-calendar-renderer.ts", "src/views/calendar-renderer.ts"],
+    fixtureOf: "constructed-calendar-mini",
     note: "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
     // Anchored absolutely under the calendar header, so with no header to hang from it leaves
     // the flow and the capture box collapses. Put back in flow to photograph it.
@@ -1311,6 +1313,7 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/calendar-renderer.ts", "src/views/empty-state-renderer.ts"],
+    fixtureOf: "constructed-calendar-empty",
     note: "renderEmpty() returns before .db-calendar is ever created, so the card lands as a "
       + "direct child of .note-database-container — the density rule (styles.css:16849-16864) has "
       + "to key off that same container, not a .db-calendar descendant, or it never applies.",
@@ -1325,6 +1328,7 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 640,
     sources: ["src/views/calendar-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
+    fixtureOf: "constructed-calendar-toolbar-options",
     note: "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
     captureCss: `.note-database-container .db-calendar-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
@@ -1369,6 +1373,7 @@ export const TEMPORAL_SCENARIOS = [
     group: "views",
     width: 640,
     sources: ["src/views/calendar-timeline-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
+    fixtureOf: "constructed-timeline-toolbar-options",
     note: "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
     captureCss: `.note-database-container .db-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
     html: () => `

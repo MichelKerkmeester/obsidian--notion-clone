@@ -11,11 +11,12 @@ _memory:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
     last_updated_at: "2026-09-04T04:45:00Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "Rebased typed captures onto main's mount fix; T004-T006 landed, gate PASS 25 green"
-    next_safe_action: "Rule on AC-002; then T009-T012, T016"
+    recent_action: "T028 landed: all 13 row-6 fixtures now constructed"
+    next_safe_action: "Rule on AC-002; fresh audit re-reads row 6"
     blockers:
       - "AC-002 as written cannot be satisfied through the capture path — needs a phase ruling before it can be ticked or amended"
       - "table and chart constructed captures remain untyped by design (table's stubbed renderCell, chart's no per-row field)"
+      - "touch-targets.mjs/unstyled-links.mjs's own constructed pass does not yet cover T028's 10 new per-state scenarios"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -23,11 +24,12 @@ _memory:
       - "tools/live/render-assertion-bundle.mjs"
       - "tools/live/render-assertion-harness.ts"
       - "tools/live/typed-data-assertions.mjs"
+      - "tools/live/constructed-state-assertions.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-goal"
       parent_session_id: null
-    completion_pct: 58
+    completion_pct: 64
     open_questions:
       - "Is fixture-vs-constructed parity pixel-equal on aligned data, or structural-equal on the harness's own shape (spec.md §12, resolved by tasks.md T003)"
     answered_questions:
@@ -179,4 +181,34 @@ and findings belong here.
 | The fixture and constructed-bench mock data are different shapes | Not invented for this doc — read directly: `scenarios/shared.mjs`'s `ROWS` is ~12-20 hand-curated rows meant to "photograph as populated"; `render-assertion-harness.ts`'s bench constants are 1600-2000 rows at 30% fill, the exact shape the freeze-regression checks were built to measure. Reusing the mount seam verbatim (as `plan.md` §6's blast-radius note requires) means constructed captures would show the perf-bench shape unless an opt-in capture-sized option is added — recorded as REQ-004/AC-004, not silently assumed away. |
 
 **2026-09-04: the row above ("constructed list photographs almost nothing on the phone") had the wrong cause — measured directly, not the row count.** Mounting `constructed-list` and reading the DOM at the moment `ListRenderer.updateWindow()` computed its window (`src/views/list-renderer.ts:339-353`): the container's `offsetTop` read `900` (desktop) / `874` (mobile) — exactly the device viewport height — because `constructed-scenarios.mjs`'s mount driver built the renderer's container as `document.body`'s child, landing it as a DOM sibling placed AFTER the still-empty `#shot` div, which `tools/screenshots/theme.css:187-194` sizes to `height: 100%` (the viewport) for the fixture path; the container was only moved into `#shot` after `runRenderAssertions`'s `onMounted` callback had already run and the render had already computed its window. `listTop = list.offsetTop - scroller.offsetTop` (`list-renderer.ts:347`) read that phantom offset as `-870`/`-842`, and `scrolled = max(0, scrollTop - listTop)` (`list-renderer.ts:348`) turned it into a positive 870px/842px "scroll" with `scrollTop` genuinely at 0 — pushing the window's start index to roughly row 11-14 before the first real-row measurement compounded it further to the 625px/1912px gap this doc originally reported. Verdict: harness mount artifact (branch a), not a `ListRenderer` defect and not, on its own, a bench-data-shape problem — a stack no real Obsidian pane produces, since nothing occupies a full viewport height above a pane's content on first layout. T006's capture-sized data option (still open) would have hidden the symptom by staying under `WINDOW_THRESHOLD` (120 rows), but would not have fixed it. Fixed in `constructed-scenarios.mjs`'s `CONSTRUCTED_ENTRY_BODY`: `#shot` is detached before `runRenderAssertions` mounts the renderer as `document.body`'s only child (offsetTop 0, still body's direct child so `height: 100%` keeps resolving against the viewport) and restored immediately after, before the container is appended into it. Recaptured detached, all 312 entries; only the 4 `constructed-list` entries moved `pixelHash`/`layoutHash` (0 of the other 308, including the other 32 constructed entries whose `sourceHashes` also changed but whose content did not — `constructed-scenarios.mjs` is a shared source for all nine constructed scenarios). Both devices now show `row-0` directly under the total header in both themes, read directly. `SURFACE_PHASE=043-constructed-capture npm run gate`: PASS, 25 green.
+
+### T028: all thirteen of the parent's row-6 fixture-only scenarios now have a constructed counterpart
+
+The parent `goal.md` row 6 (`done-audit-8`) named a bounded, thirteen-entry list of fixture-only
+scenarios feeding a slice of row 4's green with no constructed or device counterpart to cross-check
+against. This task gave every one a counterpart mounted through a real production code path — none
+was left fixture-only. Three (`table-mobile`/`list-mobile`/`board-mobile`) needed no new capture at
+all: the existing `constructed-table`/`-list`/`-board` scenarios already mount at the phone device
+with `is-phone` applied, confirmed by a genuinely distinct mobile `layoutHash`, so only a `fixtureOf`
+declaration was owed. The other ten needed additive `ScenarioSpec` options — `subtaskTree`,
+`sparseFields`, `emptyState`, `chartVariant`, `miniCalendar`, and three new `renderer` values that
+call the real toolbar renderers' own `togglePopover()` — full detail in `tasks.md` T028. Full
+red-then-green, regression, determinism and gate evidence lives there rather than duplicated here.
+
+One finding worth keeping in this durable log rather than only in the task row: a real defect
+(`constructedScenario()`'s spec builder silently dropping `opts.miniCalendar`) was found only by
+reading the actual captured PNGs, after the automated assertion script had already reported green —
+its hand-built spec bypassed the exact registry path the bug lived in. This is the concrete case for
+why this program reads every capture rather than trusting a passing assertion alone, and it is
+recorded here as the same class of finding `epic-traps.md`'s own mount-artefact precedent already
+warns about.
+
+**What this does not decide.** Whether parent row 6 ticks is left to a fresh audit, not self-certified
+here (parent D4: a fresh reviewer verifies, never self-certify). The nuance the audit needs: `touch-
+targets.mjs`/`unstyled-links.mjs`'s own constructed pass (`render-assertion-bundle.mjs`'s shared
+`SCENARIOS`, the list those two lanes plus `render-assertions.mjs` read) was not widened to include
+these ten new per-state entries, so those two lanes' own internal fixture-vs-constructed cross-check
+does not yet reach them — even though a constructed counterpart demonstrating the identical markers
+now exists in the shared capture manifest, declared via `fixtureOf` and cross-checked by hand for all
+40 new captures on both devices.
 <!-- /ANCHOR:log -->

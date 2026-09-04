@@ -72,6 +72,7 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 620,
     sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
+    fixtureOf: "constructed-board-subtask",
     // Its own lane rather than a sixth column on `board-view`: five columns overflow the widest
     // capture device, and folding the tree into that scenario would have cost two of the four
     // category lanes the board's ordinary-card coverage lives in.
@@ -338,6 +339,12 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 402,
     sources: ["src/views/table-renderer.ts", "src/views/table-column-layout-sync.ts", "src/views/table-layout.ts", "src/views/cell-renderer.ts", "src/views/file-title-display.ts", "src/views/table-record-peek.ts", "styles.css"],
+    // Superseded by constructed-table's own mobile-device capture, not a separate constructed
+    // scenario: the shared device loop in capture.mjs already mounts constructed-table at the
+    // "mobile" device (is-phone applied), which is the identical renderer/stylesheet path this
+    // fixture exists to depict — a genuinely different layoutHash is already recorded for that
+    // device against the desktop one, confirming the phone layout actually differs.
+    fixtureOf: "constructed-table",
     note: "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
     html: () => {
       const rows = [...ROWS.slice(0, 10), ROWS[17]];
@@ -390,6 +397,9 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 402,
     sources: ["src/views/list-renderer.ts", "src/views/card-field-renderer.ts"],
+    // Superseded by constructed-list's own mobile-device capture — see table-mobile's note above
+    // for why no separate constructed scenario is needed.
+    fixtureOf: "constructed-list",
     note: "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
     html: () => {
       const open = glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>');
@@ -422,6 +432,9 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 402,
     sources: ["src/views/board-renderer.ts", "src/views/group-label-renderer.ts", "src/views/card-field-renderer.ts"],
+    // Superseded by constructed-board's own mobile-device capture — see table-mobile's note above
+    // for why no separate constructed scenario is needed.
+    fixtureOf: "constructed-board",
     note: "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
     html: () => `
       <div class="note-database-container db-width-default">
@@ -481,6 +494,7 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/list-renderer.ts"],
+    fixtureOf: "constructed-list-sparse",
     note: "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
     captureCss: `
       /* What the RENDERER does at this width, which static markup cannot express. Reserving is a

@@ -610,6 +610,7 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 620,
     sources: ["src/views/chart-toolbar-renderer.ts"],
+    fixtureOf: "constructed-chart-toolbar-options",
     note: "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
     captureCss: `.note-database-container .db-chart-options-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
@@ -651,6 +652,7 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 900,
     sources: ["src/views/chart-renderer.ts"],
+    fixtureOf: "constructed-chart-number",
     note: "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
     html: () => `
       <div class="note-database-container">
@@ -667,6 +669,7 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 900,
     sources: ["src/views/chart-renderer.ts"],
+    fixtureOf: "constructed-chart-empty",
     note: "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
     html: () => `
       <div class="note-database-container">

@@ -59,6 +59,12 @@ import {
   CalendarTimelineRenderer,
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
+import { ChartToolbarRenderer, type ChartToolbarActions } from "../../src/views/chart-toolbar-renderer";
+import { CalendarToolbarRenderer, type CalendarToolbarActions } from "../../src/views/calendar-toolbar-renderer";
+import {
+  CalendarTimelineToolbarRenderer,
+  type CalendarTimelineToolbarActions,
+} from "../../src/views/calendar-timeline-toolbar-renderer";
 import type { App } from "obsidian";
 import type { DataSource } from "../../src/data/data-source";
 import type { ColumnDef, RowData, StatusOptionDef, ViewConfig } from "../../src/data/types";
@@ -166,7 +172,8 @@ export const CHART_GROUPS = BOARD_GROUPS;
 export const MAX_CHART_LAYOUT_READS = 48;
 
 export interface ScenarioSpec {
-  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery" | "chart";
+  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery" | "chart"
+    | "calendar-toolbar" | "timeline-toolbar" | "chart-toolbar";
   bag: "file-view" | "embed";
   /** The calendar scale to construct (month/week/day) or the timeline scale to construct
    *  (day/week/month/quarter/year) — whichever the named `renderer` owns. A ScenarioSpec names
@@ -189,6 +196,45 @@ export interface ScenarioSpec {
    * `count` aggregation, since `count` needs no per-row field to draw its bars.
    */
   captureData?: boolean;
+  /**
+   * Opt-in, board and timeline only, read together with `captureData`: wires the first three
+   * capture-sized rows into a parent with two children via the same frontmatter keys
+   * `buildSubtaskRelation` reads (`parentId`/`subtaskIds`/`collapsed`/`progress`) — the relation is
+   * a pure derivation over those fields, so setting them is the same input a real vault note gives
+   * it, not a fabricated DOM shape. Off by default; every existing consumer is unaffected.
+   */
+  subtaskTree?: boolean;
+  /**
+   * Opt-in, list only, read together with `captureData`: blanks a deterministic subset of
+   * frontmatter keys on rows after the first so `ListRenderer` takes its real "missing property"
+   * branch (`renderRowFieldPlaceholder`) instead of every field being present. Off by default;
+   * every existing consumer is unaffected.
+   */
+  sparseFields?: boolean;
+  /**
+   * Opt-in, calendar only: strips every date-like column from the constructed schema and clears
+   * `calendarStartDateField`, reproducing the real "no date property configured" condition
+   * `getDefaultEventDateField` and `renderMonth`/`renderWeek`/`renderDay` already branch on in
+   * production, rather than a harness-invented empty state. Off by default; every existing
+   * consumer is unaffected.
+   */
+  emptyState?: boolean;
+  /**
+   * Opt-in, chart only: "number" sets `chartType: "number"` (the renderer's own three-div,
+   * no-canvas branch); "empty" hides every group value the board bench's group field produces via
+   * `chartHiddenGroups`, reproducing the real `allGroupsHidden` aggregation result. Both are real
+   * `ViewConfig` shapes a configured chart can reach, not synthesized DOM. Undefined keeps the
+   * existing "bar" behaviour every current consumer measures.
+   */
+  chartVariant?: "number" | "empty";
+  /**
+   * Opt-in, calendar, month scale only: after the month grid mounts, clicks the real mini
+   * date-picker trigger `renderMiniCalendarButton` builds in the header — the same
+   * `data-icon="calendar-days"` button a device tap reaches — so `renderMiniCalendar`'s own
+   * popover opens through its real production path rather than a hand-applied class. Off by
+   * default; every existing consumer is unaffected.
+   */
+  miniCalendar?: boolean;
 }
 
 export interface AssertionResult {
@@ -274,6 +320,67 @@ function applyCaptureGroupPalette(columns: ColumnDef[], rows: RowData[], groupKe
     (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[groupKey]))]
     .filter((value): value is string => typeof value === "string");
   col.statusOptions = distinct.map((value, i) => ({ value, color: CAPTURE_OPTIONS[i % CAPTURE_OPTIONS.length].color }));
+}
+
+/**
+ * Wires the first three capture-sized rows into a parent with two children via the same relation
+ * frontmatter keys `buildSubtaskRelation` (subtask-relation.ts) derives from — `subtaskIds` /
+ * `parentId` / `collapsed` / `progress`. `groupKey`, when given, copies the parent's group value
+ * onto both children so a grouped renderer (board) keeps them in the same lane instead of
+ * scattering them across columns a real vault's own grouping would never separate them from.
+ */
+function applyCaptureSubtaskTree(rows: RowData[], groupKey?: string): void {
+  const record = (row: RowData) => (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+  const [parent, first, second] = rows;
+  const parentFm = record(parent);
+  const firstFm = record(first);
+  const secondFm = record(second);
+  if (groupKey) {
+    firstFm[groupKey] = parentFm[groupKey];
+    secondFm[groupKey] = parentFm[groupKey];
+  }
+  parentFm.subtaskIds = [first.file.path, second.file.path];
+  parentFm.collapsed = false;
+  parentFm.progress = 62;
+  firstFm.parentId = parent.file.path;
+  secondFm.parentId = parent.file.path;
+}
+
+/**
+ * Blanks a deterministic subset of non-title frontmatter keys on every row after the first, so
+ * `ListRenderer` takes its real "missing property" branch (`renderRowFieldPlaceholder`) for some
+ * fields on some rows — never all fields, never every row, and never the same subset twice in a
+ * row, matching the hand-written `list-sparse-fields` fixture's own "spread rather than clustered"
+ * shape. Row 0 is left fully populated: `ListRenderer` measures its once-per-render reservation
+ * decision against the first row it builds, and a row that starts already sparse would be a worse
+ * fixture for that measurement, not a better one.
+ */
+function applyCaptureSparseFields(rows: RowData[], columns: ColumnDef[]): void {
+  const candidates = columns.filter((col) => col.key !== "file.name").slice(0, 4).map((col) => col.key);
+  if (candidates.length === 0) return;
+  const record = (row: RowData) => (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+  rows.forEach((row, i) => {
+    if (i === 0) return;
+    const missing = candidates.filter((_key, ci) => (i + ci) % 3 === 0).slice(0, 2);
+    const fm = record(row);
+    for (const key of missing) delete fm[key];
+  });
+}
+
+/**
+ * Every distinct value a grouped column's rows actually carry, as a `chartHiddenGroups` map hiding
+ * all of them — the real input `computeChartAggregate` reads to reach its `allGroupsHidden` empty
+ * result (chart-aggregation.ts). Derived from the rows rather than a copied key list, the same
+ * reasoning `applyCaptureGroupPalette` above already uses: a copy that drifted out of sync would
+ * silently hide nothing instead of failing loudly.
+ */
+function allHiddenGroupsFor(rows: RowData[], key: string): Record<string, true> {
+  const hidden: Record<string, true> = {};
+  for (const row of rows) {
+    const value = (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[key];
+    if (typeof value === "string") hidden[value] = true;
+  }
+  return hidden;
 }
 
 /**
@@ -744,6 +851,49 @@ function tagChartRenders(): void {
   };
 }
 
+// The three toolbar renderers build their popover into the CALLER-supplied `containerEl`, not into
+// a container the class itself creates, so the marker belongs on `containerEl` rather than on the
+// popover panel — reachable through `togglePopover`, the same public entry the real toolbar calls
+// on open, so a tagged run proves the real open path fired rather than a hand-built panel.
+function tagChartToolbarRenders(): void {
+  const original = ChartToolbarRenderer.prototype.togglePopover;
+  ChartToolbarRenderer.prototype.togglePopover = function taggedTogglePopover(
+    containerEl: HTMLElement,
+    anchor: HTMLElement,
+    config: ViewConfig | undefined,
+    actions: ChartToolbarActions,
+  ): void {
+    original.call(this, containerEl, anchor, config, actions);
+    containerEl.setAttribute(PROVENANCE_ATTR, "chart-toolbar-renderer");
+  };
+}
+
+function tagCalendarToolbarRenders(): void {
+  const original = CalendarToolbarRenderer.prototype.togglePopover;
+  CalendarToolbarRenderer.prototype.togglePopover = function taggedTogglePopover(
+    containerEl: HTMLElement,
+    anchor: HTMLElement,
+    config: ViewConfig | undefined,
+    actions: CalendarToolbarActions,
+  ): void {
+    original.call(this, containerEl, anchor, config, actions);
+    containerEl.setAttribute(PROVENANCE_ATTR, "calendar-toolbar-renderer");
+  };
+}
+
+function tagTimelineToolbarRenders(): void {
+  const original = CalendarTimelineToolbarRenderer.prototype.togglePopover;
+  CalendarTimelineToolbarRenderer.prototype.togglePopover = function taggedTogglePopover(
+    containerEl: HTMLElement,
+    anchor: HTMLElement,
+    config: ViewConfig | undefined,
+    actions: CalendarTimelineToolbarActions,
+  ): void {
+    original.call(this, containerEl, anchor, config, actions);
+    containerEl.setAttribute(PROVENANCE_ATTR, "timeline-toolbar-renderer");
+  };
+}
+
 // Armed once at module load, in the browser only: the harness is bundled into
 // the render entry and never runs outside it.
 tagListRenders();
@@ -753,6 +903,9 @@ tagGalleryRenders();
 tagCalendarRenders();
 tagTimelineRenders();
 tagChartRenders();
+tagChartToolbarRenders();
+tagCalendarToolbarRenders();
+tagTimelineToolbarRenders();
 
 function provenanceResult(container: HTMLElement, expected: string): AssertionResult {
   const marker = container.getAttribute(PROVENANCE_ATTR);
@@ -1179,6 +1332,75 @@ function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionR
   return results;
 }
 
+function subtaskTreeAssertion(container: HTMLElement, kind: "board" | "timeline"): AssertionResult {
+  const toggle = container.querySelector(kind === "board" ? ".db-subtask-toggle" : ".db-subtask-event-toggle");
+  const progress = container.querySelector(kind === "board" ? ".db-subtask-progress" : ".db-timeline-subtask-progress");
+  const depthChild = container.querySelector('[data-subtask-depth="1"]');
+  const pass = Boolean(toggle) && Boolean(progress) && Boolean(depthChild);
+  return {
+    name: `the ${kind} drew its subtask tree`,
+    pass,
+    detail: pass
+      ? "collapse toggle, progress affordance and a depth-1 child all present"
+      : `missing: ${[!toggle && "collapse toggle", !progress && "progress affordance", !depthChild && "depth-1 child"]
+        .filter(Boolean).join(", ")}`,
+  };
+}
+
+function sparseFieldsAssertion(container: HTMLElement): AssertionResult {
+  const placeholders = container.querySelectorAll(".db-list-field.is-placeholder").length;
+  return {
+    name: "the list drew placeholder slots for its missing fields",
+    pass: placeholders > 0,
+    detail: `${placeholders} .db-list-field.is-placeholder element(s), want > 0`,
+  };
+}
+
+function calendarEmptyStateAssertion(container: HTMLElement): AssertionResult {
+  const card = container.querySelector('[data-empty-reason="no-date-field"]');
+  const grid = container.querySelectorAll(".db-calendar").length;
+  const pass = Boolean(card) && grid === 0;
+  return {
+    name: "the calendar drew its no-date-field empty state",
+    pass,
+    detail: card
+      ? `data-empty-reason="no-date-field" present, ${grid} .db-calendar grid(s) (want 0)`
+      : "no [data-empty-reason=\"no-date-field\"] element — the empty state never rendered",
+  };
+}
+
+function chartVariantAssertion(container: HTMLElement, variant: "number" | "empty"): AssertionResult {
+  const selector = variant === "number" ? ".db-chart-number" : ".db-chart-empty";
+  const present = container.querySelectorAll(selector).length;
+  return {
+    name: `the chart drew its ${variant} state`,
+    pass: present === 1,
+    detail: `${present} ${selector} element(s), want 1`,
+  };
+}
+
+function miniCalendarAssertion(container: HTMLElement): AssertionResult {
+  const popover = container.querySelector(".db-calendar-mini-popover");
+  const grid = popover?.querySelector(".db-calendar-mini-grid");
+  const pass = Boolean(popover) && Boolean(grid);
+  return {
+    name: "the calendar opened its mini date-picker popover",
+    pass,
+    detail: pass
+      ? ".db-calendar-mini-popover and its grid both present"
+      : "the mini-calendar trigger click never opened the popover",
+  };
+}
+
+function toolbarPopoverAssertion(container: HTMLElement, selector: string): AssertionResult {
+  const panel = container.querySelector(selector);
+  return {
+    name: "the toolbar opened its options popover",
+    pass: Boolean(panel),
+    detail: panel ? `${selector} present` : `${selector} missing — togglePopover did not build the panel`,
+  };
+}
+
 function timelineAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
   const bars = container.querySelectorAll<HTMLElement>(".db-timeline-event").length;
@@ -1256,7 +1478,10 @@ export function runRenderAssertions(
       columns,
       scenario.captureData ? CAPTURE_FILL : LIST_FILL,
     );
-    if (scenario.captureData) applyCaptureOptions(columns, rows);
+    if (scenario.captureData) {
+      applyCaptureOptions(columns, rows);
+      if (scenario.sparseFields) applyCaptureSparseFields(rows, columns);
+    }
     const config = makeListConfig(columns);
     const bag = scenario.bag === "file-view" ? fileViewListBag(columns) : embedListBag(columns);
     bagKeys = Object.keys(bag).sort();
@@ -1272,6 +1497,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "list-renderer"));
     if (results[0].pass) {
       results.push(...listAssertions(container, rows, columns, bag, scenario.bag));
+      if (scenario.sparseFields) results.push(sparseFieldsAssertion(container));
       results.push({
         name: "no forced layout inside the row loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -1292,6 +1518,7 @@ export function runRenderAssertions(
     if (scenario.captureData) {
       applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
       applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
+      if (scenario.subtaskTree) applyCaptureSubtaskTree(rows, BOARD_GROUP_FIELD);
     }
     const groups = makeBoardGroups(rows, BOARD_GROUPS);
     const config = makeBoardConfig(columns);
@@ -1307,6 +1534,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "board-renderer"));
     if (results[0].pass) {
       results.push(...boardAssertions(container, rows));
+      if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
       results.push({
         name: "no forced layout inside the card loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -1354,14 +1582,23 @@ export function runRenderAssertions(
     // than passing an out-of-range scale to `makeCalendarConfig`.
     const scale: "month" | "week" | "day" =
       scenario.scale === "week" || scenario.scale === "day" ? scenario.scale : "month";
-    const columns = makeCalendarColumns(CALENDAR_COLUMNS, scenario.captureData ? "mixed" : "text");
+    // "No date-like column" is the real condition getDefaultEventDateField/renderMonth branch on
+    // (calendar-renderer.ts), so the empty-state option removes the date-typed column from the
+    // constructed schema rather than fabricating the empty-state DOM directly.
+    const baseColumns = makeCalendarColumns(CALENDAR_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const columns = scenario.emptyState
+      ? baseColumns.filter((col) => col.type !== "date" && col.type !== "datetime")
+      : baseColumns;
     const rows = makeCalendarRows(
       scenario.captureData ? CAPTURE_ROWS : CALENDAR_ROWS,
       columns,
       scenario.captureData ? CAPTURE_FILL : CALENDAR_FILL,
     );
     if (scenario.captureData) applyCaptureOptions(columns, rows);
-    const config = makeCalendarConfig(columns, scale);
+    const baseConfig = makeCalendarConfig(columns, scale);
+    const config: ViewConfig = scenario.emptyState
+      ? { ...baseConfig, calendarStartDateField: undefined }
+      : baseConfig;
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
     bagKeys = Object.keys(bag).sort();
     const renderer = new CalendarRenderer(bag);
@@ -1374,11 +1611,23 @@ export function runRenderAssertions(
     renderer.render(container, config, rows);
     const layoutReads = stopCounting();
 
+    // The same button a device tap reaches: renderMiniCalendarButton tags its icon span
+    // data-icon="calendar-days", and .click() fires the real onclick handler that calls the
+    // renderer's own (private) toggleMiniCalendar — no hand-applied class.
+    if (scenario.miniCalendar) {
+      const trigger = container.querySelector('[data-icon="calendar-days"]')?.closest("button");
+      (trigger as HTMLButtonElement | null)?.click();
+    }
+
     results.push(provenanceResult(container, "calendar-renderer"));
     if (results[0].pass) {
-      results.push(...(scale === "month"
-        ? calendarAssertions(container)
-        : weekAssertions(container, scale)));
+      results.push(...(scenario.emptyState
+        ? [calendarEmptyStateAssertion(container)]
+        : scenario.miniCalendar
+          ? [miniCalendarAssertion(container)]
+          : scale === "month"
+            ? calendarAssertions(container)
+            : weekAssertions(container, scale)));
       results.push({
         name: "no forced layout inside the segment loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -1414,10 +1663,13 @@ export function runRenderAssertions(
     const config = {
       ...makeBoardConfig(columns),
       viewType: "chart",
-      chartType: "bar",
+      chartType: scenario.chartVariant === "number" ? "number" : "bar",
       chartAggregation: valueColumn ? "sum" : "count",
       chartValueField: valueColumn?.key,
       chartGroupField: BOARD_GROUP_FIELD,
+      // "empty" hides every value the group field actually produced, reproducing the real
+      // `allGroupsHidden` result computeChartAggregate returns rather than an invented empty DOM.
+      ...(scenario.chartVariant === "empty" ? { chartHiddenGroups: allHiddenGroupsFor(rows, BOARD_GROUP_FIELD) } : {}),
       schema: { columns, computedFields: [] },
     } as ViewConfig;
     const actions = chartBag();
@@ -1433,7 +1685,9 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "chart-renderer"));
     if (results[0].pass) {
-      results.push(...chartAssertions(container, config));
+      results.push(...(scenario.chartVariant
+        ? [chartVariantAssertion(container, scenario.chartVariant)]
+        : chartAssertions(container, config)));
       results.push({
         name: "no forced layout inside the chart build",
         pass: layoutReads <= MAX_CHART_LAYOUT_READS,
@@ -1454,7 +1708,10 @@ export function runRenderAssertions(
       columns,
       scenario.captureData ? CAPTURE_FILL : TIMELINE_FILL,
     );
-    if (scenario.captureData) applyCaptureOptions(columns, rows);
+    if (scenario.captureData) {
+      applyCaptureOptions(columns, rows);
+      if (scenario.subtaskTree) applyCaptureSubtaskTree(rows);
+    }
     const config = makeTimelineConfig(columns, timelineScale);
     const bag = scenario.bag === "file-view" ? fileViewTimelineBag() : embedTimelineBag();
     bagKeys = Object.keys(bag).sort();
@@ -1467,6 +1724,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "timeline-renderer"));
     if (results[0].pass) {
       results.push(...timelineAssertions(container));
+      if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "timeline"));
       results.push({
         name: "no forced layout inside the event loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -1479,6 +1737,88 @@ export function runRenderAssertions(
     // The renderer holds a ResizeObserver and pending timers; dropping the container without
     // this leaks one of each per scenario into the run that follows.
     renderer.destroy();
+  } else if (scenario.renderer === "chart-toolbar") {
+    // The chart options popover: opened through ChartToolbarRenderer's own public togglePopover,
+    // never a hand-applied class, against the same board-bench chart config the "chart" branch
+    // above builds. The anchor is a real, connected button — positionToolbarPopover needs one to
+    // place against — visually hidden so the capture shows only the popover it opens.
+    const columns = makeBoardColumns(CHART_COLUMNS, "mixed");
+    const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, CHART_GROUPS);
+    applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
+    const valueColumn = columns.find((col) => col.type === "number" || col.type === "currency");
+    if (valueColumn) {
+      const key = valueColumn.key;
+      rows.forEach((row, i) => {
+        (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[key] = i * 37 + 0.5;
+      });
+    }
+    const config = {
+      ...makeBoardConfig(columns),
+      viewType: "chart",
+      chartType: "bar",
+      chartAggregation: valueColumn ? "sum" : "count",
+      chartValueField: valueColumn?.key,
+      chartGroupField: BOARD_GROUP_FIELD,
+      schema: { columns, computedFields: [] },
+    } as ViewConfig;
+    const anchor = container.createEl("button", {
+      cls: "db-chart-options-trigger",
+      attr: {
+        type: "button",
+        style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
+      },
+    });
+    const toolbar = new ChartToolbarRenderer();
+    const actions: ChartToolbarActions = { onChange: () => undefined };
+    bagKeys = Object.keys(actions).sort();
+    toolbar.togglePopover(container, anchor, config, actions);
+
+    results.push(provenanceResult(container, "chart-toolbar-renderer"));
+    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-chart-options-popover"));
+  } else if (scenario.renderer === "calendar-toolbar") {
+    // The calendar settings popover, week scale so the Time section (only shown at week/day
+    // scale, per the fixture this supersedes) is in frame.
+    const columns = makeCalendarColumns(CALENDAR_COLUMNS, "mixed");
+    const rows = makeCalendarRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
+    applyCaptureOptions(columns, rows);
+    const config = makeCalendarConfig(columns, "week");
+    const anchor = container.createEl("button", {
+      cls: "db-calendar-options-trigger",
+      attr: {
+        type: "button",
+        style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
+      },
+    });
+    const toolbar = new CalendarToolbarRenderer();
+    const actions: CalendarToolbarActions = { onChange: () => undefined };
+    bagKeys = Object.keys(actions).sort();
+    toolbar.togglePopover(container, anchor, config, actions);
+
+    results.push(provenanceResult(container, "calendar-toolbar-renderer"));
+    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-calendar-options-popover"));
+  } else if (scenario.renderer === "timeline-toolbar") {
+    // The timeline settings popover. The bench's own makeConfig sets viewType: "calendar" (it
+    // never reaches a viewType-gated caller today), but CalendarTimelineToolbarRenderer.
+    // togglePopover guards on viewType === "timeline" — the real value database-view.ts gives a
+    // timeline host — so this local override matches the real config shape this popover expects.
+    const columns = makeTimelineColumns(TIMELINE_COLUMNS, "mixed");
+    const rows = makeTimelineRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
+    applyCaptureOptions(columns, rows);
+    const config: ViewConfig = { ...makeTimelineConfig(columns, "week"), viewType: "timeline" };
+    const anchor = container.createEl("button", {
+      cls: "db-calendar-timeline-options-trigger",
+      attr: {
+        type: "button",
+        style: "position:absolute;top:16px;left:16px;width:1px;height:1px;opacity:0;pointer-events:none",
+      },
+    });
+    const toolbar = new CalendarTimelineToolbarRenderer();
+    const actions: CalendarTimelineToolbarActions = { onChange: () => undefined };
+    bagKeys = Object.keys(actions).sort();
+    toolbar.togglePopover(container, anchor, config, actions);
+
+    results.push(provenanceResult(container, "timeline-toolbar-renderer"));
+    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-calendar-timeline-options-popover"));
   } else {
     // Row count stays at the bench's own 2000 regardless of captureData — the table has no
     // window, so every row becomes a real <tr> either way, and the constructed capture's own note

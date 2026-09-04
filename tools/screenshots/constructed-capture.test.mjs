@@ -91,14 +91,24 @@ describe("constructed scenario registry", () => {
     const ids = CONSTRUCTED_SCENARIOS.map((s) => s.id).sort();
     expect(ids).toEqual([
       "constructed-board",
+      "constructed-board-subtask",
       "constructed-calendar-day",
+      "constructed-calendar-empty",
+      "constructed-calendar-mini",
       "constructed-calendar-month",
+      "constructed-calendar-toolbar-options",
       "constructed-calendar-week",
       "constructed-chart",
+      "constructed-chart-empty",
+      "constructed-chart-number",
+      "constructed-chart-toolbar-options",
       "constructed-gallery",
       "constructed-list",
+      "constructed-list-sparse",
       "constructed-table",
       "constructed-timeline",
+      "constructed-timeline-subtask",
+      "constructed-timeline-toolbar-options",
     ]);
   });
 
@@ -121,12 +131,25 @@ describe("fixture declarations", () => {
       .map((s) => `${s.id} -> ${s.fixtureOf}`)
       .sort();
     expect(declared).toEqual([
+      "board-mobile -> constructed-board",
+      "board-subtask-tree -> constructed-board-subtask",
       "board-view -> constructed-board",
+      "calendar-empty-state -> constructed-calendar-empty",
+      "calendar-mini-calendar -> constructed-calendar-mini",
       "calendar-month-view -> constructed-calendar-month",
+      "calendar-toolbar-options -> constructed-calendar-toolbar-options",
       "calendar-week-time-grid -> constructed-calendar-week",
+      "chrome-chart-empty -> constructed-chart-empty",
+      "chrome-chart-number -> constructed-chart-number",
+      "chrome-chart-options-popover -> constructed-chart-toolbar-options",
       "gallery-view -> constructed-gallery",
+      "list-mobile -> constructed-list",
+      "list-sparse-fields -> constructed-list-sparse",
       "list-view -> constructed-list",
+      "table-mobile -> constructed-table",
       "table-view -> constructed-table",
+      "timeline-subtask-tree -> constructed-timeline-subtask",
+      "timeline-toolbar-options -> constructed-timeline-toolbar-options",
       "timeline-view -> constructed-timeline",
     ]);
   });

@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: five obsidian-pm port phases, 042, and all three 043 legs (structural, typed data and real icons, then table and chart) are landed and merged; no lane is in flight; the operator owes device confirmation and the 043 AC-002 ruling."
+description: "Resume point: five obsidian-pm port phases, 042, and all three 043 legs (structural, typed data and real icons, then table and chart) are landed and merged; a fourth 043 leg (T028, all 13 row-6 fixture-only scenarios now constructed) is landed on an unmerged worktree; no lane is in flight; the operator owes device confirmation, the 043 AC-002 ruling, and a merge decision on the T028 worktree."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,18 +10,20 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T07:00:00Z"
-    last_updated_by: "orchestrate-handover-12"
-    recent_action: "T027 landed; row 6 narrowed to 13 fixture-only scenarios, row-4 dep"
-    next_safe_action: "Operator confirms and rules"
+    last_updated_at: "2026-09-04T11:00:00Z"
+    last_updated_by: "in-runtime-code-agent"
+    recent_action: "043 T028 landed on an unmerged worktree; row 6 narrowed"
+    next_safe_action: "Decide whether to merge the T028 worktree; fresh audit reads row 6"
     blockers:
       - "operator confirmation owed: reports 29-36 and the five ported surfaces, on 1.4.10"
       - "043's AC-002 ruling owed: amend the criterion, or accept determinism as its basis"
+      - "worktrees/022-constructed-state-variants carries T028's landing but is unmerged; main is unaffected until it lands"
     key_files:
       - "goal.md"
       - "roadmap.md"
       - "043-constructed-capture/implementation-summary.md"
       - "043-constructed-capture/goal.md"
+      - "043-constructed-capture/tasks.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
@@ -38,6 +40,7 @@ _memory:
       - "Done-audit-6: the structural 043 landing did not close DONE row 6. Every constructed bench column was untyped text and every icon was the stub's placeholder diamond, so the fixture pass carried the only evidence for typed rendering and icon fidelity. That dependency was declared and bounded rather than hidden, but a declared-and-bounded dependency is still a dependency"
       - "Done-audit-7: a second 043 leg (0af4ca6, reconciled in bf67475) gave list, board, gallery, calendar and timeline real typed cells and 21 real icon names, closing the gap for those 7 declared pairs; the remaining difference there is curated content, a declared complement rather than a device-value dependency. Table and chart stay untyped by design (table's column builder takes no captureData argument, chart has no per-row field), so row 6 stays open, narrowed to those two views plus the 13 fixture-only scenarios. completion_pct stays 4 of 7 = 57"
       - "Done-audit-8: T027 (425d552) closed table and chart, typed-data-assertions.mjs 6 of 6 new markers PASS. All nine constructed views are now typed; the 13 fixture-only scenarios are the sole remaining gap, and they back 5 of the 25 npm run gate lanes, so ticked row 4's green partly depends on their hand-authored markup. Row 6 stays open on that narrower list. completion_pct stays 4 of 7 = 57"
+      - "043 T028 (worktree, unmerged): all 13 of row 6's named fixture-only scenarios now have a constructed counterpart, ten via new additive ScenarioSpec options (subtaskTree, sparseFields, emptyState, chartVariant, miniCalendar, three new toolbar-popover renderer values), three (table/list/board-mobile) via a fixtureOf declaration onto the existing mobile-device capture already on record. Red-first constructed-state-assertions.mjs failed 16 of 16 before, passed all after. Two detached runs: 0 of 352 entries changed; all 312 pre-existing entries matched committed HEAD exactly. A real bug (constructedScenario() dropping opts.miniCalendar) was found only by reading the 40 new captures, after the assertion script had already reported green through a spec that bypassed it. Row 6 deliberately left unticked (D4: a fresh reviewer verifies, never self-certify) — the residual question is whether touch-targets.mjs/unstyled-links.mjs's own constructed pass not yet covering these ten states still disqualifies the tick"
 ---
 # Session Handover: Component Surface System
 
@@ -77,6 +80,15 @@ operator device confirmation, unrelated to either phase.
 No lane is in flight. Worktrees 003 through 021 are all merged or finished into main, confirmed
 directly: every worktree's HEAD commit is an ancestor of `425d552`. Removing the finished worktrees
 is the operator's call, through sk-git. Main is clean at `425d552` and equal to origin/main.
+
+**One new worktree carries unmerged work.** `worktrees/022-constructed-state-variants` landed T028:
+all 13 of row 6's named fixture-only scenarios now have a constructed counterpart, mounted through
+real production code paths (including three toolbar renderers' own `togglePopover()`, never a
+hand-applied class). Ten scenarios needed new, additive `ScenarioSpec` options on
+`render-assertion-harness.ts`; three needed only a `fixtureOf` declaration onto an existing capture
+already on record. Full evidence lives in `043`'s own three docs. Row 6 was narrowed a fourth time
+but deliberately NOT ticked — that judgment is left to a fresh audit, per D4. Main is unaffected
+until an operator/orchestrator decides to merge this branch.
 <!-- /ANCHOR:handover-summary -->
 
 ---
@@ -92,9 +104,10 @@ determinism as its basis. Second, device confirmation: reports 29-36 and the fiv
 now that 1.4.10 is installed. Each confirmation closes its `roadmap.md` §4 row; each "still
 broken" reopens it with the device fact given, not an assumption.
 
-Candidate next work is bounded, not open-ended: only what the operator's confirmations reopen, plus
-row 6's own remaining list (the 13 fixture-only scenarios that back five gate lanes with no
-constructed or device counterpart), plus whatever AC-002's ruling requires. Nothing else is queued.
+Candidate next work is bounded, not open-ended: whether to merge `worktrees/022-constructed-state-
+variants` (row 6's own remaining list now has a constructed counterpart for all 13, awaiting a fresh
+audit's judgment before it ticks), what the operator's confirmations reopen, and whatever AC-002's
+ruling requires. Nothing else is queued.
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -107,8 +120,10 @@ constructed or device counterpart), plus whatever AC-002's ruling requires. Noth
    answer.
 3. Record each answer in `roadmap.md` §4: confirmed rows close, "still broken" rows reopen with
    the device fact given. An agent never closes an operator row on its own judgment.
-4. If the operator wants the 13 fixture-only scenarios given a constructed counterpart, open a
-   fresh spec-folder decision (Gate 3) scoped to that work; it is not implicit in the landed phase.
+4. Decide whether to merge `worktrees/022-constructed-state-variants` (043 T028: all 13 row-6
+   fixture-only scenarios now constructed, full evidence in `043`'s own docs). A fresh audit should
+   re-read row 6 against that evidence before it ticks — do not tick it on the landing pass's own
+   say-so (D4).
 5. Offer to remove the finished worktrees (003-021) through sk-git once the operator confirms
    they are no longer needed for reference.
 <!-- /ANCHOR:session-notes -->
@@ -163,4 +178,15 @@ constructed or device counterpart), plus whatever AC-002's ruling requires. Noth
 - A harness option landing for most registered views does not land for all of them. Check each
   view's own branch at its column-builder call site (does it read the option at all) rather than
   trusting an aggregate count like "7 of 9 typed" to also describe the other two.
+- A registry-builder function that fans a new `ScenarioSpec` field through a spread-conditional list
+  can silently drop one you forgot to add to that list, even though the harness branch that reads it
+  is correct and a hand-built spec (including the one a red-first assertion script builds) proves it.
+  The bug is invisible to the assertion script by construction — it bypasses the exact function the
+  bug lives in — and was only caught by reading the actual captured PNG. Read every new capture
+  rather than trusting a passing assertion alone.
+- A popover positioned with `position: fixed`/`absolute` escapes an element-scoped `#shot` crop; a
+  constructed capture of one needs the full-page (`page.screenshot()`, not `target.screenshot()`)
+  path. The same popover can also take Obsidian's real bottom-sheet presentation on a phone
+  (`isMobileBottomSheet`) instead of an anchored panel — a genuine device difference to expect and
+  confirm by reading both captures, not a defect.
 <!-- /ANCHOR:next-session -->

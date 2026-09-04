@@ -20,7 +20,10 @@
 // ───────────────────────────────────────────────────────────────────
 
 export const MANIFEST_SOURCES = ["fixture", "constructed"];
-export const CONSTRUCTED_RENDERERS = ["list", "table", "board", "gallery", "calendar", "timeline", "chart"];
+export const CONSTRUCTED_RENDERERS = [
+  "list", "table", "board", "gallery", "calendar", "timeline", "chart",
+  "calendar-toolbar", "timeline-toolbar", "chart-toolbar",
+];
 export const CONSTRUCTED_BAGS = ["file-view", "embed"];
 export const CONSTRUCTED_SCALES = ["month", "week", "day"];
 

@@ -737,7 +737,8 @@
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
-      "bytes": 34755
+      "bytes": 34755,
+      "fixtureOf": "constructed-chart-empty"
     },
     {
       "id": "chrome-chart-empty",
@@ -761,7 +762,8 @@
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
-      "bytes": 34961
+      "bytes": 34961,
+      "fixtureOf": "constructed-chart-empty"
     },
     {
       "id": "chrome-chart-empty",
@@ -785,7 +787,8 @@
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
-      "bytes": 26075
+      "bytes": 26075,
+      "fixtureOf": "constructed-chart-empty"
     },
     {
       "id": "chrome-chart-empty",
@@ -809,7 +812,8 @@
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
-      "bytes": 26095
+      "bytes": 26095,
+      "fixtureOf": "constructed-chart-empty"
     },
     {
       "id": "chrome-chart-number",
@@ -833,7 +837,8 @@
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
-      "bytes": 25227
+      "bytes": 25227,
+      "fixtureOf": "constructed-chart-number"
     },
     {
       "id": "chrome-chart-number",
@@ -857,7 +862,8 @@
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
-      "bytes": 25316
+      "bytes": 25316,
+      "fixtureOf": "constructed-chart-number"
     },
     {
       "id": "chrome-chart-number",
@@ -881,7 +887,8 @@
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
-      "bytes": 14358
+      "bytes": 14358,
+      "fixtureOf": "constructed-chart-number"
     },
     {
       "id": "chrome-chart-number",
@@ -905,7 +912,8 @@
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
-      "bytes": 14463
+      "bytes": 14463,
+      "fixtureOf": "constructed-chart-number"
     },
     {
       "id": "chrome-chart-options-popover",
@@ -929,7 +937,8 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 92254
+      "bytes": 92254,
+      "fixtureOf": "constructed-chart-toolbar-options"
     },
     {
       "id": "chrome-chart-options-popover",
@@ -953,7 +962,8 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 92437
+      "bytes": 92437,
+      "fixtureOf": "constructed-chart-toolbar-options"
     },
     {
       "id": "chrome-chart-options-popover",
@@ -977,7 +987,8 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 82332
+      "bytes": 82332,
+      "fixtureOf": "constructed-chart-toolbar-options"
     },
     {
       "id": "chrome-chart-options-popover",
@@ -1001,7 +1012,8 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 82916
+      "bytes": 82916,
+      "fixtureOf": "constructed-chart-toolbar-options"
     },
     {
       "id": "chrome-group-header-row",
@@ -2074,6 +2086,514 @@
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
       "bytes": 13038
+    },
+    {
+      "id": "constructed-calendar-toolbar-options",
+      "title": "Calendar settings popover (constructed)",
+      "group": "components",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/components/constructed-calendar-toolbar-options-desktop-dark.png",
+      "sources": [
+        "src/views/calendar-toolbar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "7c967f7e2555",
+      "pixelHash": "450355260ece",
+      "sourceHashes": {
+        "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.",
+      "capture": "viewport",
+      "bytes": 135068,
+      "source": "constructed",
+      "renderer": "calendar-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-toolbar-options",
+      "title": "Calendar settings popover (constructed)",
+      "group": "components",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/components/constructed-calendar-toolbar-options-desktop-light.png",
+      "sources": [
+        "src/views/calendar-toolbar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "7c967f7e2555",
+      "pixelHash": "64f5d5165d3e",
+      "sourceHashes": {
+        "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.",
+      "capture": "viewport",
+      "bytes": 141854,
+      "source": "constructed",
+      "renderer": "calendar-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-toolbar-options",
+      "title": "Calendar settings popover (constructed)",
+      "group": "components",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/components/constructed-calendar-toolbar-options-mobile-dark.png",
+      "sources": [
+        "src/views/calendar-toolbar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "55c5bb7fad0a",
+      "pixelHash": "258a17bf13a3",
+      "sourceHashes": {
+        "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.",
+      "capture": "viewport",
+      "bytes": 109189,
+      "source": "constructed",
+      "renderer": "calendar-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-toolbar-options",
+      "title": "Calendar settings popover (constructed)",
+      "group": "components",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/components/constructed-calendar-toolbar-options-mobile-light.png",
+      "sources": [
+        "src/views/calendar-toolbar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "55c5bb7fad0a",
+      "pixelHash": "2051c9aa0295",
+      "sourceHashes": {
+        "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.",
+      "capture": "viewport",
+      "bytes": 111645,
+      "source": "constructed",
+      "renderer": "calendar-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-toolbar-options",
+      "title": "Chart options popover (constructed)",
+      "group": "components",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/components/constructed-chart-toolbar-options-desktop-dark.png",
+      "sources": [
+        "src/views/chart-toolbar-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "9ef922224938",
+      "pixelHash": "bc8904360b79",
+      "sourceHashes": {
+        "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "ChartToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the other two settings popovers.",
+      "capture": "viewport",
+      "bytes": 104084,
+      "source": "constructed",
+      "renderer": "chart-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-toolbar-options",
+      "title": "Chart options popover (constructed)",
+      "group": "components",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/components/constructed-chart-toolbar-options-desktop-light.png",
+      "sources": [
+        "src/views/chart-toolbar-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "9ef922224938",
+      "pixelHash": "763201a9481c",
+      "sourceHashes": {
+        "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "ChartToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the other two settings popovers.",
+      "capture": "viewport",
+      "bytes": 109855,
+      "source": "constructed",
+      "renderer": "chart-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-toolbar-options",
+      "title": "Chart options popover (constructed)",
+      "group": "components",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/components/constructed-chart-toolbar-options-mobile-dark.png",
+      "sources": [
+        "src/views/chart-toolbar-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "81b57b7f35c6",
+      "pixelHash": "9d3ba18aa0b9",
+      "sourceHashes": {
+        "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "ChartToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the other two settings popovers.",
+      "capture": "viewport",
+      "bytes": 80249,
+      "source": "constructed",
+      "renderer": "chart-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-toolbar-options",
+      "title": "Chart options popover (constructed)",
+      "group": "components",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/components/constructed-chart-toolbar-options-mobile-light.png",
+      "sources": [
+        "src/views/chart-toolbar-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "81b57b7f35c6",
+      "pixelHash": "2d85fd6a8c29",
+      "sourceHashes": {
+        "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "ChartToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the other two settings popovers.",
+      "capture": "viewport",
+      "bytes": 81818,
+      "source": "constructed",
+      "renderer": "chart-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-toolbar-options",
+      "title": "Timeline settings popover (constructed)",
+      "group": "components",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/components/constructed-timeline-toolbar-options-desktop-dark.png",
+      "sources": [
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "30bbaddfdc84",
+      "pixelHash": "fe74ca2c4868",
+      "sourceHashes": {
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
+      "capture": "viewport",
+      "bytes": 82444,
+      "source": "constructed",
+      "renderer": "timeline-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-toolbar-options",
+      "title": "Timeline settings popover (constructed)",
+      "group": "components",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/components/constructed-timeline-toolbar-options-desktop-light.png",
+      "sources": [
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "30bbaddfdc84",
+      "pixelHash": "5ae623f2a27b",
+      "sourceHashes": {
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
+      "capture": "viewport",
+      "bytes": 87720,
+      "source": "constructed",
+      "renderer": "timeline-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-toolbar-options",
+      "title": "Timeline settings popover (constructed)",
+      "group": "components",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/components/constructed-timeline-toolbar-options-mobile-dark.png",
+      "sources": [
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "9d7def36ea6c",
+      "pixelHash": "881bb596a43f",
+      "sourceHashes": {
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
+      "capture": "viewport",
+      "bytes": 62823,
+      "source": "constructed",
+      "renderer": "timeline-toolbar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-toolbar-options",
+      "title": "Timeline settings popover (constructed)",
+      "group": "components",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/components/constructed-timeline-toolbar-options-mobile-light.png",
+      "sources": [
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/dropdown-field.ts",
+        "src/views/popover-position.ts"
+      ],
+      "layoutHash": "9d7def36ea6c",
+      "pixelHash": "6bbdb27c698b",
+      "sourceHashes": {
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "src/views/popover-position.ts": "6cae246726c0",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.",
+      "capture": "viewport",
+      "bytes": 64385,
+      "source": "constructed",
+      "renderer": "timeline-toolbar",
+      "bag": "file-view"
     },
     {
       "id": "dropdown-field",
@@ -4905,7 +5425,8 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 211301
+      "bytes": 211301,
+      "fixtureOf": "constructed-board"
     },
     {
       "id": "board-mobile",
@@ -4933,7 +5454,8 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 211384
+      "bytes": 211384,
+      "fixtureOf": "constructed-board"
     },
     {
       "id": "board-mobile",
@@ -4961,7 +5483,8 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 111305
+      "bytes": 111305,
+      "fixtureOf": "constructed-board"
     },
     {
       "id": "board-mobile",
@@ -4989,7 +5512,8 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 111807
+      "bytes": 111807,
+      "fixtureOf": "constructed-board"
     },
     {
       "id": "board-subtask-tree",
@@ -5021,7 +5545,8 @@
       },
       "note": "An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.",
       "capture": "viewport",
-      "bytes": 203012
+      "bytes": 203012,
+      "fixtureOf": "constructed-board-subtask"
     },
     {
       "id": "board-subtask-tree",
@@ -5053,7 +5578,8 @@
       },
       "note": "An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.",
       "capture": "viewport",
-      "bytes": 203891
+      "bytes": 203891,
+      "fixtureOf": "constructed-board-subtask"
     },
     {
       "id": "board-subtask-tree",
@@ -5085,7 +5611,8 @@
       },
       "note": "An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.",
       "capture": "viewport",
-      "bytes": 103330
+      "bytes": 103330,
+      "fixtureOf": "constructed-board-subtask"
     },
     {
       "id": "board-subtask-tree",
@@ -5117,7 +5644,8 @@
       },
       "note": "An expanded parent beside an ordinary lane: children indented by the card's own outline, the collapse affordance only on a row that has children, explicit progress shown beside the derived done/total count, and the inline add row only under an expanded parent.",
       "capture": "viewport",
-      "bytes": 105293
+      "bytes": 105293,
+      "fixtureOf": "constructed-board-subtask"
     },
     {
       "id": "board-view",
@@ -5251,7 +5779,8 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 44319
+      "bytes": 44319,
+      "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
@@ -5277,7 +5806,8 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 44567
+      "bytes": 44567,
+      "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
@@ -5303,7 +5833,8 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33169
+      "bytes": 33169,
+      "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-empty-state",
@@ -5329,7 +5860,8 @@
       },
       "note": "renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33528
+      "bytes": 33528,
+      "fixtureOf": "constructed-calendar-empty"
     },
     {
       "id": "calendar-mini-calendar",
@@ -5355,7 +5887,8 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 56738
+      "bytes": 56738,
+      "fixtureOf": "constructed-calendar-mini"
     },
     {
       "id": "calendar-mini-calendar",
@@ -5381,7 +5914,8 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 60997
+      "bytes": 60997,
+      "fixtureOf": "constructed-calendar-mini"
     },
     {
       "id": "calendar-mini-calendar",
@@ -5407,7 +5941,8 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42427
+      "bytes": 42427,
+      "fixtureOf": "constructed-calendar-mini"
     },
     {
       "id": "calendar-mini-calendar",
@@ -5433,7 +5968,8 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 45751
+      "bytes": 45751,
+      "fixtureOf": "constructed-calendar-mini"
     },
     {
       "id": "calendar-month-view",
@@ -5559,7 +6095,8 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 123983
+      "bytes": 123983,
+      "fixtureOf": "constructed-calendar-toolbar-options"
     },
     {
       "id": "calendar-toolbar-options",
@@ -5585,7 +6122,8 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 129455
+      "bytes": 129455,
+      "fixtureOf": "constructed-calendar-toolbar-options"
     },
     {
       "id": "calendar-toolbar-options",
@@ -5611,7 +6149,8 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 102417
+      "bytes": 102417,
+      "fixtureOf": "constructed-calendar-toolbar-options"
     },
     {
       "id": "calendar-toolbar-options",
@@ -5637,7 +6176,8 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 107237
+      "bytes": 107237,
+      "fixtureOf": "constructed-calendar-toolbar-options"
     },
     {
       "id": "calendar-week-time-grid",
@@ -5760,9 +6300,9 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "04e9a24620e3",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -5799,9 +6339,9 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "04e9a24620e3",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -5838,9 +6378,9 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "04e9a24620e3",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -5877,9 +6417,9 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "04e9a24620e3",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -5891,6 +6431,186 @@
       "note": "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
       "capture": "viewport",
       "bytes": 131167,
+      "source": "constructed",
+      "renderer": "board",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-board-subtask",
+      "title": "Board view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-board-subtask-desktop-dark.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "59192c1a6d36",
+      "pixelHash": "5f1fbc4bb96d",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "04e9a24620e3",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
+      "capture": "viewport",
+      "bytes": 450546,
+      "source": "constructed",
+      "renderer": "board",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-board-subtask",
+      "title": "Board view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-board-subtask-desktop-light.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "59192c1a6d36",
+      "pixelHash": "a5a87484d9c4",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "04e9a24620e3",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
+      "capture": "viewport",
+      "bytes": 442076,
+      "source": "constructed",
+      "renderer": "board",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-board-subtask",
+      "title": "Board view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-board-subtask-mobile-dark.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "9e62ea15498d",
+      "pixelHash": "b39819967404",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "04e9a24620e3",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
+      "capture": "viewport",
+      "bytes": 129342,
+      "source": "constructed",
+      "renderer": "board",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-board-subtask",
+      "title": "Board view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-board-subtask-mobile-light.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "9e62ea15498d",
+      "pixelHash": "557a221c0d76",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "04e9a24620e3",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped board renderer with the first capture-sized row wired into a parent (two children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
+      "capture": "viewport",
+      "bytes": 127976,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view"
@@ -5916,9 +6636,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -5956,9 +6676,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -5996,9 +6716,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6036,9 +6756,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6054,6 +6774,334 @@
       "renderer": "calendar",
       "bag": "file-view",
       "scale": "day"
+    },
+    {
+      "id": "constructed-calendar-empty",
+      "title": "Calendar view — no date property (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-calendar-empty-desktop-dark.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "0ba26d4010ca",
+      "pixelHash": "4009a6b722f3",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/empty-state-renderer.ts": "1830f5fbf67f",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped calendar renderer with every date-typed column removed from its schema, reproducing renderMonth's real no-date-field early return.",
+      "capture": "viewport",
+      "bytes": 43356,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-empty",
+      "title": "Calendar view — no date property (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-calendar-empty-desktop-light.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "0ba26d4010ca",
+      "pixelHash": "f1353a4dc2a9",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/empty-state-renderer.ts": "1830f5fbf67f",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped calendar renderer with every date-typed column removed from its schema, reproducing renderMonth's real no-date-field early return.",
+      "capture": "viewport",
+      "bytes": 43583,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-empty",
+      "title": "Calendar view — no date property (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-calendar-empty-mobile-dark.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "a89529045407",
+      "pixelHash": "f43bdafaee27",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/empty-state-renderer.ts": "1830f5fbf67f",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped calendar renderer with every date-typed column removed from its schema, reproducing renderMonth's real no-date-field early return.",
+      "capture": "viewport",
+      "bytes": 32208,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-empty",
+      "title": "Calendar view — no date property (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-calendar-empty-mobile-light.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/empty-state-renderer.ts"
+      ],
+      "layoutHash": "a89529045407",
+      "pixelHash": "e4a0ea887e56",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/empty-state-renderer.ts": "1830f5fbf67f",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped calendar renderer with every date-typed column removed from its schema, reproducing renderMonth's real no-date-field early return.",
+      "capture": "viewport",
+      "bytes": 32555,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-mini",
+      "title": "Calendar view — mini date-picker popover (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-calendar-mini-desktop-dark.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/calendar-mini-calendar-renderer.ts"
+      ],
+      "layoutHash": "36dda984eeb2",
+      "pixelHash": "2759db5b1cb4",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped month calendar with its own mini date-picker trigger clicked, opening renderMiniCalendar's real popover rather than a hand-applied class.",
+      "capture": "viewport",
+      "bytes": 126379,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-mini",
+      "title": "Calendar view — mini date-picker popover (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-calendar-mini-desktop-light.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/calendar-mini-calendar-renderer.ts"
+      ],
+      "layoutHash": "36dda984eeb2",
+      "pixelHash": "d1e5902add22",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped month calendar with its own mini date-picker trigger clicked, opening renderMiniCalendar's real popover rather than a hand-applied class.",
+      "capture": "viewport",
+      "bytes": 132845,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-mini",
+      "title": "Calendar view — mini date-picker popover (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-calendar-mini-mobile-dark.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/calendar-mini-calendar-renderer.ts"
+      ],
+      "layoutHash": "b10d790ff4f4",
+      "pixelHash": "1e6d2826aa93",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped month calendar with its own mini date-picker trigger clicked, opening renderMiniCalendar's real popover rather than a hand-applied class.",
+      "capture": "viewport",
+      "bytes": 87849,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-calendar-mini",
+      "title": "Calendar view — mini date-picker popover (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-calendar-mini-mobile-light.png",
+      "sources": [
+        "src/views/calendar-renderer.ts",
+        "tools/bench/calendar-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/views/calendar-mini-calendar-renderer.ts"
+      ],
+      "layoutHash": "b10d790ff4f4",
+      "pixelHash": "8cff34730ca2",
+      "sourceHashes": {
+        "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
+        "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped month calendar with its own mini date-picker trigger clicked, opening renderMiniCalendar's real popover rather than a hand-applied class.",
+      "capture": "viewport",
+      "bytes": 92166,
+      "source": "constructed",
+      "renderer": "calendar",
+      "bag": "file-view"
     },
     {
       "id": "constructed-calendar-month",
@@ -6076,9 +7124,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6116,9 +7164,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6156,9 +7204,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6196,9 +7244,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6236,9 +7284,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6276,9 +7324,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6316,9 +7364,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6356,9 +7404,9 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6396,9 +7444,9 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6435,9 +7483,9 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6449,6 +7497,162 @@
       "note": "The shipped chart renderer over the board bench's five status groups, summing a per-row currency/number column into each bar rather than only counting rows.",
       "capture": "viewport",
       "bytes": 66368,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-empty",
+      "title": "Chart view — empty state (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-chart-empty-desktop-dark.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "ac8f51266562",
+      "pixelHash": "d6853b3c20f2",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's allGroupsHidden empty state, reached by hiding every group value the board bench's group field actually produced.",
+      "capture": "viewport",
+      "bytes": 43364,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-empty",
+      "title": "Chart view — empty state (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-chart-empty-desktop-light.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "ac8f51266562",
+      "pixelHash": "a42cde807316",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's allGroupsHidden empty state, reached by hiding every group value the board bench's group field actually produced.",
+      "capture": "viewport",
+      "bytes": 43604,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-empty",
+      "title": "Chart view — empty state (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-chart-empty-mobile-dark.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "571cfaa433ad",
+      "pixelHash": "cf005768850f",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's allGroupsHidden empty state, reached by hiding every group value the board bench's group field actually produced.",
+      "capture": "viewport",
+      "bytes": 28802,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-empty",
+      "title": "Chart view — empty state (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-chart-empty-mobile-light.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "571cfaa433ad",
+      "pixelHash": "a6bde40efa45",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's allGroupsHidden empty state, reached by hiding every group value the board bench's group field actually produced.",
+      "capture": "viewport",
+      "bytes": 29181,
       "source": "constructed",
       "renderer": "chart",
       "bag": "file-view"
@@ -6474,9 +7678,9 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6513,9 +7717,9 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "1a9fef67b5de",
         "tools/bench/board-render-bench.ts": "468718e05f2a",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6527,6 +7731,162 @@
       "note": "The shipped chart renderer over the board bench's five status groups, summing a per-row currency/number column into each bar rather than only counting rows.",
       "capture": "viewport",
       "bytes": 55103,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-number",
+      "title": "Chart view — single number (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-chart-number-desktop-dark.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "d400050ef90a",
+      "pixelHash": "1481a01d67f8",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's renderNumber branch (chartType: \"number\"), the one chart type drawn as three divs instead of a Chart.js canvas.",
+      "capture": "viewport",
+      "bytes": 43769,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-number",
+      "title": "Chart view — single number (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-chart-number-desktop-light.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "d400050ef90a",
+      "pixelHash": "557a0b3a56f0",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's renderNumber branch (chartType: \"number\"), the one chart type drawn as three divs instead of a Chart.js canvas.",
+      "capture": "viewport",
+      "bytes": 43813,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-number",
+      "title": "Chart view — single number (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-chart-number-mobile-dark.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "c1911429497d",
+      "pixelHash": "d34be1eaf762",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's renderNumber branch (chartType: \"number\"), the one chart type drawn as three divs instead of a Chart.js canvas.",
+      "capture": "viewport",
+      "bytes": 23009,
+      "source": "constructed",
+      "renderer": "chart",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-chart-number",
+      "title": "Chart view — single number (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-chart-number-mobile-light.png",
+      "sources": [
+        "src/views/chart-renderer.ts",
+        "tools/bench/board-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "c1911429497d",
+      "pixelHash": "b008d683377b",
+      "sourceHashes": {
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
+        "tools/bench/board-render-bench.ts": "468718e05f2a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped chart renderer's renderNumber branch (chartType: \"number\"), the one chart type drawn as three divs instead of a Chart.js canvas.",
+      "capture": "viewport",
+      "bytes": 23172,
       "source": "constructed",
       "renderer": "chart",
       "bag": "file-view"
@@ -6552,9 +7912,9 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6591,9 +7951,9 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6630,9 +7990,9 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6669,9 +8029,9 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "tools/bench/gallery-render-bench.ts": "97b52377f347",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6708,9 +8068,9 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6747,9 +8107,9 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6786,9 +8146,9 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6825,9 +8185,9 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "tools/bench/list-render-bench.ts": "af7fa1913bbb",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6839,6 +8199,162 @@
       "note": "The shipped list renderer at the harness's bench shape (1600 rows, 30% fill), windowed to the viewport.",
       "capture": "viewport",
       "bytes": 142002,
+      "source": "constructed",
+      "renderer": "list",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-list-sparse",
+      "title": "List view — sparse fields (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-list-sparse-desktop-dark.png",
+      "sources": [
+        "src/views/list-renderer.ts",
+        "tools/bench/list-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "a46fbf05d0fc",
+      "pixelHash": "fc4c40e17a4e",
+      "sourceHashes": {
+        "src/views/list-renderer.ts": "722b433d196c",
+        "tools/bench/list-render-bench.ts": "af7fa1913bbb",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped list renderer with a deterministic, spread subset of frontmatter keys blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured rather than a fixture's static every-field-present shape.",
+      "capture": "viewport",
+      "bytes": 401883,
+      "source": "constructed",
+      "renderer": "list",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-list-sparse",
+      "title": "List view — sparse fields (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-list-sparse-desktop-light.png",
+      "sources": [
+        "src/views/list-renderer.ts",
+        "tools/bench/list-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "a46fbf05d0fc",
+      "pixelHash": "926acb0601e1",
+      "sourceHashes": {
+        "src/views/list-renderer.ts": "722b433d196c",
+        "tools/bench/list-render-bench.ts": "af7fa1913bbb",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped list renderer with a deterministic, spread subset of frontmatter keys blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured rather than a fixture's static every-field-present shape.",
+      "capture": "viewport",
+      "bytes": 398991,
+      "source": "constructed",
+      "renderer": "list",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-list-sparse",
+      "title": "List view — sparse fields (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-list-sparse-mobile-dark.png",
+      "sources": [
+        "src/views/list-renderer.ts",
+        "tools/bench/list-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "2dfe9207fc9d",
+      "pixelHash": "031d66808c7b",
+      "sourceHashes": {
+        "src/views/list-renderer.ts": "722b433d196c",
+        "tools/bench/list-render-bench.ts": "af7fa1913bbb",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped list renderer with a deterministic, spread subset of frontmatter keys blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured rather than a fixture's static every-field-present shape.",
+      "capture": "viewport",
+      "bytes": 144299,
+      "source": "constructed",
+      "renderer": "list",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-list-sparse",
+      "title": "List view — sparse fields (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-list-sparse-mobile-light.png",
+      "sources": [
+        "src/views/list-renderer.ts",
+        "tools/bench/list-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs"
+      ],
+      "layoutHash": "2dfe9207fc9d",
+      "pixelHash": "5dc63111d403",
+      "sourceHashes": {
+        "src/views/list-renderer.ts": "722b433d196c",
+        "tools/bench/list-render-bench.ts": "af7fa1913bbb",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped list renderer with a deterministic, spread subset of frontmatter keys blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured rather than a fixture's static every-field-present shape.",
+      "capture": "viewport",
+      "bytes": 141605,
       "source": "constructed",
       "renderer": "list",
       "bag": "file-view"
@@ -6864,9 +8380,9 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6903,9 +8419,9 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6942,9 +8458,9 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -6981,9 +8497,9 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "tools/bench/table-render-bench.ts": "0169d83c5b51",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -7020,9 +8536,9 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -7059,9 +8575,9 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -7098,9 +8614,9 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -7137,9 +8653,9 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
         "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
-        "tools/live/render-assertion-harness.ts": "9afee60ba59a",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
         "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
-        "tools/screenshots/constructed-scenarios.mjs": "2af9884f8602",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
         "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
         "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
         "styles.css": "c32661e8c089",
@@ -7151,6 +8667,186 @@
       "note": "The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.",
       "capture": "viewport",
       "bytes": 64746,
+      "source": "constructed",
+      "renderer": "timeline",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-subtask",
+      "title": "Timeline view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-timeline-subtask-desktop-dark.png",
+      "sources": [
+        "src/views/calendar-timeline-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "68faad559bb0",
+      "pixelHash": "ed5271d47b0c",
+      "sourceHashes": {
+        "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
+      "capture": "viewport",
+      "bytes": 167157,
+      "source": "constructed",
+      "renderer": "timeline",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-subtask",
+      "title": "Timeline view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/views/constructed-timeline-subtask-desktop-light.png",
+      "sources": [
+        "src/views/calendar-timeline-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "68faad559bb0",
+      "pixelHash": "bf2f85ba6df9",
+      "sourceHashes": {
+        "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
+      "capture": "viewport",
+      "bytes": 169375,
+      "source": "constructed",
+      "renderer": "timeline",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-subtask",
+      "title": "Timeline view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-timeline-subtask-mobile-dark.png",
+      "sources": [
+        "src/views/calendar-timeline-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "34bfd6fa8ea7",
+      "pixelHash": "a537566b5b64",
+      "sourceHashes": {
+        "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
+      "capture": "viewport",
+      "bytes": 61973,
+      "source": "constructed",
+      "renderer": "timeline",
+      "bag": "file-view"
+    },
+    {
+      "id": "constructed-timeline-subtask",
+      "title": "Timeline view — subtask tree (constructed)",
+      "group": "views",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/views/constructed-timeline-subtask-mobile-light.png",
+      "sources": [
+        "src/views/calendar-timeline-renderer.ts",
+        "tools/bench/timeline-render-bench.ts",
+        "tools/live/render-assertion-harness.ts",
+        "tools/live/render-assertion-bundle.mjs",
+        "tools/screenshots/constructed-scenarios.mjs",
+        "tools/storybook/obsidian-stub.mjs",
+        "tools/storybook/obsidian-dom-shim.mjs",
+        "src/data/subtask-relation.ts",
+        "src/data/subtask-serialize.ts",
+        "src/i18n.ts"
+      ],
+      "layoutHash": "34bfd6fa8ea7",
+      "pixelHash": "95d370b81479",
+      "sourceHashes": {
+        "src/views/calendar-timeline-renderer.ts": "07f6918bbb64",
+        "tools/bench/timeline-render-bench.ts": "fbe5d0116c22",
+        "tools/live/render-assertion-harness.ts": "3a769872a8b3",
+        "tools/live/render-assertion-bundle.mjs": "9e1195cc704c",
+        "tools/screenshots/constructed-scenarios.mjs": "b3c065bc7b55",
+        "tools/storybook/obsidian-stub.mjs": "191c8dcb8025",
+        "tools/storybook/obsidian-dom-shim.mjs": "6bd6b90ea492",
+        "src/data/subtask-relation.ts": "1a1115c92bc8",
+        "src/data/subtask-serialize.ts": "2b5c2207c25c",
+        "src/i18n.ts": "a6548122a5c5",
+        "styles.css": "c32661e8c089",
+        "tools/screenshots/theme.css": "115be5a71b07",
+        "tools/screenshots/runtime-vars.css": "cd2145aaf626",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "4fda626de932"
+      },
+      "note": "The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.",
+      "capture": "viewport",
+      "bytes": 62958,
       "source": "constructed",
       "renderer": "timeline",
       "bag": "file-view"
@@ -7287,7 +8983,8 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 244420
+      "bytes": 244420,
+      "fixtureOf": "constructed-list"
     },
     {
       "id": "list-mobile",
@@ -7313,7 +9010,8 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 245909
+      "bytes": 245909,
+      "fixtureOf": "constructed-list"
     },
     {
       "id": "list-mobile",
@@ -7339,7 +9037,8 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 137514
+      "bytes": 137514,
+      "fixtureOf": "constructed-list"
     },
     {
       "id": "list-mobile",
@@ -7365,7 +9064,8 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 137479
+      "bytes": 137479,
+      "fixtureOf": "constructed-list"
     },
     {
       "id": "list-sparse-fields",
@@ -7389,7 +9089,8 @@
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 204157
+      "bytes": 204157,
+      "fixtureOf": "constructed-list-sparse"
     },
     {
       "id": "list-sparse-fields",
@@ -7413,7 +9114,8 @@
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 205281
+      "bytes": 205281,
+      "fixtureOf": "constructed-list-sparse"
     },
     {
       "id": "list-sparse-fields",
@@ -7437,7 +9139,8 @@
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 134970
+      "bytes": 134970,
+      "fixtureOf": "constructed-list-sparse"
     },
     {
       "id": "list-sparse-fields",
@@ -7461,7 +9164,8 @@
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 134831
+      "bytes": 134831,
+      "fixtureOf": "constructed-list-sparse"
     },
     {
       "id": "list-view",
@@ -7604,7 +9308,8 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 205380
+      "bytes": 205380,
+      "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
@@ -7639,7 +9344,8 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 199902
+      "bytes": 199902,
+      "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
@@ -7674,7 +9380,8 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 59643
+      "bytes": 59643,
+      "fixtureOf": "constructed-table"
     },
     {
       "id": "table-mobile",
@@ -7709,7 +9416,8 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 58935
+      "bytes": 58935,
+      "fixtureOf": "constructed-table"
     },
     {
       "id": "table-view",
@@ -7855,7 +9563,8 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 151293
+      "bytes": 151293,
+      "fixtureOf": "constructed-timeline-subtask"
     },
     {
       "id": "timeline-subtask-tree",
@@ -7885,7 +9594,8 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 148670
+      "bytes": 148670,
+      "fixtureOf": "constructed-timeline-subtask"
     },
     {
       "id": "timeline-subtask-tree",
@@ -7915,7 +9625,8 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 85852
+      "bytes": 85852,
+      "fixtureOf": "constructed-timeline-subtask"
     },
     {
       "id": "timeline-subtask-tree",
@@ -7945,7 +9656,8 @@
       },
       "note": "The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.",
       "capture": "viewport",
-      "bytes": 86194
+      "bytes": 86194,
+      "fixtureOf": "constructed-timeline-subtask"
     },
     {
       "id": "timeline-toolbar-options",
@@ -7971,7 +9683,8 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 99834
+      "bytes": 99834,
+      "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
       "id": "timeline-toolbar-options",
@@ -7997,7 +9710,8 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 104347
+      "bytes": 104347,
+      "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
       "id": "timeline-toolbar-options",
@@ -8023,7 +9737,8 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 81396
+      "bytes": 81396,
+      "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
       "id": "timeline-toolbar-options",
@@ -8049,7 +9764,8 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 85339
+      "bytes": 85339,
+      "fixtureOf": "constructed-timeline-toolbar-options"
     },
     {
       "id": "timeline-view-day",
