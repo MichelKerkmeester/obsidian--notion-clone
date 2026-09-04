@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T07:20:00Z"
-    last_updated_by: "done-audit-9"
-    recent_action: "Done-audit-9 re-read DONE row 6 on the merged T028 tree; stays open, narrowed a fifth time"
-    next_safe_action: "Widen the shared SCENARIOS list to T028's ten state variants, then rebaseline"
+    last_updated_at: "2026-09-04T09:10:50Z"
+    last_updated_by: "done-audit-10"
+    recent_action: "Done-audit-10 read row 6 after T029 widened both constructed lanes 21 -> 31"
+    next_safe_action: "Pair or retire the 42 fixtures the two lanes' fixture pass still gates on"
     blockers:
       - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
       - "No renderer is asserted against a live Obsidian host"
@@ -26,8 +26,8 @@ _memory:
       - "038 landed (b9e2321+a6fcd31); release 1.4.5 pending; reopened 2026-09-04 for a 1:1 board copy, REQ-007"
       - "043 landed 2ab4942+0af4ca6+bf67475+425d552 (T027); table/chart typed, row 6 stays open on 13 fixture-only scenarios feeding row 4's gate green; AC-002 needs an operator ruling"
       - "043 T028 merged (d363456+dc67803): all 13 row-6 fixtures now have a constructed counterpart; css-lane, screenshots-fresh and device-parity cross-check all 13"
-      - "done-audit-9 keeps row 6 open on ten of those states: absent from render-assertion-bundle.mjs's 21-entry SCENARIOS, so touch-targets and unstyled-links see fixture markup only"
-      - "1:1 legs unmerged: 038 board on worktrees/023-board-one-to-one (1c5f465), 037 gantt on worktrees/024-gantt-one-to-one (d30ea78+9bd044a); both CSS legs open, main unaffected"
+      - "done-audit-10: T029 closed those ten, both lanes now read 31; row 6 re-scoped to the fixture half, 42 of 71 hand-authored scenarios with no constructed counterpart in-lane"
+      - "1:1 legs: 038 board merged and shipped 0.0.16 (854c748+46a8525); 037 gantt landing from worktrees/024-gantt-one-to-one (7617f85), CSS leg recorded"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -547,6 +547,105 @@ resolve them silently.
       are exercised red-first by `tools/live/constructed-state-assertions.mjs` — then rebaseline
       `touch-targets-constructed-baseline.json`. `completion_pct` stays **4 of 7 = 57**: rows 3, 4, 5
       and 7 hold, rows 1 and 2 are the operator's, row 6 stays open on ten scenarios and two lanes.
+
+      **Re-verified 2026-09-04T09:10:50Z (done-audit-10), the tracked residual closed, the row
+      still does not tick.** `043` T029 landed on main in `122a959`, was reconciled onto main's
+      one-to-one board port in `ce72379`, and had its stale post-rebase numbers trued up in
+      `65238ad`. Every number below was measured on that tree by this audit, never carried from the
+      landing pass.
+
+      **What closed — exactly the closing move `done-audit-9` named.**
+      `render-assertion-bundle.mjs` now exports `STATE_SCENARIOS` (the ten variants) and
+      `SCENARIOS_WITH_STATES`, and `touch-targets.mjs:65` / `unstyled-links.mjs:40` import the
+      latter instead of the bare `SCENARIOS`. Read out of the modules rather than counted by eye:
+      **21** + **10** = **31**. `node tools/live/touch-targets.mjs`, `$?` read directly `0` —
+      "[constructed] 50462 interactive element(s) across **31** production-renderer scenario(s)",
+      **422** under the 28px floor against a recorded baseline of **422**; was **21** scenarios and
+      **367** against **367** at `425d552`. `touch-targets-constructed-baseline.json` carries the
+      raise as data rather than prose: a `raiseHistory` of 367 -> 422 with twelve per-class
+      before/after rows summing 0+8+0+22+0+0+0+6+8+11 = **55**, and a `rebaseReconciliation` block
+      recording `reMeasured: 422`, `matchesRaiseHistory: true`, the scanned total 57060 -> **50462**
+      and the constructed link total 144 -> **72**, both attributed to main's board rewrite rather
+      than to T029. `node tools/live/unstyled-links.mjs`, `$?` `0` — "[constructed] **72** link(s)
+      across **31** production-renderer scenario(s)", **0** user-agent-default findings; was **0**
+      links across **21**, and the lane's `constructedElementsSeen === 0` empty-sample caveat no
+      longer prints. That supersedes this row's own standing prediction that widening alone would
+      not make the link half non-vacuous, and the mechanism is checkable rather than asserted:
+      **7** of the ten `STATE_SCENARIOS` set `captureData` (the three toolbar-popover entries do
+      not), so relation and file-type fields — the only source of `.internal-link` markup, per that
+      caveat's own comment — are now built by the constructed pass.
+
+      **One evidence caveat, found by this audit rather than carried.** The stamp committed at HEAD
+      (`tools/live/touch-targets.json`, written by the `ce72379` run six minutes before this one)
+      records constructed `measured 50444`, `under 417`, `betweenFloors 44201`, while two
+      independent runs here both record `50462`, `422`, `44214` — on the identical six `inputs`
+      hashes, with no `src/` or `tools/storybook/` commit between `ce72379` and `65238ad` to explain
+      the difference. The figure the docs cite (**422**) is the one this audit reproduces, and it is
+      also exactly the recorded baseline, so the ratchet is sitting on its ceiling: a run landing on
+      the lower value passes, a run landing one control above 422 fails. Not a verdict change —
+      both 417 and 422 clear the baseline — but the constructed pass is demonstrably not run-to-run
+      identical, and D2's discipline is to record the spread rather than quote the convenient
+      number. `unstyled-links.json` shows no such drift: its diff against HEAD is the `measuredAt`
+      timestamp alone, with 72 constructed links unchanged.
+
+      **The three toolbar renderers are the real reason `SCENARIOS` itself stayed at 21**, verified
+      rather than taken from the comment that claims it: `BAGS` in `render-assertions.mjs` holds
+      exactly **13** keys, enumerated out of the source, and none is `calendar-toolbar/file-view`,
+      `timeline-toolbar/file-view` or `chart-toolbar/file-view` — the three the state list adds.
+      `render-assertions.mjs:277` reads `const expected = BAGS[key]` and `:279` calls
+      `expected.filter(...)`, so a merged list throws a `TypeError` at the bag-shape comparison
+      rather than failing a check. The sibling export is a real constraint, not a convenience.
+
+      **And `render-assertions.mjs`, still reading the 21, leaves no criterion green on a
+      harness-supplied value.** Checked three ways. (a) It mounts no hand-written markup at all:
+      the harness refuses DOM without a bundled-renderer provenance marker (`render-assertion-
+      harness.ts:918`, "hand-written markup resembles renderer output and proves nothing about
+      it"), and `buildRenderAssertionBundle()` fails the run outright when any of the seven
+      `RENDERER_SOURCES` is absent from esbuild's own input manifest. (b) Its action bags are
+      return-type-annotated against the shipped `*RendererActions` interfaces — **13** annotations
+      against those same 13 `BAGS` keys — so `npx tsc --noEmit`, its own gate lane, binds their
+      shape to `src/views`; `BAGS` itself is an expected-shape threshold, which D2 asks of every
+      check, not an input a device would supply differently. (c) Its coverage total is read live
+      from `src/views` (`readdirSync` plus `/export class \w*Renderer/`), not pinned. What the
+      21-entry read does cost is arithmetic, not truth: the three toolbar renderers are now
+      constructed by the other two lanes and counted by neither, so this lane's "7 distinct
+      renderers" under-reports. That is row 3's ledger to correct, not this row's.
+
+      **What does not close.** Both lanes still run a fixture pass first, and both exit codes
+      require it — `touch-targets.mjs:414` fails on `fixtureFailed || constructedFailed` (fixture
+      **264** against a baseline of **279**), `unstyled-links.mjs:211` on
+      `findings.length + constructedFindings.length > 0` (fixture **112** links across **71**).
+      That pass mounts **71** hand-authored HTML strings from `tools/screenshots/scenarios.mjs`.
+      Neither lane reads `fixtureOf`: it is declared on the fixture and consumed only through
+      `screenshots/manifest.json`, which neither imports, so the pairing `done-audit-9` credited to
+      the other three lanes has no effect inside these two. Their constructed pass supplements the
+      fixture pass; it validates no individual fixture. Measured: of the 71, **20** carry
+      `fixtureOf` and **51** do not, and **42** of those 51 are the `panel-*` (14), `chrome-*` (15),
+      `field-*` (11) and popover (`add-view-popover`, `dropdown-field`) families — sheets, menus,
+      popovers, pickers and cell editors that no constructed scenario in either lane mounts at all,
+      because their production builders are not view renderers and the harness has no seam for
+      them. The 71st fixture makes the point on its own: `chrome-board-extensions-selection`, added
+      by main's board port in `d921404`, landed straight into the uncovered set. For a control that
+      lives only on those surfaces the hand-authored measurement is the sole evidence, inside a
+      lane whose exit code ticked row 4 sums.
+
+      **This is a re-scoping, not a widened goalpost, and saying so is part of the ruling.** It is
+      `done-audit-3`'s class (3) — recorded there as "not a structural guarantee for the rest of
+      `scenarios.mjs`" — in the part `done-audit-6`'s `fixtureOf` bound set aside rather than
+      closed, when it narrowed this row's population to the 7 declared pairs plus the 13 named
+      fixture-only scenarios. Every audit since tracked that narrower population, and today it is
+      empty. Ticking on an emptied tracked list while an untracked part of the same class is still
+      live would be this table's first criterion's own denominator error, pointed the other way.
+
+      **Stays open**, narrowed on the axis it was tracked on — ten scenarios against two lanes,
+      down to none — and re-scoped to the remainder: the fixture half of `touch-targets` and
+      `unstyled-links`, **42 of 71** hand-authored scenarios with no constructed counterpart in
+      either lane's own arithmetic. What closes it is finite and nameable: give those surfaces a
+      constructed counterpart in the same two lanes (a mount seam for the non-renderer builders,
+      which does not exist yet), or take the fixture pass out of the exit condition and keep it as
+      a reported-not-enforced number beside the constructed one. `completion_pct` stays **4 of
+      7 = 57**: rows 3, 4, 5 and 7 hold, rows 1 and 2 are the operator's, row 6 stays open on the
+      fixture half of two lanes.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -1441,4 +1540,54 @@ and fixed on that branch, its CSS leg under verification). `037`'s gantt 1:1 leg
 progress). Verified here rather than assumed: `git merge-base --is-ancestor` reports neither branch
 tip is an ancestor of main's `dc67803`, so **main is unaffected by both**, and no DONE-table row,
 release, or operator row moves on their account until they land and are verified in-runtime.
+### Done-audit-10, 2026-09-04T09:10:50Z: T029 merged, row 6's tracked residual closed, the row re-scoped and still open
+
+A fresh audit re-read row 6 on main at `65238ad` after `043` T029 (`122a959`, reconciled `ce72379`,
+numbers trued up in `65238ad`) did precisely what `done-audit-9` named as the closing move. Full
+evidence sits in row 6's own checklist paragraph above; this entry is the ruling.
+
+**The named residual is closed, measured here.** `render-assertion-bundle.mjs` gained a
+`STATE_SCENARIOS` array (10) and a `SCENARIOS_WITH_STATES` export (**31** = 21 + 10), and both lanes
+import the latter. `node tools/live/touch-targets.mjs` exit 0: constructed **50462** elements across
+**31** scenarios, **422** under the 28px floor against a recorded baseline of **422** — was 21
+scenarios and 367/367. `node tools/live/unstyled-links.mjs` exit 0: constructed **72** links across
+**31**, **0** user-agent-default findings — was **0** links across 21, so this row's own standing
+prediction that widening alone would leave the link half vacuous is superseded; 7 of the ten state
+variants set `captureData`, which is what builds the relation and file-type fields the caveat named.
+`touch-targets-constructed-baseline.json` records the 367 -> 422 raise per class (summing 55) and a
+`rebaseReconciliation` block re-measuring 422 on the merged tree.
+
+**Two checks that could have kept it open, and did not.** The three toolbar `renderer` values really
+are why `SCENARIOS` itself stayed at 21: `BAGS` in `render-assertions.mjs` holds exactly 13 keys and
+none of them is the toolbar triple, and `render-assertions.mjs:277`/`:279` would throw a `TypeError`
+on a merged list rather than fail a check. And `render-assertions.mjs`, still reading the 21, leaves
+no criterion green on a harness-supplied value: it refuses DOM without a bundled-renderer provenance
+marker, its 13 action bags are return-type-annotated against the shipped `*RendererActions`
+interfaces so `tsc --noEmit` binds them to `src/views`, and its coverage total is read live from
+`src/views` rather than pinned. Its 21-entry read costs coverage arithmetic (row 3's ledger), not
+truth.
+
+**Row 6 still does not tick, and this is a re-scoping rather than a moved goalpost.** Both lanes
+still run a fixture pass whose result their exit codes require — `touch-targets` on
+`fixtureFailed || constructedFailed`, `unstyled-links` on the summed finding count — over **71**
+hand-authored scenarios, of which **20** carry `fixtureOf` and **51** do not; **42** of those 51 are
+the `panel-*`, `chrome-*`, `field-*` and popover families that no constructed scenario in either lane
+mounts at all. Neither lane reads `fixtureOf` (it is consumed only through `screenshots/
+manifest.json`), so their constructed pass supplements the fixture pass without validating any
+individual fixture. That is `done-audit-3`'s class (3) in the part `done-audit-6`'s `fixtureOf` bound
+set aside rather than closed; ticking on an emptied tracked list while an untracked part of the same
+class is live would be this table's first criterion's denominator error pointed the other way.
+`completion_pct` stays **4 of 7 = 57**. `roadmap.md` §5 and §5.3 and `handover.md` updated to match.
+
+### 2026-09-04: the board 1:1 leg shipped as 0.0.16; the gantt leg is landing
+
+Supersedes the in-flight entry above rather than rewriting it. `038`'s board one-to-one leg was
+merged and reconciled onto main in `854c748` and cut as release **0.0.16** in `46a8525` — the first
+release under the renumbered scheme. Its arrival is visible in this audit's own numbers: the
+constructed pass's scanned element total dropped 57060 -> 50462 and its constructed link total
+144 -> 72 with the pass/fail figures unmoved, and the board port added the 71st fixture scenario
+(`chrome-board-extensions-selection`, `d921404`) straight into the set with no constructed
+counterpart. `037`'s gantt one-to-one leg is landing from `worktrees/024-gantt-one-to-one` at
+`7617f85` (TypeScript leg `d30ea78`+`9bd044a`, CSS leg recorded); main does not carry it yet.
+
 <!-- /ANCHOR:log -->
