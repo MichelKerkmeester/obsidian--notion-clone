@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
     last_updated_at: "2026-09-04T21:40:00Z"
     last_updated_by: "in-runtime-code-agent"
-    recent_action: "T031 landed: 16 Project Manager reference captures under screenshots/project-manager/; AC-002 marked Met on the operator's determinism ruling (2026-09-04)"
-    next_safe_action: "Fresh audit re-reads row 6 against T029's widened pass; decide T031's two P2 kanban fidelity gaps"
+    recent_action: "T031 landed 16 PM reference captures, closing AC-002 as Met"
+    next_safe_action: "Audit row 6 against T029 and resolve the two open P2 kanban gaps"
     blockers: []
     key_files:
       - "tools/live/render-assertion-harness.ts"
@@ -33,14 +33,8 @@ _memory:
     completion_pct: 79
     open_questions:
       - "Does the shared manifest stand, or does AC-006's separate file still apply?"
-      - "Does parent row 6 tick after T029, or does a residual keep it open? Left to a fresh audit (parent D4)."
-    answered_questions:
-      - "Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ."
-      - "Row count alone enough for row 6? No, captureData also types columns."
-      - "Does captureData's real CellRenderer add forced layout reads to the table's row loop? No — measured 3 of 3 connected reads, bound 8, identical to captureData:false at the same 2000-row shape."
-      - "Can all 13 of the parent's row-6 fixture-only scenarios be constructed through real production code paths? Yes — all 13, none left fixture-only (T028)."
-      - "Does widening touch-targets/unstyled-links' own constructed pass to the ten state variants make the link lane's sample non-vacuous? Yes — 144 links across 31 scenarios, 0 UA-default findings (T029), superseding the prior 'widening alone would not make it non-vacuous' concern."
-      - "AC-002: pixel-difference basis, or inside-mount layout determinism basis? Operator ruling 2026-09-04: accept determinism; AC-002 is now Met, the pixel-difference wording superseded."
+      - "Does parent row 6 close after T029? See Continuity Log."
+    answered_questions: []
 ---
 # Implementation Summary
 
@@ -597,3 +591,38 @@ Every exit code below was read from `$?` directly.
 7. **One dispatch leg did not run.** T019 (the second external pass) was skipped; this landing went
    straight from the first dispatched leg to in-runtime verification.
 <!-- /ANCHOR:limitations -->
+
+---
+
+<!-- ANCHOR:continuity-log -->
+## Continuity Log
+
+The `_memory.continuity` block was compacted on 2026-09-04 to satisfy the frontmatter contract
+(`SPECDOC_FRONTMATTER_004`'s compact/non-narrative `recent_action`/`next_safe_action`, and
+`SPECDOC_FRONTMATTER_007`'s 2048-byte block ceiling). The facts below are unchanged, only relocated
+out of frontmatter; `session_dedup` was left untouched.
+
+**Recent action, full form.** T031 landed: 16 Project Manager reference captures under
+`screenshots/project-manager/`; AC-002 marked Met on the operator's determinism ruling (2026-09-04).
+
+**Next safe action, full form.** Fresh audit re-reads row 6 against T029's widened pass; decide
+T031's two P2 kanban fidelity gaps.
+
+**Open question, full form.** Does parent row 6 tick after T029, or does a residual keep it open?
+Left to a fresh audit (parent D4).
+
+**Answered questions (moved out of frontmatter):**
+
+- Fixture/constructed pixel-equal at bench shape? No, all 7 pairs differ.
+- Row count alone enough for row 6? No, captureData also types columns.
+- Does captureData's real CellRenderer add forced layout reads to the table's row loop? No —
+  measured 3 of 3 connected reads, bound 8, identical to captureData:false at the same 2000-row
+  shape.
+- Can all 13 of the parent's row-6 fixture-only scenarios be constructed through real production
+  code paths? Yes — all 13, none left fixture-only (T028).
+- Does widening touch-targets/unstyled-links' own constructed pass to the ten state variants make
+  the link lane's sample non-vacuous? Yes — 144 links across 31 scenarios, 0 UA-default findings
+  (T029), superseding the prior "widening alone would not make it non-vacuous" concern.
+- AC-002: pixel-difference basis, or inside-mount layout determinism basis? Operator ruling
+  2026-09-04: accept determinism; AC-002 is now Met, the pixel-difference wording superseded.
+<!-- /ANCHOR:continuity-log -->
