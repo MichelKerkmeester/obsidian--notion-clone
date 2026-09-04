@@ -210,7 +210,7 @@
     ],
     "causal_summary": "`tools/screenshots/capture.mjs` accepts only a scenario whose `html(device)` returns a synchronous",
     "created_at": "2026-09-04T00:45:06Z",
-    "last_save_at": "2026-09-04T01:50:40.366Z",
+    "last_save_at": "2026-09-04T02:11:44.036Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,7 +221,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0c7346cbfba3609b05a6163673d77be8cfe85e15e164434f22558c4233ee4c57",
+    "source_fingerprint": "sha256:e11d6f1344b386a1b0c380d2489e4f0e78f9ed6f9850ab210461670cfbbd962b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b3771fe811fca839f455d4c5248f1069baa5b0241326504b5d81b09efa58f82c",

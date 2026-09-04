@@ -42,14 +42,30 @@ const HERE = fileURLToPath(new URL(".", import.meta.url));
 // body's job is to put it back where the capture measures it.
 const CONSTRUCTED_ENTRY_BODY = `
 window.__mountConstructed = (spec) => {
+  // #shot carries theme.css's fixture-path sizing (height: 100%, resolved against the
+  // viewport) so a fixture painted straight into it fills the pane the way the real app
+  // does. Mounting a renderer as #shot's sibling-after inherits that as a phantom full
+  // viewport height sitting above the container the instant it is created — before this
+  // function ever moves it into #shot — because #shot is still empty and already that
+  // tall. A renderer that reads its own offset from the page during that first render
+  // (the list view windows against it) sees itself starting one viewport-height down and
+  // computes its visible rows from there. Detaching #shot for the render keeps the
+  // container's initial position where a real pane's content starts: flush at zero, as
+  // body's only child, with nothing already occupying the space above it — while it is
+  // still body's DIRECT child, which is what lets its own height: 100% keep resolving
+  // against the viewport the same way it did before this fix.
+  const shot = document.getElementById("shot");
+  const shotNextSibling = shot.nextSibling;
+  shot.remove();
   let container = null;
   let provenance = false;
   runRenderAssertions(document.body, spec, "", (mounted, results) => {
     container = mounted;
     provenance = results.length > 0 && results[0].pass;
   });
+  document.body.insertBefore(shot, shotNextSibling);
   if (!container || !provenance) return false;
-  document.getElementById("shot").appendChild(container);
+  shot.appendChild(container);
   return true;
 };
 `;
