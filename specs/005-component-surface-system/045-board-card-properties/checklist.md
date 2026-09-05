@@ -87,19 +87,25 @@ ticked from a passing test alone.
 ## TESTING
 
 - [ ] CHK-020 [P0] Every `acceptance-criteria.md` row that is not operator-only is `Met` with
-      observed evidence — AC-001 through AC-004 are `Met`; AC-005 stays `Unmet` because its named
-      verification method (a `044` `sheet-grammar` lane row) does not exist in this tree yet. Not
+      observed evidence — AC-001 through AC-004 are `Met`; AC-005 stays `Unmet`. The lane its
+      Verification cell names now exists AND measures this surface directly (5 of 7 elements
+      green), but `rows`/`segmented` are red for the pre-existing settings-body reason, not a
+      registered all-green row for this surface, so the named check still does not exist. Not
       fully satisfied; see `acceptance-criteria.md` §3.
 - [x] CHK-021 [P0] `npm run gate` exits 0, read without a pipe — `npm run gate >/tmp/gate045.log
-      2>&1; echo $?` → `0`; 25 green, 0 red
+      2>&1; echo $?` → `0`; 25 green, 0 red. Re-run at T013's landing (`npm run gate` piped to a log,
+      exit read separately): 26 green, 0 red — the extra lane is `sheet-grammar`, registered between
+      the two passes by `044`'s own landing, not something this task added.
 - [x] CHK-022 [P1] Empty list, deleted key, and a schema whose only field is the title, all covered
       — `board-card-fields.test.ts`: "keeps an empty array...", "drops unknown keys...", and the
       new "the title field is the only column in the schema" shape in `SCHEMA_SHAPES`
 - [x] CHK-023 [P1] A malformed stored list loads as absent rather than throwing
       — `board-card-fields.test.ts` "returns undefined for a missing or malformed value"
-- [ ] CHK-024 [P1] A constructed scenario carries a non-default list, so the feature is photographed
-      — not done this session (`tasks.md` T013); see that task's note for the reason and what a
-      follow-up needs
+- [x] CHK-024 [P1] A constructed scenario carries a non-default list, so the feature is photographed
+      — done (`tasks.md` T013): `constructed-board-card-properties` (the panel, desktop + phone)
+      and `constructed-board-card-properties-hidden` (the same list applied to a real extensions
+      card) both captured and read; `constructed-state-assertions.mjs` proves the panel's checkbox
+      states, red before the harness branch existed
 <!-- /ANCHOR:testing -->
 
 ---

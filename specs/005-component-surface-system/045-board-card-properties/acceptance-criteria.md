@@ -72,9 +72,9 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 **AC-004 evidence:** `src/views/board-renderer-parity.test.ts` "does not let a stored card field list move the reference card's fixed slots" (a `boardCardFields` list stored on a reference-mode config; the fixed time/tags slots are unmoved) plus `tasks.md` T012's DOM-assertion and capture evidence.
 
-**AC-005 evidence, partial:** `src/views/board-renderer-hierarchy.test.ts` "still renders a title with every stored field toggled off" proves the cover/title half. The phone half — `.is-phone` hides the drag handle and shows `db-mobile-reorder-controls` via the exact same CSS this packet did not have to rewrite (`styles.css:12822` `.db-column-manager-row`, reused verbatim by `board-card-properties-panel.ts`) — is proven by `board-card-properties-panel.test.ts`'s read-only/reorder cases and by code identity with the already-shipped column manager, not by a `sheet-grammar` lane row: that lane does not exist in this tree yet (`044-phone-sheet-alignment` has not landed it as of this session). Left `Unmet` rather than claiming a check that cannot run.
+**AC-005 evidence, partial:** `src/views/board-renderer-hierarchy.test.ts` "still renders a title with every stored field toggled off" proves the cover/title half. The phone half is now backed by a photograph rather than only code identity: `tasks.md` T013's `constructed-board-card-properties-mobile-dark.png` (and its light/desktop siblings) show the desktop popover's drag handle replaced by `.db-mobile-reorder-controls` under `.is-phone`, matching `board-card-properties-panel.stories.ts`'s own state, plus `board-card-properties-panel.test.ts`'s read-only/reorder unit cases.
 
-**True-up, `044`'s landing (`dcff742e`):** the `sheet-grammar` lane this row's Verification cell names now exists on main (`tools/live/sheet-grammar.mjs`, registered in `tools/gate.mjs`, `npm run gate` 26/26) — the blocker is no longer "the lane does not exist" but "the lane has no row for this surface." Registering board-card-properties in `sheet-grammar.mjs`'s `REGISTERED_SURFACES` is `tasks.md` T013's own still-open scenario work, not done here. AC-005 stays `Unmet`.
+**True-up, T013's landing:** `sheet-grammar.mjs` (`tools/live/sheet-grammar.mjs`) measured the mounted board Properties sheet directly, not hypothetically. `surface`, `handle`, `header`, `dropdown` and `keyboard` all measure green; `dropdown` is green specifically because this section draws no `<select>` anywhere. `rows` and `segmented` measure red — but for the same reason the already-registered-red settings sheet is red: sibling `.db-view-config-row` rows and `.db-toggle-switch` checkboxes elsewhere in the SAME mounted sheet (the subgroup dropdown, cover-image settings, "source rules" and "show empty fields" toggles), not this section's own `.db-column-manager-row` / `db-checkbox db-checkbox-field` markup, which already matches the shape `column-width` conforms with. `describeSheetGrammar` reads the whole mounted sheet with no way to scope to one section, and the Properties section never mounts except inside that shared body, so there is no real (non-fabricated) way to register it apart from the settings sheet as a whole — recorded in `sheet-grammar.mjs`'s own `REGISTERED_SURFACES` comment rather than claimed as a passing row, since registering it there would either fail the gate on a defect this section does not own or require a harness-only "Properties as its own sheet" surface the operator never sees. AC-005 stays `Unmet`: the named verification method (a registered, all-green `sheet-grammar` row) still does not exist for this surface, and closing that gap needs the settings body's own rows carried onto the shared row grammar first — the same blocker `044`'s landing left open for the settings sheet itself.
 
 ### Status values
 
@@ -104,11 +104,16 @@ waiver is treated as an unmet criterion rather than as a pass.
 AC-001 through AC-004 are `Met` with observed evidence (cited above), including the two that mattered
 most — AC-003 and AC-004 pull in opposite directions (nothing changes for an existing view; nothing
 changes for the reference card even when a list exists) and both are DOM/capture comparisons rather
-than opinions. AC-005 is partially met: the cover/title guarantee is proven, the phone row grammar is
-proven by code identity with the already-shipped column manager, but the `sheet-grammar` lane its
-Verification cell names carries no row for this surface — the lane itself landed with `044`
-(`dcff742e`), narrowing the gap from "the lane does not exist" to "the lane has no row here" — so the
-row stays `Unmet` rather than claiming a check nothing runs. AC-006 is operator-only and untouched.
-Not closeable until AC-005 has a real check to point at (or the operator waives the lane requirement)
-and AC-006 is answered.
+than opinions. AC-005 is partially met and its evidence is stronger than before but still not the
+named check: the cover/title guarantee is proven, the phone row grammar is now backed by a photograph
+(`tasks.md` T013) in addition to code identity with the already-shipped column manager, and
+`sheet-grammar.mjs` measured this surface directly for the first time — five of seven elements green,
+the other two (`rows`, `segmented`) red for the pre-existing settings-body reason the lane's own
+comment already names for the settings sheet, not for anything this section's own markup does. The
+row stays `Unmet` because the lane still carries no all-green registered row for this surface, and
+`describeSheetGrammar`'s whole-sheet scope means one cannot exist here before the settings body
+itself carries the shared row grammar — a blocker owned by a different lane, named precisely rather
+than left as "the lane has no row here." AC-006 is operator-only and untouched. Not closeable until
+AC-005 has a real passing check to point at (or the operator waives the lane requirement) and AC-006
+is answered.
 <!-- /ANCHOR:closure -->

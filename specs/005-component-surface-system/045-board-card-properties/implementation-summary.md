@@ -10,23 +10,26 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
-    last_updated_at: "2026-09-05T00:50:00.000Z"
-    last_updated_by: "code-verification-pass"
-    recent_action: "Verified the landing, fixed a resolver gap, closed T011/T012 and the gate"
-    next_safe_action: "T013 (photographed scenario) and T014 (roadmap update)"
+    last_updated_at: "2026-09-05T03:45:00.000Z"
+    last_updated_by: "code-capture-pass"
+    recent_action: "Landed T013: photographed the properties panel and its card-level effect"
+    next_safe_action: "Carry the settings body's rows onto sheet-grammar; AC-006 stays operator-only"
     blockers:
-      - "AC-005's named verification method (a 044 sheet-grammar lane row) does not exist in this tree yet"
+      - "AC-005's sheet-grammar row cannot register all-green until the shared settings-body carries the row/segmented grammar (describeSheetGrammar reads the whole mounted sheet, not a scoped section)"
       - "AC-006 is operator-only"
     key_files:
       - "src/views/board-renderer.ts"
       - "src/views/board-card-fields.ts"
       - "src/views/board-card-properties-panel.ts"
       - "src/data/types.ts"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/screenshots/constructed-scenarios.mjs"
+      - "tools/live/sheet-grammar.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-045-verify"
+      session_id: "surface-system-045-t013"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 92
     open_questions:
       - "Does the gallery share this mechanism, or get its own?"
       - "Does the Properties control also reach the reference card's five semantic slots, or only the local extension card?"
@@ -47,7 +50,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 045-board-card-properties |
-| **Completed** | Not complete — REQ-001..004, 007, 008 met; REQ-005/006's sheet-grammar check and REQ-001's operator sign-off (AC-006) remain |
+| **Completed** | Not complete — REQ-001..004, 007, 008 met; REQ-005/006's phone row grammar is now photographed and directly measured (5/7 elements green on `sheet-grammar.mjs`), but the surface still cannot register as an all-green row until the shared settings body carries the row/segmented grammar; REQ-001's operator sign-off (AC-006) remains |
 | **Level** | 2 |
 <!-- /ANCHOR:metadata -->
 
@@ -182,6 +185,7 @@ for the new panel module, and eight `tools/live/*.json` evidence artefacts stale
 | Differential test for the resolver | `board-card-fields.test.ts`, 5 schema shapes including a title-only schema |
 | Operator device confirmation | Not sought (AC-006 is operator-only) |
 | Post-rebase reconciliation, landing on main | Rebased onto `origin/main` after the list hide-and-migrate landing (`e466696b`) and the screenshots symlink-ignore fix (`6328c9cb`). `src/`, `styles.css` and `tools/lane/css-lane.json` auto-merged or were resolved during the rebase (`view-config-panel-renderer.ts`: this phase's Properties section landed inside main's `.db-view-config-body` and alongside main's list-type filtering, both auto-merged clean; `css-lane.json`: main's 237-entry history plus this phase's own 3 unique `045` entries appended, `baselineHash` recomputed on the merged stylesheet at `6c7a7c42f694`). Full recapture (`npm run screenshots`, 554 entries) found zero real content-changed captures of this phase's own making: both `board-view` captures came back pixelHash/layoutHash-identical to HEAD (re-encode noise, restored) and two `constructed-board` captures were opened and read to confirm the default card fields render unchanged. 24 further captures — every `constructed-timeline` and `reference-gantt` scenario — reproduced new, but *stable*, pixel content across two isolated single-scenario reruns each, traced to `calendar-timeline-renderer.ts`'s and the vendored plugin's own real-clock "today" positioning rather than to any file this phase touches; restored to HEAD's bytes/pixelHash/layoutHash with `sourceHashes` left at their post-merge values, the same treatment `037-timeline-gantt-port`'s own post-rebase reconciliation used for the equivalent drift. 16 `tools/live/*.json` evidence artefacts re-stamped against the merged tree (8 stale after the rebase kept main's stamps, 8 more refreshed by the gate's own run); every payload's counts/totals held their prior baseline except `engine-parity`'s known cross-engine gap, which moved from 51 to 42 on its own unrelated remeasurement. `npx tsc --noEmit` exit 0; `npx vitest run` 109 files / 1135 tests; `npm run lint` 172 (pre-existing baseline, unchanged); `npm run lint:tools` exit 0; `scan-comments` PASS across 418 files; `story:smoke` 20 stories x 2 themes, 0 errors; `screenshots:verify` 0 stale; `npm run gate` 25 green. Landed `ff1dacec`, pushed to `origin/main`. |
+| T013 landing (this session) | Added `viewConfigVariant`/`boardCardFieldsHidden` to `render-assertion-harness.ts`, two `constructed-scenarios.mjs` entries plus a hand fixture, updated `constructed-capture.test.mjs`'s two hardcoded arrays, a paired `constructed-state-assertions.mjs` case, and measured (not registered) this surface in `sheet-grammar.mjs`. Adversarial pass caught a real defect before landing: the first `constructed-board-card-properties-hidden` attempt omitted `boardExtensionsEnabled`, so it rendered through `renderReferenceCard`'s fixed slot map where a stored list has no effect — the capture came back byte-identical to plain `constructed-board`. Confirmed by a direct DOM count (`stocks`: 18 occurrences without `boardExtensions: true`, 0 with it) before recapturing; the corrected capture shows the extensions card with every other field intact and `stocks` alone missing, read beside `constructed-board-extensions` to confirm. `npm run screenshots` run twice (once before the fix, once after, to pick up the corrected scenario's sourceHashes cascade) — 564 entries both times; `git status`/`check-lane.mjs`'s own comparator classified 12 files as genuinely new (this phase's captures) and up to 48 as byte-only or real-clock-drift noise (timeline/gantt "today" positioning, unrelated date-picker/record-detail re-encodes) each run, all restored to HEAD bytes/pixelHash/layoutHash. `check-lane.mjs` reports `held by null` and requires no release entry (the newest lane history entry predates the current `baselineHash`, so no review is owed for a stylesheet this phase did not touch). `touch-targets.mjs`'s fixture baseline raised 199 → 207 with attribution in `touch-targets-baseline.json` (8 new bare `<button>` reorder controls at 24×24 from the new hand fixture's four rows, the same already-known `reorderControls()` shortfall `panel-sort-rules`/`panel-column-manager` already carry, not a new defect class). `npx tsc --noEmit` exit 0; `npx vitest run` 109 files / 1140 tests; `npm run lint` 172 (unchanged baseline, 0 findings in touched files); `npm run lint:tools` exit 0; `scan-comments` PASS across 419 files; `screenshots:verify` 0 stale; `npm run gate` 26 green, 0 red. |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -189,16 +193,25 @@ for the new panel module, and eight `tools/live/*.json` evidence artefacts stale
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **No photographed non-default state (T013).** No existing capture scenario mounts
-   `ViewConfigPanelRenderer`/`renderBoardCardProperties` for a board view — the harness's one
-   `view-config` scenario is table-only. The panel has a Storybook story and thorough unit coverage
-   instead. Building the constructed scenario needs a board-typed branch in
-   `render-assertion-harness.ts`'s `view-config` case, a matching hand fixture, and updates to the
-   two hardcoded scenario-id arrays in `tools/screenshots/constructed-capture.test.mjs`.
-2. **AC-005's named verification lane doesn't exist yet.** Its Verification cell asks for a `044`
-   `sheet-grammar` lane row; `044-phone-sheet-alignment` has not landed that infrastructure. The
-   phone row grammar is verified by code identity with the already-shipped column manager and by
-   unit tests instead, but the row stays `Unmet` rather than claim a check that could not run.
+1. ~~No photographed non-default state (T013).~~ **Closed.** `viewConfigVariant: "board"`
+   (`render-assertion-harness.ts`) mounts the real `ViewConfigPanelRenderer` for a board view
+   carrying the story's own `Editable` fixture, captured as `constructed-board-card-properties`
+   (desktop popover + phone sheet) with a hand-fixture pair (`panel-board-card-properties`).
+   `boardCardFieldsHidden` on the `board` renderer pairs it with a real extensions card missing the
+   hidden field (`constructed-board-card-properties-hidden`). Both hardcoded scenario-id arrays in
+   `tools/screenshots/constructed-capture.test.mjs` updated.
+2. **AC-005's named verification lane now exists and measures this surface, but cannot register a
+   passing row for it.** `sheet-grammar.mjs` mounted the board Properties sheet directly: `surface`,
+   `handle`, `header`, `dropdown` and `keyboard` measure green; `rows` and `segmented` measure red
+   for the same pre-existing reason the settings sheet itself is red (sibling
+   `.db-view-config-row`/`.db-toggle-switch` rows elsewhere in the same mounted sheet), not this
+   section's own `.db-column-manager-row`/`db-checkbox-field` markup. `describeSheetGrammar` reads
+   the whole mounted sheet with no way to scope to one section, and this section never mounts
+   except inside that shared body, so it is documented in the lane's own `REGISTERED_SURFACES`
+   comment rather than registered — registering would either fail the gate on a defect owned
+   elsewhere, or require a harness-only surface the operator never sees. Closing this needs the
+   settings body's own rows carried onto the shared row/segmented grammar first, the same blocker
+   `044`'s landing left open for the settings sheet as a whole.
 3. ~~`../roadmap.md` §5 not updated (T014).~~ **Closed post-landing** (see Verification's
    reconciliation row below): `../roadmap.md` §5.A's `045` row and prose, and `../spec.md`'s two
    Phase Documentation Map rows, now read Landed on main.
