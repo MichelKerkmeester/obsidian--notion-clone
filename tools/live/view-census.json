@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T20:58:02.168Z",
+  "measuredAt": "2026-09-05T21:14:22.918Z",
   "inputs": {
-    "styles.css": "72977de79a32",
+    "styles.css": "7df8c9185a41",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -361,8 +361,8 @@
   ],
   "totals": {
     "fixtures": 72,
-    "escaping": 658,
-    "growing": 309,
+    "escaping": 661,
+    "growing": 312,
     "scrolling": 349,
     "rhythmGroups": 8,
     "ragged": 0,
@@ -2890,6 +2890,17 @@
       "width": 320,
       "fixture": "field-file-fields",
       "kind": "escaping",
+      "tag": "span",
+      "cls": "status-badge.db-file-tag-badge",
+      "parentCls": "db-file-tags.db-multi-select-values",
+      "by": 54,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "field-file-fields",
+      "kind": "escaping",
       "tag": "a",
       "cls": "internal-link.db-file-link-list-item",
       "parentCls": "db-file-link-list",
@@ -2904,7 +2915,7 @@
       "tag": "a",
       "cls": "internal-link.db-file-link-list-item",
       "parentCls": "db-file-link-list",
-      "by": 3.1,
+      "by": 88.5,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5633,6 +5644,28 @@
       "mean": 44,
       "sd": 0,
       "distinct": 1
+    },
+    {
+      "width": 402,
+      "fixture": "field-file-fields",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "status-badge.db-file-tag-badge",
+      "parentCls": "db-file-tags.db-multi-select-values",
+      "by": 26.6,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "field-file-fields",
+      "kind": "escaping",
+      "tag": "a",
+      "cls": "internal-link.db-file-link-list-item",
+      "parentCls": "db-file-link-list",
+      "by": 73.1,
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
