@@ -397,3 +397,33 @@ describe("owned menu — never-empty fallback", () => {
     expect(rows[0].hasAttribute("disabled")).toBe(false);
   });
 });
+
+describe("owned menu — a row's own handler runs before the menu closes", () => {
+  // The order is the whole contract for a row that opens a surface of its own. `addRow` calls the
+  // caller's `onClick` first and closes second, and closing returns focus — so a row that opens a
+  // foreign popover and lets the primitive do the closing has its focus pulled back out of that
+  // popover a moment later. Callers in that position close the menu themselves, first
+  // (`toolbar-renderer.ts`'s change-view-type row). Pinning the order here is what tells the next
+  // one why.
+  it("runs onClick, then closes, then returns focus", async () => {
+    vi.resetModules();
+    const { createOwnedMenu } = await import("./owned-menu");
+    const { doc, body } = createMockDoc();
+    const trigger = new MockElement("button");
+    const order: string[] = [];
+    const menu = createOwnedMenu(doc, {
+      returnFocus: trigger as unknown as HTMLElement,
+      onClose: () => order.push("close"),
+    });
+    const row = menu.addRow({ label: "Change type", chevron: true, onClick: () => order.push("onClick") }) as unknown as MockElement;
+    menu.showAt({ x: 0, y: 0 });
+
+    row.dispatch("click");
+
+    expect(order).toEqual(["onClick", "close"]);
+    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(0);
+    // Focus lands on the trigger only after the handler has run, which is what a caller opening its
+    // own surface has to close ahead of.
+    expect(activeElementRef.value).toBe(trigger);
+  });
+});

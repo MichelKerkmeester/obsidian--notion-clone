@@ -1239,8 +1239,14 @@ export class ToolbarRenderer {
    *
    * The type-change row is the one row here that does not lead to a `db-menu-item` result — it
    * opens the shared select picker instead, the way `showAllViewsHub`'s own "change layout" action
-   * already does (closing this menu first, then anchoring the picker on the tab, which survives
-   * the close unlike a row inside the menu that is about to be removed).
+   * already does: close this menu first, then anchor the picker on the tab, which survives the
+   * close unlike a row inside the menu that is about to be removed.
+   *
+   * The close has to be explicit, and it has to come first. `addRow` runs a row's own `onClick`
+   * and only then closes, so a row that opened the picker and left the closing to the primitive
+   * would have the menu's `returnFocus` fire afterwards — pulling focus off the option the picker
+   * had just focused and onto the tab, with an open listbox the keyboard can no longer drive.
+   * `close()` is idempotent, so the primitive's own trailing close is then a no-op.
    */
   private showViewTabMenu(
     event: MouseEvent,
@@ -1281,7 +1287,10 @@ export class ToolbarRenderer {
       icon: "replace",
       label: t("toolbar.changeViewType"),
       chevron: true,
-      onClick: () => this.showViewTypeChangeMenu(tab, viewIndex, viewType, actions),
+      onClick: () => {
+        menu.close();
+        this.showViewTypeChangeMenu(tab, viewIndex, viewType, actions);
+      },
     });
     if (isTouchDevice(this.toolbarRoot) && actions.moveView && totalViews > 1) {
       if (viewIndex > 0) {
