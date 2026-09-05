@@ -57,10 +57,10 @@
       "tools/storybook/verify-placement.mjs",
       "tools/live/evidence.mjs",
       ".github/workflows/gates.yml",
+      ".github/workflows/release.yml",
       "tools/lane/README.md",
       "tools/naming/scan-folder-docs.mjs",
-      "src/views/popover-auto-close.ts",
-      "src/views/popover-position.ts"
+      "src/views/popover-auto-close.ts"
     ],
     "entities": [
       {
@@ -160,6 +160,12 @@
         "source": "derived"
       },
       {
+        "name": "release.yml",
+        "kind": "config",
+        "path": ".github/workflows/release.yml",
+        "source": "derived"
+      },
+      {
         "name": "README.md",
         "kind": "doc",
         "path": "tools/lane/README.md",
@@ -175,12 +181,6 @@
         "name": "popover-auto-close.ts",
         "kind": "code",
         "path": "src/views/popover-auto-close.ts",
-        "source": "derived"
-      },
-      {
-        "name": "popover-position.ts",
-        "kind": "code",
-        "path": "src/views/popover-position.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Release 1.3.1 passed every gate and changed nothing",
     "created_at": "2026-08-29T14:23:23.345Z",
-    "last_save_at": "2026-09-04T20:07:56.266Z",
+    "last_save_at": "2026-09-05T01:05:13.032Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6d983447976b0a0072203e5a3e1a14bc97c9709e666d004e2859e66b93e1d81f",
+    "source_fingerprint": "sha256:9affc99f369b12b4423e04c385465dd1fa62cb6fe8ff15ecacfd8dbd2fd4284f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "c6d98b8b9d9a2790ae1acb53c5e270c3ff7b0ccd82f08a1af8caaefbcc94f2ed",
       "plan.md": "fb4021ce452cd5ecf6c04d2145a0647fd3ad6f21b1bf7b1d098184e021f60383",
       "tasks.md": "a152ffb68fbcdb1bfe635c4a578f5f04b53f219aebb144f736a0a1f281b9deaf",
-      "implementation-summary.md": "79f1c3e73e644c0d19edeeb35d1594ea1ced806ce85d70cd714fe221f3178e4f"
+      "implementation-summary.md": "bd9535077d95efe31d8a220f43a45b66694d822075a126c64e671cf75ee76959"
     },
     "last_active_child_id": null,
     "last_active_at": null

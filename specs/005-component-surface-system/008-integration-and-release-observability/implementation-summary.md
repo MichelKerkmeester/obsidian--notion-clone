@@ -210,4 +210,21 @@ not re-measure them:
    Deliverable B at zero. Per D3 this cannot approach 100 — nothing here is operator-confirmed, and
    AC-008's release decision has not been rehearsed even once.
 
+8. **2026-09-05 — the "working tree is clean after a full run" drift check (this phase's own
+   dirty-tree gate, `.github/workflows/gates.yml`) was reddening every ordinary commit since the
+   1.4.0 release, not detecting a real defect.** `main.js` is committed only by a release commit
+   (`chore(release): ...`); every commit in between intentionally carries the last release's bundle,
+   because the tagged release workflow (`.github/workflows/release.yml`) rebuilds and uploads its
+   own bundle from `src/` rather than shipping this tree's committed file. The drift check rebuilt
+   `main.js` on every push and failed the whole gate on that expected, by-design difference — a
+   feature or docs commit could not pass Gates at all unless it also committed a bundle nobody ships
+   from. Reproduced at `9436b964` (a non-release commit: rebuilding left `main.js` with 62 changed
+   lines and the pre-fix check failed) and confirmed clean at the same commit after excluding
+   `main.js` from the check on non-release commits, with the release commit (`7b976e28`) still
+   caught when `main.js` was hand-tampered to prove the exclusion does not weaken release strictness.
+   **The rule going forward:** a commit whose subject starts with `chore(release):` must still ship
+   a `main.js` that matches a fresh `src/` build; every other commit is exempt from that one file. If
+   the release-commit convention ever changes, this heuristic needs updating alongside it — it reads
+   the commit subject, not a structural signal.
+
 <!-- /ANCHOR:limitations -->
