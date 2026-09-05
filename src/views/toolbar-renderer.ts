@@ -71,6 +71,42 @@ export interface CreateEntryIntent {
   allowOverlayTransition?: boolean;
 }
 
+/**
+ * The view types a user may pick, with the gallery and the list withdrawn.
+ *
+ * Deprecated, not deleted, and the difference is the whole point. `gallery` and `list` are values
+ * in a persisted union — they are written into vault files — so removing their renderers would
+ * leave every database already configured as one unable to open. Withdrawing them from the
+ * pickers stops anyone new arriving at them while every existing one keeps working, and the step
+ * is reversible by deleting one filter.
+ *
+ * `current` is what keeps that honest: a database that IS one of the withdrawn types still sees
+ * the option, or its own type picker would show a value it does not offer and the control would
+ * read as broken. A newly created view has no current type, so it is offered the narrowed set.
+ */
+export function getViewTypeOptions(current?: DatabaseViewType): Array<{ value: DatabaseViewType; text: string; icon: string }> {
+  const all: Array<{ value: DatabaseViewType; text: string; icon: string }> = [
+    { value: "table", text: t("common.tableView"), icon: getViewTypeIconName("table") },
+    { value: "board", text: t("common.boardView"), icon: getViewTypeIconName("board") },
+    { value: "gallery", text: t("common.galleryView"), icon: getViewTypeIconName("gallery") },
+    { value: "list", text: t("common.listView"), icon: getViewTypeIconName("list") },
+    { value: "chart", text: t("common.chartView"), icon: getViewTypeIconName("chart") },
+    { value: "calendar", text: t("common.calendarView"), icon: getViewTypeIconName("calendar") },
+    { value: "timeline", text: t("common.timelineView"), icon: getViewTypeIconName("timeline") },
+  ];
+  return all.filter((option) => (option.value !== "gallery" || current === "gallery") && (option.value !== "list" || current === "list"));
+}
+
+export function getViewTypeIconName(viewType: DatabaseViewType): string {
+  if (viewType === "board") return "layout-grid";
+  if (viewType === "gallery") return "image";
+  if (viewType === "list") return "list";
+  if (viewType === "chart") return "bar-chart";
+  if (viewType === "calendar") return "calendar-days";
+  if (viewType === "timeline") return "chart-gantt";
+  return "table";
+}
+
 export interface ToolbarActions {
   selectDatabase(index: number): void;
   moveDatabase?(fromIndex: number, toIndex: number): void;
@@ -134,6 +170,10 @@ export interface ToolbarActions {
   readonly hideDatabaseActions?: boolean;
   /** When true, render only the database content and skip title, tabs, and toolbar chrome. */
   readonly hideHeaderChrome?: boolean;
+  /** Linked embeds omit the nested database title; the page heading already names it. */
+  readonly hideDatabaseTitle?: boolean;
+  createLinkedView?(): void;
+  moveLinkedView?(): void;
   readonly showChartOptions?: boolean;
   /** Async count of hidden negative-interval timeline events (drives the timeline options notice). */
   getTimelineInvalidEventCount?(): number | Promise<number>;
@@ -313,8 +353,8 @@ export class ToolbarRenderer {
       }
     }
 
-    // Embedded views keep a compact title row; dashboard uses the main heading as database selector.
-    if (!actions.showDatabaseChrome) {
+    // Embedded views keep a compact title row unless the embed already sits under the page heading.
+    if (!actions.showDatabaseChrome && !actions.hideDatabaseTitle) {
       const titleRow = header.createDiv({ cls: "db-title-row" });
       titleRow.createDiv({
         cls: "db-title",
@@ -429,6 +469,17 @@ export class ToolbarRenderer {
           actions.toggleViewConfig?.(button);
           button.setAttribute("aria-expanded", "true");
         });
+      }
+      // A linked embed has no title row, so this menu is the only place its
+      // open-full-view button can live; every other surface already draws one.
+      if (actions.openFullView && actions.hideDatabaseTitle) {
+        this.renderToolbarMenuRow(panel, t("toolbar.openFullView"), "external-link", () => actions.openFullView?.());
+      }
+      if (actions.createLinkedView) {
+        this.renderToolbarMenuRow(panel, t("toolbar.createLinkedView"), "link", () => actions.createLinkedView?.());
+      }
+      if (actions.moveLinkedView) {
+        this.renderToolbarMenuRow(panel, t("toolbar.moveToPage"), "folder-input", () => actions.moveLinkedView?.());
       }
       this.setPopoverTriggerState(button, true);
       positionToolbarPopover(panel, button, COMPACT_MENU_POPOVER);
@@ -1285,30 +1336,8 @@ export class ToolbarRenderer {
     return { row, field, controlId };
   }
 
-  /**
-   * The view types a user may pick, with the gallery and the list withdrawn.
-   *
-   * Deprecated, not deleted, and the difference is the whole point. `gallery` and `list` are values
-   * in a persisted union — they are written into vault files — so removing their renderers would
-   * leave every database already configured as one unable to open. Withdrawing them from the
-   * pickers stops anyone new arriving at them while every existing one keeps working, and the step
-   * is reversible by deleting one filter.
-   *
-   * `current` is what keeps that honest: a database that IS one of the withdrawn types still sees
-   * the option, or its own type picker would show a value it does not offer and the control would
-   * read as broken.
-   */
   private getViewTypeOptions(current?: DatabaseViewType): Array<{ value: DatabaseViewType; text: string; icon: string }> {
-    const all: Array<{ value: DatabaseViewType; text: string; icon: string }> = [
-      { value: "table", text: t("common.tableView"), icon: this.getViewTypeIcon("table") },
-      { value: "board", text: t("common.boardView"), icon: this.getViewTypeIcon("board") },
-      { value: "gallery", text: t("common.galleryView"), icon: this.getViewTypeIcon("gallery") },
-      { value: "list", text: t("common.listView"), icon: this.getViewTypeIcon("list") },
-      { value: "chart", text: t("common.chartView"), icon: this.getViewTypeIcon("chart") },
-      { value: "calendar", text: t("common.calendarView"), icon: this.getViewTypeIcon("calendar") },
-      { value: "timeline", text: t("common.timelineView"), icon: this.getViewTypeIcon("timeline") },
-    ];
-    return all.filter((option) => (option.value !== "gallery" || current === "gallery") && (option.value !== "list" || current === "list"));
+    return getViewTypeOptions(current);
   }
 
   private renderViewTabPopoverRow(
@@ -1453,13 +1482,7 @@ export class ToolbarRenderer {
   }
 
   private getViewTypeIcon(viewType: DatabaseViewType): string {
-    if (viewType === "board") return "layout-grid";
-    if (viewType === "gallery") return "image";
-    if (viewType === "list") return "list";
-    if (viewType === "chart") return "bar-chart";
-    if (viewType === "calendar") return "calendar-days";
-    if (viewType === "timeline") return "chart-gantt";
-    return "table";
+    return getViewTypeIconName(viewType);
   }
 
   private startRenameView(tab: HTMLElement, viewIndex: number, actions: ToolbarActions): void {

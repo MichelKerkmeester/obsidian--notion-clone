@@ -124,12 +124,56 @@ import {
   formatEmptyStateDiagnostics,
   getEmptyStateReason,
 } from "./empty-state-renderer";
+import { MarkdownFileSuggestModal } from "./markdown-file-suggest-modal";
+import {
+  applyLinkedViewMove,
+  EMBED_CONTENT_HOST_CLASS,
+  EMBED_LINKED_CLASS,
+  findReadingContentHost,
+  formatLinkedViewFence,
+  LINKED_VIEW_DRAG_TYPE,
+  releaseEmbedWidthToHost,
+  serializeLinkedViewSource,
+  undoLinkedViewMove,
+  vaultFilesAdapter,
+  type EmbedHostNode,
+  type LinkedViewLanguage,
+  type LinkedViewMoveResult,
+} from "./modals/linked-view-block";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES AND HELPERS
 // ───────────────────────────────────────────────────────────────────
 
 type HeaderPopoverKind = "filter" | "sort" | "columns" | "view";
+
+type EmbedHistoryEntry =
+  | { type: "created"; label: string; file: { path: string } }
+  | { type: "cell"; label: string; file: TFile; key: string; oldValue: unknown; newValue: unknown }
+  | { type: "moved"; label: string; sourcePath: string; destPath: string; snapshot: LinkedViewMoveResult };
+
+const liveLinkedViewEmbeds = new Set<EmbeddedDatabaseRenderer>();
+
+export function registerLiveLinkedViewEmbed(embed: EmbeddedDatabaseRenderer): void {
+  liveLinkedViewEmbeds.add(embed);
+}
+
+export function unregisterLiveLinkedViewEmbed(embed: EmbeddedDatabaseRenderer): void {
+  liveLinkedViewEmbeds.delete(embed);
+}
+
+/**
+ * The embed the caret is actually inside. Undo is a global command, so an embed
+ * that merely happens to be on screen must not answer for it — the file view the
+ * operator is looking at would silently lose its own undo.
+ */
+export function getFocusedLinkedViewEmbed(): EmbeddedDatabaseRenderer | null {
+  for (const embed of liveLinkedViewEmbeds) {
+    const active = embed.containerEl.ownerDocument?.activeElement;
+    if (embed.containerEl.isConnected && active && embed.containerEl.contains(active)) return embed;
+  }
+  return null;
+}
 
 function filtersEqual(left: FilterRule, right: FilterRule): boolean {
   return left.field === right.field && left.op === right.op && (left.value || "") === (right.value || "");
@@ -304,7 +348,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private readonly interactionScopeId = `embedded-database-${generateId()}`;
   private removeTouchEnvironmentObserver?: () => void;
   private touchLayoutState: boolean | undefined;
-  private readonly isCodeBlock: boolean;
   private keyboardNavigation!: TableKeyboardNavigationController;
   private isSelectingCells = false;
   private syncingComputed = false;
@@ -322,8 +365,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private unsubscribe?: () => void;
   private unsubscribeViewConfig?: () => void;
   private configHistoryStack: DatabaseConfig[] = [];
+  historyStack: EmbedHistoryEntry[] = [];
   private headerChromeHiddenOverride: boolean | null = null;
-  private embedCodeBlockHosts: HTMLElement[] = [];
+  private embedWidthHosts: EmbedHostNode[] = [];
+  private removeLinkedViewDropTarget?: () => void;
   private refreshCoordinator: RefreshCoordinator;
   private pendingSourceReload = false;
 
@@ -340,19 +385,18 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     private defaultRecordFolder = ""
   ) {
     super(containerEl);
-    const isCodeBlock = persistMode === "codeblock";
-    this.isCodeBlock = isCodeBlock;
     const shouldHideResultCreateEntryButtons = () =>
-      isCodeBlock || (this.config ? this.vs(this.config).searchText.trim().length > 0 : false);
+      this.isViewReadOnly() || (this.config ? this.vs(this.config).searchText.trim().length > 0 : false);
+    const embed = this;
     this.cellRenderer = new CellRenderer(
       this.dataSource,
       () => this.refreshAfterSave(),
       undefined,
       undefined,
       undefined,
-      isCodeBlock,
+      false,
       undefined,
-      undefined,
+      (row, col, value) => this.saveEmbedCellValue(row, col, value),
       (row) => this.getFileTitleInfo(row),
       () => this.config?.schema.computedFields || [],
       this.app,
@@ -366,7 +410,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       app: this.app,
       openRow: (row) => this.dataSource.openNote(row.file),
       deleteRow: (row) => this.deleteRow(row),
-      isReadOnly: isCodeBlock,
+      get isReadOnly() { return embed.isViewReadOnly(); },
     });
     this.keyboardNavigation = new TableKeyboardNavigationController({
       hasSelection: () => Boolean(this.cellSelection),
@@ -409,7 +453,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         });
       },
       renderCell: (td, row, col) => {
-        if (isCodeBlock) this.renderReadOnlyCell(td, row, col);
+        if (this.isViewReadOnly()) this.renderReadOnlyCell(td, row, col);
         else this.cellRenderer.renderCell(td, row, col);
         td.toggleClass("db-cell-range-selected", this.isEmbedCellSelected(row.file.path, col.key));
         // The same tap the full table view gives its main-item cell. Without it an embedded table
@@ -425,7 +469,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
       moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
-      createEntry: (defaults) => { if (!isCodeBlock) void this.createBlankEntry(defaults); },
+      createEntry: (defaults) => { void this.createBlankEntry(defaults); },
       addColumn: () => { new Notice(t("notice.editInFullView", { action: t("panel.addColumn") })); },
       showRowMenu: (event, row, context, anchorEl) => this.rowMenu.show(event, row, context, anchorEl),
       changeColumnCalculation: (columnKey, calculation) => this.changeColumnCalculation(columnKey, calculation),
@@ -433,11 +477,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
-      isReadOnly: isCodeBlock,
+      get isReadOnly() { return embed.isViewReadOnly(); },
     });
     this.boardRenderer = new BoardRenderer(this.app, {
       openRow: (row) => this.dataSource.openNote(row.file),
-      createEntry: (defaults) => { if (!isCodeBlock) void this.createBlankEntry(defaults); },
+      createEntry: (defaults) => { void this.createBlankEntry(defaults); },
       updateGroup: (row, field, value) => this.updateBoardGroup(row, field, value),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
       updateCardOrder: (field, groupKey, paths) => this.updateBoardCardOrder(field, groupKey, paths),
@@ -461,13 +505,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
-      isReadOnly: isCodeBlock,
+      get isReadOnly() { return embed.isViewReadOnly(); },
       canReorderGroups: true,
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.galleryRenderer = new GalleryRenderer(this.app, {
       openRow: (row) => this.dataSource.openNote(row.file),
-      createEntry: (defaults) => { if (!isCodeBlock) void this.createBlankEntry(defaults); },
+      createEntry: (defaults) => { void this.createBlankEntry(defaults); },
       isRowSelected: (row) => this.selectedRows.has(row.file.path),
       toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
       areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
@@ -484,7 +528,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
-      isReadOnly: isCodeBlock,
+      get isReadOnly() { return embed.isViewReadOnly(); },
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.refreshCoordinator = new RefreshCoordinator({
@@ -529,6 +573,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   onload(): void {
     this.containerEl.addClass("note-database-container");
     this.containerEl.addClass("note-database-embed");
+    if (this.persistMode === "codeblock") this.containerEl.addClass(EMBED_LINKED_CLASS);
     this.interactionScopes.register(this.interactionScopeId, this.containerEl, {
       portalSelectors: [".db-column-menu-subpopover", ".db-icon-picker-popover", ".db-color-picker-popup", ".db-calendar-search-results-popover", ".db-cell-edit-popover", ".db-cell-option-popover", ".db-cell-date-popover"],
     });
@@ -543,7 +588,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.render();
     });
     installNoteHoverPreview(this, this.containerEl, this.app, this);
-    this.markEmbedCodeBlockHost();
+    this.bindEmbedToReadingWidth();
+    registerLiveLinkedViewEmbed(this);
     this.unsubscribe = this.dataSource.onDataChanged((batch) => this.handleDataChanged(batch));
     this.unsubscribeViewConfig = this.dataSource.onViewConfigChanged((mutation) => this.handlePeerViewConfigChanged(mutation));
     this.containerEl.ownerDocument.addEventListener("mousedown", this.handleOutsideClickBound, true);
@@ -578,29 +624,45 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.containerEl.removeEventListener("keydown", this.handleEmbedKeydownBound);
     this.intersectionObserver?.disconnect();
     this.clearFileViewWidthClass();
-    this.clearEmbedCodeBlockHost();
+    this.clearEmbedWidthBinding();
+    this.removeLinkedViewDropTarget?.();
+    unregisterLiveLinkedViewEmbed(this);
     // 取消可能仍在调度的无效时间事件分块扫描，避免卸载后继续占用 idle 回调
     this.timelineInvalidEventsScanner.clear();
   }
 
-  private markEmbedCodeBlockHost(): void {
+  private bindEmbedToReadingWidth(): void {
     if (this.persistMode !== "codeblock") return;
-    this.clearEmbedCodeBlockHost();
-
-    let el = this.containerEl.parentElement;
-    for (let depth = 0; depth < 8 && isHTMLElement(el); depth++) {
-      if (el.hasClass("markdown-rendered") || el.hasClass("markdown-preview-view")) break;
-      el.addClass("note-database-embed-codeblock-host");
-      this.embedCodeBlockHosts.push(el);
-      el = el.parentElement;
+    this.clearEmbedWidthBinding();
+    const start = this.containerEl as unknown as EmbedHostNode;
+    if (typeof start.addClass !== "function") return;
+    const host = findReadingContentHost(start);
+    if (host) {
+      this.embedWidthHosts = releaseEmbedWidthToHost(start, host);
+      this.embedWidthHosts.push(host);
+      return;
+    }
+    if (start.style) {
+      start.style.width = "100%";
+      start.style.maxWidth = "none";
     }
   }
 
-  private clearEmbedCodeBlockHost(): void {
-    for (const host of this.embedCodeBlockHosts) {
-      host.removeClass("note-database-embed-codeblock-host");
+  private clearEmbedWidthBinding(): void {
+    for (const node of this.embedWidthHosts) {
+      node.removeClass(EMBED_CONTENT_HOST_CLASS);
+      if (node.style) {
+        node.style.width = "";
+        node.style.maxWidth = "";
+        node.style.overflowX = "";
+      }
     }
-    this.embedCodeBlockHosts = [];
+    this.embedWidthHosts = [];
+    const container = this.containerEl as unknown as EmbedHostNode;
+    if (container.style) {
+      container.style.width = "";
+      container.style.maxWidth = "";
+    }
   }
 
   private observeVisibility(): void {
@@ -687,7 +749,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // (selectViewInView / setViewType) agree on what counts as a view-type switch.
     const viewTypeChanged = this.lastRenderedViewType !== viewType;
     this.renderToolbar(config);
-    this.renderHeaderChromeToggle(config);
     this.renderFilterPanel(config);
     this.renderSortPanel(config);
     this.renderColumnManager(config);
@@ -1418,6 +1479,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private renderToolbar(config: ViewConfig): void {
+    const embed = this;
     this.activeRulePopoverRenderer.close();
     // Use the currentDbConfig if available (for multi-view support)
     const baseDbConfig = this.currentDbConfig || {
@@ -1577,13 +1639,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       updateTimelineScale: (scale) => this.updateTimelineScale(scale),
       getTimelineInvalidEventCount: () => this.getEmbeddedInvalidEventCount(config),
       openTimelineInvalidEvents: () => {
-        if (this.persistMode === "codeblock") {
+        if (this.isViewReadOnly()) {
           new Notice(t("notice.editInFullView", { action: t("timeline.viewInvalidEvents") }));
           return;
         }
         void this.openFullDatabaseView(config);
       },
-      syncComputedFields: this.persistMode === "codeblock"
+      syncComputedFields: this.isViewReadOnly()
         ? undefined
         : () => { this.syncComputedFieldsInBackground(config, this.rows, true, true); },
       refreshDatabase: () => this.refreshCoordinator.refreshNow(),
@@ -1599,18 +1661,21 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       copyViewCode: () => { void this.copyEmbeddedViewCode(config); },
       exportData: (format) => this.exportData(config, format),
       exportCsvMarkdownZip: () => { void this.exportCsvMarkdownZip(); },
-      createEntry: (defaults) => { if (this.persistMode !== "codeblock") void this.createBlankEntry(defaults); },
-      isReadOnly: this.persistMode === "codeblock",
-      showChartOptions: this.persistMode !== "codeblock",
+      createEntry: (defaults) => { void this.createBlankEntry(defaults); },
+      get isReadOnly() { return embed.isViewReadOnly(); },
+      showChartOptions: !this.isViewReadOnly(),
       addDatabase: () => {},
       deleteDatabase: () => {},
       openDatabaseFile: () => {},
       isReadOnlyViews: true,
       hideWidthSelect: true,
       showDatabaseChrome: this.persistMode === "frontmatter",
+      hideDatabaseTitle: this.persistMode === "codeblock",
       hideDatabaseActions: this.persistMode === "frontmatter",
       hideHeaderChrome: this.shouldHideHeaderChrome(),
+      moveLinkedView: this.persistMode === "codeblock" ? () => this.openMoveLinkedViewPicker() : undefined,
     });
+    this.bindLinkedViewMoveAffordance();
     this.renderActiveViewControls(config);
     this.updateStickyOffsets();
   }
@@ -1732,29 +1797,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.saveEmbeddedConfigInBackground();
   }
 
-  private renderHeaderChromeToggle(config: ViewConfig): void {
-    this.containerEl.querySelector(":scope > .db-embed-header-toggle")?.remove();
-    if (this.persistMode !== "codeblock") return;
-    const hidden = this.shouldHideHeaderChrome();
-    const label = hidden ? t("toolbar.showEmbedHeader") : t("toolbar.hideEmbedHeader");
-    const button = this.containerEl.createEl("button", {
-      cls: `db-toolbar-icon-button db-embed-header-toggle${hidden ? " is-header-hidden" : ""}`,
-      attr: {
-        type: "button",
-        title: label,
-        "aria-label": label,
-      },
-    });
-    setIcon(button, hidden ? "chevron-down" : "chevron-up");
-    button.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.toggleHeaderChrome(config, !hidden);
-    };
-    const header = this.containerEl.querySelector(":scope > .db-header");
-    if (header) this.containerEl.insertBefore(button, header);
-  }
-
   private toggleHeaderChrome(config: ViewConfig, hidden: boolean): void {
     this.headerChromeHiddenOverride = hidden;
     this.containerEl.toggleClass("note-database-embed-headerless", hidden);
@@ -1766,7 +1808,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.closeCalendarTimelineSearchResultsPanel();
     this.containerEl.querySelector(":scope > .db-header")?.remove();
     this.renderToolbar(config);
-    this.renderHeaderChromeToggle(config);
   }
 
   private updateRefreshIndicator(state = this.refreshCoordinator.getState()): void {
@@ -2095,7 +2136,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       app: this.app,
       database: this.currentDbConfig,
       isDatabaseReadOnly: true,
-      isViewReadOnly: this.persistMode === "codeblock",
+      isViewReadOnly: this.isViewReadOnly(),
       onChange: () => {
         this.persistEmbeddedConfigLocally(config);
         this.renderResults(config);
@@ -2183,7 +2224,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private toggleChartOptions(config: ViewConfig, anchorEl: HTMLElement): void {
-    if (config.viewType !== "chart" || this.persistMode === "codeblock") return;
+    if (config.viewType !== "chart" || this.isViewReadOnly()) return;
     if (this.chartToolbarRenderer.isPopoverOpen()) {
       this.chartToolbarRenderer.closePopover();
       return;
@@ -2275,10 +2316,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return this.timelineInvalidEventsScanner.getOptions(this.rows, config, this.timelineInvalidRowsVersion).then((options) => options.length);
   }
 
-  /** Read-only invalid-events fix path for embeds: codeblock shows a notice, the
-   *  db_view file preview opens the full editable view. Never mutates data in place. */
+  /** Invalid-events fix path for embeds: a missing source stays a notice; a
+   *  resolved source opens the full view so the same editor the standalone uses. */
   private openEmbeddedInvalidEvents(): void {
-    if (this.persistMode === "codeblock") {
+    if (this.isViewReadOnly()) {
       new Notice(t("notice.editInFullView", { action: t("timeline.viewInvalidEvents") }));
       return;
     }
@@ -3119,16 +3160,117 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return Number.isFinite(n) ? n : Number.POSITIVE_INFINITY;
   }
 
+  /**
+   * The one capability answer for this surface. An embed edits its source database
+   * exactly as the standalone view does — the operator asked for a linked view that
+   * IS the database, and a surface that looks editable while refusing edits is the
+   * worse lie. Read-only is therefore not a property of being embedded: it means the
+   * source could not be resolved, so there is nothing to write to.
+   */
+  isViewReadOnly(): boolean {
+    if (!this.currentDbConfig || !this.currentSourcePath) return true;
+    const file = this.app.vault.getAbstractFileByPath(this.currentSourcePath);
+    return !(file instanceof TFile);
+  }
+
   private async updateBoardGroup(row: RowData, field: string, value: string): Promise<void> {
-    new Notice(t("notice.embedReadonly", { action: t("notice.editEntry") }));
+    if (this.isViewReadOnly()) {
+      new Notice(t("notice.embedReadonly", { action: t("notice.editEntry") }));
+      return;
+    }
+    const oldValue = row.frontmatter[field];
+    if (oldValue === value) return;
+    try {
+      await this.dataSource.updateFrontmatter(row.file, { [field]: value }, { sourceInstanceId: this.instanceId });
+      row.frontmatter[field] = value;
+      this.pushHistory({ type: "cell", label: t("undo.editCell"), file: row.file, key: field, oldValue, newValue: value });
+      if (this.config) this.renderResults(this.config);
+    } catch (err) {
+      new Notice(t("errors.updateFailed", { error: String(err) }));
+    }
   }
 
   private async deleteRow(row: RowData): Promise<void> {
-    new Notice(t("notice.embedReadonly", { action: t("notice.deleteEntry") }));
+    if (this.isViewReadOnly()) {
+      new Notice(t("notice.embedReadonly", { action: t("notice.deleteEntry") }));
+      return;
+    }
+    try {
+      await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
+      new Notice(t("notice.deletedRow", { name: row.file.basename }));
+      if (this.config) this.renderResults(this.config);
+    } catch (err) {
+      new Notice(t("errors.updateFailed", { error: String(err) }));
+    }
   }
 
   private async createBlankEntry(defaults: Record<string, unknown> = {}): Promise<void> {
-    new Notice(t("notice.embedReadonly", { action: t("notice.createEntry") }));
+    if (this.isViewReadOnly() || !this.config) {
+      new Notice(t("notice.embedReadonly", { action: t("notice.createEntry") }));
+      return;
+    }
+    const frontmatter = { ...this.getDefaultFrontmatterFromSourceRules(this.config), ...defaults };
+    try {
+      const file = await this.dataSource.createNote(
+        this.getCreateFolder(this.config),
+        t("defaults.untitledNote"),
+        frontmatter,
+        { sourceInstanceId: this.instanceId },
+      );
+      this.pushHistory({ type: "created", label: t("undo.createRow"), file: { path: file.path } });
+      await this.refreshAfterSave();
+    } catch (err) {
+      new Notice(t("errors.createFailed", { error: String(err) }));
+    }
+  }
+
+  private async saveEmbedCellValue(row: RowData, col: ColumnDef, value: unknown): Promise<boolean> {
+    if (this.isViewReadOnly()) return false;
+    const oldValue = row.frontmatter[col.key];
+    if (oldValue === value) return true;
+    try {
+      await this.dataSource.updateFrontmatter(row.file, { [col.key]: value }, { sourceInstanceId: this.instanceId });
+      row.frontmatter[col.key] = value;
+      this.pushHistory({ type: "cell", label: t("undo.editCell"), file: row.file, key: col.key, oldValue, newValue: value });
+      return true;
+    } catch (err) {
+      new Notice(t("errors.updateFailed", { error: String(err) }));
+      return false;
+    }
+  }
+
+  private pushHistory(entry: EmbedHistoryEntry): void {
+    this.historyStack.unshift(entry);
+    if (this.historyStack.length > 15) this.historyStack.length = 15;
+  }
+
+  async undoLastEdit(): Promise<void> {
+    const entry = this.historyStack[0];
+    if (entry) {
+      try {
+        if (entry.type === "created") {
+          const file = this.app.vault.getAbstractFileByPath(entry.file.path);
+          if (file instanceof TFile) await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
+        } else if (entry.type === "cell") {
+          await this.dataSource.updateFrontmatter(entry.file, { [entry.key]: entry.oldValue }, { sourceInstanceId: this.instanceId });
+        } else {
+          await undoLinkedViewMove(vaultFilesAdapter(this.app), {
+            sourcePath: entry.sourcePath,
+            destPath: entry.destPath,
+            sourceBefore: entry.snapshot.sourceBefore,
+            destBefore: entry.snapshot.destBefore,
+          });
+        }
+        this.historyStack.shift();
+        new Notice(t("notice.undone", { action: entry.label }));
+        if (this.config) this.renderResults(this.config);
+        return;
+      } catch (err) {
+        new Notice(t("errors.updateFailed", { error: String(err) }));
+        return;
+      }
+    }
+    await this.undoLastConfigEdit();
   }
 
   private async refreshAfterSave(): Promise<void> {
@@ -3291,7 +3433,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private scheduleComputedSync(config: ViewConfig, rows: RowData[]): void {
     this.clearComputedSyncTimer();
-    if (this.persistMode === "codeblock") return;
+    if (this.isViewReadOnly()) return;
     if (!this.isAutomaticComputedSync() || config.schema.computedFields.length === 0) return;
     this.computedSyncTimer = this.getRefreshWindow().setTimeout(() => {
       this.computedSyncTimer = null;
@@ -3311,7 +3453,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     config: ViewConfig,
     affectedFields?: string[]
   ): Promise<void> {
-    if (this.persistMode === "codeblock") return;
+    if (this.isViewReadOnly()) return;
     if (!config.schema.computedFields.length || !this.isAutomaticComputedSync()) return;
 
     const computed = evaluateComputedFields(
@@ -3347,7 +3489,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private async syncComputedFields(config: ViewConfig, rows: RowData[], notify = false, force = false): Promise<void> {
-    if (this.persistMode === "codeblock") {
+    if (this.isViewReadOnly()) {
       if (notify) new Notice(t("notice.embedReadonly", { action: t("viewConfig.saveComputedResults") }));
       return;
     }
@@ -3411,9 +3553,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private persistEmbeddedConfigLocally(config = this.config): void {
     if (!config) return;
-    const before = this.persistMode === "frontmatter" && this.currentDbConfig
-      ? this.cloneDatabaseConfig(this.currentDbConfig)
-      : undefined;
+    const before = this.currentDbConfig ? this.cloneDatabaseConfig(this.currentDbConfig) : undefined;
     this.stateStore.persist(config, this.vs(config));
     this.copyConfigToSourceView();
     if (before && this.currentDbConfig && JSON.stringify(before) !== JSON.stringify(this.currentDbConfig)) {
@@ -3558,16 +3698,125 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private serializeCodeBlockReference(config: ViewConfig): string {
-    const lines: string[] = [];
-    // Prefer the stable database id over the source path so the embed survives
-    // the database file being moved or renamed. currentDbConfig.id is persisted
-    // to frontmatter (DataSource backfills it when missing), so it is reliable.
-    if (this.currentDbConfig?.id) {
-      lines.push(`dbId: ${this.currentDbConfig.id}`);
+    return serializeLinkedViewSource({
+      dbId: this.currentDbConfig?.id,
+      dbPath: this.currentDbConfig?.id ? undefined : this.currentSourcePath,
+      viewId: config.id,
+      viewIdPresent: config.id !== undefined,
+      hideHeader: this.shouldHideHeaderChrome() || undefined,
+    });
+  }
+
+  private getLinkedViewLanguage(): LinkedViewLanguage {
+    const language = this.getSectionInfo()?.text.match(/^```(\S+)/)?.[1];
+    return language === "database-view" ? "database-view" : "note-database";
+  }
+
+  private currentLinkedViewFence(config = this.config): string | null {
+    if (!config) return null;
+    return formatLinkedViewFence({
+      language: this.getLinkedViewLanguage(),
+      dbId: this.currentDbConfig?.id,
+      dbPath: this.currentDbConfig?.id ? undefined : this.currentSourcePath,
+      viewId: config.id,
+      viewIdPresent: config.id !== undefined,
+      hideHeader: this.shouldHideHeaderChrome() || undefined,
+    });
+  }
+
+  private bindLinkedViewMoveAffordance(): void {
+    if (this.persistMode !== "codeblock") return;
+    const header = this.containerEl.querySelector(":scope > .db-header");
+    if (!isHTMLElement(header)) return;
+    header.draggable = true;
+    header.addEventListener("dragstart", (event) => this.onLinkedViewDragStart(event));
+    header.addEventListener("dragend", () => this.removeLinkedViewDropTarget?.());
+  }
+
+  private onLinkedViewDragStart(event: DragEvent): void {
+    const block = this.currentLinkedViewFence();
+    const section = this.getSectionInfo();
+    if (!block || !section || !event.dataTransfer) return;
+    event.dataTransfer.setData(LINKED_VIEW_DRAG_TYPE, JSON.stringify({
+      sourcePath: this.sourcePath,
+      sourceLineStart: section.lineStart,
+      sourceLineEnd: section.lineEnd,
+      block,
+    }));
+    event.dataTransfer.setData("text/plain", block);
+    event.dataTransfer.effectAllowed = "move";
+    const doc = this.containerEl.ownerDocument;
+    const onDragOver = (dragEvent: DragEvent) => {
+      if (!dragEvent.dataTransfer?.types.includes(LINKED_VIEW_DRAG_TYPE)) return;
+      dragEvent.preventDefault();
+      if (dragEvent.dataTransfer) dragEvent.dataTransfer.dropEffect = "move";
+    };
+    const onDrop = (dropEvent: DragEvent) => {
+      dropEvent.preventDefault();
+      void this.completeLinkedViewDrop(dropEvent);
+    };
+    doc.addEventListener("dragover", onDragOver);
+    doc.addEventListener("drop", onDrop);
+    this.removeLinkedViewDropTarget = () => {
+      doc.removeEventListener("dragover", onDragOver);
+      doc.removeEventListener("drop", onDrop);
+      this.removeLinkedViewDropTarget = undefined;
+    };
+  }
+
+  private findMarkdownFileAt(target: EventTarget | null): TFile | null {
+    const el = isHTMLElement(target) ? target : null;
+    const leaves = this.app.workspace.getLeavesOfType("markdown");
+    for (const leaf of leaves) {
+      const view = leaf.view as { containerEl?: HTMLElement; file?: TFile };
+      if (el && view.containerEl?.contains(el) && view.file instanceof TFile) return view.file;
     }
-    if (config.id) lines.push(`viewId: ${config.id}`);
-    if (this.shouldHideHeaderChrome()) lines.push("hideHeader: true");
-    return lines.join("\n");
+    const active = this.app.workspace.getActiveFile();
+    return active instanceof TFile ? active : null;
+  }
+
+  private async completeLinkedViewDrop(event: DragEvent): Promise<void> {
+    const dest = this.findMarkdownFileAt(event.target);
+    if (!dest) {
+      new Notice(t("notice.linkedViewMoveFailed"));
+      return;
+    }
+    await this.moveLinkedViewToPath(dest.path);
+  }
+
+  private openMoveLinkedViewPicker(): void {
+    new MarkdownFileSuggestModal(this.app, (file) => {
+      void this.moveLinkedViewToPath(file.path);
+    }, t("linkedView.pickPage")).open();
+  }
+
+  async moveLinkedViewToPath(destPath: string): Promise<void> {
+    const block = this.currentLinkedViewFence();
+    const section = this.getSectionInfo();
+    if (!block || !section || destPath === this.sourcePath) {
+      new Notice(t("notice.linkedViewMoveFailed"));
+      return;
+    }
+    try {
+      const result = await applyLinkedViewMove(vaultFilesAdapter(this.app), {
+        sourcePath: this.sourcePath,
+        destPath,
+        sourceLineStart: section.lineStart,
+        sourceLineEnd: section.lineEnd,
+        block,
+      });
+      this.pushHistory({
+        type: "moved",
+        label: t("undo.moveLinkedView"),
+        sourcePath: this.sourcePath,
+        destPath,
+        snapshot: result,
+      });
+      new Notice(t("notice.linkedViewMoved"));
+    } catch (err) {
+      console.error("Note Database: failed to move linked view", err);
+      new Notice(t("notice.linkedViewMoveFailed"));
+    }
   }
 
   private async copyEmbeddedViewCode(config: ViewConfig): Promise<void> {
@@ -3947,7 +4196,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   /** Whether a column has an editor a press could open. Computed, rollup and the read-only file
    *  fields have none, which is what the press router means by an uneditable cell. */
   private isColumnEditable(col: ColumnDef): boolean {
-    if (this.isCodeBlock) return false;
+    if (this.isViewReadOnly()) return false;
     return col.type !== "computed" && col.type !== "rollup" && !isReadonlyFileField(col.key);
   }
 
@@ -4084,7 +4333,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private editFocusedEmbedCell(): void {
-    if (this.isCodeBlock || !this.config) return;
+    if (this.isViewReadOnly() || !this.config) return;
     const address = this.getEmbedFocusedAddress();
     const cell = address ? this.findEmbedCell(address) : null;
     const row = address ? this.rows.find((candidate) => candidate.file.path === address.rowPath) : undefined;
@@ -4094,7 +4343,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private toggleFocusedEmbedCell(): void {
-    if (this.isCodeBlock || !this.config) return;
+    if (this.isViewReadOnly() || !this.config) return;
     const address = this.getEmbedFocusedAddress();
     const cell = address ? this.findEmbedCell(address) : null;
     const row = address ? this.rows.find((candidate) => candidate.file.path === address.rowPath) : undefined;

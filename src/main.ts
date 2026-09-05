@@ -30,7 +30,8 @@ import {
   toMultiSelectValuesForKey,
   toValidObsidianTagValues,
 } from "./data/column-types";
-import { EmbeddedDatabaseEntry, EmbeddedDatabaseRenderer } from "./views/embedded-database-renderer";
+import { EmbeddedDatabaseEntry, EmbeddedDatabaseRenderer, getFocusedLinkedViewEmbed } from "./views/embedded-database-renderer";
+import { openCreateLinkedViewModal } from "./views/modals/create-linked-view-modal";
 import { BaseImportColumn, BaseImportConfirmModal } from "./views/modals/base-import-confirm-modal";
 import {
   confirmNewDatabasePropertyTypeConflicts,
@@ -106,6 +107,7 @@ export default class NoteDatabasePlugin extends Plugin {
     "import-csv-markdown": "command.importCsvMarkdown",
     "export-current-view-as-csv-markdown-zip": "command.exportCsvMarkdown",
     "undo-last-database-edit": "command.undoDatabaseEdit",
+    "create-linked-view": "command.createLinkedView",
   };
 
   async onload(): Promise<void> {
@@ -397,7 +399,28 @@ export default class NoteDatabasePlugin extends Plugin {
       id: "undo-last-database-edit",
       name: t("command.undoDatabaseEdit"),
       callback: async () => {
+        const embed = getFocusedLinkedViewEmbed();
+        if (embed) {
+          await embed.undoLastEdit();
+          return;
+        }
         await this.getActiveDatabaseView()?.undoLastEdit();
+      },
+    });
+    this.addCommand({
+      id: "create-linked-view",
+      name: t("command.createLinkedView"),
+      // A plain callback rather than an editorCallback: the flow appends to the
+      // active file when no editor has the caret, so the command stays reachable
+      // from a reading view instead of disappearing from the palette there.
+      callback: () => {
+        openCreateLinkedViewModal(
+          this.app,
+          this.dataSource,
+          this.getEmbeddedDatabaseEntries(),
+          this.app.workspace.activeEditor?.editor,
+          this.app.workspace.getActiveFile(),
+        );
       },
     });
     this.addCommand({

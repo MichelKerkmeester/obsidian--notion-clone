@@ -80,7 +80,7 @@ const addViewMenuBody = (): string => {
  * claiming the renderer offers zero view types — a true-looking result from a broken locator.
  */
 const rendererViewTypes = (): string[] => {
-  const block = toolbarSource.slice(toolbarSource.indexOf("private getViewTypeOptions"));
+  const block = toolbarSource.slice(toolbarSource.indexOf("function getViewTypeOptions"));
   const body = block.slice(0, block.indexOf("\n  }"));
   return [...body.matchAll(/text:\s*t\("common\.(\w+)"\)/g)].map((m) => m[1]);
 };

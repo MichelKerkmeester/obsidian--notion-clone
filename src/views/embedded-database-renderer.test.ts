@@ -27,6 +27,22 @@ import { EmbeddedDatabaseRenderer } from "./embedded-database-renderer";
 import { planSubtaskMove, toFrontmatterUpdates } from "../data/subtask-serialize";
 import type { BoardRendererActions, BoardSubtaskMove } from "./board-renderer";
 import type { CalendarTimelineRendererActions } from "./calendar-timeline-renderer";
+import { getViewTypeOptions } from "./toolbar-renderer";
+import {
+  applyLinkedViewMove,
+  appendLinkedViewToDatabase,
+  buildLinkedViewFence,
+  EMBED_CONTENT_HOST_CLASS,
+  findReadingContentHost,
+  formatLinkedViewFence,
+  linkedViewBlockCount,
+  parseLinkedViewFence,
+  releaseEmbedWidthToHost,
+  roundTripLinkedViewFence,
+  serializeLinkedViewSource,
+  undoLinkedViewMove,
+  type EmbedHostNode,
+} from "./modals/linked-view-block";
 
 vi.mock("obsidian", () => {
   class TFileMock {
@@ -99,6 +115,7 @@ vi.mock("../i18n", () => ({
 
 interface EmbeddedHarness {
   boardRenderer: { actions: BoardRendererActions };
+  tableRenderer: { actions: { isReadOnly?: boolean; createEntry?: (defaults?: Record<string, unknown>) => void } };
   calendarTimelineRenderer: { actions: CalendarTimelineRendererActions };
   rows: RowData[];
   config: ViewConfig | undefined;
@@ -106,11 +123,16 @@ interface EmbeddedHarness {
   currentSourcePath: string;
   instanceId: string;
   renderResults(config: ViewConfig, options?: { viewport?: unknown }): void;
+  isViewReadOnly?(): boolean;
+  undoLastEdit?(): Promise<void>;
+  historyStack?: Array<{ type: string; label: string }>;
 }
 
 interface FakeDataSource {
   updateFrontmatter: Mock<(file: TFile, updates: Record<string, unknown>, context?: DataWriteContext) => Promise<void>>;
   updateViewDefFile: Mock<(file: TFile, config: DatabaseConfig, mutation?: unknown) => Promise<void>>;
+  createNote: Mock<(folder: string, filename: string, frontmatter: Record<string, unknown>, context?: DataWriteContext) => Promise<TFile>>;
+  trashNote: Mock<(file: TFile, context?: DataWriteContext) => Promise<void>>;
   onDataChanged(): () => void;
   onViewConfigChanged(): () => void;
   notifyViewConfigChanged(): void;
@@ -142,6 +164,7 @@ const windowStub = {
  *  the read-only embed's empty-state render exercises. */
 class FakeElement {
   children: FakeElement[] = [];
+  parentElement: FakeElement | null = null;
   className = "";
   scrollTop = 0;
   scrollLeft = 0;
@@ -149,6 +172,8 @@ class FakeElement {
   isConnected = false;
   ownerDocument = { defaultView: null };
   onclick: (() => void) | null = null;
+  style: { width?: string; maxWidth?: string; overflowX?: string } = {};
+  private classes = new Set<string>();
 
   createDiv(options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): FakeElement {
     return this.createEl("div", options);
@@ -160,36 +185,80 @@ class FakeElement {
 
   createEl(_tag: string, options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): FakeElement {
     const el = new FakeElement();
-    el.className = Array.isArray(options.cls) ? options.cls.filter(Boolean).join(" ") : options.cls || "";
+    el.parentElement = this;
+    const cls = Array.isArray(options.cls) ? options.cls.filter(Boolean).join(" ") : options.cls || "";
+    el.className = cls;
+    for (const name of cls.split(/\s+/).filter(Boolean)) el.classes.add(name);
     el.textContent = options.text ?? "";
     this.children.push(el);
     return el;
   }
 
-  toggleClass(_name: string, _on: boolean): void {}
-
-  addClass(_name: string): void {}
-
-  removeClass(_name: string): void {}
-
-  querySelectorAll(): FakeElement[] {
-    return [];
+  toggleClass(name: string, on: boolean): void {
+    if (on) this.addClass(name);
+    else this.removeClass(name);
   }
 
-  querySelector(): FakeElement | null {
+  addClass(name: string): void {
+    this.classes.add(name);
+    this.className = [...this.classes].join(" ");
+  }
+
+  removeClass(name: string): void {
+    this.classes.delete(name);
+    this.className = [...this.classes].join(" ");
+  }
+
+  hasClass(name: string): boolean {
+    return this.classes.has(name);
+  }
+
+  querySelectorAll(selector?: string): FakeElement[] {
+    const found: FakeElement[] = [];
+    const walk = (node: FakeElement) => {
+      for (const child of node.children) {
+        if (!selector || child.matchesSelector(selector)) found.push(child);
+        walk(child);
+      }
+    };
+    walk(this);
+    return found;
+  }
+
+  querySelector(selector?: string): FakeElement | null {
+    if (selector?.startsWith(":scope > ")) {
+      const rest = selector.slice(":scope > ".length);
+      return this.children.find((child) => child.matchesSelector(rest)) ?? null;
+    }
+    return this.querySelectorAll(selector)[0] ?? null;
+  }
+
+  closest(selector: string): FakeElement | null {
+    let current: FakeElement | null = this;
+    while (current) {
+      if (current.matchesSelector(selector)) return current;
+      current = current.parentElement;
+    }
     return null;
   }
 
-  closest(): FakeElement | null {
-    return null;
+  matchesSelector(selector: string): boolean {
+    const classes = selector.split(".").filter(Boolean);
+    if (classes.length === 0) return true;
+    return classes.every((name) => this.classes.has(name) || this.className.split(/\s+/).includes(name));
   }
 
   getBoundingClientRect(): { top: number; left: number; right: number; bottom: number } {
     return { top: 0, left: 0, right: 0, bottom: 0 };
   }
 
+  empty(): void {
+    this.children = [];
+  }
+
   remove(): void {
     this.children = [];
+    this.parentElement = null;
   }
 }
 
@@ -231,9 +300,13 @@ function createRenderer(): { harness: EmbeddedHarness; dataSource: FakeDataSourc
     schema: { columns: [], computedFields: [] },
     views: [viewConfig],
   };
+  const created = new TFile();
+  created.path = "Tasks/Untitled.md";
   const dataSource: FakeDataSource = {
     updateFrontmatter: vi.fn(async () => {}),
     updateViewDefFile: vi.fn(async () => {}),
+    createNote: vi.fn(async () => created),
+    trashNote: vi.fn(async () => {}),
     onDataChanged: () => () => {},
     onViewConfigChanged: () => () => {},
     notifyViewConfigChanged: vi.fn(),
@@ -285,8 +358,13 @@ function flushBackgroundSave(): Promise<void> {
   return new Promise((resolve) => window.setTimeout(resolve, 0));
 }
 
+/** Nothing in this harness is a real DOM node, so every `instanceof HTMLElement`
+ *  branch must answer no rather than throw for the global being absent. */
+class NoDomElement {}
+
 beforeAll(() => {
   vi.stubGlobal("window", windowStub);
+  vi.stubGlobal("HTMLElement", NoDomElement);
 });
 
 // ───────────────────────────────────────────────────────────────────
@@ -396,5 +474,230 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
     const openNote = vi.mocked(dataSource).openNote;
     expect(openNote).toHaveBeenCalledTimes(1);
     expect(openNote).toHaveBeenCalledWith(expect.objectContaining({ path: "db.md" }));
+  });
+});
+
+function makeHost(className = ""): EmbedHostNode & FakeElement {
+  const el = new FakeElement();
+  if (className) el.addClass(className);
+  return el;
+}
+
+describe("linked embed chrome", () => {
+  it("asks the toolbar for a headerless embed and offers the move action", () => {
+    const { harness, viewConfig } = createRenderer();
+    let actions: Record<string, unknown> | undefined;
+    (harness as unknown as { toolbarRenderer: unknown }).toolbarRenderer = {
+      render: (...args: unknown[]) => { actions = args[5] as Record<string, unknown>; },
+      closePopovers: () => {},
+    };
+    (harness as unknown as { renderActiveViewControls: (config: ViewConfig) => void }).renderActiveViewControls = () => {};
+    (harness as unknown as { updateStickyOffsets: () => void }).updateStickyOffsets = () => {};
+    (harness as unknown as { renderToolbar: (config: ViewConfig) => void }).renderToolbar(viewConfig);
+
+    // The duplicate title and the collapse chevron both hang off the title row,
+    // so withdrawing the row is what removes the block furniture.
+    expect(actions?.hideDatabaseTitle).toBe(true);
+    expect(typeof actions?.moveLinkedView).toBe("function");
+    expect(actions?.showChartOptions).toBe(true);
+  });
+
+  it("builds the title row only for a surface that did not withdraw it", async () => {
+    const { readFileSync } = await import("fs");
+    const { resolve } = await import("path");
+    const toolbar = readFileSync(resolve(__dirname, "toolbar-renderer.ts"), "utf-8");
+    expect(toolbar).toContain("!actions.showDatabaseChrome && !actions.hideDatabaseTitle");
+    expect(toolbar).toContain("hideDatabaseTitle?: boolean");
+  });
+});
+
+describe("linked embed width", () => {
+  it("releases the embed to the reading-view sizer without a pixel width", () => {
+    const sizer = makeHost("markdown-preview-sizer");
+    const pre = makeHost();
+    pre.parentElement = sizer;
+    const container = makeHost();
+    container.parentElement = pre;
+    const host = findReadingContentHost(container);
+    expect(host).toBe(sizer);
+    releaseEmbedWidthToHost(container, sizer);
+    expect(sizer.hasClass(EMBED_CONTENT_HOST_CLASS)).toBe(true);
+    expect(container.style.width).toBe("100%");
+    expect(container.style.maxWidth).toBe("none");
+    // A measured width would be right once and wrong at every other host width.
+    expect(container.style.width?.endsWith("px")).toBe(false);
+    expect(pre.style.width).toBe("100%");
+    expect(pre.style.maxWidth).toBe("none");
+    expect(pre.style.overflowX).toBe("visible");
+  });
+
+  it("leaves the embed at its own width when no reading host is above it", () => {
+    const orphan = makeHost();
+    expect(findReadingContentHost(orphan)).toBeNull();
+  });
+});
+
+describe("linked embed writes", () => {
+  it("creates a row on a resolved codeblock embed and records undo.createRow", async () => {
+    const { harness, dataSource } = createRenderer();
+    expect(harness.tableRenderer.actions.isReadOnly).toBe(false);
+    harness.tableRenderer.actions.createEntry?.({ status: "Open" });
+    await flushBackgroundSave();
+    expect(dataSource.createNote).toHaveBeenCalled();
+    expect(harness.historyStack?.[0]?.label).toBe("undo.createRow");
+  });
+
+  it("is read-only only when the source database cannot be resolved", () => {
+    const { harness } = createRenderer();
+    harness.currentDbConfig = undefined;
+    harness.currentSourcePath = "missing.md";
+    expect(harness.isViewReadOnly?.()).toBe(true);
+  });
+});
+
+describe("moving a linked view", () => {
+  const movedFiles = () => new Map<string, string>([
+    ["from.md", "intro\n```note-database\ndbId: db1\n```\nend\n"],
+    ["to.md", "other\n"],
+  ]);
+  const moveRequest = {
+    sourcePath: "from.md",
+    destPath: "to.md",
+    sourceLineStart: 1,
+    sourceLineEnd: 3,
+    block: "```note-database\ndbId: db1\n```",
+  };
+
+  it("writes the destination first and leaves exactly one block", async () => {
+    const files = movedFiles();
+    const order: string[] = [];
+    const adapter = {
+      read: async (path: string) => files.get(path) ?? "",
+      write: async (path: string, content: string) => {
+        order.push(path);
+        files.set(path, content);
+      },
+    };
+    const result = await applyLinkedViewMove(adapter, moveRequest);
+    expect(order[0]).toBe("to.md");
+    expect(order[1]).toBe("from.md");
+    expect(linkedViewBlockCount(result.sourceAfter, result.destAfter)).toBe(1);
+    expect(result.destAfter).toContain("dbId: db1");
+    expect(result.sourceAfter).not.toContain("```note-database");
+    await undoLinkedViewMove(adapter, { ...result, sourcePath: "from.md", destPath: "to.md" });
+    expect(files.get("from.md")).toBe(result.sourceBefore);
+    expect(files.get("to.md")).toBe(result.destBefore);
+  });
+
+  it("leaves a recoverable duplicate, never a loss, when the second write fails", async () => {
+    const files = movedFiles();
+    const before = new Map(files);
+    const adapter = {
+      read: async (path: string) => files.get(path) ?? "",
+      write: async (path: string, content: string) => {
+        if (path === "from.md") throw new Error("interrupted");
+        files.set(path, content);
+      },
+    };
+    await expect(applyLinkedViewMove(adapter, moveRequest)).rejects.toThrow("interrupted");
+    expect(files.get("to.md")).toContain("dbId: db1");
+    expect(files.get("from.md")).toBe(before.get("from.md"));
+    expect(linkedViewBlockCount(files.get("from.md") ?? "", files.get("to.md") ?? "")).toBe(2);
+  });
+});
+
+describe("creating a linked view", () => {
+  it("builds a note-database fence for a newly appended view without List", () => {
+    const types = getViewTypeOptions().map((option) => option.value);
+    expect(types).not.toContain("list");
+    expect(types).toContain("table");
+    const db: DatabaseConfig = {
+      id: "db1",
+      name: "Tasks",
+      sourceFolder: "Tasks",
+      schema: { columns: [], computedFields: [] },
+      views: [],
+    };
+    const view = appendLinkedViewToDatabase(db, "board", "By status");
+    expect(db.views).toHaveLength(1);
+    const fence = buildLinkedViewFence(db, view, "db.md");
+    expect(fence).toContain("```note-database");
+    expect(fence).toContain("dbId: db1");
+    expect(fence).toContain(`viewId: ${view.id}`);
+    expect(fence).not.toContain("dbPath:");
+  });
+
+  it("writes a fence the embed's own option parser reads back", () => {
+    // The serialiser and the reader are separate functions, so a key renamed on
+    // one side would place blocks that render as an unresolved database.
+    const db: DatabaseConfig = {
+      id: "db1",
+      name: "Tasks",
+      sourceFolder: "Tasks",
+      schema: { columns: [], computedFields: [] },
+      views: [],
+    };
+    const view = appendLinkedViewToDatabase(db, "table", "All");
+    const body = buildLinkedViewFence(db, view, "db.md").split("\n").slice(1, -1).join("\n");
+
+    const { harness } = createRenderer();
+    (harness as unknown as { source: string }).source = body;
+    const reference = (harness as unknown as { parseEmbeddedReference(): { dbId?: string; dbPath?: string; viewId?: string } })
+      .parseEmbeddedReference();
+    expect(reference.dbId).toBe("db1");
+    expect(reference.viewId).toBe(view.id);
+    expect(reference.dbPath).toBeUndefined();
+  });
+});
+
+describe("linked-view fence round trip", () => {
+  const locators = [
+    { dbId: "db1" },
+    { dbPath: "folder/db.md" },
+  ] as const;
+  const viewIds = [
+    { viewId: "view-1", viewIdPresent: true },
+    {},
+  ] as const;
+  const headers = [
+    { hideHeader: true as const },
+    {},
+  ] as const;
+  const languages = ["note-database", "database-view"] as const;
+
+  it("round-trips the 16 canonical rows byte-identically", () => {
+    let count = 0;
+    for (const locator of locators) {
+      for (const view of viewIds) {
+        for (const header of headers) {
+          for (const language of languages) {
+            const fence = formatLinkedViewFence({ language, ...locator, ...view, ...header });
+            expect(roundTripLinkedViewFence(fence)).toBe(fence);
+            count += 1;
+          }
+        }
+      }
+    }
+    expect(count).toBe(16);
+  });
+
+  it("parses a dbPath that contains a colon and keeps the locator kind", () => {
+    const parsed = parseLinkedViewFence("```note-database\ndbPath: folder/db:name.md\n```");
+    expect(parsed.dbPath).toBe("folder/db:name.md");
+    expect(serializeLinkedViewSource(parsed)).toBe("dbPath: folder/db:name.md");
+  });
+
+  it("keeps an empty viewId key that copyCurrentViewCode writes", () => {
+    const parsed = parseLinkedViewFence("```note-database\ndbId: db1\nviewId: \n```");
+    expect(parsed.viewIdPresent).toBe(true);
+    expect(parsed.viewId).toBe("");
+    expect(roundTripLinkedViewFence("```note-database\ndbId: db1\nviewId: \n```")).toBe(
+      "```note-database\ndbId: db1\nviewId: \n```",
+    );
+  });
+
+  it("strips trailing whitespace on serialise", () => {
+    const fence = "```database-view\ndbId: db1  \n\n```\n";
+    expect(roundTripLinkedViewFence(fence)).toBe("```database-view\ndbId: db1\n```");
   });
 });

@@ -162,6 +162,7 @@ import {
   MutablePropertyTypeConflictEntry,
 } from "./property-type-conflict-workflow";
 import { CsvMarkdownExportModal } from "./modals/csv-markdown-export-modal";
+import { openCreateLinkedViewModal } from "./modals/create-linked-view-modal";
 import { CsvMarkdownExportOptions } from "../data/csv-markdown-zip-export";
 import { t, tSelectedCells } from "../i18n";
 import { createStoredZip, ZipEntry } from "../data/zip-export";
@@ -2087,6 +2088,11 @@ export class DatabaseView extends FileView {
       moveDatabase: (fromIndex, toIndex) => this.moveDatabase(fromIndex, toIndex),
       selectViewInView: (_dbIndex, viewIndex, viewId) => this.switchView(viewIndex, viewId),
       addView: (viewType, options) => this.addView(viewType, options),
+      createLinkedView: () => {
+        const editor = this.app.workspace.activeEditor?.editor;
+        const dest = this.app.workspace.getActiveFile();
+        openCreateLinkedViewModal(this.app, this.dataSource, this.viewEntries, editor, dest);
+      },
       deleteView: (viewIndex) => this.deleteView(viewIndex),
       renameView: (viewIndex, name) => this.renameView(viewIndex, name),
       setViewIcon: (viewIndex, icon) => {
