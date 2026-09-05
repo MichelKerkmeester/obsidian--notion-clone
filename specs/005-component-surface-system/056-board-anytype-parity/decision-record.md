@@ -10,12 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "recorded adr-001, the board parity reversal, as accepted"
-    next_safe_action: "Carry the superseding note into 038 and 047, then dispatch T001"
+    last_updated_at: "2026-09-05T23:40:00Z"
+    last_updated_by: "design-leaf"
+    recent_action: "added adr-004, the measured accessibility declines from t001"
+    next_safe_action: "Carry the superseding note into 038 and 047, then run T002"
     blockers:
-      - "None: all three ADRs here are Accepted; the open ruling lives in 057 ADR-002"
+      - "None: all four ADRs here are Accepted; the ungrouped-column string is the operator's"
     key_files:
       - "src/views/board-renderer.ts"
       - "specs/005-component-surface-system/038-board-kanban-port/decision-record.md"
@@ -29,6 +29,7 @@ _memory:
       - "The board half of the 2026-09-04 Project Manager 1:1 ruling is superseded; the gantt half is not"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
       - "045's card-property mechanism is kept and retargeted, not rebuilt"
+      - "Four accessibility declines and one platform decline, each with its measured ratio"
 ---
 # Decision Record: Board Anytype Parity
 
@@ -142,4 +143,70 @@ the guard, and is written as AC-006.
 **Alternatives rejected.**
 - *Fold the mechanism into the new card construction.* Rejected: it is shipped, tested and
   operator-visible; rebuilding it would put a working feature at risk for no captured reason.
+
+---
+
+## ADR-004: The four accessibility declines T001 measured, and the two values that look declinable and are not
+
+**Status**: **Accepted** — 2026-09-05, on T001's capture read. ADR-002 is the posture; this is the
+list it demanded.
+
+**Context.** ADR-002 says every captured value is adopted and a decline must name WCAG and a number.
+`design-trueup.md` sections 2 and 3 measured the board, and Anytype's **light theme** fails WCAG
+1.4.3 on the board systematically rather than in one place. The dark theme passes everywhere it was
+sampled, 4.96:1 to 13.71:1, and is adopted verbatim.
+
+**Decision.** Four declines, each with its ratio, plus one platform decline carried from ADR-002.
+
+- **E1 — the light-theme option colour as bare text (WCAG 1.4.3).** The column-header chip puts the
+  raw option hue on the page background at ~13px. Five of the seven rendered colours are below
+  4.5:1: yellow `#C09B26` **2.64:1**, amber `#B97C37` **3.50:1**, grey `#888888` **3.54:1**,
+  ungrouped `#828282` **3.84:1**, red `#C45426` **4.52:1**. The replacement is **Anytype's own
+  answer**, taken from its card chip: the tint fill plus the darkened text of the same hue, which
+  measures **6.11:1** for that amber. The chip's shape, 24px height, 12px radius and 8px inset are
+  adopted unchanged; only the unfilled treatment in light theme is declined.
+- **E2 — the light-theme secondary text on the card (WCAG 1.4.3).** `#828282` on `#FFFFFF` =
+  **3.84:1** carries the type line and every property value on every card. Anytype's dark-theme
+  equivalent `#A3A3A3` on `#191919` = **6.97:1** passes, so the role and the rhythm are adopted and
+  the hex is replaced by the lightest theme grey that clears 4.5:1. Same shape as `051` ADR-007 E2.
+- **E3 — the destructive row (WCAG 1.4.1).** `Move to Bin` in `anytype-menu-kanban-card-menu-*`
+  measures `#E1E1E1` dark / `#252525` light, **identical to every other row**; only the trash icon
+  distinguishes it. `051` ADR-007 E3 already ruled on this family. Our destructive row keeps red
+  plus the icon. Unchanged; recorded here because A12 is where it lands on the board.
+- **E4 — the control glyphs (WCAG 1.4.11).** The phone's `···` measures `#A7A7A7` on `#FFFFFF` =
+  **2.41:1** and is the only element identifying the column menu on a surface with no hover to
+  reveal an alternative. The desktop `···` and `+` fail the same 3:1 bar at `#9B9B9B` = **2.78:1**.
+  The geometry is adopted — 28 x 28px slot, 14 x 14px glyph, 15.3pt on phone — and the glyph colour
+  is replaced by one clearing 3:1. Dark theme adopted verbatim at 6.72:1.
+- **X1 — the scrollbar colours (platform, now with a number).** ADR-002 already declined
+  `#B6B6B6`/`#EBEBEB`. T001 measured the pair at **1.70:1** thumb-on-track, so the platform argument
+  now also has a WCAG figure. Filed as platform rather than accessibility, as ADR-002 asks.
+
+**Two values that look declinable and are adopted anyway, with the reason.**
+
+- **The 1px card border at 1.11:1 dark / 1.12:1 light.** A card is a control, so 1.4.11 appears to
+  apply. It does not: the card is identified by its title, icon and content, and the border divides
+  adjacent cards rather than identifying the control. A hairline that merely divides content does
+  not carry the 3:1 bar. **Adopted verbatim, both themes.** Our existing hover shadow stays as a
+  second signal and is labelled *design inferred*, since no capture holds a pointer.
+- **The 20px chip and the 25px property row.** Neither is a touch target: on the phone the target
+  is the **card**, at 74.7pt. The one phone control below the 44px floor is the `···`, at 15.3pt of
+  ink, and a static capture cannot measure its hit area — so **our own 44px floor applies to it**.
+  That is a floor added on top of parity, not a deviation from a measured value, and it is recorded
+  so a later reader does not mistake it for one (`051` design-trueup section 8d, same distinction).
+
+**Consequences.**
+- Every decline above is a **light-theme** decline. The dark theme is adopted hex for hex.
+- E1's fix is not a new palette. It is Anytype's own card-chip treatment applied to a place Anytype
+  left bare, so parity is preserved at the level of the pattern even where the literal pixel is not.
+- One divergence is **not** an accessibility decline and is escalated instead: the ungrouped column
+  reads **"No value"** on desktop and **"Uncategorized"** on phone. Parity cannot be satisfied both
+  ways; the operator picks the string. Recorded as an open question in `spec.md` section 12.
+
+**Alternatives rejected.**
+- *Adopt the light-theme option colours as-is and let the theme fix it.* Rejected: the ratios are
+  measured against Anytype's own white, not against a hypothetical theme, and four of the five
+  failures are below 4:1 rather than marginal.
+- *Decline the whole light theme and ship dark-only parity.* Rejected: only five colour roles fail,
+  and every geometric value in the light captures matches its dark twin to the pixel.
 <!-- /ANCHOR:decisions -->

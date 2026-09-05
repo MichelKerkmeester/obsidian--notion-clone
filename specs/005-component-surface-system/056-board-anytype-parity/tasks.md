@@ -10,12 +10,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "authored the task list, t001 true-up through leg e verification"
-    next_safe_action: "Dispatch T001 to an image-capable leaf with the 62 kanban capture files"
+    last_updated_at: "2026-09-05T23:40:00Z"
+    last_updated_by: "design-leaf"
+    recent_action: "landed t001, the kanban capture true-up, with design-trueup.md"
+    next_safe_action: "Run T002, the red-first measurement pass, on the current tree"
     blockers:
-      - "T004 onward are blocked on T001 and T002"
+      - "T004 onward are blocked on T002 and T003"
     key_files:
       - "src/views/board-renderer.ts"
       - "screenshots/anytype/desktop/sets"
@@ -23,10 +23,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-tasks"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 10
     open_questions: []
     answered_questions:
       - "T001 requires an image-capable leaf; a text-only leaf records pixel read owed rather than substituting a DOM reading (054 ADR-005)"
+      - "T001 landed; no row needed the pixel-read-owed label, every value came off a PNG"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Board Anytype Parity
@@ -53,7 +54,7 @@ _memory:
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 **The kanban capture true-up, by an image-capable leaf reading the captures px by px.**
+- [x] T001 **The kanban capture true-up, by an image-capable leaf reading the captures px by px.**
       Read all 20 `screenshots/anytype/desktop/sets/<use-case>/anytype-<use-case>-kanban-{light,dark}.png`,
       the 36 `screenshots/anytype/desktop/menus/anytype-menu-kanban-*` and
       `anytype-menu-set-layout-kanban-*` files, and the 6
@@ -64,6 +65,13 @@ _memory:
       owed"** rather than substituting a DOM reading (`054` ADR-005). Read across the ten use cases
       before recording a value and record the spread when they disagree — `050` generalised a single
       panel five times and was corrected five times. (`design-trueup.md`)
+      **Done 2026-09-05.** `design-trueup.md` exists: 33 of the 62 files opened, all 20 set captures
+      scanned programmatically for the option palette and the empty-column check, **nine elements
+      measured and five labelled *design inferred*** with their reason. Seven contradictions
+      recorded (C1-C7), four accessibility refusals with ratios plus one platform decline
+      (ADR-004), and `spec.md` section 4's two tables filled with **zero `unknown` cells**. Scale
+      established before measuring: desktop is **1x**, not 2x, and iOS is **3x** — both confirmed
+      against `050` REQ-003's scrollbar and `051` section 2's frame.
 - [ ] T002 **The red-first measurement pass.** Fill every `Today` cell in `checklist.md` with a
       figure read off the current tree, before any code is written. At minimum:
       `grep -o "pm-[a-z-]*" src/views/board-renderer.ts | sort -u | wc -l`;
@@ -75,7 +83,7 @@ _memory:
       the tree that produced it. (`checklist.md`)
 - [ ] T003 [P] **Disposition the seven local extensions** against T001's output: swimlanes, covers,
       WIP counts, summaries, batch order, touch menus, group controls
-      (`src/views/board-renderer.ts:202-205`). Each gets `retire` or `fold` in `spec.md` section 4's
+      (`src/views/board-renderer.ts:203-206`). Each gets `retire` or `fold` in `spec.md` section 4's
       table, with the capture that justifies a `fold` or the absence that justifies a `retire`.
       None stays default-off. (`spec.md`)
 <!-- /ANCHOR:phase-1 -->

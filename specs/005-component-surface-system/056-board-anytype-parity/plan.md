@@ -10,12 +10,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "authored the leg plan for the board anytype retarget"
-    next_safe_action: "Execute T001, the kanban capture true-up"
+    last_updated_at: "2026-09-05T23:40:00Z"
+    last_updated_by: "design-leaf"
+    recent_action: "recorded t001 as landed; legs 2 onward now gate on t002 alone"
+    next_safe_action: "Execute T002, the red-first measurement pass"
     blockers:
-      - "Legs 2 onward are gated on T001 and T002"
+      - "Legs 2 onward are gated on T002 and T003; T001 landed 2026-09-05"
     key_files:
       - "src/views/board-renderer.ts"
       - "styles.css"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-plan"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 10
     open_questions: []
     answered_questions:
       - "Legs are grouped by file so board-renderer.ts is opened once rather than once per element"
@@ -164,7 +164,7 @@ Follow the ordered tasks in `tasks.md`. It owns the Setup, Implementation and Ve
 
 | Dependency | Type | Status | Impact if Blocked |
 |------------|------|--------|-------------------|
-| T001's image-capable leaf | Internal | Red — not yet run | Every geometry value stays owed; no element may be written |
+| T001's image-capable leaf | Internal | **Green — run 2026-09-05**, output `design-trueup.md` | Was: every geometry value stays owed. Now discharged: 9 elements measured, 4 labelled design inferred, 7 contradictions and 4 measured accessibility declines recorded |
 | `050-anytype-adoption/design-trueup.md` | Internal | Green — written, and corrected by four family true-ups | The design read of record; a disagreement resolves to it (`050` ADR-003) |
 | `045-board-card-properties` | Internal | Green — shipped on main (`56a34199`) | The card-property mechanism this packet keeps |
 | `044` grammar + `048` stacking lanes | Internal | Green — 12 surfaces, 31 pairs | A regression here blocks the leg, not the packet |
@@ -286,7 +286,7 @@ T001 capture true-up ──► T002 red-first measurement ──┬──► Leg
 <!-- ANCHOR:critical-path -->
 ## L3: CRITICAL PATH
 
-1. **T001 capture true-up** — the whole packet is gated on it — CRITICAL
+1. ~~**T001 capture true-up**~~ — **landed 2026-09-05**; the path now starts at T002
 2. **T002 red-first measurement** — no criterion may be claimed without its failing figure — CRITICAL
 3. **Leg A, the renderer vocabulary** — every other leg reads the element names it produces — CRITICAL
 4. **Leg E, verification** — gate, grammar, capture hashes, gantt no-move — CRITICAL
@@ -305,7 +305,7 @@ T001 capture true-up ──► T002 red-first measurement ──┬──► Leg
 
 | Milestone | Description | Success Criteria | Target |
 |-----------|-------------|------------------|--------|
-| M1 | The capture read exists | `design-trueup.md` written; 13 of 13 anatomy elements carry a measurement or a labelled inference; no migration-table cell reads `unknown` | After T001 |
+| M1 | The capture read exists | **Reached 2026-09-05.** `design-trueup.md` written; 13 of 13 anatomy elements carry a measurement or a labelled inference; no migration-table cell reads `unknown` | After T001 |
 | M2 | Every criterion has a red | Each `checklist.md` Today cell holds a figure read off the current tree, not a mechanism | After T002 |
 | M3 | The board is Anytype-shaped | `pm-*` 39 → 0 undispositioned; sticky scrollbar present; extensions 7 → 0 default-off | After Leg D |
 | M4 | The gate is green and the gantt did not move | `npm run gate` exit 0 from `$?`; grammar 12/31; `pm-gantt-*` count and gantt hashes unchanged | After Leg E |

@@ -11,12 +11,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "authored the kanban anatomy and the per-element migration table"
-    next_safe_action: "Execute T001, the kanban capture true-up, by an image-capable leaf"
+    last_updated_at: "2026-09-05T23:40:00Z"
+    last_updated_by: "design-leaf"
+    recent_action: "trued the thirteen board elements against the kanban captures"
+    next_safe_action: "Execute T002, the red-first measurement pass, then T003"
     blockers:
-      - "Every geometry value in section 4 is owed to T001 and labelled so"
+      - "T004 onward stay blocked on T002 and T003"
     key_files:
       - "src/views/board-renderer.ts"
       - "src/views/board-card-fields.ts"
@@ -27,9 +27,11 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does the phone board adopt the desktop column geometry or only 044's sheet grammar"
+      - "Ungrouped column: No value or Uncategorized, one string for both surfaces"
     answered_questions:
       - "The gantt is out of scope and stays the Project Manager 1:1 port"
+      - "The phone board is captured and carries its own geometry, not the desktop's"
+      - "Desktop column headers carry no record count; the dots and plus are hover-only"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify + level3-arch | v2.2 -->
 # Feature Specification: Board Anytype Parity
@@ -112,7 +114,7 @@ stands untouched.
 ### Problem Statement
 The board renders Project Manager's kanban, not Anytype's: `src/views/board-renderer.ts` constructs
 **39** distinct `pm-*` classes and `styles.css` carries **23** `pm-kanban-*` rules, and the default
-layout is explicitly *"the one-to-one kanban copy"* (`board-renderer.ts:202-205`). The operator has
+layout is explicitly *"the one-to-one kanban copy"* (`board-renderer.ts:203-206`). The operator has
 replaced that target for the board. Nothing in the tree points at an Anytype kanban screen, no
 element is trued against one, and the sticky horizontal scrollbar the captures show on both the
 kanban and the grid is absent from the renderer and from the stylesheet entirely.
@@ -167,24 +169,27 @@ ground and its measurement.
 
 ### The Anytype kanban anatomy this packet matches
 
-Thirteen elements. Every geometry cell below is **owed to T001** unless it cites a measurement
-already taken; a value labelled *design inferred* was never read off a screen and says so.
+Thirteen elements. **T001 landed 2026-09-05; `design-trueup.md` is its output and every cell below
+is now either a measurement with its capture file or a labelled *design inferred* with its reason.**
+Desktop figures are CSS pixels at 1x (the captures are 2168 x 1217 at one device pixel to one CSS
+pixel, `design-trueup.md` section 2); phone figures are pt, divided by three from a 1206 x 2622
+frame.
 
 | # | Element | What the capture shows | Reference capture |
 |---|---------|------------------------|-------------------|
-| A1 | **Column header** | Group title, record count, a `···` menu and an add affordance on one row | `anytype-<use-case>-kanban-{light,dark}.png`; `anytype-menu-kanban-column-menu-{light,dark}-full.png` |
-| A2 | **Card shape and padding** | Radius, border or shadow treatment, internal padding, inter-card gap — all owed to T001 | `anytype-project-tracker-kanban-{light,dark}.png` |
-| A3 | **Card cover** | An optional image region on the card, configured by a layout setting rather than always on | `anytype-menu-set-layout-kanban-cover-{light,dark}-full.png` |
-| A4 | **Property rows on the card** | Which properties render, in what order, and the row shape they render in | `anytype-crm-contacts-deals-kanban-{light,dark}.png` |
-| A5 | **"+ New" affordance placement** | Where the new-record control sits relative to the column's cards — `047` section 5 records it as *always the top drop target* during a drag | `anytype-<use-case>-kanban-{light,dark}.png` |
-| A6 | **Column add** | The control that adds a group column, and where it sits on the strip | `anytype-<use-case>-kanban-{light,dark}.png` |
-| A7 | **Drag affordances** | Off-screen clone as drag image, cached-rect hit testing inside `requestAnimationFrame`, `isOver` plus left/right/top/bottom edge classes; cross-column drag carries the whole multi-select and commits as **one** property write, not one per card | `047/research/research.md` section 5 "Board / Kanban" (source-derived; the drag-held state is not captured — `screenshots/anytype/README.md` records drag-only states as not specifically captured) |
-| A8 | **Group-by and the ungrouped column** | The `Groups ›` row the kanban settings panel inserts between Layout and the rest, the group-by property picker, and how records with no value present | `anytype-menu-set-layout-kanban-group-by-{light,dark}-full.png`; `anytype-mobile-sheet-kanban-groupby-{light,dark}.png`; `050/design-trueup.md` line 243 |
-| A9 | **Colours per option** | The select option's own colour driving the column header and the card chip | `anytype-<use-case>-kanban-{light,dark}.png`, both themes |
-| A10 | **Horizontal scroll with the sticky scrollbar** | **Measured**: 10px tall, 8px above the viewport bottom, full content width — y 1199..1208 of a 1217px viewport, on the kanban and the grid alike. Thumb `#B6B6B6`, track `#EBEBEB`; **colours stay ours**, from the theme's scrollbar tokens, because this is an Obsidian plugin and the reader's theme decides (`050/design-trueup.md` REQ-003) | `anytype-project-tracker-kanban-light.png`, `anytype-project-tracker-grid-light.png` |
-| A11 | **Empty column state** | What an empty group column renders; and the dedicated empty state a **deleted group relation** produces, which points at view settings (`047` section 5) | `anytype-<use-case>-kanban-{light,dark}.png` across the ten use cases |
-| A12 | **Card menu** | The card's own `···` menu and its three captured sub-menus — add link to object, add to collection, change type | `anytype-menu-kanban-card-menu-{light,dark}-full.png` and its `-add-link-to-object`, `-add-to-collection`, `-change-type` variants |
-| A13 | **Page limit** | The kanban layout's captured page limit is **10** — not the flat 60 `050` first read, which `053` D4 corrected to per-layout (Gallery 60, Kanban 10, absent elsewhere) | `anytype-menu-set-layout-kanban-page-limit-{light,dark}-full.png` |
+| A1 | **Column header** | **Measured.** At rest, desktop: the option chip **alone** — 24px tall, 12px radius, 1px `#EBEBEB` light / `#292929` dark border, **no fill**, 8px in from the card's left edge, option-coloured text. **No record count exists on the desktop board.** On hover a **28 x 28px** `···` slot (fill `#232323` dark) and a bare **14 x 14px** `+` appear right-aligned, 8px from the card's right edge, 6px apart. On phone all three are permanent **and the count is present**, as plain text 10.3pt after the label | `anytype-<use-case>-kanban-{light,dark}.png` x20 at rest; `anytype-menu-kanban-column-menu-dark-full.png` on hover; `anytype-mobile-set-kanban-dark.png` |
+| A2 | **Card shape and padding** | **Measured.** **246px** wide, content-driven height (104px observed at minimum), **8px** radius, **1px** border `#212121` dark / `#F2F2F2` light, fill `#191919` / `#FFFFFF`, **no shadow at rest**, **16px** padding, **8px** inter-card gap. Column gap **24px**, pitch **270px**, and **no column background panel at all** | `anytype-project-tracker-kanban-{light,dark}.png` |
+| A3 | **Card cover** | **The control is measured; the rendered cover is design inferred.** `Cover  Select ›` opens `None` (selected) / `Object cover` / `Attachments`, with `Fit media` a separate toggle, off. The default is off, which is why no card in the twenty captures carries one | `anytype-menu-set-layout-kanban-cover-{light,dark}-full.png` |
+| A4 | **Property rows on the card** | **Measured.** **Values only, no labels**, one per line on a **25px** pitch, in the view's property order, `#A3A3A3` dark / `#828282` light. The object type is the first line under the title. Select options are **20px filled chips, 6px radius, 8px gap**, tint fill plus darkened text; checkboxes a **14 x 14px** circle glyph plus the property name; relations a 16px icon plus the object title; dates plain text | `anytype-crm-contacts-deals-kanban-{light,dark}.png`, `anytype-project-tracker-kanban-dark.png` |
+| A5 | **"+ New" affordance placement** | **Measured at rest: bottom, both clients.** Desktop is a **246 x 42px** bordered box **8px below the last card**, 8px radius, bare **14 x 14px** `+` centred, no label. Phone is a **labelled `+ New` row**, left-aligned, no box. `047` section 5's *"always the top drop target"* is a **drag-time** claim no capture holds and stays **design inferred** | `anytype-project-tracker-kanban-dark.png` y 417..458; `anytype-mobile-set-kanban-dark.png` y 1266..1313 |
+| A6 | **Column add** | **No such control exists.** No add-a-column affordance appears on the strip in any of the twenty captures; the column menu offers `Hide Column`, not `Add Column`, because a column **is** a group option. The surface that adds one is the option editor, which is `054`'s | twenty set captures; `anytype-menu-kanban-column-menu-{light,dark}.png` |
+| A7 | **Drag affordances** | **Not seen.** No capture in the 62-file set holds a card mid-drag, which `screenshots/anytype/README.md` already records. The design stays `047`'s source read — off-screen clone, cached-rect hit testing inside `requestAnimationFrame`, `isOver` plus edge classes, and one property write per cross-column drop | `047/research/research.md` section 5 (source-derived) — **design inferred from source code, not seen** |
+| A8 | **Group-by and the ungrouped column** | **Measured.** The layout panel carries `Group by  <property> ›` between `Fit media` and `Color columns`, opening a handle-less anchored picker: one row per eligible property with its type icon, a **trailing ✓** on the selected one, a divider, then `+ Add Property`. The phone shows the same list as a handle-less stacked sheet. The ungrouped column is **first in the strip**, labelled **"No value"** on desktop and **"Uncategorized"** on phone — a copy divergence in the reference, recorded in `design-trueup.md` C3 | `anytype-menu-set-layout-kanban-group-by-{light,dark}-full.png`; `anytype-mobile-sheet-kanban-groupby-{light,dark}.png` |
+| A9 | **Colours per option** | **Measured across all ten use cases: a ten-colour named palette** — Grey, Yellow, Amber, Red, Pink, Purple, Blue, Sky, Teal, Green — each with a 16px disc at a 28px pitch in the column menu. The disc carries the **tint**, which is the card chip's fill. The header chip uses the **text** variant on the page background; the card chip pairs the tint fill with a **darkened text**. `Color columns` is a toggle, **off by default**, which is why the column body is uncoloured. Full hex table: `design-trueup.md` section 3 | `anytype-menu-kanban-column-menu-{light,dark}.png`; all twenty set captures |
+| A10 | **Horizontal scroll with the sticky scrollbar** | **Re-measured independently and confirmed**: 10px tall, 8px above the viewport bottom, spanning the scroller's width — y 1199..1208 of a 1217px viewport, thumb x 668..1707 on a track to x 2100, on the kanban and the grid alike. Thumb `#B6B6B6` on track `#EBEBEB` light, `#737373` on `#292929` dark; **colours stay ours**, from the theme's scrollbar tokens, because this is an Obsidian plugin and the reader's theme decides (`050/design-trueup.md` REQ-003). The declined pair also measures **1.70:1** | `anytype-project-tracker-kanban-light.png`, `anytype-project-tracker-grid-light.png` |
+| A11 | **Empty column state** | **Not seen.** All six visible columns in all ten dark captures carry a card at y 305..330; no empty column exists in the sweep, and no board in the set has a deleted group relation. Both states stay `047` section 5's source read | twenty set captures — **design inferred from source code, not seen** |
+| A12 | **Card menu** | **Measured.** A **256px** panel on **28px** rows, four sections separated by three dividers: `Open as Object` / `Change type ›` / `Edit Properties`; `Favorite` / `Pin to Channel` / `Add Link to Object ›` / `Add to Collection ›`; `Copy Link` / `Duplicate` / `Export` / `Unlink from Collection` / `Move to Bin`; `Open in New Tab` / `Open in New Window`. Icon-plus-label rows, chevron on submenu rows. **`Move to Bin` is not red** — `#E1E1E1` dark / `#252525` light, identical to every other row | `anytype-menu-kanban-card-menu-{light,dark}.png` and its three `-add-link-to-object`, `-add-to-collection`, `-change-type` variants |
+| A13 | **Page limit** | **Confirmed: 10**, selected from `10 / 20 / 50 / 70 / 100` — `053` D4's per-layout figure, not `050`'s withdrawn flat 60. **What renders past the limit is not seen**; no captured column exceeds it | `anytype-menu-set-layout-kanban-page-limit-{light,dark}-full.png` |
 
 **Capture inventory, counted rather than quoted.** The kanban set is **20** files —
 `screenshots/anytype/desktop/sets/<use-case>/anytype-<use-case>-kanban-{light,dark}.png`, ten use
@@ -198,40 +203,54 @@ carried forward.*
 
 ### The per-element migration table
 
-Every `pm-*` class `board-renderer.ts` constructs, and where it goes. **T001 fills the Anytype
-element and capture columns; T003 fills the disposition.** A row reading `unknown` blocks closure.
+Every `pm-*` class `board-renderer.ts` constructs, and where it goes. **T001 landed and filled the
+Anytype element and capture columns; the three no-counterpart families keep `retire or fold, T003`
+because that disposition is T003's, and `design-trueup.md` section 7 supplies the evidence it
+needs.** A row reading `unknown` blocks closure; **no row reads `unknown`.** Line numbers are `9a0293a2`, re-read after the rebase rather than carried. The full per-element table, with our value beside Anytype's, is
+`design-trueup.md` section 4.
 
 | PM element | Anytype element | Capture filename | Our file | Disposition |
 |---|---|---|---|---|
-| `pm-kanban-view` | Set kanban root | `anytype-project-tracker-kanban-light.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-board` | Column strip + sticky scrollbar (A10) | `anytype-project-tracker-kanban-light.png` | `board-renderer.ts`, `styles.css` | Owed to T001 |
-| `pm-kanban-col` | Group column (A9) | `anytype-<use-case>-kanban-*.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-col-topbar`, `-col-header`, `-col-header-right`, `-col-title-row`, `-col-badge`, `-col-count` | Column header: title, count, `···`, add (A1) | `anytype-menu-kanban-column-menu-light-full.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-cards` | Card list within the column | `anytype-<use-case>-kanban-*.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-card`, `-card-body`, `-card-title-row`, `-card-title` | Card shape and title (A2) | `anytype-project-tracker-kanban-*.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-card-description` | Card body text region (A2/A4) | `anytype-course-notes-kanban-*.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-card-tags`, `pm-chip` family (7 classes) | Select-option chip on the card (A4/A9) | `anytype-crm-contacts-deals-kanban-*.png` | `board-renderer.ts`, `board-card-fields.ts` | Owed to T001 |
-| `pm-kanban-card-footer` | Card footer or its absence (A4) | `anytype-<use-case>-kanban-*.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-avatar` family (4 classes) | Person-property presentation on the card (A4) | `anytype-crm-contacts-deals-kanban-*.png` | `board-renderer.ts` | Owed to T001 |
-| `pm-kanban-card--dragging`, `pm-dragging`, `pm-kanban-drop-target` | Drag clone, `isOver` and edge classes (A7) | Not captured — source-derived from `047` section 5 | `board-renderer.ts` | Owed to T001, **design inferred** unless a capture is found |
-| `pm-kanban-card-parent` | **No Anytype counterpart** — Project Manager's subtask breadcrumb | none | `board-renderer.ts` | `retire` or `fold`, T003 |
-| `pm-kanban-card-priority-bar` | **No Anytype counterpart** — Project Manager's priority accent | none | `board-renderer.ts`, `styles.css` | `retire` or `fold`, T003 |
-| `pm-progress` family (4 classes) | **No Anytype counterpart** on the kanban card | none | `board-renderer.ts` | `retire` or `fold`, T003 |
+| `pm-kanban-view` | Set kanban root, no chrome of its own | `anytype-project-tracker-kanban-light.png` | `board-renderer.ts:330`, `styles.css:9213` | Rename; the shell already matches |
+| `pm-kanban-board` | Column strip at a **270px** pitch + the sticky scrollbar (A10) | `anytype-project-tracker-kanban-light.png`, `-grid-light.png` | `board-renderer.ts:331`, `styles.css:9228` | Gap **14 → 24px**; add the scrollbar rail |
+| `pm-kanban-col` | Group column, **246px**, **no background panel** (A9) | ten use cases, both themes | `board-renderer.ts:350`, `styles.css:9251` | Width **280 → 246px**; drop the background, radius and `overflow: hidden` |
+| `pm-kanban-col-topbar` | **No counterpart** — the option colour lands on the chip's text, never on a bar | ten use cases | `board-renderer.ts:354`, `styles.css:9265` | `retire` |
+| `pm-kanban-col-header`, `-col-title-row`, `-col-header-right` | Column header: chip at card-left **+8px**, `···` (28 x 28px) and `+` (14 x 14px) **hover-only**, 6px apart, 8px from the right edge (A1) | `anytype-menu-kanban-column-menu-dark-full.png` | `board-renderer.ts:351`, `:356`, `:363`, `styles.css:9262`, `:9269`, `:9286` | Re-shape; **9px** from the chip to the first card |
+| `pm-kanban-col-badge` | The **24px outlined option chip**, 12px radius, no fill (A1) | ten use cases | `board-renderer.ts:357`, `styles.css:9275` | Becomes a bordered chip; the light-theme text colour is declined (ADR-004 E1) |
+| `pm-kanban-col-badge-icon` | **No counterpart** — the column chip carries no icon | ten use cases | `board-renderer.ts:359-361`, `styles.css:9282` | `retire` |
+| `pm-kanban-col-count` | **Desktop: does not exist.** Phone: plain text in the label's grey, 10.3pt after it, no pill (A1) | twenty desktop files; `anytype-mobile-set-kanban-dark.png` | `board-renderer.ts:364`, `styles.css:9291` | `retire` the pill; a phone-only plain-text count or nothing |
+| `pm-kanban-cards` | The card list; **gap 8px**, no horizontal padding | ten use cases | `board-renderer.ts:366`, `styles.css:9300` | Padding **6px 10px → 0**; gap unchanged |
+| `pm-kanban-drop-target` | **Not seen** — no capture holds a drag (A7) | README, "not specifically captured" | `board-renderer.ts:382`, `styles.css:9310` | Keep, **design inferred** |
+| `pm-kanban-card`, `-card-body` | Card: **246px**, **8px** radius, 1px border, **no shadow at rest**, **16px** padding, rows on a **25px** pitch (A2) | `anytype-project-tracker-kanban-{light,dark}.png` | `board-renderer.ts:426`, `:473`, `styles.css:9314`, `:9347` | Drop `min-height: 112px`; padding **10/12 → 16px**; gap **7px → a 25px pitch** |
+| `pm-kanban-card:hover`, `--dragging`, `pm-dragging` | **Not seen** — no capture holds a pointer or a drag | README | `board-renderer.ts:455-456`, `styles.css:9327`, `:9331`, `:9338` | Keep, **design inferred**; the hover shadow is our second signal for a 1.11:1 border |
+| `pm-kanban-card-title-row`, `-card-title` | Title **≈15px** `#E1E1E1`/`#252525` after a **16 x 16px icon slot**, text starting 27px in. **No type chips** (A2) | ten use cases | `board-renderer.ts:480`, `styles.css:9357`, `:9575` | Size **13 → 15px**; add the icon slot; `retire` the M/Sub/R chips |
+| `pm-kanban-card-description` | One property row among the rest, same pitch, same grey, **single-line truncated** (A2/A4) | `anytype-course-notes-kanban-dark.png` | `board-renderer.ts:516`, `styles.css:9363` | Fold into the property row; clamp **3 → 1** |
+| `pm-kanban-card-tags`, `pm-chip` family (7 classes) | **20px tall, 6px radius, 8px gap**, tint fill plus darkened text, **no dot**; overflow `+3` (A4/A9) | `anytype-crm-contacts-deals-kanban-*.png` | `board-renderer.ts:528`, `styles.css:9374`, `:9480` | Pin 20px/6px; replace the 10%/20% colour-mix with the measured tint pair; `retire` the dot |
+| `pm-kanban-card-footer` | **No counterpart** — every property is a row in one rhythm; nothing is pinned to the bottom (A4) | ten use cases | `board-renderer.ts:553`, `styles.css:9380` | `retire` |
+| `pm-avatar` family (4 classes) | **No counterpart** — a person renders as a **16px icon plus the name** on its own row (A4) | `anytype-crm-contacts-deals-kanban-*.png`, `anytype-habit-health-log-kanban-dark.png` | `board-renderer.ts:558-569`, `styles.css:9408` | `retire`, T003 confirms |
+| `pm-kanban-card-parent` | **The slot survives, its content changes**: the line there is the **object type name**, at the ordinary secondary size and colour, not a smaller breadcrumb | ten use cases, band y 349..361 | `board-renderer.ts:478`, `styles.css:9389` | `fold`, T003 confirms |
+| `pm-kanban-card-priority-bar` | **No counterpart** — priority is an ordinary property row in the chip family | `anytype-project-tracker-kanban-dark.png` y 449..460 | `board-renderer.ts:469`, `styles.css:9342` | `retire`, T003 confirms |
+| `pm-progress` family (4 classes) | **No counterpart** on the kanban card | ten use cases | `board-renderer.ts:546-548`, `styles.css:9453` | `retire`, T003 confirms |
+| *(absent today)* | **Sticky horizontal scrollbar** — 10px tall, 8px above the bottom, scroller width (A10) | `anytype-project-tracker-kanban-light.png`, `-grid-light.png` | none — `050` REQ-003's gap | Add; geometry adopted, colours declined (ADR-002, ADR-004 X1) |
+| *(absent today)* | **`+ New` control** — 246 x 42px bordered box on desktop, labelled row on phone (A5) | `anytype-project-tracker-kanban-dark.png`, `anytype-mobile-set-kanban-dark.png` | none | Add |
 
 ### The seven local extensions, and why they are not a separate question
 
-`board-renderer.ts:202-205` gates seven affordances behind `boardExtensions = false` with the
+`board-renderer.ts:203-206` gates seven affordances behind `boardExtensions = false` with the
 comment *"the default layout is the one-to-one kanban copy, which has none of them"*: **swimlanes,
 covers, WIP counts, summaries, batch order, touch menus, group controls**. The reason they are
-dark is the target this packet replaces. Each is now re-asked against Anytype: **covers** and
-**group controls** have captured counterparts (A3, A8) and `fold`; the other five have none read so
-far and are `retire` unless T001 finds one. None may stay default-off (goal D6).
+dark is the target this packet replaces. Each is now re-asked against Anytype, and **T001 changed
+the count**: **covers**, **group controls**, **touch menus** and **WIP counts** all have captured
+counterparts (A3, A8, the phone's permanent `···` sheet, the phone's plain-text record count), so
+four are `fold` candidates rather than two. **Swimlanes**, **summaries** and **batch order** have
+no counterpart in any of the 62 files and are `retire` candidates. The evidence for each is
+`design-trueup.md` section 7; the disposition itself is T003's. None may stay default-off (goal D6).
 
 ### P0 - Blockers (MUST complete)
 
 | ID | Requirement |
 |----|-------------|
-| REQ-001 | Every one of the thirteen anatomy elements in this section is trued against a named capture file by an image-capable leaf reading it px by px, and the value is recorded in `design-trueup.md` with either a measurement or the **design inferred** label and its reason |
+| REQ-001 | Every one of the thirteen anatomy elements in this section is trued against a named capture file by an image-capable leaf reading it px by px, and the value is recorded in `design-trueup.md` with either a measurement or the **design inferred** label and its reason. **Satisfied 2026-09-05 by T001**: nine measured, five labelled *design inferred* with their reason (A3's rendered cover, A6, A7, A11 and the behaviour past A13's limit) |
 | REQ-002 | The per-element migration table above is complete: no cell reads `unknown`, and every `pm-*` class is either replaced or carries a written reason for staying |
 | REQ-003 | The board's Project Manager element vocabulary is gone or dispositioned: 39 constructed `pm-*` classes and 23 `pm-kanban-*` stylesheet rules reduced to zero undispositioned survivors |
 | REQ-004 | The sticky horizontal scrollbar exists on the board at the captured geometry — 10px tall, 8px above the viewport bottom, full content width — with colours read from the theme's scrollbar tokens rather than Anytype's fixed light-theme pair |
@@ -377,11 +396,16 @@ assumption without re-running the sweep.
 
 ## 12. OPEN QUESTIONS
 
-- Does the phone board adopt the desktop column geometry, or is `044`'s sheet grammar its only
-  constraint? The three iOS kanban sheets cover the group-by and column menus, not the board body.
-- Do the five extensions with no captured counterpart — swimlanes, WIP counts, summaries, batch
-  order, touch menus — retire outright, or does one of them fold into an Anytype element T001 has
-  yet to read? T003 answers this from T001's output, not before.
+- ~~Does the phone board adopt the desktop column geometry?~~ **Closed by T001.** The premise was
+  wrong: `anytype-mobile-set-kanban-{light,dark}.png` **is** the board body. The phone carries its
+  own geometry — **254.7pt** columns at a **278pt** pitch with a **23.3pt** gap and a transparent
+  card — alongside `044`'s grammar, and the desktop's numbers are not reused.
+- ~~Do the five extensions with no captured counterpart retire?~~ **Narrowed to three by T001.**
+  WIP counts and touch menus both have captured counterparts on the phone. Swimlanes, summaries and
+  batch order have none in any of the 62 files. T003 still takes the disposition.
+- **New, and the operator's:** the ungrouped column is labelled **"No value"** on desktop and
+  **"Uncategorized"** on phone. Parity cannot be satisfied both ways; one string has to win
+  (`design-trueup.md` C3).
 <!-- /ANCHOR:questions -->
 
 ---

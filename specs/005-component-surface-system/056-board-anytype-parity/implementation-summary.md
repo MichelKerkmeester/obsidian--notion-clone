@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "recorded the packet as authored and not started"
-    next_safe_action: "Dispatch T001 to an image-capable leaf"
+    last_updated_at: "2026-09-05T23:40:00Z"
+    last_updated_by: "design-leaf"
+    recent_action: "recorded t001 as landed and the two false premises it found"
+    next_safe_action: "Run T002, the red-first measurement pass, on the current tree"
     blockers:
       - "No implementation has begun; every criterion is Unmet by design at this point"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-impl"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 10
     open_questions: []
     answered_questions: []
 ---
@@ -121,7 +121,17 @@ worktree path.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Every geometry value in `spec.md` section 4 is owed to T001.** The captures are on disk and
+**T001 landed 2026-09-05 and discharged item 1 below, while correcting two of the premises the
+rest of this list rests on.** `design-trueup.md` is its output: 33 of the 62 files opened, all 20
+set captures scanned programmatically, **9 of the 13 anatomy elements measured** and 4 labelled
+*design inferred* with their reason. It found **two false premises in the packet's own targets** —
+`spec.md` A1 asked for a desktop record count that does not exist, and section 12 treated the phone
+board as uncaptured when `anytype-mobile-set-kanban-{light,dark}.png` is that board. It also
+recorded **four accessibility declines with their measured ratios plus one platform decline**
+(`decision-record.md` ADR-004), all of them light-theme; the dark theme is adopted hex for hex.
+Items 2 onward below are unchanged and still owed.
+
+1. ~~**Every geometry value in `spec.md` section 4 is owed to T001.**~~ **Discharged.** The captures are on disk and
    unread. Nothing here is designed from a screen anyone opened, and the document says so in each
    cell rather than implying a measurement it does not have.
 2. **The drag-held state has no capture.** `screenshots/anytype/README.md` records drag-only states
