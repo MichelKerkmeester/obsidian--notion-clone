@@ -177,6 +177,7 @@ const SPEC_OPTIONS = [
   "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
   "boardEmptyColumn", "galleryImageField", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "columnHeaderController", "longHeaderLabel", "migratedFromList",
+  "viewConfigVariant", "boardCardFieldsHidden",
 ];
 
 function constructedScenario(view, opts) {
@@ -508,6 +509,25 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/views/dropdown-field.ts"]),
     note: "ViewConfigPanelRenderer's own render for a table view with a one-view database, so "
       + "both the database-scoped and the view-scoped sections draw.",
+  }),
+  constructedScenario("board-card-properties", {
+    renderer: "view-config",
+    viewConfigVariant: "board",
+    captureData: false,
+    group: "panels",
+    capture: "viewport",
+    title: "Board card properties panel (constructed)",
+    fixtureOf: "panel-board-card-properties",
+    sources: constructedSources("src/views/board-card-properties-panel.ts", "src/views/view-config-panel-renderer.ts")
+      .concat(["src/views/board-card-fields.ts", "src/views/checkbox.ts", "src/views/property-type-icon.ts"]),
+    note: "ViewConfigPanelRenderer's own render for a board view, so renderBoardSettings mounts "
+      + "renderBoardCardProperties — the harness's one view-config scenario before this was "
+      + "table-only, so the Properties section never mounted through the capture pipeline. Schema "
+      + "and stored boardCardFields list are board-card-properties-panel.stories.ts's own Editable "
+      + "fixture verbatim: Hours and Due stored visible, Tags stored hidden, Status (the board's "
+      + "own group field) appended hidden because the operator's list never named it. The same "
+      + "render() call forks on isMobileBottomSheet, so this one scenario photographs both the "
+      + "desktop popover and the phone sheet.",
   }),
   constructedScenario("column-manager", {
     renderer: "column-manager",
@@ -853,6 +873,28 @@ export const CONSTRUCTED_SCENARIOS = [
     note: "The extensions board (boardExtensionsEnabled), which is the only surface that draws "
       + "the column-header and card selection boxes; the default board reproduces the reference "
       + "kanban card, which has none.",
+  }),
+  constructedScenario("board-card-properties-hidden", {
+    renderer: "board",
+    // Proven the hard way while building this scenario: with extensions off (the default
+    // `constructed-board` uses), the board renders through renderReferenceCard's fixed
+    // five-slot map, which resolveBoardCardFields never touches — a stored list would sit on
+    // the config and change nothing, which proves the reference path stays untouched rather
+    // than proving anything about this scenario. The local extension card (renderCard) is the
+    // one call site that reads the resolver, so this scenario has to opt into it to demonstrate
+    // a stored list doing anything at all.
+    boardExtensions: true,
+    boardCardFieldsHidden: true,
+    group: "components",
+    title: "Board view — a stored field list hides a column (constructed)",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/board-card-fields.ts"]),
+    note: "The extensions board (boardExtensionsEnabled, the only path resolveBoardCardFields "
+      + "reaches — see AC-004 for why constructed-board itself cannot show this), with an "
+      + "explicit boardCardFields list that reproduces today's derived order verbatim except for "
+      + "hiding the schema's first currency column — the card-level half of the "
+      + "board-card-properties pair: the panel shows the field unchecked, this shows the same "
+      + "list already applied to a real card.",
   }),
   constructedScenario("timeline-day", {
     renderer: "timeline",

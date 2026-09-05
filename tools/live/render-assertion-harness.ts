@@ -105,6 +105,7 @@ import { ActiveRulePopoverRenderer } from "../../src/views/active-rule-popover-r
 import { FilterPanelRenderer, type FilterPanelActions } from "../../src/views/filter-panel-renderer";
 import { SortPanelRenderer, type SortPanelActions } from "../../src/views/sort-panel-renderer";
 import { ViewConfigPanelRenderer, type ViewConfigPanelActions } from "../../src/views/view-config-panel-renderer";
+import { listBoardCardFields, toBoardCardFieldList } from "../../src/views/board-card-fields";
 import { ColumnManagerRenderer, type ColumnManagerActions } from "../../src/views/column-manager-renderer";
 import { openColumnWidthAdjuster } from "../../src/views/column-width";
 import {
@@ -307,6 +308,16 @@ export interface ScenarioSpec {
    */
   calendarHint?: boolean;
   /**
+   * Opt-in, renderer "view-config" only: builds a board view instead of the branch's default
+   * table view, so `renderBoardSettings` mounts `renderBoardCardProperties` — the harness's one
+   * `view-config` scenario before this option existed was table-only, and the Properties section
+   * only exists on a board. The schema and stored `boardCardFields` list are
+   * `board-card-properties-panel.stories.ts`'s own `Editable` fixture verbatim (Hours and Due
+   * stored visible, Tags stored hidden), so the story and this capture show identical state.
+   * Defaults to "table".
+   */
+  viewConfigVariant?: "table" | "board";
+  /**
    * Opt-in, renderer "record-detail-body" only: which note-body mode `mountNoteBodyRegion`
    * mounts. "empty" is a record whose note is only frontmatter (the placeholder line);
    * "editing" is the region after `beginEdit` swapped the rendered body for its textarea;
@@ -346,6 +357,16 @@ export interface ScenarioSpec {
    * cards container beside the populated lanes.
    */
   boardEmptyColumn?: boolean;
+  /**
+   * Opt-in, renderer "board" only: stores an explicit `boardCardFields` list that reproduces
+   * today's derived default verbatim — same fields, same order, same visibility — except for
+   * hiding the schema's first currency column (`columnOfType(columns, "currency")`, the same
+   * helper the filter/sort panel branches already use to find one). Proves a stored list removes
+   * a field from the rendered card, not only from the panel that edits it: the card this produces
+   * differs from `board`'s own default capture in exactly one field. Off by default; every
+   * existing board consumer is unaffected.
+   */
+  boardCardFieldsHidden?: boolean;
   /**
    * Opt-in, renderer "gallery" only: sets `galleryImageField` to a real schema column the rows
    * resolve no image for, so `renderCover` draws its placeholder cover on every card.
@@ -1897,6 +1918,33 @@ function viewConfigAssertions(container: HTMLElement): AssertionResult[] {
   return results;
 }
 
+function boardCardPropertiesPanelAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const panel = container.querySelector(".db-view-config-panel");
+  const rows = Array.from(panel?.querySelectorAll<HTMLElement>(".db-column-manager-row") ?? []);
+  // hours, tags, due (the stored list) plus status (the board's own group field, appended
+  // because the stored list never names it) — the same four `listBoardCardFields` produces for
+  // any config carrying this exact schema and stored list, board-card-fields.test.ts included.
+  results.push({
+    name: "the board Properties section drew one row per listable field",
+    pass: rows.length === 4,
+    detail: `${rows.length} row(s), want 4 (hours, tags, due, status)`,
+  });
+  const checkedFor = (key: string) =>
+    panel?.querySelector<HTMLInputElement>(`[data-note-database-column-key="${key}"] input[type='checkbox']`)?.checked;
+  results.push({
+    name: "the stored list's hidden field renders its checkbox unchecked",
+    pass: checkedFor("tags") === false,
+    detail: `tags checkbox checked=${checkedFor("tags")}`,
+  });
+  results.push({
+    name: "a stored visible field renders its checkbox checked",
+    pass: checkedFor("hours") === true && checkedFor("due") === true,
+    detail: `hours checked=${checkedFor("hours")}, due checked=${checkedFor("due")}`,
+  });
+  return results;
+}
+
 function columnManagerAssertions(container: HTMLElement, columns: ColumnDef[]): AssertionResult[] {
   const results: AssertionResult[] = [];
   const panel = container.querySelector(".db-column-manager");
@@ -2273,6 +2321,15 @@ export function runRenderAssertions(
       ...(scenario.boardExtensions ? { boardExtensionsEnabled: true } : {}),
       ...(scenario.boardImageField ? { boardImageField: columnOfType(columns, "text")?.key } : {}),
     } as ViewConfig;
+    const hiddenCardColumn = scenario.boardCardFieldsHidden ? columnOfType(columns, "currency") : undefined;
+    if (hiddenCardColumn) {
+      // Seed the stored list from the derived default itself, rather than hand-listing every
+      // column, so the only deliberate difference from `board`'s own default capture is the one
+      // field this scenario hides.
+      const defaultEntries = listBoardCardFields(config, columns, { groupField: BOARD_GROUP_FIELD });
+      config.boardCardFields = toBoardCardFieldList(defaultEntries.map((entry) =>
+        entry.column.key === hiddenCardColumn.key ? { ...entry, visible: false } : entry));
+    }
     if (scenario.boardImageField) applyEmptyMetadataCache(rows);
     if (scenario.boardEmptyColumn) {
       // The empty lane comes from the same data call the hosts make: a configured select option
@@ -2330,6 +2387,20 @@ export function runRenderAssertions(
         results.push(...boardAssertions(container, rows));
       }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
+      if (scenario.boardCardFieldsHidden) {
+        const stillPresent = hiddenCardColumn
+          ? container.querySelector(`.db-board-card-field[data-note-database-column-key="${hiddenCardColumn.key}"]`)
+          : null;
+        results.push({
+          name: "a stored card field list removes the hidden field from every card",
+          pass: Boolean(hiddenCardColumn) && !stillPresent,
+          detail: !hiddenCardColumn
+            ? "no currency column in this schema to hide — captureData must be on"
+            : stillPresent
+              ? `found data-note-database-column-key="${hiddenCardColumn.key}" on a card`
+              : `"${hiddenCardColumn.key}" absent from every card`,
+        });
+      }
       if (!scenario.boardExtensions) results.push({
         name: "no forced layout inside the card loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
@@ -2782,30 +2853,73 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "sort-panel-renderer"));
     if (results[0].pass) results.push(...sortPanelAssertions(container, Boolean(scenario.calendarHint)));
   } else if (scenario.renderer === "view-config") {
-    // The settings panel for a table view with a one-view database: the database-scoped rows
-    // render because actions.database is present, the view-scoped rows from the config. The
-    // bench's config shape puts columns at the top level, but the settings panel reads the real
-    // ViewConfig schema, so this branch wraps the bench data in that shape.
-    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
-    const rows = makeTableRows(TABLE_ROWS, columns);
-    applyCaptureOptions(columns, rows);
-    const config = {
-      ...makeTableConfig(columns),
-      viewType: "table",
-      schema: { columns, computedFields: [] },
-    } as ViewConfig;
-    const db = makeSurfaceDatabase(columns, config);
-    const actions: ViewConfigPanelActions = {
-      app: undefined as unknown as App,
-      onChange: () => undefined,
-      database: db,
-    };
-    bagKeys = Object.keys(actions).sort();
-    const renderer = new ViewConfigPanelRenderer();
-    renderer.render(container, true, config, actions, makeHiddenAnchor(container, "db-view-config-anchor"));
+    if (scenario.viewConfigVariant === "board") {
+      // The board's Properties section (`renderBoardCardProperties`), reached only through
+      // `renderBoardSettings` when `config.viewType === "board"` — the branch below this one is
+      // table-only, so this scenario is what makes the section mount through the capture
+      // pipeline at all. Schema and stored `boardCardFields` list are
+      // `board-card-properties-panel.stories.ts`'s own `Editable` fixture, unchanged, so the
+      // story and this capture are provably the same state: Hours and Due stored visible, Tags
+      // stored hidden, Status (the board's own group field) appended hidden because the
+      // operator's list never named it. `render()`'s own `isMobileBottomSheet` fork is what turns
+      // this into the phone's bottom sheet on that device pass — nothing here decides that.
+      const columns: ColumnDef[] = [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "status", label: "Status", type: "status" },
+        { key: "cover", label: "Cover", type: "text" },
+        { key: "hours", label: "Hours", type: "number" },
+        { key: "tags", label: "Tags", type: "multi-select" },
+        { key: "due", label: "Due", type: "date" },
+      ];
+      const config = {
+        name: "Board",
+        sourceFolder: "",
+        viewType: "board",
+        boardGroupField: "status",
+        boardImageField: "cover",
+        schema: { columns, computedFields: [] },
+        boardCardFields: [
+          { key: "hours", visible: true },
+          { key: "tags", visible: false },
+          { key: "due", visible: true },
+        ],
+      } as ViewConfig;
+      const actions: ViewConfigPanelActions = {
+        app: undefined as unknown as App,
+        onChange: () => undefined,
+      };
+      bagKeys = Object.keys(actions).sort();
+      const renderer = new ViewConfigPanelRenderer();
+      renderer.render(container, true, config, actions, makeHiddenAnchor(container, "db-view-config-anchor"));
 
-    results.push(provenanceResult(container, "view-config-panel-renderer"));
-    if (results[0].pass) results.push(...viewConfigAssertions(container));
+      results.push(provenanceResult(container, "view-config-panel-renderer"));
+      if (results[0].pass) results.push(...boardCardPropertiesPanelAssertions(container));
+    } else {
+      // The settings panel for a table view with a one-view database: the database-scoped rows
+      // render because actions.database is present, the view-scoped rows from the config. The
+      // bench's config shape puts columns at the top level, but the settings panel reads the real
+      // ViewConfig schema, so this branch wraps the bench data in that shape.
+      const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+      const rows = makeTableRows(TABLE_ROWS, columns);
+      applyCaptureOptions(columns, rows);
+      const config = {
+        ...makeTableConfig(columns),
+        viewType: "table",
+        schema: { columns, computedFields: [] },
+      } as ViewConfig;
+      const db = makeSurfaceDatabase(columns, config);
+      const actions: ViewConfigPanelActions = {
+        app: undefined as unknown as App,
+        onChange: () => undefined,
+        database: db,
+      };
+      bagKeys = Object.keys(actions).sort();
+      const renderer = new ViewConfigPanelRenderer();
+      renderer.render(container, true, config, actions, makeHiddenAnchor(container, "db-view-config-anchor"));
+
+      results.push(provenanceResult(container, "view-config-panel-renderer"));
+      if (results[0].pass) results.push(...viewConfigAssertions(container));
+    }
   } else if (scenario.renderer === "column-manager") {
     // The properties panel: one row per schema column, with a hidden column so the select-all
     // checkbox sits in its real indeterminate state.

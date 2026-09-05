@@ -259,6 +259,16 @@ ActiveViewControlsRenderer's own render over a state with two effective filters 
 
 Sources: `src/views/active-view-controls-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`
 
+### Board view — a stored field list hides a column (constructed)
+
+The extensions board (boardExtensionsEnabled, the only path resolveBoardCardFields reaches — see AC-004 for why constructed-board itself cannot show this), with an explicit boardCardFields list that reproduces today's derived order verbatim except for hiding the schema's first currency column — the card-level half of the board-card-properties pair: the panel shows the field unchecked, this shows the same list already applied to a real card.
+
+| dark | light |
+|---|---|
+| ![constructed-board-card-properties-hidden dark](notion-clone/components/constructed-board-card-properties-hidden-mobile-dark.png) | ![constructed-board-card-properties-hidden light](notion-clone/components/constructed-board-card-properties-hidden-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-card-fields.ts`
+
 ### Board view — empty column (constructed)
 
 The reference board with one configured select option no row carries, backfilled as a zero-row column through the same withEmptyOptionGroups call the hosts make.
@@ -713,6 +723,16 @@ Sources: `src/data/status-colors.ts`, `src/views/cell-renderer.ts`
 
 ## panels
 
+### Board card properties panel (constructed)
+
+ViewConfigPanelRenderer's own render for a board view, so renderBoardSettings mounts renderBoardCardProperties — the harness's one view-config scenario before this was table-only, so the Properties section never mounted through the capture pipeline. Schema and stored boardCardFields list are board-card-properties-panel.stories.ts's own Editable fixture verbatim: Hours and Due stored visible, Tags stored hidden, Status (the board's own group field) appended hidden because the operator's list never named it. The same render() call forks on isMobileBottomSheet, so this one scenario photographs both the desktop popover and the phone sheet.
+
+| dark | light |
+|---|---|
+| ![constructed-board-card-properties dark](notion-clone/panels/constructed-board-card-properties-mobile-dark.png) | ![constructed-board-card-properties light](notion-clone/panels/constructed-board-card-properties-mobile-light.png) |
+
+Sources: `src/views/board-card-properties-panel.ts`, `src/views/view-config-panel-renderer.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-card-fields.ts`, `src/views/checkbox.ts`, `src/views/property-type-icon.ts`
+
 ### Column manager (constructed)
 
 ColumnManagerRenderer's own render over the table bench's sixteen columns with one hidden, so the select-all checkbox sits in its real indeterminate state.
@@ -822,6 +842,16 @@ ViewConfigPanelRenderer's own render for a table view with a one-view database, 
 | ![constructed-view-config dark](notion-clone/panels/constructed-view-config-mobile-dark.png) | ![constructed-view-config light](notion-clone/panels/constructed-view-config-mobile-light.png) |
 
 Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
+
+### Board card properties panel
+
+The Properties section of a board view's settings panel: fixed readonly Cover and Title rows above one reorderable row per field. Reuses the column manager's row markup (drag handle, checkbox, type icon, name) but drops its wrap/edit/delete actions, which this list has no equivalent of. Payment is hidden by the operator; Billing — the board's own group-by field — is not in the stored list either, so it is appended last, unchecked, rather than removed from the panel entirely.
+
+| dark | light |
+|---|---|
+| ![panel-board-card-properties dark](notion-clone/panels/panel-board-card-properties-mobile-dark.png) | ![panel-board-card-properties light](notion-clone/panels/panel-board-card-properties-mobile-light.png) |
+
+Sources: `src/views/board-card-properties-panel.ts`, `src/views/view-config-panel-renderer.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 
 ### Column manager
 

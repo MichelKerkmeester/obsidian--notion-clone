@@ -484,6 +484,64 @@ export const PANEL_SCENARIOS = [
     },
   },
   {
+    id: "panel-board-card-properties",
+    title: "Board card properties panel",
+    group: "panels",
+    width: 520,
+    fixtureOf: "constructed-board-card-properties",
+    sources: [
+      "src/views/board-card-properties-panel.ts",
+      "src/views/view-config-panel-renderer.ts",
+      "src/views/property-type-icon.ts",
+      "src/views/checkbox.ts",
+    ],
+    note: "The Properties section of a board view's settings panel: fixed readonly Cover and "
+      + "Title rows above one reorderable row per field. Reuses the column manager's row markup "
+      + "(drag handle, checkbox, type icon, name) but drops its wrap/edit/delete actions, which "
+      + "this list has no equivalent of. Payment is hidden by the operator; Billing — the board's "
+      + "own group-by field — is not in the stored list either, so it is appended last, unchecked, "
+      + "rather than removed from the panel entirely.",
+    captureCss: ANCHORED_PANEL_CSS,
+    html: () => {
+      const fields = [
+        { key: "cost", label: "Cost", type: "currency", visible: true },
+        { key: "payment", label: "Payment", type: "select", visible: false },
+        { key: "renew", label: "Next Renewal", type: "date", visible: true },
+        { key: "cycle", label: "Billing", type: "select", visible: false },
+      ];
+      const row = (field, i) => `
+        <div class="db-column-manager-row" draggable="true" data-note-database-column-key="${field.key}">
+          <span class="db-column-drag" title="Drag to reorder">⋮⋮</span>
+          ${reorderControls(i === 0, i === fields.length - 1)}
+          <input type="checkbox" class="db-checkbox db-checkbox-field"${field.visible ? " checked" : ""}>
+          <span class="db-column-type" title="${field.type}">
+            <span class="db-column-type-icon">${TYPE_ICON[field.type]}</span>
+          </span>
+          <div class="db-column-name-wrap">
+            <span class="db-column-name">${field.label}</span>
+          </div>
+        </div>`;
+      return `
+      <div class="note-database-container">
+        <div class="db-view-config-panel" id="db-view-config-panel">
+          <div class="db-panel-header"><div class="db-panel-title">Settings</div></div>
+          <div class="db-view-config-body">
+          <div class="db-view-config-section-title db-view-config-section-view" data-scope="view">Properties</div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">Cover</div>
+            <div class="db-view-config-field"><div class="db-view-config-readonly-value">No cover</div></div>
+          </div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">Title field</div>
+            <div class="db-view-config-field"><div class="db-view-config-readonly-value">Use file name</div></div>
+          </div>
+          ${fields.map(row).join("")}
+          </div>
+        </div>
+      </div>`;
+    },
+  },
+  {
     id: "panel-column-manager",
     title: "Column manager",
     group: "panels",

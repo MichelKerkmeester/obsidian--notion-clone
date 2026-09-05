@@ -85,6 +85,17 @@ window.__stateMarkers = (scenario) => {
     sortPanel: !!container.querySelector(".db-sort-panel .db-sort-rule-row"),
     sortPanelCalendarHint: !!container.querySelector(".db-sort-panel .db-panel-hint"),
     viewConfigPanel: !!container.querySelector(".db-view-config-panel"),
+    boardCardPropertiesPanel: !!container.querySelector(".db-view-config-panel .db-column-manager-row"),
+    boardCardPropertiesListsEveryField: container.querySelectorAll(".db-view-config-panel .db-column-manager-row").length === 4,
+    boardCardPropertiesTagsUnchecked: (() => {
+      const cb = container.querySelector('.db-view-config-panel [data-note-database-column-key="tags"] input[type="checkbox"]');
+      return cb !== null && cb.checked === false;
+    })(),
+    boardCardPropertiesVisibleFieldsChecked: (() => {
+      const hours = container.querySelector('.db-view-config-panel [data-note-database-column-key="hours"] input[type="checkbox"]');
+      const due = container.querySelector('.db-view-config-panel [data-note-database-column-key="due"] input[type="checkbox"]');
+      return !!hours && hours.checked === true && !!due && due.checked === true;
+    })(),
     columnManager: !!container.querySelector(".db-column-manager .db-column-manager-row"),
     recordDetailPanel: !!container.querySelector(".db-record-detail-panel"),
     recordDetailBodyEditing: !!container.querySelector(".db-record-detail-body.is-editing .db-record-detail-body-editor"),
@@ -195,6 +206,21 @@ const PAIRED_CASES = [
     on: { renderer: "chart", bag: "file-view", captureData: true, chartVariant: "empty" },
     onMarkers: ["chartEmpty"],
     offOnlyMarkers: ["chartCanvas"],
+  },
+  {
+    // The "off" side is the harness's existing view-config scenario — a table view, which never
+    // reaches renderBoardSettings and therefore never mounts a single .db-column-manager-row. The
+    // "on" side is the same panel host for a board view instead, so the only variable this pair
+    // isolates is which view type the panel is configuring — not a hand-toggled boolean.
+    id: "constructed-board-card-properties",
+    off: { renderer: "view-config", bag: "file-view", captureData: true },
+    on: { renderer: "view-config", bag: "file-view", viewConfigVariant: "board" },
+    onMarkers: [
+      "boardCardPropertiesPanel",
+      "boardCardPropertiesListsEveryField",
+      "boardCardPropertiesTagsUnchecked",
+      "boardCardPropertiesVisibleFieldsChecked",
+    ],
   },
 ];
 
