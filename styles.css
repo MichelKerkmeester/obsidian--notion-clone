@@ -10580,6 +10580,16 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   text-align: left;
 }
 
+/* The badge wrapper is a flex row, and `text-align` cannot reach a flex container's main axis, so
+   the rule above left the multi-select rows still pinned to the board card's right edge while every
+   text value moved left. Scoped to the record sheet's own field for the same reason the alignment
+   above is: the board card's own `justify-content: flex-end` is what its four other callers lay
+   out against, and a 2-line-clamped card reads correctly with its chips flush right. */
+.note-database-container .db-record-detail-field .db-board-card-badges,
+.db-mobile-bottom-sheet .db-record-detail-field .db-board-card-badges {
+  justify-content: flex-start;
+}
+
 /* 非 wrap：值单行截断（对齐看板卡片）；wrap 由 db-board-card-field-wrap 覆盖为正常换行 */
 .note-database-container .db-record-detail-field:not(.db-board-card-field-wrap) .db-board-card-value:not(.has-badges):not(.db-checkbox-cell),
 .db-mobile-bottom-sheet .db-record-detail-field:not(.db-board-card-field-wrap) .db-board-card-value:not(.has-badges):not(.db-checkbox-cell) {
