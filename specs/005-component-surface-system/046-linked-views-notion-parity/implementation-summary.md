@@ -91,6 +91,9 @@ survives Obsidian's reading-view layout (T002), and whether an embed may write t
 (ADR-001). The chrome and width legs proceed on the first; the capability leg does not start until
 the second has a status. After that the three legs — chrome, move, create — barely touch, because
 the block format does not change.
+
+ADR-001 was decided 2026-09-05 — Accepted, full parity — and the capability leg (T006) is now
+running on `worktrees/054-linked-views` (external lane: devin first, Grok fallback).
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -129,8 +132,9 @@ the block format does not change.
 1. **The chrome census is a read of a screenshot, not a measurement.** Three block-furniture
    elements were counted from the operator's PNG. T001 writes the census; until then the number is
    an observation, and `checklist.md` says so rather than dressing it up.
-2. **ADR-001 needs the operator.** It changes behaviour on every existing page in every vault, which
-   is not a call this repository gets to make on its own.
+2. **ADR-001 is resolved.** The operator ruled 2026-09-05 ~05:30 CEST, verbatim: "Allow db writing
+   from linked views" — Accepted, full parity, the capability leg now running on
+   `worktrees/054-linked-views` (external lane: devin first, Grok fallback).
 3. **The phone flows wait on `044`.** The move action and the create flow are sheets, and inventing
    a third sheet language while `044` is defining the first would be the exact mistake `044` exists
    to stop.

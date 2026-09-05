@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-04T18:47:26Z"
+    last_updated_at: "2026-09-05T03:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened ADR-001 and ADR-002 as Proposed"
-    next_safe_action: "Decide ADR-001 before touching any capability gate"
-    blockers:
-      - "ADR-001 needs an operator ruling; it changes behaviour on every existing page"
+    recent_action: "Accepted ADR-001: linked views write to source db like standalone views"
+    next_safe_action: "Track the external T006 pass on worktrees/054-linked-views"
+    blockers: []
     key_files:
       - "src/views/embedded-database-renderer.ts"
     session_dedup:
@@ -41,9 +40,9 @@ _memory:
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-04 |
-| **Deciders** | Operator (pending) |
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
 
 ---
 
@@ -82,13 +81,19 @@ today's honest block, because it looks like it should work.
 <!-- ANCHOR:adr-001-decision -->
 ### Decision
 
-**We chose**: not yet decided — this ADR is `Proposed` and is a precondition for REQ-003 and
-REQ-004, not a record of something already done.
+**We chose**: **Option A — full parity.** An embedded/linked view writes to its source database
+exactly as the standalone view does: cell edits, row creation and deletion, status and board-column
+moves, and view configuration all persist to the source database rather than to a page-local copy.
+Undo runs through the plugin's existing undo history stack — the same one the standalone view uses.
+The view is read-only only when its source database is missing or unresolved, never as a default
+posture for the embed as such.
 
-**How it works**: the phase's chrome and width work (T004, T005) proceeds regardless, because it
-changes presentation only. The capability leg (T006) does not start until this ADR is `Accepted` or
-`Deprecated`. Whichever way it goes, the four gates change together in one commit, so the embed's
-capability set is one statement rather than four.
+Operator, verbatim, 2026-09-05 ~05:30 CEST: *"Allow db writing from linked views."*
+
+**How it works**: the phase's chrome and width work (T004, T005) already proceeded regardless,
+because it changes presentation only. The capability leg (T006) is now unblocked: the four
+read-only gates come out together, in one commit, keyed on whether the source resolves rather than
+on `persistMode === "codeblock"`.
 <!-- /ANCHOR:adr-001-decision -->
 
 ---
@@ -103,9 +108,9 @@ capability set is one statement rather than four.
 | **C. Opt-in per block — an `editable: true` option in the fence** | The page author decides, per embed; existing pages unchanged | A fifth option in a format this phase is trying to simplify; two behaviours to test everywhere | 7/10 |
 | **D. Editable where the page owns the database, read-only elsewhere** | Intuition matches Notion's inline-versus-linked distinction | "Owns" has no meaning in this data model — a database is a file, a page is a file, and any page can embed any view | 3/10 |
 
-**Why this one**: no option is chosen yet. C is the current lean because it makes the behaviour a
-per-block statement the operator can see in the fence, and because it leaves every existing page
-exactly as it is. It is recorded as a lean, not as a decision.
+**Why this one**: the operator chose Option A directly — *"Allow db writing from linked views"* —
+over the per-block opt-in of C. The ruling is unconditional: every existing embed gets the same
+capability the standalone view has, not a fence flag an author must opt into.
 <!-- /ANCHOR:adr-001-alternatives -->
 
 ---
@@ -140,11 +145,11 @@ exactly as it is. It is recorded as a lean, not as a decision.
 |---|-------|--------|----------|
 | 1 | **Necessary?** | PASS | Four gates key on one string with no recorded intent; parity work touches all four |
 | 2 | **Beyond Local Maxima?** | PASS | Four options considered, including the two obvious extremes and the Notion-shaped one |
-| 3 | **Sufficient?** | PENDING | Cannot be judged until an option is chosen |
+| 3 | **Sufficient?** | PASS | Option A is chosen and matches the standalone view's own capability set; the embed becomes the database rather than a restricted view of it |
 | 4 | **Fits Goal?** | PASS | REQ-003 and REQ-004 both depend on it; the critical path runs through it |
 | 5 | **Open Horizons?** | PASS | Whichever option wins, the presentation/capability split leaves the other reachable |
 
-**Checks Summary**: 4/5 PASS, 1 PENDING
+**Checks Summary**: 5/5 PASS
 <!-- /ANCHOR:adr-001-five-checks -->
 
 ---
@@ -154,7 +159,7 @@ exactly as it is. It is recorded as a lean, not as a decision.
 
 **What changes**:
 - `src/views/embedded-database-renderer.ts` — the four gates, together, in one commit.
-- The block format, only if option C wins.
+- The block format does not change (goal.md D1) — Option A carries no new fence option.
 
 **How to roll back**: if a writable path ships, disable its flag first so an in-flight edit is
 refused rather than half-written, then revert the gate commit. Notes already created from an embed

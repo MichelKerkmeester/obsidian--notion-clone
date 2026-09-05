@@ -106,7 +106,7 @@ into the objective, and it is expected to grow.
 | Phase opened | Done | Operator directives 2026-09-04 ~20:41 CEST, screenshots `report-42-embedded-view-clipped.png` and `report-42-standalone-reference.png` |
 | Three mechanisms read | Done | Chrome: `embedded-database-renderer.ts:600-611`, `:1724-1745`. Capability: `:421`, `:433`, `:463`, `:1575`, `:1592`, `:1593`. Format: `:3555`, `database-view.ts:3912` |
 | Host-layout question | Pending | `tasks.md` T002 — the critical path |
-| ADR-001 | Proposed | `decision-record.md` |
+| ADR-001 | Accepted | `decision-record.md` — operator ruling 2026-09-05 ~05:30 CEST: "Allow db writing from linked views" |
 
 ### Deviations and findings
 

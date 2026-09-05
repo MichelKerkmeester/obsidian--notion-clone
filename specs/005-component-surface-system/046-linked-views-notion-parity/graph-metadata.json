@@ -205,7 +205,7 @@
     ],
     "causal_summary": "The operator, verbatim, 2026-09-04 ~20:41 CEST: \"on overview the nested views shouldn't be clipped",
     "created_at": "2026-09-04T19:14:35Z",
-    "last_save_at": "2026-09-04T19:22:02.076Z",
+    "last_save_at": "2026-09-05T03:10:13.218Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,14 +217,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b2181ad8fab5593557d230b2a5cd93deb8d6b0c627580d119b8add0781afe3b5",
+    "source_fingerprint": "sha256:e176e9a39fda01ea3852eef33c6728d6155177e927d97b4316ee5c2e2194b4b4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9d2da798d3ce20885e6a5c3ac455b88da41273849117535db2dcf8e836bb0233",
       "plan.md": "9b543f43af633623a5c5c1497530b2b5aade7b2fc136236f4b0d560e7278cad5",
-      "tasks.md": "53b24e929bbaf95453968af5f4fdba018db42bc18ed81ee81225e198eb9ab87e",
-      "decision-record.md": "9e44820e462651c4b00fd9e61f63de8960f2eb9459ee6416fdf9ec28240a442d",
-      "implementation-summary.md": "713c7bddd39b3d60a2929b1d11cd1a199756613ef4698d2f4de75a29f36c583c"
+      "tasks.md": "ecaed037d51ab1dcb92388eb8d93b7fa1b26e48e30440eec9036c12da2dc6a21",
+      "decision-record.md": "f3f37961e04c5f7b29108b3caa4c8ef1e98856cb9ffdb65794b477181726c2e2",
+      "implementation-summary.md": "f0a943efbed05dc7046e020d9205f6809d4bd24083abe8a59f21d8c34803d47b"
     },
     "last_active_child_id": null,
     "last_active_at": null

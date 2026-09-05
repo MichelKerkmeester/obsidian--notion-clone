@@ -36,7 +36,7 @@ contextType: "general"
 
 - [ ] T001 Read the three mechanisms that produce the reported shape and record them, so later work argues against the tree rather than the screenshot: the code-block host ancestor walk (`embedded-database-renderer.ts:600-611`), the header/toggle pair (`:1724-1745` plus the toolbar's `db-header`), and the four read-only gates (`:421`, `:433`, `:463`, `:1575`, `:1592`, `:1593`)
 - [ ] T002 Answer the host-layout question against real Obsidian, not against a harness: can an embed span the reading view's content width without breaking the layout of prose around it, and at what cost. This is the critical path; a guess here is a rewrite (`src/views/embedded-database-renderer.ts`, `styles.css`)
-- [ ] T003 [P] Write ADR-001 — may an embed write to the vault, and if so what is the undo story. Accepted or rejected, but recorded, before any capability gate is touched (`decision-record.md`)
+- [x] T003 [P] Write ADR-001 — may an embed write to the vault, and if so what is the undo story. Accepted or rejected, but recorded, before any capability gate is touched (`decision-record.md`) — ruling: Accepted 2026-09-05 ~05:30 CEST, operator verbatim "Allow db writing from linked views"; full parity, undo through the plugin's existing history stack, read-only only when the source is unresolved
 <!-- /ANCHOR:phase-1 -->
 
 ---
