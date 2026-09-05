@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/053-toolbar-and-view-controls",
+  "spec_folder": "005-component-surface-system/053-toolbar-and-view-controls",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "toolbar spec",
+      "053 spec",
+      "view controls spec",
+      "toolbar primitives",
+      "chip row spec",
+      "implementation plan",
+      "053 plan",
+      "toolbar legs",
+      "toolbar plan",
+      "task breakdown",
+      "053 tasks",
+      "toolbar tasks"
+    ],
+    "key_topics": [
+      "toolbar",
+      "spec",
+      "view",
+      "controls",
+      "primitives",
+      "chip",
+      "row",
+      "implementation",
+      "plan",
+      "legs",
+      "task",
+      "breakdown"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "screenshots/anytype/README.md",
+      "src/views/toolbar-renderer.ts",
+      "src/views/active-view-controls-renderer.ts",
+      "src/views/filter-panel-renderer.ts",
+      "src/views/sort-panel-renderer.ts",
+      "src/views/chart-toolbar-renderer.ts",
+      "src/views/calendar-toolbar-renderer.ts",
+      "src/views/calendar-timeline-toolbar-renderer.ts",
+      "src/views/embedded-database-renderer.ts",
+      "src/views/database-view.ts",
+      "src/views/board-renderer.ts",
+      "src/views/view-config-panel-renderer.ts",
+      "src/data/types.ts",
+      "tools/mock-data/anytype/views-report.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/anytype/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "active-view-controls-renderer.ts",
+        "kind": "code",
+        "path": "src/views/active-view-controls-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "chart-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/chart-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "views-report.json",
+        "kind": "config",
+        "path": "tools/mock-data/anytype/views-report.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "View Controls",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A person using the toolbar cannot see which rules are active without opening panels (the triggers",
+    "created_at": "2026-09-05T11:46:15.524Z",
+    "last_save_at": "2026-09-05T12:13:54.900Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:9333b880ae9668eb1e393453ee19874f5bf7df7d61c63f507e7109122523ed0b",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "54984308bf676d167d7de139adf005acab0e87d1dabecf3fe057f9fece5be4cf",
+      "plan.md": "dca32715a4499eaf267d596a1e8c98fbc72b97bfdc572ffe58e15bf20003db36",
+      "tasks.md": "9ac46bfa23f87a8ced3b7259937c4d498733c31f4923e471da585c833ff04011",
+      "decision-record.md": "8a6f48a9a40f8fe5148e76f9236ca523a49e0dd26de389466167dacc9ecda40a"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

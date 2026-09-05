@@ -1,0 +1,26 @@
+{
+  "specFolder": "005-component-surface-system/053-toolbar-and-view-controls",
+  "description": "The database toolbar and view controls rebuilt as five composed shared primitives — popover shell, condition row, control-cluster button, settings entry, tab strip — taking six Anytype behaviours (050 items 1, 2, 4, 7, 10, 12, thresholds kept) with a per-surface migration table and the table, PM-parity board and gantt, formulas/rollups and the sheet grammar ruled to stay ours",
+  "keywords": [
+    "phase",
+    "toolbar",
+    "view-controls",
+    "toolbar-primitives",
+    "chip-row",
+    "dual-mode-triggers",
+    "view-settings-landing",
+    "sort-conflict-confirm",
+    "new-row-presets",
+    "measured-collapse",
+    "componentization"
+  ],
+  "lastUpdated": "2026-09-05T12:00:00.000Z",
+  "specId": "053",
+  "folderSlug": "toolbar-and-view-controls",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

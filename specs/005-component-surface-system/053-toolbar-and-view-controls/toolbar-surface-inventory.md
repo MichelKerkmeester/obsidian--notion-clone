@@ -1,0 +1,166 @@
+---
+title: "Toolbar Surface Inventory: Every Toolbar Surface, Its Primitive, Its Migration and Its Anytype Pattern"
+description: "Code-derived census of the toolbar family's surfaces: the primitive each migrates onto, the changes it takes, the Anytype capture its design is read against, and what stays ours. Extends 003's sheet-and-dropdown inventory along the toolbar axis."
+trigger_phrases:
+  - "toolbar surface inventory"
+  - "toolbar migration table"
+  - "toolbar census"
+  - "053 inventory"
+importance_tier: "high"
+contextType: "research"
+---
+# Toolbar surface inventory
+
+Every surface the toolbar family owns, derived by reading the renderers on the current tree, each
+row citing the `file:line` that constructs it. **This extends
+`../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md`; it does not restate it.** That
+document is the per-surface census of what each surface is and whether it conforms as a sheet;
+this document adds only the toolbar axis — which primitive a surface migrates onto, what changes,
+and which Anytype capture its design is read against.
+
+**Capture-read gate (goal D1), updated at landing 2026-09-05.** `050`'s `design-trueup.md` has
+since read the pixels of every capture this table cites and is now the **read of record** (`050`
+ADR-003: where a capture and `047`'s research disagree, the capture is the fact). Rows corrected
+against it are marked **[trued 2026-09-05]** and §6 lists every correction. Rows marked
+**no capture** are designed from `047`'s code-derived findings with the gap named — never from a
+guess — and absence of a capture is not evidence of absence. T001's remaining obligation is the
+handful of captures the true-up did not reach, not the whole set.
+
+---
+
+## 1. THE MECHANISMS THE FAMILY RUNS ON TODAY
+
+Five shared mechanisms, none shared on purpose — each is re-implemented per surface, which is why
+the family reads as eight renderers rather than one toolbar.
+
+| # | Mechanism | Where it lives today | What it costs |
+|---|-----------|----------------------|---------------|
+| M1 | **The close-others run** | `toolbar-renderer.ts` — the same sequence (database → group → view-tab → export → title, sometimes + `closeToolbarPopovers` + utilities) repeated at **17 call sites** (grep count of `this.closeTitleActionsPopover();` = 17; `closeDatabasePopover();` appears at 19) | Every new popover must remember to join the run; one that forgets leaves a stack |
+| M2 | **The hand-built popover shell** | Four shapes: `toolbar-renderer.ts:1240-1250` (view-tab menu), `chart-toolbar-renderer.ts:345-392` (options + child stack), `calendar-toolbar-renderer.ts:84-131`, `calendar-timeline-toolbar-renderer.ts:69-116` | Four implementations of create → header → position → outside-click → Escape → auto-close → cleanup, each with its own drift |
+| M3 | **The condition row** | `filter-panel-renderer.ts:445-532` (property, operator, value, remove, wrap/NOT) and `sort-panel-renderer.ts:223-289` (field, direction, remove, drag) | Two vocabularies for one row shape; `design-system.md` §5's condition-panel row floors have to be asserted twice |
+| M4 | **The dead settings entry** | Seven methods with zero `this.` call sites at HEAD: `renderComputedSyncButton` `:512`, `renderDatabaseRefreshButton` `:519`, `renderCalendarTimelineOptionsButton` `:551`, `renderWidthSelect` `:1594`, `renderViewConfigButton` `:2239`, `renderChartOptionsButton` `:2252`, `renderExportButton` `:2290` | The entry point is unreadable: the live path is the utilities row's settings shortcut (`:465-470`), while the classes the dead methods would stamp are still the anchor-fallback queries' target (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`) |
+| M5 | **Per-surface phone branching** | `createSheetHeader` + `positionToolbarPopover` pairs scattered per surface (`filter-panel-renderer.ts:255-278`, `sort-panel-renderer.ts:133-141`, `view-config-panel-renderer.ts:351-361`) | `044`'s grammar is honoured, but each surface re-derives when it is a sheet and when it is not |
+
+---
+
+## 2. THE PRIMITIVES (target state)
+
+One new module, `src/views/toolbar-primitives.ts`, exports five constructors. A surface migrates
+by deleting its own copy of the mechanism (goal D3). Full contracts: `spec.md` §5.
+
+| Primitive | Kills mechanism | First consumer |
+|-----------|-----------------|----------------|
+| `createPopoverShell` | M1 + M2 | The view-tab context menu |
+| `createConditionRow` | M3 | The sort panel (smaller of the two) |
+| `createControlClusterButton` | M1 (trigger side) | The filter trigger |
+| `createSettingsEntry` | M4 | The utilities row's settings shortcut |
+| `createTabStrip` | (tab strip duplication) | The embed's single-tab toolbar |
+
+---
+
+## 3. THE MIGRATION TABLE
+
+Shorthand: **Primitive** names the constructor the surface's replaced mechanism lives behind;
+**Change** names what is new for this phase; **Anytype** names the capture the change is read
+against, or `no capture`; **Stays ours** names what the row deliberately keeps. `050 item` column
+ties the row to `050`'s REQ numbering.
+
+### 3.1 The toolbar row and its clusters — `toolbar-renderer.ts:381-405`
+
+| # | Surface (defined) | `050` item | Primitive | Change | Anytype | Stays ours |
+|---|---|---|---|---|---|---|
+| T1 | View tabs + add button (`renderViewTabs` `:840-931`) **[trued 2026-09-05]** | 4 | `createTabStrip` | Extracted as-is: roving tabindex, drag (`:978-1021`), measured overflow collapse (`:895-917`), hub fallback (`:1022-1085`) | `anytype-set-kanban-view-dark.png` — the capture shows **a tab row and a trailing `+`**, active tab bright and inactive dimmed. There is **no view-selector dropdown at that width and no captured tab context menu**; the draft's "rename/duplicate/remove on context" was read from `047` §5, not from a screen (`design-trueup.md` REQ-004, contradiction C4) | Drag-reorder on desktop; touch reorder via the context menu's move rows (`:1263-1272`) |
+| T2 | View-tab context menu (`showViewTabMenu` `:1229-1284`) **[trued 2026-09-05]** | 4 | `createPopoverShell` | Rows migrate off the `db-view-tab-popover-row db-menu-item` dual class (`:1249`, `:1341`). **Duplicate and Remove go in the view-settings panel, not here** — that is where the capture puts them, last section below a divider, each a 28px row with a 16px leading icon, and it also lands them where item 2 has just put the reader. Our tab menu keeps its own action set | `anytype-view-settings-panel-dark.png` (Duplicate view / Remove view, measured). The tab **context menu itself is not captured** — neither capture phase drove a right-click — so its content and placement stay **design inferred from source code, not seen** | Row order and the change-type submenu row (`:1286-1339`); the move-to-first/last touch rows, which have no Anytype referent |
+| T3 | Add-view popover (`showAddViewMenu` `:1360-1490`) | — | `createPopoverShell` (shell only) | Shell migration; the form stays bespoke | `anytype-newobject-type-picker-dark.png` (creation type picker — pattern reference only) | The duplicate-current checkbox (`:1433-1475`), the 15-view cap (`:889-901`) |
+| T4 | All-views hub (`showAllViewsHub` `:1087-1198`) | — | `createPopoverShell` | Shell migration; its nested more-menu rides the same stack | `anytype-view-settings-panel-dark.png` (overflow list pattern) | The hub's own rename-in-place (`renameAllView` `:1203-1227`) |
+| T5 | Database switcher (`renderDatabasePopover` `:589-762`) | — | — (single caller, two-column layout) | None | `no capture` — Anytype has no multi-database switcher | The whole surface; shell migration is optional and not required by any criterion |
+| T6 | Title actions menu (`showTitleActionsMenu` `:763-838`) | — | `createPopoverShell` | Shell migration | `no capture` | Action set |
+| T7 | Utilities overflow (`renderUtilitiesOverflowButton` `:407-498`) | — | `createPopoverShell` + `createSettingsEntry` | Settings shortcut becomes the shared entry; the popover's `.is-phone` override keeps `044`'s inset | `anytype-object-more-menu-dark.png` (capability sections — pattern reference) | Refresh/copy-formats/open-file/open-full-view/move-to-page rows |
+| T8 | Group-by popover (`renderGroupSelect`/`renderGroupPopover` `:1698-2005`) | — | `createPopoverShell` (shell only) | Shell migration | `no capture` | Every switch, date-mode, row-limit and subgroup row |
+| T9 | Export popover (`renderExportPopover` `:2296-2345`) | — | `createPopoverShell` | Shell migration; `renderExportButton` `:2290` (dead) deleted | `no capture` | CSV/Markdown/zip/copy-view-code rows |
+| T10 | New button + template menu (`renderNewButton` `:2346-2407`, `showNewTemplateMenu` `:2453-2530`) | 10 (consumer) | `createControlClusterButton` (cluster side) | The create call reads the view's preset map when the view carries one (item 10) | `no capture` — Anytype's template picker was not captured; the adopted slice is deliberately template-lite | The split-button shape and the touch FAB |
+
+### 3.2 The control clusters — triggers and chips
+
+| # | Surface (defined) | `050` item | Primitive | Change | Anytype | Stays ours |
+|---|---|---|---|---|---|---|
+| T11 | Filter trigger (`renderFilterButton` `:2203-2220`) **[trued 2026-09-05]** | 1 | `createControlClusterButton` | **Declared state, not dual-mode behaviour.** The trigger carries `add` or `active` as a property a lane can read; the anchor and the click behaviour are unchanged. **Dual-mode is rejected**: the funnel measures `ink=52, blue=0` on a filtered view and on an unfiltered one, identical to the pixel, on all 120 catalogue captures | `design-trueup.md` REQ-001 (contradiction C1). Anytype's own state surface is the **`N applied` count label** in the settings panel — adopted, and it lands in T19 | The panel anchor, the badge count (`toolbar-renderer.ts:2575-2579`), and our text-carrying badge, which beats colour-only signalling on WCAG 1.4.11 |
+| T12 | Sort trigger (`renderSortButton` `:2221-2238`) **[trued 2026-09-05]** | 1 | `createControlClusterButton` | Same declared-state contract as T11. **The sort glyph's blue is a static two-tone glyph, not a state** — it measures `ink=80, blue=60` on a sorted view, an unsorted one, and a default "All" view carrying neither | `design-trueup.md` REQ-001 | Calendar hint routing (`sort-panel-renderer.ts:143-145`) |
+| T13 | Properties trigger (`renderColumnButton` `:2273-2289`) | — | `createControlClusterButton` | State plumbing only; behaviour unchanged | `no capture` | Hidden-count badge (`setHiddenBadge` `:2592-2598`) |
+| T14 | Active-rule chip rail (`active-view-controls-renderer.ts:66-189`) | 1 | — (it *is* the chip row) | Leading sort chip gains the direction colour; rail moves into the toolbar band under the clusters; sort-group-first order confirmed | `anytype-set-kanban-view-dark.png` / `anytype-set-calendar-view-dark.png`; `047` §6 chip anatomy | The logic toggle (`:146-158`), per-chip edit popover (`active-rule-popover-renderer.ts:115-141`), auto-hide-when-empty (`:97`, `if (filters.length === 0 && sorts.length === 0) return;`), overflow scroller (`:190-205`) |
+| T15 | Active-rule edit popover (`active-rule-popover-renderer.ts:33-141`) | — | `createConditionRow` | Its editor content rides the shared row | `anytype-filter-tag-value-picker-dark.png` (value-picker pattern) | Toggle-to-close keyed on `kind:index` (`:38-46`) |
+
+### 3.3 The rule panels — filter and sort
+
+| # | Surface (defined) | `050` item | Primitive | Change | Anytype | Stays ours |
+|---|---|---|---|---|---|---|
+| T16 | Filter panel (`filter-panel-renderer.ts:167-255`) | 1 (consumer) | `createConditionRow` | `renderFilterRow` `:445-532` becomes the shared row's filter binding (property, operator, value); group/NOT chrome stays | `anytype-filter-property-picker-dark.png`, `anytype-filter-tag-value-picker-dark.png` (per-relation condition rows) | Nested AND/OR/NOT trees (`:302-380`), the logic toggle in the header (`:255-278`), the debounced value commit (`:640-690`) |
+| T17 | Sort panel (`sort-panel-renderer.ts:110-197`) | 1 (consumer) | `createConditionRow` | `renderRule` `:223-289` becomes the shared row's sort binding | `no capture` — the sort moment was never reached | Drag reorder + drop indicators (`:291-337`), mobile move controls (`:238-270`), the calendar hint (`:143-145`) |
+| T18 | Sort-conflict confirm (new; board + table drag commit) | 7 | — (uses `confirm-modal`, not a new surface) | A confirm gates the drop when rules exist: decline no-ops, accept clears the sort and commits | `no capture` — **gap named**: designed from `047` §8's sorted-subscription repositioning | The PM 1:1 drag visuals — the confirm fires at commit, after the gesture, so no reference pixel moves (parent goal D5) |
+
+### 3.4 The per-view-type option panels and the settings entry
+
+| # | Surface (defined) | `050` item | Primitive | Change | Anytype | Stays ours |
+|---|---|---|---|---|---|---|
+| T19 | View-config panel (`view-config-panel-renderer.ts:329-460`) **[trued 2026-09-05]** | 2 (target), 1, 4, 10 | `createSettingsEntry` (target side) | Opens on create/duplicate within **100ms — our budget, kept** (Anytype's ~50ms is `047`'s source read and is **not observable in any capture**). Gains: the **`N applied` count label** on the Filter and Sort rows (item 1); **Duplicate view / Remove view** as the last section below a divider (item 4); and the **per-field new-row default values** section (item 10). The panel is **layout-adaptive**: a board's settings gains one `Groups ›` row between Layout and Properties and nothing else moves | `anytype-view-settings-panel-dark.png` measured (`design-trueup.md` REQ-002): **360px × 316px**, right-aligned under the settings icon, **8px** radius, 1px border, **16px** horizontal padding, a boxed 328 × 56px View name field, then **28px** rows. Two navigation moves, both captured: a settings **sub-page replaces in place** (`‹ Layout`) inside the same frame, while a **picker opens as a separate anchored popover** over an undimmed parent — the shell half of which is `051`'s REQ-003. **Contradiction C7**: there is **no default-template row** in either the Grid or the Kanban form, so item 10 narrows to per-field new-row defaults; `Page limit  60 ›` is the one captured per-view numeric setting and is where the new row belongs | Section layout, source rules, conditional formatting, status presets, board/gallery/calendar/timeline branches (`:418-460`) |
+| T20 | Chart options popover (`chart-toolbar-renderer.ts:326-392`) | — | `createPopoverShell` | Shell migration incl. its child-popover stack (`:395-420`) | `no capture` | Two-level structure; PM chart parity untouched |
+| T21 | Calendar options popover (`calendar-toolbar-renderer.ts:65-131`) | — | `createPopoverShell` | Shell migration | `anytype-set-calendar-view-dark.png` (Date Property setting — pattern reference) | Month/week/day section rebuild (`:138-149`) |
+| T22 | Timeline options popover (`calendar-timeline-toolbar-renderer.ts:60-116`) | — | `createPopoverShell` | Shell migration | `no capture` | Scale-section rebuild (`:119-123`) |
+| T23 | Settings entry point (the M4 tangle) | 2 | `createSettingsEntry` | One trigger; the seven dead methods (`:512, :519, :551, :1594, :2239, :2252, :2290`) deleted; `db-view-config-btn` / `db-chart-options-toolbar-btn` / `db-calendar-timeline-options-toolbar-btn` classes kept for the anchor fallbacks (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`) | `anytype-view-settings-panel-dark.png` (one settings surface per view type) | Which panel each view type resolves to |
+| T24 | Embedded view toolbar (`embedded-database-renderer.ts:1498-1815`) **[trued 2026-09-05]** | 12 | `createTabStrip` + collapse | **The end state is what the threshold asserts, because it is what the captures can decide.** Controls drop in a stated order matching the captured three-rung ladder — full page: tabs · search · filter · sort · settings · split `New ⌄`; inline (~680px): **view tab row only**, no icon cluster and no `New` button; phone: `All ⌄` as a **dropdown instead of tabs** · settings icon only · split `New ⌄`. So the icon cluster goes before the `New` button, and the tab row becomes a dropdown before anything else is dropped. **"Measured, not a fixed breakpoint" is relabelled source-derived**: only one inline width exists in the sweep, so the captures cannot distinguish the two mechanisms. Copy `chart-renderer.ts:876`'s owner-window `ResizeObserver` resolution rather than reinventing it — `embedded-database-renderer.ts` has none | `anytype-inlinecollection-empty-dark.png` and `anytype-page-with-inline-collection-dark.png` (inline), `anytype-collection-grid-populated-dark.png` (full page), `anytype-mobile-official-ios-06-lists.png` (phone) via `design-trueup.md` REQ-012. **Honesty caveat**: the phone image is App Store / Google Play marketing creative, not an installed-app capture — good evidence of intent, weak evidence of pixels, so no number is taken from it. Hover was never captured, so the inline icons may be hover-revealed rather than absent | `shouldHideHeaderChrome()`'s three codeblock options (`:2410-2416`) — the explicit user hide stays a hide; the 250px sweep floor, which is ours |
+
+---
+
+## 4. WHAT STAYS OURS, AND WHY (the program's rulings)
+
+| Surface family | Ruling | Where it is ruled |
+|---|---|---|
+| The table view | Stays ours — density, widths, frozen header | Parent `goal.md` §1 "Keep ours where the program says so: the table"; `roadmap.md` §6A row-height decision |
+| Formulas / rollups / calculations | Stay ours — no Anytype equivalent | `screenshots/anytype/README.md` mapping table (`formula` → no equivalent; `rollup` → no equivalent) |
+| The Project Manager 1:1 board and gantt | Not a pixel moves without a recapture read | Parent goal D5; `037`/`038` hold the parity |
+| The bottom sheets | `044`'s grammar and `048`'s stacking model are constraints, not deliverables | `044/decision-record.md` ADR-001 (header everywhere, 44px close, 16px inset, 16px title); `048/spec.md` §3 |
+| The split New button | Ours, not Anytype's creation pattern | This file T10; `047` §8 records Anytype's contextual creation |
+| Group-by's control set | Ours — our board grouping needs it | This file T8 |
+| The four non-adoptions | Cross-view drag writes, sidebar widgets, the full template system, dynamic filter values | `050/spec.md` §3 Out of Scope; `047` §11 non-adoptions |
+
+---
+
+## 5. WHAT THIS DOCUMENT DOES NOT SETTLE
+
+- **What the captures actually look like.** This inventory cites the README's written index and
+  `047`'s findings; the author's runtime could not render images. T001's record is the proof the
+  named PNGs were opened and the design rows trued against them — this document is the claim, not
+  the evidence.
+- **Whether the chip rail moves into the toolbar band without shifting the table's sticky-offset
+  measurement.** Measured, not argued: the lane runs the `.db-header` height check before and
+  after the rail's move (risk row 2, `spec.md` §8).
+- **Which widths the embed's collapse sweep must cover.** `050` AC-012 says "from 250px upward";
+  the sweep's step and ceiling are T008's to record with its first red number.
+
+---
+
+## 6. CORRECTIONS MADE AT LANDING, 2026-09-05
+
+`050`'s `design-trueup.md` landed after this inventory was drafted. Under `050` ADR-003 the capture
+is the fact and `047`'s research is a source reading, so the rows below were corrected rather than
+left standing. Each is marked **[trued 2026-09-05]** in §3.
+
+| Row | Was | Is | Contradiction |
+|---|---|---|---|
+| T1 | The tab row's context offers rename / duplicate / remove | A tab row and a trailing `+`. **No view-selector dropdown at that width**, and no tab context menu was ever photographed | C4 |
+| T2 | Duplicate joins the tab menu's permanent set | **Duplicate and Remove go in the view-settings panel**, last section below a divider. The tab menu keeps its own action set and its design stays source-derived | C4 |
+| T11 / T12 | Dual-mode triggers: `active` toggles chips, `add` opens the panel, the icon reports the state | **Rejected.** The funnel measures `ink=52, blue=0` on a filtered *and* an unfiltered view — identical to the pixel, on all 120 catalogue captures — and the sort glyph's blue is a static two-tone glyph. The trigger carries a **declared state** a lane can read; the behaviour is unchanged | C1 |
+| T14 | Auto-hide at `:99` | `:97` | — (line drift, verified at HEAD) |
+| T19 | Settings open with an unspecified geometry | **360 × 316px**, 8px radius, 16px padding, 28px rows, layout-adaptive with one `Groups ›` row for a board. Gains the `N applied` label and the Duplicate / Remove section. **No default-template row exists**, so item 10 narrows to per-field new-row defaults | C7 |
+| T24 | Collapse by measured natural width | The **end state** is asserted, because the captures can decide it and cannot decide the mechanism. "Measured, not a breakpoint" is relabelled **source-derived**. The phone rung swaps tabs for a dropdown | — |
+| Capture gate | "This author's runtime could not render images" | `design-trueup.md` is the read of record; T001's remaining obligation is the captures it did not reach | `050` ADR-003 |
+
+**One row this inventory got right before the true-up did.** T14 already recorded that the chip rail
+exists and auto-hides — the parent `goal.md` §2 correction 1 — which is the same finding
+`design-trueup.md` REQ-001 reached independently from the tree. Two independent reads agreeing is
+the strongest in-repo evidence this program accepts.
+
+**Two values `050` refused, repeated here so this phase does not re-adopt them.** The `#232323` row
+highlight at **1.14:1** against its own panel (WCAG 1.4.11 asks 3:1 of a non-text element that is
+the only thing identifying state), and colour-only active-state signalling. Our hover and selection
+tokens stay ours.
