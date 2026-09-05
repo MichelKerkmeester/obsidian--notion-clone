@@ -345,6 +345,228 @@ focus, no visible window and no pointer — the operator kept working on the sam
   catalogue-owned one. The data is there and correctly typed; it is the one column of the 270 that
   the Grid view does not list separately.
 
+## Menus and dropdowns — every one the desktop app opens
+
+`screenshots/anytype/menus/` holds **600 files: 150 distinct menus, each in light and dark, each
+twice** — once clipped to the menu's bounding box (the design reference) and once as the whole
+window (`-full`, which shows where the menu sits relative to the control that opened it). Every
+capture came from `tools/mock-data/anytype/menus.mjs`, driven over CDP against the persistent
+`notion-clone-reference-demo` space and its `Project Tracker` set.
+
+### Per context
+
+| Context | Menus | What it covers |
+|---------|-------|----------------|
+| Set controls bar | 59 | View list, view settings and its four rows, the six layouts and every per-layout sub-picker, a filter per relation format with its condition list, the date filter's calendar and relative tab, sorts and their direction, the "New" template/type menu, the grid's column-header menu |
+| Grid cell editors | 12 | One per relation format — text, url, email, phone, number, select, multi-select, date, object, file, object type, checkbox |
+| Object page | 25 | The header `···` menu and its submenus, icon/cover/layout pickers, type picker and change-type, the featured-relation editors, the block menu with view/align/colour/background/move-to, the properties panel and a per-format relation editor from it |
+| Navigation | 37 | Vault create/search/gallery/space menus, help, sync, members, widget section and item context menus, the Bin, history, graph, and every settings page this build ships with its selects |
+| Kanban | 5 | Column menu, card context menu and its submenus |
+| Calendar | 4 | Month and year selects, a day's menu, an event's context menu |
+| Gallery | 4 | Card context menu and its submenus |
+| List | 4 | Row context menu and its submenus |
+
+### Three things the crawler had to learn, each of which silently corrupts a naive sweep
+
+- **Opening the view-settings menu renames the view.** `.btn-settings` mounts its name input with an
+  empty value and commits it, so a view is renamed to "Untitled" simply by being looked at. This was
+  found the expensive way — it renamed `Grid` and `Gallery` during the first probe, and the `+` in
+  the view bar created two views at the same time. Both were repaired, and every capture that has to
+  open that menu now happens on **one throwaway view the sweep creates and removes**; the four
+  sub-pickers a fresh view cannot populate (Kanban group-by, Gallery cover, both page limits) are
+  taken on the real views instead, with the name typed back and committed with Enter afterwards.
+  `menus.mjs` re-reads all six names against `views-report.json` before and after every run.
+- **A new tab makes ours a background tab, and a background tab lies.** Several menus open a tab.
+  Chromium then reports our page `visibilityState: "hidden"`: `Runtime.evaluate` still answers, so
+  the DOM reads correctly, but the layout is stale and `Page.captureScreenshot` returns the frame of
+  a page nobody is looking at. The symptom is an entire context reporting "no element" for selectors
+  that are plainly present. The tab strip is its own CDP target (`dist/tabs.html`, rows carrying
+  `.clickable` and `.icon.close`), so the guard closes strays and re-activates ours from inside the
+  renderer — no window activation and no pointer, like everything else here.
+- **A submenu left open swallows the next hover.** Walking a menu's arrow rows without closing the
+  previous submenu makes the app ignore the next `mouseover`, and the failure is indistinguishable
+  from a row that has no submenu. One Escape between shots closes the submenu and leaves its parent
+  open; adding it turned four "unreachable" sub-pickers into four captures.
+
+### Not captured, with the exact reason
+
+| Item | Reason |
+|------|--------|
+| The controls bar's sort icon (`#dataviewControls .btn-sort`) | It is a state indicator, not an opener. It dispatches no menu on `el.click()` and none on a real CDP `Input.dispatchMouseEvent` either. The same surface is reached through view settings ▸ Sort and is captured there. |
+| `object-block-add` (`.icon.plusBlockAdd`) | The click fires and no `.menu.show` appears; the block-add affordance needs a real hover-then-click gesture the synthetic sequence does not reproduce. The same menu is the `/` slash menu, captured in the earlier pass (`anytype-slashmenu-*`). |
+| `object-relation-checkbox` | The checkbox relation sits below the fold of the properties panel, so its editor measures a negative height and cannot be clipped. The same editor is captured from the grid as `cell-checkbox`. |
+| `object-relation-settings` | A `contextmenu` event on a property row in the properties panel opens no menu in this build. |
+| Settings ▸ Membership | No such entry in this build's settings sidebar — it is a Network feature and this install has never signed in. |
+| The Name grid cell | Clicking it opens the object rather than editing in place, and the navigation empties the grid for every format that follows. Its editor is the object page title, captured under `object`. |
+| Anything that creates or deletes | Refused by name, not by luck: `menus.mjs` carries a `DESTRUCTIVE`/`MUTATING` list (Move to Bin, Delete, Duplicate, Remove view, Add a view, Create object…) that the submenu walker consults before every hover. |
+
+### The space is unchanged
+
+Every run re-reads the six view names against `views-report.json` at both ends and records them in
+`menus-report.json`; the final run reports `["Grid","Gallery","List","Kanban","Calendar","Graph"]`
+unchanged, the scratch view removed, and the tab list back to what it started as. No record value
+was edited: the cell sweep reads each cell's text before and after opening its editor and reports a
+mismatch as a failure, and the checkbox — the one format whose editor *is* the edit — is toggled,
+photographed and toggled back with its state read at both ends.
+
+### Index
+
+| Menu | Context | How it was reached |
+|------|---------|--------------------|
+| `anytype-menu-set-column-header-<theme>.png` | set controls bar | `.viewContent .cellHead:nth-child(2)` |
+| `anytype-menu-set-column-header-align-<theme>.png` | set controls bar | `.viewContent .cellHead` ▸ hover "align" |
+| `anytype-menu-set-column-header-calculate-<theme>.png` | set controls bar | `.viewContent .cellHead` ▸ hover "calculate" |
+| `anytype-menu-set-filter-checkbox-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Blocked" |
+| `anytype-menu-set-filter-checkbox-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Blocked" ▸ the condition row |
+| `anytype-menu-set-filter-date-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Starts" |
+| `anytype-menu-set-filter-date-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Starts" ▸ the condition row |
+| `anytype-menu-set-filter-date-picker-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ "Starts" ▸ Exact tab, calendar |
+| `anytype-menu-set-filter-date-relative-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ "Starts" ▸ Relative tab |
+| `anytype-menu-set-filter-email-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Owner email" |
+| `anytype-menu-set-filter-email-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Owner email" ▸ the condition row |
+| `anytype-menu-set-filter-file-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Attachments" |
+| `anytype-menu-set-filter-file-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Attachments" ▸ the condition row |
+| `anytype-menu-set-filter-multiselect-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Team" |
+| `anytype-menu-set-filter-multiselect-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Team" ▸ the condition row |
+| `anytype-menu-set-filter-number-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Estimate (pts)" |
+| `anytype-menu-set-filter-number-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Estimate (pts)" ▸ the condition row |
+| `anytype-menu-set-filter-object-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Depends on" |
+| `anytype-menu-set-filter-object-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Depends on" ▸ the condition row |
+| `anytype-menu-set-filter-phone-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Escalation line" |
+| `anytype-menu-set-filter-phone-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Escalation line" ▸ the condition row |
+| `anytype-menu-set-filter-property-picker-<theme>.png` | set controls bar | `#dataviewControls .btn-filter` |
+| `anytype-menu-set-filter-select-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Status (Project Tracker)" |
+| `anytype-menu-set-filter-select-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Status (Project Tracker)" ▸ the condition row |
+| `anytype-menu-set-filter-text-long-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Working notes" |
+| `anytype-menu-set-filter-text-long-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Working notes" ▸ the condition row |
+| `anytype-menu-set-filter-text-short-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Name" |
+| `anytype-menu-set-filter-text-short-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Name" ▸ the condition row |
+| `anytype-menu-set-filter-url-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Ticket" |
+| `anytype-menu-set-filter-url-condition-<theme>.png` | set controls bar | `.btn-settings` ▸ Filter ▸ New filter ▸ "Ticket" ▸ the condition row |
+| `anytype-menu-set-layout-calendar-<theme>.png` | set controls bar | `.btn-settings` ▸ Layout ▸ the "Calendar" tile (on the scratch view) |
+| `anytype-menu-set-layout-calendar-date-property-<theme>.png` | set controls bar | view "Calendar" ▸ `.btn-settings` ▸ Layout ▸ hover "date property" |
+| `anytype-menu-set-layout-gallery-<theme>.png` | set controls bar | `.btn-settings` ▸ Layout ▸ the "Gallery" tile (on the scratch view) |
+| `anytype-menu-set-layout-gallery-card-size-<theme>.png` | set controls bar | view "Gallery" ▸ `.btn-settings` ▸ Layout ▸ hover "card size" |
+| `anytype-menu-set-layout-gallery-cover-<theme>.png` | set controls bar | view "Gallery" ▸ `.btn-settings` ▸ Layout ▸ hover "cover" |
+| `anytype-menu-set-layout-gallery-page-limit-<theme>.png` | set controls bar | view "Gallery" ▸ `.btn-settings` ▸ Layout ▸ hover "page limit" |
+| `anytype-menu-set-layout-graph-<theme>.png` | set controls bar | `.btn-settings` ▸ Layout ▸ the "Graph" tile (on the scratch view) |
+| `anytype-menu-set-layout-graph-settings-<theme>.png` | set controls bar | view "Graph" ▸ `.btn-settings` ▸ Layout ▸ hover "settings" |
+| `anytype-menu-set-layout-grid-<theme>.png` | set controls bar | `.btn-settings` ▸ Layout ▸ the "Grid" tile (on the scratch view) |
+| `anytype-menu-set-layout-kanban-<theme>.png` | set controls bar | `.btn-settings` ▸ Layout ▸ the "Kanban" tile (on the scratch view) |
+| `anytype-menu-set-layout-kanban-cover-<theme>.png` | set controls bar | view "Kanban" ▸ `.btn-settings` ▸ Layout ▸ hover "cover" |
+| `anytype-menu-set-layout-kanban-group-by-<theme>.png` | set controls bar | view "Kanban" ▸ `.btn-settings` ▸ Layout ▸ hover "group by" |
+| `anytype-menu-set-layout-kanban-page-limit-<theme>.png` | set controls bar | view "Kanban" ▸ `.btn-settings` ▸ Layout ▸ hover "page limit" |
+| `anytype-menu-set-layout-list-<theme>.png` | set controls bar | `.btn-settings` ▸ Layout ▸ the "List" tile (on the scratch view) |
+| `anytype-menu-set-layout-list-size-<theme>.png` | set controls bar | view "List" ▸ `.btn-settings` ▸ Layout ▸ hover "size" |
+| `anytype-menu-set-new-object-<theme>.png` | set controls bar | `#dataviewControls .buttonWrap.withSelect .button.isArrow` |
+| `anytype-menu-set-new-object-default-type-for-this-view-<theme>.png` | set controls bar | `#dataviewControls` "New" arrow ▸ hover "default type for this view" |
+| `anytype-menu-set-new-object-existing-object-<theme>.png` | set controls bar | `#dataviewControls` "New" arrow ▸ hover "existing object" |
+| `anytype-menu-set-new-object-template-for-this-view-<theme>.png` | set controls bar | `#dataviewControls` "New" arrow ▸ hover "template for this view" |
+| `anytype-menu-set-sort-added-<theme>.png` | set controls bar | `.btn-settings` ▸ Sort ▸ Add sort ▸ "Estimate (pts)" |
+| `anytype-menu-set-sort-direction-<theme>.png` | set controls bar | `.btn-settings` ▸ Sort ▸ the sort row's direction select |
+| `anytype-menu-set-sort-empty-<theme>.png` | set controls bar | `.btn-settings` ▸ Sort |
+| `anytype-menu-set-sort-property-picker-<theme>.png` | set controls bar | `.btn-settings` ▸ Sort ▸ Add sort |
+| `anytype-menu-set-view-filter-<theme>.png` | set controls bar | `.btn-settings` ▸ click `#item-filter` |
+| `anytype-menu-set-view-layout-<theme>.png` | set controls bar | `.btn-settings` ▸ click `#item-layout` |
+| `anytype-menu-set-view-properties-<theme>.png` | set controls bar | `.btn-settings` ▸ click `#item-relations` |
+| `anytype-menu-set-view-settings-<theme>.png` | set controls bar | `#dataviewControls .btn-settings` |
+| `anytype-menu-set-view-sort-<theme>.png` | set controls bar | `.btn-settings` ▸ click `#item-sort` |
+| `anytype-menu-set-viewlist-<theme>.png` | set controls bar | `#dataviewControls .viewSelect` |
+| `anytype-menu-cell-checkbox-<theme>.png` | grid cell | `.viewContent .row .cell.c-checkbox` — toggles the value, toggled back after |
+| `anytype-menu-cell-date-<theme>.png` | grid cell | `.viewContent .row .cell.c-date` |
+| `anytype-menu-cell-email-<theme>.png` | grid cell | `.viewContent .row .cell.c-email` |
+| `anytype-menu-cell-file-<theme>.png` | grid cell | `.viewContent .row .cell.c-file` |
+| `anytype-menu-cell-multiselect-<theme>.png` | grid cell | `.viewContent .row .cell.c-select.isMultiSelect` |
+| `anytype-menu-cell-number-<theme>.png` | grid cell | `.viewContent .row .cell.c-number` |
+| `anytype-menu-cell-object-<theme>.png` | grid cell | `.viewContent .row .cell.c-object` |
+| `anytype-menu-cell-phone-<theme>.png` | grid cell | `.viewContent .row .cell.c-phone` |
+| `anytype-menu-cell-select-<theme>.png` | grid cell | `.viewContent .row .cell.c-select.isSelect` |
+| `anytype-menu-cell-text-<theme>.png` | grid cell | `.viewContent .row .cell.c-longText` |
+| `anytype-menu-cell-type-<theme>.png` | grid cell | `.viewContent .row .cell.cell-key-type` |
+| `anytype-menu-cell-url-<theme>.png` | grid cell | `.viewContent .row .cell.c-url` |
+| `anytype-menu-object-block-menu-<theme>.png` | object page | `.blockFeatured .icon.blockMenu` |
+| `anytype-menu-object-block-menu-align-<theme>.png` | object page | `.blockFeatured .icon.blockMenu` ▸ hover "align" |
+| `anytype-menu-object-block-menu-background-<theme>.png` | object page | `.blockFeatured .icon.blockMenu` ▸ hover "background" |
+| `anytype-menu-object-block-menu-color-<theme>.png` | object page | `.blockFeatured .icon.blockMenu` ▸ hover "color" |
+| `anytype-menu-object-block-menu-move-to-<theme>.png` | object page | `.blockFeatured .icon.blockMenu` ▸ hover "move to" |
+| `anytype-menu-object-block-menu-view-<theme>.png` | object page | `.blockFeatured .icon.blockMenu` ▸ hover "view" |
+| `anytype-menu-object-cover-picker-<theme>.png` | object page | `.editorControls .btn .icon.controlEditorCover` |
+| `anytype-menu-object-featured-tag-<theme>.png` | object page | `.blockFeatured .cellContent.c-tag` |
+| `anytype-menu-object-icon-picker-<theme>.png` | object page | `.editorControls .btn .icon.controlEditorIcon` |
+| `anytype-menu-object-layout-picker-<theme>.png` | object page | `.editorControls .btn .icon.controlEditorLayout` |
+| `anytype-menu-object-layout-picker-header-position-<theme>.png` | object page | `.editorControls .btn .icon.controlEditorLayout` ▸ hover "header position" |
+| `anytype-menu-object-more-<theme>.png` | object page | `#header .icon.commonMore` |
+| `anytype-menu-object-more-add-link-to-object-<theme>.png` | object page | `#header .icon.commonMore` ▸ hover "add link to object" |
+| `anytype-menu-object-more-add-to-collection-<theme>.png` | object page | `#header .icon.commonMore` ▸ hover "add to collection" |
+| `anytype-menu-object-more-advanced-<theme>.png` | object page | `#header .icon.commonMore` ▸ hover "advanced" |
+| `anytype-menu-object-properties-panel-<theme>.png` | object page | `#header .icon.headerRelation` (a docked panel, clipped to itself) |
+| `anytype-menu-object-relation-date-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-date .cellContent` |
+| `anytype-menu-object-relation-file-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-file .cellContent` |
+| `anytype-menu-object-relation-multiselect-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-multiselect .cellContent` |
+| `anytype-menu-object-relation-number-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-number .cellContent` |
+| `anytype-menu-object-relation-object-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-object .cellContent` |
+| `anytype-menu-object-relation-select-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-select .cellContent` |
+| `anytype-menu-object-relation-url-<theme>.png` | object page | `#header` relations ▸ `#sidebarRight .section.objectRelation.c-url .cellContent` |
+| `anytype-menu-object-type-picker-<theme>.png` | object page | `.blockFeatured .cellContent.type` |
+| `anytype-menu-object-type-picker-change-type-<theme>.png` | object page | `.blockFeatured .cellContent.type` ▸ hover "change type" |
+| `anytype-menu-nav-create-object-<theme>.png` | navigation | `.sidebar.left .pageVault .head .icon.plusMenu` |
+| `anytype-menu-nav-graph-<theme>.png` | navigation | `#header .icon.headerGraph` (a page, clipped to `#page`) |
+| `anytype-menu-nav-help-<theme>.png` | navigation | `.sidebar.left .button.help` |
+| `anytype-menu-nav-help-developers-<theme>.png` | navigation | `.sidebar.left .button.help` ▸ hover "developers" |
+| `anytype-menu-nav-help-more-<theme>.png` | navigation | `.sidebar.left .button.help` ▸ hover "more" |
+| `anytype-menu-nav-history-<theme>.png` | navigation | `#header .icon.commonClock` |
+| `anytype-menu-nav-members-<theme>.png` | navigation | `.sidebar.left .icon.widgetMember` (a page, clipped to `#page`) |
+| `anytype-menu-nav-settings-<theme>.png` | navigation | `.sidebar.left .appSettings` (a page, clipped to `#settingsPageContainer`) |
+| `anytype-menu-nav-settings-api-keys-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "api keys" |
+| `anytype-menu-nav-settings-channels-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "channels" |
+| `anytype-menu-nav-settings-language-region-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "language region" |
+| `anytype-menu-nav-settings-language-region-select-1-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "language region" ▸ select #1 |
+| `anytype-menu-nav-settings-language-region-select-2-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "language region" ▸ select #2 |
+| `anytype-menu-nav-settings-language-region-select-3-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "language region" ▸ select #3 |
+| `anytype-menu-nav-settings-language-region-select-4-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "language region" ▸ select #4 |
+| `anytype-menu-nav-settings-local-storage-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "local storage" |
+| `anytype-menu-nav-settings-local-storage-select-1-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "local storage" ▸ select #1 |
+| `anytype-menu-nav-settings-login-key-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "login key" |
+| `anytype-menu-nav-settings-my-sites-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "my sites" |
+| `anytype-menu-nav-settings-pin-code-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "pin code" |
+| `anytype-menu-nav-settings-preferences-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "preferences" |
+| `anytype-menu-nav-settings-preferences-select-1-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "preferences" ▸ select #1 |
+| `anytype-menu-nav-settings-preferences-select-2-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "preferences" ▸ select #2 |
+| `anytype-menu-nav-settings-preferences-select-3-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "preferences" ▸ select #3 |
+| `anytype-menu-nav-settings-preferences-select-4-<theme>.png` | navigation | `.sidebar.left .appSettings` ▸ sidebar entry "preferences" ▸ select #4 |
+| `anytype-menu-nav-space-name-<theme>.png` | navigation | `.sidebar.left .spaceName` (a page, clipped to `#page`) |
+| `anytype-menu-nav-space-widget-<theme>.png` | navigation | `.sidebar.left .widget.widgetSpace` (a page, clipped to `#page`) |
+| `anytype-menu-nav-sync-<theme>.png` | navigation | `.sidebar.left .sync` |
+| `anytype-menu-nav-vault-gallery-<theme>.png` | navigation | `.sidebar.left .icon.vaultGallery` (a page, clipped to `#page`) |
+| `anytype-menu-nav-vault-search-<theme>.png` | navigation | `.sidebar.left .pageVault .filter` (an input, clipped to itself) |
+| `anytype-menu-nav-vault-space-item-<theme>.png` | navigation | right-click `.sidebar.left .pageVault .body .item` |
+| `anytype-menu-nav-widget-bin-<theme>.png` | navigation | right-click `.sidebar.left .widgetSection.section-bin .items .item` |
+| `anytype-menu-nav-widget-item-<theme>.png` | navigation | right-click `.sidebar.left .widgetSection.section-recentedit .items .item` |
+| `anytype-menu-nav-widget-item-add-to-collection-<theme>.png` | navigation | right-click `.sidebar.left .widgetSection.section-recentedit .items .item` ▸ hover "add to collection" |
+| `anytype-menu-nav-widget-item-change-type-<theme>.png` | navigation | right-click `.sidebar.left .widgetSection.section-recentedit .items .item` ▸ hover "change type" |
+| `anytype-menu-nav-widget-section-recent-<theme>.png` | navigation | right-click `.sidebar.left .widgetSection.section-recentedit .nameWrap` |
+| `anytype-menu-nav-widget-section-types-<theme>.png` | navigation | right-click `.sidebar.left .widgetSection.section-type .nameWrap` |
+| `anytype-menu-kanban-card-menu-<theme>.png` | kanban | right-click `.viewContent .column .card.isPage` |
+| `anytype-menu-kanban-card-menu-add-link-to-object-<theme>.png` | kanban | right-click `.viewContent .column .card.isPage` ▸ hover "add link to object" |
+| `anytype-menu-kanban-card-menu-add-to-collection-<theme>.png` | kanban | right-click `.viewContent .column .card.isPage` ▸ hover "add to collection" |
+| `anytype-menu-kanban-card-menu-change-type-<theme>.png` | kanban | right-click `.viewContent .column .card.isPage` ▸ hover "change type" |
+| `anytype-menu-kanban-column-menu-<theme>.png` | kanban | `.viewContent .column .head .icon.commonMore` |
+| `anytype-menu-calendar-day-menu-<theme>.png` | calendar | right-click `.viewContent .day .head` |
+| `anytype-menu-calendar-item-menu-<theme>.png` | calendar | right-click `.viewContent .day .items > div` |
+| `anytype-menu-calendar-month-select-<theme>.png` | calendar | `.dateSelect .select.month` |
+| `anytype-menu-calendar-year-select-<theme>.png` | calendar | `.dateSelect .select.year` |
+| `anytype-menu-gallery-card-menu-<theme>.png` | gallery | right-click `.viewContent .card.isPage` |
+| `anytype-menu-gallery-card-menu-add-link-to-object-<theme>.png` | gallery | right-click `.viewContent .card.isPage` ▸ hover "add link to object" |
+| `anytype-menu-gallery-card-menu-add-to-collection-<theme>.png` | gallery | right-click `.viewContent .card.isPage` ▸ hover "add to collection" |
+| `anytype-menu-gallery-card-menu-change-type-<theme>.png` | gallery | right-click `.viewContent .card.isPage` ▸ hover "change type" |
+| `anytype-menu-list-row-menu-<theme>.png` | list | right-click `.viewContent .row .dropTarget` |
+| `anytype-menu-list-row-menu-add-link-to-object-<theme>.png` | list | right-click `.viewContent .row .dropTarget` ▸ hover "add link to object" |
+| `anytype-menu-list-row-menu-add-to-collection-<theme>.png` | list | right-click `.viewContent .row .dropTarget` ▸ hover "add to collection" |
+| `anytype-menu-list-row-menu-change-type-<theme>.png` | list | right-click `.viewContent .row .dropTarget` ▸ hover "change type" |
+
+Each row exists as `-dark.png`, `-light.png`, `-dark-full.png` and `-light-full.png`.
+
+
 ---
 
 # Mobile (iOS Simulator)

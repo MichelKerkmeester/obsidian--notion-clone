@@ -333,6 +333,12 @@ class Crawler {
       }
       if (!appeared) { this.miss(`${name}-${slug(item.text)}`, `${how} > hover ${sel}`, 'neither hover nor click opened a submenu'); continue; }
       await this.shot(`${name}-${slug(item.text)}`, appeared.all.map((m) => m.rect), `${how} > hover "${item.text}"`);
+      // One Escape closes just this submenu and leaves its parent open. Without
+      // it the next row is hovered while the previous submenu still covers the
+      // menu, and the app ignores the hover — which reads exactly like a row
+      // that has no submenu at all.
+      await this.d.key('Escape', 'Escape', 27);
+      await sleep(600);
     }
   }
 
@@ -691,6 +697,45 @@ async function ctxSorts(cw, d) {
   else cw.miss('set-sort-direction', '> Sort > direction', dir);
 }
 
+/**
+ * The four layout sub-pickers a scratch view cannot show.
+ *
+ * A freshly created view carries only the three default columns, and the Kanban
+ * group-by and Gallery cover pickers offer nothing and therefore do not open at
+ * all — the failure looks identical to a hover the app ignored. The six real
+ * views carry all twenty-seven properties, so these are taken there instead.
+ *
+ * That costs one write: opening the view-settings menu blanks the view's name
+ * (see the scratch-view note above), so each view's name is typed back and
+ * committed with Enter before moving on, and `main` re-checks every name against
+ * views-report.json at the end.
+ */
+async function ctxRealLayouts(cw, d, selectView, expected) {
+  cw.context = 'set';
+  for (const [i, label] of expected.entries()) {
+    if (!await selectView(label.toLowerCase())) { cw.miss(`set-layout-${label.toLowerCase()}-populated`, `view tab "${label}"`, 'view tab not found'); continue; }
+    if (await openSettings(cw) !== 'ok') { cw.miss(`set-layout-${label.toLowerCase()}-populated`, '.btn-settings', 'settings did not open'); continue; }
+    if (await cw.open('#menuDataviewViewSettings #item-layout') === 'ok') {
+      const open = await cw.menus();
+      await cw.walkSubmenus(`set-layout-${label.toLowerCase()}`, `view "${label}" ▸ .btn-settings ▸ Layout`, open[open.length - 1]);
+    } else cw.miss(`set-layout-${label.toLowerCase()}-populated`, '> Layout', 'layout row did not open');
+
+    // Put the name back, whatever the menu did to it.
+    await cw.escape();
+    if (await openSettings(cw) === 'ok') {
+      const sel = '#menuDataviewViewSettings input.input-text';
+      await d.eval(`(() => { const e = document.querySelector(${JSON.stringify(sel)}); if (e) { e.focus(); e.setSelectionRange(0, e.value.length); } })()`);
+      await sleep(250);
+      await d.typeInto(sel, label);
+      await d.key('Enter', 'Enter', 13);
+      await sleep(1600);
+    }
+    const names = await d.viewNames();
+    if (names[i] !== label) cw.misses.push({ context: 'set', menu: `set-layout-${label.toLowerCase()}-populated`, theme: cw.theme, how: 'name repair', reason: `VIEW NAME NOT RESTORED: index ${i} reads ${JSON.stringify(names[i])}, expected ${JSON.stringify(label)}` });
+  }
+  await cw.escape();
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 8. CONTEXT 2 — GRID CELL INLINE EDITORS
 // ───────────────────────────────────────────────────────────────────
@@ -784,17 +829,28 @@ async function ctxCells(cw, d, onGrid) {
 // each is driven by a candidate list and whatever does not open is reported with
 // the reason rather than quietly dropped.
 
-async function sweep(cw, openers) {
+async function sweep(cw, openers, reset = null) {
   for (const o of openers) {
     const { name, sel, mode = 'click', setup, submenus = true, fallback = null } = o;
     await cw.escape();
+    // Openers that navigate — a space row, the graph icon, the gallery — leave
+    // the next opener's surface unmounted. The reset puts it back.
+    if (reset) { try { await reset(); } catch { /* the opener reports it */ } }
     if (setup) {
       try { await setup(); } catch (e) { cw.miss(name, sel, `setup: ${e.message}`); continue; }
     }
     const got = await cw.capture(name, sel, () => (mode === 'hover' ? cw.hoverSel(sel) : mode === 'context' ? cw.contextMenu(sel) : cw.clickSel(sel)), { submenus });
     // Several sidebar and header controls open a page or a docked panel rather
-    // than a popover. `fallback` names what to clip when no menu appeared.
-    if (!got && fallback) await cw.snapEl(name, fallback, `${sel} (opens a panel, not a menu)`, { pad: 0 });
+    // than a popover. `fallback` names what to clip when no menu appeared, and a
+    // fallback that lands replaces the "no menu appeared" miss rather than
+    // sitting next to it.
+    if (!got && fallback) {
+      const shot = await cw.snapEl(name, fallback, `${sel} (opens a page or panel, not a menu)`, { pad: 0 });
+      if (shot) {
+        const i = cw.misses.findIndex((m) => m.menu === name && m.theme === cw.theme);
+        if (i > -1) cw.misses.splice(i, 1);
+      }
+    }
   }
 }
 
@@ -821,7 +877,7 @@ Object.assign(Crawler.prototype, {
 // The properties panel is a docked sidebar rather than a popover, so it is
 // clipped to itself; everything else on this surface is a real menu.
 
-async function ctxObject(cw, d) {
+async function ctxObject(cw, d, onGrid) {
   cw.context = 'object';
   await cw.escape();
   const opened = await d.eval(`(() => { const e = document.querySelector('.viewContent .row .icon.commonExpand'); if (!e) return 'MISSING'; e.click(); return 'ok'; })()`);
@@ -846,15 +902,57 @@ async function ctxObject(cw, d) {
   if (toggled) {
     await sleep(1600);
     await cw.snapEl('object-properties-panel', '#sidebarRight', '#header ▸ relations icon', { pad: 8 });
-    await sweep(cw, [
-      { name: 'object-relation-add', sel: '#sidebarRight .item.add, #sidebarRight .btn.add, #sidebarRight .icon.plus' },
-      { name: 'object-relation-select', sel: '#sidebarRight .section.objectRelation.c-select.isSelect .cellContent' },
-      { name: 'object-relation-multiselect', sel: '#sidebarRight .section.objectRelation.c-select.isMultiSelect .cellContent' },
-      { name: 'object-relation-date', sel: '#sidebarRight .section.objectRelation.c-date .cellContent' },
-      { name: 'object-relation-object', sel: '#sidebarRight .section.objectRelation.c-object .cellContent' },
-      { name: 'object-relation-file', sel: '#sidebarRight .section.objectRelation.c-file .cellContent' },
-      { name: 'object-relation-settings', sel: '#sidebarRight .section.objectRelation .icon.more, #sidebarRight .section.objectRelation .name', mode: 'context' },
-    ]);
+    // Escape closes the docked panel and, pressed enough times, leaves the
+    // object page as well — so this loop presses it once and puts both the page
+    // and the panel back before each relation rather than going through `sweep`.
+    const RELATIONS = [
+      ['select', '#sidebarRight .section.objectRelation.c-select.isSelect .cellContent'],
+      ['multiselect', '#sidebarRight .section.objectRelation.c-select.isMultiSelect .cellContent'],
+      ['date', '#sidebarRight .section.objectRelation.c-date .cellContent'],
+      ['object', '#sidebarRight .section.objectRelation.c-object .cellContent'],
+      ['file', '#sidebarRight .section.objectRelation.c-file .cellContent'],
+      ['number', '#sidebarRight .section.objectRelation.c-number .cellContent'],
+      ['checkbox', '#sidebarRight .section.objectRelation.c-checkbox .cellContent'],
+      ['url', '#sidebarRight .section.objectRelation.c-url .cellContent'],
+    ];
+    const panel = async () => {
+      if (await d.eval("!!document.querySelector('#sidebarRight .section.objectRelation')")) return true;
+      if (!await d.eval("!!document.querySelector('#header .icon.headerRelation')")) {
+        if (!await onGrid()) return false;
+        if (await d.eval("(() => { const e = document.querySelector('.viewContent .row .icon.commonExpand'); if (!e) return false; e.click(); return true; })()") !== true) return false;
+        await sleep(3200);
+      }
+      await cw.clickSel('#header .icon.headerRelation');
+      await sleep(1600);
+      return d.eval("!!document.querySelector('#sidebarRight .section.objectRelation')");
+    };
+
+    for (const [format, sel] of RELATIONS) {
+      await cw.d.key('Escape', 'Escape', 27);
+      await sleep(400);
+      if (!await panel()) { cw.miss(`object-relation-${format}`, sel, 'the properties panel could not be reopened'); continue; }
+      const before = await cw.menus();
+      if (await cw.clickSel(sel) !== 'ok') { cw.miss(`object-relation-${format}`, sel, 'no relation of this format on the panel'); continue; }
+      await sleep(1400);
+      const appeared = await cw.waitNewMenu(before, 4000);
+      if (appeared) await cw.shot(`object-relation-${format}`, appeared.all.map((m) => m.rect), `#header ▸ relations ▸ ${sel}`);
+      else await cw.snapEl(`object-relation-${format}`, sel, `#header ▸ relations ▸ ${sel} (edits in place)`);
+    }
+
+    // A relation's own settings — rename, change format, remove from object.
+    await cw.d.key('Escape', 'Escape', 27);
+    await sleep(400);
+    if (await panel()) {
+      const before = await cw.menus();
+      const r = await cw.contextMenu('#sidebarRight .section.objectRelation .name');
+      if (r === 'ok') {
+        await sleep(1300);
+        const appeared = await cw.waitNewMenu(before, 4000);
+        if (appeared) await cw.shot('object-relation-settings', appeared.all.map((m) => m.rect), '#header ▸ relations ▸ right-click a property name');
+        else cw.miss('object-relation-settings', '#sidebarRight .section.objectRelation .name', 'a contextmenu on a property row opened no menu');
+      } else cw.miss('object-relation-settings', '#sidebarRight .section.objectRelation .name', r);
+    } else cw.miss('object-relation-settings', '#sidebarRight', 'the properties panel could not be reopened');
+
     await cw.escape();
   } else cw.miss('object-properties-panel', '#header .icon.headerRelation', 'relations icon missing');
 
@@ -873,7 +971,7 @@ async function ctxObject(cw, d) {
  * is a menu; the settings entry and the widget toggle open panels instead, and
  * those are clipped to the panel.
  */
-async function ctxNav(cw, d) {
+async function ctxNav(cw, d, onGrid) {
   cw.context = 'nav';
   await sweep(cw, [
     { name: 'nav-create-object', sel: '.sidebar.left .pageVault .head .icon.plusMenu' },
@@ -890,8 +988,7 @@ async function ctxNav(cw, d) {
     { name: 'nav-widget-bin', sel: '.sidebar.left .widgetSection.section-bin .items .item', mode: 'context' },
     { name: 'nav-history', sel: '#header .icon.commonClock' },
     { name: 'nav-graph', sel: '#header .icon.headerGraph', fallback: '#page' },
-    { name: 'nav-object-more', sel: '#header .icon.commonMore' },
-  ]);
+  ], onGrid);
 
   // The vault's search box is an input rather than a popover, so it is clipped
   // to itself once focused.
@@ -901,18 +998,26 @@ async function ctxNav(cw, d) {
     await cw.snapEl('nav-vault-search', '.sidebar.left .pageVault .filterWrapper', '.sidebar.left ▸ vault filter input');
   } else cw.miss('nav-vault-search', '.sidebar.left .pageVault .filter', 'no vault filter input');
 
-  // Settings opens a page, not a menu. Each of its own pages is photographed
-  // whole, since that is where the appearance and personalisation dropdowns live.
+  // Settings opens a page, not a menu, and its own navigation is the left
+  // sidebar rather than anything inside the page. Escape leaves settings
+  // entirely, so each entry re-enters rather than assuming it is still there.
+  const enterSettings = async () => {
+    if (await d.eval("!!document.querySelector('#settingsPageContainer')")) return true;
+    if (await cw.clickSel('.sidebar.left .appSettings') !== 'ok') return false;
+    await sleep(2600);
+    return d.eval("!!document.querySelector('#settingsPageContainer')");
+  };
+
   await cw.escape();
-  if (await cw.clickSel('.sidebar.left .appSettings') !== 'ok') {
+  if (!await enterSettings()) {
     cw.miss('nav-settings', '.sidebar.left .appSettings', 'settings entry missing');
     return;
   }
-  await sleep(2600);
   await cw.snapEl('nav-settings', '#settingsPageContainer', '.sidebar.left ▸ account name', { pad: 0 });
-  // Settings is a page, and its own navigation lives in the left sidebar. These
-  // are the entries this build actually ships, read off that sidebar.
-  for (const page of ['Preferences', 'Language & Region', 'Pin Code', 'Login Key', 'Membership', 'Local storage', 'Channels', 'My Sites', 'API Keys']) {
+
+  const SETTINGS_PAGES = ['Preferences', 'Language & Region', 'Pin Code', 'Login Key', 'Membership', 'Local storage', 'Channels', 'My Sites', 'API Keys'];
+  for (const page of SETTINGS_PAGES) {
+    if (!await enterSettings()) { cw.miss(`nav-settings-${slug(page)}`, `settings ▸ "${page}"`, 'settings page could not be re-entered'); continue; }
     const r = await d.eval(`(() => {
       const el = Array.from(document.querySelectorAll('.sidebar.left .item'))
         .find(e => (e.innerText || '').trim() === ${JSON.stringify(page)});
@@ -920,27 +1025,35 @@ async function ctxNav(cw, d) {
       el.click();
       return 'ok';
     })()`);
-    if (r !== 'ok') { cw.miss(`nav-settings-${slug(page)}`, `settings ▸ "${page}"`, 'no such settings entry in the sidebar'); continue; }
-    await sleep(1800);
+    if (r !== 'ok') { cw.miss(`nav-settings-${slug(page)}`, `settings ▸ "${page}"`, 'no such entry in the settings sidebar'); continue; }
+    await sleep(1900);
     await cw.snapEl(`nav-settings-${slug(page)}`, '#settingsPageContainer', `settings ▸ "${page}"`, { pad: 0 });
-    // Any select on that settings page, opened in turn.
-    const selects = await d.eval(`(() => {
-      const list = Array.from(document.querySelectorAll('#settingsPageContainer .select'));
-      return list.length;
-    })()`);
+
+    // Any select the page carries, opened in turn. `capture` escapes first, and
+    // Escape exits settings, so the page is re-entered and re-selected each time.
+    const selects = await d.eval("document.querySelectorAll('#settingsPageContainer .select').length");
     for (let i = 0; i < Math.min(selects, 4); i += 1) {
       await cw.capture(`nav-settings-${slug(page)}-select-${i + 1}`,
         `settings ▸ "${page}" ▸ select #${i + 1}`,
-        () => cw.d.eval(`(() => {
-          const el = document.querySelectorAll('#settingsPageContainer .select')[${i}];
-          if (!el) return 'MISSING';
-          el.click();
-          return 'ok';
-        })()`),
+        async () => {
+          if (!await enterSettings()) return 'MISSING';
+          await d.eval(`(() => {
+            const el = Array.from(document.querySelectorAll('.sidebar.left .item')).find(e => (e.innerText || '').trim() === ${JSON.stringify(page)});
+            if (el) el.click();
+          })()`);
+          await sleep(1600);
+          return d.eval(`(() => {
+            const el = document.querySelectorAll('#settingsPageContainer .select')[${i}];
+            if (!el) return 'MISSING';
+            el.click();
+            return 'ok';
+          })()`);
+        },
         { submenus: false });
     }
   }
   await cw.escape();
+  await onGrid();
 }
 
 /**
@@ -1070,9 +1183,10 @@ async function main() {
     };
 
     if (wanted('set')) { log('  context: set'); await onGrid(); await ctxSetControls(cw, d); }
+    if (wanted('reallayouts')) { log('  context: set (populated layouts)'); await onGrid(); await ctxRealLayouts(cw, d, selectView, expected); }
     if (wanted('cell')) { log('  context: cell'); await onGrid(); await ctxCells(cw, d, onGrid); }
-    if (wanted('object')) { log('  context: object'); await onGrid(); await ctxObject(cw, d); }
-    if (wanted('nav')) { log('  context: nav'); await onGrid(); await ctxNav(cw, d); }
+    if (wanted('object')) { log('  context: object'); await onGrid(); await ctxObject(cw, d, onGrid); }
+    if (wanted('nav')) { log('  context: nav'); await onGrid(); await ctxNav(cw, d, onGrid); }
     if (wanted('cards')) { log('  context: cards'); await ctxCards(cw, d, selectView, onGrid); }
 
     // Discovery runs once, on the theme that happens to be active last.

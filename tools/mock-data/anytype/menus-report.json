@@ -34,7 +34,7 @@
   },
   "tabsBefore": [
     "Welcome to Anytype",
-    "Profile Settings"
+    "Channels"
   ],
   "tabsAfter": [
     "Welcome to Anytype",
@@ -43,1466 +43,11 @@
   "tabRepairs": [],
   "captures": [
     {
-      "file": "anytype-menu-set-viewlist-dark.png",
-      "full": "anytype-menu-set-viewlist-dark-full.png",
-      "context": "set",
-      "menu": "set-viewlist",
-      "theme": "dark",
-      "how": "#dataviewControls .viewSelect",
-      "clip": {
-        "x": 892,
-        "y": 606,
-        "width": 384,
-        "height": 279,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-property-picker-dark.png",
-      "full": "anytype-menu-set-filter-property-picker-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-property-picker",
-      "theme": "dark",
-      "how": "#dataviewControls .btn-filter",
-      "clip": {
-        "x": 1799,
-        "y": 63,
-        "width": 281,
-        "height": 1154,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-new-object-dark.png",
-      "full": "anytype-menu-set-new-object-dark-full.png",
-      "context": "set",
-      "menu": "set-new-object",
-      "theme": "dark",
-      "how": "#dataviewControls .buttonWrap.withSelect .button.isArrow",
-      "clip": {
-        "x": 1797,
-        "y": 245,
-        "width": 312,
-        "height": 167,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-new-object-existing-object-dark.png",
-      "full": "anytype-menu-set-new-object-existing-object-dark-full.png",
-      "context": "set",
-      "menu": "set-new-object-existing-object",
-      "theme": "dark",
-      "how": "#dataviewControls .buttonWrap.withSelect .button.isArrow > hover \"Existing object\"",
-      "clip": {
-        "x": 1437,
-        "y": 40,
-        "width": 672,
-        "height": 528,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-new-object-default-type-for-this-view-dark.png",
-      "full": "anytype-menu-set-new-object-default-type-for-this-view-dark-full.png",
-      "context": "set",
-      "menu": "set-new-object-default-type-for-this-view",
-      "theme": "dark",
-      "how": "#dataviewControls .buttonWrap.withSelect .button.isArrow > hover \"Default Type for this View\"",
-      "clip": {
-        "x": 1541,
-        "y": 100,
-        "width": 568,
-        "height": 500,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-new-object-template-for-this-view-dark.png",
-      "full": "anytype-menu-set-new-object-template-for-this-view-dark-full.png",
-      "context": "set",
-      "menu": "set-new-object-template-for-this-view",
-      "theme": "dark",
-      "how": "#dataviewControls .buttonWrap.withSelect .button.isArrow > hover \"Template for this View\"",
-      "clip": {
-        "x": 1437,
-        "y": 232,
-        "width": 672,
-        "height": 292,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-column-header-dark.png",
-      "full": "anytype-menu-set-column-header-dark-full.png",
-      "context": "set",
-      "menu": "set-column-header",
-      "theme": "dark",
-      "how": ".viewContent .cellHead:nth-child(2)",
-      "clip": {
-        "x": 828,
-        "y": 286,
-        "width": 280,
-        "height": 524,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-column-header-align-dark.png",
-      "full": "anytype-menu-set-column-header-align-dark-full.png",
-      "context": "set",
-      "menu": "set-column-header-align",
-      "theme": "dark",
-      "how": ".viewContent .cellHead:nth-child(2) > hover \"Align\"",
-      "clip": {
-        "x": 828,
-        "y": 286,
-        "width": 504,
-        "height": 524,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-column-header-calculate-dark.png",
-      "full": "anytype-menu-set-column-header-calculate-dark-full.png",
-      "context": "set",
-      "menu": "set-column-header-calculate",
-      "theme": "dark",
-      "how": ".viewContent .cellHead:nth-child(2) > hover \"Calculate\"",
-      "clip": {
-        "x": 828,
-        "y": 286,
-        "width": 504,
-        "height": 538,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-view-settings-dark.png",
-      "full": "anytype-menu-set-view-settings-dark-full.png",
-      "context": "set",
-      "menu": "set-view-settings",
-      "theme": "dark",
-      "how": ".btn-settings",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 340,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-view-layout-dark.png",
-      "full": "anytype-menu-set-view-layout-dark-full.png",
-      "context": "set",
-      "menu": "set-view-layout",
-      "theme": "dark",
-      "how": ".btn-settings > click #item-layout",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 322,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-view-properties-dark.png",
-      "full": "anytype-menu-set-view-properties-dark-full.png",
-      "context": "set",
-      "menu": "set-view-properties",
-      "theme": "dark",
-      "how": ".btn-settings > click #item-relations",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 414,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-view-filter-dark.png",
-      "full": "anytype-menu-set-view-filter-dark-full.png",
-      "context": "set",
-      "menu": "set-view-filter",
-      "theme": "dark",
-      "how": ".btn-settings > click #item-filter",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 114,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-view-sort-dark.png",
-      "full": "anytype-menu-set-view-sort-dark-full.png",
-      "context": "set",
-      "menu": "set-view-sort",
-      "theme": "dark",
-      "how": ".btn-settings > click #item-sort",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 190,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-grid-dark.png",
-      "full": "anytype-menu-set-layout-grid-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-grid",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Grid\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 322,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-gallery-dark.png",
-      "full": "anytype-menu-set-layout-gallery-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-gallery",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Gallery\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 406,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-gallery-card-size-dark.png",
-      "full": "anytype-menu-set-layout-gallery-card-size-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-gallery-card-size",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Gallery\" > hover \"Card size\"",
-      "clip": {
-        "x": 1562,
-        "y": 245,
-        "width": 606,
-        "height": 406,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-list-dark.png",
-      "full": "anytype-menu-set-layout-list-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-list",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"List\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 322,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-list-size-dark.png",
-      "full": "anytype-menu-set-layout-list-size-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-list-size",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"List\" > hover \"Size\"",
-      "clip": {
-        "x": 1562,
-        "y": 245,
-        "width": 606,
-        "height": 322,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-kanban-dark.png",
-      "full": "anytype-menu-set-layout-kanban-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-kanban",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Kanban\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 434,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-kanban-cover-dark.png",
-      "full": "anytype-menu-set-layout-kanban-cover-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-kanban-cover",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Kanban\" > hover \"Cover\"",
-      "clip": {
-        "x": 1562,
-        "y": 245,
-        "width": 606,
-        "height": 434,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-calendar-dark.png",
-      "full": "anytype-menu-set-layout-calendar-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-calendar",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Calendar\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 322,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-calendar-date-property-dark.png",
-      "full": "anytype-menu-set-layout-calendar-date-property-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-calendar-date-property",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Calendar\" > hover \"Date Property\"",
-      "clip": {
-        "x": 1562,
-        "y": 245,
-        "width": 606,
-        "height": 428,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-graph-dark.png",
-      "full": "anytype-menu-set-layout-graph-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-graph",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Graph\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 294,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-layout-graph-settings-dark.png",
-      "full": "anytype-menu-set-layout-graph-settings-dark-full.png",
-      "context": "set",
-      "menu": "set-layout-graph-settings",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Graph\" > hover \"Settings\"",
-      "clip": {
-        "x": 1530,
-        "y": 245,
-        "width": 638,
-        "height": 463,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-text-short-dark.png",
-      "full": "anytype-menu-set-filter-text-short-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-text-short",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Name\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 192,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-text-short-condition-dark.png",
-      "full": "anytype-menu-set-filter-text-short-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-text-short-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Name\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 324,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-text-long-dark.png",
-      "full": "anytype-menu-set-filter-text-long-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-text-long",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Working notes\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 224,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-text-long-condition-dark.png",
-      "full": "anytype-menu-set-filter-text-long-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-text-long-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Working notes\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 356,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-number-dark.png",
-      "full": "anytype-menu-set-filter-number-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-number",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Estimate (pts)\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 256,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-number-condition-dark.png",
-      "full": "anytype-menu-set-filter-number-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-number-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Estimate (pts)\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 444,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-select-dark.png",
-      "full": "anytype-menu-set-filter-select-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-select",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Status (Project Tracker)\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 498,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-select-condition-dark.png",
-      "full": "anytype-menu-set-filter-select-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-select-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Status (Project Tracker)\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 498,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-multiselect-dark.png",
-      "full": "anytype-menu-set-filter-multiselect-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-multiselect",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Team\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 476,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-multiselect-condition-dark.png",
-      "full": "anytype-menu-set-filter-multiselect-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-multiselect-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Team\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 476,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-date-dark.png",
-      "full": "anytype-menu-set-filter-date-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-date",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Starts\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 576,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-date-condition-dark.png",
-      "full": "anytype-menu-set-filter-date-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-date-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Starts\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 576,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-checkbox-dark.png",
-      "full": "anytype-menu-set-filter-checkbox-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-checkbox",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Blocked\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 366,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-checkbox-condition-dark.png",
-      "full": "anytype-menu-set-filter-checkbox-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-checkbox-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Blocked\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 366,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-url-dark.png",
-      "full": "anytype-menu-set-filter-url-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-url",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Ticket\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 416,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-url-condition-dark.png",
-      "full": "anytype-menu-set-filter-url-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-url-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Ticket\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 548,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-email-dark.png",
-      "full": "anytype-menu-set-filter-email-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-email",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Owner email\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 448,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-email-condition-dark.png",
-      "full": "anytype-menu-set-filter-email-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-email-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Owner email\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 580,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-phone-dark.png",
-      "full": "anytype-menu-set-filter-phone-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-phone",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Escalation line\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 480,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-phone-condition-dark.png",
-      "full": "anytype-menu-set-filter-phone-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-phone-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Escalation line\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 612,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-object-dark.png",
-      "full": "anytype-menu-set-filter-object-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-object",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Depends on\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 824,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-object-condition-dark.png",
-      "full": "anytype-menu-set-filter-object-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-object-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Depends on\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 824,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-file-dark.png",
-      "full": "anytype-menu-set-filter-file-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-file",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > New filter > \"Attachments\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 572,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-file-condition-dark.png",
-      "full": "anytype-menu-set-filter-file-condition-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-file-condition",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Attachments\" > condition row",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 648,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-date-picker-dark.png",
-      "full": "anytype-menu-set-filter-date-picker-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-date-picker",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Starts\" (Exact tab, calendar)",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 608,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-filter-date-relative-dark.png",
-      "full": "anytype-menu-set-filter-date-relative-dark-full.png",
-      "context": "set",
-      "menu": "set-filter-date-relative",
-      "theme": "dark",
-      "how": ".btn-settings > Filter > \"Starts\" > Relative tab",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 520,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-sort-empty-dark.png",
-      "full": "anytype-menu-set-sort-empty-dark-full.png",
-      "context": "set",
-      "menu": "set-sort-empty",
-      "theme": "dark",
-      "how": ".btn-settings > Sort",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 190,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-sort-property-picker-dark.png",
-      "full": "anytype-menu-set-sort-property-picker-dark-full.png",
-      "context": "set",
-      "menu": "set-sort-property-picker",
-      "theme": "dark",
-      "how": ".btn-settings > Sort > Add sort",
-      "clip": {
-        "x": 1786,
-        "y": 107,
-        "width": 382,
-        "height": 1110,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-sort-added-dark.png",
-      "full": "anytype-menu-set-sort-added-dark-full.png",
-      "context": "set",
-      "menu": "set-sort-added",
-      "theme": "dark",
-      "how": ".btn-settings > Sort > Add sort > \"Estimate (pts)\"",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 238,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-set-sort-direction-dark.png",
-      "full": "anytype-menu-set-sort-direction-dark-full.png",
-      "context": "set",
-      "menu": "set-sort-direction",
-      "theme": "dark",
-      "how": ".btn-settings > Sort > sort row > direction select",
-      "clip": {
-        "x": 1786,
-        "y": 245,
-        "width": 382,
-        "height": 238,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-text-dark.png",
-      "full": "anytype-menu-cell-text-dark-full.png",
-      "context": "cell",
-      "menu": "cell-text",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-longText (edits in place)",
-      "clip": {
-        "x": 1032,
-        "y": 262,
-        "width": 348,
-        "height": 134,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-url-dark.png",
-      "full": "anytype-menu-cell-url-dark-full.png",
-      "context": "cell",
-      "menu": "cell-url",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-url (edits in place)",
-      "clip": {
-        "x": 1416,
-        "y": 262,
-        "width": 348,
-        "height": 170,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-email-dark.png",
-      "full": "anytype-menu-cell-email-dark-full.png",
-      "context": "cell",
-      "menu": "cell-email",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-email (edits in place)",
-      "clip": {
-        "x": 1608,
-        "y": 262,
-        "width": 348,
-        "height": 170,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-phone-dark.png",
-      "full": "anytype-menu-cell-phone-dark-full.png",
-      "context": "cell",
-      "menu": "cell-phone",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-phone (edits in place)",
-      "clip": {
-        "x": 1800,
-        "y": 262,
-        "width": 348,
-        "height": 170,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-number-dark.png",
-      "full": "anytype-menu-cell-number-dark-full.png",
-      "context": "cell",
-      "menu": "cell-number",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-number (edits in place)",
-      "clip": {
-        "x": 1992,
-        "y": 262,
-        "width": 176,
-        "height": 120,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-select-dark.png",
-      "full": "anytype-menu-cell-select-dark-full.png",
-      "context": "cell",
-      "menu": "cell-select",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-select.isSelect",
-      "clip": {
-        "x": 1354,
-        "y": 336,
-        "width": 324,
-        "height": 168,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-multiselect-dark.png",
-      "full": "anytype-menu-cell-multiselect-dark-full.png",
-      "context": "cell",
-      "menu": "cell-multiselect",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-select.isMultiSelect",
-      "clip": {
-        "x": 1354,
-        "y": 336,
-        "width": 324,
-        "height": 200,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-date-dark.png",
-      "full": "anytype-menu-cell-date-dark-full.png",
-      "context": "cell",
-      "menu": "cell-date",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-date",
-      "clip": {
-        "x": 1744,
-        "y": 336,
-        "width": 312,
-        "height": 295,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-object-dark.png",
-      "full": "anytype-menu-cell-object-dark-full.png",
-      "context": "cell",
-      "menu": "cell-object",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-object:not(.cell-key-type)",
-      "clip": {
-        "x": 1354,
-        "y": 336,
-        "width": 324,
-        "height": 324,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-file-dark.png",
-      "full": "anytype-menu-cell-file-dark-full.png",
-      "context": "cell",
-      "menu": "cell-file",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-file",
-      "clip": {
-        "x": 1738,
-        "y": 336,
-        "width": 324,
-        "height": 108,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-type-dark.png",
-      "full": "anytype-menu-cell-type-dark-full.png",
-      "context": "cell",
-      "menu": "cell-type",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.cell-key-type",
-      "clip": {
-        "x": 0,
-        "y": 336,
-        "width": 322,
-        "height": 96,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-cell-checkbox-dark.png",
-      "full": "anytype-menu-cell-checkbox-dark-full.png",
-      "context": "cell",
-      "menu": "cell-checkbox",
-      "theme": "dark",
-      "how": "grid row ▸ click .viewContent .row .cell.c-checkbox (toggles in place, toggled back after)",
-      "clip": {
-        "x": 478,
-        "y": 262,
-        "width": 264,
-        "height": 120,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-more-dark.png",
-      "full": "anytype-menu-object-more-dark-full.png",
-      "context": "object",
-      "menu": "object-more",
-      "theme": "dark",
-      "how": "#header .icon.commonMore",
-      "clip": {
-        "x": 1888,
-        "y": 40,
-        "width": 280,
-        "height": 528,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-more-add-link-to-object-dark.png",
-      "full": "anytype-menu-object-more-add-link-to-object-dark-full.png",
-      "context": "object",
-      "menu": "object-more-add-link-to-object",
-      "theme": "dark",
-      "how": "#header .icon.commonMore > hover \"Add Link to Object\"",
-      "clip": {
-        "x": 1528,
-        "y": 40,
-        "width": 640,
-        "height": 528,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-more-advanced-dark.png",
-      "full": "anytype-menu-object-more-advanced-dark-full.png",
-      "context": "object",
-      "menu": "object-more-advanced",
-      "theme": "dark",
-      "how": "#header .icon.commonMore > hover \"Advanced\"",
-      "clip": {
-        "x": 1664,
-        "y": 40,
-        "width": 504,
-        "height": 528,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-icon-picker-dark.png",
-      "full": "anytype-menu-object-icon-picker-dark-full.png",
-      "context": "object",
-      "menu": "object-icon-picker",
-      "theme": "dark",
-      "how": ".editorControls .btn .icon.controlEditorIcon",
-      "clip": {
-        "x": 862,
-        "y": 112,
-        "width": 433,
-        "height": 436,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-cover-picker-dark.png",
-      "full": "anytype-menu-object-cover-picker-dark-full.png",
-      "context": "object",
-      "menu": "object-cover-picker",
-      "theme": "dark",
-      "how": ".editorControls .btn .icon.controlEditorCover",
-      "clip": {
-        "x": 971,
-        "y": 112,
-        "width": 433,
-        "height": 432,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-layout-picker-dark.png",
-      "full": "anytype-menu-object-layout-picker-dark-full.png",
-      "context": "object",
-      "menu": "object-layout-picker",
-      "theme": "dark",
-      "how": ".editorControls .btn .icon.controlEditorLayout",
-      "clip": {
-        "x": 1396,
-        "y": 112,
-        "width": 249,
-        "height": 96,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-layout-picker-header-position-dark.png",
-      "full": "anytype-menu-object-layout-picker-header-position-dark-full.png",
-      "context": "object",
-      "menu": "object-layout-picker-header-position",
-      "theme": "dark",
-      "how": ".editorControls .btn .icon.controlEditorLayout > hover \"Header position\"",
-      "clip": {
-        "x": 1396,
-        "y": 112,
-        "width": 473,
-        "height": 124,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-type-picker-dark.png",
-      "full": "anytype-menu-object-type-picker-dark-full.png",
-      "context": "object",
-      "menu": "object-type-picker",
-      "theme": "dark",
-      "how": ".blockFeatured .cellContent.type",
-      "clip": {
-        "x": 1014,
-        "y": 192,
-        "width": 249,
-        "height": 96,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-type-picker-change-type-dark.png",
-      "full": "anytype-menu-object-type-picker-change-type-dark-full.png",
-      "context": "object",
-      "menu": "object-type-picker-change-type",
-      "theme": "dark",
-      "how": ".blockFeatured .cellContent.type > hover \"Change type\"",
-      "clip": {
-        "x": 1014,
-        "y": 40,
-        "width": 505,
-        "height": 472,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-featured-tag-dark.png",
-      "full": "anytype-menu-object-featured-tag-dark-full.png",
-      "context": "object",
-      "menu": "object-featured-tag",
-      "theme": "dark",
-      "how": ".blockFeatured .cellContent.c-tag",
-      "clip": {
-        "x": 1005,
-        "y": 188,
-        "width": 313,
-        "height": 134,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-block-menu-dark.png",
-      "full": "anytype-menu-object-block-menu-dark-full.png",
-      "context": "object",
-      "menu": "object-block-menu",
-      "theme": "dark",
-      "how": ".blockFeatured .icon.blockMenu",
-      "clip": {
-        "x": 742,
-        "y": 242,
-        "width": 281,
-        "height": 551,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-block-menu-view-dark.png",
-      "full": "anytype-menu-object-block-menu-view-dark-full.png",
-      "context": "object",
-      "menu": "object-block-menu-view",
-      "theme": "dark",
-      "how": ".blockFeatured .icon.blockMenu > hover \"View\"",
-      "clip": {
-        "x": 742,
-        "y": 231,
-        "width": 537,
-        "height": 562,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-block-menu-align-dark.png",
-      "full": "anytype-menu-object-block-menu-align-dark-full.png",
-      "context": "object",
-      "menu": "object-block-menu-align",
-      "theme": "dark",
-      "how": ".blockFeatured .icon.blockMenu > hover \"Align\"",
-      "clip": {
-        "x": 742,
-        "y": 242,
-        "width": 505,
-        "height": 551,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-block-menu-color-dark.png",
-      "full": "anytype-menu-object-block-menu-color-dark-full.png",
-      "context": "object",
-      "menu": "object-block-menu-color",
-      "theme": "dark",
-      "how": ".blockFeatured .icon.blockMenu > hover \"Color\"",
-      "clip": {
-        "x": 742,
-        "y": 242,
-        "width": 505,
-        "height": 551,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-block-menu-background-dark.png",
-      "full": "anytype-menu-object-block-menu-background-dark-full.png",
-      "context": "object",
-      "menu": "object-block-menu-background",
-      "theme": "dark",
-      "how": ".blockFeatured .icon.blockMenu > hover \"Background\"",
-      "clip": {
-        "x": 742,
-        "y": 242,
-        "width": 505,
-        "height": 551,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-block-menu-move-to-dark.png",
-      "full": "anytype-menu-object-block-menu-move-to-dark-full.png",
-      "context": "object",
-      "menu": "object-block-menu-move-to",
-      "theme": "dark",
-      "how": ".blockFeatured .icon.blockMenu > hover \"Move to\"",
-      "clip": {
-        "x": 742,
-        "y": 242,
-        "width": 641,
-        "height": 594,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-object-properties-panel-dark.png",
-      "full": "anytype-menu-object-properties-panel-dark-full.png",
-      "context": "object",
-      "menu": "object-properties-panel",
-      "theme": "dark",
-      "how": "#header ▸ relations icon",
-      "clip": {
-        "x": 1812,
-        "y": 0,
-        "width": 356,
-        "height": 1217,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-create-object-dark.png",
-      "full": "anytype-menu-nav-create-object-dark-full.png",
-      "context": "nav",
-      "menu": "nav-create-object",
-      "theme": "dark",
-      "how": ".sidebar.left .pageVault .head .icon.plusMenu",
-      "clip": {
-        "x": 196,
-        "y": 40,
-        "width": 248,
-        "height": 124,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-vault-space-item-dark.png",
-      "full": "anytype-menu-nav-vault-space-item-dark-full.png",
-      "context": "nav",
-      "menu": "nav-vault-space-item",
-      "theme": "dark",
-      "how": ".sidebar.left .pageVault .body .item",
-      "clip": {
-        "x": 127,
-        "y": 105,
-        "width": 248,
-        "height": 212,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-vault-gallery-dark.png",
-      "full": "anytype-menu-nav-vault-gallery-dark-full.png",
-      "context": "nav",
-      "menu": "nav-vault-gallery",
-      "theme": "dark",
-      "how": ".sidebar.left .icon.vaultGallery (opens a panel, not a menu)",
-      "clip": {
-        "x": 608,
-        "y": 0,
-        "width": 1560,
-        "height": 1217,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-help-dark.png",
-      "full": "anytype-menu-nav-help-dark-full.png",
-      "context": "nav",
-      "menu": "nav-help",
-      "theme": "dark",
-      "how": ".sidebar.left .button.help",
-      "clip": {
-        "x": 228,
-        "y": 803,
-        "width": 280,
-        "height": 296,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-help-developers-dark.png",
-      "full": "anytype-menu-nav-help-developers-dark-full.png",
-      "context": "nav",
-      "menu": "nav-help-developers",
-      "theme": "dark",
-      "how": ".sidebar.left .button.help > hover \"Developers\"",
-      "clip": {
-        "x": 228,
-        "y": 803,
-        "width": 504,
-        "height": 296,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-space-widget-dark.png",
-      "full": "anytype-menu-nav-space-widget-dark-full.png",
-      "context": "nav",
-      "menu": "nav-space-widget",
-      "theme": "dark",
-      "how": ".sidebar.left .widget.widgetSpace (opens a panel, not a menu)",
-      "clip": {
-        "x": 608,
-        "y": 0,
-        "width": 1560,
-        "height": 1217,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-space-name-dark.png",
-      "full": "anytype-menu-nav-space-name-dark-full.png",
-      "context": "nav",
-      "menu": "nav-space-name",
-      "theme": "dark",
-      "how": ".sidebar.left .spaceName (opens a panel, not a menu)",
-      "clip": {
-        "x": 608,
-        "y": 0,
-        "width": 1560,
-        "height": 1217,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-members-dark.png",
-      "full": "anytype-menu-nav-members-dark-full.png",
-      "context": "nav",
-      "menu": "nav-members",
-      "theme": "dark",
-      "how": ".sidebar.left .icon.widgetMember (opens a panel, not a menu)",
-      "clip": {
-        "x": 608,
-        "y": 0,
-        "width": 1560,
-        "height": 1217,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-history-dark.png",
-      "full": "anytype-menu-nav-history-dark-full.png",
-      "context": "nav",
-      "menu": "nav-history",
-      "theme": "dark",
-      "how": "#header .icon.commonClock",
-      "clip": {
-        "x": 684,
-        "y": 40,
-        "width": 312,
-        "height": 404,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-graph-dark.png",
-      "full": "anytype-menu-nav-graph-dark-full.png",
-      "context": "nav",
-      "menu": "nav-graph",
-      "theme": "dark",
-      "how": "#header .icon.headerGraph (opens a panel, not a menu)",
-      "clip": {
-        "x": 608,
-        "y": 0,
-        "width": 1560,
-        "height": 1217,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-vault-search-dark.png",
-      "full": "anytype-menu-nav-vault-search-dark-full.png",
-      "context": "nav",
-      "menu": "nav-vault-search",
-      "theme": "dark",
-      "how": ".sidebar.left ▸ vault filter input",
-      "clip": {
-        "x": 0,
-        "y": 16,
-        "width": 320,
-        "height": 106,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-settings-dark.png",
-      "full": "anytype-menu-nav-settings-dark-full.png",
-      "context": "nav",
-      "menu": "nav-settings",
-      "theme": "dark",
-      "how": ".sidebar.left ▸ account name",
-      "clip": {
-        "x": 1050,
-        "y": 40,
-        "width": 665,
-        "height": 820,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-nav-settings-preferences-dark.png",
-      "full": "anytype-menu-nav-settings-preferences-dark-full.png",
-      "context": "nav",
-      "menu": "nav-settings-preferences",
-      "theme": "dark",
-      "how": "settings ▸ \"Preferences\"",
-      "clip": {
-        "x": 1050,
-        "y": 40,
-        "width": 665,
-        "height": 1177,
-        "scale": 1
-      }
-    },
-    {
-      "file": "anytype-menu-kanban-column-menu-dark.png",
-      "full": "anytype-menu-kanban-column-menu-dark-full.png",
+      "file": "anytype-menu-kanban-column-menu-light.png",
+      "full": "anytype-menu-kanban-column-menu-light-full.png",
       "context": "kanban",
       "menu": "kanban-column-menu",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .column .head .icon.commonMore",
       "clip": {
         "x": 740,
@@ -1513,11 +58,11 @@
       }
     },
     {
-      "file": "anytype-menu-kanban-card-menu-dark.png",
-      "full": "anytype-menu-kanban-card-menu-dark-full.png",
+      "file": "anytype-menu-kanban-card-menu-light.png",
+      "full": "anytype-menu-kanban-card-menu-light-full.png",
       "context": "kanban",
       "menu": "kanban-card-menu",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .column .card.isPage",
       "clip": {
         "x": 789,
@@ -1528,11 +73,11 @@
       }
     },
     {
-      "file": "anytype-menu-kanban-card-menu-change-type-dark.png",
-      "full": "anytype-menu-kanban-card-menu-change-type-dark-full.png",
+      "file": "anytype-menu-kanban-card-menu-change-type-light.png",
+      "full": "anytype-menu-kanban-card-menu-change-type-light-full.png",
       "context": "kanban",
       "menu": "kanban-card-menu-change-type",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .column .card.isPage > hover \"Change type\"",
       "clip": {
         "x": 789,
@@ -1543,11 +88,11 @@
       }
     },
     {
-      "file": "anytype-menu-kanban-card-menu-add-link-to-object-dark.png",
-      "full": "anytype-menu-kanban-card-menu-add-link-to-object-dark-full.png",
+      "file": "anytype-menu-kanban-card-menu-add-link-to-object-light.png",
+      "full": "anytype-menu-kanban-card-menu-add-link-to-object-light-full.png",
       "context": "kanban",
       "menu": "kanban-card-menu-add-link-to-object",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .column .card.isPage > hover \"Add Link to Object\"",
       "clip": {
         "x": 789,
@@ -1558,11 +103,26 @@
       }
     },
     {
-      "file": "anytype-menu-calendar-month-select-dark.png",
-      "full": "anytype-menu-calendar-month-select-dark-full.png",
+      "file": "anytype-menu-kanban-card-menu-add-to-collection-light.png",
+      "full": "anytype-menu-kanban-card-menu-add-to-collection-light-full.png",
+      "context": "kanban",
+      "menu": "kanban-card-menu-add-to-collection",
+      "theme": "light",
+      "how": ".viewContent .column .card.isPage > hover \"Add to Collection\"",
+      "clip": {
+        "x": 789,
+        "y": 345,
+        "width": 536,
+        "height": 483,
+        "scale": 1
+      }
+    },
+    {
+      "file": "anytype-menu-calendar-month-select-light.png",
+      "full": "anytype-menu-calendar-month-select-light-full.png",
       "context": "calendar",
       "menu": "calendar-month-select",
-      "theme": "dark",
+      "theme": "light",
       "how": ".dateSelect .select.month",
       "clip": {
         "x": 666,
@@ -1573,11 +133,11 @@
       }
     },
     {
-      "file": "anytype-menu-calendar-year-select-dark.png",
-      "full": "anytype-menu-calendar-year-select-dark-full.png",
+      "file": "anytype-menu-calendar-year-select-light.png",
+      "full": "anytype-menu-calendar-year-select-light-full.png",
       "context": "calendar",
       "menu": "calendar-year-select",
-      "theme": "dark",
+      "theme": "light",
       "how": ".dateSelect .select.year",
       "clip": {
         "x": 759,
@@ -1588,11 +148,11 @@
       }
     },
     {
-      "file": "anytype-menu-calendar-item-menu-dark.png",
-      "full": "anytype-menu-calendar-item-menu-dark-full.png",
+      "file": "anytype-menu-calendar-item-menu-light.png",
+      "full": "anytype-menu-calendar-item-menu-light-full.png",
       "context": "calendar",
       "menu": "calendar-item-menu",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .day .items > div",
       "clip": {
         "x": 640,
@@ -1603,11 +163,11 @@
       }
     },
     {
-      "file": "anytype-menu-calendar-day-menu-dark.png",
-      "full": "anytype-menu-calendar-day-menu-dark-full.png",
+      "file": "anytype-menu-calendar-day-menu-light.png",
+      "full": "anytype-menu-calendar-day-menu-light-full.png",
       "context": "calendar",
       "menu": "calendar-day-menu",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .day .head",
       "clip": {
         "x": 640,
@@ -1618,11 +178,11 @@
       }
     },
     {
-      "file": "anytype-menu-gallery-card-menu-dark.png",
-      "full": "anytype-menu-gallery-card-menu-dark-full.png",
+      "file": "anytype-menu-gallery-card-menu-light.png",
+      "full": "anytype-menu-gallery-card-menu-light-full.png",
       "context": "gallery",
       "menu": "gallery-card-menu",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .card.isPage",
       "clip": {
         "x": 785,
@@ -1633,11 +193,11 @@
       }
     },
     {
-      "file": "anytype-menu-gallery-card-menu-change-type-dark.png",
-      "full": "anytype-menu-gallery-card-menu-change-type-dark-full.png",
+      "file": "anytype-menu-gallery-card-menu-change-type-light.png",
+      "full": "anytype-menu-gallery-card-menu-change-type-light-full.png",
       "context": "gallery",
       "menu": "gallery-card-menu-change-type",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .card.isPage > hover \"Change type\"",
       "clip": {
         "x": 785,
@@ -1648,11 +208,11 @@
       }
     },
     {
-      "file": "anytype-menu-gallery-card-menu-add-link-to-object-dark.png",
-      "full": "anytype-menu-gallery-card-menu-add-link-to-object-dark-full.png",
+      "file": "anytype-menu-gallery-card-menu-add-link-to-object-light.png",
+      "full": "anytype-menu-gallery-card-menu-add-link-to-object-light-full.png",
       "context": "gallery",
       "menu": "gallery-card-menu-add-link-to-object",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .card.isPage > hover \"Add Link to Object\"",
       "clip": {
         "x": 785,
@@ -1663,11 +223,26 @@
       }
     },
     {
-      "file": "anytype-menu-list-row-menu-dark.png",
-      "full": "anytype-menu-list-row-menu-dark-full.png",
+      "file": "anytype-menu-gallery-card-menu-add-to-collection-light.png",
+      "full": "anytype-menu-gallery-card-menu-add-to-collection-light-full.png",
+      "context": "gallery",
+      "menu": "gallery-card-menu-add-to-collection",
+      "theme": "light",
+      "how": ".viewContent .card.isPage > hover \"Add to Collection\"",
+      "clip": {
+        "x": 785,
+        "y": 621,
+        "width": 536,
+        "height": 483,
+        "scale": 1
+      }
+    },
+    {
+      "file": "anytype-menu-list-row-menu-light.png",
+      "full": "anytype-menu-list-row-menu-light-full.png",
       "context": "list",
       "menu": "list-row-menu",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .row .dropTarget",
       "clip": {
         "x": 1369,
@@ -1678,11 +253,11 @@
       }
     },
     {
-      "file": "anytype-menu-list-row-menu-change-type-dark.png",
-      "full": "anytype-menu-list-row-menu-change-type-dark-full.png",
+      "file": "anytype-menu-list-row-menu-change-type-light.png",
+      "full": "anytype-menu-list-row-menu-change-type-light-full.png",
       "context": "list",
       "menu": "list-row-menu-change-type",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .row .dropTarget > hover \"Change type\"",
       "clip": {
         "x": 1369,
@@ -1693,11 +268,11 @@
       }
     },
     {
-      "file": "anytype-menu-list-row-menu-add-link-to-object-dark.png",
-      "full": "anytype-menu-list-row-menu-add-link-to-object-dark-full.png",
+      "file": "anytype-menu-list-row-menu-add-link-to-object-light.png",
+      "full": "anytype-menu-list-row-menu-add-link-to-object-light-full.png",
       "context": "list",
       "menu": "list-row-menu-add-link-to-object",
-      "theme": "dark",
+      "theme": "light",
       "how": ".viewContent .row .dropTarget > hover \"Add Link to Object\"",
       "clip": {
         "x": 1369,
@@ -1706,297 +281,24 @@
         "height": 550,
         "scale": 1
       }
-    }
-  ],
-  "misses": [
-    {
-      "context": "set",
-      "menu": "set-sort-list",
-      "theme": "dark",
-      "how": "#dataviewControls .btn-sort",
-      "reason": "opener fired but no .menu.show appeared"
     },
     {
-      "context": "set",
-      "menu": "set-layout-gallery-cover",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Gallery\" > hover #menuDataviewViewLayout #item-coverRelationKey",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "set",
-      "menu": "set-layout-gallery-page-limit",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Gallery\" > hover #menuDataviewViewLayout #item-pageLimit",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "set",
-      "menu": "set-layout-kanban-group-by",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Kanban\" > hover #menuDataviewViewLayout #item-groupRelationKey",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "set",
-      "menu": "set-layout-kanban-page-limit",
-      "theme": "dark",
-      "how": ".btn-settings > Layout > \"Kanban\" > hover #menuDataviewViewLayout #item-pageLimit",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "object",
-      "menu": "object-more-add-to-collection",
-      "theme": "dark",
-      "how": "#header .icon.commonMore > hover #menuObject #item-addCollection",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "object",
-      "menu": "object-block-add",
-      "theme": "dark",
-      "how": ".icon.plusBlockAdd",
-      "reason": "opener fired but no .menu.show appeared"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-add",
-      "theme": "dark",
-      "how": "#sidebarRight .item.add, #sidebarRight .btn.add, #sidebarRight .icon.plus",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-select",
-      "theme": "dark",
-      "how": "#sidebarRight .section.objectRelation.c-select.isSelect .cellContent",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-multiselect",
-      "theme": "dark",
-      "how": "#sidebarRight .section.objectRelation.c-select.isMultiSelect .cellContent",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-date",
-      "theme": "dark",
-      "how": "#sidebarRight .section.objectRelation.c-date .cellContent",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-object",
-      "theme": "dark",
-      "how": "#sidebarRight .section.objectRelation.c-object .cellContent",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-file",
-      "theme": "dark",
-      "how": "#sidebarRight .section.objectRelation.c-file .cellContent",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "object",
-      "menu": "object-relation-settings",
-      "theme": "dark",
-      "how": "#sidebarRight .section.objectRelation .icon.more, #sidebarRight .section.objectRelation .name",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-vault-gallery",
-      "theme": "dark",
-      "how": ".sidebar.left .icon.vaultGallery",
-      "reason": "opener fired but no .menu.show appeared"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-help-more",
-      "theme": "dark",
-      "how": ".sidebar.left .button.help > hover #menuHelp #item-more",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-space-widget",
-      "theme": "dark",
-      "how": ".sidebar.left .widget.widgetSpace",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-space-name",
-      "theme": "dark",
-      "how": ".sidebar.left .spaceName",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-members",
-      "theme": "dark",
-      "how": ".sidebar.left .icon.widgetMember",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-sync",
-      "theme": "dark",
-      "how": ".sidebar.left .sync",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-widget-section-recent",
-      "theme": "dark",
-      "how": ".sidebar.left .widgetSection.section-recentedit .nameWrap",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-widget-section-types",
-      "theme": "dark",
-      "how": ".sidebar.left .widgetSection.section-type .nameWrap",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-widget-item",
-      "theme": "dark",
-      "how": ".sidebar.left .widgetSection.section-recentedit .items .item",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-widget-bin",
-      "theme": "dark",
-      "how": ".sidebar.left .widgetSection.section-bin .items .item",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-graph",
-      "theme": "dark",
-      "how": "#header .icon.headerGraph",
-      "reason": "opener fired but no .menu.show appeared"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-object-more",
-      "theme": "dark",
-      "how": "#header .icon.commonMore",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-preferences-select-1",
-      "theme": "dark",
-      "how": "settings ▸ \"Preferences\" ▸ select #1",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-preferences-select-2",
-      "theme": "dark",
-      "how": "settings ▸ \"Preferences\" ▸ select #2",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-preferences-select-3",
-      "theme": "dark",
-      "how": "settings ▸ \"Preferences\" ▸ select #3",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-preferences-select-4",
-      "theme": "dark",
-      "how": "settings ▸ \"Preferences\" ▸ select #4",
-      "reason": "no element for the opener selector"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-language-region",
-      "theme": "dark",
-      "how": "settings ▸ \"Language & Region\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-pin-code",
-      "theme": "dark",
-      "how": "settings ▸ \"Pin Code\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-login-key",
-      "theme": "dark",
-      "how": "settings ▸ \"Login Key\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-membership",
-      "theme": "dark",
-      "how": "settings ▸ \"Membership\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-local-storage",
-      "theme": "dark",
-      "how": "settings ▸ \"Local storage\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-channels",
-      "theme": "dark",
-      "how": "settings ▸ \"Channels\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-my-sites",
-      "theme": "dark",
-      "how": "settings ▸ \"My Sites\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "nav",
-      "menu": "nav-settings-api-keys",
-      "theme": "dark",
-      "how": "settings ▸ \"API Keys\"",
-      "reason": "no such settings entry in the sidebar"
-    },
-    {
-      "context": "kanban",
-      "menu": "kanban-card-menu-add-to-collection",
-      "theme": "dark",
-      "how": ".viewContent .column .card.isPage > hover #menuObjectContext #item-addCollection",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
-      "context": "gallery",
-      "menu": "gallery-card-menu-add-to-collection",
-      "theme": "dark",
-      "how": ".viewContent .card.isPage > hover #menuObjectContext #item-addCollection",
-      "reason": "neither hover nor click opened a submenu"
-    },
-    {
+      "file": "anytype-menu-list-row-menu-add-to-collection-light.png",
+      "full": "anytype-menu-list-row-menu-add-to-collection-light-full.png",
       "context": "list",
       "menu": "list-row-menu-add-to-collection",
-      "theme": "dark",
-      "how": ".viewContent .row .dropTarget > hover #menuObjectContext #item-addCollection",
-      "reason": "neither hover nor click opened a submenu"
+      "theme": "light",
+      "how": ".viewContent .row .dropTarget > hover \"Add to Collection\"",
+      "clip": {
+        "x": 1369,
+        "y": 331,
+        "width": 536,
+        "height": 483,
+        "scale": 1
+      }
     }
   ],
+  "misses": [],
   "discovery": [
     {
       "surface": "controls",
@@ -2037,31 +339,6 @@
         {
           "cls": "icon.plusMenu.plus.withBackground",
           "text": "",
-          "visible": true
-        },
-        {
-          "cls": "widget.withSelect.widgetSpace",
-          "text": "",
-          "visible": true
-        },
-        {
-          "cls": "icon.commonMore.more.hasSvg",
-          "text": "",
-          "visible": true
-        },
-        {
-          "cls": "widget.withSelect.isEditable.widgetObject",
-          "text": "Accessibility audit",
-          "visible": true
-        },
-        {
-          "cls": "widget.withSelect.isEditable.widgetObject",
-          "text": "Finance Reports records",
-          "visible": true
-        },
-        {
-          "cls": "widget.withSelect.isEditable.widgetObject",
-          "text": "Bin",
           "visible": true
         }
       ],
