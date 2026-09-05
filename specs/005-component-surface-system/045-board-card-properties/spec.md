@@ -27,9 +27,10 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does the gallery share this mechanism, or get its own? Recorded as a question, not scoped here."
-      - "Does the Properties control also reach the 1:1 reference card's five semantic slots, or only the local extension card?"
-    answered_questions: []
+      - "Does the Properties control reach the reference card's five semantic slots?"
+    answered_questions:
+      - "Gallery does not share the mechanism: retired by specs/007 (ADR-001)"
+      - "Hiding a card field does not hide it in the table: cards only (ADR-002)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
 # Feature Specification: Board Card Properties
@@ -284,15 +285,25 @@ the board.
 
 ## 10. OPEN QUESTIONS
 
-- Does the gallery card share this mechanism? Its renderer has the same shape
+**Two of the three below were answered by the operator on 2026-09-05 and are recorded in
+`decision-record.md`. They are kept here, struck through, because a question that vanishes reads as
+one that was never asked.**
+
+- ~~Does the gallery card share this mechanism? Its renderer has the same shape
   (`gallery-renderer.ts:361` builds a `db-gallery-meta` grid from the same visible columns), so it
-  probably can. Recorded, not scoped — the operator asked for the board.
+  probably can. Recorded, not scoped — the operator asked for the board.~~ **Answered 2026-09-05,
+  ADR-001: no.** The operator's words on the gallery were *"should have been deprecated"*, and the
+  instruction is to retire it completely, the same way the list view is being retired in
+  `specs/006-list-view-deprecation`. The retirement is `specs/007-gallery-view-deprecation`;
+  `045` stays board-only.
 - Does the Properties control also reach the reference card's five semantic slots (`time`,
   `progress`, `due`, `tags`, `people`), or only the local extension card? REQ-007 says the reference
   path must not diverge; whether a *mapping* control over those five slots is a divergence is a
-  judgment the operator should make.
-- Should hiding a field on cards also offer to hide it in the table, as a convenience? Cheap, and it
-  reintroduces exactly the coupling this phase removes. Left open deliberately.
+  judgment the operator should make. **Still open.**
+- ~~Should hiding a field on cards also offer to hide it in the table, as a convenience? Cheap, and it
+  reintroduces exactly the coupling this phase removes. Left open deliberately.~~ **Answered
+  2026-09-05, ADR-002: no, cards only.** The panel writes `boardCardFields` and never
+  `hiddenColumns`, which is what already ships and what AC-001's test already asserts.
 <!-- /ANCHOR:questions -->
 
 ---

@@ -31,7 +31,7 @@ _memory:
     completion_pct: 96
     open_questions:
       - "Does the gallery share this mechanism, or get its own?"
-      - "Does the Properties control also reach the reference card's five semantic slots, or only the local extension card?"
+      - "Does the Properties control reach the reference card's five semantic slots?"
       - "Should hiding a field on cards also offer to hide it in the table?"
     answered_questions: []
 ---

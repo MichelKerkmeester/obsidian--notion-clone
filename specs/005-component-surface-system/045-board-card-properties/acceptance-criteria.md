@@ -13,7 +13,7 @@ _memory:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
     last_updated_at: "2026-09-05T05:20:00Z"
     last_updated_by: "code-grammar-registration-pass"
-    recent_action: "Registered board-card-properties in sheet-grammar.mjs (7/7); closed AC-005"
+    recent_action: "Recorded the operator's two answers as ADR-001 and ADR-002 in decision-record.md"
     next_safe_action: "AC-006 is the only remaining open row; only the operator closes it"
     blockers:
       - "AC-006 is operator-only"
@@ -27,7 +27,8 @@ _memory:
       parent_session_id: null
     completion_pct: 83
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "Gallery does not share it (ADR-001); hiding a card field is cards only (ADR-002)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Board Card Properties
@@ -37,6 +38,12 @@ _memory:
 > This document decides whether the packet may close. A packet is closeable when
 > every row below is `Met`, `Waived` or `Superseded`. A `Waived` or `Superseded`
 > row MUST name an ADR that exists in `decision-record.md`.
+
+> **2026-09-05, the two open operator questions were answered and no criterion moved.** ADR-001
+> (the gallery does not share the mechanism; it is retired by `specs/007-gallery-view-deprecation`)
+> and ADR-002 (hiding a card field does not hide it in the table — cards only) are now recorded in
+> `decision-record.md`. Both confirm shipped behaviour rather than waiving a criterion, so every
+> Waiver cell stays `-`. AC-006 is unchanged, `Unmet`, and operator-only.
 
 ---
 
@@ -112,4 +119,12 @@ carries a registered, all-green `board-card-properties` row (measured 5/7 at `7b
 `npm run gate` 25/25) rather than the photograph-plus-code-identity evidence it stood on before. AC-006
 is operator-only and untouched — the packet's only remaining open row. Not closeable until the
 operator reports arranging a board card's properties on a released build as close to Notion's.
+
+**2026-09-05 true-up.** The two design questions the packet carried open are now decided (ADR-001,
+ADR-002) and neither moved a row: ADR-002 confirms the behaviour AC-001's test already asserts, and
+ADR-001 hands the gallery to a different packet entirely. AC-006 is still the single thing between
+this packet and closure, and it is deferred rather than confirmed — the operator's 2026-09-05 device
+check of 0.0.22 could not exercise sheets at all (*"pressing any action in a sheet doesn't work and
+instantly closes it"*), which is `031`'s open class, so the Properties sheet could not be reached to
+be judged. Recorded on `../roadmap.md` §4 as a deferral, not as a pass.
 <!-- /ANCHOR:closure -->

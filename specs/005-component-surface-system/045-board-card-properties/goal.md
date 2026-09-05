@@ -26,9 +26,10 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does the gallery share the mechanism, or get its own"
       - "Does the control reach the reference card's five semantic slots"
-    answered_questions: []
+    answered_questions:
+      - "Gallery does not share it: it is retired by specs/007 (ADR-001)"
+      - "Hiding a card field does not hide it in the table: cards only (ADR-002)"
 ---
 # Goal: Board Card Properties
 
@@ -109,5 +110,6 @@ into the objective, and it is expected to grow.
 |------|------|
 | The ask reads as a feature and is mostly a decoupling | The operator asked for a Properties control. Building it on today's field selection would give a control that edits the table. The decoupling is the work; the control is the visible part of it. |
 | Four overlapping visibility concepts already exist | `hiddenColumns`, `columnOrder`, `showEmptyFields` and the renderer's own type exclusions. Adding a fifth without removing the board's use of the first two is how this stays confusing, which is why D1 pairs the addition with the removal. |
-| `030` retired the gallery | So "gallery cards may share the mechanism" is a question about surviving renderers, and it is recorded as one rather than acted on. |
+| `030` retired the gallery | So "gallery cards may share the mechanism" is a question about surviving renderers, and it is recorded as one rather than acted on. **Closed 2026-09-05 by ADR-001**: the operator said the gallery *"should have been deprecated"* and asked for it to be retired completely, so there is no surviving renderer to share with. `specs/007-gallery-view-deprecation` carries the retirement. |
+| Both of the packet's open operator questions were answered on 2026-09-05 | ADR-001 (gallery: no, it is retired) and ADR-002 (hide-in-table: no, cards only) are recorded in `decision-record.md`, which this packet did not previously have. Neither changes shipped code. AC-006 is untouched and stays the only open row. |
 <!-- /ANCHOR:log -->
