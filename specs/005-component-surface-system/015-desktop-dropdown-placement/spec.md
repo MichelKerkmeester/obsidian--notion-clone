@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-30T21:15:00Z"
-    last_updated_by: "criteria-adjudication"
-    recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"
-    next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
+    last_updated_at: "2026-09-05T09:30:00Z"
+    last_updated_by: "desktop-chrome-bugs"
+    recent_action: "Two desktop chrome defects fixed: split-button tone/radius/height and condition-row floors"
+    next_safe_action: "Operator opens the desktop toolbar and a filter popover and says whether both read correctly"
     blockers:
       - "Calendar/timeline search panel: 240-292px under the sidebar, declared red (plan.md 7)"
       - "Third copy of the anchor idiom in embedded-database-renderer.ts, same file lock"
@@ -33,7 +33,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
-    completion_pct: 88
+    completion_pct: 82
     open_questions:
       - "Anchorless open: entry guard returns and the panel renders unplaced, binds 34 call sites"
       - "getPlacementOptions drops align, gap and preferredSide into dead code (plan.md 7)"

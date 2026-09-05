@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Transcription blocker dropped; the arithmetic is exported and called"
-    next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
+    last_updated_at: "2026-09-05T09:30:00Z"
+    last_updated_by: "desktop-chrome-bugs"
+    recent_action: "Two desktop chrome defects fixed: split-button tone/radius/height and condition-row floors"
+    next_safe_action: "Operator opens the desktop toolbar and a filter popover and says whether both read correctly"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 88
+    completion_pct: 82
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
       - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"
@@ -323,6 +323,60 @@ fails on this harness when the repair is removed. Those three can fail for the r
       (`column-menu.ts`'s anchorless submenu fallback among them) is still copied into both
       harnesses for the same reason this was. It fails for one reason and would be retired by the
       same move. It is not folded into this criterion, which is about the search-results clamp.
+- [x] The New split button reads as one member of the toolbar row: its two halves agree in height,
+      it matches the icon buttons' height and outer radius, and it paints no fill at rest.
+
+      Reopened 2026-09-05 by the operator's desktop report, the program's traceability row 47 — *"on
+      desktop that plus dropdown button is broken, looking weird"* — against a phase that had been
+      Shipped + verified. The subject is
+      chrome on a dropdown surface this phase owns rather than the placement it was scoped for, and
+      it is recorded here rather than in a new packet for that reason.
+
+      **Mechanism, read out of the host stylesheet rather than guessed:** the halves sized from two
+      different authorities. `.db-new-button-primary` takes `height: 28px` from the shared
+      toolbar-button rule; `.db-new-button-dropdown` declared no height, and Obsidian's own
+      `app.css` (1.13.4, extracted from the installed `obsidian.asar` this session) states
+      `button { height: var(--input-height) }`. Under the group's `align-items: stretch` the half
+      with no height takes the host's while the pinned half stays at 28px and top-aligns inside it.
+
+      Measured before, on the shipped renderer with the host's declaration applied: group 30px,
+      primary 28px, dropdown 30px, icon buttons 28px. After the dropdown half states its own 28px:
+      28/28/28. Rest fill `rgb(107, 116, 224)` → `rgba(0, 0, 0, 0)`; outer radius 6px → 8px,
+      matching the icon buttons.
+
+      **Watched red first**, in `unstyled-links.mjs`'s constructed pass: 33 chrome-geometry
+      findings, exit 1, naming the radius and both halves' resting fill. The failing values were a
+      6px outer radius against 8px, and `rgb(107, 116, 224)` on both halves at rest. 0 findings,
+      exit 0, after.
+      **The height half of that red is not in-repo and the lane says so in its own PASS lines:**
+      `theme.css` states no height for a bare button, so the harness measures the pill against a
+      shorter host than the app supplies. Adding that stand-in was tried and reverted — it moved 480
+      of 546 captures for reasons unrelated to either bug.
+
+- [x] A desktop filter or sort condition keeps its property name, its operator and its value
+      readable, and the panel is wide enough to hold all three without overflowing.
+
+      Reopened by the same desktop pass, the program's traceability row 50 — *"dropdowns have bad
+      styling and truncate input content too much"*. Measured before, on the shipped `FilterPanelRenderer` in a 360px panel: property 82px,
+      operator 110px, value 16-40px. The panel width is written inline by `positionToolbarPopover`,
+      so no stylesheet rule could reach it; `PANEL_POPOVER`'s 360px cap is the producer.
+
+      After: property 140px, operator 140px, value 120-140px in a 552px panel, zero row overflow, at
+      every nesting depth the panel builds. Both numbers are floors rather than fixed widths, so a
+      shorter name still sizes to its content.
+
+      **Watched red first** in the same pass. The failing values were 82px, 110px and 17px, and the
+      check is deliberately two-sided: the floors are `min-width`, so on their own they can only
+      ever be satisfied — a panel too narrow simply overflows instead. The overflow measurement is
+      what makes the pair say something, and it went red at an 8px overrun inside a NOT node at an
+      intermediate width.
+
+- [ ] The operator opens the desktop toolbar and a filter popover and says both read correctly.
+
+      Operator-confirmed is the only state that closes this, per D3. The two rows above are measured
+      on the shipped renderers in a headless browser; neither is the operator's own screen, and one
+      of them cannot be measured in-repo at all.
+
 - [ ] The operator opens any desktop dropdown and it is where they expected it.
 
       Operator-confirmed is the only state that closes this, per D3. No harness can answer it, and
@@ -402,6 +456,7 @@ anchor, destroy the anchor, let the loop tick. Only the loop can observe it.
 | Four captures | Owed | `chrome-selection-status-bar` names `embedded-database-renderer.ts` as a source |
 | Inventory closure assertion | Built | 16 coordinate writes across 7 files, all classified |
 | Recapture | Declined with reasons, not deferred | 276 captures were already stale at HEAD |
+| Two desktop chrome defects, 2026-09-05 | Shipped, verified in-repo | Split button and condition-row floors; 33 findings red, 0 green; 43 captures moved and reviewed |
 
 ### Deviations and findings
 
@@ -413,5 +468,11 @@ anchor, destroy the anchor, let the loop tick. Only the loop can observe it.
 | The clamp repair is phone-visible too, and was measured | `getVisiblePopoverBounds` subtracts the mobile navbar and safe-area inset from `bottom`, and nothing gates this panel to desktop — `isDesktopOnly` is false and the render path has no `is-phone` branch. On a 390×844 phone with a 72px navbar and a 34px inset, `bounds` ends at 738 rather than 844, so the vertical cap moves **up 76px** — but only when the anchor sits low enough to bind: with `anchor.bottom=728` the top goes 734 → 658, while a high anchor at `bottom=128` is unchanged at 134. Width and left are identical on a phone, since there are no sidebars and `bounds.left + 8` is the old literal `8`. The direction is right — it stops the panel being placed under the navbar — but it is a phone-visible change out of a desktop phase, and no phone check covers it |
 | The line numbers this folder recorded were stale in three places | `database-view.ts:6890` and `embedded-database-renderer.ts:1305` named the **callers**, not the method, and were ~60 lines out; the method is at `:6953` and `:1323`. `filter-panel-renderer.ts:532` named nothing — the draft commit that destroys the trigger is `commitDraftValue` at `:624`, refreshing at `:637`. All three corrected. `owned-menu.ts:168` and `popover-position.ts:182`/`:200`/`:491` were checked and are right |
 | ~~`column-menu.ts:616` passes the panel and gets the whole viewport~~ **Fixed at the source** | The finding was right and is kept: `getVisiblePopoverBounds` intersected the container's own rect, so a body-portalled fixed panel that had not laid out tripped the degenerate guard and got `[0..1440]` — the very bound the repair was removing, measured at `bounds(sub)=[0..1440]` for a 292px five-row submenu. **Resolved 2026-09-02, verified by reading `src/`:** an empty rect is ignored rather than intersected (`popover-position.ts:640-642`), the call site still passes `panel` (`:616`), and the two-argument agreement check that found it was watched red at `(panel).right=1440` before it went green at 1140 |
+| The reported focus ring is not a defect, and was not changed | The operator's split-button report also named a persistent focus ring on the More-tools button. Every ring in the stylesheet is already `:focus-visible`-only. A probe on the shipped toolbar shows a mouse click leaves `:focus-visible` false with `box-shadow: none`; pressing Escape to close the menu flips it true and the ring appears. That is the browser's own keyboard-focus contract, and taking it away would take the ring from keyboard users. Reported back rather than absorbed |
+| The panel width exceeds the declared `panel` role | `design-system.md` §5 declares the role at 292-360px. The operator's instruction named 440-520px as typical and required a value box never under ~120px; 552px is what those floors actually need once the row's three trailing buttons and its own padding are counted. The instruction outranks the doc, so the code follows it and the doc is now a defect for the operator to rule on |
+| `PANEL_POPOVER` has a third caller the report did not name | Filter, Sort **and Column Manager** share the preset, so the Column Manager widened with them. Kept deliberately: the preset exists because three panels beside each other used to arrive at three widths, and giving the two reported ones their own would restore exactly that. Its captures were read |
+| A first version of the row floors regressed a surface nobody reported | `.db-active-rule-popover` carries `db-filter-panel` for its chrome while being a 292px wrapping column, so a 140px property floor put each of its three controls on its own line. Caught by reading the capture rather than by the lane, which had inherited the same over-broad selector; both now exclude it |
+| A stale committed capture was found while reviewing, and is not this change's | `constructed-toolbar-add-view` shows the Copy-settings checkbox left of its caption at HEAD. A capture taken from HEAD's own `styles.css` this session puts it right of the caption, which is what `.db-add-view-duplicate`'s `justify-content: space-between` has declared for some time. The committed image predates the rule; the freshness gate could not see it because the rule's own file hash had already been recorded |
+| The harness does not stand in for the host's `button` height | `app.css` states `button { height: var(--input-height) }` and `theme.css` states nothing, so every capture of a bare button is shorter here than in the app. Adding it moves 480 of 546 captures, which is a pass of its own rather than a rider on a two-bug fix. Recorded, not fixed |
 | ~~Both harnesses transcribe rather than call~~ **Retired by lifting the arithmetic** | The finding is the reason the lift happened and is kept: reverting the *transcription* turned the run to exit 1 while reverting the *source* left it at exit 0, so a source-only regression was invisible to the gate. **Resolved 2026-09-02:** `verify-placement.mjs:110` imports `calendarSearchResultsPlacement` and `anchorlessSubmenuPlacement` from `src/views/popover-position` and calls them, and the formula pair is exported from `formula-modal.ts` and called by the modal itself. Deleting a clamp from a shipped function now turns its unit tests red, which is the observation the withdrawal said did not exist |
 <!-- /ANCHOR:log -->

@@ -9,10 +9,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-30T09:45:00Z"
+    last_updated_at: "2026-09-05T09:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"
-    next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
+    recent_action: "Two desktop chrome defects fixed: split-button tone/radius/height and condition-row floors"
+    next_safe_action: "Operator opens the desktop toolbar and a filter popover and says whether both read correctly"
     blockers:
       - "database-view.ts and embedded-database-renderer.ts held by another session all phase"
     key_files:
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
-    completion_pct: 88
+    completion_pct: 82
     open_questions: []
     answered_questions: []
 ---
@@ -43,7 +43,7 @@ _memory:
 | **Spec Folder** | 015-desktop-dropdown-placement |
 | **Shipped** | 2026-08-30 |
 | **Level** | 1 |
-| **State** | All six defects fixed and verified. The search clamp is lifted into one exported function both renderers call, so a source regression now reddens both harnesses, and the phone arm of the dead-anchor pair exists. Not operator-confirmed |
+| **State** | All six placement defects fixed and verified. The search clamp is lifted into one exported function both renderers call, so a source regression now reddens both harnesses, and the phone arm of the dead-anchor pair exists. **Reopened 2026-09-05 by two desktop chrome reports on the same surfaces — the New split button and the anchored filter popover — both fixed and verified in-repo, shipped in 0.0.24 pending.** Not operator-confirmed |
 
 <!-- /ANCHOR:metadata -->
 
@@ -136,6 +136,11 @@ phase started and passed to another phase during it.
 | Placement probe | 23/29 at first run to **30/31**, one declared red, exit 0 |
 | Inventory closure | **16 writes across 7 files, all classified, baseline holds, exit 0** |
 | Calendar/timeline search results | **DECLARED RED.** Right edge 1380 against a 1140 bound — 240px under the sidebar, growing to 292px as the anchor moves |
+| **2026-09-05 chrome pass — split button** | **PASS.** Rest fill `rgb(107, 116, 224)` → `rgba(0, 0, 0, 0)`; outer radius 6px → 8px, matching the icon buttons; halves 28/28 against 28px icon buttons. Under the host's own `button { height: var(--input-height) }`, applied in a probe, the halves measured 28 and 30 inside a 30px group before the fix and 28/28/28 after |
+| **2026-09-05 chrome pass — condition rows** | **PASS.** Property 82px → 140px, operator 110px → 140px, value 16-40px → 120-140px, panel 360px → 552px, row overflow 0px at every nesting depth the panel builds |
+| Chrome-geometry lane | **33 findings, exit 1** before; **0 findings, exit 0** after. `tools/live/chrome-geometry-measure.mjs`, judged by a pure function with 15 unit cases, running in `unstyled-links.mjs`'s constructed pass |
+| Gate, 2026-09-05 | `npm run gate` **25/25 green, exit 0**; `npx tsc --noEmit` **exit 0**; `npm test` **1158 passed across 109 files, exit 0**; `npm run screenshots:verify` **546 entries current, exit 0** |
+| Captures, 2026-09-05 | 43 moved content, 0 byte-only re-encodes. All 43 pixel-diffed against HEAD and their changed regions located; 15 opened as images, covering every family and both themes for the two reported surfaces |
 
 <!-- /ANCHOR:verification -->
 
@@ -162,6 +167,19 @@ phase started and passed to another phase during it.
    opening a panel with an already-dead anchor, which would bind all 34 call sites; and `showAt`
    passing an undefined containing block, which is a numeric no-op only while body sits at the origin.
 
-5. **Not operator-confirmed.** Every number is a probe measurement on a rendered tree.
+5. **The split button's height defect has no in-repo red, and the lane says so in its own output.**
+   `theme.css` states no height for a bare `button`, while Obsidian's `app.css` states
+   `height: var(--input-height)`. So the harness measures the pill against a shorter host than the
+   app supplies, and the disagreement between the two halves only appears once the host's own
+   declaration is applied. It was reproduced that way in a probe, and by reading `app.css` directly.
+   Adding the stand-in to `theme.css` was tried and reverted: it moved 480 of 546 captures, which is
+   a harness-fidelity pass of its own rather than a rider on a two-bug fix.
+
+6. **The 552px panel exceeds the `panel` role width the design system declares** (292-360px). The
+   operator's instruction named 440-520px as typical and required a value box never under ~120px;
+   552 is what those floors need once the row's three trailing buttons and its own padding are
+   counted. The instruction was followed and the doc is left as the operator's call.
+
+7. **Not operator-confirmed.** Every number is a probe measurement on a rendered tree.
 
 <!-- /ANCHOR:limitations -->
