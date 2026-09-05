@@ -94,7 +94,7 @@ from the parser.
 - [x] T019 `npx tsc --noEmit`, `npx vitest run` and `npm run gate`, each read by exit status
 - [x] T020 `validate.sh --strict` on this packet and on the parent, taking the first `RESULT:` line
 - [ ] T021 [B] Load `catalogue.json` into the Anytype demo space over the captures leg's CDP session
-- [ ] T022 [B] Import the ten CSVs into the AppFlowy demo workspace, in an operator window
+- [ ] T022 Import the ten CSVs into the AppFlowy demo workspace, in an operator window. **Skipped by operator decision, 2026-09-05** (`decision-record.md` ADR-001) — AppFlowy is Flutter with no DOM or accessibility tree, so the import needs real mouse clicks the operator chose not to spend. The ten CSVs stay in `tools/mock-data/csv/` and the import steps stay written down in `screenshots/appflowy/README.md` for a future operator window
 - [ ] T023 [B] Operator opens the upgraded vault on a device and reads the ten databases
 <!-- /ANCHOR:phase-3 -->
 
@@ -103,8 +103,10 @@ from the parser.
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-T001 to T020 are done. T021 to T023 are blocked on something this packet cannot supply: a CDP
-session, an operator window, and a device.
+T001 to T020 are done. T021 and T023 stay blocked on something this packet cannot supply: a CDP
+session and a device. T022 is not blocked — it is skipped by operator decision, 2026-09-05
+(`decision-record.md` ADR-001); the CSVs and import steps are retained for a future operator window
+rather than being pursued now.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -115,6 +117,7 @@ session, an operator window, and a device.
 - `spec.md` §3 for the column mapping and the two decisions.
 - `checklist.md` for the failing number each criterion started from.
 - `acceptance-criteria.md` for the closure gate.
+- `decision-record.md` ADR-001 for why AC-008/T022 is skipped rather than blocked.
 - `tools/mock-data/CODE.md` for the generator's topology.
 <!-- /ANCHOR:cross-refs -->
 
@@ -161,7 +164,7 @@ children, so the **first** `RESULT:` line is the folder's own verdict.
 
 - [x] All ten use cases, not a representative subset.
 - [x] All three outputs, not the vault alone.
-- [x] The two competitor legs named as blocked rather than quietly dropped.
+- [x] The two competitor legs named as blocked or skipped rather than quietly dropped: Anytype (T021) stays blocked on the CDP session, AppFlowy (T022) is skipped by operator decision (`decision-record.md` ADR-001).
 <!-- /ANCHOR:fix-completeness -->
 
 <!-- ANCHOR:security -->
@@ -192,7 +195,8 @@ children, so the **first** `RESULT:` line is the folder's own verdict.
 <!-- ANCHOR:summary -->
 ## Verification Summary
 
-Five of the eight goal criteria are closed on evidence recorded in `checklist.md`. Three stay open
-and none of them is closeable from this session: the Anytype load, the AppFlowy import and the
-operator's own device read.
+Five of the eight goal criteria are closed on evidence recorded in `checklist.md`, and the AppFlowy
+import closes a sixth way — skipped by operator decision, 2026-09-05 (`decision-record.md` ADR-001).
+Two stay open and neither is closeable from this session: the Anytype load and the operator's own
+device read.
 <!-- /ANCHOR:summary -->

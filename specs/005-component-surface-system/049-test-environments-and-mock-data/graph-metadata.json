@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "tools/live/render-assertion-harness.ts",
       "tools/mock-data/catalogue.json",
@@ -59,8 +60,7 @@
       "tools/mock-data/catalogue.test.mjs",
       "tools/mock-data/README.md",
       "specs/005-component-surface-system/roadmap.md",
-      "specs/005-component-surface-system/goal.md",
-      "src/data/column-types.ts"
+      "specs/005-component-surface-system/goal.md"
     ],
     "entities": [
       {
@@ -91,6 +91,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -172,12 +178,6 @@
         "source": "derived"
       },
       {
-        "name": "column-types.ts",
-        "kind": "code",
-        "path": "src/data/column-types.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The vault held one test database",
     "created_at": "2026-09-05T07:27:39Z",
-    "last_save_at": "2026-09-05T08:18:14.651Z",
+    "last_save_at": "2026-09-05T08:49:35.276Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,14 +219,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6d6852851f608d974ac6976419ac86d4096a9ab57eb29c7ef5a40df1508d95ee",
+    "source_fingerprint": "sha256:a9a05ed35b37f71e0c23e792af9eca8cd639f83bf95240b82fadbc612bb2990a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b5b6949adae06c1e20bc8f19147e206e38381fa203332346f5b4cb6c3c372636",
       "plan.md": "e0d880e1cabbf6585f07d7c465a91434bdf72984acc09c7850968ebe19834ac6",
-      "tasks.md": "8b42f86980f4e3580b70d7ce112730a9d94f98f40306626ff20f49d91b175b83",
+      "tasks.md": "381fb9e652ef36a3d65de10c7a59ece6cc190ceb562ffa692a39fe23d6ac85a5",
+      "decision-record.md": "375d1875ae1812f353fc9f09fb226dfa45c95f1f0f2f744631fc379deebc4605",
       "implementation-summary.md": "4ae017cf1161f17421df447999de9167ce76de9e42e3d8667fc558944372cb7f"
     },
     "last_active_child_id": null,

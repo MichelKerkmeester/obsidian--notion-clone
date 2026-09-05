@@ -35,7 +35,7 @@ genuine, populated Board view, but it belongs to the app's shipped starter conte
 built. Its Grid/Calendar counterparts (if the database has alternate views registered) sit behind a
 tab-bar `+` in the canvas, which needed a click, so they were not reached.
 
-## Mock-data catalogue and CSV import — pending an operator window
+## Mock-data catalogue and CSV import — skipped by operator decision 2026-09-05
 
 Later in this capture pass the operator asked for a richer, multi-use-case demo dataset in both
 apps, loaded from a shared `tools/mock-data/catalogue.json` (plus one CSV per use case) that a
@@ -45,12 +45,18 @@ CSV import is entirely click-driven (a toolbar button, a file picker, a column-m
 no DOM to script — AppFlowy is Flutter, rendered to a single GPU-backed canvas, so it has no CDP
 target and no accessibility tree at all (confirmed: the AX tree under its window is one opaque
 `AXGroup`, same as Anytype's before CDP, but AppFlowy has no equivalent remote-debugging escape
-hatch since it isn't Chromium). Once the operator is not actively using the machine, importing the
-catalogue's CSVs is: **Sidebar → the target space → `+` next to the space name → "Import" → CSV →
+hatch since it isn't Chromium). **2026-09-05, ~11:15: the operator decided to skip the AppFlowy
+CSV import outright** — "Skip AppFlowy installed captures" — rather than spend the roughly 10
+minutes of real mouse clicks it would take on their own Mac. See
+`specs/005-component-surface-system/047-competitor-references-and-pm-alignment/decision-record.md`
+ADR-002 and the `049-test-environments-and-mock-data/decision-record.md` ADR-001 mirror. The CSVs
+and the exact steps are **retained rather than discarded**, for whenever a future operator window
+opens: **Sidebar → the target space → `+` next to the space name → "Import" → CSV →
 pick the use-case file → map each catalogue column to a database property (matching its typed
 column, e.g. a `status` column to a Select property, a `due_date` column to a Date property) →
-confirm.** Repeated once per use-case CSV once the catalogue path is known. Nothing was imported in
-this pass; the capture below is the same `To-dos` board already documented, re-confirmed unchanged.
+confirm.** Repeated once per use-case CSV once the catalogue path is known — the ten CSVs live in
+`tools/mock-data/csv/`. Nothing was imported in this pass; the capture below is the same `To-dos`
+board already documented, re-confirmed unchanged.
 
 ## Captures
 

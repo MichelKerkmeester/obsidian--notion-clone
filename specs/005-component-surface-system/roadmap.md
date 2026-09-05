@@ -1148,7 +1148,7 @@ with no specification, and the only reason that is not still true is that its ag
 
 ## 6A. OPERATOR DECISIONS ON RECORD
 
-Four decisions were taken on 2026-08-30, and **twelve more on 2026-09-05** — across three tables
+Four decisions were taken on 2026-08-30, and **thirteen more on 2026-09-05** — across four tables
 further down, not folded into this one. Each closes a question, and each is recorded here
 because a decision that lives only in a conversation gets relitigated by the next agent.
 
@@ -1235,6 +1235,12 @@ is again what Apple does and again a presentation choice, not a repair.
 |---|---|---|
 | **"Debugged, refined, perfected" is the bar for every phone surface, not a one-off note.** Operator, on the 0.0.23 device check: *"it is possible to add property, sort etc. But all should be debugged, refined, perfected."* | A control responding is not the same test as the surface being right. Column width, settings, Add view and board/timeline on the phone all respond to a tap on 0.0.23 and are still named FAILING — see §4's updated rows 37, 38, 40, 41 and 43 — because responding is the floor this standard sits above, not the standard itself | Every phone-surface row in §4 and §4A, present and future; the standard applies past `048-stacked-sheets` to the whole program |
 | **The 5-iteration deep-research cap is overridden for `047`: 20 more iterations, run purely on Anytype.** Operator: *"finds Anytype to have amazing UI/UX"*, wants *"a lot of screenshots"* and *"another 20 iterations deep research UX / Logic extraction run purely on Anytype"* | An explicit, named exception to the default 5-iteration research cap — scoped to one competitor reference and one packet, not a change to the cap itself | `047-competitor-references-and-pm-alignment`; recorded Accepted in its own `decision-record.md` |
+
+### One more, taken 2026-09-05 (~11:15)
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **Skip AppFlowy installed captures; Anytype's demo space is the persistent test environment.** Operator: *"Skip AppFlowy installed captures."* | AppFlowy is Flutter with no DOM or accessibility tree, so its CSV import and remaining view captures need real mouse clicks — about 10 minutes of the operator's Mac, taken away from their concurrent use of it. The operator chose to keep only the official AppFlowy images. Separately, Anytype's demo space stays the persistent test environment (kept across sessions, not deleted and rebuilt) | `047-competitor-references-and-pm-alignment/decision-record.md` ADR-002 and `049-test-environments-and-mock-data/decision-record.md` ADR-001. `047`'s two remaining AppFlowy installed-app rows (AC-001) and `049`'s AppFlowy environment leg (AC-008/T022) both close as skipped by operator decision — not failed, not deferred. The retained CSVs stay in `tools/mock-data/csv/` for a future operator window |
 
 ---
 
