@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The board renders Project Manager's kanban, not Anytype's: `src/views/board-renderer.ts` constructs",
     "created_at": "2026-09-05T20:25:00Z",
-    "last_save_at": "2026-09-05T21:22:14.267Z",
+    "last_save_at": "2026-09-05T23:25:50.005Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,12 +222,12 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e9b7582fdfa8a7a937c93625dd89a6083eef35e4a062e151e928bd97a1dcad84",
+    "source_fingerprint": "sha256:fc0aca13b47899a02241521bc061715e8781736d63db83fef864d91ed22bf801",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ff0c6d3ec3c5eae9d6ae2887c1dc760e9a565fe5111061a5c1679ab1e7435a65",
       "plan.md": "3424b933d260f02c6a5571e2422b5860f28fffbc51825219ec9d609980b5e8dc",
-      "tasks.md": "46b66d5bc46b45d209019797e0a28b8276e954a4c37f56ef2f204ea30529e729",
+      "tasks.md": "391a04e5df509c4500a71748a6297b34c43648122ea115b0beea77ce10da3868",
       "decision-record.md": "fbbdd2b2e85e4eafe8b9e5e05426f2e7f11d05c7c656a0961aea845d3852ed56",
       "implementation-summary.md": "df48391728cbbc905e17d7366941f8995cd80099af6d7d39def961285ebfff6e"
     },

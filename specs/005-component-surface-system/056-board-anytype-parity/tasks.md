@@ -10,24 +10,25 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-05T23:40:00Z"
-    last_updated_by: "design-leaf"
-    recent_action: "landed t001, the kanban capture true-up, with design-trueup.md"
-    next_safe_action: "Run T002, the red-first measurement pass, on the current tree"
+    last_updated_at: "2026-09-06T00:00:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "measured t002s red-first pass into checklist.md at cc5a7ff2"
+    next_safe_action: "Run T003, dispositioning the seven local extensions, against T001s output"
     blockers:
-      - "T004 onward are blocked on T002 and T003"
+      - "T004 onward are blocked on T003"
     key_files:
       - "src/views/board-renderer.ts"
-      - "screenshots/anytype/desktop/sets"
+      - "specs/005-component-surface-system/056-board-anytype-parity/checklist.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-tasks"
       parent_session_id: null
-    completion_pct: 10
+    completion_pct: 18
     open_questions: []
     answered_questions:
       - "T001 requires an image-capable leaf; a text-only leaf records pixel read owed rather than substituting a DOM reading (054 ADR-005)"
       - "T001 landed; no row needed the pixel-read-owed label, every value came off a PNG"
+      - "T002 landed; C3-C5 reconfirmed unchanged at cc5a7ff2 and C6-C9 turned from mechanism to measured figure, none written after a fix"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Board Anytype Parity
@@ -72,7 +73,7 @@ _memory:
       (ADR-004), and `spec.md` section 4's two tables filled with **zero `unknown` cells**. Scale
       established before measuring: desktop is **1x**, not 2x, and iOS is **3x** — both confirmed
       against `050` REQ-003's scrollbar and `051` section 2's frame.
-- [ ] T002 **The red-first measurement pass.** Fill every `Today` cell in `checklist.md` with a
+- [x] T002 **The red-first measurement pass.** Fill every `Today` cell in `checklist.md` with a
       figure read off the current tree, before any code is written. At minimum:
       `grep -o "pm-[a-z-]*" src/views/board-renderer.ts | sort -u | wc -l`;
       `grep -o "pm-kanban[a-z-]*" styles.css | sort -u | wc -l`;
@@ -81,6 +82,18 @@ _memory:
       `grep -o "pm-gantt[a-z-]*" src/views/calendar-timeline-renderer.ts styles.css | sort -u | wc -l`
       as REQ-009's baseline. A `Today` cell written after the fix is a cell nobody can check against
       the tree that produced it. (`checklist.md`)
+      **Done 2026-09-06 on `cc5a7ff2`.** C3, C4 and C5 re-run and unchanged from `3407dab0` (39/23
+      classes, scrollbar rule still absent, `boardExtensions = false` still at line 206). C6-C9 turned
+      from mechanism to figure: C6 — `npx vitest run` on both card-property suites, exit 0, 2 files /
+      19 tests passed; C7 — `node tools/live/sheet-grammar.mjs`, exit 0, every check `PASS`, registry
+      counted at 12 surfaces / 31 stacked pairs; C8 — no per-layout page limit exists anywhere in the
+      board renderer, the one row-count mechanism (`getGroupVisibleCount`) is a single
+      `groupRowLimit` shared by every layout, defaulting to 0 (unlimited); C9 — the specified command
+      reads 119 (62 unique in the `.ts` file, 57 in `styles.css`, filename-prefixed before `sort -u`,
+      not the same tally as `037`'s 60-of-60 class-intersection check), plus the `constructed-timeline`
+      scenario's layout/pixel hashes from `screenshots/manifest.json` as the gantt capture baseline.
+      Every row in `checklist.md` now carries either a measured figure or an explained absence; none
+      was written after a fix.
 - [ ] T003 [P] **Disposition the seven local extensions** against T001's output: swimlanes, covers,
       WIP counts, summaries, batch order, touch menus, group controls
       (`src/views/board-renderer.ts:203-206`). Each gets `retire` or `fold` in `spec.md` section 4's
