@@ -38,7 +38,7 @@
       "plan",
       "tasks"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "important",
     "status": "draft",
     "key_files": [
       "spec.md",
@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "src/views/mobile-bottom-sheet.ts",
       "src/views/database-view.ts",
@@ -59,8 +60,7 @@
       "src/views/toolbar-renderer.ts",
       "src/views/view-config-panel-renderer.ts",
       "src/views/table-record-peek.ts",
-      "src/views/calendar-timeline-renderer.ts",
-      "src/main.ts"
+      "src/views/calendar-timeline-renderer.ts"
     ],
     "entities": [
       {
@@ -91,6 +91,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "main.ts",
-        "kind": "code",
-        "path": "src/main.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three operator reports arrived inside eight minutes on 2026-09-04 and they are one defect seen from",
     "created_at": "2026-09-04T18:46:24Z",
-    "last_save_at": "2026-09-05T02:57:17.433Z",
+    "last_save_at": "2026-09-05T05:36:30.215Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:38d8418351dbf242c0d3196b16a24ccbc1d1955234712962bc77cc56a145c0a1",
+    "source_fingerprint": "sha256:11bb066495c599576010a9df0b94bbf08311eebe408e26ad827d4b8387b06cff",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ed71bcf8935d979b00674f7294f3ae0abf8a77a5d13b09b12ae4aba4b00be253",
+      "spec.md": "8f2b53b90102cdbc045ddde1b509b443186569cd063adb54acdf5993488b27e3",
       "plan.md": "220be2579bff6607d196d9b02b0b4b8426c00cc4e1ac6b1a987ea42efb64cff2",
-      "tasks.md": "1f3c912119632a0531086828c68099e9a0296c4bba8d6ad069bd3d9dfa813a7f",
-      "implementation-summary.md": "1118f038c775f22d9a2c15997d3e7685e5648f74034fb437535ffa91c5bc381b"
+      "tasks.md": "4c98ed89eda39f21689b45b39df02bd5bfc26bc0fcdc04d5685664cd06bf7932",
+      "decision-record.md": "fb9a2aa947740010ced23ea2b94839b270b1ea7abdbe92137ef0cd7f9a47f042",
+      "implementation-summary.md": "8058a10af2862b3c5100d0a187de7a91bc66f694975528b5acf0418f3361ac11"
     },
     "last_active_child_id": null,
     "last_active_at": null

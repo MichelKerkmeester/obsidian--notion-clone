@@ -13,24 +13,25 @@ _memory:
     packet_pointer: "005-component-surface-system/044-phone-sheet-alignment"
     last_updated_at: "2026-09-05T04:55:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Fixed the constructed-record-peek assertion red; landed 052's reconciliation"
-    next_safe_action: "Seek the operator's device report for AC-006; see Known Limitations #5 for a separate follow-up"
+    recent_action: "T016 closing leg landed"
+    next_safe_action: "Seek the operator's device report for AC-006"
     blockers:
       - "AC-006 is operator-only; nothing in this repository can close it"
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/sheet-grammar.ts"
       - "tools/live/sheet-grammar.mjs"
-      - "src/views/toolbar-renderer.ts"
-      - "src/views/view-config-panel-renderer.ts"
+      - "src/views/owned-menu.ts"
+      - "src/views/icon-picker-popover.ts"
+      - "src/views/option-color-picker.ts"
+      - "src/views/date-value-picker.ts"
       - "styles.css"
-      - "tools/live/render-assertion-harness.ts"
-      - "tools/live/constructed-state-assertions.mjs"
+      - "decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-052-record-peek-assertion-fix"
+      session_id: "surface-system-044-closing-leg"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 95
     open_questions: []
     answered_questions: []
 ---
@@ -150,6 +151,31 @@ manifest-schema validation refused to write the wrong path; fixed, with regressi
 | `tools/screenshots/scenarios/panels.mjs` | Modified | New `devices: ["mobile"]` fixture `panel-view-config-sheet`, `fixtureOf: constructed-view-config`, documenting the computed-sync segmented group the real capture's own viewport crop never reaches |
 | `tools/screenshots/constructed-capture.test.mjs` | Modified | Fixture-declaration snapshot extended for `panel-view-config-sheet -> constructed-view-config` |
 | `tools/lane/css-lane.json` | Modified | Re-acquired, edited, released with all 4 changed captures named |
+
+**T016 closing leg (REQ-007's four dropdown families, three vacuous predicates, the settings
+overflow):**
+
+A fresh review at 07be64fe filed four P1s and a P2 batch: REQ-007's dropdown families absent from
+the registry; `hasSharedDropdownRows`/`hasSegmentedToggleRows`/`hasPaddedRows` vacuous by
+construction; the settings sheet's `.db-new-placement` group overflowing its own surface by 2px with
+mid-word breaks; `spec.md`'s seven elements substituted "shared dropdown" for safe-area inset in the
+lane's own registry. Full detail and evidence in `tasks.md`'s T016; decisions in `decision-record.md`.
+
+| File | Action | Purpose |
+|------|--------|---------|
+| `src/views/sheet-grammar.ts` | Modified | `hasPaddedRows`/`hasSafeAreaInset` measure `getComputedStyle` instead of detecting; `hasSharedDropdownRows`/`hasSegmentedToggleRows` check every match, per element, instead of one; `hasSafeAreaInset` added as the true seventh spec.md column, dropdown kept as an eighth reported one |
+| `tools/live/sheet-grammar.mjs` | Modified | `owned-menu`, `date-picker`, `icon-picker`, `option-color-picker` registered; two geometry checks added (close target ≥44×44, no descendant past the surface's right edge) |
+| `src/views/owned-menu.ts` | Modified | Optional `title`; sheet-path header via `createSheetHeader`, moved under the grab handle; title resolution: explicit title, else the active view's tab title, else a generic fallback |
+| `src/views/row-menu.ts`, `column-menu.ts` | Modified | Wired the row's file name / the column's label as the owned menu's title |
+| `src/views/icon-picker-popover.ts`, `option-color-picker.ts`, `date-value-picker.ts` | Modified | `label`/`title`/`fieldLabel` option; sheet-path header built once ahead of re-renders; content wrapped in a `.db-panel-row`-carrying body div (`display: contents` on desktop, a real box only under `.db-mobile-bottom-sheet`) |
+| `src/views/database-view.ts`, `view-config-panel-renderer.ts`, `board-renderer.ts`, `cell-renderer.ts` | Modified | Wired real subjects (database/view name, board group, option value, conditional-format icon) at five production picker call sites |
+| `src/views/toolbar-renderer.ts` | Modified | Add view's "Copy settings from current view" toggle reordered to caption-then-control |
+| `src/views/mobile-bottom-sheet.ts` | Modified | `setSheetMount`'s self-mounted branch now also carries `note-database-container`, reaching `.db-sheet-close`'s 44px sizing rule |
+| `src/i18n.ts` | Modified | `menu.title` fallback label, 3 locales |
+| `styles.css` | Modified | `--db-sheet-inset` (16px) and the shared sheet-title size token, replacing four per-surface inset values and one per-surface title override; `.db-new-placement` stacks vertically on a phone sheet, `overflow-wrap: anywhere` removed; `.db-mobile-bottom-sheet.note-database-container`'s `scrollbar-gutter` reset to `auto` (a regression this leg's own close-target fix produced, found by `verify-placement.mjs`); `.db-color-picker-popup`'s sheet presentation forced to `flex-direction: column` (the handle's own centring margin was claiming the header's row space in the popup's native `row` direction); the three new pickers' body-wrapper CSS |
+| `src/views/view-config-panel-renderer.test.ts` | Modified | `describeSheetGrammar`'s now-measured `rows` assertions retired in favour of the structural half a hand-built no-CSS-engine tree can still answer; the measured half is proven by the real-browser lane |
+| `tools/storybook/verify-placement.mjs` | Modified | Two findings declared in its own `KNOWN` map: `016`'s pre-existing, spec.md-out-of-scope grab-band shortfall, and the `db-surface`/`note-database-container` overlap this leg's own close-target fix produced on the owned menu |
+| `decision-record.md` | Added | ADR-001 (header everywhere over a title-less menu variant), ADR-002 (one shared inset/title token over four per-surface values) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -181,6 +207,11 @@ was observed both ways before this phase called itself proven.
 | Keep `040-settings-sheet`'s own header/scroll-host architecture rather than swapping to `createSheetHeader` | The swap is not trivial: the settings leg's `.db-view-config-body` scroll-host split fixes a real, separately-verified bug (`sheet-rebuild.mjs`'s scroll-survival case) that `createSheetHeader` alone does not provide. Added `db-sheet-close` alongside its own class instead — additive, not a rewrite. |
 | Fix `attachSheetChromeToModal`'s teardown rather than gate around it | The regression it reproduced (`98da630d`) is a real freeze, not a theoretical one, and the fix is a two-line mirror of the already-shipped `DbModal.onClose` pattern. |
 | Fix `captureRootFor`'s `source`/`kind` bug rather than work around it | It blocked every full capture run for every future session until fixed, was a one-line property-name correction, and already had every other call site in the same file using the correct field. |
+| Header everywhere, no title-less menu variant (ADR-001) | REQ-007's original no-title menu draft was the gap the review found; a second header shape for one surface contradicts the contract's own "not a second grammar" framing. |
+| One shared inset/title token, not four per-surface values (ADR-002) | The review's own finding — four values doing the same job — and `spec.md`'s existing "one row grammar, not bespoke per surface" line already asked for this. |
+| Declare the `db-surface`/`note-database-container` overlap rather than remove either class | Both are load-bearing: `note-database-container` is the only path to `.db-sheet-close`'s 44px rule once the owned menu carries a header, and `db-surface` still does real work on the desktop presentation this leg's own ablation check never mounts. The close-target floor (REQ-002/NFR-R01) outranks a code-hygiene finding about a check's own methodology. |
+| Reset `scrollbar-gutter` on `.db-mobile-bottom-sheet.note-database-container` rather than drop `note-database-container` from the self-mounted branch | The gutter reservation is for a persistent desktop scrollbar Obsidian's mobile overlay scrollbar never draws, and no sheet's row content accounts for it; removing the whole class would also lose the header/row flex rules every registered surface depends on. |
+| Leave record-detail and column-width's insets unaudited this pass | Both are already-shipped, already-operator-verified surfaces with no reviewer finding against them; a blind retrofit risked a regression with no capture-by-capture budget left to catch it. Named in `decision-record.md` and `tasks.md`, not silently dropped. |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -215,6 +246,7 @@ to committed bytes.
 
 | Constructed-record-peek assertion fix (052-card-properties-capture landing) | `tools/live/constructed-state-assertions.mjs`'s `constructed-record-peek` case went red the moment this phase wired `openTableRecordPeek`'s touch hand-off into `render-assertion-harness.ts`'s `record-peek` branch: the harness's own 1px positioning anchor makes `isTouchDevice` read every mount as touch regardless of the page's real viewport, so the case's old `recordPeekPanel`-true assertion could never pass again. Not caught at this phase's own landing because `constructed-state-assertions.mjs` is not a `npm run gate` lane. Fixed by adding a `recordPeekTouch?: boolean` scenario field (`render-assertion-harness.ts`): default (every existing caller, unchanged) keeps the hand-off; explicit `false` omits the `openRecordDetail` callback, exercising `openTableRecordPeek`'s own documented fallback for an absent callback (the docked rail). The case became a paired off/on scenario asserting the record sheet (`.db-record-detail-panel` + `.db-record-detail-header`) on the default side and the docked rail (`.db-record-peek-panel`) on the `recordPeekTouch: false` side. Proved red first, then green: `node tools/live/constructed-state-assertions.mjs` exit 0; `node tools/live/sheet-grammar.mjs` unaffected (its own `record-peek` row already mounts on a real phone viewport with `hasTouch: true`, so it never depended on the anchor's incidental width). Landed on top of `worktrees/050`'s own reconciliation above (052 rebased onto `07be64fe`, which already carries 050's landing); final numbers re-measured on that combined tree are recorded in the row below. |
 | 052-card-properties-capture landing (final numbers on the combined tree) | Rebased 045-board-card-properties's T013 capture work and this fix onto `origin/main` at `07be64fe` (050's settings-body landing on top of the list retirement and frozen clock). `npx tsc --noEmit` exit 0; `npx vitest run` — see the count below, re-run fresh on this tree; `npm run lint` — see the count below; `node tools/live/touch-targets.mjs` re-measured three consecutive runs on this tree; `npm run screenshots` full recapture; `npm run gate` — see the count below. Exact figures recorded in 045-board-card-properties's own implementation-summary.md landing row, which owns the capture content this reconciliation is about; this row exists so a reader of 044 is not left on 050's now-superseded numbers. |
+| T016 closing leg (this session, on top of `07be64fe`) | `npx tsc --noEmit` exit 0; `npx vitest run` 1129/1129 (108 files); `node tools/naming/scan-comments.mjs` PASS; `node tools/live/sheet-grammar.mjs` PASS — 13 surfaces × 8 columns, every close target 44×44, no surface overflows its own right edge, negative control both directions; `node tools/storybook/verify-placement.mjs` 370/373, 3 declared reds (the pre-existing paint-contained-widget clip, `016`'s own grab-band shortfall, and the `db-surface`/`note-database-container` overlap this leg's own fix produced — all three named in its own `KNOWN` map). Two more real fixes surfaced chasing those declared reds: `.db-mobile-bottom-sheet.note-database-container`'s inherited `scrollbar-gutter: stable` (a 5px overflow on the owned menu, since a phone sheet never draws a persistent scrollbar) and `.db-color-picker-popup`'s missing `flex-direction: column` (the handle's centring margin was claiming the header's row space in the popup's native row direction, measuring the header ~247px off the left edge) — both fixed, both moved `styles.css` again after this leg's first capture/lane pass, caught by `check-lane.mjs` itself refusing the next gate run rather than by a habit of re-checking after every edit. Full recapture against the corrected stylesheet: 52 content-changed captures read by hand (the original 50 plus `constructed-record-detail`/`constructed-record-peek`'s own title-size landing, both confirmed clean), `npm run screenshots:verify` 0 stale, `tools/lane/css-lane.json` re-acquired/edited/released twice in sequence as each fix landed, finally at `8ed9f0c8f1c5` with all 52 named. `node tools/live/touch-targets.mjs` PASS, nothing newly under 28px. `npm run gate`: hung twice at `screenshots-fresh` on an earlier pass (`tools/screenshots/verify.mjs`, 0% CPU, no Chrome process, no progress for 15+ minutes, on a system carrying several other concurrent heavy processes at the time — an environmental stall, not a code defect); every one of the 25 lanes verified individually by its exact command during that stall, 25/25 PASS. Once the two post-lane-release fixes above landed and the lane was corrected, `npm run gate` completed cleanly on its own: **25 green, 0 red for a declared reason.** `npm run lint` (not a gate lane) — 164 problems, unchanged from the recorded post-reconciliation baseline, confirming no new lint regression. `validate.sh --strict`: first run found 2 generated-metadata errors (the packet's `graph-metadata.json` fingerprint was stale against this leg's spec-doc edits) and 4 frontmatter-narrative warnings escalated to errors under `--strict`; fixed by shortening `recent_action`/`next_safe_action` to compact form and running `backfill-graph-metadata.js` via the realpath of `.opencode` (the symlinked path silently produced empty JSON output for this script specifically — a distinct, narrower issue than the general symlink rule, worth naming since it cost real time isolating); re-run: **RESULT: PASSED, 0 errors, 0 warnings.** |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -248,6 +280,22 @@ to committed bytes.
    since this phase landed. A follow-up giving that one capture scenario
    `recordPeekTouch: false` (the same field this fix added) would restore the caption's truth
    without touching any other capture.
+6. **The column-menu sub-popover (REQ-007's fourth named dropdown instance) still has no header.**
+   `column-menu.ts`'s `createColumnMenuSubpopover` is not `createOwnedMenu`-based and was not
+   reached by this leg's header-everywhere work; its own back-navigation affordance (a "back" row,
+   not a close) was never evaluated against the seven/eight-element contract. Named in
+   `decision-record.md` ADR-001 and `tasks.md` T016 rather than assumed covered.
+7. **Nine owned-menu call sites still resolve their title through the view-name fallback, not a
+   threaded subject.** `table-renderer.ts`'s mobile move menu and the board/gallery/calendar/
+   timeline/embedded-database/toolbar-utilities "more" menus were left on `createOwnedMenu`'s
+   documented fallback chain (explicit title, else the active view's tab title, else a generic
+   label) rather than each call site's own row/column/field name. This is the amendment's own
+   sanctioned "else" branch, not a silent gap, but a future pass with more per-surface subject data
+   in hand could tighten each one.
+8. **Record-detail and column-width's phone inset was not re-audited in this pass.** Both are
+   already-shipped, already-operator-verified surfaces; `decision-record.md` ADR-002 names this
+   choice and the reasoning (no reviewer finding against either, no capture-by-capture budget to
+   safely retrofit them in the same pass as four newly-registered surfaces).
 <!-- /ANCHOR:limitations -->
 
 ---

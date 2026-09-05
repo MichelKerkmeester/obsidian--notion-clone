@@ -12,12 +12,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/044-phone-sheet-alignment"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened phase from operator reports 40, 41 and 43"
-    next_safe_action: "Read the inventory and rank the non-conforming instances (T001)"
+    last_updated_at: "2026-09-05T04:50:00Z"
+    last_updated_by: "code-agent"
+    recent_action: "Amended REQ-007 (header everywhere)"
+    next_safe_action: "Seek the operator's device report for AC-006"
     blockers:
-      - "Inventory 003/sheet-and-dropdown-inventory.md is being written concurrently"
+      - "AC-006 is operator-only; nothing in this repository can close it"
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/database-view.ts"
@@ -192,7 +192,7 @@ instance fails a check in this repository instead of being found by the operator
 |----|-------------|
 | REQ-005 | The Add view sheet uses the shared row grammar: header with a close affordance, grouped rows instead of loose tall inputs, **Title property** as a dropdown row (it is a select rendered as a plain text input today), **Copy settings from current view** as a toggle row, and the view-type list as chromed rows with chevrons rather than a bare icon list. Operator report 43. |
 | REQ-006 | The Add view picker carries no **List view** row. The removal itself belongs to `specs/006-list-view-deprecation/002-hide-and-migrate`; this phase asserts the absence and fails if the row returns. |
-| REQ-007 | Dropdown instances that present as sheets on the phone — owned menus, the column-menu sub-popover, the icon picker, the option colour picker — carry the same seven elements as a sheet does. A dropdown is not a second grammar. |
+| REQ-007 | Dropdown instances that present as sheets on the phone — owned menus, the column-menu sub-popover, the icon picker, the option colour picker — carry the same seven elements as a sheet does. A dropdown is not a second grammar. **Amended 2026-09-05 (operator decision, superseding this row's earlier no-title menu-variant draft):** "header everywhere" — every phone sheet, including the owned context menu, gets a title row with a 44px close, with no title-less variant. The owned menu's title names the row, column or field it was opened for (`row-menu.ts`'s file name, `column-menu.ts`'s `col.label`), falling back to the active view's own tab title, then to a generic label, when no specific subject was threaded to the call site. Closed for owned-menu, the icon picker, the option colour picker and the date picker by this leg; the column-menu sub-popover (this row's fourth named instance) still has no header and remains open — its own back-navigation affordance was never evaluated against this contract. |
 | REQ-008 | A conformance check enumerates every registered phone surface and reports one row per instance per grammar element. It is not evidence until a negative control is observed: remove one element from one conforming surface and the check goes red on that surface alone. |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,

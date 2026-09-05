@@ -75,7 +75,10 @@ produced it.
       172 problems, unchanged from the branch base (stashed this diff, base alone measured 172 too)
 - [x] CHK-011 [P0] No console errors while opening and dismissing every reported sheet —
       `verify-placement.mjs` 402/403 (1 declared red, unrelated); `sheet-teardown.mjs` 12 producers,
-      0 leaking, including the `attachSheetChromeToModal` regression found and fixed this session
+      0 leaking, including the `attachSheetChromeToModal` regression found and fixed this session.
+      T016 closing leg: 370/373 on the current 373-total tree (373 replaces 403 — later main legs
+      removed superseded checks, not a regression here), 3 declared reds, all named in
+      `verify-placement.mjs`'s own `KNOWN` map (decision-record.md ADR-001/002)
 - [x] CHK-012 [P1] The width field's clamp still refuses to rewrite a field being typed into —
       unchanged by this phase's own edits; column-width's `activeElement` guard is `039`'s own T005
 - [x] CHK-013 [P1] Settings restyling touches only our own host wrapper classes, never `Setting`
@@ -94,7 +97,13 @@ produced it.
 - [x] CHK-021 [P0] `npm run gate` exits 0 with `sheet-grammar` registered, read without a pipe —
       `npm run gate; echo $?` → 0, 26/26 green including `sheet-grammar` at landing and again at
       T015 (`settings` registered, 7 surfaces × 7 elements); 25/25 after `worktrees/050` reconciled
-      onto main's list-renderer retirement, which removed the unrelated `list-window` lane
+      onto main's list-renderer retirement, which removed the unrelated `list-window` lane.
+      T016 closing leg: `sheet-grammar` widened to 13 surfaces × 8 columns (the four REQ-007
+      dropdown families registered, `hasSafeAreaInset` restored as the true seventh spec.md column).
+      `npm run gate; echo $?` → 0, **25 green, 0 red for a declared reason** (two more real CSS
+      fixes and a corrected `css-lane.json` landed after an earlier orchestrated run hung at
+      `screenshots-fresh` for environmental reasons — see `implementation-summary.md`'s T016
+      verification row for the full account)
 - [x] CHK-022 [P1] Rotation across the touch boundary re-applies the chrome rather than stranding it
       — unchanged by this phase; `DbModal.applyPresentation()`'s re-apply path carries zero diff
 - [x] CHK-023 [P1] Two sheets opened in sequence — the second does not inherit the first's keyboard
