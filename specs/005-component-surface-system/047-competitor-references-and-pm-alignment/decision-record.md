@@ -1,24 +1,27 @@
 ---
 title: "Decision Record: Competitor References and PM Alignment"
-description: "ADR-001 overrides the deep-research cap for Anytype; ADR-002 skips AppFlowy's remaining installed-app captures and keeps Anytype's demo space persistent; ADR-003 supersedes ADR-002 and removes AppFlowy from the reference set entirely."
+description: "ADR-001 overrides the deep-research cap for Anytype; ADR-002 skips AppFlowy's remaining installed-app captures and keeps Anytype's demo space persistent; ADR-003 supersedes ADR-002 and removes AppFlowy from the reference set entirely; ADR-004 scopes the css lane's review obligation to this repo's own render roots."
 trigger_phrases:
   - "047 decision record"
   - "anytype research override"
   - "deep research iteration cap"
   - "competitor references adr"
   - "appflowy removed decision"
+  - "css lane scope adr"
 importance_tier: "normal"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T12:10:00Z"
+    last_updated_at: "2026-09-05T12:50:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Recorded ADR-003: AppFlowy removed from the reference set entirely, superseding ADR-002"
+    recent_action: "Recorded ADR-004: css lane review scope"
     next_safe_action: "Reconcile 049's mirror decision and the roadmap §6A entry"
     blockers: []
     key_files:
       - "screenshots/anytype/"
+      - "tools/lane/css-lane.json"
+      - "tools/lane/check-lane.mjs"
       - "../049-test-environments-and-mock-data/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -403,5 +406,156 @@ screenshots/appflowy/` to restore the folder, then reopen this ADR and flip `047
 `049`'s AC-008 back to their ADR-001/ADR-002 dispositions with the restored evidence.
 <!-- /ANCHOR:adr-003-impl -->
 <!-- /ANCHOR:adr-003 -->
+
+---
+
+<!-- ANCHOR:adr-004 -->
+## ADR-004: Scope the css lane's review obligation to this repo's own render roots
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-004-context -->
+### Context
+
+`tools/lane/check-lane.mjs` refuses a release that leaves a git-reported, content-changed capture
+under `screenshots/` unnamed in that release's `reviewed` list, on the stated premise that every
+capture in the tree is a render of `styles.css`. That premise held when the lane was written and
+`screenshots/` carried only this repository's own renders (`notion-clone/`, `project-manager/`).
+It stopped holding once this packet's D2 put competitor reference photographs at
+`screenshots/anytype/` — 151 top-level captures taken by `tools/mock-data/anytype/capture.mjs`
+against a live Anytype Electron window over the Chrome DevTools Protocol, plus 6 official marketing
+JPGs — and a `mobile-official/` subfolder of 20 further official images, none of which any script in
+this repository renders. (`screenshots/appflowy/` carried the equivalent official/installed captures
+under the same D2 until ADR-003 above removed it; its presence at the time this fix was written is
+why the mechanism below is a config allowlist rather than a one-off `anytype`-only exclusion.) No
+edit to `styles.css` can move a pixel in an anytype capture, so a lane release naming one in
+`reviewed` records a review nobody could have needed to perform against our own stylesheet, and a
+release that omits one is refused for a reason that does not apply to it.
+
+`tools/screenshots/reference-scenarios.mjs` was read before deciding `screenshots/project-manager/`'s
+status, since its captures also come from vendored, not our own, view code. It renders the vendored
+Project Manager plugin's `KanbanView`/`GanttView` through our own Playwright capture pipeline
+(`tools/screenshots/capture.mjs`), and the reference host page **deliberately excludes our
+`styles.css`** from the rendered page — only the vendored plugin's own stylesheets load, precisely so
+a stray rule of ours cannot contaminate the comparison. Read narrowly, `project-manager` captures are
+therefore no more painted by our stylesheet than an `anytype` photograph is. The distinction this ADR
+draws instead is which pipeline produces the file: `capture.mjs` runs inside this repository, against
+this repository's fixtures (`tools/bench/reference-fixture.ts`) and this repository's own harness
+code, so a change anywhere in that pipeline — not `styles.css` specifically, but the bench data, the
+renderer, or the harness itself — can move those pixels on the next capture run, the same way it can
+for `notion-clone/`. `anytype/` is a photograph of a running third-party application or its own
+marketing site; no script this repository owns ever produces or can alter that file, regardless of
+what changes here.
+
+### Constraints
+
+- The fix changes only what the css lane treats as in its review scope. It does not change
+  `tools/screenshots/capture.mjs`, `manifest-schema.mjs`, or any capture-generation code, and it does
+  not touch `screenshots/anytype/`'s own contents.
+- The mechanism must generalize to a future vendor root without a code change, per the operator's
+  instruction: "any future `screenshots/<vendor>/` that is not our render."
+<!-- /ANCHOR:adr-004-context -->
+
+---
+
+<!-- ANCHOR:adr-004-decision -->
+### Decision
+
+**We chose**: add `inScopeCaptureRoots` — an explicit allowlist of the two roots this repository's
+own capture pipeline renders (`screenshots/notion-clone/`, `screenshots/project-manager/`) — to
+`tools/lane/css-lane.json`, and narrow the checker's changed-capture set to those roots
+(`inScopeCaptures` in `tools/lane/check-lane.mjs`) before the release-review refusal runs. A capture
+outside the allowlist can still exist, be committed, and move freely; the lane simply stops asking a
+release to account for it.
+
+**How it works**: `check-lane.mjs` reads `lane.inScopeCaptureRoots` and filters the
+content-changed set to paths starting with one of those roots before calling `reviewVerdict`. With
+no roots configured the filter is a no-op — narrowing is something the config opts into, never a
+silent default, so a lane file that omits the field keeps today's conservative behavior rather than
+exempting everything. `screenshots/appflowy/`'s removal under ADR-003 already exercised the benefit
+this allowlist is built for: because the mechanism is additive (what's in scope) rather than
+subtractive (what's excluded), deleting that vendor root needed no change here at all.
+<!-- /ANCHOR:adr-004-decision -->
+
+---
+
+<!-- ANCHOR:adr-004-alternatives -->
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **A. Explicit allowlist of in-scope roots in `css-lane.json`** | New vendor roots need no code change to stay excluded; the config states positively what the lane governs | One more field to keep current if a future in-scope root is added | 9/10 |
+| B. Denylist naming `anytype/` explicitly | Smaller diff today | Silently re-admits the bug for the next vendor root added, exactly the failure the operator asked to close for good | 4/10 |
+| C. Hard-code the vendor name as an exclusion inside `check-lane.mjs` | No new config field | Same generalization failure as B, plus buries a scope decision inside code a reviewer of `css-lane.json` would never see | 3/10 |
+
+**Why this one**: the operator asked for an allowlist over a denylist by name, and Option A is the
+only one of the three that stays correct when a new competitor reference root is added later without
+anyone touching this file.
+<!-- /ANCHOR:adr-004-alternatives -->
+
+---
+
+<!-- ANCHOR:adr-004-consequences -->
+### Consequences
+
+**What improves**: a release that moves competitor reference photographs no longer needs to name
+them in `reviewed` to pass, and the lane's own header comment and `inScopeCaptures` doc comment now
+state the real scope rule instead of the "every screenshot fingerprints `styles.css`" claim that
+stopped being true once `047` landed vendor references.
+
+**What it costs**: nothing removed from the lane's protection of `notion-clone/` or
+`project-manager/` — `check-lane.test.mjs` asserts an unreviewed `notion-clone` capture still fails
+the release exactly as before, even alongside an excluded `anytype` capture in the same changed set.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A future in-scope render root is added under `screenshots/` without adding it to `inScopeCaptureRoots` | M | The allowlist lives beside `holder`/`baselineHash` in the one file every lane handover already edits, and the checker logs a count of excluded captures on every run so a large silent exclusion is visible |
+| `project-manager`'s status is revisited later without re-reading `reference-scenarios.mjs` | L | This ADR records the finding — the reference page excludes `styles.css`, but the capture pipeline is ours — so a later reader does not have to re-derive it |
+<!-- /ANCHOR:adr-004-consequences -->
+
+---
+
+<!-- ANCHOR:adr-004-five-checks -->
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | The current lane's last release entry names real `screenshots/anytype/` paths in `reviewed`, confirming the bug already forced an unearned review obligation |
+| 2 | **Beyond Local Maxima?** | PASS | A denylist and a code-level hard-code were both considered and scored lower for failing to generalize |
+| 3 | **Sufficient?** | PASS | `check-lane.test.mjs` proves an anytype capture is excluded, a notion-clone capture stays covered, and the config defaults to today's behavior when absent |
+| 4 | **Fits Goal?** | PASS | Directly closes the friction D2 introduced without touching D2's own decision to place vendor captures under `screenshots/` |
+| 5 | **Open Horizons?** | PASS | A future vendor root or a future in-scope render root are both one config-line changes, not a code change |
+
+**Checks Summary**: 5/5 PASS
+<!-- /ANCHOR:adr-004-five-checks -->
+
+---
+
+<!-- ANCHOR:adr-004-impl -->
+### Implementation
+
+**What changes**: `tools/lane/css-lane.json` gains `inScopeCaptureRoots`; `tools/lane/check-lane.mjs`
+gains `inScopeCaptures` and applies it in `main()` before `reviewVerdict`; `tools/lane/check-lane.test.mjs`
+gains coverage for the allowlist, the config-absent default, and the combined
+anytype-excluded/notion-clone-still-covered case. No production rendering, capture, or manifest code
+changes.
+
+**Verification**: `npx vitest run tools/lane/check-lane.test.mjs` (26/26 passing, including the new
+red-then-green cases), `npm test` (full suite), `npm run gate` (`css-lane` green among the full run).
+
+**How to roll back**: remove `inScopeCaptureRoots` from `css-lane.json`; `inScopeCaptures` returns
+its input unfiltered with no roots configured, restoring today's behavior with no code change.
+<!-- /ANCHOR:adr-004-impl -->
+<!-- /ANCHOR:adr-004 -->
 
 ---
