@@ -861,3 +861,80 @@ describe("board subtask host action contract", () => {
     expect(paths).not.toContain(CHILD_PATH);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 9. DEFAULT BOARD CARD PROPERTIES
+// ───────────────────────────────────────────────────────────────────
+//
+// The default board renders the reference kanban card. These assertions cover
+// which properties that card shows: the reference's own five slots are filled
+// from the configured field list, and every other configured property renders
+// beside them in the panel's order.
+
+describe("default board card properties", () => {
+  const REFERENCE_CONFIG: ViewConfig = { ...CONFIG, boardExtensionsEnabled: undefined };
+
+  function renderReference(config: ViewConfig = REFERENCE_CONFIG): MockElement {
+    const container = new MockElement("div");
+    new BoardRenderer({} as unknown as App, createActions())
+      .render(container as unknown as HTMLElement, config, GROUPS, "status");
+    return container;
+  }
+
+  function todoCard(container: MockElement): MockElement {
+    return container.querySelectorAll<MockElement>(".pm-kanban-card")
+      .find((card) => card.getAttribute("data-note-database-row-path") === TODO_PATH)!;
+  }
+
+  function fieldKeys(card: MockElement): Array<string | null> {
+    return card.querySelectorAll<MockElement>(".db-board-card-meta .db-board-card-field")
+      .map((field) => field.getAttribute("data-note-database-column-key"));
+  }
+
+  it("renders a configured property that fills no reference slot", () => {
+    const card = todoCard(renderReference());
+    expect(fieldKeys(card)).toContain("notes");
+  });
+
+  it("renders configured properties in the stored order", () => {
+    const card = todoCard(renderReference({
+      ...REFERENCE_CONFIG,
+      boardCardFields: [
+        { key: "notes", visible: true },
+        { key: "priority", visible: true },
+      ],
+    } as ViewConfig));
+    expect(fieldKeys(card)).toEqual(["notes", "priority"]);
+  });
+
+  function timeChipLabel(card: MockElement): string | undefined {
+    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
+    return body.querySelector<MockElement>(":scope > .pm-chip")
+      ?.querySelector<MockElement>(".pm-chip-label")?.textContent;
+  }
+
+  it("drops the reference time chip when the stored list hides its column", () => {
+    expect(timeChipLabel(todoCard(renderReference()))).toBe("2h");
+
+    const withoutHours = todoCard(renderReference({
+      ...REFERENCE_CONFIG,
+      boardCardFields: [
+        { key: "hours", visible: false },
+        { key: "tags", visible: true },
+        { key: "people", visible: true },
+        { key: "due", visible: true },
+      ],
+    } as ViewConfig));
+    expect(timeChipLabel(withoutHours)).toBeUndefined();
+    expect(withoutHours.querySelector(".pm-kanban-card-tags")).not.toBeNull();
+  });
+
+  it("still renders the card title with every configured property hidden", () => {
+    const card = todoCard(renderReference({
+      ...REFERENCE_CONFIG,
+      boardCardFields: COLUMNS.map((column) => ({ key: column.key, visible: false })),
+    } as ViewConfig));
+    expect(card.querySelector<MockElement>(".pm-kanban-card-title")?.textContent).toBe("To Do Note");
+    expect(card.querySelectorAll(".db-board-card-meta .db-board-card-field")).toHaveLength(0);
+  });
+});

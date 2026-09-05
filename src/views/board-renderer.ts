@@ -211,6 +211,9 @@ export class BoardRenderer {
   private hydratedDescriptions = new Map<string, string>();
   /** Render arguments replayed once when a lazy description load lands. */
   private referenceRenderArgs?: { container: HTMLElement; config: ViewConfig; groups: BoardGroup[]; groupField: string };
+  /** The view's visible card fields in the order the properties panel shows them,
+   *  resolved once per render and shared by every card. */
+  private referenceCardFields: ColumnDef[] = [];
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
@@ -228,13 +231,13 @@ export class BoardRenderer {
     const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
     groups = groups.filter((group) => !hiddenGroups.has(group.key));
     this.boardExtensions = config.boardExtensionsEnabled === true;
+    this.legacyVisibleColumnKeys = config.boardCardFields === undefined
+      ? new Set(this.actions.getColumns(config).map((col) => col.key))
+      : undefined;
     if (!this.boardExtensions) {
       this.renderReferenceBoard(container, config, groups, groupField);
       return;
     }
-    this.legacyVisibleColumnKeys = config.boardCardFields === undefined
-      ? new Set(this.actions.getColumns(config).map((col) => col.key))
-      : undefined;
     const board = container.createDiv({ cls: "db-board", attr: { role: "grid" } });
     // 缓存当前看板与分组元数据，供拖拽期间实时列命中（方案 A/B）复用。
     this.boardEl = board;
@@ -314,6 +317,14 @@ export class BoardRenderer {
     groupField: string,
   ): void {
     this.referenceRenderArgs = { container, config, groups, groupField };
+    // Resolved once per render, not per card: the card field list is a property of the view.
+    this.referenceCardFields = resolveBoardCardFields(config, getColumnsInOrder(config), {
+      groupField,
+      subgroupField: config.boardSubgroupEnabled !== false && config.boardSubgroupField && config.boardSubgroupField !== groupField
+        ? config.boardSubgroupField
+        : undefined,
+      visibleKeys: this.legacyVisibleColumnKeys,
+    });
     container.addClass("pm-kanban-view");
     const board = container.createDiv({ cls: "pm-kanban-board" });
     const rows: RowData[] = [];
@@ -406,7 +417,7 @@ export class BoardRenderer {
     row: RowData,
     groupField: string,
   ): void {
-    const fields = this.getReferenceCardFields(config);
+    const fields = this.getReferenceCardFields();
     const subtaskNode = this.subtaskRelation?.nodes.get(row.file.path);
 
     const card = cards.createDiv({
@@ -419,7 +430,17 @@ export class BoardRenderer {
       },
     });
     card.draggable = !this.actions.isReadOnly && !this.touchMode;
-    card.addEventListener("click", () => this.actions.openRow(row));
+    // The card, not the row alone: the record surface is placed against the element it was
+    // opened from. Handed nothing to point at, the host falls back to the whole scrolling
+    // container, which has no room above or below itself — so the panel renders as a clipped
+    // sliver at the top of the window instead of beside the card.
+    card.addEventListener("click", (event) => {
+      // A property value can be a link or a checkbox; those act for themselves rather than
+      // opening the record behind them.
+      if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea")) return;
+      if (this.actions.openRecordDetail) this.actions.openRecordDetail(card, row);
+      else this.actions.openRow(row);
+    });
     card.addEventListener("contextmenu", (event) => {
       event.preventDefault();
       this.actions.showRowMenu?.(event, row);
@@ -525,6 +546,8 @@ export class BoardRenderer {
       track.createDiv({ cls: "pm-progress-fill" }).style.width = `${Math.max(0, Math.min(100, progress))}%`;
     }
 
+    this.renderReferenceCardMeta(body, config, row, fields.rest);
+
     const footer = body.createDiv({ cls: "pm-kanban-card-footer" });
 
     // The reference always constructs the avatar stack; an unmapped people
@@ -558,14 +581,41 @@ export class BoardRenderer {
     }
   }
 
-  /** The reference card's fixed field set, mapped to RowData columns by type
-   *  and key convention. First match per slot wins, in schema order. */
-  private getReferenceCardFields(config: ViewConfig): {
+  /** The configured properties the reference card's own five slots did not take, rendered in
+   *  the order the properties panel lists them. Nothing is emitted when there are none, so a
+   *  view whose fields all land in a reference slot keeps the reference card tree exactly. */
+  private renderReferenceCardMeta(body: HTMLElement, config: ViewConfig, row: RowData, columns: ColumnDef[]): void {
+    if (columns.length === 0) return;
+    const entries: HTMLElement[] = [];
+    for (const col of columns) {
+      const value = this.getCellValue(row, col);
+      const displayType = this.getDisplayType(config, col);
+      const empty = this.isEmptyValue(value) && displayType !== "checkbox";
+      if (empty && !this.shouldShowEmptyField(config, col)) continue;
+      const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
+      // Display-only: a click anywhere on this card opens the record, and an editable field
+      // would swallow that click to start an inline edit instead.
+      entries.push(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty, true));
+    }
+    if (entries.length === 0) return;
+    const meta = body.createDiv({ cls: "db-board-card-meta" });
+    for (const entry of entries) meta.appendChild(entry);
+  }
+
+  /** The reference card's five semantic slots, mapped to RowData columns by type and key
+   *  convention. First match per slot wins, in the order the properties panel lists them.
+   *
+   *  The slots are filled from the view's visible fields rather than from every column, so
+   *  hiding a property in the panel empties its slot. Whatever fills no slot is returned in
+   *  `rest` and renders beside them in panel order — the card shows the properties the view
+   *  is configured for, while the five the reference authored keep their reference positions. */
+  private getReferenceCardFields(): {
     time?: ColumnDef;
     progress?: ColumnDef;
     due?: ColumnDef;
     tags?: ColumnDef;
     people?: ColumnDef;
+    rest: ColumnDef[];
   } {
     const fields: {
       time?: ColumnDef;
@@ -573,13 +623,15 @@ export class BoardRenderer {
       due?: ColumnDef;
       tags?: ColumnDef;
       people?: ColumnDef;
-    } = {};
-    for (const col of this.actions.getColumns(config)) {
+      rest: ColumnDef[];
+    } = { rest: [] };
+    for (const col of this.referenceCardFields) {
       if (col.type === "number" && /progress/i.test(col.key) && !fields.progress) fields.progress = col;
       else if (col.type === "number" && !fields.time) fields.time = col;
       else if (col.type === "date" && !fields.due) fields.due = col;
       else if (col.type === "multi-select" && /people|person|assignee|owner/i.test(col.key) && !fields.people) fields.people = col;
       else if (col.type === "multi-select" && (isObsidianTagsKey(col.key) || /tag/i.test(col.key)) && !fields.tags) fields.tags = col;
+      else fields.rest.push(col);
     }
     return fields;
   }
@@ -2124,6 +2176,7 @@ export class BoardRenderer {
     resolvedValue?: unknown,
     resolvedDisplayType?: ColumnDef["type"],
     resolvedEmpty?: boolean,
+    displayOnly?: boolean,
   ): HTMLElement {
     const value = this.getCellValue(row, col);
     const displayType = resolvedDisplayType || this.getDisplayType(config, col);
@@ -2133,7 +2186,7 @@ export class BoardRenderer {
       app: this.app, row, col, config, value: displayValue, displayType, empty,
       fieldClass: "db-board-card-field", valueClass: "db-board-card-value", labelClass: "db-board-card-field-label",
       badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: this.getCardFieldWidth(config, col),
-      wrap: col.wrap, readOnly: this.actions.isReadOnly, applyConditionalFormat: this.actions.applyConditionalFormat,
+      wrap: col.wrap, readOnly: displayOnly || this.actions.isReadOnly, applyConditionalFormat: this.actions.applyConditionalFormat,
       onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
       onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
       onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),

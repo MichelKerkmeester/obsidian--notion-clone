@@ -29,6 +29,7 @@
 
 import { afterEach, describe, expect, it, vi, beforeAll } from "vitest";
 import { BoardGroup, BoardRenderer, BoardRendererActions } from "./board-renderer";
+import { clearRenderedViewRoots } from "./rendered-view-roots";
 import { ColumnDef, RowData, StatusColor, ViewConfig } from "../data/types";
 import { setFrozenRenderNow } from "../data/calendar-date-time";
 import { TFile, setIcon, setTooltip } from "obsidian";
@@ -669,10 +670,13 @@ describe("pm-kanban card tree parity", () => {
     expect(footer?.querySelector<MockElement>(".pm-chip .pm-chip-label")?.textContent).toBeTruthy();
   });
 
-  it("does not let a stored card field list move the reference card's fixed slots", () => {
+  // A card shows the properties the view is configured for, so a stored list empties the slot
+  // of a property it hides. What the list may not do is move a slot: the ones it leaves visible
+  // still render where the reference put them, in the reference's own vocabulary.
+  it("empties a reference slot whose column the stored list hides, and moves none of them", () => {
     const listed = {
       ...CONFIG,
-      boardCardFields: [{ key: "hours", visible: false }, { key: "tags", visible: false }],
+      boardCardFields: [{ key: "hours", visible: false }, { key: "tags", visible: false }, { key: "due", visible: true }],
     } as ViewConfig;
     const renderer = new BoardRenderer({} as unknown as App, createActions());
     const container = new MockElement("div");
@@ -680,8 +684,11 @@ describe("pm-kanban card tree parity", () => {
     const card = container.querySelectorAll<MockElement>(".pm-kanban-card")
       .find((el) => el.getAttribute("data-note-database-row-path") === CHILD_PATH)!;
     const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
-    expect(body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm")?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("2h");
-    expect(body.querySelector<MockElement>(":scope > .pm-kanban-card-tags")).not.toBeNull();
+    expect(body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm")).toBeNull();
+    expect(body.querySelector<MockElement>(":scope > .pm-kanban-card-tags")).toBeNull();
+
+    const footer = body.querySelector<MockElement>(":scope > .pm-kanban-card-footer")!;
+    expect(footer.querySelector<MockElement>(":scope > .pm-chip .pm-chip-label")?.textContent).toBeTruthy();
   });
 
   it("renders the subtask type chip with the reference chip vocabulary", () => {
@@ -961,6 +968,22 @@ describe("pm-kanban interaction parity", () => {
     expect(vi.mocked(actions.openRow).mock.calls[0][0].file.path).toBe(PARENT_PATH);
   });
 
+  it("anchors the record surface to the card that was clicked", () => {
+    const openRecordDetail = vi.fn<(anchorEl: HTMLElement, row: RowData) => void>();
+    const actions = createActions({ openRecordDetail });
+    const { board } = renderBoard(actions);
+    const card = board.querySelectorAll<MockElement>(".pm-kanban-card")[0];
+    card.dispatchEvent({ type: "click", target: card });
+
+    // Without an element to point at, the record surface anchors to the whole scrolling
+    // container: it has no room above or below itself, so the panel renders as a clipped
+    // sliver over the window chrome.
+    expect(openRecordDetail).toHaveBeenCalledTimes(1);
+    expect(openRecordDetail.mock.calls[0][0]).toBe(card as unknown as HTMLElement);
+    expect(openRecordDetail.mock.calls[0][1].file.path).toBe(PARENT_PATH);
+    expect(actions.openRow).not.toHaveBeenCalled();
+  });
+
   it("opens the row menu on contextmenu", () => {
     const showRowMenu = vi.fn();
     const actions = createActions({ showRowMenu });
@@ -1102,5 +1125,24 @@ describe("pm-kanban lazy description hydration", () => {
     expect(description).not.toBeNull();
     expect(description?.textContent).toBe("Body text from the note");
     expect(renderer).toBeTruthy();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 9. VIEW ROOT TEARDOWN
+// ───────────────────────────────────────────────────────────────────
+
+describe("switching away from the default board", () => {
+  it("leaves no board root or board container class behind", () => {
+    const { container } = renderBoard();
+    expect(container.querySelector(".pm-kanban-board")).not.toBeNull();
+    expect(container.hasClass("pm-kanban-view")).toBe(true);
+
+    clearRenderedViewRoots(container as unknown as HTMLElement);
+
+    // Whatever renders next mounts into this container. A surviving root stacks above it,
+    // and a surviving container class keeps the board's flex/overflow layout on it.
+    expect(container.querySelector(".pm-kanban-board")).toBeNull();
+    expect(container.hasClass("pm-kanban-view")).toBe(false);
   });
 });

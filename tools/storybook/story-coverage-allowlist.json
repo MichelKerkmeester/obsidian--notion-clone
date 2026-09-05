@@ -77,6 +77,10 @@
       "reason": "Read mode is Obsidian's MarkdownRenderer, which has no standalone build — the stub declares it out of scope, so a story could only demonstrate the stub, exactly as for inline-markdown-renderer.ts. The half a story could show is covered instead by note-body-region.test.ts, which drives the swap, focus, debounce and flush against a fake DOM, and by the two panel-record-detail-sheet-body-* screenshot scenarios."
     },
     {
+      "path": "rendered-view-roots.ts",
+      "reason": "Its one export removes the previous view's root from a container and takes the board's layout class off it. There is nothing to draw \u2014 a story would have to render a view first just to watch it disappear. The contract is exercised by board-renderer-parity.test.ts, which mounts a real board and asserts the container is clean afterwards."
+    },
+    {
       "path": "sheet-grammar.ts",
       "reason": "Exports structural predicates over an already-mounted sheet element (describeSheetGrammar and the seven SHEET_GRAMMAR_ELEMENTS), not a renderer with its own DOM to preview. A story would have nothing to draw; the contract is exercised by tools/live/sheet-grammar.mjs against the real mounted surfaces instead."
     }

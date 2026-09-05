@@ -186,6 +186,7 @@ import { parseClipboardTable, serializeSelectedCells as serializeClipboardSelect
 import { openBulkEditFieldMenu } from "./bulk-edit-field-menu";
 import { calendarSearchResultsPlacement, getVisiblePopoverBounds, positionToolbarPopover, publishKeyboardInset } from "./popover-position";
 import { closeRecordDetailPanel, getOpenRecordDetailPath, openRecordDetailPanel, refreshRecordDetailPanel } from "./record-detail-panel";
+import { clearRenderedViewRoots } from "./rendered-view-roots";
 import {
   attachTitleOpenAffordance,
   closeTableRecordPeek,
@@ -11710,12 +11711,9 @@ export class DatabaseView extends FileView {
       ? { top: this.containerEl_.scrollTop, left: this.containerEl_.scrollLeft }
       : undefined;
     // Remove only top-level rendered results; panels manage their own contents.
-    // All view types use the same cleanup selector so that render() always
+    // All view types go through the same teardown so that render() always
     // rebuilds elements in a fixed order (summary → chart/table/…).
-    this.containerEl_.querySelectorAll(
-      ":scope > .db-table, :scope > .db-table-wrap, :scope > .db-grouped-table, :scope > .db-board, :scope > .db-gallery, :scope > .db-gallery-grouped, :scope > .db-gallery-total-header, :scope > .db-list, :scope > .db-list-grouped, :scope > .db-list-total-header, :scope > .db-chart, :scope > .db-chart-empty, :scope > .db-chart-number, :scope > .db-calendar, :scope > .db-timeline, :scope > .db-summary, :scope > .db-selection-status-bar, :scope > .db-empty"
-    )
-      .forEach(el => el.remove());
+    clearRenderedViewRoots(this.containerEl_);
     try {
       this.render();
     } finally {
