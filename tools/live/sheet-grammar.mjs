@@ -55,6 +55,14 @@ const REGISTERED_SURFACES = [
   // seven elements measured green against the real `openColumnWidthAdjuster` module entry.
   { name: "column-width", spec: { renderer: "column-width-adjuster", bag: "file-view", captureData: true } },
   { name: "settings", spec: { renderer: "view-config", bag: "file-view", captureData: true } },
+  // The board's own Properties section (`renderBoardCardProperties`), reached through the same
+  // `view-config` sheet body as `settings` but with `viewConfigVariant: "board"` so the board
+  // branch — cover/title fixed rows plus the reorderable field list — mounts instead of the
+  // table branch. Measured 5/7 at `7b976e28` (rows/segmented red on the shared settings-body
+  // markup this section does not own); the settings-body grammar landing carried both the fixed
+  // rows (`asSheet`) and the shared body onto the grammar, so this row now measures the same
+  // shared markup this section always depended on.
+  { name: "board-card-properties", spec: { renderer: "view-config", bag: "file-view", captureData: true, viewConfigVariant: "board" } },
 ];
 
 // The element removed by the negative control: the grab handle, whose loss is exactly the
