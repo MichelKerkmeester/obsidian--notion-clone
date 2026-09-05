@@ -11,13 +11,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/052-dropdown-menu-and-picker-componentization"
-    last_updated_at: "2026-09-05T12:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored the phase from a source census of the menu, dropdown and picker files"
-    next_safe_action: "Execute T001, the Anytype menu-grammar read"
+    last_updated_at: "2026-09-05T16:30:00Z"
+    last_updated_by: "reconcile-trueups"
+    recent_action: "Reconciled D3 and checklist C7 against the T001 true-up"
+    next_safe_action: "Execute T003, the per-surface migration table and the C7 width mapping"
     blockers:
       - "No phases after 051 exist yet in the parent spec's Phase Documentation Map; the parent is not edited here"
-      - "Anytype menu captures are top-level files in screenshots/anytype/, not a menus/ subfolder"
+      - "T001 is done; the design read of record is this packet's design-trueup.md"
     key_files:
       - "src/views/owned-menu.ts"
       - "src/views/dropdown-field.ts"
@@ -66,7 +66,7 @@ their own header/grid/search wiring.
 |----|----------|
 | D1 | **One menu primitive, one picker family.** The menu primitive is the composition of `owned-menu.ts` + `menu-row.ts` extended once (real submenus, sections it already has); the picker family is `dropdown-field.ts` (select/multi-select), `date-value-picker.ts`, `option-color-picker.ts`, `icon-picker-popover.ts` and the relation editor in `cell-renderer.ts` reduced to shared hosts. A surface that needs something the primitive cannot express gets the primitive extended once — never a fifteenth row vocabulary. |
 | D2 | **Red first, per surface.** Every migration row in `componentization-plan.md` names a threshold and the red value observed on today's tree before its leg runs (parent D2). |
-| D3 | **Anytype's menu grammar is a design source, read from the captures — and `050`'s `design-trueup.md` is the read of record.** Where a capture and `047`'s research disagree, the capture is the fact and the research is a source reading (`050` ADR-003, Accepted 2026-09-05). Where a pattern is adopted, the migration table names the capture file it was designed against; where the captures do not reach a pattern, the design says so and is **code-derived** with the gap named — and absence of a capture is not evidence of absence. Anytype is not a data model — `050`'s D6 applies here unchanged, and so do the two values `050` **refused**: the `#232323` row highlight at 1.14:1, and colour-only active-state signalling. |
+| D3 | **Anytype's menu grammar is a design source, read from the captures — and this packet's own `design-trueup.md` is now the read of record, with `050`'s underneath it.** *(Updated 2026-09-05: T001 is done. It opened the 150 clipped menus under `menus/` and the 59 iOS states and recorded eleven contradictions, two of which correct `050` itself — hover **was** captured, 37 times (C1), and `050` §2's secondary-text ratio is 7.11:1, not 7.95:1 (C10). Where the two reads disagree, this packet's is the later and the one that opened the file.)* Where a capture and `047`'s research disagree, the capture is the fact and the research is a source reading (`050` ADR-003, Accepted 2026-09-05). Where a pattern is adopted, the migration table names the capture file it was designed against; where the captures do not reach a pattern, the design says so and is **code-derived** with the gap named — and absence of a capture is not evidence of absence. Anytype is not a data model — `050`'s D6 applies here unchanged, and so do the two values `050` **refused**: the `#232323` row highlight at 1.14:1, and colour-only active-state signalling. |
 | D4 | **Existing contracts are constraints, not deliverables.** `044`'s sheet grammar (header everywhere, 44px close, 16px row inset, 16px title), `048`'s stacking model and its 31 registered pairs, `001`'s role vocabulary and the design-system's 292px menu width and named-role sizing are consumed unchanged. This phase may not regress any of them. |
 | D5 | **Kept ours, per the operator's ruling.** The table view's surface, formulas/rollups/calculations and the Project Manager 1:1 board and gantt are out of adoption scope. `038`/`037`'s `screenshots/project-manager/` reference parity is not moved by a menu change without a recapture and a read. |
 | D6 | **One leg touches one file group.** The implementation order groups migrations by the file they land in, so `toolbar-renderer.ts` is opened once, not once per surface. |
