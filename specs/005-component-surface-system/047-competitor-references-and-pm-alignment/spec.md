@@ -84,6 +84,12 @@ something to compare against.
 
 **Changelog**: when this phase closes, refresh the matching file in `../changelog/` using the parent
 packet number plus this phase folder name.
+
+**Capture-leg status, 2026-09-05**: the captures leaf reports **Anytype 0.56.5** and **AppFlowy
+0.14.1** installed via Homebrew (T002). App launch hung for the agent; the operator opened both
+apps by hand, and captures resume from those windows. Separately, the operator's Anytype research
+depth is overridden to 20 additional iterations beyond the default cap — `decision-record.md`
+ADR-001.
 <!-- /ANCHOR:phase-context -->
 
 ---
@@ -296,4 +302,8 @@ of measured gaps rather than an impression.
   divergence on 60 of 60 classes. If the next pass also measures zero, the gap is in what was
   carried rather than in how faithfully it was carried — and that is a scope conversation with the
   operator, not a fidelity fix.
+- **RESOLVED, 2026-09-05: how much research depth does the Anytype reference get?** The operator
+  finds Anytype's UI/UX "amazing" and asked for 20 additional deep-research iterations of
+  UX/logic extraction run purely on Anytype, beyond the default 5-iteration cap — `decision-record.md`
+  ADR-001. AppFlowy and Project Manager keep the default cap and this spec's original scope.
 <!-- /ANCHOR:questions -->

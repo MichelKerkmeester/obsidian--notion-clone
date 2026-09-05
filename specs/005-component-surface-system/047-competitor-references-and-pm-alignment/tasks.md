@@ -34,7 +34,7 @@ contextType: "general"
 ## Phase 1: Setup
 
 - [ ] T001 Record the licence and attribution position for each image source, per product, before anything is downloaded (`scratch/licence-positions.md`)
-- [ ] T002 [B] Get the operator's go-ahead to install the two Homebrew casks — `anytype` 0.56.5 and `appflowy` 0.14.1, neither installed today. Installation is a scoped mutation
+- [ ] T002 [B] Get the operator's go-ahead to install the two Homebrew casks — `anytype` 0.56.5 and `appflowy` 0.14.1, neither installed today. Installation is a scoped mutation. **Status, 2026-09-05: both casks installed via Homebrew. App launch hung for the agent; the operator opened both apps by hand — this task is not ticked until the install and the app session are both confirmed against the running apps**
 - [ ] T003 [P] Read `037/acceptance-criteria.md` AC-007 and `038/tasks.md` T12 so the comparison style is copied rather than reinvented
 - [ ] T004 [P] Record the pre-change baseline: board and gantt capture hashes, `screenshots:verify`'s entry count, and the gate's lane list (`scratch/baseline.md`)
 <!-- /ANCHOR:phase-1 -->
@@ -47,8 +47,8 @@ contextType: "general"
 - [ ] T005 Write the negative control FIRST and observe it red against the current schema: a reference entry grouped `anytype` is rejected today by `manifest-schema.mjs:118` (`tools/screenshots/manifest-schema.test.mjs`)
 - [ ] T006 Widen the reference contract — the group allowlist at `:118` and `REFERENCE_RENDERERS` at `:52` — and decide what `referenceOf` means for a capture with no constructed counterpart (`tools/screenshots/manifest-schema.mjs`)
 - [ ] T007 Give `verify.mjs` a deterministic class for a capture with no in-repo source, distinct from `vendor-unavailable`, which means an unavailable source rather than no source (`tools/screenshots/verify.mjs`)
-- [ ] T008 Capture Anytype: board, table, calendar, timeline — official product images AND the installed app (`screenshots/anytype/`)
-- [ ] T009 [P] Capture AppFlowy: board, table, calendar, timeline — official product images AND the installed app (`screenshots/appflowy/`)
+- [ ] T008 Capture Anytype: board, table, calendar, timeline — official product images AND the installed app (`screenshots/anytype/`). **Research note: the operator's UX/logic extraction pass on Anytype runs 20 iterations beyond the default cap — `decision-record.md` ADR-001. Captures resume from the app window the operator opened by hand**
+- [ ] T009 [P] Capture AppFlowy: board, table, calendar, timeline — official product images AND the installed app (`screenshots/appflowy/`). Captures resume from the app window the operator opened by hand; the default research cap applies
 - [ ] T010 Write the manifest entries with provenance: source, app version, capture date, in `screenshots/project-manager/`'s entry shape (`screenshots/manifest.json`)
 - [ ] T011 [P] Describe both new roots and where their contents came from (`screenshots/README.md`)
 - [ ] T012 Run the board comparison against Project Manager: named elements, measured values, a numbered gap or a zero — the shape `038`'s T12 used (`scratch/board-comparison.md`)

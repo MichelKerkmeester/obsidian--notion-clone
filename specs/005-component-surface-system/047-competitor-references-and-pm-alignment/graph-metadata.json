@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "tools/screenshots/manifest-schema.mjs",
       "screenshots/manifest.json",
@@ -84,6 +85,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -193,17 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Rows 37 and 38 have been open since 2026-09-04 waiting for one thing no in-repo session can do: the",
     "created_at": "2026-09-05T03:47:54Z",
-    "last_save_at": "2026-09-05T04:35:20.118Z",
+    "last_save_at": "2026-09-05T06:27:33.635Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,14 +213,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:928258c44180a4dd3b45ae2b30682757ee3a2c0d3dbb8a78e88803207801fc04",
+    "source_fingerprint": "sha256:230d68165f0653fcd1de0a77d3ff89a0129822642bea5df1f63bad74227fbd16",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "364c2f1ae1803afdd875056ea3a4ad66fbac376b32413de2274747c7f73e473f",
+      "spec.md": "3224862228c108799164d7abbee846f799ddf091b6a8fe994839a37a11071721",
       "plan.md": "09a3e40515d5b94978ae526e8d386ce75199f12a6818e46796c65570a17cf56c",
-      "tasks.md": "a8099a6ed034c99582499c21527a43f476360583d662851d6f62f2a70f1d5fb9",
+      "tasks.md": "889826d3bc96a7aad6d349cd014e859b6515518396d457d835023f4553710df6",
+      "decision-record.md": "26ee68c7926ab32c9eb269e030c8ba3425f49f70c77a72bfb7855e6c30719a49",
       "implementation-summary.md": "7603ff4c994af94e14d3701558d2987b12435b453a535d87583031f06e3de44a"
     },
     "last_active_child_id": null,

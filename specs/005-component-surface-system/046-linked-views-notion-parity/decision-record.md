@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-05T04:20:00Z"
-    last_updated_by: "implementation-verifier"
-    recent_action: "Accepted ADR-002 after the capability seam landed; ADR-001 was accepted before the gates moved"
-    next_safe_action: "Decide whether the write capability ships behind a settings flag (tasks.md T016)"
-    blockers:
-      - "ADR-001's rollback assumes a feature flag that was not built; T016 asks whether one is needed"
+    last_updated_at: "2026-09-05T00:00:00Z"
+    last_updated_by: "markdown-agent"
+    recent_action: "Accepted ADR-003 and ADR-004 for header drag and rollback"
+    next_safe_action: "Implement ADR-004 handle markup and close T016 and Limitations 3-4"
+    blockers: []
     key_files:
       - "src/views/embedded-database-renderer.ts"
     session_dedup:
@@ -293,3 +292,192 @@ construction, so nothing else depends on it having happened.
 <!-- /ANCHOR:adr-002 -->
 
 ---
+
+<!-- ANCHOR:adr-003 -->
+## ADR-003: No feature flag for source writes — a revert is the rollback
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-003-context -->
+### Context
+
+ADR-001's Implementation section named a flag as the rollback path — *"disable its flag first ...
+then revert the gate commit"* — but no flag was built. `checklist.md` CHK-121 asks for one,
+Known Limitation 4 in `implementation-summary.md` names the gap, and `tasks.md` T016 left the
+question open as an operator call rather than an oversight to leave unstated.
+<!-- /ANCHOR:adr-003-context -->
+
+---
+
+<!-- ANCHOR:adr-003-decision -->
+### Decision
+
+**We chose**: no settings flag for the source-write capability. A plugin ships as one bundle with
+no in-flight server edits, so reverting the release to the last flag-free build is the whole
+rollback if the capability needs undoing.
+
+**How it works**: `isViewReadOnly()` keeps deciding write capability from whether the source
+resolves, with no additional toggle in front of it. `T016` closes on this answer.
+<!-- /ANCHOR:adr-003-decision -->
+
+---
+
+<!-- ANCHOR:adr-003-alternatives -->
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **A. No flag — release revert is the rollback** | No extra surface to build, test or forget; matches how the rest of the plugin ships | An in-flight edit at revert time is not rescued by the flag alone either, so the practical difference is small | 7/10 |
+| B. A settings flag gates the capability | Lets an operator disable writes without a full release revert | A second capability seam next to `isViewReadOnly()`, on a codepath ADR-002 just consolidated to one | 5/10 |
+
+**Why this one**: the operator ruled directly rather than asking for the flag build implied by
+ADR-001's original rollback note.
+<!-- /ANCHOR:adr-003-alternatives -->
+
+---
+
+<!-- ANCHOR:adr-003-consequences -->
+### Consequences
+
+**What improves**: `T016` and Known Limitation 4 both close on a stated answer instead of an open
+call; `isViewReadOnly()` stays the single capability seam ADR-002 built.
+
+**What it costs**: undoing the capability now requires a release revert rather than a toggle.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A write bug ships and needs a fast disable | M | Revert to the prior release; no in-flight server state to reconcile |
+<!-- /ANCHOR:adr-003-consequences -->
+
+---
+
+<!-- ANCHOR:adr-003-five-checks -->
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | `T016` and Limitation 4 were open calls blocking the same question |
+| 2 | **Beyond Local Maxima?** | PASS | The flag alternative was named and scored, not omitted |
+| 3 | **Sufficient?** | PASS | Answers the exact question `checklist.md` CHK-121 and `tasks.md` T016 ask |
+| 4 | **Fits Goal?** | PASS | Keeps the capability seam singular, consistent with ADR-002 |
+| 5 | **Open Horizons?** | PASS | A flag can still be added later if a fast-disable need is demonstrated |
+
+**Checks Summary**: 5/5 PASS
+<!-- /ANCHOR:adr-003-five-checks -->
+
+---
+
+<!-- ANCHOR:adr-003-impl -->
+### Implementation
+
+**What changes**: none — this closes an open question rather than changing shipped code.
+
+**How to roll back**: revert the release that shipped the write capability.
+<!-- /ANCHOR:adr-003-impl -->
+<!-- /ANCHOR:adr-003 -->
+
+---
+
+<!-- ANCHOR:adr-004 -->
+## ADR-004: The linked-view header drags only from a dedicated six-dot handle
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-004-context -->
+### Context
+
+Known Limitation 3 in `implementation-summary.md` named the shipped behaviour as a risk: *"Dragging
+a linked view starts anywhere on its header, including over toolbar controls. That reads as a
+plausible affordance and may read as a trap; only a device answers it."*
+<!-- /ANCHOR:adr-004-context -->
+
+---
+
+<!-- ANCHOR:adr-004-decision -->
+### Decision
+
+**We chose**: the linked-view header gets a dedicated six-dot grab handle. Dragging starts only
+from that handle; the rest of the header — including its toolbar controls — does not drag.
+
+**How it works**: the whole-header drag zone Known Limitation 3 flagged is narrowed to the new
+handle element; toolbar controls on the rest of the header stop competing with the drag gesture for
+the same pointer-down.
+<!-- /ANCHOR:adr-004-decision -->
+
+---
+
+<!-- ANCHOR:adr-004-alternatives -->
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **A. Dedicated six-dot handle** | Removes the trap Limitation 3 named; matches the grab-band pattern already used on sheets (`003/spec.md`) | One more element in the header markup | 8/10 |
+| B. Keep whole-header drag | No new markup | The named trap ships as-is: a toolbar tap can be read as a drag start | 3/10 |
+
+**Why this one**: it resolves the exact risk Limitation 3 recorded rather than shipping it
+unanswered pending a device check.
+<!-- /ANCHOR:adr-004-alternatives -->
+
+---
+
+<!-- ANCHOR:adr-004-consequences -->
+### Consequences
+
+**What improves**: Known Limitation 3 closes; toolbar controls on the header are no longer
+contested by the drag gesture.
+
+**What it costs**: a new element to place and style in the header markup.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| The handle is too small or poorly placed to find | M | Size and placement follow the existing sheet grab-band pattern rather than a new one |
+<!-- /ANCHOR:adr-004-consequences -->
+
+---
+
+<!-- ANCHOR:adr-004-five-checks -->
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Limitation 3 named a live trap on shipped behaviour |
+| 2 | **Beyond Local Maxima?** | PASS | Keeping whole-header drag was named and scored, not omitted |
+| 3 | **Sufficient?** | PASS | Directly answers Limitation 3's open risk |
+| 4 | **Fits Goal?** | PASS | Reuses the plugin's existing grab-handle grammar rather than inventing one |
+| 5 | **Open Horizons?** | PASS | The handle can be restyled later without reopening the decision |
+
+**Checks Summary**: 5/5 PASS
+<!-- /ANCHOR:adr-004-five-checks -->
+
+---
+
+<!-- ANCHOR:adr-004-impl -->
+### Implementation
+
+**What changes**: the linked-view header markup and drag-start binding (implementation leg not run
+in this pass — this record states the decision the implementation follows).
+
+**How to roll back**: revert the handle markup and drag-binding commit; the header returns to a
+whole-header drag zone.
+<!-- /ANCHOR:adr-004-impl -->
+<!-- /ANCHOR:adr-004 -->

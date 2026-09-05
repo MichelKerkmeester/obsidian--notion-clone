@@ -1923,4 +1923,54 @@ per subclass. It gates six inventory rows; the dropdown, menu and picker rows do
 `completion_pct` stays **5 of 7 = 71**: rows 1 and 2 are still the operator's, and closing three
 report rows is not a §3 DONE row.
 
+### 2026-09-05 (later): D1 decided, six operator decisions recorded, five desktop reports opened
+
+**`048` D1 is DECIDED.** Obsidian modals opened from a sheet on the phone — Create property,
+confirms, date pickers, suggest modals — become stacked bottom sheets; none stay modals. Recorded
+Accepted in `048/decision-record.md`. The implementation leg runs on **codex, in
+`worktrees/062`** — a separate lane from this recording pass.
+
+**The 07:02 device check of 0.0.23 is read more precisely.** The operator's fuller words: *"it is
+possible to add property, sort etc. But all should be debugged, refined, perfected."* A control
+responding is not the same test as the surface being right: the column-width sheet, the settings
+sheet, the Add view sheet and board/timeline on the phone are named as still FAILING on 0.0.23, not
+merely unexercised — `roadmap.md` §4 rows 37, 38, 40, 41 and 43 now carry that reading, kept
+alongside the prior one rather than overwriting it. All five are re-asked after **0.0.24**, which
+carries `044-phone-sheet-alignment`'s closing leg (`origin/main` `28b505f3`). **"Debugged, refined,
+perfected" is now the standing bar for every phone surface in this program**, recorded in
+`roadmap.md` §6A.
+
+**`046-linked-views-notion-parity`: two implementation facts recorded, not decisions in dispute.**
+There is no feature flag for the source-writing behaviour the linked-view ADR-001 accepted — a
+revert is the rollback if it needs undoing. And the linked-view header gets a dedicated six-dot grab
+handle; the rest of the header does not drag. Checked against `046/decision-record.md` before
+writing — see that document for whether a codex/verifier leg already carried these.
+
+**Five fresh desktop reports, with screenshots, under `scratch/device-2026-09-05/`** (gitignored;
+cited here by filename only): `desktop-toolbar-new-split-button.png` — the operator: *"that plus
+dropdown button is broken, looking weird"*; `desktop-board-card-peek-clipped.png` — clicking a board
+card opens the record peek clipped at the top of the window; `desktop-board-card-properties-not-rendered.png`
+— not all enabled properties show on board cards; `desktop-filter-popover-truncated.png` — the
+operator: *"dropdowns have bad styling and truncate input content too much"*; and
+`desktop-board-persists-over-calendar.png` — the board stays rendered above the calendar after
+switching views. Two debug leaves are fixing these now and will add their own `roadmap.md` §4 rows
+with root causes once found; this pass added placeholder rows only where none existed yet, to avoid
+duplicating a row a concurrent session had already opened.
+
+**`047`: the operator finds Anytype's UI/UX "amazing"** and wants "a lot of screenshots" of it plus
+**another 20 iterations of deep research UX/logic extraction run purely on Anytype** — an explicit,
+named override of the default 5-iteration research cap, scoped to this one competitor reference and
+this one packet. Recorded Accepted in `047-competitor-references-and-pm-alignment/decision-record.md`
+and in `roadmap.md` §6A. The captures leaf reports **Anytype 0.56.5** and **AppFlowy 0.14.1**
+installed via Homebrew; app launch hung for the agent, the operator opened both apps by hand, and
+captures resume from those windows.
+
+**Hub re-mint, closed.** The Public checkout was already fresh; no change was needed, and the
+pre-push override that the staleness would have required is no longer necessary. Closing note added
+to `roadmap.md` §6A next to the original re-mint decision.
+
+**What this entry does not claim.** No product code was written in this pass and no gate was run.
+The parent's `completion_pct` is unchanged by this entry — it records decisions and reports, not
+phase progress — and stays at the value the immediately preceding entry recorded: **5 of 7 = 71**.
+
 <!-- /ANCHOR:log -->
