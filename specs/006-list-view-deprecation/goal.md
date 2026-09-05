@@ -11,9 +11,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-05T02:45:00Z"
+    last_updated_at: "2026-09-05T03:30:00Z"
     last_updated_by: "phase-007-landing"
-    recent_action: "007 landed: renderer and measurement surface removed, gate 24/24 green"
+    recent_action: "007 landed on main after reconciliation, gate 25/25 green"
     next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
     blockers:
       - "One operator report against a released 006 build is still unconfirmed. 007 ran and landed without it (recorded in 007/tasks.md T001), so this is now a gap behind the work rather than a gate in front of it."
@@ -98,9 +98,11 @@ Three to seven bullets, each checkable without opening another file.
       a notice. **Shipped by `006-hide-and-migrate`** — `src/data/list-migration.ts`, run on open in
       both hosts (`database-view.ts`, `embedded-database-renderer.ts`), notice in three locales.
 - [x] `src/views/list-renderer.ts` is gone. **Done 2026-09-05** by `007-remove-renderer-and-harness`
-      (`ba2acf7d`) — was 1,173 lines.
+      (`8665931e` after landing on main; `ba2acf7d` pre-rebase) — was 1,173 lines.
 - [x] The `list-window` gate lane is **removed, not skipped**, and `npm run gate` exits 0 read from
-      `$?`. **Done**: the lane list is 24 names, `list-window` is not one of them, `$?` is `0`.
+      `$?`. **Done**: the lane list was 24 names pre-rebase; after reconciling with main's own
+      `sheet-grammar` addition, the lane list is 25 names, `list-window` is still not one of them,
+      `$?` is `0`.
 - [x] `renderer-coverage.json` carries the new floor with the reason beside the number. **Done**:
       `"constructed": 6, "total": 21, "note": "was 7/22; list renderer retired"`.
 - [x] `033-list-virtualisation` and `024-list-view-freeze` are closed against this decision rather
@@ -128,7 +130,7 @@ into the objective, and it is expected to grow.
 | Four deprecation children opened | Done | `005`-`008` |
 | Usage audit | Done | `005-usage-and-migration-audit/implementation-summary.md` — migration target confirmed, 4 declared losses, measurement surface enumerated, 2 open questions answered with recommended defaults |
 | Hide and migrate | Shipped + verified, operator confirmation open | `006-hide-and-migrate/implementation-summary.md` — list withdrawn from every picker and switcher, migration on open with a locale-complete notice, `npm run gate` 25/25 green; open item is one operator report against a released build |
-| Remove renderer and harness | Landed, one deferral | `007-remove-renderer-and-harness/implementation-summary.md` — `list-renderer.ts` and its whole measurement surface (lane, harness, ratchet pins, fixtures, constructed scenarios, replay claims, unit specs) removed together; `list` stays on `DatabaseViewType`, migrated permanently (ADR-001); `npm run gate` 24/24 green (the lane count dropped from 25 with `list-window` gone). `styles.css`'s now-dead `db-list-*` rules deferred to a follow-up (T010). The parent's own operator-report precondition above was still unconfirmed when this phase ran — recorded as a gap in `007/tasks.md` T001, not treated as cleared. |
+| Remove renderer and harness | Shipped + verified on main | `007-remove-renderer-and-harness/implementation-summary.md` — `list-renderer.ts` and its whole measurement surface (lane, harness, ratchet pins, fixtures, constructed scenarios, replay claims, unit specs) removed together; `list` stays on `DatabaseViewType`, migrated permanently (ADR-001); `npm run gate` was 24/24 green on this phase's own pre-rebase branch (dropped from 25 with `list-window` gone), then reconciled onto main — which had independently landed a `sheet-grammar` lane in the same window — to **25/25 green** (26 with `sheet-grammar` added, minus 1 for `list-window` retired; the total lands back at 25 by coincidence of timing, not because nothing changed — see `roadmap.md` §5 for the lane-count history). `styles.css`'s now-dead `db-list-*` rules deferred to a follow-up (T010). The parent's own operator-report precondition above was still unconfirmed when this phase ran — recorded as a gap in `007/tasks.md` T001, not treated as cleared. |
 
 ### Deviations and findings
 

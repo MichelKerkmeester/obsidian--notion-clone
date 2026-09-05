@@ -52,15 +52,15 @@
       "tools/screenshots/constructed-scenarios.mjs",
       "tools/screenshots/scenarios.mjs",
       "tools/live/replay.mjs",
-      "tools/storybook/verify-placement.mjs",
       "tools/gate.mjs",
+      "tools/lane/css-lane.json",
+      "tools/live/touch-targets-baseline.json",
+      "screenshots/manifest.json",
+      "tools/storybook/verify-placement.mjs",
       "src/views/card-field-renderer.ts",
       "src/views/database-view.ts",
       "src/data/types.ts",
-      "screenshots/manifest.json",
-      "tools/lane/css-lane.json",
-      "screenshots/README.md",
-      "src/views/CODE.md"
+      "screenshots/README.md"
     ],
     "entities": [
       {
@@ -130,15 +130,33 @@
         "source": "derived"
       },
       {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
-        "source": "derived"
-      },
-      {
         "name": "gate.mjs",
         "kind": "file",
         "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-baseline.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -160,27 +178,9 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
         "name": "README.md",
         "kind": "doc",
         "path": "screenshots/README.md",
-        "source": "derived"
-      },
-      {
-        "name": "CODE.md",
-        "kind": "doc",
-        "path": "src/views/CODE.md",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "After `006` nobody can reach the list, but the code and everything that measures it are still there",
     "created_at": "2026-09-04T19:33:27Z",
-    "last_save_at": "2026-09-05T00:44:45.709Z",
+    "last_save_at": "2026-09-05T01:35:47.708Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a35f6b3981d3ddf943e9cf50f5dd6fc904b3053a6a08d15ecd8ef3ea9f07a105",
+    "source_fingerprint": "sha256:eff5f84b694398c0bdf515ddf8b083691e3ec2780f30c8581d2c45e180dbef77",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d654136b4535406719fae80879a3619a5ca0aa75f2006747dc9027e975cf6b3f",
       "plan.md": "07b48f1d6423408edad08ce5f8514c9a3416fbac33b920e8031d72e1c1548e9c",
-      "tasks.md": "a26a81099306c887d7aac668ec29853a5f46e36d026b4d389c87e887d3094667",
-      "implementation-summary.md": "4f149157ab50fd178164a7ce771a34e694d88fe00a85e522fa1eab5a10deec16"
+      "tasks.md": "34b6dd8820e0a0c4bda95d9a500a3b6bc28117cedac95c97eea08a0ee81bf702",
+      "implementation-summary.md": "5edbcd2ac51c554b589d7afd3403b054cdad1fbb66de9058fea30c2386e46f14"
     },
     "last_active_child_id": null,
     "last_active_at": null

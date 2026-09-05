@@ -87,7 +87,7 @@ Each row is checkable without opening another file, and each records what is tru
 so the check has a value to move from.
 
 - [x] `rg -n 'list-renderer' src tools` returns nothing. **Done 2026-09-05**: `src/views/list-renderer.ts` deleted; the search returns nothing live (a `tools/lane/css-lane.json` audit note and `src/views/CODE.md`'s repo-wide "Current state" line are the only remaining hits across the whole tree, both historical/descriptive text, not code).
-- [x] `npm run gate` exits 0 from the final state, read from `$?` rather than through a pipe, with `list-window` **absent from the lane list** rather than present and skipped. **Done**: 24 lanes print, `list-window` is not one of them, `$?` is `0`.
+- [x] `npm run gate` exits 0 from the final state, read from `$?` rather than through a pipe, with `list-window` **absent from the lane list** rather than present and skipped. **Done**: 24 lanes printed on this phase's own pre-reconciliation branch, `list-window` not one of them, `$?` `0`. After landing on main (which had independently added a `sheet-grammar` lane), the reconciled tree prints **25** lanes; `list-window` is still absent and `$?` is still `0` — see `implementation-summary.md`'s reconciliation note.
 - [x] `renderer-coverage.json` carries the new floor with the reason beside the number. **Done**: `"constructed": 6, "total": 21, "note": "was 7/22; list renderer retired"`.
 - [x] The board and gallery cards render identically before and after, measured on captures rather than asserted. **Done**: `tools/lane/check-lane.mjs`'s pixel/layout compare against the pre-removal commit found 0 board/gallery-only captures content-changed; the two multi-view comparisons that include board/gallery content changed only because the list panel left a three-way comparison (read by hand, both themes/devices).
 - [x] The `DatabaseViewType` decision is recorded with its reasoning, and no surface offers what the union forbids while none forbids what a saved file still contains. **Done**: ADR-001 in `plan.md`, Accepted — `list` stays, migrated permanently by `migrateListViewOnOpen`.
@@ -110,7 +110,7 @@ into the objective, and it is expected to grow.
 | Ship dependency | Ran without independent confirmation | `006-hide-and-migrate`'s own `spec.md` reads "Shipped + verified", but the parent `goal.md`'s "one operator report against a released build" line was never checked off before this phase ran — recorded as a gap, not treated as cleared (`tasks.md` T001) |
 | Union decision | Done | ADR-001 in `plan.md`, Accepted — `list` stays, permanent coercion |
 | Renderer, lane, harness, ratchet, fixtures, constructed scenarios, replay claims, unit specs | Done | `implementation-summary.md` |
-| `npm run gate` | 24/24 green | `$?` 0, two pre-existing red lanes (`placement`, `evidence`) found and fixed along the way |
+| `npm run gate` | 24/24 green pre-reconciliation; 25/25 green after landing on main (`sheet-grammar` lane arrived with the merge) | `$?` 0 on both, two pre-existing red lanes (`placement`, `evidence`) found and fixed along the way |
 
 ### Deviations and findings
 

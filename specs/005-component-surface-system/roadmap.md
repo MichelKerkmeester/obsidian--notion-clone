@@ -454,6 +454,16 @@ held by live agents and are marked ⚠ — their state is read-only here and may
 and several bullets under *Next* and *Later* are shipped. Each bullet carries its own status word
 from §3.1; read that, not the heading above it.
 
+**`npm run gate`'s lane count is not a constant — read the number beside the date, not against
+this section's own older "25 green" figures.** The count moved twice outside `005`'s own phases:
+`044-phone-sheet-alignment` (`005`'s child) added a `sheet-grammar` lane, taking the count from 25
+to 26; `006-list-view-deprecation/007-remove-renderer-and-harness` (a sibling packet, not a `005`
+child) then removed the `list-window` lane, taking it from 26 to 25. The bullets below that quote
+"25 green" from before either change and the ones that would quote "26" or "25" after are two
+different baselines that happen to share a number — a coincidence of timing, not evidence that
+nothing changed. See `006-list-view-deprecation/007-remove-renderer-and-harness/implementation-summary.md`'s
+own Reconciliation section for the full per-lane accounting.
+
 **Now:** Six phases held by other agents — four unaudited since this morning's snapshot, two opened
 today.
 

@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation/007-remove-renderer-and-harness"
-    last_updated_at: "2026-09-05T02:45:00Z"
+    last_updated_at: "2026-09-05T03:30:00Z"
     last_updated_by: "phase-007-landing"
-    recent_action: "Landed 007: renderer and measurement surface removed, gate 24/24 green"
+    recent_action: "007 landed on main after reconciliation, gate 25/25 green"
     next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
     blockers: []
     key_files:
@@ -150,9 +150,40 @@ mechanically reproducible defects, not open product questions.
 | `node tools/live/touch-targets.mjs` | PASS both passes; fixture 198/198 (was 279), constructed 1215/1215 (was 1223) |
 | `node tools/live/unstyled-links.mjs` | PASS; constructed 1332 links (was 1476), 0 UA-default findings |
 | `node tools/lane/check-lane.mjs` | "release names all 21 changed capture(s)", exit 0 |
-| `npm run gate` | **24/24 green**, `$?` read directly: `0` |
+| `npm run gate` | **24/24 green** on this phase's own pre-reconciliation branch, `$?` read directly: `0`. After landing on main (which had independently added a `sheet-grammar` lane in the same window), the reconciled tree prints **25/25 green**, `$?` still `0` — see the Reconciliation note below. |
 | ADR-001 (`DatabaseViewType`) | Accepted — `list` stays, migrated permanently |
 <!-- /ANCHOR:verification -->
+
+---
+
+<!-- ANCHOR:reconciliation -->
+## Reconciliation With Main
+
+This phase's two commits (`feat(views): retire the list renderer, its lane and its captures` and
+`docs(specs): record the list renderer retirement`) were rebased onto `origin/main` after main had
+independently landed `044-phone-sheet-alignment`, `045-board-card-properties`, `038-board-kanban-port`
+and the phone sheet grammar feature (`sheet-grammar`, a 25th gate lane). A third commit,
+`chore(views): reconcile the list renderer retirement with main`, resolved what the rebase left:
+
+- `tools/gate.mjs`: kept both sides — `sheet-grammar` (main's addition) and the `list-window`
+  removal (this phase's own change) — so the lane count is 25 (26 with `sheet-grammar` added,
+  minus 1 for `list-window` retired), not the 24 this phase's own docs recorded pre-rebase.
+- `tools/lane/css-lane.json`: this phase's release entry appended after main's own
+  `044`/`045`/`038` acquire/edit/release entries rather than overwriting them.
+- `tools/live/touch-targets-baseline.json` / `touch-targets-constructed-baseline.json`: main's
+  `044-phone-sheet-alignment` had already found the recorded 279/1223 baselines stale (true
+  pre-list values were 199/1220); this phase's own `listRetirementLowering` note was corrected to
+  measure from that true basis (199→198, 1220→1215).
+- `screenshots/manifest.json` and the panel/board captures: a fresh full `npm run screenshots`
+  capture on the merged tree, since the rebase's own conflict resolution did not yet reflect this
+  phase's generic "Field N" column fix together with main's own panel-close-button edit.
+
+`npm run gate` on the fully reconciled tree: **25/25 green**, `$?` read directly, re-run twice for
+stability. Every number this phase's own docs record above (`tasks.md`, `goal.md`,
+`acceptance-criteria.md`) reflects the pre-reconciliation branch; this section is the corrected,
+post-landing truth. See `chore(views): reconcile the list renderer retirement with main` for the
+full per-file resolution.
+<!-- /ANCHOR:reconciliation -->
 
 ---
 

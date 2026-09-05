@@ -12,9 +12,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-05T02:45:00Z"
+    last_updated_at: "2026-09-05T03:30:00Z"
     last_updated_by: "phase-007-landing"
-    recent_action: "007 landed: renderer and measurement surface removed, gate 24/24 green"
+    recent_action: "007 landed on main after reconciliation, gate 25/25 green"
     next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
     blockers:
       - "007 ran and landed without the operator report this line names. The report itself is still unconfirmed anywhere in this tree; 007/tasks.md T001 records that gap rather than treating it as cleared."
@@ -86,7 +86,7 @@ performs the removal it asserts.
 | **Spec Folder** | `specs/006-list-view-deprecation/` |
 | **Level** | 3 (Full) — `recommend-level.sh --loc 1800 --files 26 --architectural --db` returned 80/100, confidence 94% |
 | **Phase decomposition** | Qualifies, both thresholds met independently: phase complexity **30/50** against a threshold of 25, and documentation level **3** against a threshold of 3. The script's suggested count at 30 is 2; four children are used because the deprecation has four distinct stopping points, and the count is the author's call under `phase-definitions.md` §2 |
-| **Status** | In progress — `005` (audit) complete, `006` (hide and migrate) shipped + verified with operator confirmation open, `007` (remove renderer and harness) landed with `styles.css`'s list rules deferred (T010), `008` (docs and release) not started |
+| **Status** | In progress — `005` (audit) complete, `006` (hide and migrate) shipped + verified with operator confirmation open, `007` (remove renderer and harness) shipped + verified on main (25/25 green) with `styles.css`'s list rules deferred (T010), `008` (docs and release) not started |
 | **Primary source** | `src/views/list-renderer.ts` (1,173 lines), `src/views/card-field-renderer.ts` (349), `src/data/types.ts:317` (the persisted union), `tools/live/list-window.mjs` (a gate lane) |
 | **Precedent** | `../005-component-surface-system/030-gallery-view-deprecation/` |
 | **Superseded direction** | [`superseded-clickup-direction.md`](superseded-clickup-direction.md), children `000`-`004` |
@@ -237,7 +237,7 @@ migrates to — records it and does not fix it.
 | — | `004-mobile-and-live-verification/` | Phone presentation and live verification of the converted list | **Superseded 2026-09-04** — kept as history |
 | 1 | `005-usage-and-migration-audit/` | Which vaults and views use list; what the migration target must preserve; the data-loss check | **Complete** — Level 1 |
 | 2 | `006-hide-and-migrate/` | Remove list from the pickers and the switcher; migrate existing list views to table with a one-time notice, in three locales | **Shipped + verified, operator confirmation open** — Level 1 |
-| 3 | `007-remove-renderer-and-harness/` | Delete the renderer, the `list-window` lane, the fixtures and constructed scenarios, the bench and the replay claims; re-baseline the ratchets; prune the captures | Draft — Level 3 |
+| 3 | `007-remove-renderer-and-harness/` | Delete the renderer, the `list-window` lane, the fixtures and constructed scenarios, the bench and the replay claims; re-baseline the ratchets; prune the captures | **Shipped + verified** — Level 3, `npm run gate` 25/25 green on the tree reconciled with main |
 | 4 | `008-docs-and-release/` | README, changelog, and the release that carries the removal | Draft — Level 1 |
 
 ### Phase Transition Rules

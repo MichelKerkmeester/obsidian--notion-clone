@@ -69,7 +69,7 @@ contextType: "general"
 ## Phase 3: Verification
 
 - [x] T011 `npm run gate` from the final state, `$?` read directly without a pipe. The `list-window` lane must be **absent** from the lane list, not present and skipped
-  `npm run gate` prints 24 lane names (`types` through `evidence`); `list-window` is absent from the list, not present and skipped. `$?` read directly (not through a pipe): `0`. `24 green, 0 red for a declared reason`, re-run twice for stability. Two red lanes were found and fixed during this phase rather than declared: `placement` (a leftover check asserting on zero list rows — removed, see the finding below) and `evidence` (`view-census.json` stale after `view-census.mjs`'s own comment moved — re-stamped by running the tool it names).
+  `npm run gate` prints 24 lane names (`types` through `evidence`); `list-window` is absent from the list, not present and skipped. `$?` read directly (not through a pipe): `0`. `24 green, 0 red for a declared reason`, re-run twice for stability. Two red lanes were found and fixed during this phase rather than declared: `placement` (a leftover check asserting on zero list rows — removed, see the finding below) and `evidence` (`view-census.json` stale after `view-census.mjs`'s own comment moved — re-stamped by running the tool it names). After landing on main, which had independently added a `sheet-grammar` lane in the same window, the reconciled tree prints 25 lane names; `list-window` is still absent and `$?` is still `0` (`chore(views): reconcile the list renderer retirement with main`).
 - [x] T012 `rg -n 'list-renderer' src tools` returns nothing; `tsc --noEmit` is clean
   Live imports and constructions are gone. Remaining `tools/` hits are historical `tools/lane/css-lane.json` notes (out of scope; css-lane release is verifier-owned). `src/views/CODE.md` still names the retired file (docs off-limits).
 - [x] T013 Recapture and compare the board and gallery cards against T002's before-captures. Identical, read by hand
@@ -87,7 +87,7 @@ contextType: "general"
 
 - [ ] All tasks marked `[x]` — T010 (list rules in `styles.css`) is deliberately deferred to a follow-up pass; see its own note
 - [x] No `[B]` blocked tasks remaining
-- [x] Manual verification passed — `npm run gate` 24/24 green, `$?` 0; 21 content-changed captures read by hand
+- [x] Manual verification passed — `npm run gate` 24/24 green pre-reconciliation, 25/25 green after landing on main (`sheet-grammar` lane arrived with the merge), `$?` 0 on both; 21 content-changed captures read by hand
 <!-- /ANCHOR:completion -->
 
 ---
