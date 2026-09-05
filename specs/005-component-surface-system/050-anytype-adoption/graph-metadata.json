@@ -38,7 +38,7 @@
       "breakdown",
       "tasks"
     ],
-    "importance_tier": "high",
+    "importance_tier": "important",
     "status": "draft",
     "key_files": [
       "spec.md",
@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "src/views/toolbar-renderer.ts",
       "src/views/bulk-edit-field-menu.ts",
@@ -59,8 +60,7 @@
       "src/views/database-view.ts",
       "src/views/view-config-panel-renderer.ts",
       "src/views/board-renderer.ts",
-      "src/views/table-renderer.ts",
-      "src/views/active-view-controls-renderer.ts"
+      "src/views/table-renderer.ts"
     ],
     "entities": [
       {
@@ -91,6 +91,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -166,12 +172,6 @@
         "source": "derived"
       },
       {
-        "name": "active-view-controls-renderer.ts",
-        "kind": "code",
-        "path": "src/views/active-view-controls-renderer.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Our view surfaces work but do not cohere",
     "created_at": "2026-09-05T08:01:32Z",
-    "last_save_at": "2026-09-05T08:14:42.698Z",
+    "last_save_at": "2026-09-05T11:09:55.288Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,14 +219,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:fbef46a86440a9042af8e49b68458b3fc40b6f7eeabb0a2897634d22d82cd7c5",
+    "source_fingerprint": "sha256:34ebab2012c79c73e364921ead850fd4e60e1f1f6662c9dc938bdb5e98088037",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "8da9f63b3078109b0e15ca81051ae605d57fb584fa7ed3ad5a085f898bbea16c",
-      "plan.md": "6e932bc6cccb099a0d5cb581d8029d00f590a921e7f85452b51f272a74abd79d",
-      "tasks.md": "15b6da341c433e325de973a0a857d83f4d5d4ebc8f97610621848906ad79ca6c",
+      "spec.md": "0f1f432373e966644339eee7a5cadc71e4655b5286422e47ae7df491543fa8d7",
+      "plan.md": "60bdd1aabc78f27972a80bfd68d66387a768f85edddfccce35b62f61e7de6fd6",
+      "tasks.md": "4513f776af1b6c5961ab767f9d8f19531d6508ed016fa2ac167212cb3d70995b",
+      "decision-record.md": "63d79ebca101d43f8799928f90d4c18911e25c406f12b02c29ebcc7024ad5d80",
       "implementation-summary.md": "c791cd6a7bb858ddae686ccd12e2e5810195e45c688d194728e20ccc41afb0b3"
     },
     "last_active_child_id": null,

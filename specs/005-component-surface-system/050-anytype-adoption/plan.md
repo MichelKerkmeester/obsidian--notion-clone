@@ -24,11 +24,20 @@ contextType: "planning"
 Fourteen items, sixteen files, no new architecture — `047` verified that against this repo before it
 ranked them. Every item lands inside a renderer or a state store we already have.
 
-Two things shape the order. First, **the captures gate everything** (goal D1): the research is
-code-derived and the first capture pass reached no mouse-driven surface, so six items have no
-reference screen and T001 is the only task that may run before the sweep completes. Second, **one
-leg touches one file** (goal D7): items are grouped by the file they land in and each group is
-opened once, so `toolbar-renderer.ts` is not edited three times by three items.
+Two things shape the order. First, **the captures gate everything** (goal D1). That gate is now
+discharged: T001 read the 151-file sweep and `design-trueup.md` is the read. Five items have no
+reference screen and are marked *design inferred from source code, not seen* — REQ-005, REQ-006,
+REQ-007, REQ-011, REQ-013. Second, **one leg touches one file** (goal D7): items are grouped by the
+file they land in and each group is opened once, so `toolbar-renderer.ts` is not edited three times by
+three items.
+
+**What T001 did to this plan.** Six legs are materially smaller than they were sized. REQ-001's chip
+row and count badge already ship, REQ-009's twelve empty-state reasons already ship, REQ-013's
+per-format rows already ship on both viewports and are already `sheet-grammar`-registered, REQ-005's
+snapshot machinery already exists, REQ-008's never-empty guarantee already holds in the file that
+matters, and REQ-014 has no virtualization path to replace. Those become **assertions with negative
+controls over existing behaviour** plus a small residue each, rather than construction (ADR-004). The
+LOC estimate below is corrected rather than left to be discovered mid-phase.
 
 ### Overview
 
@@ -44,11 +53,16 @@ parent's serialized CSS lane owns it.
 ## 2. QUALITY GATES
 
 ### Definition of Ready
-- `capture-alignment.md` has a row for the item: the Anytype screen it is designed against, or the
-  gap the sweep left and the `047` finding standing in for it.
-- The item's threshold in `acceptance-criteria.md` has been run on the current tree and **observed
-  failing**, with the figure written into `checklist.md`.
-- The item's phone expression is stated, or its absence is stated with a reason.
+- `design-trueup.md` has a section for the item: the Anytype screen it is designed against with its
+  measured values, or the gap the sweep left and the `047` finding standing in for it. **All fourteen
+  do, as of T001.**
+- The item's threshold in `acceptance-criteria.md` — **in the restated form where T001 restated it**
+  — has been run on the current tree and **observed failing**, with the figure written into
+  `checklist.md`. Measuring the original wording of AC-001, AC-005, AC-008, AC-009, AC-013 or AC-014
+  produces a red that no code change caused (ADR-004).
+- The item's phone expression is stated, or its absence is stated with a reason. **REQ-003 is the one
+  item with no phone expression**, and the reason is recorded: a touch surface has no persistent
+  scrollbar chrome to make sticky.
 
 ### Definition of Done
 - The threshold passes, and the negative control for it was observed red.
@@ -172,15 +186,15 @@ reverting it restores the prior surface without touching the other thirteen item
 
 | Leg | Depends on | Why |
 |-----|-----------|-----|
-| L1 | T001 | REQ-001's chip anatomy and REQ-013's per-format rows both need the panel screens the first pass never reached |
-| L2 | T001, L1 | The settings panel L2 opens is where L1's chips are configured from |
-| L3 | T001 | REQ-003's edge bleed is visible in `anytype-board-official.jpg`; REQ-007's confirm is not, and needs the sweep |
-| L4 | T001 | The view-tab context menu was never captured |
-| L5 | — | Code-derived; no reference screen is expected |
-| L6 | T001 | The 92px figure is from source; the flipped editor was never captured |
-| L7 | T001 | The four-section `objectContext` menu and its caps were never captured |
-| L8 | T001 | One flavour is visible in `anytype-inlinecollection-empty-dark.png`; the other is not |
-| L9 | T001 | The inline collection is captured; the collapsed toolbar state is not |
+| L1 | ~~T001~~ **released** | The filter panel and the property picker were reached. Both items ship already; the residue is the settings-panel `N applied` value and three unproven grammar elements |
+| L2 | ~~T001~~ **released**, L1 | The settings panel is captured and measured: 360 × 316px, 28px rows, 8px radius. REQ-010's per-view default row is **absent from the captured panel**, so it is ours to design |
+| L3 | ~~T001~~ **released** | REQ-003's geometry is measured on both a kanban and a grid, which is what rescoped it. REQ-007's confirm was never captured and stays source-derived |
+| L4 | ~~T001~~ **released** | Duplicate and Remove are captured — in the settings panel. The tab context menu was still never captured and is dropped from AC-004 |
+| L5 | — | Behaviour, no reference screen expected, **confirmed at T001**. And the snapshot machinery already exists in `database-viewport.ts` |
+| L6 | ~~T001~~ **released** | The 92px figure is from source and no capture shows an open editor near an edge. The deciding criterion is the no-overflow one instead |
+| L7 | ~~T001~~ **released** | The object context menu is captured — **five** sections, not four. The never-empty fallback and the caps were not; the caps are not adopted |
+| L8 | ~~T001~~ **released** | Anytype renders **no** empty-state block at all. Ours has twelve reasons; the residue is the deleted-relation state |
+| L9 | ~~T001~~ **released** | The collapsed inline toolbar **is** captured, and so is `Page limit  60 ›`. The measured-versus-breakpoint mechanism is not |
 <!-- /ANCHOR:phase-deps -->
 
 ---
@@ -190,17 +204,17 @@ reverting it restores the prior surface without touching the other thirteen item
 
 | Leg | Items | Estimated LOC | Note |
 |-----|-------|---------------|------|
-| T001 | Gate | ~150 (doc) | `capture-alignment.md`, fourteen rows |
-| L1 | 2 | ~430 | The largest; a new chip surface plus phone condition rows |
-| L2 | 2 | ~180 | One continuation, one preset map |
-| L3 | 3 | ~270 | Sticky scrollbar, two-file confirm, `positionLock` |
-| L4 | 1 | ~120 | Duplicate plus a tab menu |
-| L5 | 1 | ~60 | Two fields and a restore |
-| L6 | 1 | ~50 | One edge-proximity branch |
-| L7 | 1 | ~120 | Predicate, caps, fallback |
-| L8 | 1 | ~90 | Two flavours plus the deleted-relation state |
-| L9 | 2 | ~190 | Measured collapse and a "Load more" row |
-| **Total** | **14** | **~1660** | Against the 1500 estimate the level was scored on |
+| T001 | Gate | **~700 (doc), done** | `design-trueup.md` plus `decision-record.md`; larger than estimated because the read produced three ADRs |
+| L1 | 2 | ~430 → **~90** | Both items ship. Residue: the settings-panel `N applied` value, three grammar elements, and lane rows over what exists |
+| L2 | 2 | ~180 → **~150** | One continuation; per-**field** defaults only, since the status preset ships |
+| L3 | 3 | ~270 → **~300** | Sticky scrollbar now on two surfaces, not one; plus the confirm and `positionLock` |
+| L4 | 1 | ~120 → **~70** | Duplicate in the settings panel; the tab menu is dropped from the criterion |
+| L5 | 1 | ~60 → **~40** | Wire the existing snapshot; do not build a second |
+| L6 | 1 | ~50 | Unchanged — one edge-proximity branch |
+| L7 | 1 | ~120 → **~50** | One fallback in `bulk-edit-field-menu.ts`; the caps are not adopted and `row-menu.ts` is asserted |
+| L8 | 1 | ~90 → **~50** | One state, not two flavours plus one |
+| L9 | 2 | ~190 → **~160** | Measured collapse and a page-limited "Load more" row |
+| **Total** | **14** | **~1660 → ~960** | Corrected at T001. Six legs became assertions over shipped behaviour plus a residue |
 <!-- /ANCHOR:effort -->
 
 ---
@@ -262,10 +276,13 @@ L5  view-state-store  (REQ-005)  — no capture dependency, may start immediatel
 <!-- ANCHOR:critical-path -->
 ## L3: CRITICAL PATH
 
-T001 → L1 → L2 is the only chain longer than one node, and it is the critical path: the chip surface
-must exist before the settings panel that configures it is worth landing in. Everything else fans out
-from T001 and can be ordered by rank alone. L5 is off the path entirely and can run at any time,
-which makes it the natural first green row while the sweep is still running.
+T001 → L1 → L2 was the critical path and T001 is done, which releases all nine legs at once.
+
+**The path is now L2 alone.** L1's chip surface already exists, so L2 no longer waits on it being
+built — only on the settings-panel `N applied` value, which is a string. Everything else fans out and
+can be ordered by rank. L3 is the largest remaining leg, since T001 doubled REQ-003's surface count
+from one to two, and it is the only leg carrying the goal D5 parity constraint, which makes it the
+natural next one after L2.
 <!-- /ANCHOR:critical-path -->
 
 ---
@@ -275,7 +292,7 @@ which makes it the natural first green row while the sweep is still running.
 
 | Milestone | Content | Gate |
 |-----------|---------|------|
-| M1 | `capture-alignment.md` complete, fourteen rows, gaps named | Every item has a design or a named gap |
+| M1 | ~~`design-trueup.md` complete~~ **Done 2026-09-05** — fourteen sections, five gaps named, seven contradictions recorded, six thresholds restated | Every item has a design or a named gap |
 | M2 | The top ten by fit are green with their controls seen red | `npm run gate` exits 0 |
 | M3 | All fourteen green, phone expressions included | Gate 0, replay reversed 0, board parity unchanged |
 | M4 | Operator reads the surfaces on device | Operator's own words; not tickable by an agent |
@@ -287,13 +304,23 @@ which makes it the natural first green row while the sweep is still running.
 
 ### ADR-001: One chip surface for sorts and filters, not two
 
-**Status**: Proposed
+**Status**: Accepted, amended at T001
 
 **Context**: REQ-001 could render a sort control and a filter control as separate rows, which is the
 smaller change against our current panels. Anytype uses one row: a leading direction-coloured sort
 chip, then filter chips, then the add control and clear-all.
 
 **Decision**: One row, following Anytype. The sort chip leads and is visually distinct by direction.
+
+**Amended at T001.** This ADR is now a description of what already ships rather than a choice being
+made. `active-view-controls-renderer.ts` builds exactly this row — sorts first with a direction arrow
+and an ordinal, a conjunction chip, filter chips with a format icon and an `×`, `Clear all`, auto-hide
+at `:93` — hosted off the header rather than owned by either panel, which is what the mitigation
+below proposed. Two things also change: **Anytype does not do this.** No chip row appears on any of
+the 151 captures, including a view that demonstrably carries a filter, so "following Anytype" is
+false as stated and the row is ours (`design-trueup.md` C2). And the sort chip's direction is carried
+by an **arrow glyph plus an ordinal number**, not by colour, which is the right call and is why the
+"direction-coloured" phrasing is retired.
 
 **Consequences**:
 - Positive: one add control, one clear-all, one auto-hide rule, one place to read "is this view
@@ -310,13 +337,22 @@ chip, then filter chips, then the add control and clear-all.
 
 ### ADR-002: The per-view new-row preset is the whole template adoption
 
-**Status**: Proposed
+**Status**: Accepted, amended at T001
 
 **Context**: Anytype's template system is large — per-type defaults, per-view overrides, lock,
 duplicate, bin, switchable-until-first-edit. `047` ranked only the per-view "new row" default preset
 and explicitly listed the rest as a non-adoption.
 
 **Decision**: REQ-010 is the preset map and nothing else. No template objects, no lock, no switching.
+
+**Amended at T001 — the slice narrows again, twice over.** First, a per-view **status** preset and a
+per-database template already ship (`view-config-panel-renderer.ts:259, :265, :403-407` and
+`:558-612`), so the residue is per-**field** default values and only that. Second, the premise that
+Anytype offers a per-view template override is contradicted by the panel itself: the captured view
+settings, in both their Grid and their Kanban form, carry View name, Layout, [Groups], Properties,
+Filter, Sort, Duplicate view and Remove view, and **no default-template row** (`design-trueup.md` C7).
+The one captured per-view default of any kind is `Page limit  60 ›` in the gallery layout block —
+which is also where a new default row belongs.
 
 **Consequences**:
 - Positive: the useful 90% of the behavior at a fraction of the surface, and no new object kind in a
@@ -327,6 +363,19 @@ and explicitly listed the rest as a non-adoption.
 **Alternatives Rejected**:
 - The full template system: needs an object kind we do not have and a type system we deliberately did
   not adopt (goal D6).
+
+---
+
+### ADR-003, ADR-004, ADR-005 — recorded in `decision-record.md`
+
+T001's read forced three rulings too large to sit inside a plan ADR, so they live in this packet's
+`decision-record.md` and are named here so an `acceptance-criteria.md` waiver can cite them.
+
+| ADR | Ruling |
+|-----|--------|
+| ADR-003 | Where a capture and `047`'s research disagree, the capture decides and the contradiction is named. Seven do. Absence of a capture is not evidence of absence; a source-derived number survives where no capture can replace it, carrying its provenance |
+| ADR-004 | Six thresholds — AC-001, AC-005, AC-008, AC-009, AC-013, AC-014 — asserted a failing value the tree does not have and are restated before any of them may be observed red. Shipped behaviour is asserted with a negative control rather than deleted from the packet |
+| ADR-005 | The measured Anytype geometry is adopted; its `#232323` row highlight (1.14:1) and its colour-only state signalling are refused on contrast; every colour stays on our own theme tokens. 28px rows are adopted as a named deviation from the spacing scale, because a measurement and `design-system.md` §9's touch floor agree on the number |
 
 ---
 
