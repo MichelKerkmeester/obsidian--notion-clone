@@ -50,6 +50,7 @@
       "implementation-summary.md",
       "screenshots/anytype/README.md",
       "src/views/toolbar-renderer.ts",
+      "src/views/toolbar-primitives.ts",
       "src/views/active-view-controls-renderer.ts",
       "src/views/filter-panel-renderer.ts",
       "src/views/sort-panel-renderer.ts",
@@ -59,8 +60,7 @@
       "src/views/embedded-database-renderer.ts",
       "src/views/database-view.ts",
       "src/views/board-renderer.ts",
-      "src/views/view-config-panel-renderer.ts",
-      "src/data/types.ts"
+      "src/views/view-config-panel-renderer.ts"
     ],
     "entities": [
       {
@@ -115,6 +115,12 @@
         "name": "toolbar-renderer.ts",
         "kind": "code",
         "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-primitives.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-primitives.ts",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "types.ts",
-        "kind": "code",
-        "path": "src/data/types.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "A person using the toolbar cannot see which rules are active without opening panels (the triggers",
     "created_at": "2026-09-05T11:46:15.524Z",
-    "last_save_at": "2026-09-05T14:38:35.594Z",
+    "last_save_at": "2026-09-05T15:51:39.189Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,12 +222,12 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:38b6d803fd1a750cc3b8ec3b43c2694063faad1ee8ad8c340af327bce11cec1d",
+    "source_fingerprint": "sha256:dbe3d8a6c30a1931d709871e177bc0e370a20007ed5514cb0ce13ac4925f1ae7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "5f1204624fde24b51930fb952739884f6f418dee99b06a1a199c823ea37861f1",
       "plan.md": "2a078f818e3ae5f2ae0e557e7b7e51b4cc3d51807b8d0cbc3c4125c11a7f01ca",
-      "tasks.md": "732fc3e00ca1d710d14d1b53f07903cb27e8ef8d9f5d1c5c7268b197c87c7450",
+      "tasks.md": "9863125557511133a6565006be32564e25b8bca38715f85f7d2fdb771b6c37d6",
       "decision-record.md": "6e299c24f05cf21cff331205f88d0746e0cfd14edcdc7a1d99a8259542cc437f",
       "implementation-summary.md": "0598a4814490d2613ddbc793174d2f794e6fe1079dc109d3eee37fca521e7ca1"
     },

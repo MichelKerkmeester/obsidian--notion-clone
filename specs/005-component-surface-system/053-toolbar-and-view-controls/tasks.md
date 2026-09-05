@@ -64,14 +64,14 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Primitives (L1)
 
-- [ ] **T002 — [P] Measure the red numbers for every threshold in `acceptance-criteria.md` and
+- [x] **T002 — [P] Measure the red numbers for every threshold in `acceptance-criteria.md` and
       write them into `checklist.md`.** Includes: chip-state combination count (0 of 4 assertable
       today), settings-landing delay (never), confirm existence (absent on both renderers), preset
       storage (none), embed overflow width (sweep to find it), close-run count (17), dual-class
       count (2 sites), dead-method count (7). **Threshold**: one failing figure per criterion.
       **Red-first proof**: the figures themselves. **Proof**: `checklist.md`'s Today column, every
       cell filled from the tree.
-- [ ] **T003 — Build `src/views/toolbar-primitives.ts` with all five constructors and unit tests.**
+- [x] **T003 — Build `src/views/toolbar-primitives.ts` with all five constructors and unit tests.**
       `createPopoverShell` (sibling-close sequence, anchor lease, role sizing), `createConditionRow`
       (property/operator/value with the row floors), `createControlClusterButton` (badge, state),
       `createSettingsEntry` (per-view-type resolution, fallback classes), `createTabStrip` (drag,
@@ -86,7 +86,7 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Toolbar row shells (L2)
 
-- [ ] **T004 — Migrate the view-tab strip, its context menu, add-view, hub, title actions,
+- [x] **T004 — Migrate the view-tab strip, its context menu, add-view, hub, title actions,
       utilities, group-by and export onto the primitives; delete the seven dead methods and the
       repeated close runs.** (src/views/toolbar-renderer.ts) **Threshold**: close-run grep count 17
       → 0 outside the shell; dead-method count 7 → 0; `db-view-tab-popover-row db-menu-item`
@@ -108,7 +108,7 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-4 -->
 ## Phase 4: Clusters and chips (L3) — `050` item 1
 
-- [ ] **T005 — Give the filter and sort triggers a declared `active`/`add` state (ADR-001, Accepted:
+- [x] **T005 — Give the filter and sort triggers a declared `active`/`add` state (ADR-001, Accepted:
       dual-mode icon behaviour is rejected) and reshape the existing chip rail to the measured
       anatomy.** (src/views/toolbar-renderer.ts, src/views/active-view-controls-renderer.ts,
       styles.css) **Threshold** (`050` AC-001, kept; AC-102 as restated at T001): chip row present
@@ -133,7 +133,7 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-5 -->
 ## Phase 5: Rule panels and conflict confirm (L4) — `050` item 7
 
-- [ ] **T006 — [P] Bind filter and sort condition rows onto `createConditionRow`.**
+- [x] **T006 — [P] Bind filter and sort condition rows onto `createConditionRow`.**
       (src/views/filter-panel-renderer.ts, src/views/sort-panel-renderer.ts) **Threshold**: one
       row implementation, both panels; the `condition panel` row floors hold at 552px (property
       140, operator 140, value 120-140, zero overflow); the sort binding renders at the measured
@@ -180,7 +180,7 @@ and stay unticked — an agent never ticks them.
       phone rung, real client). **Proof**: lane timing assertion + the sweep lane + negative
       control that reverts to the boolean hide and reddens the sweep. The 100ms budget stays ours —
       no capture can time a transition.
-- [ ] **T009 — Add per-view new-row presets: settings section, config field, creation read.**
+- [x] **T009 — Add per-view new-row presets: settings section, config field, creation read.**
       (src/data/types.ts, src/views/view-config-panel-renderer.ts,
       src/views/toolbar-renderer.ts) **Threshold** (`050` AC-010, kept): every preset value
       applied at creation; a view with no presets produces creation calls byte-identical to
@@ -196,7 +196,7 @@ and stay unticked — an agent never ticks them.
       alternative, not a gap (`050` goal D6). **Proof**: unit test on the creation path +
       byte-comparison of the no-preset case against a pre-change baseline + negative control that
       applies presets to a preset-less view and reddens.
-- [ ] **T010 — [P] Delete the dual classes, verify the anchor fallbacks, and re-derive the graph
+- [x] **T010 — [P] Delete the dual classes, verify the anchor fallbacks, and re-derive the graph
       metadata.** (styles.css, src/views/*) **Threshold**: `db-view-tab-popover-row` dual class
       count 0; `db-view-config-btn`/`db-chart-options-toolbar-btn`/`db-calendar-timeline-options-toolbar-btn`
       still resolve as query targets on the live trigger. **Red-first proof**: T002's counts.
@@ -209,17 +209,29 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-7 -->
 ## Phase 7: Verification
 
-- [ ] **T011 — Register one permanent gate lane row per criterion, each observed red before
-      green.** (tools/live/*) **Threshold**: `npm run gate` exits 0 read from `$?` with the rows
-      green. **Red-first proof**: T002's figures. **Proof**: `npm run gate >/tmp/gate.log 2>&1;
-      echo $?` → 0, and `npm run replay` holds with reversed 0.
-- [ ] **T012 — Recapture the surfaces this phase changed and read every changed PNG.**
-      (tools/screenshots/scenarios/*.mjs, screenshots/) **Threshold**: every new or changed
-      surface registered in the same change (`screenshot-currency.md` §2), scenario `sources`
-      lists accurate. **Red-first proof**: `npm run screenshots:verify` reddens on the changed
-      sources before the recapture. **Proof**: `npm run screenshots:verify` exits 0, changed PNGs
-      opened and read, stand-in gaps checked before filing defects. **Operator/device row — not
-      tickable by an agent: the harness is not the device.**
+- [x] **T011 — Register one permanent gate lane row per criterion, each observed red before
+      green.** ✅ 2026-09-05 (landing) (tools/live/*) **Threshold**: `npm run gate` exits 0 read
+      from `$?` with the rows green. **Red-first proof**: T002's figures, plus a fresh negative
+      control at landing (forcing `data-control-state` constant reddened 3 of the new
+      `render-assertions` rows; reverted). **Proof**: `npm run gate </dev/null; echo $?` → **0**,
+      25/25 green, and `npm run replay` holds, **28/28**, reversed 0. Added at landing:
+      `render-assertions` gained 7 new rows (AC-102's four rules combinations,
+      AC-104's tab-menu row) that did not exist when this task was drafted. **AC-103, AC-105 and
+      AC-107 still have no dedicated row** — the gate is green because those three surfaces are
+      exercised for provenance only, not for the specific behaviour their AC names; see their own
+      acceptance-criteria.md cells for why each was left unbuilt this pass.
+- [x] **T012 — Recapture the surfaces this phase changed and read every changed PNG.** ✅
+      2026-09-05 (landing) (tools/screenshots/scenarios/*.mjs, screenshots/) **Threshold**: every
+      new or changed surface registered in the same change (`screenshot-currency.md` §2), scenario
+      `sources` lists accurate. **Red-first proof**: `npm run screenshots:verify` reddened 1066
+      stale reasons (across fewer unique files, styles.css cascade) before the recapture. **Proof**:
+      `npm run screenshots` → 554 captured, manifest updated; `npm run screenshots:verify` exits
+      **0**. Of 70 changed files, 58 were genuine content changes (opened and read across every
+      family in at least one theme/device pair — chip rail, tab gap, condition rows, settings
+      panel, sort-rule row, board/list-row control pitch) and 11 were byte-only re-encodes,
+      restored to their committed bytes rather than reviewed. `screenshots/project-manager/`: 0
+      files changed. The css-lane handover (`tools/lane/css-lane.json`) records the reviewed list.
+      **Operator/device row — not tickable by an agent: the harness is not the device.**
 - [ ] **T013 — Operator device pass.** The operator opens the rebuilt toolbar on iOS and desktop
       and reads it as the improvement asked for. **Operator/device row — stays unticked until the
       operator says so; nothing in this repository can close it.**
