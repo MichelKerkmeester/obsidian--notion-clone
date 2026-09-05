@@ -126,7 +126,7 @@ Every one of these is a **refusal**, and three of them are the same defect in th
 
 | Pair | Ratio | Verdict |
 |---|---|---|
-| Open-trigger fill `#232323` on panel `#171717` | **1.20:1** | Fails WCAG 1.4.11's 3:1. This is `050`'s `#232323` row highlight a third time: hover, selection **and** expanded state are all signalled at ~1.2:1 |
+| Open-trigger fill `#232323` on panel `#171717` | **1.14:1** | Fails WCAG 1.4.11's 3:1. This is `050`'s `#232323` row highlight a third time: hover, selection **and** expanded state are all signalled at the same near-invisible ratio. *Corrected 2026-09-05 from 1.20:1 — `050` §2 and `052` C1/G16 both report **1.14:1** for this exact pair, and the WCAG relative-luminance formula returns 1.140 for `#232323` on `#171717`. Three packets now agree; the 1.20 was this document's arithmetic and it loses to a value two independent reads and a re-derivation return* |
 | Chip label `#3C7FFB` on chip fill `#E2ECFE` | **3.14:1** | Fails 4.5:1 for a ~13px label |
 | Chip fill `#E2ECFE` on the bar `#FFFFFF` | **1.19:1** | The chip's own boundary is not a 3:1 indicator either, so the fill cannot carry the state alone |
 | Inactive view tab `#B6B6B6` on `#FFFFFF` | **2.03:1** | An unread tab label at a third of the required ratio |
@@ -388,14 +388,14 @@ independently on light theme where `050` measured dark.
 
 **What the trigger *does* signal**, and this is new: while its popover is open it carries a
 **28×28px rounded `#232323` fill** (`anytype-view-settings-panel-dark.png`, x 845..872). That is the
-expanded state, expressed as a background — at **1.20:1**.
+expanded state, expressed as a background — at **1.14:1**.
 
 **Values that change.**
 
 | Was | Is |
 |---|---|
 | Dual-mode rejected on `050`'s dark-theme read | **Rejected on two independent reads.** Light theme, three views, same numbers |
-| No captured expanded state | **Captured: a 28×28px rounded fill.** The geometry is adopted — it is also our own coarse-pointer floor. The **1.20:1 tint is refused**; our open-state background clears 3:1 or the state rides `aria-expanded` plus a second visible signal |
+| No captured expanded state | **Captured: a 28×28px rounded fill.** The geometry is adopted — it is also our own coarse-pointer floor. The **1.14:1 tint is refused**; our open-state background clears 3:1 or the state rides `aria-expanded` plus a second visible signal |
 | Trigger box unspecified | **28×28px on a 32px pitch**, measured. `createControlClusterButton` sizes from this |
 
 **Phone.** There is **no filter trigger on the phone toolbar at all** —
@@ -784,7 +784,7 @@ layout. On the phone it is the **only** icon in the toolbar. And it carries the 
 | Was | Is |
 |---|---|
 | "one settings surface per view type" | **Sharper: one settings *trigger*, one settings *surface*, and the branching happens one level in.** That is a stronger argument for `createSettingsEntry` than the inventory made — the phone proves a single trigger can carry every view type, because it does |
-| Trigger geometry unspecified | **28×28px on a 32px pitch**, with the expanded state as a fill whose **1.20:1 tint is refused** |
+| Trigger geometry unspecified | **28×28px on a 32px pitch**, with the expanded state as a fill whose **1.14:1 tint is refused** |
 | ADR-002's seven dead methods | Unaffected. The capture argues for one entry; ADR-002 is how we get there |
 
 ---
@@ -900,7 +900,7 @@ that exists but does not apply; a phone Edit mode instead of a long-press.
 
 | Refused | Measured | Reason |
 |---|---|---|
-| Open-trigger `#232323` fill | **1.20:1** | WCAG 1.4.11 asks 3:1 of a non-text element that is the only state signal. Third instance of the same defect after `050`'s two |
+| Open-trigger `#232323` fill | **1.14:1** | WCAG 1.4.11 asks 3:1 of a non-text element that is the only state signal. Third instance of the same defect after `050`'s two. *Ratio corrected 2026-09-05 from 1.20:1 to match `050` §2 and `052` C1; the refusal is unchanged* |
 | Chip accent on chip tint | **3.14:1** | Below 4.5:1 for a ~13px label |
 | Chip fill as the state | **1.19:1** on its own bar | Not a 3:1 indicator; cannot carry state alone |
 | Inactive tab `#B6B6B6` | **2.03:1** | Less than half the required ratio |
@@ -950,4 +950,14 @@ direct feedback.
 - **Token and role authority**: `../design-system.md`
 - **Phone grammar**: `../044-phone-sheet-alignment/spec.md` §3
 - **Stacking model**: `../048-stacked-sheets/spec.md` §4
+- **Confirm primitive owner**: `../051-modal-and-sheet-componentization/decision-record.md` ADR-003 —
+  ADR-003's sort-conflict confirm **consumes** it and does not re-specify it
+- **Condition row: this packet owns it.** The filter/sort rule row and its per-format value control
+  are one of this phase's five composed primitives, replacing the two condition-row vocabularies the
+  toolbar carries today. `050` REQ-013's phone rows and `052`'s value pickers consume it. *Written
+  down 2026-09-05 during the cross-family reconciliation — it had been implicit, which is how two
+  vocabularies survived inside one toolbar (`../roadmap.md` §7.10)*
+- **Menu primitive owner**: `../052-dropdown-menu-and-picker-componentization/spec.md` §5 — this
+  packet's popovers are hosted on it
+- **Cross-family reconciliation**: `../roadmap.md` §7.10
 <!-- /ANCHOR:cross-refs -->

@@ -125,7 +125,7 @@ set-controls context was found by hashing all 59 files, not by looking.
 | Move the presets section to the New menu | `anytype-menu-set-new-object-light.png` is the captured home for a per-view creation default, and it is where the reader already is when they create a row |
 | Keep the `condition panel` role at 440-560px against a measured 360px | The measurement covers a different row. Anytype fits 360px by splitting one condition across three stacked popovers; ours carries property, operator, value, group, NOT and remove on one line |
 | Keep the chip radius at 8px against a measured full pill | r≈14 is off our 4/6/8 scale, and mixing pill and square corners in one interface degrades both. The 26px → 28px height change is adopted, because there the measurement and our own coarse-pointer floor agree |
-| Refuse four Anytype colour pairs outright | 1.20:1 open-trigger fill, 3.14:1 chip label, 2.03:1 inactive tab, 3.74:1 New label. The geometry is taken and the palette is not; this is an Obsidian plugin and the theme owns the ramp |
+| Refuse four Anytype colour pairs outright | 1.14:1 open-trigger fill (corrected 2026-09-05 from 1.20:1, to match `050` §2 and `052` C1), 3.14:1 chip label, 2.03:1 inactive tab, 3.74:1 New label. The geometry is taken and the palette is not; this is an Obsidian plugin and the theme owns the ramp |
 | Keep the calendar and timeline option triggers despite capture evidence for merging | Anytype has one settings trigger per view and reaches every per-layout option through it. Merging would move surfaces carrying the Project Manager parity, which parent goal D5 forbids without a recapture read. The evidence is recorded so a later phase can revisit rather than rediscover |
 <!-- /ANCHOR:decisions -->
 
