@@ -88,7 +88,7 @@ REQ-006 gained the phone half of the shell's geometry; ADR-002 gained its list. 
 ## How It Was Delivered
 
 T001 opened the capture files rather than citing them. 151 desktop states in `screenshots/anytype/`,
-600 menu files in `screenshots/anytype/menus/`, 118 iOS sheet files in
+600 menu files in `screenshots/anytype/desktop/menus/`, 118 iOS sheet files in
 `screenshots/anytype/mobile/`, plus our own renders under `screenshots/notion-clone/`. Panel edges
 were found by scanning for the border colour, row pitch by ink-band grouping, colours by per-pixel
 sampling, contrast by computation from the sampled hex, and the scrim by dividing the luminance of

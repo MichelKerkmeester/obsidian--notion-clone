@@ -24,7 +24,7 @@ Every surface in the floating-surface family, dispositioned. Census method: `gre
 - **Grammar refs** (G1-G16) point into `anytype-menu-grammar.md`.
 
 **Capture citations re-evidenced 2026-09-05 · T001.** Every row's Anytype-pattern cell now names a
-file in `screenshots/anytype/menus/` or `screenshots/anytype/mobile/` that was opened and measured,
+file in `screenshots/anytype/desktop/menus/` or `screenshots/anytype/mobile/` that was opened and measured,
 or says it has none. `design-trueup.md` §4 carries the full seen/not-seen table and the five rows
 with no Anytype capture at all — **M4, M5, M12, M15 and the desktop half of M7**. Four of those five
 are surfaces Anytype does not ship (number-display styles, text render modes, a timeline, a chip

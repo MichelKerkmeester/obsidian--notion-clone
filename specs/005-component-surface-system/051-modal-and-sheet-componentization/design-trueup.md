@@ -16,7 +16,7 @@ contextType: "research"
 > This is **T001's output** and goal D1's gate. It **is** the `modal-surface-inventory.md` the packet
 > was drafted against; the filename changed and nothing else did, exactly as `050`'s
 > `design-trueup.md` replaced its `capture-alignment.md`. Every value below was read off a file in
-> `screenshots/anytype/`, `screenshots/anytype/menus/`, `screenshots/anytype/mobile/`, off a file in
+> `screenshots/anytype/`, `screenshots/anytype/desktop/menus/`, `screenshots/anytype/mobile/`, off a file in
 > `screenshots/notion-clone/`, or off a line in `src/views/`. Nothing here is carried over from
 > `050`'s true-up or `047`'s research unless it is labelled as such.
 

@@ -206,7 +206,7 @@
     ],
     "causal_summary": "The family works surface by surface and drifts as a family",
     "created_at": "2026-09-05T14:00:00Z",
-    "last_save_at": "2026-09-05T13:49:18.923Z",
+    "last_save_at": "2026-09-05T14:26:51.417Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,14 +218,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:38ce98c70aa92c2b6133d38d266f474fba2f898ab32c515d7564f70f9d34f435",
+    "source_fingerprint": "sha256:b05197377a2bb1811914fb862c22bc168e19ed65fa00d77950aa330635a0550c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "29a946e54f3cf40175d69f63a6febba723686c364600a1d68fade93d12807159",
+      "spec.md": "1f193dd460c1bec891d9541b9ef664cad256f7171c4f59abc13ea0bf586535f4",
       "plan.md": "cf5d8fda4c067e28a2ee488195e7cc8983e4357da7b72229e70121a1340a5541",
-      "tasks.md": "cbf390ae3d01d90096d7b9f4cd312bf0cfa1e465bf33ce09b86aecae6c1e2de5",
+      "tasks.md": "b1227517ea1f3c972cc559ea2eedf0c9e127d774438acde56e879c47c55b82d7",
       "decision-record.md": "723959d65b2a52df2c698c3b01e769169f76e28217672be0121322c5d42291c0",
-      "implementation-summary.md": "05840554b4708bbdd662ca29ed7898e9b9c64584bdaad0b8d3d7ce94919ebd3c"
+      "implementation-summary.md": "c8b4e76a9aaa3ca7be2374e580d7c46857f76f802aa569ce7aeee22af4daf8de"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -179,7 +179,7 @@ Each file carries a written description in `screenshots/anytype/README.md`.
 
 **This lands after `050`'s `design-trueup.md`, so it supersedes that document wherever it reports a
 phone surface as uncaptured** — which it does often, because the only phone evidence it had was the
-twenty App Store and Google Play marketing images in `mobile-official/`. Those stay what they were:
+twenty App Store and Google Play marketing images in `mobile/official/`. Those stay what they were:
 good evidence of intent, weak evidence of pixels, no number taken from them.
 
 **The pixels are unread here.** This landing pass could not open image files, exactly as the drafting

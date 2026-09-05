@@ -68,7 +68,7 @@ with the gap recorded here — `050` goal D1's discipline, carried:
   competitor screen.
 
 The mobile reference is now `screenshots/anytype/mobile/` — **118 real iOS simulator captures, 59
-states in both themes** — which supersedes `mobile-official/`'s 20 marketing images. Every phone
+states in both themes** — which supersedes `mobile/official/`'s 20 marketing images. Every phone
 expression here is still measured against `044`'s grammar; the Anytype screens inform the design
 and never the pass/fail.
 <!-- /ANCHOR:protocol -->

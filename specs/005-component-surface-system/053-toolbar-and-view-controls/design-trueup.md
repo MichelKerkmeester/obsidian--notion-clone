@@ -79,7 +79,7 @@ sub-page *also* carries a `Group by` row, so Anytype reaches grouping through tw
 | Set | Files | Geometry |
 |---|---|---|
 | Catalogue (`screenshots/anytype/*.png`) | 120 + 15 named | 2168×1217, **1 device px = 1 CSS px** |
-| Menus (`screenshots/anytype/menus/`) | 600 — 150 menus × 2 themes × (clipped + `-full`) | `-full` is the same 2168×1217 window; the clipped file is the menu **plus its drop shadow** |
+| Menus (`screenshots/anytype/desktop/menus/`) | 600 — 150 menus × 2 themes × (clipped + `-full`) | `-full` is the same 2168×1217 window; the clipped file is the menu **plus its drop shadow** |
 | iOS (`screenshots/anytype/mobile/`) | 118 — 59 states × 2 themes | 1206×2622 px at 402×874 pt — **3× — every phone number below is the measured pixel ÷ 3** |
 
 **The 1:1 claim is re-proved, not inherited.** The toolbar icon pitch measures **32px** in
@@ -817,7 +817,7 @@ and a fixed breakpoint remain indistinguishable — `047` §5's "measures its ow
 absent. Both caveats survive this sweep unchanged.
 
 **One caveat retires.** The phone rung was read from App Store creative; it is now read from a real
-iOS client, and the reading is the same. The `mobile-official/` images are no longer load-bearing
+iOS client, and the reading is the same. The `mobile/official/` images are no longer load-bearing
 for this row.
 
 **What we do today.** `shouldHideHeaderChrome()` (`embedded-database-renderer.ts:2410-2416`) is a

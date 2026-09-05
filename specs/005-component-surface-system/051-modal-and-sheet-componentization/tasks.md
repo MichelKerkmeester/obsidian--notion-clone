@@ -95,7 +95,7 @@ with the owner named, never self-closed.
       "unknown". **Met**: 35 of 35 rows; 25 name a capture, 10 carry **design inferred from source
       code, not seen**. **Red-first proof**: the file did not exist. **Capture**: the shell
       behaviours were read directly — 151 desktop states in `screenshots/anytype/`, 600 menu files
-      in `screenshots/anytype/menus/`, 118 iOS sheet files in `screenshots/anytype/mobile/` — not
+      in `screenshots/anytype/desktop/menus/`, 118 iOS sheet files in `screenshots/anytype/mobile/` — not
       taken second-hand from `../050-anytype-adoption/design-trueup.md`, which had no phone
       captures to read. The desktop values came back identical off the second set
       (`design-trueup.md` §2a). **Per ADR-002 (Accepted, operator 2026-09-05 ~14:15: "Yes, where

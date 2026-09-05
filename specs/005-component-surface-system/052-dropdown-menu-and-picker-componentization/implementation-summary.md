@@ -209,7 +209,7 @@ from a measurement and it deserves its own name.
 5. **`goal.md` was not edited.** Its D1 and D3 clauses describe the capture read as outstanding.
    They are satisfied by `design-trueup.md`, but the goal document sits above this packet's write
    scope for this change and reconciling it belongs with the phase's closure at T015.
-6. **No number was taken from `mobile-official/`.** Those twenty files are App Store and Google Play
+6. **No number was taken from `mobile/official/`.** Those twenty files are App Store and Google Play
    marketing creative — good evidence of intent, weak evidence of pixels — and the iOS simulator set
    supersedes them for every phone figure quoted here.
 <!-- /ANCHOR:limitations -->

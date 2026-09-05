@@ -359,7 +359,7 @@ are indexed with a per-file written description in `screenshots/anytype/README.m
 **This closes the evidence gap this packet's phone rows were written against**, and it supersedes
 one caveat that appears throughout the 050 true-up: `design-trueup.md` was written before these
 existed, so wherever it says a phone surface has no capture, or takes its phone reading from the
-twenty **App Store and Google Play marketing images** in `mobile-official/`, that gap is now closed
+twenty **App Store and Google Play marketing images** in `mobile/official/`, that gap is now closed
 by a real screen. The marketing images stay what they were — good evidence of intent, weak evidence
 of pixels — and no number is taken from them.
 

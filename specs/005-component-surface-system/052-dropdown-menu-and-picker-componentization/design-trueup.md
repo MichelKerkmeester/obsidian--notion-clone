@@ -17,7 +17,7 @@ contextType: "research"
 
 > This is T001's output and the gate on every leg in `plan.md`. Method is
 > `../050-anytype-adoption/design-trueup.md`'s, unchanged: **measure, then decide**. Every value
-> below was read off a file in `screenshots/anytype/menus/`, off a file in
+> below was read off a file in `screenshots/anytype/desktop/menus/`, off a file in
 > `screenshots/anytype/mobile/`, or off a line in `src/views/`. Nothing is carried over from `047`'s
 > research unless it is labelled as such, and `050`'s restated thresholds for items 1, 4, 6 and 8
 > bind here rather than `050`'s originals.

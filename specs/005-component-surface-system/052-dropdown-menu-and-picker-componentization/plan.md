@@ -170,7 +170,7 @@ grid change.
 | `048`'s stacking model + D1 | Submenus and pickers at depth 2-3 | Landed (`048` code complete, AC-009 operator-owned) |
 | `001`'s role vocabulary + design-system sizing | Width roles and mount adapters | Shipped; consumed |
 | `050` items 1/4/6/8 | Overlapping surfaces (spec §7) | Draft; coordination via one-leg-one-file. **[T001]** All four confirmed against the menus sweep at `050`'s restated thresholds — `design-trueup.md` §6 |
-| Anytype captures + `047` research | Grammar evidence | **Read.** T001 opened the **150** clipped desktop menus in `screenshots/anytype/menus/` and the **59** iOS states in `screenshots/anytype/mobile/`, measured them, and wrote `design-trueup.md` as the read of record. Eleven contradictions recorded; AC-009 and AC-005 Met |
+| Anytype captures + `047` research | Grammar evidence | **Read.** T001 opened the **150** clipped desktop menus in `screenshots/anytype/desktop/menus/` and the **59** iOS states in `screenshots/anytype/mobile/`, measured them, and wrote `design-trueup.md` as the read of record. Eleven contradictions recorded; AC-009 and AC-005 Met |
 <!-- /ANCHOR:dependencies -->
 
 ---

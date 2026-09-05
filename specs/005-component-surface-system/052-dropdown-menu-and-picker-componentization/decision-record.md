@@ -196,7 +196,7 @@ grid measures rows. Both pickers consume the one implementation (REQ-003, checkl
 ### Context
 
 `design-trueup.md` is T001's output and the read of record for this packet. It opened the 150
-clipped menus in `screenshots/anytype/menus/` and the 59 iOS states in `screenshots/anytype/mobile/`
+clipped menus in `screenshots/anytype/desktop/menus/` and the 59 iOS states in `screenshots/anytype/mobile/`
 and measured them. Eleven drafted premises are wrong; three of them touch decisions this record has
 already taken, and one of those is a decision clause rather than a mechanism.
 

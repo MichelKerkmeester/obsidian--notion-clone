@@ -21,7 +21,7 @@ it extracts only what a menu, dropdown or picker phase needs, and disposes each 
 This document was drafted from the capture index's written descriptions, because the authoring
 session could not open image files. `050`'s `design-trueup.md` then read the pixels of three menu
 captures with a per-pixel scan. **This packet's own `design-trueup.md` is now the read of record**:
-T001 opened the 150 clipped menus under `screenshots/anytype/menus/` and the 59 iOS states under
+T001 opened the 150 clipped menus under `screenshots/anytype/desktop/menus/` and the 59 iOS states under
 `screenshots/anytype/mobile/`, measured them, and corrected every row the pixels disagree with.
 `050` ADR-003 still governs the precedence (where a capture and `047`'s research disagree, the
 capture is the fact and the research is a source reading). Rows corrected at landing are marked
@@ -133,7 +133,7 @@ pixel read, and the survivors are named there.
 
 ## 5. Corrections made at T001, 2026-09-05
 
-T001 opened the 150 clipped menus in `screenshots/anytype/menus/` and the 59 iOS states in
+T001 opened the 150 clipped menus in `screenshots/anytype/desktop/menus/` and the 59 iOS states in
 `screenshots/anytype/mobile/`, and measured them. `design-trueup.md` is the read of record and
 carries every number; the table below is the index of what changed here. Rows are marked
 **[trued 2026-09-05 · T001]** in §1.
@@ -169,7 +169,7 @@ are indexed with a per-file written description in `screenshots/anytype/README.m
 **This closes the evidence gap this packet's phone rows were written against**, and it supersedes
 one caveat that appears throughout the 050 true-up: `design-trueup.md` was written before these
 existed, so wherever it says a phone surface has no capture, or takes its phone reading from the
-twenty **App Store and Google Play marketing images** in `mobile-official/`, that gap is now closed
+twenty **App Store and Google Play marketing images** in `mobile/official/`, that gap is now closed
 by a real screen. The marketing images stay what they were — good evidence of intent, weak evidence
 of pixels — and no number is taken from them.
 

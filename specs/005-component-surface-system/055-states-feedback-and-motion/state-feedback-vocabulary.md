@@ -86,7 +86,7 @@ Capture files that inform the empty-state design directly:
 `anytype-inlinecollection-empty-dark.png` (the "view" flavour with its `+ New Object` row — the
 model for our per-layout add affordance), `anytype-collection-grid-populated-dark.png` (populated
 contrast), and — since `964a0b2a` — the **118 real iOS simulator captures** under
-`screenshots/anytype/mobile/`, which supersede `mobile-official/` as the mobile reference (the
+`screenshots/anytype/mobile/`, which supersede `mobile/official/` as the mobile reference (the
 official creative remains marketing, good evidence of intent and weak evidence of pixels). T001
 read them: the desktop's no-empty-block finding is **desktop-scoped**, and the phone renders a
 **three-tier ladder** — message only, illustration plus one line, illustration plus title plus

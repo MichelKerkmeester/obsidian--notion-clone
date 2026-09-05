@@ -85,7 +85,7 @@ oracle-tested; `sheet-grammar` pairs unchanged.
 
 - [x] T001 Read the Anytype captures and correct every G-row the pixels disagree with
       (`design-trueup.md`, `anytype-menu-grammar.md`). Scope grew with the evidence: the sweep now
-      holds **150 clipped desktop menus** in `screenshots/anytype/menus/` and **59 iOS states** in
+      holds **150 clipped desktop menus** in `screenshots/anytype/desktop/menus/` and **59 iOS states** in
       `screenshots/anytype/mobile/`, so the read covered the menu classes rather than the six files
       this task originally named. **Proof (observed 2026-09-05)**: `design-trueup.md` written as the
       read of record — §2 carries the measured geometry set and five width tiers, §3 all sixteen

@@ -435,7 +435,7 @@ capture in the tree is a render of `styles.css`. That premise held when the lane
 It stopped holding once this packet's D2 put competitor reference photographs at
 `screenshots/anytype/` — 151 top-level captures taken by `tools/mock-data/anytype/capture.mjs`
 against a live Anytype Electron window over the Chrome DevTools Protocol, plus 6 official marketing
-JPGs — and a `mobile-official/` subfolder of 20 further official images, none of which any script in
+JPGs — and a `mobile/official/` subfolder of 20 further official images, none of which any script in
 this repository renders. (`screenshots/appflowy/` carried the equivalent official/installed captures
 under the same D2 until ADR-003 above removed it; its presence at the time this fix was written is
 why the mechanism below is a config allowlist rather than a one-off `anytype`-only exclusion.) No
