@@ -12,9 +12,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/049-test-environments-and-mock-data"
-    last_updated_at: "2026-09-05T11:15:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Closed AC-007: the catalogue is loaded into Anytype, with views and captures"
+    last_updated_at: "2026-09-05T12:10:00Z"
+    last_updated_by: "code-agent"
+    recent_action: "Closed AC-007 (Anytype load); moved AC-008 to Superseded (AppFlowy removed)"
     next_safe_action: "AC-009 is the only row left, and only the operator can close it"
     blockers:
       - "AC-009 is operator-owned and nothing here can close it"
@@ -29,7 +29,7 @@ _memory:
     completion_pct: 0
     open_questions: []
     answered_questions:
-      - "Whether AppFlowy's CSV import infers select options or needs them declared first — moot, 2026-09-05: the import is skipped by operator decision (ADR-001) and the question is deferred to whichever future operator window performs it"
+      - "Whether AppFlowy's CSV import infers select options or needs them declared first — moot, 2026-09-05: AppFlowy was removed from the reference set entirely (ADR-002), so the question no longer applies to any future work in this repo"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Test Environments and Mock Data
@@ -71,7 +71,7 @@ counted as evidence.
 | AC-005 | REQ-007 | **Given** each generated database, **When** it is mounted in the shipped `TableRenderer` with the shipped `CellRenderer` at 1440px, **Then** the renderer builds exactly the record count in rows for all **10**, and the author has opened every PNG | `node tools/mock-data/capture.mjs`: ten rows reading `rows N/N … ok`, 30 headers each, 868-1240 cells, 134-186 links, 57-81 checkboxes. Bundle manifest checked for `table-renderer.ts` and `cell-renderer.ts` at `tools/mock-data/capture.mjs:234` before any mount | Met | - |
 | AC-006 | REQ-005, REQ-006 | **Given** any use case, **When** its records are inspected, **Then** exactly one is entirely empty, every record identity is unique, and every one of the **265** relation links points at a record that exists in the same use case | `tools/mock-data/catalogue.test.mjs:188` and `:175`; independently re-checked against the written vault by resolving every `[[link]]` against the filenames on disk: **unresolved: 0** | Met | - |
 | AC-007 | REQ-001 | **Given** `catalogue.json`, **When** an agent loads it into the Anytype demo space, **Then** Anytype holds the same ten use cases at the same record counts, with **0** records missing | `tools/mock-data/anytype/load.mjs`, ten `read back` lines, then `--verify` re-reading every object from the live space: **326 of 326** records and **5990 of 5990** settable cells, `0` misses (`tools/mock-data/anytype/verify-report.json`). **The load did not need the captures leg's CDP session:** Anytype 0.56.5 serves a local HTTP API on `localhost:31009` that creates types, properties, options, objects and collection membership in bulk, so only the views leg needed the renderer | Met | - |
-| AC-008 | REQ-001 | **Given** the ten CSVs, **When** they are imported into the AppFlowy demo workspace in an operator window, **Then** AppFlowy holds the same ten use cases at the same record counts, with **0** records missing. **2026-09-05: skipped by operator decision** — AppFlowy is Flutter with no DOM or accessibility tree, so the import needs real mouse clicks the operator chose not to spend (~10 minutes of their own Mac). The ten CSVs stay in `tools/mock-data/csv/`, and the exact import steps stay written down in `screenshots/appflowy/README.md`, for a future operator window | A per-use-case count read back from AppFlowy and compared against `recordCount`, emitted at `tools/mock-data/emit-portable.ts:71`. AppFlowy exposes no DOM, so this is read by a person | Waived | ADR-001 |
+| AC-008 | REQ-001 | **Given** the ten CSVs, **When** they are imported into the AppFlowy demo workspace in an operator window, **Then** AppFlowy holds the same ten use cases at the same record counts, with **0** records missing. **2026-09-05: first skipped by operator decision** — AppFlowy is Flutter with no DOM or accessibility tree, so the import needs real mouse clicks the operator chose not to spend (~10 minutes of their own Mac). **Later the same day, superseded**: the operator removed AppFlowy from the reference set entirely, so this environment leg no longer applies. The ten CSVs stay in `tools/mock-data/csv/` as product-neutral CSV-export fixtures; `screenshots/appflowy/` (including its import-steps README) was deleted | A per-use-case count read back from AppFlowy and compared against `recordCount`, emitted at `tools/mock-data/emit-portable.ts:71`. No longer applicable — AppFlowy left the reference set | Superseded | ADR-002 |
 | AC-009 | REQ-007 | **Given** the upgraded vault on the operator's device, **When** they open the ten generated databases, **Then** they report them as usable test environments rather than as a wall of noise, and the computed and rollup columns resolve to values | The operator's own words against the vault files written by `tools/mock-data/emit-obsidian.ts:333`. **Only the operator closes this row; nothing in this repository can**, and the computed and rollup half of it specifically cannot be shown by a constructed mount | Unmet | - |
 
 ### Status values
@@ -96,14 +96,16 @@ Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Wai
 
 **Closeable:** No
 
-Six of nine rows are met on evidence recorded in `checklist.md`, and a seventh — AC-008 — closed
-`Waived` on 2026-09-05 (ADR-001): the operator chose to skip the AppFlowy CSV-import leg rather than
-spend real click time on a Flutter app with no DOM or accessibility tree, and the CSVs stay in
-`tools/mock-data/csv/` for a future operator window. Two rows remain open, and each needs something
-this session does not have: AC-007 needs the CDP session the captures leg owns, and AC-009 is the
-operator's own read on a device, which under the parent's D3 is the only thing that closes a defect.
-This packet's active, agent-closeable environment scope is now **Anytype and Obsidian only** —
-AppFlowy's leg is closed by decision, not by evidence.
+Seven of nine rows are met on evidence recorded in `checklist.md` and above — AC-001 through AC-007,
+the last of these closing 2026-09-05 once the Anytype catalogue load ran over the app's local HTTP
+API rather than the CDP session it was originally written against. AC-008 closed `Waived` on
+2026-09-05 (ADR-001), then moved to `Superseded` the same day (ADR-002): the operator first chose to
+skip the AppFlowy CSV-import leg rather than spend real click time on a Flutter app with no DOM or
+accessibility tree, then removed AppFlowy from the reference set entirely, so the environment itself
+no longer applies. The CSVs stay in `tools/mock-data/csv/` as product-neutral fixtures. One row
+remains open: AC-009 is the operator's own read on a device, which under the parent's D3 is the only
+thing that closes a defect. This packet's active, agent-closeable environment scope is **Anytype and
+Obsidian only** — AppFlowy's leg is closed by decision, not by evidence.
 
 AC-009 carries one part no automated check can substitute for. The computed and rollup columns
 photograph empty in AC-005's captures because both are evaluated by the data pipeline against a live

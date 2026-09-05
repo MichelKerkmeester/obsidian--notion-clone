@@ -247,9 +247,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] All sixteen block shapes the current writers can produce round-trip byte-identically, plus the three adversarial rows. Today: untested — no round-trip test exists.
 - [ ] The operator opens the Overview page and reports the nested views as reading like real databases. Only the operator closes this row.
 
-## 047-competitor-references-and-pm-alignment — 0/6
+## 047-competitor-references-and-pm-alignment — 1/6
 
-- [ ] `screenshots/anytype/` and `screenshots/appflowy/` carry board, table, calendar and timeline captures from both sources. Today: neither root exists, and neither app is installed — `brew info --cask` reports `anytype` 0.56.5 and `appflowy` 0.14.1, both "Not installed".
 - [ ] Every new capture has a manifest entry carrying its provenance: source, app version, capture date. Today: `screenshots/manifest.json` has 546 entries, 16 of them references, all Project Manager.
 - [ ] The reference contract accepts the new groups and renderers and still rejects a malformed entry, proven by a negative control observed red. Today: `manifest-schema.mjs:118` rejects any group but `project-manager`; `:52` allows two renderers; no negative control exists.
 - [ ] A capture with no in-repo source has a deterministic class in `verify.mjs`. Today: `vendor-unavailable` exists for an *unavailable* source, which is a different thing from no source at all.

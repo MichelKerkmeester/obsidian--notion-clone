@@ -1,9 +1,9 @@
 ---
 title: "Feature Specification: Competitor References and Closer PM Alignment"
-description: "Capture Anytype and AppFlowy references beside the Project Manager set, and close the board and gantt fidelity gap the operator named as 'align closer' with in-repo comparison criteria."
+description: "Capture Anytype references beside the Project Manager set — AppFlowy was removed from scope 2026-09-05, see decision-record.md ADR-003 — and close the board and gantt fidelity gap the operator named as 'align closer' with in-repo comparison criteria."
 trigger_phrases:
   - "competitor references"
-  - "anytype appflowy captures"
+  - "anytype competitor captures"
   - "047 pm alignment"
   - "align closer board timeline"
 importance_tier: "critical"
@@ -38,7 +38,9 @@ _memory:
 <!-- SPECKIT_LEVEL: 2 -->
 
 > Phase chain: parent [`../spec.md`](../spec.md). Opened 2026-09-05 from the operator's ruling on
-> `../roadmap.md` §4 rows 37 and 38: **"align closer"**, plus Anytype and AppFlowy references.
+> `../roadmap.md` §4 rows 37 and 38: **"align closer"**, plus an Anytype reference set. AppFlowy was
+> named in the same ruling and captured, then removed from scope entirely the same day — see
+> `decision-record.md` ADR-003.
 
 ---
 
@@ -75,8 +77,9 @@ This is **Phase 47** of the Component Surface System.
 something to compare against.
 
 **Deliverables**:
-- `screenshots/anytype/` and `screenshots/appflowy/` with manifest entries in
-  `screenshots/project-manager/`'s style.
+- `screenshots/anytype/` with manifest entries in `screenshots/project-manager/`'s style. AppFlowy
+  was captured under the original ruling, then removed from the reference set entirely by operator
+  decision — `decision-record.md` ADR-003.
 - A widened reference contract in `tools/screenshots/manifest-schema.mjs` that still rejects a
   malformed entry.
 - A measured board and gantt fidelity comparison against Project Manager, gap by gap.
@@ -89,7 +92,8 @@ packet number plus this phase folder name.
 0.14.1** installed via Homebrew (T002). App launch hung for the agent; the operator opened both
 apps by hand, and captures resume from those windows. Separately, the operator's Anytype research
 depth is overridden to 20 additional iterations beyond the default cap — `decision-record.md`
-ADR-001.
+ADR-001. **AppFlowy's captures were later removed from the reference set entirely, same day —
+`decision-record.md` ADR-003.**
 <!-- /ANCHOR:phase-context -->
 
 ---
@@ -104,6 +108,8 @@ operator installing both plugins in one vault and comparing them. On 2026-09-05 
 0.0.22 and returned a verdict rather than a confirmation — **"align closer"** — and asked for two
 further reference sets beside Project Manager: **Anytype** and **AppFlowy**, boards, tables,
 calendar and timeline, from both the official product images and the apps installed locally.
+AppFlowy was captured under this ruling, then removed from the reference set entirely later the
+same day — `decision-record.md` ADR-003. This spec's active scope is Anytype-only from here on.
 
 The in-repo comparison halves of both rows are already `Met`: `037`'s AC-007 matched 60 of 60
 `pm-gantt-*` classes with zero divergence at `30c4b746`, and `038`'s T12 matched fourteen
@@ -136,12 +142,10 @@ of measured gaps rather than an impression.
 ## 3. SCOPE
 
 ### In Scope
-- **Anytype** and **AppFlowy** reference captures: board, table, calendar and timeline surfaces,
-  from **both** official product images **and** the locally installed apps. Both Homebrew casks
-  exist — `anytype` 0.56.5 and `appflowy` 0.14.1 — and **neither is installed today**, so the
-  install is part of the work.
-- `screenshots/anytype/` and `screenshots/appflowy/` as new capture roots, flat, the way
-  `screenshots/project-manager/` is.
+- **Anytype** reference captures: board, table, calendar and timeline surfaces, from **both**
+  official product images **and** the locally installed app. Homebrew cask `anytype` 0.56.5
+  existed and **was not installed at the time**, so the install was part of the work.
+- `screenshots/anytype/` as the new capture root, flat, the way `screenshots/project-manager/` is.
 - Manifest entries in the project-manager style, with the provenance a downloaded image or an app
   screenshot needs and a rendered capture does not.
 - Widening `manifest-schema.mjs`'s reference contract without loosening it.
@@ -153,7 +157,10 @@ of measured gaps rather than an impression.
   shipped.
 - Rows 37 and 38 themselves. They close on the operator's own vault comparison and nothing here
   substitutes for that.
-- Anytype's or AppFlowy's source code. There is no vendored copy and this phase does not create one.
+- Anytype's source code. There is no vendored copy and this phase does not create one.
+- **AppFlowy, entirely.** Captured under the original ruling, then removed from the reference set by
+  operator decision, 2026-09-05 — `decision-record.md` ADR-003, which supersedes ADR-002's
+  disposition of AppFlowy's remaining installed-app rows.
 - Redistributing competitor product images beyond what their terms allow — see §6.
 - `045-board-card-properties`'s per-view card fields, which sit behind `boardExtensionsEnabled` and
   deliberately do not move the reference path.
@@ -164,8 +171,9 @@ of measured gaps rather than an impression.
 |-----------|-------------|-------------|
 | `tools/screenshots/manifest-schema.mjs` | Modify | Widen the reference contract past `project-manager`, `pm-kanban` and `pm-gantt` |
 | `screenshots/manifest.json` | Modify | The new reference entries |
-| `screenshots/anytype/`, `screenshots/appflowy/` | Create | The capture roots |
-| `screenshots/README.md` | Modify | What the two new roots are and where they came from |
+| `screenshots/anytype/` | Create | The capture root |
+| `screenshots/appflowy/` | Delete | Removed from the reference set entirely — `decision-record.md` ADR-003 |
+| `screenshots/README.md` | Modify | What the new root is and where it came from |
 | `tools/screenshots/verify.mjs` | Modify | How a capture with no in-repo source is classified |
 | `src/views/board-renderer.ts`, `styles.css` | Modify | Whatever the board fidelity pass measures and closes |
 | `src/views/calendar-timeline-renderer.ts`, `styles.css` | Modify | Whatever the gantt fidelity pass measures and closes |
@@ -180,7 +188,7 @@ of measured gaps rather than an impression.
 
 | ID | Requirement |
 |----|-------------|
-| REQ-001 | `screenshots/anytype/` and `screenshots/appflowy/` exist and carry board, table, calendar and timeline captures from **both** sources the operator named: official product images and the locally installed apps |
+| REQ-001 | `screenshots/anytype/` exists and carries board, table, calendar and timeline captures from **both** sources the operator named: official product images and the locally installed app. AppFlowy was removed from this requirement's scope, 2026-09-05 — `decision-record.md` ADR-003 |
 | REQ-002 | Every new capture has a manifest entry carrying its provenance — which source it came from, which app version, and when — in the shape `screenshots/project-manager/`'s entries use |
 | REQ-003 | The board and gantt are compared against Project Manager with **in-repo comparison criteria**, in the style `037`'s AC-007 and `038`'s T12 used: named elements, measured values, zero-divergence or a numbered gap |
 
@@ -201,9 +209,9 @@ of measured gaps rather than an impression.
 <!-- ANCHOR:success-criteria -->
 ## 5. SUCCESS CRITERIA
 
-- **SC-001**: a reviewer can open `screenshots/anytype/`, `screenshots/appflowy/` and
-  `screenshots/project-manager/` beside our own captures and compare four products without leaving
-  the repository.
+- **SC-001**: a reviewer can open `screenshots/anytype/` and `screenshots/project-manager/` beside
+  our own captures and compare three products without leaving the repository. AppFlowy was removed
+  from this comparison, 2026-09-05 — `decision-record.md` ADR-003.
 - **SC-002**: "align closer" is a numbered list of measured differences, each closed or
   dispositioned, rather than a verdict.
 - **SC-003**: the manifest contract is wider and no weaker — the negative control still goes red.
@@ -305,5 +313,6 @@ of measured gaps rather than an impression.
 - **RESOLVED, 2026-09-05: how much research depth does the Anytype reference get?** The operator
   finds Anytype's UI/UX "amazing" and asked for 20 additional deep-research iterations of
   UX/logic extraction run purely on Anytype, beyond the default 5-iteration cap — `decision-record.md`
-  ADR-001. AppFlowy and Project Manager keep the default cap and this spec's original scope.
+  ADR-001. Project Manager keeps the default cap and this spec's original scope; AppFlowy was later
+  removed from scope entirely, 2026-09-05 — `decision-record.md` ADR-003.
 <!-- /ANCHOR:questions -->

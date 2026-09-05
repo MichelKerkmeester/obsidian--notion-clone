@@ -11,13 +11,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T07:40:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Authored the directive from the rows 37/38 align-closer ruling"
+    last_updated_at: "2026-09-05T12:10:00Z"
+    last_updated_by: "code-agent"
+    recent_action: "Rewrote the directive and completion criteria to Anytype-only per ADR-003 (AppFlowy removed)"
     next_safe_action: "Write the negative control red-first, then widen the reference contract"
     blockers:
       - "manifest-schema.mjs rejects any reference group that is not project-manager"
-      - "Installing the two casks is a scoped mutation and needs the operator's go-ahead"
     key_files:
       - "tools/screenshots/manifest-schema.mjs"
       - "screenshots/manifest.json"
@@ -30,7 +29,7 @@ _memory:
       - "How does the freshness lane classify a capture with no in-repo source?"
       - "Does align closer have a stopping point if the second pass also measures zero?"
     answered_questions:
-      - "Both casks exist and neither app is installed: anytype 0.56.5, appflowy 0.14.1"
+      - "Anytype cask installed: 0.56.5. AppFlowy was installed and captured, then removed from the reference set entirely by operator decision — decision-record.md ADR-003"
 ---
 # Goal: Competitor References and Closer PM Alignment
 
@@ -48,8 +47,10 @@ _memory:
 ## 1. DURABLE DIRECTIVE
 
 **Objective:** Give the board and the gantt more than one reference to be judged against — Anytype
-and AppFlowy beside Project Manager — and turn the operator's *"align closer"* into a numbered list
-of measured gaps, each closed with a before and an after or dispositioned with a reason.
+beside Project Manager — and turn the operator's *"align closer"* into a numbered list of measured
+gaps, each closed with a before and an after or dispositioned with a reason. AppFlowy was captured
+under the original ruling, then removed from the reference set entirely by operator decision,
+2026-09-05 — `decision-record.md` ADR-003.
 
 ### Decisions
 
@@ -58,7 +59,7 @@ Frozen choices. Changing one is an amendment.
 | ID | Decision |
 |----|----------|
 | D1 | **Both sources, per the operator's words:** official product images **and** the apps installed locally through Homebrew casks. Not one or the other. |
-| D2 | Captures live at `screenshots/anytype/` and `screenshots/appflowy/`, **flat**, the way `screenshots/project-manager/` does. Our own captures stay under `screenshots/notion-clone/`. |
+| D2 | Captures live at `screenshots/anytype/`, **flat**, the way `screenshots/project-manager/` does. Our own captures stay under `screenshots/notion-clone/`. AppFlowy was also captured this way, then removed entirely — `decision-record.md` ADR-003. |
 | D3 | **The manifest contract is widened, not loosened.** `manifest-schema.mjs:118` rejects any reference group but `project-manager` and `:52` allows only `pm-kanban` and `pm-gantt`. A negative control proves the widened version still rejects. |
 | D4 | **No fidelity fix without a measured gap behind it.** `037`'s AC-007 and `038`'s T12 are the style: named elements, measured values, a numbered gap or a zero. |
 | D5 | **A capture that could not be taken is recorded as uncaptured, with its reason.** An absent capture reported as zero gaps is the exact failure this program was rewritten around. |
@@ -87,9 +88,10 @@ including a roadmap row. Name a conflict rather than resolving it silently.
 Each row is checkable without opening another file, and each records what is true today so the check
 has a value to move from.
 
-- [ ] `screenshots/anytype/` and `screenshots/appflowy/` carry board, table, calendar and timeline
-      captures from **both** sources. **Today: neither root exists, and neither app is installed —
-      `brew info --cask` reports `anytype` 0.56.5 and `appflowy` 0.14.1, both "Not installed".**
+- [x] `screenshots/anytype/` carries board, table, calendar and timeline captures from **both**
+      sources. **Met, 2026-09-05: 6 of 8 rows captured, 2 N/A (no timeline in Anytype) — see
+      `acceptance-criteria.md` AC-001. AppFlowy was also captured under the original ruling, then
+      removed from the reference set entirely — `decision-record.md` ADR-003.**
 - [ ] Every new capture has a manifest entry carrying its provenance: source, app version, capture
       date. **Today: `screenshots/manifest.json` has 546 entries, 16 of them references, all
       Project Manager.**
@@ -126,7 +128,7 @@ into the objective, and it is expected to grow.
 | Cask availability checked | Done | `brew info --cask anytype` → 0.56.5, auto_updates, **Not installed**. `brew info --cask appflowy` → 0.14.1, **Not installed** |
 | Contract blocker found | Done | `tools/screenshots/manifest-schema.mjs:118` rejects any reference `group` but `project-manager`; `:52` limits `REFERENCE_RENDERERS` to `pm-kanban` and `pm-gantt` |
 | Contract widened | Not started | `tasks.md` T005, T006 |
-| Captures | Done, partial | `tasks.md` T008, T009 — 10 of 16 matrix rows captured (all 6 Anytype rows reached once driven over CDP; AppFlowy is Flutter with no scriptable surface), 4 N/A (no timeline in either product), 2 not reachable (AppFlowy's remaining database views need a click, forbidden mid-session); demo page and every object inside it deleted (Move to Bin) via CDP before commit — cleanup is complete, not deferred |
+| Captures | Done | `tasks.md` T008, T009 — Anytype: 6 of 8 matrix rows captured (all reached once driven over CDP), 2 N/A (no timeline in Anytype); demo page and every object inside it deleted (Move to Bin) via CDP before commit — cleanup is complete, not deferred. AppFlowy was also captured (T009), then removed from the reference set entirely by operator decision — `decision-record.md` ADR-003 |
 | Fidelity comparison | Not started | `tasks.md` T012, T013 |
 
 ### Deviations and findings
@@ -140,5 +142,5 @@ into the objective, and it is expected to grow.
 | Neither app is installed | So the installed-app half of the operator's ask starts with an installation, which is a scoped mutation and waits for a go-ahead rather than being assumed. |
 | No simulated mouse click works in this environment | Confirmed three ways: `CGEvent` posts (Quartz, from Python) return no error and have no visible effect; `System Events`'s `click at {x,y}` is refused outright — `osascript is not allowed assistive access` (-25211); and both apps' content areas expose no accessibility tree to click through instead (their whole window body is one opaque `AXGroup` — only native window-chrome buttons and the native macOS menu bar are real accessibility elements). What does work: `keystroke`/`key code` sent to whatever is frontmost, and clicking a native menu-bar item via the accessibility API's menu action. Every installed-app capture was reached through some combination of `Cmd+K`/`Cmd+P`, `Cmd+N`, `/`, arrows + Return, Escape, and native-menu clicks — never a coordinate click. This caps what could be captured: view-switcher tabs, toolbar icons, table cells, and context menus were all unreachable. |
 | The Anytype demo page needed a click to delete — solved by driving Anytype over CDP instead | Anytype's own deletion docs (`docs.anytype.io/anytype/organize/deletion`) describe a click/checkbox-driven Bin flow with no keyboard shortcut. Once the operator asked for a fully click-free method (quit Anytype, relaunch with `--remote-debugging-port=9222`, drive it over raw CDP WebSocket JSON-RPC), `el.click()` executed inside the page's own renderer reached the object header's `···` → Move to Bin — a real DOM click that never touches the OS pointer or focus. `notion-clone-reference-demo` and every object created inside it were deleted this way before the commit; confirmed by a post-cleanup screenshot showing only the two objects Anytype ships by default. |
-| AppFlowy has no CDP equivalent | AppFlowy is Flutter, rendered to a single GPU-backed surface with no DOM and no `--remote-debugging-port` — the CDP escape hatch that worked for Anytype (Electron/Chromium) does not exist for it. Its remaining installed views (Grid/Calendar of the `To-dos` database) and the operator's later CSV-import ask stay behind a real click, recorded as pending an operator window rather than attempted. |
+| AppFlowy has no CDP equivalent, and was later removed from scope entirely | AppFlowy is Flutter, rendered to a single GPU-backed surface with no DOM and no `--remote-debugging-port` — the CDP escape hatch that worked for Anytype (Electron/Chromium) does not exist for it. Its remaining installed views (Grid/Calendar of the `To-dos` database) stayed behind a real click. Rather than leave that pending an operator window, the operator later chose to drop AppFlowy from the reference set entirely — `decision-record.md` ADR-003, superseding the earlier skip decision (ADR-002) |
 <!-- /ANCHOR:log -->

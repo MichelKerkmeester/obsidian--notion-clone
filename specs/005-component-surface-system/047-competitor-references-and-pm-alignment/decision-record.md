@@ -1,25 +1,24 @@
 ---
 title: "Decision Record: Competitor References and PM Alignment"
-description: "ADR-001 overrides the deep-research cap for Anytype; ADR-002 skips AppFlowy's remaining installed-app captures and keeps Anytype's demo space persistent."
+description: "ADR-001 overrides the deep-research cap for Anytype; ADR-002 skips AppFlowy's remaining installed-app captures and keeps Anytype's demo space persistent; ADR-003 supersedes ADR-002 and removes AppFlowy from the reference set entirely."
 trigger_phrases:
   - "047 decision record"
   - "anytype research override"
   - "deep research iteration cap"
   - "competitor references adr"
-  - "appflowy skip decision"
+  - "appflowy removed decision"
 importance_tier: "normal"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T11:15:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Recorded ADR-002: skip AppFlowy captures, keep Anytype demo persistent"
-    next_safe_action: "Await a future operator window to resume AppFlowy captures"
+    last_updated_at: "2026-09-05T12:10:00Z"
+    last_updated_by: "code-agent"
+    recent_action: "Recorded ADR-003: AppFlowy removed from the reference set entirely, superseding ADR-002"
+    next_safe_action: "Reconcile 049's mirror decision and the roadmap §6A entry"
     blockers: []
     key_files:
       - "screenshots/anytype/"
-      - "screenshots/appflowy/"
       - "../049-test-environments-and-mock-data/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -273,5 +272,136 @@ T009 and T022 gain a skip note, and `../roadmap.md` §6A records the decision.
 from `Waived` to `Met` in both packets' `acceptance-criteria.md`, citing the new evidence.
 <!-- /ANCHOR:adr-002-impl -->
 <!-- /ANCHOR:adr-002 -->
+
+---
+
+<!-- ANCHOR:adr-003 -->
+## ADR-003: AppFlowy removed from the reference set entirely, superseding ADR-002
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-003-context -->
+### Context
+
+ADR-002 (above) recorded skipping AppFlowy's two remaining installed-app capture rows while keeping
+its official product images and the already-taken installed captures as an ongoing reference set,
+pending a future operator window. The operator's later, separate instruction supersedes that
+disposition outright rather than extending it: **"let's ditch AppFlowy screenshots"** — AppFlowy
+leaves the reference set entirely, not partially. This is a scope decision, not a technical one:
+nothing about AppFlowy's Flutter/no-DOM limitation changed; the operator chose to stop carrying it
+as a comparison product at all.
+
+### Constraints
+
+- The removal is scoped to **AppFlowy as a reference product** across this phase and its sibling
+  `049-test-environments-and-mock-data`. It does not touch Anytype's reference set or Project
+  Manager's.
+- `tools/mock-data/csv/`'s CSVs are **not** deleted — the operator judged them product-neutral CSV
+  export fixtures rather than AppFlowy-specific artifacts, and reworded their documentation instead
+  of removing them.
+<!-- /ANCHOR:adr-003-context -->
+
+---
+
+<!-- ANCHOR:adr-003-decision -->
+### Decision
+
+**We chose**: delete `screenshots/appflowy/` entirely (images, `README.md`, `sources.md`), remove
+every AppFlowy reference from this phase's `spec.md`, `tasks.md`, `acceptance-criteria.md` and
+`goal.md` — rewriting scope statements to Anytype-only (plus the Project Manager reference) — and
+record the removal in `../roadmap.md` §6A and §4 rows 37/38. `049-test-environments-and-mock-data`
+carries the mirror change in its own `tasks.md`, `acceptance-criteria.md` and `decision-record.md`.
+`tools/mock-data/csv/` and its README are reworded from "the AppFlowy import files" to a
+product-neutral "CSV export" framing, since the CSVs themselves are not AppFlowy-specific.
+
+**How it works**: this ADR **supersedes ADR-002** above. ADR-002's disposition of AppFlowy's
+remaining installed-app rows (`Waived`, pending a future operator window) is moot once AppFlowy
+leaves the reference set entirely — there is no future window to wait for. `047`'s AC-001 is
+rewritten to an Anytype-only matrix (8 rows: board/table/calendar/timeline x official/installed,
+of which timeline is N/A for both sources) and reassessed against that narrower scope: every
+remaining row is either captured or correctly N/A, so AC-001 now reads `Met` rather than `Waived`.
+`049`'s AC-008 (the AppFlowy CSV-import environment leg) moves from `Waived` (ADR-001, pending a
+future window) to `Superseded` — the environment itself is out of scope, not merely deferred.
+<!-- /ANCHOR:adr-003-decision -->
+
+---
+
+<!-- ANCHOR:adr-003-alternatives -->
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **A. Delete `screenshots/appflowy/` and rewrite every active scope statement to Anytype-only** | Matches the operator's explicit instruction; leaves no stale "AppFlowy work in progress" doc anywhere active readers look | The captures and provenance work already done for AppFlowy (T009, T011, T015) is discarded rather than reused | 9/10 |
+| B. Keep the AppFlowy folder and images, just stop planning further AppFlowy work (extend ADR-002 as-is) | No deletion; smallest diff | Does not match "ditch AppFlowy screenshots" — the operator asked for removal, not a freeze | 3/10 |
+| C. Archive `screenshots/appflowy/` under a `_archive/` prefix instead of deleting | Recoverable without git history | Not what was asked, and adds a permanent stale folder the manifest and README indexes would need to keep excluding | 4/10 |
+
+**Why this one**: the operator's own words are a direct instruction to remove, not to freeze or
+archive; Option A is the literal reading, and git history already makes the removal recoverable
+without a parallel archive folder.
+<!-- /ANCHOR:adr-003-alternatives -->
+
+---
+
+<!-- ANCHOR:adr-003-consequences -->
+### Consequences
+
+**What improves**: the packet's active scope statements stop describing AppFlowy as in-progress or
+pending work, matching what the operator actually wants captured going forward. `AC-001` closes on
+real evidence (`Met`) instead of carrying a permanent `Waived` gap.
+
+**What it costs**: the AppFlowy captures, provenance research (`sources.md`), and README content
+already produced under T009/T011/T015 are removed from the working tree; they remain recoverable
+from git history (this commit's parent) if a future operator reopens AppFlowy as a reference
+product.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A later reader finds a stray AppFlowy reference in an untouched doc and assumes the removal was incomplete | L | This ADR names the exact narrow write-authority scope; any residual mention outside it is a known, reported gap rather than a silent miss |
+| Git history is the only remaining record of the AppFlowy captures if a future operator wants them back | L | This ADR and its commit message name exactly what was removed and when, so a future recovery is a `git log`/`git show` away rather than a guess |
+<!-- /ANCHOR:adr-003-consequences -->
+
+---
+
+<!-- ANCHOR:adr-003-five-checks -->
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Explicit, named operator instruction: "let's ditch AppFlowy screenshots" |
+| 2 | **Beyond Local Maxima?** | PASS | Freezing AppFlowy in place (extending ADR-002) and archiving it were both considered and scored lower |
+| 3 | **Sufficient?** | PASS | Scoped to AppFlowy as a reference product across `047` and `049`; Anytype and Project Manager are untouched |
+| 4 | **Fits Goal?** | PASS | Matches the operator's own words exactly, and closes `047`'s AC-001 on real evidence rather than leaving a permanent waiver |
+| 5 | **Open Horizons?** | PASS | Git history retains the removed captures if a future operator reopens AppFlowy as a reference product |
+
+**Checks Summary**: 5/5 PASS
+<!-- /ANCHOR:adr-003-five-checks -->
+
+---
+
+<!-- ANCHOR:adr-003-impl -->
+### Implementation
+
+**What changes**: `git rm -r screenshots/appflowy/`; `047`'s `spec.md`, `tasks.md`,
+`acceptance-criteria.md` and `goal.md` rewritten to Anytype-only scope; `049`'s `tasks.md`,
+`acceptance-criteria.md` and `decision-record.md` carry the mirror change; `../roadmap.md` §6A gains
+this decision and §4 rows 37/38 drop AppFlowy from the ask; `tools/mock-data/README.md` and
+`tools/mock-data/csv/README.md` reworded from AppFlowy-specific framing to product-neutral "CSV
+export" framing, since the CSVs stay (they are product-neutral, per the operator).
+
+**How to roll back**: `git revert` the removal commit, or `git checkout <pre-removal-sha> --
+screenshots/appflowy/` to restore the folder, then reopen this ADR and flip `047`'s AC-001 and
+`049`'s AC-008 back to their ADR-001/ADR-002 dispositions with the restored evidence.
+<!-- /ANCHOR:adr-003-impl -->
+<!-- /ANCHOR:adr-003 -->
 
 ---
