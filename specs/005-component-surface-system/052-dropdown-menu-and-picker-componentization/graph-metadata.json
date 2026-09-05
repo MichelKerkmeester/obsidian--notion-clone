@@ -47,6 +47,8 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
+      "screenshots/anytype/README.md",
       "src/views/owned-menu.ts",
       "src/views/menu-row.ts",
       "src/views/dropdown-field.ts",
@@ -95,6 +97,18 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/anytype/README.md",
         "source": "derived"
       },
       {
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Critical Dependencies",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The family works surface by surface and drifts as a family",
     "created_at": "2026-09-05T11:32:58.144Z",
-    "last_save_at": "2026-09-05T12:10:19.200Z",
+    "last_save_at": "2026-09-05T14:17:12.599Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cd27bcb7e4d4afc910701b8e88c72b4ed7867e7964563656ab0ac142ee03cc27",
+    "source_fingerprint": "sha256:a0781a8158062842548cc97cc899cbbf50d1d9289c0f7a747264e52fcfd0ada3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "bcc43113caf7205ca9492a9744614b981eba5c52fb499fc8e183cb889270b56c",
-      "plan.md": "422b358934205a24c8d3632043ff1c6ff3996c363b5b7ca9924314a4cab075fa",
-      "tasks.md": "929c3fd256c63a51125bc4f558e85d666cd5abb6ec5178f69c1d618098a6a3be",
-      "decision-record.md": "ab767223fdaf7af0960d9d6ed7a967732aee6931e1526e9283691f5d7752dee1"
+      "spec.md": "3d677c7e022b37434cf8ab222f6c30af372c27cfdd19aa3ecdece0e3a59b9083",
+      "plan.md": "0015c5b4b9afb9572bd2c4731419af6a0139f3cac4571beb1b9c4343c342caf1",
+      "tasks.md": "0b1eb758436ba0ad89008dfe1babca23c370fdbf5787ecc8c2d513646b83baee",
+      "decision-record.md": "a94b61851b0efeecef56428163cb3df290722cbefe1ffab56e72f85a41338468",
+      "implementation-summary.md": "9d7cb4e89ee642bec7ad2a3409fed5a4cf212c40bbcb766f18171ea3acb26b48"
     },
     "last_active_child_id": null,
     "last_active_at": null

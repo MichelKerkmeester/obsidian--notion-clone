@@ -83,19 +83,32 @@ self-closed.
 T001-T006. Exit criterion: the submenu lane row observed red then green; the host's search
 oracle-tested; `sheet-grammar` pairs unchanged.
 
-- [ ] T001 Read the Anytype captures listed in `anytype-menu-grammar.md` — open the actual PNGs
-      (`anytype-object-more-menu-dark.png`, `anytype-filter-property-picker-dark.png`,
-      `anytype-filter-tag-value-picker-dark.png`, `anytype-relation-editor-tag-dark.png`,
-      `anytype-layout-picker-dark.png`, `anytype-view-settings-panel-dark.png`) and correct every
-      G-row the pixels disagree with (`anytype-menu-grammar.md`). **Proof**: each cited capture
-      file resolves under `screenshots/anytype/` and has been opened; the grammar doc carries a
-      dated correction note if any row changed.
+- [x] T001 Read the Anytype captures and correct every G-row the pixels disagree with
+      (`design-trueup.md`, `anytype-menu-grammar.md`). Scope grew with the evidence: the sweep now
+      holds **150 clipped desktop menus** in `screenshots/anytype/menus/` and **59 iOS states** in
+      `screenshots/anytype/mobile/`, so the read covered the menu classes rather than the six files
+      this task originally named. **Proof (observed 2026-09-05)**: `design-trueup.md` written as the
+      read of record — §2 carries the measured geometry set and five width tiers, §3 all sixteen
+      G-rows, §4 re-evidences all 25 census surfaces, §5 re-counts the widths, §6 confirms `050`'s
+      four inherited items; **103 cited capture filenames all resolve** under `screenshots/anytype/`;
+      `anytype-menu-grammar.md` §5 carries the dated correction table for the fourteen rows that
+      changed; AC-009 and AC-005 are `Met`. **Eleven contradictions found**, the load-bearing ones
+      being: hover states *were* captured 37 times (the README's caveat is false), hover-open and
+      innermost-only Escape are proved by the sweep's own procedure, the create row sits **first**
+      rather than last (ADR-004), the checkmark is **trailing** rather than leading, and the census
+      baselines were 71/45/9 against a measured 70/44/8.
 - [ ] T002 Record every red: per checklist row C1-C10, measure today's value on the current tree
       (`checklist.md`). **Proof**: every `Today` cell carries a figure or a counted fact with the
-      command that produced it (`grep -c`, lane output), not an estimate.
+      command that produced it (`grep -c`, lane output), not an estimate. **T001 note**: C2 is already
+      correct at 70; **C7 is not** — it says 9 distinct widths including 240, against a measured 8 at
+      14 production sites, with 240 a story value only (`design-trueup.md` C9). Correct C7 here.
 - [ ] T003 Baseline the row-vocabulary count per file (`grep -c "db-menu-item"`) and the bespoke
-      width list, and store them in `checklist.md` C2/C8's evidence cells. **Proof**: the numbers
-      in the checklist reproduce from the commands recorded beside them.
+      width list, and store them in `checklist.md` C2/C7's evidence cells. **Proof**: the numbers
+      in the checklist reproduce from the commands recorded beside them. Measured at T001 and to be
+      reproduced here: **70** row sites outside `menu-row.ts` (`toolbar-renderer.ts` 44,
+      `column-menu.ts` 19, `dropdown-field.ts` 4, `cell-renderer.ts` 3; 76 including `menu-row.ts`'s
+      own 6), and **8** distinct `preferredWidth` literals — 124, 252, 280, 292, 318, 360, 420, 520 —
+      at **14** production call sites.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -105,18 +118,29 @@ oracle-tested; `sheet-grammar` pairs unchanged.
 
 - [ ] T004 Menu primitive submenu handle (`src/views/owned-menu.ts`, `src/views/menu-row.ts`):
       `OwnedMenuHandle` gains a way to open a nested menu through the same factory, registered in
-      `overlayStack` with `parentId`; `ArrowRight`/`Enter`/pointer open it; Escape closes the
-      innermost only; the phone path is a stacked sheet per `048` (ADR-001). **Proof (D2)**:
+      `overlayStack` with `parentId`; `ArrowRight`/`Enter`/pointer open it, **and hover opens it
+      behind `@media (hover: hover)`** (ADR-004, decided against the sweep's own procedure); Escape
+      closes the innermost only — **observed** in that procedure, not inferred; the phone path is a
+      stacked sheet per `048` (ADR-001), and the parent row **keeps its highlight and rotates its
+      chevron `›` → `⌄`** while the child is open (`design-trueup.md` G8, G16). Placement: flush
+      beside the parent with a 2px gap, child top aligned to the opening row, flipping to the
+      parent's left at the viewport edge — one implementation shared with `050` item 6.
+      **Proof (D2)**:
       red-first — a lane assertion that no nested menu opens from a `submenu: true` row FAILs
       before T004 and PASSes after; `sheet-grammar.mjs`'s `record column submenu` pair stays green.
 - [ ] T005 Never-empty fallback row in the menu primitive (`src/views/owned-menu.ts`): a menu whose
-      eligible-row set is empty renders the G3 fallback instead of a blank sheet. **Proof**: unit
-      test with a zero-eligible-row predicate; red-first on today's tree (empty menu renders today).
+      eligible-row set is empty renders the G3 fallback instead of a blank sheet — **the instruction
+      shape**, naming the action rather than the absence, per the two captured strings
+      (`design-trueup.md` G3). **Proof**: unit test with a zero-eligible-row predicate; red-first on
+      today's tree, where the only file that can violate it is `bulk-edit-field-menu.ts:31-45`
+      (`050` REQ-008's narrowing — `row-menu.ts` cannot render empty and is asserted, not built).
 - [ ] T006 Extract the picker host (`src/views/popover-host.ts`): active-picker registry, phone
       sheet-header construction, shared search + empty state + create-affordance slot, geometric
       grid navigator (ADR-003), width roles. `dropdown-field.ts` (`src/views/dropdown-field.ts`)
       is the first consumer; its public API and `048`'s 11 registered dropdown pairs stay
-      class-stable. **Proof**: `npx vitest run` green; `node tools/live/sheet-grammar.mjs` via the
+      class-stable. The search field is **first in the panel** and the create row **directly beneath
+      it, above the list** (ADR-004); the affordance stays reachable when the list is empty.
+      **Proof**: `npx vitest run` green; `node tools/live/sheet-grammar.mjs` via the
       gate unchanged; the host's search unit-tested against `filterDropdownOptions`'s recorded
       behaviour (same visible rows, same section hiding, same empty row).
 <!-- /ANCHOR:phase-2 -->
@@ -149,11 +173,17 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       affordance). **Proof**: `record relation editor`/`record option colour picker` pairs green;
       the option-commit transaction flow covered by existing `vitest` suites unchanged.
 - [ ] T011 Relation editor onto the picker host (`src/views/cell-renderer.ts:899`): search, list,
-      footer onto the host; checkmark unified (G14); width becomes the declared picker role.
+      footer onto the host; checkmark unified **and moved trailing** (G14) — the `✓` text node at
+      `cell-renderer.ts:1420`, `:1478`, `:1483` is deleted rather than restyled, because a text glyph
+      cannot carry the `menuitemcheckbox` semantics `menu-row.ts` already gives us; width becomes the
+      declared picker role.
       **Proof**: windowing behaviour unchanged (the host does not own the list's window);
       `field-relation-values` capture re-taken and read.
 - [ ] T012 Date, colour and icon pickers onto the host (`src/views/date-value-picker.ts`,
-      `src/views/option-color-picker.ts`, `src/views/icon-picker-popover.ts`): registries,
+      `src/views/option-color-picker.ts`, `src/views/icon-picker-popover.ts`): the colour picker keeps
+      its 12-swatch grid — Anytype's is a 224px labelled list and is declined (ADR-005) — and gains
+      the **trailing tick** plus **named colours as accessible names**, since a swatch identified by
+      hue alone is colour-only signalling. Registries,
       headers, grid nav and widths move to the host; presets, catalogues and colour dots keep
       their behaviour. **Proof**: one `activePickers` WeakMap remains in `src/views/` (the host's),
       counted by `grep -c "activePickers = new WeakMap"`; the two geometric navigators collapse to
@@ -199,6 +229,7 @@ oracle-tested; `sheet-grammar` pairs unchanged.
 
 - Migration rows: `componentization-plan.md` §1-§3
 - Grammar patterns: `anytype-menu-grammar.md` G1-G16
-- Overlapping `050` items: `spec.md` §7
+- Overlapping `050` items: `spec.md` §7, confirmed at T001 in `design-trueup.md` §6
+- Capture read of record: `design-trueup.md` — T001's output
 - Red-first protocol: `checklist.md` VERIFICATION PROTOCOL
 <!-- /ANCHOR:cross-refs -->

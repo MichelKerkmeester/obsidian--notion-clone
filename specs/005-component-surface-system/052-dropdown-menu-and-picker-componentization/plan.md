@@ -24,8 +24,9 @@ contextType: "planning"
 The family already has its three shared pieces; this phase finishes the composition. `owned-menu.ts`
 mounts `db-surface db-menu db-owned-menu` on `doc.body`, carries keyboard roving, focus return and a
 phone-sheet branch (`showAt` at `:186-262`); `menu-row.ts` builds the row grammar; `dropdown-field.ts`
-is the searchable listbox with sections, icons and phone header. Around them sit 71 hand-built row
-sites, three hand-built submenus, four pickers with private hosts and nine bespoke widths. No new
+is the searchable listbox with sections, icons and phone header. Around them sit **70** hand-built row
+sites (re-counted at T001), three hand-built submenus, four pickers with private hosts and **eight**
+bespoke widths across fourteen call sites. No new
 architecture layer: the picker host (`popover-host.ts`) extracts what `dropdown-field.ts` and the
 three pickers already each do privately.
 
@@ -85,7 +86,10 @@ dropdown-field  date-picker   color-picker   icon-picker   relation editor
 ### Decisions taken in this plan
 
 **ADR-001: the submenu is a child surface in the overlay stack, not an inline region.**
-Anytype's submenus are separate surfaces (hover-opened). Ours become child surfaces registered with
+**[confirmed 2026-09-05 · T001]** Anytype's submenus are separate surfaces, hover-opened — and this
+is no longer a source read: the sweep could open each of its 37 submenus only by dispatching a hover
+on the parent row, and `screenshots/anytype/README.md` records that one Escape closes the child and
+leaves the parent open, which is this ADR's innermost-only clause **observed**. Ours become child surfaces registered with
 `parentId` set to the parent menu's surface id — `overlay-stack.ts:47`'s field, load-bearing since
 `048` — so Escape closes the innermost only, the LIFO rule holds, and the phone path presents the
 submenu through the stacking model `048` already registers (`record column submenu` pair,
@@ -94,7 +98,10 @@ would break `044`'s header-per-sheet grammar on phone and reinvent the column me
 hand-built lifecycle, which this phase exists to delete.
 
 **ADR-002: the create-affordance slot is `preserveValueOnSelect`, not a new option kind.**
-`dropdown-field.ts:42-43` already carries the action-row mechanic and four call sites use it for
+**[amended by ADR-004, 2026-09-05 · T001 — mechanism stands, placement changes.]** The captured
+create row sits **first, under the search field and above the list**
+(`menus/anytype-menu-object-more-add-link-to-object-dark.png`), not last in its section; last is
+where Anytype puts an *escalation*. `dropdown-field.ts:42-43` already carries the action-row mechanic and four call sites use it for
 create actions (`database-view.ts:5323-5325`, `calendar-toolbar-renderer.ts:325`,
 `calendar-timeline-toolbar-renderer.ts:199`, `view-config-panel-renderer.ts:670,1117,1830,1947,1976`).
 Adopting Anytype's pattern (G11) is a convention plus placement (the row sits last in its section,
@@ -102,8 +109,12 @@ under the search field's reach), not a second mechanism. A new option kind would
 model the picker host just unified.
 
 **ADR-003: the geometric grid navigator is one function keyed by layout, not two.**
-`icon-picker-popover.ts:281-306` and `option-color-picker.ts:130-173` are near-identical
-nearest-neighbour implementations. The host owns one; the icon picker's row-aware variant is the
+**[citations corrected 2026-09-05 · T001]** `getIconNavigationTarget` (`icon-picker-popover.ts:284`)
+and `getColorNavigationTarget` (`option-color-picker.ts:138`) are near-identical nearest-neighbour
+implementations; the count of two is unchanged and correct. Anytype's own colour picker turns out to
+be a **224px labelled list rather than a grid**
+(`menus/anytype-menu-object-block-menu-color-dark.png`), which removes an outside precedent for our
+grid and changes nothing about the duplication this ADR ends. The host owns one; the icon picker's row-aware variant is the
 same function with the row-partition branch enabled. Two functions would re-drift on the first
 grid change.
 <!-- /ANCHOR:architecture -->
@@ -115,7 +126,7 @@ grid change.
 
 | Phase | Scope | Legs | Exit criterion | Status |
 |-------|-------|------|----------------|--------|
-| Phase 1 — Evidence and primitives | T001-T006: the capture read, the red baselines, the submenu handle, the fallback row, the picker-host extraction | tasks.md Phase 1 + 2 | The submenu lane row observed red then green; the host's search oracle-tested; `sheet-grammar` pairs unchanged | Unmet |
+| Phase 1 — Evidence and primitives | T001-T006: the capture read, the red baselines, the submenu handle, the fallback row, the picker-host extraction | tasks.md Phase 1 + 2 | The submenu lane row observed red then green; the host's search oracle-tested; `sheet-grammar` pairs unchanged | **T001 done** (`design-trueup.md`; AC-009 and AC-005 Met); T002-T006 unmet |
 | Phase 2 — Consumers | T007-T012: toolbar menus and panels, column-menu submenus, the cell editors, the three pickers onto the host | tasks.md Phase 3 | C2's row-vocabulary count at its target; every registered pair green; changed captures re-read | Unmet |
 | Phase 3 — Widths, lanes, closure | T013-T015: width roles, family lane rows red-then-green, docs trued | tasks.md Phase 4 | AC-002 through AC-009 `Met` or waived; `npm run gate` exit 0 read from `$?` | Unmet |
 
@@ -141,6 +152,9 @@ grid change.
   implementations' recorded outputs.
 - **Lane**: one row per migrated family (menus, select picker, option editor, relation editor,
   date, colour, icon), each negative control observed red before its leg's green.
+- **Submenu paths**: four now, not three — pointer, `ArrowRight`/`Enter`, **hover behind
+  `@media (hover: hover)`** (ADR-004), and the phone tap. The hover path needs its own assertion,
+  because it is the one a coarse-pointer profile must **not** fire.
 - **Manual/capture**: `npm run screenshots:verify` + changed PNGs opened; phone 390×844 profile for
   every picker's sheet expression; gantt/board reference read if leg 2 touches their menus.
 <!-- /ANCHOR:testing -->
@@ -155,8 +169,8 @@ grid change.
 | `044`'s sheet grammar | Header-everywhere, 44px close, 16px inset/title on every phone sheet in the family | Landed; consumed |
 | `048`'s stacking model + D1 | Submenus and pickers at depth 2-3 | Landed (`048` code complete, AC-009 operator-owned) |
 | `001`'s role vocabulary + design-system sizing | Width roles and mount adapters | Shipped; consumed |
-| `050` items 1/4/6/8 | Overlapping surfaces (spec §7) | Draft; coordination via one-leg-one-file |
-| Anytype captures + `047` research | Grammar evidence | Captures exist (156 files); T001 reads them |
+| `050` items 1/4/6/8 | Overlapping surfaces (spec §7) | Draft; coordination via one-leg-one-file. **[T001]** All four confirmed against the menus sweep at `050`'s restated thresholds — `design-trueup.md` §6 |
+| Anytype captures + `047` research | Grammar evidence | **Read.** T001 opened the **150** clipped desktop menus in `screenshots/anytype/menus/` and the **59** iOS states in `screenshots/anytype/mobile/`, measured them, and wrote `design-trueup.md` as the read of record. Eleven contradictions recorded; AC-009 and AC-005 Met |
 <!-- /ANCHOR:dependencies -->
 
 ---

@@ -22,7 +22,7 @@ contextType: "planning"
 The plugin's menus have three good shared pieces — `owned-menu.ts` (container), `menu-row.ts`
 (rows), `dropdown-field.ts` (listbox) — and a drifted periphery that predates or bypasses them: 70
 hand-built row constructions, submenus built outside the menu factory, three pickers each wiring
-their own host, and nine bespoke popover widths. This phase reduces the whole family to one menu
+their own host, and eight bespoke popover widths across fourteen call sites. This phase reduces the whole family to one menu
 primitive and one picker family, and takes Anytype's menu grammar where the captures show it is
 better. The table view, formulas/rollups/calculations, and the Project Manager 1:1 board and gantt
 stay ours.
@@ -90,13 +90,14 @@ sheet (`003` inventory §9) and its dock claim is `048`'s arbitration. The prope
 The family works surface by surface and drifts as a family. Counted from source on today's tree:
 
 - **Rows**: `createMenuRow` (`menu-row.ts:93`) is the canonical builder and production reaches it
-  through `owned-menu.ts:170`'s `addRow` — but **71 sites across four files construct
-  `db-menu-item` rows by hand** (45 in `toolbar-renderer.ts`, 19 in `column-menu.ts`, 4 in
-  `dropdown-field.ts`, 3 in `cell-renderer.ts`), exactly the "fourteen other vocabularies" drift
-  the design-system's row-grammar section records, still growing.
-- **Submenus**: `owned-menu.ts:170-178` closes the menu on any non-submenu row and exposes no
-  nested-menu handle; `menu-row.ts:112-122` draws a chevron and sets `aria-haspopup` that promises
-  a menu nothing can open. The only real submenus (`column-menu.ts:224-255`, `:257-320`, `:386-431`)
+  through `owned-menu.ts:170`'s `addRow` — but **70 sites across four files construct
+  `db-menu-item` rows by hand** (44 in `toolbar-renderer.ts`, 19 in `column-menu.ts`, 4 in
+  `dropdown-field.ts`, 3 in `cell-renderer.ts`, re-measured at T001 — 76 counting `menu-row.ts`'s
+  own 6), exactly the "fourteen other vocabularies" drift the design-system's row-grammar section
+  records, still growing.
+- **Submenus**: `owned-menu.ts:175` reads the `submenu` flag exactly once, to suppress auto-close
+  (`if (!rowOptions.submenu) close();`), and exposes no nested-menu handle; `menu-row.ts:112-122`
+  draws a chevron and sets `aria-haspopup` that promises a menu nothing can open. The only real submenus (`column-menu.ts:224-255`, `:257-320`, `:386-431`)
   are hand-built body popovers with their own cleanup lifecycle — the design-system's "affordance
   without a mechanism" anti-pattern, live in shipped code.
 - **Pickers**: `date-value-picker.ts`, `icon-picker-popover.ts` and `option-color-picker.ts` each
@@ -104,20 +105,27 @@ The family works surface by surface and drifts as a family. Counted from source 
   construction dance, and place themselves with four bespoke widths (252, 318, 124; the dropdown
   adds 280/360/180). The relation editor (`cell-renderer.ts:899`) is a fourth picker with its own
   search/virtualized-list/footer wiring.
-- **Placement widths**: 34 `positionToolbarPopover` call sites, 9 passing bespoke numbers (420,
-  360, 318, 292, 280, 252, 240, 124, 520), against the design-system's rule that width is a
-  property of the role, not the call site.
+- **Placement widths**: 34 `positionToolbarPopover` call sites, **14 passing a bespoke number** and
+  **8 distinct literals** between them (124, 252, 280, 292, 318, 360, 420, 520 — re-counted at
+  T001; the drafted 240 is a story value, not a production one), against the design-system's rule
+  that width is a property of the role, not the call site.
 - **Search**: four separate search implementations — `dropdown-field.ts`'s
   `filterDropdownOptions` (`:407`), the relation editor's inline filter (`cell-renderer.ts:968`),
   `icon-picker-popover.ts`'s search, and the all-views hub's search (`toolbar-renderer.ts:1180`) —
   with different empty states, different reset behaviour and no shared "create new" affordance.
 
 Anytype solves the same problem with one menu grammar: **five** sectioned blocks with capability
-gating, 28px rows and 16px leading icons in a 256px frame (measured, `design-trueup.md` REQ-008 and
-§2), one picker component feeding three search surfaces, and a "create" entry in the value picker's
-search row (`anytype-filter-tag-value-picker-dark.png`). Its **hover-opened, pre-filtered submenus**
-are `047` §9's source read and are **not captured** — the sweep photographed no hover state at all —
-so that half stays code-derived with the gap named (goal D3).
+gating, **28px rows, a 16px content inset and a 16px icon box in a 256px frame** — re-measured at
+T001 across all 150 clipped menus (`design-trueup.md` §2) — one picker component feeding every
+search surface, and a create affordance that sits **first, under the search field and above the
+list** (`menus/anytype-menu-object-more-add-link-to-object-dark.png`; ADR-004).
+
+Its **hover-opened submenus are no longer code-derived.** **[trued 2026-09-05 · T001]** The sweep
+could open each of its 37 submenus only by dispatching a hover on the parent row, and
+`screenshots/anytype/README.md` records that one Escape closes the child and leaves the parent
+open — so hover-open and innermost-only dismissal are both **observed**, and each of those 37
+captures also photographs the parent row in its hover state (`#232323`, 28px, **1.14:1**, refused on
+contrast per ADR-005). Goal D3's gap closes here.
 
 ### Purpose
 
@@ -186,8 +194,8 @@ markup — and the family reads like Anytype's menus where Anytype's are better.
 | ID | Requirement |
 |----|-------------|
 | REQ-001 | The menu primitive opens a real submenu through the same factory that produced its parent row: keyboard (`ArrowRight`/`Enter`), pointer and phone-sheet paths all open it; the phone expression is the stacked-sheet grammar `048` already registers, not a second mechanism. The chevron promise in `menu-row.ts:112-122` becomes true or disappears. |
-| REQ-002 | Every menu row in the family is built by `createMenuRow`. A surface that needs a row the builder cannot express extends the builder once. The 71 hand-built sites are migrated or individually dispositioned in `componentization-plan.md`. |
-| REQ-003 | The picker family shares one host owning: the one-per-document active-picker registry, the phone sheet-header construction, search-with-empty-state, grid keyboard navigation (the two geometric navigators in `icon-picker-popover.ts:281-306` and `option-color-picker.ts:130-173` are one function), and width-by-role. |
+| REQ-002 | Every menu row in the family is built by `createMenuRow`. A surface that needs a row the builder cannot express extends the builder once. The **70** hand-built sites outside `menu-row.ts` — `toolbar-renderer.ts` 44, `column-menu.ts` 19, `dropdown-field.ts` 4, `cell-renderer.ts` 3, re-measured 2026-09-05 — are migrated or individually dispositioned in `componentization-plan.md`. **[trued 2026-09-05 · T001]** The drafted 71/45 figures were wrong (`design-trueup.md` C8); `checklist.md` C2 already carried the right number. |
+| REQ-003 | The picker family shares one host owning: the one-per-document active-picker registry, the phone sheet-header construction, search-with-empty-state, grid keyboard navigation (the two geometric navigators, `getIconNavigationTarget` at `icon-picker-popover.ts:284` and `getColorNavigationTarget` at `option-color-picker.ts:138`, are one function — line numbers corrected 2026-09-05), and width-by-role. |
 | REQ-004 | Every family surface in `componentization-plan.md` carries a row: surface → primitive → changes → Anytype pattern with capture filename → stays ours. No surface in the census is undispositioned. |
 | REQ-005 | `anytype-menu-grammar.md` states the menu grammar worth taking — item density, section headers, submenu arrows, search-first pickers, the create-option row, hover/active states — each with its capture file or its named gap. |
 
@@ -212,8 +220,10 @@ markup — and the family reads like Anytype's menus where Anytype's are better.
   and every adopted pattern names a capture that resolves under `screenshots/anytype/` or a named gap.
 - **SC-002**: A submenu opened from the column menu opens through the menu primitive on desktop,
   phone and keyboard, and the hand-built subpopover lifecycle (`column-menu.ts:568-633`) is gone.
-- **SC-003**: The 71 hand-built row sites are reduced to the single builder (or individually
-  dispositioned), measured by `grep -c 'db-menu-item'` per file against a recorded baseline.
+- **SC-003**: The **70** hand-built row sites outside `menu-row.ts` are reduced to the single builder
+  (or individually dispositioned), measured by `grep -c 'db-menu-item'` per file against the baseline
+  re-counted at T001 — `toolbar-renderer.ts` 44, `column-menu.ts` 19, `dropdown-field.ts` 4,
+  `cell-renderer.ts` 3.
 - **SC-004**: Every threshold in `acceptance-criteria.md` was observed failing on the current tree
   before its leg ran, and the failing figure is recorded in `checklist.md`.
 <!-- /ANCHOR:success-criteria -->
@@ -228,8 +238,8 @@ markup — and the family reads like Anytype's menus where Anytype's are better.
 | Dependency | `044`'s `sheet-grammar` lane and `048`'s registered pairs | Migrating child markup can move a registered pair's selectors | `tools/live/sheet-grammar.mjs:88-118` names every pair and selector; update rows in the same leg, never after |
 | Dependency | `048`'s D1 (modals-as-sheets) | The picker family renders inside modal-presented sheets at depth 3 | The stacking lane already registers depth-3 chains (`properties property type picker`, `import confirm dropdown chain`); keep them green |
 | Risk | `toolbar-renderer.ts` is 2,626 lines and carries the toolbar's own tests | Wide refactor regressions in the most-used chrome | One leg, D6; the geometry/grammar lanes run per leg |
-| Risk | Anytype's hover-open submenus are desktop-only | Phone expression needs its own decision | D7: the phone path is the stacked sheet Anytype's mobile builds also reach; decided in the grammar doc, not improvised per surface |
-| Risk | Capture descriptions were read from the index, not the pixels | A grammar pattern could be mis-stated | Goal D1's clause: T001 re-reads the actual PNGs and corrects the grammar doc; image reads were unavailable to this authoring session |
+| Risk **[trued 2026-09-05 · T001]** | Anytype's hover-open submenus are desktop-only | Phone expression needs its own decision | **Resolved.** Hover-open is proved by the sweep's own procedure (37 submenus reachable only by hover) and adopted behind `@media (hover: hover)` per ADR-004. The phone expression is measured, not reasoned: `mobile/anytype-mobile-sheet-object-more-submenu-dark.png` **overlays and dims** the parent and rotates the parent row's chevron `›` → `⌄` — `048`'s dimming plus a row-level state signal, not a fresh sheet |
+| Risk **[closed 2026-09-05 · T001]** | Capture descriptions were read from the index, not the pixels | A grammar pattern could be mis-stated | **Closed, and the risk was real**: T001 opened the 150 clipped menus and the 59 iOS states and found **eleven** contradictions, of which four were mis-stated grammar patterns (G11's placement, G12's evidence, G14's side, G15's shape) and one was a caveat five documents repeated (hover was never captured — 37 captures show it). `design-trueup.md` is the read of record |
 | Risk | `styles.css` is 22k+ lines with cascade traps | A selector rename silently breaks sibling surfaces | The parent's serialized CSS lane; cascade replay per the design-system's §10 anti-pattern list |
 <!-- /ANCHOR:risks -->
 
@@ -242,10 +252,10 @@ markup — and the family reads like Anytype's menus where Anytype's are better.
 
 | 050 item | Surface | This phase's role |
 |----------|---------|-------------------|
-| Item 1 — the filter/sort trigger state **[trued 2026-09-05]** | `toolbar-renderer.ts`, `filter-panel-renderer.ts` | `design-trueup.md` REQ-001 rewrote this item in both directions. **Our chip row already ships** (`active-view-controls-renderer.ts`, auto-hiding at `:97`, on both the full-page and embedded surfaces) and our triggers already carry a numeric count badge (`toolbar-renderer.ts:2575`) — so `050`'s AC-001 could not be observed red as written. And **Anytype's dual-mode icons are rejected**: the funnel and sort glyphs are pixel-identical across all 120 catalogue captures whether or not the view is filtered or sorted, so there is no second mode to adopt; the colour-only signalling it does carry fails WCAG 1.4.11 where our count badge carries a text second signal. The one thing adopted is the `N applied` **count label** in the view-settings panel's value column. This phase's role is unchanged: the trigger menu opens through the menu primitive |
-| Item 4 — duplicate view + view-tab context menu **[trued 2026-09-05]** | `active-view-controls-renderer.ts`, `toolbar-renderer.ts` | `design-trueup.md` REQ-004 (contradiction C4): Anytype's **duplicate and remove live in the view-settings panel**, last section below a divider — not in a tab context menu. **No right-click on a view tab was ever captured**, so a tab menu may exist but may not be designed from a screen nobody saw; the true-up marks it *design inferred from source code, not seen*. Our tab menu already exists (`toolbar-renderer.ts:1229`, hand-rolled rows) and is migrated onto the primitive here regardless — its **content and placement** are `053`'s and `050`'s to settle, not this phase's. Duplicate-view itself is partially landed (`database-view.ts:3925` `duplicateView`, wired at `toolbar-renderer.ts:1256`); this phase does not re-implement it |
-| Item 6 — cell-editor flip at the right edge | `popover-position.ts` | Placement is shared; this phase's picker host calls the same placement and inherits the flip when `050` lands it |
-| Item 8 — capability-gated menus, never empty **[trued 2026-09-05]** | `row-menu.ts`, `bulk-edit-field-menu.ts` | `design-trueup.md` REQ-008 narrowed this to **one file**: `row-menu.ts` cannot render empty (its first row, `menu.openNote`, is unconditional), so its guarantee is **asserted so it cannot regress, not built**; the only file that can violate the threshold is `bulk-edit-field-menu.ts:31-45`. The selection caps `047` describes are **not adopted** — our row menu has no multi-select, so they have no referent. The gating predicate stays `050`'s; this phase's primitive gives the one violating file somewhere to render the fallback row, whose exact wording is **code-derived** (the "No available actions" state appears on no capture) |
+| Item 1 — the filter/sort trigger state **[trued 2026-09-05]** | `toolbar-renderer.ts`, `filter-panel-renderer.ts` | `design-trueup.md` REQ-001 rewrote this item in both directions. **Our chip row already ships** (`active-view-controls-renderer.ts`, auto-hiding at `:97`, on both the full-page and embedded surfaces) and our triggers already carry a numeric count badge (`toolbar-renderer.ts:2575`) — so `050`'s AC-001 could not be observed red as written. And **Anytype's dual-mode icons are rejected**: the funnel and sort glyphs are pixel-identical across all 120 catalogue captures whether or not the view is filtered or sorted, so there is no second mode to adopt; the colour-only signalling it does carry fails WCAG 1.4.11 where our count badge carries a text second signal. The one thing adopted is the `N applied` **count label** in the view-settings panel's value column. This phase's role is unchanged: the trigger menu opens through the menu primitive. **[T001 adds]** The menus sweep found the same thing from the other side and by a different method: `README.md`'s "Not captured" table records that `#dataviewControls .btn-sort` "**is a state indicator, not an opener** — it dispatches no menu on `el.click()` and none on a real CDP mouse event". Two independent reads, one answer |
+| Item 4 — duplicate view + view-tab context menu **[trued 2026-09-05]** | `active-view-controls-renderer.ts`, `toolbar-renderer.ts` | `design-trueup.md` REQ-004 (contradiction C4): Anytype's **duplicate and remove live in the view-settings panel**, last section below a divider — not in a tab context menu. **No right-click on a view tab was ever captured**, so a tab menu may exist but may not be designed from a screen nobody saw; the true-up marks it *design inferred from source code, not seen*. Our tab menu already exists (`toolbar-renderer.ts:1229`, hand-rolled rows) and is migrated onto the primitive here regardless — its **content and placement** are `053`'s and `050`'s to settle, not this phase's. Duplicate-view itself is partially landed (`database-view.ts:3925` `duplicateView`, wired at `toolbar-renderer.ts:1256`); this phase does not re-implement it. **[T001 adds]** The phone answer is now captured and it is not a context menu either: `mobile/anytype-mobile-sheet-set-viewswitcher-edit-dark.png` shows an iOS **edit mode on the view list** — a red `⊖` per row, a pencil, a drag handle, a blue done tick in the header — which is the shape our phone move-rows (`toolbar-renderer.ts:1263-1273`) already approximate. **The desktop tab menu stays unseen** |
+| Item 6 — cell-editor flip at the right edge **[trued 2026-09-05 · T001]** | `popover-position.ts` | Placement is shared; this phase's picker host calls the same placement and inherits the flip when `050` lands it. **A horizontal flip is now captured**: `menus/anytype-menu-object-more-advanced-dark.png` places the parent at x 236..491 and its child **to the left**, where `…-add-link-to-object` places the child to the right — one menu family flipping side by available room. It gives **no boundary**, so `050`'s 92px stays source-derived; what it gives is proof the guard exists, and that G8's submenu placement and this item want **one** implementation rather than two |
+| Item 8 — capability-gated menus, never empty **[trued 2026-09-05]** | `row-menu.ts`, `bulk-edit-field-menu.ts` | `design-trueup.md` REQ-008 narrowed this to **one file**: `row-menu.ts` cannot render empty (its first row, `menu.openNote`, is unconditional), so its guarantee is **asserted so it cannot regress, not built**; the only file that can violate the threshold is `bulk-edit-field-menu.ts:31-45`. The selection caps `047` describes are **not adopted** — our row menu has no multi-select, so they have no referent. The gating predicate stays `050`'s; this phase's primitive gives the one violating file somewhere to render the fallback row, whose exact wording is **code-derived** (the "No available actions" state appears on no capture). **[T001 adds]** Two empty-state strings *are* captured, both in pickers and both **naming the action**: *"Type to create a new option"* (`menus/anytype-menu-object-featured-tag-dark.png`) and *"Nothing found. Create first option to start."* (`mobile/anytype-mobile-sheet-cell-multiselect-empty-dark.png`). So the picker half of the fallback has a screen behind it and the action-menu half does not |
 
 Where an item's file and a migration leg would both open a file, `050`'s leg and this phase's leg
 coordinate through D6's one-leg-one-file rule and the parent's serialized CSS lane.
@@ -321,14 +331,22 @@ coordinate through D6's one-leg-one-file rule and the parent's serialized CSS la
 ## 11. OPEN QUESTIONS
 
 - Which picker widths become named roles versus stay content-driven numbers — decided per row in
-  `componentization-plan.md` against the design-system's §5 policy, not pre-decided here.
+  `componentization-plan.md` §3 against the design-system's §5 policy, not pre-decided here. T001
+  re-counted the literals (8, not 9) and measured Anytype's five width tiers against our three
+  roles; ADR-005 rules on adoption, and the per-row role names are still the legs'.
 - Does the create-option row belong in the dropdown primitive (so every select gains it) or in the
   cell option editor only? Anytype puts it in the picker; our option editor already has one
-  (`cell-renderer.ts:1508-1516`). The grammar doc proposes; the operator disposes if the answer
-  changes a shipped surface's behaviour.
-- Do Anytype's hover-open submenus adopt on desktop, or do ours stay click/arrow-key opened? Hover
-  is Anytype's mechanism (research §9); the captures cannot show a hover state, so this is a
-  code-derived decision with the gap named.
+  (`cell-renderer.ts:1508-1516`). **Its *placement* is no longer open** — ADR-004 fixes it at first,
+  under the search and above the list, against the capture. The **rollout breadth** stays the
+  operator's, because it changes shipped surfaces' behaviour.
+
+**Closed 2026-09-05 by T001.** *Do Anytype's hover-open submenus adopt on desktop?* **Yes.** The
+question assumed the captures could not show a hover state. They can and they do: **37 of the 150
+menus were reached by hovering a parent row**, so hover-open is proved by the sweep's own procedure
+rather than inferred from `047` §9 — and `screenshots/anytype/README.md` records that one Escape
+closes the child while leaving the parent open, which is ADR-001's dismissal clause observed.
+ADR-004 adopts hover-open behind `@media (hover: hover)`, with click and `ArrowRight` retained for
+keyboard and touch.
 <!-- /ANCHOR:questions -->
 
 ---
@@ -342,4 +360,5 @@ coordinate through D6's one-leg-one-file rule and the parent's serialized CSS la
 - **Packet Goal**: See `goal.md`
 - **Migration Table**: See `componentization-plan.md`
 - **Menu Grammar**: See `anytype-menu-grammar.md`
+- **Capture Read (T001)**: See `design-trueup.md` — the read of record for every G-row and every width
 - **Research Source**: See `../047-competitor-references-and-pm-alignment/research/research.md` §9, §11
