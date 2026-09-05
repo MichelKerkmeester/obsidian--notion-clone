@@ -304,19 +304,50 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       submenu's body. **Proof**: `grep -n "createColumnMenuSubpopover" src/views/column-menu.ts`
       returns nothing; the depth-3 `record column submenu` pair green; keyboard path
       (`ArrowRight`) and phone path both exercised in the lane.
-- [ ] T010 Cell option editor rows via the row builder (`src/views/cell-renderer.ts:1123`): the
+- [x] T010 Cell option editor rows via the row builder (`src/views/cell-renderer.ts:1123`): the
       option rows and their checkmark render through the shared row/host; drag-reorder and the
       add-option row keep their behaviour (ADR-002 makes the add row the reference create
       affordance). **Proof**: `record relation editor`/`record option colour picker` pairs green;
       the option-commit transaction flow covered by existing `vitest` suites unchanged.
-- [ ] T011 Relation editor onto the picker host (`src/views/cell-renderer.ts:899`): search, list,
+      **Proof (observed 2026-09-05, landed)**: each option row's shell, label and checked
+      semantics now come from `menu-row.ts`'s `createMenuRow` (`role="menuitemcheckbox"`,
+      `aria-checked`), called with the row's own `db-cell-option-item` class; the drag handle,
+      reorder buttons and colour dot are spliced back in front of the label with
+      `label.before(...)`, and the check mark is deleted as a `"✓"` text node and rebuilt as a
+      `setIcon(mark, "check")` glyph, cleared and reset through the same helper on every
+      selection change (`design-trueup.md` G14 — a glyph cannot carry `aria-checked`, the row
+      now does). `npx vitest run` 1311/1311 green (was 1308 before the two new lane tests);
+      `npx tsc --noEmit` 0. Captures: `constructed-cell-editor-select-*` and
+      `field-cell-edit-select-*` re-taken in both themes and both device profiles and opened —
+      the trailing check is now a blue tick icon rather than the ASCII glyph, position
+      unchanged (already after the label, per G14's own finding that ours was leading only in
+      the *option colour picker* and *dropdown field*, not here).
+- [x] T011 Relation editor onto the picker host (`src/views/cell-renderer.ts:899`): search, list,
       footer onto the host; checkmark unified **and moved trailing** (G14) — the `✓` text node at
       `cell-renderer.ts:1420`, `:1478`, `:1483` is deleted rather than restyled, because a text glyph
       cannot carry the `menuitemcheckbox` semantics `menu-row.ts` already gives us; width becomes the
       declared picker role.
       **Proof**: windowing behaviour unchanged (the host does not own the list's window);
       `field-relation-values` capture re-taken and read.
-- [ ] T012 Date, colour and icon pickers onto the host (`src/views/date-value-picker.ts`,
+      **Proof (observed 2026-09-05, landed) and one named deviation**: the citation above drifted —
+      the `"✓"` text node at those three lines sits in the *option editor* (`editOptionPopover`,
+      T010's function), not the relation editor; the relation editor's own check was already an
+      icon (`setIcon(check, "check")`) at the row's trailing edge (after the label, which the row's
+      `justify-content: space-between` pushes it against), so G14's leading/trailing finding does
+      not apply to this row and no markup changed there. **Deviation, named rather than forced**:
+      the row itself stays hand-built rather than moving onto `createMenuRow`. `list.onkeydown`
+      selects the active row via `[role=option]`, and this list is a `listbox`
+      (`aria-multiselectable="true"`) whose children need `role="option"`/`aria-selected` —
+      `menu-row.ts`'s rows are `menuitem`/`menuitemcheckbox` for a `menu`, a different ARIA
+      pattern the row builder has no reason to also express. Migrating anyway would have broken
+      the keyboard path silently (the selector would stop matching). The width did change: the
+      inline `{ minWidth: 360, preferredWidth: 420, maxWidth: 520 }` literal became
+      `RELATION_PICKER_POPOVER`, the same three numbers named once in `popover-host.ts`. `npx tsc
+      --noEmit` 0, `npx vitest run` green; no capture depicts this popover today (`field-relation-
+      values` turns out to be the *read-mode* chip renderer's own scenario, unaffected by this
+      leg — a second stale citation, recorded here rather than silently corrected elsewhere) and
+      neither the row markup nor the width numbers moved a pixel, so none was owed.
+- [x] T012 Date, colour and icon pickers onto the host (`src/views/date-value-picker.ts`,
       `src/views/option-color-picker.ts`, `src/views/icon-picker-popover.ts`): the colour picker keeps
       its 12-swatch grid — Anytype's is a 224px labelled list and is declined (ADR-005) — and gains
       the **trailing tick** plus **named colours as accessible names**, since a swatch identified by
@@ -327,6 +358,34 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       one (`grep -c "function getColorNavigationTarget\|function getIconNavigationTarget"` → 0);
       `field-date-value-picker`, `field-icon-picker`, `field-option-color-picker` captures re-taken
       and read.
+      **Proof (observed 2026-09-05, landed)**: `popover-host.ts` gained the shared `ActivePicker`
+      registry (`getActivePicker`/`setActivePicker`/`clearActivePickerIfCurrent`/
+      `closeActivePicker`), written against `date-value-picker.ts`'s own need to read `anchor`
+      back — the exact shape T006 found nothing had to fit, fitted first this time; the icon and
+      colour pickers close whichever family member is open the same way. `grep -c "activePickers =
+      new WeakMap" src/views/*.ts` → **1** (was 3). The two navigators collapsed into
+      `getGridNavigationTarget` (kept the icon picker's `<=` row tolerance, the looser of the two);
+      `grep -c "function getColorNavigationTarget\|function getIconNavigationTarget" src/views/*.ts`
+      → **0**; oracle-tested in `popover-host.test.ts` against both grids' own shapes before either
+      picker migrated (ADR-003). `mountPickerSheetHeader` replaced the three pickers' own
+      `isMobileBottomSheet`/`createSheetHeader` dance; widths moved onto `DATE_PICKER_POPOVER`
+      (252), `SWATCH_PICKER_POPOVER` (124) and `GRID_PICKER_POPOVER` (318). The colour picker's
+      selected swatch gains a `setIcon(swatch, "check")` trailing tick, styled with
+      `mix-blend-mode: difference` so it reads against all sixteen fills; its `aria-label` already
+      carried the colour's name (no change owed there — named accessible names were already
+      shipped). **Fable review P1 #9, red first**: the phone swatch measured 18×18px, no
+      `.db-mobile-bottom-sheet` override existed for it at all — green at
+      `.db-mobile-bottom-sheet .db-color-picker-body .db-color-picker-swatch { width: 44px; height:
+      44px; }` (checklist C11). `npx tsc --noEmit` 0; `npx vitest run` 1311/1311 (10 new
+      `popover-host.test.ts` cases exercising the unified navigator on both grid shapes). Captures:
+      `field-date-value-picker`, `field-icon-picker` unchanged (their widths hold the same numbers
+      the roles now name, so neither moved a pixel); `field-option-color-picker-*` and
+      `constructed-option-color-picker-*` re-taken in both themes and both device profiles and
+      opened — the trailing tick and the 44px phone grid both read correctly; `constructed-cell-
+      editor-select-*` and `field-cell-edit-select-*` also moved (T010's check-icon change) and were
+      opened in the same pass. `screenshots:verify` and `check-lane` (`SURFACE_PHASE=052-dropdown-
+      menu-and-picker-componentization`) both exit 0 with the 13 real content moves named in
+      `tools/lane/css-lane.json`'s release entry, 3 byte-only re-encodes excluded.
 <!-- /ANCHOR:phase-3 -->
 
 ---
