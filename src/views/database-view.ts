@@ -212,6 +212,7 @@ import {
 } from "../data/table-keyboard-navigation";
 import { getTablePasteValue, planTablePasteLayout, TablePasteLayout } from "../data/table-paste-plan";
 import { createOwnedMenuForEvent } from "./owned-menu";
+import { showToast } from "./toast";
 import {
   FileRenameChange,
   FileRenameRequest,
@@ -2745,8 +2746,12 @@ export class DatabaseView extends FileView {
         plugin.settings.galleryMigrationNotices = [...(plugin.settings.galleryMigrationNotices ?? []), db.id];
         void plugin.saveSettings();
       }
-      if (!alreadyNotified) {
-        new Notice(t("notice.galleryMigrated", { name: view.name || t("common.galleryView") }));
+      if (!alreadyNotified && this.containerEl_) {
+        showToast(this.containerEl_.ownerDocument, {
+          severity: "success",
+          message: t("notice.galleryMigrated", { name: view.name || t("common.galleryView") }),
+          action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+        });
       }
     } catch (err) {
       if (view.viewType === "board") view.viewType = "gallery";

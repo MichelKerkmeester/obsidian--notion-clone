@@ -121,6 +121,7 @@ import { setupTitleCellTap } from "./table-record-peek";
 import { InteractionScopeRegistry } from "./interaction-scope";
 import { moveTableCellByRowOffset, resolveTableCellNavigation, TableKeyboardNavigationController, type TableCellNavigationIntent } from "../data/table-keyboard-navigation";
 import { createOwnedMenuForEvent } from "./owned-menu";
+import { showToast } from "./toast";
 import {
   EmptyStateOptions,
   EmptyStateRenderer,
@@ -766,7 +767,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         void plugin.saveSettings();
       }
       if (!alreadyNotified) {
-        new Notice(t("notice.galleryMigrated", { name: config.name || t("common.galleryView") }));
+        showToast(this.containerEl.ownerDocument, {
+          severity: "success",
+          message: t("notice.galleryMigrated", { name: config.name || t("common.galleryView") }),
+          action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+        });
       }
     } catch (err) {
       if (config.viewType === "board") config.viewType = "gallery";
