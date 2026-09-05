@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-05T10:53:47.614Z",
+  "measuredAt": "2026-09-05T11:20:49.537Z",
   "inputs": {
     "styles.css": "e2e6314a036a",
     "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -14,7 +14,7 @@
     "scenarios": 71
   },
   "constructed": {
-    "links": 1336,
+    "links": 1480,
     "scenarios": 70
   },
   "chrome": {
