@@ -97,11 +97,21 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       innermost-only Escape are proved by the sweep's own procedure, the create row sits **first**
       rather than last (ADR-004), the checkmark is **trailing** rather than leading, and the census
       baselines were 71/45/9 against a measured 70/44/8.
-- [ ] T002 Record every red: per checklist row C1-C10, measure today's value on the current tree
+- [x] T002 Record every red: per checklist row C1-C10, measure today's value on the current tree
       (`checklist.md`). **Proof**: every `Today` cell carries a figure or a counted fact with the
       command that produced it (`grep -c`, lane output), not an estimate. **T001 note**: C2 is already
       correct at 70; **C7 is not** — it says 9 distinct widths including 240, against a measured 8 at
       14 production sites, with 240 a story value only (`design-trueup.md` C9). Correct C7 here.
+      **Proof (observed 2026-09-05)**: C2, C4 and C7 reproduced unchanged (70/76, 3, 8 distinct at 14
+      sites — C7 had already been corrected by a prior landing); C1 and C3 reconfirmed by grep against
+      `owned-menu.ts`; C5, C6 and C8 had drifted line citations (functions/constructions moved since
+      they were written) and are corrected with fresh `grep -n` reads, each dated; C9 measured live —
+      `node tools/live/sheet-grammar.mjs` exits 0, 564 PASS/0 FAIL — and its "8 first-sheet rows"
+      baseline corrected to the current 12 (`044` registered the four dropdown families on top of the
+      original 8 since this cell was written), pairs unchanged at 31; C10 reconfirmed no family lane
+      rows exist anywhere in `tools/gate.mjs` or `tools/live|lane/*.mjs`. `acceptance-criteria.md`
+      AC-006 carried the same stale citations as C6 and is corrected alongside it. No threshold was
+      unobservable as written, so no Proposed ADR was needed.
 - [ ] T003 Baseline the row-vocabulary count per file (`grep -c "db-menu-item"`) and the bespoke
       width list, and store them in `checklist.md` C2/C7's evidence cells. **Proof**: the numbers
       in the checklist reproduce from the commands recorded beside them. Measured at T001 and to be
