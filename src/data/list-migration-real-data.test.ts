@@ -16,17 +16,10 @@
 // left out: they are untouched by `applyListMigration` and their real values (mostly empty
 // defaults) would only pad the fixture without changing what any assertion here checks.
 
-/* eslint-disable import/no-nodejs-modules, no-undef --
-   One assertion reads table-renderer.ts from disk to confirm listCompactFields is truly inert
-   on the table path, the same way list-hide-and-migrate.test.ts reads its host sources. Needs
-   the node builtins the plugin runtime rule forbids. Scoped to this suite, which never ships. */
-
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS & THE REAL FIXTURE
 // ───────────────────────────────────────────────────────────────────
 
-import { readFileSync } from "fs";
-import { resolve } from "path";
 import { describe, expect, it, vi } from "vitest";
 import type { App } from "obsidian";
 import { DataSource } from "./data-source";
@@ -137,7 +130,6 @@ const PUNCH_LIST_VIEW_FRONTMATTER = {
   hiddenColumns: [],
   groupByField: "",
   groupOrders: {},
-  listCompactFields: true,
   filterLogic: "and",
   filters: [{ field: "pinned", op: "eq", value: "true" }],
 };
@@ -173,7 +165,6 @@ describe("the operator's real Punch List view", () => {
     expect(view.sortColumn).toBe("priority");
     expect(view.sortDirection).toBe("asc");
     expect(view.groupByField).toBeUndefined();
-    expect(view.listCompactFields).toBe(true);
     expect(parsed!.schema.columns).toHaveLength(18);
   });
 
@@ -215,21 +206,6 @@ describe("the operator's real Punch List view", () => {
     expect(view.groupByField).toBe(before.groupByField);
   });
 
-  it("leaves listCompactFields on the migrated view, inert because the table never reads it", () => {
-    // Confirms the "loss" the migration comment and the 005 audit both name: the field survives
-    // the rewrite, but nothing on the table path consumes it, matching the audit's grep-confirmed
-    // count of read sites (list-renderer.ts and column-width.ts only).
-    const tableRendererSource = readFileSync(resolve(__dirname, "../views/table-renderer.ts"), "utf-8");
-    expect(tableRendererSource).not.toContain("listCompactFields");
-
-    const parsed = source().parseDatabaseConfig(TESTBED_FRONTMATTER);
-    const view = parsed!.views.find((v) => v.name === "Punch List")!;
-    applyListMigration(view, planListMigration(view)!);
-
-    expect(view.viewType).toBe("table");
-    expect(view.listCompactFields).toBe(true);
-  });
-
   // ───────────────────────────────────────────────────────────────────
   // 4. THE ROUND TRIP
   // ───────────────────────────────────────────────────────────────────
@@ -253,7 +229,6 @@ describe("the operator's real Punch List view", () => {
     expect(reparsedView.sortColumn).toBe(view.sortColumn);
     expect(reparsedView.sortDirection).toBe(view.sortDirection);
     expect(reparsedView.groupByField).toBe(view.groupByField);
-    expect(reparsedView.listCompactFields).toBe(view.listCompactFields);
   });
 
   // ───────────────────────────────────────────────────────────────────

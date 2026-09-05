@@ -38,7 +38,7 @@ export function captureRootFor(scenario) {
   return scenario && scenario.kind === "reference" ? "" : CAPTURE_ROOT;
 }
 export const CONSTRUCTED_RENDERERS = [
-  "list", "table", "board", "gallery", "calendar", "timeline", "chart",
+  "table", "board", "gallery", "calendar", "timeline", "chart",
   "calendar-toolbar", "timeline-toolbar", "chart-toolbar",
   "toolbar", "active-view-controls", "active-rule-popover", "filter-panel", "sort-panel",
   "view-config", "column-manager", "record-detail", "record-detail-body", "record-peek",

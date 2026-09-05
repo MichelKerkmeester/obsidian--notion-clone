@@ -111,11 +111,8 @@ function findChrome() {
   throw new Error("typed-data-assertions: no Chrome/Chromium found. Set SCREENSHOT_CHROME.");
 }
 
-// Every renderer this program's own DONE row 6 still names as untyped: list already proved the
-// option (kept here as the original negative control), table just gained the production
-// CellRenderer, and chart just gained a per-row value column.
+// Table just gained the production CellRenderer, and chart just gained a per-row value column.
 const SCENARIOS_UNDER_TEST = [
-  { id: "constructed-list", renderer: "list", bag: "file-view" },
   { id: "constructed-table", renderer: "table", bag: "file-view" },
   { id: "constructed-chart", renderer: "chart", bag: "file-view" },
 ];

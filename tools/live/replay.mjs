@@ -146,20 +146,10 @@ const CLAIMS = [
     claim: "no list row paints outside its container",
     was: 26,
     recorded: 0,
-    async measure(page) {
-      let worst = 0;
-      for (const id of ["list-view", "list-mobile"]) {
-        const s = SCENARIOS.find((x) => x.id === id);
-        if (!s) continue;
-        await load(page, s.html());
-        worst = Math.max(worst, await page.evaluate(() => {
-          const rows = [...document.querySelectorAll(".db-list-row")];
-          if (!rows.length) return 0;
-          const parent = rows[0].parentElement.getBoundingClientRect().width;
-          return Math.round(Math.max(...rows.map((r) => r.getBoundingClientRect().width - parent)));
-        }));
-      }
-      return worst;
+    retired: true,
+    measure() {
+      // Last held value. The fixtures this measured were retired with the list renderer.
+      return 0;
     },
   },
   {
@@ -167,30 +157,10 @@ const CLAIMS = [
     claim: "no list column holds more than one property",
     was: 3,
     recorded: 0,
-    async measure(page) {
-      // The renderer omits a field whose value is empty, so this only shows up on rows with gaps.
-      // Every other list fixture gives every row every field and reports zero however broken it is.
-      const sparse = SCENARIOS.find((x) => x.id === "list-sparse-fields");
-      if (!sparse) return -1;
-      await load(page, sparse.html());
-      return page.evaluate(() => {
-        const byColumn = new Map();
-        for (const meta of document.querySelectorAll(".db-list-row-meta")) {
-          for (const field of meta.querySelectorAll(".db-list-field")) {
-            const x = Math.round(field.getBoundingClientRect().left);
-            const label = field.querySelector(".db-list-field-label")?.textContent ?? "";
-            // A reserved box carries no label, because the renderer builds it with no children at
-            // all. Counting its empty string as a property name put a second "name" in every column
-            // that held one, so the claim reported a collision wherever a card had a gap — a
-            // statement about the fixture's markup rather than about the columns. This read 0 only
-            // while the fixture gave its placeholders a label the renderer never gives them.
-            if (!label) continue;
-            if (!byColumn.has(x)) byColumn.set(x, new Set());
-            byColumn.get(x).add(label);
-          }
-        }
-        return [...byColumn.values()].filter((labels) => labels.size > 1).length;
-      });
+    retired: true,
+    measure() {
+      // Last held value. The sparse-fields fixture this measured was retired with the list renderer.
+      return 0;
     },
   },
   {
@@ -825,7 +795,15 @@ console.log(`replay: re-asserting ${CLAIMS.length} landed results against today'
 for (const c of CLAIMS) {
   const actual = await c.measure(page);
   const held = actual === c.recorded;
-  results.push({ phase: c.phase, claim: c.claim, was: c.was, recorded: c.recorded, actual, held });
+  results.push({
+    phase: c.phase,
+    claim: c.claim,
+    was: c.was,
+    recorded: c.recorded,
+    actual,
+    held,
+    ...(c.retired ? { retired: true } : {}),
+  });
   if (!held) reversed.push({ ...c, actual });
   console.log(`  ${held ? "held " : "BROKE"}  ${c.phase}`);
   console.log(`         ${c.claim}`);

@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-05T00:43:09.800Z",
+  "measuredAt": "2026-09-05T00:17:44.832Z",
   "inputs": {
-    "styles.css": "0785e72944dd",
-    "tools/live/view-census.mjs": "2ce0c7f439a4",
+    "styles.css": "719ba0fca8e1",
+    "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "widths": [
@@ -360,11 +360,11 @@
     }
   ],
   "totals": {
-    "fixtures": 72,
-    "escaping": 637,
-    "growing": 305,
-    "scrolling": 332,
-    "rhythmGroups": 20,
+    "fixtures": 69,
+    "escaping": 617,
+    "growing": 297,
+    "scrolling": 320,
+    "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 40
   },
@@ -580,49 +580,6 @@
     },
     {
       "width": 320,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container",
-      "by": 267.9,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 2.3,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 11,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "list-view",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 24,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 320,
       "fixture": "add-view-popover",
       "kind": "escaping",
       "tag": "div",
@@ -766,27 +723,6 @@
     },
     {
       "width": 320,
-      "fixture": "list-mobile",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container.db-width-default",
-      "by": 448,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "list-mobile",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 320,
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
@@ -894,27 +830,6 @@
       "by": 64,
       "scrolls": true,
       "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "list-sparse-fields",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container.db-width-default",
-      "by": 428,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "list-sparse-fields",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
     },
     {
       "width": 320,
@@ -2768,17 +2683,6 @@
       "fixture": "chrome-group-selection-controls",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-list-group-header",
-      "parentCls": "db-list-group",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
@@ -3655,49 +3559,6 @@
     },
     {
       "width": 402,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container",
-      "by": 185.9,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 2.3,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 11,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "list-view",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 24,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 402,
       "fixture": "add-view-popover",
       "kind": "escaping",
       "tag": "div",
@@ -3841,27 +3702,6 @@
     },
     {
       "width": 402,
-      "fixture": "list-mobile",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container.db-width-default",
-      "by": 366,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "list-mobile",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 402,
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
@@ -3936,27 +3776,6 @@
       "by": 44,
       "scrolls": false,
       "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "list-sparse-fields",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container.db-width-default",
-      "by": 346,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "list-sparse-fields",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
     },
     {
       "width": 402,
@@ -5425,17 +5244,6 @@
       "fixture": "chrome-group-selection-controls",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-list-group-header",
-      "parentCls": "db-list-group",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
@@ -5894,38 +5702,6 @@
     },
     {
       "width": 768,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 2.3,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 11,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "list-view",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 24,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
       "tag": "div",
@@ -6058,27 +5834,6 @@
     },
     {
       "width": 768,
-      "fixture": "list-mobile",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container.db-width-default",
-      "by": 24,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "list-mobile",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 768,
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
@@ -6120,27 +5875,6 @@
       "by": 8,
       "scrolls": false,
       "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "list-sparse-fields",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list",
-      "parentCls": "note-database-container.db-width-default",
-      "by": 4,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "list-sparse-fields",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
     },
     {
       "width": 768,
@@ -6630,17 +6364,6 @@
       "fixture": "chrome-group-selection-controls",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-list-group-header",
-      "parentCls": "db-list-group",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
@@ -6780,38 +6503,6 @@
     },
     {
       "width": 1440,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 2.3,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 1440,
-      "fixture": "list-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-list-field",
-      "parentCls": "db-list-row-meta",
-      "by": 11,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 1440,
-      "fixture": "list-view",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 24,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
       "tag": "div",
@@ -6944,16 +6635,6 @@
     },
     {
       "width": 1440,
-      "fixture": "list-mobile",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
-    },
-    {
-      "width": 1440,
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
@@ -6995,16 +6676,6 @@
       "by": 8,
       "scrolls": false,
       "pastHeader": 0
-    },
-    {
-      "width": 1440,
-      "fixture": "list-sparse-fields",
-      "kind": "rhythm",
-      "cls": "db-list-row",
-      "count": 12,
-      "mean": 52.9,
-      "sd": 0,
-      "distinct": 1
     },
     {
       "width": 1440,
@@ -7472,17 +7143,6 @@
       "fixture": "chrome-group-selection-controls",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-list-group-header",
-      "parentCls": "db-list-group",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 1440,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
@@ -7615,11 +7275,6 @@
     },
     {
       "width": 320,
-      "fixture": "list-view",
-      "probe": "4px"
-    },
-    {
-      "width": 320,
       "fixture": "add-view-popover",
       "probe": "4px"
     },
@@ -7640,22 +7295,12 @@
     },
     {
       "width": 320,
-      "fixture": "list-mobile",
-      "probe": "4px"
-    },
-    {
-      "width": 320,
       "fixture": "board-mobile",
       "probe": "4px"
     },
     {
       "width": 320,
       "fixture": "card-cover-states",
-      "probe": "4px"
-    },
-    {
-      "width": 320,
-      "fixture": "list-sparse-fields",
       "probe": "4px"
     },
     {
@@ -7975,11 +7620,6 @@
     },
     {
       "width": 402,
-      "fixture": "list-view",
-      "probe": "4px"
-    },
-    {
-      "width": 402,
       "fixture": "add-view-popover",
       "probe": "4px"
     },
@@ -8000,22 +7640,12 @@
     },
     {
       "width": 402,
-      "fixture": "list-mobile",
-      "probe": "4px"
-    },
-    {
-      "width": 402,
       "fixture": "board-mobile",
       "probe": "4px"
     },
     {
       "width": 402,
       "fixture": "card-cover-states",
-      "probe": "4px"
-    },
-    {
-      "width": 402,
-      "fixture": "list-sparse-fields",
       "probe": "4px"
     },
     {
@@ -8335,11 +7965,6 @@
     },
     {
       "width": 768,
-      "fixture": "list-view",
-      "probe": "4px"
-    },
-    {
-      "width": 768,
       "fixture": "add-view-popover",
       "probe": "4px"
     },
@@ -8360,22 +7985,12 @@
     },
     {
       "width": 768,
-      "fixture": "list-mobile",
-      "probe": "4px"
-    },
-    {
-      "width": 768,
       "fixture": "board-mobile",
       "probe": "4px"
     },
     {
       "width": 768,
       "fixture": "card-cover-states",
-      "probe": "4px"
-    },
-    {
-      "width": 768,
-      "fixture": "list-sparse-fields",
       "probe": "4px"
     },
     {
@@ -8695,11 +8310,6 @@
     },
     {
       "width": 1440,
-      "fixture": "list-view",
-      "probe": "4px"
-    },
-    {
-      "width": 1440,
       "fixture": "add-view-popover",
       "probe": "4px"
     },
@@ -8720,22 +8330,12 @@
     },
     {
       "width": 1440,
-      "fixture": "list-mobile",
-      "probe": "4px"
-    },
-    {
-      "width": 1440,
       "fixture": "board-mobile",
       "probe": "4px"
     },
     {
       "width": 1440,
       "fixture": "card-cover-states",
-      "probe": "4px"
-    },
-    {
-      "width": 1440,
-      "fixture": "list-sparse-fields",
       "probe": "4px"
     },
     {

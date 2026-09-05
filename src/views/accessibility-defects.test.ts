@@ -78,14 +78,12 @@ describe("Accessibility Defect Fixes", () => {
     expect(detailContent).toContain('panel.setAttribute("aria-label", title.text || r.file.basename)');
   });
 
-  it("Item 6: selection checkboxes in Board, Gallery, and List renderers have descriptive aria-labels", () => {
+  it("Item 6: selection checkboxes in Board and Gallery renderers have descriptive aria-labels", () => {
     const boardPath = resolve(__dirname, "board-renderer.ts");
     const galleryPath = resolve(__dirname, "gallery-renderer.ts");
-    const listPath = resolve(__dirname, "list-renderer.ts");
 
     const boardContent = readFileSync(boardPath, "utf-8");
     const galleryContent = readFileSync(galleryPath, "utf-8");
-    const listContent = readFileSync(listPath, "utf-8");
 
     // Board checkboxes
     expect(boardContent).toContain('cls: "db-board-column-checkbox",');
@@ -97,11 +95,6 @@ describe("Accessibility Defect Fixes", () => {
     expect(galleryContent).toContain('cls: "db-gallery-group-checkbox",');
     expect(galleryContent).toContain('"aria-label": label || t("common.total")');
     expect(galleryContent).toContain('"aria-label": row.file.basename || row.file.path');
-
-    // List checkboxes
-    expect(listContent).toContain('cls: "db-list-group-checkbox",');
-    expect(listContent).toContain('"aria-label": label || t("common.total")');
-    expect(listContent).toContain('"aria-label": row.file.basename || row.file.path');
   });
 
   it("Item 7: urgency classes supply non-colour visual glyphs for deuteranope clarity", () => {
@@ -168,25 +161,20 @@ describe("Accessibility Defect Fixes", () => {
   it("Item 10 & 11: renderers use row role on cards and provide explicit aria-labels on controls", () => {
     const boardPath = resolve(__dirname, "board-renderer.ts");
     const galleryPath = resolve(__dirname, "gallery-renderer.ts");
-    const listPath = resolve(__dirname, "list-renderer.ts");
 
     const boardContent = readFileSync(boardPath, "utf-8");
     const galleryContent = readFileSync(galleryPath, "utf-8");
-    const listContent = readFileSync(listPath, "utf-8");
 
     // Cards should not have role="button"
     expect(boardContent).not.toContain('card.setAttribute("role", "button")');
     expect(galleryContent).not.toContain('card.setAttribute("role", "button")');
-    expect(listContent).not.toContain('item.setAttribute("role", "button")');
 
     // Cards should have role="row"
     expect(boardContent).toContain('role: "row"');
     expect(galleryContent).toContain('role: "row"');
-    expect(listContent).toContain('role: "row"');
 
     // Open buttons have aria-label
     expect(boardContent).toContain('attr: { type: "button", "aria-label": t("menu.openNote") }');
     expect(galleryContent).toContain('attr: { type: "button", "aria-label": t("menu.openNote") }');
-    expect(listContent).toContain('attr: { type: "button", "aria-label": t("menu.openNote") }');
   });
 });

@@ -420,27 +420,12 @@ export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnCla
  * Group-level selection headers.
  *
  * These are the controls that select a whole group at once, and they are a different family from
- * the per-row box beside them: board subgroup, gallery group and list group each pass their own
- * class to the factory. All three were absent from every fixture, so nothing photographed them and
- * no check could reach them — the same hole that let eleven of twelve row families ship round.
+ * the per-row box beside them: board subgroup and gallery group each pass their own class to the
+ * factory.
  *
- * The nesting mirrors each renderer: the list wraps toggle, checkbox, title and count in
- * `db-list-group-header-label`, the gallery puts them straight on the header, and the board's
+ * The nesting mirrors each renderer: the gallery puts them straight on the header, and the board's
  * subgroup keeps its title and count in `db-board-header-text`.
  */
-export const listGroupHeader = (title, count, tone = OPTION_TONES[title]) => `
-  <div class="db-list-group">
-    <div class="db-list-group-header">
-      <span class="db-list-group-header-label">
-        ${collapseToggle("db-list-group-toggle")}
-        ${rowCheckbox("db-list-group-checkbox")}
-        ${groupTitle("db-list-group-title", title, tone)}
-        <span class="db-list-group-count">${count}</span>
-      </span>
-      <button type="button" class="db-list-group-new">+ New</button>
-    </div>
-  </div>`;
-
 export const galleryGroupHeader = (title, count, tone = OPTION_TONES[title]) => `
   <div class="db-gallery-group">
     <div class="db-gallery-group-header">

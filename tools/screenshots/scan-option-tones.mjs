@@ -36,7 +36,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  OPTION_TONES, ROWS, boardSubgroupHeader, galleryGroupHeader, groupTitle, listGroupHeader,
+  OPTION_TONES, ROWS, boardSubgroupHeader, galleryGroupHeader, groupTitle,
   optionPill, tableGroupTitle,
 } from "./scenarios/shared.mjs";
 
@@ -112,10 +112,9 @@ const bareTitles = [];
 // bare lane title while the check reported the family clean. The reference (default) board's own
 // `pm-kanban-col-badge` colours by inline style, not a `status-color-*` class — a different, real
 // contract this check does not model — so `db-board-column-title` is exercised directly through
-// `groupTitle`, the same badge-or-text primitive `listGroupHeader`/`galleryGroupHeader`/
+// `groupTitle`, the same badge-or-text primitive `galleryGroupHeader`/
 // `boardSubgroupHeader` already call, rather than through a fixture that no longer builds this class.
 const HEADERS = [
-  ["listGroupHeader", listGroupHeader, ROWS[0].category, "db-list-group-title"],
   ["galleryGroupHeader", galleryGroupHeader, ROWS[4].category, "db-gallery-group-title"],
   ["boardSubgroupHeader", boardSubgroupHeader, ROWS[2].cycle, "db-board-subgroup-title"],
   ["db-board-column-title", (title) => groupTitle("db-board-column-title", title, OPTION_TONES[title]),

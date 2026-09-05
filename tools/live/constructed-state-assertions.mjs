@@ -63,7 +63,6 @@ window.__stateMarkers = (scenario) => {
         const indents = rows.map((row) => parseInt(row.style.paddingLeft || "0", 10));
         return indents.length > 1 && Math.max(...indents) > Math.min(...indents);
       })(),
-    placeholderField: !!container.querySelector(".db-list-field.is-placeholder"),
     emptyDateReason: !!container.querySelector('[data-empty-reason="no-date-field"]'),
     calendarGrid: !!container.querySelector(".db-calendar"),
     chartNumber: !!container.querySelector(".db-chart-number"),
@@ -95,8 +94,7 @@ window.__stateMarkers = (scenario) => {
     tableGrouped: !!container.querySelector(".db-grouped-table tr.db-group-divider-row"),
     summaryRow: !!container.querySelector(".db-summary .db-summary-item"),
     ownedMenu: !!doc.querySelector(".db-owned-menu .db-menu-item"),
-    groupSelectionBoxes: !!container.querySelector(".db-list-group-checkbox")
-      && !!container.querySelector(".db-gallery-group-checkbox")
+    groupSelectionBoxes: !!container.querySelector(".db-gallery-group-checkbox")
       && !!container.querySelector(".db-board-column-checkbox"),
     cardCovers: !!container.querySelector(".db-board-card-cover.is-empty .db-board-card-cover-placeholder")
       && !!container.querySelector(".db-gallery-cover.is-empty .db-gallery-cover-placeholder"),
@@ -176,12 +174,6 @@ const PAIRED_CASES = [
     off: { renderer: "timeline", bag: "file-view", captureData: true },
     on: { renderer: "timeline", bag: "file-view", captureData: true, subtaskTree: true },
     onMarkers: ["subtaskToggle", "subtaskProgress", "subtaskDepthChild"],
-  },
-  {
-    id: "constructed-list-sparse",
-    off: { renderer: "list", bag: "file-view", captureData: true },
-    on: { renderer: "list", bag: "file-view", captureData: true, sparseFields: true },
-    onMarkers: ["placeholderField"],
   },
   {
     id: "constructed-calendar-empty",
@@ -430,9 +422,8 @@ const SINGLE_CASES = [
     // A config built as `viewType: "list"`, run through the real `planListMigration`/
     // `applyListMigration` before the harness ever hands it to `TableRenderer` — not a config
     // authored as a table from the start. The marker requires both a real `table.db-table` and
-    // the absence of any `.db-list-row`, so a regression that left the config half-migrated (or
-    // a harness change that silently kept routing it to `ListRenderer`) fails here instead of
-    // only showing up as a visual diff nobody was looking for.
+    // the absence of any `.db-list-row`, so a regression that left the config half-migrated
+    // fails here instead of only showing up as a visual diff nobody was looking for.
     id: "constructed-list-migrated",
     spec: { renderer: "table", bag: "file-view", captureData: true, migratedFromList: true },
     marker: "migratedListAsTable",

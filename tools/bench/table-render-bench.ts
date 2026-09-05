@@ -83,7 +83,10 @@ export function makeRows(count: number, columns: ColumnDef[]): RowData[] {
 }
 
 export function makeConfig(columns: ColumnDef[]): ViewConfig {
-  return { name: "Bench", sourceFolder: "notes", columns } as unknown as ViewConfig;
+  // schema.columns, not a flat columns field: ViewConfig carries no such field (only
+  // RecordSchema does), and the assertion harness's own getViewRuleColumns reads
+  // config.schema?.columns for every filter/sort/active-rule scenario built on this config.
+  return { name: "Bench", sourceFolder: "notes", schema: { columns, computedFields: [] } } as unknown as ViewConfig;
 }
 
 /** Minimal but honest: every required action, none of them doing work worth measuring. */

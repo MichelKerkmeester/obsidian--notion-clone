@@ -64,7 +64,6 @@ import { SortPanelRenderer } from "./sort-panel-renderer";
 import { SummaryRenderer } from "./summary-renderer";
 import { applyConditionalFormat } from "../data/conditional-formatting";
 import { GalleryRenderer } from "./gallery-renderer";
-import { ListRenderer } from "./list-renderer";
 import { ChartRenderer } from "./chart-renderer";
 import { CalendarToolbarRenderer } from "./calendar-toolbar-renderer";
 import { ChartToolbarRenderer } from "./chart-toolbar-renderer";
@@ -183,7 +182,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private tableRenderer: TableRenderer;
   private boardRenderer: BoardRenderer;
   private galleryRenderer: GalleryRenderer;
-  private listRenderer: ListRenderer;
   private chartRenderer = new ChartRenderer();
   private calendarToolbarRenderer = new CalendarToolbarRenderer();
   private chartToolbarRenderer = new ChartToolbarRenderer();
@@ -477,27 +475,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
       updateCardSize: (width) => this.updateGalleryCardSize(width),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
-      isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
-      toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
-      showRowMenu: (event, row) => this.rowMenu.show(event, row),
-      showColumnMenu: (event, col, anchorEl) => this.showColumnContextMenu(event, col, anchorEl, false),
-      renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
-      renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
-      applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
-      isReadOnly: isCodeBlock,
-      get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
-    });
-    this.listRenderer = new ListRenderer(this.app, {
-      openRow: (row) => this.dataSource.openNote(row.file),
-      createEntry: (defaults) => { if (!isCodeBlock) void this.createBlankEntry(defaults); },
-      isRowSelected: (row) => this.selectedRows.has(row.file.path),
-      toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
-      areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
-      toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
-      editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
-      getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
       moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),

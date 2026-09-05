@@ -205,7 +205,7 @@ for (const width of WIDTHS) {
 // measured was a stack of unstyled divs: no track width, no grid column, no padding. The heights,
 // the standard deviations and the spill counts were all real measurements of markup the plugin does
 // not build, which is a check that cannot fail whatever the product does. The names below are the
-// ones list-renderer.ts actually creates, and the title sits inside the line wrapper it is built in.
+// ones the retired list view actually created, and the title sits inside the line wrapper it was built in.
 //
 // The second axis was inert for the same reason. It toggled an inline `flex-wrap` on the meta row,
 // which has been a grid since the column fix landed and ignores the property outright. The axis

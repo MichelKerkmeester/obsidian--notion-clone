@@ -23,7 +23,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph, listGroupHeader,
+import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph,
   optionPill, rowCheckbox, tableGroupTitle } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -795,18 +795,13 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 620,
     fixtureOf: "constructed-group-selection-controls",
-    sources: ["src/views/list-renderer.ts", "src/views/gallery-renderer.ts", "src/views/board-renderer.ts"],
-    // Three families that existed in source and in no fixture: renderGroupCheckbox in the list and
-    // the gallery, and renderSubgroup in the board. Nothing photographed them and no check could
-    // reach them, which is the same hole that let a row checkbox family ship unstyled.
-    //
-    // They are captured together on purpose. The criterion these controls have to meet is that one
-    // role paints one box, so three headers side by side is the picture that shows a divergence at
-    // a glance; three separate captures would not.
-    note: "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
+    sources: ["src/views/gallery-renderer.ts", "src/views/board-renderer.ts"],
+    // Two remaining families: renderGroupCheckbox in the gallery, and the board column-header
+    // box. They are captured together so one role paints one box and a divergence is visible
+    // at a glance.
+    note: "The whole-group selection box from the gallery and a board subgroup. One role, so both boxes must be the same size and radius.",
     html: () => `
       <div class="note-database-container">
-        ${listGroupHeader("Design", 4)}
         ${galleryGroupHeader("Business", 7)}
         ${boardSubgroupHeader("Monthly", 3)}
       </div>`,

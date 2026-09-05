@@ -69,20 +69,6 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 // what makes a bag change visible — a member the renderer calls disappearing
 // from a bag must fail rather than being silently tolerated.
 const BAGS = {
-  "list/file-view": [
-    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "editCell", "editFileName",
-    "editFormula", "expandGroup", "getColumns", "getSelectedRows", "hideCreateEntry",
-    "isGroupCollapsed", "isRowSelected", "moveRowToGroupAndPosition", "moveRowToPosition",
-    "moveRowsToGroup", "moveRowsToPosition", "openRecordDetail", "openRow",
-    "renderGroupSummaries", "renderRecordIcon", "saveCellValue", "showColumnMenu", "showRowMenu",
-    "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected",
-  ],
-  "list/embed": [
-    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "editCell", "expandGroup",
-    "getColumns", "hideCreateEntry", "isGroupCollapsed", "isReadOnly", "isRowSelected",
-    "moveRowToPosition", "openRow", "renderGroupSummaries", "renderRecordIcon", "showColumnMenu",
-    "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected",
-  ],
   "table/file-view": [
     "addColumn", "applyConditionalFormat", "areAllRowsSelected", "captureInteractionSnapshot",
     "changeColumnCalculation", "createEntry", "expandGroup", "getVisibleColumns",
@@ -325,12 +311,11 @@ if (failures.length > 0) {
 
 stamp(
   STAMP_PATH,
-  { constructed, total },
+  { constructed, total, note: "was 7/22; list renderer retired" },
   [
     "tools/live/render-assertions.mjs",
     "tools/live/render-assertion-harness.ts",
     ...RENDERER_SOURCES,
-    "tools/bench/list-render-bench.ts",
     "tools/bench/table-render-bench.ts",
     "tools/bench/board-render-bench.ts",
     "tools/bench/gallery-render-bench.ts",

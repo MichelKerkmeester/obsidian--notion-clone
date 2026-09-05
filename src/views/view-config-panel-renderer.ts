@@ -452,12 +452,6 @@ export class ViewConfigPanelRenderer {
         config.showEmptyFields = value || undefined;
         actions.onChange(t("undo.showEmptyFieldsConfig"));
       });
-      if (config.viewType === "list") {
-        this.renderSwitch(body, t("viewConfig.listCompactFields"), config.listCompactFields === true, (value) => {
-          config.listCompactFields = value || undefined;
-          actions.onChange(t("undo.listCompactFieldsConfig"));
-        });
-      }
     }
     if (config.viewType === "gallery") {
       this.renderGallerySettings(body, config, actions);

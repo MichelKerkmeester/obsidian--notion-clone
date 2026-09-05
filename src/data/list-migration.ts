@@ -13,12 +13,9 @@
 // widths (`getFieldWidth` is one function, shared), so the column set, the filters, the sorts and
 // the grouping a list view carries are already a table's, and the plan has nothing to translate.
 //
-// The list's own fields are LEFT ON THE VIEW rather than stripped. `listCompactFields` has no
-// table equivalent — it sized a compact meta-field row the table does not have — and it becomes
-// inert once nothing reads it, which is cheaper and safer than deleting a field other builds may
-// still have written. What the migration must not do is repair: a corrupt column set is the table
-// renderer's existing fallback's job, and a migration that "fixed" it on the way past would bypass
-// that fallback.
+// What the migration must not do is repair: a corrupt column set is the table renderer's existing
+// fallback's job, and a migration that "fixed" it on the way past would bypass that fallback.
+// Leftover list-only keys in vault YAML are ignored on parse and are not rewritten onto ViewConfig.
 //
 // PURE ON PURPOSE. It takes a view and returns what to write, so the decision can be checked
 // without an Obsidian `App`, a vault or a rendered surface — the shape three checks in this

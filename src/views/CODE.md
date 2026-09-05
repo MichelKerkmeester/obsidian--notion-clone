@@ -53,7 +53,7 @@ Reads rows from src/data. Emits db-* DOM styled by styles.css.
 | Concern | Representative modules |
 |---|---|
 | View container and state | `DatabaseView.ts`, `DatabaseFileView.ts`, `DatabaseViewport.ts`, `ViewStateStore.ts`, `ViewRuleOperations.ts` |
-| View bodies | `TableRenderer.ts`, `BoardRenderer.ts`, `GalleryRenderer.ts`, `ListRenderer.ts`, `ChartRenderer.ts`, `CalendarRenderer.ts`, `CalendarTimelineRenderer.ts`, `EmbeddedDatabaseRenderer.ts` |
+| View bodies | `TableRenderer.ts`, `BoardRenderer.ts`, `GalleryRenderer.ts`, `ChartRenderer.ts`, `CalendarRenderer.ts`, `CalendarTimelineRenderer.ts`, `EmbeddedDatabaseRenderer.ts` |
 | Table internals | `CellRenderer.ts`, `ColumnHeaderController.ts`, `ColumnManagerRenderer.ts`, `ColumnMenu.ts`, `ColumnOperations.ts`, `ColumnPropertySync.ts`, `ColumnWidth.ts`, `TableColumnLayoutSync.ts`, `TableFooterRenderer.ts`, `TableLayout.ts`, `TableRecordPeek.ts`, `RowMenu.ts` |
 | Cell and field renderers | `CardFieldRenderer.ts`, `FileFieldRenderer.ts`, `FileTitleDisplay.ts`, `DropdownField.ts`, `DateValuePicker.ts`, `DatePickerModel.ts`, `NumberDisplayRenderer.ts`, `RelationValueRenderer.ts`, `RecordIconRenderer.ts`, `PropertyTypeIcon.ts`, `InlineMarkdownRenderer.ts`, `FieldTooltip.ts` |
 | Toolbar, panels, popovers | `ToolbarRenderer.ts`, `ChartToolbarRenderer.ts`, `CalendarToolbarRenderer.ts`, `CalendarTimelineToolbarRenderer.ts`, `FilterPanelRenderer.ts`, `SortPanelRenderer.ts`, `ViewConfigPanelRenderer.ts`, `ActiveViewControlsRenderer.ts`, `ActiveRulePopoverRenderer.ts`, `IconPickerPopover.ts`, `OptionColorPicker.ts`, `BulkEditFieldMenu.ts`, `RecordDetailPanel.ts` |

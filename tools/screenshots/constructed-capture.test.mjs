@@ -28,26 +28,26 @@ import {
 describe("manifest schema", () => {
   it("accepts a constructed entry carrying a per-view scenario id", () => {
     const entry = {
-      id: "constructed-list",
+      id: "constructed-table",
       source: "constructed",
-      renderer: "list",
+      renderer: "table",
       bag: "file-view",
       theme: "dark",
       device: "desktop",
-      file: "screenshots/notion-clone/views/constructed-list-desktop-dark.png",
+      file: "screenshots/notion-clone/views/constructed-table-desktop-dark.png",
       pixelHash: "0123456789ab",
-      sourceHashes: { "src/views/list-renderer.ts": "0123456789ab" },
+      sourceHashes: { "src/views/table-renderer.ts": "0123456789ab" },
     };
     expect(validateManifestEntry(entry).ok).toBe(true);
   });
 
   it("rejects a constructed entry without the view it photographs", () => {
     const entry = {
-      id: "constructed-list",
+      id: "constructed-table",
       source: "constructed",
       theme: "dark",
       device: "desktop",
-      file: "screenshots/notion-clone/views/constructed-list-desktop-dark.png",
+      file: "screenshots/notion-clone/views/constructed-table-desktop-dark.png",
       pixelHash: "0123456789ab",
       sourceHashes: {},
     };
@@ -66,7 +66,7 @@ describe("constructed scenario readiness", () => {
     // photograph an unmounted view.
     expect(() =>
       validateConstructedScenario({
-        id: "constructed-list",
+        id: "constructed-table",
         mount: () => {},
       }),
     ).toThrow(/readiness/);
@@ -75,7 +75,7 @@ describe("constructed scenario readiness", () => {
   it("accepts a constructed scenario whose mount awaits the ready signal", () => {
     expect(() =>
       validateConstructedScenario({
-        id: "constructed-list",
+        id: "constructed-table",
         mount: async () => null,
       }),
     ).not.toThrow();
@@ -123,9 +123,7 @@ describe("constructed scenario registry", () => {
       "constructed-gallery",
       "constructed-group-selection-controls",
       "constructed-icon-picker",
-      "constructed-list",
       "constructed-list-migrated",
-      "constructed-list-sparse",
       "constructed-number-displays",
       "constructed-option-color-picker",
       "constructed-owned-menu",
@@ -218,9 +216,6 @@ describe("fixture declarations", () => {
       "field-relation-values -> constructed-relation-values",
       "field-status-colors -> constructed-status-colors",
       "gallery-view -> constructed-gallery",
-      "list-mobile -> constructed-list",
-      "list-sparse-fields -> constructed-list-sparse",
-      "list-view -> constructed-list",
       "panel-column-manager -> constructed-column-manager",
       "panel-column-width-sheet -> constructed-column-width-adjuster",
       "panel-filter-conditions -> constructed-filter-panel",

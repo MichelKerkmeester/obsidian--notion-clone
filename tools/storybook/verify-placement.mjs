@@ -131,7 +131,6 @@ import { mountNoteBodyRegion } from "${join(REPO, "src/views/note-body-region")}
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
 import { CellRenderer } from "${join(REPO, "src/views/cell-renderer")}";
-import { ListRenderer, reservesColumnsOnWrappingLine } from "${join(REPO, "src/views/list-renderer")}";
 import { DatabaseView } from "${join(REPO, "src/views/database-view")}";
 import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-database-renderer")}";
 import { getColumnDisplayType, isEmptyValue } from "${join(REPO, "src/data/column-display")}";
@@ -141,7 +140,6 @@ globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRendere
 globalThis.__tall = { openRecordDetailPanel, closeRecordDetailPanel, mountNoteBodyRegion };
 globalThis.__dock = { DatabaseView, closeRecordDetailPanel, CellRenderer };
 globalThis.__viewrow = { ToolbarRenderer };
-globalThis.__list = { ListRenderer, reservesColumnsOnWrappingLine };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
 globalThis.__opentarget = { DatabaseView, openTableRecordPeek, closeTableRecordPeek, closeRecordDetailPanel };
@@ -5095,322 +5093,8 @@ await section("the reorder button and the row checkbox share one cell", async ()
   }
 });
 
-// ───────────────────────────────────────────────────────────────────
-// 5j. A PROPERTY KEEPS ITS COLUMN ON EVERY CARD
-// ───────────────────────────────────────────────────────────────────
-//
-// The renderer omits nothing now: a property with no value is still built and hidden, so its column
-// is claimed by index rather than left to whichever siblings happened to survive. That was already
-// true on the desktop, where the meta row is a grid and `grid-column` decides. It was not true on a
-// phone, where the same element is a wrapping flex line that ignores `grid-column` entirely, and
-// the phone is the surface the raggedness was reported on.
-//
-// Built the way capture.mjs builds a page, `--capture-max-width` included. Without it the plugin
-// container sized itself to content and measured 948px inside a 402px viewport, and every phone
-// number taken off that page described a width no phone has — including the first version of this
-// measurement, which reported fourteen distinct positions where the truth was two.
-
 const rhythmResults = [];
-await section("a property keeps its column on every card", async () => {
-  const sheets = ["tools/screenshots/theme.css", "styles.css", "tools/screenshots/runtime-vars.css"]
-    .map((file) => `<style>${readFileSync(join(REPO, file), "utf8")}</style>`).join("\n");
-  const sparse = SCENARIOS.find((s) => s.id === "list-sparse-fields");
-  for (const device of [
-    { id: "desktop", viewport: VIEWPORT, bodyClass: "", touch: false },
-    { id: "phone", viewport: { width: 402, height: 874 }, bodyClass: "is-mobile is-phone", touch: true },
-  ]) {
-    const context = await browser.newContext({
-      viewport: device.viewport, reducedMotion: "reduce", hasTouch: device.touch, isMobile: device.touch,
-    });
-    const page = await context.newPage();
-    await page.setContent(`<!doctype html><html class="theme-light" style="--capture-max-width: ${device.viewport.width}px">`
-      + `<head><meta name="viewport" content="width=device-width, initial-scale=1">${sheets}</head>`
-      + `<body class="${device.bodyClass}"><div id="shot">${sparse.html()}</div></body></html>`);
-    await page.waitForTimeout(250);
-    rhythmResults.push(...await page.evaluate((id) => {
-      const metas = [...document.querySelectorAll(".db-list-row-meta")];
-      const widths = [...new Set(metas.map((m) => Math.round(m.getBoundingClientRect().width)))];
-      const byProperty = new Map();
-      for (const meta of metas) {
-        const origin = meta.getBoundingClientRect().left;
-        for (const field of meta.querySelectorAll(".db-list-field")) {
-          const label = (field.querySelector(".db-list-field-label")?.textContent || "").trim();
-          // A reserved box has no label, because the renderer builds it with no children at all —
-          // and a box with no name has no column of its own to keep. Grouping the unlabelled ones
-          // together under "?" made every placeholder in the fixture look like one property landing
-          // in four columns, which is a statement about the check rather than about the surface.
-          // The renderer-driven section next door has always skipped them for the same reason.
-          if (!label) continue;
-          if (!byProperty.has(label)) byProperty.set(label, new Set());
-          byProperty.get(label).add(Math.round(field.getBoundingClientRect().left - origin));
-        }
-      }
-      const spread = [...byProperty].map(([label, xs]) => [label, xs.size]);
-      const worst = Math.max(...spread.map(([, n]) => n));
-      return [
-        {
-          name: `on ${id} every list card's field area is the same width`,
-          pass: metas.length > 0 && widths.length === 1,
-          detail: `${metas.length} cards, each missing a different subset of its properties, take`
-            + ` ${widths.length} distinct meta width(s): ${widths.join("/")}px`
-            + " — cards of different widths is what ragged looks like before the columns are even read",
-        },
-        {
-          name: `on ${id} a property starts in the same column on every card`,
-          pass: metas.length > 0 && worst === 1,
-          detail: `${spread.length} properties across ${metas.length} cards; worst lands in ${worst}`
-            + ` column(s) [${spread.map(([l, n]) => `${l}:${n}`).join(" ")}]`
-            + ". Drop the hidden placeholder and the survivors shuffle up one slot each.",
-        },
-      ];
-    }, device.id));
-    await context.close();
-  }
-});
-
-
-// ───────────────────────────────────────────────────────────────────
-// 5k. THE SAME TWO PROPERTIES, THROUGH THE RENDERER THAT SHIPS
-// ───────────────────────────────────────────────────────────────────
-//
-// 5j measures a fixture. The fixture writes its own markup and imports nothing, so it holds
-// whatever shape its author last typed and keeps reporting green while the renderer walks away
-// from it — which is exactly what happened: a change to how empty properties are built shipped
-// twice, and no check here could see it, because none of them run the renderer.
-//
-// So this asserts the same two properties against `ListRenderer` itself, at the shape the defect
-// was reported on rather than the four columns the fixture draws: twenty-one properties, each row
-// missing a different subset. Both surfaces, because the desktop row is a grid where `grid-column`
-// decides and the phone row is a wrapping flex line where it means nothing, and only one of those
-// was ever actually broken.
-//
-// It also counts the elements the renderer built, so a fix that restores alignment by rendering a
-// whole hidden field per empty property — three nodes and a value render for something invisible —
-// cannot pass this quietly. That shape is what took a 1,600-row list to seven seconds of blocked
-// main thread.
-//
-// The third assertion is therefore surface-shaped, like the reservation it watches, and it keys on
-// the same thing the renderer does: whether two properties share a line. Where they do — a grid, or
-// a wrapping line wide enough for a pair — it asks that a reserved slot exist and hold nothing.
-// Where one property fills a line on its own it asks the opposite, that nothing be reserved at all,
-// because there a reservation buys no slot at all, only a blank line and the row gap under it, and
-// a card carrying fourteen of those is 84px of scrolling for boxes nobody can see.
-//
-// Keying it on the device instead would have been the trap: the same phone rotated to landscape
-// fits two properties per line and needs its reservations back, so a check that assumed "phone
-// means reserve nothing" would go red on a correct renderer. One assertion covering every surface
-// could only ever have been the weakest of the three.
-
 const rendererRhythmResults = [];
-await section("the same properties through the renderer that ships", async () => {
-  const sheets = ["tools/screenshots/theme.css", "styles.css", "tools/screenshots/runtime-vars.css"]
-    .map((file) => `<style>${readFileSync(join(REPO, file), "utf8")}</style>`).join("\n");
-  // "Phone" is not a width, and that is the whole point of the sweep.
-  //
-  // One 402px phone answered the reservation question once, by hand, and a criterion was written off
-  // it. But `shouldReserveColumns` decides on the field area's measured width, so the interesting
-  // cases are the band where it changes its mind and the two sides of it — and a phone rotated to
-  // landscape is wide while still carrying `is-phone`, which is the case a device-keyed check gets
-  // wrong on a correct renderer.
-  //
-  // Six widths under the same body class: 360 is the narrowest common handset, 402 is the reported
-  // one, 430 is the largest current handset, 480 and 540 straddle the band where two properties
-  // start to fit, and 1024 is that phone in landscape on a tablet-sized viewport.
-  for (const device of [
-    { id: "desktop", viewport: VIEWPORT, bodyClass: "", touch: false },
-    ...[360, 402, 430, 480, 540, 1024].map((width) => ({
-      id: `phone-${width}`,
-      viewport: { width, height: 874 },
-      bodyClass: "is-mobile is-phone",
-      touch: true,
-    })),
-  ]) {
-    const context = await browser.newContext({
-      viewport: device.viewport, reducedMotion: "reduce", hasTouch: device.touch, isMobile: device.touch,
-    });
-    const page = await context.newPage();
-    // `capture-element` matters more than it looks: the width cap that keeps the container inside the
-    // device lives on `html.capture-element #shot`, so a page carrying the custom property without
-    // the class is not bounded by anything. Measured without it the phone's field area came out
-    // 858px wide inside a 402px viewport — a width no phone has, on which any wrapping question
-    // answers itself wrongly. With it the same row measures 328px.
-    await page.setContent(`<!doctype html><html class="theme-light capture-element" style="--capture-max-width: ${device.viewport.width}px">`
-      + `<head><meta name="viewport" content="width=device-width, initial-scale=1">${sheets}</head>`
-      + `<body class="${device.bodyClass}"><div id="shot">`
-      + `<div class="note-database-container db-width-default"></div></div></body></html>`);
-    await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
-    await page.addScriptTag({ content: positionerJs });
-
-    const built = await page.evaluate(() => {
-      // Four, not the twenty-one of the reported database, because this measures x-positions and
-      // twenty-one of them do not fit on a phone: they wrap to three lines' worth of positions that
-      // every property shares, and a property then lands in one column whether the renderer claims
-      // it by index or by count. The check passes either way and has proved nothing. Four is the
-      // width at which the defect was measured, and the width at which dropping a field visibly
-      // pulls its successors left. Row count and column count for cost live in the bench.
-      const PROPERTIES = ["cost", "renew", "payment", "cycle"];
-      // Widths deliberately unequal: with every column the same width a slot claimed by index and
-      // one taken by count produce the same picture, and the measurement cannot tell them apart.
-      const WIDTHS = { cost: 110, renew: 190, payment: 150, cycle: 130 };
-      const columns = [{ key: "file.name", label: "Name", type: "text" }].concat(
-        PROPERTIES.map((key) => ({ key, label: key, type: "text", width: WIDTHS[key] })),
-      );
-      // Each row missing a different subset, spread so no two adjacent rows drop the same columns.
-      const rows = Array.from({ length: 12 }, (unused, r) => {
-        const frontmatter = {};
-        PROPERTIES.forEach((key, c) => { if ((r * 5 + c * 3) % 7 > 1) frontmatter[key] = `${key}-${r}`; });
-        return { file: { path: `notes/row-${r}.md`, basename: `row-${r}`, name: `row-${r}.md` }, frontmatter, computed: {} };
-      });
-      const config = { name: "Check", sourceFolder: "notes", schema: { columns, computedFields: [] } };
-      const actions = {
-        openRow: () => undefined, createEntry: () => undefined, isRowSelected: () => false,
-        toggleRowSelected: () => undefined, areAllRowsSelected: () => false,
-        toggleRowsSelected: () => undefined, editCell: () => undefined,
-        getColumns: () => columns, moveRowToPosition: () => undefined, isReadOnly: false,
-      };
-      const container = document.querySelector(".note-database-container");
-      new globalThis.__list.ListRenderer(undefined, actions).render(container, config, rows);
-      return { rows: rows.length, properties: PROPERTIES.length };
-    });
-
-    await page.waitForTimeout(250);
-    rendererRhythmResults.push(...await page.evaluate(({ id, built }) => {
-      const metas = [...document.querySelectorAll(".db-list-row-meta")];
-      const widths = [...new Set(metas.map((m) => Math.round(m.getBoundingClientRect().width)))];
-      // Grouped by label, so only properties that carry a value are compared. A placeholder has no
-      // label — it is a reserved box, not a rendered field, and has no position of its own to keep.
-      const byProperty = new Map();
-      for (const meta of metas) {
-        const origin = meta.getBoundingClientRect().left;
-        for (const field of meta.querySelectorAll(".db-list-field")) {
-          const label = (field.querySelector(".db-list-field-label")?.textContent || "").trim();
-          if (!label) continue;
-          if (!byProperty.has(label)) byProperty.set(label, new Set());
-          byProperty.get(label).add(Math.round(field.getBoundingClientRect().left - origin));
-        }
-      }
-      const spread = [...byProperty].map(([label, xs]) => [label, xs.size]);
-      const worst = spread.length ? Math.max(...spread.map(([, n]) => n)) : 0;
-      // How many properties share a line, which decides whether the alignment question is even
-      // askable here. A surface that fits one property per line puts every one of them at x=0
-      // whether the renderer claims a column by index or by count, so it answers "aligned" without
-      // ever having been able to answer anything else. Reported so that green is legible.
-      const perLine = Math.max(...metas.map((meta) => {
-        const rowsByTop = new Map();
-        for (const field of meta.querySelectorAll(".db-list-field")) {
-          const top = Math.round(field.getBoundingClientRect().top);
-          rowsByTop.set(top, (rowsByTop.get(top) || 0) + 1);
-        }
-        return Math.max(0, ...rowsByTop.values());
-      }), 0);
-      const askable = perLine >= 2
-        ? `${perLine} properties share a line here, so a shuffle would move one`
-        : `only ${perLine} property fits per line here, so every one sits at x=0 and this cannot`
-          + " show a shuffle — the column claim is load-bearing on the wider surface, not this one";
-      const placeholders = document.querySelectorAll(".db-list-field.is-placeholder").length;
-      const nodesInPlaceholders = [...document.querySelectorAll(".db-list-field.is-placeholder")]
-        .reduce((total, el) => total + el.querySelectorAll("*").length, 0);
-      // Which layout this surface is actually in, read off the element rather than assumed from the
-      // device name, and whether a reservation is worth anything in it. A grid always has a column
-      // to hold. A wrapping line has a slot to hold only when two properties share a line; when one
-      // fills a line on its own, a reservation holds nothing and costs a blank line. The arm has to
-      // be selected the same way the renderer selects it, or the check goes red on a correct
-      // renderer at the first width nobody tested.
-      const isGrid = metas.length > 0 && metas.every((m) => getComputedStyle(m).display === "grid");
-      const reservationHoldsSomething = isGrid || perLine >= 2;
-      // What the RENDERER decided, asked of the shipped decision rather than re-derived here. The
-      // first version of this sweep split its arms on `perLine`, which is what actually fitted — and
-      // a rig that reserved at every width simply moved every narrow surface into the permissive arm
-      // and passed. Both sides moved together, so the check could not see the defect it exists for.
-      //
-      // The inputs are read off the rendered boxes: each field and placeholder carries the declared
-      // width the renderer sized it from, and the gap and the field area are computed style.
-      const declaredWidths = metas.length
-        ? [...metas[0].querySelectorAll(".db-list-field")]
-          .map((f) => Number.parseFloat(f.style.getPropertyValue("--db-card-field-width")))
-          .filter((w) => Number.isFinite(w))
-        : [];
-      const columnGap = metas.length ? Number.parseFloat(getComputedStyle(metas[0]).columnGap) || 0 : 0;
-      const fieldAreaWidth = metas.length ? metas[0].getBoundingClientRect().width : 0;
-      const rendererReserves = isGrid
-        || globalThis.__list.reservesColumnsOnWrappingLine(declaredWidths, columnGap, fieldAreaWidth);
-      const narrowestPair = [...declaredWidths].sort((a, b) => a - b).slice(0, 2).join(" + ");
-      // A field line carrying nothing but reserved boxes: zero height nobody sees, plus the row gap
-      // beneath it. A grid has none by construction. A wrapping line grows one per gap in the data.
-      let deadLines = 0;
-      let totalLines = 0;
-      let metaHeight = 0;
-      for (const meta of metas) {
-        const shownByTop = new Map();
-        for (const field of meta.querySelectorAll(".db-list-field")) {
-          const top = Math.round(field.getBoundingClientRect().top);
-          const shown = (shownByTop.get(top) || 0) + (field.classList.contains("is-placeholder") ? 0 : 1);
-          shownByTop.set(top, shown);
-        }
-        totalLines += shownByTop.size;
-        for (const shown of shownByTop.values()) if (shown === 0) deadLines += 1;
-        metaHeight += meta.getBoundingClientRect().height;
-      }
-      metaHeight = Math.round((metaHeight / Math.max(1, metas.length)) * 10) / 10;
-      return [
-        {
-          name: `on ${id} the renderer gives every list card the same field-area width`,
-          pass: metas.length === built.rows && widths.length === 1,
-          detail: `${metas.length} rendered cards, each missing a different subset of`
-            + ` ${built.properties} properties, take ${widths.length} distinct meta width(s):`
-            + ` ${widths.join("/")}px — this is the renderer's own output, not a fixture's`,
-        },
-        {
-          name: `on ${id} the renderer starts a property in the same column on every card`,
-          pass: metas.length === built.rows && worst === 1,
-          detail: `${spread.length} properties across ${metas.length} cards; worst lands in ${worst}`
-            + ` column(s). Skip the empty ones and the survivors shuffle up one slot each. ${askable}`,
-        },
-        reservationHoldsSomething ? {
-          name: `on ${id} a reserved column costs one element and no rendered content`,
-          pass: placeholders > 0 && nodesInPlaceholders === 0,
-          detail: `${placeholders} reserved columns hold ${nodesInPlaceholders} child element(s)`
-            + ` — this surface puts ${perLine} propert${perLine === 1 ? "y" : "ies"} on a line in a`
-            + ` ${isGrid ? "grid" : "wrapping line"}, so a reservation holds a real slot here.`
-            + " A full hidden field would carry a label and a value nobody can see, on every"
-            + " empty property of every row",
-        } : !rendererReserves ? {
-          name: `on ${id} the wrapping card spends no line on a property it does not show`,
-          pass: metas.length > 0 && deadLines === 0 && placeholders === 0,
-          detail: `${metas.length} cards over ${totalLines} field line(s), ${deadLines} of them`
-            + ` carrying only reserved boxes; ${placeholders} boxes reserved; the field area`
-            + ` averages ${metaHeight}px per card. grid-column means nothing on a wrapping line and`
-            + ` only ${perLine} property fits per line here, so every property sits at x=0 either`
-            + " way and a reservation buys a blank line and the row gap under it rather than a slot"
-            + " — measured at 84px per card on the reported database",
-        } : {
-          // THE DECLARED OVER-RESERVATION BAND, reported rather than failed.
-          //
-          // `shouldReserveColumns` tests the two NARROWEST declared widths plus a gap, deliberately,
-          // so the uncertain cases resolve toward reserving: a needless reservation costs height
-          // while a needless skip costs the alignment the whole mechanism exists to hold. At this
-          // width the narrowest pair fits and the pair the data actually renders does not, so the
-          // renderer reserves and nothing pairs.
-          //
-          // Failing here would fail a correct implementation — the shape the goal line itself warns
-          // about. What IS asserted is that the band stays cheap: every reserved box holds nothing,
-          // and the dead lines are exactly the reservations rather than a multiple of them.
-          name: `on ${id} the declared over-reservation band stays a reservation and not a render`,
-          pass: metas.length > 0 && nodesInPlaceholders === 0 && deadLines <= placeholders,
-          detail: `only ${perLine} property fits per line here, yet ${placeholders} box(es) are`
-            + ` reserved — the narrowest declared pair (${narrowestPair} + ${Math.round(columnGap)}px`
-            + ` gap) fits this ${Math.round(fieldAreaWidth)}px field area and the pair the data`
-            + ` renders does not, which is the band the shipped decision resolves toward reserving`
-            + ` on purpose. The cost is bounded and measured: ${nodesInPlaceholders} child element(s)`
-            + ` inside those boxes, ${deadLines} line(s) carrying only reserved boxes across`
-            + ` ${totalLines} field line(s), field area ${metaHeight}px per card. Failing this width`
-            + ` would fail a correct renderer; letting it go unreported would hide the height`,
-        },
-      ];
-    }, { id: device.id, built }));
-    await context.close();
-  }
-});
 
 // ───────────────────────────────────────────────────────────────────
 // 5n. LIFTED FROM THE PHASE PROBES
@@ -9027,8 +8711,6 @@ let dropdownFieldsChecked = 0;
 const iconlessOffenders = [];
 let menuRowsChecked = 0;
 const sharedGlyphOffenders = [];
-let listRowsChecked = 0;
-const flatListOffenders = [];
 
 await section("every fixture table has as many cells as it has headers", async () => {
   const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
@@ -9134,20 +8816,8 @@ await section("every fixture table has as many cells as it has headers", async (
           sharedGlyphs.push({ scenario: id, labels: list.slice(0, 3) });
         }
       }
-      // A list row without the wrapper the renderer builds.
-      //
-      // `list-renderer` makes `controls` then a `db-list-row-main` holding the title and meta lines.
-      // A fixture that drops those in as bare siblings turns the row into a two-column auto grid,
-      // and the first column then sizes to whichever is wider — the controls, or the cost sitting
-      // underneath them. The title starts at a different x on almost every row as a result.
-      const flatListRows = [];
-      for (const row of document.querySelectorAll(".db-list-row")) {
-        if (row.querySelector(":scope > .db-list-row-main")) continue;
-        flatListRows.push({ scenario: id });
-      }
       return {
-        rows, tables, bareTitles, iconlessRows, sharedGlyphs, flatListRows,
-        listRows: document.querySelectorAll(".db-list-row").length,
+        rows, tables, bareTitles, iconlessRows, sharedGlyphs,
         menuRows: document.querySelectorAll(
           ".db-toolbar-utilities-popover .db-menu-item, .db-view-tab-popover .db-menu-item, .db-owned-menu .db-menu-item, .db-chart-options-popover button",
         ).length,
@@ -9164,8 +8834,6 @@ await section("every fixture table has as many cells as it has headers", async (
     iconlessOffenders.push(...found.iconlessRows);
     menuRowsChecked += found.menuRows;
     sharedGlyphOffenders.push(...found.sharedGlyphs);
-    listRowsChecked += found.listRows;
-    flatListOffenders.push(...found.flatListRows);
   }
 
   await page.close();
@@ -9197,16 +8865,6 @@ await section("every fixture table has as many cells as it has headers", async (
         : "")
       + `. The stylesheet hides the icon without that class, and a hidden element leaves the grid, so `
       + `every later child slides one track left and the label ends up in the icon's column`);
-
-  record("every fixture list row carries the wrapper the renderer builds",
-    listRowsChecked > 0 && flatListOffenders.length === 0,
-    `${listRowsChecked} list row(s) across the fixture set; ${flatListOffenders.length} lack `
-      + `.db-list-row-main`
-      + (flatListOffenders.length
-        ? `: ${[...new Set(flatListOffenders.map((o) => o.scenario))].join(", ")}`
-        : "")
-      + `. Without it the row is a two-column auto grid whose first column sizes to the wider of the `
-      + `controls and the cost beneath them, so the title starts at a different x on almost every row`);
 
   record("no menu draws one glyph for two different actions",
     menuRowsChecked > 0 && sharedGlyphOffenders.length === 0,
@@ -9620,146 +9278,7 @@ await section("every row checkbox toggles its own row", async () => {
       + `the worst place for it — so the zero is asserted rather than assumed`);
 });
 
-// ───────────────────────────────────────────────────────────────────
-// THE LIST GIVES BACK ITS SCROLL LISTENER, ON BOTH PATHS
-// ───────────────────────────────────────────────────────────────────
-//
-// `005`'s five-dimension row maps none, and resource ownership is again the one with nothing behind
-// it. Here it is worth measuring because the listener is on the SCROLLER, which outlives the list —
-// `clear()` says so in its own comment: "dropping the list without dropping the listener would leave
-// every previous render still recomputing a window over rows that are gone."
-//
-// A comment is not a measurement, and there are two release paths, not one. `releaseWindow` handles
-// the flat list and `releaseGroupWindows` the grouped one, and the grouped windowing is recent
-// enough that its release has never been exercised by anything.
-//
-// THREE BEHAVIOURS, ONE MEASUREMENT. A count across ten renders separates them: flat means released
-// on each re-render, accumulating-then-dropping means deferred collection like the properties panel,
-// and accumulating-forever means a leak. Only the first is what this code claims.
-
 const listOwnershipResults = [];
-
-await section("the list gives back its scroll listener on both paths", async () => {
-  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
-  await page.setContent(page_html);
-  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
-  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
-  await page.addScriptTag({ content: positionerJs });
-
-  const measured = await page.evaluate(() => {
-    const { ListRenderer } = globalThis.__list;
-    const host = document.querySelector(".note-database-container");
-
-    const columns = [
-      { key: "file.name", label: "Name", type: "text" },
-      { key: "cost", label: "Cost", type: "number" },
-    ];
-    // Enough rows that the window engages; a list short enough to render whole never subscribes,
-    // and a run over one would report a clean zero for the wrong reason.
-    const rows = Array.from({ length: 900 }, (_, i) => ({
-      file: { path: `note-${i}.md`, name: `note-${i}.md`, basename: `Note ${i}` },
-      frontmatter: { cost: i }, computed: {},
-    }));
-    const config = { schema: { columns }, viewType: "list", columnOrder: columns.map((c) => c.key) };
-
-    const RENDERS = 10;
-    const measure = (label, run) => {
-      // A fresh scroller each time, watched from before the first render.
-      const scroller = host.createDiv({ cls: "db-list-scroller" });
-      scroller.setCssProps({ height: "600px", overflow: "auto" });
-      let added = 0;
-      let removed = 0;
-      const realAdd = scroller.addEventListener.bind(scroller);
-      const realRemove = scroller.removeEventListener.bind(scroller);
-      scroller.addEventListener = (type, fn, opts) => {
-        if (type === "scroll") added += 1;
-        return realAdd(type, fn, opts);
-      };
-      scroller.removeEventListener = (type, fn, opts) => {
-        if (type === "scroll") removed += 1;
-        return realRemove(type, fn, opts);
-      };
-
-      //  takes (app, actions) — the app first. Passing the bag as the only argument
-      // put it in the  slot and left  undefined, which surfaced as a TypeError
-      // deep inside a group header rather than at the constructor.
-      const renderer = new ListRenderer({}, {
-        // Every member of `ListRendererActions`, read off the interface rather than discovered one
-        // TypeError at a time. A bag missing a required method throws from deep inside a row paint,
-        // which reads as a harness fault rather than as an incomplete stub.
-        openRow: () => undefined, openRecordDetail: () => undefined,
-        createEntry: () => undefined,
-        isRowSelected: () => false, toggleRowSelected: () => undefined,
-        areAllRowsSelected: () => false, toggleRowsSelected: () => undefined,
-        editCell: () => undefined, saveCellValue: () => undefined, editFileName: () => undefined,
-        getColumns: () => columns,
-        moveRowToPosition: () => undefined, moveRowsToGroup: () => undefined,
-        moveRowToGroupAndPosition: () => undefined, moveRowsToPosition: () => undefined,
-        getSelectedRows: () => [],
-        isGroupCollapsed: () => false, toggleGroupCollapsed: () => undefined,
-        expandGroup: () => undefined,
-        showRowMenu: () => undefined, showColumnMenu: () => undefined,
-        editFormula: () => undefined, renderRecordIcon: () => null,
-        renderGroupSummaries: () => undefined, applyConditionalFormat: () => undefined,
-        get isReadOnly() { return false; },
-        get hideCreateEntry() { return false; },
-      });
-
-      const after = [];
-      for (let i = 0; i < RENDERS; i += 1) {
-        run(renderer, scroller);
-        after.push(added - removed);
-      }
-      const outstanding = added - removed;
-      scroller.remove();
-      return { label, added, removed, outstanding, perRender: after, renders: RENDERS };
-    };
-
-    const flat = measure("flat", (renderer, scroller) => {
-      renderer.render(scroller, config, rows);
-    });
-    const grouped = measure("grouped", (renderer, scroller) => {
-      // Each group must exceed GROUP_WINDOW_THRESHOLD (200) for a section to window — the source
-      // reads `shown.length > 200`, so two groups of exactly 200 window neither and the arm
-      // measures nothing. The premise row above is what caught that: `0 scroll subscription(s)`.
-      const half = Math.floor(rows.length / 2);
-      const groups = [
-        { key: "a", label: "A", rows: rows.slice(0, half), count: half },
-        { key: "b", label: "B", rows: rows.slice(half), count: rows.length - half },
-      ];
-      renderer.renderGrouped(scroller, config, groups, "cost");
-    });
-
-    return { flat, grouped };
-  });
-
-  const record = (name, pass, detail) => listOwnershipResults.push({ name, pass, detail });
-
-  for (const arm of [measured.flat, measured.grouped]) {
-    record(`the ${arm.label} list subscribes at all, so there is something to give back`,
-      arm.added > 0,
-      `${arm.added} scroll subscription(s) taken across ten renders of the ${arm.label} list. A list `
-        + `short enough to render whole never windows and never subscribes — a clean zero for the `
-        + `wrong reason — so this is the premise, not an aside`);
-
-    // THE LEDGER, NOT THE TOTAL. `outstanding === 1` is true of a list that releases on every
-    // re-render AND of one that subscribed once and never releases at all — 10 added / 9 removed
-    // and 1 added / 0 removed are the same total and opposite behaviours. Only the second leaves a
-    // listener on the scroller when the list is finally torn down, which is the leak `clear()`'s
-    // own comment describes. Measured: dropping `releaseGroupWindows()` from `clear()` moves the
-    // grouped arm from 10/9 to 1/0 and does not move the total at all.
-    record(`each re-render of the ${arm.label} list releases the listener it replaces`,
-      arm.added === arm.renders && arm.removed === arm.renders - 1 && arm.outstanding === 1
-        && arm.perRender.every((n) => n === 1),
-      `${arm.added} added, ${arm.removed} removed, ${arm.outstanding} outstanding over ${arm.renders} `
-        + `renders; per render [${arm.perRender.join(", ")}]. The ADD COUNT is the discriminator, `
-        + `not the total and not the difference: 1 added / 0 removed leaves the same outstanding `
-        + `count as ${arm.renders}/${arm.renders - 1} and satisfies "removed === added - 1" just as well, `
-        + `while meaning the opposite — subscribed once and never released. That is the one that `
-        + `leaves a listener on the SCROLLER, which outlives the list, still recomputing a window `
-        + `over rows that are gone`);
-  }
-});
 
 // ───────────────────────────────────────────────────────────────────
 // CHOOSING A VIEW TYPE ASKS FOR THAT VIEW TYPE

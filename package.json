@@ -14,7 +14,6 @@
     "storybook:verify": "node tools/storybook/verify-shim.mjs",
     "storybook": "storybook dev -p 6006 --no-open",
     "bench": "node tools/bench/run.mjs",
-    "bench:list": "node tools/bench/run-list.mjs",
     "build-storybook": "storybook build",
     "story:smoke": "node tools/storybook/smoke.mjs",
     "story:coverage": "node tools/storybook/story-coverage.mjs",

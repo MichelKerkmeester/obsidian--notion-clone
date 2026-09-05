@@ -36,8 +36,6 @@ const HERE = fileURLToPath(new URL(".", import.meta.url));
 // sixteen-column table. Sampling above the bend matters for timing budgets;
 // here it matters that the row count is the count the freeze was measured at.
 export const SCENARIOS = [
-  { name: "list/file-view", renderer: "list", bag: "file-view" },
-  { name: "list/embed", renderer: "list", bag: "embed" },
   { name: "table/file-view", renderer: "table", bag: "file-view" },
   { name: "table/embed", renderer: "table", bag: "embed" },
   { name: "board/file-view", renderer: "board", bag: "file-view" },
@@ -74,7 +72,6 @@ export const SCENARIOS = [
 export const STATE_SCENARIOS = [
   { name: "board-subtask-tree/file-view", renderer: "board", bag: "file-view", captureData: true, subtaskTree: true },
   { name: "timeline-subtask-tree/file-view", renderer: "timeline", bag: "file-view", captureData: true, subtaskTree: true },
-  { name: "list-sparse-fields/file-view", renderer: "list", bag: "file-view", captureData: true, sparseFields: true },
   { name: "calendar-mini-calendar/file-view", renderer: "calendar", bag: "file-view", captureData: true, miniCalendar: true },
   { name: "calendar-empty-state/file-view", renderer: "calendar", bag: "file-view", captureData: true, emptyState: true },
   { name: "chrome-chart-number/file-view", renderer: "chart", bag: "file-view", captureData: true, chartVariant: "number" },
@@ -138,7 +135,6 @@ export const STATE_SCENARIOS = [
 export const SCENARIOS_WITH_STATES = [...SCENARIOS, ...STATE_SCENARIOS];
 
 export const RENDERER_SOURCES = [
-  "src/views/list-renderer.ts",
   "src/views/table-renderer.ts",
   "src/views/board-renderer.ts",
   "src/views/gallery-renderer.ts",

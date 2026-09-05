@@ -111,7 +111,6 @@ import { ColumnOperations, FrontmatterValueChange } from "./column-operations";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
 import type { BoardSubtaskMove } from "./board-renderer";
 import { GalleryRenderer } from "./gallery-renderer";
-import { ListRenderer } from "./list-renderer";
 import { ChartRenderer } from "./chart-renderer";
 import { ChartToolbarRenderer } from "./chart-toolbar-renderer";
 import { getDefaultChartDateBucket, getDefaultChartField, getDefaultChartNumberBucket } from "../data/chart-aggregation";
@@ -396,7 +395,6 @@ export class DatabaseView extends FileView {
   private activeRulePopoverRenderer = new ActiveRulePopoverRenderer();
   private boardRenderer: BoardRenderer;
   private galleryRenderer: GalleryRenderer;
-  private listRenderer: ListRenderer;
   private chartRenderer = new ChartRenderer();
   private chartToolbarRenderer = new ChartToolbarRenderer();
   private mobileColumnWidthPanelCleanup?: () => void;
@@ -828,37 +826,6 @@ export class DatabaseView extends FileView {
       editFileName: (target, row, currentName) => this.cellRenderer.editFileName(target, row, currentName),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
       updateCardSize: (width) => this.updateGalleryCardSize(width),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
-      moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
-      moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath, movedPaths) =>
-        this.moveRowWithGroupUpdatesAndPosition(row, [{ field, fromGroupKey, toGroupKey }], beforePath, afterPath, movedPaths),
-      moveRowsToPosition: (paths, beforePath, afterPath) => this.moveRowsToPosition(paths, beforePath, afterPath),
-      getSelectedRows: () => this.rows.filter((row) => this.selectedRows.has(row.file.path)),
-      isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
-      toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
-      showRowMenu: (event, row, context) => this.rowMenu.show(event, row, context),
-      showColumnMenu: (event, col, anchorEl) => this.showContextMenu(event, col, anchorEl, {
-        includeWidthActions: false,
-      }),
-      editFormula: (col) => this.showFormulaModal(col),
-      renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
-      renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.getActiveDb()),
-      applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.getActiveDb(), targetField),
-      get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
-    });
-    this.listRenderer = new ListRenderer(this.app, {
-      openRow: (row) => { void this.openRecordAt(row); },
-      openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
-      createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
-      isRowSelected: (row) => this.selectedRows.has(row.file.path),
-      toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
-      areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
-      toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
-      editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
-      saveCellValue: (row, col, value) => this.saveCellValueWithHistory(row, col, value),
-      editFileName: (target, row, currentName) => this.cellRenderer.editFileName(target, row, currentName),
-      getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
       moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
       moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
       moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath, movedPaths) =>
@@ -8078,14 +8045,10 @@ export class DatabaseView extends FileView {
       const scrollTarget = focusCell || (target.matches("tr")
         ? target.querySelector<HTMLElement>("td") || target
         : target);
-      if (this.getConfig()?.viewType === "list") {
-        this.revealListRowLeadingEdge(target);
-      } else {
-        scrollTarget.scrollIntoView(resolveNewRecordRevealBehavior(
-          this.getConfig()?.viewType,
-          Boolean(focusCell),
-        ));
-      }
+      scrollTarget.scrollIntoView(resolveNewRecordRevealBehavior(
+        this.getConfig()?.viewType,
+        Boolean(focusCell),
+      ));
       if (focusCell && focusRequest) {
         this.selectedRows.clear();
         this.lastSelectedRowPath = null;
@@ -8117,18 +8080,6 @@ export class DatabaseView extends FileView {
         if (target.isConnected) target.removeClass("is-new-record-highlight");
       }, 2200);
     });
-  }
-
-  /** Reveal a wide list row without asking the browser to scroll outer Obsidian containers. */
-  private revealListRowLeadingEdge(target: HTMLElement): void {
-    if (!this.containerEl_) return;
-    const containerRect = this.containerEl_.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
-    const centeredTop = this.containerEl_.scrollTop
-      + targetRect.top
-      - containerRect.top
-      - Math.max(0, (this.containerEl_.clientHeight - targetRect.height) / 2);
-    this.containerEl_.scrollTo({ top: Math.max(0, centeredTop), left: 0, behavior: "smooth" });
   }
 
   private findRenderedRowElement(path: string): HTMLElement | null {
@@ -8914,9 +8865,6 @@ export class DatabaseView extends FileView {
         break;
       case "gallery":
         this.updateCardFieldDOM(row, col, config, this.galleryRenderer.renderCardFieldContent(row, col, config));
-        break;
-      case "list":
-        this.updateCardFieldDOM(row, col, config, this.listRenderer.renderRowFieldContent(row, col, config));
         break;
       default:
         this.refresh();
@@ -10591,29 +10539,6 @@ export class DatabaseView extends FileView {
       return;
     }
     this.galleryRenderer.render(this.containerEl_, renderConfig, this.rows, this.getEmptyStateOptions(config));
-  }
-
-  private renderList(config: ViewConfig): void {
-    if (!this.containerEl_) return;
-    const renderConfig = this.getStatefulConfig(config);
-    if (this.vs().groupByField) {
-      const field = this.vs().groupByField;
-      const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
-      const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-      const sorted = this.queryEngine.sortGroups(groups, order);
-      // Recorded from the same array the renderer is handed, so the two cannot disagree.
-      this.renderedRowOrder = sorted.flatMap((group) => group.rows.map((row) => row.file.path));
-      this.listRenderer.renderGrouped(
-        this.containerEl_,
-        renderConfig,
-        sorted,
-        field,
-        this.getEmptyStateOptions(config),
-      );
-      return;
-    }
-    this.renderedRowOrder = this.rows.map((row) => row.file.path);
-    this.listRenderer.render(this.containerEl_, renderConfig, this.rows, this.getEmptyStateOptions(config));
   }
 
   private getStatefulConfig(config: ViewConfig): ViewConfig {

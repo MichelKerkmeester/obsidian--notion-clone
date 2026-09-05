@@ -131,13 +131,13 @@ Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `sr
 
 ### Group selection controls
 
-The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.
+The whole-group selection box from the gallery and a board subgroup. One role, so both boxes must be the same size and radius.
 
 | dark | light |
 |---|---|
 | ![chrome-group-selection-controls dark](notion-clone/components/chrome-group-selection-controls-mobile-dark.png) | ![chrome-group-selection-controls light](notion-clone/components/chrome-group-selection-controls-mobile-light.png) |
 
-Sources: `src/views/list-renderer.ts`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`
+Sources: `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`
 
 ### Owned menu — the shell every context menu uses
 
@@ -237,7 +237,7 @@ ActiveRulePopoverRenderer's own toggleFilter against a real anchor, with the pan
 |---|---|
 | ![constructed-active-rule-filter dark](notion-clone/components/constructed-active-rule-filter-mobile-dark.png) | ![constructed-active-rule-filter light](notion-clone/components/constructed-active-rule-filter-mobile-light.png) |
 
-Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
 ### Active rule popover — sort (constructed)
 
@@ -247,7 +247,7 @@ The sort twin of the filter popover: toggleSort against a real anchor with SortP
 |---|---|
 | ![constructed-active-rule-sort dark](notion-clone/components/constructed-active-rule-sort-mobile-dark.png) | ![constructed-active-rule-sort light](notion-clone/components/constructed-active-rule-sort-mobile-light.png) |
 
-Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/sort-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
+Sources: `src/views/active-rule-popover-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/sort-panel-renderer.ts`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
 ### Active filter and sort chips (constructed)
 
@@ -257,7 +257,7 @@ ActiveViewControlsRenderer's own render over a state with two effective filters 
 |---|---|
 | ![constructed-active-view-controls dark](notion-clone/components/constructed-active-view-controls-mobile-dark.png) | ![constructed-active-view-controls light](notion-clone/components/constructed-active-view-controls-mobile-light.png) |
 
-Sources: `src/views/active-view-controls-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`
+Sources: `src/views/active-view-controls-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`
 
 ### Board view — empty column (constructed)
 
@@ -331,23 +331,23 @@ Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `to
 
 ### Group selection controls (constructed)
 
-One role, three views: the whole-group selection box from the list, the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Framing bound: three real grouped renders do not fit one viewport, and an element capture crops to it, so the picture holds the list host and as much of the next as fits; the gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.
+One role, two views: the whole-group selection box from the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.
 
 | dark | light |
 |---|---|
 | ![constructed-group-selection-controls dark](notion-clone/components/constructed-group-selection-controls-mobile-dark.png) | ![constructed-group-selection-controls light](notion-clone/components/constructed-group-selection-controls-mobile-light.png) |
 
-Sources: `src/views/list-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`
+Sources: `src/views/gallery-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`
 
 ### A migrated list view (constructed)
 
-A config built as viewType: "list" (listCompactFields included, the real Punch List shape 006 migrates), run through the production planListMigration/applyListMigration, then forked on the migrated viewType the same way database-view.ts's render() does — ListRenderer if it stayed "list", TableRenderer otherwise. Photographs a real table, not a hand-authored one.
+A config built as viewType: "list", run through the production planListMigration/applyListMigration, then mounted as TableRenderer. Photographs a real table, not a hand-authored one. The migrated table is the proof.
 
 | dark | light |
 |---|---|
 | ![constructed-list-migrated dark](notion-clone/components/constructed-list-migrated-mobile-dark.png) | ![constructed-list-migrated light](notion-clone/components/constructed-list-migrated-mobile-light.png) |
 
-Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/list-migration.ts`, `src/views/list-renderer.ts`
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/list-migration.ts`
 
 ### Owned menu — the shell every context menu uses (constructed)
 
@@ -357,7 +357,7 @@ createOwnedMenu's own entry with rows built through the handle's addRow the way 
 |---|---|
 | ![constructed-owned-menu dark](notion-clone/components/constructed-owned-menu-mobile-dark.png) | ![constructed-owned-menu light](notion-clone/components/constructed-owned-menu-mobile-light.png) |
 
-Sources: `src/views/owned-menu.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
+Sources: `src/views/owned-menu.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
 
 ### Summary row (constructed)
 
@@ -367,7 +367,7 @@ SummaryRenderer's own render with the onChange hook that makes the rule items dr
 |---|---|
 | ![constructed-summary dark](notion-clone/components/constructed-summary-mobile-dark.png) | ![constructed-summary light](notion-clone/components/constructed-summary-mobile-light.png) |
 
-Sources: `src/views/summary-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+Sources: `src/views/summary-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### Table footer aggregates (constructed)
 
@@ -741,7 +741,7 @@ FilterPanelRenderer's own render over a flat AND group of three rules, so the pa
 |---|---|
 | ![constructed-filter-panel dark](notion-clone/panels/constructed-filter-panel-mobile-dark.png) | ![constructed-filter-panel light](notion-clone/panels/constructed-filter-panel-mobile-light.png) |
 
-Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/date-value-picker.ts`, `src/data/view-filter-tree.ts`
+Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/date-value-picker.ts`, `src/data/view-filter-tree.ts`
 
 ### Filter panel with a nested group and a NOT (constructed)
 
@@ -751,7 +751,7 @@ The same renderer over a tree that holds a NOT node and an inner OR group — th
 |---|---|
 | ![constructed-filter-panel-nested dark](notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png) | ![constructed-filter-panel-nested light](notion-clone/panels/constructed-filter-panel-nested-mobile-light.png) |
 
-Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/data/view-filter-tree.ts`
+Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/data/view-filter-tree.ts`
 
 ### Record detail panel (constructed)
 
@@ -801,7 +801,7 @@ SortPanelRenderer's own render over two real rules, with the first rule's move-u
 |---|---|
 | ![constructed-sort-panel dark](notion-clone/panels/constructed-sort-panel-mobile-dark.png) | ![constructed-sort-panel light](notion-clone/panels/constructed-sort-panel-mobile-light.png) |
 
-Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
+Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
 
 ### Sort panel with no rules, calendar hint (constructed)
 
@@ -811,7 +811,7 @@ The calendar view's sort panel: the renderer reads config.viewType === "calendar
 |---|---|
 | ![constructed-sort-panel-calendar dark](notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png) | ![constructed-sort-panel-calendar light](notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png) |
 
-Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### View configuration panel (constructed)
 
@@ -1195,26 +1195,6 @@ The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid
 
 Sources: `src/views/gallery-renderer.ts`, `tools/bench/gallery-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
-### List view (constructed)
-
-The shipped list renderer at the harness's bench shape (1600 rows, 30% fill), windowed to the viewport.
-
-| dark | light |
-|---|---|
-| ![constructed-list dark](notion-clone/views/constructed-list-mobile-dark.png) | ![constructed-list light](notion-clone/views/constructed-list-mobile-light.png) |
-
-Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### List view — sparse fields (constructed)
-
-The shipped list renderer with a deterministic, spread subset of frontmatter keys blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured rather than a fixture's static every-field-present shape.
-
-| dark | light |
-|---|---|
-| ![constructed-list-sparse dark](notion-clone/views/constructed-list-sparse-mobile-dark.png) | ![constructed-list-sparse light](notion-clone/views/constructed-list-sparse-mobile-light.png) |
-
-Sources: `src/views/list-renderer.ts`, `tools/bench/list-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
 ### Table view (constructed)
 
 The shipped table renderer at the bench's sixteen-column shape, over the capture-sized row set captureData selects.
@@ -1294,36 +1274,6 @@ A gallery whose image field is configured but whose rows resolve no image: every
 | ![gallery-view dark](notion-clone/views/gallery-view-mobile-dark.png) | ![gallery-view light](notion-clone/views/gallery-view-mobile-light.png) |
 
 Sources: `src/views/gallery-renderer.ts`, `src/views/card-field-renderer.ts`
-
-### List view — mobile
-
-The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.
-
-| dark | light |
-|---|---|
-| ![list-mobile dark](notion-clone/views/list-mobile-mobile-dark.png) | ![list-mobile light](notion-clone/views/list-mobile-mobile-light.png) |
-
-Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
-
-### List rows with fields missing
-
-The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.
-
-| dark | light |
-|---|---|
-| ![list-sparse-fields dark](notion-clone/views/list-sparse-fields-mobile-dark.png) | ![list-sparse-fields light](notion-clone/views/list-sparse-fields-mobile-light.png) |
-
-Sources: `src/views/list-renderer.ts`
-
-### List view
-
-The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.
-
-| dark | light |
-|---|---|
-| ![list-view dark](notion-clone/views/list-view-mobile-dark.png) | ![list-view light](notion-clone/views/list-view-mobile-light.png) |
-
-Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### Table view — mobile auto-fit
 

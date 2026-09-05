@@ -220,12 +220,6 @@ function constructedScenario(view, opts) {
 }
 
 export const CONSTRUCTED_SCENARIOS = [
-  constructedScenario("list", {
-    renderer: "list",
-    title: "List view (constructed)",
-    sources: constructedSources("src/views/list-renderer.ts", "tools/bench/list-render-bench.ts"),
-    note: "The shipped list renderer at the harness's bench shape (1600 rows, 30% fill), windowed to the viewport.",
-  }),
   constructedScenario("table", {
     renderer: "table",
     title: "Table view (constructed)",
@@ -302,15 +296,6 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"]),
     note: "The shipped week-scale timeline with the first capture-sized row wired into the same "
       + "parent/two-children relation the board's constructed subtask tree uses.",
-  }),
-  constructedScenario("list-sparse", {
-    renderer: "list",
-    sparseFields: true,
-    title: "List view — sparse fields (constructed)",
-    sources: constructedSources("src/views/list-renderer.ts", "tools/bench/list-render-bench.ts"),
-    note: "The shipped list renderer with a deterministic, spread subset of frontmatter keys "
-      + "blanked per row, so renderRowFieldPlaceholder's real reservation decision is measured "
-      + "rather than a fixture's static every-field-present shape.",
   }),
   constructedScenario("calendar-mini", {
     renderer: "calendar",
@@ -433,7 +418,7 @@ export const CONSTRUCTED_SCENARIOS = [
     group: "components",
     title: "Active filter and sort chips (constructed)",
     fixtureOf: "chrome-active-view-controls",
-    sources: constructedSources("src/views/active-view-controls-renderer.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/active-view-controls-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/filter-panel-renderer.ts"]),
     note: "ActiveViewControlsRenderer's own render over a state with two effective filters and "
       + "two sorts, so the AND logic button sits between the groups exactly as the chip row draws it.",
@@ -445,7 +430,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Active rule popover — filter (constructed)",
     fixtureOf: "chrome-active-rule-popover-filter",
-    sources: constructedSources("src/views/active-rule-popover-renderer.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/active-rule-popover-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/filter-panel-renderer.ts", "src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
     note: "ActiveRulePopoverRenderer's own toggleFilter against a real anchor, with the panel "
       + "built by FilterPanelRenderer's renderSingleRuleEditor; captured full-page for its "
@@ -458,7 +443,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Active rule popover — sort (constructed)",
     fixtureOf: "chrome-active-rule-popover-sort",
-    sources: constructedSources("src/views/active-rule-popover-renderer.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/active-rule-popover-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/sort-panel-renderer.ts", "src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
     note: "The sort twin of the filter popover: toggleSort against a real anchor with "
       + "SortPanelRenderer's renderSingleRuleEditor; captured full-page for the same reason.",
@@ -474,7 +459,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Filter panel with active conditions (constructed)",
     fixtureOf: "panel-filter-conditions",
-    sources: constructedSources("src/views/filter-panel-renderer.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/filter-panel-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/dropdown-field.ts", "src/views/date-value-picker.ts", "src/data/view-filter-tree.ts"]),
     note: "FilterPanelRenderer's own render over a flat AND group of three rules, so the panel "
       + "header defers its logic button to the group's own dropdown.",
@@ -486,7 +471,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Filter panel with a nested group and a NOT (constructed)",
     fixtureOf: "panel-filter-nested-group",
-    sources: constructedSources("src/views/filter-panel-renderer.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/filter-panel-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/dropdown-field.ts", "src/data/view-filter-tree.ts"]),
     note: "The same renderer over a tree that holds a NOT node and an inner OR group — the "
       + "nesting depth the panel's own wrap rules allow for a wrapped subtree.",
@@ -497,7 +482,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Sort panel with two rules (constructed)",
     fixtureOf: "panel-sort-rules",
-    sources: constructedSources("src/views/sort-panel-renderer.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/sort-panel-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/dropdown-field.ts"]),
     note: "SortPanelRenderer's own render over two real rules, with the first rule's move-up and "
       + "the last rule's move-down disabled by the renderer itself.",
@@ -509,7 +494,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Sort panel with no rules, calendar hint (constructed)",
     fixtureOf: "panel-sort-calendar-empty",
-    sources: constructedSources("src/views/sort-panel-renderer.ts", "tools/bench/list-render-bench.ts"),
+    sources: constructedSources("src/views/sort-panel-renderer.ts", "tools/bench/table-render-bench.ts"),
     note: "The calendar view's sort panel: the renderer reads config.viewType === \"calendar\" "
       + "and draws its layout hint above the empty state — the only state the hint appears in.",
   }),
@@ -631,19 +616,17 @@ export const CONSTRUCTED_SCENARIOS = [
     group: "components",
     title: "A migrated list view (constructed)",
     sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts")
-      .concat(["src/data/list-migration.ts", "src/views/list-renderer.ts"]),
-    note: "A config built as viewType: \"list\" (listCompactFields included, the real Punch List "
-      + "shape 006 migrates), run through the production planListMigration/applyListMigration, "
-      + "then forked on the migrated viewType the same way database-view.ts's render() does — "
-      + "ListRenderer if it stayed \"list\", TableRenderer otherwise. Photographs a real table, "
-      + "not a hand-authored one.",
+      .concat(["src/data/list-migration.ts"]),
+    note: "A config built as viewType: \"list\", run through the production "
+      + "planListMigration/applyListMigration, then mounted as TableRenderer. Photographs a "
+      + "real table, not a hand-authored one. The migrated table is the proof.",
   }),
   constructedScenario("summary", {
     renderer: "summary",
     group: "components",
     title: "Summary row (constructed)",
     fixtureOf: "chrome-summary-row",
-    sources: constructedSources("src/views/summary-renderer.ts", "tools/bench/list-render-bench.ts"),
+    sources: constructedSources("src/views/summary-renderer.ts", "tools/bench/table-render-bench.ts"),
     note: "SummaryRenderer's own render with the onChange hook that makes the rule items "
       + "draggable and clickable, over the same three rule kinds the grouped table uses.",
   }),
@@ -653,7 +636,7 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Owned menu — the shell every context menu uses (constructed)",
     fixtureOf: "chrome-owned-menu",
-    sources: constructedSources("src/views/owned-menu.ts", "tools/bench/list-render-bench.ts")
+    sources: constructedSources("src/views/owned-menu.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/menu-row.ts", "src/views/mobile-bottom-sheet.ts"]),
     note: "createOwnedMenu's own entry with rows built through the handle's addRow the way "
       + "ColumnMenu builds them. The menu mounts on document.body by design, so the capture is "
@@ -666,14 +649,12 @@ export const CONSTRUCTED_SCENARIOS = [
     group: "components",
     title: "Group selection controls (constructed)",
     fixtureOf: "chrome-group-selection-controls",
-    sources: constructedSources("src/views/list-renderer.ts", "tools/bench/board-render-bench.ts")
-      .concat(["src/views/gallery-renderer.ts", "src/views/board-renderer.ts", "src/views/group-label-renderer.ts"]),
-    note: "One role, three views: the whole-group selection box from the list, the gallery and "
-      + "the extensions board's column header, each through its renderer's own grouped entry. The "
+    sources: constructedSources("src/views/gallery-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/board-renderer.ts", "src/views/group-label-renderer.ts"]),
+    note: "One role, two views: the whole-group selection box from the gallery and the "
+      + "extensions board's column header, each through its renderer's own grouped entry. The "
       + "fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface "
-      + "is the swimlane lane header, which carries no box. Framing bound: three real grouped "
-      + "renders do not fit one viewport, and an element capture crops to it, so the picture holds "
-      + "the list host and as much of the next as fits; the gallery and board boxes are asserted "
+      + "is the swimlane lane header, which carries no box. Gallery and board boxes are asserted "
       + "by constructed-state-assertions rather than photographed here.",
   }),
   constructedScenario("card-covers", {

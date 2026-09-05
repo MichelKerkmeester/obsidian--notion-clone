@@ -83,13 +83,6 @@ describe("the migration preserves the view, not just the type", () => {
     }
   });
 
-  it("leaves listCompactFields on the view, inert, rather than stripping it", () => {
-    const view = list({ listCompactFields: true });
-    applyListMigration(view, planListMigration(view)!);
-    expect(view.listCompactFields).toBe(true);
-    expect(view.viewType).toBe("table");
-  });
-
   it("does not repair a corrupt column set, so the table's schema-order fallback still applies", () => {
     const view = list({ columnOrder: ["ghost-column", "cost"], columnWidths: { ghost: 99 } });
     applyListMigration(view, planListMigration(view)!);

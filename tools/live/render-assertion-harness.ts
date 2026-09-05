@@ -50,7 +50,6 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
 import { TableRenderer, type TableRendererActions } from "../../src/views/table-renderer";
 import { applyListMigration, planListMigration } from "../../src/data/list-migration";
 import { CellRenderer } from "../../src/views/cell-renderer";
@@ -71,11 +70,6 @@ import {
 import type { App } from "obsidian";
 import type { DataSource } from "../../src/data/data-source";
 import type { ColumnDef, RowData, StatusOptionDef, TimelineScale, ViewConfig } from "../../src/data/types";
-import {
-  makeColumns as makeListColumns,
-  makeRows as makeListRows,
-  makeConfig as makeListConfig,
-} from "../bench/list-render-bench";
 import {
   makeColumns as makeTableColumns,
   makeRows as makeTableRows,
@@ -137,7 +131,6 @@ import type { DatabaseConfig, RecordSchema } from "../../src/data/types";
 import type { DatabaseViewState } from "../../src/views/view-state-store";
 import type { BoardGroup } from "../../src/views/board-renderer";
 import type { TableGroup } from "../../src/views/table-renderer";
-import type { ListGroup } from "../../src/views/list-renderer";
 import type { GalleryGroup } from "../../src/views/gallery-renderer";
 
 // The constructed timeline capture mounts the real CalendarTimelineRenderer against the real
@@ -158,17 +151,8 @@ setFrozenRenderNow(new Date(2026, 2, 25, 13, 45, 0, 0));
 // Sampling above the bend matters for timing budgets; for structure it matters
 // that the row count is the count the freeze was measured at.
 export const LIST_COLUMNS = 21;
-export const LIST_ROWS = 1600;
-export const LIST_FILL = 0.3;
 export const TABLE_COLUMNS = 16;
 export const TABLE_ROWS = 2000;
-
-// The column whose grid position must be identical on every row. It sits mid-
-// list, where a reservation change silently breaks alignment. The column
-// factory maps the first slot to the file name, so the named column lands one
-// index earlier than its position in the reported database's property list.
-export const ALIGNMENT_COLUMN = "amount";
-export const ALIGNMENT_GRID_COLUMN = "18";
 
 // A render that forces layout more than a small constant times has something
 // per-row in it. The legitimate reads are O(1) in the row count and decided
@@ -256,13 +240,6 @@ export interface ScenarioSpec {
    * it, not a fabricated DOM shape. Off by default; every existing consumer is unaffected.
    */
   subtaskTree?: boolean;
-  /**
-   * Opt-in, list only, read together with `captureData`: blanks a deterministic subset of
-   * frontmatter keys on rows after the first so `ListRenderer` takes its real "missing property"
-   * branch (`renderRowFieldPlaceholder`) instead of every field being present. Off by default;
-   * every existing consumer is unaffected.
-   */
-  sparseFields?: boolean;
   /**
    * Opt-in, calendar only: strips every date-like column from the constructed schema and clears
    * `calendarStartDateField`, reproducing the real "no date property configured" condition
@@ -414,14 +391,10 @@ export interface ScenarioSpec {
    */
   longHeaderLabel?: boolean;
   /**
-   * Opt-in, renderer "table" only: builds the config as `viewType: "list"` with
-   * `listCompactFields: true` set (the real Punch-List shape `006` migrates), runs it through the
-   * production `planListMigration`/`applyListMigration`, and THEN forks on the migrated
-   * `viewType` the same way `database-view.ts`'s own `render()` does — `ListRenderer` if it is
-   * still `"list"`, `TableRenderer` otherwise. Every other `scenario.renderer` value in this file
-   * picks its renderer straight off `scenario.renderer` and never exercises that viewType-driven
-   * fork; this option exists because that fork is exactly what a failed migration would get
-   * wrong, and nothing else here would catch it.
+   * Opt-in, renderer "table" only: builds the config as `viewType: "list"`, runs it through the
+   * production `planListMigration`/`applyListMigration`, then always mounts `TableRenderer`.
+   * A migration that failed to flip the type fails the marker (`table.db-table` present,
+   * `.db-list-row` absent) rather than constructing a retired renderer.
    */
   migratedFromList?: boolean;
 }
@@ -588,34 +561,6 @@ function applyCaptureSubtaskTree(rows: RowData[], groupKey?: string): void {
   secondFm.parentId = parent.file.path;
 }
 
-/**
- * Blanks a deterministic subset of non-title frontmatter keys on every row after the first, so
- * `ListRenderer` takes its real "missing property" branch (`renderRowFieldPlaceholder`) for some
- * fields on some rows — never all fields, never every row, and never the same subset twice in a
- * row, matching the hand-written `list-sparse-fields` fixture's own "spread rather than clustered"
- * shape. Row 0 is left fully populated: `ListRenderer` measures its once-per-render reservation
- * decision against the first row it builds, and a row that starts already sparse would be a worse
- * fixture for that measurement, not a better one.
- */
-function applyCaptureSparseFields(rows: RowData[], columns: ColumnDef[]): void {
-  const candidates = columns.filter((col) => col.key !== "file.name").slice(0, 4).map((col) => col.key);
-  if (candidates.length === 0) return;
-  const record = (row: RowData) => (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
-  rows.forEach((row, i) => {
-    if (i === 0) return;
-    const missing = candidates.filter((_key, ci) => (i + ci) % 3 === 0).slice(0, 2);
-    const fm = record(row);
-    for (const key of missing) delete fm[key];
-  });
-}
-
-/**
- * Every distinct value a grouped column's rows actually carry, as a `chartHiddenGroups` map hiding
- * all of them — the real input `computeChartAggregate` reads to reach its `allGroupsHidden` empty
- * result (chart-aggregation.ts). Derived from the rows rather than a copied key list, the same
- * reasoning `applyCaptureGroupPalette` above already uses: a copy that drifted out of sync would
- * silently hide nothing instead of failing loudly.
- */
 function allHiddenGroupsFor(rows: RowData[], key: string): Record<string, true> {
   const hidden: Record<string, true> = {};
   for (const row of rows) {
@@ -652,61 +597,6 @@ function makeCaptureCellRenderer(): CellRenderer {
 // openRecordDetail entirely, so an embedded row cannot open the record panel
 // — whether that is intended belongs to the embed's owner; this check asserts
 // that the difference exists and that the renderer acts on it.
-
-function fileViewListBag(columns: ColumnDef[]): ListRendererActions {
-  return {
-    openRow: () => undefined,
-    openRecordDetail: () => undefined,
-    createEntry: () => undefined,
-    isRowSelected: () => false,
-    toggleRowSelected: () => undefined,
-    areAllRowsSelected: () => false,
-    toggleRowsSelected: () => undefined,
-    editCell: () => undefined,
-    saveCellValue: () => undefined,
-    editFileName: () => undefined,
-    getColumns: () => columns,
-    moveRowToPosition: () => undefined,
-    moveRowsToGroup: () => undefined,
-    moveRowToGroupAndPosition: () => undefined,
-    moveRowsToPosition: () => undefined,
-    getSelectedRows: () => [],
-    isGroupCollapsed: () => false,
-    toggleGroupCollapsed: () => undefined,
-    expandGroup: () => undefined,
-    showRowMenu: () => undefined,
-    showColumnMenu: () => undefined,
-    editFormula: () => undefined,
-    renderRecordIcon: () => null,
-    renderGroupSummaries: () => undefined,
-    applyConditionalFormat: () => undefined,
-    get hideCreateEntry() { return false; },
-  };
-}
-
-function embedListBag(columns: ColumnDef[]): ListRendererActions {
-  return {
-    openRow: () => undefined,
-    createEntry: () => undefined,
-    isRowSelected: () => false,
-    toggleRowSelected: () => undefined,
-    areAllRowsSelected: () => false,
-    toggleRowsSelected: () => undefined,
-    editCell: () => undefined,
-    getColumns: () => columns,
-    moveRowToPosition: () => undefined,
-    isGroupCollapsed: () => false,
-    toggleGroupCollapsed: () => undefined,
-    expandGroup: () => undefined,
-    showRowMenu: () => undefined,
-    showColumnMenu: () => undefined,
-    renderRecordIcon: () => null,
-    renderGroupSummaries: () => undefined,
-    applyConditionalFormat: () => undefined,
-    isReadOnly: false,
-    get hideCreateEntry() { return false; },
-  };
-}
 
 function fileViewTableBag(columns: ColumnDef[], captureData?: boolean): TableRendererActions {
   // Only built when a scenario actually reads it — the 2000-row structural path never pays for a
@@ -1002,19 +892,6 @@ function chartBag(): ChartRendererActions {
 
 const PROVENANCE_ATTR = "data-production-render";
 
-function tagListRenders(): void {
-  const original = ListRenderer.prototype.render;
-  ListRenderer.prototype.render = function taggedRender(
-    container: HTMLElement,
-    config: ViewConfig,
-    rows: RowData[],
-    emptyState?: unknown,
-  ): void {
-    original.call(this, container, config, rows, emptyState);
-    container.setAttribute(PROVENANCE_ATTR, "list-renderer");
-  };
-}
-
 function tagTableRenders(): void {
   const original = TableRenderer.prototype.renderTable;
   TableRenderer.prototype.renderTable = function taggedRenderTable(
@@ -1306,20 +1183,6 @@ function tagCellStartEdits(): void {
   };
 }
 
-function tagListGroupedRenders(): void {
-  const original = ListRenderer.prototype.renderGrouped;
-  ListRenderer.prototype.renderGrouped = function taggedRenderGrouped(
-    container: HTMLElement,
-    config: ViewConfig,
-    groups: ListGroup[],
-    groupField: string,
-    emptyState?: unknown,
-  ): void {
-    original.call(this, container, config, groups, groupField, emptyState);
-    container.setAttribute(PROVENANCE_ATTR, "list-renderer");
-  };
-}
-
 function tagGalleryGroupedRenders(): void {
   const original = GalleryRenderer.prototype.renderGrouped;
   GalleryRenderer.prototype.renderGrouped = function taggedRenderGrouped(
@@ -1336,7 +1199,6 @@ function tagGalleryGroupedRenders(): void {
 
 // Armed once at module load, in the browser only: the harness is bundled into
 // the render entry and never runs outside it.
-tagListRenders();
 tagTableRenders();
 tagBoardRenders();
 tagGalleryRenders();
@@ -1358,7 +1220,6 @@ tagSummaryRenders();
 tagEmptyStateRenders();
 tagColumnHeaderSetups();
 tagCellStartEdits();
-tagListGroupedRenders();
 tagGalleryGroupedRenders();
 
 function provenanceResult(container: HTMLElement, expected: string): AssertionResult {
@@ -1481,108 +1342,6 @@ function countRowAppendsToConnectedNodes(): () => number {
 // ───────────────────────────────────────────────────────────────────
 // 6. ASSERTION SUITE
 // ───────────────────────────────────────────────────────────────────
-
-function listAssertions(
-  container: HTMLElement,
-  rows: RowData[],
-  columns: ColumnDef[],
-  bag: ListRendererActions,
-  bagName: string,
-): AssertionResult[] {
-  const results: AssertionResult[] = [];
-  const rowEls = Array.from(container.querySelectorAll<HTMLElement>(".db-list-row"));
-  const fieldsPerRow = rowEls.map((row) => row.querySelectorAll<HTMLElement>(".db-list-field").length);
-  const placeholderPerRow = rowEls.map((row) => row.querySelectorAll<HTMLElement>(".db-list-field.is-placeholder").length);
-  const valuePerRow = rowEls.map((row) => row.querySelectorAll<HTMLElement>(".db-list-field:not(.is-placeholder)").length);
-  const expectedFields = columns.length - 1;
-
-  // The list is windowed, so "every row is rendered" is now deliberately false. The whole point of
-  // windowing is that node count stops tracking row count, and that cannot be true while this
-  // asserts the opposite — the two are the same claim pointing in opposite directions. What
-  // replaces it is stricter about the thing that actually matters: the window must be a real
-  // subset, neither empty nor the whole list.
-  results.push({
-    name: "the list mounts a window, not every row",
-    pass: rowEls.length > 0 && rowEls.length < rows.length,
-    detail: `${rowEls.length} .db-list-row mounted for ${rows.length} rows`,
-  });
-  // Counted per MOUNTED row rather than per row. The invariant is unchanged — one affordance per
-  // row, so a second checkbox on any row still fails — but its denominator is now the rows that
-  // exist in the DOM, which is the only set an affordance can belong to.
-  results.push({
-    name: "row open affordance is one per mounted row",
-    pass: container.querySelectorAll("button.db-list-row-open").length === rowEls.length,
-    detail: `${container.querySelectorAll("button.db-list-row-open").length} open buttons for ${rowEls.length} mounted rows`,
-  });
-  results.push({
-    name: "row checkbox affordance is one per mounted row",
-    pass: container.querySelectorAll("input.db-list-row-checkbox").length === rowEls.length,
-    detail: `${container.querySelectorAll("input.db-list-row-checkbox").length} checkboxes for ${rowEls.length} mounted rows`,
-  });
-  results.push({
-    name: "every row renders every non-title column",
-    pass: fieldsPerRow.every((count) => count === expectedFields),
-    detail: fieldsPerRow.length
-      ? `field counts per row ${Math.min(...fieldsPerRow)}..${Math.max(...fieldsPerRow)}, want ${expectedFields}`
-      : "no rows to count",
-  });
-  results.push({
-    name: "empty slots reserve their column index",
-    pass: rowEls.every((row) => {
-      const columnsOnRow = Array.from(row.querySelectorAll<HTMLElement>(".db-list-field"))
-        .map((field) => field.style.gridColumn)
-        .sort((a, b) => Number(a) - Number(b));
-      return columnsOnRow.length === expectedFields
-        && columnsOnRow.every((value, index) => value === String(index + 1));
-    }),
-    detail: "every row's fields occupy grid columns 1..20 including placeholders",
-  });
-  results.push({
-    name: `column "${ALIGNMENT_COLUMN}" sits at the same grid column on every row that renders it`,
-    pass: (() => {
-      // Placeholders do not carry the column-key attribute — only value fields
-      // do — so the named column is only identifiable on rows where it has a
-      // value. The empty rows' slots are covered by the reserve assertion.
-      const fields = Array.from(container.querySelectorAll<HTMLElement>(
-        `[data-note-database-column-key="${ALIGNMENT_COLUMN}"]`,
-      ));
-      return fields.length > 0 && fields.every((field) => field.style.gridColumn === ALIGNMENT_GRID_COLUMN);
-    })(),
-    detail: `"${ALIGNMENT_COLUMN}" fields: `
-      + `${container.querySelectorAll(`[data-note-database-column-key="${ALIGNMENT_COLUMN}"]`).length} found, `
-      + `grid columns ${[...new Set(Array.from(container.querySelectorAll<HTMLElement>(
-        `[data-note-database-column-key="${ALIGNMENT_COLUMN}"]`,
-      )).map((field) => field.style.gridColumn))].join(",") || "none"}`
-      + `, want ${ALIGNMENT_GRID_COLUMN} on every one`,
-  });
-  results.push({
-    name: "empty cells render as placeholders, never as skipped nodes",
-    pass: placeholderPerRow.every((placeholders, index) => placeholders === expectedFields - valuePerRow[index])
-      && placeholderPerRow.some((count) => count > 0),
-    detail: `placeholders per row ${Math.min(...placeholderPerRow)}..${Math.max(...placeholderPerRow)} `
-      + `against value fields ${Math.min(...valuePerRow)}..${Math.max(...valuePerRow)}`,
-  });
-  results.push({
-    name: "row click reaches the record-panel action in the file-view bag",
-    pass: bagName === "file-view"
-      ? (() => {
-          if (typeof bag.openRecordDetail !== "function") return false;
-          let calls = 0;
-          const original = bag.openRecordDetail;
-          bag.openRecordDetail = () => { calls += 1; };
-          const title = container.querySelector<HTMLElement>(".db-list-row-title");
-          if (!title) return false;
-          title.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-          bag.openRecordDetail = original;
-          return calls === 1;
-        })()
-      : typeof bag.openRecordDetail !== "function",
-    detail: bagName === "file-view"
-      ? "clicking a row title must invoke openRecordDetail exactly once"
-      : "the embed bag omits openRecordDetail, so its rows cannot open the record panel",
-  });
-  return results;
-}
 
 function tableAssertions(
   container: HTMLElement,
@@ -1826,15 +1585,6 @@ function subtaskTreeAssertion(container: HTMLElement, kind: "board" | "timeline"
   };
 }
 
-function sparseFieldsAssertion(container: HTMLElement): AssertionResult {
-  const placeholders = container.querySelectorAll(".db-list-field.is-placeholder").length;
-  return {
-    name: "the list drew placeholder slots for its missing fields",
-    pass: placeholders > 0,
-    detail: `${placeholders} .db-list-field.is-placeholder element(s), want > 0`,
-  };
-}
-
 function calendarEmptyStateAssertion(container: HTMLElement): AssertionResult {
   const card = container.querySelector('[data-empty-reason="no-date-field"]');
   const grid = container.querySelectorAll(".db-calendar").length;
@@ -2002,10 +1752,10 @@ function makeToolbarActions(): ToolbarActions {
   };
 }
 
-/** The capture-sized typed dataset the panel branches share: list columns, 18 rows, full fill. */
+/** The capture-sized typed dataset the panel branches share: 21 columns, 18 rows. */
 function makeSurfaceListData(): { columns: ColumnDef[]; rows: RowData[] } {
-  const columns = makeListColumns(LIST_COLUMNS, "mixed");
-  const rows = makeListRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
+  const columns = makeTableColumns(LIST_COLUMNS, "mixed");
+  const rows = makeTableRows(CAPTURE_ROWS, columns);
   applyCaptureOptions(columns, rows);
   return { columns, rows };
 }
@@ -2503,43 +2253,7 @@ export function runRenderAssertions(
   let bagKeys: string[] = [];
   let chartValueField: string | undefined;
 
-  if (scenario.renderer === "list") {
-    const columns = makeListColumns(LIST_COLUMNS, scenario.captureData ? "mixed" : "text");
-    const rows = makeListRows(
-      scenario.captureData ? CAPTURE_ROWS : LIST_ROWS,
-      columns,
-      scenario.captureData ? CAPTURE_FILL : LIST_FILL,
-    );
-    if (scenario.captureData) {
-      applyCaptureOptions(columns, rows);
-      if (scenario.sparseFields) applyCaptureSparseFields(rows, columns);
-    }
-    const config = makeListConfig(columns);
-    const bag = scenario.bag === "file-view" ? fileViewListBag(columns) : embedListBag(columns);
-    bagKeys = Object.keys(bag).sort();
-    const renderer = new ListRenderer(app, bag);
-
-    // Render first, then ask whether the output carries the renderer's marker:
-    // the marker is applied by the render call itself, so checking before it
-    // would fail every run.
-    const stopCounting = countLayoutReads();
-    renderer.render(container, config, rows);
-    const layoutReads = stopCounting();
-
-    results.push(provenanceResult(container, "list-renderer"));
-    if (results[0].pass) {
-      results.push(...listAssertions(container, rows, columns, bag, scenario.bag));
-      if (scenario.sparseFields) results.push(sparseFieldsAssertion(container));
-      results.push({
-        name: "no forced layout inside the row loop",
-        pass: layoutReads <= MAX_LAYOUT_READS,
-        detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
-          + (layoutReads > MAX_LAYOUT_READS
-            ? " — reads scale with rows, which is the quadratic shape that froze the app"
-            : " (the touch-mode probe and reservation decision are the legitimate O(1) reads)"),
-      });
-    }
-  } else if (scenario.renderer === "board") {
+  if (scenario.renderer === "board") {
     const columns = makeBoardColumns(BOARD_COLUMNS, scenario.captureData ? "mixed" : "text");
     const rows = makeBoardRows(
       scenario.captureData ? CAPTURE_ROWS : BOARD_ROWS,
@@ -2941,7 +2655,7 @@ export function runRenderAssertions(
     // minimal header host the renderer requires (it refuses to render without one) and the
     // state the chips summarise: effective filter rules and sort rules over real columns.
     const { columns } = makeSurfaceListData();
-    const config = { ...makeListConfig(columns), viewType: "list" } as ViewConfig;
+    const config = { ...makeTableConfig(columns), viewType: "table" } as ViewConfig;
     const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
     const currencyCol = columnOfType(columns, "currency");
     const dateCol = columnOfType(columns, "date");
@@ -2974,7 +2688,7 @@ export function runRenderAssertions(
     // toggleFilter/toggleSort against a real anchor, with the panel's editor delegated to the
     // filter or sort renderer's renderSingleRuleEditor.
     const { columns } = makeSurfaceListData();
-    const config = makeListConfig(columns);
+    const config = makeTableConfig(columns);
     const anchor = makeHiddenAnchor(container, "db-active-rule-anchor");
     const close = (): void => undefined;
     if (scenario.ruleKind === "sort") {
@@ -3005,7 +2719,7 @@ export function runRenderAssertions(
     // header defers its logic button to, the nested tree exercises the NOT node and the inner
     // OR group at the depth the panel's own wrap rules allow.
     const { columns } = makeSurfaceListData();
-    const config = makeListConfig(columns);
+    const config = makeTableConfig(columns);
     const anchor = makeHiddenAnchor(container, "db-filter-anchor");
     const actions: FilterPanelActions = { saveState: () => undefined, refresh: () => undefined, close: () => undefined };
     bagKeys = Object.keys(actions).sort();
@@ -3050,8 +2764,8 @@ export function runRenderAssertions(
     const currencyCol = columnOfType(columns, "currency");
     const dateCol = columnOfType(columns, "date");
     const config = scenario.calendarHint
-      ? { ...makeListConfig(columns), viewType: "calendar" } as ViewConfig
-      : makeListConfig(columns);
+      ? { ...makeTableConfig(columns), viewType: "calendar" } as ViewConfig
+      : makeTableConfig(columns);
     const state = scenario.calendarHint
       ? makeSurfaceState()
       : makeSurfaceState({
@@ -3252,7 +2966,7 @@ export function runRenderAssertions(
     const currencyCol = columnOfType(columns, "currency");
     const selectCol = columnOfType(columns, "select");
     const config = {
-      ...makeListConfig(columns),
+      ...makeTableConfig(columns),
       summaryRules: [
         ...(currencyCol ? [{ field: currencyCol.key, summary: "sum" }, { field: currencyCol.key, summary: "avg" }] : []),
         ...(selectCol ? [{ field: selectCol.key, summary: "unique" }] : []),
@@ -3577,23 +3291,15 @@ export function runRenderAssertions(
         "the column headers carry their menu triggers, resize handles and property-type icons"));
     }
   } else if (scenario.renderer === "group-selection-controls") {
-    // One role, three views: the whole-group selection box from the list, the gallery and the
-    // extensions board's column header, each through its renderer's own grouped entry so the
-    // picture can show a divergence the way one header beside another can. The board's subgroup
-    // box the fixture depicted no longer exists on the shipped board — the subgroup surface is
-    // the swimlane lane header, which carries no box — so the board's whole-group box is its
-    // column-header checkbox.
+    // One role, two remaining views: the whole-group selection box from the gallery and the
+    // extensions board's column header, each through its renderer's own grouped entry.
     const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
     const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
     applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
     applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
     const groups = makeBoardGroups(rows, BOARD_GROUPS);
-    const listHost = container.createDiv({ cls: "db-group-selection-host" });
     const galleryHost = container.createDiv({ cls: "db-group-selection-host" });
     const boardHost = container.createDiv({ cls: "db-group-selection-host" });
-    const listRenderer = new ListRenderer(undefined as unknown as App, fileViewListBag(columns));
-    listRenderer.renderGrouped(listHost, { ...makeBoardConfig(columns), viewType: "list" } as ViewConfig,
-      groups.map((g) => ({ key: g.key, rows: g.rows, count: g.count })), BOARD_GROUP_FIELD);
     const galleryRenderer = new GalleryRenderer(undefined as unknown as App, fileViewGalleryBag(columns));
     galleryRenderer.renderGrouped(galleryHost, { ...makeBoardConfig(columns), viewType: "gallery" } as ViewConfig,
       groups.map((g) => ({ key: g.key, rows: g.rows, count: g.count })), BOARD_GROUP_FIELD);
@@ -3606,19 +3312,18 @@ export function runRenderAssertions(
     bagKeys = [];
 
     const markers = [
-      ["list", listHost.getAttribute(PROVENANCE_ATTR)],
       ["gallery", galleryHost.getAttribute(PROVENANCE_ATTR)],
       ["board", boardHost.getAttribute(PROVENANCE_ATTR)],
     ];
     results.push({
-      name: "all three grouped renders mounted through their production entries",
+      name: "both grouped renders mounted through their production entries",
       pass: markers.every(([, marker]) => marker !== null),
       detail: markers.map(([name, marker]) => `${name}:${marker ?? "none"}`).join(", "),
     });
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-list-group-checkbox", ".db-gallery-group-checkbox", ".db-board-column-checkbox"],
-        "the whole-group selection boxes rendered in all three views"));
+        [".db-gallery-group-checkbox", ".db-board-column-checkbox"],
+        "the whole-group selection boxes rendered in gallery and board"));
     }
   } else if (scenario.renderer === "card-covers") {
     // The empty card cover in the two card views: board with its extensions vocabulary and an
@@ -3666,31 +3371,21 @@ export function runRenderAssertions(
     const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
     const rows = makeTableRows(scenario.captureData ? CAPTURE_ROWS : TABLE_ROWS, columns);
     if (scenario.captureData) applyCaptureOptions(columns, rows);
-    // Built as a list — real Punch-List shape, `listCompactFields` included — and only ever
-    // turned into a table by running the production plan/apply pair, not by authoring it as one.
+    // Built as a list and only ever turned into a table by the production plan/apply pair.
+    // The migrated table is the proof; a failed flip fails the marker below.
     const migratedConfig = {
       ...makeTableConfig(columns),
       schema: { columns, computedFields: [] },
       viewType: "list",
-      listCompactFields: true,
     } as ViewConfig;
     const plan = planListMigration(migratedConfig);
     if (plan) applyListMigration(migratedConfig, plan);
     bagKeys = [];
 
-    // The fork itself is the assertion: `database-view.ts`'s `render()` picks `ListRenderer` for
-    // `viewType === "list"` and `TableRenderer` otherwise. A migration that failed to flip the
-    // type would land here, not in a broken render — `ListRenderer` renders a `viewType: "list"`
-    // config just fine, which is exactly why the marker below checks which renderer actually ran.
-    if (migratedConfig.viewType === "list") {
-      const bag = scenario.bag === "file-view" ? fileViewListBag(columns) : embedListBag(columns);
-      new ListRenderer(app, bag).render(container, migratedConfig, rows);
-    } else {
-      const bag = scenario.bag === "file-view"
-        ? fileViewTableBag(columns, scenario.captureData)
-        : embedTableBag(columns, scenario.captureData);
-      new TableRenderer(bag).renderTable(container, migratedConfig, rows);
-    }
+    const bag = scenario.bag === "file-view"
+      ? fileViewTableBag(columns, scenario.captureData)
+      : embedTableBag(columns, scenario.captureData);
+    new TableRenderer(bag).renderTable(container, migratedConfig, rows);
 
     results.push({
       name: "the migrated list view rendered through the table renderer, not the list renderer",
@@ -3704,7 +3399,7 @@ export function runRenderAssertions(
       results.push(...tableAssertions(container, rows, columns));
     }
   } else {
-    // captureData sizes the data as well as typing it, the way it already does for list, board
+    // captureData sizes the data as well as typing it, the way it already does for board
     // and gallery. The table has no window, so every row becomes a real <tr>: at the bench's 2000
     // the container measures over 80,000px tall, which no element-mode capture can photograph and
     // which repeats one under-floor control thousands of times in the touch-target lane without

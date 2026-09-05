@@ -574,8 +574,6 @@ export interface ViewConfig {
   galleryImageFit?: "cover" | "contain";
   /** Render currently visible properties on cards/lists even when the value is empty. */
   showEmptyFields?: boolean;
-  /** List view only: shrink non-wrapped fields to content width while capping them at their configured column width. */
-  listCompactFields?: boolean;
   /** Persisted advanced filter logic. */
   filterLogic?: "and" | "or";
   /** Persisted advanced filters. */
