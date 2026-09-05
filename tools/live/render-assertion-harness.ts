@@ -325,6 +325,18 @@ export interface ScenarioSpec {
    */
   recordBodyVariant?: "empty" | "editing" | "read";
   /**
+   * Opt-in, renderer "record-peek" only: whether `openTableRecordPeek` is given the touch
+   * hand-off it is wired with in production. Defaults to `true` (undefined behaves the same as
+   * `true`), matching every existing caller of this scenario unchanged: the harness's own
+   * positioning anchor (`makeHiddenAnchor`) is a 1px span, so `isTouchDevice`'s container-width
+   * signal reads it as narrow regardless of the page's real viewport, and the hand-off always
+   * fires. Explicit `false` renders the docked rail instead, by omitting the `openRecordDetail`
+   * callback entirely — `openTableRecordPeek`'s own contract for an absent callback ("the rail
+   * opens as it always did"), not a synthetic touch override, since no anchor width this harness
+   * could construct would make `isTouchDevice` agree that a 1px span is a wide desktop pane.
+   */
+  recordPeekTouch?: boolean;
+  /**
    * Opt-in, renderer "cell-editors" only: which cell editor `CellRenderer.startEdit` opens on
    * the constructed row. "text" opens the markdown textarea editor (with its format toolbar) on
    * one cell and the single-line number editor on another; "select" opens the option-list
@@ -3036,17 +3048,21 @@ export function runRenderAssertions(
       renderRecordIcon: () => null,
       // On a touch mount the peek hands off to the record sheet — the same hand-off the view
       // host makes — so a phone scenario photographs the surface a phone actually gets.
-      openRecordDetail: (openAnchor, openRow) => {
-        openRecordDetailPanel({
-          anchorEl: openAnchor,
-          host: container,
-          row: openRow,
-          columns,
-          config,
-          app: undefined as unknown as App,
-          actions: { editCell: () => undefined, openRow: () => undefined },
-        });
-      },
+      // `recordPeekTouch: false` omits this callback so the scenario proves the other side of
+      // the same branch: the docked rail a caller without the hand-off still gets.
+      ...(scenario.recordPeekTouch === false ? {} : {
+        openRecordDetail: (openAnchor: HTMLElement, openRow: RowData) => {
+          openRecordDetailPanel({
+            anchorEl: openAnchor,
+            host: container,
+            row: openRow,
+            columns,
+            config,
+            app: undefined as unknown as App,
+            actions: { editCell: () => undefined, openRow: () => undefined },
+          });
+        },
+      }),
     });
     container.setAttribute(PROVENANCE_ATTR, "record-peek");
 

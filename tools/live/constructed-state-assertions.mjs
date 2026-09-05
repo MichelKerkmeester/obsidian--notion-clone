@@ -98,6 +98,7 @@ window.__stateMarkers = (scenario) => {
     })(),
     columnManager: !!container.querySelector(".db-column-manager .db-column-manager-row"),
     recordDetailPanel: !!container.querySelector(".db-record-detail-panel"),
+    recordDetailHeader: !!container.querySelector(".db-record-detail-panel .db-record-detail-header"),
     recordDetailBodyEditing: !!container.querySelector(".db-record-detail-body.is-editing .db-record-detail-body-editor"),
     recordDetailBodyEmpty: !!container.querySelector(".db-record-detail-body .db-record-detail-body-rendered.is-empty"),
     recordPeekPanel: !!container.querySelector(".db-record-peek-panel"),
@@ -222,6 +223,19 @@ const PAIRED_CASES = [
       "boardCardPropertiesVisibleFieldsChecked",
     ],
   },
+  {
+    // openTableRecordPeek's own touch branch, proven both ways: the harness's positioning
+    // anchor is a 1px span, so `isTouchDevice` reads it as narrow regardless of the page's real
+    // viewport and the touch hand-off fires by default — which is the production shape a phone
+    // gets. The "off" side asks the harness not to wire that hand-off at all, exercising
+    // `openTableRecordPeek`'s own documented fallback for an absent callback: the docked rail,
+    // the surface a mouse still gets.
+    id: "constructed-record-peek",
+    off: { renderer: "record-peek", bag: "file-view", captureData: true, recordPeekTouch: false },
+    on: { renderer: "record-peek", bag: "file-view", captureData: true },
+    onMarkers: ["recordDetailPanel", "recordDetailHeader"],
+    offOnlyMarkers: ["recordPeekPanel"],
+  },
 ];
 
 // Single-mount cases: brand-new `renderer` values with no boolean to pair against. Their own "off"
@@ -328,11 +342,6 @@ const SINGLE_CASES = [
     id: "constructed-record-detail-body-empty",
     spec: { renderer: "record-detail-body", bag: "file-view", recordBodyVariant: "empty" },
     marker: "recordDetailBodyEmpty",
-  },
-  {
-    id: "constructed-record-peek",
-    spec: { renderer: "record-peek", bag: "file-view", captureData: true },
-    marker: "recordPeekPanel",
   },
   {
     id: "constructed-table-footer",
