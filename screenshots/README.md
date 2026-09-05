@@ -1422,3 +1422,10 @@ Year scale with boundary ticks, weekend fills, progress, milestone and dependenc
 | ![timeline-view-year dark](notion-clone/views/timeline-view-year-mobile-dark.png) | ![timeline-view-year light](notion-clone/views/timeline-view-year-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`
+
+## Reference roots
+
+Two roots under `screenshots/` are not one of the scenario groups above:
+
+- `screenshots/project-manager/` — our render. reference renders of the vendored Project Manager plugin, produced by `tools/screenshots/reference-scenarios.mjs`. Lane scope: in scope (css-lane `inScopeCaptureRoots` in `tools/lane/css-lane.json`). Index: indexed above under the `project-manager` group.
+- `screenshots/anytype/` — photograph. photographs of the third-party Anytype app; never produced by this repo. Lane scope: not in scope (css-lane `inScopeCaptureRoots` in `tools/lane/css-lane.json`). Index: its own index at `screenshots/anytype/README.md`.
