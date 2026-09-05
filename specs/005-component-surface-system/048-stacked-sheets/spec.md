@@ -23,7 +23,7 @@ contextType: "planning"
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P0 |
-| **Status** | Draft |
+| **Status** | Implemented — awaiting operator confirmation on 0.0.24 |
 | **Created** | 2026-09-05 |
 | **Branch** | `worktrees/062-stacked-sheets` |
 | **Parent Spec** | ../spec.md |
@@ -125,10 +125,14 @@ Notion-like, and the phrasing is deliberate: this is a contract, not a mood.
    scrollbar at the cut. A row bisected by the sheet's bottom edge with nothing to say the list
    continues is the defect in the third capture.
 
-### Decision D1 — operator-owned, open
+### Decision D1 — ACCEPTED 2026-09-05
 
 **An Obsidian `Modal` opened from inside a sheet — create property, confirms, date pickers — must
 present as a sheet too on the phone, or the phone flow must use a sheet instead of the modal.**
+
+**ACCEPTED: present as a sheet** — see `decision-record.md` ADR-001, which also records the two
+consequences taken with it (a `fullscreen` modal opened over a sheet presents as a sheet, and the
+header's title falls back to the modal's own heading). The recommendation below is what was accepted.
 
 **Recommendation: present as a sheet.** `DbModal` already declares a presentation per subclass
 (`db-modal.ts:56`), so the mechanism exists and the change is to give those subclasses the header

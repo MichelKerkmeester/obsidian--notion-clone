@@ -12,13 +12,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/048-stacked-sheets"
-    last_updated_at: "2026-09-05T07:20:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored the durable directive from the 0.0.23 stacked-sheet report"
-    next_safe_action: "Execute T001, the code-derived stacked-surface inventory"
+    last_updated_at: "2026-09-05T09:35:00Z"
+    last_updated_by: "code-agent"
+    recent_action: "Closed the stacking model, the migrations and the lane rows against measured evidence"
+    next_safe_action: "Cut 0.0.24 and collect the operator device confirmation"
     blockers:
       - "Operator device confirmation is the only row that closes this phase"
-      - "D1 is operator-owned: Obsidian modals opened from a sheet, presented as sheets or replaced"
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/overlay-stack.ts"
@@ -28,10 +27,8 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-048-goal"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "D1: present Obsidian modals opened from a sheet as sheets, or replace the phone flow with a sheet"
-      - "Parent scale-back figure: 0.92 like iOS, or a smaller step on a 390pt screen"
+    completion_pct: 86
+    open_questions: []
     answered_questions: []
 ---
 # Goal: Stacked Sheets
@@ -81,26 +78,26 @@ Frozen choices. Changing one is an amendment.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **The inventory exists and is code-derived.** Every surface that can open while another sheet
+- [x] **The inventory exists and is code-derived.** Every surface that can open while another sheet
       is open, grouped parent → child → opener kind → current → target, each row citing a
       `file:line` opener. **Today: no such document exists**; `../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md`
       censuses surfaces one at a time and never asks which opens over which.
-- [ ] **A parent sheet's bounding box does not move when a child opens**, measured on both edges.
+- [x] **A parent sheet's bounding box does not move when a child opens**, measured on both edges.
       **Today: unmeasured, and no code path reads the parent when a child mounts** —
       `setSheetMount` (`mobile-bottom-sheet.ts:274`) appends the child to the body and touches
       nothing else.
-- [ ] **Exactly one scrim while two sheets are open, and it sits between them.** **Today: 1 scrim
+- [x] **Exactly one scrim while two sheets are open, and it sits between them.** **Today: 1 scrim
       behind both** — `setScrim` (`mobile-bottom-sheet.ts:478`) reuses a single
       `.db-mobile-sheet-scrim` node for however many sheets are open, by design.
-- [ ] **Every stacked child carries a header with a 44px close.** **Today: 5 surfaces call
+- [x] **Every stacked child carries a header with a 44px close.** **Today: 5 surfaces call
       `createSheetHeader` or its equivalent** (`filter-panel-renderer.ts:259`,
       `sort-panel-renderer.ts:113`, `toolbar-renderer.ts:1386`, `create-linked-view-modal.ts:59`,
       `view-config-panel-renderer.ts:388`) **and not one of them is a stacked child.**
-- [ ] **The topmost sheet holds the keyboard inset and the sheet beneath it holds zero**, proven by
+- [x] **The topmost sheet holds the keyboard inset and the sheet beneath it holds zero**, proven by
       a negative control. **Today: each sheet writes its own `--db-mobile-sheet-bottom` at its own
       placement time** (`popover-position.ts:406`), which is why the operator's filter sheet sits
       at the top of the screen while its own dropdown sits at the bottom.
-- [ ] **`npm run gate` exits 0 with a permanent lane row per stacked pair, each observed red before
+- [x] **`npm run gate` exits 0 with a permanent lane row per stacked pair, each observed red before
       green.** **Today: `sheet-grammar`'s registry holds 8 surfaces and every one of them is a
       first sheet** (`tools/live/sheet-grammar.mjs:46-68`); no stacked pair is registered.
 - [ ] **The operator opens the Properties sheet, the filter sheet's operator dropdown and its
@@ -121,16 +118,22 @@ into the objective, and it is expected to grow.
 | Item | State | Evidence |
 |------|-------|----------|
 | Phase opened from the 0.0.23 device check | Done | Operator 2026-09-05 07:02 CEST, iPhone, build 0.0.23; screenshots `../scratch/device-2026-09-05/stacked-properties-create-property.png`, `stacked-filter-operator-dropdown.png`, `stacked-filter-property-picker.png` |
+| Gate | Done | `npm run gate` `$?` 0, 25 lanes green, 0 red |
+| Operator confirmation | Pending | AC-009; ships in 0.0.24 |
 | Level chosen | Done | `recommend-level.sh --loc 600 --files 13 --architectural` → Level 2, 64/100, confidence 82%; phase score 10/50 against a threshold of 25, so a standard child |
-| Stacked-surface inventory | Pending | T001; the table lands in `stacked-surface-inventory.md` |
-| Stacking model | Pending | T004-T007, `mobile-bottom-sheet.ts` and `overlay-stack.ts` |
-| Per-child migrations | Pending | T008-T012, by inventory rank |
-| Lane row per stacked pair | Pending | T013-T014, `tools/live/sheet-grammar.mjs` |
+| Stacked-surface inventory | Done | T001, `stacked-surface-inventory.md` §3 |
+| Stacking model | Done | T005-T009; depth, one scrim between the top two, top-only inset, parent treatment |
+| Per-child migrations | Done | T010-T016; K1/K3/K4 migrated, K2/K5/K6 already closed by `044` and the gantt leg |
+| Lane row per stacked pair | Done | T017-T019; **31 pairs**, three at depth 3, 253 red before 0 green |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
+| D1 was answered ACCEPTED rather than deferred | `decision-record.md` ADR-001. Modals opened from a sheet present as sheets, which covers all 19 `DbModal` subclasses in one change and closes the `fullscreen` question with them. |
+| The K5 native `Menu` row was already closed | `rg "new Menu\("` returns nothing in `src`; `calendar-timeline-renderer.ts` reaches `createOwnedMenuForEvent` on the tree this packet opened against. Recorded rather than re-migrated. |
+| K2 and K6 needed no work | `044`'s closing leg had already given the owned menu and the date, icon and colour pickers a `createSheetHeader`. The inventory listed them because it was written against the state before that leg landed. |
+| Three defects were found by building the model, not by the reports | The dim was written and never rendered (specificity), a press inside a child closed the parent (a hand-kept exemption list), and re-placing a parent detached it. Each is fixed at its producer and recorded in `decision-record.md` or `implementation-summary.md`. |
 | The inventory is not written into `003`'s document | This packet's write authority is its own folder. `003/sheet-and-dropdown-inventory.md` is cited as the per-surface census and extended along the stacking axis here rather than edited in place, so neither document restates the other. |
 | `044`'s three named `applySheetChrome` bypasses read differently now | `icon-picker-popover.ts:229` and `option-color-picker.ts:104` both reach `positionToolbarPopover` in the current tree, which applies the chrome. Recorded, not re-adjudicated: the count is `044`'s to close. |
 | The native `<select>` in the Add view sheet is gone | `003`'s inventory §8 records one at `toolbar-renderer.ts:1371`. `rg 'createEl\("select"' src` returns nothing today, so `044` T008's dropdown swap landed. One fewer stacked child of a native kind. |
