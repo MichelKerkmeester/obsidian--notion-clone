@@ -19,7 +19,13 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { isHTMLElement } from "./dom-guards";
-import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance, SHEET_KEYBOARD_INSET_VAR } from "./mobile-bottom-sheet";
+import {
+  applySheetChrome,
+  attachSheetDragToDismiss,
+  playSheetEntrance,
+  SHEET_KEYBOARD_INSET_VAR,
+  SHEET_STACK_CHANGE_EVENT,
+} from "./mobile-bottom-sheet";
 import { overlayStack } from "./overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
@@ -336,6 +342,13 @@ export function positionToolbarPopover(
       place();
     });
   };
+  // Depth changes re-place the TOP sheet only. A sheet beneath one is not repositioned at all: the
+  // stack already writes its inset, and re-running placement on a parent is what "the parent does
+  // not move" forbids. Measured: re-placing a parent whose anchor had gone re-resolved it down the
+  // anchored branch, which stripped its sheet chrome and left it detached under its own child.
+  const scheduleWhenTop = () => {
+    if (overlayStack.isTopSheet(panel)) schedule();
+  };
   const visualViewport = view.visualViewport;
   const cleanup = () => {
     releaseSheetDrag?.();
@@ -347,6 +360,7 @@ export function positionToolbarPopover(
     ownerDocument.removeEventListener("scroll", schedule, true);
     visualViewport?.removeEventListener("resize", schedule);
     visualViewport?.removeEventListener("scroll", schedule);
+    panel.removeEventListener(SHEET_STACK_CHANGE_EVENT, scheduleWhenTop);
     if (positionCleanups.get(panel) === cleanup) positionCleanups.delete(panel);
   };
   teardown = cleanup;
@@ -354,6 +368,7 @@ export function positionToolbarPopover(
   ownerDocument.addEventListener("scroll", schedule, true);
   visualViewport?.addEventListener("resize", schedule);
   visualViewport?.addEventListener("scroll", schedule);
+  panel.addEventListener(SHEET_STACK_CHANGE_EVENT, scheduleWhenTop);
   positionCleanups.set(panel, cleanup);
 }
 
@@ -402,7 +417,7 @@ export function placeSheet(
   // whenever no keyboard is open. The stylesheet's `bottom` rule reads this variable and carries
   // `!important`, so the lever was already wired — it was simply always written zero, and the
   // re-placement that a visual-viewport event triggers recomputed the same zero every time.
-  const keyboard = keyboardInset(view, panel.ownerDocument);
+  const keyboard = overlayStack.isTopSheet(panel) ? keyboardInset(view, panel.ownerDocument) : 0;
   panel.style.setProperty("--db-mobile-sheet-bottom", `${keyboard}px`);
   // The same figure, published once per placement on the sheet's own node. The placement loop
   // above is the sheet's one viewport subscription, so this is where the published value is
@@ -460,14 +475,20 @@ export function keepSheetPlaced(
     if (frame !== undefined) return;
     frame = view.requestAnimationFrame(replace);
   };
+  // Same rule as the anchored positioner above: only the top sheet re-places on a depth change.
+  const scheduleWhenTop = () => {
+    if (overlayStack.isTopSheet(panel)) schedule();
+  };
   view.addEventListener("resize", schedule);
   visual?.addEventListener("resize", schedule);
   visual?.addEventListener("scroll", schedule);
+  panel.addEventListener(SHEET_STACK_CHANGE_EVENT, scheduleWhenTop);
   return () => {
     if (frame !== undefined) view.cancelAnimationFrame(frame);
     view.removeEventListener("resize", schedule);
     visual?.removeEventListener("resize", schedule);
     visual?.removeEventListener("scroll", schedule);
+    panel.removeEventListener(SHEET_STACK_CHANGE_EVENT, scheduleWhenTop);
   };
 }
 

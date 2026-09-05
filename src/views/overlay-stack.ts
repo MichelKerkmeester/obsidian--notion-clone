@@ -44,17 +44,21 @@ export interface OverlaySurfaceOptions {
   anchor?: HTMLElement;
   getAnchor?: () => HTMLElement | null;
   parentId?: string;
-  close(reason: OverlayCloseReason): void;
+  isSheet?: boolean;
+  close?(reason: OverlayCloseReason): void;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
 }
 
-interface OverlaySurface extends Required<Pick<OverlaySurfaceOptions, "panel" | "close">> {
+export interface OverlaySurface {
   id: string;
+  panel: HTMLElement;
+  close(reason: OverlayCloseReason): void;
   getPanel?: () => HTMLElement | null;
   anchor?: HTMLElement;
   getAnchor?: () => HTMLElement | null;
   parentId?: string;
+  isSheet: boolean;
   closeOnOutsidePointerDown: boolean;
   closeOnEscape: boolean;
 }
@@ -81,31 +85,59 @@ export class OverlayStack {
 
   register(options: OverlaySurfaceOptions): { id: string; unregister(restoreFocus?: boolean): void } {
     const doc = options.panel.ownerDocument;
-    const id = options.id || `db-overlay-${++nextOverlayId}`;
-    this.unregister(id, false);
+    const existingIndex = this.surfaces.findIndex((surface) =>
+      surface.panel.ownerDocument === doc
+      && (surface.panel === options.panel || (options.id !== undefined && surface.id === options.id)));
+    const existing = existingIndex >= 0 ? this.surfaces[existingIndex] : undefined;
+    const id = options.id || existing?.id || `db-overlay-${++nextOverlayId}`;
 
+    const parentId = existing
+      ? options.parentId ?? existing.parentId
+      : options.parentId ?? this.getTopSurfaceForDocument(doc, { sheetsOnly: true })?.id;
+    const safeParentId = parentId === id ? undefined : parentId;
     const surface: OverlaySurface = {
       id,
       panel: options.panel,
       getPanel: options.getPanel,
       anchor: options.anchor,
       getAnchor: options.getAnchor,
-      parentId: options.parentId,
-      close: (reason) => options.close(reason),
-      closeOnOutsidePointerDown: options.closeOnOutsidePointerDown !== false,
-      closeOnEscape: options.closeOnEscape !== false,
+      // Re-registering a rebuilt panel must not make it its own parent. An omitted parent on an
+      // existing surface means "keep the relationship this owner already established"; a new
+      // sheet derives its parent from the top sheet that was open before it mounted.
+      parentId: safeParentId,
+      isSheet: options.isSheet ?? existing?.isSheet ?? false,
+      close: options.close ? (reason) => options.close?.(reason) : existing?.close ?? (() => undefined),
+      closeOnOutsidePointerDown: options.closeOnOutsidePointerDown === undefined
+        ? existing?.closeOnOutsidePointerDown ?? true
+        : options.closeOnOutsidePointerDown,
+      closeOnEscape: options.closeOnEscape === undefined
+        ? existing?.closeOnEscape ?? true
+        : options.closeOnEscape,
     };
-    this.surfaces.push(surface);
+    if (existingIndex >= 0) this.surfaces[existingIndex] = surface;
+    else this.surfaces.push(surface);
     this.ensureDocumentListeners(doc);
 
     return {
       id,
-      unregister: (restoreFocus = true) => this.unregister(id, restoreFocus),
+      unregister: (restoreFocus = true) => this.unregister(id, restoreFocus, doc),
     };
   }
 
-  unregister(id: string, restoreFocus = true): boolean {
-    const index = this.surfaces.findIndex((surface) => surface.id === id);
+  unregister(id: string, restoreFocus = true, ownerDocument?: Document): boolean {
+    const index = this.surfaces.findIndex((surface) =>
+      surface.id === id && (!ownerDocument || surface.panel.ownerDocument === ownerDocument));
+    if (index < 0) return false;
+    const [surface] = this.surfaces.splice(index, 1);
+    if (restoreFocus) this.restoreFocus(surface);
+    this.removeDocumentListenersIfIdle(surface.panel.ownerDocument);
+    return true;
+  }
+
+  /** Remove the surface represented by a live or previously registered panel node. */
+  unregisterPanel(panel: HTMLElement, restoreFocus = false): boolean {
+    const index = this.surfaces.findIndex((surface) =>
+      surface.panel === panel || this.livePanel(surface) === panel);
     if (index < 0) return false;
     const [surface] = this.surfaces.splice(index, 1);
     if (restoreFocus) this.restoreFocus(surface);
@@ -133,6 +165,76 @@ export class OverlayStack {
 
   getTopSurface(): OverlaySurface | undefined {
     return this.surfaces[this.surfaces.length - 1];
+  }
+
+  getTopSurfaceForDocument(doc: Document, options: { sheetsOnly?: boolean } = {}): OverlaySurface | undefined {
+    for (let index = this.surfaces.length - 1; index >= 0; index -= 1) {
+      const surface = this.surfaces[index];
+      if (surface.panel.ownerDocument !== doc) continue;
+      if (options.sheetsOnly && !surface.isSheet) continue;
+      return surface;
+    }
+    return undefined;
+  }
+
+  /** Return the registered surface immediately beneath a panel in the same document. */
+  getSurfaceBelow(panel: HTMLElement, options: { sheetsOnly?: boolean } = {}): OverlaySurface | undefined {
+    const index = this.surfaces.findIndex((surface) => this.livePanel(surface) === panel);
+    if (index < 0) return undefined;
+    for (let candidateIndex = index - 1; candidateIndex >= 0; candidateIndex -= 1) {
+      const candidate = this.surfaces[candidateIndex];
+      if (candidate.panel.ownerDocument !== panel.ownerDocument) continue;
+      if (options.sheetsOnly && !candidate.isSheet) continue;
+      return candidate;
+    }
+    return undefined;
+  }
+
+  /** Resolve a panel's nesting depth by following its registered parent chain. */
+  getDepth(panel: HTMLElement): number {
+    const surface = this.surfaces.find((candidate) => this.livePanel(candidate) === panel);
+    if (!surface) return 1;
+    let depth = 1;
+    let current = surface;
+    const visited = new Set<string>();
+    while (current.parentId && !visited.has(current.id)) {
+      visited.add(current.id);
+      const parent = this.surfaces.find((candidate) =>
+        candidate.panel.ownerDocument === panel.ownerDocument && candidate.id === current.parentId);
+      if (!parent) break;
+      depth += 1;
+      current = parent;
+    }
+    return depth;
+  }
+
+  /**
+   * True when a node lies inside a surface stacked above this one.
+   *
+   * A surface that closes on an outside press needs to know that a press landing in its own child
+   * is not outside it. Answering that from a hand-kept list of child surface classes means every
+   * new child has to be remembered by every parent, and the one nobody remembered is the one that
+   * closes the parent under the person's thumb. The stack already knows what is above what.
+   */
+  isInsideSurfaceAbove(panel: HTMLElement, target: Node | null | undefined): boolean {
+    if (!target) return false;
+    const index = this.surfaces.findIndex((surface) => this.livePanel(surface) === panel);
+    if (index < 0) return false;
+    for (let above = index + 1; above < this.surfaces.length; above += 1) {
+      const candidate = this.surfaces[above];
+      if (candidate.panel.ownerDocument !== panel.ownerDocument) continue;
+      if (this.livePanel(candidate).contains(target)) return true;
+    }
+    return false;
+  }
+
+  isTopSheet(panel: HTMLElement): boolean {
+    const top = this.getTopSurfaceForDocument(panel.ownerDocument, { sheetsOnly: true });
+    return top !== undefined && this.livePanel(top) === panel;
+  }
+
+  hasPanel(panel: HTMLElement): boolean {
+    return this.surfaces.some((surface) => this.livePanel(surface) === panel || surface.panel === panel);
   }
 
   isTopSurface(panel: HTMLElement): boolean {
@@ -183,14 +285,6 @@ export class OverlayStack {
     const anchor = surface.getAnchor?.() || surface.anchor;
     if (isNode && (this.livePanel(surface).contains(target) || anchor?.contains(target))) return;
     this.dismissSurface(surface, "outside-pointerdown");
-  }
-
-  private getTopSurfaceForDocument(doc: Document): OverlaySurface | undefined {
-    for (let index = this.surfaces.length - 1; index >= 0; index -= 1) {
-      const surface = this.surfaces[index];
-      if (surface.panel.ownerDocument === doc) return surface;
-    }
-    return undefined;
   }
 
   private dismissSurface(surface: OverlaySurface, reason: OverlayCloseReason): void {

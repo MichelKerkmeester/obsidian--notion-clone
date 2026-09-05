@@ -19,7 +19,7 @@
 import { setIcon, setTooltip } from "obsidian";
 import { t } from "../i18n";
 import { isElement } from "./dom-guards";
-import { overlayStack } from "./overlay-stack";
+import { overlayStack, type OverlayCloseReason } from "./overlay-stack";
 import { beginSheetGeneration, isSheetTraceEnabled, traceSheet } from "./sheet-trace";
 
 // ───────────────────────────────────────────────────────────────────
@@ -36,6 +36,12 @@ export interface SheetChromeOptions {
    * edits a cell on the way out, so dismissing a menu also does something the user did not ask for.
    */
   scrimCapturesPointer?: boolean;
+  /** Close callback used by sheets that do not install the popover adapter. */
+  close?(reason: OverlayCloseReason): void;
+  /** Whether the shared stack may route outside presses to this sheet. */
+  closeOnOutsidePointerDown?: boolean;
+  /** Whether the shared stack may route Escape to this sheet. */
+  closeOnEscape?: boolean;
 }
 
 /**
@@ -85,6 +91,22 @@ export function applySheetChrome(
     return;
   }
   if (!isSheet) existingHandle?.remove();
+}
+
+const SHEET_SURFACE_ID_ATTR = "data-db-sheet-surface-id";
+let nextSheetSurfaceId = 0;
+
+function getSheetSurfaceId(panel: HTMLElement): string {
+  const existing = panel.getAttribute(SHEET_SURFACE_ID_ATTR);
+  if (existing) return existing;
+  const id = panel.id ? `db-sheet-${panel.id}` : `db-sheet-surface-${++nextSheetSurfaceId}`;
+  panel.setAttribute(SHEET_SURFACE_ID_ATTR, id);
+  return id;
+}
+
+function invokeSheetClose(panel: HTMLElement): void {
+  const closeButton = panel.querySelector<HTMLElement>(".db-sheet-close, .db-cell-edit-close");
+  closeButton?.click();
 }
 
 /** The bar itself. One place, so its shape and its aria treatment cannot drift between callers. */
@@ -145,11 +167,11 @@ export function createSheetHeader(panel: HTMLElement, options: SheetHeaderOption
   });
   setIcon(closeButton, "x");
   setTooltip(closeButton, t("common.close"), { delay: 100 });
-  closeButton.addEventListener("click", (event) => {
+  closeButton.onclick = (event) => {
     event.preventDefault();
     event.stopPropagation();
     if (!overlayStack.dismissPanel(panel, "programmatic")) options.onClose?.();
-  });
+  };
   return { header, titleEl, closeButton };
 }
 
@@ -171,6 +193,13 @@ export const SHEET_KEYBOARD_INSET_VAR = "--db-keyboard-inset";
 // 2c. HOST MODALS
 // ───────────────────────────────────────────────────────────────────
 
+export interface SheetModalChromeOptions {
+  title?: string;
+  getTitle?(): string | undefined;
+  closeOnOutsidePointerDown?: boolean;
+  closeOnEscape?: boolean;
+}
+
 /**
  * Present a host modal inside the shared sheet chrome, and take the chrome down again.
  *
@@ -187,11 +216,51 @@ export const SHEET_KEYBOARD_INSET_VAR = "--db-keyboard-inset";
  * strands the modal element on the body with the backdrop pinned behind it — `DbModal.onClose` hit
  * the identical failure and this mirrors that fix rather than reinventing it.
  */
-export function attachSheetChromeToModal(modalEl: HTMLElement, isSheet: boolean, close: () => void): () => void {
-  applySheetChrome(modalEl, isSheet);
+export function attachSheetChromeToModal(
+  modalEl: HTMLElement,
+  isSheet: boolean,
+  close: () => void,
+  options: SheetModalChromeOptions = {},
+): () => void {
+  applySheetChrome(modalEl, isSheet, {
+    close: isSheet ? () => close() : undefined,
+    closeOnOutsidePointerDown: isSheet ? options.closeOnOutsidePointerDown ?? true : false,
+    closeOnEscape: isSheet ? options.closeOnEscape ?? true : false,
+  });
   const releaseDrag = isSheet ? attachSheetDragToDismiss(modalEl, close) : undefined;
+  let header: SheetHeaderHandle | undefined;
+  if (isSheet) {
+    const resolveTitle = (): string => {
+      const supplied = options.getTitle?.()?.trim();
+      if (supplied) return supplied;
+      const heading = Array.from(modalEl.querySelectorAll<HTMLElement>(".note-database-modal h1, .note-database-modal h2, .note-database-modal h3"))
+        .find((candidate) => !candidate.closest(".db-sheet-modal-header"))
+        ?.textContent?.trim();
+      return heading || options.title?.trim() || t("menu.title");
+    };
+    header = createSheetHeader(modalEl, { title: resolveTitle(), onClose: close });
+    header.header.addClass("db-sheet-modal-header");
+    let contentRoot = modalEl.querySelector<HTMLElement>(".note-database-modal");
+    while (contentRoot?.parentElement && contentRoot.parentElement !== modalEl) {
+      contentRoot = contentRoot.parentElement;
+    }
+    modalEl.insertBefore(header.header, contentRoot || modalEl.firstElementChild);
+    // Modal subclasses populate their content after calling the base lifecycle. Resolve the
+    // heading on the next microtask so the persistent chrome names the actual surface.
+    void Promise.resolve().then(() => {
+      if (!modalEl.isConnected || !header) return;
+      header.titleEl.setText(resolveTitle());
+      for (const heading of Array.from(modalEl.querySelectorAll<HTMLElement>(".note-database-modal h1, .note-database-modal h2, .note-database-modal h3"))) {
+        if (!heading.closest(".db-sheet-modal-header")) heading.addClass("db-sheet-original-title");
+      }
+    });
+  }
   return () => {
     releaseDrag?.();
+    const releasedHeader = header;
+    header = undefined;
+    releasedHeader?.header.remove();
+    modalEl.querySelectorAll<HTMLElement>(".db-sheet-original-title").forEach((heading) => heading.removeClass("db-sheet-original-title"));
     applySheetChrome(modalEl, false);
   };
 }
@@ -276,11 +345,24 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
   const remembered = originalMount.get(panel);
 
   if (isSheet) {
-    setScrim(doc, true, options.scrimCapturesPointer);
     // Registered before either branch returns. A surface that already lives on the body takes an
     // early exit below, and registering only after the move would leave exactly those sheets
     // unknown to the watcher — so the backdrop could be taken down while one was still open.
     sheetsFor(doc).add(panel);
+    sheetPointerCapture.set(panel, options.scrimCapturesPointer);
+    const alreadyRegistered = overlayStack.hasPanel(panel);
+    overlayStack.register({
+      panel,
+      id: getSheetSurfaceId(panel),
+      isSheet: true,
+      ...(options.close || !alreadyRegistered ? { close: options.close || (() => invokeSheetClose(panel)) } : {}),
+      ...(options.closeOnOutsidePointerDown !== undefined || !alreadyRegistered
+        ? { closeOnOutsidePointerDown: options.closeOnOutsidePointerDown ?? false }
+        : {}),
+      ...(options.closeOnEscape !== undefined || !alreadyRegistered
+        ? { closeOnEscape: options.closeOnEscape ?? false }
+        : {}),
+    });
     // A generation begins when a surface mounts, so a device trace reads as one sheet's whole life
     // rather than as a stream to be correlated by timestamp afterwards.
     if (isSheetTraceEnabled()) beginSheetGeneration(panel.className);
@@ -307,6 +389,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     if (panel.parentElement === doc.body) {
       panel.addClass("note-database-container");
       panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
+      syncSheetStack(doc);
       return;
     }
     if (panel.parentElement) {
@@ -329,16 +412,22 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // and wrong for a sheet, so the sheet states its own value rather than inheriting that one.
     panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
     doc.body.appendChild(panel);
+    syncSheetStack(doc);
     return;
   }
 
-  sheetsFor(doc).delete(panel);
-  setScrim(doc, false, false);
-  // After the prune inside setScrim, so a document that still holds another sheet keeps the claim.
+  const wasSheet = sheetsFor(doc).delete(panel);
+  sheetPointerCapture.delete(panel);
+  if (wasSheet) overlayStack.unregisterPanel(panel, false);
+  panel.style.removeProperty("--db-sheet-depth");
+  panel.style.removeProperty("--db-sheet-z-index");
+  panel.removeClass("is-stack-parent");
+  syncSheetStack(doc);
+  // After the stack has been resynchronized, a document that still holds another sheet keeps the claim.
   claimBottomDock(doc, "sheet", sheetsFor(doc).size > 0);
   if (!remembered) {
     if (isSheetTraceEnabled()) traceSheet("sheet-unmount", panel.className);
-  panel.style.removeProperty("--db-mobile-sheet-bottom");
+    panel.style.removeProperty("--db-mobile-sheet-bottom");
     return;
   }
   originalMount.delete(panel);
@@ -419,6 +508,8 @@ export function isInsideOpenSheet(target: Node | null | undefined): boolean {
  */
 const liveSheets = new WeakMap<Document, Set<HTMLElement>>();
 const sheetWatchers = new WeakMap<Document, MutationObserver>();
+const sheetPointerCapture = new WeakMap<HTMLElement, boolean | undefined>();
+export const SHEET_STACK_CHANGE_EVENT = "db-sheet-stack-change";
 
 // ───────────────────────────────────────────────────────────────────
 // 1c. WHO OWNS THE BOTTOM EDGE
@@ -460,13 +551,20 @@ function sheetsFor(doc: Document): Set<HTMLElement> {
   return created;
 }
 
-/** Drop anything no longer in the document, and report whether any sheet remains. */
-function pruneSheets(doc: Document): boolean {
+function surfacePanel(surface: { panel: HTMLElement; getPanel?: () => HTMLElement | null }): HTMLElement {
+  return surface.getPanel?.() || surface.panel;
+}
+
+/** Drop anything no longer in the document and release its stack registration. */
+function pruneSheets(doc: Document): Set<HTMLElement> {
   const sheets = sheetsFor(doc);
   for (const sheet of Array.from(sheets)) {
-    if (!sheet.isConnected) sheets.delete(sheet);
+    if (sheet.isConnected) continue;
+    sheets.delete(sheet);
+    sheetPointerCapture.delete(sheet);
+    overlayStack.unregisterPanel(sheet, false);
   }
-  return sheets.size > 0;
+  return sheets;
 }
 
 function stopWatching(doc: Document): void {
@@ -478,39 +576,78 @@ function watchForSheetRemoval(doc: Document): void {
   if (sheetWatchers.has(doc)) return;
   if (typeof MutationObserver === "undefined") return;
   const observer = new MutationObserver(() => {
-    if (pruneSheets(doc)) return;
-    // The last sheet has gone, however it went. Remove the backdrop and stop watching:
-    // an idle document should not carry an observer waiting for a sheet that may never open.
-    // The dock claim goes with it — a sheet removed with a bare `.remove()` never runs the release
-    // path above, and the bar it displaced would stay hidden with nothing left to explain why.
-    claimBottomDock(doc, "sheet", false);
-    doc.body.querySelector<HTMLElement>(".db-mobile-sheet-scrim")?.remove();
-    stopWatching(doc);
+    syncSheetStack(doc);
+    if (sheetsFor(doc).size === 0) stopWatching(doc);
   });
   observer.observe(doc.body, { childList: true, subtree: true });
   sheetWatchers.set(doc, observer);
 }
 
+function baseSheetZIndex(doc: Document, reference?: HTMLElement): number {
+  const declared = reference
+    ? doc.defaultView?.getComputedStyle(reference).getPropertyValue("--db-layer-modal")
+    : doc.defaultView?.getComputedStyle(doc.documentElement).getPropertyValue("--db-layer-modal");
+  const parsed = Number.parseFloat(declared || "");
+  return Number.isFinite(parsed) ? parsed : 1000;
+}
+
 function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | undefined): void {
-  const existing = doc.body.querySelector<HTMLElement>(".db-mobile-sheet-scrim");
-  if (wanted) {
-    const scrim = existing ?? doc.createElement("div");
-    if (!existing) {
-      scrim.className = "db-mobile-sheet-scrim";
-      scrim.setAttribute("aria-hidden", "true");
-      doc.body.appendChild(scrim);
-    }
-    // Opt out, not opt in: the stylesheet makes the backdrop modal and a producer that needs a
-    // permeable one says so. The previous default let every sheet leak presses to the view behind.
-    scrim.style.pointerEvents = capturesPointer === false ? "none" : "";
+  const scrims = Array.from(doc.body.querySelectorAll<HTMLElement>(".db-mobile-sheet-scrim"));
+  const existing = scrims.shift();
+  for (const duplicate of scrims) duplicate.remove();
+  if (!wanted) {
+    existing?.remove();
+    stopWatching(doc);
     return;
   }
-  // Only a sheet still IN the document holds the backdrop up. Testing the DOM directly counted a
-  // panel that had been detached without taking its chrome down, so one producer's leak pinned the
-  // backdrop permanently and disabled cleanup for every producer after it.
-  if (pruneSheets(doc)) return;
-  existing?.remove();
-  stopWatching(doc);
+  const scrim = existing ?? doc.createElement("div");
+  if (!existing) {
+    scrim.className = "db-mobile-sheet-scrim";
+    scrim.setAttribute("aria-hidden", "true");
+  }
+  // Opt out, not opt in: the stylesheet makes the backdrop modal and a producer that needs a
+  // permeable one says so. The previous default let every sheet leak presses to the view behind.
+  scrim.style.pointerEvents = capturesPointer === false ? "none" : "";
+  const top = overlayStack.getTopSurfaceForDocument(doc, { sheetsOnly: true });
+  const topPanel = top ? surfacePanel(top) : undefined;
+  const depth = topPanel ? overlayStack.getDepth(topPanel) : 1;
+  const topZ = baseSheetZIndex(doc, topPanel) + Math.max(0, depth - 1) * 2;
+  scrim.style.setProperty("--db-sheet-scrim-z-index", String(topZ - 1));
+  // Move it only when it is not already there. The watcher below reacts to childList changes on the
+  // body, and re-inserting a node at the position it already occupies still emits a mutation record,
+  // so an unconditional move would wake the watcher, which would call back here, forever.
+  if (topPanel?.parentElement === doc.body) {
+    if (scrim.parentElement !== doc.body || scrim.nextElementSibling !== topPanel) doc.body.insertBefore(scrim, topPanel);
+  } else if (!scrim.isConnected) doc.body.appendChild(scrim);
+}
+
+function syncSheetStack(doc: Document): void {
+  const sheets = pruneSheets(doc);
+  if (sheets.size === 0) {
+    setScrim(doc, false, undefined);
+    claimBottomDock(doc, "sheet", false);
+    return;
+  }
+
+  const topSurface = overlayStack.getTopSurfaceForDocument(doc, { sheetsOnly: true });
+  const top = topSurface ? surfacePanel(topSurface) : Array.from(sheets).at(-1);
+  const baseZ = baseSheetZIndex(doc);
+  for (const sheet of sheets) {
+    const depth = overlayStack.getDepth(sheet);
+    sheet.style.setProperty("--db-sheet-depth", String(depth));
+    sheet.style.setProperty("--db-sheet-z-index", String(baseZ + Math.max(0, depth - 1) * 2));
+    // Every surface under the top is pushed back, not only the one directly beneath it. A three-deep
+    // chain leaves the outermost sheet visible past the edges of the two above it, so marking only
+    // the middle one would leave a sheet on screen at full strength while the person is two levels
+    // away from it.
+    sheet.classList.toggle("is-stack-parent", sheet !== top);
+    if (sheet !== top) {
+      sheet.style.setProperty("--db-mobile-sheet-bottom", "0px");
+      sheet.style.setProperty(SHEET_KEYBOARD_INSET_VAR, "0px");
+    }
+  }
+  setScrim(doc, true, top ? sheetPointerCapture.get(top) : undefined);
+  for (const sheet of sheets) sheet.dispatchEvent(new Event(SHEET_STACK_CHANGE_EVENT));
 }
 
 // ───────────────────────────────────────────────────────────────────

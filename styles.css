@@ -201,7 +201,7 @@
   /* Above the host's navigation bar, which the sheet is meant to cover. The portal is what makes
      this number reachable at all — inside the leaf no value wins — and the bar sits on the popover
      tier, so the sheet takes the modal one. */
-  z-index: var(--db-layer-modal, 1000) !important;
+  z-index: var(--db-sheet-z-index, var(--db-layer-modal, 1000)) !important;
   left: 0 !important;
   right: 0 !important;
   bottom: var(--db-mobile-sheet-bottom, 0px) !important;
@@ -233,6 +233,28 @@
   isolation: isolate;
 }
 
+/* A child sheet sits above the surface that opened it. The root panel keeps its own box so the
+   parent does not jump when the child arrives; only its content is visually pulled back, which is
+   the compact depth cue used by iOS and Notion. The scrim remains the single boundary between the
+   two surfaces.
+
+   The marking class is doubled for the same reason the sheet's own z-index is doubled further down:
+   the entrance rule sets `opacity: 1` on the same two-class weight and sits later in the file, so an
+   equal-weight rule here loses on position alone. Doubling wins on specificity instead, which holds
+   wherever this block sits and whatever is added after it. Measured: without it a parent under an
+   open child painted at opacity 1 — the dim was written and never rendered. */
+.db-mobile-bottom-sheet.is-stack-parent.is-stack-parent {
+  opacity: 0.88;
+  transition: opacity 180ms ease-out;
+}
+
+.db-mobile-bottom-sheet.is-stack-parent.is-stack-parent > :not(.db-mobile-bottom-sheet-handle) {
+  transform: scale(0.96) translateY(4px);
+  transform-origin: center top;
+  opacity: 0.96;
+  transition: transform 180ms ease-out, opacity 180ms ease-out;
+}
+
 /* The backdrop behind a phone sheet. A sibling of the sheet on the body, so it can actually sit
    behind it — as a pseudo-element it was trapped inside the sheet's own stacking context and
    painted the surface grey instead of dimming the app. 0.4 is the opacity scale's step; the 0.42
@@ -243,7 +265,7 @@
    wants a non-blocking backdrop opts out at the call site. */
 .db-mobile-sheet-scrim {
   position: fixed;
-  z-index: calc(var(--db-layer-modal, 1000) - 1);
+  z-index: var(--db-sheet-scrim-z-index, calc(var(--db-layer-modal, 1000) - 1));
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
   pointer-events: auto;
@@ -2933,6 +2955,71 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/* A dropdown opened from a phone sheet is a sheet in its own right. Its chrome stays fixed while
+   the option list owns scrolling, so a long property picker never carries the title and close
+   control off the top edge. The fade is opt-in from the renderer once the list is actually longer
+   than its viewport, and disappears at the end of the list. */
+.db-dropdown-popover.db-mobile-bottom-sheet {
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.db-dropdown-popover.db-mobile-bottom-sheet > .db-panel-header {
+  flex: 0 0 auto;
+  margin: 20px 0 0;
+  padding-inline: var(--db-sheet-inset);
+}
+
+.db-dropdown-popover.db-mobile-bottom-sheet > .db-dropdown-search {
+  padding-inline: var(--db-sheet-inset);
+}
+
+.db-dropdown-popover.db-mobile-bottom-sheet > .db-dropdown-options {
+  position: relative;
+  padding: 0 var(--db-sheet-inset) calc(var(--db-space-4) + env(safe-area-inset-bottom));
+}
+
+.db-dropdown-popover.db-mobile-bottom-sheet.has-scroll-overflow > .db-dropdown-options {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 22px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 22px), transparent 100%);
+}
+
+.db-dropdown-popover.db-mobile-bottom-sheet .db-dropdown-section-title {
+  padding-inline: 0;
+}
+
+.db-dropdown-popover.db-mobile-bottom-sheet .db-dropdown-option {
+  min-height: 44px;
+  padding-inline: 0;
+}
+
+.db-relation-popover.db-mobile-bottom-sheet {
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.db-relation-popover.db-mobile-bottom-sheet > .db-panel-header {
+  flex: 0 0 auto;
+  margin: 20px 0 0;
+  padding-inline: var(--db-sheet-inset);
+}
+
+.db-relation-popover.db-mobile-bottom-sheet > .db-relation-popover-header {
+  padding: 0 var(--db-sheet-inset) var(--db-space-4);
+}
+
+.db-relation-popover.db-mobile-bottom-sheet > .db-relation-option-list {
+  padding-inline: var(--db-sheet-inset);
+}
+
+.db-relation-popover.db-mobile-bottom-sheet > .db-relation-popover-footer {
+  padding-inline: var(--db-sheet-inset);
 }
 
 .note-database-container .db-dropdown-search input {
@@ -12455,6 +12542,31 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin-bottom: 8px;
 }
 
+.db-mobile-bottom-sheet:has(> .db-sheet-modal-header) {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden !important;
+}
+
+.db-mobile-bottom-sheet > .db-sheet-modal-header {
+  flex: 0 0 auto;
+  margin: 20px 0 0;
+  padding-inline: var(--db-sheet-inset);
+}
+
+.db-mobile-bottom-sheet > .modal-content,
+.db-mobile-bottom-sheet > .note-database-modal {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.db-mobile-bottom-sheet .db-sheet-original-title,
+.db-mobile-bottom-sheet > .modal-close-button {
+  display: none !important;
+}
+
 /* Operator decision, 2026-09-05: 16px on the header of the owned menu and the three field pickers —
    the four surfaces this leg gave a header for the first time, whose containers declare no inset of
    their own (`.db-owned-menu`, `.db-icon-picker-popover`, `.db-color-picker-popup`,
@@ -21798,7 +21910,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
    Doubling the class beats those two on specificity rather than on position, so this holds wherever
    it sits and whatever is added after it. */
 .db-mobile-bottom-sheet.db-mobile-bottom-sheet {
-  z-index: var(--db-layer-modal, 1000) !important;
+  z-index: var(--db-sheet-z-index, var(--db-layer-modal, 1000)) !important;
 }
 
 :is(.note-database-modal, .formula-workbench-modal, .db-chart-drilldown-modal) {

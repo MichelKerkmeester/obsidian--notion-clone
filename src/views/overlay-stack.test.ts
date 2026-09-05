@@ -31,11 +31,11 @@ function createDocument(): Document & FakeDocument {
   } as unknown as Document & FakeDocument;
 }
 
-function createElement(doc: Document): HTMLElement {
+function createElement(doc: Document, owned: Node[] = []): HTMLElement {
   return {
     ownerDocument: doc,
     isConnected: true,
-    contains: () => false,
+    contains: (node: Node) => owned.includes(node),
     focus: () => undefined,
   } as unknown as HTMLElement;
 }
@@ -117,5 +117,57 @@ describe("OverlayStack", () => {
 
     expect(stack.dismissTop("action")).toBe(true);
     expect(focused).toBe(0);
+  });
+
+  it("derives depth and the surface beneath a nested sheet", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const parent = createElement(doc);
+    const child = createElement(doc);
+    const grandchild = createElement(doc);
+
+    stack.register({ id: "parent", panel: parent, isSheet: true, close: () => undefined });
+    stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+    stack.register({ id: "grandchild", panel: grandchild, isSheet: true, close: () => undefined });
+
+    expect(stack.getDepth(parent)).toBe(1);
+    expect(stack.getDepth(child)).toBe(2);
+    expect(stack.getDepth(grandchild)).toBe(3);
+    expect(stack.getSurfaceBelow(grandchild, { sheetsOnly: true })?.panel).toBe(child);
+    expect(stack.isTopSheet(grandchild)).toBe(true);
+    expect(stack.isTopSheet(child)).toBe(false);
+  });
+
+  it("treats a press inside a stacked child as inside the parent, not outside it", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const pressTarget = {} as unknown as Node;
+    const parent = createElement(doc);
+    const child = createElement(doc, [pressTarget]);
+
+    stack.register({ id: "parent", panel: parent, isSheet: true, close: () => undefined });
+    stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+
+    expect(stack.isInsideSurfaceAbove(parent, pressTarget)).toBe(true);
+    // The reverse must stay false, or a parent's own content would count as belonging to its child
+    // and the child would never close on a press behind it.
+    expect(stack.isInsideSurfaceAbove(child, pressTarget)).toBe(false);
+    expect(stack.isInsideSurfaceAbove(parent, null)).toBe(false);
+  });
+
+  it("keeps a child attached to a parent that is rebuilt in place", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const originalParent = createElement(doc);
+    const rebuiltParent = createElement(doc);
+    const child = createElement(doc);
+
+    stack.register({ id: "parent", panel: originalParent, isSheet: true, close: () => undefined });
+    stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+    stack.register({ id: "parent", panel: rebuiltParent, isSheet: true, close: () => undefined });
+
+    expect(stack.size()).toBe(2);
+    expect(stack.getDepth(child)).toBe(2);
+    expect(stack.getSurfaceBelow(child, { sheetsOnly: true })?.panel).toBe(rebuiltParent);
   });
 });

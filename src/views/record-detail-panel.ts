@@ -42,6 +42,7 @@ import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
 import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-sheet";
+import { overlayStack } from "./overlay-stack";
 import { mountNoteBodyRegion } from "./note-body-region";
 import type { NoteBodyRegion } from "./note-body-region";
 import { trapFocus } from "./interaction-scope";
@@ -210,6 +211,10 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // 字段编辑器挂在 host/body，而不是详情 panel 内；它们属于详情面板的子交互，
     // 不能被误判成 outside click。该集合必须覆盖所有 CellRenderer 编辑表面。
     if (isRecordDetailChildPopoverTarget(event.target)) return;
+    // A press inside a sheet stacked above this panel belongs to that sheet, not to the app behind
+    // it. The named set above predates the stack and can only cover the children someone listed;
+    // asking the stack covers every child, including the ones added after this line was written.
+    if (overlayStack.isInsideSurfaceAbove(panel, target)) return;
     close();
   };
   const onKeydown = (event: KeyboardEvent): void => {
