@@ -162,9 +162,10 @@ and stay unticked — an agent never ticks them.
       `dragstart`+`drop` on the shipped handler. Both resolve `confirmSortConflict` async on
       decline and accept. **Board reference `pixelHash` unchanged**: zero production edits to
       `board-renderer.ts`/`table-renderer.ts` this task (`git diff --stat` empty on both),
-      `screenshots/project-manager/` 0 files changed. **Negative control, run and reverted**:
-      short-circuiting each renderer's sort-conflict branch (`if (false && ...)`) reddened both
-      new test files (`confirmSortConflict` never called); reverted, green again.
+      `screenshots/project-manager/` 0 files changed. **Negative control, re-run and reverted**:
+      making `confirmSortConflict` return `true` unconditionally in both renderers, which is the
+      exact symptom this task guards (a drop under an active sort committing without asking),
+      reddens all four cases across the two files; reverted, green again.
 <!-- /ANCHOR:phase-5 -->
 
 ---
@@ -188,14 +189,20 @@ and stay unticked — an agent never ticks them.
       phone rung, real client). **Proof**: the timing half is `database-view-settings-landing.test.ts`,
       a constructed `DatabaseView` mount driving the shipped `addView`/`duplicateView` →
       `openViewSettingsAfterMutation` → `toggleHeaderPopover` → real `ViewConfigPanelRenderer`,
-      timed with `performance.now()` — **create 4.7ms, duplicate 0.8ms**. The sweep half is the
+      timed with `performance.now()`: **create 2.318ms, duplicate 0.391ms** as re-measured on the
+      landing tree, against the 100ms budget the test actually asserts (an earlier pre-rebase run
+      read 4.7ms and 0.8ms; the figure moves with the machine, the budget does not). The sweep half is the
       missing rung, `collapseTabStripToDropdown` (`toolbar-renderer.ts`, reached from
       `applyToolbarChromeCollapse` once the four chrome controls are gone and the row still
       overflows), plus `tools/live/toolbar-collapse-sweep.ts` + `run-toolbar-collapse-sweep.mjs`
-      reading **250px→900px, 10px steps, zero overflow throughout** in real Chrome. **Negative
-      control, run and reverted**: short-circuiting the new rung's call site (`if (false) this.…`)
-      reddened the sweep's below-floor probe (100-200px went from zero overflow to overflow,
-      `scrollWidth` unchanged at 196 while `clientWidth` shrank under it); reverted, PASS again.
+      reading **250px→900px, 10px steps, zero overflow throughout** in real Chrome, now wired into
+      `tools/gate.mjs` as the `toolbar-collapse` lane. **Negative control, re-run and reverted**:
+      disabling the new rung's call site makes both dropdown readings print `never in range`,
+      which is what proves the rung produced them. It does **not** redden the sweep's verdict,
+      and an earlier note here saying it reddened the below-floor probe was wrong: the runner
+      filters only the 250-900px `readings` for overflow, and the below-floor probe is printed
+      rather than asserted, exactly as its own comment says. Inside 250-900px the rung never
+      fires for this fixture, so removing it cannot change that range's result.
       The 100ms budget stays ours — no capture can time a transition.
 - [x] **T009 — Add per-view new-row presets: settings section, config field, creation read.**
       (src/data/types.ts, src/views/view-config-panel-renderer.ts,
@@ -233,10 +240,15 @@ and stay unticked — an agent never ticks them.
       `render-assertions` rows; reverted). **Proof**: `npm run gate </dev/null; echo $?` → **0**,
       25/25 green, and `npm run replay` holds, **28/28**, reversed 0. Added at landing:
       `render-assertions` gained 7 new rows (AC-102's four rules combinations,
-      AC-104's tab-menu row) that did not exist when this task was drafted. **AC-103, AC-105 and
-      AC-107 still have no dedicated row** — the gate is green because those three surfaces are
-      exercised for provenance only, not for the specific behaviour their AC names; see their own
-      acceptance-criteria.md cells for why each was left unbuilt this pass.
+      AC-104's tab-menu row) that did not exist when this task was drafted.
+      **Extended 2026-09-05 (verify-and-land pass)**: AC-107 now has a dedicated row too, the
+      `toolbar-collapse` lane hosting `run-toolbar-collapse-sweep.mjs` from `tools/gate.mjs`
+      without a new lane file. `npm run gate </dev/null; echo $?` → **0, 26/26 green**. What that
+      lane gates is the 250-900px zero-overflow promise and nothing else, since the tab-row rung
+      does not fire inside that range; the lane's own comment says so rather than implying wider
+      cover. **AC-103 and AC-105 still have no dedicated row**: their proofs are vitest files the
+      gate's `tests` row runs every time without naming them. Promoting those two is what is left
+      of this task's threshold.
 - [x] **T012 — Recapture the surfaces this phase changed and read every changed PNG.** ✅
       2026-09-05 (landing) (tools/screenshots/scenarios/*.mjs, screenshots/) **Threshold**: every
       new or changed surface registered in the same change (`screenshot-currency.md` §2), scenario
@@ -249,6 +261,14 @@ and stay unticked — an agent never ticks them.
       restored to their committed bytes rather than reviewed. `screenshots/project-manager/`: 0
       files changed. The css-lane handover (`tools/lane/css-lane.json`) records the reviewed list.
       **Operator/device row — not tickable by an agent: the harness is not the device.**
+      **Re-verified 2026-09-05 (verify-and-land pass)**: after the rebase, `toolbar-renderer.ts`
+      and `render-assertion-harness.ts` marked **300** captures stale by source hash. A full
+      recapture wrote **558** entries and `node tools/screenshots/verify.mjs` exits **0**. Only
+      eight PNGs moved bytes, by 0-37 bytes each on 40-200KB files, and none of them is a toolbar
+      capture. All eight were opened and read: board desktop dark and light, board mobile,
+      board subtask tree, the mini calendar, timeline day desktop and mobile, and the empty
+      record-detail sheet. Every one renders fully styled and correct, so the deltas are
+      sub-pixel encoder noise, not layout change. `screenshots/project-manager/`: 0 files changed.
 - [ ] **T013 — Operator device pass.** The operator opens the rebuilt toolbar on iOS and desktop
       and reads it as the improvement asked for. **Operator/device row — stays unticked until the
       operator says so; nothing in this repository can close it.**
