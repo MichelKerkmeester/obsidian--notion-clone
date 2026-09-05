@@ -38,7 +38,7 @@
       "intrinsic",
       "sizing"
     ],
-    "importance_tier": "critical",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,18 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "checklist.md",
       "tools/live/view-census.mjs",
       "src/views/column-width.ts",
-      "src/views/list-renderer.ts",
       "src/views/column-width.test.ts",
       "tools/live/view-census.json",
       "tools/lane/css-lane.json",
       "tools/live/portal-safety.mjs",
       "tools/screenshots/runtime-vars.css",
       "tools/screenshots/capture.mjs",
-      "tools/storybook/verify-placement.mjs"
+      "tools/storybook/verify-placement.mjs",
+      "tools/live/render-assertions.mjs",
+      "src/data/types.ts",
+      "tools/mock-data/emit-obsidian.ts"
     ],
     "entities": [
       {
@@ -91,6 +94,12 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
@@ -112,12 +121,6 @@
         "name": "column-width.ts",
         "kind": "code",
         "path": "src/views/column-width.ts",
-        "source": "derived"
-      },
-      {
-        "name": "list-renderer.ts",
-        "kind": "code",
-        "path": "src/views/list-renderer.ts",
         "source": "derived"
       },
       {
@@ -163,6 +166,24 @@
         "source": "derived"
       },
       {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "emit-obsidian.ts",
+        "kind": "code",
+        "path": "tools/mock-data/emit-obsidian.ts",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -185,29 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Critical Dependencies",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Two operator defects, one question",
     "created_at": "2026-08-29T12:48:53.568Z",
-    "last_save_at": "2026-09-04T20:07:56.229Z",
+    "last_save_at": "2026-09-05T21:01:38.283Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,14 +219,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b0598f516b75ac7708fab31f4894b201e7f969a3ce86384f22fcee2a63cc0e2c",
+    "source_fingerprint": "sha256:e9655eb85f64afb6fc9cee8cd1a15025d1e68e3e0a83c86f62d444f4d64defba",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "52ce33cd850eb6e323e88263d568330bae0ee2821ee8da39e7ffde0a944a69d4",
       "plan.md": "beb128acf893029dc9b273ad85092a97ec424b2a64240f7f124d0a326a0bac6e",
       "tasks.md": "71c78341a263d33bc626336018a028270bfe3c73f17c979eff7c72e08a246977",
+      "decision-record.md": "fbf7c7dac505f3deda638fc8b2573c342cec7bb6ec10588aa7321d96a69ae293",
       "implementation-summary.md": "e32303f86a532145f5a3a2ac26bcdf6b069c7ecad7f463d2dfe020d5a82625db"
     },
     "last_active_child_id": null,
