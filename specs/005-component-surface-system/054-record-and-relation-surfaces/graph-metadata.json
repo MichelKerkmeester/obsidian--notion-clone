@@ -59,7 +59,8 @@
       "src/views/modals/relation-rollup-config-modal.ts",
       "src/views/column-menu.ts",
       "tools/live/sheet-grammar.mjs",
-      "screenshots/anytype/README.md"
+      "screenshots/anytype/README.md",
+      "tools/live/render-assertion-bundle.mjs"
     ],
     "entities": [
       {
@@ -177,6 +178,12 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-bundle.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertion-bundle.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -199,17 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-05T14:08:10.334Z",
+    "last_save_at": "2026-09-05T16:13:11.641Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:02fb674d4adb974069f43e4e47f4c7c261798afb645a1d71757eb719af188941",
+    "source_fingerprint": "sha256:bd5c820fe4fe1166179e9c44b3acf150146e38209464fc8d01e975fe243983f2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "50f470cd7cf2edb7cfab0196a5a42b5011c8dc5988af4515becbdc766c1f925f",
       "plan.md": "24cd0245479ee276caf3a5df6b566b61596ad981890334df69650a845e19ca6c",
-      "tasks.md": "bc5beaebbf67248c658b02ebae814893d89213c56a2b6167552e7f7edd541612",
-      "decision-record.md": "a7310dc8869d1f517798499c37d2022daf8c416f27850c41bfd6c37fd50a5770",
+      "tasks.md": "c783434b455331cb106e44d606221a3e33d7031dfb42e81a3c307061cd57030e",
+      "decision-record.md": "77cae2750137c23eae164e1e1d68498b43e480ee8e1ac26e365562f131f49f19",
       "implementation-summary.md": "4d4b08a1d740cdfb0fb66bee4c8d15305afcf695771e73e6283eee925201b878"
     },
     "last_active_child_id": null,

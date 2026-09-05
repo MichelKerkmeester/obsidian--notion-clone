@@ -89,13 +89,34 @@ in the parent program's escalation format rather than retrying. A task blocked o
       its menu fell outside the crop — with the same menu legible in
       `menu-object-type-picker-dark.png`, which the row does not depend on. AC-010 is **Met**. The
       three `spec.md` §10 open questions are answered in `design-trueup.md` §5.
-- [ ] T002 [P0] Measure the red numbers on the current tree and write them into `checklist.md`'s
+- [x] T002 [P0] Measure the red numbers on the current tree and write them into `checklist.md`'s
       Today cells: header-builder census (4), property-row vocabulary census (3), type-list census
       (3), the record sheet's hidden-group absence, the "Empty" placeholder in
       `getEmptyDisplayValue`, and the exported-editor count (0).
       **Proof:** `checklist.md` Today cells carry the numbers and the command or lane that read
       them; the census lane (built here as a throwaway harness if the permanent one is not ready
       yet) fails or reports the counts as recorded.
+      **Done 2026-09-05.** Every number re-confirmed unchanged (C1 4, C2 3-at-4-sites, C3
+      1-list+1-filter+1-submenu, C4 absent, C5 "Empty", C6 0) via `rg`/`sed` against the current
+      tree, with several stale `file:line` citations corrected in the same pass (`getEmptyDisplayValue`
+      `:636`→`:655`; the empty-filter `:387-396`→`:399-410`; `column-manager-renderer.ts` row builder
+      `:265`→`:267`; `board-card-properties-panel.ts` row `:48`→`:50`; `property-type-conflict-modal.ts`
+      `getTypeOptions` and `create-property-modal.ts`'s `PROPERTY_TYPES` citations in `checklist.md` C3
+      corrected from `:364-369`/`:69-74`, both drifted, to the confirmed `:377`/`:48`). The two
+      geometry rows (C8, C9) were measured live through a throwaway script mounting
+      `panel-column-manager/file-view` and `panel-record-detail-docked/file-view` via
+      `tools/live/render-assertion-bundle.mjs`: the properties panel's desktop rect (x 28.52, y
+      25.17, w 540.96, h 604.51) and the board-card `pixelHash` baseline from `screenshots/manifest.json`
+      (current at HEAD, `npm run screenshots:verify` exit 0). The same script re-read the docked
+      record panel now that 006's docking landed (`ae46da94`) and found it currently green against
+      `chrome-geometry-measure.mjs`'s floors — not a red this leg needs to fix. AC-002's per-row
+      pixel figures (measured on a PNG capture) could not be re-observed under this leg's
+      no-image-read constraint; restated as a DOM box/`text-align` reading in
+      `acceptance-criteria.md` and proposed formally in `decision-record.md` ADR-005 (Proposed,
+      operator to rule). **Observed, not fixed:** AC-007/C7's "four external callers" citation for
+      `renderCardField` reads as **3** today (`board-renderer.ts:2185`, `gallery-renderer.ts:691`,
+      `record-detail-panel.ts:474`, plus its own test file) — outside T002's named scope, named here
+      rather than corrected in passing.
 - [ ] T003 [P0] Write `migration-table.md`: one row per §5A surface (10) and one per §5B behaviour
       (7), columns surface → primitive → changes → Anytype pattern with capture filename → stays
       ours. The behaviour rows **consume `design-trueup.md` §3 and §4** rather than re-reading the
@@ -243,7 +264,7 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Done |
 |----------|-------|------|
-| Setup/measurement | 3 | 0 |
+| Setup/measurement | 3 | 2 |
 | L1 | 2 | 0 |
 | L2 | 4 | 0 |
 | L3 | 3 | 0 |

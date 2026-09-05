@@ -265,3 +265,48 @@ Two further rulings follow from the same reading and bind the same way:
 | **What contract must not break?** | Goal D5's keep-list (the board card's rendering, the `038` parity) and goal D6's Anytype-is-not-a-data-model boundary. The A4 ruling is where D6 does the work |
 
 <!-- /ANCHOR:adr-004 -->
+
+---
+
+<!-- ANCHOR:adr-005 -->
+## ADR-005 (Proposed): AC-002's Today figure restates from a captured pixel position to a DOM box reading
+
+**Status: PROPOSED — 2026-09-05 (T002 re-measurement). Not decided; the operator rules.**
+
+### Context
+
+AC-002's Today cell was originally measured on a screenshot: "measured on `constructed-record-detail-desktop-dark.png` as labels at x 59 on every row and values starting at 273, 311, 319, 343, 349 and 362." T002's brief for this pass forbids opening PNGs — the re-measurement runs through `rg`, `node -e`, `npx vitest run` and headless Chrome against the live renderer instead.
+
+Re-mounting `panel-record-detail/file-view` through `tools/live/render-assertion-bundle.mjs` and reading `.db-record-detail-field-label`/`.db-board-card-value` with `getBoundingClientRect()` gives every row the same numbers — label left edge x 42, value box spanning x 122-364, `text-align: right` computed — because `getBoundingClientRect()` returns the value `<div>`'s own box, which is a fixed-width flex/grid cell, not the glyph run's start pixel. The PNG measurement was reading where the *text* started inside that box, which varies by string length; the DOM box position does not vary, by construction. The two measurements are not the same observable and one cannot be produced from the other without reading rendered glyph positions off a bitmap — the exact operation this leg was told not to do.
+
+### Decision (proposed)
+
+Restate AC-002's Verification cell to the DOM-observable form for every future "Today" and closing measurement: the value element's `getBoundingClientRect()` box and its computed `text-align`, not a per-row glyph-start pixel read off a capture. The defect the criterion protects (desktop right-alignment must become left-alignment per `design-trueup.md`'s A2 correction) is fully decidable from `text-align` alone — `right` today, `left` once P2 lands — so the box reading does not weaken the criterion, it just names an observable the gate can run headlessly instead of one that needs a person to open an image.
+
+The existing PNG-based numbers stay in the row's history as what was true of that capture; they are not being called wrong, only unreproducible under a no-image-read measurement pass.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| Open the PNG and re-measure the glyph pixel positions | Keeps the exact same observable across passes | Directly contradicts this leg's constraint, and the underlying box measurement already decides the pass/fail question (right vs. left) without it |
+| Leave AC-002's Today cell as the stale PNG figures, unremeasured | No document churn | T002 exists specifically to re-measure every red number now; leaving a citation nobody can currently reproduce is the drift this task was dispatched to catch |
+| Compute glyph start via a `Range`/`TextMetrics` read in the same headless pass | Closer to the original figure's intent | More code for a number the criterion does not need — the box's `text-align` already answers "aligned right or left," and a glyph-accurate x is not part of any threshold this packet defines |
+
+### Consequences
+
+- Positive: every future re-measurement of AC-002 can run unattended in the gate; no step requires a person to look at an image first.
+- Negative: the exact numbers 59/273/311/319/343/349/362 are retired from being the row's live evidence; a reader who wants that specific historical reading finds it in this ADR and the row's own prior-citation note rather than in a re-run command.
+- Neutral: the row's Unmet status and its underlying defect (right-aligned today, must become left-aligned) are unchanged by this restatement.
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — T002 could not observe the row's own citation red as written, and evidence-and-proof.md requires marking that rather than leaving it silently unreproduced |
+| **Is there a simpler existing thing?** | The box/`text-align` reading already exists as a byproduct of mounting the scenario for the census; no new measurement code beyond the throwaway script this pass wrote |
+| **What does it touch?** | `acceptance-criteria.md` AC-002's Verification cell only; no code, no other AC row |
+| **What is the real caller that must not break?** | Whoever next re-measures AC-002 to close it — they need a command that runs without opening an image |
+| **What contract must not break?** | ADR-004's ruling that P2's anatomy is "label, then value, value left-aligned" — this ADR does not touch that, only how the current-state number is taken |
+
+<!-- /ANCHOR:adr-005 -->
