@@ -11,12 +11,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened phase from the operator's board-card properties directive"
-    next_safe_action: "Design the persisted shape and its migration from hiddenColumns (tasks.md T003)"
+    last_updated_at: "2026-09-05T07:20:00Z"
+    last_updated_by: "desktop-board-bugs"
+    recent_action: "Amended REQ-007 per ADR-003 after the operator's desktop report"
+    next_safe_action: "Operator confirms roadmap row 49 on 0.0.25"
     blockers:
-      - "Interacts with 038 REQ-007: the default board is a 1:1 kanban copy with a fixed slot set"
+      - "AC-006 is operator-only"
     key_files:
       - "src/views/board-renderer.ts"
       - "src/data/types.ts"
@@ -26,11 +26,11 @@ _memory:
       session_id: "surface-system-045-spec"
       parent_session_id: null
     completion_pct: 0
-    open_questions:
-      - "Does the Properties control reach the reference card's five semantic slots?"
+    open_questions: []
     answered_questions:
       - "Gallery does not share the mechanism: retired by specs/007 (ADR-001)"
       - "Hiding a card field does not hide it in the table: cards only (ADR-002)"
+      - "The control reaches the reference card's five slots: it fills them, never moves them (ADR-003)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
 # Feature Specification: Board Card Properties
@@ -69,8 +69,9 @@ copy).
 
 **Dependencies**:
 - `038-board-kanban-port` REQ-007 and SC-004 — the default board is a one-to-one obsidian-pm kanban
-  copy, and every local extension must render default-off. This control is a local extension and
-  inherits that rule.
+  copy. This control was scoped as a local extension inheriting the default-off rule; **ADR-003
+  amends that on 2026-09-05**, because the flag is never set and the rule therefore withheld the
+  control from every board that ships.
 - `030-gallery-view-deprecation` — gallery is retired, so "gallery cards may share the mechanism" is
   a question about the surviving card renderers, not a commitment.
 - `044-phone-sheet-alignment` — the options popover on the phone is a sheet, and it must use the
@@ -79,8 +80,9 @@ copy).
 **Deliverables**:
 - A persisted per-view field list with order and visibility.
 - A Properties control in the board's options surface, on desktop and phone.
-- A card renderer that honours it, and stays byte-identical to the reference when the local
-  extension is off.
+- A card renderer that honours it. **Amended 2026-09-05 (ADR-003):** it honours the list on the
+  default board too, which is the only board that ships; what stays faithful to the reference is the
+  card's tree and vocabulary, not a fixed slot scan.
 
 **Changelog**:
 - When this phase closes, refresh the matching file in ../changelog/ using the parent packet number plus this phase folder name.
@@ -181,7 +183,7 @@ the board.
 |----|-------------|
 | REQ-005 | The Properties control lives in the board's options popover on desktop and its sheet on the phone, built from the shared dropdown/toggle row grammar `044` defines. It does not introduce a third menu language. |
 | REQ-006 | Order is changeable by drag on desktop and by an explicit move affordance on touch, because a drag handle inside a scrolling sheet is not reachable with a thumb. |
-| REQ-007 | **Reference fidelity, interacting with `038` REQ-007 and SC-004.** The default board is a one-to-one obsidian-pm kanban copy whose card renders a *fixed* set of slots — `getReferenceCardFields` (`board-renderer.ts:552`) resolves exactly `time`, `progress`, `due`, `tags`, `people`, and `KanbanCardProps` (`specs/context/obsidian-pm-main/src/ui/composites/KanbanCard.ts:10`) names the same shape. This control is a local extension: it renders only where `boardExtensionsEnabled` is on, and with everything shown the reference path's DOM stays byte-identical to what `038`'s parity reviewer measured. A properties list must never be able to make the default board diverge from the reference. |
+| REQ-007 | **AMENDED 2026-09-05 by `decision-record.md` ADR-003 — read that before this row.** As written, this required the control to render only where `boardExtensionsEnabled` is on, so the default board stayed a one-to-one obsidian-pm kanban copy whose card renders a *fixed* set of slots — `time`, `progress`, `due`, `tags`, `people`, matching `KanbanCardProps` (`specs/context/obsidian-pm-main/src/ui/composites/KanbanCard.ts:10`). **Nothing in `src/` ever sets that flag**, so the confinement did not protect the reference card, it withheld the control from the only board card that ships, and the operator reported the symptom on 2026-09-05. **The amended requirement:** the card's five reference slots are filled from the view's visible field list rather than from a fixed scan, and every configured field taking no slot renders beside them in panel order. A stored list may empty a reference slot; it may never move one, and the reference tree — title row, type chips, time chip, progress bar, footer avatar stack and due chip — is otherwise unchanged. |
 | REQ-008 | No spec path, phase number, task id or requirement id appears in any code comment this phase writes. |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
@@ -195,8 +197,10 @@ the board.
 
 - **SC-001**: two board views over one database show different card fields in different orders, and
   neither one's table column visibility changed.
-- **SC-002**: with `boardExtensionsEnabled` off, the rendered card DOM is identical to the pre-change
-  tree — measured, not asserted, against `038`'s parity fixtures.
+- ~~**SC-002**: with `boardExtensionsEnabled` off, the rendered card DOM is identical to the pre-change
+  tree — measured, not asserted, against `038`'s parity fixtures.~~ **Superseded 2026-09-05 by
+  ADR-003:** the default card renders the view's configured fields. What is measured instead is that
+  its tree and vocabulary are unchanged and no reference slot moved.
 - **SC-003**: an upgraded view with no stored list renders a byte-identical card to the one it
   rendered before the change.
 - **SC-004**: the operator arranges a board card's properties on the phone and reports it as close to
@@ -296,10 +300,13 @@ one that was never asked.**
   instruction is to retire it completely, the same way the list view is being retired in
   `specs/006-list-view-deprecation`. The retirement is `specs/007-gallery-view-deprecation`;
   `045` stays board-only.
-- Does the Properties control also reach the reference card's five semantic slots (`time`,
+- ~~Does the Properties control also reach the reference card's five semantic slots (`time`,
   `progress`, `due`, `tags`, `people`), or only the local extension card? REQ-007 says the reference
   path must not diverge; whether a *mapping* control over those five slots is a divergence is a
-  judgment the operator should make. **Still open.**
+  judgment the operator should make.~~ **Answered 2026-09-05, ADR-003: it reaches them.** The
+  operator's desktop report settled it, because the question turned out to rest on a false premise —
+  there is no "local extension card" in a shipping build, since nothing in `src/` sets
+  `boardExtensionsEnabled`. The list fills the five slots and may empty one; it may never move one.
 - ~~Should hiding a field on cards also offer to hide it in the table, as a convenience? Cheap, and it
   reintroduces exactly the coupling this phase removes. Left open deliberately.~~ **Answered
   2026-09-05, ADR-002: no, cards only.** The panel writes `boardCardFields` and never

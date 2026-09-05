@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The operator asked, verbatim: \"Also make it possible to adjust visible properties in board card",
     "created_at": "2026-09-04T19:01:24Z",
-    "last_save_at": "2026-09-05T04:32:09.136Z",
+    "last_save_at": "2026-09-05T09:26:23.617Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8b952ae033da1a694fcf62ff755c0537b1b3354f88c692536e21536383968b37",
+    "source_fingerprint": "sha256:033d63f4adef8614a4831f8e206816c600622587d93dfe0311f697f0a152b241",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4fd4a908858c075c207fa7109252d7275910605d16e76c5749a0de0c07adaf9a",
+      "spec.md": "4b9aa9c4c5f4b72de8c45d62d46a3e65ab449149b1119b00602022c80a8a121f",
       "plan.md": "aaf4ae6fbf8a21541c940331be940256a0ed77330bac44ae78e276ad1bfda386",
       "tasks.md": "d36652f4b3f2a24321dfd9c2373456dd135cdebeffdad7f591e9780715382bcf",
-      "decision-record.md": "714176924a730fd78515c3b35a70769e020371cf2435d835f000815d1aad19c9",
+      "decision-record.md": "bae64403b656ddde32168eda3fe7190bd0479427b0424c39ec5135a28b4bd5f7",
       "implementation-summary.md": "d352a408c4bbf7f67635d90781eb8372f7bfb8cd3f3b6c88c5ed2ea79f36fa9e"
     },
     "last_active_child_id": null,

@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
-    last_updated_at: "2026-09-05T06:00:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Recorded ADR-001 (gallery retired, does not share) and ADR-002 (cards only)"
-    next_safe_action: "AC-006 stays the only open row and only the operator closes it"
+    last_updated_at: "2026-09-05T07:20:00Z"
+    last_updated_by: "desktop-board-bugs"
+    recent_action: "Recorded ADR-003 amending REQ-007 so the default board card shows its configured properties"
+    next_safe_action: "Operator confirms roadmap row 49 on 0.0.25; AC-006 stays operator-only"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -275,3 +275,148 @@ stays honest.
 **How to roll back**: delete this ADR and restore the bullet in `spec.md` §10.
 <!-- /ANCHOR:adr-002-impl -->
 <!-- /ANCHOR:adr-002 -->
+
+---
+
+<!-- ANCHOR:adr-003 -->
+## ADR-003: Does the default board card show the properties the view is configured for?
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-003-context -->
+### Context
+
+REQ-007 confined this packet's control behind `boardExtensionsEnabled`, so that the default board
+stayed a one-to-one copy of the reference kanban and a stored list could never move its five fixed
+slots. AC-004 measured that, and `board-renderer-parity.test.ts` asserted it directly: with `hours`
+and `tags` stored hidden, the card still rendered the `2h` chip and the tag row.
+
+**Two facts read from the tree turn that from a boundary into a defect.** `board-renderer.ts:230`
+takes the reference path whenever `boardExtensionsEnabled` is not `true`, and **nothing in `src/`
+ever writes that flag** — grep finds it in `types.ts` as a field, in the renderer as a read, and in
+two test files. So the reference card is not the default board card, it is the *only* board card
+that ships, and `resolveBoardCardFields` — the whole mechanism this packet built — sat behind a
+branch no operator can take. The Properties panel wrote `boardCardFields`; no shipped renderer read
+it.
+
+On 2026-09-05 the operator reported exactly that, from the desktop, with a screenshot: every
+property checked visible, and a card showing a title, one number and a date chip. Their words:
+*"not all enabled properties are showing in cards of board"*.
+
+### Constraints
+
+- `038` REQ-007 and SC-004 own the reference parity this would move, and `038` spent four review
+  rounds proving it. The amendment is theirs to inherit, not this packet's to ignore.
+- The card must stay recognisable as the reference card. The five slots the reference authored —
+  time, progress, due, tags, people — carry its look, and losing them would be a different card.
+- A card that renders every column of a wide schema is unreadable; the panel has to be able to
+  take fields off it, which is what this packet built the panel for.
+<!-- /ANCHOR:adr-003-context -->
+
+---
+
+<!-- ANCHOR:adr-003-decision -->
+### Decision
+
+**We chose**: the default board card renders the properties the view is configured for. REQ-007's
+`boardExtensionsEnabled` confinement is **amended**, and AC-004 is superseded by this record.
+
+**How it works**: the reference card's five slots are resolved from the view's visible field list
+in panel order rather than from every column, so hiding a property in the panel empties its slot.
+Every configured field that takes no slot renders in a `db-board-card-meta` grid between the
+progress bar and the footer, in the order the panel lists them. The reference tree is otherwise
+untouched: the title row and its type chips, the time chip, the progress bar, and the footer's
+avatar stack and due chip stay exactly where the reference put them, which is what "keeps its
+look" means here. The grid renders display-only, because a click anywhere on a reference card
+opens the record and an editable field would swallow that click.
+
+**What this does not do**: it does not move a reference slot. A stored list can empty one, never
+relocate one, and `board-renderer-parity.test.ts` now asserts that narrower contract in place of
+the one it asserted before.
+<!-- /ANCHOR:adr-003-decision -->
+
+---
+
+<!-- ANCHOR:adr-003-alternatives -->
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Slots from the list, everything else in a grid** | The operator's ask, in the reference's own shell; a view whose fields all land in slots renders the reference card unchanged | Amends another packet's requirement, and a wide schema makes a tall card until the operator trims it | 9/10 |
+| Ship a `boardExtensionsEnabled` toggle instead | REQ-007 survives untouched | It answers a question nobody asked. The operator wants properties on the card they have, not a second board behind a switch — and the extension card is a different layout, not the reference one they are looking at | 3/10 |
+| Render every visible field in panel order, footer included | One rule, no slot concept at all | The footer is the card's one right-aligned row; dissolving it into the body is the look changing, which the operator did not ask for | 4/10 |
+| Leave it, and document that the panel needs the flag | No code moves | The shipped panel would keep writing a field no shipped renderer reads. That is the defect, restated as a note | 1/10 |
+
+**Why this one**: the operator's screenshot is the newer instruction, and it is about the card in
+front of them. REQ-007 protected a parity that is worth keeping — this keeps all of it that can be
+kept while the card does what the panel promises.
+<!-- /ANCHOR:adr-003-alternatives -->
+
+---
+
+<!-- ANCHOR:adr-003-consequences -->
+### Consequences
+
+**What improves**:
+- The Properties panel does something. Before this, every path through it wrote a field the shipped
+  board could not read.
+- Slot resolution moved from per-card to once per render, so a card no longer calls `getColumns`
+  for itself.
+
+**What it costs**:
+- `038`'s reference parity is now "the reference tree, filled from the view's fields" rather than
+  "the reference tree, filled from a fixed scan". Twelve constructed board captures moved and were
+  read by hand; the parity fixtures for the tree itself did not.
+- A schema wider than the card is tall renders a tall card until the operator hides fields. The
+  panel is the answer and it now works.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A view with many columns renders an unreadably tall card on first open | M | The derived default already drops the title, the grouped field and every select/status column; the panel takes the rest off per view |
+| A later reader restores REQ-007 from `spec.md` without seeing this | M | REQ-007 and AC-004 both point here, and the parity test's own name states the narrower contract |
+<!-- /ANCHOR:adr-003-consequences -->
+
+---
+
+<!-- ANCHOR:adr-003-five-checks -->
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | The operator reported the symptom with a screenshot, and the mechanism is a branch no shipped code can take |
+| 2 | **Beyond Local Maxima?** | PASS | Four options weighed; the two that preserved REQ-007 intact were rejected on what they leave the operator holding |
+| 3 | **Sufficient?** | PASS | Red before green on three renderer assertions, plus twelve captures read by hand |
+| 4 | **Fits Goal?** | PASS | REQ-002 already said the implicit exclusions become entries the operator can change; this is that requirement reaching the card that ships |
+| 5 | **Open Horizons?** | PASS | The slot resolver now takes an ordered field list, so a later mapping control over the five slots has somewhere to plug in |
+
+**Checks Summary**: 5/5 PASS
+<!-- /ANCHOR:adr-003-five-checks -->
+
+---
+
+<!-- ANCHOR:adr-003-impl -->
+### Implementation
+
+**What changes**:
+- `src/views/board-renderer.ts`: `getReferenceCardFields` resolves from the per-render field list
+  and returns the leftovers; `renderReferenceCardMeta` renders them; `renderCardFieldContent` takes
+  a display-only flag.
+- `src/views/board-renderer-hierarchy.test.ts`: four assertions for the default card's properties.
+- `src/views/board-renderer-parity.test.ts`: the slot-immovability test rewritten to the narrower
+  contract this record sets.
+- Twelve constructed board captures, and the lane history entry naming them.
+
+**How to roll back**: restore the `getReferenceCardFields` scan over `this.actions.getColumns` and
+drop the meta call, then re-capture. REQ-007 returns as written and the operator's report reopens.
+<!-- /ANCHOR:adr-003-impl -->
+<!-- /ANCHOR:adr-003 -->
