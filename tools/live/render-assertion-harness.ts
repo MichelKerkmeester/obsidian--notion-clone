@@ -1699,12 +1699,12 @@ function toolbarPopoverAssertion(container: HTMLElement, selector: string): Asse
 // branches stay data-shaped rather than each inventing its own.
 
 /** The first non-name column of a type, for the surfaces that need one specific column kind. */
-function columnOfType(columns: ColumnDef[], type: ColumnDef["type"]): ColumnDef | undefined {
+export function columnOfType(columns: ColumnDef[], type: ColumnDef["type"]): ColumnDef | undefined {
   return columns.find((col) => col.key !== "file.name" && col.type === type);
 }
 
 /** The view state every toolbar/panel surface reads, with the given members overlaid. */
-function makeSurfaceState(overrides: Partial<DatabaseViewState> = {}): DatabaseViewState {
+export function makeSurfaceState(overrides: Partial<DatabaseViewState> = {}): DatabaseViewState {
   return {
     searchText: "",
     statusFilter: "",
@@ -1720,7 +1720,7 @@ function makeSurfaceState(overrides: Partial<DatabaseViewState> = {}): DatabaseV
 }
 
 /** A one-view database over the given schema, the shape ToolbarRenderer.render takes entries of. */
-function makeSurfaceDatabase(columns: ColumnDef[], view: ViewConfig): DatabaseConfig {
+export function makeSurfaceDatabase(columns: ColumnDef[], view: ViewConfig): DatabaseConfig {
   return {
     id: "bench",
     name: "Bench",
@@ -1751,7 +1751,7 @@ function makeHiddenAnchor(container: HTMLElement, cls: string): HTMLElement {
 }
 
 /** The toolbar's action bag, every required member present and none of them doing work. */
-function makeToolbarActions(): ToolbarActions {
+export function makeToolbarActions(): ToolbarActions {
   return {
     selectDatabase: () => undefined,
     moveDatabase: () => undefined,

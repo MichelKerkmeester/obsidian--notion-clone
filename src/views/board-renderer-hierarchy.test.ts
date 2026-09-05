@@ -460,6 +460,34 @@ const GROUPS: BoardGroup[] = [
   { key: "In Progress", rows: [doingRow], count: 1 },
 ];
 
+// A second "To Do" card gives the sort-conflict tests a same-group pair to
+// reorder; SORTED_CONFIG carries an explicit sort rule so the drop routes
+// through the confirm branch instead of a plain reorder.
+const TODO_SECOND_PATH = "Tasks/Backlog/To Do Second.md";
+const todoSecondRow: RowData = {
+  file: makeFile(TODO_SECOND_PATH, "To Do Second", "Tasks/Backlog"),
+  frontmatter: {
+    status: "To Do",
+    priority: "P2",
+    hours: 3,
+    tags: [],
+    people: [],
+    due: "2026-09-06",
+    notes: "Second backlog note",
+  },
+  computed: {},
+};
+
+const SORTED_GROUPS: BoardGroup[] = [
+  { key: "To Do", rows: [todoRow, todoSecondRow], count: 2 },
+  { key: "In Progress", rows: [doingRow], count: 1 },
+];
+
+const SORTED_CONFIG: ViewConfig = {
+  ...CONFIG,
+  sortRules: [{ field: "priority", direction: "asc" }],
+};
+
 function createActions(overrides: Partial<BoardRendererActions> = {}): BoardRendererActions {
   return {
     openRow: vi.fn(),
@@ -480,7 +508,11 @@ function createActions(overrides: Partial<BoardRendererActions> = {}): BoardRend
   };
 }
 
-function renderBoard(actions: BoardRendererActions = createActions()): {
+function renderBoard(
+  actions: BoardRendererActions = createActions(),
+  config: ViewConfig = CONFIG,
+  groups: BoardGroup[] = GROUPS,
+): {
   container: MockElement;
   board: MockElement;
   renderer: BoardRenderer;
@@ -488,7 +520,7 @@ function renderBoard(actions: BoardRendererActions = createActions()): {
 } {
   const renderer = new BoardRenderer({} as unknown as App, actions);
   const container = new MockElement("div");
-  renderer.render(container as unknown as HTMLElement, CONFIG, GROUPS, "status");
+  renderer.render(container as unknown as HTMLElement, config, groups, "status");
   const board = container.querySelector<MockElement>(".db-board")!;
   return { container, board, renderer, actions };
 }
@@ -786,6 +818,55 @@ describe("board drop matrix stays path-keyed", () => {
       undefined,
       [TODO_PATH],
     );
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 6A. SORT-CONFLICT CONFIRM ON DROP
+// ───────────────────────────────────────────────────────────────────
+//
+// A same-group reorder under an active sort routes through the confirm
+// before it touches the order transaction. Both resolutions are driven
+// against the real drop listener with the confirm promise resolved async,
+// on the local-extension board layout rather than the Project Manager 1:1
+// reference kanban so the parity fixture's drag visuals stay untouched.
+
+describe("board sort-conflict confirm on drop", () => {
+  it("leaves the order and the sort unchanged when the confirm is declined", async () => {
+    const confirmSortConflict = vi.fn().mockResolvedValue(false);
+    const actions = createActions({ confirmSortConflict, clearSort: vi.fn() });
+    const { board } = renderBoard(actions, SORTED_CONFIG, SORTED_GROUPS);
+    const todoColumn = board.querySelectorAll<MockElement>(":scope > .db-board-column")[0];
+    const todoCards = todoColumn.querySelector<MockElement>(".db-board-cards")!;
+    const secondCard = todoCards.querySelectorAll<MockElement>(".db-board-card")[1];
+    secondCard.rect = { left: 0, right: 0, top: 0, bottom: 40, height: 40 } as unknown as Rect;
+
+    secondCard.dispatchEvent(dropEvent(TODO_PATH, "To Do", 0, 30));
+    await flush();
+    await flush();
+
+    expect(confirmSortConflict).toHaveBeenCalledTimes(1);
+    expect(actions.clearSort).not.toHaveBeenCalled();
+    expect(actions.moveRowToPosition).not.toHaveBeenCalled();
+    expect(actions.moveRowWithGroupUpdatesAndPosition).not.toHaveBeenCalled();
+  });
+
+  it("clears the sort and commits the drop when the confirm is accepted", async () => {
+    const confirmSortConflict = vi.fn().mockResolvedValue(true);
+    const actions = createActions({ confirmSortConflict, clearSort: vi.fn() });
+    const { board } = renderBoard(actions, SORTED_CONFIG, SORTED_GROUPS);
+    const todoColumn = board.querySelectorAll<MockElement>(":scope > .db-board-column")[0];
+    const todoCards = todoColumn.querySelector<MockElement>(".db-board-cards")!;
+    const secondCard = todoCards.querySelectorAll<MockElement>(".db-board-card")[1];
+    secondCard.rect = { left: 0, right: 0, top: 0, bottom: 40, height: 40 } as unknown as Rect;
+
+    secondCard.dispatchEvent(dropEvent(TODO_PATH, "To Do", 0, 30));
+    await flush();
+    await flush();
+
+    expect(confirmSortConflict).toHaveBeenCalledTimes(1);
+    expect(actions.clearSort).toHaveBeenCalledTimes(1);
+    expect(actions.moveRowToPosition).toHaveBeenCalledWith(TODO_PATH, TODO_SECOND_PATH, undefined);
   });
 });
 

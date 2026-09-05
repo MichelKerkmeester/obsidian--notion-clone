@@ -410,7 +410,7 @@ export class ToolbarRenderer {
     const creationCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-creation-cluster" });
     if (!phoneLayout && !isChartView) this.renderSearch(utilitiesCluster, state, actions);
     if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb, currentView);
-    if (actions.hideDatabaseTitle && !actions.hideHeaderChrome) this.installMeasuredToolbarCollapse(header);
+    if (actions.hideDatabaseTitle && !actions.hideHeaderChrome) this.installMeasuredToolbarCollapse(header, currentDb, currentViewIndex, actions);
   }
 
   private renderUtilitiesOverflowButton(
@@ -2531,11 +2531,16 @@ export class ToolbarRenderer {
     this.installMenuKeyboardNavigation(panel);
   }
 
-  private installMeasuredToolbarCollapse(header: HTMLElement): void {
+  private installMeasuredToolbarCollapse(
+    header: HTMLElement,
+    db: DatabaseConfig | undefined,
+    currentViewIndex: number,
+    actions: ToolbarActions,
+  ): void {
     this.chromeCollapseObserver?.disconnect();
     const toolbar = header.querySelector<HTMLElement>(".db-toolbar");
     if (!toolbar) return;
-    const apply = () => this.applyToolbarChromeCollapse(toolbar);
+    const apply = () => this.applyToolbarChromeCollapse(toolbar, db, currentViewIndex, actions);
     const view = toolbar.ownerDocument.defaultView;
     if (view?.ResizeObserver) {
       this.chromeCollapseObserver = new view.ResizeObserver(() => apply());
@@ -2544,19 +2549,74 @@ export class ToolbarRenderer {
     apply();
   }
 
-  private applyToolbarChromeCollapse(toolbar: HTMLElement): void {
+  private applyToolbarChromeCollapse(
+    toolbar: HTMLElement,
+    db: DatabaseConfig | undefined,
+    currentViewIndex: number,
+    actions: ToolbarActions,
+  ): void {
     const newCluster = toolbar.querySelector<HTMLElement>(".db-toolbar-creation-cluster");
     const query = toolbar.querySelector<HTMLElement>(".db-toolbar-query-cluster");
     const props = toolbar.querySelector<HTMLElement>(".db-toolbar-properties-cluster");
     const add = toolbar.querySelector<HTMLElement>(".db-view-tab-add");
     const targets = [newCluster, query, props, add].filter((el): el is HTMLElement => Boolean(el));
     for (const el of targets) el.style.display = "";
+    this.restoreCollapsedTabStrip(toolbar);
     const naturalWidth = toolbar.scrollWidth;
     if (naturalWidth <= toolbar.clientWidth + 1) return;
     for (const el of targets) {
       if (toolbar.scrollWidth <= toolbar.clientWidth + 1) break;
       el.style.display = "none";
     }
+    // The last rung: the four controls above are gone and the row still does not fit. Rather
+    // than let the tab row clip or scroll, it becomes the one thing a single view always has
+    // room for — its own name behind a dropdown, the same trigger the many-tabs overflow already
+    // opens.
+    if (toolbar.scrollWidth > toolbar.clientWidth + 1) {
+      this.collapseTabStripToDropdown(toolbar, db, currentViewIndex, actions);
+    }
+  }
+
+  /** Undo a prior tab-row collapse before remeasuring, so every resize starts from the tab
+   *  row's natural shape rather than compounding the last one. */
+  private restoreCollapsedTabStrip(toolbar: HTMLElement): void {
+    toolbar.querySelector<HTMLElement>(".db-view-tab-collapsed-trigger")?.remove();
+    toolbar.querySelectorAll<HTMLElement>("[data-chrome-collapsed-tab]").forEach((el) => {
+      el.style.display = "";
+      el.removeAttribute("data-chrome-collapsed-tab");
+    });
+  }
+
+  private collapseTabStripToDropdown(
+    toolbar: HTMLElement,
+    db: DatabaseConfig | undefined,
+    currentViewIndex: number,
+    actions: ToolbarActions,
+  ): void {
+    const strip = toolbar.querySelector<HTMLElement>(".db-view-tabs");
+    const currentView = db?.views[currentViewIndex];
+    if (!strip || !db || !currentView) return;
+    const tabs = Array.from(strip.querySelectorAll<HTMLElement>(".db-view-tab"));
+    if (!tabs.length) return;
+    for (const tab of tabs) {
+      tab.style.display = "none";
+      tab.setAttribute("data-chrome-collapsed-tab", "true");
+    }
+    const trigger = strip.createEl("button", {
+      cls: "db-view-tab db-view-tab-collapsed-trigger",
+      attr: {
+        type: "button",
+        "aria-haspopup": "dialog",
+        "aria-expanded": "false",
+        "aria-controls": "db-all-views-popover",
+        "aria-label": currentView.name || t("common.untitled"),
+      },
+    });
+    this.renderViewIcon(trigger.createSpan({ cls: "db-view-tab-icon" }), currentView.icon, this.getViewTypeIcon(currentView.viewType || "table"));
+    trigger.createSpan({ cls: "db-view-tab-name", text: currentView.name || t("common.untitled") });
+    setIcon(trigger.createSpan({ cls: "db-view-tab-collapsed-chevron" }), "chevron-down");
+    setTooltip(trigger, currentView.name || t("common.untitled"), { delay: 100 });
+    trigger.onclick = () => this.showAllViewsHub(trigger, db, currentViewIndex, actions);
   }
 
   private renderFullViewButton(toolbar: HTMLElement, actions: ToolbarActions): void {
