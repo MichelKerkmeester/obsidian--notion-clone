@@ -10,13 +10,11 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_at: "2026-09-05T23:40:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "authored ten closure criteria with thresholds"
-    next_safe_action: "T002 records each row's failing figure before any leg is written"
+    recent_action: "closed ac-001, ac-005 and ac-006 on the t001 capture read"
+    next_safe_action: "T002 records each remaining row's failing figure before any leg is written"
     blockers:
-      - "AC-001 gates every other row: no value may be adopted before its capture is read"
-      - "AC-005 is the operator's ADR-002 ruling and nothing here can decide it"
       - "AC-010 is operator-owned and nothing in this repository can close it"
     key_files:
       - "src/views/calendar-renderer.ts"
@@ -26,9 +24,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-ac"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 30
     open_questions: []
     answered_questions:
+      - "T001 established A4 and A6 as absences across all twenty set captures"
+      - "ADR-002 is Accepted: keep week and day, styled to the month grid"
       - "A class-count threshold would be unobservable here: the calendar carries zero pm-* classes"
       - "The phone calendar has no Anytype reference, so AC-007 counts labels rather than matches"
 ---
@@ -46,7 +46,7 @@ _memory:
 
 **Packet:** 005-component-surface-system/057-calendar-anytype-parity
 **Level:** 3
-**Status:** Draft
+**Status:** In progress — T001 landed
 **Date:** 2026-09-05
 <!-- /ANCHOR:metadata -->
 
@@ -65,12 +65,12 @@ HEAD before the fix (goal D2), recorded in `checklist.md`. Exit statuses are rea
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | **Given** the 44 calendar capture files on disk, **When** an image-capable leaf reads them px by px, **Then** all 9 anatomy elements are recorded in `design-trueup.md` with a capture filename and either a measurement or the **design inferred** label, and A4's and A6's absences are established across all twenty set captures rather than one | T001's read. A measurement-only leg records "pixel read owed" (`054` ADR-005) | Unmet | - |
+| AC-001 | REQ-001 | **Given** the 44 calendar capture files on disk, **When** an image-capable leaf reads them px by px, **Then** all 9 anatomy elements are recorded in `design-trueup.md` with a capture filename and either a measurement or the **design inferred** label, and A4's and A6's absences are established across all twenty set captures rather than one | **Met 2026-09-05.** `design-trueup.md` §4 carries 9 of 9 elements: 28 sub-rows with a measurement and a capture filename, 9 marked **pixel read owed** with the reason a static capture cannot answer them, 2 labelled `047`-sourced rather than measured. A4 and A6 established across 10 light + 10 dark (§3): 0 non-background px below the grid rule, 0 ink in the header band between the title and the `‹ Today ›` cluster | Met | - |
 | AC-002 | REQ-002 | **Given** a month grid, a day cell and an event chip built from 91 untrued `db-calendar-*` classes, **When** each is retargeted, **Then** each matches a measured captured value or deviates on a named accessibility ground with its ratio or size | Measured on the production render path at both themes. **Deliberately not a class count**: the calendar carries 0 `pm-*` classes, so a count-to-zero threshold would read green on an untouched tree (ADR-003) | Unmet | - |
 | AC-003 | REQ-003 | **Given** a toolbar written against Project Manager's navigation model, **When** it is retargeted, **Then** month and year selects, arrows and a Today button are present and matching, and the today-scroll positions the current week at the viewport bottom — or each declined part carries a written reason | `anytype-menu-calendar-month-select-*` and `-year-select-*`, plus `047` section 5's source-derived read | Unmet | - |
 | AC-004 | REQ-004 | **Given** the captured calendar settings menu, **When** the date-property picker is retargeted, **Then** it matches `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` | The capture, read at T001; the picker, read on the production path | Unmet | - |
-| AC-005 | REQ-005 / OPERATOR | **Given** three shipped scales against one captured calendar layout, **When** the operator rules, **Then** `decision-record.md` ADR-002 carries a status other than **Proposed** and the implementation follows it | The operator's ruling, put at T003 with T001's absence finding attached. Nothing in this repository decides it | Unmet | - |
-| AC-006 | REQ-006 | **Given** our collapsible unscheduled backlog drawer (`calendar-renderer.ts:160-163`), **When** all twenty set captures have been read, **Then** it is matched to a captured Anytype counterpart or kept as ours with a written argument | The captures, plus `047` section 5 and `050`'s true-up, neither of which names a counterpart | Unmet | - |
+| AC-005 | REQ-005 / OPERATOR | **Given** three shipped scales against one captured calendar layout, **When** the operator rules, **Then** `decision-record.md` ADR-002 carries a status other than **Proposed** and the implementation follows it | **Met 2026-09-05 ~23:20**, operator: *"Keep week and day, styled to the month grid."* ADR-002 is **Accepted**. The *implementation follows it* half stays open under AC-002: the week and day scales are labelled **"ours, restyled to the month grid's measured values"**, never *inferred from Anytype* | Met | - |
+| AC-006 | REQ-006 | **Given** our collapsible unscheduled backlog drawer (`calendar-renderer.ts:160-163`), **When** all twenty set captures have been read, **Then** it is matched to a captured Anytype counterpart or kept as ours with a written argument | **Met 2026-09-05.** All twenty read; there is no counterpart to match to (`design-trueup.md` §3). Kept as ours with the argument in §A4: a set omits objects with no date value and they stay reachable in its other layouts, while a note with unparseable date frontmatter has no other surface here. Restyled to the month grid's measured values | Met | - |
 | AC-007 | REQ-007 | **Given** that iOS Anytype ships no calendar layout and `screenshots/anytype/mobile/` holds no calendar capture, **When** the phone calendar is written, **Then** the count of phone-calendar values presented without **"design inferred from desktop"** and a named source capture is 0 | The iOS view-layout sheets are picker, gallery and kanban only; none of the 104 `mobile/sheets/` captures is a calendar surface. There is no reference and there will not be one | Unmet | - |
 | AC-008 | REQ-008 | **Given** 12 registered sheet surfaces and 31 registered stacked pairs, **When** the last leg lands, **Then** `sheet-grammar.mjs` still reports 12 and 31 green at exit 0 | `node tools/live/sheet-grammar.mjs`, exit read from `$?` | Unmet | - |
 | AC-009 | REQ-009 / REQ-010 | **Given** T002's pre-leg `pm-gantt-*` count, gantt capture hashes and guard-test pass counts, **When** every calendar leg has landed, **Then** the gantt baseline is identical and `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` are green with 0 lines changed | `037`'s in-repo parity was 60 of 60 classes with zero divergence at `30c4b746`; `calendar-timeline-renderer.ts` is 4317 lines next door and a stylesheet co-tenant | Unmet | - |
@@ -97,11 +97,12 @@ treated as an unmet criterion rather than as a pass.
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Not closeable.** Ten rows, ten Unmet. The packet was authored 2026-09-05 ~22:45 on the operator's
-calendar ruling and no task has run: T001's capture true-up is owed to an image-capable leaf and
-gates AC-001 through AC-004 and AC-006; T002's red-first pass is owed and gates every figure;
-AC-005 is the operator's scale ruling and AC-010 is the operator's device read, and neither is
-closed by anybody here.
+**Not closeable.** Ten rows: three Met, seven Unmet. T001 landed 2026-09-05 and closed AC-001,
+AC-006 and — with the operator's ~23:20 ruling — AC-005. The seven that remain are the render
+itself: AC-002, AC-003 and AC-004 assert the retargeted calendar and are T005 through T007's;
+AC-007 counts phone labels that no leg has written yet; AC-008 and AC-009 are post-leg gate reads
+with no leg to read; and AC-010 is the operator's device read, which nobody here closes.
+T002's red-first pass is still owed and still gates every figure below C1 and C2.
 
 **One row is worth flagging as different in kind.** AC-007 does not assert a match, because there
 is nothing to match against — it asserts that every phone value **says** it was inferred. That is

@@ -10,12 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_at: "2026-09-05T23:40:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "recorded adr-001 accepted and adr-002 proposed for the operator"
-    next_safe_action: "Run T001, then put ADR-002's scale question to the operator"
+    recent_action: "recorded the operator ruling accepting adr-002"
+    next_safe_action: "Run T002's red-first pass, then leg A against design-trueup.md"
     blockers:
-      - "ADR-002 is Proposed and gates the first implementation leg"
+      - "T002's red-first figures are owed before the first implementation leg"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "specs/005-component-surface-system/039-calendar-parity-port/decision-record.md"
@@ -23,10 +23,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "ADR-002: do the week and day scales survive parity with a one-layout product"
+    completion_pct: 25
+    open_questions: []
     answered_questions:
+      - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
 ---
@@ -85,7 +85,8 @@ better, which `050`, `053` and `054` already carry.
 
 ## ADR-002: Do the week and day scales survive?
 
-**Status**: **Proposed** — awaiting the operator. Put at T003 with T001's finding attached.
+**Status**: **Accepted** — 2026-09-05 ~23:20, operator: *"Keep week and day, styled to the month
+grid."* Put at T003 with T001's absence finding attached, and answered in the same pass.
 
 **Context.** Ours has three scales: `updateCalendarScale?(scale: "month" | "week" | "day",
 anchorDateKey, label?)` (`src/views/calendar-renderer.ts:82`). Around them sit seven scale-switch
@@ -100,17 +101,37 @@ Anytype ships **one** calendar layout among six, and no scale switch appears any
 before this question is put — an absence asserted from one screen is the mistake `050` made five
 times and was corrected for five times.
 
-**Decision.** Pending. This is an operator call because it is large, irreversible, operator-visible,
-and not something *"almost 1:1 Anytype"* settles on its own: parity says remove them, and the
-operator has never asked for a working feature to be deleted.
+**Decision.** **The week and day scales stay, styled to the month grid.** The month view becomes
+Anytype 1:1 — every value in `design-trueup.md` §4 marked *adopt* applies to it without
+qualification. The week and day scales survive as **our extension**, taking the month grid's
+measured vocabulary: the same 1px `#EBEBEB` / `#292929` rules, the same `#F7F7F7` / `#1E1E1E`
+weekend tint, the same `#216DFA` today marker, the same flat 20px-pitch chip with a 10px inset and
+an 8px icon gap, and the same header grammar.
 
-**Consequences of each answer.**
-- *Remove:* the calendar becomes month-only; 29 or so classes, the week body, the day view and a
-  keyboard test suite go with it. Parity is closer. The deletion lands as its own last, clearly
-  labelled leg so reverting it does not unwind the retarget (`plan.md` section 7).
-- *Keep:* a visible deviation from the stated target, recorded here as a deviation with its reason
-  rather than left as drift. It is not an accessibility ground, so goal D3 does not cover it and
-  this ADR is what authorises it.
+This was an operator call because it is large, irreversible, operator-visible, and not something
+*"almost 1:1 Anytype"* settles on its own: parity said remove them, and the operator has never asked
+for a working feature to be deleted. The ruling resolves it the other way, and this ADR is what
+authorises the resulting deviation — ADR-004 does not, because keeping them is not an accessibility
+ground.
+
+**Consequences of each answer, both recorded because the ADR asked for both.**
+- *Remove*, not taken: the calendar becomes month-only; seven scale-switch classes, twenty-two
+  `db-calendar-week-*` classes, the timed-event body with its hour gutters and current-time line,
+  the day view and `calendar-keyboard-navigation.test.ts`'s coverage of all of it go with them —
+  roughly a third of the 91-class vocabulary. Parity is closer, and shipped, tested,
+  operator-visible function is gone.
+- *Keep*, taken: a visible deviation from the stated target, recorded here with its reason rather
+  than left as drift. Goal D3 does not cover it, so this ADR authorises it.
+
+**Consequences of the ruling as taken.**
+- Every week and day value is labelled **"ours, restyled to the month grid's measured values"** and
+  names the `design-trueup.md` §2c row it took its number from. It is never labelled *inferred from
+  Anytype*: twenty captures contain nothing to infer a week or day scale from, and calling it an
+  inference would be the same fabrication AC-007's phone label exists to prevent.
+- The scale control stays in the header, so our header carries four controls where Anytype's carries
+  three (`design-trueup.md` §A5, §7). That deviation is created by this ruling, sits inside its
+  scope, and is not presented as a measured value.
+- `plan.md` section 7's "deletion lands as its own last leg" contingency is moot and does not run.
 
 **Alternatives rejected.**
 - *Decide it in-repo.* Rejected under goal D6. Inferring a deletion of shipped, tested,

@@ -10,12 +10,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_at: "2026-09-05T23:40:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "authored the task list, t001 true-up through leg e verification"
-    next_safe_action: "Dispatch T001 to an image-capable leaf and put T003's scale question to the operator"
+    recent_action: "ticked t001, the calendar capture true-up"
+    next_safe_action: "Run T002's red-first pass, then leg A against design-trueup.md"
     blockers:
-      - "T005 onward are blocked on T001, T002 and the operator's ADR-002 ruling"
+      - "T005 onward are blocked on T002's red-first figures"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "screenshots/anytype/desktop/sets"
@@ -23,9 +23,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 20
     open_questions: []
     answered_questions:
+      - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
@@ -53,7 +54,7 @@ _memory:
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 **The calendar capture true-up, by an image-capable leaf reading the captures px by px.**
+- [x] T001 **The calendar capture true-up, by an image-capable leaf reading the captures px by px.**
       Read all 20 `screenshots/anytype/desktop/sets/<use-case>/anytype-<use-case>-calendar-{light,dark}.png`
       and the 24 `screenshots/anytype/desktop/menus/anytype-menu-calendar-*` and
       `anytype-menu-set-layout-calendar-*` files. Record every value for `spec.md` section 4's nine
@@ -63,6 +64,11 @@ _memory:
       established rather than assumed**: A4's unscheduled area and A6's scale switch, each read
       across all twenty set captures before absence is recorded. `050` generalised a single panel
       five times and was corrected five times. (`design-trueup.md`)
+      **Done 2026-09-05.** 9 of 9 elements; 28 sub-rows measured with a capture filename, 9 **pixel
+      read owed**, 2 labelled `047`-sourced. Both absences established across 10 light + 10 dark.
+      Six contradictions recorded (`design-trueup.md` §5), including that the captures are **1:1,
+      not 2x**, and that the 24 menu files are **5 distinct menus**, not 6. Five accessibility
+      refusals with their ratios (§6).
 - [ ] T002 **The red-first measurement pass.** Fill every `Today` cell in `checklist.md` with a
       figure read off the current tree, before any code is written. At minimum:
       `grep -o 'db-calendar[a-z-]*' src/views/calendar-renderer.ts | sort -u | wc -l`;
@@ -76,6 +82,10 @@ _memory:
       (`calendar-renderer.ts:82`), a scale control/menu/popover/segment class family, a week body
       with all-day rows, hour gutters and timed events, and `calendar-keyboard-navigation.test.ts`.
       Record the ruling. Never infer it. (`decision-record.md`)
+      **The ruling arrived 2026-09-05 ~23:20 during T001** — operator: *"Keep week and day, styled
+      to the month grid"* — and is recorded in `decision-record.md` ADR-002 (**Accepted**) and in
+      `design-trueup.md` §7 with both branches' consequences. The row stays unticked because the
+      tick is the operator's to give, not this leg's.
 - [ ] T004 [P] **Disposition the unscheduled backlog drawer** (`db-calendar-backlog*`,
       `calendar-renderer.ts:160-163`) against T001's output: matched to a captured Anytype
       counterpart, or kept as ours with a written argument. (`spec.md`)

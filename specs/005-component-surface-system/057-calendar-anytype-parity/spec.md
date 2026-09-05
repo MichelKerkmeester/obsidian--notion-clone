@@ -11,13 +11,13 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_at: "2026-09-05T23:40:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "authored the calendar anatomy and the phone-gap disposition"
-    next_safe_action: "Execute T001, the calendar capture true-up, by an image-capable leaf"
+    recent_action: "trued the nine anatomy rows against the calendar captures"
+    next_safe_action: "Run T002's red-first pass, then leg A against design-trueup.md"
     blockers:
-      - "Every geometry value in section 4 is owed to T001"
       - "The phone calendar has no Anytype capture and never will"
+      - "Six-week rows, overflow and chip hover are pixel read owed"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -26,10 +26,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-spec"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 20
     open_questions:
-      - "Do the week and day scales survive parity with a product that ships one calendar layout"
+      - "What a six-week month, an overflowing day and a chip hover look like: pixel read owed"
     answered_questions:
+      - "ADR-002 ruled: keep week and day, styled to the month grid"
+      - "A4 and A6 are absences, established across all twenty set captures"
+      - "The desktop captures are 1:1, not 2x, and the 24 menu files are five distinct menus"
       - "The calendar carries zero pm-* classes, so a class-count threshold would be unobservable here"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify + level3-arch | v2.2 -->
@@ -66,7 +69,7 @@ scale ruling gates one whole element; the parent's serialized CSS lane gates eve
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | In progress — T001 landed |
 | **Created** | 2026-09-05 |
 | **Branch** | `worktrees/117-phases-056-057` |
 | **Parent Spec** | ../spec.md |
@@ -179,24 +182,36 @@ a value labelled *design inferred* was never read off a screen and says so.
 
 | # | Element | What the capture shows | Reference capture |
 |---|---------|------------------------|-------------------|
-| A1 | **Month grid** | Week rows, weekday header, grid line treatment, and how the grid handles a month spilling into adjacent weeks | `anytype-<use-case>-calendar-{light,dark}.png`, ten use cases x two themes |
-| A2 | **Day cells** | Cell height, padding, date-number placement and treatment, and the overflow affordance when a day holds more objects than fit. `047` section 5 records each day cell **self-loading its own objects** | `anytype-content-calendar-calendar-{light,dark}.png` |
-| A3 | **Event chips** | Chip shape, height, padding, truncation, icon or its absence, and the colour source | `anytype-project-tracker-calendar-{light,dark}.png`; `anytype-menu-calendar-item-menu-{light,dark}-full.png` for the chip's own menu |
-| A4 | **Unscheduled area** | **Owed to T001, and possibly absent.** No unscheduled or backlog region appears in `047` section 5's read of the calendar, and none is named in `050`'s true-up. If the captures show none, ours is kept and argued rather than deleted | `anytype-<use-case>-calendar-{light,dark}.png` across all ten use cases before concluding absence |
-| A5 | **Navigation** | `047` section 5, source-derived: its own toolbar with **month and year selects spanning years 0-3000**, arrows, and a **Today** button; plus a "today scroll" that positions the current week at the bottom of the viewport | `anytype-menu-calendar-month-select-{light,dark}-full.png`, `anytype-menu-calendar-year-select-{light,dark}-full.png` |
-| A6 | **Day/week/month switch — as Anytype does or does not have it** | **The capture sweep shows no scale switch.** Anytype's six set layouts are Grid, Gallery, List, Kanban, Calendar and Graph; Calendar is one layout, not three scales, and no month/week/day control appears in `anytype-menu-set-layout-calendar-*`. Ours has three (`calendar-renderer.ts:82`) with a scale control, menu, popover and segment class family. **T001 confirms the absence across all twenty calendar captures before ADR-002 is put to the operator** — an absence asserted from one screen is the error `050` made five times | `anytype-menu-set-layout-calendar-{light,dark}-full.png`; all twenty set captures |
-| A7 | **Today marker** | How the current day is marked in the grid, and the "today scroll" behaviour `047` section 5 records | `anytype-<use-case>-calendar-{light,dark}.png`; the capture date decides which cell to read |
-| A8 | **Date-property picker** | The captured calendar settings menu's date-property row — which date property the calendar reads, and how it is chosen | `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` |
-| A9 | **Day menu** | The menu a day cell opens. `047` section 5: clicking a day merges the view's default object properties with that day's date, then opens the creation config popup | `anytype-menu-calendar-day-menu-{light,dark}-full.png` |
+| A1 | **Month grid** | **Measured (T001).** Seven equal columns at a 213.1px pitch across a 1492px grid inset 16px each side; **136px** week rows; 1px `#EBEBEB` / `#292929` rules; a **22px** weekday band whose labels are right-aligned 11px inside the column at ≈12px, Monday first, with **no** weekend tint on the header itself. A month spilling into adjacent weeks keeps the cell's normal background and dims only the day number. **Six-week months are pixel read owed** — all three captured months fit five rows | `anytype-<use-case>-calendar-{light,dark}.png`, ten use cases x two themes |
+| A2 | **Day cells** | **Measured (T001).** 136px tall; the date number sits **top-right**, 12px below the cell top and 5px inside the right rule, at ≈16px weight 400; the first chip starts 32px down. Adjacent-month numbers dim to `#C8C8C8` / `#525252` (**1.67:1** / **2.29:1**, declined — §6 R1) while the cell keeps its normal background. **The overflow affordance is pixel read owed**: the busiest captured cell holds 3 chips in a cell that fits 5. `047` section 5's self-loading is behaviour, not presentation | `anytype-content-calendar-calendar-{light,dark}.png`, `anytype-crm-contacts-deals-calendar-{light,dark}.png` |
+| A3 | **Event chips** | **Measured (T001).** A flat row on **no background at all** — no fill, tint, border, radius or accent bar; **20px pitch**, 14px ink, a ≈14x12px leading icon 10px in with an ≈8px gap, label ≈12px `#292929` / `#DDDDDD`. **The colour source is: there is none** — every chip in twenty captures is the same grey pair. Truncation and the overflow affordance are **pixel read owed**: no chip truncates and no cell overflows in the set | `anytype-project-tracker-calendar-{light,dark}.png`; the chip's own menu is the **same capture** as the day menu — see the inventory note |
+| A4 | **Unscheduled area** | **Absent, established (T001).** Zero non-background pixels below the grid's bottom rule across all 10 light and all 10 dark set captures. No drawer, no collapsed strip, no toggle. Ours is **kept and argued**, not deleted — `design-trueup.md` §A4 — and restyled to the month grid's measured values | all twenty `anytype-<use-case>-calendar-{light,dark}.png` |
+| A5 | **Navigation** | **Measured (T001).** A month select and a **separate** year select, both ≈16px `#252525`, 12px apart; then `‹` `Today` `›` at fixed x in all twenty. The month list is 12 rows at a 28px pitch in a 224x352px panel; the year list is scrollable in a 225x368px panel. **The 0-3000 range and the "today scroll" stay `047`-sourced and are not observable in a static capture** — labelled, never quoted as measured | `anytype-menu-calendar-month-select-{light,dark}.png`, `anytype-menu-calendar-year-select-{light,dark}.png` |
+| A6 | **Day/week/month switch — as Anytype does or does not have it** | **Absent, established (T001).** Zero ink in the header band between the month title and the `‹ Today ›` cluster across all 10 light and all 10 dark set captures; the layout panel's whole settings surface is `Date Property` and `Show icon`. **ADR-002 is Accepted**: the operator ruled *"Keep week and day, styled to the month grid"* — the month view goes Anytype 1:1 and the two extra scales survive as **ours, restyled to the month grid's measured values**, never as an inference from Anytype | `anytype-menu-set-layout-calendar-{light,dark}.png`; all twenty set captures |
+| A7 | **Today marker** | **Measured (T001).** A **26 x 24px fully-rounded `#3C7FFB` disc** with a white numeral at the day number's own size, right edge 5px inside the cell's right rule and top 7px below it; and the today cell **drops the weekend tint** back to the plain surface. White on that blue is **3.74:1** and is declined for `#216DFA` at 4.53:1 — `design-trueup.md` §6 R4. Not readable in the set captures, which all show a month with no today; read on the day-menu capture, whose Sat 5 September is today | `anytype-menu-calendar-day-menu-{light,dark}-full.png` |
+| A8 | **Date-property picker** | **Measured (T001).** A `Date Property ›` row in the 358 x 298px layout panel, value right-aligned; the submenu is **224px wide at a 28px row pitch**, nine date properties each with a leading icon, the current one checkmarked, an `#EBEBEB` divider, then `+ Add Property`. Beside it a `Show icon` toggle, **26 x 16px `#6E9EFC`** (2.64:1, declined — §6 R5), which is what gates A3's chip icon | `anytype-menu-set-layout-calendar-date-property-{light,dark}.png` |
+| A9 | **Day menu** | **Measured (T001).** A **224 x 72px** panel, 2 rows at a 28px pitch with 8px panel padding, hover fill `#F2F2F2`: `Open as Object`, `New Object`. **This is also A3's item menu** — the two captures are byte-identical, so one menu serves both and building two would be an invention | `anytype-menu-calendar-day-menu-{light,dark}.png` |
 
-**Capture inventory, counted rather than quoted.** The calendar set is **20** files —
-`screenshots/anytype/desktop/sets/<use-case>/anytype-<use-case>-calendar-{light,dark}.png`, ten use
-cases by two themes. (A `ls` glob on `*calendar*` returns 30 because the `content-calendar` use-case
-folder matches by name; the calendar-layout captures are 20.) The calendar menu crawl is **24**
-files, which is **6 menus** at light/dark by clipped/`-full`: day menu, item menu, month select,
-year select, and the two `set-layout-calendar` panels (base and date-property). *The opening brief
-for this packet said "calendar 4 menus"; the folder holds six. The counted figure is used and the
-discrepancy is named rather than carried forward.*
+**Capture inventory, counted rather than quoted, and corrected by T001.** The calendar set is **20**
+files — `screenshots/anytype/desktop/sets/<use-case>/anytype-<use-case>-calendar-{light,dark}.png`,
+ten use cases by two themes. (A `ls` glob on `*calendar*` returns 30 because the `content-calendar`
+use-case folder matches by name; the calendar-layout captures are 20.) The calendar menu crawl is
+**24** files. The file count survived T001; the **menu** count did not.
+
+*This row said six menus. There are **five distinct surfaces in those 24 files**.* The day-menu and
+item-menu captures are byte-identical — `anytype-menu-calendar-day-menu-light-full.png` and
+`-item-menu-light-full.png` share MD5 `28d38b3a11620d04ef06e7e86c65b5c5`, the dark pair shares
+`6e9f31e1629cbffad9a1183148a8f963`, and the clipped light pair shares
+`9c74340bc6bdd972363f80706305a4b5`. The five are: the day/item menu, the month select, the year
+select, and the two `set-layout-calendar` panels (base and date-property). *The opening brief said
+"calendar 4 menus", this row said six, and the answer is five.* A6's warning about asserting from
+one screen has a counterpart here: **counting files is not counting surfaces.**
+
+**One more premise T001 overturned, recorded where it was written rather than only in the true-up.**
+Every desktop capture in this set is **1 device pixel to 1 CSS pixel**, not 2x: the grid rules are
+one device pixel wide, the frame is 2168 x 1217 with an odd height, and `051`'s true-up reached the
+same conclusion independently on the same window. Any later leg that halves these numbers will build
+a calendar at half scale.
 
 ### The phone gap, stated plainly
 
@@ -209,7 +224,7 @@ Every phone-calendar value this packet writes therefore carries the label **"des
 desktop"** and names the desktop capture it was inferred from. This is not a caveat to be dropped
 once the work looks right; it is REQ-007, and AC-007 counts it.
 
-### The three-scale question, and why this packet does not answer it
+### The three-scale question, answered by the operator on 2026-09-05 ~23:20
 
 `updateCalendarScale?(scale: "month" | "week" | "day", anchorDateKey, label?)`
 (`src/views/calendar-renderer.ts:82`) is a shipped, working feature with its own control, menu,
@@ -219,8 +234,18 @@ calendar layout.
 
 Deleting two of three scales to match a product that never had them is a large, irreversible,
 operator-visible change that the operator did not ask for; keeping them is a visible deviation from
-*"1:1 Anytype"*. Goal D6 makes this the operator's call, put as **ADR-002**, and this packet
-implements whichever answer comes back. What it does not do is infer one.
+*"1:1 Anytype"*. Goal D6 made this the operator's call, put as **ADR-002**. It was not inferred.
+
+**The ruling, verbatim: *"Keep week and day, styled to the month grid."*** ADR-002 is **Accepted**.
+The month view becomes Anytype 1:1 against `design-trueup.md` §4's measured values. The week and day
+scales survive as **our extension**, restyled to that same grid — the same rules, tints, today
+marker, chip grammar and header. Their values are labelled **"ours, restyled to the month grid's
+measured values"** and name the §2c row each number came from; they are never labelled *inferred
+from Anytype*, because twenty captures contain nothing to infer a week or day scale from and
+claiming otherwise would be the fabrication the phone label below exists to prevent.
+
+One deviation the ruling creates: the scale control stays in the header, so ours carries four
+controls where Anytype's carries three. ADR-002 authorises it; it is not a measured value.
 
 ### P0 - Blockers (MUST complete)
 
@@ -372,14 +397,21 @@ that does not exist.
 
 ## 12. OPEN QUESTIONS
 
-- **ADR-002, for the operator**: do the week and day scales survive? Anytype ships one calendar
-  layout; ours has three, and they carry roughly a third of the calendar's class vocabulary, their
-  own keyboard tests and a full timed-event body.
-- Does the unscheduled backlog drawer have an Anytype counterpart? Nothing in `047` section 5 or
-  `050`'s true-up names one, but neither read the calendar closely. T001 answers it from the
-  captures.
-- What does the phone calendar target? There is no reference. The desktop capture is the only
-  source, and goal D4 requires every value derived from it to say so.
+**Two of the three closed on 2026-09-05.**
+
+- ~~**ADR-002, for the operator**: do the week and day scales survive?~~ **Answered ~23:20:**
+  *"Keep week and day, styled to the month grid."* ADR-002 Accepted.
+- ~~Does the unscheduled backlog drawer have an Anytype counterpart?~~ **Answered by T001:** no, and
+  not from one screen — zero non-background pixels below the grid rule in all twenty set captures.
+  Kept as ours with the argument in `design-trueup.md` §A4.
+- **Still open. What does the phone calendar target?** There is no reference and there will not be
+  one. The desktop capture is the only source, and goal D4 requires every value derived from it to
+  say so.
+
+**Three opened by T001 and owed to a capture nobody has.** Each is **pixel read owed** in
+`design-trueup.md` §4, not filled with a plausible number: what a six-week month does to the row
+height; what the overflow affordance looks like when a day holds more than five objects; and what
+hover, focus and press do to a chip that now has no box to lift.
 <!-- /ANCHOR:questions -->
 
 ---
