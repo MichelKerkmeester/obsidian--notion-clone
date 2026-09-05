@@ -7505,13 +7505,19 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   outline: none;
 }
 
+/* The trailing gutter is published as a variable because a second rule has to cancel it: the sticky
+   action row below runs full bleed and pulls itself back out by exactly this much. Writing the
+   figure twice is what let the two drift — the inline-overlay variant reset the padding to 8px and
+   the pull kept reaching for 44, so the row ran 36px past the surface and the editor scrolled
+   sideways on a phone that cannot pan. One declaration, read by both. */
 .db-cell-edit-popover.is-mobile {
+  --db-cell-edit-gutter-end: 44px;
   position: fixed;
   z-index: var(--db-layer-popover, 100);
   max-width: none;
   border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
   box-shadow: var(--db-elevation-3);
-  padding: 8px 44px 8px 8px;
+  padding: 8px var(--db-cell-edit-gutter-end) 8px 8px;
 }
 
 .db-cell-edit-popover.is-mobile .db-cell-textarea {
@@ -13262,6 +13268,19 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .db-mobile-bottom-sheet .db-record-detail-title {
   font-size: var(--db-font-lg);
   font-weight: var(--db-font-lg-weight);
+}
+
+/* A flex item's automatic minimum size is the width of its longest unbreakable run, and the sheet
+   header lays out in a single nowrap line, so a title made of one long word does not truncate — it
+   widens the header, pushes the close control off the right edge and makes the whole surface scroll
+   sideways on a phone that cannot pan. The titles that carry a property, field or record name are
+   the user's words, not the plugin's, so no length can be assumed. `.db-record-detail-title` has
+   answered this since it was written (`min-width: 0` beside a `word-break`, § RECORD DETAIL) and is
+   the one sheet header that never overflowed; this gives the shared title the same freedom to break
+   at the surface it is measured against. */
+.db-mobile-bottom-sheet .db-panel-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* The owned menu, icon picker, colour picker and date picker each mount their own body div — a
@@ -20607,6 +20626,9 @@ body.pm-resize-active * {
 
 /* 移动端内联编辑器覆盖层 */
 .db-cell-edit-popover.is-mobile.is-inline-overlay {
+  /* No close control sits over this variant, so it keeps no gutter for one — and the sticky action
+     row's pull reads the figure from here rather than assuming the docked editor's 44px. */
+  --db-cell-edit-gutter-end: 8px;
   position: absolute;        /* 非 fixed，跟随文档流 */
   left: 0;
   right: 0;
@@ -21116,7 +21138,7 @@ img.db-text-md-image {
   justify-content: flex-end;
   gap: 8px;
   min-height: 44px;
-  margin: -8px -44px 8px -8px;
+  margin: -8px calc(-1 * var(--db-cell-edit-gutter-end)) 8px -8px;
   padding: 4px 8px;
   border-bottom: 1px solid var(--background-modifier-border);
   background: var(--background-primary);
