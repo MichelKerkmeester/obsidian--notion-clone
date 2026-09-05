@@ -3,12 +3,11 @@
 // COMPONENT: Database toolbar chrome — heading, view tabs, query/properties/utilities clusters
 // ───────────────────────────────────────────────────────────────────
 //
-// There is no shared popover manager: each of the toolbar's many independent
-// popovers (database switcher, group options, export, title actions,
-// utilities, all-views hub) tracks its own element and close listener, and
-// every open handler explicitly closes the others first. View-tab overflow
-// collapsing measures real DOM widths through a ResizeObserver and always
-// keeps the active tab visible, filling remaining space left-to-right.
+// Toolbar menus and panels share one shell so sibling dismissal, placement
+// and the header close control cannot drift per surface. The host still
+// tracks each open panel so a rebuild or an explicit close can reset the
+// matching trigger. View-tab overflow collapsing measures real DOM widths
+// through a ResizeObserver and always keeps the active tab visible.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -22,7 +21,7 @@ import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { createMenuRow, createMenuSection, createMenuSeparator } from "./menu-row";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
-import { applySheetChrome, createSheetHeader } from "./mobile-bottom-sheet";
+import { applySheetChrome } from "./mobile-bottom-sheet";
 import { createOwnedMenu } from "./owned-menu";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { getEffectiveFilterRules } from "../data/filter-rules";
@@ -39,6 +38,15 @@ import { isHTMLElement } from "./dom-guards";
 import { renderRecordIcon } from "./record-icon-renderer";
 import { createCheckbox } from "./checkbox";
 import { isTouchDevice } from "../data/touch-environment";
+import { applyViewRowPresets, writablePresetColumns } from "../data/view-row-presets";
+import {
+  createControlClusterButton,
+  createPopoverShell,
+  createSettingsEntry,
+  createTabStrip,
+  dismissToolbarSurfaces,
+  type PopoverShellHandle,
+} from "./toolbar-primitives";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. HELPERS
@@ -191,6 +199,7 @@ export interface ToolbarActions {
 
 export class ToolbarRenderer {
   private resizeObserver: ResizeObserver | null = null;
+  private chromeCollapseObserver: ResizeObserver | null = null;
   private draggedViewIndex: number | null = null;
   private draggedDatabaseIndex: number | null = null;
   private suppressViewTabClickUntil = 0;
@@ -205,13 +214,18 @@ export class ToolbarRenderer {
   private groupRowLimitEditingCustom = false;
   private groupRowLimitFocusCustomInput = false;
   private viewTabPopover?: HTMLElement;
+  private viewTabShell?: PopoverShellHandle;
   private removeViewTabPopoverListener?: () => void;
   private exportPopover?: HTMLElement;
+  private exportShell?: PopoverShellHandle;
   private removeExportPopoverListener?: () => void;
   private titleActionsPopover?: HTMLElement;
+  private titleActionsShell?: PopoverShellHandle;
   private removeTitleActionsPopoverListener?: () => void;
   private utilitiesPopover?: HTMLElement;
+  private utilitiesShell?: PopoverShellHandle;
   private removeUtilitiesPopoverListener?: () => void;
+  private groupShell?: PopoverShellHandle;
   private toolbarRoot?: HTMLElement;
   private descriptionScrollTimers = new WeakMap<HTMLElement, number>();
   private calendarTimelineToolbarRenderer = new CalendarTimelineToolbarRenderer();
@@ -227,12 +241,9 @@ export class ToolbarRenderer {
     actions: ToolbarActions
   ): void {
     this.toolbarRoot = containerEl;
-    this.closeDatabasePopover();
-    this.closeGroupPopover();
-    this.closeViewTabPopover();
-    this.closeExportPopover();
-    this.closeTitleActionsPopover();
-    this.closeUtilitiesPopover();
+    this.chromeCollapseObserver?.disconnect();
+    this.chromeCollapseObserver = null;
+    this.dismissOpenToolbarPopovers();
     this.calendarTimelineToolbarRenderer.closePopover();
     const currentEntry = viewEntries[currentDbIndex];
     const currentDb = currentEntry?.config;
@@ -299,10 +310,7 @@ export class ToolbarRenderer {
             return;
           }
           actions.closeToolbarPopovers?.();
-          this.closeGroupPopover();
-          this.closeViewTabPopover();
-          this.closeExportPopover();
-          this.closeTitleActionsPopover();
+          this.dismissSiblingToolbarSurfaces(chevron);
           chevron.setAttribute("aria-expanded", String(!this.databasePopover?.isConnected));
           this.renderDatabasePopover(chevron, viewEntries, currentDbIndex, actions);
         };
@@ -363,7 +371,7 @@ export class ToolbarRenderer {
 
       const titleActions = titleRow.createDiv({ cls: "db-title-actions" });
       this.renderFullViewButton(titleActions, actions);
-      if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions, currentDb);
+      if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions, currentDb, currentView);
       if (currentDb?.description) {
         header.createDiv({
           cls: "db-description db-description-embed",
@@ -401,7 +409,8 @@ export class ToolbarRenderer {
 
     const creationCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-creation-cluster" });
     if (!phoneLayout && !isChartView) this.renderSearch(utilitiesCluster, state, actions);
-    if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb);
+    if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb, currentView);
+    if (actions.hideDatabaseTitle && !actions.hideHeaderChrome) this.installMeasuredToolbarCollapse(header);
   }
 
   private renderUtilitiesOverflowButton(
@@ -411,7 +420,7 @@ export class ToolbarRenderer {
     actions: ToolbarActions,
   ): void {
     const button = this.createIconButton(toolbar, "more-horizontal", t("toolbar.utilities"), "db-toolbar-more-btn");
-    button.setAttribute("aria-haspopup", "menu");
+    createSettingsEntry(button, { label: t("toolbar.utilities"), ariaHaspopup: "menu" });
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-controls", "db-toolbar-utilities");
     button.onclick = (event) => {
@@ -422,11 +431,7 @@ export class ToolbarRenderer {
         return;
       }
       actions.closeToolbarPopovers?.();
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
+      this.dismissSiblingToolbarSurfaces(button);
       if (this.utilitiesPopover?.isConnected) {
         this.closeUtilitiesPopover();
         return;
@@ -434,10 +439,23 @@ export class ToolbarRenderer {
 
       const root = button.closest(".note-database-container");
       if (!root) return;
-      const panel = root.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover", attr: { id: "db-toolbar-utilities", role: "menu", "aria-label": t("toolbar.utilities") } });
-      this.utilitiesPopover = panel;
-      const header = panel.createDiv({ cls: "db-panel-header" });
-      header.createDiv({ cls: "db-panel-title", text: t("toolbar.utilities") });
+      const shell = createPopoverShell(button, {
+        title: t("toolbar.utilities"),
+        role: "menu",
+        className: "db-view-tab-popover db-toolbar-utilities-popover",
+        id: "db-toolbar-utilities",
+        onClose: () => {
+          this.utilitiesShell = undefined;
+          this.utilitiesPopover = undefined;
+          this.removeUtilitiesPopoverListener = undefined;
+          (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-toolbar-more-btn, .db-new-button-dropdown").forEach((trigger) => {
+            this.setPopoverTriggerState(trigger, false);
+          });
+        },
+      });
+      this.utilitiesShell = shell;
+      this.utilitiesPopover = shell.panel;
+      const panel = shell.panel;
 
       if (!actions.hideWidthSelect) {
         const width = config?.displayWidth === "wide" ? "default" : "wide";
@@ -480,9 +498,7 @@ export class ToolbarRenderer {
         this.renderToolbarMenuRow(panel, t("toolbar.moveToPage"), "folder-input", () => actions.moveLinkedView?.());
       }
       this.setPopoverTriggerState(button, true);
-      positionToolbarPopover(panel, button, COMPACT_MENU_POPOVER);
       this.installMenuKeyboardNavigation(panel);
-      this.removeUtilitiesPopoverListener = installPopoverAutoClose({ panel, anchorEl: button, close: () => this.closeUtilitiesPopover() });
     };
   }
 
@@ -509,21 +525,6 @@ export class ToolbarRenderer {
     return handle.row as HTMLButtonElement;
   }
 
-  private renderComputedSyncButton(toolbar: HTMLElement, actions: ToolbarActions): void {
-    if (!actions.syncComputedFields) return;
-    const btn = this.createIconButton(toolbar, "", t("viewConfig.saveComputedResults"));
-    appendSvg(btn, ToolbarRenderer.ICONS.refresh_fx);
-    btn.onclick = () => actions.syncComputedFields?.();
-  }
-
-  private renderDatabaseRefreshButton(toolbar: HTMLElement, actions: ToolbarActions): void {
-    if (!actions.refreshDatabase) return;
-    const btn = this.createIconButton(toolbar, "", t("toolbar.refreshDatabase"), "db-database-refresh-button");
-    setIcon(btn, "refresh-cw");
-    btn.onclick = () => actions.refreshDatabase?.();
-    this.updateDatabaseRefreshButton(btn, actions);
-  }
-
   updateDatabaseRefreshButton(button: HTMLElement, state: Pick<ToolbarActions,
     "pendingRefreshCount" | "pendingRefreshUnknown" | "isRefreshingDatabase">): void {
     const pending = state.pendingRefreshCount || 0;
@@ -546,29 +547,6 @@ export class ToolbarRenderer {
           : t("toolbar.refreshDatabase");
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
-  }
-
-  private renderCalendarTimelineOptionsButton(toolbar: HTMLElement, config: ViewConfig, database: DatabaseConfig, actions: ToolbarActions): void {
-    const label = config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
-    const btn = this.createIconButton(toolbar, "", label);
-    btn.addClass("db-calendar-timeline-options-toolbar-btn");
-    this.appendViewSettingsIcon(btn, this.getViewTypeIcon(config.viewType || "calendar"));
-    btn.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      actions.closeToolbarPopovers?.();
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
-      if (config.viewType === "calendar" && actions.toggleCalendarOptions) {
-        const container = toolbar.closest(".note-database-container") as HTMLElement || toolbar;
-        actions.toggleCalendarOptions(container, btn, config);
-      } else {
-        this.toggleCalendarTimelineOptions(toolbar, btn, config, database, actions);
-      }
-    };
   }
 
   private toggleCalendarTimelineOptions(toolbar: HTMLElement, anchor: HTMLElement, config: ViewConfig, database: DatabaseConfig, actions: ToolbarActions): void {
@@ -783,17 +761,24 @@ export class ToolbarRenderer {
       return;
     }
 
-    this.closeTitleActionsPopover();
-    this.closeDatabasePopover();
-    this.closeGroupPopover();
-    this.closeViewTabPopover();
-    this.closeExportPopover();
     actions.closeToolbarPopovers?.();
+    this.dismissSiblingToolbarSurfaces(anchorEl);
 
-    const panel = root.createDiv({ cls: "db-view-tab-popover db-title-actions-popover", attr: { id: "db-title-actions", role: "menu", "aria-label": t("common.database") } });
-    this.titleActionsPopover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("common.database") });
+    const shell = createPopoverShell(anchorEl, {
+      title: t("common.database"),
+      role: "menu",
+      className: "db-view-tab-popover db-title-actions-popover",
+      id: "db-title-actions",
+      onClose: () => {
+        this.titleActionsShell = undefined;
+        this.titleActionsPopover = undefined;
+        this.removeTitleActionsPopoverListener = undefined;
+        root.querySelectorAll<HTMLElement>(".db-heading-more-button").forEach((button) => this.setPopoverTriggerState(button, false));
+      },
+    });
+    this.titleActionsShell = shell;
+    this.titleActionsPopover = shell.panel;
+    const panel = shell.panel;
 
     if (actions.renameDatabase) {
       this.renderTitleActionsPopoverRow(panel, t("toolbar.renameDatabase"), "pencil", (rowEvent) => {
@@ -809,10 +794,7 @@ export class ToolbarRenderer {
     }
     this.renderTitleActionsPopoverRow(panel, t("toolbar.deleteDatabase"), "trash", () => actions.deleteDatabase(), "is-danger");
 
-    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchorEl, true);
-    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeTitleActionsPopover() });
-    this.removeTitleActionsPopoverListener = removeAutoClose;
     this.installMenuKeyboardNavigation(panel);
   }
 
@@ -824,11 +806,11 @@ export class ToolbarRenderer {
     extraClass = ""
   ): void {
     const row = panel.createEl("button", {
-      cls: `db-view-tab-popover-row db-menu-item ${extraClass}`.trim(),
+      cls: `db-view-tab-popover-row ${extraClass}`.trim(),
       attr: { type: "button", role: "menuitem", "aria-label": label },
     });
-    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), icon);
-    row.createSpan({ cls: "db-view-tab-popover-label db-menu-item-label", text: label });
+    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker" }), icon);
+    row.createSpan({ cls: "db-view-tab-popover-label", text: label });
     row.onclick = (event) => {
       this.closeTitleActionsPopover();
       onClick(event);
@@ -843,60 +825,69 @@ export class ToolbarRenderer {
     currentViewIndex: number,
     actions: ToolbarActions
   ): void {
-    const tabs = left.createDiv({
-      cls: "db-view-tabs",
-      attr: { role: "tablist", "aria-label": t("toolbar.viewSwitcher") },
-    });
     const readOnly = actions.isReadOnlyViews;
     const canReorder = Boolean(!readOnly && actions.moveView && db.views.length > 1 && !isTouchDevice(this.toolbarRoot));
-    const tabEls: { el: HTMLElement; index: number }[] = [];
-
-    db.views.forEach((view, i) => {
-      const viewId = this.getViewIdentity(view, i);
-      const tabId = this.getViewTabId(db, view, i);
-      const tab = tabs.createEl("button", {
-        cls: `db-view-tab${i === currentViewIndex ? " is-active" : ""}`,
-        attr: {
-          type: "button",
-          id: tabId,
-          role: "tab",
-          "aria-selected": i === currentViewIndex ? "true" : "false",
-          "aria-controls": `${tabId}-panel`,
-          "data-view-id": viewId,
-          tabindex: i === currentViewIndex ? "0" : "-1",
-        },
-      });
-      this.renderViewIcon(tab.createSpan({ cls: "db-view-tab-icon" }), view.icon, this.getViewTypeIcon(view.viewType || "table"));
-      tab.createSpan({ cls: "db-view-tab-name", text: view.name || t("common.untitled") });
-      tab.onclick = () => {
+    const viewIndex = (id: string): number => db.views.findIndex((view, index) => this.getViewIdentity(view, index) === id);
+    const strip = createTabStrip(left, {
+      activeId: this.getViewIdentity(db.views[currentViewIndex], currentViewIndex),
+      ariaLabel: t("toolbar.viewSwitcher"),
+      measureOverflow: false,
+      tabs: db.views.map((view, i) => {
+        const viewId = this.getViewIdentity(view, i);
+        const tabId = this.getViewTabId(db, view, i);
+        return {
+          id: viewId,
+          label: view.name || t("common.untitled"),
+          active: i === currentViewIndex,
+          attributes: {
+            id: tabId,
+            "aria-controls": `${tabId}-panel`,
+            "data-view-id": viewId,
+          },
+        };
+      }),
+      renderIcon: (parent, tab) => {
+        const view = db.views[viewIndex(tab.id)];
+        if (!view) return;
+        this.renderViewIcon(parent, view.icon, this.getViewTypeIcon(view.viewType || "table"));
+      },
+      onActivate: (id, tab) => {
         if (Date.now() < this.suppressViewTabClickUntil) return;
-        this.setRovingTab(tabEls, tab);
-        actions.selectViewInView(0, i, viewId);
-      };
-      if (canReorder) this.setupViewTabDrag(tab, i, actions);
-      if (!readOnly) {
-        tab.oncontextmenu = (e) => this.showViewTabMenu(e, i, db.views.length, actions, tab, view.viewType || "table");
-        tab.ondblclick = () => this.startRenameView(tab, i, actions);
-      }
-      tabEls.push({ el: tab, index: i });
-    });
-
-    // "+" add view button (only in non-readonly mode)
-    if (!readOnly) {
-      const addBtn = tabs.createEl("button", {
-        cls: "db-view-tab db-view-tab-add",
-        attr: {
-          type: "button",
-          "aria-label": db.views.length >= 15 ? t("toolbar.maxViews") : t("toolbar.addView"),
+        const index = viewIndex(id);
+        if (index < 0) return;
+        tab.parentElement?.querySelectorAll<HTMLElement>("[role=tab]").forEach((el) => {
+          el.setAttribute("tabindex", el === tab ? "0" : "-1");
+        });
+        actions.selectViewInView(0, index, id);
+      },
+      onContext: readOnly ? undefined : (event, id, tab) => {
+        const index = viewIndex(id);
+        const view = db.views[index];
+        if (!view) return;
+        this.showViewTabMenu(event, index, db.views.length, actions, tab, view.viewType || "table");
+      },
+      onDoubleActivate: readOnly ? undefined : (_id, tab) => this.startRenameView(tab, viewIndex(_id), actions),
+      addButton: readOnly ? undefined : {
+        label: db.views.length >= 15 ? t("toolbar.maxViews") : t("toolbar.addView"),
+        disabled: db.views.length >= 15,
+        attributes: {
           "aria-haspopup": "dialog",
           "aria-expanded": "false",
           "aria-controls": "db-add-view-popover",
         },
-      });
-      if (db.views.length >= 15) addBtn.disabled = true;
-      setIcon(addBtn, "plus");
-      setTooltip(addBtn, db.views.length >= 15 ? t("toolbar.maxViews") : t("toolbar.addView"), { delay: 100 });
-      if (db.views.length < 15) addBtn.onclick = (event) => this.showAddViewMenu(event, actions, addBtn, db, currentViewIndex);
+        onClick: (event) => {
+          const addBtn = event?.currentTarget;
+          if (!(addBtn instanceof HTMLButtonElement) || !event) return;
+          this.showAddViewMenu(event, actions, addBtn, db, currentViewIndex);
+        },
+      },
+    });
+    const tabs = strip.root;
+    const tabEls: { el: HTMLElement; index: number }[] = db.views
+      .map((view, index) => ({ el: strip.tabs.get(this.getViewIdentity(view, index)), index }))
+      .filter((entry): entry is { el: HTMLElement; index: number } => Boolean(entry.el));
+    if (canReorder) {
+      for (const entry of tabEls) this.setupViewTabDrag(entry.el, entry.index, actions);
     }
 
     // Set up resize observer on the toolbar for dynamic overflow detection
@@ -1092,14 +1083,29 @@ export class ToolbarRenderer {
       return;
     }
     this.closeViewTabPopover();
-    const panel = root.createDiv({ cls: "db-view-tab-popover db-all-views-popover", attr: { id: "db-all-views-popover", role: "dialog", "aria-label": t("toolbar.allViews") } });
-    this.viewTabPopover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header db-all-views-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("toolbar.allViews") });
-    const search = header.createEl("input", {
-      cls: "db-all-views-search",
-      attr: { type: "search", placeholder: t("toolbar.searchViews"), "aria-label": t("toolbar.searchViews") },
+    let search!: HTMLInputElement;
+    const shell = createPopoverShell(anchor, {
+      title: t("toolbar.allViews"),
+      role: "panel",
+      className: "db-view-tab-popover db-all-views-popover",
+      id: "db-all-views-popover",
+      beforeClose: (header) => {
+        header.addClass("db-all-views-header");
+        search = header.createEl("input", {
+          cls: "db-all-views-search",
+          attr: { type: "search", placeholder: t("toolbar.searchViews"), "aria-label": t("toolbar.searchViews") },
+        });
+      },
+      onClose: () => {
+        this.viewTabShell = undefined;
+        this.viewTabPopover = undefined;
+        this.removeViewTabPopoverListener = undefined;
+        root.querySelectorAll<HTMLElement>(".db-view-tab-add, .db-view-tab-more").forEach((button) => this.setPopoverTriggerState(button, false));
+      },
     });
+    this.viewTabShell = shell;
+    this.viewTabPopover = shell.panel;
+    const panel = shell.panel;
     const list = panel.createDiv({ cls: "db-all-views-list", attr: { role: "listbox", "aria-label": t("toolbar.allViews") } });
     const renderList = () => {
       list.empty();
@@ -1184,10 +1190,8 @@ export class ToolbarRenderer {
     };
     search.oninput = renderList;
     renderList();
-    positionToolbarPopover(panel, anchor, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchor, true);
     this.installMenuKeyboardNavigation(panel);
-    this.removeViewTabPopoverListener = installPopoverAutoClose({ panel, anchorEl: anchor, close: () => this.closeViewTabPopover() });
   }
 
   private renderInlineViewAction(parent: HTMLElement, label: string, icon: string, onClick: () => void, extraClass = ""): void {
@@ -1238,17 +1242,23 @@ export class ToolbarRenderer {
     event.stopPropagation();
     const root = tab.closest(".note-database-container");
     if (!root) return;
-    this.closeViewTabPopover();
-    this.closeDatabasePopover();
-    this.closeGroupPopover();
-    this.closeExportPopover();
-    this.closeTitleActionsPopover();
     actions.closeToolbarPopovers?.();
+    this.dismissSiblingToolbarSurfaces(tab);
 
-    const panel = root.createDiv({ cls: "db-view-tab-popover", attr: { role: "menu", "aria-label": t("viewConfig.viewSection") } });
-    this.viewTabPopover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("viewConfig.viewSection") });
+    const shell = createPopoverShell(tab, {
+      title: t("viewConfig.viewSection"),
+      role: "menu",
+      className: "db-view-tab-popover",
+      onClose: () => {
+        this.viewTabShell = undefined;
+        this.viewTabPopover = undefined;
+        this.removeViewTabPopoverListener = undefined;
+        this.setPopoverTriggerState(tab, false);
+      },
+    });
+    this.viewTabShell = shell;
+    this.viewTabPopover = shell.panel;
+    const panel = shell.panel;
 
     this.renderViewTabPopoverRow(panel, t("toolbar.rename"), "pencil", () => {
       this.startRenameView(tab, viewIndex, actions);
@@ -1276,16 +1286,13 @@ export class ToolbarRenderer {
       }, "is-danger");
     }
 
-    positionToolbarPopover(panel, tab, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(tab, true);
     this.installMenuKeyboardNavigation(panel);
-    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: tab, close: () => this.closeViewTabPopover() });
-    this.removeViewTabPopoverListener = removeAutoClose;
   }
 
   private renderViewTypeChangeRow(panel: HTMLElement, viewIndex: number, viewType: DatabaseViewType, actions: ToolbarActions): void {
     const row = panel.createEl("button", {
-      cls: "db-view-tab-popover-row db-menu-item",
+      cls: "db-view-tab-popover-row",
       attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.changeViewType") },
     });
     setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), "replace");
@@ -1346,11 +1353,11 @@ export class ToolbarRenderer {
     extraClass = ""
   ): void {
     const row = panel.createEl("button", {
-      cls: `db-view-tab-popover-row db-menu-item ${extraClass}`.trim(),
+      cls: `db-view-tab-popover-row ${extraClass}`.trim(),
       attr: { type: "button", role: "menuitem", "aria-label": label },
     });
-    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), icon);
-    row.createSpan({ cls: "db-view-tab-popover-label db-menu-item-label", text: label });
+    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker" }), icon);
+    row.createSpan({ cls: "db-view-tab-popover-label", text: label });
     row.onclick = () => {
       this.closeViewTabPopover();
       onClick();
@@ -1372,19 +1379,24 @@ export class ToolbarRenderer {
       this.closeViewTabPopover();
       return;
     }
-    this.closeViewTabPopover();
-    this.closeDatabasePopover();
-    this.closeGroupPopover();
-    this.closeExportPopover();
-    this.closeTitleActionsPopover();
     actions.closeToolbarPopovers?.();
+    this.dismissSiblingToolbarSurfaces(anchorEl);
 
-    const panel = root.createDiv({ cls: "db-view-tab-popover db-add-view-popover", attr: { id: "db-add-view-popover", role: "dialog", "aria-label": t("toolbar.addView") } });
-    this.viewTabPopover = panel;
-    createSheetHeader(panel, {
+    const shell = createPopoverShell(anchorEl, {
       title: t("toolbar.addView"),
-      onClose: () => this.closeViewTabPopover(),
+      role: "panel",
+      className: "db-view-tab-popover db-add-view-popover",
+      id: "db-add-view-popover",
+      onClose: () => {
+        this.viewTabShell = undefined;
+        this.viewTabPopover = undefined;
+        this.removeViewTabPopoverListener = undefined;
+        this.setPopoverTriggerState(anchorEl, false);
+      },
     });
+    this.viewTabShell = shell;
+    this.viewTabPopover = shell.panel;
+    const panel = shell.panel;
 
     // Settings first, actions second, because the settings modify what the actions produce —
     // reading order follows causal order. What makes the settings skippable is the heading above
@@ -1477,11 +1489,8 @@ export class ToolbarRenderer {
         },
       });
     }
-    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchorEl, true);
     this.installMenuKeyboardNavigation(panel);
-    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeViewTabPopover() });
-    this.removeViewTabPopoverListener = removeAutoClose;
   }
 
   private getViewTypeIcon(viewType: DatabaseViewType): string {
@@ -1590,22 +1599,6 @@ export class ToolbarRenderer {
   }
 
   // ── Row 2: Toolbar buttons ──
-
-  private renderWidthSelect(
-    toolbar: HTMLElement,
-    entry: ToolbarViewEntry | undefined,
-    config: ViewConfig | undefined,
-    actions: ToolbarActions
-  ): void {
-    const current = config?.displayWidth || "default";
-    const next = current === "wide" ? "default" : "wide";
-    const btn = this.createIconButton(toolbar, "", current === "wide" ? t("toolbar.defaultWidth") : t("toolbar.wide"), "db-width-toggle-btn");
-    appendSvg(btn, current === "wide" ? ToolbarRenderer.ICONS.widthIn : ToolbarRenderer.ICONS.widthOut);
-    btn.addClass(current === "wide" ? "is-active" : "is-inactive");
-    // Two-state toggle: the active class styles it, aria-pressed announces it.
-    btn.setAttribute("aria-pressed", String(current === "wide"));
-    btn.onclick = () => actions.setDisplayWidth(next);
-  }
 
   private renderSearch(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
     const wrap = toolbar.createDiv({ cls: `db-search-control${state.searchText ? " is-active" : ""}` });
@@ -1718,10 +1711,7 @@ export class ToolbarRenderer {
         return;
       }
       actions.closeToolbarPopovers?.();
-      this.closeDatabasePopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
+      this.dismissSiblingToolbarSurfaces(btn);
       this.setPopoverTriggerState(btn, !this.groupPopover?.isConnected);
       this.renderGroupPopover(btn, config, currentViewType, actions, state);
     };
@@ -1752,8 +1742,22 @@ export class ToolbarRenderer {
       return;
     }
 
-    const panel = root.createDiv({ cls: "db-group-popover", attr: { id: "db-group-popover", role: "menu", "aria-label": t("toolbar.group") } });
-    this.groupPopover = panel;
+    const shell = createPopoverShell(anchorEl, {
+      title: t("toolbar.group"),
+      role: "menu",
+      className: "db-group-popover",
+      id: "db-group-popover",
+      omitHeader: true,
+      onClose: () => {
+        this.groupShell = undefined;
+        this.groupPopover = undefined;
+        this.removeGroupPopoverListener = undefined;
+        root.querySelectorAll<HTMLElement>(".db-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
+      },
+    });
+    this.groupShell = shell;
+    this.groupPopover = shell.panel;
+    const panel = shell.panel;
     this.groupPopoverConfig = config;
     this.groupPopoverViewType = currentViewType;
     this.groupPopoverActions = actions;
@@ -1761,15 +1765,6 @@ export class ToolbarRenderer {
 
     const groupValue = this.resolveGroupValue(config, currentViewType, state);
     this.populateGroupPopover(panel, config, currentViewType, groupValue, actions);
-
-    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
-    const removeAutoClose = installPopoverAutoClose({
-      panel,
-      anchorEl,
-      close: () => this.closeGroupPopover(),
-      isActiveTarget: (target) => this.isGroupPopoverActiveTarget(target, panel, anchorEl),
-    });
-    this.removeGroupPopoverListener = removeAutoClose;
   }
 
   private isGroupPopoverActiveTarget(target: EventTarget | null, panel: HTMLElement, anchorEl: HTMLElement): boolean {
@@ -2102,12 +2097,30 @@ export class ToolbarRenderer {
     return computedDef?.type || "text";
   }
 
+  private dismissOpenToolbarPopovers(): void {
+    this.closeDatabasePopover();
+    this.closeGroupPopover();
+    this.closeViewTabPopover();
+    this.closeExportPopover();
+    this.closeTitleActionsPopover();
+    this.closeUtilitiesPopover();
+  }
+
+  private dismissSiblingToolbarSurfaces(anchor: HTMLElement): void {
+    dismissToolbarSurfaces(anchor);
+    this.dismissOpenToolbarPopovers();
+  }
+
   private closeGroupPopover(): void {
     const root = this.groupPopover?.closest(".note-database-container");
-    this.removeGroupPopoverListener?.();
-    this.removeGroupPopoverListener = undefined;
     this.groupRowLimitEditingCustom = false;
     this.groupRowLimitFocusCustomInput = false;
+    if (this.groupShell) {
+      this.groupShell.close();
+      return;
+    }
+    this.removeGroupPopoverListener?.();
+    this.removeGroupPopoverListener = undefined;
     this.groupPopover?.remove();
     this.groupPopover = undefined;
     root?.querySelectorAll<HTMLElement>(".db-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
@@ -2115,6 +2128,10 @@ export class ToolbarRenderer {
 
   private closeViewTabPopover(): void {
     const root = this.viewTabPopover?.closest(".note-database-container");
+    if (this.viewTabShell) {
+      this.viewTabShell.close();
+      return;
+    }
     this.removeViewTabPopoverListener?.();
     this.removeViewTabPopoverListener = undefined;
     this.viewTabPopover?.remove();
@@ -2123,6 +2140,10 @@ export class ToolbarRenderer {
   }
 
   private closeExportPopover(): void {
+    if (this.exportShell) {
+      this.exportShell.close();
+      return;
+    }
     this.removeExportPopoverListener?.();
     this.removeExportPopoverListener = undefined;
     this.exportPopover?.remove();
@@ -2131,6 +2152,10 @@ export class ToolbarRenderer {
 
   private closeTitleActionsPopover(): void {
     const root = this.titleActionsPopover?.closest(".note-database-container");
+    if (this.titleActionsShell) {
+      this.titleActionsShell.close();
+      return;
+    }
     this.removeTitleActionsPopoverListener?.();
     this.removeTitleActionsPopoverListener = undefined;
     this.titleActionsPopover?.remove();
@@ -2139,6 +2164,10 @@ export class ToolbarRenderer {
   }
 
   private closeUtilitiesPopover(): void {
+    if (this.utilitiesShell) {
+      this.utilitiesShell.close();
+      return;
+    }
     this.removeUtilitiesPopoverListener?.();
     this.removeUtilitiesPopoverListener = undefined;
     this.utilitiesPopover?.remove();
@@ -2202,17 +2231,18 @@ export class ToolbarRenderer {
 
   private renderFilterButton(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
     const count = getEffectiveFilterRules(state.filters).length;
-    const filterBtn = this.createIconButton(toolbar, "list-filter", t("toolbar.filter"), "db-filter-btn db-toolbar-badge-button");
-    filterBtn.setAttribute("aria-haspopup", "dialog");
+    const filterBtn = createControlClusterButton(toolbar, {
+      icon: "list-filter",
+      label: t("toolbar.filter"),
+      state: count > 0 ? "active" : "add",
+      count,
+      className: "db-filter-btn db-toolbar-badge-button",
+      ariaHaspopup: "dialog",
+      ariaControls: "db-filter-panel",
+    });
     filterBtn.setAttribute("aria-expanded", "false");
-    filterBtn.setAttribute("aria-controls", "db-filter-panel");
-    this.setBadge(filterBtn, count);
     filterBtn.onclick = () => {
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
+      this.dismissSiblingToolbarSurfaces(filterBtn);
       this.setPopoverTriggerState(filterBtn, filterBtn.getAttribute("aria-expanded") !== "true");
       actions.toggleFilterPanel(filterBtn);
     };
@@ -2220,48 +2250,20 @@ export class ToolbarRenderer {
 
   private renderSortButton(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
     const count = this.getSortRuleCount(state);
-    const sortBtn = this.createIconButton(toolbar, "arrow-up-down", t("toolbar.sort"), "db-sort-btn db-toolbar-badge-button");
-    sortBtn.setAttribute("aria-haspopup", "dialog");
+    const sortBtn = createControlClusterButton(toolbar, {
+      icon: "arrow-up-down",
+      label: t("toolbar.sort"),
+      state: count > 0 ? "active" : "add",
+      count,
+      className: "db-sort-btn db-toolbar-badge-button",
+      ariaHaspopup: "dialog",
+      ariaControls: "db-sort-panel",
+    });
     sortBtn.setAttribute("aria-expanded", "false");
-    sortBtn.setAttribute("aria-controls", "db-sort-panel");
-    this.setBadge(sortBtn, count);
     sortBtn.onclick = () => {
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
+      this.dismissSiblingToolbarSurfaces(sortBtn);
       this.setPopoverTriggerState(sortBtn, sortBtn.getAttribute("aria-expanded") !== "true");
       actions.toggleSortPanel(sortBtn);
-    };
-  }
-
-  private renderViewConfigButton(toolbar: HTMLElement, actions: ToolbarActions): void {
-    const btn = this.createIconButton(toolbar, "", t("toolbar.settings"), "db-view-config-btn");
-    appendSvg(btn, ToolbarRenderer.ICONS.settings);
-    btn.onclick = () => {
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
-      actions.toggleViewConfig(btn);
-    };
-  }
-
-  private renderChartOptionsButton(toolbar: HTMLElement, actions: ToolbarActions): void {
-    const btn = this.createIconButton(toolbar, "", t("chart.options"), "db-chart-options-toolbar-btn");
-    this.appendViewSettingsIcon(btn, this.getViewTypeIcon("chart"));
-
-    btn.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
-      actions.toggleChartOptions?.(btn);
     };
   }
 
@@ -2271,35 +2273,23 @@ export class ToolbarRenderer {
   }
 
   private renderColumnButton(toolbar: HTMLElement, config: ViewConfig | undefined, state: DatabaseViewState, actions: ToolbarActions): void {
-    const colBtn = this.createIconButton(toolbar, "columns-3", t("toolbar.properties"), "db-col-manager-btn db-toolbar-badge-button");
-    colBtn.setAttribute("aria-haspopup", "dialog");
+    const hiddenCount = state.hiddenColumns.size;
+    const colBtn = createControlClusterButton(toolbar, {
+      icon: "columns-3",
+      label: t("toolbar.properties"),
+      state: hiddenCount > 0 ? "active" : "add",
+      count: hiddenCount,
+      neutralCount: true,
+      className: "db-col-manager-btn db-toolbar-badge-button",
+      ariaHaspopup: "dialog",
+      ariaControls: "db-column-manager",
+    });
+    colBtn.setAttribute("aria-label", hiddenCount > 0 ? t("toolbar.propertiesHidden", { count: hiddenCount }) : t("toolbar.properties"));
     colBtn.setAttribute("aria-expanded", "false");
-    colBtn.setAttribute("aria-controls", "db-column-manager");
-    this.setHiddenBadge(colBtn, state.hiddenColumns.size);
     colBtn.onclick = () => {
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeExportPopover();
-      this.closeTitleActionsPopover();
+      this.dismissSiblingToolbarSurfaces(colBtn);
       this.setPopoverTriggerState(colBtn, colBtn.getAttribute("aria-expanded") !== "true");
       actions.toggleColumnManager(colBtn);
-    };
-  }
-
-  private renderExportButton(toolbar: HTMLElement, actions: ToolbarActions): void {
-    if (!actions.exportData && !actions.copyViewCode && !actions.exportCsvMarkdownZip) return;
-    const btn = this.createIconButton(toolbar, "", t("toolbar.copyFormats"), "db-export-btn");
-    appendSvg(btn, ToolbarRenderer.ICONS.copy);
-    btn.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.closeDatabasePopover();
-      this.closeGroupPopover();
-      this.closeViewTabPopover();
-      this.closeTitleActionsPopover();
-      actions.closeToolbarPopovers?.();
-      this.renderExportPopover(btn, actions);
     };
   }
 
@@ -2310,10 +2300,19 @@ export class ToolbarRenderer {
       this.closeExportPopover();
       return;
     }
-    const panel = root.createDiv({ cls: "db-export-popover" });
-    this.exportPopover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("toolbar.copyFormats") });
+    const shell = createPopoverShell(anchorEl, {
+      title: t("toolbar.copyFormats"),
+      role: "menu",
+      className: "db-export-popover",
+      onClose: () => {
+        this.exportShell = undefined;
+        this.exportPopover = undefined;
+        this.removeExportPopoverListener = undefined;
+      },
+    });
+    this.exportShell = shell;
+    this.exportPopover = shell.panel;
+    const panel = shell.panel;
     if (actions.copyViewCode) {
       this.renderExportPopoverRow(panel, t("toolbar.copyViewCode"), "code-xml", () => actions.copyViewCode?.());
     }
@@ -2324,10 +2323,7 @@ export class ToolbarRenderer {
     if (actions.exportCsvMarkdownZip) {
       this.renderExportPopoverRow(panel, t("toolbar.exportCsvMarkdownZip"), "archive", () => actions.exportCsvMarkdownZip?.());
     }
-    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.installMenuKeyboardNavigation(panel);
-    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeExportPopover() });
-    this.removeExportPopoverListener = removeAutoClose;
   }
 
   private renderExportPopoverRow(panel: HTMLElement, label: string, icon: string, onClick: () => void): void {
@@ -2343,7 +2339,7 @@ export class ToolbarRenderer {
     };
   }
 
-  private renderNewButton(toolbar: HTMLElement, actions: ToolbarActions, currentDb?: DatabaseConfig): void {
+  private renderNewButton(toolbar: HTMLElement, actions: ToolbarActions, currentDb?: DatabaseConfig, currentView?: ViewConfig): void {
     const hasTemplate = hasRecordTemplate(currentDb);
     const label = hasTemplate ? getNewFromTemplateLabel() : t("toolbar.new");
     const tooltip = hasTemplate ? getNewFromTemplateTooltip(currentDb) : label;
@@ -2367,7 +2363,7 @@ export class ToolbarRenderer {
         actions.createEntryFromTemplate(template, position, intent);
         return;
       }
-      actions.createEntry(undefined, position, intent);
+      actions.createEntry(applyViewRowPresets(currentView?.newRowPresets, currentDb?.schema), position, intent);
     };
     newBtn.onclick = () => {
       void executeNewFromTemplate({
@@ -2390,7 +2386,7 @@ export class ToolbarRenderer {
     });
     setIcon(dropdown, "chevron-down");
     setTooltip(dropdown, t("toolbar.chooseTemplate"), { delay: 100 });
-    dropdown.onclick = (event) => this.showNewTemplateMenu(event, dropdown, actions, currentDb);
+    dropdown.onclick = (event) => this.showNewTemplateMenu(event, dropdown, actions, currentDb, currentView);
   }
 
   /**
@@ -2419,6 +2415,7 @@ export class ToolbarRenderer {
     anchor: HTMLElement,
     actions: ToolbarActions,
     currentDb?: DatabaseConfig,
+    currentView?: ViewConfig,
   ): void {
     event.preventDefault();
     event.stopPropagation();
@@ -2430,13 +2427,23 @@ export class ToolbarRenderer {
     }
     this.closeUtilitiesPopover();
     actions.closeToolbarPopovers?.();
-    const panel = root.createDiv({
-      cls: "db-view-tab-popover db-new-template-popover",
-      attr: { id: "db-new-template-menu", role: "menu", "aria-label": t("toolbar.chooseTemplate") },
+    const shell = createPopoverShell(anchor, {
+      title: t("toolbar.chooseTemplate"),
+      role: "menu",
+      className: "db-view-tab-popover db-new-template-popover",
+      id: "db-new-template-menu",
+      onClose: () => {
+        this.utilitiesShell = undefined;
+        this.utilitiesPopover = undefined;
+        this.removeUtilitiesPopoverListener = undefined;
+        (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-toolbar-more-btn, .db-new-button-dropdown").forEach((trigger) => {
+          this.setPopoverTriggerState(trigger, false);
+        });
+      },
     });
-    this.utilitiesPopover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("toolbar.chooseTemplate") });
+    this.utilitiesShell = shell;
+    this.utilitiesPopover = shell.panel;
+    const panel = shell.panel;
     const placement = panel.createDiv({ cls: "db-new-placement", attr: { role: "group", "aria-label": t("toolbar.insertPlacement") } });
     for (const option of [{ value: "top" as const, label: t("toolbar.insertAtTop") }, { value: "bottom" as const, label: t("toolbar.insertAtBottom") }]) {
       const button = placement.createEl("button", {
@@ -2457,7 +2464,7 @@ export class ToolbarRenderer {
     const choose = (template: NewRecordTemplateConfig | null) => {
       actions.closeToolbarPopovers?.();
       if (actions.createEntryFromTemplate) actions.createEntryFromTemplate(template, position(), { allowOverlayTransition: true });
-      else actions.createEntry(undefined, position(), { allowOverlayTransition: true });
+      else actions.createEntry(applyViewRowPresets(currentView?.newRowPresets, currentDb?.schema), position(), { allowOverlayTransition: true });
       this.closeUtilitiesPopover();
     };
     const templates = actions.recordTemplates || [];
@@ -2498,10 +2505,58 @@ export class ToolbarRenderer {
       });
       configure.setAttribute("aria-disabled", "true");
     }
-    positionToolbarPopover(panel, anchor, COMPACT_MENU_POPOVER);
+    const presetColumns = writablePresetColumns(currentDb?.schema);
+    if (currentView && presetColumns.length > 0) {
+      createMenuSeparator(panel);
+      createMenuSection(panel, t("toolbar.settings"));
+      for (const column of presetColumns) {
+        const row = panel.createDiv({ cls: "db-new-preset-row db-menu-item" });
+        row.createSpan({ cls: "db-menu-item-label", text: column.label || column.key });
+        const input = row.createEl("input", {
+          cls: "db-new-preset-input",
+          attr: { type: "text", "aria-label": column.label || column.key, placeholder: t("toolbar.presetNone") },
+        });
+        input.value = currentView.newRowPresets?.[column.key] || "";
+        input.onclick = (event) => event.stopPropagation();
+        input.oninput = () => {
+          const next = { ...(currentView.newRowPresets || {}) };
+          if (input.value) next[column.key] = input.value;
+          else delete next[column.key];
+          currentView.newRowPresets = Object.keys(next).length ? next : undefined;
+          actions.updateViewConfig?.(t("toolbar.settings"));
+        };
+      }
+    }
     this.setPopoverTriggerState(anchor, true);
     this.installMenuKeyboardNavigation(panel);
-    this.removeUtilitiesPopoverListener = installPopoverAutoClose({ panel, anchorEl: anchor, close: () => this.closeUtilitiesPopover() });
+  }
+
+  private installMeasuredToolbarCollapse(header: HTMLElement): void {
+    this.chromeCollapseObserver?.disconnect();
+    const toolbar = header.querySelector<HTMLElement>(".db-toolbar");
+    if (!toolbar) return;
+    const apply = () => this.applyToolbarChromeCollapse(toolbar);
+    const view = toolbar.ownerDocument.defaultView;
+    if (view?.ResizeObserver) {
+      this.chromeCollapseObserver = new view.ResizeObserver(() => apply());
+      this.chromeCollapseObserver.observe(toolbar);
+    }
+    apply();
+  }
+
+  private applyToolbarChromeCollapse(toolbar: HTMLElement): void {
+    const newCluster = toolbar.querySelector<HTMLElement>(".db-toolbar-creation-cluster");
+    const query = toolbar.querySelector<HTMLElement>(".db-toolbar-query-cluster");
+    const props = toolbar.querySelector<HTMLElement>(".db-toolbar-properties-cluster");
+    const add = toolbar.querySelector<HTMLElement>(".db-view-tab-add");
+    const targets = [newCluster, query, props, add].filter((el): el is HTMLElement => Boolean(el));
+    for (const el of targets) el.style.display = "";
+    const naturalWidth = toolbar.scrollWidth;
+    if (naturalWidth <= toolbar.clientWidth + 1) return;
+    for (const el of targets) {
+      if (toolbar.scrollWidth <= toolbar.clientWidth + 1) break;
+      el.style.display = "none";
+    }
   }
 
   private renderFullViewButton(toolbar: HTMLElement, actions: ToolbarActions): void {

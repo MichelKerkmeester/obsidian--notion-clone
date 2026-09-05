@@ -28,6 +28,7 @@ import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./prop
 import { DatabaseViewState } from "./view-state-store";
 import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
 import { closeActiveDateValuePicker, renderDateValuePicker } from "./date-value-picker";
+import { createConditionRow } from "./toolbar-primitives";
 import { trapFocus } from "./interaction-scope";
 
 // ───────────────────────────────────────────────────────────────────
@@ -467,8 +468,6 @@ export class FilterPanelRenderer {
   ): void {
     const rule = state.filters[index];
     if (!rule) return;
-    const row = panel.createDiv({ cls: "db-panel-row" });
-    if (options?.compact) row.addClass("db-active-rule-editor-row");
     const rerender = options?.rerender || (() => {
       this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
     });
@@ -477,25 +476,6 @@ export class FilterPanelRenderer {
     const firstKey = allCols[0]?.key || "status";
     const currentField = rule.field || firstKey;
     const currentCol = allCols.find((col) => col.key === currentField) || allCols[0];
-    createDropdownField({
-      parent: row,
-      label: t("panel.field"),
-      options: allCols.map((col) => toPropertyDropdownOption(col)),
-      value: currentField,
-      className: "db-panel-dropdown db-filter-field-dropdown",
-      hideLabel: true,
-      renderIcon: renderDropdownPropertyTypeIcon,
-      onChange: (value) => {
-        rule.field = value;
-        const nextCol = allCols.find((col) => col.key === rule.field);
-        const nextOps = getFilterOperatorsForColumn(nextCol);
-        if (!nextOps.some(([op]) => op === rule.op)) rule.op = nextOps[0]?.[0] || "eq";
-        rule.value = "";
-        actions.saveState();
-        rerender();
-        actions.refresh();
-      },
-    });
 
     // Migrate legacy checkbox eq/neq filters to empty/notempty, preserving intent
     // (eq "true" → checked/notempty, eq "false" → unchecked/empty; neq inverts). Idempotent:
@@ -507,46 +487,73 @@ export class FilterPanelRenderer {
     }
     const ops = getFilterOperatorsForColumn(currentCol);
     if (!ops.some(([op]) => op === rule.op)) rule.op = ops[0]?.[0] || "eq";
-    createDropdownField({
-      parent: row,
-      label: t("panel.operator"),
-      options: ops.map(([value, label]) => ({ value, text: label })),
-      value: rule.op,
-      className: "db-panel-dropdown db-filter-operator-dropdown",
-      hideLabel: true,
-      onChange: (value) => {
-        rule.op = value as FilterRule["op"];
-        actions.saveState();
-        rerender();
-        actions.refresh();
+
+    createConditionRow(panel, {
+      compact: options?.compact,
+      field: (parent) => {
+        createDropdownField({
+          parent,
+          label: t("panel.field"),
+          options: allCols.map((col) => toPropertyDropdownOption(col)),
+          value: currentField,
+          className: "db-panel-dropdown db-filter-field-dropdown",
+          hideLabel: true,
+          renderIcon: renderDropdownPropertyTypeIcon,
+          onChange: (value) => {
+            rule.field = value;
+            const nextCol = allCols.find((col) => col.key === rule.field);
+            const nextOps = getFilterOperatorsForColumn(nextCol);
+            if (!nextOps.some(([op]) => op === rule.op)) rule.op = nextOps[0]?.[0] || "eq";
+            rule.value = "";
+            actions.saveState();
+            rerender();
+            actions.refresh();
+          },
+        });
       },
-    });
-
-    if (rule.op !== "empty" && rule.op !== "notempty") {
-      this.renderValueInput(row, rule, currentCol, actions);
-    } else {
-      row.createSpan({ text: "—", cls: "db-panel-empty-value" });
-    }
-
-    if (options?.showRemove !== false) {
-      if (options?.onWrap) {
-        this.createFilterTreeIconButton(row, "folder-plus", t("viewConfig.sourceRules.addGroup"), options.onWrap);
-      }
-      if (options?.onNot) {
-        this.createFilterTreeIconButton(row, "circle-slash-2", t("viewConfig.sourceRules.addNot"), options.onNot);
-      }
-      const rmBtn = row.createEl("button", { cls: "db-panel-button", text: "×" });
-      rmBtn.onclick = () => {
-        if (options?.onRemove) {
-          options.onRemove();
+      operator: (parent) => {
+        createDropdownField({
+          parent,
+          label: t("panel.operator"),
+          options: ops.map(([value, label]) => ({ value, text: label })),
+          value: rule.op,
+          className: "db-panel-dropdown db-filter-operator-dropdown",
+          hideLabel: true,
+          onChange: (value) => {
+            rule.op = value as FilterRule["op"];
+            actions.saveState();
+            rerender();
+            actions.refresh();
+          },
+        });
+      },
+      value: (parent) => {
+        if (rule.op !== "empty" && rule.op !== "notempty") {
+          this.renderValueInput(parent, rule, currentCol, actions);
           return;
         }
-        removeFilterRuleAt(state, index);
-        actions.saveState();
-        rerender();
-        actions.refresh();
-      };
-    }
+        parent.createSpan({ text: "—", cls: "db-panel-empty-value" });
+      },
+      trailing: options?.showRemove === false ? undefined : (parent) => {
+        if (options?.onWrap) {
+          this.createFilterTreeIconButton(parent, "folder-plus", t("viewConfig.sourceRules.addGroup"), options.onWrap);
+        }
+        if (options?.onNot) {
+          this.createFilterTreeIconButton(parent, "circle-slash-2", t("viewConfig.sourceRules.addNot"), options.onNot);
+        }
+        const rmBtn = parent.createEl("button", { cls: "db-panel-button", text: "×" });
+        rmBtn.onclick = () => {
+          if (options?.onRemove) {
+            options.onRemove();
+            return;
+          }
+          removeFilterRuleAt(state, index);
+          actions.saveState();
+          rerender();
+          actions.refresh();
+        };
+      },
+    });
   }
 
   private renderValueInput(row: HTMLElement, rule: FilterRule, col: ColumnDef | undefined, actions: FilterPanelActions): void {

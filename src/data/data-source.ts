@@ -1081,6 +1081,7 @@ export class DataSource {
       calendarAllDayMaxLanes: this.parsePositiveNumber(v["calendarAllDayMaxLanes"]),
       calendarFirstDayOfWeek: v["calendarFirstDayOfWeek"] === 0 ? 0 : v["calendarFirstDayOfWeek"] === 1 ? 1 : v["calendarFirstDayOfWeek"] === 6 ? 6 : undefined,
       yearDisplayMode: v["yearDisplayMode"] === "always" ? "always" : v["yearDisplayMode"] === "smart" ? "smart" : v["yearDisplayMode"] === "never" ? "never" : undefined,
+      newRowPresets: this.parseStringRecord(v["newRowPresets"]),
       viewSourceRulesEnabled: v["viewSourceRulesEnabled"] === true ? true : v["viewSourceRulesEnabled"] === false ? false : (parsedSourceRuleTree || hasLegacyViewSourceRules) ? true : undefined,
       calendarMonthVisibleLanes: this.parsePositiveNumber(v["calendarMonthVisibleLanes"]),
       timelineStartDateField: safeString(v["timelineStartDateField"]) || undefined,
@@ -1304,6 +1305,7 @@ export class DataSource {
       calendarAllDayMaxLanes: typeof view.calendarAllDayMaxLanes === "number" ? view.calendarAllDayMaxLanes : undefined,
       calendarFirstDayOfWeek: view.calendarFirstDayOfWeek === 0 || view.calendarFirstDayOfWeek === 1 || view.calendarFirstDayOfWeek === 6 ? view.calendarFirstDayOfWeek : undefined,
       yearDisplayMode: view.yearDisplayMode === "always" || view.yearDisplayMode === "smart" || view.yearDisplayMode === "never" ? view.yearDisplayMode : undefined,
+      newRowPresets: view.newRowPresets && Object.keys(view.newRowPresets).length ? view.newRowPresets : undefined,
       viewSourceRulesEnabled: typeof view.viewSourceRulesEnabled === "boolean" ? view.viewSourceRulesEnabled : undefined,
       calendarMonthVisibleLanes: typeof view.calendarMonthVisibleLanes === "number" ? view.calendarMonthVisibleLanes : undefined,
       timelineStartDateField: view.timelineStartDateField || "",
@@ -1356,6 +1358,7 @@ export class DataSource {
       "galleryImageFit",
       "boardImageField",
       "boardCardFields",
+      "newRowPresets",
       "boardImageAspectRatio",
       "boardImageFit",
       "alwaysShowEmptyFields",
@@ -1482,6 +1485,15 @@ export class DataSource {
       .filter(([field, summary]) => field.trim() && summary.trim())
       .map(([field, summary]) => ({ field, summary }));
     return rules.length > 0 ? rules : undefined;
+  }
+
+  private parseStringRecord(value: unknown): Record<string, string> | undefined {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+    const result: Record<string, string> = {};
+    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
+      if (typeof item === "string" && key.trim() && item !== "") result[key] = item;
+    }
+    return Object.keys(result).length > 0 ? result : undefined;
   }
 
   private parseNumberMap(value: unknown): Record<string, number> | undefined {

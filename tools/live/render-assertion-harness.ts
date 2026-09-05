@@ -271,11 +271,13 @@ export interface ScenarioSpec {
    * Opt-in, renderer "toolbar" only: after the toolbar mounts, clicks one of its own trigger
    * buttons to open the surface it owns — "utilities" clicks the More-tools button
    * (`renderUtilitiesOverflowButton`'s own onclick), "add-view" clicks the view-tab plus button
-   * (`showAddViewMenu`'s own onclick). The same anchors a device tap reaches; nothing is
+   * (`showAddViewMenu`'s own onclick), "tab-menu" right-clicks the first view tab
+   * (`showViewTabMenu`'s own oncontextmenu, reading rename/duplicate/remove through the shared
+   * shell). The same anchors a device tap or a right-click reaches; nothing is
    * hand-applied. Undefined leaves the toolbar closed, which is what the plain toolbar
    * scenarios photograph.
    */
-  toolbarPopover?: "utilities" | "add-view";
+  toolbarPopover?: "utilities" | "add-view" | "tab-menu";
   /**
    * Opt-in, renderer "toolbar" only: the search text `renderSearch` reads from the view state.
    * A non-empty value is what widens the collapsed 28px wrap into its active state and reveals
@@ -284,12 +286,14 @@ export interface ScenarioSpec {
    */
   searchText?: string;
   /**
-   * Opt-in, renderer "active-view-controls" only: which chip groups the state carries.
-   * "filter" renders the filter group alone, "sort" the sort group alone, "both" the shared
-   * rail with sort chips first and the AND/OR logic button between the groups. Defaults to
-   * "both", the only shape the fixture this supersedes photographs.
+   * Opt-in, renderer "active-view-controls" and "toolbar": which chip groups (or, on the
+   * toolbar, which trigger counts) the state carries. "filter" the filter group/count alone,
+   * "sort" the sort group/count alone, "both" the shared rail with sort chips first and the
+   * AND/OR logic button between the groups, "none" neither — the row absent and both toolbar
+   * triggers reporting `add`. Defaults to "both" on "active-view-controls" (the only shape the
+   * fixture this supersedes photographs) and to "none" on "toolbar" (its own prior default).
    */
-  rules?: "filter" | "sort" | "both";
+  rules?: "none" | "filter" | "sort" | "both";
   /**
    * Opt-in, renderer "active-rule-popover" only: which single-rule editor the popover opens —
    * `ActiveRulePopoverRenderer.toggleFilter` or `toggleSort`, the same entries the chip row's
@@ -1826,6 +1830,28 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
   if (scenario.toolbarPopover === "add-view") {
     results.push(toolbarPopoverAssertion(container, ".db-add-view-popover"));
   }
+  if (scenario.toolbarPopover === "tab-menu") {
+    // The view tab's context menu offers rename, duplicate and remove through the shared shell.
+    // No dedicated class marks this popover — showViewTabMenu builds it with only
+    // "db-view-tab-popover" — so a bare ".db-toolbar-popover" is the shell's own marker, and
+    // only one surface is open in this scenario.
+    const panel = container.querySelector(".db-toolbar-popover");
+    results.push({
+      name: "right-clicking a view tab opens its context menu through the shared shell",
+      pass: Boolean(panel?.classList.contains("db-view-tab-popover")),
+      detail: panel ? `classes=${panel.className}` : "no popover opened on contextmenu",
+    });
+    const rowLabels = Array.from(panel?.querySelectorAll(".db-view-tab-popover-row") ?? [])
+      .map((row) => row.textContent?.trim() ?? "");
+    const hasRename = rowLabels.some((label) => label.includes("Rename"));
+    const hasDuplicate = rowLabels.some((label) => /duplicate|copy/i.test(label));
+    const hasRemove = rowLabels.some((label) => /delete|remove/i.test(label));
+    results.push({
+      name: "the tab context menu offers rename, duplicate and remove",
+      pass: hasRename && hasDuplicate && hasRemove,
+      detail: `rows: ${rowLabels.join(" | ") || "none"}`,
+    });
+  }
   if (scenario.searchText) {
     const active = container.querySelector(".db-search-control.is-active");
     const hasText = container.querySelector<HTMLInputElement>(".db-search-input")?.value === scenario.searchText;
@@ -1836,6 +1862,33 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
         : "the search wrap stayed collapsed despite the state's search text",
     });
   }
+  const rules = scenario.rules ?? "none";
+  const wantFilterActive = rules === "filter" || rules === "both";
+  const wantSortActive = rules === "sort" || rules === "both";
+  const filterState = container.querySelector<HTMLElement>(".db-filter-btn")?.getAttribute("data-control-state");
+  const sortState = container.querySelector<HTMLElement>(".db-sort-btn")?.getAttribute("data-control-state");
+  results.push({
+    name: `filter and sort triggers declare add versus active from their counts (rules=${rules})`,
+    pass: filterState === (wantFilterActive ? "active" : "add") && sortState === (wantSortActive ? "active" : "add"),
+    detail: `filter=${filterState ?? "missing"}, sort=${sortState ?? "missing"}, want `
+      + `${wantFilterActive ? "active" : "add"}/${wantSortActive ? "active" : "add"} on rules=${rules}`,
+  });
+  const more = container.querySelector(".db-toolbar-more-btn");
+  const fallbacks = ["db-view-config-btn", "db-chart-options-toolbar-btn", "db-calendar-timeline-options-toolbar-btn"]
+    .filter((cls) => more?.classList.contains(cls));
+  results.push({
+    name: "the live utilities trigger still resolves the older settings-anchor queries",
+    pass: fallbacks.length === 3,
+    detail: more ? `fallback classes present: ${fallbacks.join(", ") || "none"}` : "no utilities trigger",
+  });
+  if (scenario.toolbarPopover === "utilities" || scenario.toolbarPopover === "add-view") {
+    const panel = container.querySelector(".db-toolbar-utilities-popover, .db-add-view-popover");
+    results.push({
+      name: "an opened toolbar menu is built through the shared popover shell",
+      pass: Boolean(panel?.classList.contains("db-toolbar-popover")),
+      detail: panel ? `classes=${panel.className}` : "no opened toolbar menu",
+    });
+  }
   return results;
 }
 
@@ -1843,6 +1896,16 @@ function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
   const results: AssertionResult[] = [];
   const rail = container.querySelector(".db-active-view-controls");
   const chips = container.querySelectorAll(".db-active-control-chip").length;
+  if (scenario.rules === "none") {
+    results.push({
+      name: "the rail is absent entirely when neither a filter nor a sort is active",
+      pass: chips === 0,
+      detail: rail
+        ? `${chips} chip(s) still drew with no active rule — the row must be absent, not just empty`
+        : "no chip rail mounted, none active",
+    });
+    return results;
+  }
   results.push({
     name: "the active-view-controls rail drew its chips",
     pass: Boolean(rail) && chips > 0,
@@ -1854,6 +1917,15 @@ function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
       pass: Boolean(container.querySelector(".db-active-control-logic")),
       detail: container.querySelector(".db-active-control-logic") ? "logic button present"
         : "logic button missing — the filter group renders it only when more than one rule is effective",
+    });
+  }
+  if (scenario.rules !== "filter") {
+    results.push({
+      name: "a sort chip carries the direction as a word, not only an arrow",
+      pass: Boolean(container.querySelector(".db-active-control-direction")),
+      detail: container.querySelector(".db-active-control-direction")
+        ? "direction word present"
+        : "no direction word — the rail used to show an ordinal only",
     });
   }
   return results;
@@ -1939,6 +2011,12 @@ function viewConfigAssertions(container: HTMLElement): AssertionResult[] {
       && Boolean(panel.querySelector('.db-view-config-section-title[data-scope="view"]')),
     detail: panel ? `${panel.querySelectorAll(".db-view-config-row").length} config row(s)`
       : "no .db-view-config-panel",
+  });
+  const summaries = Array.from(panel?.querySelectorAll(".db-view-config-summary") ?? []).map((el) => el.textContent || "");
+  results.push({
+    name: "every settings summary row states a count or the empty word",
+    pass: summaries.length >= 3 && summaries.every((text) => text.length > 0),
+    detail: summaries.length ? summaries.join(" · ") : "no summary rows",
   });
   return results;
 }
@@ -2733,7 +2811,29 @@ export function runRenderAssertions(
     applyCaptureOptions(columns, rows);
     const config = { ...makeTableConfig(columns), viewType: "table" } as ViewConfig;
     const db = makeSurfaceDatabase(columns, config);
-    const state = makeSurfaceState({ searchText: scenario.searchText ?? "" });
+    if (scenario.toolbarPopover === "tab-menu") {
+      // showViewTabMenu gates its delete row on totalViews > 1 — the single-view fixture every
+      // other toolbar scenario mounts would suppress it, proving nothing about the menu's remove
+      // row. A second view is the minimum that exercises the row this scenario exists to read.
+      db.views = [config, { ...config, id: "bench-second-view", name: "Second view" }];
+    }
+    // `rules` mirrors the active-view-controls branch below so the two surfaces the same state
+    // drives — the chip rail and the toolbar's own filter/sort triggers — are provable against
+    // the identical four combinations, not two harnesses that could quietly diverge.
+    const toolbarRules = scenario.rules ?? "none";
+    const selectCol = columns.find((col) => col.type === "select" || col.type === "status");
+    const dateCol = columnOfType(columns, "date");
+    const toolbarFilters = selectCol && (toolbarRules === "filter" || toolbarRules === "both")
+      ? [{ field: selectCol.key, op: "eq" as const, value: "Backlog" }]
+      : [];
+    const toolbarSortRules = dateCol && (toolbarRules === "sort" || toolbarRules === "both")
+      ? [{ field: dateCol.key, direction: "asc" as const }]
+      : [];
+    const state = makeSurfaceState({
+      searchText: scenario.searchText ?? "",
+      filters: toolbarFilters,
+      sortRules: toolbarSortRules,
+    });
     const actions = makeToolbarActions();
     bagKeys = Object.keys(actions).sort();
     const renderer = new ToolbarRenderer();
@@ -2742,6 +2842,11 @@ export function runRenderAssertions(
       (container.querySelector<HTMLButtonElement>(".db-toolbar-more-btn"))?.click();
     } else if (scenario.toolbarPopover === "add-view") {
       (container.querySelector<HTMLButtonElement>(".db-view-tab-add"))?.click();
+    } else if (scenario.toolbarPopover === "tab-menu") {
+      // showViewTabMenu binds oncontextmenu, not onclick — a synthetic click proves nothing
+      // about the real trigger a right-click reaches, so this dispatches the same event type.
+      const tab = container.querySelector<HTMLElement>(".db-view-tab:not(.db-view-tab-add)");
+      tab?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
     }
 
     results.push(provenanceResult(container, "toolbar-renderer"));
@@ -2761,8 +2866,8 @@ export function runRenderAssertions(
       ? [{ field: currencyCol.key, direction: "desc" as const }, { field: dateCol.key, direction: "asc" as const }]
       : [];
     const state = makeSurfaceState({
-      ...(scenario.rules === "sort" ? {} : { filters }),
-      ...(scenario.rules === "filter" ? {} : { sortRules }),
+      ...(scenario.rules === "sort" || scenario.rules === "none" ? {} : { filters }),
+      ...(scenario.rules === "filter" || scenario.rules === "none" ? {} : { sortRules }),
     });
     const actions: ActiveViewControlsActions = {
       editFilter: () => undefined,

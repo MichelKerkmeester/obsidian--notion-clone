@@ -695,6 +695,8 @@ export interface ViewConfig {
   calendarFirstDayOfWeek?: 0 | 1 | 6;
   /** 日期年份显示：always 始终显示（默认）/ smart 当年隐藏 / never 始终隐藏。视图级，各视图设置面板可配。 */
   yearDisplayMode?: "always" | "smart" | "never";
+  /** Per-column string defaults applied when this view creates a row. */
+  newRowPresets?: Record<string, string>;
   /** Max visible event lanes per month day before collapsing into "+N". Undefined derives from row height. */
   calendarMonthVisibleLanes?: number;
   /** Date field used to place records on timeline views. */

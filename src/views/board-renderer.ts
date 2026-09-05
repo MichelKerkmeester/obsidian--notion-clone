@@ -146,6 +146,8 @@ export interface BoardRendererActions {
   readonly isReadOnly?: boolean;
   readonly hideCreateEntry?: boolean;
   readonly canReorderGroups?: boolean;
+  confirmSortConflict?(): Promise<boolean>;
+  clearSort?(): void;
 }
 
 interface ParsedLink {
@@ -1444,7 +1446,17 @@ export class BoardRenderer {
           targetSubgroupKey: subgroupKey,
           explicitlySorted: isExplicitlySorted(config),
         });
-        if (intent === "ignore") return;
+        if (intent === "ignore") {
+          void this.confirmSortConflict(config).then((ok) => {
+            if (!ok) return;
+            this.actions.clearSort?.();
+            this.rowDropFeedback.setPending();
+            void this.moveCardAndOrder(dragged, groupField, group.key, fromGroup, path, this.getCardDropOrder(visibleRows, paths, row.file.path, event, card), subgroupField, subgroupKey, fromSubgroup, paths)
+              .then(() => this.rowDropFeedback.commit())
+              .catch((error) => this.rowDropFeedback.fail(error));
+          });
+          return;
+        }
         this.rowDropFeedback.setPending();
         void this.moveCardAndOrder(dragged, groupField, group.key, fromGroup, path, this.getCardDropOrder(visibleRows, paths, row.file.path, event, card), subgroupField, subgroupKey, fromSubgroup, paths)
           .then(() => this.rowDropFeedback.commit())
@@ -2046,6 +2058,11 @@ export class BoardRenderer {
 
   private canReorderCards(config: ViewConfig): boolean {
     return !isExplicitlySorted(config);
+  }
+
+  private async confirmSortConflict(config: ViewConfig): Promise<boolean> {
+    if (!isExplicitlySorted(config)) return true;
+    return (await this.actions.confirmSortConflict?.()) === true;
   }
 
   private canReorderGroups(): boolean {

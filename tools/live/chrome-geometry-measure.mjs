@@ -43,6 +43,10 @@ export const RECORD_DOCK_MIN_PANE_FRACTION = 0.6;
 /** How far the dock's edges may sit from the pane's own, in px. The gutter is 12; one is slack. */
 export const RECORD_DOCK_EDGE_TOLERANCE = 13;
 
+/** Chip and trigger boxes are specified as 28px; one pixel of subpixel rounding is slack. */
+export const TOOLBAR_BOX_PX = 28;
+export const TOOLBAR_BOX_TOLERANCE = 1;
+
 // ───────────────────────────────────────────────────────────────────
 // 2. PURE JUDGEMENT
 // ───────────────────────────────────────────────────────────────────
@@ -166,6 +170,24 @@ export function judgeChromeGeometry(reading) {
       });
     }
   }
+  if (reading.chipHeight != null && Math.abs(reading.chipHeight - TOOLBAR_BOX_PX) > TOOLBAR_BOX_TOLERANCE) {
+    rows.push({
+      what: "an active-rule chip is not the measured 28px height",
+      detail: `${reading.chipHeight}px against ${TOOLBAR_BOX_PX}px`,
+      why: "the rail was 26px; the capture is a 28px chip, and a shorter chip reads as a different control",
+    });
+  }
+  if (reading.triggerWidth != null && reading.triggerHeight != null) {
+    const wide = Math.abs(reading.triggerWidth - TOOLBAR_BOX_PX) > TOOLBAR_BOX_TOLERANCE;
+    const tall = Math.abs(reading.triggerHeight - TOOLBAR_BOX_PX) > TOOLBAR_BOX_TOLERANCE;
+    if (wide || tall) {
+      rows.push({
+        what: "a toolbar trigger is not the measured 28×28 box",
+        detail: `${reading.triggerWidth}×${reading.triggerHeight} against ${TOOLBAR_BOX_PX}×${TOOLBAR_BOX_PX}`,
+        why: "the cluster pitch is 32px because the trigger is 28px with a 4px gap",
+      });
+    }
+  }
   return rows;
 }
 
@@ -274,11 +296,27 @@ function readRecordDock(root, scenario) {
   };
 }
 
+function readToolbarBoxes(root) {
+  const chip = root.querySelector(".db-active-control-chip");
+  const icon = root.querySelector(".db-toolbar-icon-button");
+  const chipBox = chip?.getBoundingClientRect();
+  const iconBox = icon?.getBoundingClientRect();
+  return {
+    chipHeight: chipBox && chipBox.height > 0 ? Math.round(chipBox.height) : null,
+    triggerWidth: iconBox && iconBox.width > 0 ? Math.round(iconBox.width) : null,
+    triggerHeight: iconBox && iconBox.height > 0 ? Math.round(iconBox.height) : null,
+  };
+}
+
 /** Reads whichever chrome surface this scenario built; all absent is a clean skip. */
 export function measureChromeGeometry(root, scenario) {
+  const boxes = readToolbarBoxes(root);
   return {
     splitButton: readSplitButton(root),
     ruleRows: readRuleRows(root),
     recordDock: readRecordDock(root, scenario),
+    chipHeight: boxes.chipHeight,
+    triggerWidth: boxes.triggerWidth,
+    triggerHeight: boxes.triggerHeight,
   };
 }

@@ -102,6 +102,8 @@ export interface TableRendererActions {
   readonly hideCreateEntry?: boolean;
   /** When true, row-level data mutation controls are not rendered */
   readonly isReadOnly?: boolean;
+  confirmSortConflict?(): Promise<boolean>;
+  clearSort?(): void;
   captureInteractionSnapshot?(): InteractionSnapshot;
   restoreInteractionSnapshot?(snapshot: InteractionSnapshot): void;
 }
@@ -176,8 +178,9 @@ export class TableRenderer {
   // The select column's width and the row's decision to draw that button were asking different
   // questions, and the column always assumed the wider answer. On a phone that is 64px of column
   // holding one 28px checkbox — 36px of dead width per row on a 402px screen, in the ordinary state
-  // of a table someone has sorted, because `canManualReorder` is false the moment a view is
-  // explicitly sorted. Set beside the container so the two questions cannot drift apart again.
+  // of a table someone has sorted, because a sorted view does not draw that button. Drop listeners
+  // are a different question: a desktop drag under an active sort still has to land so the confirm
+  // can run. Set beside the container so the drawing question cannot drift from the column width.
   private renderCanReorder = false;
 
   constructor(private actions: TableRendererActions) {}
@@ -997,7 +1000,7 @@ export class TableRenderer {
     context?: RowCreateContext,
   ): void {
     const canMoveGroup = Boolean(groupField && groupKey != null && typeof this.actions.moveRowsToGroup === "function");
-    const canReorder = this.canManualReorder(config);
+    const canReorder = this.canAcceptReorderDrop();
     if (this.actions.isReadOnly) return;
     if (this.isTouchRender()) return;
     if (!handleParent) return;
@@ -1078,9 +1081,21 @@ export class TableRenderer {
       this.rowDropFeedback.setPending();
       const isAfter = placement === "after";
       const position = this.getDropPosition(rows, dragPath, row.file.path, isAfter);
-      void this.moveRowToDropPosition(draggedRow, dragPath, groupField, groupKey, event, position.beforePath, position.afterPath)
+      const commit = () => this.moveRowToDropPosition(draggedRow, dragPath, groupField, groupKey, event, position.beforePath, position.afterPath)
         .then(() => this.rowDropFeedback.commit())
         .catch((error) => this.rowDropFeedback.fail(error));
+      if (isExplicitlySorted(config)) {
+        void this.confirmSortConflict(config).then((ok) => {
+          if (!ok) {
+            this.rowDropFeedback.clear();
+            return;
+          }
+          this.actions.clearSort?.();
+          void commit();
+        });
+        return;
+      }
+      void commit();
     });
   }
 
@@ -1120,8 +1135,17 @@ export class TableRenderer {
   }
 
   private canManualReorder(config: ViewConfig): boolean {
-    if (!this.actions.moveRowToPosition) return false;
-    return !isExplicitlySorted(config);
+    return Boolean(this.actions.moveRowToPosition) && !isExplicitlySorted(config);
+  }
+
+  /** A sorted view still accepts a drop so the confirm can run; it does not draw the move control. */
+  private canAcceptReorderDrop(): boolean {
+    return Boolean(this.actions.moveRowToPosition);
+  }
+
+  private async confirmSortConflict(config: ViewConfig): Promise<boolean> {
+    if (!isExplicitlySorted(config)) return true;
+    return (await this.actions.confirmSortConflict?.()) === true;
   }
 
   private getDropPosition(

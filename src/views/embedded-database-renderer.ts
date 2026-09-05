@@ -50,6 +50,7 @@ import type { SubtaskMovePlan, SubtaskMoveRequest } from "../data/types";
 import { safeString } from "../data/safe-string";
 import { createCheckbox } from "./checkbox";
 import { CsvMarkdownExportModal } from "./modals/csv-markdown-export-modal";
+import { confirmWithModal } from "./modals/confirm-modal";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
 import type { BoardSubtaskMove } from "./board-renderer";
 import { CellRenderer } from "./cell-renderer";
@@ -472,6 +473,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
       moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
+      confirmSortConflict: () => this.confirmSortConflict(),
+      clearSort: () => this.clearSortForManualReorder(),
       createEntry: (defaults) => { void this.createBlankEntry(defaults); },
       addColumn: () => { new Notice(t("notice.editInFullView", { action: t("panel.addColumn") })); },
       showRowMenu: (event, row, context, anchorEl) => this.rowMenu.show(event, row, context, anchorEl),
@@ -485,6 +488,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.boardRenderer = new BoardRenderer(this.app, {
       openRow: (row) => this.dataSource.openNote(row.file),
       createEntry: (defaults) => { void this.createBlankEntry(defaults); },
+      confirmSortConflict: () => this.confirmSortConflict(),
+      clearSort: () => this.clearSortForManualReorder(),
       updateGroup: (row, field, value) => this.updateBoardGroup(row, field, value),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
       updateCardOrder: (field, groupKey, paths) => this.updateBoardCardOrder(field, groupKey, paths),
@@ -2144,6 +2149,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.viewConfigPanelRenderer.render(this.containerEl, this.showViewConfigPanel, config, {
       app: this.app,
       database: this.currentDbConfig,
+      appliedCounts: {
+        filters: getEffectiveFilterRules(this.vs(config).filters).length,
+        sorts: this.vs(config).sortRules.filter((rule) => rule.field && rule.direction).length || (this.vs(config).sortColumn ? 1 : 0),
+        hiddenProperties: this.vs(config).hiddenColumns.size,
+      },
       isDatabaseReadOnly: true,
       isViewReadOnly: this.isViewReadOnly(),
       onChange: () => {
@@ -2405,6 +2415,26 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       dbPath: options.dbPath || options.databasePath,
       viewId: options.viewId,
     };
+  }
+
+  private async confirmSortConflict(): Promise<boolean> {
+    return (await confirmWithModal(this.app, {
+      title: t("toolbar.sortConflictTitle"),
+      message: t("toolbar.sortConflictMessage"),
+      confirmText: t("toolbar.sortConflictConfirm"),
+    })) === true;
+  }
+
+  private clearSortForManualReorder(): void {
+    const config = this.config;
+    if (!config) return;
+    const state = this.vs(config);
+    state.sortRules = [];
+    state.sortColumn = undefined;
+    state.sortDirection = "asc";
+    config.sortRules = [];
+    config.sortColumn = undefined;
+    this.persistEmbeddedConfigLocally(config);
   }
 
   private shouldHideHeaderChrome(): boolean {

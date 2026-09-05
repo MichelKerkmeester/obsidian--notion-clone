@@ -84,7 +84,21 @@ export const STATE_SCENARIOS = [
   { name: "chrome-toolbar-search/file-view", renderer: "toolbar", bag: "file-view", captureData: true, searchText: "notion" },
   { name: "chrome-toolbar-utilities/file-view", renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "utilities" },
   { name: "chrome-toolbar-add-view/file-view", renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "add-view" },
+  // A constructed row that right-clicks a real view tab and reads rename/duplicate/remove off
+  // the popover the shared shell built — not the hand-rolled dual-classed rows the migration
+  // replaced.
+  { name: "chrome-toolbar-tab-menu/file-view", renderer: "toolbar", bag: "file-view", toolbarPopover: "tab-menu" },
+  // The four filter x sort combinations this row set makes assertable in one pass: the toolbar's
+  // own triggers (data-control-state) and the chip rail they gate share the same "rules" state
+  // shape, so both surfaces are proven against the identical four states rather than each
+  // claiming coverage of a set the other was never checked against.
+  { name: "chrome-toolbar-rules-filter/file-view", renderer: "toolbar", bag: "file-view", rules: "filter" },
+  { name: "chrome-toolbar-rules-sort/file-view", renderer: "toolbar", bag: "file-view", rules: "sort" },
+  { name: "chrome-toolbar-rules-both/file-view", renderer: "toolbar", bag: "file-view", rules: "both" },
   { name: "chrome-active-view-controls/file-view", renderer: "active-view-controls", bag: "file-view", captureData: true },
+  { name: "chrome-active-view-controls-none/file-view", renderer: "active-view-controls", bag: "file-view", rules: "none" },
+  { name: "chrome-active-view-controls-filter/file-view", renderer: "active-view-controls", bag: "file-view", rules: "filter" },
+  { name: "chrome-active-view-controls-sort/file-view", renderer: "active-view-controls", bag: "file-view", rules: "sort" },
   { name: "chrome-active-rule-filter/file-view", renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "filter" },
   { name: "chrome-active-rule-sort/file-view", renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "sort" },
   // The anchored panels.

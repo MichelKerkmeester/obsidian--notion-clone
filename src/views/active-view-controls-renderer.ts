@@ -118,8 +118,10 @@ export class ActiveViewControlsRenderer {
           icon.createSpan({ cls: "db-active-control-order", text: String(visibleIndex + 1) });
         }
         chip.querySelector<HTMLElement>(".db-active-control-field")?.setText(column?.label || rule.field);
-        const detail = rule.direction === "desc" ? t("common.desc") : t("common.asc");
-        chip.querySelector<HTMLElement>(".db-active-control-detail")?.setText(detail);
+        const detail = createDirectionWord(rule.direction);
+        const detailEl = chip.querySelector<HTMLElement>(".db-active-control-detail");
+        detailEl?.addClass("db-active-control-direction");
+        detailEl?.setText(detail);
         this.setEditLabel(chip, `${column?.label || rule.field} · ${detail}`);
         this.appendRemoveButton(chip, t("toolbar.sort"), () => actions.removeSort(index));
       }
@@ -175,13 +177,11 @@ export class ActiveViewControlsRenderer {
     this.setEditHandler(chip, () => actions.editFilter(index, chip));
     const icon = chip.querySelector<HTMLElement>(".db-active-control-icon");
     if (icon) setIcon(icon, "list-filter");
-    chip.querySelector<HTMLElement>(".db-active-control-field")?.setText(column?.label || rule.field);
     const operator = getFilterOperatorsForColumn(column).find(([value]) => value === rule.op)?.[1] || rule.op;
-    const detail = rule.op === "empty" || rule.op === "notempty"
-      ? operator
-      : `${operator} · ${String(rule.value ?? "")}`;
-    chip.querySelector<HTMLElement>(".db-active-control-detail")?.setText(detail);
-    this.setEditLabel(chip, `${column?.label || rule.field} · ${detail}`);
+    const phrase = formatFilterPhrase(column?.label || rule.field, operator, rule);
+    chip.querySelector<HTMLElement>(".db-active-control-field")?.setText(phrase);
+    chip.querySelector<HTMLElement>(".db-active-control-detail")?.setText("");
+    this.setEditLabel(chip, phrase);
     this.appendRemoveButton(chip, t("toolbar.filter"), () => actions.removeFilter(index));
   }
 
@@ -225,4 +225,14 @@ export class ActiveViewControlsRenderer {
       onRemove();
     };
   }
+}
+
+function createDirectionWord(direction: "asc" | "desc"): string {
+  return direction === "desc" ? t("common.desc") : t("common.asc");
+}
+
+function formatFilterPhrase(field: string, operator: string, rule: FilterRule): string {
+  if (rule.op === "empty" || rule.op === "notempty") return `${field} ${operator}`;
+  const value = String(rule.value ?? "").trim();
+  return value ? `${field} ${operator} ${value}` : `${field} ${operator}`;
 }

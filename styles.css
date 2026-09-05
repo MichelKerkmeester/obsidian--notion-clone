@@ -1762,7 +1762,7 @@
   flex: 0 0 1px;
   width: 1px;
   height: 16px;
-  margin: 0 var(--db-space-2);
+  margin: 0 12px 0 8px;
   background: var(--background-modifier-border);
 }
 
@@ -1774,7 +1774,7 @@
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  height: 26px;
+  height: 28px;
   min-width: 0;
   border: 0;
   border-radius: var(--db-radius-md);
@@ -1803,7 +1803,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--db-space-2);
-  height: 24px;
+  height: 26px;
   max-width: min(360px, 52vw);
   padding: 0 var(--db-space-3) 0 var(--db-space-4);
 }
@@ -1973,7 +1973,7 @@
 .note-database-container .db-view-tabs {
   display: flex;
   align-items: center;
-  gap: var(--db-space-1);
+  gap: var(--db-space-6);
   flex-shrink: 0;
 }
 .note-database-container .db-view-tab {
@@ -2109,6 +2109,7 @@
   justify-content: center;
   flex: 0 0 auto;
   width: 28px;
+  height: 28px;
   position: relative;
   padding: 0;
   overflow: visible;
@@ -11228,6 +11229,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
    The `.db-x.db-surface` form has the same specificity as the scoped one, so nothing about the
    in-container rendering moves; it only starts matching once a surface is actually portalled. */
 .note-database-container .db-filter-panel,
+.note-database-container .db-sort-panel,
 .note-database-container .db-view-config-panel,
 .note-database-container .db-column-manager,
 .note-database-container .db-database-popover,
@@ -11236,6 +11238,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-chart-options-popover,
 .note-database-container .db-view-tab-popover,
 .db-filter-panel.db-surface,
+.db-sort-panel.db-surface,
 .db-view-config-panel.db-surface,
 .db-column-manager.db-surface,
 .db-database-popover.db-surface,
@@ -11261,7 +11264,8 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-container .db-view-config-panel {
-  width: min(440px, calc(100vw - 72px));
+  width: min(360px, calc(100vw - 72px));
+  min-height: 315px;
 }
 
 .note-database-container .db-group-popover {
@@ -11540,7 +11544,12 @@ body.is-phone .note-database-container .db-record-detail-panel {
   grid-template-columns: 116px minmax(0, 1fr);
   align-items: start;
   gap: var(--db-space-4);
+  min-height: 28px;
   padding: var(--db-space-3) 0;
+}
+
+.note-database-container .db-view-config-name-field .db-view-config-text {
+  min-height: 56px;
 }
 
 .note-database-container .db-view-config-label {
@@ -12586,12 +12595,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
   padding-inline: var(--db-sheet-inset);
 }
 
-/* Operator decision, 2026-09-05: sort and filter share `.db-filter-panel`'s own 8px container
-   padding (`.note-database-container .db-filter-panel, ...`, § FLOATING PANELS) — correct for the
-   small anchored popover the same rule sizes, and 8px short of the shared inset once that surface
-   presents as a sheet. Only the inline pair moves; the block pair stays the container's own 8px,
-   and the header above takes it from here rather than adding its own second inset. */
-.db-filter-panel.db-mobile-bottom-sheet {
+/* Operator decision, 2026-09-05: sort and filter share the panel's own 8px container padding
+   (`.note-database-container .db-filter-panel, .db-sort-panel, ...`, § FLOATING PANELS) — correct
+   for the small anchored popover the same rule sizes, and 8px short of the shared inset once that
+   surface presents as a sheet. Only the inline pair moves; the block pair stays the container's own
+   8px, and the header above takes it from here rather than adding its own second inset. */
+.db-filter-panel.db-mobile-bottom-sheet,
+.db-sort-panel.db-mobile-bottom-sheet {
   padding-inline: var(--db-sheet-inset);
 }
 
@@ -12695,6 +12705,25 @@ body.is-phone .note-database-container .db-record-detail-panel {
 
 .note-database-container .db-panel-row:hover {
   background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-sort-rule-row:not(.db-active-rule-editor-row) {
+  min-height: 36px;
+  margin-bottom: 12px;
+}
+
+.note-database-container .db-new-preset-row {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-3);
+  min-height: 28px;
+  padding: 4px 6px;
+}
+
+.note-database-container .db-new-preset-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 28px;
 }
 
 .note-database-container .db-sort-rule-row.is-dragging {
@@ -21969,7 +21998,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .note-database-container .db-toolbar-cluster {
   display: inline-flex;
   align-items: center;
-  gap: var(--db-space-1);
+  gap: var(--db-space-2);
   min-width: 0;
   flex: 0 0 auto;
 }

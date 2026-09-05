@@ -51,7 +51,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { stamp } from "./evidence.mjs";
-import { buildRenderAssertionBundle, RENDERER_SOURCES, SCENARIOS } from "./render-assertion-bundle.mjs";
+import { buildRenderAssertionBundle, RENDERER_SOURCES, SCENARIOS, STATE_SCENARIOS } from "./render-assertion-bundle.mjs";
 import { countConstructed, scenarioLabel } from "./render-scenario-utils.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -203,6 +203,17 @@ try {
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await page.goto(`file://${join(work, "index.html")}`);
   outcomes = await page.evaluate((scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)), SCENARIOS);
+  // The toolbar's declared trigger state, the chip rail it gates, and the tab context menu
+  // carry no action bag to compare and are not part of the coverage ratchet below, so they are
+  // asserted here rather than folded into `outcomes` — the four rules combinations
+  // (none/filter/sort/both) plus the tab-menu row each get their own scenario in STATE_SCENARIOS
+  // and their own red-first pass/fail line.
+  const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
+    scenario.rules != null || scenario.toolbarPopover === "tab-menu");
+  const rulesOutcomes = await page.evaluate(
+    (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
+    rulesScenarios,
+  );
   await page.close();
   for (const error of pageErrors) {
     failures.push(`page error: ${error}`);
@@ -237,6 +248,18 @@ try {
       const mark = result.pass ? "PASS" : "FAIL";
       if (!result.pass) failures.push(`${label}: ${result.name} — ${result.detail}`);
       console.log(`  ${mark}  ${label.padEnd(20)} ${result.name}`);
+      if (!result.pass) console.log(`       ${result.detail}`);
+    }
+  }
+
+  console.log(`\nrender-assertions: ${rulesScenarios.length} filter/sort rules scenario(s) `
+    + `x ${rulesOutcomes[0]?.results.length ?? 0} assertions\n`);
+  for (const outcome of rulesOutcomes) {
+    const label = outcome.scenario.name;
+    for (const result of outcome.results) {
+      const mark = result.pass ? "PASS" : "FAIL";
+      if (!result.pass) failures.push(`${label}: ${result.name} — ${result.detail}`);
+      console.log(`  ${mark}  ${label.padEnd(38)} ${result.name}`);
       if (!result.pass) console.log(`       ${result.detail}`);
     }
   }

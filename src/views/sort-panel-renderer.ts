@@ -24,6 +24,7 @@ import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { getViewRuleColumns, removeSortRuleAt } from "./view-rule-operations";
+import { createConditionRow } from "./toolbar-primitives";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -94,7 +95,7 @@ export class SortPanelRenderer {
       panel.empty();
     } else {
       panel = containerEl.createDiv({
-        cls: "db-sort-panel db-filter-panel",
+        cls: "db-sort-panel",
         attr: { id: "db-sort-panel", role: "dialog", "aria-label": t("toolbar.sort") },
       });
       panel.tabIndex = -1;
@@ -165,8 +166,82 @@ export class SortPanelRenderer {
     actions: SortPanelActions,
     compact = false
   ): void {
-    const row = panel.createDiv({ cls: "db-panel-row db-sort-rule-row" });
-    if (compact) row.addClass("db-active-rule-editor-row");
+    const columns = getViewRuleColumns(config);
+    const row = createConditionRow(panel, {
+      className: "db-sort-rule-row",
+      compact,
+      leading: compact ? undefined : (parent) => {
+        const drag = parent.createSpan({ cls: "db-panel-drag", text: "⋮⋮" });
+        drag.title = t("panel.dragToSort");
+        const moveControls = parent.createSpan({ cls: "db-mobile-reorder-controls" });
+        const upBtn = moveControls.createEl("button", {
+          attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
+        });
+        setIcon(upBtn, "arrow-up");
+        upBtn.disabled = index === 0;
+        upBtn.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.moveRule(panel, config, state, actions, index, index - 1);
+        };
+        const downBtn = moveControls.createEl("button", {
+          attr: { type: "button", title: t("menu.moveDown"), "aria-label": t("menu.moveDown") },
+        });
+        setIcon(downBtn, "arrow-down");
+        downBtn.disabled = index >= (state.sortRules || []).length - 1;
+        downBtn.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.moveRule(panel, config, state, actions, index, index + 1);
+        };
+      },
+      field: (parent) => {
+        createDropdownField({
+          parent,
+          label: t("panel.field"),
+          options: columns.map((col) => toPropertyDropdownOption(col)),
+          value: rule.field,
+          className: "db-panel-dropdown db-sort-field-dropdown",
+          hideLabel: true,
+          renderIcon: renderDropdownPropertyTypeIcon,
+          onChange: (value) => {
+            state.sortColumn = undefined;
+            state.sortDirection = "asc";
+            rule.field = value;
+            actions.save();
+            actions.refresh();
+          },
+        });
+      },
+      operator: (parent) => {
+        createDropdownField({
+          parent,
+          label: t("panel.sortDirection"),
+          options: [
+            { value: "asc", text: t("common.asc") },
+            { value: "desc", text: t("common.desc") },
+          ],
+          value: rule.direction,
+          className: "db-panel-dropdown db-sort-direction-dropdown",
+          hideLabel: true,
+          onChange: (value) => {
+            state.sortColumn = undefined;
+            state.sortDirection = "asc";
+            rule.direction = value as SortRule["direction"];
+            actions.save();
+            actions.refresh();
+          },
+        });
+      },
+      trailing: compact ? undefined : (parent) => {
+        parent.createEl("button", { cls: "db-panel-button", text: "×" }).onclick = () => {
+          removeSortRuleAt(state, index);
+          actions.save();
+          this.render(panel.parentElement as HTMLElement, true, config, state, actions, this.anchorEl || undefined);
+          actions.refresh();
+        };
+      },
+    });
     if (!compact) {
       row.draggable = true;
       row.ondragstart = (event) => {
@@ -184,77 +259,6 @@ export class SortPanelRenderer {
       row.ondragleave = () => this.clearDropIndicator(row);
       row.ondrop = (event) => this.dropRuleOn(event, index, row, panel, config, state, actions);
       row.ondragend = () => this.finishDrag();
-
-      const drag = row.createSpan({ cls: "db-panel-drag", text: "⋮⋮" });
-      drag.title = t("panel.dragToSort");
-
-      const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls" });
-      const upBtn = moveControls.createEl("button", {
-        attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
-      });
-      setIcon(upBtn, "arrow-up");
-      upBtn.disabled = index === 0;
-      upBtn.onclick = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.moveRule(panel, config, state, actions, index, index - 1);
-      };
-      const downBtn = moveControls.createEl("button", {
-        attr: { type: "button", title: t("menu.moveDown"), "aria-label": t("menu.moveDown") },
-      });
-      setIcon(downBtn, "arrow-down");
-      downBtn.disabled = index >= (state.sortRules || []).length - 1;
-      downBtn.onclick = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        this.moveRule(panel, config, state, actions, index, index + 1);
-      };
-    }
-
-    const columns = getViewRuleColumns(config);
-    createDropdownField({
-      parent: row,
-      label: t("panel.field"),
-      options: columns.map((col) => toPropertyDropdownOption(col)),
-      value: rule.field,
-      className: "db-panel-dropdown db-sort-field-dropdown",
-      hideLabel: true,
-      renderIcon: renderDropdownPropertyTypeIcon,
-      onChange: (value) => {
-        state.sortColumn = undefined;
-        state.sortDirection = "asc";
-        rule.field = value;
-        actions.save();
-        actions.refresh();
-      },
-    });
-
-    createDropdownField({
-      parent: row,
-      label: t("panel.sortDirection"),
-      options: [
-        { value: "asc", text: t("common.asc") },
-        { value: "desc", text: t("common.desc") },
-      ],
-      value: rule.direction,
-      className: "db-panel-dropdown db-sort-direction-dropdown",
-      hideLabel: true,
-      onChange: (value) => {
-        state.sortColumn = undefined;
-        state.sortDirection = "asc";
-        rule.direction = value as SortRule["direction"];
-        actions.save();
-        actions.refresh();
-      },
-    });
-
-    if (!compact) {
-      row.createEl("button", { cls: "db-panel-button", text: "×" }).onclick = () => {
-        removeSortRuleAt(state, index);
-        actions.save();
-        this.render(panel.parentElement as HTMLElement, true, config, state, actions, this.anchorEl || undefined);
-        actions.refresh();
-      };
     }
   }
 

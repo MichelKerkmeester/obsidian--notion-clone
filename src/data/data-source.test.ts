@@ -148,6 +148,32 @@ describe("DataSource view filter tree persistence", () => {
     expect(reparsed!.views[0].timelineWeekLabel).toBe("dateRange");
   });
 
+  it("round-trips newRowPresets through parseViewConfig and toViewPayload", () => {
+    const dataSource = source();
+    const presets = { status: "Open", cost: "12" };
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "table",
+          sourceFolder: "",
+          newRowPresets: presets,
+        }],
+      },
+    });
+    expect(parsed!.views[0].newRowPresets).toEqual(presets);
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(parsed!.views[0]);
+    expect(payload.newRowPresets).toEqual(presets);
+    const reparsed = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [payload] },
+    });
+    expect(reparsed!.views[0].newRowPresets).toEqual(presets);
+  });
+
   it("round-trips boardCardFields through parseViewConfig, toViewPayload, and the legacy flat path", () => {
     const dataSource = source();
     const fields = [

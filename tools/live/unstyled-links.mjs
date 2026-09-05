@@ -182,7 +182,8 @@ for (const scenario of RENDERER_SCENARIOS) {
     constructedElementsSeen += found.seen;
     constructedFindings.push(...found.rows);
   }
-  if (geometry && (geometry.splitButton || geometry.ruleRows.length > 0 || geometry.recordDock)) {
+  if (geometry && (geometry.splitButton || geometry.ruleRows.length > 0 || geometry.recordDock
+    || geometry.chipHeight || geometry.triggerHeight)) {
     chromeSurfacesMeasured += 1;
     for (const row of judgeChromeGeometry(geometry)) chromeFindings.push({ scenario: label, ...row });
   }

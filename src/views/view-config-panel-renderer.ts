@@ -266,6 +266,7 @@ export interface ViewConfigPanelActions {
   onManageViewStatusPresets?(): void;
   readonly isDatabaseReadOnly?: boolean;
   readonly isViewReadOnly?: boolean;
+  readonly appliedCounts?: { filters: number; sorts: number; hiddenProperties: number };
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -379,6 +380,7 @@ export class ViewConfigPanelRenderer {
     }
 
     this.renderSectionTitle(body, t("viewConfig.viewSection"), "view");
+    this.renderAppliedSummaries(body, config, actions);
     this.renderViewType(body, config, actions);
     if (actions.onOpenLayoutOptions && ["chart", "calendar", "timeline"].includes(config.viewType || "")) {
       const label = config.viewType === "chart" ? t("chart.options") : config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
@@ -467,6 +469,25 @@ export class ViewConfigPanelRenderer {
     panel.createDiv({ cls: `db-view-config-section-title db-view-config-section-${scope}`, text, attr: { "data-scope": scope } });
   }
 
+  private renderAppliedSummaries(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
+    const filterCount = actions.appliedCounts?.filters ?? (config.filters || []).length;
+    const sortCount = actions.appliedCounts?.sorts
+      ?? ((config.sortRules || []).filter((rule) => rule.field).length || (config.sortColumn ? 1 : 0));
+    const hiddenCount = actions.appliedCounts?.hiddenProperties ?? (config.hiddenColumns || []).length;
+    this.renderAppliedSummary(panel, t("viewConfig.properties"), hiddenCount, t("toolbar.noHiddenProperties"));
+    this.renderAppliedSummary(panel, t("viewConfig.filters"), filterCount, t("toolbar.noFilters"));
+    this.renderAppliedSummary(panel, t("viewConfig.sorts"), sortCount, t("toolbar.noSorts"));
+  }
+
+  private renderAppliedSummary(panel: HTMLElement, label: string, count: number, emptyWord: string): void {
+    const row = panel.createDiv({ cls: this.rowClass("db-view-config-summary-row") });
+    row.createDiv({ cls: "db-view-config-label", text: label });
+    row.createDiv({
+      cls: "db-view-config-field db-view-config-summary",
+      text: count > 0 ? t("toolbar.appliedCount", { count }) : emptyWord,
+    });
+  }
+
   private renderViewType(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
     this.renderSelect(
       panel,
@@ -529,7 +550,7 @@ export class ViewConfigPanelRenderer {
       actions.onDatabaseChange?.(t("undo.databaseNameConfig"));
     }, readOnly, undefined, (value) => {
       database.name = value || t("common.untitledDatabase");
-    });
+    }, "db-view-config-name-field");
     this.renderTextarea(panel, t("viewConfig.databaseDescription"), database.description || "", t("viewConfig.descriptionPlaceholder"), (value) => {
       database.description = value || undefined;
       actions.onDatabaseChange?.(t("undo.databaseDescriptionConfig"));
@@ -2097,11 +2118,12 @@ export class ViewConfigPanelRenderer {
     onChange: (value: string) => void,
     disabled = false,
     helpText?: string,
-    onInput?: (value: string) => void
+    onInput?: (value: string) => void,
+    fieldClass?: string,
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
-    const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
+    const field = row.createDiv({ cls: ["db-view-config-field", "db-view-config-field-stack", fieldClass].filter(Boolean).join(" ") });
     if (disabled) {
       field.createDiv({ cls: "db-view-config-readonly-value", text: value || t("common.notSet") });
       if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });

@@ -155,3 +155,39 @@ describe("judgeChromeGeometry, condition rows", () => {
     expect(judgeChromeGeometry({ splitButton: null, ruleRows: [healthyRuleRow({ overflow: 1 })] })).toEqual([]);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. CHIP AND TRIGGER BOXES
+// ───────────────────────────────────────────────────────────────────
+
+describe("judgeChromeGeometry, toolbar boxes", () => {
+  it("passes a 28px chip and a 28×28 trigger", () => {
+    expect(judgeChromeGeometry({
+      splitButton: null,
+      ruleRows: [],
+      chipHeight: 28,
+      triggerWidth: 28,
+      triggerHeight: 28,
+    })).toEqual([]);
+  });
+
+  it("catches the chip at the height it had before the rail was measured", () => {
+    const rows = judgeChromeGeometry({
+      splitButton: null,
+      ruleRows: [],
+      chipHeight: 26,
+    });
+    expect(reasons(rows)).toContain("an active-rule chip is not the measured 28px height");
+    expect(rows[0].detail).toContain("26px");
+  });
+
+  it("catches a trigger that is not a 28×28 box", () => {
+    const rows = judgeChromeGeometry({
+      splitButton: null,
+      ruleRows: [],
+      triggerWidth: 24,
+      triggerHeight: 24,
+    });
+    expect(reasons(rows)).toContain("a toolbar trigger is not the measured 28×28 box");
+  });
+});

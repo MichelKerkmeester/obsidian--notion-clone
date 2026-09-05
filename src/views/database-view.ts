@@ -765,6 +765,8 @@ export class DatabaseView extends FileView {
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.getActiveDb(), targetField),
       setupFillHandle: (td, row, col) => this.setupTableFillHandle(td, row, col),
       moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
+      confirmSortConflict: () => this.confirmSortConflict(),
+      clearSort: () => this.clearSortForManualReorder(),
       moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
       moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath) =>
         this.moveRowToGroupAndPosition(row, field, fromGroupKey, toGroupKey, beforePath, afterPath),
@@ -774,13 +776,15 @@ export class DatabaseView extends FileView {
       changeColumnCalculation: (columnKey, calculation) => this.changeColumnCalculation(columnKey, calculation),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
+      expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.boardRenderer = new BoardRenderer(this.app, {
       openRow: (row) => { void this.openRecordAt(row); },
       openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
+      confirmSortConflict: () => this.confirmSortConflict(),
+      clearSort: () => this.clearSortForManualReorder(),
       createGroup: (field, name, color) => this.createBoardGroup(field, name, color),
       updateGroup: (row, field, value, fromValue) => this.updateBoardGroup(row, field, value, fromValue),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
@@ -3458,6 +3462,7 @@ export class DatabaseView extends FileView {
     this.clearViewStateCache();
     this.saveCurrentViewConfigInBackground();
     this.rerenderToolbar();
+    this.openViewSettingsAfterMutation();
     this.refresh({ viewport: "reset-top" });
   }
 
@@ -3941,8 +3946,36 @@ export class DatabaseView extends FileView {
     this.clearViewStateCache();
     this.saveCurrentViewConfigInBackground(this.getCurrentDatabaseMutationTarget());
     this.rerenderToolbar();
+    this.openViewSettingsAfterMutation();
     this.refresh({ viewport: "reset-top" });
     new Notice(t("notice.copiedView", { name: duplicated.name }));
+  }
+
+  private openViewSettingsAfterMutation(): void {
+    const anchor = this.containerEl_?.querySelector<HTMLElement>(".db-view-config-btn");
+    if (anchor) this.toggleHeaderPopover("view", anchor);
+  }
+
+  private async confirmSortConflict(): Promise<boolean> {
+    return (await confirmWithModal(this.app, {
+      title: t("toolbar.sortConflictTitle"),
+      message: t("toolbar.sortConflictMessage"),
+      confirmText: t("toolbar.sortConflictConfirm"),
+    })) === true;
+  }
+
+  private clearSortForManualReorder(): void {
+    const state = this.vs();
+    const config = this.getConfig();
+    state.sortRules = [];
+    state.sortColumn = undefined;
+    state.sortDirection = "asc";
+    if (config) {
+      config.sortRules = [];
+      config.sortColumn = undefined;
+      this.viewStateStore.persist(config, state);
+    }
+    this.scheduleViewStateSave();
   }
 
   private getUniqueDuplicatedViewName(db: DatabaseConfig, baseName: string): string {
@@ -5091,6 +5124,11 @@ export class DatabaseView extends FileView {
     this.viewConfigPanelRenderer.render(this.containerEl_, this.showViewConfigPanel, config, {
       app: this.app,
       database: db,
+      appliedCounts: {
+        filters: getEffectiveFilterRules(this.vs().filters).length,
+        sorts: this.vs().sortRules.filter((rule) => rule.field && rule.direction).length || (this.vs().sortColumn ? 1 : 0),
+        hiddenProperties: this.vs().hiddenColumns.size,
+      },
       onChange: (label) => {
         this.pendingUndoLabel = label || t("undo.viewConfig");
         this.scheduleConfigSave();
