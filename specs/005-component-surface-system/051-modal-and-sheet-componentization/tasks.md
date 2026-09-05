@@ -103,7 +103,7 @@ with the owner named, never self-closed.
       `properties property type picker` and `add view property picker` — and twenty-nine keep
       `048`'s stacking, ten of them because nothing equivalent was captured
       (`design-trueup.md` §4).
-- [ ] **T002 — [P] Measure every red in `acceptance-criteria.md` and write it into
+- [x] **T002 — [P] Measure every red in `acceptance-criteria.md` and write it into
       `checklist.md`.** Chrome-deciding sites (4), independent header sites (12), undeclared titles
       (20 of 20), exported confirm primitives (0), sub-page affordances (0), shell geometry
       literals, motion literals. **Threshold**: one failing figure per criterion. **Red-first
@@ -111,6 +111,19 @@ with the owner named, never self-closed.
       from the tree rather than from this document. **Unblocked**: T001 landed, so the geometry and
       motion literal counts have a target list to be counted against
       (`design-trueup.md` §2a, §2b).
+      **Done 2026-09-05** — every `Unmet` row in `acceptance-criteria.md` and every threshold row
+      in `checklist.md` C1-C10 carries the exact `rg`/`node`/`ls` command and its output, dated.
+      All previously stated figures were confirmed exactly against HEAD: 4 chrome-deciding sites
+      (`rg -n "attachSheetChromeToModal\("`), 20 `extends DbModal` subclasses and 0 declared
+      titles, 12 `createSheetHeader` call sites, 0 exported confirm primitives, no shell affordance
+      (`surface-shell.ts` absent), 12 `sheet-grammar` surfaces / 31 stacked pairs green
+      (`node tools/live/sheet-grammar.mjs` exit 0), `npm run replay` exit 0 reversed 0. Two
+      corrections: `checklist.md` C4 had gone stale after T001 landed (still read "file does not
+      exist") and is now reconciled with AC-004's `Met` status; AC-006's Verification cell cannot be
+      observed red as written (it reads "0" both before the shell exists and after it is correctly
+      built) and `decision-record.md` ADR-006 (Proposed) restates it against today's scattered
+      per-property literal count. A stray `tools/live/replay.json` timestamp written by running the
+      lane was reverted before commit — out of this task's write authority.
 - [ ] **T003 — [P] Capture the board and gantt parity baseline before any `styles.css` or shared
       chrome commit.** **Threshold**: a recorded `pixelHash` per reference capture. **Red-first
       proof**: n/a — this is the baseline the later comparison is meaningful against. **Proof**: the

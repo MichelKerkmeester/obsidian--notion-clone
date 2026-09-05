@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Modal and Sheet Componentization"
-description: "ADR-001 the sheet engine stays and the shell composes it. ADR-002 a sub-page replaces in place rather than stacking, per pair, with the list of two converts out of thirty-one. ADR-003 the confirm primitive is this packet's and is the only one. ADR-004 fullscreen survives only for the formula workbench. ADR-005 the phone close survives the capture that contradicts it, on a measured 2.21:1."
+description: "ADR-001 the sheet engine stays and the shell composes it. ADR-002 a sub-page replaces in place rather than stacking, per pair, with the list of two converts out of thirty-one. ADR-003 the confirm primitive is this packet's and is the only one. ADR-004 fullscreen survives only for the formula workbench. ADR-005 the phone close survives the capture that contradicts it, on a measured 2.21:1. ADR-006 restates AC-006's geometry-literal count so it can be observed red instead of trivially zero."
 trigger_phrases:
   - "051 decision record"
   - "shell composition decision"
@@ -13,11 +13,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-05T14:50:00Z"
-    last_updated_by: "adr-answers-051-053"
-    recent_action: "Added ADR-002's per-pair list and ADR-005"
-    next_safe_action: "Execute T002, the red measurement, against design-trueup.md's value list"
-    blockers: []
+    last_updated_at: "2026-09-05T16:00:00Z"
+    last_updated_by: "t002-red-measurement"
+    recent_action: "Added proposed adr-006 restating ac-006's literal count"
+    next_safe_action: "Operator review of ADR-006, then begin Phase 2 legs (T004+)"
+    blockers:
+      - "ADR-006 (Proposed) awaits operator review before AC-006's Verification wording changes"
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/modals/db-modal.ts"
@@ -358,3 +359,59 @@ shell closes, not a place where we had already chosen the reference's answer.
 | **What is the real caller that must not break?** | `createSheetHeader`'s close button (`mobile-bottom-sheet.ts:163-176`) and the touch-target ratchet that measures it |
 | **What contract must not break?** | `044` REQ-007 as amended, and the `sheet-grammar` lane rows that assert the close on twelve registered surfaces |
 <!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: AC-006's geometry-literal count is restated so it can be observed red
+
+**Status: PROPOSED — awaiting operator review.**
+
+### Context
+
+T002 (`tasks.md`) requires every threshold in `acceptance-criteria.md` to carry a failing figure
+observed on HEAD before the fix (goal D2). AC-006's Verification cell reads: *"a count of geometry
+literals in the shell path → 0."* Measured as written, that count is **0 today** —
+`src/views/surface-shell.ts` does not exist (confirmed: `ls src/views/surface-shell.ts` → No such
+file or directory) — which is the same number the criterion requires to be true when the work is
+*done*. A metric that reads "0" both before any code is written and after the shell is built and
+correct cannot be observed red: it fails `SC-004` for the same reason `AC-003`'s pre-T001 tolerance
+did, addressed above in `design-trueup.md` §6 C1 — the earlier "bounding box moves by `\|Δ\| ≤ 1px`"
+was false on the surface it was written for, and here the count is trivially true for the wrong
+reason (absence, not conformance) rather than false.
+
+**What is actually red today, measured 2026-09-05:** the seven geometry values AC-006 names are
+not literals *inside a shell path that does not yet exist* — they are literals scattered across
+`styles.css` outside any single shared declaration. `rg -c "360px" styles.css` → **20** separate
+occurrences (max-width/max-height rules, none reading one named constant); the **8px** radius is
+`--db-radius-lg` (`styles.css:83`), a design-system-wide token referenced ad hoc per surface
+(`var(--menu-radius, var(--db-radius-lg))` and others) rather than a shell-owned declaration. That
+scatter — not an empty file — is the red baseline the fix actually closes.
+
+### Decision
+
+**Proposed:** restate AC-006's Verification cell from *"a count of geometry literals in the shell
+path → 0"* to *"a count of the shell's seven properties (radius, horizontal padding, vertical
+padding, divider clearance, row height, panel width, phone close) declared as raw literals outside
+`surface-shell.ts`'s named constants → 0, red-first against today's scattered occurrence count
+(≥ 20 for the 360px panel width alone, confirmed by `rg -c \"360px\" styles.css`)."* The target
+number does not change; only the metric's denominator changes, from a file that does not exist to
+the surfaces that exist today and must converge on the shell's constants.
+
+### Consequences
+
+- The lane T007/T015 build asserts against a baseline that can actually go from red to green,
+  rather than one that reads green by construction before the shell exists.
+- No scope change: AC-006's seven target values, and `checklist.md` C6's Target column, are
+  unchanged. Only the Verification cell's wording moves.
+- If the operator prefers the criterion as originally written, the risk it carries — a false
+  "already met" read before T007 lands — should be named as accepted rather than silently
+  inherited.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Leave the wording as written** | No document change | A literal-minded run of the stated check passes today, before any shell code exists, which is the false-pass `evidence-and-proof.md` §3.4 warns against ("it asserted nothing") |
+| **Restate against today's scattered-literal count (proposed)** | Observable red today, same green target | One more sentence to maintain until the criterion closes |
+<!-- /ANCHOR:adr-006 -->
