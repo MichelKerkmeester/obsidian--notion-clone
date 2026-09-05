@@ -9,9 +9,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/043-constructed-capture"
-    last_updated_at: "2026-09-05T01:15:00Z"
-    last_updated_by: "in-runtime-code-agent"
-    recent_action: "Fixed isGitIgnored()'s symlink-crossing false negative (KL #9 follow-up)"
+    last_updated_at: "2026-09-05T02:00:00Z"
+    last_updated_by: "markdown-agent"
+    recent_action: "Recorded KL #11: a code leaf froze the timeline bench clock (6bac9ce9)"
     next_safe_action: "Audit row 6 against T029 and resolve the two open P2 kanban gaps"
     blockers: []
     key_files:
@@ -26,6 +26,8 @@ _memory:
       - "tools/screenshots/constructed-scenarios.mjs"
       - "tools/bench/table-render-bench.ts"
       - "tools/bench/reference-fixture.ts"
+      - "src/data/calendar-date-time.ts"
+      - "tools/bench/timeline-render-bench.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-043-impl-summary"
@@ -669,6 +671,8 @@ Every exit code below was read from `$?` directly.
    direct visual read instead. No code change from this observation; recorded here as the
    known limitation a future lane hardening (tightening the grid, or requiring `layoutHash`
    agreement too) would need to cite.
+
+11. **RESOLVED, 2026-09-05.** A code leaf (`6bac9ce9`, `test(bench): freeze the timeline bench on the harness clock so captures stop drifting daily`) landed on `origin/main` closing this packet's own daily capture-drift exposure. Three independent real-clock reads fed the constructed timeline/gantt captures — the bench's event-window anchor (`EVENT_START`, now `eventStart()`, `tools/bench/timeline-render-bench.ts`), the gantt's own today-line and scroll-to-today (`CalendarTimelineRenderer.getTodayDateKey`, `src/views/calendar-timeline-renderer.ts:4294`), and `buildTimelineRangeGeometry`'s range seed (`startOfTodayUtc`, `src/data/calendar-timeline-model.ts:600`) — each calling `new Date()` on its own. The observed before-state: 48 timeline/gantt captures moved on a recapture after midnight on 2026-09-05 with no code change. All three now go through one injectable `renderNow()` / `setFrozenRenderNow()` seam in `src/data/calendar-date-time.ts`, frozen exactly once — by `render-assertion-harness.ts` — to the fixtures' fictional now `2026-03-25T13:45`; production never calls the setter, so the shipped views keep reading the real clock. RED FIRST, verbatim from the commit body: `tools/bench/timeline-render-bench.test.mjs` — "a fresh module import per simulated real day under a frozen clock expects identical rows; failed pre-fix (rows drifted by exactly one day per simulated day)"; `src/views/board-renderer-parity.test.ts` — "classifies a fixed due date by the frozen render clock, not the real one" failed pre-fix (both frozen clocks classified overdue, since the real clock was read instead). Second-run zero-change proof: the forced recapture moved 50 captures (32 `constructed-timeline*`, 10 `constructed-board*`, 8 `reference-kanban*`/`reference-gantt*`), each read against its reference twin, and two further screenshot runs reproduced identical `pixelHash`/`layoutHash` for all 50; `tsc` 0, `vitest` 1142/1142, `lint` 172 (unchanged baseline), `lint:tools` 0, `scan-comments` 0, `screenshots:verify` 0 stale, `gate` 26/26 green. Landed outside this packet's own docs-authoring boundary by a code leaf; recorded here as `tasks.md` T032.
 <!-- /ANCHOR:limitations -->
 
 ---
