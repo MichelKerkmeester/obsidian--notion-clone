@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/049-test-environments-and-mock-data",
+  "spec_folder": "005-component-surface-system/049-test-environments-and-mock-data",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "test environments spec",
+      "mock data catalogue spec",
+      "049 spec",
+      "anytype appflowy test data",
+      "database testbed upgrade",
+      "implementation plan",
+      "mock data plan",
+      "049 plan",
+      "catalogue emitter plan",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist"
+    ],
+    "key_topics": [
+      "test",
+      "environments",
+      "spec",
+      "mock",
+      "data",
+      "catalogue",
+      "anytype",
+      "appflowy",
+      "database",
+      "testbed",
+      "upgrade",
+      "implementation"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "tools/live/render-assertion-harness.ts",
+      "tools/mock-data/catalogue.json",
+      "tools/mock-data/random.ts",
+      "tools/mock-data/use-cases.ts",
+      "tools/mock-data/catalogue.ts",
+      "tools/mock-data/emit-obsidian.ts",
+      "tools/mock-data/emit-portable.ts",
+      "tools/mock-data/generate.ts",
+      "tools/mock-data/capture.mjs",
+      "tools/mock-data/catalogue.test.mjs",
+      "tools/mock-data/README.md",
+      "specs/005-component-surface-system/roadmap.md",
+      "specs/005-component-surface-system/goal.md",
+      "src/data/column-types.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.json",
+        "kind": "config",
+        "path": "tools/mock-data/catalogue.json",
+        "source": "derived"
+      },
+      {
+        "name": "random.ts",
+        "kind": "code",
+        "path": "tools/mock-data/random.ts",
+        "source": "derived"
+      },
+      {
+        "name": "use-cases.ts",
+        "kind": "code",
+        "path": "tools/mock-data/use-cases.ts",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.ts",
+        "kind": "code",
+        "path": "tools/mock-data/catalogue.ts",
+        "source": "derived"
+      },
+      {
+        "name": "emit-obsidian.ts",
+        "kind": "code",
+        "path": "tools/mock-data/emit-obsidian.ts",
+        "source": "derived"
+      },
+      {
+        "name": "emit-portable.ts",
+        "kind": "code",
+        "path": "tools/mock-data/emit-portable.ts",
+        "source": "derived"
+      },
+      {
+        "name": "generate.ts",
+        "kind": "code",
+        "path": "tools/mock-data/generate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/mock-data/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.test.mjs",
+        "kind": "file",
+        "path": "tools/mock-data/catalogue.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "tools/mock-data/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/roadmap.md",
+        "source": "derived"
+      },
+      {
+        "name": "column-types.ts",
+        "kind": "code",
+        "path": "src/data/column-types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Environments",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mock Data",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The vault held one test database",
+    "created_at": "2026-09-05T07:27:39Z",
+    "last_save_at": "2026-09-05T08:06:38.555Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:4b5a0905b16f0d27b368f7591d58b059d791faf895bc74004ca8246e4034909f",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "b5b6949adae06c1e20bc8f19147e206e38381fa203332346f5b4cb6c3c372636",
+      "plan.md": "e0d880e1cabbf6585f07d7c465a91434bdf72984acc09c7850968ebe19834ac6",
+      "tasks.md": "8b42f86980f4e3580b70d7ce112730a9d94f98f40306626ff20f49d91b175b83",
+      "implementation-summary.md": "c0eb2c09c7afd0c75292f5ca058fd3530cf9519f1eef3d1608b78b0105de959e"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

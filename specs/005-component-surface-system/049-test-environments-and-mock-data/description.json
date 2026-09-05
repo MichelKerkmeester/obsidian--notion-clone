@@ -1,0 +1,23 @@
+{
+  "specFolder": "005-component-surface-system/049-test-environments-and-mock-data",
+  "description": "One deterministic mock-data catalogue of ten use cases emitted three ways, so the Obsidian vault, an Anytype demo space and an AppFlowy workspace hold the same records and a difference between them is a finding about the products",
+  "keywords": [
+    "phase",
+    "test-environments",
+    "mock-data",
+    "catalogue",
+    "database-testbed",
+    "anytype",
+    "appflowy",
+    "deterministic-fixtures"
+  ],
+  "lastUpdated": "2026-09-05T09:55:00.000Z",
+  "specId": "049",
+  "folderSlug": "test-environments-and-mock-data",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

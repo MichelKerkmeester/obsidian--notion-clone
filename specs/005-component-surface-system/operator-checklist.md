@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **49 phases**, **6 with nothing left**, **110 rows** waiting on a device.
+Derived 2026-09-05: **50 phases**, **6 with nothing left**, **113 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -258,6 +258,12 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 ## 048-stacked-sheets — 6/7
 
 - [ ] The operator opens the Properties sheet, the filter sheet's operator dropdown and its property picker on iOS and reports each as one stack rather than two sheets. Only the operator closes this row; nothing in this repository can.
+
+## 049-test-environments-and-mock-data — 5/8
+
+- [ ] The Anytype demo space holds the same ten use cases at the same record counts, loaded from `catalogue.json`.
+- [ ] The AppFlowy demo workspace holds the same ten, imported from the per-use-case CSVs.
+- [ ] The operator opens the upgraded vault on a device and reads the ten databases as usable test environments rather than as a wall of noise.
 
 ## Nothing left to check
 

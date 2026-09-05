@@ -1,0 +1,198 @@
+---
+title: "Tasks: Test Environments and Mock Data"
+description: "Task Format: T### [P?] Description (file path)"
+trigger_phrases:
+  - "task breakdown"
+  - "implementation tasks"
+  - "verification checklist"
+  - "049 tasks"
+importance_tier: "normal"
+contextType: "implementation"
+---
+<!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
+# Tasks: Test Environments and Mock Data
+
+<!-- SPECKIT_LEVEL: 2 -->
+
+---
+
+<!-- ANCHOR:notation -->
+## Task Notation
+
+| Prefix | Meaning |
+|--------|---------|
+| `[ ]` | Pending |
+| `[x]` | Completed |
+| `[P]` | Parallelizable |
+| `[B]` | Blocked |
+
+**Task Format**: `T### [P?] Description (file path)`
+<!-- /ANCHOR:notation -->
+
+---
+
+<!-- ANCHOR:phase-1 -->
+## Phase 1: Setup — read before writing
+
+The column set could not be inferred from the ask, and the database-note shape could not be inferred
+from the parser.
+
+- [x] T001 Read the plugin's real column types and display variants (`src/data/column-types.ts`,
+      `src/data/types.ts`, `src/data/text-link-scheme.ts`, `src/data/file-fields.ts`)
+- [x] T002 Read the on-disk database note and a record's frontmatter, so the emitted shape is the one
+      the vault already holds (`Database Testbed/Testbed.md`, `Database Testbed/Records/`)
+- [x] T003 Checksum the vault's 31 pre-existing files, so "untouched" is checkable afterwards
+- [x] T004 Confirm which view types the plugin ships and keeps, given the two deprecation packets
+<!-- /ANCHOR:phase-1 -->
+
+---
+
+<!-- ANCHOR:phase-2 -->
+## Phase 2: Implementation
+
+### The catalogue
+
+- [x] T005 Seeded value stream with no unseeded fallback (`tools/mock-data/random.ts`)
+- [x] T006 Ten domain vocabularies, data only, at least `recordCount` titles each
+      (`tools/mock-data/use-cases.ts`)
+- [x] T007 The facet schema binding frontmatter key, plugin column type and neutral type
+      (`tools/mock-data/catalogue.ts`)
+- [x] T008 The record builder: 20-40 records per use case, one deliberately empty, relations wired
+      after every record exists (`tools/mock-data/catalogue.ts`)
+- [x] T009 A coverage function reading the values records carry rather than the schema
+      (`tools/mock-data/catalogue.ts`)
+
+### The emitters
+
+- [x] T010 [P] Vault notes and the `db_view: true` database note, YAML by hand
+      (`tools/mock-data/emit-obsidian.ts`)
+- [x] T011 [P] `catalogue.json` with a neutral type per column, and one CSV per use case
+      (`tools/mock-data/emit-portable.ts`)
+- [x] T012 The CLI, with the vault guard, the idempotent write and the run summary
+      (`tools/mock-data/generate.ts`)
+
+### The evidence
+
+- [x] T013 Unit suite: determinism, counts, coverage, relations, vault containment
+      (`tools/mock-data/catalogue.test.mjs`)
+- [x] T014 Capture runner mounting the shipped `TableRenderer` and `CellRenderer`, with a bundle
+      manifest check before anything mounts (`tools/mock-data/capture.mjs`)
+- [x] T015 Folder documentation, which the three-source threshold owes
+      (`tools/mock-data/README.md`, `CODE.md`)
+<!-- /ANCHOR:phase-2 -->
+
+---
+
+<!-- ANCHOR:phase-3 -->
+## Phase 3: Verification
+
+- [x] T016 Arm both negative controls and observe them red before counting either check as evidence
+- [x] T017 Write the ten databases into the vault, then confirm the 31 pre-existing files are
+      byte-identical and a second run reports zero changes
+- [x] T018 Capture every generated database at desktop width, read every PNG, and record what the
+      constructed mount cannot show
+- [x] T019 `npx tsc --noEmit`, `npx vitest run` and `npm run gate`, each read by exit status
+- [x] T020 `validate.sh --strict` on this packet and on the parent, taking the first `RESULT:` line
+- [ ] T021 [B] Load `catalogue.json` into the Anytype demo space over the captures leg's CDP session
+- [ ] T022 [B] Import the ten CSVs into the AppFlowy demo workspace, in an operator window
+- [ ] T023 [B] Operator opens the upgraded vault on a device and reads the ten databases
+<!-- /ANCHOR:phase-3 -->
+
+---
+
+<!-- ANCHOR:completion -->
+## Completion Criteria
+
+T001 to T020 are done. T021 to T023 are blocked on something this packet cannot supply: a CDP
+session, an operator window, and a device.
+<!-- /ANCHOR:completion -->
+
+---
+
+<!-- ANCHOR:cross-refs -->
+## Cross-References
+
+- `spec.md` §3 for the column mapping and the two decisions.
+- `checklist.md` for the failing number each criterion started from.
+- `acceptance-criteria.md` for the closure gate.
+- `tools/mock-data/CODE.md` for the generator's topology.
+<!-- /ANCHOR:cross-refs -->
+
+---
+
+## Verification Checklist
+
+<!-- ANCHOR:protocol -->
+## Verification Protocol
+
+Read exit codes without a pipe: `cmd >/tmp/out.log 2>&1; echo $?`. A pipe makes `$?` the pipe's
+status. `validate.sh` output continues past the folder asked about when a parent recurses into its
+children, so the **first** `RESULT:` line is the folder's own verdict.
+<!-- /ANCHOR:protocol -->
+
+<!-- ANCHOR:pre-impl -->
+## Pre-Implementation
+
+- [x] The plugin's column set read from source rather than from the ask's wording.
+- [x] The database-note shape read from disk rather than derived from the parser.
+- [x] The vault's file set checksummed before the first write.
+- [x] The rollback written before the irreversible step: remove the ten named folders.
+<!-- /ANCHOR:pre-impl -->
+
+<!-- ANCHOR:code-quality -->
+## Code Quality
+
+- [x] No spec path, requirement id, task id or checklist id in any comment or test name.
+- [x] Module banners on every source file, matching the `tools/` convention.
+- [x] No dead code, commented-out code or debug logging.
+- [x] No new dependency. YAML is emitted by hand rather than pulling a parser in.
+<!-- /ANCHOR:code-quality -->
+
+<!-- ANCHOR:testing -->
+## Testing Checklist
+
+- [x] 20 assertions across 5 groups, all passing.
+- [x] Both negative controls armed and observed red, then disarmed and observed green.
+- [x] The capture runner asserts row counts rather than trusting that a screenshot succeeded.
+<!-- /ANCHOR:testing -->
+
+<!-- ANCHOR:fix-completeness -->
+## Fix Completeness
+
+- [x] All ten use cases, not a representative subset.
+- [x] All three outputs, not the vault alone.
+- [x] The two competitor legs named as blocked rather than quietly dropped.
+<!-- /ANCHOR:fix-completeness -->
+
+<!-- ANCHOR:security -->
+## Security
+
+- [x] No credential, token or personal datum generated. Every name is invented; every host is under
+      `example.com`.
+- [x] The vault path is passed on the command line and never stored.
+- [x] `.obsidian/` and `data.json` are never touched.
+<!-- /ANCHOR:security -->
+
+<!-- ANCHOR:docs -->
+## Documentation
+
+- [x] `README.md` and `CODE.md` under `tools/mock-data/`.
+- [x] Both record what a green run does not prove.
+<!-- /ANCHOR:docs -->
+
+<!-- ANCHOR:file-org -->
+## File Organization
+
+- [x] Eight source files and two docs, all under `tools/mock-data/`.
+- [x] Generated portable outputs beside the generator; generated vault output in the vault and not
+      committed.
+- [x] Captures in the packet's git-ignored `scratch/`, not in `screenshots/`.
+<!-- /ANCHOR:file-org -->
+
+<!-- ANCHOR:summary -->
+## Verification Summary
+
+Five of the eight goal criteria are closed on evidence recorded in `checklist.md`. Three stay open
+and none of them is closeable from this session: the Anytype load, the AppFlowy import and the
+operator's own device read.
+<!-- /ANCHOR:summary -->
