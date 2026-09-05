@@ -39,15 +39,15 @@ A populated lane beside an empty lane, preserving the rendered column header, ze
 
 Sources: `src/views/board-renderer.ts`
 
-### Card covers, board and gallery
+### Card covers, board
 
-The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.
+The empty cover in the board's card: the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio the board has always drawn.
 
 | dark | light |
 |---|---|
 | ![card-cover-states dark](notion-clone/components/card-cover-states-mobile-dark.png) | ![card-cover-states light](notion-clone/components/card-cover-states-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `src/views/gallery-renderer.ts`
+Sources: `src/views/board-renderer.ts`
 
 ### Active rule popover — filter
 
@@ -131,13 +131,13 @@ Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `sr
 
 ### Group selection controls
 
-The whole-group selection box from the gallery and a board subgroup. One role, so both boxes must be the same size and radius.
+The whole-group selection box from a board subgroup.
 
 | dark | light |
 |---|---|
 | ![chrome-group-selection-controls dark](notion-clone/components/chrome-group-selection-controls-mobile-dark.png) | ![chrome-group-selection-controls light](notion-clone/components/chrome-group-selection-controls-mobile-light.png) |
 
-Sources: `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`
+Sources: `src/views/board-renderer.ts`
 
 ### Owned menu — the shell every context menu uses
 
@@ -309,15 +309,15 @@ CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time 
 
 Sources: `src/views/calendar-toolbar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
-### Card covers, board and gallery (constructed)
+### Card covers, board (constructed)
 
-The empty cover in both card views: each renderer with an image field the rows resolve nothing for, which is the only cover state a capture without a vault can show. Framing bound: a board of covered cards already fills the viewport an element capture crops to, so the picture holds the board host; the gallery's empty cover is asserted by constructed-state-assertions rather than photographed here.
+The empty cover in the board card: the renderer with an image field the rows resolve nothing for, which is the only cover state a capture without a vault can show. This used to mount the gallery's own empty cover beside it, asserted by constructed-state-assertions rather than photographed; the gallery is retired, so only the board host is built here now.
 
 | dark | light |
 |---|---|
 | ![constructed-card-covers dark](notion-clone/components/constructed-card-covers-mobile-dark.png) | ![constructed-card-covers light](notion-clone/components/constructed-card-covers-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/gallery-renderer.ts`
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### Chart options popover (constructed)
 
@@ -351,13 +351,13 @@ Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `to
 
 ### Group selection controls (constructed)
 
-One role, two views: the whole-group selection box from the gallery and the extensions board's column header, each through its renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. Gallery and board boxes are asserted by constructed-state-assertions rather than photographed here.
+The extensions board's column-header selection box, through the renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. This used to mount the gallery's own group box alongside it; the gallery is retired, so only the board's box is asserted here now.
 
 | dark | light |
 |---|---|
 | ![constructed-group-selection-controls dark](notion-clone/components/constructed-group-selection-controls-mobile-dark.png) | ![constructed-group-selection-controls light](notion-clone/components/constructed-group-selection-controls-mobile-light.png) |
 
-Sources: `src/views/gallery-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/group-label-renderer.ts`
 
 ### A migrated list view (constructed)
 
@@ -1245,16 +1245,6 @@ The shipped chart renderer's renderNumber branch (chartType: "number"), the one 
 
 Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
-### Gallery view (constructed)
-
-The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid.
-
-| dark | light |
-|---|---|
-| ![constructed-gallery dark](notion-clone/views/constructed-gallery-mobile-dark.png) | ![constructed-gallery light](notion-clone/views/constructed-gallery-mobile-light.png) |
-
-Sources: `src/views/gallery-renderer.ts`, `tools/bench/gallery-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
 ### Linked view in a reading host (constructed)
 
 The shipped table renderer paints the same capture-sized data once as a standalone view and once as a linked view inside a readable-line-width host, with prose before and after it.
@@ -1334,16 +1324,6 @@ The shipped timeline renderer at its year scale.
 | ![constructed-timeline-year dark](notion-clone/views/constructed-timeline-year-mobile-dark.png) | ![constructed-timeline-year light](notion-clone/views/constructed-timeline-year-mobile-light.png) |
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Gallery view
-
-A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.
-
-| dark | light |
-|---|---|
-| ![gallery-view dark](notion-clone/views/gallery-view-mobile-dark.png) | ![gallery-view light](notion-clone/views/gallery-view-mobile-light.png) |
-
-Sources: `src/views/gallery-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
 ### Table view — mobile auto-fit
 

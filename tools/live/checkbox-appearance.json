@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-05T21:56:43.520Z",
+  "measuredAt": "2026-09-05T23:34:45.409Z",
   "inputs": {
-    "styles.css": "adae4d3efba1",
+    "styles.css": "53d49be6d120",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "checkboxes": 162,
-    "fixtures": 72,
-    "owned": 162,
+    "checkboxes": 149,
+    "fixtures": 71,
+    "owned": 149,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 162,
-    "tokenDependent": 151,
+    "appearanceSelfOwned": 149,
+    "tokenDependent": 138,
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
@@ -21,13 +21,13 @@
     "mountGroups": 7,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 162,
+    "boxesUnderHostProfiles": 149,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0
   },
   "shapes": {
-    "16x16 r=4px": 113,
+    "16x16 r=4px": 100,
     "18x18 r=4px": 26,
     "28x28 r=4px": 12,
     "34x18 r=9999px": 11
@@ -622,282 +622,6 @@
         "db-table",
         "db-select-col",
         "db-select-inner"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 0,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 1,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 2,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 3,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 4,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 5,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 6,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 7,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 8,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 9,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 10,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "gallery-view",
-      "index": 11,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-controls"
       ],
       "measured": {
         "appearance": "none",
@@ -3629,28 +3353,6 @@
     {
       "scenario": "chrome-group-selection-controls",
       "index": 0,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-gallery-group-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-gallery-group",
-        "db-gallery-group-header"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "chrome-group-selection-controls",
-      "index": 1,
       "classes": [
         "db-checkbox",
         "db-checkbox-row",

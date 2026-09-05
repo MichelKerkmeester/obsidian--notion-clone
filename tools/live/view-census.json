@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T21:58:39.602Z",
+  "measuredAt": "2026-09-05T23:35:59.327Z",
   "inputs": {
-    "styles.css": "adae4d3efba1",
+    "styles.css": "53d49be6d120",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 72,
-    "escaping": 661,
-    "growing": 312,
-    "scrolling": 349,
+    "fixtures": 71,
+    "escaping": 656,
+    "growing": 310,
+    "scrolling": 346,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 40
@@ -796,39 +796,6 @@
       "parentCls": "db-board-card",
       "by": 8,
       "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "card-cover-states",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-gallery",
-      "parentCls": "note-database-container",
-      "by": 50,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "card-cover-states",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-gallery-field",
-      "parentCls": "db-gallery-card",
-      "by": 4,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "card-cover-states",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-gallery-field-label",
-      "parentCls": "db-gallery-field",
-      "by": 64,
-      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3884,28 +3851,6 @@
       "cls": "db-board-card-cover.is-empty",
       "parentCls": "db-board-card",
       "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "card-cover-states",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-gallery-cover-placeholder",
-      "parentCls": "db-gallery-cover.is-empty",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "card-cover-states",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-gallery-field-label",
-      "parentCls": "db-gallery-field",
-      "by": 44,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7754,11 +7699,6 @@
     },
     {
       "width": 320,
-      "fixture": "gallery-view",
-      "probe": "4px"
-    },
-    {
-      "width": 320,
       "fixture": "add-view-popover",
       "probe": "4px"
     },
@@ -8111,11 +8051,6 @@
       "width": 402,
       "fixture": "board-drop-language",
       "probe": ""
-    },
-    {
-      "width": 402,
-      "fixture": "gallery-view",
-      "probe": "4px"
     },
     {
       "width": 402,
@@ -8474,11 +8409,6 @@
     },
     {
       "width": 768,
-      "fixture": "gallery-view",
-      "probe": "4px"
-    },
-    {
-      "width": 768,
       "fixture": "add-view-popover",
       "probe": "4px"
     },
@@ -8831,11 +8761,6 @@
       "width": 1440,
       "fixture": "board-drop-language",
       "probe": ""
-    },
-    {
-      "width": 1440,
-      "fixture": "gallery-view",
-      "probe": "4px"
     },
     {
       "width": 1440,
