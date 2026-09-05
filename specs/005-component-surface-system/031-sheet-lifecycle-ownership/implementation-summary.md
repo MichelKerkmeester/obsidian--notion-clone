@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-04T18:20:00Z"
-    last_updated_by: "reports-34-36-second-pass"
-    recent_action: "A panel rebuild no longer replays the sheet entrance; four surfaces, one line each"
-    next_safe_action: "The operator adds a sort rule and a filter condition on the phone"
+    last_updated_at: "2026-09-05T06:20:00Z"
+    last_updated_by: "reports-34-36-fourth-pass"
+    recent_action: "A press inside a portalled sheet is no longer read as a press outside the view"
+    next_safe_action: "The operator taps Add sort and Add condition on the phone against a build carrying the fix"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -30,6 +30,8 @@ _memory:
       - "The entrance is keyed to the node, so a rebuild replays it; only the owner can tell a rebuild from an opening"
       - "A sheet still on the body is an open sheet; holding the backdrop for it is correct"
       - "The long press consumed nothing; it now swallows the click it caused"
+      - "The backdrop never wins the hit test; elementFromPoint returns the control in both engines"
+      - "The views carry a second dismissal path the overlay stack knows nothing about, and no lane had ever installed it"
 ---
 # Implementation Summary: Sheet Lifecycle Ownership
 
@@ -422,6 +424,68 @@ added the difference, not this packet); `npm run lint` **172**, unchanged; `npm 
 `scan-comments` `PASS`; `sheet-rebuild` **31 checks green across Chrome and WebKit**, exit 0;
 `verify-placement` **393/394**, unchanged; `npm run gate` **PASS — 25 green, 0 red** at exit 0;
 `npm run screenshots:verify` 528 entries, 0 stale.
+
+### The view was closing its own sheet — reports 34-36, fourth pass (2026-09-05)
+
+The operator, on released 0.0.22: *"pressing any action in a sheet doesn't work and instantly closes
+it"*, and *"all buttons like add sort, add filter etc still broken"*. Three shipped fixes had not
+touched it.
+
+**The leading hypothesis was measured and is wrong.** The theory was that the backdrop stacks above
+the portalled sheet in WebKit, so the press at the button's centre reaches the backdrop instead. It
+does not. `document.elementFromPoint` at the settled centre of "+ Add" returns
+`button.db-panel-button` in **both** engines, on an emulated iPhone 14 Pro with real touch. The
+backdrop sits one z-index tier below the sheet and never wins the point. The remaining candidates
+went the same way, on evidence rather than argument: the overlay stack's `pointerdown` check passes
+(its `getPanel()` resolver and the retained-node rebuild already fixed that end); the drag gesture
+never arms, because `onDown` requires `event.target === grabTarget()` and a button is not the grab
+bar; and a stale delayed click cannot be it, because the failure lands on the FIRST tap, before any
+rebuild has happened.
+
+**Root cause: the view's own outside-press dismissal reads a portalled sheet as outside itself.**
+Both views hold a document-level capture listener on `mousedown` that decides independently of the
+overlay stack whether a press was outside, by asking whether the view's container holds the pressed
+node — `database-view.ts:3012` and `embedded-database-renderer.ts:998`. A sheet is portalled onto
+`document.body` precisely so it can cover the host's navigation bar, so that question answers
+"outside" for a thumb resting on the sheet's own control, and `closeHeaderPopovers()` runs. It runs
+on `mousedown`, which is before the `click` a tap produces — so the panel is already gone when the
+click would have reached the button. **One wrong answer, both complaints:** the action does nothing
+AND the sheet closes. Desktop is unaffected for the only reason that matters here — a desktop panel
+is never portalled, so containment still answers correctly there.
+
+**Why five lanes across two engines could not see it.** Not the engine, and this time not the event
+either: it is the wiring. Every sheet case in this repository registers dismissal through
+`installPopoverAutoClose` — the overlay stack — and the views carry a **second** dismissal path the
+stack knows nothing about. No harness had ever installed it, so the entire path was unmeasured in
+Chrome and WebKit alike. It is also a `mousedown`, and every existing case drives a click or a
+`pointerdown`.
+
+**The fix is at the portal, not at the call sites.** `isInsideOpenSheet` in
+`mobile-bottom-sheet.ts` answers from the live-sheet registry the module already maintains — a node
+matches only while the module is actually holding it as a mounted sheet, so chrome left on a
+detached or demoted node cannot turn a genuine outside press into an inside one. Both views consult
+it beside their containment test. The module that moves the node is the module that knows it moved.
+
+**Red then green, in both engines.** New lane rows in `sheet-rebuild`, on an emulated iPhone with
+`page.touchscreen.tap`. Each carries its own negative control that runs the same tap against the
+container-only shape and must still lose the sheet, so the case cannot go quietly vacuous: `the tap
+closes the sheet and adds nothing — the defect this case exists to see`. With the predicate
+neutralised the four real rows go red in both engines with the operator's symptom verbatim — `0
+rule(s) after the tap (open: false, sheet: false)` — and green with it restored: `the tap reached
+it: 1 rule(s), sheet still open and still a sheet`. A call-site guard pins both views to the
+predicate, because the behavioural case models the views rather than constructing them, and a
+predicate nobody consults is as dead as a wrong one.
+
+**Evidence, exit codes read directly.** `npx tsc --noEmit` 0; `npm test` **1129 passed, 108 files**,
+exit 0; `sheet-rebuild` green across Chrome and WebKit including 12 new rows; `npm run gate`
+**PASS — 25 green, 0 red** at exit 0. Screenshots recaptured because the freshness lane fingerprints
+the two view sources; the capture is behaviour-neutral and committed separately.
+
+**Still not proven here.** No Obsidian host is constructed, so the views' listeners are modelled
+from their source rather than installed by the real class; the call-site guard is what holds that
+seam. The delayed compatibility click, the software keyboard's effect on `visualViewport`, and the
+host's own re-render remain unmeasurable in this harness, and the device row stays open until the
+operator confirms on hardware.
 
 <!-- /ANCHOR:limitations -->
 
