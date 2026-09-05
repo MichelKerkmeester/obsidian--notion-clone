@@ -48,22 +48,28 @@ not close until T002 has put a number in them and the fix has moved it.
 | C12 | First embedded-view width at which a toolbar control overflows | T002 sweeps from **250px** upward and records the first overflow | **no** overflow at any width in the sweep, collapse driven by measured width | [ ] |
 | C13 | Phone filter/sort surfaces rendering per-format condition rows, with `044`'s grammar | **0 of them** — the phone filter surfaces render one generic row shape | every supported format; **7 of 7** grammar elements | [ ] |
 | C14 | Embedded view paging path | **virtualization path entered** | a page plus a "Load more" row; virtualization not entered | [ ] |
-| C15 | Items carrying a design trued against a real Anytype screen or a named gap | **0 of 14** — `capture-alignment.md` does not exist, and `screenshots/anytype/README.md` records that the first pass reached no mouse-driven surface at all | **14 of 14** | [ ] |
+| C15 | Items carrying a design trued against a real Anytype screen or a named gap | **14 of 14 covered, five gaps named** — `design-trueup.md` §3 carries one section per item and §4's roll-up names the five with no capture: REQ-005, REQ-006, REQ-007, REQ-011, REQ-013 | **14 of 14** | [x] |
 | C16 | `npm run gate` exit status with every negative control observed red | not yet run for this phase | exit **0**, each control red then green | [ ] |
 | C17 | `screenshots/project-manager/` board and gantt reference `pixelHash` | baseline to be captured before the first leg that touches `board-renderer.ts` | identical, or operator-ruled | [ ] |
 
 **C1, C2, C3 and C7 are what the operator will notice first. C16 is the check that C1-C15 are not
 theatre, and C17 is the check that adopting Anytype did not cost us Project Manager.**
 
-### Six items have no reference screen
+### Five items have no reference screen — settled at T001
 
-C1, C4, C6, C7, C8 and C10 depend on surfaces the first capture pass could not reach — the view
-switcher, a filter or sort panel with a condition open, an open cell editor, an object context menu,
-and the per-view template control. `screenshots/anytype/README.md` explains why: raw `CGEvent`
-clicks posted with no effect, `System Events` was refused assistive access (-25211), and the whole
-canvas is one opaque `AXGroup` with no accessibility tree to click through. If the running sweep
-does not close those six, each is designed from `047`'s code-derived findings **with the gap named
-in `capture-alignment.md`** — never from a guess about what the screen looks like (goal D1).
+The packet expected six gaps: C1, C4, C6, C7, C8 and C10. The sweep closed C1's and half of C4's
+and C8's, and it turned C10's from unphotographed into **absent from the shipped product**. The
+final list of items with **no capture at all** is **REQ-005, REQ-006, REQ-007, REQ-011 and
+REQ-013**, each marked *design inferred from source code, not seen* in `design-trueup.md` §4. Two of
+the five (REQ-005, REQ-011) need no screen: they are behaviour over time and no still can show them.
+
+Each is designed from `047`'s code-derived findings **with the gap named in `design-trueup.md`** —
+never from a guess about what the screen looks like (goal D1).
+
+**Six `Today` cells above are now known to be wrong**, because the packet was written from `047`'s
+research without re-reading `src/views`: C1, C5, C8, C9, C13 and C14 assert a failing value this
+tree does not have. `decision-record.md` ADR-004 restates the matching thresholds; T002 measures the
+restated form, not the wording above.
 <!-- /ANCHOR:protocol -->
 
 ---
@@ -82,7 +88,8 @@ in `capture-alignment.md`** — never from a guess about what the screen looks l
       portal and `038`/`037`'s Project Manager parity (`spec.md` §3 Out of Scope, `goal.md` D4, D5)
 - [x] CHK-005 [P0] The four non-adoptions `047` recorded are carried into this packet as frozen
       (`goal.md` D6, `spec.md` §3 Out of Scope)
-- [ ] CHK-006 [P0] T001 complete: `capture-alignment.md` exists with fourteen rows
+- [x] CHK-006 [P0] T001 complete: `design-trueup.md` exists with a section for all fourteen items,
+      five gaps named, seven contradictions recorded and six thresholds restated
 - [ ] CHK-007 [P0] T002 complete: every mechanism-only `Today` cell above carries a measured number
 <!-- /ANCHOR:pre-impl -->
 

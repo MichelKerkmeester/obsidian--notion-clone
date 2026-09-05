@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Our view surfaces work but do not cohere",
     "created_at": "2026-09-05T08:01:32Z",
-    "last_save_at": "2026-09-05T11:09:55.288Z",
+    "last_save_at": "2026-09-05T11:13:38.882Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:34ebab2012c79c73e364921ead850fd4e60e1f1f6662c9dc938bdb5e98088037",
+    "source_fingerprint": "sha256:e0dea8a0147adc8f18565df364d3e3d954634949d2d19e160fe6ed0bf765b06b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "0f1f432373e966644339eee7a5cadc71e4655b5286422e47ae7df491543fa8d7",
       "plan.md": "60bdd1aabc78f27972a80bfd68d66387a768f85edddfccce35b62f61e7de6fd6",
       "tasks.md": "4513f776af1b6c5961ab767f9d8f19531d6508ed016fa2ac167212cb3d70995b",
       "decision-record.md": "63d79ebca101d43f8799928f90d4c18911e25c406f12b02c29ebcc7024ad5d80",
-      "implementation-summary.md": "c791cd6a7bb858ddae686ccd12e2e5810195e45c688d194728e20ccc41afb0b3"
+      "implementation-summary.md": "194e9c63bec9103906bfebc91fcd03397aa739b59e17b103a85d471f6ed10b24"
     },
     "last_active_child_id": null,
     "last_active_at": null

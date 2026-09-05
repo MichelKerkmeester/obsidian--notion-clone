@@ -14,11 +14,10 @@ _memory:
     packet_pointer: "005-component-surface-system/050-anytype-adoption"
     last_updated_at: "2026-09-05T08:10:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened the packet from 047's research §11"
-    next_safe_action: "Execute T001 and write capture-alignment.md"
+    recent_action: "Read the capture sweep at T001 and trued up all fourteen item designs"
+    next_safe_action: "Execute T002 against the thresholds ADR-004 restated"
     blockers:
-      - "The capture sweep is still running; D1 makes it a gate on every implementation task"
-      - "No code has changed; every criterion is Unmet"
+      - "No code has changed; every criterion except AC-015 is Unmet"
     key_files:
       - "specs/005-component-surface-system/047-competitor-references-and-pm-alignment/research/research.md"
       - "screenshots/anytype/README.md"
@@ -138,18 +137,26 @@ Nothing here has been verified on a device or through a lane, because nothing he
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Six items have no reference screen.** REQ-001, REQ-004, REQ-006, REQ-007, REQ-008 and REQ-010
-   depend on surfaces the first capture pass could not reach. If the running sweep does not close
-   them, each ships on `047`'s code-derived findings with the gap named in `capture-alignment.md`.
-2. **The mobile leg has the thinnest evidence of all.** REQ-013 is ranked High (mobile) and the
-   capture set is desktop-only and dark-only; `047`'s Android findings came from `anytype-kotlin`
-   source and iOS was never reached at all.
+1. **Five items have no reference screen**, settled at T001: REQ-005, REQ-006, REQ-007, REQ-011 and
+   REQ-013. Each ships on `047`'s code-derived findings with the gap named in `design-trueup.md` §4,
+   and each is marked *design inferred from source code, not seen*. Two of the five need no screen
+   at all — REQ-005 and REQ-011 are behaviour over time.
+2. **The mobile leg still has the thinnest evidence of all.** REQ-013 is ranked High (mobile) and
+   **no filter or sort sheet appears anywhere in the 151-file sweep**. The 20 mobile images are
+   official App Store and Google Play marketing creative, not installed-app captures, so no pixel
+   value is taken from them. `047`'s Android findings came from `anytype-kotlin` source and iOS was
+   never reached.
 3. **Two legs touch `styles.css`.** It is 22,692 lines and shared with every other phase in this
    program. The parent's serialized CSS lane owns that collision; this packet obeys it rather than
    inventing its own protocol.
 4. **The thresholds are stated but not yet measured.** Seven `Today` cells in `checklist.md` carry a
    mechanism rather than a figure, deliberately: T002 measures them on the tree that produced them,
    because a failing number written after the fix proves nothing.
+5. **Six `Today` cells are wrong, and T001 is why we know.** C1, C5, C8, C9, C13 and C14 assert a
+   failing value this tree does not have — the chip row, the count badge, the per-format phone rows,
+   twelve empty-state reasons, a viewport snapshot and the absence of any virtualization path all
+   already ship. `decision-record.md` ADR-004 restates the matching thresholds, and T002 measures the
+   restated form. Measuring the original wording produces a red that no code change caused.
 <!-- /ANCHOR:limitations -->
 
 ---

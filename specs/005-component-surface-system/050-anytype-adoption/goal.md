@@ -129,7 +129,7 @@ into the objective, and it is expected to grow.
 | Phase opened from the operator's Anytype ruling | Done | Operator 2026-09-05, *"I find Anytype to have amazing UI/UX"*, on reading `047`'s research |
 | Level chosen | Done | `recommend-level.sh --loc 1500 --files 16` → Level 2, 51/100, confidence 90%; raised to **Level 3** on judgment (fourteen independent requirements, a hard sequencing gate, two viewports). Phase score **20/50** against a threshold of 25, so a standard child rather than a phase parent |
 | The fourteen items ranked and file-scoped | Done | `../047-competitor-references-and-pm-alignment/research/research.md` §11 |
-| Capture sweep read and designs trued up | Pending | T001; the table lands in `capture-alignment.md` |
+| Capture sweep read and designs trued up | Done | T001, 2026-09-05 — `design-trueup.md`, fourteen sections, five gaps named (REQ-005, REQ-006, REQ-007, REQ-011, REQ-013), seven contradictions resolved in the capture's favour, six thresholds restated. Rulings in `decision-record.md` (ADR-003/004/005) |
 | The nine implementation legs | Pending | T002-T015, one leg per file group, ordered by best rank |
 | A lane row per item, red first | Pending | T016-T017 |
 
@@ -137,7 +137,8 @@ into the objective, and it is expected to grow.
 
 | Item | Note |
 |------|------|
-| The research ranked items it could not see | `047`'s §11 is derived from `anytype-ts` source and the official docs, not from screens. `screenshots/anytype/README.md` is explicit that clicks were impossible in that environment — raw `CGEvent` posts had no effect, `System Events` was refused assistive access, and the canvas exposes one opaque `AXGroup`. Items 1, 4, 6, 7, 8 and 10 therefore have **no reference screen today**, which is exactly why D1 is a gate. |
+| The research ranked items it could not see | `047`'s §11 is derived from `anytype-ts` source and the official docs, not from screens, which is exactly why D1 is a gate. **Settled at T001:** the sweep closed item 1's gap and half of items 4 and 8; the final no-capture list is items 5, 6, 7, 11 and 13. |
+| The gate paid for itself in both directions | Seven of `047`'s source-derived claims do not hold in the shipped 0.56.5 build — no chip row, state-invariant trigger icons, a scrollbar that is not board-scoped, duplicate/remove in the settings panel rather than a tab menu, five menu sections not four, no empty-state block at all, and no per-view default-template row. Six of this packet's own "today" premises do not hold against the current tree either. See `design-trueup.md` §1. |
 | The level score and the phase score disagree with each other, and that is expected | They are different scales. `recommend-level.sh --loc 1500 --files 16 --architectural` would return Level 3 **and** a phase score of 30, which qualifies for decomposition; without `--architectural` it returns Level 2 and 20, which does not. The honest reading is `047`'s: *"none require new architecture, all slot into renderers or state stores we already have"* — so the run without `--architectural` is the true one, the phase score is 20, and this is a standard child. The level is raised to 3 on judgment over that same run, per the rule that a divergence goes higher. |
 | Mobile has the thinnest evidence of any leg | Item 13 is ranked High (mobile) and the capture set is desktop-only and dark-only. The Android findings in `047` §10 came from `anytype-kotlin` source, and iOS was never reached. Item 13's design is code-derived until the sweep says otherwise. |
 <!-- /ANCHOR:log -->
