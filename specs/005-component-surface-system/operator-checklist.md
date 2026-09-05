@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **56 phases**, **6 with nothing left**, **157 rows** waiting on a device.
+Derived 2026-09-05: **56 phases**, **6 with nothing left**, **156 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -306,12 +306,11 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` exits 0 with one permanent lane row per criterion, each observed red before green, and `npm run replay` holds with reversed 0. `050` item thresholds ride the same lane rows.
 - [ ] The operator reads the rebuilt toolbar on device and names it the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
-## 054-record-and-relation-surfaces — 0/7
+## 054-record-and-relation-surfaces — 1/7
 
 - [ ] The census reads 1 header builder, 1 property-row vocabulary and 1 property-type list across the family, read by the census lane — one page rendering the same column through every consumer — never by grep. Red first: the counts today are 4 / 3 / 3, measured by T002 and recorded in `checklist.md` C1-C3. The lane's negative controls (bypass the primitive in one consumer; reintroduce a second builder) were observed red before the counts closed.
 - [ ] The record sheet renders a hidden-properties group with a count whose expanded state survives a field-commit refresh, and empty relation/select/multi-select rows render an add affordance opening the occupied row's editor — on the record sheet and board cards, with the word "Empty" gone where an editor exists. Red first: no group exists today (`record-detail-panel.ts:387-396` filters empties wholesale) and `getEmptyDisplayValue` (`record-detail-panel.ts:636`) renders the placeholder word. The negative control (restore the word, remove the group) was observed red.
 - [ ] One exported editor primitive per column type exists behind `CellRenderer.startEdit`, the pinned dispatch test is green, and the option and relation editors mount standalone in a lane — the first check in this family that can hold an editor without constructing the 3,152-line class. Red first: 0 exported primitives exist today; the pinned test fails on their absence before the extraction starts (ADR-002's designed red).
-- [ ] `migration-table.md` exists with one row per §5A surface (10) and one per §5B behaviour (7), every named capture filename resolving under `screenshots/anytype/`, every behaviour row carrying T001's image-true-up disposition (adopted / adapted / rejected-with-reason), and every surface row marking what stays ours. Red first: the file does not exist.
 - [ ] `npx tsc --noEmit`, `npm run build` and `npx vitest run` all pass with exit statuses read (the repo's three verification gates); `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0 with one permanent lane row per primitive, each negative control observed red then green; `npm run replay` holds with reversed 0; `npm run screenshots:verify` exits 0 with every changed capture opened and read by a person.
 - [ ] The board-card reference captures are `pixelHash`-identical to their pre-L3 baseline, or the difference carries an operator ruling — read before any L3 close (D7).
 - [ ] The operator opens a record on iOS and desktop and reads it as one object page against the Anytype object page; reports no surface where a property looks or edits differently from the same property elsewhere; and confirms formulas, rollups and aggregations behave exactly as before. Only the operator closes this. Nothing in this repository can.

@@ -75,12 +75,20 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
       the PM 1:1 board and gantt (`spec.md` §3, §5B)
 - [x] CHK-005 [P0] The 050 overlaps are references by item number, not duplicates — items 6, 9, 11
       named in `spec.md` §5C with the slice this phase takes
-- [ ] CHK-006 [P0] T001 complete: every §5B capture opened by hand, dispositions recorded
-- [x] CHK-007 [P0] T002 complete: every Today cell above carries the measured number. AC-002's
-      Today cell carries the DOM box/`text-align` reading as corroboration only — per ADR-005
-      (Rejected, 2026-09-05 ~18:20), the operator kept the pixel reading as the proof, so the row
-      records **pixel read owed**, to be closed by an image-capable in-runtime leaf at the leg's
-      close rather than by this measurement-only leg
+- [ ] CHK-006 [P0] T001 complete: every §5B capture opened by hand, dispositions recorded — 30 of
+      the 31 named captures were read and every §5B row carries its disposition, but
+      `menus/anytype-menu-cell-type-dark.png` could not be read (its menu fell outside the crop),
+      so the row stays unticked on the word **every**. No §5B row depends on that file, which is
+      why AC-010 is nonetheless `Met`
+- [x] CHK-007 [P0] T002 complete: every Today cell above carries the measured number, **and the
+      pixel read ADR-005 owed is now closed**: read on
+      `screenshots/notion-clone/panels/constructed-record-detail-desktop-dark.png` (2880×1800, a 2×
+      capture, figures below in CSS px) — across the 21 property rows the label left edge holds
+      **x 58.0-59.0** on every row, and the value **right** edge holds **x 379.0-379.5** on 19 of
+      them, while the value **left** edge is ragged across **x 263-366**. The two rows that break
+      the right edge (`added_to`, `note`) are file chips left-aligned at x 143.5. Values are
+      right-aligned with a ragged left edge, so AC-002's design half is confirmed **red** on the
+      observable the operator kept
 - [x] CHK-008 [P0] T003 complete: `migration-table.md` exists and passes AC-008's file check
 <!-- /ANCHOR:pre-impl -->
 
@@ -92,9 +100,12 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
 - [x] CHK-010 [P0] The primitives module family exists under `src/views/record-surface/` with
       `index.ts`'s contract table (ADR-001), and no consumer hosts a primitive another consumer
       imports — `record-header.ts`, `property-row.ts`, `add-property-row.ts`,
-      `hidden-properties.ts` and `cell-editor-contract.ts` exist, `index.ts` lists all five in
-      `RECORD_SURFACE_PRIMITIVES`, and `card-field-renderer.ts`'s own value-rendering body was
-      removed in favour of calling `property-row.ts`'s `renderPropertyValue`
+      `hidden-properties.ts` and `cell-editor-contract.ts` exist. `index.ts` re-exports all five and
+      its `RECORD_SURFACE_PRIMITIVES` table carries the **four built primitives** (P1, P2, P3, P5);
+      `cell-editor-contract.ts` is the pinned dispatch ahead of P4's extraction rather than a
+      primitive, so it is deliberately absent from the table and P4 has no row until an editor
+      module lands. `card-field-renderer.ts`'s own value-rendering body was removed in favour of
+      calling `property-row.ts`'s `renderPropertyValue`
 - [ ] CHK-011 [P0] The editor extraction is mechanical per ADR-002: one editor per leg, the dispatch
       test green before and after each, no behavioural edit inside a moved body — **not started**;
       `cell-editor-contract.ts` pins the dispatch and is observed red (no extracted module exists

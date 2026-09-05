@@ -174,8 +174,16 @@ in the parent program's escalation format rather than retrying. A task blocked o
       the original line by line), now called by `card-field-renderer.ts`'s shim, with all of
       `card-field-renderer.test.ts` and `checkbox-borrowed-ancestor.test.ts` (updated for the new
       call site) green; `buildPropertyRow` and `renderOptionValue` are the label-then-value,
-      left-aligned, no-format-icon, single-select-as-text/multi-select-as-chip shell, unit-tested but
-      not yet wired to any consumer.
+      left-aligned, no-format-icon, single-select-as-text/multi-select-as-chip shell, not yet wired
+      to any consumer.
+      **Correction 2026-09-05 (verifier leg):** the row's own "unit tests on the variants" proof did
+      **not** hold when this task was first ticked — the shell and the option split shipped with no
+      test referencing either export, and no capture or consumer test could have caught a regression
+      in code nothing calls. `property-row.test.ts` now closes it: six cases pinning the row's
+      label-then-value order, its two-children shape (the no-format-icon half), the
+      coloured-text-versus-filled-chip split, the gray fallback and the empty single-select. Seen red
+      first — swapping `textClass` for `chipClass` in the single-select branch fails the split case,
+      and the file was restored from git afterwards.
 - [x] T021 [P0] Build `record-surface/hidden-properties.ts`: collapsed group with count, toggle,
       expanded state carried across refreshes. **Proof:** unit test asserting survival across a
       simulated `renderContent` re-run; red before (no such module).

@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
-    last_updated_at: "2026-09-05T18:20:00Z"
-    last_updated_by: "operator-decision"
-    recent_action: "Recorded adr-005 rejected; ac-002's proof stays the by-hand pixel read"
-    next_safe_action: "Execute T001, the capture-image read and design true-up"
+    last_updated_at: "2026-09-05T20:30:00Z"
+    last_updated_by: "verifier-leg"
+    recent_action: "Adr-005's owed pixel read closed by an image-capable leaf at the leg's close"
+    next_safe_action: "Switch record-detail-panel.ts onto the primitives at T030, then re-measure AC-001 to AC-007"
     blockers: []
     key_files:
       - "src/views/record-detail-panel.ts"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-054-author"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 14
     open_questions: []
     answered_questions:
       - "The operator's 2026-09-05 directive names componentization and Anytype adoption together; formulas/rollups/calculations and the PM 1:1 board and gantt stay ours"

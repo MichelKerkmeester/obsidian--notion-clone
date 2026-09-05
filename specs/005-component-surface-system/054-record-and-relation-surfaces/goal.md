@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
-    last_updated_at: "2026-09-05T12:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored the packet from the operator's componentization directive"
-    next_safe_action: "Execute T001, the capture-image read and design true-up"
+    last_updated_at: "2026-09-05T20:30:00Z"
+    last_updated_by: "verifier-leg"
+    recent_action: "Ticked the migration-table criterion; the primitives are built beside their consumers"
+    next_safe_action: "Switch record-detail-panel.ts onto the primitives at T030, then re-measure AC-001 to AC-007"
     blockers:
       - "T001's image true-up gates every design row (D1)"
       - "OPS-001..003 are the operator's; nothing here can close them"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-054-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 14
     open_questions:
       - "Does the record sheet's desktop anchored panel keep its current DOM under the P1 primitive?"
       - "Does P3's search-first picker sit beside or replace S3's quick-add file-field row?"
@@ -122,10 +122,14 @@ conflicts; never resolve them silently.
       — the first check in this family that can hold an editor without constructing the 3,152-line
       class. Red first: **0** exported primitives exist today; the pinned test fails on their
       absence before the extraction starts (ADR-002's designed red).
-- [ ] `migration-table.md` exists with one row per §5A surface (10) and one per §5B behaviour (7),
+- [x] `migration-table.md` exists with one row per §5A surface (10) and one per §5B behaviour (7),
       every named capture filename resolving under `screenshots/anytype/`, every behaviour row
       carrying T001's image-true-up disposition (adopted / adapted / rejected-with-reason), and
-      every surface row marking what stays ours. Red first: the file does not exist.
+      every surface row marking what stays ours. Red first: the file did not exist, so the counts
+      were **0** surface rows and **0** behaviour rows — observed red before the fix.
+      **Closed 2026-09-05, re-checked independently at landing:** 10 surface rows `S1`-`S10`, 7
+      behaviour rows `A1`-`A7`, and all 12 cited capture basenames resolve under
+      `screenshots/anytype/`.
 - [ ] `npx tsc --noEmit`, `npm run build` and `npx vitest run` all pass with exit statuses read
       (the repo's three verification gates); `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0 with
       one permanent lane row per primitive, each negative control observed red then green; `npm run

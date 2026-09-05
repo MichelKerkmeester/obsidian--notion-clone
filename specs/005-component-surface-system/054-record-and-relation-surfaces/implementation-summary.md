@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
-    last_updated_at: "2026-09-05T16:10:00Z"
-    last_updated_by: "design-trueup"
-    recent_action: "Read 31 captures at T001 and trued up every behaviour row and the editor taxonomy"
-    next_safe_action: "Execute T002, the red-number census, against the thresholds ADR-004 restated"
+    last_updated_at: "2026-09-05T20:30:00Z"
+    last_updated_by: "verifier-leg"
+    recent_action: "Landed the record-surface primitives and the card-field shim at milestone m2"
+    next_safe_action: "Switch record-detail-panel.ts and table-record-peek.ts onto the primitives at T030 and T031"
     blockers:
       - "AC-012 is operator-owned and nothing in this repository can close it"
       - "checklist.md's Today cells still carry the pre-true-up figures and were outside this change's write scope"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-054-trueup"
       parent_session_id: null
-    completion_pct: 8
+    completion_pct: 14
     open_questions: []
     answered_questions:
       - "Is the Anytype relation row 'type icon left, value right'? No — no format icon on a value row, and nothing right-aligned, on either platform."
