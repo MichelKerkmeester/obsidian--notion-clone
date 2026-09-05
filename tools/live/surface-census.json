@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-05T08:36:48.697Z",
+  "measuredAt": "2026-09-05T15:23:49.011Z",
   "inputs": {
-    "styles.css": "e2e6314a036a",
+    "styles.css": "9c4b9f65e443",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
     "rendered": 83,
-    "buildable": 222,
+    "buildable": 223,
     "declared": 5,
     "renderedOnly": 0,
-    "buildableNotRendered": 139,
+    "buildableNotRendered": 140,
     "untokened": 0,
     "unroled": 83
   },
@@ -872,7 +872,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "538x149",
+      "rect": "538x177",
       "scenarios": [
         "panel-sort-rules",
         "panel-sort-calendar-empty"
@@ -916,7 +916,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "458x527",
+      "rect": "378x531",
       "scenarios": [
         "panel-view-config",
         "panel-view-config-sheet",
@@ -1567,6 +1567,7 @@
     "db-summary-dropdown-popover",
     "db-table-calculation-popover",
     "db-record-peek-empty",
+    "db-toolbar-popover",
     "db-toolbar-utilities-popover",
     "db-toolbar-menu-row",
     "db-database-popover",

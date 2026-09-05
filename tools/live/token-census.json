@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T08:36:49.432Z",
+  "measuredAt": "2026-09-05T15:23:50.507Z",
   "inputs": {
-    "styles.css": "e2e6314a036a",
+    "styles.css": "9c4b9f65e443",
     "tools/live/token-census.mjs": "f20e5a646c11"
   },
   "tokenRoots": [
@@ -1586,6 +1586,8 @@
     {
       "cls": "db-sort-panel",
       "differing": [
+        "borderRadius",
+        "padding",
         "fontSize",
         "boxShadow"
       ],
@@ -1593,7 +1595,7 @@
       "tokensOnBody": false,
       "tokensWhenMarked": true,
       "inside": {
-        "radius": "0px",
+        "radius": "8px",
         "font": "13px",
         "token": "8px"
       },
@@ -1603,7 +1605,7 @@
         "token": ""
       },
       "marked": {
-        "radius": "0px",
+        "radius": "8px",
         "font": "16px",
         "token": "8px"
       }

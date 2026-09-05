@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T08:36:59.233Z",
+  "measuredAt": "2026-09-05T15:24:00.069Z",
   "inputs": {
-    "styles.css": "e2e6314a036a",
+    "styles.css": "9c4b9f65e443",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -2630,9 +2630,9 @@
       "tag": "div",
       "cls": "db-toolbar-left",
       "parentCls": "db-toolbar",
-      "by": 214.4,
+      "by": 220.4,
       "scrolls": true,
-      "pastHeader": 214.4
+      "pastHeader": 220.4
     },
     {
       "width": 320,
@@ -2641,9 +2641,9 @@
       "tag": "div",
       "cls": "db-toolbar-right",
       "parentCls": "db-toolbar",
-      "by": 214.4,
+      "by": 220.4,
       "scrolls": true,
-      "pastHeader": 214.4
+      "pastHeader": 220.4
     },
     {
       "width": 320,
@@ -2685,9 +2685,9 @@
       "tag": "div",
       "cls": "db-toolbar-left",
       "parentCls": "db-toolbar",
-      "by": 178.7,
+      "by": 248.7,
       "scrolls": true,
-      "pastHeader": 178.7
+      "pastHeader": 248.7
     },
     {
       "width": 320,
@@ -2707,9 +2707,9 @@
       "tag": "div",
       "cls": "db-toolbar-right",
       "parentCls": "db-toolbar",
-      "by": 16,
+      "by": 18,
       "scrolls": true,
-      "pastHeader": 16
+      "pastHeader": 18
     },
     {
       "width": 320,
@@ -2762,9 +2762,9 @@
       "tag": "div",
       "cls": "db-active-control-group.is-filter",
       "parentCls": "db-active-view-controls-scroll",
-      "by": 706.8,
+      "by": 718.8,
       "scrolls": true,
-      "pastHeader": 650.2
+      "pastHeader": 662.2
     },
     {
       "width": 320,
@@ -5400,9 +5400,9 @@
       "tag": "div",
       "cls": "db-toolbar-left",
       "parentCls": "db-toolbar",
-      "by": 132.4,
+      "by": 138.4,
       "scrolls": true,
-      "pastHeader": 132.4
+      "pastHeader": 138.4
     },
     {
       "width": 402,
@@ -5411,9 +5411,9 @@
       "tag": "div",
       "cls": "db-toolbar-right",
       "parentCls": "db-toolbar",
-      "by": 132.4,
+      "by": 138.4,
       "scrolls": true,
-      "pastHeader": 132.4
+      "pastHeader": 138.4
     },
     {
       "width": 402,
@@ -5455,9 +5455,9 @@
       "tag": "div",
       "cls": "db-toolbar-left",
       "parentCls": "db-toolbar",
-      "by": 96.7,
+      "by": 166.7,
       "scrolls": true,
-      "pastHeader": 96.7
+      "pastHeader": 166.7
     },
     {
       "width": 402,
@@ -5521,9 +5521,9 @@
       "tag": "div",
       "cls": "db-active-control-group.is-filter",
       "parentCls": "db-active-view-controls-scroll",
-      "by": 624.8,
+      "by": 636.8,
       "scrolls": true,
-      "pastHeader": 568.2
+      "pastHeader": 580.2
     },
     {
       "width": 402,
@@ -6718,9 +6718,9 @@
       "tag": "div",
       "cls": "db-active-control-group.is-filter",
       "parentCls": "db-active-view-controls-scroll",
-      "by": 226.8,
+      "by": 238.8,
       "scrolls": true,
-      "pastHeader": 170.2
+      "pastHeader": 182.2
     },
     {
       "width": 768,

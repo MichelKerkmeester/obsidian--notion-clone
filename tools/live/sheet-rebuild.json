@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-09-05T14:00:58.833Z",
+  "measuredAt": "2026-09-05T17:55:14.201Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "c0bf923ce8b9",
     "tools/live/sheet-rebuild-harness.ts": "d36bd65f96f3",
-    "src/views/toolbar-renderer.ts": "4b55ffceb466",
+    "src/views/toolbar-renderer.ts": "2a575a1f1adf",
     "src/views/popover-position.ts": "7edae5db0282",
     "src/views/mobile-bottom-sheet.ts": "2895c83bc817",
-    "src/views/sort-panel-renderer.ts": "3b916d60a109",
-    "src/views/filter-panel-renderer.ts": "0a5c86a1f6e4",
-    "src/views/view-config-panel-renderer.ts": "fbaa2757b153",
+    "src/views/sort-panel-renderer.ts": "7adab612ed79",
+    "src/views/filter-panel-renderer.ts": "d8e2b0131330",
+    "src/views/view-config-panel-renderer.ts": "16ceb7e6385e",
     "src/views/overlay-stack.ts": "943698865bdb",
     "src/views/popover-auto-close.ts": "b81714513ff4"
   },
@@ -119,7 +119,7 @@
     {
       "name": "the sort sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 667; the deepest point during the rebuild was 670",
+      "detail": "settled at top 667; the deepest point during the rebuild was 667",
       "preFixFailure": "settled at top 708 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
