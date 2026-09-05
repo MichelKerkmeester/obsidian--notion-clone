@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The vault held one test database",
     "created_at": "2026-09-05T07:27:39Z",
-    "last_save_at": "2026-09-05T10:30:33.279Z",
+    "last_save_at": "2026-09-05T10:48:00.654Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b4923a85bf31ae1bc6b5fa356790c34cd2f6f48612727e15f9367df340c91a16",
+    "source_fingerprint": "sha256:6dc05ca48683e6e26801d3a72fdff32716fdb87db41d57cf7e27bae9b599a3a9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b5b6949adae06c1e20bc8f19147e206e38381fa203332346f5b4cb6c3c372636",
-      "plan.md": "e0d880e1cabbf6585f07d7c465a91434bdf72984acc09c7850968ebe19834ac6",
-      "tasks.md": "dd62462fc2ca096bb86956ba9c4ba1b47a995df92fd73026556f7b71c5f74324",
+      "spec.md": "9d77e375d92be19e0cace3a476792edbccb5d7208718233fcdae08a222022692",
+      "plan.md": "82aa73b1a95c18efdefad5f785f59ebfb295168cc1dbdb6407ed24fa2a43e23a",
+      "tasks.md": "ec018b115ee4caa96d5015216c886e66227f9873745fa1092c6199cfacb67e16",
       "decision-record.md": "1bfdb06bbb0a85ed2a69f6de2564ba7df0bdc3257ccc2eb41fad0e8d2cdb6269",
-      "implementation-summary.md": "4ae017cf1161f17421df447999de9167ce76de9e42e3d8667fc558944372cb7f"
+      "implementation-summary.md": "fbcdf1b498573b2f22e2863ffdf230dd038a82862e12c9f7eccde2e8b8bad367"
     },
     "last_active_child_id": null,
     "last_active_at": null

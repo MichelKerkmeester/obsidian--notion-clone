@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Rows 37 and 38 have been open since 2026-09-04 waiting for one thing no in-repo session can do: the",
     "created_at": "2026-09-05T03:47:54Z",
-    "last_save_at": "2026-09-05T10:40:22.206Z",
+    "last_save_at": "2026-09-05T10:48:00.547Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,12 +223,12 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:0985dc1241f3705d8cdff9148822d110f327b187455ff44a9b2e52bad9b1ad6d",
+    "source_fingerprint": "sha256:f719f8ed2a6f460f12a8b084e4558cd22a2652ab26293333c4fb77525fbd634c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "a3f88879e22a2677e7cd6666ec81eb425327f286d377acf1d45716f6befd48ba",
       "plan.md": "09a3e40515d5b94978ae526e8d386ce75199f12a6818e46796c65570a17cf56c",
-      "tasks.md": "8283829b3ba69007ec1e616431727e8db566d663e100ed51d75ea008df8f10aa",
+      "tasks.md": "601f3ea8fdeb809ff26e7ffd925434a8c45daca9a455b070e3d4ca26432f975b",
       "decision-record.md": "89b1e03a799ef026dec2fcbffdb0493be7873157eae446888c70dc5f244ede51",
       "implementation-summary.md": "7603ff4c994af94e14d3701558d2987b12435b453a535d87583031f06e3de44a",
       "research/research.md": "6b98388e4ad4135334b8285709b760ee5c6429ea6464e4c4b66db9827fe3d4ae"
