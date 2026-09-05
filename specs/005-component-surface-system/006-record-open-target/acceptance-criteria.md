@@ -94,6 +94,8 @@ branch x mount/host x environment x transition x semantic outcome x negative con
 | AC-011 | REQ-002, REQ-004 | **Action outcome.** Edit a field inside the target and assert the write landed in the **file backing the requested id**, not in the file backing the row now at that position; then assert the setting change routes the next open to the newly chosen target | every edit writes to the requested record's file; 0 writes to an unrequested file; the setting change moves the observed target | *trace* — recorded in `../architecture-findings.md` §3: **nothing drives a click, drag or commit** in any current harness, so no write has ever been attributed to a record id | N9 | Unmet | - |
 | AC-012 | REQ-006, REQ-007 | **Resource ownership.** With the target open, count its dismissal, focus and keyboard owners; assert the database view's own interaction scope is still registered and not stranded; after close, re-count listeners and nodes against the pre-open baseline | exactly 1 owner of each kind for the target; the view's scope still owns its own events; listener and node counts return to the pre-open baseline, **and after close the view scrolls, responds to a click at the coordinates the target occupied, and still answers its own keyboard shortcuts — 0 targets leave the view stranded** | *census* — the peek is neither a leaf nor a `Modal` and dismisses itself on container scroll and window resize (`:227-228`), so it owns dismissal privately; the view's scope ownership across an open has never been counted. Owner counts are the Stage-1 census deliverable | N10 | Unmet | - |
 | AC-013 | REQ-001 | **Negative-control mutation.** Substitute exactly one tuple coordinate — open from a different affordance, run the phone branch instead of desktop, skip the refresh transition, alias the record id to its row position, or set the target to a value the resolver does not know — and rerun | each single substitution fails at least one **value** assertion; a failure caused only by a missing node does not count | no such control exists. The measured spread this must catch is already recorded: **20 affordances resolve to 4 surfaces** with no setting to disagree with | N11 | Unmet | - |
+| AC-014 | REQ-001 | **Anchorless placement.** Open the record panel from an affordance carrying no element — the resolver's `hasAnchor: false` path on a desktop host — and read the produced panel's box against the pane it was opened in | `height >= 0.6 * pane.height`, the panel's right edge within one gutter (13px) of the pane's right edge, and `panel.top >= pane.top` | **72px against a 900px viewport**, drawn at `top 12 · bottom 84` — with no element to point at the panel was positioned against the pane container, which fills the pane, so the anchored arithmetic took its no-room fallback and left the height to the content | N12 | **Met** | - |
+| AC-015 | REQ-001 | **Placement is stated, not inferred.** For every combination of the setting's accepted values, phone and desktop, anchor and no anchor, read the placement the resolver returned | every combination returns `anchored` or `docked` — 0 undefined — and `docked` exactly when the target is one of this plugin's own surfaces, the host is not a phone, and no anchor was carried | **no such field existed**: each affordance's placement was decided by which element it happened to pass, which is how one board card was repaired while five siblings kept the defect | N13 | **Met** | - |
 
 ### F8 audit — every criterion re-tested for the "passes on today's broken tree" shape
 
@@ -118,6 +120,8 @@ call count.
 | AC-011 | Outcome, and the strongest one here — the write is attributed to a file, not to a node | Kept unchanged |
 | AC-012 | **Count.** Owner counts are countable mechanism | **Threshold extended.** Adds the user-visible consequence: after close the view scrolls, responds to a click where the target was, and still answers its own shortcuts |
 | AC-013 | Substitution control. Outcome-shaped by construction — each substitution must fail a **value** assertion | Kept unchanged |
+| AC-014 | Outcome. A measured height and two measured edges against the pane the panel was opened in | Written after the audit and to its shape: no class is asserted, no call site counted |
+| AC-015 | **Classification**, and unavoidably so — the subject IS the answer the resolver classifies | **Paired with AC-014.** A stated placement that nothing acts on would be the shape the audit rejects, so it closes only alongside the geometry AC-014 measures |
 
 **Rule going forward.** No row here may be marked `Met` because the peek module was deleted, a
 setting was added, an affordance was routed, or a trace artefact exists. Those are inputs. The
@@ -255,6 +259,8 @@ A blank cell is a coverage gap and blocks closure, even when the criterion's num
 | AC-011 | production | every target | declared mount | desktop + phone | open → edit → close | write lands in the right file | N9 |
 | AC-012 | production | every target | declared mount | desktop + phone | open → close | one owner, view not stranded | N10 |
 | AC-013 | substituted | substituted | substituted | substituted | substituted | assertion fails | N11 |
+| AC-014 | production panel | panel, no anchor | pane container | desktop | open | docked to the pane | N12 |
+| AC-015 | resolver | every target | n/a | desktop + phone | resolve | placement stated | N13 |
 
 ### Negative controls
 
@@ -274,6 +280,8 @@ hardening; register them in `checklist.md` when its verification protocol is nex
 | N9 | Redirecting the write to the row now at that position fails the file-attribution assertion | AC-011 attributes the write |
 | N10 | Leaving the view's scope unregistered after a close fails the ownership count | AC-012 counts owners |
 | N11 | Each single-coordinate substitution fails a value assertion | The suite is connected to every coordinate |
+| N12 | Feeding the anchored arithmetic a pane-shaped anchor reproduces `top 12 · height 72` at a 900px viewport | AC-014 measures the placement, not the presence of a panel |
+| N13 | Reverting the resolver's `placement` leaves it undefined on every path | AC-015 measures a stated answer, not a defaulted one |
 
 ### Status values
 
@@ -326,6 +334,8 @@ and its one leaf-lifetime criterion runs against a workspace the harness builds 
 | AC-011 | **Harness-dependent** | 3 | "Assert the write landed in the file backing the requested id." There is no vault behind the harness and `editCell` is a stub, so no write can be attributed to a record id at all. The criterion is right and needs a real data source, not a better fixture. **It is also the packet's highest-value row** — a misattributed write is silent and permanent — and should be the one that gets the real driver first |
 | AC-012 | Sound | — | Owner counts, the view's own interaction scope still registered, listener and node counts returning to baseline, and the view scrolling and answering its shortcuts after close. All plugin-owned state |
 | AC-013 | Sound | — | A substitution suite over its own coordinates |
+| AC-014 | Sound | — | Panel height and edges against the pane. Every bound is plugin-declared, and the failing number came off the shipped renderer in headless Chrome rather than a fixture |
+| AC-015 | Sound | — | The resolver is pure and takes no host, so a device adds nothing this cannot already answer |
 
 **What would settle the four.** All of AC-004, AC-005 and AC-011 need the same thing: `openRow` and
 `editCell` wired to the shipped opener and the shipped writer, the way `editFileName` was wired to

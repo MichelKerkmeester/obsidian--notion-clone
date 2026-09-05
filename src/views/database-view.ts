@@ -194,7 +194,7 @@ import {
   setupTitleCellTap,
   syncTableRecordPeek,
 } from "./table-record-peek";
-import { type ResolvedOpenTarget, resolveRecordOpenTarget } from "./record-open-target";
+import { type RecordSurfacePlacement, type ResolvedOpenTarget, resolveRecordOpenTarget } from "./record-open-target";
 import { hasRelationValue, planRelationTargetChange } from "../data/relation-target-change";
 import { highlightSearchMatches, renderSearchHighlightedText } from "./search-highlight";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -8361,10 +8361,13 @@ export class DatabaseView extends FileView {
       return;
     }
     if (resolved.target === "panel") {
-      // The container stands in when an affordance has no element of its own — a menu item or a
-      // shortcut. The panel is anchored on a phone by its own sheet chrome rather than by this.
+      // The container stands in when an affordance has no element of its own — a menu item, a
+      // card's open button. It stands in for focus return and for deciding what counts as a press
+      // inside the panel, NOT for placement: a container fills its pane, so positioning against it
+      // finds no room and clips the panel to a strip. The resolver says which placement applies and
+      // the panel asks the pane for its edges instead.
       const host = anchorEl ?? this.containerEl_;
-      if (host) this.openRecordDetailPanel(host, row);
+      if (host) this.openRecordDetailPanel(host, row, resolved.placement);
       return;
     }
     this.dataSource.openNote(row.file, resolved.target === "split" ? "split" : resolved.target === "window" ? "window" : "tab");
@@ -11667,7 +11670,11 @@ export class DatabaseView extends FileView {
     });
   }
 
-  private openRecordDetailPanel(anchorEl: HTMLElement, row: RowData): void {
+  private openRecordDetailPanel(
+    anchorEl: HTMLElement,
+    row: RowData,
+    placement: RecordSurfacePlacement = "anchored",
+  ): void {
     if (!this.containerEl_) return;
     const config = this.getConfig();
     if (!config) return;
@@ -11675,6 +11682,7 @@ export class DatabaseView extends FileView {
     openRecordDetailPanel({
       anchorEl,
       host: this.containerEl_,
+      placement,
       row,
       columns,
       config,

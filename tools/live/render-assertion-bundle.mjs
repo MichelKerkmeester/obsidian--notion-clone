@@ -95,6 +95,7 @@ export const STATE_SCENARIOS = [
   { name: "panel-view-config/file-view", renderer: "view-config", bag: "file-view", captureData: true },
   { name: "panel-column-manager/file-view", renderer: "column-manager", bag: "file-view", captureData: true },
   { name: "panel-record-detail/file-view", renderer: "record-detail", bag: "file-view", captureData: true },
+  { name: "panel-record-detail-docked/file-view", renderer: "record-detail", bag: "file-view", captureData: true, recordPlacement: "docked" },
   { name: "panel-record-detail-body-editing/file-view", renderer: "record-detail-body", bag: "file-view", recordBodyVariant: "editing" },
   { name: "panel-record-detail-body-empty/file-view", renderer: "record-detail-body", bag: "file-view", recordBodyVariant: "empty" },
   { name: "panel-record-peek/file-view", renderer: "record-peek", bag: "file-view", captureData: true },

@@ -133,6 +133,7 @@ describe("constructed scenario registry", () => {
       "constructed-record-detail",
       "constructed-record-detail-body-editing",
       "constructed-record-detail-body-empty",
+      "constructed-record-detail-docked",
       "constructed-record-icon",
       "constructed-record-peek",
       "constructed-relation-values",

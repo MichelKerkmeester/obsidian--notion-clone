@@ -32,6 +32,19 @@ export type RecordOpenTarget = "panel" | "peek" | "tab" | "split" | "window";
 export const RECORD_OPEN_TARGETS: RecordOpenTarget[] = ["panel", "peek", "tab", "split", "window"];
 
 /**
+ * How a surface takes its position once the target is known.
+ *
+ * `anchored` points the surface at the element that opened it. `docked` gives it the pane's edge
+ * instead, and exists because an affordance with no element to point at used to hand the positioner
+ * the whole container as its anchor. A container fills the pane, so it leaves no room above or below
+ * itself; the anchored arithmetic then finds no space, falls back to pinning the surface at the top
+ * of the viewport, and lets whatever height the content happens to have at that moment stand — which
+ * renders as a clipped strip rather than a panel. Docking answers from the pane instead of from an
+ * element, so there is no space to run out of.
+ */
+export type RecordSurfacePlacement = "anchored" | "docked";
+
+/**
  * The default when the setting has never been written.
  *
  * `panel` rather than `peek`, because it is what most affordances already did — every list, board,
@@ -59,6 +72,15 @@ export interface ResolvedOpenTarget {
   target: RecordOpenTarget;
   /** What was asked for before the platform and the anchor had their say. */
   requested: RecordOpenTarget;
+  /**
+   * How the resolved surface takes its position.
+   *
+   * Decided here rather than at the call site for the same reason the target is: an affordance that
+   * can choose its own placement is an affordance that can disagree with the one beside it, and the
+   * anchorless case reached twenty call sites before it reached one of them correctly. A caller that
+   * opens a workspace leaf ignores this; it is meaningful for `panel` and `peek` alone.
+   */
+  placement: RecordSurfacePlacement;
   /** Why it differs, or undefined when it does not. Carried so a caller can report rather than guess. */
   reason?: "no-anchor" | "phone-has-no-split" | "phone-has-no-window" | "phone-has-no-peek";
 }
@@ -75,30 +97,54 @@ export function normalizeRecordOpenTarget(value: unknown): RecordOpenTarget {
 }
 
 /**
- * Setting x platform x anchor -> surface.
+ * Setting x platform x anchor -> surface, and how that surface is placed.
  *
- * The folds are all in one direction: a target that cannot exist here becomes the nearest one that
- * can. None of them silently becomes something unrelated, and each carries the reason, so a caller
- * that wants to tell the reader why they got a sheet instead of a split can.
+ * Two answers rather than one, because they have the same three inputs and separating them is what
+ * let an affordance take the right surface and position it wrongly. The folds are all in one
+ * direction: a target that cannot exist here becomes the nearest one that can. None of them
+ * silently becomes something unrelated, and each carries the reason, so a caller that wants to tell
+ * the reader why they got a sheet instead of a split can.
  */
 export function resolveRecordOpenTarget(request: OpenTargetRequest): ResolvedOpenTarget {
   const requested = normalizeRecordOpenTarget(request.setting);
+  const fold = foldToTarget(requested, request);
+  return { ...fold, requested, placement: resolvePlacement(fold.target, request) };
+}
 
-  // A preview layer is positioned against something. With nothing to point at there is no
-  // placement to compute, so the panel takes it — which is also what the panel is for.
+/** The target alone, before placement: setting x platform x anchor -> surface. */
+function foldToTarget(
+  requested: RecordOpenTarget,
+  request: OpenTargetRequest,
+): Pick<ResolvedOpenTarget, "target" | "reason"> {
+  // A preview layer is positioned against something, and points at nothing else by design. With
+  // nothing to point at it has no shape left, so the panel takes it — which is also what the panel
+  // is for, and the panel can be docked instead.
   if (requested === "peek" && !request.hasAnchor) {
-    return { target: "panel", requested, reason: "no-anchor" };
+    return { target: "panel", reason: "no-anchor" };
   }
 
   if (request.isPhone) {
     // A phone has one pane. A split and a popout are both "another window" on a surface that has
     // none, and a peek is a hover-shaped idea on a device with no hover.
-    if (requested === "split") return { target: "tab", requested, reason: "phone-has-no-split" };
-    if (requested === "window") return { target: "tab", requested, reason: "phone-has-no-window" };
-    if (requested === "peek") return { target: "panel", requested, reason: "phone-has-no-peek" };
+    if (requested === "split") return { target: "tab", reason: "phone-has-no-split" };
+    if (requested === "window") return { target: "tab", reason: "phone-has-no-window" };
+    if (requested === "peek") return { target: "panel", reason: "phone-has-no-peek" };
   }
 
-  return { target: requested, requested };
+  return { target: requested };
+}
+
+/**
+ * Anchored unless the surface is one of this plugin's own AND has nothing to anchor to.
+ *
+ * A phone is deliberately excluded. Its panel is a bottom sheet placed from the viewport, which
+ * already asks the anchor for nothing, so docking it would replace a working answer with a second
+ * one. The defect this exists for is a desktop pane with a container standing in for an element.
+ */
+function resolvePlacement(target: RecordOpenTarget, request: OpenTargetRequest): RecordSurfacePlacement {
+  if (opensAWorkspaceLeaf(target)) return "anchored";
+  if (request.isPhone || request.hasAnchor) return "anchored";
+  return "docked";
 }
 
 /** True when the resolved target is a real workspace leaf rather than one of this plugin's surfaces. */

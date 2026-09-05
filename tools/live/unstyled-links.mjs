@@ -147,7 +147,7 @@ window.__measureConstructedLinks = (scenario, control, defaults) => {
     // Geometry is read once, in the dark theme, because a box's size and radius do not vary with
     // the palette; only its colours do, and the resting fill this reads is compared to
     // transparency rather than to a specific colour.
-    geometry = measureChromeGeometry(container);
+    geometry = measureChromeGeometry(container, scenario);
   });
   return { perTheme, provenance, geometry };
 };
@@ -182,7 +182,7 @@ for (const scenario of RENDERER_SCENARIOS) {
     constructedElementsSeen += found.seen;
     constructedFindings.push(...found.rows);
   }
-  if (geometry && (geometry.splitButton || geometry.ruleRows.length > 0)) {
+  if (geometry && (geometry.splitButton || geometry.ruleRows.length > 0 || geometry.recordDock)) {
     chromeSurfacesMeasured += 1;
     for (const row of judgeChromeGeometry(geometry)) chromeFindings.push({ scenario: label, ...row });
   }
@@ -229,10 +229,11 @@ if (constructedElementsSeen === 0) {
 }
 
 console.log(`unstyled-links: [chrome geometry] ${chromeSurfacesMeasured} constructed scenario(s) carried a `
-  + "split button or an anchored rule row");
+  + "split button, an anchored rule row or a docked record panel");
 if (chromeSurfacesMeasured === 0) {
-  console.error("unstyled-links: FAIL — no constructed scenario built a toolbar or a rule panel, so the");
-  console.error("  chrome-geometry measurement scanned nothing. An empty scan is not a clean one.");
+  console.error("unstyled-links: FAIL — no constructed scenario built a toolbar, a rule panel or a docked");
+  console.error("  record panel, so the chrome-geometry measurement scanned nothing.");
+  console.error("  An empty scan is not a clean one.");
   process.exit(2);
 }
 

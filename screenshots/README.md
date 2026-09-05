@@ -803,6 +803,16 @@ The same region over an empty body, drawing the placeholder line the module writ
 
 Sources: `src/views/note-body-region.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Record detail panel, docked (constructed)
+
+The same panel opened by an affordance carrying no element — a menu item, a card's open button — which passes the pane container rather than a pressed element. Pointing the panel AT that container is what drew it as a strip at the top of the window, so this photographs the placement rather than the chrome: the panel takes the pane's height and its trailing edge instead of its content's height. The anchored capture beside it is the control; the two differ only in placement.
+
+| dark | light |
+|---|---|
+| ![constructed-record-detail-docked dark](notion-clone/panels/constructed-record-detail-docked-mobile-dark.png) | ![constructed-record-detail-docked light](notion-clone/panels/constructed-record-detail-docked-mobile-light.png) |
+
+Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/popover-position.ts`, `src/views/record-open-target.ts`
+
 ### Table record peek (constructed)
 
 openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.

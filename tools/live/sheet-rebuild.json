@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-05T11:20:11.364Z",
+  "measuredAt": "2026-09-05T14:00:58.833Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "c0bf923ce8b9",
     "tools/live/sheet-rebuild-harness.ts": "d36bd65f96f3",
     "src/views/toolbar-renderer.ts": "4b55ffceb466",
-    "src/views/popover-position.ts": "eb4701280a66",
+    "src/views/popover-position.ts": "7edae5db0282",
     "src/views/mobile-bottom-sheet.ts": "2895c83bc817",
     "src/views/sort-panel-renderer.ts": "3b916d60a109",
     "src/views/filter-panel-renderer.ts": "0a5c86a1f6e4",

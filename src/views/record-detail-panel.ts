@@ -38,6 +38,7 @@ import { parseInlineMarkdown } from "../data/inline-markdown";
 import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./inline-markdown-renderer";
 import { markNoteHoverLink } from "./hover-link-preview";
 import { isMobileBottomSheet, positionToolbarPopover, releasePopoverPosition } from "./popover-position";
+import type { RecordSurfacePlacement } from "./record-open-target";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
@@ -91,6 +92,17 @@ export interface OpenRecordDetailOptions {
   anchorEl: HTMLElement;
   /** 面板挂载宿主（传容器的 note-database-container 元素）。 */
   host: HTMLElement;
+  /**
+   * How the panel takes its position. Defaults to `anchored`, which is what every affordance with
+   * an element to point at wants.
+   *
+   * `docked` is for the affordances that have no such element — a menu item, a card's open button,
+   * an open action inside the panel itself. They used to pass the host container as the anchor, and
+   * a container fills its pane, so the anchored arithmetic found no room beside it and pinned a
+   * content-height panel to the top of the viewport. The anchor is still passed for focus return
+   * and outside-press containment; only the placement changes.
+   */
+  placement?: RecordSurfacePlacement;
   row: RowData;
   /** 调用方算好的可见列。 */
   columns: ColumnDef[];
@@ -155,7 +167,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // 互斥：先关旧面板
   closeRecordDetailPanel();
 
-  const { anchorEl, host, row, columns, config, app, actions } = opts;
+  const { anchorEl, host, row, columns, config, app, actions, placement = "anchored" } = opts;
 
   // 记录从日历 overflow popover 打开时，定位必须先使用仍连接且可见的事件锚点。
   // 定位完成后只隐藏 overflow，不能 remove：CalendarRenderer 会保留节点引用供
@@ -405,7 +417,14 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   removeFocusTrap = trapFocus(panel);
   panel.focus?.({ preventScroll: true });
   // 定位（复用 positionToolbarPopover：挂载点选择 / 视口夹取 / 翻转 / 移动端留白）
-  positionToolbarPopover(panel, anchorEl, { minWidth: 240, preferredWidth: 360, maxWidth: 420, align: "center" });
+  positionToolbarPopover(panel, anchorEl, {
+    minWidth: 240,
+    preferredWidth: 360,
+    maxWidth: 420,
+    align: "center",
+    // The host, not the anchor: a dock is measured from the pane the panel belongs to.
+    dockTo: placement === "docked" ? host : undefined,
+  });
   // 移动端底部抽屉：positionToolbarPopover 已加 .db-mobile-bottom-sheet 与抓手；接上向下拖拽关闭手势。
   if (panel.hasClass("db-mobile-bottom-sheet")) removeSheetDrag = attachSheetDragToDismiss(panel, close);
   // positionToolbarPopover 会在下一帧复测一次；按注册顺序在其复测之后隐藏来源

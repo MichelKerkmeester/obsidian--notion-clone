@@ -10,9 +10,14 @@
 // viewport or scroll container can all move independently of each
 // other. On phones the popover switches to a full-width bottom sheet
 // instead of anchored placement, since a narrow anchored panel is
-// unusable at that width. The pure math (`resolvePopoverHorizontalLeft`,
-// `resolveAnchoredPopoverTop`, `clamp`) is split out from the DOM-facing
-// code so it can be unit-tested without a browser.
+// unusable at that width; on a desktop, a surface opened by an affordance
+// with no element to point at docks to its pane's edge instead, because
+// pointing it at the pane container leaves the anchored arithmetic no
+// room and collapses the surface to a strip. The pure math
+// (`resolvePopoverHorizontalLeft`, `resolveAnchoredPopoverBox`,
+// `resolveContainerDockPlacement`, `resolveAnchoredPopoverTop`, `clamp`)
+// is split out from the DOM-facing code so it can be unit-tested without
+// a browser.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -40,6 +45,17 @@ export interface ToolbarPopoverPositionOptions {
   gap?: number;
   align?: "left" | "center" | "right";
   preferredSide?: "left" | "right";
+  /**
+   * Dock to this element's edge instead of pointing at an anchor.
+   *
+   * Set by a caller whose affordance has no element to point at — a menu item, a card's open
+   * button. Those callers used to pass the pane container AS the anchor, which is a rectangle that
+   * fills the pane and therefore leaves no room on any side of itself; the anchored arithmetic
+   * found no space, took its no-room fallback, and pinned the surface to the top of the viewport at
+   * whatever height its content happened to have. Docking asks the pane where its edges are rather
+   * than asking an element where there is room beside it.
+   */
+  dockTo?: HTMLElement;
 }
 
 /**
@@ -134,7 +150,13 @@ export function positionToolbarPopover(
   // It returned here, so the replacement panel never became a sheet at all: no portal onto the body,
   // no backdrop, no placement. The surface the operator was looking at simply stopped existing, and
   // the control they had just tapped had done nothing they could see.
-  if (!isMobileBottomSheet(panel.ownerDocument) && !anchorEl?.isConnected) return;
+  //
+  // A docked surface joins the sheet on the permitted side of this guard, and for the identical
+  // reason: it places itself from its pane and reads the anchor for nothing. Today its callers
+  // happen to pass a live container, so the refusal above would not fire — which is exactly what
+  // made the sheet's version of this survive so long. A branch gated on something it never
+  // measures is a trap whether or not it has sprung yet.
+  if (!isMobileBottomSheet(panel.ownerDocument) && !options.dockTo && !anchorEl?.isConnected) return;
 
   const margin = options.margin ?? 12;
   const gap = options.gap ?? 6;
@@ -251,6 +273,20 @@ export function positionToolbarPopover(
       return;
     }
 
+    // A docked surface answers from its pane, so it asks the anchor nothing and sits above the
+    // anchor questions for the same reason the sheet does. Placing it below them would make a
+    // surface that never had an anchor inherit the rule that hides one whose anchor died.
+    if (options.dockTo) {
+      const dockScroll = panel.scrollTop;
+      placeContainerDock(panel, options.dockTo, {
+        margin,
+        width: Math.min(preferredWidth, maxPreferredWidth),
+        containingBlock,
+      });
+      panel.scrollTop = dockScroll;
+      return;
+    }
+
     // An anchor that has been removed cannot be measured, so there is no coordinate this function
     // could write that means anything. Returning quietly — which is what this used to do — leaves
     // the surface painted at wherever the anchor last was, over content that has since been
@@ -300,10 +336,6 @@ export function positionToolbarPopover(
     const panelRect = panel.getBoundingClientRect();
     const measuredWidth = Math.min(panelRect.width || width, maxWidth);
     const naturalHeight = Math.max(panel.scrollHeight, panelRect.height || 0);
-    const belowSpace = Math.max(0, bounds.bottom - anchorRect.bottom - gap - margin);
-    const aboveSpace = Math.max(0, anchorRect.top - bounds.top - gap - margin);
-    const useAbove = aboveSpace > belowSpace && belowSpace < Math.min(naturalHeight, 240);
-    const availableHeight = useAbove ? aboveSpace : belowSpace;
     const anchorLeft = resolvePopoverHorizontalLeft(
       anchorRect,
       bounds,
@@ -313,35 +345,10 @@ export function positionToolbarPopover(
       options.align ?? "right",
       options.preferredSide,
     );
+    const box = resolveAnchoredPopoverBox(anchorRect, bounds, naturalHeight, gap, margin);
 
-    if (availableHeight <= 0) {
-      const fallbackHeight = Math.max(0, bounds.height - margin * 2);
-      setPosition(
-        panel,
-        anchorLeft,
-        bounds.top + margin,
-        containingBlock,
-        0,
-        0
-      );
-      panel.style.maxHeight = `${fallbackHeight}px`;
-      panel.scrollTop = savedPanelScroll;
-      return;
-    }
-
-    const renderedHeight = Math.min(naturalHeight, availableHeight);
-    const top = useAbove
-      ? anchorRect.top - gap - renderedHeight
-      : anchorRect.bottom + gap;
-    setPosition(
-      panel,
-      anchorLeft,
-      clamp(top, bounds.top + margin, bounds.bottom - renderedHeight - margin),
-      containingBlock,
-      0,
-      0
-    );
-    panel.style.maxHeight = `${availableHeight}px`;
+    setPosition(panel, anchorLeft, box.top, containingBlock, 0, 0);
+    panel.style.maxHeight = `${box.maxHeight}px`;
     panel.scrollTop = savedPanelScroll;
   };
 
@@ -460,6 +467,79 @@ export function placeSheet(
 }
 
 /**
+ * Dock a surface to the trailing edge of its pane, full pane height.
+ *
+ * The desktop counterpart to `placeSheet`: both place a surface from a rectangle it is given rather
+ * than from an element it points at, which is what an affordance with no anchor needs. The pane
+ * rather than the viewport, because a plugin surface belongs to its pane — clamping to the viewport
+ * would let it sit over a neighbouring split, and clamping to the pane alone would let it run under
+ * a sidebar that overlaps the pane, so it takes the intersection.
+ *
+ * Height is written, not merely capped. That is the whole repair: a `max-height` lets a surface
+ * whose content is momentarily short paint as a strip, which is exactly the defect — the anchored
+ * fallback already set a generous cap and the panel rendered 72px inside it. A dock states the
+ * height it occupies, so a short panel is a panel with space under its fields rather than a sliver.
+ */
+export function placeContainerDock(
+  panel: HTMLElement,
+  pane: HTMLElement,
+  options: { margin?: number; width?: number; bounds?: DOMRect; containingBlock?: DOMRect } = {},
+): void {
+  const margin = options.margin ?? 12;
+  const bounds = options.bounds ?? getVisiblePopoverBounds(null);
+  // A pane that has not laid out says nothing about where a surface may go — the same rule
+  // `getVisiblePopoverBounds` applies to its container, for the same reason. A pane holding nothing
+  // but this fixed panel reports no area at all, and intersecting the bounds with an empty rect
+  // would dock the panel to a strip of nothing. Missing information, not a constraint of zero.
+  const paneRect = pane.getBoundingClientRect();
+  const dockAgainst = paneRect.width > 0 && paneRect.height > 0 ? paneRect : bounds;
+  const box = resolveContainerDockPlacement(dockAgainst, bounds, options.width ?? 360, margin);
+  panel.setCssProps({
+    position: "fixed",
+    right: "auto",
+    bottom: "auto",
+    width: `${box.width}px`,
+    "max-width": `${box.width}px`,
+    height: `${box.height}px`,
+    "max-height": `${box.height}px`,
+    "box-sizing": "border-box",
+    "overflow-y": "auto",
+    "overscroll-behavior": "contain",
+  });
+  setPosition(panel, box.left, box.top, options.containingBlock, 0, 0);
+}
+
+/**
+ * Where a docked surface sits, given its pane and the bounds it must stay inside.
+ *
+ * Pure so the geometry can be asserted without a browser, which the rest of this module's
+ * arithmetic already is and this defect needed: the reason nobody caught a panel rendering as a
+ * strip is that the height it rendered at was never a number any check could read.
+ *
+ * A pane narrower than the requested width yields a narrower dock rather than one that overhangs
+ * the pane's leading edge — a surface hanging off the left of its own pane is worse than a cramped
+ * one, and a split pane can genuinely be narrower than this surface would like.
+ */
+export function resolveContainerDockPlacement(
+  paneRect: { top: number; bottom: number; left: number; right: number },
+  bounds: { top: number; bottom: number; left: number; right: number },
+  width: number,
+  margin: number,
+): { left: number; top: number; width: number; height: number } {
+  const top = Math.max(paneRect.top, bounds.top) + margin;
+  const bottom = Math.min(paneRect.bottom, bounds.bottom) - margin;
+  const right = Math.min(paneRect.right, bounds.right) - margin;
+  const leadingEdge = Math.max(paneRect.left, bounds.left) + margin;
+  const left = Math.max(leadingEdge, right - width);
+  return {
+    left,
+    top,
+    width: Math.max(0, right - left),
+    height: Math.max(0, bottom - top),
+  };
+}
+
+/**
  * Keep a sheet placed while it is open, rather than only at the moment it opened.
  *
  * `placeSheet` is a single placement. The anchored panel path re-runs it from its own reposition
@@ -575,6 +655,47 @@ export function anchorlessSubmenuPlacement(
   return {
     left: clamp(point.x + 8, bounds.left + 8, bounds.right - size.width - 8),
     top: clamp(point.y - 8, bounds.top + 8, bounds.bottom - size.height - 8),
+  };
+}
+
+/**
+ * The vertical box an anchored surface takes: where its top goes and how tall it may be.
+ *
+ * Lifted out of the placement loop unchanged so the arithmetic can be read without a browser. The
+ * extraction is the point rather than a tidy-up: the no-room fallback below is what produces a
+ * clipped strip when a caller hands this function a rectangle that fills the pane, and while the
+ * arithmetic lived inside a DOM closure that outcome was not a value anything could assert.
+ *
+ * `height` is what the surface actually paints — the cap does not make a short panel tall — and it
+ * is returned beside the cap because the difference between the two is the defect: a generous cap
+ * over a momentarily short natural height is a sliver, not a panel.
+ */
+export function resolveAnchoredPopoverBox(
+  anchorRect: { top: number; bottom: number },
+  bounds: { top: number; bottom: number; height: number },
+  naturalHeight: number,
+  gap: number,
+  margin: number,
+): { top: number; maxHeight: number; height: number } {
+  const belowSpace = Math.max(0, bounds.bottom - anchorRect.bottom - gap - margin);
+  const aboveSpace = Math.max(0, anchorRect.top - bounds.top - gap - margin);
+  const useAbove = aboveSpace > belowSpace && belowSpace < Math.min(naturalHeight, 240);
+  const availableHeight = useAbove ? aboveSpace : belowSpace;
+
+  // Neither side has room. An anchor that fills its pane reaches this every time, and there is no
+  // position beside it that means anything, so the surface is pinned to the top of the bounds and
+  // capped at them.
+  if (availableHeight <= 0) {
+    const maxHeight = Math.max(0, bounds.height - margin * 2);
+    return { top: bounds.top + margin, maxHeight, height: Math.min(naturalHeight, maxHeight) };
+  }
+
+  const renderedHeight = Math.min(naturalHeight, availableHeight);
+  const top = useAbove ? anchorRect.top - gap - renderedHeight : anchorRect.bottom + gap;
+  return {
+    top: clamp(top, bounds.top + margin, bounds.bottom - renderedHeight - margin),
+    maxHeight: availableHeight,
+    height: renderedHeight,
   };
 }
 

@@ -3421,7 +3421,11 @@
         "screenshots/anytype/anytype-travel-itinerary-kanban-dark.png",
         "screenshots/anytype/anytype-travel-itinerary-kanban-light.png",
         "screenshots/anytype/anytype-travel-itinerary-list-dark.png",
-        "screenshots/anytype/anytype-travel-itinerary-list-light.png"
+        "screenshots/anytype/anytype-travel-itinerary-list-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-mobile-light.png"
       ]
     }
   ],

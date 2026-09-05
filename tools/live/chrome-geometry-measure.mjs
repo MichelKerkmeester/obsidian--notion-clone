@@ -28,6 +28,21 @@ export const RULE_CONTROL_MIN_WIDTH = 140;
 /** Below this a value box holds two characters, which is what the report was about. */
 export const RULE_VALUE_MIN_WIDTH = 120;
 
+/**
+ * The share of its pane a docked record panel must occupy before it reads as a panel.
+ *
+ * A record opened from an affordance with no element to point at used to be positioned AGAINST the
+ * pane container. A container fills its pane, so nothing fits beside it, and the panel fell back to
+ * the top of the viewport at whatever height its content happened to have — 72px against a 900px
+ * viewport, a strip with a close button in it. The floor is deliberately well under a full pane:
+ * the check is "did it take the pane's height or its content's", and those two are not near
+ * each other.
+ */
+export const RECORD_DOCK_MIN_PANE_FRACTION = 0.6;
+
+/** How far the dock's edges may sit from the pane's own, in px. The gutter is 12; one is slack. */
+export const RECORD_DOCK_EDGE_TOLERANCE = 13;
+
 // ───────────────────────────────────────────────────────────────────
 // 2. PURE JUDGEMENT
 // ───────────────────────────────────────────────────────────────────
@@ -119,6 +134,38 @@ export function judgeChromeGeometry(reading) {
       });
     }
   }
+  const dock = reading.recordDock;
+  if (dock) {
+    const fraction = dock.paneHeight > 0 ? dock.panelHeight / dock.paneHeight : 0;
+    if (fraction < RECORD_DOCK_MIN_PANE_FRACTION) {
+      rows.push({
+        what: "a docked record panel took its content's height instead of its pane's",
+        detail: `${Math.round(dock.panelHeight)}px in a ${Math.round(dock.paneHeight)}px pane, `
+          + `${Math.round(fraction * 100)}% against a ${RECORD_DOCK_MIN_PANE_FRACTION * 100}% floor`,
+        why: "an affordance with nothing to point at is positioned against the pane container, "
+          + "which fills the pane and so leaves no room beside itself — the panel then falls back "
+          + "to the top of the viewport at content height, which is a strip rather than a panel",
+      });
+    }
+    const rightGap = dock.paneRight - dock.panelRight;
+    if (Math.abs(rightGap) > RECORD_DOCK_EDGE_TOLERANCE) {
+      rows.push({
+        what: "a docked record panel is not against its pane's trailing edge",
+        detail: `${Math.round(rightGap)}px from the pane's right edge, `
+          + `tolerance ${RECORD_DOCK_EDGE_TOLERANCE}px`,
+        why: "a dock is defined by the edge it sits against; a panel floating away from it is "
+          + "taking a position from something other than the pane",
+      });
+    }
+    if (dock.panelTop < dock.paneTop - RECORD_DOCK_EDGE_TOLERANCE) {
+      rows.push({
+        what: "a docked record panel starts above its own pane",
+        detail: `panel top ${Math.round(dock.panelTop)}px, pane top ${Math.round(dock.paneTop)}px`,
+        why: "the panel belongs to its pane, so a top above it is painted over whatever chrome "
+          + "or neighbouring split occupies that space",
+      });
+    }
+  }
   return rows;
 }
 
@@ -194,7 +241,44 @@ function readRuleRows(root) {
   return rows;
 }
 
-/** Reads whichever of the two chrome surfaces this scenario built; both absent is a clean skip. */
-export function measureChromeGeometry(root) {
-  return { splitButton: readSplitButton(root), ruleRows: readRuleRows(root) };
+/**
+ * The docked record panel against the pane it was docked to.
+ *
+ * Which scenario built it decides whether this applies, rather than anything read off the node: an
+ * anchored panel is content-height by design and would fail the floor below for the right reason,
+ * so measuring both and judging them the same would certify nothing. Asking the scenario keeps the
+ * distinction where it is declared instead of adding a marker to the shipped panel for a lane's
+ * benefit.
+ */
+function readRecordDock(root, scenario) {
+  if (scenario?.recordPlacement !== "docked") return null;
+  const panel = root.querySelector(".db-record-detail-panel");
+  if (!panel) return null;
+  // A phone sheet is docked to the viewport floor by a different function and has its own lane.
+  if (panel.classList.contains("db-mobile-bottom-sheet")) return null;
+  const panelRect = panel.getBoundingClientRect();
+  // The same fallback the placement itself makes: a pane holding nothing but this fixed panel has
+  // no area, and the dock is measured against the viewport instead. Reading the empty rect here
+  // would compare the panel to a rectangle it was never placed against.
+  const paneRect = root.getBoundingClientRect();
+  const pane = paneRect.width > 0 && paneRect.height > 0
+    ? paneRect
+    : { top: 0, right: root.ownerDocument.defaultView.innerWidth, height: root.ownerDocument.defaultView.innerHeight };
+  return {
+    panelHeight: panelRect.height,
+    panelTop: panelRect.top,
+    panelRight: panelRect.right,
+    paneHeight: pane.height,
+    paneTop: pane.top,
+    paneRight: pane.right,
+  };
+}
+
+/** Reads whichever chrome surface this scenario built; all absent is a clean skip. */
+export function measureChromeGeometry(root, scenario) {
+  return {
+    splitButton: readSplitButton(root),
+    ruleRows: readRuleRows(root),
+    recordDock: readRecordDock(root, scenario),
+  };
 }

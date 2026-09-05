@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-05T08:36:45.952Z",
+  "measuredAt": "2026-09-05T13:59:11.556Z",
   "inputs": {
     "styles.css": "e2e6314a036a",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
-    "src/views/popover-position.ts": "eb4701280a66"
+    "src/views/popover-position.ts": "7edae5db0282"
   },
   "checks": [
     {
@@ -165,9 +165,9 @@
     "src/views/column-width.ts:363  .db-panel-title",
     "src/views/column-width.ts:373  .db-panel-row",
     "src/views/column-width.ts:397  .db-panel-row",
-    "src/views/database-view.ts:3169  .db-group-order-popover",
-    "src/views/database-view.ts:3283  .db-panel-button",
-    "src/views/database-view.ts:7028  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:3170  .db-group-order-popover",
+    "src/views/database-view.ts:3284  .db-panel-button",
+    "src/views/database-view.ts:7029  .db-calendar-search-results-popover",
     "src/views/date-value-picker.ts:142  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:153  .db-date-picker-body",
     "src/views/date-value-picker.ts:214  .db-calendar-mini-popover",
@@ -247,7 +247,7 @@
     "src/views/option-color-picker.ts:46  .db-color-picker-popup",
     "src/views/option-color-picker.ts:68  .db-color-picker-body",
     "src/views/owned-menu.ts:108  .db-menu",
-    "src/views/record-detail-panel.ts:167  .db-record-detail-panel",
+    "src/views/record-detail-panel.ts:179  .db-record-detail-panel",
     "src/views/sort-panel-renderer.ts:96  .db-sort-panel",
     "src/views/sort-panel-renderer.ts:123  .db-panel-hint",
     "src/views/sort-panel-renderer.ts:128  .db-panel-empty",

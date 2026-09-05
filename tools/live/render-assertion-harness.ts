@@ -327,6 +327,17 @@ export interface ScenarioSpec {
    */
   recordBodyVariant?: "empty" | "editing" | "read";
   /**
+   * Opt-in, renderer "record-detail" only: how the panel is placed. Defaults to "anchored",
+   * which is the affordance that has an element to point at.
+   *
+   * "docked" is the affordance that has none — a menu item, a card's open button — and it is built
+   * the way the view builds it: the pane container standing in as the anchor, because that is what
+   * those callers pass for focus return and outside-press containment. The placement is what
+   * changes, and the reason this scenario exists is that pointing a panel AT that container is what
+   * used to clip it to a strip.
+   */
+  recordPlacement?: "anchored" | "docked";
+  /**
    * Opt-in, renderer "record-peek" only: whether `openTableRecordPeek` is given the touch
    * hand-off it is wired with in production. Defaults to `true` (undefined behaves the same as
    * `true`), matching every existing caller of this scenario unchanged: the harness's own
@@ -2977,7 +2988,11 @@ export function runRenderAssertions(
       const blankKey = columns.find((col) => col.key !== "file.name" && col.type === "text")?.key;
       if (blankKey) delete fm[blankKey];
     }
-    const anchor = makeHiddenAnchor(container, "db-record-detail-anchor");
+    const docked = scenario.recordPlacement === "docked";
+    // The docked case passes the container, which is exactly what an affordance with no element of
+    // its own passes in the view. Using a hidden anchor here instead would photograph a case that
+    // does not occur.
+    const anchor = docked ? container : makeHiddenAnchor(container, "db-record-detail-anchor");
     const actions: RecordDetailActions = {
       editCell: () => undefined,
       openRow: () => undefined,
@@ -2986,6 +3001,7 @@ export function runRenderAssertions(
     openRecordDetailPanel({
       anchorEl: anchor,
       host: container,
+      placement: docked ? "docked" : "anchored",
       row,
       columns,
       config,

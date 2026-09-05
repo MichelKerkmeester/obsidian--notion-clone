@@ -327,7 +327,7 @@ const SPEC_OPTIONS = [
   "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
   "boardEmptyColumn", "galleryImageField", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "columnHeaderController", "longHeaderLabel", "migratedFromList",
-  "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount",
+  "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement",
 ];
 
 function constructedScenario(view, opts) {
@@ -729,6 +729,25 @@ export const CONSTRUCTED_SCENARIOS = [
       + "a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through "
       + "positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone "
       + "sheet fixtures together.",
+  }),
+  constructedScenario("record-detail-docked", {
+    renderer: "record-detail",
+    recordPlacement: "docked",
+    group: "panels",
+    capture: "viewport",
+    title: "Record detail panel, docked (constructed)",
+    sources: constructedSources("src/views/record-detail-panel.ts", "tools/bench/board-render-bench.ts")
+      .concat([
+        "src/views/card-field-renderer.ts",
+        "src/views/popover-position.ts",
+        "src/views/record-open-target.ts",
+      ]),
+    note: "The same panel opened by an affordance carrying no element — a menu item, a card's "
+      + "open button — which passes the pane container rather than a pressed element. Pointing the "
+      + "panel AT that container is what drew it as a strip at the top of the window, so this "
+      + "photographs the placement rather than the chrome: the panel takes the pane's height and "
+      + "its trailing edge instead of its content's height. The anchored capture beside it is the "
+      + "control; the two differ only in placement.",
   }),
   constructedScenario("record-detail-body-editing", {
     renderer: "record-detail-body",

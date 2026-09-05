@@ -125,3 +125,71 @@ describe("which targets are real workspace leaves", () => {
     expect(surfaces.length).toBeGreaterThan(0);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. PLACEMENT, PER AFFORDANCE WITH NOTHING TO POINT AT
+// ───────────────────────────────────────────────────────────────────
+
+// Every one of these reaches the view as an open with no anchor element. They are listed
+// individually rather than as one case because they arrived at the sliver independently — each was
+// wired by a different renderer, and the reason the defect survived a fix to the board card is that
+// a fix per affordance leaves the next affordance broken. If placement ever moves back to the call
+// sites, these rows fail together and say which surfaces regressed.
+const ANCHORLESS_AFFORDANCES = [
+  "the row context menu's open item",
+  "the timeline event menu's open item",
+  "a gallery card's open button",
+  "a board card's open button",
+  "the open action inside the record panel itself",
+] as const;
+
+describe("an affordance with no element to point at gets a docked panel", () => {
+  for (const affordance of ANCHORLESS_AFFORDANCES) {
+    it(`docks the panel for ${affordance}`, () => {
+      const resolved = resolveRecordOpenTarget({ isPhone: false, hasAnchor: false });
+      expect(resolved.target).toBe("panel");
+      expect(resolved.placement).toBe("docked");
+    });
+  }
+
+  it("docks the panel a peek folded into, rather than leaving it pointing at nothing", () => {
+    // The fold already sent this to the panel; without a placement to go with it the panel was
+    // handed the container as its anchor, which is the case that renders as a strip.
+    const resolved = resolveRecordOpenTarget({ isPhone: false, hasAnchor: false, setting: "peek" });
+    expect(resolved).toMatchObject({ target: "panel", reason: "no-anchor", placement: "docked" });
+  });
+});
+
+describe("placement leaves every other opening alone", () => {
+  it("anchors whenever the affordance has an element", () => {
+    expect(resolveRecordOpenTarget({ isPhone: false, hasAnchor: true }).placement).toBe("anchored");
+    expect(resolveRecordOpenTarget({ isPhone: false, hasAnchor: true, setting: "peek" }).placement)
+      .toBe("anchored");
+  });
+
+  it("anchors on a phone even with nothing to point at", () => {
+    // A phone panel is a bottom sheet placed from the viewport. It never asked the anchor anything,
+    // so it never had the defect, and docking it would be a second answer to a settled question.
+    expect(resolveRecordOpenTarget({ isPhone: true, hasAnchor: false }).placement).toBe("anchored");
+    expect(resolveRecordOpenTarget({ isPhone: true, hasAnchor: false, setting: "peek" }).placement)
+      .toBe("anchored");
+  });
+
+  it("leaves the workspace's own surfaces anchored, since they take no placement from us", () => {
+    for (const target of ["tab", "split", "window"] as const) {
+      expect(resolveRecordOpenTarget({ isPhone: false, hasAnchor: false, setting: target }))
+        .toMatchObject({ target, placement: "anchored" });
+    }
+  });
+
+  it("states a placement on every path, so no caller has to guess one", () => {
+    for (const setting of RECORD_OPEN_TARGETS) {
+      for (const isPhone of [false, true]) {
+        for (const hasAnchor of [false, true]) {
+          const resolved = resolveRecordOpenTarget({ setting, isPhone, hasAnchor });
+          expect(["anchored", "docked"]).toContain(resolved.placement);
+        }
+      }
+    }
+  });
+});

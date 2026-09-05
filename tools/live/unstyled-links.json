@@ -1,23 +1,23 @@
 {
-  "measuredAt": "2026-09-05T11:20:49.537Z",
+  "measuredAt": "2026-09-05T14:01:34.345Z",
   "inputs": {
     "styles.css": "e2e6314a036a",
     "tools/screenshots/theme.css": "f30f295f9cf0",
-    "tools/live/unstyled-links.mjs": "58df95837546",
+    "tools/live/unstyled-links.mjs": "d09512eed178",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
-    "tools/live/chrome-geometry-measure.mjs": "ec99632a30d6",
-    "tools/live/render-assertion-bundle.mjs": "c2a315daad54",
-    "tools/live/render-assertion-harness.ts": "46997630a3d9"
+    "tools/live/chrome-geometry-measure.mjs": "39f8103f6df6",
+    "tools/live/render-assertion-bundle.mjs": "400aef771393",
+    "tools/live/render-assertion-harness.ts": "0f6952d221a5"
   },
   "fixture": {
     "links": 112,
     "scenarios": 71
   },
   "constructed": {
-    "links": 1480,
-    "scenarios": 70
+    "links": 1484,
+    "scenarios": 71
   },
   "chrome": {
-    "surfaces": 7
+    "surfaces": 8
   }
 }
