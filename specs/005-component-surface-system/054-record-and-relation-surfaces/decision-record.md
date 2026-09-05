@@ -11,9 +11,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
-    last_updated_at: "2026-09-05T12:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Recorded the two structural decisions this phase is shaped by"
+    last_updated_at: "2026-09-05T18:20:00Z"
+    last_updated_by: "operator-decision"
+    recent_action: "Recorded adr-005 rejected; ac-002's proof stays the by-hand pixel read"
     next_safe_action: "Execute T001, the capture-image read and design true-up"
     blockers: []
     key_files:
@@ -28,6 +28,7 @@ _memory:
     open_questions: []
     answered_questions:
       - "The operator's 2026-09-05 directive names componentization and Anytype adoption together; formulas/rollups/calculations and the PM 1:1 board and gantt stay ours"
+      - "ADR-005 (2026-09-05 ~18:20): rejected. AC-002's proof stays the by-hand pixel read of the true-up's captured positions; the DOM box reading stands as corroboration only"
 ---
 
 # Decision Record: Record and Relation Surfaces
@@ -269,9 +270,18 @@ Two further rulings follow from the same reading and bind the same way:
 ---
 
 <!-- ANCHOR:adr-005 -->
-## ADR-005 (Proposed): AC-002's Today figure restates from a captured pixel position to a DOM box reading
+## ADR-005 (Rejected): AC-002's Today figure restates from a captured pixel position to a DOM box reading
 
-**Status: PROPOSED — 2026-09-05 (T002 re-measurement). Not decided; the operator rules.**
+**Status: REJECTED — 2026-09-05 (~18:20, operator ruling). Operator: "Keep the pixel reading."**
+
+**Operator ruling:** the DOM box/`text-align` reading does not replace the pixel read as AC-002's
+proof. The proof stays a by-hand screenshot read of the captured positions (labels at x 59, values
+right-aligned at 273-362, as measured in the true-up); it is performed by an image-capable
+in-runtime leaf at the leg's close. A measurement-only leg that cannot open an image records
+"pixel read owed" for that row rather than substituting the DOM reading as if it closed the
+criterion. The DOM figures measured under T002 (`.db-record-detail-field-label` left edge x 42,
+`.db-board-card-value` box x 122-364, `text-align: right` computed) stand as corroboration of the
+same conclusion — still right-aligned, still Unmet — not as the proof itself.
 
 ### Context
 

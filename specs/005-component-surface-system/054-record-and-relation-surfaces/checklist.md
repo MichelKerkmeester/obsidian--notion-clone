@@ -76,7 +76,11 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
 - [x] CHK-005 [P0] The 050 overlaps are references by item number, not duplicates — items 6, 9, 11
       named in `spec.md` §5C with the slice this phase takes
 - [ ] CHK-006 [P0] T001 complete: every §5B capture opened by hand, dispositions recorded
-- [x] CHK-007 [P0] T002 complete: every Today cell above carries the measured number
+- [x] CHK-007 [P0] T002 complete: every Today cell above carries the measured number. AC-002's
+      Today cell carries the DOM box/`text-align` reading as corroboration only — per ADR-005
+      (Rejected, 2026-09-05 ~18:20), the operator kept the pixel reading as the proof, so the row
+      records **pixel read owed**, to be closed by an image-capable in-runtime leaf at the leg's
+      close rather than by this measurement-only leg
 - [ ] CHK-008 [P0] T003 complete: `migration-table.md` exists and passes AC-008's file check
 <!-- /ANCHOR:pre-impl -->
 

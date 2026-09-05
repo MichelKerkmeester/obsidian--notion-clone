@@ -111,9 +111,11 @@ in the parent program's escalation format rather than retrying. A task blocked o
       record panel now that 006's docking landed (`ae46da94`) and found it currently green against
       `chrome-geometry-measure.mjs`'s floors — not a red this leg needs to fix. AC-002's per-row
       pixel figures (measured on a PNG capture) could not be re-observed under this leg's
-      no-image-read constraint; restated as a DOM box/`text-align` reading in
-      `acceptance-criteria.md` and proposed formally in `decision-record.md` ADR-005 (Proposed,
-      operator to rule). **Observed, not fixed:** AC-007/C7's "four external callers" citation for
+      no-image-read constraint; the DOM box/`text-align` reading recorded here was proposed
+      formally in `decision-record.md` ADR-005 as a substitute observable, then **Rejected**
+      2026-09-05 (~18:20) — operator: "Keep the pixel reading." AC-002's proof stays the by-hand
+      pixel read, owed to an image-capable leaf at the leg's close; this leg's DOM reading stands
+      only as corroboration. **Observed, not fixed:** AC-007/C7's "four external callers" citation for
       `renderCardField` reads as **3** today (`board-renderer.ts:2185`, `gallery-renderer.ts:691`,
       `record-detail-panel.ts:474`, plus its own test file) — outside T002's named scope, named here
       rather than corrected in passing.

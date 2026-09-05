@@ -1357,6 +1357,13 @@ accordingly.
 |---|---|---|
 | **Cursor usage is gone; GLM 5.3 flash max through OpenRouter or DevPass via `cli-pi` carries implementation and planning legs, with Sonnet agents verifying.** Operator: *"Cursor usage is gone, use GLM 5.3 flash max through OpenRouter or DevPass cli-pi alongside Sonnet agents for verification"* | Implementation legs run on GLM via `cli-pi` with bounded briefs; Sonnet in-runtime verifiers land them; Cursor is not dispatched until the operator says otherwise | Parent `goal.md` D14's delegation ladder and `goal-prompt.md`'s DELEGATION line (both updated); every future `cli-pi` / `cli-opencode` GLM dispatch |
 
+### Two more, taken 2026-09-05 (~18:20)
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **`054` ADR-005 — rejected: AC-002's proof stays the by-hand pixel read.** Operator: *"Keep the pixel reading."* | ADR-005 proposed restating AC-002's Today figure from the true-up's captured pixel positions (labels at x 59, values right-aligned at 273, 311, 319, 343, 349 and 362) to a DOM box/`text-align` reading, because a measurement-only leg could not open the PNG capture. The operator rejected the substitution: the proof stays the by-hand screenshot read, performed by an image-capable in-runtime leaf at the leg's close. A measurement-only leg records **"pixel read owed"** rather than substituting a DOM reading; the DOM figures (`.db-record-detail-field-label` x 42, `.db-board-card-value` box x 122-364, `text-align: right`) stand as corroboration only, not as the proof | `054-record-and-relation-surfaces/decision-record.md` ADR-005 (now Rejected), `acceptance-criteria.md` AC-002's Verification cell, `checklist.md` CHK-007, and `tasks.md` T002's done-note — all updated to the rejected form |
+| **`051` ADR-006 — accepted: AC-006's shell-geometry criterion restated as a literal count.** | The criterion as written ("a count of geometry literals in the shell path → 0") reads trivially 0 today because `src/views/surface-shell.ts` does not exist, the same number it needs when the work is done — unobservable red. The operator accepted ADR-006's restatement: a count of the shell's seven properties (radius, horizontal padding, vertical padding, divider clearance, row height, panel width, phone close) declared as raw literals outside the shell's named constants → 0, red today at **≥ 20** for the 360px width alone (`rg -c "360px" styles.css`), driven to zero as the shell is built | `051-modal-and-sheet-componentization/decision-record.md` ADR-006 (now Accepted), `acceptance-criteria.md` AC-006's Verification cell, and `checklist.md` C6 — all updated to the accepted form with today's measured red |
+
 ---
 
 ## 7. WHERE A PHASE'S OWN DOCUMENTS DISAGREE
