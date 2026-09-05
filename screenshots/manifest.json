@@ -116,7 +116,7 @@
       "layoutHash": "3f973e6acbb6",
       "pixelHash": "5c0d50ade26e",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -140,7 +140,7 @@
       "layoutHash": "3f973e6acbb6",
       "pixelHash": "76be54efd91d",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -164,7 +164,7 @@
       "layoutHash": "89757e7c6b99",
       "pixelHash": "ba735b633a18",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -188,7 +188,7 @@
       "layoutHash": "89757e7c6b99",
       "pixelHash": "55fb0f6fd6ec",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -212,7 +212,7 @@
       "layoutHash": "049b6a2ff9f3",
       "pixelHash": "781d9582814c",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -237,7 +237,7 @@
       "layoutHash": "049b6a2ff9f3",
       "pixelHash": "e4e23c420751",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -262,7 +262,7 @@
       "layoutHash": "54f54a298a72",
       "pixelHash": "8329218c0aa2",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -287,7 +287,7 @@
       "layoutHash": "54f54a298a72",
       "pixelHash": "176f66712e0a",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -2789,7 +2789,7 @@
       "layoutHash": "88bb1978419a",
       "pixelHash": "3a16bcf14909",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -2831,7 +2831,7 @@
       "layoutHash": "88bb1978419a",
       "pixelHash": "38acf4aeaaf7",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -2873,7 +2873,7 @@
       "layoutHash": "2a979f489ca2",
       "pixelHash": "9d7c7f2b751e",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -2915,7 +2915,7 @@
       "layoutHash": "2a979f489ca2",
       "pixelHash": "db017c15d314",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -12688,7 +12688,7 @@
       "layoutHash": "d3be1b8401d7",
       "pixelHash": "ef717aafcef8",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
@@ -12717,7 +12717,7 @@
       "layoutHash": "d3be1b8401d7",
       "pixelHash": "36b120ee3e52",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
@@ -12746,7 +12746,7 @@
       "layoutHash": "2730400b6133",
       "pixelHash": "b33351516451",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
@@ -12775,7 +12775,7 @@
       "layoutHash": "2730400b6133",
       "pixelHash": "cf2d62c8c717",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
@@ -12806,11 +12806,11 @@
       "layoutHash": "4abbb53e06e8",
       "pixelHash": "35530a44f276",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -12839,11 +12839,11 @@
       "layoutHash": "4abbb53e06e8",
       "pixelHash": "8838cffc88af",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -12872,11 +12872,11 @@
       "layoutHash": "012de9f6a207",
       "pixelHash": "5f7aeb3b84d3",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -12905,11 +12905,11 @@
       "layoutHash": "012de9f6a207",
       "pixelHash": "b1666b7f9209",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -12935,7 +12935,7 @@
       "layoutHash": "eafd8b345ffe",
       "pixelHash": "7d78d926dfe9",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -12962,7 +12962,7 @@
       "layoutHash": "eafd8b345ffe",
       "pixelHash": "3ab83216eef6",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -12989,7 +12989,7 @@
       "layoutHash": "0449387dcdd0",
       "pixelHash": "493ea59403a6",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -13016,7 +13016,7 @@
       "layoutHash": "0449387dcdd0",
       "pixelHash": "5450f4e40499",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -13572,7 +13572,7 @@
       "layoutHash": "f92e1acfa297",
       "pixelHash": "c4f6c0f6c92e",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13611,7 +13611,7 @@
       "layoutHash": "f92e1acfa297",
       "pixelHash": "6c4277b7f6c5",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13650,7 +13650,7 @@
       "layoutHash": "b634b8f01953",
       "pixelHash": "c86ccfbfb9d2",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13689,7 +13689,7 @@
       "layoutHash": "b634b8f01953",
       "pixelHash": "f8b0eca7a7b4",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13731,7 +13731,7 @@
       "layoutHash": "58953356555a",
       "pixelHash": "f887efa3855f",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13740,7 +13740,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -13776,7 +13776,7 @@
       "layoutHash": "58953356555a",
       "pixelHash": "cb6bab613a51",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13785,7 +13785,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -13821,7 +13821,7 @@
       "layoutHash": "26600276e495",
       "pixelHash": "7a3fda1a9930",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13830,7 +13830,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
@@ -13866,7 +13866,7 @@
       "layoutHash": "26600276e495",
       "pixelHash": "aef724e0e664",
       "sourceHashes": {
-        "src/views/board-renderer.ts": "caf797b30bdd",
+        "src/views/board-renderer.ts": "b6184e201f1d",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
         "tools/live/render-assertion-harness.ts": "3b9b6b0a108c",
         "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
@@ -13875,7 +13875,7 @@
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "c373bdb709f4",
+        "src/i18n.ts": "ddc38f2f52f0",
         "styles.css": "e191ebb917cd",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "cd2145aaf626",
