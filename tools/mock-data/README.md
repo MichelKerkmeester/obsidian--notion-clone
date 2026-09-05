@@ -1,10 +1,10 @@
 ---
 title: "tools/mock-data: the shared test-environment catalogue"
-description: "One deterministic record set, ten use cases, three products — the Obsidian vault, an Anytype demo space and an AppFlowy workspace all built from the same catalogue so a difference between them is a finding rather than noise."
+description: "One deterministic record set, ten use cases, three destinations — the Obsidian vault, an Anytype demo space and a CSV export for any tool that reads one — all built from the same catalogue so a difference between them is a finding rather than noise."
 trigger_phrases:
   - "obsidian plugin mock data generator"
   - "test environment catalogue"
-  - "anytype appflowy test data"
+  - "anytype csv export test data"
   - "database testbed use cases"
 ---
 
@@ -14,10 +14,10 @@ trigger_phrases:
 frontmatter and the database files the plugin reads, a product-neutral `catalogue.json`, and one CSV
 per use case.
 
-It exists because comparing this plugin against Anytype and AppFlowy was, until now, comparing three
-different data sets. The single vault database held finance-flavoured project data, so every check
-it could support was a check about money and status, and any difference between products could
-always be explained away as a difference in what they were holding.
+It exists because comparing this plugin against Anytype — and generating a CSV export for any tool
+that imports one — was, until now, working from three different data sets. The single vault database
+held finance-flavoured project data, so every check it could support was a check about money and
+status, and any difference could always be explained away as a difference in what the data held.
 
 ## 1. QUICK START
 
@@ -67,8 +67,8 @@ vault. Nothing is ever deleted; a folder the catalogue no longer produces is rep
 `person` and so on — so an agent loading Anytype picks its own native field instead of guessing from
 the value.
 
-**`csv/<use-case>.csv`.** One file per use case for AppFlowy's CSV import. The first column is the
-record title, because a CSV has no other way to name a row.
+**`csv/<use-case>.csv`.** One file per use case, a generic CSV export for any tool that imports one.
+The first column is the record title, because a CSV has no other way to name a row.
 
 Neither portable output invents a created or modified timestamp. Those two columns are declared with
 `source: "file"` and carry no value, because in a vault they come from the filesystem.

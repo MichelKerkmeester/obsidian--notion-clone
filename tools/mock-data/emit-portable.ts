@@ -3,11 +3,12 @@
 // COMPONENT: catalogue to the two product-neutral outputs, JSON and CSV
 // ───────────────────────────────────────────────────────────────────
 //
-// Anytype is loaded over its object API by an agent driving the app, and
-// AppFlowy imports a CSV. Neither can read an Obsidian note, so both read from
-// here, and both read the SAME record set the vault got. That is the whole
-// mechanism behind the "same records in all three" criterion: one build, three
-// translations, no second source.
+// Anytype is loaded over its object API by an agent driving the app, and the
+// CSV export exists for any tool whose only intake is a CSV import. Neither
+// can read an Obsidian note, so both read from here, and both read the SAME
+// record set the vault got. That is the whole mechanism behind the "same
+// records in all three" criterion: one build, three translations, no second
+// source.
 //
 // The JSON carries a neutral type per column so a loader picks its own native
 // field rather than guessing from the value. The CSV cannot carry a type at

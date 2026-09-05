@@ -71,8 +71,9 @@ export const FACETS = [
 
 export type Facet = (typeof FACETS)[number];
 
-/** The product-neutral type a loader for Anytype or AppFlowy reads. It says what
- *  the value means, never which Obsidian column type carries it. */
+/** The product-neutral type a loader for Anytype, or any tool reading the CSV
+ *  export, reads. It says what the value means, never which Obsidian column
+ *  type carries it. */
 export type NeutralType =
   | "title" | "text" | "richText" | "url" | "email" | "phone"
   | "number" | "rating" | "percent" | "money"
