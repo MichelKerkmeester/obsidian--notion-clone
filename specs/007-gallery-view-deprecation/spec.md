@@ -151,7 +151,7 @@ Per-phase detail lives in each child's `plan.md`. This is the audit-trail summar
 <!-- ANCHOR:inventory -->
 ## 4. THE GALLERY INVENTORY, MEASURED
 
-Counted on 2026-09-05 against the working tree at `464cd7e3`, by `grep -ril gallery` per root and
+Counted on 2026-09-05 against the working tree at `3a8df24c`, by `grep -ril gallery` per root and
 `grep -ic gallery` per file. It is a starting map, not the audit — child `001` owns the audit, and
 `006`'s equivalent found surfaces its own spec had missed, which is the reason this list is written
 down rather than assumed.
@@ -303,7 +303,7 @@ that error being caught in a spec and being carried into a requirement.
   reached. The same argument applies here and the same answer is the likely one, but it is `003`'s
   ADR to take, not this parent's to assume.
 - **Does the embedded codeblock host migrate too?** `applyGalleryMigration` is called only from
-  `database-view.ts:11669`. `embedded-database-renderer.ts` renders the gallery and has no
+  `database-view.ts:11678`. `embedded-database-renderer.ts` renders the gallery and has no
   equivalent call, so a gallery-configured codeblock renders unmigrated today. `006` inherited this
   gap and recorded it; this packet can either close it for the gallery or ship the same partial
   state knowingly. It cannot ship it unknowingly.

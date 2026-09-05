@@ -354,10 +354,18 @@ rather than reporting twelve separate failures — **they are re-asked after the
 and the deferral is recorded per row above, which is what §4A exists to require.
 
 **The named blocker is one bug, and it has an owner and a worktree.** Tap inside an open sheet
-dismisses it on iOS; the fix is in progress on `worktrees/056-sheet-inside-tap` under
-`031-sheet-lifecycle-ownership`. That is the third bug in `031`'s class — the entrance fix
-(`c96467c9`) and the toolbar-rebuild drop (`9ecb5fff`) both landed and both shipped, and this is a
-distinct third. Rows 34-36 name it as a symptom; every other deferred row is collateral.
+dismisses it on iOS; the fix was in progress on `worktrees/056-sheet-inside-tap` under
+`031-sheet-lifecycle-ownership` when the operator gave the ruling. That is the third bug in `031`'s
+class — the entrance fix (`c96467c9`) and the toolbar-rebuild drop (`9ecb5fff`) both landed and both
+shipped, and this is a distinct third. Rows 34-36 name it as a symptom; every other deferred row is
+collateral.
+
+*Later the same day, and it does not un-defer anything:* the fix **landed on main** — `3a77d523`
+(the view stops reading a press inside a portalled sheet as outside), `308ba2d3` (the cell selection
+survives the same press), recorded in `031/implementation-summary.md` at `66b69842` and `2be66ba5`.
+**It has not shipped.** Under D3 that is landed, not released and not confirmed, so all twelve rows
+stay DEFERRED and are re-asked after the next iCloud build exactly as the operator set out. The
+deferral's terms are what changed state, not the deferral.
 
 **Two rows are deferred for a reason worth separating from the other ten.** Rows 39 and 43 are not
 sheet-lifecycle defects at all — 39 is a presentation ruling on the gantt's milestone label and 43

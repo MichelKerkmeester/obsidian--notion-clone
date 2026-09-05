@@ -94,7 +94,7 @@ has a value to move from.
       standalone host. **Today this works** — the criterion exists to catch a regression, not
       because it is new.
 - [ ] The embedded codeblock host either migrates too or carries an ADR saying why not. **Today:
-      one call site (`database-view.ts:11669`), none in `embedded-database-renderer.ts`.**
+      one call site (`database-view.ts:11678`), none in `embedded-database-renderer.ts`.**
 - [ ] Every closed surface has a test that was observed red before green, with the failing value
       recorded.
 - [ ] `npm run gate` exits 0 read from `$?`, never through a pipe.

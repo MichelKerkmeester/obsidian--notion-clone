@@ -50,7 +50,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the state the phase opens against, read from the working tree at
-`464cd7e3`, so the audit's findings later have a measured baseline rather than an impression.
+`3a8df24c`, so the audit's findings later have a measured baseline rather than an impression.
 
 ### Opening measurements
 
@@ -66,7 +66,7 @@ _memory:
   `src/views/gallery-renderer.ts` and `tools/bench/gallery-render-bench.ts` in its `inputs`.
 - `src/data/types.ts:317` declares `DatabaseViewType` with `"gallery"` in the union;
   `:562-574` declare six `gallery*` `ViewConfig` fields.
-- `applyGalleryMigration` has exactly **one** call site: `src/views/database-view.ts:11669`.
+- `applyGalleryMigration` has exactly **one** call site: `src/views/database-view.ts:11678`.
   `src/views/embedded-database-renderer.ts` renders the gallery and has none.
 - `src/main.ts:146` and `:182` re-accept `gallery` when sanitizing loaded settings. The `.base`
   importer at `:1571-1641` **does not**: `:1577` already lands a `cards` view on `board`, fixed

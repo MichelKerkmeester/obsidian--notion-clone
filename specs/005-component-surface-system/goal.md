@@ -1870,7 +1870,7 @@ independently and it is a phased Level 3 packet with four children, mirroring
 `006-list-view-deprecation` rather than inventing a shape. Its gallery inventory — 42 files under
 `src/`, 31 under `tools/`, 85 `styles.css` references, 24 of 546 manifest scenarios, a 787-line
 renderer — is enumerated in its own `spec.md` rather than summarised here, counted against the tree
-at `464cd7e3`.
+at `3a8df24c`.
 
 **What this entry does not claim.** No code was written in this pass. No gate was run, because
 nothing that a gate measures changed. `completion_pct` stays **5 of 7 = 71**: rows 1 and 2 are still

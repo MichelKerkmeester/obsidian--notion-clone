@@ -51,7 +51,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the user-facing state the phase opens against, read from the working
-tree at `464cd7e3`.
+tree at `3a8df24c`.
 
 ### Opening measurements
 

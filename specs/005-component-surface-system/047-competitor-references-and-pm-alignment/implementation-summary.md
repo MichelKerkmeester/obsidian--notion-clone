@@ -51,7 +51,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the state the packet opens against, read from the working tree at
-`464cd7e3` and from `brew` on 2026-09-05.
+`3a8df24c` and from `brew` on 2026-09-05.
 
 ### Opening measurements
 

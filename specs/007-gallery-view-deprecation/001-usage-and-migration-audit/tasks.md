@@ -49,7 +49,7 @@ contextType: "general"
 - [ ] T007 [P] List every measurement of the gallery: `renderer-coverage.json` pins, the bench and its driver, `constructed-scenarios.mjs:237`, the `core.mjs`/`shared.mjs` scenarios, `render-assertion-harness.ts`, `verify-placement.mjs`, and the unit specs (`scratch/measurement-inventory.md`)
 - [ ] T008 Derive the declared-loss list: what each of the six `gallery*` `ViewConfig` fields expresses, and whether the board has an equivalent. Name each loss individually (`scratch/declared-losses.md`)
 - [ ] T009 Report actual vault usage — how many gallery-configured views exist — or state that the vault is unreadable from this session rather than reporting zero
-- [ ] T010 Record the embedded-codeblock asymmetry as a finding with its evidence: `applyGalleryMigration` has exactly one call site (`src/views/database-view.ts:11669`) and `embedded-database-renderer.ts` has none
+- [ ] T010 Record the embedded-codeblock asymmetry as a finding with its evidence: `applyGalleryMigration` has exactly one call site (`src/views/database-view.ts:11678`) and `embedded-database-renderer.ts` has none
 <!-- /ANCHOR:phase-2 -->
 
 ---

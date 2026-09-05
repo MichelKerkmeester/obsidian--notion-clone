@@ -95,7 +95,7 @@ Frozen choices. Changing one is an amendment.
       exempts `gallery` from the unknown-type coercion and must not.**
 - [ ] A vault carrying a gallery-configured view opens it as a board with the same cover, once,
       with a notice — in **both** hosts. `applyGalleryMigration` is called only from
-      `database-view.ts:11669` today; `embedded-database-renderer.ts` has no equivalent call.
+      `database-view.ts:11678` today; `embedded-database-renderer.ts` has no equivalent call.
 - [ ] `src/views/gallery-renderer.ts` is gone. It is 787 lines today.
 - [ ] The gallery's gate surface is **removed, not skipped**, and `npm run gate` exits 0 read from
       `$?`: the bench and its driver, the two `renderer-coverage.json` `inputs` pins, the
@@ -127,8 +127,8 @@ into the objective, and it is expected to grow.
 | Packet opened | Done | Operator 2026-09-05: *"should have been deprecated"*, with the instruction to retire the gallery completely the way the list view is being retired. Recorded as `../005-component-surface-system/roadmap.md` §6A and `045/decision-record.md` ADR-001 |
 | Level and shape decided | Done | `recommend-level.sh --loc 1800 --files 55 --api --db --architectural` → **Level 3, 90/100, confidence 95%**; phase score **50/50** against a threshold of 25. Both `phase-definitions.md` §2 conditions met independently, so a phased packet with four children rather than four sibling folders |
 | Four children opened | Done | `001`-`004`, scaffolded from the contract-backed templates |
-| Inventory taken | Done | `spec.md` §4 — 42 `src/` files, 31 `tools/` files, 85 `styles.css` lines, 24 of 546 capture entries, a 787-line renderer. Counted against the tree at `464cd7e3`, not estimated |
-| Inventory re-derived after a rebase | Done | The packet was first drafted against `2a7db8cf`; `464cd7e3` landed `046`'s linked-view work underneath it. Every `file:line` in this packet was re-checked against the new tree — line numbers moved in `main.ts`, `database-view.ts`, `toolbar-renderer.ts`, `i18n.ts` and `manifest-schema.mjs`, the `src/` file count went 41 to 42, `styles.css` went 84 to 85, **and one claim turned out to be false**: the `.base` importer no longer mints a gallery |
+| Inventory taken | Done | `spec.md` §4 — 42 `src/` files, 31 `tools/` files, 85 `styles.css` lines, 24 of 546 capture entries, a 787-line renderer. Counted against the tree at `3a8df24c`, not estimated |
+| Inventory re-derived after a rebase | Done | The packet was first drafted against `2a7db8cf`. Two upstream landings arrived underneath it before it was pushed — `046`'s linked-view work, then `031`'s sheet-inside-tap fix — leaving it at `3a8df24c`. Every `file:line` in this packet was re-checked against the new tree after each — line numbers moved in `main.ts`, `database-view.ts`, `toolbar-renderer.ts`, `i18n.ts` and `manifest-schema.mjs`, the `src/` file count went 41 to 42, `styles.css` went 84 to 85, **and one claim turned out to be false**: the `.base` importer no longer mints a gallery |
 | Audit | Not started | `001-usage-and-migration-audit` |
 | Settings redirect and migrate | Not started | `002-settings-redirect-and-migrate` |
 | Remove renderer and harness | Not started | `003-remove-renderer-and-harness` |

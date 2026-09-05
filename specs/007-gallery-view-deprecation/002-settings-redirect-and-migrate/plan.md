@@ -75,7 +75,7 @@ the part that closes the remaining doors and makes the migration reach both host
   rather than behaviour.
 - **`gallery-migration.ts`**: pure, takes a view and returns what to write. Unchanged unless `001`
   says it drops something.
-- **`database-view.ts:2717`/`:11669`**: the one existing call site.
+- **`database-view.ts:2718`/`:11669`**: the one existing call site.
 - **`embedded-database-renderer.ts`**: the host with no call site. REQ-004's subject.
 
 ### Data Flow
@@ -94,7 +94,7 @@ The `.base` import path enters the same flow one step earlier, at creation.
 | `main.ts:146`, `:182` | Re-blesses `gallery` on settings load | update | A unit asserting a loaded gallery coerces |
 | `main.ts:1571-1641` | **Already lands a `cards` view on `board`** (`:1577`) | unchanged — verified and pinned | A regression unit importing a `.base` `cards` view and asserting `board`, so a later edit cannot silently reintroduce the gallery landing |
 | `gallery-migration.ts` | Decides what a gallery becomes | update only if `001` says so | Its existing spec plus any new loss case |
-| `database-view.ts:11669` | The one migration call site | unchanged | `rg -n applyGalleryMigration src` still finds it |
+| `database-view.ts:11678` | The one migration call site | unchanged | `rg -n applyGalleryMigration src` still finds it |
 | `embedded-database-renderer.ts` | Renders a gallery, never migrates it | update, or a recorded decision against | REQ-004's ADR |
 | `toolbar-renderer.ts:97`, `view-config-panel-renderer.ts:515` | Already filter gallery from the pickers | unchanged | Verified, not re-implemented |
 | `i18n.ts:1456`, `:392` | `notice.galleryMigrated`, `undo.galleryMigration` in three locales | unchanged | Reused rather than rewritten |

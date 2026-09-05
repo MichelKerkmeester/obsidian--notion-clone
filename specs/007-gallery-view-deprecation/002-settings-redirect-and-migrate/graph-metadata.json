@@ -200,7 +200,7 @@
     ],
     "causal_summary": "`030` withdrew the gallery from two pickers and stopped",
     "created_at": "2026-09-05T03:46:37Z",
-    "last_save_at": "2026-09-05T04:32:08.814Z",
+    "last_save_at": "2026-09-05T04:35:19.727Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a5d0691b72c7b66933cce475cec6a01ef42062733c4b713b6d561f36bc9471bf",
+    "source_fingerprint": "sha256:28953ad96d5bdea635a5dacb8fa4b99b9556b2f7fb8bcfaae87499bb4d5ef182",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0b8f0955cf14f1b9219cb3f46310a6432a1d67fa8ebb00596e4808fd2ef55800",
-      "plan.md": "7f2854601ed3755aa9957e03bfa70bc6c0ad57737073d763bbb877e1ce32d734",
+      "spec.md": "7ae8ea53969443c171ce6636c37cb4797087bc10332603620dc6f14f872a5a02",
+      "plan.md": "1c5d6d1e4449fc506b0205693222532a49e1c352d91bd1f2a8c00c62dfa439b2",
       "tasks.md": "791dce00685e2c0c6d290286dfeb87cc25b49cc69b9f1b7983c2bd7183e62311",
-      "implementation-summary.md": "ccea4a87432eb6891bcb725db3f3f2468b119f0726ad5c510405746d579c144e"
+      "implementation-summary.md": "4f57343f5595f5e5c8d2b1bb05331d0b9fd2d18f8452d63558f74b76e6b74bde"
     },
     "last_active_child_id": null,
     "last_active_at": null

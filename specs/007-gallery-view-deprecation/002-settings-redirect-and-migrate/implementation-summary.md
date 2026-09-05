@@ -51,7 +51,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the state the phase opens against, read from the working tree at
-`464cd7e3`.
+`3a8df24c`.
 
 ### Opening measurements
 
@@ -63,8 +63,8 @@ _memory:
   `:1641` assigns it to `view.boardImageField`; `:1639`'s comment records that the gallery-shaped
   settings beside it are dropped for want of a board equivalent. **Nothing here mints a gallery.**
 - `src/data/gallery-migration.ts` — 74 lines, pure, targets board, reads `galleryImageField`.
-- `applyGalleryMigration` call sites: **1**, at `src/views/database-view.ts:11669`, declared at
-  `:2717` as `migrateGalleryViewOnOpen`.
+- `applyGalleryMigration` call sites: **1**, at `src/views/database-view.ts:11678`, declared at
+  `:2718` as `migrateGalleryViewOnOpen`.
 - `src/views/embedded-database-renderer.ts` — 29 gallery mentions, **0** migration calls.
 - `src/i18n.ts:1456` `notice.galleryMigrated` and `:392` `undo.galleryMigration`, both present in
   `en`, `zh-CN` and `zh-TW`.

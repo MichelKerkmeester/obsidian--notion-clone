@@ -100,7 +100,7 @@ landing the gallery migration makes anyway. What is left there is naming — the
 So this phase has **one** live minting surface to close, not two.
 
 The migration itself is asymmetric. `applyGalleryMigration` is called from
-`database-view.ts:11669` and nowhere else, so a gallery-configured **codeblock** embed renders
+`database-view.ts:11678` and nowhere else, so a gallery-configured **codeblock** embed renders
 through `EmbeddedDatabaseRenderer` unmigrated. `006-list-view-deprecation` recorded this exact gap
 as inherited from `030` and left the decision to a child; the decision is now this phase's.
 
