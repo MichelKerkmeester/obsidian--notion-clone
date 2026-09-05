@@ -36,10 +36,12 @@ src/views/
 +-- TableRenderer.ts       # The table body
 +-- ToolbarRenderer.ts     # The toolbar and view switcher
 +-- ...                    # ~90 renderers, cells, panels and popovers
-`-- modals/                # Obsidian Modal subclasses
++-- modals/                # Obsidian Modal subclasses
+`-- record-surface/        # Shared record/property primitives (header, row, add-property, hidden group)
 ```
 
-The folder is flat apart from `modals/`. See [`CODE.md`](./CODE.md) for the grouping by concern.
+The folder is flat apart from `modals/` and `record-surface/`. See [`CODE.md`](./CODE.md) for the
+grouping by concern.
 
 ---
 
@@ -47,6 +49,7 @@ The folder is flat apart from `modals/`. See [`CODE.md`](./CODE.md) for the grou
 
 - [`CODE.md`](./CODE.md) — the grouped code map.
 - [`modals/README.md`](./modals/README.md) — the dialog layer.
+- [`record-surface/README.md`](./record-surface/README.md) — the shared record/property primitives.
 - [`../data/README.md`](../data/README.md) — the logic these renderers read.
 - [`../../screenshots/README.md`](../../screenshots/README.md) — the shots that photograph this DOM.
 </content>

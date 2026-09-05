@@ -15,26 +15,12 @@
 // ───────────────────────────────────────────────────────────────────
 
 import type { App } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/column-types";
-import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/date-time-format";
+import { isObsidianTagsKey } from "../data/column-types";
 import { getFileFieldFixedType, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
-import { getNumberDisplayStyle } from "../data/column-display";
-import { formatEuroCurrency, formatEuroNumber } from "../data/euro-format";
-import { parseInlineMarkdown } from "../data/inline-markdown";
 import { isImeComposing } from "../data/keyboard-utils";
-import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/text-link-scheme";
-import { parseTextLink } from "../data/text-link";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
-import { t } from "../i18n";
-import { isHTMLElement } from "./dom-guards";
 import { setFieldTooltip } from "./field-tooltip";
-import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./file-field-renderer";
-import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./inline-markdown-renderer";
-import { renderDelayedExternalLink } from "./cell-renderer";
-import { renderProgress, renderProgressRing, renderRating } from "./number-display-renderer";
-import { createCheckbox } from "./checkbox";
-import { renderRelationValue } from "./relation-value-renderer";
-import { openExternalUrl } from "./open-external";
+import { renderPropertyValue } from "./record-surface/property-row";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -173,6 +159,11 @@ interface CardFieldValueOptions {
   onNumberChange?: (row: RowData, col: ColumnDef, value: number) => void | Promise<void | boolean>;
 }
 
+/**
+ * A re-export shim. The value-rendering body that used to live here moved to
+ * `record-surface/property-row.ts` unchanged, so board, gallery, list and record-sheet cards
+ * keep rendering exactly what they render today; this call is the entire difference.
+ */
 export function renderCardFieldValue(
   valueEl: HTMLElement,
   app: App,
@@ -182,124 +173,7 @@ export function renderCardFieldValue(
   displayType: ColumnDef["type"],
   options: CardFieldValueOptions,
 ): void {
-  if (displayType === "checkbox") {
-    valueEl.addClass("db-checkbox-cell");
-    const checkbox = createCheckbox(valueEl, { role: "field" });
-    checkbox.checked = toBooleanValue(value);
-    checkbox.disabled = !!options.readOnly;
-    checkbox.onclick = (event) => {
-      event.stopPropagation();
-      if (col.type === "computed") {
-        event.preventDefault();
-        if (!options.readOnly) options.onEditFormula?.(col);
-      }
-    };
-    if (col.type !== "computed" && !options.readOnly) {
-      checkbox.onchange = () => void options.onEdit?.(valueEl, row, col);
-    }
-    setFieldTooltip(valueEl, checkbox.checked ? t("common.true") : t("common.false"));
-    return;
-  }
-
-  if (shouldRenderSpecialFileField(col) && renderSpecialFileFieldValue(valueEl, app, row, col, value, {
-    tagsContainerClass: options.badgesClass,
-    linkItemClass: options.linkClass,
-  })) return;
-
-  if (col.type === "select" || col.type === "status") {
-    const resolved = resolveOptionDisplay(col, String(value));
-    const badge = valueEl.createSpan({ cls: "status-badge", text: resolved.value || t("common.empty") });
-    badge.title = resolved.value || t("common.empty");
-    badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
-    return;
-  }
-  if (col.type === "multi-select" || isObsidianTagsKey(col.key)) {
-    const values = toMultiSelectValuesForKey(col.key, value);
-    const badges = valueEl.createDiv({ cls: options.badgesClass });
-    badges.addClass("has-badges");
-    setFieldTooltip(badges, values);
-    for (const entry of values) {
-      const resolved = resolveOptionDisplay(col, entry);
-      const badge = badges.createSpan({ cls: "status-badge", text: resolved.value || t("common.empty") });
-      badge.title = resolved.value || t("common.empty");
-      badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
-    }
-    return;
-  }
-  if (col.type === "relation" && renderRelationValue(valueEl, app, row, value, true)) {
-    valueEl.addClass("has-badges");
-    return;
-  }
-  if (displayType === "date" || displayType === "datetime") {
-    valueEl.addClass("db-date-value");
-    valueEl.textContent = displayType === "datetime"
-      ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
-      : formatDateValueDisplay(value);
-    return;
-  }
-  if (displayType === "number" || displayType === "currency") {
-    const numeric = typeof value === "number" ? value : Number(value);
-    if (Number.isFinite(numeric) && displayType === "number") {
-      const style = getNumberDisplayStyle(col);
-      const interaction = !options.readOnly && options.onNumberChange
-        ? { onChange: (next: number) => options.onNumberChange?.(row, col, next) }
-        : undefined;
-      if (style === "rating") { renderRating(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
-      if (style === "progress") { renderProgress(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
-      if (style === "ring") { renderProgressRing(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
-    }
-    valueEl.addClass("db-card-field-number");
-    // Format the way the table formats. A card and a cell showing the same column were rendering
-    // the same figure two different ways — the table grouped it and gave a currency column its
-    // symbol, the card printed the raw JavaScript number — so the sheet read as unformatted data
-    // next to a table that looked right.
-    if (Number.isFinite(numeric)) {
-      valueEl.textContent = displayType === "currency"
-        ? formatEuroCurrency(numeric)
-        : formatEuroNumber(numeric);
-      return;
-    }
-  }
-
-  const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
-    ? assembleSchemeLinkTarget(col.textLinkScheme, value)
-    : null;
-  if (schemeTarget !== null) {
-    renderDelayedExternalLink(valueEl, row, { label: String(value), target: schemeTarget, external: true });
-    return;
-  }
-  if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-    const values = Array.isArray(value) ? value : [value];
-    const parsed = values.map((entry) => parseInlineMarkdown(entry));
-    if (parsed.some((nodes) => nodes !== null)) {
-      valueEl.empty();
-      const onOpenLink = (target: string, external: boolean): void => {
-        void (options.onOpenTarget?.(row, target, external) || (external ? Promise.resolve(openExternalUrl(target)) : app.workspace.openLinkText(target, row.file.path)));
-      };
-      const onResolveImage = (target: string, external: boolean): string | null => resolveInlineImageSrc(app, row, target, external);
-      parsed.forEach((nodes, index) => {
-        if (index > 0) valueEl.appendText(", ");
-        if (nodes) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-        else valueEl.appendText(String(values[index]));
-      });
-      setFieldTooltip(valueEl, valueToTooltip(value));
-      return;
-    }
-  }
-  if (col.textRenderMode === "link") {
-    const values = Array.isArray(value) ? value : [value];
-    const links = values.map((entry) => parseTextLink(entry)).filter((entry) => entry !== null);
-    for (const link of links) {
-      const anchor = valueEl.createEl("a", { cls: options.linkClass, text: link.label, attr: { href: "#", title: link.label } });
-      anchor.onclick = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        void (options.onOpenTarget?.(row, link.target, link.external) || (link.external ? Promise.resolve(openExternalUrl(link.target)) : app.workspace.openLinkText(link.target, row.file.path)));
-      };
-    }
-    if (links.length > 0) return;
-  }
-  valueEl.textContent = formatCardNumber(value);
+  renderPropertyValue(valueEl, value, displayType, { app, row, col, ...options });
 }
 
 // ───────────────────────────────────────────────────────────────────

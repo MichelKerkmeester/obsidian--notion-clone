@@ -54,9 +54,9 @@ const MIGRATED = [
     note: "boolean cell in a table row",
   },
   {
-    file: "card-field-renderer.ts",
+    file: "record-surface/property-row.ts",
     creates: 'createCheckbox(valueEl, { role: "field"',
-    note: "boolean field on a card",
+    note: "boolean field on a card (card-field-renderer.ts calls in through this shared value renderer)",
   },
   {
     file: "record-detail-panel.ts",

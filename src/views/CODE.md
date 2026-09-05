@@ -21,6 +21,8 @@ Current state:
 
 - Around 90 direct source modules, grouped below by purpose.
 - `modals/` holds the Obsidian `Modal` subclasses.
+- `record-surface/` holds the shared record/property primitives converging the family's headers,
+  property rows, add-property affordance and hidden-properties group.
 - The layer depends on `src/data/`. `src/data/` never depends on it.
 
 ---
@@ -62,6 +64,7 @@ Reads rows from src/data. Emits db-* DOM styled by styles.css.
 | Interaction and overlays | `InteractionScope.ts`, `InteractionSnapshot.ts`, `OverlayStack.ts`, `PopoverPosition.ts`, `PopoverAutoClose.ts`, `EdgeAutoScroller.ts`, `DragDropFeedback.ts`, `CardRovingTabindex.ts`, `HoverLinkPreview.ts`, `DomGuards.ts`, `MobileMoveIcon.ts` |
 | Suggest and workflow | `ImageFileSuggestModal.ts`, `MarkdownFileSuggestModal.ts`, `PropertyTypeConflictWorkflow.ts`, `SearchHighlight.ts`, `EmptyStateRenderer.ts` |
 | Modal dialogs | `modals/` (see [`modals/CODE.md`](./modals/CODE.md)) |
+| Record/property primitives | `record-surface/` (see [`record-surface/CODE.md`](./record-surface/CODE.md)) |
 
 ---
 
@@ -130,5 +133,6 @@ Expected result: the view suites pass and every screenshot still matches its sou
 
 - [`README.md`](./README.md)
 - [`modals/CODE.md`](./modals/CODE.md)
+- [`record-surface/CODE.md`](./record-surface/CODE.md)
 - [`../data/CODE.md`](../data/CODE.md)
 </content>
