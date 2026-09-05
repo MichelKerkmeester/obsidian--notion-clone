@@ -117,6 +117,5 @@ export async function runToolbarCollapseSweep(host: HTMLElement, widths: number[
       tabRowIsDropdown: Boolean(toolbar.querySelector(".db-view-tab-collapsed-trigger")),
     });
   }
-  // outer.remove();
   return readings;
 }

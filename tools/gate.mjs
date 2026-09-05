@@ -3,8 +3,8 @@
 // COMPONENT: runs every check and returns one verdict
 // ───────────────────────────────────────────────────────────────────
 //
-// There are twenty-one scripts and four scanners that are not scripts at all.
-// Running them meant a shell loop and reading twenty-five exit codes by eye,
+// There are twenty-two scripts and four scanners that are not scripts at all.
+// Running them meant a shell loop and reading twenty-six exit codes by eye,
 // and in this session alone that went wrong four times — three where a pipe made
 // `$?` the pipe's status rather than the command's, and one where a check was
 // simply run, its red exit unread, and the work committed on top.
@@ -68,6 +68,16 @@ const CHECKS = [
   // froze the app through every other check. This one bundles the shipped renderers and asserts
   // structural facts about what they build, so a renderer change moves a number in a gate.
   { name: "render-assertions", cmd: ["node", "tools/live/render-assertions.mjs"] },
+  // The embedded toolbar decides what to hide by measuring its own natural width, so the only
+  // honest check is a real one: this mounts the shipped ToolbarRenderer in the codeblock-embed
+  // shape and steps the container 250px to 900px, failing if the row ever overflows its own box.
+  //
+  // What it gates is the zero-overflow promise across that range, and nothing else. The last rung,
+  // the tab row folding into a dropdown, does not fire inside it — a single truncated tab already
+  // fits under the floor once the four chrome controls collapse — so the run prints where each
+  // rung switches and probes below the floor for the dropdown without gating either. A lane that
+  // claimed to gate a rung it never reaches would be worse than no lane.
+  { name: "toolbar-collapse", cmd: ["node", "tools/live/run-toolbar-collapse-sweep.mjs"] },
   // Closing a sheet left its backdrop on the body — a full-screen element at inset 0 with
   // pointer-events auto, over the whole app, which the operator reported as a freeze. The
   // placement check does assert a backdrop leaves with its menu, but only against the one

@@ -106,7 +106,9 @@ try {
   page.on("pageerror", (error) => { pageError = error; });
   await page.goto(`file://${join(work, "sweep.html")}`);
   readings = await page.evaluate((widths) => window.__toolbarCollapseSweep(widths), WIDTHS);
-  // A fresh page for the second probe: the first already tore down and removed its own mount.
+  // A fresh page for the second probe. Reloading is what guarantees a clean mount: the sweep
+  // leaves its container and its live ResizeObserver behind, and a second sweep in the same
+  // document would measure against the first one's collapse decisions.
   await page.goto(`file://${join(work, "sweep.html")}`);
   belowFloorReadings = await page.evaluate((widths) => window.__toolbarCollapseSweep(widths), BELOW_FLOOR_WIDTHS);
   await page.close();
@@ -130,9 +132,21 @@ function firstDropWidth(rows, key) {
   const dropped = rows.find((r) => r[key] === false);
   return dropped ? dropped.width : null;
 }
-function firstDropdownWidth(rows) {
-  const shown = rows.find((r) => r.tabRowIsDropdown === true);
-  return shown ? shown.width : null;
+/**
+ * The WIDEST probed width at which the tab row is already a dropdown, not the first one read.
+ *
+ * Both probes step upward from their narrowest width, so reading the first match returns that
+ * narrowest width whenever the rung is engaged there — which says nothing about where the rung
+ * switches, and reads as a measured switch point to anyone quoting it. The widest engaged width
+ * is the one the probe can actually resolve: the rung holds at it and at every narrower step.
+ */
+function widestDropdownWidth(rows) {
+  const engaged = rows.filter((r) => r.tabRowIsDropdown === true);
+  return engaged.length ? engaged[engaged.length - 1].width : null;
+}
+
+function px(width) {
+  return width === null ? "never in range" : `${width}px`;
 }
 
 const switchPoints = {
@@ -140,19 +154,19 @@ const switchPoints = {
   queryClusterDropsAt: firstDropWidth(readings, "queryClusterVisible"),
   propertiesClusterDropsAt: firstDropWidth(readings, "propertiesClusterVisible"),
   addTabDropsAt: firstDropWidth(readings, "addTabVisible"),
-  tabRowBecomesDropdownAt: firstDropdownWidth(readings),
+  tabRowBecomesDropdownAt: widestDropdownWidth(readings),
 };
 
 console.log("\n=== embedded toolbar collapse ladder, 250px-900px sweep, 10px steps ===");
-console.log(`  New button drops at:        ${switchPoints.newClusterDropsAt ?? "never in range"}px`);
-console.log(`  Icon cluster (query) drops: ${switchPoints.queryClusterDropsAt ?? "never in range"}px`);
-console.log(`  Icon cluster (props) drops: ${switchPoints.propertiesClusterDropsAt ?? "never in range"}px`);
-console.log(`  Add-view "+" drops at:      ${switchPoints.addTabDropsAt ?? "never in range"}px`);
-console.log(`  Tab row becomes dropdown:   ${switchPoints.tabRowBecomesDropdownAt ?? "never in range"}px`);
+console.log(`  New button drops at:        ${px(switchPoints.newClusterDropsAt)}`);
+console.log(`  Icon cluster (query) drops: ${px(switchPoints.queryClusterDropsAt)}`);
+console.log(`  Icon cluster (props) drops: ${px(switchPoints.propertiesClusterDropsAt)}`);
+console.log(`  Add-view "+" drops at:      ${px(switchPoints.addTabDropsAt)}`);
+console.log(`  Tab row becomes dropdown:   ${px(switchPoints.tabRowBecomesDropdownAt)}`);
 
-const belowFloorDropdownAt = firstDropdownWidth(belowFloorReadings);
+const belowFloorDropdownAt = widestDropdownWidth(belowFloorReadings);
 console.log("\n=== below the 250px floor, informational only — confirms the rung engages ===");
-console.log(`  Tab row becomes dropdown at: ${belowFloorDropdownAt ?? "never in this range"}px`);
+console.log(`  Tab row is a dropdown at and below: ${px(belowFloorDropdownAt)}`);
 console.log("  (not gated: nothing promises zero overflow below the documented floor)");
 
 const overflowing = readings.filter((r) => r.overflow);
