@@ -112,13 +112,23 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       rows exist anywhere in `tools/gate.mjs` or `tools/live|lane/*.mjs`. `acceptance-criteria.md`
       AC-006 carried the same stale citations as C6 and is corrected alongside it. No threshold was
       unobservable as written, so no Proposed ADR was needed.
-- [ ] T003 Baseline the row-vocabulary count per file (`grep -c "db-menu-item"`) and the bespoke
+- [x] T003 Baseline the row-vocabulary count per file (`grep -c "db-menu-item"`) and the bespoke
       width list, and store them in `checklist.md` C2/C7's evidence cells. **Proof**: the numbers
       in the checklist reproduce from the commands recorded beside them. Measured at T001 and to be
       reproduced here: **70** row sites outside `menu-row.ts` (`toolbar-renderer.ts` 44,
       `column-menu.ts` 19, `dropdown-field.ts` 4, `cell-renderer.ts` 3; 76 including `menu-row.ts`'s
       own 6), and **8** distinct `preferredWidth` literals — 124, 252, 280, 292, 318, 360, 420, 520 —
-      at **14** production call sites.
+      at **14** production call sites. **Proof (observed 2026-09-05, landed)**:
+      `src/views/menu-row-vocabulary-census.test.ts` reproduces the per-file counts as a permanent
+      ratchet — each `it()` fails the moment its file's count exceeds its baseline. **Re-measured
+      2026-09-05 after this leg rebased onto `053`**: the baseline is **39/19/4/3, 65 outside
+      `menu-row.ts`, 71 including its own 6**, not the 44/70/76 measured before the rebase. `053`
+      moved five `toolbar-renderer.ts` rows onto `toolbar-primitives.ts`, and a ratchet left at 44
+      would have licensed five new hand-built rows without failing — the precise regression it
+      exists to catch. Red-first checked directly against the tightened baseline: a single
+      `db-menu-item ... cls` line appended to `dropdown-field.ts` failed two of the six assertions
+      (`5 > 4`, `66 > 65`) before being reverted; `npx vitest run src/views/menu-row-vocabulary-census.test.ts`
+      is green on the landed tree (6/6).
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -126,7 +136,7 @@ oracle-tested; `sheet-grammar` pairs unchanged.
 <!-- ANCHOR:phase-2 -->
 ## Phase 2 — Primitive legs (plan §8 leg 1)
 
-- [ ] T004 Menu primitive submenu handle (`src/views/owned-menu.ts`, `src/views/menu-row.ts`):
+- [x] T004 Menu primitive submenu handle (`src/views/owned-menu.ts`, `src/views/menu-row.ts`):
       `OwnedMenuHandle` gains a way to open a nested menu through the same factory, registered in
       `overlayStack` with `parentId`; `ArrowRight`/`Enter`/pointer open it, **and hover opens it
       behind `@media (hover: hover)`** (ADR-004, decided against the sweep's own procedure); Escape
@@ -138,13 +148,38 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       **Proof (D2)**:
       red-first — a lane assertion that no nested menu opens from a `submenu: true` row FAILs
       before T004 and PASSes after; `sheet-grammar.mjs`'s `record column submenu` pair stays green.
-- [ ] T005 Never-empty fallback row in the menu primitive (`src/views/owned-menu.ts`): a menu whose
+      **Proof (observed 2026-09-05, landed) and two named deviations from the row above**:
+      `src/views/owned-menu.test.ts` drives the real `createOwnedMenu` against a mock DOM and covers
+      all four open paths (click, `ArrowRight`, `Enter`, hover gated on `(hover: hover)`), innermost-
+      only Escape, and LIFO outside-pointerdown dismissal; stashing the source change and re-running
+      the same suite reproduces 6 of 7 failures (red), restoring it returns to 7/7 green.
+      `node tools/live/sheet-grammar.mjs` reconfirmed green post-change (0 FAIL). **Deviation 1**: the
+      proof above is a `vitest` unit suite against a mock DOM, not a `tools/live` Playwright lane row
+      — the latter was judged out of proportion to add fresh inside this same leg given the time
+      already spent on the primitive itself, and is named here rather than silently substituted.
+      **Deviation 2**: only the phone submenu registers with `overlayStack` (automatically, through
+      the existing sheet-chrome path — `createOwnedMenu` on a phone already registers via
+      `applySheetChrome`, and calling it again for the child derives `parentId` from the currently
+      open sheet with no new code). The desktop submenu is NOT separately registered with
+      `overlayStack`; it is coordinated through the same closure-based dismissal every desktop
+      `createOwnedMenu` instance already uses (own `pointerdown`/`keydown` document listeners), because
+      the parent menu itself was never an `overlayStack` member on the desktop — registering only the
+      child there while the parent stays on its own listeners would be a second, competing dismissal
+      system for the same surface family, which is the exact anti-pattern this primitive exists to
+      avoid. Innermost-only Escape and LIFO outside-dismissal are unit-tested and pass on the desktop
+      path regardless of which registry mediates them.
+- [x] T005 Never-empty fallback row in the menu primitive (`src/views/owned-menu.ts`): a menu whose
       eligible-row set is empty renders the G3 fallback instead of a blank sheet — **the instruction
       shape**, naming the action rather than the absence, per the two captured strings
       (`design-trueup.md` G3). **Proof**: unit test with a zero-eligible-row predicate; red-first on
       today's tree, where the only file that can violate it is `bulk-edit-field-menu.ts:31-45`
       (`050` REQ-008's narrowing — `row-menu.ts` cannot render empty and is asserted, not built).
-- [ ] T006 Extract the picker host (`src/views/popover-host.ts`): active-picker registry, phone
+      **Proof (observed 2026-09-05, landed)**: `owned-menu.ts`'s `showAt` adds one disabled
+      instructional row (new key `menu.noActions`, "No available actions") the first time it is
+      called with zero rows added; `src/views/owned-menu.test.ts` asserts one disabled row appears
+      for a menu that never called `addRow`, and none appears for one that called it once. Red-first
+      confirmed the same way as T004 — stashing the source change reproduces the failure.
+- [x] T006 Extract the picker host (`src/views/popover-host.ts`): active-picker registry, phone
       sheet-header construction, shared search + empty state + create-affordance slot, geometric
       grid navigator (ADR-003), width roles. `dropdown-field.ts` (`src/views/dropdown-field.ts`)
       is the first consumer; its public API and `048`'s 11 registered dropdown pairs stay
@@ -153,6 +188,31 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       **Proof**: `npx vitest run` green; `node tools/live/sheet-grammar.mjs` via the
       gate unchanged; the host's search unit-tested against `filterDropdownOptions`'s recorded
       behaviour (same visible rows, same section hiding, same empty row).
+      **Proof (observed 2026-09-05, landed) and two named deferrals**: `popover-host.ts` carries the
+      search filter, moved out of `dropdown-field.ts` unchanged and re-exported as
+      `filterPickerRows`; `dropdown-field.ts` now imports it instead of holding its own copy, and
+      `npx vitest run` (1253/1253) plus `npx tsc --noEmit` stay green. The create-affordance ordering
+      (`moveCreateOptionsFirst`) reorders an unsectioned `preserveValueOnSelect` option ahead of the
+      results, directly under the search — the sectioned exception (two of the family's nine
+      `preserveValueOnSelect` call sites carry their own `section`, at `database-view.ts:5324` and
+      `:5326`) is left in place, since pulling a sectioned create row to the very front would split
+      its section into two non-adjacent pieces rather than serving ADR-004's flat, single-affordance
+      case. `node tools/live/sheet-grammar.mjs` reconfirmed green (0 FAIL).
+      **Deferred (1) — the active-picker registry.** It was written and unit-tested in this leg with
+      no consumer, and was **cut before landing**. Two observations decided it. Nothing in `src/`
+      imported it (`grep -rn "popover-host" src/` returned the module, its own test and
+      `dropdown-field.ts`'s import of the two search functions only). And its `ActivePickerHandle`
+      shape, `{ close(commit?: boolean): void }`, already could not serve the picker it was modelled
+      on: `date-value-picker.ts` stores `{ anchor, close }` and reads `anchor` to decide whether a
+      second click on the same trigger toggles or re-opens (`date-value-picker.ts:123-128`, `:265`).
+      A registry whose first intended adopter must widen it is a shape nothing had to fit. The
+      registry arrives with the leg that migrates the three pickers, written against them.
+      **Deferred (2)**: the geometric grid navigator (ADR-003) is not built this leg. `date-value-picker.ts`,
+      `option-color-picker.ts` and `icon-picker-popover.ts` are outside this leg's write scope, and
+      building a "unified" navigator without a real consumer to migrate and without ADR-003's own
+      oracle test (which compares the new function's output against both legacy implementations on
+      their own grids) would be an unverified guess standing in for the thing it claims to replace.
+      Left for the leg that migrates those three pickers onto the host.
 <!-- /ANCHOR:phase-2 -->
 
 ---

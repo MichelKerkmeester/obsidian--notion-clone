@@ -74,6 +74,19 @@ under the primitive.
 ### Consequences
 
 - `OwnedMenuHandle` gains a child-menu method; `menu-row.ts`'s `submenu: true` chevron becomes true.
+- ~~Registered in `overlayStack` with `parentId` on every platform~~ — **[amended 2026-09-05 · T004,
+  on the landed implementation]** the phone child registers; the desktop child does not. The premise
+  this clause rested on was that the parent menu is already an `overlayStack` member, and on the
+  desktop it is not: `createOwnedMenu`'s desktop path has always dismissed through its own
+  `pointerdown`/`keydown` document listeners in the closure, and only its phone path reaches
+  `applySheetChrome`, which registers. Registering the child alone would put a parent and its own
+  child on two different dismissal mechanisms for one surface family, which is the second-dismissal-
+  system anti-pattern this ADR's own decision names and keeps dead. So the decision holds where the
+  parent is a stack member and inverts where it is not. Innermost-only Escape and LIFO
+  outside-dismissal are the behaviours the clause existed to buy, and both hold on the desktop path
+  under the closure, unit-tested in `owned-menu.test.ts`. **What would close the gap** is migrating
+  the whole desktop `createOwnedMenu` family onto `overlayStack`, parent first, which is a change to
+  every existing caller's dismissal and belongs to its own leg, not to this one.
 - Depth-3 chains keep `048`'s stacking behaviour; the registered pair's selector may change only in
   the same leg that changes the markup (plan §4).
 - Hover-open on desktop is **not** decided here — ~~it is `anytype-menu-grammar.md`'s G8 gap and
