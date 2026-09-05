@@ -92,7 +92,9 @@ produced it.
       observed evidence — AC-001 through AC-005 and AC-007 all `Met`; AC-006 stays `Unmet`
       (operator-only, by design)
 - [x] CHK-021 [P0] `npm run gate` exits 0 with `sheet-grammar` registered, read without a pipe —
-      `npm run gate; echo $?` → 0, 26/26 green including `sheet-grammar`
+      `npm run gate; echo $?` → 0, 26/26 green including `sheet-grammar` at landing and again at
+      T015 (`settings` registered, 7 surfaces × 7 elements); 25/25 after `worktrees/050` reconciled
+      onto main's list-renderer retirement, which removed the unrelated `list-window` lane
 - [x] CHK-022 [P1] Rotation across the touch boundary re-applies the chrome rather than stranding it
       — unchanged by this phase; `DbModal.applyPresentation()`'s re-apply path carries zero diff
 - [x] CHK-023 [P1] Two sheets opened in sequence — the second does not inherit the first's keyboard
@@ -101,7 +103,11 @@ produced it.
 - [x] CHK-024 [P1] `touch-targets` ratchet re-baselined with the raise attributed per class —
       fixture 279→199 (found stale at this phase's own branch base, not a raise this phase made);
       constructed 1223→1220, isolated to `db-icon-only-button`×2 the settings-sheet leg (040) resized
-      between base and rebase tip (`tools/live/touch-targets-constructed-baseline.json`)
+      between base and rebase tip (`tools/live/touch-targets-constructed-baseline.json`); T015
+      narrowed constructed further to 1214 (checkbox/segmented conversions, an improvement, not a
+      raise); `worktrees/050`'s reconciliation onto main's list-renderer retirement (which dropped
+      the list-only controls both ratchets counted) re-measured fixture 198 / constructed 1209,
+      stable across three runs
 <!-- /ANCHOR:testing -->
 
 ---

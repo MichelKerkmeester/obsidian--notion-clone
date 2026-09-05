@@ -11,13 +11,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/044-phone-sheet-alignment"
-    last_updated_at: "2026-09-05T01:35:00Z"
+    last_updated_at: "2026-09-05T04:30:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Landed the shared sheet grammar and its gate lane"
+    recent_action: "Reconciled worktrees/050 onto main and re-verified the gate"
     next_safe_action: "Seek the operator's device report for AC-006"
     blockers:
       - "AC-006 is operator-only; nothing in this repository can close it"
-      - "tasks.md T014 (roadmap.md/spec.md after-numbers) is out of this leg's dispatched scope"
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/sheet-grammar.ts"
@@ -47,7 +46,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 044-phone-sheet-alignment |
-| **Completed** | Not complete — AC-006 (operator device report) and tasks.md T014 remain open |
+| **Completed** | Not complete — AC-006 (operator device report) remains open; every other task and criterion is closed |
 | **Level** | 2 |
 <!-- /ANCHOR:metadata -->
 
@@ -73,14 +72,13 @@ row-count floor), not a conflict.
 ### Grammar registry
 
 `tools/live/sheet-grammar.mjs`'s `REGISTERED_SURFACES`: **sort-panel, filter-panel, add-view,
-record-detail, record-peek, column-width** — 6 surfaces × 7 elements, all green, plus the Add view
-picker's List-row absence and a negative control (remove the grab handle from sort-panel, require
-that row alone to go red, require a clean re-mount to restore green). **settings/view-config is not
-registered**: its header and close conform (measured green), but its body still draws rows through
-its own long-standing `.db-view-config-row` class rather than `.db-panel-row`, and its computed-field
-sync control is a native `input[type="radio"]` group rather than a segmented control — both pre-date
-this phase and are not this leg's rows/segmented gap to close. Measured red on `rows` and `segmented`
-when tested; left unregistered rather than papered over.
+record-detail, record-peek, column-width, settings** — 7 surfaces × 7 elements, all green, plus the
+Add view picker's List-row absence and a negative control (remove the grab handle from sort-panel,
+require that row alone to go red, require a clean re-mount to restore green). `settings` was the
+last unregistered surface (see the T015 follow-up below): its header and close conformed from the
+start, but its body drew rows through its own long-standing `.db-view-config-row` class rather than
+`.db-panel-row`, and its computed-field sync control was a native `input[type="radio"]` group rather
+than a segmented control. Both gaps are closed and the surface is registered.
 
 ### A real regression found and fixed
 
@@ -191,18 +189,27 @@ was observed both ways before this phase called itself proven.
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0 |
-| `npx vitest run` | 1113/1113 (107 files) |
-| `npm run lint` | 172 problems, unchanged from the branch base |
+| `npx vitest run` | 1113/1113 (107 files) at this phase's own landing; T015 raised it to 1145 (110 files); re-verified at 1128/1128 (108 files) after reconciling onto main's list-renderer retirement, which deleted the two list-only specs |
+| `npm run lint` | 172 problems, unchanged from the branch base at landing and again at T015; 164 after the main reconciliation (main's own baseline moved with the list-renderer retirement — confirmed by measuring an unmodified checkout of the same main tip) |
 | `npm run lint:tools` | Clean |
 | `node tools/naming/scan-comments.mjs` | PASS |
-| `node tools/live/sheet-grammar.mjs` | PASS — 6 surfaces × 7 elements, List-row absence, negative control both directions |
+| `node tools/live/sheet-grammar.mjs` | PASS — 7 surfaces × 7 elements (`settings` registered by T015, the sixth-to-seventh surface), List-row absence, negative control both directions |
 | `node tools/live/sheet-teardown.mjs` | PASS — 12 producers, 0 leaking (includes the `attachSheetChromeToModal` regression case) |
 | `npm run storybook:placement` | 402/403 geometry checks, 1 declared red (unrelated, pre-existing) |
-| `npm run screenshots:verify` | 0 stale, 552 entries |
-| `node tools/live/touch-targets.mjs` | PASS — fixture 199 (corrected from a stale 279; already 199 at this phase's own branch base, unmoved through the rebase and every edit), constructed 1220 (corrected from 1223; the 3-control drop isolated to `db-icon-only-button` the settings-sheet leg resized between base and rebase tip — not this release) |
-| `npm run gate` | PASS — 26/26 green (`sheet-grammar` newly registered, 21 → 26) |
+| `npm run screenshots:verify` | 0 stale, 552 entries at T015; 534 after the main reconciliation (main's list-renderer retirement dropped 20 list-only captures this phase never owned; this phase's own 2 new `panel-view-config-sheet` fixture entries are unaffected) |
+| `node tools/live/touch-targets.mjs` | PASS — fixture 199 / constructed 1220 at T015; re-measured three times at 198 / 1209 after the main reconciliation (main's list-renderer retirement dropped the list-only controls both ratchets counted — recorded in `6f2aef3f`'s own commit message as fixture 198 / constructed 1215, further narrowed here by this phase's own checkbox/segmented conversions) |
+| `npm run gate` | PASS — 26/26 green at T015; 25/25 after the main reconciliation, since main's list-renderer retirement removed the `list-window` lane (26 → 25) rather than this phase losing coverage |
 | `validate.sh 044-phone-sheet-alignment --strict` | Run at commit time; see the packet commit |
 | Operator device confirmation | Not sought this session (AC-006) |
+
+Reconciled onto main (`9436b964..696c9291`: the list renderer retirement and the frozen-clock bench
+fix) by `worktrees/050-settings-body-grammar`. `tools/live/*.json` evidence and
+`screenshots/manifest.json` were refreshed against the merged tree's actual `styles.css` hash rather
+than left pointing at either side's pre-merge value; `tools/lane/css-lane.json` kept main's history
+plus this phase's three `044-phone-sheet-alignment` entries, `baselineHash` recomputed. No content
+this phase owns changed: the full recapture (534 entries) found nothing beyond byte-only re-encode
+noise outside this phase's own settings-sheet captures, confirmed by decoded-pixel hash and restored
+to committed bytes.
 <!-- /ANCHOR:verification -->
 
 ---
@@ -213,9 +220,9 @@ was observed both ways before this phase called itself proven.
 1. **AC-006 cannot close here.** Device confirmation is the operator's, and it is the row that
    actually closes the phase — every previous sheet fix on this program passed its own gate and
    still reached the operator broken.
-2. **tasks.md T014 is not done.** `../roadmap.md` §4 rows 40/41/43 and `../spec.md`'s Phase
-   Documentation Map row still carry their pre-work text; explicitly out of this leg's dispatched
-   scope, left for a follow-up pass.
+2. ~~**tasks.md T014 is not done.**~~ **Closed.** `../roadmap.md` §4 rows 40/41/43 and
+   `../spec.md`'s Phase Documentation Map row were updated to Landed/Fixed with each row's own
+   evidence (`dcff742e`).
 3. ~~**The settings sheet's body grammar is a known, unregistered gap.**~~ **Closed by T015.**
    `rowClass()`/`hintClass()` route the body onto `db-panel-row`/`db-panel-hint`, the computed-sync
    radios onto `db-new-placement`, and the switches onto the shared checkbox; `settings` is now
