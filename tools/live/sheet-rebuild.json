@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-09-05T00:07:57.163Z",
+  "measuredAt": "2026-09-05T00:44:45.713Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "9b8cd68af575",
     "tools/live/sheet-rebuild-harness.ts": "cb014e452dc0",
-    "src/views/toolbar-renderer.ts": "f3685ed5a6fc",
-    "src/views/popover-position.ts": "e33b0768ec48",
-    "src/views/mobile-bottom-sheet.ts": "715ed7650295",
-    "src/views/sort-panel-renderer.ts": "74506ae6e9ae",
-    "src/views/filter-panel-renderer.ts": "8cca93f10465",
-    "src/views/view-config-panel-renderer.ts": "e76cf13f66c0",
+    "src/views/toolbar-renderer.ts": "dca7a1d16d74",
+    "src/views/popover-position.ts": "9523ac9d8791",
+    "src/views/mobile-bottom-sheet.ts": "f53fe31e722f",
+    "src/views/sort-panel-renderer.ts": "3b916d60a109",
+    "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
+    "src/views/view-config-panel-renderer.ts": "7fd5bdf46e67",
     "src/views/overlay-stack.ts": "4f35a9904a53",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
@@ -89,7 +89,7 @@
     {
       "name": "settings sheet chrome survives its own scroll",
       "pass": true,
-      "detail": "the band held at 48px through a 200px scroll (48px at rest), and the header stayed put at 24px from the sheet's top edge",
+      "detail": "the band held at 48px through a 200px scroll (48px at rest), and the header stayed put at 44px from the sheet's top edge",
       "preFixFailure": "the grab band went from 48px to ZERO after a 200px scroll — the bar and the header scrolled off the top with the content"
     },
     {
@@ -119,7 +119,7 @@
     {
       "name": "the sort sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 708; the deepest point during the rebuild was 711",
+      "detail": "settled at top 667; the deepest point during the rebuild was 670",
       "preFixFailure": "settled at top 708 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
@@ -131,7 +131,7 @@
     {
       "name": "the filter sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 699; the deepest point during the rebuild was 699",
+      "detail": "settled at top 667; the deepest point during the rebuild was 667",
       "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
@@ -143,7 +143,7 @@
     {
       "name": "a sheet that is genuinely opening still rises",
       "pass": true,
-      "detail": "the entrance still runs: first seen at 844 on a 844px screen, settled at 708",
+      "detail": "the entrance still runs: first seen at 844 on a 844px screen, settled at 667",
       "preFixFailure": null
     },
     {

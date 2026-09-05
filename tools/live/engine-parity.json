@@ -1,22 +1,77 @@
 {
-  "measuredAt": "2026-09-05T00:06:06.717Z",
+  "measuredAt": "2026-09-05T00:42:58.029Z",
   "inputs": {
-    "styles.css": "e191ebb917cd",
+    "styles.css": "0785e72944dd",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 72,
-    "differences": 42
+    "differences": 49
   },
   "differences": [
     {
       "scenarioId": "add-view-popover",
-      "selector": "select",
+      "selector": "input[type=\"text\"]",
       "index": 0,
       "notes": [
-        "radius 4px vs 5px",
-        "height 32 vs 23"
+        "width 193 vs 215.31"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "input[type=\"text\"]",
+      "index": 1,
+      "notes": [
+        "width 193 vs 215.31"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 3,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 4,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 5,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 6,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 7,
+      "notes": [
+        "width 342 vs 334"
       ]
     },
     {

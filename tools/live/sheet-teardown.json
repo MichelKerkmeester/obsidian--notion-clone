@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-05T00:07:43.283Z",
+  "measuredAt": "2026-09-05T00:44:31.966Z",
   "inputs": {
-    "tools/live/sheet-teardown.mjs": "79db2b03b39b",
-    "tools/live/sheet-teardown-harness.ts": "0768e51b8d59",
-    "src/views/mobile-bottom-sheet.ts": "715ed7650295",
-    "src/views/popover-position.ts": "e33b0768ec48",
+    "tools/live/sheet-teardown.mjs": "41e92c7d1071",
+    "tools/live/sheet-teardown-harness.ts": "c53bc9ae20d3",
+    "src/views/mobile-bottom-sheet.ts": "f53fe31e722f",
+    "src/views/popover-position.ts": "9523ac9d8791",
     "src/views/owned-menu.ts": "f32cc37ad4be"
   },
-  "producers": 11,
+  "producers": 12,
   "leaking": 0,
   "checks": [
     {
@@ -50,6 +50,12 @@
       "name": "DbModal with a detached host wrapper",
       "pass": true,
       "detail": "base close restored the panel before the host wrapper was removed",
+      "preFixFailure": "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed"
+    },
+    {
+      "name": "attachSheetChromeToModal with a detached host wrapper",
+      "pass": true,
+      "detail": "the returned teardown restored the panel before the host wrapper was removed",
       "preFixFailure": "1 backdrop(s) and 1 sheet(s) left after the host wrapper was removed"
     },
     {
