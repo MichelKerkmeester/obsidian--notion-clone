@@ -601,7 +601,7 @@ export const PANEL_SCENARIOS = [
     fixtureOf: "constructed-record-detail",
     sources: [
       "src/views/record-detail-panel.ts",
-      "src/views/card-field-renderer.ts",
+      "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
       "src/views/note-body-region.ts",
     ],
     note: "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
@@ -658,7 +658,7 @@ export const PANEL_SCENARIOS = [
     sources: [
       "src/views/record-detail-panel.ts",
       "src/views/popover-position.ts",
-      "src/views/card-field-renderer.ts",
+      "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
       "src/views/note-body-region.ts",
     ],
     note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",

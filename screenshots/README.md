@@ -791,7 +791,7 @@ openRecordDetailPanel's own entry against a real anchor over a capture-sized boa
 |---|---|
 | ![constructed-record-detail dark](notion-clone/panels/constructed-record-detail-mobile-dark.png) | ![constructed-record-detail light](notion-clone/panels/constructed-record-detail-mobile-light.png) |
 
-Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/popover-position.ts`, `src/views/mobile-bottom-sheet.ts`
+Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/views/popover-position.ts`, `src/views/mobile-bottom-sheet.ts`
 
 ### Record detail — note body being typed (constructed)
 
@@ -821,7 +821,7 @@ The same panel opened by an affordance carrying no element — a menu item, a ca
 |---|---|
 | ![constructed-record-detail-docked dark](notion-clone/panels/constructed-record-detail-docked-mobile-dark.png) | ![constructed-record-detail-docked light](notion-clone/panels/constructed-record-detail-docked-mobile-light.png) |
 
-Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/popover-position.ts`, `src/views/record-open-target.ts`
+Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/views/popover-position.ts`, `src/views/record-open-target.ts`
 
 ### Table record peek (constructed)
 
@@ -921,7 +921,7 @@ Opened from a calendar or timeline event card. Fields are click-to-edit; an empt
 |---|---|
 | ![panel-record-detail dark](notion-clone/panels/panel-record-detail-mobile-dark.png) | ![panel-record-detail light](notion-clone/panels/panel-record-detail-mobile-light.png) |
 
-Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`, `src/views/note-body-region.ts`
+Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/views/note-body-region.ts`
 
 ### Record detail — mobile bottom sheet
 
@@ -931,7 +931,7 @@ The phone form of the record detail panel. positionToolbarPopover renders it as 
 |---|---|
 | ![panel-record-detail-sheet dark](notion-clone/panels/panel-record-detail-sheet-mobile-dark.png) | ![panel-record-detail-sheet light](notion-clone/panels/panel-record-detail-sheet-mobile-light.png) |
 
-Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`, `src/views/note-body-region.ts`
+Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/views/note-body-region.ts`
 
 ### Record detail — note body being typed
 
@@ -1075,7 +1075,7 @@ The reference board inside the default-width container: its fixed-width columns 
 |---|---|
 | ![board-mobile dark](notion-clone/views/board-mobile-mobile-dark.png) | ![board-mobile light](notion-clone/views/board-mobile-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `src/views/card-field-renderer.ts`
+Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
 ### Board view — subtask tree
 
@@ -1085,7 +1085,7 @@ A parent and two child cards beside an ordinary lane, using the same card, title
 |---|---|
 | ![board-subtask-tree dark](notion-clone/views/board-subtask-tree-mobile-dark.png) | ![board-subtask-tree light](notion-clone/views/board-subtask-tree-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
+Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
 ### Board view
 
@@ -1093,7 +1093,7 @@ Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src
 |---|---|
 | ![board-view dark](notion-clone/views/board-view-mobile-dark.png) | ![board-view light](notion-clone/views/board-view-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`
+Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
 ### Calendar empty state — no date property
 
@@ -1343,7 +1343,7 @@ A gallery whose image field is configured but whose rows resolve no image: every
 |---|---|
 | ![gallery-view dark](notion-clone/views/gallery-view-mobile-dark.png) | ![gallery-view light](notion-clone/views/gallery-view-mobile-light.png) |
 
-Sources: `src/views/gallery-renderer.ts`, `src/views/card-field-renderer.ts`
+Sources: `src/views/gallery-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
 ### Table view — mobile auto-fit
 

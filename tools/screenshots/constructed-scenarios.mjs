@@ -723,7 +723,7 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Record detail panel (constructed)",
     fixtureOf: "panel-record-detail",
     sources: constructedSources("src/views/record-detail-panel.ts", "tools/bench/board-render-bench.ts")
-      .concat(["src/views/card-field-renderer.ts", "src/views/popover-position.ts", "src/views/mobile-bottom-sheet.ts"]),
+      .concat(["src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts", "src/views/popover-position.ts", "src/views/mobile-bottom-sheet.ts"]),
     note: "openRecordDetailPanel's own entry against a real anchor over a capture-sized board "
       + "row: the panel chrome and its typed fields. The note body is absent — mounting it needs "
       + "a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through "
@@ -738,7 +738,7 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Record detail panel, docked (constructed)",
     sources: constructedSources("src/views/record-detail-panel.ts", "tools/bench/board-render-bench.ts")
       .concat([
-        "src/views/card-field-renderer.ts",
+        "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
         "src/views/popover-position.ts",
         "src/views/record-open-target.ts",
       ]),

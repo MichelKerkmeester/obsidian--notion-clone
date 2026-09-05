@@ -56,7 +56,7 @@ export const CORE_SCENARIOS = [
     title: "Board view",
     group: "views",
     width: 1100,
-    sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts"],
+    sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"],
     fixtureOf: "constructed-board",
     html: () => `
       <div class="note-database-container pm-kanban-view">
@@ -91,7 +91,7 @@ export const CORE_SCENARIOS = [
     title: "Board view — subtask tree",
     group: "views",
     width: 620,
-    sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
+    sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts", "src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"],
     fixtureOf: "constructed-board-subtask",
     note: "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
     html: () => `
@@ -146,7 +146,7 @@ export const CORE_SCENARIOS = [
     title: "Gallery view",
     group: "views",
     width: 900,
-    sources: ["src/views/gallery-renderer.ts", "src/views/card-field-renderer.ts"],
+    sources: ["src/views/gallery-renderer.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"],
     fixtureOf: "constructed-gallery",
     // Two things this fixture used to get wrong, both of which made the gallery photograph as
     // something the renderer does not build.
@@ -385,7 +385,7 @@ export const CORE_SCENARIOS = [
     title: "Board view — mobile",
     group: "views",
     width: 402,
-    sources: ["src/views/board-renderer.ts", "src/views/group-label-renderer.ts", "src/views/card-field-renderer.ts"],
+    sources: ["src/views/board-renderer.ts", "src/views/group-label-renderer.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"],
     // Superseded by constructed-board's own mobile-device capture — see table-mobile's note above
     // for why no separate constructed scenario is needed.
     fixtureOf: "constructed-board",
