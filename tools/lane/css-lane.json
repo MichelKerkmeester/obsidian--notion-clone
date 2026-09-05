@@ -1,8 +1,8 @@
 {
-  "holder": "044-phone-sheet-alignment",
-  "acquiredAt": "2026-09-05T23:20:00Z",
-  "baselineHash": "e50cb406c8ed",
-  "baselineCommit": "fc730ed9",
+  "holder": "051-modal-and-sheet-componentization",
+  "acquiredAt": "2026-09-05T22:40:00Z",
+  "baselineHash": "adae4d3efba1",
+  "baselineCommit": "d00cf59c",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3579,6 +3579,21 @@
         "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png"
       ],
       "note": "Three content-changed captures of 558, all opened and read. The two mobile text cell editors are the surface this change moves and their layout hashes moved with it: before, Cancel reads 'Cance' with its last glyph clipped at the editor's right edge, the 36px overhang photographed; after, Save and Cancel both sit inside the edge with the row's trailing inset matching its leading one. The desktop table footer is the third and it is not this change - neither rule can reach it, one needing a bottom sheet and the other living on the mobile cell editor - its layoutHash is unchanged and the image reads correctly, so it is the rasteriser moving pixels without moving geometry. Named rather than argued away, because the lane's own test called it changed. The title rule moved no capture at all: no fixture carries a name long enough to reach it, and tools/live/sheet-grammar.mjs's overflow sweep is what holds that one, red at 316 failures before it and 0 after."
+    },
+    {
+      "event": "acquire",
+      "phase": "051-modal-and-sheet-componentization",
+      "at": "2026-09-05T22:40:00Z",
+      "hash": "e50cb406c8ed",
+      "note": "Taken over from 044-phone-sheet-alignment after rebasing this leg onto its landing. The edit is one additive block of six rules for the shared surface shell header: .db-shell-header, .db-shell-header-leading, .db-shell-header .db-panel-title, .db-shell-back, its hover/focus-visible pair, and its svg sizing. No existing selector was edited, and no existing rule changed the set of elements it matches, because nothing in the tree builds a .db-shell-header yet: the shell is the only producer of that class, no surface asks it for a sub-page, and no capture fixture names it - grep for db-shell across tools/screenshots and tools/live returns nothing."
+    },
+    {
+      "event": "release",
+      "phase": "051-modal-and-sheet-componentization",
+      "at": "2026-09-05T22:55:00Z",
+      "hash": "adae4d3efba1",
+      "reviewed": [],
+      "note": "npm run screenshots regenerated all 558 captures after the stylesheet edit. The reviewed list is empty because no picture moved, not because none was opened: the manifest, diffed entry by entry against the base commit's, reports zero pixelHash changes across all 558 entries, the 32 Project Manager board and gantt entries the parent's D5 protects included. An earlier rebase of this same leg did show one mover, constructed-table-footer-desktop-light, and it was chased to ground rather than waved through - identical layoutHash on both sides, and with origin/main's own styles.css restored byte for byte and this block removed it recaptured to the same new hash rather than to the committed one, so it was the capturing environment. This base's own recapture has since absorbed it and the set is clean. Captures were opened anyway to read what the shell has not reached yet: panel-view-config-sheet-mobile-dark and chrome-owned-menu-sheet-mobile-dark both still show a two-slot header with the title on the leading edge and a flush frame, which is correct while no producer builds the shell header. The cascade audit is the independent read of the block, and does not depend on the capture harness at all: sheetLines 23126 to 23172, rules 3034 to 3040, duplicatedSelectors 261 unchanged, conflicts 126 unchanged. Six rules, no new duplicate, no new conflict. One finding recorded rather than claimed: tools/live/engine-parity.json is not deterministic across invocations on an unchanged tree - 66 differences on one run and 50 on each of the three that followed, with the checkbox fixture caught mid-transition changing identity each time - so its re-derived number here is a sample, not a measurement, and no improvement is being claimed from it. GATE at handover: npx tsc --noEmit 0, npx vitest run 1329/1329, npm run build 0, npm run gate 26 green 0 red exit 0."
     }
   ],
   "outstanding": [
