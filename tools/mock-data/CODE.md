@@ -13,7 +13,7 @@ trigger_phrases:
 
 ## 1. OVERVIEW
 
-Six source files, one direction of flow:
+Eight source files, one direction of flow:
 
 ```
 use-cases.ts  ─┐

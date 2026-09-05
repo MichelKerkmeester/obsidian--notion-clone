@@ -57,7 +57,7 @@ _memory:
 <!-- ANCHOR:what-changed -->
 ## 2. WHAT CHANGED
 
-`tools/mock-data/`, eight source files and two docs, 2442 lines. Nothing under `src/` was touched, so
+`tools/mock-data/`, eight source files and three docs, 2442 lines of source. Nothing under `src/` was touched, so
 no plugin behaviour changed.
 
 | File | Role |
@@ -70,7 +70,7 @@ no plugin behaviour changed.
 | `generate.ts` | The CLI, including the guarded and idempotent vault write |
 | `capture.mjs` | Mounts each database in the shipped renderer and photographs it |
 | `catalogue.test.mjs` | 20 assertions across determinism, counts, coverage, relations, containment |
-| `README.md`, `CODE.md` | The folder docs the three-source threshold owes |
+| `README.md`, `CODE.md`, `csv/README.md` | The folder docs the three-source threshold owes, one per folder that passes it |
 
 Generated and committed: `catalogue.json` and `csv/*.csv`. Generated and **not** committed: the 336
 vault files, which live in the operator's vault.
