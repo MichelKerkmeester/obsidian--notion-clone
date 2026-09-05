@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/048-stacked-sheets",
+  "spec_folder": "005-component-surface-system/048-stacked-sheets",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "stacked sheets spec",
+      "sheet over sheet",
+      "048 spec",
+      "stacking model",
+      "notion sheet stacking",
+      "implementation plan",
+      "stacking model plan",
+      "048 plan",
+      "sheet depth model",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist"
+    ],
+    "key_topics": [
+      "stacked",
+      "sheets",
+      "spec",
+      "sheet",
+      "stacking",
+      "model",
+      "notion",
+      "implementation",
+      "plan",
+      "depth",
+      "task",
+      "breakdown"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "specs/005-component-surface-system/048-stacked-sheets/stacked-surface-inventory.md",
+      "specs/005-component-surface-system/roadmap.md",
+      "specs/005-component-surface-system/spec.md",
+      "specs/005-component-surface-system/goal.md",
+      "specs/005-component-surface-system/goal-prompt.md",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/overlay-stack.ts",
+      "src/views/popover-position.ts",
+      "src/views/dropdown-field.ts",
+      "src/views/owned-menu.ts",
+      "src/views/modals/db-modal.ts",
+      "src/views/column-manager-renderer.ts",
+      "src/views/date-value-picker.ts",
+      "src/views/icon-picker-popover.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "stacked-surface-inventory.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/048-stacked-sheets/stacked-surface-inventory.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/roadmap.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal-prompt.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/goal-prompt.md",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "overlay-stack.ts",
+        "kind": "code",
+        "path": "src/views/overlay-stack.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "dropdown-field.ts",
+        "kind": "code",
+        "path": "src/views/dropdown-field.ts",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "db-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/db-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.ts",
+        "kind": "code",
+        "path": "src/views/column-manager-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "date-value-picker.ts",
+        "kind": "code",
+        "path": "src/views/date-value-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "icon-picker-popover.ts",
+        "kind": "code",
+        "path": "src/views/icon-picker-popover.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Stacked Sheets",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Scope Boundary",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Nothing in the plugin models a stack",
+    "created_at": "2026-09-05T05:13:09Z",
+    "last_save_at": "2026-09-05T05:23:06.043Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:09838b2d4ef551628590dbc7e4fc788f00620a3b966663e3557f6ad756aaf7d1",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "acc779da4ae3d6ee8467d96f200ce6e4ef0fe2dade283eb55b57b8fe9a0278fd",
+      "plan.md": "86bb732265bb7113d8a9d86ad709f5cb4ea0ee2f76410487abab4364c2291578",
+      "tasks.md": "d5106fe09a0a6676dd37b76af7dceeafd819c9f3fe04e1524b634c6a91686e54",
+      "implementation-summary.md": "35bf16db424537156dc93aaf4488f7c3e4ba2213524269de0947b638f5c3f8cd"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -10,13 +10,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-05T06:30:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Recorded the 0.0.22 deferrals; opened 007 gallery retirement and 047"
-    next_safe_action: "Land the worktrees/056 sheet fix, cut a build, re-ask the 12 rows"
+    last_updated_at: "2026-09-05T07:20:00Z"
+    last_updated_by: "stacked-sheets-phase-pass"
+    recent_action: "0.0.23 check: closed rows 34-36, re-anchored nine deferrals, opened 048"
+    next_safe_action: "Answer 048 D1, then run 048 T002/T003 and re-ask the nine deferred rows"
     blockers:
-      - "Rows 29-36, 39-41, 43 DEFERRED: a tap inside an open sheet dismisses it on iOS"
-      - "031 third bug in flight on worktrees/056-sheet-inside-tap"
+      - "0.0.23: rows 34-36 CLOSED; 29-33/39-41/43 deferred, blocker discharged"
+      - "Rows 44-46 NEW: stacked sheets, owned by 048; its D1 is operator-owned"
       - "Rows 37/38 need 047: the fidelity pass and the Anytype/AppFlowy captures"
       - "007-gallery-view-deprecation and 047 opened, nothing landed"
       - "006-list-view-deprecation owes only its 0.0.23 release cut"
@@ -34,7 +34,7 @@ _memory:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
-      - "Every phase 000-047 carries its own goal.md; the DONE table cites each open one"
+      - "Every phase 000-048 carries its own goal.md; the DONE table cites each open one"
       - "Gallery does not share 045's mechanism: retired by specs/007"
       - "Hiding a board card field is cards only, not the table (045 ADR-002)"
       - "The timeline froze on a per-event touch probe; the calendar does not scale with rows"
@@ -789,6 +789,8 @@ and this row is a defect.**
 | `045-board-card-properties` | [`045-board-card-properties/goal.md`](045-board-card-properties/goal.md) | One per-view ordered property list with per-field visibility, the renderer moved onto it, an upgrade with no stored list leaving every existing card byte-identical, a stored list having zero effect on `038`'s one-to-one reference path, and the operator arranging a card's properties on a phone and reading it as close to Notion's. **Shipped in 0.0.22; both open questions answered as `decision-record.md` ADR-001/ADR-002, and 0.0.23's settings-body grammar closed AC-005 (7 of 7 `sheet-grammar` elements). AC-006, the operator's own device read, is the only row left.** | 0/6 |
 | `046-linked-views-notion-parity` | [`046-linked-views-notion-parity/goal.md`](046-linked-views-notion-parity/goal.md) | The embed unboxed from its ancestor-walk clip, the duplicate `db-header` and its hide-the-title chevron gone, ADR-001 (may an embed write) taken before the four `persistMode === "codeblock"` read-only gates are touched, a linked view movable to another page, a create flow writing the fence `serializeCodeBlockReference` already builds, and the operator reading the Overview page's nested views as real databases. **ADR-001/ADR-002 Accepted 2026-09-05; the capability leg landed partially in 0.0.23 (`ec893e67`) — the duplicate title/chevron are gone and the four read-only gates are one `isViewReadOnly()` seam (AC-003/AC-006 `Met`), but the card border, embed width and device-driven move/create rows stay `Unmet` behind `T002`'s open host-layout question, and `T016` (a settings-flag gate) is a fresh operator call.** | 0/7 |
 | `047-competitor-references-and-pm-alignment` | [`047-competitor-references-and-pm-alignment/goal.md`](047-competitor-references-and-pm-alignment/goal.md) | Anytype and AppFlowy reference captures under `screenshots/anytype/` and `screenshots/appflowy/` — official product images and locally installed apps both — carrying the same manifest shape as `screenshots/project-manager/`, a board and gantt fidelity pass against Project Manager with every gap measured before it is closed, and the operator reading the two views as aligned. Opened 2026-09-05 from the rows 37/38 *"align closer"* ruling. | 0/6 |
+| `048-stacked-sheets` | [`048-stacked-sheets/goal.md`](048-stacked-sheets/goal.md) | A code-derived inventory of every surface that can open while another sheet is open, a parent sheet whose bounding box does not move while a child is open, exactly one scrim sitting between two open sheets rather than behind both, a header with a 44px close on every stacked child, the keyboard inset published to the topmost sheet only, a green `sheet-grammar` lane carrying one row per stacked pair with a stacking negative control observed red, and the operator reading the Properties sheet and the filter sheet's two dropdowns as one stack rather than two sheets. Opened 2026-09-05 from §4 rows 44-46. | 0/7 |
+
 | **`006-list-view-deprecation`** — a **sibling packet**, not a phase here | [`../006-list-view-deprecation/goal.md`](../006-list-view-deprecation/goal.md) | No surface offering list, a list-configured vault opening as a table with the same columns once with a notice, `list-renderer.ts` gone, the `list-window` lane **removed not skipped** with `npm run gate` at 0, the coverage floor lowered with its reason beside the number, `033-list-virtualisation` and `024-list-view-freeze` closed against the retirement, and the operator reporting a migrated vault. Its four live children each carry their own goal; see [`../006-list-view-deprecation/roadmap.md`](../006-list-view-deprecation/roadmap.md). **Children `005` through `007` are done; `008`'s release row is satisfied by 0.0.23 (`d3979cf5`), leaving only its and `006`'s own operator rows open.** | 7/9 |
 
 | **`007-gallery-view-deprecation`** — the **second sibling packet**, opened 2026-09-05 | [`../007-gallery-view-deprecation/goal.md`](../007-gallery-view-deprecation/goal.md) | No surface offering gallery and no path minting one, every gallery-configured view opening as a board with the same cover once and with a notice, `gallery-renderer.ts` gone, its bench and coverage pin and constructed scenario removed rather than skipped with `npm run gate` still exiting 0, the dead `db-gallery-*` CSS gone, and the operator opening a migrated vault and reporting it as migrated rather than broken. Its four children each carry their own goal; see [`../007-gallery-view-deprecation/roadmap.md`](../007-gallery-view-deprecation/roadmap.md). | 0/8 |
@@ -1875,5 +1877,50 @@ at `3a8df24c`.
 **What this entry does not claim.** No code was written in this pass. No gate was run, because
 nothing that a gate measures changed. `completion_pct` stays **5 of 7 = 71**: rows 1 and 2 are still
 the operator's, and a recorded deferral is not a tick.
+
+### 2026-09-05 07:02: the 0.0.23 device check — three rows close, nine are re-anchored, `048` opens
+
+The operator, on an iPhone running 0.0.23: **"Buttons work now but stacked sheets dont look or work
+right. Add phase to optimize stacked sheets and make sure we have inventory of all sheets that are
+stacked on top of a parent."**
+
+**Rows 34, 35 and 36 CLOSE.** They are the three §4 rows whose subject is a control inside a sheet —
+the sort sheet's add-sort, the filter sheet's Add condition, and the class both belong to. *"Buttons
+work now"* is the operator using the fix, which is D3's third state. The fix is `031`'s
+(`3a77d523`, `308ba2d3`), shipped in 0.0.23 at `d3979cf5`.
+
+**The other nine stay deferred, and the reason changed rather than the state.** Rows 29, 30, 31, 32,
+33, 39, 40, 41 and 43 were deferred on a named blocker; that blocker is gone. They stay deferred
+because the 0.0.23 pass did not exercise them and none of their subjects is a sheet action: a plural
+form in `i18n.ts`, a gantt label ruling, sheet chrome and layout on four rows, and two surfaces that
+sit beside a sheet rather than inside one. Each row now records its own reason. `045`'s AC-006 moves
+with the nine — the Properties sheet is reachable now, it was simply not judged.
+
+**Rows 44, 45 and 46 are new, and `048-stacked-sheets` owns all three.** One defect seen three ways.
+Nothing in the plugin models a stack: one `z-index` for every sheet (`styles.css:194`), one scrim
+behind all of them (`mobile-bottom-sheet.ts:478`), no parent read when a child mounts (`:274`), and
+a keyboard inset each sheet computes for itself (`popover-position.ts:406`). `overlay-stack.ts:47`
+declares a `parentId` on every registered surface and `rg -n "parentId" src/views` returns no
+reader, so the shape a depth model needs already exists with nothing consuming it.
+
+`recommend-level.sh --loc 600 --files 13 --architectural` returns **64/100 at 82% confidence** with
+a phase score of **10/50** against a threshold of 25, so `048` is a standard Level 2 child rather
+than a phased packet — one threshold is missed and `phase-definitions.md` §2 requires both.
+
+**The operator asked for two things and both are deliverables.** The stacking model is `048`'s
+`spec.md` §3, eight clauses each checkable. The inventory is `048`'s T001 and is written:
+`048-stacked-sheets/stacked-surface-inventory.md` groups every stacked pair parent → child → opener
+kind → current → target with a `file:line` per row. Its sharpest finding is a count: the
+`sheet-grammar` lane registers **8** surfaces and **every one of them is a first sheet**, so every
+stacked child in the plugin is unregistered and the lane cannot fail on any of them.
+
+**One decision is opened and it is the operator's.** `048` D1: an Obsidian `Modal` opened from
+inside a sheet either presents as a sheet on the phone, or the phone flow uses a sheet instead. The
+recommendation on record is to present as a sheet, because `DbModal` already declares a presentation
+per subclass. It gates six inventory rows; the dropdown, menu and picker rows do not wait on it.
+
+**What this entry does not claim.** No product code was written in this pass and no gate was run.
+`completion_pct` stays **5 of 7 = 71**: rows 1 and 2 are still the operator's, and closing three
+report rows is not a §3 DONE row.
 
 <!-- /ANCHOR:log -->

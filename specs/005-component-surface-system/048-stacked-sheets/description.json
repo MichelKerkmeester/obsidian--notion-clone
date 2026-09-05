@@ -1,0 +1,22 @@
+{
+  "specFolder": "005-component-surface-system/048-stacked-sheets",
+  "description": "Notion-like stacked sheet presentation on the phone: a child sheet overlays its parent in place, the parent dims and scales back without moving, one scrim sits between them, and every stacked child carries the sheet grammar",
+  "keywords": [
+    "phase",
+    "stacked-sheets",
+    "sheet-stacking",
+    "overlay-stack",
+    "bottom-sheet",
+    "phone",
+    "notion-parity"
+  ],
+  "lastUpdated": "2026-09-05T07:20:00.000Z",
+  "specId": "048",
+  "folderSlug": "stacked-sheets",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
