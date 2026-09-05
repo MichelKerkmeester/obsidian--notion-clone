@@ -30,6 +30,18 @@
 // their own surfaces here when they land; a surface is added when it
 // conforms, not when it is hoped to.
 //
+// One check refuses that narrowing, and it is the sweep in section 4b. A phone
+// is 390px wide and cannot pan, so a surface that draws past its own right edge
+// has put content where no thumb can reach it whether or not that surface has
+// earned a header. The sweep therefore runs over every sheet the plugin can
+// present — the registry above plus the surfaces the sheet and stacked-surface
+// inventories enumerate that it does not carry — on both engines, twice: once
+// with the fixtures' own names, once with every vault-derived string replaced by
+// a single unbreakable word, because a property name belongs to the user and no
+// length can be assumed. It has its own negative control: a child wider than the
+// phone, injected into a surface the sweep just called clean, which must register
+// as overflow and must stop doing so when it is removed.
+//
 // Usage: node tools/live/sheet-grammar.mjs
 
 // ───────────────────────────────────────────────────────────────────
@@ -39,7 +51,7 @@
 import { existsSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright-core";
+import { chromium, webkit } from "playwright-core";
 import { buildRenderAssertionBundle } from "./render-assertion-bundle.mjs";
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
@@ -133,6 +145,53 @@ const CLOSE_TARGET_FLOOR_PX = 44;
 // The element removed by the negative control: the grab handle, whose loss is exactly the
 // "drag handler doesnt work" shape the operator reported.
 const NEGATIVE_CONTROL = { surface: "sort-panel", element: "handle" };
+
+// ───────────────────────────────────────────────────────────────────
+// 2b. THE OVERFLOW SWEEP REGISTRY
+// ───────────────────────────────────────────────────────────────────
+
+// The registry above is deliberately narrow: a surface joins it when it conforms to all eight
+// grammar columns. Horizontal overflow answers to no such gate. A phone is 390px wide and cannot
+// pan, so a surface that draws past its own right edge has put content where a thumb cannot reach
+// it whether or not that surface has earned a header — which is why the sweep below runs over
+// every sheet the plugin can present, not only the ones the columns cover. The extra rows are the
+// surfaces the sheet and stacked-surface inventories enumerate that the grammar registry does not
+// carry: the Properties sheet, the toolbar's two other popovers, the single-rule editor the chip
+// rail opens, both mobile inline cell editors, and the deeper filter and picker states.
+const OVERFLOW_ONLY_SURFACES = [
+  { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
+  { name: "toolbar-utilities", spec: { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "utilities" } },
+  { name: "toolbar-tab-menu", spec: { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "tab-menu" } },
+  { name: "filter-panel-nested", spec: { renderer: "filter-panel", bag: "file-view", captureData: true, filterDepth: "nested" } },
+  { name: "sort-panel-calendar-hint", spec: { renderer: "sort-panel", bag: "file-view", captureData: true, calendarHint: true } },
+  { name: "record-detail-docked", spec: { renderer: "record-detail", bag: "file-view", captureData: true, recordPlacement: "docked" } },
+  { name: "active-rule-filter", spec: { renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "filter" } },
+  { name: "active-rule-sort", spec: { renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "sort" } },
+  { name: "cell-editor-text", spec: { renderer: "cell-editors", bag: "file-view", captureData: true, editorKind: "text" } },
+  { name: "cell-editor-select", spec: { renderer: "cell-editors", bag: "file-view", captureData: true, editorKind: "select" } },
+  { name: "date-picker-datetime", spec: { renderer: "date-picker", bag: "file-view", includeTime: true } },
+  { name: "dropdown", spec: { renderer: "dropdown", bag: "file-view" } },
+];
+
+// Every surface a phone can present, measured for overflow whether or not it owns a header.
+const OVERFLOW_SWEEP_SURFACES = [...REGISTERED_SURFACES, ...OVERFLOW_ONLY_SURFACES];
+
+// The sweep measures each surface twice. The first pass is the surface as the fixtures build it.
+// The second replaces every vault-derived string with one unbreakable word, because a property
+// name, an option value and the field a picker was opened for all belong to the user: the plugin
+// cannot bound their length, and a surface that fits only the short names the fixtures happen to
+// carry has not been sized, it has been lucky. Nothing this touches is a string the plugin ships,
+// so no shipped copy is being misrepresented as data.
+const UNBREAKABLE_NAME = "QuarterlyReviewCheckpointTwentyTwentySixQThreeFinalApprovedByOperations";
+
+// The negative control: a child wider than the phone, injected into a surface that measured clean.
+// 600px against a 390px viewport is past any inset the sheets carry, so a control that fails to go
+// red says the sweep is measuring nothing rather than that the tree is clean.
+const OVERFLOW_CONTROL_WIDTH_PX = 600;
+
+// Sub-pixel layout leaves a rect a hair past a parent it visually sits inside. The same tolerance
+// the right-edge check above already uses, so one number governs both.
+const OVERFLOW_TOLERANCE_PX = 0.5;
 
 // ───────────────────────────────────────────────────────────────────
 // 3. BUNDLE
@@ -595,6 +654,135 @@ window.__stackedSheetGrammarNegativeControl = async () => {
   await Promise.resolve();
   return { before, oldWay, restored };
 };
+
+// --- the all-sheets overflow sweep ---
+
+const OVERFLOW_TOLERANCE = ${OVERFLOW_TOLERANCE_PX};
+const CONTROL_WIDTH = ${OVERFLOW_CONTROL_WIDTH_PX};
+const UNBREAKABLE = ${JSON.stringify(UNBREAKABLE_NAME)};
+
+// Every shape a phone presents on top of the view: the bottom sheets, the two docked inline cell
+// editors and the option list that are deliberately not sheets, and a host modal wearing sheet
+// chrome. The editors are portalled onto the body; the option list stays inside the cell it edits,
+// so both roots are searched rather than the body alone.
+const SWEEP_SELECTOR = ".db-mobile-bottom-sheet, .db-cell-edit-popover, .db-cell-option-popover, .modal-container";
+const sweptSurfaces = () => Array.from(document.querySelectorAll(SWEEP_SELECTOR));
+
+const describeNode = (el) => {
+  const name = el.tagName.toLowerCase();
+  const classes = typeof el.className === "string" ? el.className.trim().split(/\\s+/).filter(Boolean) : [];
+  return classes.length > 0 ? name + "." + classes.slice(0, 3).join(".") : name;
+};
+
+// The nodes that carry the user's words rather than the plugin's. A picker's header takes the field
+// it was opened for and a menu's title takes the row, column or field it belongs to, so the title is
+// vault text on exactly the surfaces whose titles are not fixed copy.
+//
+// Shipped copy is deliberately absent. A segmented option, a menu action and a button caption come
+// from the translation table, where the longest run is bounded by a translator rather than by a
+// vault; a stress that rewrites them measures a string the plugin will never be handed, and the
+// segmented placement group in particular already carries an operator decision to break at word
+// boundaries only, which such a word would report as a defect it is not.
+const VAULT_TEXT_SELECTORS = [
+  ".db-panel-title", ".db-record-detail-title", ".db-column-name-wrap", ".db-column-name-wrap *",
+  ".db-column-manager-name", ".db-view-config-readonly-value", ".db-dropdown-field-value",
+  ".db-dropdown-option", ".db-record-detail-field-label",
+];
+
+const lengthenVaultText = (surface) => {
+  for (const selector of VAULT_TEXT_SELECTORS) {
+    for (const el of surface.querySelectorAll(selector)) {
+      if (el.children.length > 0) continue;
+      if (!el.textContent || !el.textContent.trim()) continue;
+      el.textContent = UNBREAKABLE;
+    }
+  }
+};
+
+const measureOverflow = (surface) => {
+  const surfaceRight = surface.getBoundingClientRect().right;
+  const past = [];
+  for (const el of surface.querySelectorAll("*")) {
+    const style = window.getComputedStyle(el);
+    if (style.display === "none" || style.visibility === "hidden") continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) continue;
+    if (rect.right > surfaceRight + OVERFLOW_TOLERANCE) {
+      past.push(describeNode(el) + " +" + (rect.right - surfaceRight).toFixed(1) + "px");
+    }
+  }
+  return {
+    node: describeNode(surface),
+    scrollWidth: surface.scrollWidth,
+    clientWidth: surface.clientWidth,
+    past: past.slice(0, 3),
+    pastCount: past.length,
+  };
+};
+
+// The document and the body are measured beside the surfaces because a sheet is portalled onto the
+// body: a surface can stay inside its own box and still widen the page it was appended to, and a
+// page that scrolls sideways is the defect an operator sees whichever node caused it.
+const measureSweep = () => ({
+  surfaces: sweptSurfaces().map(measureOverflow),
+  documentScroll: { scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth },
+  bodyScroll: { scrollWidth: document.body.scrollWidth, clientWidth: document.body.clientWidth },
+});
+
+window.__sheetOverflow = (scenario, stress) => {
+  let report = { mounted: false };
+  runRenderAssertions(document.body, scenario, "", () => {
+    if (stress) for (const surface of sweptSurfaces()) lengthenVaultText(surface);
+    report = { mounted: true, ...measureSweep() };
+  });
+  return report;
+};
+
+window.__stackedSheetOverflow = async (pair, stress) => {
+  let parent = null;
+  let opened = null;
+  let mountError = null;
+  try {
+    runRenderAssertions(document.body, pair.parent, "", () => { parent = mountedSheet(); });
+  } catch (error) {
+    mountError = String(error);
+  }
+  if (parent && !mountError) {
+    try { opened = openPairChild(parent, pair.child); } catch (error) { mountError = String(error); }
+  }
+  await waitForStackSettle();
+  if (!parent || !opened?.panel || !opened.panel.isConnected || mountError) {
+    opened?.close();
+    return { error: mountError || "parent or child did not mount" };
+  }
+  if (stress) for (const surface of sweptSurfaces()) lengthenVaultText(surface);
+  const report = measureSweep();
+  opened.close();
+  await Promise.resolve();
+  return report;
+};
+
+// A sweep that has never been observed red is not evidence. This mounts a surface the sweep just
+// called clean, hangs a child wider than the phone off it, requires the same measurement to report
+// the overflow, then removes the child and requires the surface to come back clean.
+window.__sheetOverflowNegativeControl = () => {
+  const scenario = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === NEGATIVE_CONTROL.surface).spec)};
+  let result = { mounted: false };
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (!sheet) { result = { mounted: true, error: "no sheet mounted" }; return; }
+    const before = measureOverflow(sheet);
+    const wide = document.createElement("div");
+    wide.style.width = CONTROL_WIDTH + "px";
+    wide.style.height = "8px";
+    wide.style.flex = "0 0 auto";
+    sheet.appendChild(wide);
+    const injected = measureOverflow(sheet);
+    wide.remove();
+    result = { mounted: true, before, injected, restored: measureOverflow(sheet) };
+  });
+  return result;
+};
 `);
 
 if (missingSources.length > 0) {
@@ -624,6 +812,97 @@ function findChrome() {
 }
 
 const failures = [];
+
+// ───────────────────────────────────────────────────────────────────
+// 4b. THE OVERFLOW SWEEP
+// ───────────────────────────────────────────────────────────────────
+
+// One row per surface per pass. A phone cannot pan sideways, so anything the surface put past its
+// own right edge is unreachable, and a page that scrolls sideways is the same defect one level out.
+const reportSweep = (engineName, label, report) => {
+  if (report.error) {
+    failures.push(`overflow sweep ${engineName} ${label}: ${report.error}`);
+    console.log(`  FAIL  ${engineName} ${label} — ${report.error}`);
+    return;
+  }
+  if (report.mounted === false) {
+    failures.push(`overflow sweep ${engineName} ${label}: did not mount`);
+    console.log(`  FAIL  ${engineName} ${label} — did not mount`);
+    return;
+  }
+  if (report.surfaces.length === 0) {
+    failures.push(`overflow sweep ${engineName} ${label}: mounted no surface to measure`);
+    console.log(`  FAIL  ${engineName} ${label} — mounted no surface to measure`);
+    return;
+  }
+  for (const surface of report.surfaces) {
+    const scrolls = surface.scrollWidth > surface.clientWidth;
+    if (scrolls) failures.push(`overflow sweep ${engineName} ${label}: ${surface.node} scrolls horizontally (${surface.scrollWidth} > ${surface.clientWidth})`);
+    console.log(`  ${scrolls ? "FAIL" : "PASS"}  ${engineName} ${label} — ${surface.node} scrollWidth ${surface.scrollWidth} ≤ clientWidth ${surface.clientWidth}`);
+    const clean = surface.pastCount === 0;
+    if (!clean) failures.push(`overflow sweep ${engineName} ${label}: ${surface.pastCount} descendant(s) past ${surface.node}'s right edge (${surface.past.join(", ")})`);
+    console.log(`  ${clean ? "PASS" : "FAIL"}  ${engineName} ${label} — nothing past ${surface.node}'s right edge${clean ? "" : `: ${surface.past.join(", ")}`}`);
+  }
+  for (const [name, measured] of [["document", report.documentScroll], ["body", report.bodyScroll]]) {
+    const scrolls = measured.scrollWidth > measured.clientWidth;
+    if (scrolls) failures.push(`overflow sweep ${engineName} ${label}: the ${name} scrolls horizontally (${measured.scrollWidth} > ${measured.clientWidth})`);
+    console.log(`  ${scrolls ? "FAIL" : "PASS"}  ${engineName} ${label} — ${name} scrollWidth ${measured.scrollWidth} ≤ clientWidth ${measured.clientWidth}`);
+  }
+};
+
+async function runOverflowSweep(engineName, engine, launchOptions) {
+  let sweepBrowser;
+  try {
+    sweepBrowser = await engine.launch(launchOptions);
+    const page = await sweepBrowser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
+    const pageErrors = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
+    await page.goto(`file://${join(work, "index.html")}`);
+
+    // The fixtures' own names first, then the same surfaces again with every vault-derived string
+    // replaced by one unbreakable word. A surface that only fits the short names a fixture happens
+    // to carry is not a surface that has been sized.
+    for (const stress of [false, true]) {
+      const pass = stress ? "long name" : "as built";
+      console.log(`sheet-grammar: overflow sweep — ${engineName}, ${pass}\n`);
+      for (const { name, spec } of OVERFLOW_SWEEP_SURFACES) {
+        const report = await page.evaluate(([scenario, withStress]) => window.__sheetOverflow(scenario, withStress), [spec, stress]);
+        reportSweep(engineName, `${name} (${pass})`, report);
+      }
+      for (const pair of REGISTERED_STACKED_PAIRS) {
+        const report = await page.evaluate(([shape, withStress]) => window.__stackedSheetOverflow(shape, withStress), [pair, stress]);
+        reportSweep(engineName, `stacked ${pair.name} (${pass})`, report);
+      }
+      console.log("");
+    }
+
+    const control = await page.evaluate(() => window.__sheetOverflowNegativeControl());
+    console.log(`sheet-grammar: overflow negative control — ${engineName}, a ${OVERFLOW_CONTROL_WIDTH_PX}px child injected into ${NEGATIVE_CONTROL.surface}\n`);
+    if (!control.mounted || control.error) {
+      failures.push(`overflow negative control ${engineName}: ${control.error || "did not mount"}`);
+      console.log(`  FAIL  ${engineName} — ${control.error || "did not mount"}`);
+    } else {
+      const cleanBefore = control.before.pastCount === 0 && control.before.scrollWidth <= control.before.clientWidth;
+      const wentRed = control.injected.scrollWidth > control.injected.clientWidth;
+      const cleanAfter = control.restored.pastCount === 0 && control.restored.scrollWidth <= control.restored.clientWidth;
+      if (!cleanBefore) failures.push(`overflow negative control ${engineName}: the control surface already overflowed before the injection`);
+      if (!wentRed) failures.push(`overflow negative control ${engineName}: the injected ${OVERFLOW_CONTROL_WIDTH_PX}px child did not register as overflow`);
+      if (!cleanAfter) failures.push(`overflow negative control ${engineName}: the surface did not come back clean after the child was removed`);
+      console.log(`  ${cleanBefore ? "PASS" : "FAIL"}  ${engineName} — clean before the injection (${control.before.scrollWidth}/${control.before.clientWidth})`);
+      console.log(`  ${wentRed ? "PASS" : "FAIL"}  ${engineName} — red with the injection (${control.injected.scrollWidth}/${control.injected.clientWidth})`);
+      console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  ${engineName} — clean again once removed (${control.restored.scrollWidth}/${control.restored.clientWidth})`);
+    }
+    console.log("");
+
+    await page.close();
+    for (const error of pageErrors) failures.push(`overflow sweep ${engineName} page error: ${error}`);
+  } catch (error) {
+    failures.push(`overflow sweep ${engineName} failed to run: ${error.message}`);
+  } finally {
+    if (sweepBrowser) await sweepBrowser.close();
+  }
+}
+
 let browser;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
@@ -764,6 +1043,16 @@ try {
 
   await page.close();
   for (const error of pageErrors) failures.push(`page error: ${error}`);
+
+  // Both engines, because a phone runs the app in a WebKit web view and the desktop and the rest of
+  // this lane run it in Chrome. Flex minimum sizing and intrinsic text measurement differ enough
+  // between the two that a surface can fit in one and overflow in the other.
+  for (const [engineName, engine, launchOptions] of [
+    ["Chrome", chromium, { executablePath: findChrome() }],
+    ["WebKit", webkit, {}],
+  ]) {
+    await runOverflowSweep(engineName, engine, launchOptions);
+  }
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
 } finally {
@@ -784,5 +1073,9 @@ if (failures.length > 0) {
 console.log("\nsheet-grammar: PASS — every registered surface satisfies all eight grammar columns,");
 console.log("  every close target clears 44x44 with no descendant past the surface's right edge,");
 console.log("  every registered parent-to-child row keeps one scrim, top-only keyboard ownership and");
-console.log("  an unmigrated parent treatment went red before the stacking control returned green.");
+console.log("  an unmigrated parent treatment went red before the stacking control returned green;");
+console.log("  and on both engines every sheet the plugin can present — with the fixtures' own names");
+console.log("  and again with an unbreakable one — kept its scroll width inside its client width,");
+console.log("  drew nothing past its right edge and left the document unscrolled sideways, after a");
+console.log(`  ${OVERFLOW_CONTROL_WIDTH_PX}px child injected into a clean surface proved the sweep can go red.`);
 process.exit(0);
