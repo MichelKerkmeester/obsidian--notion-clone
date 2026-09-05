@@ -502,9 +502,26 @@
    host stylesheet gives every bare button a fill; scoped to the owned menu, this reset only reached
    the rows that happened to be inside one, so the first surface to build rows anywhere else got the
    host's button fill as a band behind them. Same computed value inside the owned menu as before —
-   the selector is the same weight and still resolves to transparent. */
-.db-menu-item.db-menu-item:not(:hover):not(:focus-visible) {
+   the selector is the same weight and still resolves to transparent.
+
+   `:not(.is-submenu-open)` is the one addition: a row whose child menu is open stays highlighted
+   even after the pointer has moved off it and onto the child, which is the parent-side state signal
+   that a highlight vanishing the moment the pointer left would erase — reading as "nothing is open
+   here" while a whole submenu is in fact open. */
+.db-menu-item.db-menu-item:not(:hover):not(:focus-visible):not(.is-submenu-open) {
   background: transparent;
+}
+
+/* The parent row of an open submenu carries two signals, neither of them colour alone: the
+   highlight reuses the row's own hover fill rather than a new token, and the chevron rotates the
+   way a stacked child sheet already rotates its own opener on the phone — a second expression of
+   the same state, given to the desktop's pointer-hover row. */
+.db-menu-item.is-submenu-open {
+  background: var(--db-hover-bg, var(--background-modifier-hover));
+}
+
+.db-menu-item.is-submenu-open .db-menu-item-chevron {
+  transform: rotate(90deg);
 }
 
 /* A thumb needs more than the 30px a mouse is happy with. The host grows its own menu rows on a

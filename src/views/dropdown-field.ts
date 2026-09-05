@@ -19,6 +19,7 @@ import { t } from "../i18n";
 import { createSheetHeader } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
+import { filterPickerRows, moveCreateOptionsFirst } from "./popover-host";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. STATE
@@ -217,9 +218,14 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   let currentSectionEl: HTMLElement | undefined;
   const sectionRows: DropdownRow[] = [];
   const emptyRow = optionsHost.createDiv({ cls: "db-dropdown-empty", text: t("dropdown.noResults"), attr: { role: "status", hidden: "true" } });
-  let activeIndex = options.options.findIndex((option) => option.value === options.value && !option.disabled);
+  // Every create-affordance row (`preserveValueOnSelect`) moves ahead of the ordinary results,
+  // directly under the search field, so it stays reachable while a query is still narrowing toward
+  // nothing rather than scrolling past once the list is short. The two groups keep their own
+  // internal order; only the two groups themselves are interleaved.
+  const orderedOptions = moveCreateOptionsFirst(options.options);
+  let activeIndex = orderedOptions.findIndex((option) => option.value === options.value && !option.disabled);
   if (activeIndex < 0) {
-    activeIndex = options.options.findIndex((option) => !option.disabled);
+    activeIndex = orderedOptions.findIndex((option) => !option.disabled);
   }
   if (activeIndex < 0) activeIndex = 0;
   let typeahead = "";
@@ -255,7 +261,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     options.onChange(item.value);
     if (options.closeOnSelect !== false) close();
   };
-  for (const option of options.options) {
+  for (const option of orderedOptions) {
     if (option.section && option.section !== currentSection) {
       currentSection = option.section;
       currentSectionEl = optionsHost.createDiv({ cls: "db-dropdown-section-title", text: option.section });
@@ -300,7 +306,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   syncActiveOption();
   if (searchInput) {
     searchInput.oninput = () => {
-      const visibleRows = filterDropdownOptions(sectionRows, searchInput?.value || "", emptyRow);
+      const visibleRows = filterPickerRows(sectionRows, searchInput?.value || "", emptyRow);
       activeIndex = visibleRows.length ? sectionRows.indexOf(visibleRows[0]) : -1;
       syncActiveOption();
       updateScrollAffordance();
@@ -419,25 +425,4 @@ function syncDropdownSelection(rows: Array<{ row: HTMLButtonElement; value: stri
     check?.replaceChildren();
     if (selected && check) setIcon(check, "check");
   }
-}
-
-function filterDropdownOptions(
-  rows: DropdownRow[],
-  query: string,
-  emptyRow?: HTMLElement,
-): DropdownRow[] {
-  const normalized = query.trim().toLowerCase();
-  const visibleRows: DropdownRow[] = [];
-  for (const item of rows) {
-    const matches = !normalized || (item.row.getAttribute("data-search-text") || "").includes(normalized);
-    item.row.toggleClass("is-hidden", !matches);
-    if (matches && !item.row.disabled) visibleRows.push(item);
-  }
-  const sections = Array.from(new Set(rows.map((item) => item.section).filter((item): item is HTMLElement => item != null)));
-  for (const section of sections) {
-    const hasVisibleRow = rows.some((item) => item.section === section && !item.row.hasClass("is-hidden"));
-    section.toggleClass("is-hidden", !hasVisibleRow);
-  }
-  if (emptyRow) emptyRow.toggleAttribute("hidden", visibleRows.length > 0);
-  return visibleRows;
 }
