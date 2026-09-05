@@ -35,6 +35,23 @@ genuine, populated Board view, but it belongs to the app's shipped starter conte
 built. Its Grid/Calendar counterparts (if the database has alternate views registered) sit behind a
 tab-bar `+` in the canvas, which needed a click, so they were not reached.
 
+## Mock-data catalogue and CSV import — pending an operator window
+
+Later in this capture pass the operator asked for a richer, multi-use-case demo dataset in both
+apps, loaded from a shared `tools/mock-data/catalogue.json` (plus one CSV per use case) that a
+parallel packet-049 leaf was generating. That file had not landed on `origin/main` after 30 minutes
+of polling (`git fetch` + `git ls-tree`, three checks, 10 minutes apart), and in any case AppFlowy's
+CSV import is entirely click-driven (a toolbar button, a file picker, a column-mapping dialog) with
+no DOM to script — AppFlowy is Flutter, rendered to a single GPU-backed canvas, so it has no CDP
+target and no accessibility tree at all (confirmed: the AX tree under its window is one opaque
+`AXGroup`, same as Anytype's before CDP, but AppFlowy has no equivalent remote-debugging escape
+hatch since it isn't Chromium). Once the operator is not actively using the machine, importing the
+catalogue's CSVs is: **Sidebar → the target space → `+` next to the space name → "Import" → CSV →
+pick the use-case file → map each catalogue column to a database property (matching its typed
+column, e.g. a `status` column to a Select property, a `due_date` column to a Date property) →
+confirm.** Repeated once per use-case CSV once the catalogue path is known. Nothing was imported in
+this pass; the capture below is the same `To-dos` board already documented, re-confirmed unchanged.
+
 ## Captures
 
 | File | Origin | Shows |

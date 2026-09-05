@@ -7,48 +7,68 @@ documented in `sources.md`) and screenshots of the locally installed app (`*-dar
 
 ## Installed app
 
-- **Version**: 0.56.5 (from the app's own `Anytype` menu → `?` Help is click-only and unreachable in
-  this environment; the version is the Homebrew cask version at install time, `brew info --cask
-  anytype`, cross-checked against the app's own About panel where reachable — see the input
-  limitation note below).
+- **Version**: 0.56.5 — Homebrew cask version at install time (`brew info --cask anytype`), and
+  confirmed against the CDP target's own user-agent string (`anytype/0.56.5 ... Electron/41.10.6`).
 - **Install source**: Homebrew cask (`brew install --cask anytype`), local-only, never signed in to
   an Anytype Network account or workspace.
-- **Workspace**: the default local space created on first launch ("Get Started"), plus one page I
-  created named `notion-clone-reference-demo` holding an inline Collection with 7 named demo rows
-  (`Design onboarding flow`, `Fix login bug`, `Write release notes`, `Update pricing page`,
-  `QA pass`, `Ship v2`, `Test Tab Row`) and 3 unnamed rows created by exploratory keystrokes. Every
-  other object shown (`Welcome to Anytype`, `Playground Page`, the `Collections` type list) is the
-  app's own shipped content, viewed but not edited.
-- **Theme**: dark only. See the limitation note.
+- **Workspace**: the default local space created on first launch ("Get Started" — `Welcome to
+  Anytype`, `Playground Page`). A demo page `notion-clone-reference-demo` and its objects were
+  created for this capture pass and **fully deleted (Move to Bin) before this commit** — see
+  "Cleanup" below. Everything shown in the final capture set is either the app's own shipped content
+  (viewed, never edited) or the transient demo state, already removed.
+- **Theme**: dark only — see "Still not reachable" below.
 
-## A note on how these were captured, and why the list is shorter than asked
+## How these were captured — two methods, in sequence
 
-The operator asked for a full UI/UX tour: every set view type, the view switcher, filter/sort
-panels with a condition open, the property/relation editor, context menus, hover states, and more.
-**None of the mouse-driven surfaces in that list were reachable.** This environment has no working
-path to a simulated mouse click:
+**Phase 1 — keyboard only.** No simulated mouse click worked in this environment at first: raw
+`CGEvent` clicks posted with no effect, and `System Events`'s `click at` was refused outright
+(`osascript is not allowed assistive access`, -25211). Only `keystroke`/`key code` (sent to whatever
+was frontmost) and native macOS menu-bar item clicks worked. Captures from this phase were reached
+through `Cmd+K` (search/quick-switcher), `Cmd+N` (new object), `/` (slash menu), arrows + Return,
+and Escape — sidebar navigation, search, slash menu, object creation, Settings → Account, and one
+Grid view of the demo collection.
 
-- Raw `CGEvent` clicks (Quartz, from Python) post with no error and have no effect.
-- `System Events`'s `click at {x, y}` fails outright: `osascript is not allowed assistive access`
-  (-25211).
-- Anytype's content area exposes no accessibility tree to click *through* either — the whole window
-  body is one opaque `AXGroup`; only the native traffic-light buttons are real accessibility
-  elements.
+**Phase 2 — Chrome DevTools Protocol.** The operator later granted OS Accessibility permission, but
+synthetic clicks proved unreliable against this window (coordinates drifted, hover state updated but
+clicks landed on the wrong element, and the operator was concurrently using the same machine — a
+window-bounds check mid-session caught the window having moved from `{-2160,1602}` to `{-2148,227}`,
+confirming real interference). The operator then asked for a click-free method entirely: **quit
+Anytype (`quit app "Anytype"`), relaunch with `--remote-debugging-port=9222`, and drive it over CDP**
+— raw WebSocket JSON-RPC (`Runtime.evaluate`, `Page.captureScreenshot`, `Input.dispatchKeyEvent`)
+rather than Playwright (`connectOverCDP` hung for 30s against this Electron build; the raw protocol
+connected immediately). `el.click()` executed inside the page's own JS engine is a real DOM click
+dispatched by the renderer itself — it never moves the OS pointer, changes the frontmost app, or
+takes keyboard focus, so it was safe to use while the operator kept working. Page.captureScreenshot
+renders from the page directly, independent of window position, focus, or visibility. This phase
+reached the view-settings panel, all six set layouts (Grid/Gallery/List/Kanban/Calendar/Graph), the
+filter and property pickers, the relation editor, the new-object type picker, and the object
+context menu — and used the same method to delete the demo content at the end.
 
-What **does** work: `System Events` `keystroke`/`key code` (sent to whatever is frontmost), and
-clicking native macOS menu-bar items (`File`, `Edit`, the app menu) via the accessibility API's
-menu-item action, which is a different, less-restricted code path than a coordinate click. Every
-capture below was reached through some combination of: `Cmd+K` (search/quick-switcher), `Cmd+N`
-(new object), `/` (slash menu), arrow keys + Return inside those overlays, and Escape. Anything that
-required clicking a view tab, a toolbar icon, a cell, or a context menu in the canvas itself was not
-reachable, including the theme toggle (it lives in Settings → Preferences, and that panel's sidebar
-is not keyboard-navigable either) — **so no light-theme captures exist for the installed app.**
+## Still not reachable, with the exact refusal
 
-The demo page `notion-clone-reference-demo` (and the `New Collection` object inside it) could not be
-deleted for the same reason — Anytype's own docs confirm deletion is click/checkbox-driven (Bin →
-select → Delete), with no keyboard shortcut, and neither app exposes a "Delete" native menu item.
-**The operator needs to delete it manually** — one right-click on the page in the sidebar, or open
-it and use its `···` menu → Delete/Move to Bin. Nothing else in the vault was touched.
+- **Light theme / Settings → Preferences.** The Settings panel itself was reached in Phase 1 via
+  `Cmd+,`, but that shortcut is an Electron **menu accelerator** handled by the main process, not a
+  page-level `keydown` listener — `Input.dispatchKeyEvent` (CDP, phase 2) posts into the renderer's
+  own input pipeline and does not trigger it, so it could not be reopened once phase 2 started
+  without a native menu click, which is exactly the kind of OS-level action the operator asked to
+  avoid entirely. No settings/appearance capture or theme toggle exists as a result.
+- **A worked view-switcher "+" popover appearing as a menu vs. a submenu** and a **few hover-only
+  states** (e.g. a row's inline "⋮⋮" drag handle) were not specifically captured — the settings
+  panel and layout picker capture the same underlying controls in their open state, which is the
+  higher-value shot.
+- Everything else the operator's expanded brief asked for (every layout, view switcher, view
+  settings, filter, property/relation editor, type picker, new-object flow, context menu on an
+  object) **was** reached; see the table below.
+
+## Cleanup
+
+`notion-clone-reference-demo` and every object created inside it (the `Untitled` Collection plus its
+demo rows) were moved to Bin via the object header's `···` → **Move to Bin**, driven the same
+click-free way (`el.click()` over CDP). The sidebar's "Recently edited" list and the space itself now
+show only the two objects Anytype shipped by default (`Welcome to Anytype`, `Playground Page`),
+confirmed by a post-cleanup screenshot before this commit. Anytype's Bin keeps a moved object
+recoverable (docs.anytype.io/anytype/organize/deletion) — nothing was permanently purged, matching
+"move to bin", not "delete forever".
 
 ## Captures
 
@@ -70,29 +90,50 @@ it and use its `···` menu → Delete/Move to Bin. Nothing else in the vault w
 | `anytype-inlinecollection-onboarding1-dark.png` | Installed, dark | "This is Inline Collection" onboarding step, first of two |
 | `anytype-inlinecollection-onboarding2-dark.png` | Installed, dark | "Views — adjust rules and views" onboarding step, second of two |
 | `anytype-inlinecollection-empty-dark.png` | Installed, dark | The inline collection block after onboarding, empty Grid ("All" view), `+ New Object` row |
-| `anytype-page-with-inline-collection-dark.png` | Installed, dark | The `notion-clone-reference-demo` page showing its embedded collection preview |
-| `anytype-collection-fullpage-onboarding-dark.png` | Installed, dark | The collection opened as its own full page, with the "Change Types Easily" onboarding tooltip and its toolbar (search, filter, sort, view-settings, New) |
-| `anytype-collection-grid-populated-dark.png` | Installed, dark | The same full-page Grid view with all 10 demo rows named/created |
+| `anytype-page-with-inline-collection-dark.png` | Installed, dark | The demo page showing its embedded collection preview |
+| `anytype-collection-fullpage-onboarding-dark.png` | Installed, dark | The collection opened as its own full page, with the "Change Types Easily" onboarding tooltip and its toolbar |
+| `anytype-collection-grid-populated-dark.png` | Installed, dark | The full-page Grid view with 10 demo rows |
 | `anytype-type-collections-list-dark.png` | Installed, dark | The system `Collections` Type page — every Collection-type object in the space, with Templates/Edit Type actions |
-| `anytype-object-page-empty-dark.png` | Installed, dark | A single demo row (`Fix login bug`) opened as its own object page |
+| `anytype-object-page-empty-dark.png` | Installed, dark | A single demo row opened as its own object page |
 | `anytype-settings-account-tooltip-dark.png` | Installed, dark | Settings → Account page, with the "Join the Anytype Network" membership tooltip |
 | `anytype-settings-account-dark.png` | Installed, dark | Settings → Account page, tooltip dismissed — local profile name, local Anytype Identity key (not a login credential) |
+| `anytype-view-settings-panel-dark.png` | Installed, dark, CDP | A newly added view's settings popover — View name, Layout, Properties, Filter, Sort, Duplicate/Remove view |
+| `anytype-layout-picker-dark.png` | Installed, dark, CDP | The Layout submenu — all six set/collection view types: Grid, Gallery, List, Kanban, Calendar, Graph |
+| `anytype-layout-picker-kanban-selected-dark.png` | Installed, dark, CDP | Layout submenu with Kanban selected, board rendering behind it (grouped by Tag, "No value") |
+| `anytype-set-kanban-view-dark.png` | Installed, dark, CDP | The set rendered as a Kanban board, tab renamed to match, with the view-settings panel (Layout, Groups, Properties, Filter, Sort) |
+| `anytype-set-calendar-view-dark.png` | Installed, dark, CDP | The set rendered as a Calendar (month grid), Layout picker open with Calendar selected and its Date Property setting |
+| `anytype-set-gallery-view-dark.png` | Installed, dark, CDP | The set rendered as a Gallery, Layout picker open with Gallery selected and its Card size/Cover/Fit media settings |
+| `anytype-set-list-view-dark.png` | Installed, dark, CDP | The set rendered as a List, Layout picker open with List selected and its Size/Show icon settings |
+| `anytype-set-graph-view-dark.png` | Installed, dark, CDP | The set rendered as a Graph (unconnected demo-row nodes, since no relations link them), Layout picker open with Graph selected |
+| `anytype-filter-property-picker-dark.png` | Installed, dark, CDP | "New filter" property picker — Name, Object type, Creation/Modified/Opened date, Backlinks, Tag, Description, Add advanced filter |
+| `anytype-filter-tag-value-picker-dark.png` | Installed, dark, CDP | The Tag filter's value picker — "Filter or create options…", both popovers open together |
+| `anytype-relation-editor-tag-dark.png` | Installed, dark, CDP | An object page's empty Tag relation clicked open — the same value-picker/relation-editor pattern, on a single object rather than a filter |
+| `anytype-newobject-type-picker-dark.png` | Installed, dark, CDP | The "+" new-object flow's type picker — Page, Note, Task, Chat, Collection, Query, Bookmark, Create from clipboard/Upload/Create Type |
+| `anytype-object-more-menu-dark.png` | Installed, dark, CDP | An object's header `···` context menu — Type settings, Copy Link, Favorite, Pin to Channel, Add Link/Add to Collection, Duplicate, **Move to Bin**, Lock, Search in Object, Version History, Print, Export, Advanced |
 
-**23 files total**: 5 official + 18 installed-app captures.
+**36 files total**: 5 official + 31 installed-app captures (18 from the keyboard-only phase, 13 from
+the CDP phase).
 
 ## Views not captured, and why
 
-- **Kanban, Calendar, Gallery, List of the demo collection** — reaching them requires clicking a
-  view tab in the collection's toolbar. Not reachable; see the limitation note above. The **official**
-  Kanban/Calendar/Gallery images cover what these views look like.
 - **Timeline/gantt** — Anytype has no timeline or gantt view (confirmed against the product's own
-  view documentation and its community's open feature-request threads for one). Not applicable
-  rather than uncaptured.
-- **Property/relation editor opened on a cell, filter/sort panel with a condition, view switcher,
-  type picker, context menus, hover states, graph view, widgets/home** — all require a click inside
-  the canvas-rendered content area. Not reachable.
-- **Light theme** — the toggle lives in a Settings panel whose sidebar is not keyboard-navigable.
-  Not reachable.
+  view documentation and its community's open feature-request threads for one). Not applicable.
+- **Light theme** — see "Still not reachable" above: the Settings shortcut is a main-process menu
+  accelerator, unreachable from the CDP renderer target without a native-menu click.
+- Everything else in the operator's expanded brief — every set layout, view switcher, view settings,
+  filter, property/relation editor, type picker, new-object flow, object context menu — **was**
+  reached via CDP; see the table above.
+
+## Mock-data catalogue
+
+The operator asked for the sets in this pass to be populated from a shared mock-data catalogue
+(`tools/mock-data/catalogue.json`, diverse use cases, being generated by a parallel packet-049 leaf).
+This capture pass polled `origin/main` for that file three times (`git fetch` + `git ls-tree`, 10
+minutes apart, 30 minutes total) and it had not landed. Rather than block further against an
+open-ended external dependency, the layout/filter/relation/context-menu captures above use the
+existing small demo dataset (task-style rows with a Tag property) instead of the catalogue's richer,
+multi-use-case data. If the catalogue lands later, re-running this capture pass against it is a
+follow-up, not a blocker for this leg.
 
 ## Manifest
 
