@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: main is at e0145ac9, release 0.0.21 is cut and installed, the screenshots folder split has landed, and CI's 'Capture staleness' divergence is fixed. The operator's queued order of work continues from step 4 — 044's remaining phone-sheet legs, 006's children, 045, then 046 behind ADR-001. Four legs are in flight, none is a phase-blocking gap on main."
+description: "Resume point: main is at 9436b964, release 0.0.22 is cut (7b976e28) and installed to the iCloud vault, carrying six landed lanes since 0.0.21 — board card properties, kanban line-height alignment, list hide-and-migrate, phone sheet grammar (26 gate lanes), the CI capture-staleness fix, and the symlink-safe ignore check. Three worktrees are in flight (list renderer retirement, the bench/board frozen clock, the settings-sheet body grammar), none a phase-blocking gap on main. `npm run gate` reads 26/26 green."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,27 +10,28 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T22:22:00Z"
-    last_updated_by: "orchestrate-handover-16"
-    recent_action: "Cut 0.0.21 and landed the sheet fixes, reference captures and folder split"
-    next_safe_action: "Confirm each in-flight worktree tip, then resume the order of work from step 4"
+    last_updated_at: "2026-09-05T01:01:00Z"
+    last_updated_by: "orchestrate-handover-17"
+    recent_action: "Cut 0.0.22: card properties, line-height, list hide-and-migrate, sheet grammar, CI fix landed"
+    next_safe_action: "Resolve 047's rebase conflicts, land it, then verify 049 and 050 in order"
     blockers:
-      - "Operator device confirmation owed on 0.0.21 for rows 29-36, 39, 40 and 41"
+      - "Operator device confirmation owed on 0.0.21/0.0.22 for rows 29-36, 39, 40, 41 and 43"
       - "Rows 37/38 need the operator's own vault side-by-side; the in-repo half is MET"
-      - "ADR-001 (may an embed write) asked of the operator 2026-09-04, unanswered"
+      - "ADR-001 (may an embed write) asked of the operator 2026-09-04, still unanswered"
+      - "045's two open questions: gallery sharing and hide-in-table, unresolved"
     key_files:
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
+      - "specs/006-list-view-deprecation/007-remove-renderer-and-harness/tasks.md"
       - "specs/005-component-surface-system/044-phone-sheet-alignment/tasks.md"
-      - "specs/005-component-surface-system/045-board-card-properties/tasks.md"
-      - "specs/006-list-view-deprecation/006-hide-and-migrate/tasks.md"
+      - "specs/005-component-surface-system/046-linked-views-notion-parity/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
       parent_session_id: null
     completion_pct: 71
     open_questions:
-      - "ADR-001: may a linked-view embed write back to the source, or is it read-only (046, blocks all four read-only gates until answered)"
+      - "ADR-001: may a linked-view embed write back to source? Blocks 046's capability leg"
     answered_questions: []
 ---
 # Session Handover: Component Surface System
@@ -41,116 +42,129 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-**Main is at `e0145ac9`, pushed, and `0.0.21` is cut and installed** (release commit `5af7eef7`) to the iCloud vault plugin
-folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel Kerkmeester/.obsidian/
-plugins/note-database`); `manifest.json`, `package.json` and `versions.json` there all read
-`0.0.21`. A `.backup-0.0.21-preview` sits beside the live install — it is a superseded pre-release
-build from earlier in the session, not the shipped one; check the release tag and the manifest
-version together, never the presence of a versioned backup folder alone. `0.0.21` carries four
-legs:
+**Main is at `9436b964`, pushed, and `0.0.22` is cut and installed** (release commit `7b976e28`) to
+the iCloud vault plugin folder (`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Michel
+Kerkmeester/.obsidian/plugins/note-database`); `manifest.json`, `package.json` and `versions.json`
+there all read `0.0.22`, confirmed against the live install directly. `npm run gate` on this
+checkout reads **26/26 green**. `0.0.22` carries six lanes landed after `0.0.21`'s cut, in
+chronological order:
 
-- **The WebKit sheet fix's second bug** (`031`), landed `9ecb5fff` on main and re-trued at
-  `45a1750d`: a dead-anchor drop fix (`9f31bf6f`), a retained-node rebuild of the sort/filter
-  panels (`8140a1ae`), a pointerdown-only outside-dismissal pin (`efb5b54f`), and a
-  `debugSheetTrace` device report for what emulation cannot reproduce (`c12817a8`).
-- **The settings sheet fix** (`044`, contract owners `003`/`016`), root-caused to the sheet
-  scrolling its own header and grab band out of reach — `dbdec603`, recorded `355d24ff`.
-- **The column-width sheet fix** (`044`), a shared keyboard-aware bottom sheet with segmented
-  presets — `8bcb11f3`, recorded `e494be00`.
-- **The gantt's reinstated local milestone-label anti-collision fix** (`037`, the operator's
-  decided ruling on row 39) — `1358927`.
-- **The Project Manager reference captures** (`043` T031) under `screenshots/project-manager/` —
-  `295401ad`, reconciled `04814e24` — closing `roadmap.md` rows 37 and 38's in-repo half.
+- **The screenshots-folder split and the CI capture-staleness fix** were already recorded by
+  `orchestrate-handover-16` as session work ahead of `0.0.21`'s cut; both are unchanged this pass.
+- **The symlink-safe ignore check** (`6328c9cb`): `isGitIgnored()` fatals or misreports on a path
+  that crosses a symlink, which every worktree's `specs/context` link does; `classifySource()` now
+  resolves the real path before asking git, so a vendored reference absent through a worktree
+  symlink still classifies as `VENDOR UNAVAILABLE` rather than a false `MISSING SOURCE`.
+- **List hide-and-migrate** (`006-list-view-deprecation`'s child `006`), landed `e0e1c568`,
+  reconciled `e466696b`, recorded `4ac061ca`/`c78c5592`, live evidence refreshed at `f49eda4c`:
+  List view is hidden from every surface and existing list views migrate to the table. This is the
+  006 → 007 handoff precondition ("shipped, not merely merged"), and 0.0.22 is that release.
+- **Board card properties** (`045-board-card-properties`), landed `a79d7421`, reconciled `ff1dacec`,
+  trued up `56a34199`: a per-view ordered property list for board cards behind the existing
+  `boardExtensionsEnabled` flag. Two questions stay open (see Blockers).
+- **The kanban line-height fix** (`038-board-kanban-port`'s reopened gap), landed `74a26419`,
+  reconciled through the folder-split and card-properties rebases (`4df2720c`/`b7dc7cf5`), trued up
+  at `53513962`: `.note-database-container`'s inherited 1.45 line-height no longer inflates the
+  count chip, column header or subtask parent past the reference. Rows 37/38 stay open regardless —
+  see Blockers.
+- **Phone sheet grammar** (`044-phone-sheet-alignment`'s remaining legs), feature landed at
+  `2c0902fc`, reconciled twice as sibling lanes landed underneath it (`bdf255cf`, then `9436b964`
+  after the line-height fix), recorded `52df995a`/`113530ba`: `sheet-grammar` is now a registered
+  gate lane (**26 gate lanes total, up from 21**), the shared header (`createSheetHeader`) and
+  seven-element contract (`src/views/sheet-grammar.ts`) cover six surfaces, and the Add view sheet
+  and record peek both conform. AC-001 through AC-005 and AC-007 are `Met`; AC-006 stays operator-
+  only, `Unmet` by design.
 
-**Rows 34-36, 39, 40 and 41 are all shipped in 0.0.21, none is operator-confirmed.** For rows
-34-36, the operator should enable "Trace sheet lifecycle", reproduce, then run "Copy sheet trace"
-and paste it back if the class still reproduces on device.
+**A correction against this packet's own prior docs**: `roadmap.md` §4 rows 40/41/43 and §5.A's
+`044` row cited `dcff742e` as the sha where phone sheet grammar "closed on main." That commit is
+**not an ancestor of current main** — a later rebase (`bdf255cf`, then `9436b964`) superseded it
+after the board line-height fix landed underneath it, the same class of trap row 34's history
+already carries once (`fb44a302`). Fixed in this pass to cite `9436b964`.
 
-**A fresh in-repo side-by-side against the Project Manager reference captures** (`565d86d0`,
-desktop/dark, 2880x1800, DPR 2) found the gantt clean — zero fidelity gaps; its two remaining
-differences (the bar/label-dot colour and the phone label width) are dispositions, not defects.
-The board came out with line-height-driven gaps instead: `.note-database-container`'s inherited
-1.45 line-height inflates the count chip, the column header and the subtask parent line 2-3px
-taller than the reference, and the reference's `::-webkit-scrollbar` rules for the board and its
-card list were never copied. The fix (`line-height: normal` reset on the kanban host) has landed
-on main (`74a26419`, reconciled `4df2720c`/`b7dc7cf5` across the list hide-and-migrate and
-board-card-properties landings); `constructed-board-desktop-dark.png` read beside
-`reference-kanban-desktop-dark.png` confirms the count pill and every card band now align. Rows 37
-and 38 stay open either way, pending the operator's own vault side-by-side.
+**Rows 29-36, 39, 40, 41 and 43 are all shipped (0.0.21 or 0.0.22), none is operator-confirmed.**
+For rows 34-36, the operator should enable "Trace sheet lifecycle", reproduce, then run "Copy sheet
+trace" and paste it back if the class still reproduces on device. Rows 37/38 need the operator's
+own vault side-by-side; the in-repo half (gantt zero gaps, board aligned after the line-height fix)
+is MET.
 
-**The parent DONE table stays 5 of 7 = 71%** — row 6 ticked at `2242fa0` (done-audit-11); rows 1
-and 2 are the only open rows, both operator device confirmation. Nothing this session touched
-moves that count.
+**The parent DONE table stays 5 of 7 = 71%**, unchanged this pass — rows 1 and 2 are the only open
+rows, both operator device confirmation.
 
-**`006-list-view-deprecation`**: child `005-usage-and-migration-audit` is done (`c98e05ab`: one
-list view found in the vault, four declared losses). Child `006-hide-and-migrate` is implemented
-(`8152cf4f`) — a devin pass that ran out of daily quota mid-way, finished by Grok 4.6 via
-cli-cursor — and is under verification on `worktrees/044-list-hide-migrate`. Children `007` and
-`008` are next, not started.
+**`006-list-view-deprecation`**: children `005` and `006` are both shipped (`006` in 0.0.22, above).
+Child `007-remove-renderer-and-harness` is **in flight** on `worktrees/047-list-remove-renderer`
+(see §2) — its unblocking precondition ("`006` shipped, not merely merged") is now met. Child
+`008-docs-and-release` stays blocked on `007`.
 
-**`044-phone-sheet-alignment`**: T005-T007 landed. T003/T004/T008-T012 (the grammar contract, the
-shared header, the Add view sheet, record peek, the gantt's owned menu, the suggest modals, and
-`group-order-modal.ts` removed) are under verification on `worktrees/043-sheet-alignment-2`, a
-rebase onto `0.0.21` — a P0 in the modal chrome helper was caught and fixed there. Four of the five
-conflicted files are resolved but unstaged; `specs/005-component-surface-system/
-044-phone-sheet-alignment/tasks.md` still carries live conflict markers there.
+**`044-phone-sheet-alignment`**: fully landed (above). One follow-on scope its own
+`implementation-summary.md` named as deliberately out of reach — the settings sheet's body grammar
+(`.db-view-config-row`, native radio group) — is now its own in-flight leg on
+`worktrees/050-settings-body-grammar` (see §2).
 
-**`045-board-card-properties`**: a Grok pass is done — the resolver, the persisted property list,
-and the Properties panel — and a verifier is running on `worktrees/045-board-card-properties`.
+**`045-board-card-properties`**: fully landed (above). Open questions: does the gallery share the
+mechanism or get its own, and should hiding a card field also hide the table column — neither
+scoped or answered yet.
 
 **`046-linked-views-notion-parity`**: ADR-001 (may an embed write back to the source) was asked of
 the operator 2026-09-04 and is still unanswered; the four read-only gates stay untouched until it
 is.
 
-**The screenshots folder split has landed** (`worktrees/042-screenshots-folders`, landed
-`7d95a882`+`aa049b45`, reconciled with main `933308a5`): captures now live under
-`screenshots/notion-clone/<group>/` (534 PNGs, this program's own fixtures and constructed
-renders) and `screenshots/project-manager/` (16 PNGs, `037`'s reference captures, untouched by
-this reconciliation). All 550 final entries verified byte-identical to the prior blob for that
-path — the move changed paths, not pixels. `roadmap.md` §4 rows 37/38 were updated to say both
-legs landed.
+**Delegation rung**: devin's daily quota has been exhausted since ~23:00 CEST on 2026-09-04 and has
+not reset; Grok 4.6 xhigh via cli-cursor is the active first rung; GLM 5.3 flash max via
+cli-opencode/llmgateway is available as a further fallback.
 
-**CI fixed** (`e0145ac9`): the Gates workflow's "Capture staleness" step had failed on every push
-to main since `e494be00` — `specs/**/context/` is gitignored, so the vendored `obsidian-pm-main`
-reference tree the Project Manager captures declare as their source dependency exists locally (as
-a symlink) but never in CI's checkout, and every declared source read MISSING. `verify.mjs` now
-runs each missing source through `classifySource()`, which asks git's own ignore rules
-(`isGitIgnored()`) whether the checkout was ever going to have it; a git-ignored absent source
-downgrades to a reported-but-non-failing `VENDOR UNAVAILABLE` bucket, while a present source is
-still hashed and compared exactly as before, so real drift still fails STALE. Verified in a fresh
-clean clone: red before (exit 1, 200 MISSING SOURCE), green after (exit 0, 200 VENDOR UNAVAILABLE,
-0 problems); the Gates run on `e0145ac9` is green.
-
-**Delegation rung, tonight**: devin's daily quota exhausted at ~23:00 CEST; Grok 4.6 xhigh via
-cli-cursor is the active first rung until it resets; GLM 5.3 flash max via cli-opencode/llmgateway
-is available as a further fallback.
-
-**Worktrees `.worktrees/022` through `.worktrees/046` all exist.** Landed ones are the operator's
-to remove through `sk-git`; the in-flight ones are named throughout this section and in §2.
+**Worktrees `.worktrees/022` through `.worktrees/050` all exist.** Landed ones are the operator's
+to remove through `sk-git`; the three in-flight ones are named in §2.
 <!-- /ANCHOR:handover-summary -->
 
 ---
 
 <!-- ANCHOR:context-transfer -->
-## 2. NEXT SAFE ACTION: RESUME THE QUEUED ORDER AT STEP 4
+## 2. NEXT SAFE ACTION: LAND THE THREE IN-FLIGHT WORKTREES, THEN RESUME ORDER OF WORK AT STEPS 5 AND 7
 
-The operator's pause on setting the goal prompt is over — the order below is the same one
-`goal-prompt.md` carried. Steps 1-3 are done this session: 0.0.21 cut, the reference captures
-landed, and the screenshots folder split landed (§1).
+`goal-prompt.md`'s ORDER OF WORK is at steps 5 and 7 now — steps 1, 2 (in-repo half), 3, 4 and 6 are
+done (0.0.21/0.0.22 cut, reference captures, folder split, `044`'s phone-sheet grammar, `045`'s
+card properties). Three worktrees carry work opened since `orchestrate-handover-16`, none landed:
 
-4. **Finish `044`'s remaining phone-sheet work** on `worktrees/043-sheet-alignment-2` — resolve the
-   two remaining conflict markers in `044-phone-sheet-alignment/tasks.md`, stage the four already-
-   resolved files, verify, then land.
-5. **`006-list-view-deprecation`'s children, in order**: verify and land `006-hide-and-migrate`
-   (`worktrees/044-list-hide-migrate`), then `007` then `008`. Not negotiable.
-6. **Verify and land `045-board-card-properties`** (`worktrees/045-board-card-properties`), behind
-   the existing `boardExtensionsEnabled` flag.
-7. **`046-linked-views-notion-parity`** stays blocked on the operator's ADR-001 ruling.
+1. **`worktrees/047-list-remove-renderer`** (006's child `007-remove-renderer-and-harness`) — **mid
+   interactive rebase, stopped on conflicts.** `git rebase-merge` shows the feat commit
+   (`ba2acf7d`, "retire the list renderer, its lane and its captures") applied with conflicts still
+   open: `UU` in `screenshots/manifest.json`, six `constructed-{filter,sort}-panel` captures,
+   `tools/lane/css-lane.json`, and nine `tools/live/*.json` evidence files (`capture-device-parity`,
+   `renderer-coverage`, `replay`, `sheet-rebuild`, `sheet-teardown`, `touch-targets`,
+   `touch-targets-baseline`, `touch-targets-constructed-baseline`, `unstyled-links`,
+   `view-census`); `tools/live/list-window.json` is `UD` (deleted by us, modified by them). One
+   docs commit (`7042699a`, "record the list renderer retirement") is queued behind it. Resolve,
+   `git rebase --continue`, verify (`npm run gate` should drop to 25 lanes once `list-window` is
+   gone), then land — this is the irreversible step `007` exists to be. The queued docs commit also
+   edits this packet's own `goal-prompt.md` (a gate-lane count correction) and
+   `006-list-view-deprecation`'s `goal.md`/`spec.md`; read it fresh before trusting its numbers
+   against whatever `main` is at by the time it lands. Landing this unblocks `008-docs-and-release`.
+2. **`worktrees/050-settings-body-grammar`** — a Grok 4.6 (cli-cursor) pass giving the settings
+   sheet's body its own row grammar, the scope `044`'s own `implementation-summary.md` named as
+   deliberately out of reach (`.db-view-config-row`, native radio group). Working tree carries
+   `view-config-panel-renderer.ts`, `tools/live/sheet-grammar.mjs`, a new
+   `view-config-panel-renderer.test.ts`, and a `044-phone-sheet-alignment/tasks.md` edit — nothing
+   committed yet. Needs a verifier next: run the gate, confirm `sheet-grammar`'s settings row is
+   real rather than special-cased, then commit and land.
+3. **`worktrees/049-bench-frozen-today`** — a board/timeline bench and capture pass freezing "today"
+   so gantt/calendar renders stop drifting on the real clock (the recurring cause behind every
+   "restored to HEAD, real-clock drift" note on recent board/gantt reconciliations). Working tree
+   touches `calendar-date-time.ts`, `calendar-timeline-model.ts`, `board-renderer.ts`,
+   `calendar-timeline-renderer.ts`, the timeline bench, and roughly 60 captures — nothing committed.
+   **Land this one last** among the three; once it lands, `043-constructed-capture`'s docs need a
+   pass recording the frozen-clock fixture and retiring the "drift, restored to HEAD" caveat
+   wherever it still reads as a standing limitation rather than a fixed one.
 
-**Still owed from the operator regardless of the above**: device confirmation on 0.0.21 for rows
-34-36/39/40/41 and on releases 0.0.7-0.0.20; the vault side-by-side for rows 37/38; and ADR-001.
-Each confirmation closes its `roadmap.md` §4 row; a "still broken" answer reopens the row with the
-device fact given, never argued with. **No agent ticks an operator row.**
+**Then resume `goal-prompt.md`'s ORDER OF WORK**: step 5 finishes with `008-docs-and-release`
+(README, changelog with the rollback sentence, the release that carries the removal) once `007`
+lands; step 7 (`046-linked-views-notion-parity`) stays blocked on the operator's ADR-001 ruling and
+is not this session's to start.
+
+**Still owed from the operator regardless of the above**: device confirmation on 0.0.21/0.0.22 for
+rows 29-36/39/40/41/43 and on every release before them; the vault side-by-side for rows 37/38;
+ADR-001; and `045`'s two open questions (gallery sharing, hide-in-table). Each confirmation closes
+its `roadmap.md` §4 row; a "still broken" answer reopens the row with the device fact given, never
+argued with. **No agent ticks an operator row.**
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -159,12 +173,13 @@ device fact given, never argued with. **No agent ticks an operator row.**
 ## 3. RESUME ORDER
 
 1. Read this handover in full before touching anything.
-2. Run `npm run gate` from a clean `main` checkout and confirm 25/25 green before assuming the
-   tree is as described here. CI's Gates workflow is also green as of `e0145ac9` (§1).
-3. **Confirm each in-flight worktree's tip against §1 before trusting any stated state** — several
-   moved during this session and the fastest-changing ones (`043-sheet-alignment-2`,
-   `044-list-hide-migrate`, `045-board-card-properties`, `046-board-line-height`) can move again
-   before this doc is read.
+2. Run `npm run gate` from a clean `main` checkout and confirm 26/26 green before assuming the
+   tree is as described here (verified at `9436b964` this pass). CI's Gates workflow is also green
+   as of `e0145ac9` (§1).
+3. **Confirm each in-flight worktree's tip against §2 before trusting any stated state** —
+   `worktrees/047-list-remove-renderer`, `worktrees/049-bench-frozen-today` and
+   `worktrees/050-settings-body-grammar` can all move again before this doc is read; `047` in
+   particular is mid-rebase and its conflict list is a snapshot, not a promise.
 4. Work the order in §2. Land, gate-green, ship; a phase is not done because its lane is green —
    D3 keeps shipped, verified and operator-confirmed apart.
 5. Once the operator confirms a landed worktree is no longer needed for reference, offer to remove
@@ -274,6 +289,15 @@ device fact given, never argued with. **No agent ticks an operator row.**
   reference source itself showed both labels painting on the same header SVG at fixed `y` offsets
   in `GanttView`'s own code — a faithful copy is not obligated to be prettier than what it copies,
   and that distinction is an operator call, not a defect to silently patch over.
+- A docs commit that cites the sha where a rebasing branch "closed on main" can be wrong the moment
+  a sibling lane lands underneath it before that branch pushes: the rebase target moves, the branch
+  re-rebases onto the new target, and the sha the docs already named stops being an ancestor of
+  main at all — `git merge-base --is-ancestor <sha> HEAD` answers this in one command, and
+  `git log --oneline --all | grep <sha>` confirms whether it survives even as a dangling ref. This
+  packet's own `roadmap.md` carried exactly that trap for `044`'s landing sha (`dcff742e`, orphaned
+  by the board line-height fix landing underneath it and a second reconciliation to `9436b964`) —
+  the same class row 34's history already names for `fb44a302`. Check ancestry before citing a
+  landing sha in docs, not just before trusting one already written.
 <!-- /ANCHOR:next-session -->
 
 ---
@@ -333,3 +357,16 @@ program-level decision record only.
   SOURCE`; real drift still fails STALE. Verified red-then-green in a fresh clean clone; the Gates
   workflow is green on main. Main advanced to `9afe6e13` then `e0145ac9` while this handover was
   in progress; rebased in place twice.
+- **2026-09-05, six lanes landed and 0.0.22 cut**: the symlink-safe ignore check (`6328c9cb`,
+  `isGitIgnored()` now resolves through a worktree's `specs/context` symlink before asking git);
+  `006-list-view-deprecation`'s child `006-hide-and-migrate` (`e0e1c568`, reconciled `e466696b`,
+  trued `f49eda4c`); `045-board-card-properties` (`a79d7421`, reconciled `ff1dacec`, trued
+  `56a34199`); the kanban line-height fix reconciled twice more and trued at `53513962`; and
+  `044-phone-sheet-alignment`'s remaining legs (`2c0902fc`, reconciled `bdf255cf` then `9436b964`
+  after the line-height fix landed underneath it), registering `sheet-grammar` as a gate lane
+  (21 → 26). `0.0.22` cut at `7b976e28`, installed to iCloud, `npm run gate` 26/26 green. Corrected
+  `roadmap.md`'s stale `dcff742e` citation for `044`'s landing to `9436b964` (§4 gotchas) —
+  `dcff742e` was superseded by a later rebase and is not an ancestor of main. Three worktrees opened
+  and left in flight, uncommitted: `047-list-remove-renderer` (mid-rebase, conflicts open),
+  `049-bench-frozen-today` (board/timeline frozen-clock pass), `050-settings-body-grammar` (Grok
+  4.6 via cli-cursor, needs a verifier).
