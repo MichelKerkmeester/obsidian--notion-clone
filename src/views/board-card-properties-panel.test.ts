@@ -12,7 +12,7 @@ import type { ViewConfig } from "../data/types";
 import { t, setLocale } from "../i18n";
 import { renderBoardCardProperties } from "./board-card-properties-panel";
 
-// This suite now mounts the record-surface P2 checkbox row, whose own import chain reaches
+// This suite now mounts the shared checkbox property row, whose own import chain reaches
 // obsidian-dependent modals the same way card-field-renderer.test.ts's does — the entries beyond
 // setIcon/setTooltip exist only so that chain loads under the test runner.
 vi.mock("obsidian", () => ({

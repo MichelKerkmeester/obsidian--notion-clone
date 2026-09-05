@@ -49,7 +49,7 @@ export interface ColumnManagerActions {
   editColumn(col: ColumnDef): void;
   addColumn(): void;
   /** Present when the host can pre-set the new property's format and label; absent callers fall
-   *  back to `addColumn()`, matching the blank-modal behaviour every consumer had before P3. */
+   *  back to `addColumn()`, the blank-modal behaviour every consumer had before the picker. */
   createPropertyOfType?(type: ColumnDef["type"], initialLabel?: string): void;
   addFileFieldColumn?(key: string): void;
   deleteColumn(col: ColumnDef): void;
@@ -168,7 +168,7 @@ export class ColumnManagerRenderer {
   }
 
   // ───────────────────────────────────────────────────────────────────
-  // 3B. ADD-PROPERTY PICKER (P3)
+  // 3B. ADD-PROPERTY PICKER
   // ───────────────────────────────────────────────────────────────────
 
   /**
@@ -241,7 +241,7 @@ export class ColumnManagerRenderer {
         beforeClose: addToggle,
       });
     } else {
-      // P1's desktop variant, title-only (no icon, no open/close — this panel closes through its
+      // The shared desktop header, title-only (no icon, no open/close — this panel closes through its
       // own toolbar toggle, not a header button) with the select-all toggle as trailing content.
       buildDesktopRecordHeader({
         parent: panel,

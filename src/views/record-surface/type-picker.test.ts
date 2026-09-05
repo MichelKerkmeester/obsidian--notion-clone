@@ -1,6 +1,6 @@
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    type-picker.test
-// COMPONENT: P7's one type list, its icons and its disabled-not-omitted gating
+// COMPONENT: the one property-format list, its icons and its disabled-not-omitted gating
 // ───────────────────────────────────────────────────────────────────
 
 // ───────────────────────────────────────────────────────────────────

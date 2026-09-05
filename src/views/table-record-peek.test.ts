@@ -35,7 +35,7 @@ const { platform, setIconMock } = vi.hoisted(() => ({
     el.setAttribute("data-icon", icon);
   }),
 }));
-// This suite now mounts the record-surface primitives (P1's header, P2's row shell), whose own
+// This suite now mounts the record-surface primitives (the shared header and row shell), whose own
 // import chain reaches obsidian-dependent modals the same way card-field-renderer.test.ts's does —
 // the entries beyond TFile/Platform/setIcon exist only so that chain loads under the test runner.
 vi.mock("obsidian", () => ({

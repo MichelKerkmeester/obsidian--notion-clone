@@ -1,6 +1,6 @@
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    type-picker
-// COMPONENT: P7 — the one property-format list every type-list site renders
+// COMPONENT: the one property-format list every type-list site renders
 // ───────────────────────────────────────────────────────────────────
 //
 // Three sites drew their own type list before this: `create-property-modal.ts`'s `PROPERTY_TYPES`
@@ -54,7 +54,7 @@ export function rollupNeedsRelationGate(hasRelation: boolean, reason: string): T
 
 /**
  * The property-type-conflict modal's per-writer subset (`getTypeOptions`), restated as a gate
- * rather than a filter (A6's correction): a computed writer's draft can only resolve to one of
+ * rather than a filter, as the capture read corrected: a computed writer's draft resolves to one of
  * five plain types, and any other writer's draft cannot become a relation, rollup, computed value
  * or a files column through this dialog. The eight always-disabled formats carry one shared
  * reason; the computed-only gap is named separately so the copy matches what is actually missing.

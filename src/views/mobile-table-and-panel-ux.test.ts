@@ -21,7 +21,7 @@ import { describe, expect, it } from "vitest";
 
 const stylesContent = readFileSync(resolve(__dirname, "../../styles.css"), "utf-8");
 const recordPanelSource = readFileSync(resolve(__dirname, "./record-detail-panel.ts"), "utf-8");
-// The header block — including the close button's class — moved into the shared P1 primitive
+// The header block — including the close button's class — moved into the shared header primitive
 // (`record-surface/record-header.ts`) when the record sheet switched onto it; the sheet-dismiss
 // assertions below read both sources rather than assuming everything is still one file.
 const recordHeaderSource = readFileSync(resolve(__dirname, "./record-surface/record-header.ts"), "utf-8");
