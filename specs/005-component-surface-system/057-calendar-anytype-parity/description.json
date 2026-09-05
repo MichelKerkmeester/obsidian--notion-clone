@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/057-calendar-anytype-parity",
+  "description": "Phase 2: calendar-anytype-parity",
+  "keywords": [
+    "phase",
+    "calendar-anytype-parity"
+  ],
+  "lastUpdated": "2026-09-05T20:25:01.650Z",
+  "specId": "057",
+  "folderSlug": "calendar-anytype-parity",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

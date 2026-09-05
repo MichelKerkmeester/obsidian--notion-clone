@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/057-calendar-anytype-parity",
+  "spec_folder": "005-component-surface-system/057-calendar-anytype-parity",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "057 spec",
+      "calendar anytype parity",
+      "calendar month grid anatomy",
+      "calendar phone gap",
+      "057 plan",
+      "calendar anytype parity plan",
+      "calendar retarget legs",
+      "057 tasks",
+      "calendar anytype parity tasks",
+      "calendar true-up task",
+      "057 acceptance criteria",
+      "calendar anytype closure gate"
+    ],
+    "key_topics": [
+      "spec",
+      "calendar",
+      "anytype",
+      "parity",
+      "month",
+      "grid",
+      "anatomy",
+      "phone",
+      "gap",
+      "plan",
+      "retarget",
+      "legs"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/views/calendar-renderer.ts",
+      "src/views/calendar-toolbar-renderer.ts",
+      "styles.css",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/spec.md",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/goal.md",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/plan.md",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/tasks.md",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/checklist.md",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/acceptance-criteria.md",
+      "specs/005-component-surface-system/057-calendar-anytype-parity/decision-record.md",
+      "src/views/calendar-mini-calendar-renderer.ts",
+      "src/views/calendar-renderer.test.ts",
+      "src/views/calendar-keyboard-navigation.test.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/057-calendar-anytype-parity/checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-mini-calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-mini-calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-keyboard-navigation.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-keyboard-navigation.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Calendar Anytype Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Project Manager",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Renderer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The calendar is shaped by nobody's reference in particular",
+    "created_at": "2026-09-05T20:25:00Z",
+    "last_save_at": "2026-09-05T20:53:08.391Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:fbed7182d7fccea451fa7e9da1cb63e5b03b9804c5c0f98072356275aad20320",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "81cf00a3bd4789161f4a80e3271e6270cc0bc5bea4921fb4e1d9288d2964a032",
+      "plan.md": "9c069123a3d90773888ca32e49e2eb912819c59b2fb8b7894a8e9c5dbd94fd43",
+      "tasks.md": "d799064c022e50f294ad20bd6422fccf8f0c03366fb183432f97dbcd31450147",
+      "decision-record.md": "a3375af2475e80ca1748b834338ae66df4ccb2643c3d0a028c29041ddc81d403",
+      "implementation-summary.md": "2a219f2fba2e474177f8e6b7323811ff2aaf5c3194568dde87e192fac22d0e1f"
+    },
+    "last_active_at": null
+  }
+}

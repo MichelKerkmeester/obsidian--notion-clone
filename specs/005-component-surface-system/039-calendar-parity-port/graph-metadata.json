@@ -22,7 +22,7 @@
       "039 goal",
       "calendar parity goal",
       "calendar milestone completion goal",
-      "implementation"
+      "039 decision record"
     ],
     "key_topics": [
       "calendar",
@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "src/views/calendar-renderer.ts",
       "src/i18n.ts",
@@ -85,6 +86,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -194,17 +201,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Execution Rules",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "obsidian-pm has no calendar view; this phase merges its verified date and milestone language into the existing calendar-renderer.ts, not a file port.",
     "created_at": "2026-09-02T21:56:40.087Z",
-    "last_save_at": "2026-09-03T11:16:19.655Z",
+    "last_save_at": "2026-09-05T20:53:08.789Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,14 +214,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:712e45b3f425460da99e54a723f314d86be8d159cf954ff0d42be528b562e699",
+    "source_fingerprint": "sha256:d703970103f21590589a44af14d15741602658afdfb152489b20fdc24ea59317",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9384e616c1fbdf036cca5a638f18390ae4b21f944f32f5d8c03bc9d7a8d80d0e",
       "plan.md": "822cd1fe3da8684f7dd69b7f08af129efae19f9f063b54471e84988261ee97a6",
       "tasks.md": "995ba44686effa326d060ee1b2aa6a2fa1cf59a852f1e116447b4f4951a9e51b",
+      "decision-record.md": "57b0d37b1887951da1fd8773130a4281730a9b6e28f9bc0fa5bd5fe517206619",
       "implementation-summary.md": "f27059a2f0380fdd3f43a6bf91d016f6c1ec9a3e75b8f9dd2f925b85fdb82dd3"
     },
     "last_active_child_id": null,
