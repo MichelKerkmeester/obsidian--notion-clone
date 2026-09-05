@@ -11,11 +11,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-05T00:00:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Accepted ADR-003 and ADR-004 for header drag and rollback"
-    next_safe_action: "Implement ADR-004 handle markup and close T016 and Limitations 3-4"
-    blockers: []
+    last_updated_at: "2026-09-05T06:55:00Z"
+    last_updated_by: "implementation-verifier"
+    recent_action: "Implemented ADR-004's handle markup and measured the linked surface"
+    next_safe_action: "Operator reads the released build on device"
+    blockers:
+      - "The constructed host cannot reproduce the code-block clipping, so AC-002 needs the device"
     key_files:
       - "src/views/embedded-database-renderer.ts"
     session_dedup:

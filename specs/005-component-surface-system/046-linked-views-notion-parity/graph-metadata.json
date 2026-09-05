@@ -58,6 +58,8 @@
       "src/i18n.ts",
       "src/views/embedded-database-renderer.test.ts",
       "src/views/add-view-popover-layout.test.ts",
+      "src/views/toolbar-renderer.test.ts",
+      "tools/live/render-assertion-harness.ts",
       "tools/screenshots/constructed-scenarios.mjs"
     ],
     "entities": [
@@ -164,6 +166,18 @@
         "source": "derived"
       },
       {
+        "name": "toolbar-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/toolbar-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
         "name": "constructed-scenarios.mjs",
         "kind": "file",
         "path": "tools/screenshots/constructed-scenarios.mjs",
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator, verbatim, 2026-09-04 ~20:41 CEST: \"on overview the nested views shouldn't be clipped",
     "created_at": "2026-09-04T19:14:35Z",
-    "last_save_at": "2026-09-05T06:27:33.541Z",
+    "last_save_at": "2026-09-05T06:38:19.667Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:fd9e83675b19fe6c7b8554f60f1991839e2c9e5368b78ccc293f26c82c285137",
+    "source_fingerprint": "sha256:3748b9e9fc755497730c692be057a65c17b9d13a01878a48add840104fac6bca",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "7c21e61f53d5db26a6a1eca3973738a58964ccbd3d79d8fbae254470d156c728",
       "plan.md": "9b543f43af633623a5c5c1497530b2b5aade7b2fc136236f4b0d560e7278cad5",
-      "tasks.md": "d6527e9e8764a62f35244e8bdaf5ab9e03938ee0f0a7838e37a313aef98cc740",
-      "decision-record.md": "5ac1e74c5391b72a5d2e8e9ceaa45175c6b400452907eb97512a292d96480e88",
-      "implementation-summary.md": "20e12724dea64957324796420e3a7d15b51261f8f89c67e5b0257751a65915c4"
+      "tasks.md": "dc7b7ff4c35c46d60a8e01035eac7015c3505ed0c5f29604adf0d83b04125ffb",
+      "decision-record.md": "532ccfa86746712bb73463b92a6e166c7cf4abb08e5e913adbca3c8f56625534",
+      "implementation-summary.md": "5e36be54c45b39c6ad293a12628a57be5b715543062e09ad213ff5c8f42bffef"
     },
     "last_active_child_id": null,
     "last_active_at": null
