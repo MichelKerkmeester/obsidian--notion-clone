@@ -5,6 +5,20 @@ against Anytype. It is not tracked by `tools/screenshots/manifest.json` — see 
 the bottom of this file for why. Two kinds of file live here: official product images (`*-official.*`,
 documented in `sources.md`) and screenshots of the locally installed app (`*-dark.png`).
 
+## Layout — how to find a capture
+
+Grouped by platform and subject, filenames unchanged so any citation by name still resolves:
+
+| Folder | Holds | How to find it |
+|--------|-------|-----------------|
+| `official/` | 5 desktop `*-official.jpg` docs.anytype.io illustrations | Look here first for board/table/calendar/gallery/properties reference art |
+| `desktop/sets/<use-case>/` | 120 catalogue captures, 12 per use case (6 layouts × 2 themes) | Pick the use-case folder (e.g. `project-tracker/`) named in the filename itself |
+| `desktop/app/` | 31 dark-only installed-app screens — search, slash menu, inline collection, set layouts, filters, pickers, the object `···` menu | Anything not a catalogue set or a menu crawl capture lives here |
+| `desktop/menus/` | 600 files, 150 menus × light/dark × clipped/`-full`, kept flat since the filename already carries its context (`menu-set-`, `menu-cell-`, `menu-object-`, `menu-nav-`, `menu-kanban-`, `menu-calendar-`, `menu-gallery-`, `menu-list-`) | Grep the filename prefix for a context, e.g. `anytype-menu-nav-` for sidebar/settings menus |
+| `mobile/official/` | 20 App Store / Google Play / GitHub README marketing images | Vendor marketing creative, not an installed-app capture |
+| `mobile/sheets/` | 104 `anytype-mobile-sheet-*` iOS simulator captures | Every bottom sheet: view edit, filters, sorts, cell editors, pickers |
+| `mobile/app/` | 14 remaining iOS simulator captures — set layouts, object page, space and type lists | Screens that are not a sheet |
+
 ## Installed app
 
 - **Version**: 0.56.5 — Homebrew cask version at install time (`brew info --cask anytype`), and
@@ -78,6 +92,8 @@ recoverable (docs.anytype.io/anytype/organize/deletion) — nothing was permanen
 "move to bin", not "delete forever".
 
 ## Captures
+
+The five `*-official.jpg` rows live in `official/`; every other row below lives in `desktop/app/`.
 
 | File | Origin | Shows |
 |------|--------|-------|
@@ -168,9 +184,9 @@ alignment`'s contract-widening task), not this capture pass, so **no manifest en
 anything in this folder** and `screenshots/manifest.json` is untouched. `npm run screenshots:verify`
 does not see this folder — it only walks `manifest.scenarios` — so it is unaffected either way.
 
-## Mobile — official (`mobile-official/`)
+## Mobile — official (`mobile/official/`)
 
-A later, separate pass added `screenshots/anytype/mobile-official/`: 20 official Anytype **mobile**
+A later, separate pass added `screenshots/anytype/mobile/official/`: 20 official Anytype **mobile**
 images (App Store, Google Play, and the `anyproto/anytype-swift` GitHub README) — no installed-app
 mobile captures, since Anytype's mobile clients were not installed for this pass. Same "not tracked
 by `manifest.json`" status as the rest of this folder, for the same reason (no `reference` group/
@@ -186,7 +202,7 @@ renderer widened for a mobile surface).
 
 Full per-file source URLs, fetch dates, resolutions, and the licence position (same "terms
 unclear, retained for internal comparison" finding as the rest of this folder) are in
-`screenshots/anytype/mobile-official/sources.md`.
+`screenshots/anytype/mobile/official/sources.md`.
 ## Catalogue sets — loaded, with views, in both themes
 
 The follow-up the section above recorded as out of scope is done. `tools/mock-data/catalogue.json`
@@ -326,7 +342,8 @@ persistent test environment, so unlike the previous pass nothing was moved to Bi
 
 ### Captures
 
-**120 files**, named `anytype-<usecase>-<layout>-<theme>.png`.
+**120 files**, named `anytype-<usecase>-<layout>-<theme>.png`, one folder per use case under
+`desktop/sets/<usecase>/`.
 Each set has six layouts in two themes. `capture-report.json` records the row count the DOM held
 when each was taken, so a capture that photographed an empty grid is visible as a number rather
 than only as a picture nobody looked at.
@@ -347,7 +364,7 @@ focus, no visible window and no pointer — the operator kept working on the sam
 
 ## Menus and dropdowns — every one the desktop app opens
 
-`screenshots/anytype/menus/` holds **600 files: 150 distinct menus, each in light and dark, each
+`screenshots/anytype/desktop/menus/` holds **600 files: 150 distinct menus, each in light and dark, each
 twice** — once clipped to the menu's bounding box (the design reference) and once as the whole
 window (`-full`, which shows where the menu sits relative to the control that opened it). Every
 capture came from `tools/mock-data/anytype/menus.mjs`, driven over CDP against the persistent
@@ -571,12 +588,14 @@ Each row exists as `-dark.png`, `-light.png`, `-dark-full.png` and `-light-full.
 
 # Mobile (iOS Simulator)
 
-`mobile/` holds 59 mobile states, each in light and dark — 118 files. They are screenshots of the
+`mobile/` holds 59 mobile states, each in light and dark — 118 files, split into `mobile/sheets/`
+(104 files, every `anytype-mobile-sheet-*` bottom sheet) and `mobile/app/` (the remaining 14 —
+set layouts, the object page, the space and type lists). They are screenshots of the
 **official open-source Anytype iOS client built from source** and run on a simulator, not of the
 desktop app at a narrow width. Everything they show is real iOS chrome: sheets that slide from the
 bottom, iOS pickers, the SpringBoard status bar.
 
-They are the counterpart to `mobile-official/` above: those are the vendor's own marketing images,
+They are the counterpart to `mobile/official/` above: those are the vendor's own marketing images,
 these are the running app.
 
 ## Provenance
@@ -699,7 +718,9 @@ join must happen in one session, which is why the invite is read at launch rathe
 
 Every row exists as `<name>-light.png` and `<name>-dark.png`. Themes were switched with
 `xcrun simctl ui booted appearance light|dark` without leaving the state, so both files show the
-same screen.
+same screen. Every `anytype-mobile-sheet-*` stem below lives in `mobile/sheets/`; the rest
+(`anytype-mobile-space-typeslist`, `anytype-mobile-type-collections-list`, `anytype-mobile-object-page`,
+`anytype-mobile-set-*`) live in `mobile/app/`.
 
 ### Navigation and space
 
