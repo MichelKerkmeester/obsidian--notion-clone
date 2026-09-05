@@ -960,14 +960,22 @@
      gets below: nothing under this marker ever waits on a `transitionend`, so a hard stop starves
      no listener, while a duration merely close to zero still runs a transition — and a synchronous
      style read that lands inside that run reports the value a property is leaving, not the one it
-     is heading to. A spec-true `0` suppresses the transition outright instead of racing it. */
+     is heading to. A spec-true `0` suppresses the transition outright instead of racing it.
+
+     `!important`, because without it this clause resets only the rules written ABOVE it. Its
+     selector is one class plus a universal, so it ties with every `.db-toast`-shaped rule in the
+     file and loses the tie to whichever comes later — and this block sits near the top, with
+     twenty thousand lines of surface rules below. Measured, not argued: the toast's own
+     `animation: db-toast-in` won this tie and kept its full 200ms entrance under
+     `prefers-reduced-motion: reduce`, until this word. A reset any later rule can outrank is not
+     a reset, and the next body-mounted surface would have rediscovered that the same way. */
   .db-surface,
   .db-surface *,
   .db-surface *::before,
   .db-surface *::after {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    transition-duration: 0;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0 !important;
     scroll-behavior: auto;
   }
 

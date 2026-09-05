@@ -135,6 +135,7 @@ import { DatabaseView } from "${join(REPO, "src/views/database-view")}";
 import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-database-renderer")}";
 import { getColumnDisplayType, isEmptyValue } from "${join(REPO, "src/data/column-display")}";
 import { openColumnWidthAdjuster } from "${join(REPO, "src/views/column-width")}";
+import { showToast } from "${join(REPO, "src/views/toast")}";
 import { formatEuroCurrency, formatEuroNumber } from "${join(REPO, "src/data/euro-format")}";
 globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
 globalThis.__tall = { openRecordDetailPanel, closeRecordDetailPanel, mountNoteBodyRegion };
@@ -154,6 +155,7 @@ globalThis.__panels = { FilterPanelRenderer, SortPanelRenderer };
 globalThis.__registry = { SURFACE_REGISTRY, renderDateValuePicker, closeActiveDateValuePicker };
 globalThis.__table = { TableRenderer };
 globalThis.__columnWidth = { openColumnWidthAdjuster };
+globalThis.__toast = { showToast };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -8437,6 +8439,175 @@ await section("the registry describes where these surfaces actually mount", asyn
 });
 
 // ───────────────────────────────────────────────────────────────────
+// THE TOAST, BUILT RATHER THAN GREPPED
+// ───────────────────────────────────────────────────────────────────
+//
+// A notice that promised "Undo to keep it a gallery" was raised over a bare `Notice`, which has no
+// slot for a button — the text asked for an action the surface could not carry. The component that
+// replaces it makes three claims a source grep cannot settle, because all three are about what the
+// browser ends up with rather than about what the module says.
+//
+// SEVERITY IS NOT COLOUR. Two toasts differ by a class and by a glyph, and only the glyph survives
+// a reader who cannot separate the two colours. A grep sees the conditional; it does not see
+// whether two different icons reached the DOM, which is the thing being promised.
+//
+// AN ABSENT ACTION LEAVES NO ROW. The action row is built unconditionally and hidden by `:empty`,
+// so whether a plain notice renders a stray 12px gap under its message is a question for the
+// cascade and not for the module. Measured as a computed style, because the rule is the mechanism.
+//
+// AN ACTION REACHES ITS CALLBACK. The button existing is not the button working: the promise was
+// broken for as long as it was, precisely because nothing ever pressed it.
+
+const toastResults = [];
+
+await section("the toast pairs severity with a glyph and its action reaches its callback", async () => {
+  // Width is read off `offsetWidth` rather than a bounding rect, and the difference is not
+  // pedantry: read as a rect during the entrance keyframe the card measures 376px, which is 384
+  // times the `--db-motion-scale-from` it enters at. A rect carries the transform, so that number
+  // is an animation frame and not a layout, and waiting the animation out instead would make the
+  // check a race.
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { showToast } = globalThis.__toast;
+    const read = (card) => ({
+      severityClass: card.className,
+      glyph: card.querySelector(".db-toast-icon [data-icon]")?.getAttribute("data-icon") ?? null,
+      role: card.getAttribute("role"),
+      live: card.getAttribute("aria-live"),
+      stackClass: card.parentElement ? String(card.parentElement.className) : null,
+      stackOnBody: card.parentElement?.parentElement === document.body,
+      actionsDisplay: getComputedStyle(card.querySelector(".db-toast-actions")).display,
+      actionLabel: card.querySelector(".db-toast-action")?.textContent ?? null,
+      box: (() => {
+        const stack = card.parentElement;
+        const cardStyle = getComputedStyle(card);
+        const actionStyle = getComputedStyle(card.querySelector(".db-toast-actions"));
+        return {
+          width: card.offsetWidth,
+          right: Math.round(window.innerWidth - stack.getBoundingClientRect().right),
+          bottom: Math.round(window.innerHeight - stack.getBoundingClientRect().bottom),
+          radius: cardStyle.borderTopLeftRadius,
+          padding: cardStyle.paddingTop,
+          minHeight: cardStyle.minHeight,
+          actionGap: actionStyle.columnGap,
+          actionMarginTop: actionStyle.marginTop,
+        };
+      })(),
+    });
+
+    const plain = showToast(document, { severity: "success", message: "Migrated" });
+    const plainRead = read(document.querySelector(".db-toast"));
+    plain.close();
+
+    const failed = showToast(document, { severity: "error", message: "Could not read the source" });
+    const errorRead = read(document.querySelector(".db-toast"));
+    failed.close();
+
+    let clicks = 0;
+    showToast(document, {
+      severity: "success",
+      message: "Migrated",
+      action: { label: "Undo", onClick: () => { clicks += 1; } },
+    });
+    const actionRead = read(document.querySelector(".db-toast"));
+    document.querySelector(".db-toast-action").click();
+
+    return {
+      plain: plainRead,
+      error: errorRead,
+      action: actionRead,
+      clicks,
+      cardsAfterAction: document.querySelectorAll(".db-toast").length,
+    };
+  });
+
+  await page.close();
+
+  // The one claim in this component that a stylesheet grep gets WRONG, so it is asked of the
+  // browser. The reset is written near the top of a twenty-thousand-line file and its selector is
+  // one class plus a universal, which ties with `.db-toast` and loses the tie on order. Read as
+  // source, `.db-surface` is in the reset's selector list and the toast carries `.db-surface`, so
+  // it looks covered; read as a computed style it kept its full entrance. Both preferences are
+  // measured, because a duration that is short under BOTH proves the reset reached nothing.
+  const motion = {};
+  for (const preference of ["reduce", "no-preference"]) {
+    const motionPage = await browser.newPage({ viewport: VIEWPORT, reducedMotion: preference });
+    await motionPage.setContent(page_html);
+    await motionPage.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+    await motionPage.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+    await motionPage.addScriptTag({ content: positionerJs });
+    motion[preference] = await motionPage.evaluate(() => {
+      globalThis.__toast.showToast(document, { severity: "success", message: "Migrated" });
+      const style = getComputedStyle(document.querySelector(".db-toast"));
+      return { duration: style.animationDuration, iterations: style.animationIterationCount };
+    });
+    await motionPage.close();
+  }
+
+  const record = (name, pass, detail) => toastResults.push({ name, pass, detail });
+
+  record("a reader who asked for no motion gets a toast that does not animate",
+    parseFloat(motion.reduce.duration) <= 0.001
+      && parseFloat(motion["no-preference"].duration) > 0.1,
+    `under reduce the entrance computes ${motion.reduce.duration} `
+      + `x${motion.reduce.iterations}, against ${motion["no-preference"].duration} `
+      + `x${motion["no-preference"].iterations} with no preference. Both are read, because a `
+      + `duration that is short under either preference proves the reset reached nothing`);
+
+  record("a success and an error toast reach the DOM as two different glyphs, not two colours",
+    measured.plain.glyph === "check" && measured.error.glyph === "alert-triangle",
+    `success drew "${measured.plain.glyph}" on ${measured.plain.severityClass}, error drew `
+      + `"${measured.error.glyph}" on ${measured.error.severityClass}. A reader who cannot separate `
+      + `the two colours has only the glyph left, so a shared glyph is severity by colour alone`);
+
+  record("the toast announces itself as a polite live region on a body-mounted db-surface stack",
+    measured.plain.role === "status" && measured.plain.live === "polite"
+      && String(measured.plain.stackClass).split(" ").includes("db-surface")
+      && String(measured.plain.stackClass).includes("db-toast-stack")
+      && measured.plain.stackOnBody,
+    `role=${measured.plain.role} aria-live=${measured.plain.live}, stack classes `
+      + `"${measured.plain.stackClass}", stack's parent is the body=${measured.plain.stackOnBody}. `
+      + `\`db-surface\` is what carries the token scale and the reduced-motion reset to a surface `
+      + `that has left the container, so its absence is silent everywhere but on screen`);
+
+  record("a notice with no action renders no action row",
+    measured.plain.actionsDisplay === "none",
+    `the action row computed display:${measured.plain.actionsDisplay} with no action given, against `
+      + `display:${measured.action.actionsDisplay} with one. The row is built either way and hidden `
+      + `by \`:empty\`, so this is a cascade fact and not a module one`);
+
+  record("the action button carries the label it was given and reaches its callback exactly once",
+    measured.action.actionLabel === "Undo" && measured.clicks === 1,
+    `the row rendered "${measured.action.actionLabel}" and one press ran the callback `
+      + `${measured.clicks} time(s). The gallery-migration notice promised an Undo for as long as `
+      + `it did because nothing ever pressed the button it did not have`);
+
+  // The geometry is the one part of this component that was READ off a source stylesheet rather
+  // than seen in a picture — no capture on either platform shows a feedback surface. A number
+  // transcribed from another project's source and never measured in ours is a number nobody has
+  // checked, so it is measured here on the built card instead of standing in prose.
+  record("the built toast renders at the geometry it was measured from",
+    measured.plain.box.width === 384 && measured.plain.box.right === 12
+      && measured.plain.box.bottom === 12 && measured.plain.box.radius === "12px"
+      && measured.plain.box.padding === "16px" && measured.plain.box.minHeight === "64px"
+      && measured.action.box.actionGap === "8px" && measured.action.box.actionMarginTop === "12px",
+    `${measured.plain.box.width}px wide, ${measured.plain.box.right}px from the right and `
+      + `${measured.plain.box.bottom}px from the bottom, ${measured.plain.box.radius} radius, `
+      + `${measured.plain.box.padding} padding, ${measured.plain.box.minHeight} min-height, action `
+      + `row gap ${measured.action.box.actionGap} at margin-top ${measured.action.box.actionMarginTop}`);
+
+  record("pressing the action dismisses the toast that carried it",
+    measured.cardsAfterAction === 0,
+    `${measured.cardsAfterAction} card(s) remain after the press. A toast whose action stays on `
+      + `screen invites the same undo twice`);
+});
+
+// ───────────────────────────────────────────────────────────────────
 // THE FLICK, DRIVEN THROUGH THE GESTURE RATHER THAN ASKED OF THE RULE
 // ───────────────────────────────────────────────────────────────────
 //
@@ -10639,7 +10810,7 @@ await section("a view-switcher row on a phone carries one trailing control", asy
 results.push(...tallSheetResults, ...dockResults, ...viewRowResults, ...phoneResults, ...menuResults, ...columnWidthKeyboardResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...toastResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
