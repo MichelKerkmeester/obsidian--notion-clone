@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-05T14:00:00Z"
-    last_updated_by: "orchestrate-handover-19"
-    recent_action: "Authored one threshold per requirement, each with a red observed on HEAD"
-    next_safe_action: "Execute T001, the surface inventory"
+    last_updated_at: "2026-09-05T14:50:00Z"
+    last_updated_by: "adr-answers-051-053"
+    recent_action: "Recorded the operator's fullscreen and sub-page answers; thresholds unchanged"
+    next_safe_action: "Execute T001, the surface inventory, against ADR-002 and ADR-004"
     blockers:
       - "AC-009 gates the geometry rows: they read from 050's design-trueup.md rather than from a fresh capture pass"
       - "AC-010 is operator-owned and nothing here can close it"
@@ -27,9 +27,10 @@ _memory:
       session_id: "surface-system-051-ac"
       parent_session_id: null
     completion_pct: 0
-    open_questions:
-      - "Whether fullscreen survives as a third presentation"
-    answered_questions: []
+    open_questions: []
+    answered_questions:
+      - "Fullscreen survives only for the formula workbench (ADR-004, Accepted); the other three fullscreen subclasses become modal/sheet"
+      - "A registered stacked pair may become an in-place sub-page where the Anytype capture shows it, per pair (ADR-002, Accepted)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Modal and Sheet Componentization

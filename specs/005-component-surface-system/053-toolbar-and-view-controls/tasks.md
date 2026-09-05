@@ -93,8 +93,9 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-4 -->
 ## Phase 4: Clusters and chips (L3) — `050` item 1
 
-- [ ] **T005 — Make the filter and sort triggers dual-mode and move the chip rail into the toolbar
-      band with a direction-coloured leading sort chip.** (src/views/toolbar-renderer.ts,
+- [ ] **T005 — Give the filter and sort triggers a declared `active`/`add` state (ADR-001, Accepted:
+      dual-mode icon behaviour is rejected) and move the chip rail into the toolbar band with a
+      direction-coloured leading sort chip.** (src/views/toolbar-renderer.ts,
       src/views/active-view-controls-renderer.ts, styles.css) **Threshold** (`050` AC-001, kept):
       chip row present iff a rule is active; trigger icons report `add` vs `active`; all four
       filter × sort combinations assertable. **Red-first proof**: today both triggers open the

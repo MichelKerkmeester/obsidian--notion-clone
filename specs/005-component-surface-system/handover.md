@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: main carries 0.0.25 (2334046b, bundle f2518f5e) with the five desktop fixes from the operator's 0.0.23 desktop pass. This pass landed five new family phases 051-055 — the operator's componentization instruction — four drafted externally by GLM 5.3 flash and one written in-runtime after its leaf died at the scaffold. All five were corrected against 050's design-trueup.md, which landed while they were drafting and overturned twenty-five claims across them. All five pass validate.sh --strict with Errors 0. No T001 has run in any of them. 053's three ADRs stay Proposed and are operator questions."
+description: "Resume point: main carries 0.0.25 (2334046b, bundle f2518f5e) with the five desktop fixes from the operator's 0.0.23 desktop pass. This pass landed five new family phases 051-055 — the operator's componentization instruction — four drafted externally by GLM 5.3 flash and one written in-runtime after its leaf died at the scaffold. All five were corrected against 050's design-trueup.md, which landed while they were drafting and overturned twenty-five claims across them. All five pass validate.sh --strict with Errors 0. No T001 has run in any of them. The five operator questions this pass opened (053's three ADRs, 051's two) were all answered 2026-09-05 (~14:15) and are now Accepted."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,37 +10,36 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-05T14:30:00Z"
-    last_updated_by: "orchestrate-handover-19"
-    recent_action: "Landed phases 051-055 and corrected them against the capture true-up"
-    next_safe_action: "Ask the operator the five open questions in section 2, then run 051-055 T001"
+    last_updated_at: "2026-09-05T14:50:00Z"
+    last_updated_by: "adr-answers-051-053"
+    recent_action: "Recorded the operator's 2026-09-05 (~14:15) answers to all five open questions"
+    next_safe_action: "Run 051-055 T001 against the now-Accepted decisions"
     blockers:
       - "Rows 47-51 shipped in 0.0.25; operator confirmation owed"
       - "Rows 29-33, 39-41, 43 re-asked against 0.0.25, unanswered"
-      - "053's three ADRs Proposed; none disposed by roadmap 6A"
       - "051-055: none past T001"
       - "046 T002/T016 and 044/045 AC-006 stay open"
     key_files:
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
-      - "specs/005-component-surface-system/050-anytype-adoption/design-trueup.md"
       - "specs/005-component-surface-system/053-toolbar-and-view-controls/decision-record.md"
+      - "specs/005-component-surface-system/051-modal-and-sheet-componentization/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
       parent_session_id: null
-    completion_pct: 71
-    open_questions:
-      - "053 ADR-001: extend the chip rail or rebuild it"
-      - "053 ADR-002: delete the seven dead methods, keep their classes"
-      - "053 ADR-003: confirm gates the drop or the gesture"
-      - "051: does fullscreen survive as a third presentation"
-      - "051: may a registered stacked pair become an in-place sub-page"
+    completion_pct: 76
+    open_questions: []
     answered_questions:
       - "The confirm primitive is 051's; 053 and 055 consume it"
       - "Anytype dual-mode trigger icons rejected: 120 captures, WCAG 1.4.11"
       - "Selection caps not adopted: no multi-select referent"
       - "055 was renamed from 051-states-feedback-and-motion"
+      - "053 ADR-001: extend the existing chip rail; no new chip-row component"
+      - "053 ADR-002: delete the seven dead methods, keep their classes"
+      - "053 ADR-003: the confirm fires on drop, not on gesture start"
+      - "051: fullscreen survives only for the formula workbench (new ADR-004)"
+      - "051: a registered stacked pair may become an in-place sub-page, per pair where the capture shows it (ADR-002)"
 ---
 # Session Handover: Component Surface System
 
@@ -113,31 +112,36 @@ DONE table and *open, drafted 2026-09-05, awaiting T001 true-up* in `roadmap.md`
 ---
 
 <!-- ANCHOR:context-transfer -->
-## 2. NEXT SAFE ACTION: ASK THE FIVE OPEN QUESTIONS, THEN RUN 051-055 T001
+## 2. NEXT SAFE ACTION: ALL FIVE QUESTIONS ANSWERED — RUN 051-055 T001
 
-### The operator questions this pass opened, and did not answer
+### The five operator questions this pass opened, now answered 2026-09-05 (~14:15)
 
-**`053`'s three ADRs stay PROPOSED.** Each was tested against one question at landing — *does it sit
-inside a decision the operator has already taken in `roadmap.md` §6A?* — and **none of the three
-does**. §6A covers the chip rail's neighbours but not the chip rail, and the confirm's presentation
-but not its timing. Two carry an upstream constraint that narrows them without deciding them.
+**`053`'s three ADRs were PROPOSED at landing.** Each was tested against one question — *does it
+sit inside a decision the operator has already taken in `roadmap.md` §6A?* — and **none of the
+three did**. §6A covered the chip rail's neighbours but not the chip rail, and the confirm's
+presentation but not its timing. The operator has since answered all three directly, and `051`'s two
+open questions alongside them. All five are now **Accepted** — quoted in full in `roadmap.md` §6A's
+"Five more, taken 2026-09-05 (~14:15)" table and in each packet's own `decision-record.md`.
 
-1. **`053` ADR-001 — extend the existing chip rail, or rebuild it on a new primitive?** The rail
-   ships (`active-view-controls-renderer.ts`, auto-hiding at `:97`, on both the full-page and
-   embedded paths) and the fixtures and screenshot manifest already track it. Its dual-mode clause
-   was **amended at landing** and is no longer part of the question.
-2. **`053` ADR-002 — delete the seven dead settings-entry methods and keep their classes?** Seven
-   methods have zero call sites (`toolbar-renderer.ts:512`, `:519`, `:551`, `:1594`, `:2239`,
-   `:2252`, `:2290`), and two anchor-fallback queries still read the classes they would stamp
-   (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`).
-3. **`053` ADR-003 — does the sort-conflict confirm gate the drop, or the gesture?** Gating the
-   gesture changes the surface the board parity lane photographs; gating the drop leaves the
-   surprise until drop time. `design-trueup.md` REQ-007 already ruled **confirm, not disable**, and
-   `051` ADR-003 makes the confirm primitive `051`'s — neither says *when* it fires.
-4. **`051` — does `fullscreen` survive as a third presentation?** Four surfaces use it, one of them
-   the 1,664-line formula workbench that stays ours.
-5. **`051` — may a registered stacked pair become an in-place sub-page?** Converting one changes a
-   green `sheet-grammar` row's subject, which is the operator's call, not an agent's.
+1. **`053` ADR-001 — extend the existing chip rail, or rebuild it on a new primitive?** **Accepted:
+   "Extend the existing rail."** `active-view-controls-renderer.ts` is kept and reshaped to the
+   Anytype-derived layout; no new chip-row component. (Its dual-mode clause was already amended out
+   at landing.)
+2. **`053` ADR-002 — delete the seven dead settings-entry methods and keep their classes?**
+   **Accepted: "Delete methods, keep classes."** The seven zero-call-site methods
+   (`toolbar-renderer.ts:512`, `:519`, `:551`, `:1594`, `:2239`, `:2252`, `:2290`) are removed; the
+   two anchor-fallback queries (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`) keep
+   the classes `createSettingsEntry` stamps on the live trigger.
+3. **`053` ADR-003 — does the sort-conflict confirm gate the drop, or the gesture?** **Accepted:
+   "On drop."** The drag proceeds unchanged; on drop, an active sort raises the confirm and offers
+   clear-sort-and-commit or decline-and-revert.
+4. **`051` — does `fullscreen` survive as a third presentation?** **Accepted: "Keep fullscreen for
+   the workbench only."** `FormulaModal` stays `fullscreen`; the other three fullscreen subclasses
+   become modal (desktop) / sheet (phone). Recorded as new ADR-004.
+5. **`051` — may a registered stacked pair become an in-place sub-page?** **Accepted: "Yes, where
+   the capture shows it."** A pair converts only where its equivalent Anytype surface's capture
+   shows the replace-in-place pattern, judged per pair; `048`'s stacking model stays the default for
+   every other pair. `048/decision-record.md` records the scoped exception.
 
 ### The in-flight worktrees, with their tips
 
@@ -193,9 +197,10 @@ a translation of it.
 
 A fresh device check against **`0.0.25`** for rows 29-33, 39-41 and 43, and a first look at rows
 47-51; the vault side-by-side for rows 37/38; `044`'s and `045`'s AC-006; `046`'s AC-007 and its
-`T016` settings-flag call; `006`'s two operator rows; and the five questions above. Each
-confirmation closes its `roadmap.md` §4 row or its phase's own AC row; a "still broken" answer
-reopens the row with the device fact given, never argued with. **No agent ticks an operator row.**
+`T016` settings-flag call; and `006`'s two operator rows. The five questions above are answered as
+of 2026-09-05 (~14:15). Each confirmation closes its `roadmap.md` §4 row or its phase's own AC row;
+a "still broken" answer reopens the row with the device fact given, never argued with. **No agent
+ticks an operator row.**
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -208,8 +213,9 @@ reopens the row with the device fact given, never argued with. **No agent ticks 
 2. Run `npm run gate` from a clean `main` checkout and confirm it green before assuming the tree is
    as described here. If the parent's phase count moved, regenerate `operator-checklist.md` with
    `node tools/naming/build-operator-checklist.mjs` — the `operator-list` lane reads it.
-3. Ask the five operator questions in §2. Three of them (`053`'s ADRs) block that phase's first
-   implementation leg; the other two block `051`'s.
+3. The five operator questions in §2 are answered — three of them (`053`'s ADRs) unblock that
+   phase's first implementation leg, and the other two unblock `051`'s (`051/tasks.md` T009 is
+   specifically unblocked by ADR-004).
 4. **Run `051`-`055`'s T001 before any implementation in them.** Each phase's T001 is its capture
    read or its surface inventory, and each is a gate rather than a step — which is precisely the
    lesson this pass paid for.

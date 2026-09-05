@@ -93,7 +93,11 @@ with the owner named, never self-closed.
       "unknown". **Red-first proof**: today the file does not exist. **Capture**: the shell
       behaviours are read from `../050-anytype-adoption/design-trueup.md` §2 and REQ-002, whose own
       sources are `anytype-view-settings-panel-dark.png` and `anytype-set-kanban-view-dark.png`;
-      rows with no captured pattern say **design inferred from source code, not seen**.
+      rows with no captured pattern say **design inferred from source code, not seen**. **Per
+      ADR-002 (Accepted, operator 2026-09-05 ~14:15: "Yes, where the capture shows it")**: a `048`
+      registered stacked pair's row converts to the sub-page presentation only where its equivalent
+      Anytype surface's capture shows the replace-in-place pattern, judged per pair; every other
+      pair's row keeps `048`'s stacking model as the default.
 - [ ] **T002 — [P] Measure every red in `acceptance-criteria.md` and write it into
       `checklist.md`.** Chrome-deciding sites (4), independent header sites (12), undeclared titles
       (20 of 20), exported confirm primitives (0), sub-page affordances (0), shell geometry
@@ -155,8 +159,11 @@ with the owner named, never self-closed.
       (`modals/invalid-time-events-modal.ts:78`), `FormulaModal` (`modals/formula-modal.ts:217`),
       `PropertyTypeConflictModal` (`modals/property-type-conflict-modal.ts:90`). **Threshold**: each
       either takes a shell role or carries a written reason for staying `fullscreen`. **Red-first
-      proof**: none carry either today. **Blocked on** `spec.md` §11's first open question if the
-      answer changes the formula workbench, which stays ours.
+      proof**: none carry either today. **Resolved** (`decision-record.md` ADR-004, Accepted,
+      operator 2026-09-05 ~14:15: "Keep fullscreen for the workbench only") — `FormulaModal` carries
+      the written reason and stays `fullscreen`; `ChartDrilldownModal`, `InvalidTimeEventsModal` and
+      `PropertyTypeConflictModal` take the shell's modal (desktop) / sheet (phone) role. No longer
+      blocked.
 - [ ] **T010 — Route or disposition the 3 non-`DbModal` outliers.**
       `src/main.ts:3047`, `image-file-suggest-modal.ts:40`,
       `markdown-file-suggest-modal.ts:34`. **Threshold**: chrome-deciding sites 2 → 1, or a written

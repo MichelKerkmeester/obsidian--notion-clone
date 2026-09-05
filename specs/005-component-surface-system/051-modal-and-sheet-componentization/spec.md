@@ -145,7 +145,8 @@ decisions from three modules and hoping the order is the one everything else use
 - **A surface's own body.** Menu rows are `052`'s, toolbar popovers `053`'s, property rows `054`'s,
   state copy `055`'s.
 - **The formula workbench** (`modals/formula-modal.ts`, 1,664 lines) — stays ours, `fullscreen`,
-  untouched except by whatever the presentation decision in §11 rules.
+  untouched. Confirmed by the operator's fullscreen-presentation ruling, §11 and
+  `decision-record.md` ADR-004 (Accepted).
 - **The table view, formulas/rollups/calculations, the Project Manager 1:1 board and gantt** — kept
   ours per the program's rulings.
 - **Anytype's data model** — `050` D6 applies unchanged.
@@ -314,16 +315,22 @@ each phase's one-leg-one-file rule coordinate them.
 <!-- ANCHOR:questions -->
 ## 11. OPEN QUESTIONS
 
-- Does `fullscreen` survive as a third presentation, or collapse into the sheet with a height role?
-  Four surfaces use it and one of them is the 1,664-line formula workbench that stays ours. Decided
-  in `modal-surface-inventory.md` against the four, not pre-decided here.
+- ~~Does `fullscreen` survive as a third presentation, or collapse into the sheet with a height
+  role?~~ **Resolved 2026-09-05 (~14:15), operator: "Keep fullscreen for the workbench only."** The
+  formula workbench (`FormulaModal`) stays `fullscreen`; the other three `fullscreen` subclasses
+  (`ChartDrilldownModal`, `InvalidTimeEventsModal`, `PropertyTypeConflictModal`) become modal
+  (desktop) / sheet (phone) — see `decision-record.md` ADR-004 (Accepted).
 - Do the three `FuzzySuggestModal` subclasses join the shell, or stay Obsidian-native behind a shim?
   They are not `DbModal` subclasses and they reach `attachSheetChromeToModal` directly; joining the
   shell means re-parenting them, and a shim means the count of chrome-deciding sites stops at two
-  rather than one.
-- Does the sub-page pattern reach surfaces `048` has already registered as stacked pairs? Replacing
-  a registered stacked pair with a sub-page would change a green row's subject, which needs the
-  operator's ruling rather than an agent's judgment.
+  rather than one. **Still open.**
+- ~~Does the sub-page pattern reach surfaces `048` has already registered as stacked pairs?~~
+  **Resolved 2026-09-05 (~14:15), operator: "Yes, where the capture shows it."** A registered
+  stacked pair converts to an in-place sub-page with a back arrow only where the Anytype capture
+  shows that pattern for the equivalent surface, judged per pair; per pair the `sheet-grammar` lane
+  row is rewritten to the sub-page shape red-first. `048`'s stacking model stays the default for
+  every other pair — see `decision-record.md` ADR-002 (Accepted) and `048/decision-record.md`'s
+  scoped-exception note.
 <!-- /ANCHOR:questions -->
 
 ---

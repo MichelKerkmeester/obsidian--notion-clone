@@ -1308,6 +1308,26 @@ landing: §6A's decisions cover the chip rail's neighbours but not the chip rail
 confirm's presentation but not its timing. All three stay Proposed and all three are in
 `handover.md`'s operator questions.
 
+**Superseded by the five decisions below.** The five open questions this claim refers to — `053`'s
+three ADRs plus `051`'s two — were answered the same day, later that afternoon.
+
+### Five more, taken 2026-09-05 (~14:15)
+
+These are the five operator questions `handover.md` §2 opened and, until now, left unanswered:
+`053`'s three ADRs and `051`'s two open questions. All five close in one sitting.
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **`053` ADR-001 — extend the existing chip rail.** Operator: *"Extend the existing rail"* | `active-view-controls-renderer.ts` is kept and reshaped to the Anytype-derived layout; no new chip-row component is built. The dual-mode trigger clause was already amended out at landing and stays rejected | `053-toolbar-and-view-controls/decision-record.md` ADR-001, now **Accepted** |
+| **`053` ADR-002 — delete the seven dead settings-entry methods, keep their classes.** Operator: *"Delete methods, keep classes"* | The seven zero-call-site methods in `toolbar-renderer.ts` are removed; the two anchor-fallback DOM queries (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`) keep the classes `createSettingsEntry` stamps on the live trigger | `053-toolbar-and-view-controls/decision-record.md` ADR-002, now **Accepted** |
+| **`053` ADR-003 — the sort-conflict confirm gates the drop, not the gesture.** Operator: *"On drop"* | The drag runs unchanged; on drop, an active sort raises the confirm and offers clear-sort-and-commit or decline-and-revert. Zero drag-visual change, so the board `pixelHash` parity comparison stays meaningful | `053-toolbar-and-view-controls/decision-record.md` ADR-003, now **Accepted** |
+| **`051` — `fullscreen` survives only for the formula workbench.** Operator: *"Keep fullscreen for the workbench only"* | `FormulaModal` stays `fullscreen`, untouched. `ChartDrilldownModal`, `InvalidTimeEventsModal` and `PropertyTypeConflictModal` become modal (desktop) / sheet (phone) — the shell's ordinary two-presentation resolution | `051-modal-and-sheet-componentization/decision-record.md` ADR-004 (new), **Accepted**; unblocks `051/tasks.md` T009 |
+| **`051` — a registered stacked pair may become an in-place sub-page, per pair.** Operator: *"Yes, where the capture shows it"* | A `048` stacked pair converts to a sub-page with a back arrow only where the Anytype capture shows that pattern for the equivalent surface, judged pair by pair; the converted pair's `sheet-grammar` row is rewritten to the sub-page shape, red-first. `048`'s stacking model stays the default for every pair not converted | `051-modal-and-sheet-componentization/decision-record.md` ADR-002, now **Accepted**; `048-stacked-sheets/decision-record.md` records the scoped exception |
+
+**All five of `handover.md` §2's open questions are now answered.** None of `053`'s three ADRs
+stays Proposed, and neither of `051`'s two open questions is open. `handover.md` is updated
+accordingly.
+
 ---
 
 ## 7. WHERE A PHASE'S OWN DOCUMENTS DISAGREE

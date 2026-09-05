@@ -13,9 +13,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/048-stacked-sheets"
-    last_updated_at: "2026-09-05T09:40:00Z"
-    last_updated_by: "code-agent"
-    recent_action: "Implemented ADR-001 and recorded the two decisions it forced"
+    last_updated_at: "2026-09-05T14:50:00Z"
+    last_updated_by: "adr-answers-051-053"
+    recent_action: "Recorded 051 ADR-002's scoped sub-page exception to this packet's stacking default"
     next_safe_action: "Cut 0.0.24 for the operator device check"
     blockers: []
     key_files:
@@ -253,5 +253,21 @@ number and then told to ignore it; it is not asked. Rollback is the two listener
 `popover-position.ts`, independent of the rest of the model.
 <!-- /ANCHOR:adr-003-consequences -->
 <!-- /ANCHOR:adr-003 -->
+
+---
+
+<!-- ANCHOR:sub-page-exception-note -->
+## NOTE, 2026-09-05 (~14:15): a scoped exception to the stacking default
+
+`051` ADR-002 (Accepted, operator: *"Yes, where the capture shows it"*) lets a registered stacked
+pair convert to an in-place sub-page with a back arrow when the equivalent Anytype surface's capture
+shows that pattern, judged per pair. **This packet's stacking model — ADR-001/ADR-002/ADR-003 above
+— stays the default for every pair that is not converted.** A conversion is a per-pair exception
+`051` T001 decides against a capture, not a change to this record's decisions or to the stacking
+model itself: the converted pair's `sheet-grammar` row moves from this packet's stacking shape to
+the sub-page shape, observed red before green, in the same leg that converts it. No pair converts by
+default, and this packet's thirty-one registered pairs remain the regression gate for every pair
+that stays stacked.
+<!-- /ANCHOR:sub-page-exception-note -->
 
 ---

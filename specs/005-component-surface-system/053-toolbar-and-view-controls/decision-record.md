@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-05T12:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Recorded the three architecture decisions the plan's legs depend on"
-    next_safe_action: "Operator review of ADR-001's implication for 050's item-1 Today cell"
+    last_updated_at: "2026-09-05T14:50:00Z"
+    last_updated_by: "adr-answers-051-053"
+    recent_action: "Recorded the operator's 2026-09-05 (~14:15) answers; all three ADRs move to Accepted"
+    next_safe_action: "Execute T001 (capture read); the legs gated on ADR-001/002/003 may proceed"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
@@ -23,9 +23,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-053-adr"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "ADR-001: extend the existing chip rail; no new chip-row component"
+      - "ADR-002: delete the seven dead methods, keep their classes"
+      - "ADR-003: the confirm fires on drop, not on gesture start"
 ---
 
 # Decision Record: Toolbar and View Controls
@@ -57,6 +60,15 @@ own Context or Decision.
 | ADR-001 | **Proposed** | `050` ADR-004 restated AC-001, and `design-trueup.md` REQ-001 **rejects** the dual-mode clause this ADR originally carried — amended below. The rail-extension half is unaffected | Extend the existing chip rail, or rebuild it on a new primitive? |
 | ADR-002 | **Proposed** | None | Delete seven dead methods and keep their classes for the anchor fallbacks, or keep the methods? |
 | ADR-003 | **Proposed** | `design-trueup.md` REQ-007 ruled **confirm, not disable**, and `051` ADR-003 makes the confirm primitive `051`'s. Neither decides *when* the confirm fires | Gate the drop, or gate the gesture? |
+
+**Operator answered all three, 2026-09-05 (~14:15).** Each moves to **Accepted** below, quoted in
+its own ADR section.
+
+| ADR | Status | Operator's answer |
+|---|---|---|
+| ADR-001 | **Accepted** | *"Extend the existing rail"* — keep `active-view-controls-renderer.ts` and reshape it to the Anytype-derived layout; no new chip-row component |
+| ADR-002 | **Accepted** | *"Delete methods, keep classes"* — remove the seven dead methods; the two anchor-fallback DOM queries keep their classes |
+| ADR-003 | **Accepted** | *"On drop"* — the drag proceeds; on drop the confirm offers clear-sort-and-commit or decline-and-revert |
 <!-- /ANCHOR:disposition -->
 
 ---
@@ -64,7 +76,7 @@ own Context or Decision.
 <!-- ANCHOR:adr-001 -->
 ## ADR-001: The existing chip rail is extended, not rebuilt
 
-**Status: PROPOSED — awaiting operator review.**
+**Status: Accepted, 2026-09-05 (~14:15).**
 
 ### Context
 
@@ -85,6 +97,10 @@ embedded (`embedded-database-renderer.ts:309`) paths. Two independent reads agre
 strongest in-repo evidence this program accepts short of a device confirmation.
 
 ### Decision
+
+**Operator, 2026-09-05 (~14:15):** *"Extend the existing rail."* Keep
+`active-view-controls-renderer.ts` and reshape it to the Anytype-derived layout; no new chip-row
+component.
 
 **Extend the rail.** The rail gains the two things it lacks — the direction-coloured leading sort
 chip, and placement in the toolbar band under the clusters — plus a **declared state** on each
@@ -132,7 +148,7 @@ parent `goal.md` §2 with citations, not absorbed silently.
 <!-- ANCHOR:adr-002 -->
 ## ADR-002: Dead settings-entry methods are deleted; their classes are kept
 
-**Status: PROPOSED — awaiting operator review.**
+**Status: Accepted, 2026-09-05 (~14:15).**
 
 ### Context
 
@@ -147,6 +163,9 @@ their classes together would break the fallbacks; keeping the methods keeps the 
 unreadable — the live path is the utilities row's settings shortcut (`:465-470`).
 
 ### Decision
+
+**Operator, 2026-09-05 (~14:15):** *"Delete methods, keep classes."* Remove the seven dead methods;
+the two anchor-fallback DOM queries keep their classes.
 
 **Delete the methods, keep the classes.** `createSettingsEntry` stamps the same classes on the
 live trigger it renders, so the fallback queries resolve against the live trigger — or against
@@ -184,7 +203,7 @@ drew.
 <!-- ANCHOR:adr-003 -->
 ## ADR-003: The sort-conflict confirm fires at commit, not at gesture start
 
-**Status: PROPOSED — awaiting operator review.**
+**Status: Accepted, 2026-09-05 (~14:15).**
 
 ### Context
 
@@ -195,6 +214,9 @@ any change to the drag's visuals risks moving a reference pixel, which parent go
 without a recapture read.
 
 ### Decision
+
+**Operator, 2026-09-05 (~14:15):** *"On drop."* The drag proceeds; on drop the confirm offers
+clear-sort-and-commit or decline-and-revert.
 
 **Gate the commit.** The drag runs exactly as today — same drag image, same preview, same hover
 classes.
