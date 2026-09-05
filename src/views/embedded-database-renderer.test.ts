@@ -172,6 +172,19 @@ class FakeElement {
   style: { width?: string; maxWidth?: string; overflowX?: string } = {};
   private classes = new Set<string>();
   private listeners = new Map<string, Set<(event: unknown) => void>>();
+  private attrs = new Map<string, string>();
+
+  setAttribute(name: string, value: string): void {
+    this.attrs.set(name, value);
+  }
+
+  getAttribute(name: string): string | null {
+    return this.attrs.has(name) ? this.attrs.get(name)! : null;
+  }
+
+  removeAttribute(name: string): void {
+    this.attrs.delete(name);
+  }
 
   instanceOf(constructor: unknown): boolean {
     return typeof HTMLElement !== "undefined" && constructor === HTMLElement;
@@ -192,6 +205,7 @@ class FakeElement {
     el.className = cls;
     for (const name of cls.split(/\s+/).filter(Boolean)) el.classes.add(name);
     el.textContent = options.text ?? "";
+    for (const [name, value] of Object.entries(options.attr ?? {})) el.setAttribute(name, value);
     this.children.push(el);
     return el;
   }
@@ -345,7 +359,7 @@ function createRenderer(): { harness: EmbeddedHarness; dataSource: FakeDataSourc
         return null;
       },
     },
-    metadataCache: {},
+    metadataCache: { getFileCache: () => null },
     workspace: {},
     fileManager: {},
   };
@@ -552,6 +566,43 @@ describe("linked embed chrome", () => {
     expect(startDrag).not.toHaveBeenCalled();
     handle.dispatchEvent({ type: "dragstart", bubbles: true });
     expect(startDrag).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("linked-view summary footer", () => {
+  it("mounts the SUM/AVERAGE summary footer on the codeblock render path, same as the standalone view", () => {
+    const { harness } = createRenderer();
+    const summaryRenderer = (harness as unknown as {
+      summaryRenderer: { render: (...args: unknown[]) => void };
+    }).summaryRenderer;
+    const renderSpy = vi.spyOn(summaryRenderer, "render");
+    const tableConfig: ViewConfig = {
+      name: "Table",
+      sourceFolder: "Tasks",
+      schema: { columns: [{ key: "value", label: "Value", type: "number" }], computedFields: [] },
+      viewType: "table",
+      summaryRules: [{ field: "value", summary: "sum" }],
+    };
+
+    // This fixture has no real layout engine behind it: the summary bar is drawn early in
+    // renderResults(), and the table body renderer that runs after it reaches DOM methods
+    // (setAttr, getComputedStyle) this fake element never needed until now. Those come after
+    // the call this test verifies, so a failure past that point is this fixture's ceiling, not
+    // the finding under test — caught and ignored rather than widening the fake into a browser.
+    vi.stubGlobal("getComputedStyle", () => ({ paddingLeft: "0", paddingRight: "0" }));
+    try {
+      harness.renderResults(tableConfig);
+    } catch {
+      // See comment above: only errors past the summary-render call reach here.
+    } finally {
+      vi.unstubAllGlobals();
+      vi.stubGlobal("window", windowStub);
+      vi.stubGlobal("HTMLElement", NoDomElement);
+    }
+
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+    const calledConfig = renderSpy.mock.calls[0][2] as ViewConfig | undefined;
+    expect(calledConfig?.summaryRules).toEqual(tableConfig.summaryRules);
   });
 });
 

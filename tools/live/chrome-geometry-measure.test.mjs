@@ -191,3 +191,35 @@ describe("judgeChromeGeometry, toolbar boxes", () => {
     expect(reasons(rows)).toContain("a toolbar trigger is not the measured 28×28 box");
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 6. THE LINKED-VIEW ROW-INSERTION SEAM
+// ───────────────────────────────────────────────────────────────────
+
+describe("judgeChromeGeometry, linked-view row-insertion seam", () => {
+  it("passes a zeroed seam", () => {
+    expect(judgeChromeGeometry({ splitButton: null, ruleRows: [], insertLineRows: [{ height: 0 }] })).toEqual([]);
+  });
+
+  it("allows a pixel of subpixel rounding", () => {
+    expect(judgeChromeGeometry({ splitButton: null, ruleRows: [], insertLineRows: [{ height: 1 }] })).toEqual([]);
+  });
+
+  it("catches a seam that paints as a full-height empty row, and names every offending row", () => {
+    const rows = judgeChromeGeometry({
+      splitButton: null,
+      ruleRows: [],
+      insertLineRows: [{ height: 34 }, { height: 0 }, { height: 34 }],
+    });
+    expect(reasons(rows)).toEqual([
+      "a row-insertion seam paints as a visible empty row inside a linked-view embed",
+      "a row-insertion seam paints as a visible empty row inside a linked-view embed",
+    ]);
+    expect(rows[0].detail).toBe("34px against a 1px ceiling");
+  });
+
+  it("skips a scenario that built no linked-view table rather than inventing a verdict for it", () => {
+    expect(judgeChromeGeometry({ splitButton: null, ruleRows: [], insertLineRows: null })).toEqual([]);
+    expect(judgeChromeGeometry({ splitButton: null, ruleRows: [] })).toEqual([]);
+  });
+});

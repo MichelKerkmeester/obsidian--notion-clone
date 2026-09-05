@@ -15773,6 +15773,15 @@ body.is-phone .note-database-container .db-record-detail-panel {
   vertical-align: middle;
 }
 
+/* Same specificity (0,3,2) as the th/td rule above and it comes later, so without this the
+   insertion-line row table-renderer.ts emits between every pair of rows inherits the 34px cell
+   height instead of the zero the base rule (`.db-table tr.db-row-insert-line > td`) sets, and
+   paints as an empty band only inside an embed. */
+.note-database-embed.note-database-container table.db-table tr.db-row-insert-line > td {
+  height: 0;
+  border: 0;
+}
+
 .note-database-embed.note-database-container table.db-table th {
   position: relative;
   display: table-cell;

@@ -183,7 +183,8 @@ for (const scenario of RENDERER_SCENARIOS) {
     constructedFindings.push(...found.rows);
   }
   if (geometry && (geometry.splitButton || geometry.ruleRows.length > 0 || geometry.recordDock
-    || geometry.chipHeight || geometry.triggerHeight)) {
+    || geometry.chipHeight || geometry.triggerHeight
+    || (geometry.insertLineRows && geometry.insertLineRows.length > 0))) {
     chromeSurfacesMeasured += 1;
     for (const row of judgeChromeGeometry(geometry)) chromeFindings.push({ scenario: label, ...row });
   }
@@ -230,10 +231,10 @@ if (constructedElementsSeen === 0) {
 }
 
 console.log(`unstyled-links: [chrome geometry] ${chromeSurfacesMeasured} constructed scenario(s) carried a `
-  + "split button, an anchored rule row or a docked record panel");
+  + "split button, an anchored rule row, a docked record panel, or a linked-view table");
 if (chromeSurfacesMeasured === 0) {
-  console.error("unstyled-links: FAIL — no constructed scenario built a toolbar, a rule panel or a docked");
-  console.error("  record panel, so the chrome-geometry measurement scanned nothing.");
+  console.error("unstyled-links: FAIL — no constructed scenario built a toolbar, a rule panel, a docked");
+  console.error("  record panel, or a linked-view table, so the chrome-geometry measurement scanned nothing.");
   console.error("  An empty scan is not a clean one.");
   process.exit(2);
 }

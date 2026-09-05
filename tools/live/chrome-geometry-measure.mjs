@@ -3,14 +3,18 @@
 // COMPONENT: the toolbar/panel chrome geometry unstyled-links.mjs reads off a mounted renderer
 // ───────────────────────────────────────────────────────────────────
 //
-// Two desktop defects were reported against surfaces no lane measured: the New split button read
-// as a control of its own rather than one of the toolbar's, and a filter condition row crushed its
-// value control to a sliver while the panel around it had room to spare.
+// Three desktop defects were reported against surfaces no lane measured: the New split button read
+// as a control of its own rather than one of the toolbar's, a filter condition row crushed its
+// value control to a sliver while the panel around it had room to spare, and a linked-view embed
+// painted an empty 34px band between every data row — the row-insertion seam the table renderer
+// draws between rows, zeroed everywhere except where the embed's own cell-height rule ties it in
+// specificity and wins by source order.
 //
-// Neither is catchable by a count or a class check. Both are geometry and computed tone, so they
-// need a measurement with a threshold, taken off the shipped renderer rather than a fixture that
-// mirrors it. It rides the constructed pass of an existing lane because the gate's lane count is a
-// deliberate ceiling, not because link colour and chrome geometry are the same subject.
+// None of the three is catchable by a count or a class check. All are geometry and computed tone,
+// so they need a measurement with a threshold, taken off the shipped renderer rather than a
+// fixture that mirrors it. It rides the constructed pass of an existing lane because the gate's
+// lane count is a deliberate ceiling, not because link colour and chrome geometry are the same
+// subject.
 //
 // `judgeChromeGeometry` is the pure part and carries its own tests. `measureChromeGeometry` needs a
 // live `document` and `getComputedStyle`, so the real browser run is what exercises it.
@@ -46,6 +50,15 @@ export const RECORD_DOCK_EDGE_TOLERANCE = 13;
 /** Chip and trigger boxes are specified as 28px; one pixel of subpixel rounding is slack. */
 export const TOOLBAR_BOX_PX = 28;
 export const TOOLBAR_BOX_TOLERANCE = 1;
+
+/**
+ * A row-insertion seam is a hairline the table renderer draws between rows, zeroed everywhere
+ * except inside a linked-view (codeblock) embed, where the embed's own `th, td { height: 34px }`
+ * rule ties in specificity with the seam's own `height: 0` and wins by source order — one report
+ * measured 34px empty bands between every data row. One pixel is subpixel rounding; 34 is the
+ * defect.
+ */
+export const INSERT_LINE_MAX_HEIGHT = 1;
 
 // ───────────────────────────────────────────────────────────────────
 // 2. PURE JUDGEMENT
@@ -188,6 +201,17 @@ export function judgeChromeGeometry(reading) {
       });
     }
   }
+  for (const seam of reading.insertLineRows || []) {
+    if (seam.height > INSERT_LINE_MAX_HEIGHT) {
+      rows.push({
+        what: "a row-insertion seam paints as a visible empty row inside a linked-view embed",
+        detail: `${Math.round(seam.height)}px against a ${INSERT_LINE_MAX_HEIGHT}px ceiling`,
+        why: "the embed's th/td height rule ties in specificity with the seam's own height:0 rule "
+          + "and wins by source order, so every seam the table renderer draws between rows paints "
+          + "as an empty band and the embed's row pitch doubles against the standalone table's",
+      });
+    }
+  }
   return rows;
 }
 
@@ -308,6 +332,26 @@ function readToolbarBoxes(root) {
   };
 }
 
+/**
+ * The row-insertion seam's height inside a linked-view (codeblock) embed. `runRenderAssertions`
+ * builds the table renderer's own bare `.note-database-container` host; production's embed adds
+ * `.note-database-embed` on top of it (`EMBED_LINKED_CLASS`, `embedded-database-renderer.ts:584`),
+ * which is the class the embed-only CSS keys on and the harness never applies on its own. Added
+ * here and removed again once read, so a later pass over this same container (the link-colour
+ * scan runs right after) still sees the DOM `runRenderAssertions` actually built.
+ */
+function readLinkedViewInsertLines(root, scenario) {
+  if (scenario?.renderer !== "table" || scenario?.bag !== "embed") return null;
+  const alreadyEmbed = root.classList.contains("note-database-embed");
+  if (!alreadyEmbed) root.classList.add("note-database-embed", "note-database-embed-linked");
+  try {
+    return [...root.querySelectorAll("table.db-table > tbody > tr.db-row-insert-line")]
+      .map((tr) => ({ height: tr.getBoundingClientRect().height }));
+  } finally {
+    if (!alreadyEmbed) root.classList.remove("note-database-embed", "note-database-embed-linked");
+  }
+}
+
 /** Reads whichever chrome surface this scenario built; all absent is a clean skip. */
 export function measureChromeGeometry(root, scenario) {
   const boxes = readToolbarBoxes(root);
@@ -318,5 +362,6 @@ export function measureChromeGeometry(root, scenario) {
     chipHeight: boxes.chipHeight,
     triggerWidth: boxes.triggerWidth,
     triggerHeight: boxes.triggerHeight,
+    insertLineRows: readLinkedViewInsertLines(root, scenario),
   };
 }
