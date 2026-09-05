@@ -3226,13 +3226,12 @@
       "reviewed": [
         "screenshots/notion-clone/components/constructed-dropdown-mobile-dark.png",
         "screenshots/notion-clone/components/constructed-dropdown-mobile-light.png",
-        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-light.png",
         "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
         "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
         "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png"
       ],
-      "note": "7 content-changed captures of 550, each opened and read; the other 19 git reported were pixelHash-identical to HEAD and were restored. The column manager gains the close it never had, beside its existing All checkbox, and the settings sheet and the board variant of it carry the same header from the shared builder rather than a hand-built row. The dropdown sheet is the visible half of the fix the operator reported: a title and a 44px close above an option list that scrolls under a fade, where the same surface previously mounted with no header at all and cut its last row against the sheet edge. The datetime picker fixture moved in light only and is unchanged in shape. npm run screenshots:verify: 550 current, 0 stale."
+      "note": "6 content-changed captures of 550, each opened and read; every other capture the run touched was pixelHash-identical and was restored. The column manager gains the close it never had, beside its existing All checkbox, and the settings sheet and the board variant of it carry the same header from the shared builder rather than a hand-built row. The dropdown sheet is the visible half of the fix the operator reported: a title and a 44px close above an option list that scrolls under a fade, where the same surface previously mounted with no header at all and cut its last row against the sheet edge. npm run screenshots:verify: 550 current, 0 stale."
     }
   ],
   "outstanding": [
