@@ -7626,6 +7626,60 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   border-color: var(--db-control-border-strong);
 }
 
+/* The single-select-as-text half of `property-row.ts`'s `renderOptionValue` split: no fill, no
+   border, the option's own foreground colour carrying the value — the same `--status-color-fg-*`
+   pair the filled badge already uses for its text, so the floor the badge pairing rule clears
+   (4.5:1 against the badge's own tint) is not weakened by the fill's removal; a foreground colour
+   built to sit legibly against a tinted background reads at least as well against the page
+   underneath it. Multi-select keeps the filled chip untouched. */
+.note-database-container .status-color-text-gray,
+.note-database-modal .status-color-text-gray { color: var(--status-color-fg-gray); }
+.note-database-container .status-color-text-brown,
+.note-database-modal .status-color-text-brown { color: var(--status-color-fg-brown); }
+.note-database-container .status-color-text-orange,
+.note-database-modal .status-color-text-orange { color: var(--status-color-fg-orange); }
+.note-database-container .status-color-text-yellow,
+.note-database-modal .status-color-text-yellow { color: var(--status-color-fg-yellow); }
+.note-database-container .status-color-text-green,
+.note-database-modal .status-color-text-green { color: var(--status-color-fg-green); }
+.note-database-container .status-color-text-blue,
+.note-database-modal .status-color-text-blue { color: var(--status-color-fg-blue); }
+.note-database-container .status-color-text-purple,
+.note-database-modal .status-color-text-purple { color: var(--status-color-fg-purple); }
+.note-database-container .status-color-text-pink,
+.note-database-modal .status-color-text-pink { color: var(--status-color-fg-pink); }
+.note-database-container .status-color-text-red,
+.note-database-modal .status-color-text-red { color: var(--status-color-fg-red); }
+.note-database-container .status-color-text-slate,
+.note-database-modal .status-color-text-slate { color: var(--status-color-fg-slate); }
+.note-database-container .status-color-text-cyan,
+.note-database-modal .status-color-text-cyan { color: var(--status-color-fg-cyan); }
+.note-database-container .status-color-text-teal,
+.note-database-modal .status-color-text-teal { color: var(--status-color-fg-teal); }
+.note-database-container .status-color-text-lime,
+.note-database-modal .status-color-text-lime { color: var(--status-color-fg-lime); }
+.note-database-container .status-color-text-indigo,
+.note-database-modal .status-color-text-indigo { color: var(--status-color-fg-indigo); }
+.note-database-container .status-color-text-violet,
+.note-database-modal .status-color-text-violet { color: var(--status-color-fg-violet); }
+.note-database-container .status-color-text-rose,
+.note-database-modal .status-color-text-rose { color: var(--status-color-fg-rose); }
+
+/* The record sheet and the peek draw a single-select value as one `.status-badge` with no
+   `.db-board-card-badges`/`.db-multi-select-values` wrapper (`renderPropertyValue`,
+   `table-record-peek.ts`'s `renderProperty`); multi-select nests its badges one level deeper inside
+   that wrapper. The direct-child selector is what tells the two apart without a JS change to either
+   renderer — stripping the chip's fill, border and padding off the direct child turns it into
+   `renderOptionValue`'s coloured-text shape while a nested (multi-select) badge is untouched. */
+.note-database-container .db-record-detail-field .db-board-card-value > .status-badge,
+.db-mobile-bottom-sheet .db-record-detail-field .db-board-card-value > .status-badge,
+.note-database-container .db-record-peek-field-value > .status-badge {
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  color: var(--db-status-fg, var(--text-normal));
+}
+
 /* 日期紧急度颜色标注（条件格式化） */
 .note-database-container .urgency-red {
   color: var(--status-color-fg-red);
@@ -10518,6 +10572,12 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .db-mobile-bottom-sheet .db-record-detail-field .db-board-card-value {
   flex: 1;
   min-width: 0;
+  /* Left, not the board card's right. Scoped here rather than fixed at the board card's own rule,
+     which `renderCardField`'s four other callers still depend on and which a 2-line-clamped card
+     summary reads correctly right-aligned. The mobile sheet already resolves to `left` through its
+     own later, more specific rule below; stating it here too keeps the desktop and phone
+     declarations beside each other rather than only one of them carrying it. */
+  text-align: left;
 }
 
 /* 非 wrap：值单行截断（对齐看板卡片）；wrap 由 db-board-card-field-wrap 覆盖为正常换行 */
@@ -10549,6 +10609,59 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   font-size: var(--font-smaller);
   min-width: 72px;
   flex-shrink: 0;
+}
+
+/* The hidden-properties group on the record sheet — the peek's own working disclosure
+   (`db-record-peek-hidden-*` below), moved rather than redesigned, with the record sheet's own
+   class names so the two panels' rules stay beside their own field grammar. */
+.note-database-container .db-record-detail-hidden-group,
+.db-mobile-bottom-sheet .db-record-detail-hidden-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.note-database-container .db-record-detail-hidden-toggle,
+.db-mobile-bottom-sheet .db-record-detail-hidden-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin: 0;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  /* Fallback deliberate: --font-smaller is an Obsidian host token the capture harness's stand-in
+     never supplies (tools/screenshots/scan-pinned-values.mjs tracks a fixed baseline of no-fallback
+     reads and this rule is new, not one of the tracked ones), so a bare var() here would drop the
+     whole declaration in every capture. The peek's own equivalent toggle carries the same gap. */
+  font-size: var(--font-smaller, 0.8em);
+  cursor: pointer;
+}
+
+.note-database-container .db-record-detail-hidden-toggle:hover,
+.db-mobile-bottom-sheet .db-record-detail-hidden-toggle:hover,
+.note-database-container .db-record-detail-hidden-toggle:focus-visible,
+.db-mobile-bottom-sheet .db-record-detail-hidden-toggle:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-record-detail-hidden-fields,
+.db-mobile-bottom-sheet .db-record-detail-hidden-fields {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.note-database-container .db-record-detail-hidden-fields.is-hidden,
+.db-mobile-bottom-sheet .db-record-detail-hidden-fields.is-hidden {
+  display: none;
 }
 
 /* The sheet's chrome does not scroll, and only its content does.
@@ -12925,6 +13038,59 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
 
 .note-database-container .db-column-manager-file-property-dropdown .db-dropdown-option-check {
   display: none;
+}
+
+/* The search-first "add a property" picker — a popover off the "+ Add property" button, on the
+   shared `.db-dropdown-popover` shell so it inherits that surface's border, elevation and
+   max-height scroll for free; only the parts `add-property-row.ts` draws that the shared shell
+   doesn't already name get their own rule here. */
+.note-database-container .db-add-property-search {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 28px;
+  margin: 0 0 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-sm);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font: inherit;
+}
+
+.note-database-container .db-add-property-search:focus {
+  border-color: var(--interactive-accent);
+  outline: none;
+}
+
+.note-database-container .db-add-property-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+}
+
+.note-database-container .db-add-property-option,
+.note-database-container .db-add-property-create {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-3);
+  width: 100%;
+  min-height: 30px;
+  box-sizing: border-box;
+  padding: var(--db-space-3) var(--db-space-4);
+  border-radius: var(--db-radius-sm);
+  color: var(--text-normal);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.note-database-container .db-add-property-option:hover,
+.note-database-container .db-add-property-create:hover {
+  background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-add-property-create {
+  color: var(--text-accent);
 }
 
 /* 面板空状态 */

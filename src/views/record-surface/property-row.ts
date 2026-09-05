@@ -20,7 +20,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import type { App } from "obsidian";
+import { setIcon, setTooltip, type App } from "obsidian";
 import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../../data/column-types";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../../data/date-time-format";
 import { isFileFieldKey } from "../../data/file-fields";
@@ -271,4 +271,146 @@ export function renderOptionValue(
     const chip = valueEl.createSpan({ cls: options.chipClass, text: resolved.value || t("common.empty") });
     chip.addClass(resolved.option ? `status-color-${resolved.option.color}` : "status-color-gray");
   }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 5. EMPTY-VALUE PROMPT — a format-specific action, never the word "Empty"
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * The prompt an empty relation, select or multi-select row shows in place of "Empty" — naming the
+ * action rather than the absence. Scoped to just these three formats; every other empty format
+ * keeps its existing text, and a table cell (denser than a property row) renders nothing for an
+ * empty value on either platform, so this is never called there.
+ */
+export function getPropertyEmptyPrompt(displayType: ColumnDef["type"]): string | null {
+  if (displayType === "select") return t("field.emptySelectPrompt");
+  if (displayType === "multi-select") return t("field.emptyMultiSelectPrompt");
+  if (displayType === "relation") return t("field.emptyRelationPrompt");
+  return null;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 6. CHECKBOX ROW — the properties-panel row shell shared by the desktop
+//    properties panel and the board-card properties panel
+// ───────────────────────────────────────────────────────────────────
+//
+// Both panels drew the same row by hand — drag handle, move buttons, a visibility checkbox, the
+// type icon, the name — and each carried its own copy of the drag-ignore check. Reorder state
+// (which key is being dragged, where it lands) stays with the caller, since the two panels persist
+// a reorder through entirely different paths (range-selection-aware column visibility versus a
+// plain splice); only the row's DOM and its per-row event wiring move here.
+
+export interface CheckboxPropertyRowDrag {
+  onDragStart: (event: DragEvent) => void;
+  onDragOver: (event: DragEvent) => void;
+  onDragLeave: () => void;
+  onDrop: (event: DragEvent) => void;
+  onDragEnd: () => void;
+}
+
+export interface CheckboxPropertyRowMove {
+  canMoveUp: boolean;
+  canMoveDown: boolean;
+  moveUpLabel: string;
+  moveDownLabel: string;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+}
+
+export interface CheckboxPropertyRowOptions {
+  parent: HTMLElement;
+  rowClass: string;
+  dataColumnKey: string;
+  /** Drag reorder is off entirely (no handle, no move buttons) when false — the read-only case. */
+  draggable: boolean;
+  dragHandleClass: string;
+  dragHandleTitle: string;
+  moveControlsClass: string;
+  drag?: CheckboxPropertyRowDrag;
+  move?: CheckboxPropertyRowMove;
+  checked: boolean;
+  checkboxDisabled?: boolean;
+  /** Column-manager's shift-range visibility toggle reads the native click event; wire this for it. */
+  onCheckboxClick?: (event: MouseEvent, checkbox: HTMLInputElement) => void;
+  /** The board-card panel's plain persist-on-toggle path; wire this instead of (or beside) the click. */
+  onCheckboxChange?: (checked: boolean) => void;
+  typeClass: string;
+  typeTitle?: string;
+  renderTypeIcon: (parent: HTMLElement) => void;
+  nameWrapClass: string;
+  nameClass: string;
+  nameText: string;
+}
+
+export interface CheckboxPropertyRowHandle {
+  row: HTMLElement;
+  checkbox: HTMLInputElement;
+  nameWrap: HTMLElement;
+  nameEl: HTMLElement;
+}
+
+export function buildCheckboxPropertyRow(options: CheckboxPropertyRowOptions): CheckboxPropertyRowHandle {
+  const row = options.parent.createDiv({ cls: options.rowClass });
+  row.setAttribute("data-note-database-column-key", options.dataColumnKey);
+
+  if (options.draggable) {
+    row.draggable = true;
+    if (options.drag) {
+      row.ondragstart = options.drag.onDragStart;
+      row.ondragover = options.drag.onDragOver;
+      row.ondragleave = options.drag.onDragLeave;
+      row.ondrop = options.drag.onDrop;
+      row.ondragend = options.drag.onDragEnd;
+    }
+
+    const dragHandle = row.createSpan({ cls: options.dragHandleClass, text: "⋮⋮" });
+    dragHandle.title = options.dragHandleTitle;
+
+    if (options.move) {
+      const move = options.move;
+      const moveControls = row.createSpan({ cls: options.moveControlsClass });
+      const upBtn = moveControls.createEl("button", { attr: { type: "button" } });
+      setIcon(upBtn, "arrow-up");
+      setTooltip(upBtn, move.moveUpLabel, { delay: 100 });
+      upBtn.disabled = !move.canMoveUp;
+      upBtn.onclick = (event) => { event.preventDefault(); event.stopPropagation(); move.onMoveUp(); };
+      const downBtn = moveControls.createEl("button", { attr: { type: "button" } });
+      setIcon(downBtn, "arrow-down");
+      setTooltip(downBtn, move.moveDownLabel, { delay: 100 });
+      downBtn.disabled = !move.canMoveDown;
+      downBtn.onclick = (event) => { event.preventDefault(); event.stopPropagation(); move.onMoveDown(); };
+    }
+  }
+
+  const checkbox = createCheckbox(row, { role: "field" });
+  checkbox.checked = options.checked;
+  checkbox.disabled = Boolean(options.checkboxDisabled);
+  if (options.onCheckboxClick) {
+    const onCheckboxClick = options.onCheckboxClick;
+    checkbox.onclick = (event) => onCheckboxClick(event, checkbox);
+  }
+  if (options.onCheckboxChange) {
+    const onCheckboxChange = options.onCheckboxChange;
+    checkbox.onchange = () => onCheckboxChange(checkbox.checked);
+  }
+
+  const typeEl = row.createSpan({
+    cls: options.typeClass,
+    ...(options.typeTitle !== undefined ? { attr: { title: options.typeTitle } } : {}),
+  });
+  options.renderTypeIcon(typeEl);
+
+  const nameWrap = row.createDiv({ cls: options.nameWrapClass });
+  const nameEl = nameWrap.createSpan({ text: options.nameText, cls: options.nameClass });
+
+  return { row, checkbox, nameWrap, nameEl };
+}
+
+/** The drag-ignore check both properties panels carried a copy of: a drag starting on a control
+ *  inside the row (a button, an input, the move controls) is that control's click, not a reorder. */
+export function shouldIgnorePropertyRowDrag(event: DragEvent): boolean {
+  const target = event.target as { closest?: (selector: string) => unknown } | null;
+  return Boolean(target && typeof target === "object" && typeof target.closest === "function"
+    && target.closest("input, select, textarea, button, .db-dropdown-field, .db-mobile-reorder-controls"));
 }

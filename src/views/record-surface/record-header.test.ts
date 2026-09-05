@@ -99,8 +99,8 @@ describe("buildDesktopRecordHeader", () => {
     expect(handle.header.hasClass("db-record-detail-header")).toBe(true);
     expect(handle.titleEl.hasClass("db-record-detail-title")).toBe(true);
     expect(handle.titleEl.textContent).toBe("My Record");
-    expect(handle.openButton.hasClass("db-board-card-open")).toBe(true);
-    expect(handle.closeButton.hasClass("db-cell-edit-close")).toBe(true);
+    expect(handle.openButton?.hasClass("db-board-card-open")).toBe(true);
+    expect(handle.closeButton?.hasClass("db-cell-edit-close")).toBe(true);
   });
 
   it("marks an empty title and never wires a rename unless one is supplied", () => {
@@ -141,6 +141,22 @@ describe("buildDesktopRecordHeader", () => {
 
     (handle.closeButton as unknown as MockElement).fire("click");
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("draws no open/close button when the caller omits them, for a display-only rail", () => {
+    const parent = new MockElement();
+    const handle = buildDesktopRecordHeader({
+      parent: parent as unknown as HTMLElement,
+      title: "Rail Title",
+      titleIsEmpty: false,
+      headerClass: "db-record-peek-header",
+      titleClass: "db-record-peek-title",
+    });
+
+    expect(handle.header.hasClass("db-record-peek-header")).toBe(true);
+    expect(handle.titleEl.hasClass("db-record-peek-title")).toBe(true);
+    expect(handle.openButton).toBeNull();
+    expect(handle.closeButton).toBeNull();
   });
 });
 

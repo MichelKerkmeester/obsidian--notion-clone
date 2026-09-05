@@ -56,12 +56,10 @@ const MIGRATED = [
   {
     file: "record-surface/property-row.ts",
     creates: 'createCheckbox(valueEl, { role: "field"',
-    note: "boolean field on a card (card-field-renderer.ts calls in through this shared value renderer)",
-  },
-  {
-    file: "record-detail-panel.ts",
-    creates: 'createCheckbox(valueEl, { role: "field"',
-    note: "boolean field in the record detail panel",
+    // The record sheet's own boolean field went through this exact call too, before the record
+    // sheet switched onto `renderCardField` (card-field-renderer.ts, itself a shim over this
+    // module) for its rows — one site, not two, once the shared renderer is the one that draws it.
+    note: "boolean field on a card or in the record detail panel (both call in through this shared value renderer)",
   },
 ] as const;
 

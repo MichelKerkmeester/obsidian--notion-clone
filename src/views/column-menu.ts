@@ -25,6 +25,7 @@ import { isNumberDisplayColumn } from "../data/column-display";
 import { t } from "../i18n";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { createDropdownField, DropdownOption } from "./dropdown-field";
+import { PROPERTY_TYPES } from "./record-surface/type-picker";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { anchorlessSubmenuPlacement, getVisiblePopoverBounds, positionToolbarPopover } from "./popover-position";
 import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/text-link-scheme-menu";
@@ -225,10 +226,12 @@ export class ColumnMenu {
     const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-type-popover", anchorEl);
     panel.setAttr("role", "listbox");
     const labels = COLUMN_TYPE_LABELS();
-    const groups: Array<{ title: string; types: ColumnDef["type"][] }> = [
-      { title: t("columnType.group.basic"), types: ["text", "number", "date", "datetime", "currency", "checkbox"] },
-      { title: t("columnType.group.options"), types: ["select", "multi-select", "status"] },
-      { title: t("columnType.group.advanced"), types: ["computed", "relation", "rollup", "files"] },
+    // Sliced from the shared property-format list rather than a second literal — the grouping is
+    // this submenu's own presentation, the thirteen values underneath it are the shared ones.
+    const groups: Array<{ title: string; types: readonly ColumnDef["type"][] }> = [
+      { title: t("columnType.group.basic"), types: PROPERTY_TYPES.slice(0, 6) },
+      { title: t("columnType.group.options"), types: PROPERTY_TYPES.slice(6, 9) },
+      { title: t("columnType.group.advanced"), types: PROPERTY_TYPES.slice(9) },
     ];
     groups.forEach((group) => {
       panel.createDiv({ cls: "db-dropdown-section-title", text: group.title });

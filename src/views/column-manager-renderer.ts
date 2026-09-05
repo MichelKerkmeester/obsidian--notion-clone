@@ -21,14 +21,18 @@ import { applyRangeSelection } from "../data/range-selection";
 import { ColumnDef, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { getFileFieldFixedType, QUICK_ADD_FILE_FIELDS } from "../data/file-fields";
-import { isMobileBottomSheet, PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, PANEL_POPOVER, positionToolbarPopover, releasePopoverPosition } from "./popover-position";
 import { carrySheetEntrance } from "./mobile-bottom-sheet";
 import { buildShellHeader } from "./surface-shell";
 import { getPropertyDropdownIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
-import { isHTMLElement } from "./dom-guards";
 import { openDropdownMenu } from "./dropdown-field";
+import { installPopoverAutoClose } from "./popover-auto-close";
 import { createCheckbox } from "./checkbox";
+import { buildCheckboxPropertyRow, shouldIgnorePropertyRowDrag } from "./record-surface/property-row";
+import { buildAddPropertyRow } from "./record-surface/add-property-row";
+import { buildDesktopRecordHeader } from "./record-surface/record-header";
+import { buildTypePickerOptions } from "./record-surface/type-picker";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -44,6 +48,9 @@ export interface ColumnManagerActions {
   toggleColumnWrap(col: ColumnDef): void;
   editColumn(col: ColumnDef): void;
   addColumn(): void;
+  /** Present when the host can pre-set the new property's format and label; absent callers fall
+   *  back to `addColumn()`, matching the blank-modal behaviour every consumer had before P3. */
+  createPropertyOfType?(type: ColumnDef["type"], initialLabel?: string): void;
   addFileFieldColumn?(key: string): void;
   deleteColumn(col: ColumnDef): void;
   /** When true, edit/delete/add buttons are hidden (used by embedded/read-only views) */
@@ -110,7 +117,11 @@ export class ColumnManagerRenderer {
         attr: { type: "button" },
       });
       addColumnBtn.createSpan({ cls: "db-panel-button-label", text: `+ ${t("panel.addColumn")}` });
-      addColumnBtn.onclick = () => actions.addColumn();
+      addColumnBtn.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.openAddPropertyPicker(addColumnBtn, actions);
+      };
 
       if (actions.addFileFieldColumn) {
         const existingKeys = new Set(columns.map((col) => col.key));
@@ -156,6 +167,52 @@ export class ColumnManagerRenderer {
     this.updateToolbarButton(containerEl, state, columns);
   }
 
+  // ───────────────────────────────────────────────────────────────────
+  // 3B. ADD-PROPERTY PICKER (P3)
+  // ───────────────────────────────────────────────────────────────────
+
+  /**
+   * The search-first add-property picker, in a popover off the "+ Add property" button rather
+   * than inline in the panel — a permanently open 13-row format list would grow this panel's own
+   * footprint every time it is open, and its geometry is asserted unchanged elsewhere.
+   */
+  private openAddPropertyPicker(anchorEl: HTMLElement, actions: ColumnManagerActions): void {
+    const createProperty = (type: ColumnDef["type"], initialLabel?: string): void => {
+      if (actions.createPropertyOfType) actions.createPropertyOfType(type, initialLabel);
+      else actions.addColumn();
+    };
+    const host = anchorEl.ownerDocument.body;
+    const popover = host.createDiv({ cls: "db-dropdown-popover db-add-property-picker" });
+    let close: () => void = () => undefined;
+    // Typing a name that matches no format is the create path — seeded as a text property, the
+    // way `create-property-modal.ts`'s own default does.
+    buildAddPropertyRow({
+      parent: popover,
+      rootClass: "db-add-property-row",
+      searchClass: "db-add-property-search",
+      optionListClass: "db-add-property-options",
+      optionClass: "db-add-property-option",
+      createRowClass: "db-add-property-create",
+      options: buildTypePickerOptions().map((option) => ({ value: option.value as ColumnDef["type"], label: option.text })),
+      searchPlaceholder: t("panel.addPropertySearchPlaceholder"),
+      createLabel: (query) => t("panel.createPropertyNamed", { name: query }),
+      renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "db-column-type-option-icon"),
+      onSelect: (type) => { close(); createProperty(type); },
+      onCreateNew: (query) => { close(); createProperty("text", query); },
+    }).searchInput.focus();
+    positionToolbarPopover(popover, anchorEl, { minWidth: 220, preferredWidth: 260, maxWidth: 320 });
+    const removeAutoClose = installPopoverAutoClose({
+      panel: popover,
+      anchorEl,
+      close: () => close(),
+    });
+    close = () => {
+      removeAutoClose();
+      releasePopoverPosition(popover);
+      popover.remove();
+    };
+  }
+
   private renderHeader(
     panel: HTMLElement,
     columns: ColumnDef[],
@@ -184,9 +241,16 @@ export class ColumnManagerRenderer {
         beforeClose: addToggle,
       });
     } else {
-      const header = panel.createDiv({ cls: "db-panel-header" });
-      header.createSpan({ text: t("toolbar.properties"), cls: "db-panel-title" });
-      addToggle(header);
+      // P1's desktop variant, title-only (no icon, no open/close — this panel closes through its
+      // own toolbar toggle, not a header button) with the select-all toggle as trailing content.
+      buildDesktopRecordHeader({
+        parent: panel,
+        title: t("toolbar.properties"),
+        titleIsEmpty: false,
+        headerClass: "db-panel-header",
+        titleClass: "db-panel-title",
+        renderTrailing: addToggle,
+      });
     }
   }
 
@@ -204,108 +268,90 @@ export class ColumnManagerRenderer {
     index: number,
     total: number
   ): void {
-    const row = panel.createDiv({ cls: "db-column-manager-row" });
-    row.draggable = true;
-    row.ondragstart = (event) => {
-      if (this.shouldIgnoreColumnDrag(event)) {
-        event.preventDefault();
-        return;
-      }
-      this.draggedKey = col.key;
-      event.dataTransfer?.setData("text/plain", col.key);
-      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
-      row.addClass("is-dragging");
-    };
-    row.ondragover = (event) => {
-      if (!this.draggedKey || this.draggedKey === col.key) return;
-      event.preventDefault();
-      row.addClass("is-drop-target");
-    };
-    row.ondragleave = () => row.removeClass("is-drop-target");
-    row.ondrop = (event) => {
-      if (!this.draggedKey || this.draggedKey === col.key) return;
-      event.preventDefault();
-      row.removeClass("is-drop-target");
-      const rect = row.getBoundingClientRect();
-      const placement = event.clientY > rect.top + rect.height / 2 ? "after" : "before";
-      actions.moveColumnTo(this.draggedKey, col.key, placement);
-      this.draggedKey = null;
-    };
-    row.ondragend = () => {
-      this.draggedKey = null;
-      row.removeClass("is-dragging");
-      panel.querySelectorAll(".db-column-manager-row").forEach((el) => el.removeClass("is-drop-target"));
-    };
-
-    const drag = row.createSpan({ cls: "db-column-drag", text: "⋮⋮" });
-    drag.title = t("panel.dragToSort");
-
-    const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls" });
-    const upBtn = moveControls.createEl("button", {
-      attr: { type: "button" },
-    });
-    setIcon(upBtn, "arrow-up");
-    setTooltip(upBtn, t("menu.moveUp"), { delay: 100 });
-    upBtn.disabled = index === 0;
-    upBtn.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      actions.moveColumn(col.key, -1);
-    };
-    const downBtn = moveControls.createEl("button", {
-      attr: { type: "button" },
-    });
-    setIcon(downBtn, "arrow-down");
-    setTooltip(downBtn, t("menu.moveDown"), { delay: 100 });
-    downBtn.disabled = index >= total - 1;
-    downBtn.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      actions.moveColumn(col.key, 1);
-    };
-
     const requiredReason = this.getRequiredColumnReason(config, state, col);
-    const cb = createCheckbox(row, { role: "field" });
-    cb.checked = !state.hiddenColumns.has(col.key);
-    if (requiredReason) {
-      cb.checked = true;
-      cb.disabled = true;
-    }
-    cb.onclick = (event) => {
-      const selectedKeys = new Set(columns.filter((candidate) => !state.hiddenColumns.has(candidate.key)).map((candidate) => candidate.key));
-      if (requiredReason) selectedKeys.add(col.key);
-      this.lastSelectedColumnVisibilityKey = applyRangeSelection({
-        orderedIds: this.getColumnVisibilityKeys(columns, config, state),
-        selectedIds: selectedKeys,
-        anchorId: this.lastSelectedColumnVisibilityKey,
-        targetId: col.key,
-        selected: cb.checked,
-        range: event.shiftKey,
-      });
-      this.syncColumnVisibility(columns, config, state, actions, selectedKeys);
-    };
+    const checked = requiredReason ? true : !state.hiddenColumns.has(col.key);
 
-    const typeEl = row.createSpan({
-      cls: "db-column-type",
-      attr: { title: col.type },
+    const handle = buildCheckboxPropertyRow({
+      parent: panel,
+      rowClass: "db-column-manager-row",
+      dataColumnKey: col.key,
+      draggable: true,
+      dragHandleClass: "db-column-drag",
+      dragHandleTitle: t("panel.dragToSort"),
+      moveControlsClass: "db-mobile-reorder-controls",
+      drag: {
+        onDragStart: (event) => {
+          if (shouldIgnorePropertyRowDrag(event)) {
+            event.preventDefault();
+            return;
+          }
+          this.draggedKey = col.key;
+          event.dataTransfer?.setData("text/plain", col.key);
+          if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+          handle.row.addClass("is-dragging");
+        },
+        onDragOver: (event) => {
+          if (!this.draggedKey || this.draggedKey === col.key) return;
+          event.preventDefault();
+          handle.row.addClass("is-drop-target");
+        },
+        onDragLeave: () => handle.row.removeClass("is-drop-target"),
+        onDrop: (event) => {
+          if (!this.draggedKey || this.draggedKey === col.key) return;
+          event.preventDefault();
+          handle.row.removeClass("is-drop-target");
+          const rect = handle.row.getBoundingClientRect();
+          const placement = event.clientY > rect.top + rect.height / 2 ? "after" : "before";
+          actions.moveColumnTo(this.draggedKey, col.key, placement);
+          this.draggedKey = null;
+        },
+        onDragEnd: () => {
+          this.draggedKey = null;
+          handle.row.removeClass("is-dragging");
+          panel.querySelectorAll(".db-column-manager-row").forEach((el) => el.removeClass("is-drop-target"));
+        },
+      },
+      move: {
+        canMoveUp: index !== 0,
+        canMoveDown: index < total - 1,
+        moveUpLabel: t("menu.moveUp"),
+        moveDownLabel: t("menu.moveDown"),
+        onMoveUp: () => actions.moveColumn(col.key, -1),
+        onMoveDown: () => actions.moveColumn(col.key, 1),
+      },
+      checked,
+      checkboxDisabled: Boolean(requiredReason),
+      onCheckboxClick: (event) => {
+        const selectedKeys = new Set(columns.filter((candidate) => !state.hiddenColumns.has(candidate.key)).map((candidate) => candidate.key));
+        if (requiredReason) selectedKeys.add(col.key);
+        this.lastSelectedColumnVisibilityKey = applyRangeSelection({
+          orderedIds: this.getColumnVisibilityKeys(columns, config, state),
+          selectedIds: selectedKeys,
+          anchorId: this.lastSelectedColumnVisibilityKey,
+          targetId: col.key,
+          selected: handle.checkbox.checked,
+          range: event.shiftKey,
+        });
+        this.syncColumnVisibility(columns, config, state, actions, selectedKeys);
+      },
+      typeClass: "db-column-type",
+      typeTitle: col.type,
+      renderTypeIcon: (iconParent) => renderPropertyTypeIcon(iconParent, col, "db-column-type-icon"),
+      nameWrapClass: "db-column-name-wrap",
+      nameClass: "db-column-name",
+      nameText: `${col.label} [${col.key}]`,
     });
-    renderPropertyTypeIcon(typeEl, col, "db-column-type-icon");
 
-    const nameWrap = row.createDiv({ cls: "db-column-name-wrap" });
-    const nameEl = nameWrap.createSpan({
-      text: `${col.label} [${col.key}]`,
-      cls: "db-column-name",
-    });
-    nameEl.title = t("panel.doubleClickEdit");
-    nameEl.addEventListener("dblclick", () => actions.editColumn(col));
+    handle.nameEl.title = t("panel.doubleClickEdit");
+    handle.nameEl.addEventListener("dblclick", () => actions.editColumn(col));
     if (requiredReason) {
-      nameWrap.createDiv({
+      handle.nameWrap.createDiv({
         cls: "db-column-group-hint",
         text: requiredReason,
         attr: { title: requiredReason },
       });
     }
-    const wrapBtn = row.createEl("button", {
+    const wrapBtn = handle.row.createEl("button", {
       cls: `clickable-icon db-column-wrap-toggle${col.wrap ? " is-active" : ""}`,
       attr: {},
     });
@@ -314,11 +360,11 @@ export class ColumnManagerRenderer {
     wrapBtn.onclick = () => actions.toggleColumnWrap(col);
 
     if (!actions.isReadOnly) {
-      const editBtn = row.createEl("button", { cls: "clickable-icon" });
+      const editBtn = handle.row.createEl("button", { cls: "clickable-icon" });
       setIcon(editBtn, "edit");
       editBtn.onclick = () => actions.editColumn(col);
 
-      const deleteBtn = row.createEl("button", {
+      const deleteBtn = handle.row.createEl("button", {
         cls: "clickable-icon db-column-delete-btn",
         attr: {},
       });
@@ -351,11 +397,6 @@ export class ColumnManagerRenderer {
         if (visibleCount > 0) colBtn.createSpan({ cls: "db-toolbar-badge", text: String(visibleCount) });
       }
     }
-  }
-
-  private shouldIgnoreColumnDrag(event: DragEvent): boolean {
-    return isHTMLElement(event.target)
-      && event.target.closest("input, select, textarea, button, .db-dropdown-field, .db-mobile-reorder-controls") != null;
   }
 
   private getColumnVisibilityKeys(columns: ColumnDef[], config: ViewConfig, state: DatabaseViewState): string[] {

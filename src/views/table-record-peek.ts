@@ -25,6 +25,8 @@ import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
 import { resolveCellTapAction, trackCellGesture } from "./table-cell-gesture";
+import { buildDesktopRecordHeader } from "./record-surface/record-header";
+import { buildPropertyRow } from "./record-surface/property-row";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -230,10 +232,15 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
     while (panel.firstChild) panel.removeChild(panel.firstChild);
     panel.setAttribute("aria-label", currentRow.file.basename);
 
-    const header = createChild(panel, "div", "db-record-peek-header");
-    renderRecordIcon?.(header, currentRow, config);
-    const title = createChild(header, "span", "db-record-peek-title");
-    title.textContent = currentRow.file.basename;
+    buildDesktopRecordHeader({
+      parent: panel,
+      title: currentRow.file.basename,
+      titleIsEmpty: false,
+      renderIcon: (headerEl) => renderRecordIcon?.(headerEl, currentRow, config),
+      // A display-only rail: no open/close button of its own, so onOpen/onClose stay unset.
+      headerClass: "db-record-peek-header",
+      titleClass: "db-record-peek-title",
+    });
 
     const visibleProperties = visibleColumns.filter((column) => column.key !== "file.name");
     const visibleKeys = new Set(visibleColumns.map((column) => column.key));
@@ -337,37 +344,39 @@ function renderProperty(
   column: ColumnDef,
   config: ViewConfig,
 ): void {
-  const field = createChild(parent, "div", "db-record-peek-field");
-  field.setAttribute("data-note-database-column-key", column.key);
-
-  const label = createChild(field, "span", "db-record-peek-field-label");
-  label.textContent = column.label || column.key;
-
-  const value = createChild(field, "span", "db-record-peek-field-value");
   const text = stringifyValue(getColumnValue(row, column));
-
   const displayType = getColumnDisplayType(column, config.schema.computedFields);
   const isOption = displayType === "status" || displayType === "select" || displayType === "multi-select";
-  if (!isOption || !text) {
-    value.textContent = text;
-    return;
-  }
 
-  // Multi-select stringifies to a comma-joined list, and one badge around the whole list would be a
-  // chip that reads as a single option. Each value gets its own, in the container the cell uses.
-  const values = displayType === "multi-select"
-    ? text.split(",").map((item) => item.trim()).filter(Boolean)
-    : [text];
-  const host = displayType === "multi-select"
-    ? createChild(value, "div", "db-multi-select-values")
-    : value;
-  for (const item of values) {
-    const { option } = resolveOptionDisplay(column, item);
-    const badge = createChild(host, "span", `status-badge status-color-${option?.color || "gray"}`);
-    badge.textContent = item;
-    badge.title = item;
-    badge.setAttribute("data-status-color", option?.color || "gray");
-  }
+  const handle = buildPropertyRow({
+    parent,
+    rowClass: "db-record-peek-field",
+    labelClass: "db-record-peek-field-label",
+    valueClass: "db-record-peek-field-value",
+    label: column.label || column.key,
+    renderValue: (valueEl) => {
+      if (!isOption || !text) {
+        valueEl.textContent = text;
+        return;
+      }
+      // Multi-select stringifies to a comma-joined list, and one badge around the whole list
+      // would be a chip that reads as a single option. Each value gets its own, in the
+      // container the cell uses.
+      const values = displayType === "multi-select"
+        ? text.split(",").map((item) => item.trim()).filter(Boolean)
+        : [text];
+      const host = displayType === "multi-select"
+        ? valueEl.createDiv({ cls: "db-multi-select-values" })
+        : valueEl;
+      for (const item of values) {
+        const { option } = resolveOptionDisplay(column, item);
+        const badge = host.createSpan({ cls: `status-badge status-color-${option?.color || "gray"}`, text: item });
+        badge.title = item;
+        badge.setAttribute("data-status-color", option?.color || "gray");
+      }
+    },
+  });
+  handle.row.setAttribute("data-note-database-column-key", column.key);
 }
 
 function isEmptyValue(value: unknown): boolean {

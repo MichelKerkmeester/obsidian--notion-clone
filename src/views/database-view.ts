@@ -5069,6 +5069,7 @@ export class DatabaseView extends FileView {
         toggleColumnWrap: (col) => this.toggleColumnWrap(col),
         editColumn: (col) => this.showColumnRenameModal(col),
         addColumn: () => { void this.openCreatePropertyModal(); },
+        createPropertyOfType: (type, initialLabel) => { void this.openCreatePropertyModal({ initialType: type, initialLabel }); },
         addFileFieldColumn: (key) => { void this.columnOperations.addFileFieldColumn(key); },
         deleteColumn: (col) => { void this.columnOperations.deleteColumn(col); },
       },

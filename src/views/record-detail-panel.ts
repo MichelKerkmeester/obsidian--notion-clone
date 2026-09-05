@@ -16,38 +16,30 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Component, MarkdownRenderer, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/column-types";
-import { getColumnDisplayType, getNumberDisplayStyle } from "../data/column-display";
-import { formatDateValueDisplay, formatDateTimeValueDisplay } from "../data/date-time-format";
+import { App, Component, MarkdownRenderer } from "obsidian";
+import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/column-types";
+import { getColumnDisplayType } from "../data/column-display";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
 import { isImeComposing } from "../data/keyboard-utils";
-import { safeString } from "../data/safe-string";
-import { parseTextLink } from "../data/text-link";
-import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/text-link-scheme";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { t } from "../i18n";
-import { isElement, isHTMLElement } from "./dom-guards";
+import { isElement } from "./dom-guards";
 import { setFieldTooltip } from "./field-tooltip";
-import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./file-field-renderer";
-import { renderProgress, renderProgressRing, renderRating } from "./number-display-renderer";
-import { renderRelationValue } from "./relation-value-renderer";
 import { getFieldWidth } from "./column-width";
-import { parseInlineMarkdown } from "../data/inline-markdown";
-import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./inline-markdown-renderer";
 import { markNoteHoverLink } from "./hover-link-preview";
 import { isMobileBottomSheet, positionToolbarPopover, releasePopoverPosition } from "./popover-position";
 import type { RecordSurfacePlacement } from "./record-open-target";
-import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
-import { createCheckbox } from "./checkbox";
 import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-sheet";
 import { overlayStack } from "./overlay-stack";
 import { mountNoteBodyRegion } from "./note-body-region";
 import type { NoteBodyRegion } from "./note-body-region";
 import { trapFocus } from "./interaction-scope";
 import { openExternalUrl } from "./open-external";
+import { buildDesktopRecordHeader } from "./record-surface/record-header";
+import { getPropertyEmptyPrompt } from "./record-surface/property-row";
+import { createHiddenPropertiesGroup, type HiddenPropertiesGroupHandle } from "./record-surface/hidden-properties";
 
 /**
  * 日历 / 时间线事件卡片「展开为可编辑浮动面板」。
@@ -194,6 +186,15 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // embeds and transclusions off this component, and an unloaded parent never loads them.
   const bodyLifetime = actions.readNoteBody ? new Component() : null;
   bodyLifetime?.load();
+  // Outlives renderContent the same way bodyText does: a field-commit refresh rebuilds every
+  // field, and a toggle held only in the DOM would collapse itself back on the very next one.
+  const hiddenPropertiesGroup: HiddenPropertiesGroupHandle = createHiddenPropertiesGroup({
+    groupClass: "db-record-detail-hidden-group",
+    toggleClass: "db-record-detail-hidden-toggle",
+    fieldsClass: "db-record-detail-hidden-fields",
+    expandedClass: "is-expanded",
+    label: (count) => t("panel.hiddenProperties", { count: String(count) }),
+  });
   const close = (): void => {
     if (closed) return;
     closed = true;
@@ -357,57 +358,41 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     panel.setAttribute("aria-label", title.text || r.file.basename);
     const titleField = title.field || "file.name";
     // 标题区（对齐事件卡片标题）+ 右上角「打开笔记」按钮（复用看板卡片 db-board-card-open 样式）
-    const header = panel.createDiv({ cls: "db-record-detail-header" });
-    actions.renderRecordIcon?.(header, r, config);
-    const titleEl = header.createDiv({ cls: "db-record-detail-title", text: title.text });
-    markNoteHoverLink(titleEl, r.file.path, r.file.path);
-    actions.applyConditionalFormat?.(titleEl, r, config, titleField);
-    if (title.isEmpty) titleEl.addClass("is-empty-title");
-    // 仅 file.name 标题可双击重命名；其它字段标题只读（用字段编辑改值）
     const editFileName = titleField === "file.name" ? actions.editFileName : undefined;
-    if (editFileName && !actions.isReadOnly) {
-      titleEl.addEventListener("dblclick", (event) => {
-        event.stopPropagation();
-        editFileName(titleEl, r, title.text);
-      });
-      setFieldTooltip(titleEl, title.text, t("cell.doubleClickRename"));
-    } else {
-      setFieldTooltip(titleEl, title.isEmpty ? "" : title.text);
-    }
-    const openBtn = header.createEl("button", {
-      cls: "db-board-card-open",
-      attr: { type: "button", "aria-label": t("menu.openNote") },
+    buildDesktopRecordHeader({
+      parent: panel,
+      title: title.text,
+      titleIsEmpty: title.isEmpty,
+      renderIcon: (headerEl) => actions.renderRecordIcon?.(headerEl, r, config),
+      decorateTitle: (titleEl) => {
+        markNoteHoverLink(titleEl, r.file.path, r.file.path);
+        actions.applyConditionalFormat?.(titleEl, r, config, titleField);
+      },
+      // 仅 file.name 标题可双击重命名；其它字段标题只读（用字段编辑改值）
+      rename: editFileName && !actions.isReadOnly ? { onRename: (titleEl) => editFileName(titleEl, r, title.text) } : undefined,
+      onOpen: () => {
+        actions.openRow(r);
+        close();
+      },
+      // 常驻关闭按钮：桌面端 CSS 隐藏（保持锚定面板原貌），移动端底部抽屉显示，触摸可点关闭。
+      onClose: () => close(),
     });
-    setIcon(openBtn, "maximize-2");
-    setTooltip(openBtn, t("menu.openNote"), { delay: 100 });
-    openBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      actions.openRow(r);
-      close();
-    });
-    // 常驻关闭按钮：桌面端 CSS 隐藏（保持锚定面板原貌），移动端底部抽屉显示，触摸可点关闭。
-    const closeBtn = header.createEl("button", {
-      cls: "db-cell-edit-close",
-      attr: { type: "button", "aria-label": t("common.close") },
-    });
-    setIcon(closeBtn, "x");
-    setTooltip(closeBtn, t("common.close"), { delay: 100 });
-    closeBtn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      close();
-    });
-    // 字段列表（跳过 titleField；空字段按 showEmptyFields 过滤，对齐看板卡片）
+    // 字段列表（跳过 titleField；空字段按 showEmptyFields 归入隐藏分组，而非整体丢弃）
     // The scroll region, holding everything below the header. See `contentHost`.
     const scrollEl = panel.createDiv({ cls: "db-record-detail-scroll" });
     const fieldsEl = scrollEl.createDiv({ cls: "db-record-detail-fields" });
+    const hiddenFieldColumns: ColumnDef[] = [];
     for (const col of columns) {
       if (col.key === titleField) continue;
       const value = getRecordCellValue(r, col);
       const displayType = getRecordDisplayType(config, col);
       const empty = isEmptyValue(value) && displayType !== "checkbox";
-      if (empty && config.showEmptyFields !== true) continue;
+      if (empty && config.showEmptyFields !== true) { hiddenFieldColumns.push(col); continue; }
       renderRecordField(fieldsEl, r, col, config, app, actions);
     }
+    hiddenPropertiesGroup.render(scrollEl, hiddenFieldColumns, (hiddenParent, col) => {
+      renderRecordField(hiddenParent, r, col, config, app, actions);
+    });
     // Last, so the body reads as the note under its properties rather than as another property.
     mountBody(r);
   };
@@ -492,137 +477,6 @@ function fieldPlaceholder(): HTMLElement {
   return window.activeDocument.body;
 }
 
-/** 渲染字段值展示（移植自 BoardRenderer.renderPreviewValue 的展示分支，markdown/link/image 首版降级为文本）。 */
-function renderRecordValue(
-  valueEl: HTMLElement,
-  row: RowData,
-  col: ColumnDef,
-  value: unknown,
-  displayType: ColumnDef["type"],
-  app: App,
-  actions: RecordDetailActions,
-): void {
-  // checkbox
-  if (displayType === "checkbox") {
-    valueEl.addClass("db-checkbox-cell");
-    const cb = createCheckbox(valueEl, { role: "field" });
-    cb.checked = toBooleanValue(value);
-    cb.onclick = (event) => event.stopPropagation();
-    cb.disabled = !!actions.isReadOnly;
-    if (!actions.isReadOnly) {
-      cb.onchange = () => {
-        void actions.editCell(valueEl, row, col);
-      };
-    }
-    setFieldTooltip(valueEl, cb.checked ? t("common.true") : t("common.false"));
-    return;
-  }
-
-  // file 特殊字段（file.tags / file 链接字段）
-  if (shouldRenderSpecialFileField(col) && renderSpecialFileFieldValue(valueEl, app, row, col, value, {
-    tagsContainerClass: "db-board-card-badges",
-    linkItemClass: "db-board-card-link",
-  })) {
-    valueEl.addClass("has-badges");
-    return;
-  }
-
-  // select / status
-  if (col.type === "select" || col.type === "status") {
-    renderBadge(valueEl, col, String(value));
-    return;
-  }
-
-  // multi-select
-  if (col.type === "multi-select") {
-    const values = toMultiSelectValuesForKey(col.key, value);
-    valueEl.addClass("has-badges");
-    const wrap = valueEl.createDiv({ cls: "db-board-card-badges" });
-    setFieldTooltip(wrap, values);
-    for (const entry of values) renderBadge(wrap, col, entry);
-    return;
-  }
-  if (col.type === "relation" && renderRelationValue(valueEl, app, row, value, true)) {
-    valueEl.addClass("has-badges");
-    return;
-  }
-
-  // date / datetime
-  if (displayType === "date" || displayType === "datetime") {
-    valueEl.addClass("db-date-value");
-    valueEl.textContent = displayType === "datetime"
-      ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
-      : formatDateValueDisplay(value);
-    setFieldTooltip(valueEl, valueEl.textContent);
-    return;
-  }
-
-  // number（rating / progress / ring）
-  if (displayType === "number") {
-    const num = typeof value === "number" ? value : parseFloat(String(value));
-    if (!isNaN(num)) {
-      const style = getNumberDisplayStyle(col);
-      if (style === "rating") { renderRating(valueEl, num, col.numberDisplayConfig); return; }
-      if (style === "progress") { renderProgress(valueEl, num, col.numberDisplayConfig); return; }
-      if (style === "ring") { renderProgressRing(valueEl, num, col.numberDisplayConfig); return; }
-    }
-  }
-
-  const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
-    ? assembleSchemeLinkTarget(col.textLinkScheme, value)
-    : null;
-  if (schemeTarget !== null) {
-    renderDelayedExternalLink(valueEl, row, {
-      label: String(value),
-      target: schemeTarget,
-      external: true,
-    });
-    return;
-  }
-
-  // markdown 内联（text 字段 textRenderMode === "markdown"）：对齐看板卡片渲染，
-  // 链接点击 stopPropagation 立即打开（renderInlineMarkdown 默认 card 策略，与面板"单击=编辑"共存）
-  if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-    const mdValues = Array.isArray(value) ? value : [value];
-    const parsed = mdValues.map((entry) => parseInlineMarkdown(entry));
-    if (parsed.some((nodes) => nodes !== null)) {
-      valueEl.empty();
-      const onOpenLink = (target: string, external: boolean): void => {
-        openTarget(app, row, target, external);
-      };
-      const onResolveImage = (target: string, external: boolean): string | null =>
-        resolveInlineImageSrc(app, row, target, external);
-      parsed.forEach((nodes, idx) => {
-        if (idx > 0) valueEl.appendText(", ");
-        if (nodes) {
-          if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-          else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-        } else {
-          valueEl.appendText(safeString(mdValues[idx]));
-        }
-      });
-      setFieldTooltip(valueEl, valueToTooltip(value));
-      return;
-    }
-  }
-
-  // text link（textRenderMode === "link"）：值显示为可点击链接，对齐看板/列表/画廊
-  if (col.textRenderMode === "link" && !isFileFieldKey(col.key)) {
-    const linkValues = Array.isArray(value) ? value : [value];
-    const links = linkValues
-      .map((entry) => parseTextLink(entry))
-      .filter((entry): entry is ParsedLink => entry !== null);
-    if (links.length > 0) {
-      for (const link of links) renderLink(valueEl, link, app, row);
-      return;
-    }
-  }
-
-  // 默认文本
-  valueEl.textContent = Array.isArray(value) ? value.join(", ") : safeString(value);
-  setFieldTooltip(valueEl, valueEl.textContent);
-}
-
 // ───────────────────────────────────────────────────────────────────
 // 6. HELPERS
 // ───────────────────────────────────────────────────────────────────
@@ -652,18 +506,16 @@ function isEmptyValue(value: unknown): boolean {
   return value == null || value === "" || (Array.isArray(value) && value.length === 0);
 }
 
+/**
+ * A relation, select or multi-select field with no value gets a prompt naming the action
+ * ("Select option", not "Empty"). Every other empty format keeps the plain word, since
+ * clicking it still opens the same editor an occupied row opens; only what it reads changes.
+ */
 function getEmptyDisplayValue(displayType: ColumnDef["type"]): unknown {
-  if (displayType === "multi-select") return [t("common.empty")];
+  const prompt = getPropertyEmptyPrompt(displayType);
+  if (prompt !== null) return displayType === "multi-select" ? [prompt] : prompt;
   if (displayType === "checkbox") return false;
   return t("common.empty");
-}
-
-function renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-  const resolved = resolveOptionDisplay(col, value);
-  const display = resolved.value || t("common.empty");
-  const badge = parent.createSpan({ cls: "status-badge", text: display });
-  badge.title = display;
-  badge.addClass(resolved.option ? `status-color-${resolved.option.color}` : "status-color-gray");
 }
 
 /** 打开内部 / 外部链接（markdown 内联链接 / 图片点击复用）。 */
@@ -673,22 +525,4 @@ function openTarget(app: App, row: RowData, target: string, external: boolean): 
     return;
   }
   void app.workspace.openLinkText(target, row.file.path);
-}
-
-interface ParsedLink {
-  label: string;
-  target: string;
-  external: boolean;
-}
-
-/** text link 模式：值渲染为可点击链接（复刻 BoardRenderer.renderLink）。 */
-function renderLink(parent: HTMLElement, link: ParsedLink, app: App, row: RowData): void {
-  const anchor = parent.createEl("a", { cls: "db-board-card-link", text: link.label, attr: { title: link.label } });
-  anchor.href = link.external ? link.target : "#";
-  if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
-  anchor.onclick = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    openTarget(app, row, link.target, link.external);
-  };
 }

@@ -17,8 +17,33 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it, vi } from "vitest";
-import { buildPropertyRow, renderOptionValue } from "./property-row";
+import {
+  buildCheckboxPropertyRow, buildPropertyRow, getPropertyEmptyPrompt, renderOptionValue,
+  shouldIgnorePropertyRowDrag,
+} from "./property-row";
 import type { ColumnDef } from "../../data/types";
+
+// This module's import chain reaches obsidian-dependent modals (card-field-renderer.ts's own
+// suite hits the same chain) — the entries beyond setIcon/setTooltip exist only so that chain
+// loads under the test runner, not because property-row.ts's own exports touch them.
+vi.mock("obsidian", () => ({
+  App: class {},
+  CachedMetadata: class {},
+  TFile: class {},
+  TFolder: class {},
+  Modal: class {},
+  Menu: class {},
+  Notice: class {},
+  Component: class {},
+  Setting: class {},
+  Platform: { isMobile: false },
+  MarkdownRenderer: { render: vi.fn(), renderMarkdown: vi.fn() },
+  setIcon: vi.fn(),
+  setTooltip: vi.fn(),
+  debounce: (fn: unknown) => fn,
+  getAllTags: vi.fn(() => []),
+  normalizePath: (path: string) => path,
+}));
 
 // ───────────────────────────────────────────────────────────────────
 // 2. FIXTURES
@@ -29,25 +54,43 @@ class MockElement {
   public className: string;
   public text: string | null = null;
   public children: MockElement[] = [];
+  public attributes = new Map<string, string>();
+  public draggable = false;
+  public disabled = false;
+  public checked = false;
+  public title = "";
+  public onclick: ((event: { preventDefault(): void; stopPropagation(): void }) => void) | null = null;
+  public onchange: (() => void) | null = null;
+  public ondragstart: ((event: unknown) => void) | null = null;
+  public ondragover: ((event: unknown) => void) | null = null;
+  public ondragleave: (() => void) | null = null;
+  public ondrop: ((event: unknown) => void) | null = null;
+  public ondragend: (() => void) | null = null;
 
   constructor(tagName = "div", className = "") {
     this.tagName = tagName.toUpperCase();
     this.className = className;
   }
 
-  createDiv(options: { cls?: string; text?: string } = {}): MockElement {
+  createDiv(options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): MockElement {
     return this.createEl("div", options);
   }
 
-  createSpan(options: { cls?: string; text?: string } = {}): MockElement {
+  createSpan(options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): MockElement {
     return this.createEl("span", options);
   }
 
-  createEl(tag: string, options: { cls?: string; text?: string } = {}): MockElement {
-    const el = new MockElement(tag, options.cls || "");
+  createEl(tag: string, options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): MockElement {
+    const className = Array.isArray(options.cls) ? options.cls.filter(Boolean).join(" ") : (options.cls || "");
+    const el = new MockElement(tag, className);
     if (options.text !== undefined) el.text = options.text;
+    if (options.attr) for (const [key, value] of Object.entries(options.attr)) el.attributes.set(key, value);
     this.children.push(el);
     return el;
+  }
+
+  setAttribute(name: string, value: string): void {
+    this.attributes.set(name, value);
   }
 
   addClass(cls: string): void {
@@ -57,6 +100,23 @@ class MockElement {
   hasClass(cls: string): boolean {
     return this.className.split(/\s+/).includes(cls);
   }
+
+  /** Stands in for Obsidian's cross-window `.instanceOf()` extension so `isHTMLElement` passes. */
+  instanceOf(): boolean {
+    return true;
+  }
+
+  closest(selector: string): MockElement | null {
+    return matchesSelector(this, selector) ? this : null;
+  }
+}
+
+function matchesSelector(node: MockElement, selector: string): boolean {
+  return selector.split(",").some((part) => {
+    const trimmed = part.trim();
+    if (trimmed.startsWith(".")) return node.hasClass(trimmed.slice(1));
+    return node.tagName === trimmed.toUpperCase();
+  });
 }
 
 const asHTMLElement = (el: MockElement): HTMLElement => el as unknown as HTMLElement;
@@ -165,5 +225,116 @@ describe("renderOptionValue", () => {
     const valueEl = new MockElement();
     renderOptionValue(asHTMLElement(valueEl), false, [], { col, ...OPTION_CLASSES });
     expect(valueEl.children).toHaveLength(0);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 5. CASES — THE EMPTY-VALUE PROMPT
+// ───────────────────────────────────────────────────────────────────
+
+describe("getPropertyEmptyPrompt", () => {
+  it("names the action for select, multi-select and relation, never the word Empty", () => {
+    expect(getPropertyEmptyPrompt("select")).toBe("Select option");
+    expect(getPropertyEmptyPrompt("multi-select")).toBe("Select options");
+    expect(getPropertyEmptyPrompt("relation")).toBe("Select options");
+  });
+
+  it("leaves every other format alone", () => {
+    expect(getPropertyEmptyPrompt("text")).toBeNull();
+    expect(getPropertyEmptyPrompt("number")).toBeNull();
+    expect(getPropertyEmptyPrompt("date")).toBeNull();
+    expect(getPropertyEmptyPrompt("checkbox")).toBeNull();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 6. CASES — THE CHECKBOX ROW SHELL
+// ───────────────────────────────────────────────────────────────────
+
+describe("buildCheckboxPropertyRow", () => {
+  const baseOptions = {
+    rowClass: "db-column-manager-row",
+    dataColumnKey: "status",
+    dragHandleClass: "db-column-drag",
+    dragHandleTitle: "Drag to sort",
+    moveControlsClass: "db-mobile-reorder-controls",
+    checked: true,
+    typeClass: "db-column-type",
+    renderTypeIcon: vi.fn(),
+    nameWrapClass: "db-column-name-wrap",
+    nameClass: "db-column-name",
+    nameText: "Status [status]",
+  };
+
+  it("draws drag handle, move controls, checkbox, type icon and name when draggable", () => {
+    const parent = new MockElement();
+    const handle = buildCheckboxPropertyRow({
+      parent: asHTMLElement(parent),
+      ...baseOptions,
+      draggable: true,
+      move: {
+        canMoveUp: false, canMoveDown: true,
+        moveUpLabel: "Move up", moveDownLabel: "Move down",
+        onMoveUp: vi.fn(), onMoveDown: vi.fn(),
+      },
+    });
+
+    const row = handle.row as unknown as MockElement;
+    expect(row.draggable).toBe(true);
+    expect(row.attributes.get("data-note-database-column-key")).toBe("status");
+    expect(row.children.map((child) => child.className)).toEqual([
+      "db-column-drag", "db-mobile-reorder-controls", "db-checkbox db-checkbox-field",
+      "db-column-type", "db-column-name-wrap",
+    ]);
+    expect(handle.checkbox.checked).toBe(true);
+    expect((handle.nameEl as unknown as MockElement).text).toBe("Status [status]");
+  });
+
+  it("draws no drag handle or move controls when not draggable — the read-only case", () => {
+    const parent = new MockElement();
+    const handle = buildCheckboxPropertyRow({
+      parent: asHTMLElement(parent),
+      ...baseOptions,
+      draggable: false,
+      checkboxDisabled: true,
+    });
+
+    const row = handle.row as unknown as MockElement;
+    expect(row.draggable).toBe(false);
+    expect(row.children.some((child) => child.hasClass("db-column-drag"))).toBe(false);
+    expect(row.children.some((child) => child.hasClass("db-mobile-reorder-controls"))).toBe(false);
+    expect(handle.checkbox.disabled).toBe(true);
+  });
+
+  it("wires the click handler for a shift-range toggle and the change handler for a plain persist, independently", () => {
+    const onCheckboxClick = vi.fn();
+    const onCheckboxChange = vi.fn();
+    const parent = new MockElement();
+    const handle = buildCheckboxPropertyRow({
+      parent: asHTMLElement(parent),
+      ...baseOptions,
+      draggable: false,
+      onCheckboxClick,
+      onCheckboxChange,
+    });
+
+    const fakeEvent = { preventDefault() {}, stopPropagation() {}, shiftKey: false };
+    (handle.checkbox as unknown as { onclick: (event: unknown) => void }).onclick(fakeEvent);
+    expect(onCheckboxClick).toHaveBeenCalledWith(fakeEvent, handle.checkbox);
+
+    (handle.checkbox as unknown as { onchange: () => void }).onchange();
+    expect(onCheckboxChange).toHaveBeenCalledWith(true);
+  });
+});
+
+describe("shouldIgnorePropertyRowDrag", () => {
+  it("ignores a drag starting on a control inside the row", () => {
+    const button = new MockElement("button");
+    expect(shouldIgnorePropertyRowDrag({ target: button } as unknown as DragEvent)).toBe(true);
+  });
+
+  it("allows a drag starting on the row itself", () => {
+    const row = new MockElement("div", "db-column-manager-row");
+    expect(shouldIgnorePropertyRowDrag({ target: row } as unknown as DragEvent)).toBe(false);
   });
 });

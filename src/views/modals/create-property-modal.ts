@@ -14,11 +14,12 @@
 import { App, Notice } from "obsidian";
 import { t } from "../../i18n";
 import { ColumnDef, ViewConfig } from "../../data/types";
-import { COLUMN_TYPE_LABELS, isColumnType } from "../../data/column-types";
+import { isColumnType } from "../../data/column-types";
 import { isFileFieldKey } from "../../data/file-fields";
 import { createUniqueColumnKey } from "../../data/column-config";
 import { createDropdownField } from "../dropdown-field";
-import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { buildTypePickerOptions, rollupNeedsRelationGate } from "../record-surface/type-picker";
 import { DbModal } from "./db-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
@@ -41,16 +42,6 @@ export interface CreatePropertyModalOptions {
   /** Modal title; defaults to "Create property". */
   title?: string;
 }
-
-// ───────────────────────────────────────────────────────────────────
-// 3. CONSTANTS
-// ───────────────────────────────────────────────────────────────────
-
-const PROPERTY_TYPES: ColumnDef["type"][] = [
-  "text", "number", "date", "datetime", "currency", "checkbox",
-  "select", "multi-select", "status",
-  "computed", "relation", "rollup", "files",
-];
 
 // ───────────────────────────────────────────────────────────────────
 // 4. MODAL
@@ -120,7 +111,6 @@ export class CreatePropertyModal extends DbModal {
 
   private renderForm(): void {
     const { contentEl } = this;
-    const labels = COLUMN_TYPE_LABELS();
     const hasRelation = this.config.schema.columns.some((col) => col.type === "relation");
 
     const labelRow = contentEl.createDiv({ cls: "db-modal-row" });
@@ -148,19 +138,14 @@ export class CreatePropertyModal extends DbModal {
     createDropdownField({
       parent: typeRow,
       label: t("modal.propertyType"),
-      options: PROPERTY_TYPES.map((type) => ({
-        value: type,
-        text: labels[type],
-        icon: getPropertyDropdownIcon(type),
-        // Rollup requires an existing relation to aggregate; without one it would
-        // be created with an empty relationField. Disable + explain instead.
-        ...(type === "rollup" && !hasRelation
-          ? { disabled: true, disabledReason: t("modal.rollupNeedsRelation") }
-          : {}),
-      })),
+      // The shared property-format list — rollup requires an existing relation to aggregate;
+      // without one it would be created with an empty relationField, so the gate disables it with
+      // its reason rather than removing it from the list.
+      options: buildTypePickerOptions(rollupNeedsRelationGate(hasRelation, t("modal.rollupNeedsRelation"))),
       value: this.typeValue,
       className: "db-modal-dropdown",
       hideLabel: true,
+      searchable: true,
       renderIcon: renderDropdownPropertyTypeIcon,
       disabled: this.options.lockType,
       onChange: (value) => {

@@ -41,6 +41,11 @@ export const RECORD_SURFACE_PRIMITIVES: readonly RecordSurfacePrimitiveEntry[] =
     module: "./hidden-properties",
     summary: "Hidden-properties group: collapsed with a count, expanded state survives a rebuild.",
   },
+  {
+    name: "P7",
+    module: "./type-picker",
+    summary: "Type picker: the one unfiltered thirteen-format list, gated (disabled + reason) rather than filtered per site.",
+  },
 ];
 
 // ───────────────────────────────────────────────────────────────────
@@ -51,4 +56,5 @@ export * from "./record-header";
 export * from "./property-row";
 export * from "./hidden-properties";
 export * from "./add-property-row";
+export * from "./type-picker";
 export * from "./cell-editor-contract";

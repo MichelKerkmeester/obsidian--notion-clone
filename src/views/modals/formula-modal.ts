@@ -26,8 +26,9 @@ import { getFileFieldValue } from "../../data/file-fields";
 import { getComputedStorageKey } from "../../data/column-display";
 import { ColumnDef, ComputedFieldDef, ComputedSyncMode, RowData, StatusOptionDef } from "../../data/types";
 import { getEffectiveLocale, t } from "../../i18n";
-import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "../property-type-icon";
+import { renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "../property-type-icon";
 import { createDropdownField } from "../dropdown-field";
+import { buildTypePickerOptions, type TypePickerGate } from "../record-surface/type-picker";
 import { confirmWithModal } from "./confirm-modal";
 import { safeString } from "../../data/safe-string";
 import { isDateLikeColumnType } from "../../data/date-time-format";
@@ -135,7 +136,11 @@ const FUNCTIONS: FormulaFunctionHelp[] = [
   ...formulaIfsSwitchMathHelp,
 ];
 
-const RESULT_TYPE_KEYS: Array<[ComputedFieldDef["type"], string]> = [["number", "formula.typeNumber"], ["text", "formula.typeText"], ["date", "formula.typeDate"], ["datetime", "formula.typeDatetime"], ["checkbox", "formula.typeCheckbox"]];
+/** The five formats a formula can resolve to. The workbench itself keeps its own design; only
+ *  this existing type dropdown now reads from the shared property-format list. */
+const RESULT_TYPES: readonly ComputedFieldDef["type"][] = ["number", "text", "date", "datetime", "checkbox"];
+const resultTypeGate: TypePickerGate = (type) =>
+  RESULT_TYPES.includes(type as ComputedFieldDef["type"]) ? undefined : { disabled: true, reason: t("formula.resultTypeNotComputable") };
 const FUNCTION_CATEGORY_KEYS = ["formula.catLogic", "formula.catMath", "formula.catText", "formula.catDate", "formula.catStats"];
 const HELP_CATEGORY_KEYS = ["formula.catFields", "formula.catExamples", ...FUNCTION_CATEGORY_KEYS];
 const FUNCTION_NAMES = new Set(FUNCTIONS.flatMap((fn) => [fn.name, fn.name.toLowerCase()]));
@@ -285,10 +290,11 @@ export class FormulaModal extends DbModal {
     createDropdownField({
       parent: typeLabel,
       label: t("formula.resultType"),
-      options: RESULT_TYPE_KEYS.map(([value, labelKey]) => ({ value, text: t(labelKey), icon: getPropertyDropdownIcon(value) })),
+      options: buildTypePickerOptions(resultTypeGate),
       value: this.selectedResultType,
       className: "db-modal-dropdown db-formula-result-type-dropdown",
       hideLabel: true,
+      searchable: true,
       renderIcon: renderDropdownPropertyTypeIcon,
       onChange: (value) => {
         this.selectedResultType = value as ComputedFieldDef["type"];

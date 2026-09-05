@@ -26,8 +26,9 @@ import {
 } from "../../data/property-type-conflict";
 import { ColumnDef, ComputedFieldDef } from "../../data/types";
 import { t } from "../../i18n";
-import { createDropdownField, DropdownOption } from "../dropdown-field";
-import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { createDropdownField } from "../dropdown-field";
+import { renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { buildTypePickerOptions, conflictWriterGate } from "../record-surface/type-picker";
 import { DbModal } from "./db-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
@@ -259,15 +260,17 @@ export class PropertyTypeConflictModal extends DbModal {
     createDropdownField({
       parent: pluginTypeCell,
       label: t("propertyConflict.changeTypeFor", { key: writer.key, database: writer.databaseName }),
-      options: getTypeOptions(writer).map((type): DropdownOption => ({
-        value: type,
-        text: getPluginTypeLabel(type),
-        icon: isColumnTypeValue(type) ? getPropertyDropdownIcon(type) : undefined,
+      // The shared property-format list, gated rather than filtered: a computed writer's draft
+      // can only resolve to a plain type, and no writer here can become a relation, rollup,
+      // computed value or files column — disabled with a reason instead of omitted.
+      options: buildTypePickerOptions(conflictWriterGate(writer.sourceKind, {
+        notAWriterTarget: t("propertyConflict.typeNotAvailable"),
+        computedOnlyPlainTypes: t("propertyConflict.computedOnlyPlainTypes"),
       })),
       value: writer.pluginType,
       className: "db-property-conflict-type-dropdown",
       hideLabel: true,
-      searchable: false,
+      searchable: true,
       renderIcon: (parentEl, icon) => {
         renderDropdownPropertyTypeIcon(parentEl, icon);
       },
@@ -371,36 +374,12 @@ function getObservableTypeLabel(type: ObservablePropertyType): string {
   return label === key ? getPropertyTypeConflictTypeLabel(type) : label;
 }
 
-function getPluginTypeLabel(type: ColumnDef["type"] | ComputedFieldDef["type"]): string {
-  const key = type === "multi-select" ? "columnType.multiSelect" : `columnType.${type}`;
-  const label = t(key);
-  return label === key ? type : label;
-}
-
 function getTargetObservableTypeLabel(
   type: ColumnDef["type"] | ComputedFieldDef["type"],
   fallback: ObservablePropertyType
 ): string {
   const observable = mapColumnTypeToObservablePropertyType(type) || fallback;
   return getObservableTypeLabel(observable);
-}
-
-function getTypeOptions(writer: PropertyWriter): Array<ColumnDef["type"] | ComputedFieldDef["type"]> {
-  if (writer.sourceKind === "computed") return ["text", "number", "date", "datetime", "checkbox"];
-  return ["text", "number", "date", "datetime", "currency", "select", "multi-select", "status", "checkbox"];
-}
-
-function isColumnTypeValue(type: ColumnDef["type"] | ComputedFieldDef["type"]): type is ColumnDef["type"] {
-  return type === "text" ||
-    type === "number" ||
-    type === "date" ||
-    type === "datetime" ||
-    type === "currency" ||
-    type === "select" ||
-    type === "multi-select" ||
-    type === "status" ||
-    type === "checkbox" ||
-    type === "computed";
 }
 
 function getPrimaryDraftObservableType(

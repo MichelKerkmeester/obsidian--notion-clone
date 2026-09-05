@@ -35,10 +35,26 @@ const { platform, setIconMock } = vi.hoisted(() => ({
     el.setAttribute("data-icon", icon);
   }),
 }));
+// This suite now mounts the record-surface primitives (P1's header, P2's row shell), whose own
+// import chain reaches obsidian-dependent modals the same way card-field-renderer.test.ts's does —
+// the entries beyond TFile/Platform/setIcon exist only so that chain loads under the test runner.
 vi.mock("obsidian", () => ({
+  App: class {},
+  CachedMetadata: class {},
   TFile: class {},
+  TFolder: class {},
+  Modal: class {},
+  Menu: class {},
+  Notice: class {},
+  Component: class {},
+  Setting: class {},
   Platform: platform,
+  MarkdownRenderer: { render: vi.fn(), renderMarkdown: vi.fn() },
   setIcon: setIconMock,
+  setTooltip: vi.fn(),
+  debounce: (fn: unknown) => fn,
+  getAllTags: vi.fn(() => []),
+  normalizePath: (path: string) => path,
 }));
 
 // i18n's t() resolves the active locale through `window`, which does not
@@ -86,12 +102,39 @@ class FakeElement extends FakeEventTarget {
   parent: FakeElement | null = null;
   readonly children: FakeElement[] = [];
   type = "";
+  title = "";
   private classes = new Set<string>();
   private attrs = new Map<string, string>();
   private text = "";
 
   constructor(public readonly tagName: string) {
     super();
+  }
+
+  // Obsidian's own createDiv/createSpan/createEl helpers, patched globally onto every real
+  // HTMLElement at runtime — the record-surface primitives this suite now mounts through are
+  // written against that API, not against raw createElement/appendChild the way this panel's own
+  // code was before the switch.
+  createDiv(options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): FakeElement {
+    return this.createEl("div", options);
+  }
+
+  createSpan(options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): FakeElement {
+    return this.createEl("span", options);
+  }
+
+  createEl(tag: string, options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): FakeElement {
+    const el = new FakeElement(tag);
+    el.ownerDocument = this.ownerDocument;
+    if (options.cls) el.className = Array.isArray(options.cls) ? options.cls.filter(Boolean).join(" ") : options.cls;
+    if (options.text !== undefined) el.textContent = options.text;
+    if (options.attr) for (const [key, value] of Object.entries(options.attr)) el.setAttribute(key, value);
+    this.appendChild(el);
+    return el;
+  }
+
+  addClass(cls: string): void {
+    this.classes.add(cls);
   }
 
   get className(): string {

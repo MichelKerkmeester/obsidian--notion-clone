@@ -35,23 +35,30 @@ export interface DesktopRecordHeaderOptions {
   decorateTitle?: (titleEl: HTMLElement) => void;
   /** Present only when the title field may be renamed in place (today: `file.name` titles only). */
   rename?: { onRename: (titleEl: HTMLElement) => void };
-  /** Opens the underlying note. The caller decides whether this also closes the header's host. */
-  onOpen: () => void;
-  onClose: () => void;
+  /** Opens the underlying note. Absent on a display-only rail, which draws no open button. */
+  onOpen?: () => void;
+  /** Absent on a rail that closes some other way (the peek dismisses on outside click/Escape). */
+  onClose?: () => void;
+  /** Defaults to the record sheet's own classes; a rail supplies its own to keep its CSS untouched. */
+  headerClass?: string;
+  titleClass?: string;
+  /** A caller-owned control appended after the title — the properties panel's select-all toggle,
+   *  which is not part of any record's own header and has nowhere else in this contract to live. */
+  renderTrailing?: (header: HTMLElement) => void;
 }
 
 export interface DesktopRecordHeaderHandle {
   header: HTMLElement;
   titleEl: HTMLElement;
-  openButton: HTMLElement;
-  closeButton: HTMLElement;
+  openButton: HTMLElement | null;
+  closeButton: HTMLElement | null;
 }
 
 export function buildDesktopRecordHeader(options: DesktopRecordHeaderOptions): DesktopRecordHeaderHandle {
-  const header = options.parent.createDiv({ cls: "db-record-detail-header" });
+  const header = options.parent.createDiv({ cls: options.headerClass || "db-record-detail-header" });
   options.renderIcon?.(header);
 
-  const titleEl = header.createDiv({ cls: "db-record-detail-title", text: options.title });
+  const titleEl = header.createDiv({ cls: options.titleClass || "db-record-detail-title", text: options.title });
   options.decorateTitle?.(titleEl);
   if (options.titleIsEmpty) titleEl.addClass("is-empty-title");
 
@@ -66,27 +73,37 @@ export function buildDesktopRecordHeader(options: DesktopRecordHeaderOptions): D
     setFieldTooltip(titleEl, options.titleIsEmpty ? "" : options.title);
   }
 
-  const openButton = header.createEl("button", {
-    cls: "db-board-card-open",
-    attr: { type: "button", "aria-label": t("menu.openNote") },
-  });
-  setIcon(openButton, "maximize-2");
-  setTooltip(openButton, t("menu.openNote"), { delay: 100 });
-  openButton.addEventListener("click", (event) => {
-    event.stopPropagation();
-    options.onOpen();
-  });
+  options.renderTrailing?.(header);
 
-  const closeButton = header.createEl("button", {
-    cls: "db-cell-edit-close",
-    attr: { type: "button", "aria-label": t("common.close") },
-  });
-  setIcon(closeButton, "x");
-  setTooltip(closeButton, t("common.close"), { delay: 100 });
-  closeButton.addEventListener("click", (event) => {
-    event.stopPropagation();
-    options.onClose();
-  });
+  let openButton: HTMLElement | null = null;
+  if (options.onOpen) {
+    const onOpen = options.onOpen;
+    openButton = header.createEl("button", {
+      cls: "db-board-card-open",
+      attr: { type: "button", "aria-label": t("menu.openNote") },
+    });
+    setIcon(openButton, "maximize-2");
+    setTooltip(openButton, t("menu.openNote"), { delay: 100 });
+    openButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      onOpen();
+    });
+  }
+
+  let closeButton: HTMLElement | null = null;
+  if (options.onClose) {
+    const onClose = options.onClose;
+    closeButton = header.createEl("button", {
+      cls: "db-cell-edit-close",
+      attr: { type: "button", "aria-label": t("common.close") },
+    });
+    setIcon(closeButton, "x");
+    setTooltip(closeButton, t("common.close"), { delay: 100 });
+    closeButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      onClose();
+    });
+  }
 
   return { header, titleEl, openButton, closeButton };
 }
