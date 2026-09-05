@@ -279,10 +279,10 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       `toolbarPopover: "tab-menu"` spec, real `styles.css`), screenshotted once to a scratch path
       and viewed: rename/duplicate/copy-embed/change-type/delete render at the primitive's 28px row
       pitch with the first row focused and delete in the warning colour, matching every other
-      migrated menu in this family. `npx tsc --noEmit` and `npm run build` both exit 0. **Landed 2026-09-06** after three
+      migrated menu in this family. `npx tsc --noEmit` and `npm run build` both exit 0. **Landed 2026-09-06** after four
       rebases onto a fast-moving main; the whole set was re-verified on the tree that shipped:
       `npm run gate` **26 green 0 red exit 0** (26, not the 25 the primitive legs quote — main's
-      toolbar-collapse sweep became a lane in between), `npx vitest run` 1315/1315,
+      toolbar-collapse sweep became a lane in between), `npx vitest run` 1336/1336,
       `npx tsc --noEmit` 0, `npm run build` 0, `node tools/screenshots/verify.mjs` 558 current.
       **Anytype read for the parent-versus-replace question** (`menus/anytype-menu-set-view-settings-light-full.png`
       → `menus/anytype-menu-set-view-layout-light-full.png`, both opened): Anytype does neither of

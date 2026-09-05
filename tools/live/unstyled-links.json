@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-05T22:02:14.943Z",
+  "measuredAt": "2026-09-05T22:21:26.506Z",
   "inputs": {
     "styles.css": "adae4d3efba1",
     "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -7,7 +7,7 @@
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
     "tools/live/chrome-geometry-measure.mjs": "e3c48aa4538d",
     "tools/live/render-assertion-bundle.mjs": "eb7b63618620",
-    "tools/live/render-assertion-harness.ts": "d56feffff07e"
+    "tools/live/render-assertion-harness.ts": "b335f4ffbeee"
   },
   "fixture": {
     "links": 112,
