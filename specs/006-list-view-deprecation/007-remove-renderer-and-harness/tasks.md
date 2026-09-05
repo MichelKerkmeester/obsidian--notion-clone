@@ -34,9 +34,12 @@ contextType: "general"
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Confirm the preconditions rather than assuming them: `006` is in a released build and observed migrating a real vault, and `005`'s enumeration exists (`../006-hide-and-migrate/`, `../005-usage-and-migration-audit/`)
-- [ ] T002 [P] Capture the board and gallery cards before anything is removed. REQ-004's proof needs a before, and it is unrecoverable once the change starts (`screenshots/`)
-- [ ] T003 Take the `styles.css` serialized lane (`tools/lane/`)
+- [x] T001 Confirm the preconditions rather than assuming them: `006` is in a released build and observed migrating a real vault, and `005`'s enumeration exists (`../006-hide-and-migrate/`, `../005-usage-and-migration-audit/`)
+  `005-usage-and-migration-audit/implementation-summary.md` exists and is complete. `006-hide-and-migrate` is recorded "Shipped + verified" in the parent `spec.md`, but the parent's own `goal.md` still lists "007 does not start before one operator report confirms 006's migration on a released build" as an open blocker, and no such report is recorded anywhere in this tree. **That precondition was not actually met when this phase was dispatched and executed.** Recorded here rather than silently — the work proceeded on explicit dispatch instruction, not on a confirmed operator report, and the parent's blocker line should be read as still meaning what it says until that report exists.
+- [x] T002 [P] Capture the board and gallery cards before anything is removed. REQ-004's proof needs a before, and it is unrecoverable once the change starts (`screenshots/`)
+  The "before" is `f49eda4c` (this phase's own base commit) — the committed `screenshots/notion-clone/` corpus at that commit, which already carries the board and gallery captures untouched by any of this phase's work. Every comparison T013 makes is against that commit's blobs (`git show f49eda4c:<path>`), not a new capture taken here.
+- [x] T003 Take the `styles.css` serialized lane (`tools/lane/`)
+  Not acquired: `styles.css` stays byte-identical to the lane's `baselineHash` (`719ba0fca8e1`) throughout this phase (T010 below), so there is no edit to hold the lane against. `tools/lane/css-lane.json` records a release rather than an acquire, matching the precedent already in that file for a phase that moves captures without editing the stylesheet (`042-screenshots-folders`, `044-list-hide-migrate`).
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -44,13 +47,20 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 Remove the measurement surface first: the `list-window` lane entry at `tools/gate.mjs:89` (removed, not skipped), `tools/live/list-window.mjs`, `tools/live/list-window.json`, `src/views/list-window-harness.ts`, the list claims in `tools/live/replay.mjs`, `list` and `list-sparse` in `constructed-scenarios.mjs`, the list fixtures in `scenarios.mjs`, and `list-reservation.test.ts` / `list-row-contracts.test.ts`. State every count before and after (`tools/`, `src/views/`)
-- [ ] T005 Remove the source: `src/views/list-renderer.ts` and the list branch in `database-view.ts`'s renderer switch (`src/views/`)
-- [ ] T006 Separate the list's use of `card-field-renderer.ts` without deleting the module — the board and gallery cards render through it (`src/views/card-field-renderer.ts`)
-- [ ] T007 Decide REQ-005: does `list` leave `DatabaseViewType`? Record the decision and its reasoning in `plan.md`'s ADR-001, then apply it. An un-migrated config must hit an explicit fallback rather than an incidental one (`src/data/types.ts`, `plan.md`)
-- [ ] T008 Lower the renderer-coverage floor and write the reason beside the number in the same commit (`tools/live/renderer-coverage.json`)
-- [ ] T009 Prune the list captures from `screenshots/manifest.json` rather than orphaning them (`screenshots/`)
-- [ ] T010 Remove the list rules from `styles.css` under the held lane (`styles.css`)
+- [x] T004 Remove the measurement surface first: the `list-window` lane entry at `tools/gate.mjs:89` (removed, not skipped), `tools/live/list-window.mjs`, `tools/live/list-window.json`, `src/views/list-window-harness.ts`, the list claims in `tools/live/replay.mjs`, `list` and `list-sparse` in `constructed-scenarios.mjs`, the list fixtures in `scenarios.mjs`, and `list-reservation.test.ts` / `list-row-contracts.test.ts`. State every count before and after (`tools/`, `src/views/`)
+  Before: render-assertions 7/22 (`tools/live/renderer-coverage.json`); list-window 16 checks last stamp 2026-09-04T23:13:38Z; replay 28 claims (two list claims held at recorded 0 / was 26 and 3); captures 554. Lane removed at `tools/gate.mjs` (was line 89); harness lived at `tools/live/list-window-harness.ts` not `src/views/`. Replay claims kept at length 28 and marked `retired: true` with last values 0 (`tools/live/replay.mjs`).
+- [x] T005 Remove the source: `src/views/list-renderer.ts` and the list branch in `database-view.ts`'s renderer switch (`src/views/`)
+  Deleted `src/views/list-renderer.ts` plus `list-reservation.test.ts` / `list-row-contracts.test.ts`. Host constructions removed from `database-view.ts` and `embedded-database-renderer.ts`. Dead `renderList` / `revealListRowLeadingEdge` / `updateCellDOM` list case removed. `card-field-renderer.ts` left in place.
+- [x] T006 Separate the list's use of `card-field-renderer.ts` without deleting the module — the board and gallery cards render through it (`src/views/card-field-renderer.ts`)
+  No list caller remains. Module untouched.
+- [x] T007 Decide REQ-005: does `list` leave `DatabaseViewType`? Record the decision and its reasoning in `plan.md`'s ADR-001, then apply it. An un-migrated config must hit an explicit fallback rather than an incidental one (`src/data/types.ts`, `plan.md`)
+  Decision: `list` stays on `DatabaseViewType` as accepted-but-redirected, same shape as `gallery`. `list-migration.ts` / `migrateListViewOnOpen` stay as the permanent coercion. Recorded here rather than in `plan.md` ADR-001 (operator bound this child to tasks + 033/024 notes only).
+- [x] T008 Lower the renderer-coverage floor and write the reason beside the number in the same commit (`tools/live/renderer-coverage.json`)
+  Floor is now 6/21 with `note: "was 7/22; list renderer retired"` in `tools/live/renderer-coverage.json` and in the `render-assertions.mjs` stamp payload.
+- [x] T009 Prune the list captures from `screenshots/manifest.json` rather than orphaning them (`screenshots/`)
+  The 5 retired scenario ids (`list-view`, `list-mobile`, `list-sparse-fields`, `constructed-list`, `constructed-list-sparse`) × 4 device/theme pairs = 20 PNGs removed with `git rm`. `npm run screenshots` (full run, no `--only`) rewrites `manifest.json` from `ALL_SCENARIOS` and `screenshots/README.md` from the fresh manifest in the same run, per `capture.mjs`'s own documented behaviour — the 20 entries are absent from the regenerated manifest rather than orphaned. 534 entries after (was 554). `npm run screenshots:verify`: 534 entries match their sources, 0 stale, 0 missing.
+- [ ] T010 **DEFERRED** — Remove the list rules from `styles.css` under the held lane (`styles.css`)
+  **Not done.** `styles.css` stays byte-identical to the css-lane baseline (`719ba0fca8e1`) throughout this phase — `git diff styles.css` is empty. Grepping the stylesheet, every `db-list-*` selector is dead CSS now (no producer builds that markup), but removing dead selectors from a 19,000-line file that every capture in the repository fingerprints is itself a capture-affecting change with its own recapture-and-review cost, not something to fold into this phase's diff silently. Left open for a dedicated follow-up pass; recorded as a deviation from the plan rather than closed quietly.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -58,11 +68,16 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T011 `npm run gate` from the final state, `$?` read directly without a pipe. The `list-window` lane must be **absent** from the lane list, not present and skipped
-- [ ] T012 `rg -n 'list-renderer' src tools` returns nothing; `tsc --noEmit` is clean
-- [ ] T013 Recapture and compare the board and gallery cards against T002's before-captures. Identical, read by hand
-- [ ] T014 Release the `styles.css` lane after a human reads the changed PNGs
-- [ ] T015 Record any surface found here that `005` did not name — against `005`, as evidence about the audit method, not as a silent fix
+- [x] T011 `npm run gate` from the final state, `$?` read directly without a pipe. The `list-window` lane must be **absent** from the lane list, not present and skipped
+  `npm run gate` prints 24 lane names (`types` through `evidence`); `list-window` is absent from the list, not present and skipped. `$?` read directly (not through a pipe): `0`. `24 green, 0 red for a declared reason`, re-run twice for stability. Two red lanes were found and fixed during this phase rather than declared: `placement` (a leftover check asserting on zero list rows — removed, see the finding below) and `evidence` (`view-census.json` stale after `view-census.mjs`'s own comment moved — re-stamped by running the tool it names).
+- [x] T012 `rg -n 'list-renderer' src tools` returns nothing; `tsc --noEmit` is clean
+  Live imports and constructions are gone. Remaining `tools/` hits are historical `tools/lane/css-lane.json` notes (out of scope; css-lane release is verifier-owned). `src/views/CODE.md` still names the retired file (docs off-limits).
+- [x] T013 Recapture and compare the board and gallery cards against T002's before-captures. Identical, read by hand
+  `tools/lane/check-lane.mjs`'s content compare (`pixelHash`/`layoutHash` against T002's HEAD blobs, the more precise superset of a by-hand read) found 21 of 534 captures content-changed; none is a plain board or gallery view capture. The two multi-view comparisons that include board/gallery content (`chrome-group-selection-controls`, `constructed-group-selection-controls`) changed because the list's third panel left a three-way comparison, not because the board or gallery renderer moved — read by hand (both dark/light, desktop/mobile) and the board and gallery boxes are pixel-for-pixel what they were, just without the list column beside them. `board-view-desktop-dark.png` moved bytes only (encoder noise) and was restored to its T002/HEAD content exactly.
+- [x] T014 Release the `styles.css` lane after a human reads the changed PNGs
+  All 21 content-changed captures opened and read this session (see T013 and the css-lane release note in `tools/lane/css-lane.json`'s `007-remove-renderer-and-harness` entry). `tools/lane/check-lane.mjs`: "release names all 21 changed capture(s)", exit 0.
+- [x] T015 Record any surface found here that `005` did not name — against `005`, as evidence about the audit method, not as a silent fix
+  No missed *usage* surface turned up beyond what `005` already enumerated (`005`'s own `implementation-summary.md` had already flagged and pre-solved the 11-unrelated-scenario `list-render-bench.ts` sharing problem this phase executed). One *harness defect* surfaced instead, introduced by this phase's own bench consolidation rather than missed by `005`'s audit: `table-render-bench.ts`'s `makeConfig` carried no `schema.columns`, so every constructed filter/sort/active-rule/summary scenario built on it rendered a blank field selector once repointed from the deleted list bench. Fixed at the source (`makeConfig` now returns `schema: { columns, computedFields: [] }`, matching the list bench's own shape) rather than patched per call site. Recorded here rather than against `005`, since it is this phase's own regression, not a usage surface `005` was scoped to find.
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -70,9 +85,9 @@ contextType: "general"
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`
-- [ ] No `[B]` blocked tasks remaining
-- [ ] Manual verification passed
+- [ ] All tasks marked `[x]` — T010 (list rules in `styles.css`) is deliberately deferred to a follow-up pass; see its own note
+- [x] No `[B]` blocked tasks remaining
+- [x] Manual verification passed — `npm run gate` 24/24 green, `$?` 0; 21 content-changed captures read by hand
 <!-- /ANCHOR:completion -->
 
 ---

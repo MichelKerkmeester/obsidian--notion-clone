@@ -286,22 +286,39 @@ Phase 1.5 (Config) ───┘
 
 ### ADR-001: Does `list` leave `DatabaseViewType`?
 
-**Status**: Proposed — REQ-005 requires it decided before this phase ships.
+**Status**: Accepted.
 
 **Context**: `viewType` is persisted into vault files. `006` migrates on open, but a vault that never
 opens keeps the value indefinitely. The gallery faced this and chose to keep the value accepted
 while withdrawing it from every picker.
 
-**Decision**: not yet taken. Either answer is acceptable; leaving it implicit is not, because the
-behaviour of an un-migrated vault then depends on whichever branch happens to run first.
+**Decision**: `list` **stays** on `DatabaseViewType`, as an accepted-but-redirected value, the same
+shape the gallery already uses. `src/data/list-migration.ts` and `database-view.ts`'s /
+`embedded-database-renderer.ts`'s `migrateListViewOnOpen` stay as the permanent coercion — not a
+transitional shim to be removed later — so a vault that opens with `viewType: "list"` at any point
+in the future still migrates cleanly rather than hitting an unhandled value. The render dispatch's
+own fallback is explicit in effect: `migrateListViewOnOpen` runs before every render and flips an
+un-migrated config's `viewType` to `"table"` before the table/board/gallery/chart/calendar/timeline
+`if`-chain in `database-view.ts`'s `render()` is reached, so `"list"` never reaches that chain in the
+normal path; a config that somehow still reads `"list"` at that point (a migration that threw and
+rolled itself back, per the `catch` blocks in both `migrateListViewOnOpen` implementations) falls
+through to the same `else` branch every other unrecognised/removed `viewType` would, which renders it
+as a table — the same outcome the accepted decision names, reached deterministically rather than by
+coincidence.
 
 **Consequences**:
-- Removing the value narrows the type and makes the compiler enforce the deprecation.
-- Removing it also means an un-migrated config hits an unhandled value, so the fallback has to be
-  explicit rather than incidental.
+- Removing the value would have narrowed the type and let the compiler enforce the deprecation, at
+  the cost of a hard break for any un-migrated vault (rejected below).
+- Keeping it means `DatabaseViewType`, the CSS view-toggle class list, and a few label/lookup
+  switches still name `"list"` indefinitely, exactly as they already do for `"gallery"`.
 
 **Alternatives Rejected**:
 - *Decide it in `006`*: rejected, because `006` must stay reversible and a union narrowing is not.
+- *Remove `"list"` from `DatabaseViewType` now that `007` is the irreversible phase*: rejected. `006`
+  ships a locale-complete migration and coercion path; narrowing the type here would strand any vault
+  that has not yet opened since `006` shipped, and this phase's own precondition (a released `006`
+  build actually observed migrating a real vault) was not confirmed before this phase ran — see T001.
+  Removing the value now would compound an unconfirmed precondition with an irreversible one.
 
 ---
 

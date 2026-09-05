@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: List View Freeze"
-description: "Stop the list view hanging Obsidian by moving a layout measurement out of the row loop, and stop reserving an empty property's column with a whole hidden field."
+description: "SUPERSEDED 2026-09-05. The list view was retired; the freeze and reservation work has no remaining surface."
 trigger_phrases:
   - "list view freezes obsidian"
   - "opening list view hangs"
@@ -55,10 +55,13 @@ _memory:
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P0 |
-| **Status** | In Progress |
+| **Status** | Superseded — the list view was retired |
 | **Created** | 2026-08-30 |
 | **Branch** | `main` |
 <!-- /ANCHOR:metadata -->
+
+*2026-09-05: superseded.* The list view was retired, so the freeze and reservation criteria have
+no remaining surface. AC-6 (operator device) stays NOT MET as historical record.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Remove the List Renderer and Its Harness"
-description: "Nothing is removed yet. This records the nine measurement surfaces that must come out with the renderer, counted before the change so the removal can be checked against a number rather than a feeling."
+description: "The list renderer and every measurement surface named against it are gone in one change. list stays on DatabaseViewType, migrated permanently by the existing coercion. One deferral (styles.css) and one harness regression found and fixed during the removal are both recorded rather than folded in silently."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -11,23 +11,27 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation/007-remove-renderer-and-harness"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Recorded the opening state; nothing removed"
-    next_safe_action: "Confirm the two preconditions, then capture the board and gallery before-state"
-    blockers:
-      - "Preconditions unmet: 005 has not run and 006 has not shipped"
+    last_updated_at: "2026-09-05T02:45:00Z"
+    last_updated_by: "phase-007-landing"
+    recent_action: "Landed 007: renderer and measurement surface removed, gate 24/24 green"
+    next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
+    blockers: []
     key_files:
-      - "src/views/list-renderer.ts"
+      - "src/views/database-view.ts"
+      - "src/views/embedded-database-renderer.ts"
+      - "src/data/list-migration.ts"
       - "tools/gate.mjs"
       - "tools/live/renderer-coverage.json"
+      - "tools/bench/table-render-bench.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-deprecation-007-summary"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "Does list leave DatabaseViewType? No — it stays accepted-but-redirected, ADR-001 in plan.md."
+      - "Was the 006 precondition (an operator report against a released build) confirmed before this phase ran? No — recorded as a gap in tasks.md T001, not silently assumed met."
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -43,7 +47,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 007-remove-renderer-and-harness |
-| **Completed** | Not complete — opened 2026-09-04 |
+| **Completed** | 2026-09-05, with one task (T010) deliberately deferred |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -52,33 +56,43 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** This is the irreversible phase and it has two unmet preconditions. What follows is
-the surface count it opens against, so the removal is checkable against a number.
+`src/views/list-renderer.ts` (1,173 lines) and every measurement surface named against it left the
+tree together, per `plan.md`'s measurements-first ordering. `list` stays on `DatabaseViewType` as an
+accepted-but-redirected value (ADR-001, `plan.md`), migrated permanently by `src/data/list-migration.ts`
+and the `migrateListViewOnOpen` coercion in both hosts — not narrowed out of the type.
 
-### The nine surfaces
+### The nine surfaces named at opening, and what happened to each
 
-Read from the tree at `c6b5f11`. Every one of these must leave in the same commit as the renderer:
+1. `tools/gate.mjs:89`'s `list-window` lane entry — **removed**, not skipped. The gate now runs 24
+   lanes, not 25.
+2. `tools/live/list-window.mjs` — **deleted**.
+3. `tools/live/list-window.json` — **deleted**.
+4. `src/views/list-window-harness.ts` — **deleted**.
+5. `tools/live/renderer-coverage.json`'s `list-renderer.ts`/`list-render-bench.ts` pins — **removed**;
+   floor lowered 7/22 → 6/21 with `note: "was 7/22; list renderer retired"`.
+6. `tools/screenshots/constructed-scenarios.mjs`'s `list`/`list-sparse` — **removed**; the
+   `constructed-list-migrated` scenario's list fork removed too (always mounts `TableRenderer` now).
+7. `tools/screenshots/scenarios.mjs` (`core.mjs`/`chrome.mjs`/`shared.mjs`)'s list fixtures —
+   **removed**: `list-view`, `list-mobile`, `list-sparse-fields`, the list host inside
+   `group-selection-controls`, and `listGroupHeader()`.
+8. `tools/live/replay.mjs`'s list claims — **kept, not dropped**, marked `retired: true` with their
+   last recorded values (0, `was` 26 and 3), per the file's own convention for a measured result whose
+   fixture no longer exists. Both still report `held` because `retired` claims return their recorded
+   value directly rather than re-measuring a fixture that is gone.
+9. `src/views/list-reservation.test.ts` and `list-row-contracts.test.ts` — **deleted**.
 
-1. `tools/gate.mjs:89` — the `list-window` lane entry.
-2. `tools/live/list-window.mjs` — the lane.
-3. `tools/live/list-window.json` — its ratchet.
-4. `src/views/list-window-harness.ts` — its harness.
-5. `tools/live/renderer-coverage.json` — pins `src/views/list-renderer.ts` and
-   `tools/bench/list-render-bench.ts` by content hash, and fails closed on a coverage decrease.
-6. `tools/screenshots/constructed-scenarios.mjs` — `list` and `list-sparse`.
-7. `tools/screenshots/scenarios.mjs` — the list fixtures.
-8. `tools/live/replay.mjs` — the list claims.
-9. `src/views/list-reservation.test.ts` and `src/views/list-row-contracts.test.ts`.
-
-And the source: `src/views/list-renderer.ts`, 1,173 lines, plus the list branch in
-`database-view.ts`'s renderer switch. `src/views/card-field-renderer.ts` (349 lines) is **not** on
-this list — the board and gallery cards render through it.
+Also: `card-field-renderer.ts` (349 lines) — **untouched**, per plan; the list's separate use of it
+was in `list-renderer.ts` itself, which is gone. `listCompactFields` removed from `ViewConfig`
+(`types.ts`), the parser/serializer (`data-source.ts`), the config panel
+(`view-config-panel-renderer.ts`), and all three locale dictionaries (`i18n.ts`).
 
 ### Files Changed
 
-| File | Action | Purpose |
-|------|--------|---------|
-| (none) | — | No file has been removed. The documents in this folder are the only artifacts so far. |
+Full list in the landing commit (`feat(views): retire the list renderer, its lane and its captures`).
+By surface: 8 files deleted (the renderer, its two unit specs, the list-window lane/harness/ratchet,
+the bench entry and its runner); ~30 `src/`/`tools/` files modified to remove list branches, list
+column/config builders, and list-specific assertions; 5 evidence/ratchet JSON files re-stamped or
+deliberately lowered; 20 screenshot PNGs deleted and 21 recaptured for real content reasons.
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -86,10 +100,20 @@ this list — the board and gallery cards render through it.
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered, and it must not start yet. Two preconditions are unmet: `005`'s enumeration has not
-run, and `006` has not shipped in a release. `plan.md` §3 sets the internal order — measurements
-first, then source, then the ratchet and the manifest — so the tree is never in a state where the
-gate is green against a half-removed view.
+Per `plan.md` §3's internal order: measurements out first (lane, harness, ratchet pins, fixtures,
+constructed scenarios, replay claims, unit specs), then the source (`list-renderer.ts` and its call
+sites in both hosts), then the ratchet floor and the capture manifest, then verification.
+
+One precondition gap is recorded rather than assumed clean: `006-list-view-deprecation/goal.md`
+still names "one operator report against a released build" as the thing that unblocks `007`, and no
+such report exists in this tree. This phase was dispatched and executed anyway; `tasks.md` T001
+records the gap rather than silently treating it as satisfied.
+
+Verification ran the full `npm run gate` (not a subset) from the final state after every removal and
+recapture, `$?` read directly. It found two real red lanes along the way — `placement` (a leftover
+check with zero subjects to check, see Known Limitations) and `evidence` (a stale stamp file, fixed
+by re-running the tool that writes it) — both fixed rather than declared, because both were
+mechanically reproducible defects, not open product questions.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -101,8 +125,10 @@ gate is green against a half-removed view.
 |----------|-----|
 | Remove everything in one commit, not a tidy sequence | Two commits satisfy a later search and still leave a window where the gate ran green against a view that was half gone. AC-001 is therefore phrased over the commit, not the tree. |
 | Measurements out before source | Otherwise `list-window.mjs` runs against a deleted renderer, and the failure it produces is indistinguishable from a real one. |
-| Capture the board and gallery before starting | REQ-004's proof needs a before, and once the change begins it is unrecoverable. |
-| Record a missed surface against `005` rather than fixing it silently | A surface the audit missed is evidence about the audit method. Losing it costs more than the minute saved. |
+| `list` stays on `DatabaseViewType`, migrated permanently (ADR-001) | Same shape the gallery already uses; narrowing the type now would strand any vault that has not opened since `006` shipped, and `006`'s own release-confirmation precondition was not confirmed before this phase ran. |
+| `styles.css`'s list rules deferred (T010) | Dead CSS in a 19,000-line, every-capture-fingerprinting stylesheet is its own bounded, capture-affecting change; folding it into this diff would make an already-large landing harder to review for the thing that actually matters (the renderer and its measurement surface). |
+| Fix the `makeConfig` schema regression at its source, not per call site | `table-render-bench.ts`'s `makeConfig` silently produced a config with no `schema.columns` once seven constructed scenarios were re-pointed to it from the deleted list bench, blanking every filter/sort field selector. One shape fix in `makeConfig` corrects every call site at once, rather than patching each scenario that happened to need it. |
+| Record the unconfirmed `006` precondition rather than treat it as satisfied | A precondition line that says "does not start before X" and starts anyway without X is a fact about this landing, not a detail to smooth over. |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -112,10 +138,20 @@ gate is green against a half-removed view.
 
 | Check | Result |
 |-------|--------|
-| `validate.sh 007-remove-renderer-and-harness --strict` | Run at authoring time; see the packet commit |
-| `npm run gate` | Not run — nothing has changed |
-| Board/gallery before-captures | Not taken (tasks.md T002) |
-| ADR-001 (`DatabaseViewType`) | Proposed, not decided |
+| `npx tsc --noEmit` | 0 errors |
+| `npm test` (vitest) | 1090 passed, 0 failed (was 1109 at the base commit; 19 fewer from the deleted list-only test files and removed list assertions inside shared specs) |
+| `npm run lint` | 164 problems (was 172 at the base commit; the 8-problem drop traced file-by-file to the deleted `list-renderer.ts` (6) and the list checks removed from `accessibility-defects.test.ts` (2) — not part of `npm run gate`) |
+| `npm run lint:tools` | 0 problems |
+| `node tools/naming/scan-comments.mjs` | PASS, 0 findings |
+| `node tools/live/render-assertions.mjs` | PASS, coverage 6/21 (was 7/22) |
+| `node tools/live/replay.mjs` | PASS, 28 results held, 2 marked `retired` |
+| `npm run screenshots` (full) | 534 screenshots (was 554), 0 failures |
+| `npm run screenshots:verify` | 534 entries fresh, 0 stale |
+| `node tools/live/touch-targets.mjs` | PASS both passes; fixture 198/198 (was 279), constructed 1215/1215 (was 1223) |
+| `node tools/live/unstyled-links.mjs` | PASS; constructed 1332 links (was 1476), 0 UA-default findings |
+| `node tools/lane/check-lane.mjs` | "release names all 21 changed capture(s)", exit 0 |
+| `npm run gate` | **24/24 green**, `$?` read directly: `0` |
+| ADR-001 (`DatabaseViewType`) | Accepted — `list` stays, migrated permanently |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -123,15 +159,29 @@ gate is green against a half-removed view.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Two unmet preconditions.** `005` has not enumerated and `006` has not shipped. Starting without
-   either turns a removal into a discovery process run against a red gate.
-2. **ADR-001 is open.** Whether `list` leaves `DatabaseViewType` decides what an un-migrated vault
-   does, and leaving it implicit means the behaviour depends on whichever branch runs first.
-3. **The gallery's own deprecation is unfinished.** `renderer-coverage.json` still pins
+1. **T010 deferred.** `styles.css`'s `db-list-*` rules are dead CSS but still in the stylesheet.
+   Recorded as a follow-up, not folded into this diff — see `tasks.md` T010.
+2. **The `006` precondition was not confirmed before this phase ran.** No operator report against a
+   released build is recorded anywhere in this tree. See `tasks.md` T001.
+3. **A harness regression was found and fixed mid-phase, not caught by `npm run gate` alone.**
+   `render-assertion-harness.ts`'s re-point from the deleted list bench to the table bench (a
+   mechanical rename, `makeListConfig` → `makeTableConfig`) silently blanked every constructed
+   filter/sort/active-rule/summary scenario's field selector, because the two bench files'
+   `makeConfig` functions built a differently-shaped `ViewConfig`. `render-assertions.mjs`'s own
+   `SCENARIOS`/`STATE_SCENARIOS` list never exercises those renderer branches — only running the full
+   screenshot capture and reading the resulting PNG surfaced it. Fixed at the source
+   (`table-render-bench.ts`'s `makeConfig`); the general lesson — a gate lane's own scenario coverage
+   can miss a regression its sibling capture pipeline exercises — is recorded here rather than assumed
+   closed by a green `npm run gate`.
+4. **A leftover check with zero subjects was found and removed, not declared.**
+   `tools/storybook/verify-placement.mjs` carried "every fixture list row carries the wrapper the
+   renderer builds", added when the list still had fixtures. With the fixtures gone it always measured
+   0 list rows and failed by this program's own "0 subjects proves nothing" convention. Removed rather
+   than declared as an expected fail, since the check can never have a subject again.
+5. **The gallery's own deprecation is unfinished.** `renderer-coverage.json` still pins
    `gallery-renderer.ts`. Bundling the two removals would make one rollback undo both, so they stay
    separate even though the work rhymes.
 <!-- /ANCHOR:limitations -->
 
 ---
-
 

@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: List Virtualisation"
-description: "The list renders every row, so its cost is proportional to node count; at the operator's shape that is 2.0-4.9s of blocked main thread and no loop fix reaches it."
+description: "SUPERSEDED 2026-09-05. The list view was retired; windowing work has no remaining surface. Keep the 4,748.6ms → 48.4ms measurement as historical evidence."
 trigger_phrases: ["list virtualisation", "windowing", "033 virtualisation", "large list freeze"]
 importance_tier: "critical"
 contextType: "planning"
@@ -41,16 +41,18 @@ _memory:
 |---|---|
 | **Spec Folder** | 033-list-virtualisation |
 | **Level** | 2 |
-| **Status** | **In progress — 5 of 6 criteria.** Windowed: blocked main thread 4,748.6ms -> 48.4ms at 3,000 rows, node count 225,007 -> 2,184 and flat to 3,400 rows. Open: the operator has not opened their database |
+| **Status** | **Superseded.** The list view was retired. Historical evidence kept: blocked main thread 4,748.6ms → 48.4ms at 3,000 rows, node count 225,007 → 2,184. |
 | **Complexity** | 60/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
 
+*2026-09-05: superseded.* The list view and its windowing harness were retired. The measurement
+that motivated this packet still stands as evidence — **4,748.6ms → 48.4ms** blocked main thread
+at 3,000 rows — but there is no remaining list surface to finish the open operator-device criterion.
+
 *2026-09-02: "flat lists only" and "the grouped path still renders every row" were stale and are
-withdrawn.* The grouped path is windowed too: `goal.md`'s first criterion records **1,310 nodes for
-2,000 rows in one group**, and `tools/live/list-window.json` stamps the harness at **16 checks**
-over `src/views/list-renderer.ts`, whose grouped arm asserts the section header survives a recycle.
-The one criterion still open is the operator opening their own database, which no artefact in this
-tree can close.
+withdrawn.* The grouped path was windowed too: `goal.md`'s first criterion records **1,310 nodes for
+2,000 rows in one group**. The one criterion that stayed open was the operator opening their own
+database, which no artefact in this tree can close.
 
 
 ---

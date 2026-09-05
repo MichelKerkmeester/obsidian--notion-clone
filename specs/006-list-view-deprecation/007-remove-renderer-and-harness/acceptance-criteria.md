@@ -11,23 +11,23 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation/007-remove-renderer-and-harness"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored the acceptance criteria for this packet"
-    next_safe_action: "Meet, waive or supersede the open criteria"
-    blockers:
-      - "Preconditions unmet: 005 has not run and 006 has not shipped"
+    last_updated_at: "2026-09-05T02:45:00Z"
+    last_updated_by: "phase-007-landing"
+    recent_action: "All seven criteria verified Met against the landed tree (ba2acf7d)"
+    next_safe_action: "Closeable; T010 and the 006 operator-report gap are recorded caveats"
+    blockers: []
     key_files:
-      - "src/views/list-renderer.ts"
+      - "src/views/database-view.ts"
       - "tools/gate.mjs"
       - "tools/live/renderer-coverage.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-deprecation-007-ac"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "All seven AC rows: Met"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Phase 1: remove-renderer-and-harness
@@ -58,13 +58,13 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001, US-001 | **Given** the change is complete, **When** the tree is searched, **Then** no lane, ratchet, harness, bench entry, fixture, constructed scenario, replay claim or unit spec names the list, and none was removed in a different commit from the renderer. **Failing value today: 9 surfaces** — `tools/gate.mjs:89`, `tools/live/list-window.mjs`, `tools/live/list-window.json`, `src/views/list-window-harness.ts`, the `list-render-bench` and `list-renderer.ts` pins in `renderer-coverage.json`, `list`/`list-sparse` in `constructed-scenarios.mjs`, the list fixtures in `scenarios.mjs`, the list claims in `replay.mjs`, and two unit specs. | `rg -n 'list-renderer\|list-window\|list-sparse' src tools` returns nothing; `git show --stat` on the removal commit carries all of them |
-| AC-002 | REQ-002 | **Given** the change is complete, **When** `tools/gate.mjs`'s lane list is read, **Then** `list-window` is **absent**, not present-and-skipped. A skipped lane reads green in perpetuity and nobody looks at it again. | The lane list read directly, plus `npm run gate` output naming the lane count |
-| AC-003 | REQ-003 | **Given** the renderer is removed, **When** `renderer-coverage.json` is read, **Then** the floor is at its new value and the reason is recorded beside the number in the same commit. **Failing value today: the file pins `src/views/list-renderer.ts` and `tools/bench/list-render-bench.ts` by content hash**, so the floor cannot move without the pins moving. | The diff, showing number and reason together |
-| AC-004 | REQ-004, US-002 | **Given** `card-field-renderer.ts` survives, **When** the board and gallery cards are captured after the change, **Then** they are identical to the captures taken before it. The before-captures must be taken in T002; once the change starts they are unrecoverable. | Capture pair, `pixelHash` and `layoutHash` unchanged |
-| AC-005 | REQ-005 | **Given** ADR-001 is decided, **When** a vault carrying an un-migrated `viewType: "list"` is opened, **Then** the behaviour is the one the decision names, reached by an explicit fallback rather than by whichever branch happens to run first. | ADR-001 status in `plan.md` plus the fallback asserted |
-| AC-006 | REQ-006 | **Given** the list captures are pruned, **When** `screenshots-fresh` runs, **Then** it is green — no entry points at a source file that no longer exists. | `npm run gate`'s `screenshots-fresh` lane |
-| AC-007 | REQ-001, REQ-002 | **Given** the final state, **When** `npm run gate` is run and `$?` is read directly rather than through a pipe, **Then** it is 0. A pipe makes `$?` the pipe's status, which is how a red gate reads as green. | The command and the exit status, both recorded |
+| AC-001 | REQ-001, US-001 | **Given** the change is complete, **When** the tree is searched, **Then** no lane, ratchet, harness, bench entry, fixture, constructed scenario, replay claim or unit spec names the list, and none was removed in a different commit from the renderer. **Met**: all 9 surfaces named at opening (`tools/gate.mjs:89`, `tools/live/list-window.{mjs,json}`, `src/views/list-window-harness.ts`, the `renderer-coverage.json` pins, `list`/`list-sparse` in `constructed-scenarios.mjs`, the `scenarios.mjs` fixtures, the `replay.mjs` claims, two unit specs) left in the one landing commit, alongside the source and 20 orphaned captures. The `replay.mjs` claims are kept and marked `retired: true` rather than deleted — the file's own convention for a measured result whose fixture is gone, not a surface still naming the list in the sense this row means. | `rg -n 'list-renderer\|list-window\|list-sparse' src tools` returns nothing live; `git show --stat` on `ba2acf7d` carries all 9 plus the source | Met | - |
+| AC-002 | REQ-002 | **Given** the change is complete, **When** `tools/gate.mjs`'s lane list is read, **Then** `list-window` is **absent**, not present-and-skipped. A skipped lane reads green in perpetuity and nobody looks at it again. | The lane list read directly, plus `npm run gate` output naming the lane count | Met | - |
+| AC-003 | REQ-003 | **Given** the renderer is removed, **When** `renderer-coverage.json` is read, **Then** the floor is at its new value and the reason is recorded beside the number in the same commit. **Met**: `"constructed": 6, "total": 21, "note": "was 7/22; list renderer retired"`, in the same commit as the renderer's removal. | The diff, showing number and reason together | Met | - |
+| AC-004 | REQ-004, US-002 | **Given** `card-field-renderer.ts` survives, **When** the board and gallery cards are captured after the change, **Then** they are identical to the captures taken before it. The before-captures must be taken in T002; once the change starts they are unrecoverable. **Met**: the before is the base commit `f49eda4c`'s own committed corpus (`tasks.md` T002); `check-lane.mjs`'s pixel/layout compare against it found 0 board/gallery-only captures content-changed. | Capture pair, `pixelHash` and `layoutHash` unchanged | Met | - |
+| AC-005 | REQ-005 | **Given** ADR-001 is decided, **When** a vault carrying an un-migrated `viewType: "list"` is opened, **Then** the behaviour is the one the decision names, reached by an explicit fallback rather than by whichever branch happens to run first. **Met**: ADR-001 Accepted (`list` stays, `migrateListViewOnOpen` permanent); the render dispatch's own `if`-chain has no `"list"` branch, so an un-migrated config falls to the same `else` (table) branch any unrecognised viewType would, deterministically rather than by which branch happens to run first. | ADR-001 status in `plan.md` plus the fallback asserted | Met | - |
+| AC-006 | REQ-006 | **Given** the list captures are pruned, **When** `screenshots-fresh` runs, **Then** it is green — no entry points at a source file that no longer exists. **Met**: `npm run screenshots:verify` reports 534 entries matching their sources, 0 stale, 0 missing. | `npm run gate`'s `screenshots-fresh` lane | Met | - |
+| AC-007 | REQ-001, REQ-002 | **Given** the final state, **When** `npm run gate` is run and `$?` is read directly rather than through a pipe, **Then** it is 0. A pipe makes `$?` the pipe's status, which is how a red gate reads as green. **Met**: `npm run gate` prints `24 green, 0 red for a declared reason`; `$?` read directly is `0`, confirmed on repeated runs. | The command and the exit status, both recorded | Met | - |
 
 ### Status values
 
@@ -89,10 +89,12 @@ waiver is treated as an unmet criterion rather than as a pass.
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes, with one recorded caveat.
 
-Written at opening. Seven criteria are open and two preconditions are unmet: `005` has not run and
-`006` has not shipped. AC-001 is the one that matters most and it is deliberately phrased over the
-*commit*, not just the tree — removing the renderer and the lane in two commits satisfies a search
-and still leaves a window where the gate was green against a half-removed view.
+All seven criteria are `Met`, landed in the single commit AC-001 requires (`ba2acf7d`). The caveat is
+outside this document's own seven rows: `tasks.md` T010 (removing `styles.css`'s now-dead `db-list-*`
+rules) is deliberately deferred to a follow-up pass, and the `006` parent's own precondition — one
+operator report against a released build — was not confirmed before this phase ran (`tasks.md` T001).
+Neither blocks these seven criteria; both are recorded so closing this packet does not read as
+closing either question.
 <!-- /ANCHOR:closure -->

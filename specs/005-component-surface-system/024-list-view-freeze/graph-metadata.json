@@ -47,16 +47,12 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
-      "src/views/list-renderer.ts",
-      "tools/bench/list-render-bench.ts",
       "src/views/column-width.test.ts",
-      "tools/bench/run-list.mjs",
       "tools/bench/CODE.md",
       "tools/bench/README.md",
       "tools/storybook/verify-placement.mjs",
       "tools/screenshots/scenarios/core.mjs",
       "tools/gate.mjs",
-      "src/views/list-reservation.test.ts",
       "src/views/file-title-display.ts"
     ],
     "entities": [
@@ -97,27 +93,9 @@
         "source": "derived"
       },
       {
-        "name": "list-renderer.ts",
-        "kind": "code",
-        "path": "src/views/list-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "list-render-bench.ts",
-        "kind": "code",
-        "path": "tools/bench/list-render-bench.ts",
-        "source": "derived"
-      },
-      {
         "name": "column-width.test.ts",
         "kind": "test",
         "path": "src/views/column-width.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "run-list.mjs",
-        "kind": "file",
-        "path": "tools/bench/run-list.mjs",
         "source": "derived"
       },
       {
@@ -151,12 +129,6 @@
         "source": "derived"
       },
       {
-        "name": "list-reservation.test.ts",
-        "kind": "test",
-        "path": "src/views/list-reservation.test.ts",
-        "source": "derived"
-      },
-      {
         "name": "file-title-display.ts",
         "kind": "code",
         "path": "src/views/file-title-display.ts",
@@ -170,12 +142,6 @@
       },
       {
         "name": "List View Freeze",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "In Progress",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -199,15 +165,45 @@
         "source": "derived"
       },
       {
+        "name": "Purpose Opening",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Implementation Plan",
         "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. QUALITY GATES",
+        "kind": "heading",
         "path": "plan.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The operator, on a shipped build: \"opening list view bugs out obsidian freezes and you cant do",
     "created_at": "2026-08-30T16:53:58.480Z",
-    "last_save_at": "2026-09-02T09:02:32.201Z",
+    "last_save_at": "2026-09-05T00:46:29.700Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,10 +214,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:def298e043ac29878f9943cafbab12c8280ae971e205f9114f10c352935d44cb",
+    "source_fingerprint": "sha256:5a23e05a6e9edc2acfca754b971991f1fa2a0d48c61384cc8aa32acd7072b53f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "342bb80776a67f234eddbee9ab9802178f971b71a6922e435d111133c1c44511",
+      "spec.md": "72a6177c8b84c66169d3c0364f40f0ee37fd04b640d7532ee7b4b81d2ca1e00a",
       "plan.md": "74d146088f7f156e37e1a4273050d46ddbe579801cac3c2aca9ad64c4adca0ee",
       "tasks.md": "663b24b46470747da9124e481c7d1122cbda8aa44a9c8232ef42e81215bb949a",
       "implementation-summary.md": "773f44b1bff537a1344f0dee1726e2dcfe86155d9396fd42635781518e85f4a4"

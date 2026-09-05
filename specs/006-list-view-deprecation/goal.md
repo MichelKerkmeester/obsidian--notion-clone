@@ -11,11 +11,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-05T00:40:00Z"
-    last_updated_by: "phase-006-reconciliation"
-    recent_action: "006-hide-and-migrate shipped, verified, reconciled with main"
-    next_safe_action: "Await one operator report before 007 starts"
-    blockers: []
+    last_updated_at: "2026-09-05T02:45:00Z"
+    last_updated_by: "phase-007-landing"
+    recent_action: "007 landed: renderer and measurement surface removed, gate 24/24 green"
+    next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
+    blockers:
+      - "One operator report against a released 006 build is still unconfirmed. 007 ran and landed without it (recorded in 007/tasks.md T001), so this is now a gap behind the work rather than a gate in front of it."
     key_files:
       - "spec.md"
       - "plan.md"
@@ -26,13 +27,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-view-deprecation-goal"
       parent_session_id: null
-    completion_pct: 29
-    open_questions:
-      - "Does list leave DatabaseViewType, or stay accepted-but-redirected like gallery? 005 recommends: stay accepted-but-redirected, decided by 007"
-      - "Do stacked titles and listCompactFields map to table, or are they a declared loss? 005 answers: both are declared losses (implementation-summary.md §6, L1-L2), alongside two more it found (roving-tabindex keyboard model, col.wrap)"
+    completion_pct: 71
+    open_questions: []
     answered_questions:
       - "Route B is superseded; the operator retired the view rather than converting it"
       - "005's audit ran: table confirmed via column-width.ts's shared getFieldWidth; the per-group create button is not a loss (table's version is the styled one); the picker is not the only list-minting surface — the settings-load sanitizer and the .base importer mint it too"
+      - "Does list leave DatabaseViewType, or stay accepted-but-redirected like gallery? 007 decided (ADR-001, Accepted): stays accepted-but-redirected, migrated permanently"
+      - "Do stacked titles and listCompactFields map to table, or are they a declared loss? Declared losses, per 005; listCompactFields removed from ViewConfig/i18n/the config panel by 007"
 ---
 # Goal: List View Deprecation
 
@@ -96,14 +97,15 @@ Three to seven bullets, each checkable without opening another file.
 - [x] A vault carrying a list-configured view opens it as a table with the same columns, once, with
       a notice. **Shipped by `006-hide-and-migrate`** — `src/data/list-migration.ts`, run on open in
       both hosts (`database-view.ts`, `embedded-database-renderer.ts`), notice in three locales.
-- [ ] `src/views/list-renderer.ts` is gone. **Today: 1,173 lines.**
-- [ ] The `list-window` gate lane is **removed, not skipped**, and `npm run gate` exits 0 read from
-      `$?`. **Today: `tools/gate.mjs:89` runs it, and `tools/live/list-window.json` ratchets it.**
-- [ ] `renderer-coverage.json` carries the new floor with the reason beside the number. **Today: it
-      pins `src/views/list-renderer.ts` and `tools/bench/list-render-bench.ts` by hash.**
-- [ ] `033-list-virtualisation` and `024-list-view-freeze` are closed against this decision rather
-      than left open against a view that no longer exists. **Today: both open; `024`'s AC-6 already
-      reads NOT MET.**
+- [x] `src/views/list-renderer.ts` is gone. **Done 2026-09-05** by `007-remove-renderer-and-harness`
+      (`ba2acf7d`) — was 1,173 lines.
+- [x] The `list-window` gate lane is **removed, not skipped**, and `npm run gate` exits 0 read from
+      `$?`. **Done**: the lane list is 24 names, `list-window` is not one of them, `$?` is `0`.
+- [x] `renderer-coverage.json` carries the new floor with the reason beside the number. **Done**:
+      `"constructed": 6, "total": 21, "note": "was 7/22; list renderer retired"`.
+- [x] `033-list-virtualisation` and `024-list-view-freeze` are closed against this decision rather
+      than left open against a view that no longer exists. **Done**: both `spec.md`s read superseded
+      2026-09-05, each keeping its own historical measurement as evidence rather than deleting it.
 - [ ] **The operator opens a vault that had a list view and reports it as migrated rather than
       broken.** Only the operator closes this row.
 <!-- /ANCHOR:completion -->
@@ -126,6 +128,7 @@ into the objective, and it is expected to grow.
 | Four deprecation children opened | Done | `005`-`008` |
 | Usage audit | Done | `005-usage-and-migration-audit/implementation-summary.md` — migration target confirmed, 4 declared losses, measurement surface enumerated, 2 open questions answered with recommended defaults |
 | Hide and migrate | Shipped + verified, operator confirmation open | `006-hide-and-migrate/implementation-summary.md` — list withdrawn from every picker and switcher, migration on open with a locale-complete notice, `npm run gate` 25/25 green; open item is one operator report against a released build |
+| Remove renderer and harness | Landed, one deferral | `007-remove-renderer-and-harness/implementation-summary.md` — `list-renderer.ts` and its whole measurement surface (lane, harness, ratchet pins, fixtures, constructed scenarios, replay claims, unit specs) removed together; `list` stays on `DatabaseViewType`, migrated permanently (ADR-001); `npm run gate` 24/24 green (the lane count dropped from 25 with `list-window` gone). `styles.css`'s now-dead `db-list-*` rules deferred to a follow-up (T010). The parent's own operator-report precondition above was still unconfirmed when this phase ran — recorded as a gap in `007/tasks.md` T001, not treated as cleared. |
 
 ### Deviations and findings
 
@@ -137,4 +140,5 @@ into the objective, and it is expected to grow.
 | `030`'s own deprecation is unfinished | `renderer-coverage.json` still pins `gallery-renderer.ts`, and `toolbar-renderer.ts` still renders gallery when a view already is one. That is the precedent working as designed — withdrawal without deletion — and it is also a reminder that this packet's `007` is the step that actually removes anything. |
 | `005` found two more list-minting surfaces than this document named | The settings-load sanitizer (`main.ts:142,178`) and the `.base` file importer (`main.ts:1544-1585`) both accept or mint `viewType: "list"` independently of the view picker. `006`'s REQ-002 ("no surface offers list as a choice") needs to account for all three, not just the picker. |
 | The embedded-codeblock migration gap is inherited from `030`, not introduced by this packet | `gallery-migration.ts` is called only from `database-view.ts`'s `refresh()`; `embedded-database-renderer.ts` has no equivalent call and would still render a list-configured codeblock through `ListRenderer` unmigrated. `006` decides whether to close this for `list` or accept the same partial state the gallery already ships with. |
+| `007` found a harness regression its own removal introduced, not a surface `005` missed | Re-pointing `render-assertion-harness.ts`'s shared column/row builders from the deleted list bench to the table bench exposed that the two benches' `makeConfig` build differently-shaped `ViewConfig`s (only one carries `schema.columns`), blanking every constructed filter/sort/active-rule/summary scenario's field selector. `npm run gate`'s own `render-assertions` lane never exercises those renderer branches, so only the full screenshot capture caught it. Fixed at the source in `table-render-bench.ts`. |
 <!-- /ANCHOR:log -->

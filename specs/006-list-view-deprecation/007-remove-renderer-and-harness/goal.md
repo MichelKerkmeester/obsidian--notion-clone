@@ -86,12 +86,12 @@ summary of it. Name a conflict rather than resolving it silently.
 Each row is checkable without opening another file, and each records what is true today
 so the check has a value to move from.
 
-- [ ] `rg -n 'list-renderer' src tools` returns nothing. **Today: `src/views/list-renderer.ts` is 1,173 lines.**
-- [ ] `npm run gate` exits 0 from the final state, read from `$?` rather than through a pipe, with `list-window` **absent from the lane list** rather than present and skipped. **Today: `tools/gate.mjs:89` runs it and `tools/live/list-window.json` ratchets it.**
-- [ ] `renderer-coverage.json` carries the new floor with the reason beside the number. **Today: it pins `src/views/list-renderer.ts` and `tools/bench/list-render-bench.ts` by hash.**
-- [ ] The board and gallery cards render identically before and after, measured on captures rather than asserted.
-- [ ] The `DatabaseViewType` decision is recorded with its reasoning, and no surface offers what the union forbids while none forbids what a saved file still contains.
-- [ ] `033-list-virtualisation` and `024-list-view-freeze` are closed against this decision rather than left open against a view that no longer exists. **Today: both open; `024`'s AC-6 already reads NOT MET.**
+- [x] `rg -n 'list-renderer' src tools` returns nothing. **Done 2026-09-05**: `src/views/list-renderer.ts` deleted; the search returns nothing live (a `tools/lane/css-lane.json` audit note and `src/views/CODE.md`'s repo-wide "Current state" line are the only remaining hits across the whole tree, both historical/descriptive text, not code).
+- [x] `npm run gate` exits 0 from the final state, read from `$?` rather than through a pipe, with `list-window` **absent from the lane list** rather than present and skipped. **Done**: 24 lanes print, `list-window` is not one of them, `$?` is `0`.
+- [x] `renderer-coverage.json` carries the new floor with the reason beside the number. **Done**: `"constructed": 6, "total": 21, "note": "was 7/22; list renderer retired"`.
+- [x] The board and gallery cards render identically before and after, measured on captures rather than asserted. **Done**: `tools/lane/check-lane.mjs`'s pixel/layout compare against the pre-removal commit found 0 board/gallery-only captures content-changed; the two multi-view comparisons that include board/gallery content changed only because the list panel left a three-way comparison (read by hand, both themes/devices).
+- [x] The `DatabaseViewType` decision is recorded with its reasoning, and no surface offers what the union forbids while none forbids what a saved file still contains. **Done**: ADR-001 in `plan.md`, Accepted — `list` stays, migrated permanently by `migrateListViewOnOpen`.
+- [x] `033-list-virtualisation` and `024-list-view-freeze` are closed against this decision rather than left open against a view that no longer exists. **Done**: both `spec.md`s reviewed this session and read as superseded 2026-09-05, each keeping its own historical measurement (`024`'s AC-6 stays NOT MET as record; `033`'s 4,748.6ms → 48.4ms blocked-main-thread finding kept as evidence) rather than deleting the real work either phase did.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -107,12 +107,17 @@ into the objective, and it is expected to grow.
 | Item | State | Evidence |
 |------|-------|----------|
 | Phase opened | Done | Parent conversion 2026-09-04 |
-| Ship dependency | Blocked | `006-hide-and-migrate` must be released first |
-| Union decision | Pending | `acceptance-criteria.md` |
+| Ship dependency | Ran without independent confirmation | `006-hide-and-migrate`'s own `spec.md` reads "Shipped + verified", but the parent `goal.md`'s "one operator report against a released build" line was never checked off before this phase ran — recorded as a gap, not treated as cleared (`tasks.md` T001) |
+| Union decision | Done | ADR-001 in `plan.md`, Accepted — `list` stays, permanent coercion |
+| Renderer, lane, harness, ratchet, fixtures, constructed scenarios, replay claims, unit specs | Done | `implementation-summary.md` |
+| `npm run gate` | 24/24 green | `$?` 0, two pre-existing red lanes (`placement`, `evidence`) found and fixed along the way |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
 | Two `005` phases are closed from here, not from `005` | `033-list-virtualisation` and `024-list-view-freeze` measured real work on a view being removed. Closing them is right; deleting the measurements would lose the evidence that the freeze was real. |
+| A harness regression, not a missed `005` surface | Re-pointing `render-assertion-harness.ts`'s shared column/row builders from the deleted list bench to the table bench exposed that the two benches' `makeConfig` build differently-shaped configs (only one carries `schema.columns`), blanking every constructed filter/sort/active-rule/summary scenario's field selector. Fixed at the source in `table-render-bench.ts`. This is `007`'s own regression, introduced by this phase's removal, not a usage surface `005`'s audit should have found — recorded here per `tasks.md` T015 rather than filed against `005`. |
+| A leftover geometry check with zero subjects | `tools/storybook/verify-placement.mjs` carried a check for the list fixture's row wrapper; with the fixtures gone it always measured 0 subjects and failed. Removed rather than declared, since it can never have a subject again. |
+| `styles.css`'s list rules deferred | T010 is open on purpose — a stylesheet edit that every capture in the repository fingerprints is its own bounded change, not a rider on this landing. |
 <!-- /ANCHOR:log -->

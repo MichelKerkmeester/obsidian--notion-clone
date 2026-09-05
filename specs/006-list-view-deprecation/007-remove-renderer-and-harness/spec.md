@@ -45,9 +45,9 @@ delete.
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Draft |
+| **Status** | Shipped — one deferral (T010, `styles.css`) and one recorded precondition gap (006's operator report) |
 | **Created** | 2026-09-04 |
-| **Branch** | Not yet dispatched |
+| **Branch** | `worktrees/047-list-remove-renderer` |
 | **Parent Spec** | ../spec.md |
 | **Phase** | 3 of 4 in the deprecation (folder `007` of `008`) |
 | **Predecessor** | 006-hide-and-migrate |
