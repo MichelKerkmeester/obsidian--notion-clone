@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "packet_id": "007-gallery-view-deprecation",
+  "spec_folder": "007-gallery-view-deprecation",
+  "parent_id": null,
+  "children_ids": [
+    "007-gallery-view-deprecation/001-usage-and-migration-audit",
+    "007-gallery-view-deprecation/002-settings-redirect-and-migrate",
+    "007-gallery-view-deprecation/003-remove-renderer-and-harness",
+    "007-gallery-view-deprecation/004-docs-and-release"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "gallery view deprecation",
+      "deprecate gallery view",
+      "retire gallery view",
+      "007 gallery deprecation",
+      "gallery migration to board",
+      "packet goal",
+      "durable directive",
+      "completion criteria",
+      "007 gallery deprecation goal"
+    ],
+    "key_topics": [
+      "gallery",
+      "view",
+      "deprecation",
+      "deprecate",
+      "retire",
+      "migration",
+      "board",
+      "packet",
+      "goal",
+      "durable",
+      "directive",
+      "completion"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "goal.md",
+      "roadmap.md",
+      "tools/live/renderer-coverage.json",
+      "src/views/gallery-renderer.ts",
+      "tools/bench/gallery-render-bench.ts",
+      "src/views/card-field-renderer.ts",
+      "src/main.ts",
+      "src/data/gallery-migration.ts",
+      "src/views/embedded-database-renderer.ts",
+      "tools/bench/run-gallery.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "screenshots/manifest.json",
+      "src/data/types.ts",
+      "src/i18n.ts",
+      "src/data/gallery-migration.test.ts",
+      "src/views/database-view.ts",
+      "src/views/view-config-panel-renderer.ts",
+      "src/data/data-source.ts",
+      "src/views/toolbar-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "roadmap.md",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-renderer.ts",
+        "kind": "code",
+        "path": "src/views/gallery-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/gallery-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.ts",
+        "kind": "code",
+        "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-gallery.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-gallery.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.test.ts",
+        "kind": "test",
+        "path": "src/data/gallery-migration.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "data-source.ts",
+        "kind": "code",
+        "path": "src/data/data-source.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Gallery View Deprecation",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The gallery view is withdrawn but not removed, and has been since `030-gallery-view-deprecation`",
+    "created_at": "2026-09-05T03:46:36Z",
+    "last_save_at": "2026-09-05T04:18:22.075Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:976dfa294213ffb55e0d36bc01e0abb0eaac7a98a1533256929b3d31b618b0ae",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "369abd12a30f51a208535fe5e349259f8958ac6d4d7ffd4e710fff0f26095013"
+    },
+    "last_active_child_id": "007-gallery-view-deprecation/004-docs-and-release",
+    "last_active_at": null
+  }
+}

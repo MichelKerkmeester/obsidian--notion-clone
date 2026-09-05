@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "packet_id": "007-gallery-view-deprecation/001-usage-and-migration-audit",
+  "spec_folder": "007-gallery-view-deprecation/001-usage-and-migration-audit",
+  "parent_id": "007-gallery-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "gallery usage audit",
+      "gallery migration audit",
+      "007 phase 1",
+      "what mints a gallery",
+      "implementation plan",
+      "gallery audit plan",
+      "007 phase 1 plan",
+      "task breakdown",
+      "gallery audit tasks",
+      "007 phase 1 tasks",
+      "acceptance criteria",
+      "closure gate"
+    ],
+    "key_topics": [
+      "gallery",
+      "usage",
+      "audit",
+      "migration",
+      "phase",
+      "mints",
+      "implementation",
+      "plan",
+      "task",
+      "breakdown",
+      "tasks",
+      "acceptance"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/main.ts",
+      "src/data/gallery-migration.ts",
+      "screenshots/manifest.json",
+      "src/views/gallery-renderer.ts",
+      "tools/live/renderer-coverage.json",
+      "tools/bench/gallery-render-bench.ts",
+      "src/views/embedded-database-renderer.ts",
+      "tools/screenshots/scenarios/core.mjs",
+      "tools/screenshots/scenarios/shared.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.ts",
+        "kind": "code",
+        "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-renderer.ts",
+        "kind": "code",
+        "path": "src/views/gallery-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/gallery-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "shared.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/shared.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Gallery Usage",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Migration Audit",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`030-gallery-view-deprecation` withdrew the gallery from two pickers and stopped",
+    "created_at": "2026-09-05T03:46:37Z",
+    "last_save_at": "2026-09-05T04:04:06.222Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:f14443c26d4d2367528101d49a023fc45b70779f4b71bf11771c9b6e23fef3cf",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "b218320ad693dccca06d8834b3170a6ecc845ddd684ba474aeb755d4eaf2fa84",
+      "plan.md": "c9a91be79c5949576ef00494aa1d71b89e613dd38e77c56f44f56fac7a172b45",
+      "tasks.md": "2e6e4e9fedc66b7f3dc7af7a3db07b5ffe07aa11579731f252e80a41c3e63a8d",
+      "implementation-summary.md": "596b8d90a22bbcf54bc55906b571192a8341897cfe07abac2d3294ce60b5ae8a"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

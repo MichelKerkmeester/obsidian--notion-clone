@@ -1,0 +1,17 @@
+{
+  "specFolder": "007-gallery-view-deprecation/004-docs-and-release",
+  "description": "Phase 4: docs-and-release",
+  "keywords": [
+    "phase",
+    "docs-and-release"
+  ],
+  "lastUpdated": "2026-09-05T03:46:39.505Z",
+  "specId": "004",
+  "folderSlug": "docs-and-release",
+  "parentChain": [
+    "007-gallery-view-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

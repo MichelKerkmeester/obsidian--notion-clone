@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/047-competitor-references-and-pm-alignment",
+  "spec_folder": "005-component-surface-system/047-competitor-references-and-pm-alignment",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "competitor references",
+      "anytype appflowy captures",
+      "047 pm alignment",
+      "align closer board timeline",
+      "implementation plan",
+      "competitor reference plan",
+      "047 plan",
+      "task breakdown",
+      "competitor reference tasks",
+      "047 tasks",
+      "acceptance criteria",
+      "closure gate"
+    ],
+    "key_topics": [
+      "competitor",
+      "references",
+      "anytype",
+      "appflowy",
+      "captures",
+      "alignment",
+      "align",
+      "closer",
+      "board",
+      "timeline",
+      "implementation",
+      "plan"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "tools/screenshots/manifest-schema.mjs",
+      "screenshots/manifest.json",
+      "src/views/board-renderer.ts",
+      "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts",
+      "screenshots/README.md",
+      "tools/screenshots/verify.mjs",
+      "src/views/calendar-timeline-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "manifest-schema.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/manifest-schema.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "GanttView.ts",
+        "kind": "code",
+        "path": "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Competitor References",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Capture Anytype",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Project Manager",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Which Anytype",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Both Homebrew",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Headless Chrome",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Contract",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Rows 37 and 38 have been open since 2026-09-04 waiting for one thing no in-repo session can do: the",
+    "created_at": "2026-09-05T03:47:54Z",
+    "last_save_at": "2026-09-05T04:24:38.846Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:76878620944e3ab25340696a0a6fe451c793dcf1642fedfb67acc4c46158e227",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "529a71ce9f8a789795007db44d84dfb36020f9bb49b8f704288c2a3bb8a8ff5c",
+      "plan.md": "74d72aff20c99d3047dbc182beabb3d8b1484e7f9b489c24958d88ade83e36ee",
+      "tasks.md": "f992e0e20b8e1eb638b26e40f088857c443d05569cd41c9d753adf7863994e9a",
+      "implementation-summary.md": "6a560639bd31827a62ffb441184a6441ed0f247375882491cb42e9bc39a778e6"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

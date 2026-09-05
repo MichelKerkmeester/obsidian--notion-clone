@@ -10,16 +10,16 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-04T21:10:00Z"
-    last_updated_by: "phase-goal-backfill"
-    recent_action: "Gave every phase a nested goal and referenced them all from this DONE table"
-    next_safe_action: "Land the WebKit sheet fix, the column-width and settings sheets, and cut 0.0.21"
+    last_updated_at: "2026-09-05T06:30:00Z"
+    last_updated_by: "decisions-and-phases-pass"
+    recent_action: "Recorded the 0.0.22 deferrals; opened 007 gallery retirement and 047"
+    next_safe_action: "Land the worktrees/056 sheet fix, cut a build, re-ask the 12 rows"
     blockers:
-      - "Only DONE rows 1 and 2 remain, both operator device confirmation: reports 29-43 and the five ported surfaces"
-      - "031 reopened: entrance fix landed (c96467c9); a second bug is in flight on branches/001-sheet-webkit, a toolbar rebuild drops the sheet"
-      - "044, 045, 046 opened 2026-09-04 from reports 40-43 and have landed nothing"
-      - "043 T031 is done on worktrees/037-reference-captures, not on main"
-      - "006-list-view-deprecation has four live children, none started"
+      - "Rows 29-36, 39-41, 43 DEFERRED: a tap inside an open sheet dismisses it on iOS"
+      - "031 third bug in flight on worktrees/056-sheet-inside-tap"
+      - "Rows 37/38 need 047: the fidelity pass and the Anytype/AppFlowy captures"
+      - "007-gallery-view-deprecation and 047 opened, nothing landed"
+      - "006-list-view-deprecation owes only its 0.0.23 release cut"
       - "Earlier blockers are in the LOG and roadmap.md rather than here"
     key_files:
       - "roadmap.md"
@@ -34,10 +34,12 @@ _memory:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
-      - "Every phase 000-046 now carries its own goal.md, and this DONE table references each open one"
+      - "Every phase 000-047 carries its own goal.md; the DONE table cites each open one"
+      - "Gallery does not share 045's mechanism: retired by specs/007"
+      - "Hiding a board card field is cards only, not the table (045 ADR-002)"
       - "The timeline froze on a per-event touch probe; the calendar does not scale with rows"
-      - "The deep review returned FAIL against 1.3.9: P0=1, P1=7, P2=7; 11 of 15 findings were doc drift in this packet"
-      - "Operator shape: 1,000-3,000 rows at 80-100% fill; the 2,000ms budget breaks at 1,300"
+      - "Deep review FAIL on 1.3.9: P0=1, P1=7, P2=7; 11 of 15 were doc drift"
+      - "Operator shape: 1,000-3,000 rows at 80-100% fill; budget breaks at 1,300"
       - "The output-number-format exclusion is the formula editor's only, so report 7 is in scope"
       - "The editable note body is accepted; its writer already goes through the per-file queue"
 ---
@@ -786,7 +788,10 @@ and this row is a defect.**
 | `044-phone-sheet-alignment` | [`044-phone-sheet-alignment/goal.md`](044-phone-sheet-alignment/goal.md) | Zero phone bottom-sheet surfaces bypassing `applySheetChrome` (today 3), the column-width adjuster carrying all seven grammar elements (today 0), a focused field staying inside the reduced `visualViewport`, the settings sheet closing from its grab band with no label wrapping, the Add view sheet on a shared row type (today 0 of its controls), a green `sheet-grammar` lane that does not yet exist, and the operator reading all three sheets as aligned on iOS. | 0/7 |
 | `045-board-card-properties` | [`045-board-card-properties/goal.md`](045-board-card-properties/goal.md) | One per-view ordered property list with per-field visibility, the renderer moved onto it, an upgrade with no stored list leaving every existing card byte-identical, a stored list having zero effect on `038`'s one-to-one reference path, and the operator arranging a card's properties on a phone and reading it as close to Notion's. | 0/6 |
 | `046-linked-views-notion-parity` | [`046-linked-views-notion-parity/goal.md`](046-linked-views-notion-parity/goal.md) | The embed unboxed from its ancestor-walk clip, the duplicate `db-header` and its hide-the-title chevron gone, ADR-001 (may an embed write) taken before the four `persistMode === "codeblock"` read-only gates are touched, a linked view movable to another page, a create flow writing the fence `serializeCodeBlockReference` already builds, and the operator reading the Overview page's nested views as real databases. | 0/7 |
+| `047-competitor-references-and-pm-alignment` | [`047-competitor-references-and-pm-alignment/goal.md`](047-competitor-references-and-pm-alignment/goal.md) | Anytype and AppFlowy reference captures under `screenshots/anytype/` and `screenshots/appflowy/` — official product images and locally installed apps both — carrying the same manifest shape as `screenshots/project-manager/`, a board and gantt fidelity pass against Project Manager with every gap measured before it is closed, and the operator reading the two views as aligned. Opened 2026-09-05 from the rows 37/38 *"align closer"* ruling. | 0/6 |
 | **`006-list-view-deprecation`** — a **sibling packet**, not a phase here | [`../006-list-view-deprecation/goal.md`](../006-list-view-deprecation/goal.md) | No surface offering list, a list-configured vault opening as a table with the same columns once with a notice, `list-renderer.ts` gone, the `list-window` lane **removed not skipped** with `npm run gate` at 0, the coverage floor lowered with its reason beside the number, `033-list-virtualisation` and `024-list-view-freeze` closed against the retirement, and the operator reporting a migrated vault. Its four live children each carry their own goal; see [`../006-list-view-deprecation/roadmap.md`](../006-list-view-deprecation/roadmap.md). | 0/7 |
+
+| **`007-gallery-view-deprecation`** — the **second sibling packet**, opened 2026-09-05 | [`../007-gallery-view-deprecation/goal.md`](../007-gallery-view-deprecation/goal.md) | No surface offering gallery and no path minting one, every gallery-configured view opening as a board with the same cover once and with a notice, `gallery-renderer.ts` gone, its bench and coverage pin and constructed scenario removed rather than skipped with `npm run gate` still exiting 0, the dead `db-gallery-*` CSS gone, and the operator opening a migrated vault and reporting it as migrated rather than broken. Its four children each carry their own goal; see [`../007-gallery-view-deprecation/roadmap.md`](../007-gallery-view-deprecation/roadmap.md). | 0/8 |
 
 **Every other phase's subgoal is reachable the same way**, at `<phase>/goal.md`. The full inventory
 with a derived figure and a current state per phase is `roadmap.md` §5.A, and the 103 rows that only
@@ -1820,5 +1825,54 @@ stray gate/capture/headless process before the run: `pgrep -f "node tools/gate.m
 All eight runs are green, no lane exempted or worked around to reach this. This entry re-confirms
 rows 3, 4, 5, 6 and 7 on the tree as it stands today; it adds no evidence toward rows 1 or 2, which
 stay the operator's device confirmation alone. `completion_pct` unchanged at **5 of 7 = 71**.
+
+### 2026-09-05: the 0.0.22 device check, twelve deferrals, and two packets opened
+
+**The check is a deferral, not a pass, and nothing below claims a fix.** The operator's words on
+0.0.22, quoted in full: *"some still broken, all buttons like add sort, add filter still broken"* and
+*"pressing any action in a sheet doesn't work and instantly closes it"*.
+
+**Twelve `roadmap.md` §4 rows moved to DEFERRED** — 29-36, 39-41 and 43 — on one named blocker: a tap
+inside an open sheet dismisses it on iOS, fix in progress on `worktrees/056-sheet-inside-tap` under
+`031-sheet-lifecycle-ownership`. They are re-asked after the next iCloud build. This is a third
+distinct bug in `031`'s class; the entrance fix (`c96467c9`) and the toolbar-rebuild drop
+(`9ecb5fff`) both landed and both shipped, so neither is what is failing here. Ten of the twelve are
+collateral rather than instances: the sheet is the instrument the operator would use to judge them,
+and the instrument is broken. Rows 39 and 43 are the clearest case — one is a gantt label ruling and
+one is the Add view sheet's grammar, and neither is a lifecycle defect.
+
+**DONE rows 1 and 2 do not move, and this is why they read differently now.** They were waiting on
+device confirmation. They are still waiting, but the wait now has a recorded reason and a named
+build rather than an open end. Under D3 that is neither shipped nor verified nor confirmed — it is a
+recorded deferral, which §4A of the roadmap has always required and which twelve rows were missing.
+
+**Rows 37 and 38 went the other way: more work, not deferred work.** The operator's ruling was
+*"align closer"* on the board and timeline against Project Manager, plus reference captures of
+**Anytype** and **AppFlowy** — boards, tables, calendar, timeline — from both the official product
+images and the apps installed locally through Homebrew casks, under `screenshots/anytype/` and
+`screenshots/appflowy/`. `047-competitor-references-and-pm-alignment` was opened for both halves:
+`recommend-level.sh` 53/100 at 92% confidence, phase score 10/50, so a standard Level 2 child rather
+than a phased packet — the phase threshold is 25 and it is not met, and the level threshold of 3 is
+not met either, so neither condition licenses decomposition.
+
+**`045`'s two open operator questions were answered, and neither moved a criterion.** ADR-001: the
+gallery does not share the card-properties mechanism, because the operator retired the gallery
+outright — *"should have been deprecated"*. ADR-002: hiding a card field does not hide it in the
+table, cards only. Both are in `045/decision-record.md`, a document that packet did not previously
+have. `045`'s AC-006 is unchanged and is deferred with the twelve, for the same reason: the
+Properties sheet could not be reached to be judged.
+
+**`specs/007-gallery-view-deprecation` was opened as a second top-level sibling packet.** It is not a
+phase of this program and it is not an extension of `030-gallery-view-deprecation`, which withdrew
+the gallery from every picker and deliberately stopped there. `recommend-level.sh` returns 90/100 at
+95% confidence with a phase score of 50/50, so both thresholds in `phase-definitions.md` §2 are met
+independently and it is a phased Level 3 packet with four children, mirroring
+`006-list-view-deprecation` rather than inventing a shape. Its gallery inventory — 41 files under
+`src/`, 31 under `tools/`, 84 `styles.css` references, 24 manifest scenarios, a 787-line renderer —
+is enumerated in its own `spec.md` rather than summarised here.
+
+**What this entry does not claim.** No code was written in this pass. No gate was run, because
+nothing that a gate measures changed. `completion_pct` stays **5 of 7 = 71**: rows 1 and 2 are still
+the operator's, and a recorded deferral is not a tick.
 
 <!-- /ANCHOR:log -->

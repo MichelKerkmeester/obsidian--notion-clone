@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "007-gallery-view-deprecation/003-remove-renderer-and-harness",
+  "spec_folder": "007-gallery-view-deprecation/003-remove-renderer-and-harness",
+  "parent_id": "007-gallery-view-deprecation",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "remove gallery renderer",
+      "gallery harness removal",
+      "007 phase 3",
+      "gallery dead css",
+      "implementation plan",
+      "gallery removal plan",
+      "007 phase 3 plan",
+      "task breakdown",
+      "gallery removal tasks",
+      "007 phase 3 tasks",
+      "acceptance criteria",
+      "closure gate"
+    ],
+    "key_topics": [
+      "remove",
+      "gallery",
+      "renderer",
+      "harness",
+      "removal",
+      "phase",
+      "dead",
+      "css",
+      "implementation",
+      "plan",
+      "task",
+      "breakdown"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/gallery-renderer.ts",
+      "tools/live/renderer-coverage.json",
+      "styles.css",
+      "tools/bench/gallery-render-bench.ts",
+      "tools/bench/run-gallery.mjs",
+      "screenshots/manifest.json",
+      "tools/gate.mjs",
+      "tools/screenshots/scenarios/core.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/storybook/verify-placement.mjs",
+      "src/i18n.ts",
+      "src/data/gallery-migration.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "src/views/database-view.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-renderer.ts",
+        "kind": "code",
+        "path": "src/views/gallery-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/gallery-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-gallery.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-gallery.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.ts",
+        "kind": "code",
+        "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Gallery Renderer",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Its Harness",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The renderer and its measurements are one unit, and taking them apart in two changes is how a gate",
+    "created_at": "2026-09-05T03:46:38Z",
+    "last_save_at": "2026-09-05T04:15:42.247Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:8ab30bfa9496bbd7a047ebff8e85f8cfd973ad81d19bc2a3061cb7ffaa3b2ae4",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "79b786d70dd96e162a600a05c299195b7cd9b5f04a675af0d1ab464436a4d842",
+      "plan.md": "bfd30ab63534fa18485e9c1016b0f90827b218b7798f39af553633544fde3f40",
+      "tasks.md": "0924045b9cf3bf210cfab4a4d82cbb6526c5708db44da29382d737397e7ded09",
+      "implementation-summary.md": "fadc7593fcb1827d1450acfb47cccdba8d35a1b49c0b2845df8b1348b26fcb0d"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

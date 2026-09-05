@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/047-competitor-references-and-pm-alignment",
+  "description": "Phase 1: competitor-references-and-pm-alignment",
+  "keywords": [
+    "phase",
+    "competitor-references-and-pm-alignment"
+  ],
+  "lastUpdated": "2026-09-05T03:47:55.183Z",
+  "specId": "047",
+  "folderSlug": "competitor-references-and-pm-alignment",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
