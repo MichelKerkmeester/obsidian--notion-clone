@@ -56,11 +56,11 @@
       "tools/lane/css-lane.json",
       "tools/live/touch-targets-baseline.json",
       "screenshots/manifest.json",
-      "tools/storybook/verify-placement.mjs",
-      "src/views/card-field-renderer.ts",
-      "src/views/database-view.ts",
-      "src/data/types.ts",
-      "screenshots/README.md"
+      "tools/live/view-census.mjs",
+      "tools/screenshots/scenarios/shared.test.mjs",
+      "src/views/mobile-table-and-panel-ux.test.ts",
+      "src/views/screenshot-fixtures.test.ts",
+      "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
       {
@@ -154,33 +154,33 @@
         "source": "derived"
       },
       {
+        "name": "view-census.mjs",
+        "kind": "file",
+        "path": "tools/live/view-census.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "shared.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/shared.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-table-and-panel-ux.test.ts",
+        "kind": "test",
+        "path": "src/views/mobile-table-and-panel-ux.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "screenshot-fixtures.test.ts",
+        "kind": "test",
+        "path": "src/views/screenshot-fixtures.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "verify-placement.mjs",
         "kind": "file",
         "path": "tools/storybook/verify-placement.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "card-field-renderer.ts",
-        "kind": "code",
-        "path": "src/views/card-field-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "database-view.ts",
-        "kind": "code",
-        "path": "src/views/database-view.ts",
-        "source": "derived"
-      },
-      {
-        "name": "types.ts",
-        "kind": "code",
-        "path": "src/data/types.ts",
-        "source": "derived"
-      },
-      {
-        "name": "README.md",
-        "kind": "doc",
-        "path": "screenshots/README.md",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "After `006` nobody can reach the list, but the code and everything that measures it are still there",
     "created_at": "2026-09-04T19:33:27Z",
-    "last_save_at": "2026-09-05T01:35:47.708Z",
+    "last_save_at": "2026-09-05T02:38:36.983Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:eff5f84b694398c0bdf515ddf8b083691e3ec2780f30c8581d2c45e180dbef77",
+    "source_fingerprint": "sha256:573170b29759b2ec3395bbf973e0a0e7059c2811dc881a074e9b8fc6e602c1a8",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d654136b4535406719fae80879a3619a5ca0aa75f2006747dc9027e975cf6b3f",
       "plan.md": "07b48f1d6423408edad08ce5f8514c9a3416fbac33b920e8031d72e1c1548e9c",
-      "tasks.md": "34b6dd8820e0a0c4bda95d9a500a3b6bc28117cedac95c97eea08a0ee81bf702",
-      "implementation-summary.md": "5edbcd2ac51c554b589d7afd3403b054cdad1fbb66de9058fea30c2386e46f14"
+      "tasks.md": "003afe0ac4682ff80780802d4ccfb8ee8b6d925a00aec50ed5e4050aa0db6d8d",
+      "implementation-summary.md": "763f3191c535bb62550282bfddd772c7c1f1980499cd9c5f6cc23eb306782353"
     },
     "last_active_child_id": null,
     "last_active_at": null

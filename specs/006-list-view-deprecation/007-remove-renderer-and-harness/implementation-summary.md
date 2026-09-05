@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Remove the List Renderer and Its Harness"
-description: "The list renderer and every measurement surface named against it are gone in one change. list stays on DatabaseViewType, migrated permanently by the existing coercion. One deferral (styles.css) and one harness regression found and fixed during the removal are both recorded rather than folded in silently."
+description: "The list renderer and every measurement surface named against it are gone in one change. list stays on DatabaseViewType, migrated permanently by the existing coercion. The one deferral (styles.css's dead list rules) landed in a follow-up pass; a harness regression found during the removal was fixed rather than folded in silently."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation/007-remove-renderer-and-harness"
-    last_updated_at: "2026-09-05T03:30:00Z"
-    last_updated_by: "phase-007-landing"
-    recent_action: "007 landed on main after reconciliation, gate 25/25 green"
-    next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
+    last_updated_at: "2026-09-05T04:35:00Z"
+    last_updated_by: "phase-007-t010-followup"
+    recent_action: "T010 follow-up landed (styles.css cleanup); gate 25/25 green"
+    next_safe_action: "Proceed to 008-docs-and-release; no open tasks remain in this packet"
     blockers: []
     key_files:
       - "src/views/database-view.ts"
@@ -23,11 +23,13 @@ _memory:
       - "tools/gate.mjs"
       - "tools/live/renderer-coverage.json"
       - "tools/bench/table-render-bench.ts"
+      - "styles.css"
+      - "tools/live/view-census.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-deprecation-007-summary"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 100
     open_questions: []
     answered_questions:
       - "Does list leave DatabaseViewType? No — it stays accepted-but-redirected, ADR-001 in plan.md."
@@ -47,7 +49,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 007-remove-renderer-and-harness |
-| **Completed** | 2026-09-05, with one task (T010) deliberately deferred |
+| **Completed** | 2026-09-05; T010's deferred `styles.css` cleanup landed the same day in a follow-up commit — see the T010 Follow-Up section below |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -187,11 +189,66 @@ full per-file resolution.
 
 ---
 
+<!-- ANCHOR:t010-followup -->
+## T010 Follow-Up: Stylesheet Cleanup
+
+Landed separately from the phase's original landing, once the held `styles.css` lane was actually
+free to take (`chore(styles): drop the retired list view's stylesheet rules`).
+
+By the time this ran, the css-lane baseline had already moved twice more past the `719ba0fca8e1`
+this phase's own T010 note recorded: `049-bench-frozen-today` released at `0785e72944dd` (no CSS
+edit, a clock-freeze fix), and this phase's own `git rm` of the retired PNGs released at the same
+hash without touching `styles.css`. The follow-up re-verified from `0785e72944dd`, the hash actually
+in the tree, rather than trusting the stale value this file's own earlier note carried.
+
+`rg -n "db-list" src tools --glob '!*.css'` confirmed the only remaining producer of `db-list`
+markup anywhere in the repository is `tools/live/view-census.mjs`'s row-rhythm matrix — the
+reproduction this phase's own landing commit deliberately kept (editing only a comment) to measure
+the stylesheet's row layout independent of a live view. Removed every `db-list*` selector arm that
+fixture does not build: list grouping, row drag/drop states, the file-title path-prefix block, the
+open/new-row buttons, the mobile reorder button, field variants no producer ever set, and four
+selector arms that had accidentally merged into an unrelated `is-phone` filter-panel rule through a
+missing brace. Kept the 9 classes the fixture mounts, bare and under `.is-phone` alike. 86 `db-list`
+references before, 24 after.
+
+RED FIRST: a new `describe` block in `tools/screenshots/scenarios/shared.test.mjs` asserted no
+`db-list` selector arm resolves outside the fixture's mounted classes — failed against the pre-edit
+stylesheet naming all 62 dead arms, passed against the edit. Two pre-existing suites this change
+never touched corroborated it independently: `src/views/mobile-table-and-panel-ux.test.ts` (asserts
+the exact declarations on the kept phone `.db-list-row`/`-row-meta`/`-field`/`:hover` rules) and
+`src/views/screenshot-fixtures.test.ts` (asserts every class `view-census.mjs` mounts is real, which
+required keeping exactly the classes kept here).
+
+Zero-change proof: `view-census.json`'s `rowMatrix`/`rail`/`rows`/`probes`/`totals` fields are
+byte-identical before and after the edit, diffed programmatically rather than eyeballed. `npm run
+screenshots` moved 20 PNGs by encoder bytes only, all `pixelHash`/`layoutHash`-identical to HEAD via
+`check-lane.mjs`'s content compare, restored to HEAD-committed bytes with the manifest's `bytes`
+field corrected; the manifest's only other change is every scenario's `styles.css` fingerprint
+moving to the new hash, a pure text substitution verified to touch no other byte. css-lane released
+with an empty `reviewed` list — nothing moved for a real reason to open and read. `npm run
+screenshots:verify`: 532/532 current, 0 stale.
+
+Re-stamped the eight evidence artifacts the hash bump left stale (`cascade-audit`,
+`checkbox-appearance`, `checkbox-inventory`, `design-conformance`, `engine-parity`, `surface-census`,
+`token-census`, `view-census`) by re-running their own tools rather than editing their numbers — the
+`evidence` gate lane discovered exactly these 8 of 15 tracked artifacts as stale, matching the files
+that actually list `styles.css` in their `inputs`.
+
+`npx tsc --noEmit`: 0 errors. `npm test`: 1124 passed (108 files, including the new test — 34 more
+than this phase's own 1090, all from unrelated work that landed on `main` between this phase's
+landing and this follow-up). `npm run lint:tools`: 0 problems. `npm run gate`: **25/25 green**, `$?`
+read directly, re-run twice for stability.
+<!-- /ANCHOR:t010-followup -->
+
+---
+
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **T010 deferred.** `styles.css`'s `db-list-*` rules are dead CSS but still in the stylesheet.
-   Recorded as a follow-up, not folded into this diff — see `tasks.md` T010.
+1. **T010 — RESOLVED.** `styles.css`'s `db-list-*` rules were dead CSS left in the stylesheet at
+   this phase's original landing; a follow-up pass removed them (`chore(styles): drop the retired
+   list view's stylesheet rules`) once the held lane was actually free. See `tasks.md` T010 and the
+   T010 Follow-Up section above for the evidence.
 2. **The `006` precondition was not confirmed before this phase ran.** No operator report against a
    released build is recorded anywhere in this tree. See `tasks.md` T001.
 3. **A harness regression was found and fixed mid-phase, not caught by `npm run gate` alone.**
