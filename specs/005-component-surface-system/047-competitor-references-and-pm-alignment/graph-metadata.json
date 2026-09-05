@@ -48,6 +48,7 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "research/research.md",
       "tools/screenshots/manifest-schema.mjs",
       "screenshots/manifest.json",
       "src/views/board-renderer.ts",
@@ -58,7 +59,8 @@
       "screenshots/anytype/sources.md",
       "screenshots/appflowy/sources.md",
       "screenshots/anytype/README.md",
-      "screenshots/appflowy/README.md"
+      "screenshots/appflowy/README.md",
+      "src/views/filter-panel-renderer.ts"
     ],
     "entities": [
       {
@@ -101,6 +103,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -152,6 +160,12 @@
         "source": "derived"
       },
       {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Headless Chrome",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Rows 37 and 38 have been open since 2026-09-04 waiting for one thing no in-repo session can do: the",
     "created_at": "2026-09-05T03:47:54Z",
-    "last_save_at": "2026-09-05T06:41:55.631Z",
+    "last_save_at": "2026-09-05T07:41:18.654Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,16 +220,18 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:4cb413530f40db9175f2cc4ac7bb8b9f4ec73d8817b619fcd46988b8a10a9ce1",
+    "source_fingerprint": "sha256:2c38462be12091e80b6f789be09f16e317cb7e0afa3cfa5e85002192ca11d9cc",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "3224862228c108799164d7abbee846f799ddf091b6a8fe994839a37a11071721",
       "plan.md": "09a3e40515d5b94978ae526e8d386ce75199f12a6818e46796c65570a17cf56c",
       "tasks.md": "7ca4075619a2c49dafca07567af7b80374295341028e02dd91066b25a96be701",
       "decision-record.md": "26ee68c7926ab32c9eb269e030c8ba3425f49f70c77a72bfb7855e6c30719a49",
-      "implementation-summary.md": "7603ff4c994af94e14d3701558d2987b12435b453a535d87583031f06e3de44a"
+      "implementation-summary.md": "7603ff4c994af94e14d3701558d2987b12435b453a535d87583031f06e3de44a",
+      "research/research.md": "6b98388e4ad4135334b8285709b760ee5c6429ea6464e4c4b66db9827fe3d4ae"
     },
     "last_active_child_id": null,
     "last_active_at": null
