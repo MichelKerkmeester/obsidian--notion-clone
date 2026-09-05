@@ -9,9 +9,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-05T06:20:00Z"
-    last_updated_by: "reports-34-36-fourth-pass"
-    recent_action: "A press inside a portalled sheet is no longer read as a press outside the view"
+    last_updated_at: "2026-09-05T06:40:00Z"
+    last_updated_by: "reports-34-36-fourth-pass-second-landing"
+    recent_action: "A press inside a portalled sheet is no longer read as outside"
     next_safe_action: "The operator taps Add sort and Add condition on the phone against a build carrying the fix"
     blockers:
       - "Nothing here is confirmed on the operator's device"
@@ -32,6 +32,7 @@ _memory:
       - "The long press consumed nothing; it now swallows the click it caused"
       - "The backdrop never wins the hit test; elementFromPoint returns the control in both engines"
       - "The views carry a second dismissal path the overlay stack knows nothing about, and no lane had ever installed it"
+      - "Of the three call sites that read alike, two are defects and the wheel one is unreachable from a sheet"
 ---
 # Implementation Summary: Sheet Lifecycle Ownership
 
@@ -486,6 +487,43 @@ from their source rather than installed by the real class; the call-site guard i
 seam. The delayed compatibility click, the software keyboard's effect on `visualViewport`, and the
 host's own re-render remain unmeasurable in this harness, and the device row stays open until the
 operator confirms on hardware.
+
+### The two siblings of the same fork — reports 34-36, fourth pass, second landing (2026-09-05)
+
+Three call sites in the two views branch on the same bare containment test. The dismissal one was
+the reported defect; the operator asked for the other two in the same landing. **Only one of them is
+a defect, and measuring which was the whole of the work.**
+
+**`shouldClearCellSelectionFromPointer` is reachable and was wrong** — `database-view.ts:3030`,
+`embedded-database-renderer.ts:1015`. It is called from `handleOutsideClick`, a *document*-level
+capture listener, so it does see presses inside a portalled sheet. A press on the sheet's own
+control takes the OUTSIDE branch, which clears the selection unless the target is a modal or a menu,
+and a sheet is neither — so a phone user silently loses a cell selection they never left, where
+desktop keeps it because its panel never moves and the inside branch already names every control
+that must not clear it. Routed through the same predicate. Red then green in both engines, from one
+press that answers both shapes: `the shipped shape still drops it (button.db-panel-button)` before,
+`containment alone drops it and the shipped shape keeps it, on the same press` after.
+
+**`forwardOuterWheelScroll` is NOT reachable, and gets no guard** — `database-view.ts:1534`. It
+reads exactly like the same defect, which is why it was flagged. It is not: the listener is bound to
+`containerEl_.parentElement`, and a sheet portalled onto the body is not a descendant of it, so no
+event from a sheet ever propagates through. Measured in both engines: `sheetIsDescendantOfContainer
+Parent: false, wheelReached: false`. A guard there would sit on an impossible path, and the lane row
+proving it works could never go red — the vacuous case this packet's negative-control idiom exists
+to prevent.
+
+**The measurement nearly went the other way, and that is the part worth keeping.** The first run
+reported `wheelReached: true` in both engines — because the harness mounts its root directly on the
+body, where a sheet *is* a descendant of the root's parent. The view mounts its content inside the
+workspace leaf. Same code, same engines, opposite answer, decided entirely by an ancestry the
+harness had no reason to model. The binding is now pinned as a lane invariant instead of guarded in
+shipped code, so moving that listener to the document — where the dismissal listeners already are —
+goes red and says why.
+
+**Evidence.** `npx tsc --noEmit` 0; `npm test` **1143 passed, 108 files**, exit 0; `sheet-rebuild`
+green across Chrome and WebKit with 6 further rows; `npm run gate` **PASS — 25 green, 0 red** at
+exit 0, after `git rebase origin/main` (three generated evidence artifacts conflicted and were
+re-derived rather than merged).
 
 <!-- /ANCHOR:limitations -->
 
