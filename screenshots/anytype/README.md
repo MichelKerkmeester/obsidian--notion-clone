@@ -154,3 +154,23 @@ that contract is explicitly a different leg of this packet (`047-competitor-refe
 alignment`'s contract-widening task), not this capture pass, so **no manifest entry exists for
 anything in this folder** and `screenshots/manifest.json` is untouched. `npm run screenshots:verify`
 does not see this folder — it only walks `manifest.scenarios` — so it is unaffected either way.
+
+## Mobile — official (`mobile-official/`)
+
+A later, separate pass added `screenshots/anytype/mobile-official/`: 20 official Anytype **mobile**
+images (App Store, Google Play, and the `anyproto/anytype-swift` GitHub README) — no installed-app
+mobile captures, since Anytype's mobile clients were not installed for this pass. Same "not tracked
+by `manifest.json`" status as the rest of this folder, for the same reason (no `reference` group/
+renderer widened for a mobile surface).
+
+- 7 iOS (Apple App Store, `apps.apple.com`, bundle `io.anytype.app`, id `6449487029`): hero,
+  object-type list, spaces, chats, pages, lists, organize.
+- 7 Android (Google Play, `play.google.com`, package `io.anytype.app`): the same seven subjects —
+  both stores use the same marketing creative, re-exported per store.
+- 6 GitHub (`anyproto/anytype-swift` README, `docs/assets/screenshots/`): the same creative minus
+  the object-type-list subject, which exists in that repo's assets folder but is not referenced by
+  the live README and was excluded as not clearly official.
+
+Full per-file source URLs, fetch dates, resolutions, and the licence position (same "terms
+unclear, retained for internal comparison" finding as the rest of this folder) are in
+`screenshots/anytype/mobile-official/sources.md`.
