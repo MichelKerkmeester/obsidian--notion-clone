@@ -225,3 +225,205 @@ grammar lane asserts the seven elements on a registered `confirm` row.
 **How to roll back**: revert the leg's commit; the signature never changed, so every caller is
 unaffected by the revert — the confirm returns to its headerless sheet exactly as shipped today.
 <!-- /ANCHOR:adr-002 -->
+
+---
+
+<!-- ANCHOR:adr-004 -->
+## ADR-004: The 050-inherited thresholds bind at their restated figures, not their original ones
+
+> **Numbering note.** ADR-003 is deliberately unused in this packet. `acceptance-criteria.md`
+> AC-003 cites `051` ADR-003 as the owner of the confirm primitive, and a local ADR-003 beside it
+> would read as the same ruling. The next local number is 004.
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Design true-up (T001) |
+
+---
+
+### Context
+
+AC-009 and AC-011 were written citing "ADR-004", which did not exist — the restatements they lean
+on live in `../050-anytype-adoption/design-trueup.md`, in another packet, and nothing in this one
+recorded that they bind here. A criterion whose justification is a dangling reference cannot be
+audited, and two of the four `050`-inherited rows were in that state.
+
+The substance is not in dispute. `050`'s own true-up already established that four of its premises
+are false against this tree: the row menu cannot render empty, twelve empty reasons already ship,
+the scroll-restore machinery already exists, and there is no virtualization path to avoid. This
+packet's `design-trueup.md` §4 re-confirmed each against today's tree.
+
+### Constraints
+
+- `050` stays the requirement set for items 5, 8, 9 and 14 (goal D3); this packet is their
+  implementation leg and may not reopen the requirements.
+- A threshold whose failing value is asserted wrongly cannot be observed red, so goal D2 is
+  unsatisfiable until each is restated.
+- AC-IDs are stable once written: restate a criterion's cell, never renumber it.
+
+### Decision
+
+**We chose**: the four `050`-inherited criteria bind at the figures
+`../050-anytype-adoption/design-trueup.md` restated, re-confirmed in this packet's
+`design-trueup.md` §4, and this ADR is the record AC-009 and AC-011 cite.
+
+**How it works**: each row's Verification cell already carries the restated figure and now names an
+ADR that exists. Specifically — selection caps are **not adopted** (no multi-select referent);
+`bulk-edit-field-menu.ts` is the **only** never-empty violator; `no-database` **is** the target
+empty flavour and the deleted-relation state is the real red; the "never virtualizes" clause is a
+**future-regression guard**, not today's red.
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Record the restatement locally (chosen)** | The citation resolves; the audit trail is one hop | One more ADR to maintain | 9/10 |
+| Point the cells at `050`'s true-up directly | No new ADR | A cross-packet file path is not an ADR, and the waiver contract asks for one | 5/10 |
+| Renumber the criteria | Tidy | Forbidden — AC-IDs are stable once written | 1/10 |
+
+**Why this one**: the cheapest change that makes an existing citation true.
+
+### Consequences
+
+**What improves**: AC-009 and AC-011 are auditable; the restated figures have one home in this
+packet.
+
+**What it costs**: nothing measurable. The thresholds were already restated in their cells.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A later reader takes `050`'s original wording as binding | M | Both `050`'s true-up and this one state the precedence in their own words; the cells carry the restated figure inline |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Two criteria cited a non-existent ADR |
+| 2 | **Beyond Local Maxima?** | PASS | Three options scored |
+| 3 | **Sufficient?** | PASS | One ADR closes both dangling citations |
+| 4 | **Fits Goal?** | PASS | Goal D2 needs an observable red per threshold |
+| 5 | **Open Horizons?** | PASS | Nothing is foreclosed; the requirements stay `050`'s |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changes**: `acceptance-criteria.md` AC-009 and AC-011 keep their wording and now cite an ADR
+that exists. No code.
+
+**How to roll back**: delete this ADR and the citations revert to dangling — which is the state
+this fixes, so there is nothing to preserve.
+<!-- /ANCHOR:adr-004 -->
+
+---
+
+<!-- ANCHOR:adr-005 -->
+## ADR-005: The motion set is measured from `anytype-ts` source, and `--db-motion-surface` becomes 200ms
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Design true-up (T001) |
+
+---
+
+### Context
+
+The draft motion spec cited `047` §10 — "0.2s enter / 0.1s exit, one centralized `animationProps`
+helper" — for values a still capture can never show. Reading
+`specs/context/anytype-ts/src/scss` directly contradicts both halves. The toast's enter **and**
+exit share one `transition-duration: 0.2s` (`notification/common.scss:21`, `:25`); `0.1s` occurs
+four times in the whole stylesheet and none of them is an exit
+(`widget/common.scss:34`, `component/sidebar/page/common.scss:3`,
+`block/dataview/view/gallery.scss:13`, and a `transition-delay` at `page/auth.scss:379`). And the
+"centralized helper" is three constants (`_mixins.scss:2`, `:5-7`) plus 18 hand-typed `0.3s` and 96
+bare `ease` keywords against 2 `ease-out`.
+
+Separately, this packet's own census contradicted itself: 42 and 78 both appear as the count of
+hand-typed `120ms` transitions, in four documents, used interchangeably.
+
+### Constraints
+
+- `sk-design`'s bands govern where a value may sit: 120-180ms direct feedback, 180-260ms small
+  state change, deformation held inside 0.95-1.05.
+- An established project value outranks a neighbouring measurement; a measurement outranks a stray
+  literal.
+- `design-system.md` declares no easing vocabulary, and two parallel easing systems would make
+  elevation-of-motion unreadable (`sk-design` §4 NEVER-8).
+
+### Decision
+
+**We chose**: four tokens, three unchanged and one changed, plus one new token.
+
+- `--db-motion-fast` stays **`120ms ease`** — an established value with 42 declarations on it,
+  inside the direct-feedback band, against Anytype's neighbouring `0.15s`.
+- `--db-motion-surface` becomes **`200ms ease-out`**, up from the drafted 180ms. Anytype puts menu,
+  popup and sidebar on one `0.2s` constant (`_mixins.scss:5-7`) with a decelerating curve
+  (`_mixins.scss:9`), 200ms is inside the small-state band, and our 180ms is three stray literals
+  rather than an established token — so the measurement wins.
+- `--db-motion-sheet` stays **`260ms ease-out`**, ours, reasoned at `styles.css:114-120`, with no
+  measured counterpart to contradict it.
+- `--db-motion-emphatic` stays **`1.1s ease-in-out infinite`**.
+- **`--db-motion-scale-from: 0.98`** is added, because our popover (`styles.css:360`) and the toast
+  need the same number and a scale written twice drifts — the argument `styles.css:114-120` already
+  makes for the sheet duration.
+
+**How it works**: the tokens land in the `--db-*` block with their dark-theme override, the three
+`180ms` literals migrate in the same commit, and the reduced-motion reset names every new consumer.
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Measured 200ms, keep our 120/260 (chosen)** | Each value has a stated owner — measurement or established project value | One migration of three literals | 9/10 |
+| Keep 180ms and alias | No migration | Adopts a stray literal over a measured constant, for no reason but inertia | 4/10 |
+| Port `$easeInQuint` as a bespoke cubic-bezier | Highest fidelity to the reference | A second easing system beside the keywords; and the constant's name is an ease-**out** curve called "In", so it would be copied wrongly | 3/10 |
+
+**Why this one**: it is the only option where every value can name why it beat its neighbour.
+
+### Consequences
+
+**What improves**: four durations with a stated provenance each; one scale value that cannot drift;
+a census that is right.
+
+**What it costs**: three `180ms` literals migrate to a 200ms token, so any surface tuned by eye
+against 180ms moves by 20ms. Mitigation: all three are small floating surfaces, which is exactly
+the population the token describes.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| The token lands before its literals migrate, leaving both live | M | L4's commit carries token and migration together, as `plan.md` §6 already requires |
+| Reduced motion is read as adopted from the reference | L | `prefers-reduced-motion` occurs **0 times** in `anytype-ts/src`; the true-up records that ours has no counterpart |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Both halves of the cited motion finding are contradicted by the source |
+| 2 | **Beyond Local Maxima?** | PASS | Three options scored, including the highest-fidelity one |
+| 3 | **Sufficient?** | PASS | Five tokens cover every duration and scale this phase's surfaces need |
+| 4 | **Fits Goal?** | PASS | REQ-055-5 is one token set for motion |
+| 5 | **Open Horizons?** | PASS | An easing vocabulary in `design-system.md` stays available later; nothing here forecloses it |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changes**: `styles.css` token block and dark-theme override; the three `180ms` literals; the
+reduced-motion reset's consumer list. `spec.md` §4 and `state-feedback-vocabulary.md` §4 carry the
+corrected values and census.
+
+**How to roll back**: revert L4's commit; token and literals move together, so no half-migrated
+state exists.
+<!-- /ANCHOR:adr-005 -->

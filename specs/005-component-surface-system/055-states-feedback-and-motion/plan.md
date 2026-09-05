@@ -41,11 +41,14 @@ measured red on the current tree before its code lands (goal D2).
 
 ### Definition of Ready
 - The leg's threshold from `acceptance-criteria.md` has been run on the current tree and observed
-  failing, the figure written into `checklist.md`.
+  failing, with the measured figure in that row's Verification cell (T001 wrote them there on
+  2026-09-05; `design-trueup.md` carries the reading) and the leg's red-then-green recorded in
+  `checklist.md` as it lands.
 - The leg's phone expression is stated, or its absence is stated with a reason (050 goal D3's
   discipline, carried).
-- Any capture the leg's design depends on is named in `checklist.md`'s capture column, or the gap
-  is.
+- Any capture the leg's design depends on is named in the task's own Capture field and in
+  `design-trueup.md` §3, or the gap is named there. Four rows have no capture on either platform —
+  `empty.deleted-relation`, `loading`, `error` and `destructive.confirm` — and each says so.
 
 ### Definition of Done
 - The threshold passes; the negative control was observed red after the row went green.
@@ -79,8 +82,10 @@ the confirm keeps presenting through `DbModal`'s declared presentation (`db-moda
   `onOpen`; stacked-pair registration under `048`'s model.
 - **Empty state** — `no-source` and `deleted-relation` join the reason union; `getEmptyStateReason`
   gains the source-missing branch; chart's `ChartEmptyReason` maps onto the shared component.
-- **Motion tokens** — four tokens in the `--db-*` block; the reduced-motion reset names every new
-  consumer in the same change.
+- **Motion tokens** — five tokens in the `--db-*` block, measured against `anytype-ts` source and
+  reconciled with our established values in ADR-005; the reduced-motion reset names every new
+  consumer in the same change. Anytype ships **no** reduced-motion rule, so that half is ours
+  alone.
 - **View state** — one scroll-offset field, written on switch-away, restored on return.
 - **Capability gate** — one predicate over the selection, one fallback row, two caps.
 
@@ -100,7 +105,7 @@ view without one behaves exactly as today. Toast state is ephemeral and never pe
 | L1 | `src/views/toast.ts` (new), `src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`, `styles.css` | Toast component; `notice.galleryMigrated` gains its Undo; `notice.deletedRow` routed; rail + bar undo unified | AC-055-1, AC-055-2 |
 | L2 | `src/views/empty-state-renderer.ts`, `src/views/chart-renderer.ts`, `src/views/database-view.ts`, `styles.css` | `no-source` + `deleted-relation` flavours; chart absorption | AC-055-5, AC-055-6 (050 AC-009) |
 | L3 | `src/views/modals/confirm-modal.ts`, `styles.css` | `044` grammar on the confirm sheet; `048` stacked-pair registration | AC-055-3, AC-055-4 |
-| L4 | `styles.css` | Motion tokens; migrated durations in the legs' own files; reduced-motion reset extension | AC-055-7, AC-055-8 |
+| L4 | `styles.css` | Motion tokens (`--db-motion-surface` is **200ms**, not 180ms — ADR-005) plus `--db-motion-scale-from: 0.98`; migrated durations in the legs' own files, the three `180ms` literals included; reduced-motion reset extension | AC-055-7, AC-055-8 |
 | L5 | `src/views/row-menu.ts`, `src/views/bulk-edit-field-menu.ts` | Capability gate, never-empty fallback, caps (050 REQ-008) | AC-055-9 (050 AC-008) |
 | L6 | `src/views/view-state-store.ts`, `src/views/embedded-database-renderer.ts` | Scroll restore (050 REQ-005); "Load more" row (050 REQ-014) | AC-055-10 (050 AC-005), AC-055-11 (050 AC-014) |
 
@@ -143,7 +148,12 @@ deliverable — not folded into this phase to chase a sweep across 18 files.
 - `design-system.md` — role vocabulary, token snapshot, row grammar; the motion tokens extend its
   token block.
 - `047-competitor-references-and-pm-alignment` — §9/§10 findings and the capture index, cited per
-  pattern in `state-feedback-vocabulary.md` §3.
+  pattern in `state-feedback-vocabulary.md` §3. **Its §10 motion finding is superseded** by the
+  source read in `design-trueup.md` §2 (ADR-005).
+- `specs/context/anytype-ts/src/scss/` — the motion source. Motion is invisible in a still, so
+  every duration, easing and scale in this packet is a `file:line` read, never a capture.
+- `../050-anytype-adoption/design-trueup.md` — the method, and the binding restatements for items
+  5, 8, 9 and 14 (ADR-004).
 - `specs/007-gallery-view-deprecation` — the gallery retires; inheritance only (goal D7).
 <!-- /ANCHOR:dependencies -->
 
@@ -186,7 +196,7 @@ the literal migration is also reverted — so L4's commit carries token + migrat
 
 | Leg | Estimated LOC | Note |
 |-----|---------------|------|
-| T001 | ~100 (doc) | `checklist.md` measurements |
+| T001 | ~560 (doc) | `design-trueup.md`, the measured true-up; figures written into `acceptance-criteria.md` |
 | L1 | ~220 | Component + callers + CSS |
 | L2 | ~160 | Two flavours + chart absorption |
 | L3 | ~80 | Header + registration |
@@ -230,7 +240,7 @@ T001  red-first measurements
 
 | Milestone | Content | Gate |
 |-----------|---------|------|
-| M1 | `checklist.md` filled: every threshold's red figure recorded | No leg starts before its figure exists |
+| M1 | `design-trueup.md` written and every threshold's red figure recorded in its `acceptance-criteria.md` cell | No leg starts before its figure exists — **met 2026-09-05** |
 | M2 | L1-L3, L5, L6 green with controls seen red | `npm run gate` exits 0 |
 | M3 | L4 landed; token census reconciled; reduced-motion test extended | Gate 0; no untokenized duration in touched files |
 | M4 | Operator reads the states on device | The operator's own words; not tickable by an agent |
@@ -280,5 +290,19 @@ title, and the sheet/stack behaviour follows `DbModal`'s existing declaration.
 
 **Alternatives rejected**: a `ConfirmSheet` parallel class (two confirm paths, the thing `048`
 exists to end).
+
+### ADR-004 and ADR-005 live in `decision-record.md`
+
+Two further decisions were taken at T001 and are recorded in full in `decision-record.md`, which is
+this packet's ADR authority; they are named here so the set is discoverable from the plan.
+
+- **ADR-004** — the four `050`-inherited thresholds bind at their restated figures, not their
+  originals. `acceptance-criteria.md` AC-009 and AC-011 cite it; before T001 that citation was
+  dangling.
+- **ADR-005** — the motion set is measured from `anytype-ts` source rather than from `047` §10, and
+  `--db-motion-surface` becomes `200ms ease-out` with `--db-motion-scale-from: 0.98` added.
+
+ADR-003 is deliberately unused here: `051` ADR-003 owns the confirm primitive, and a local ADR-003
+would read as the same ruling.
 <!-- /ANCHOR:phase-adr -->
 

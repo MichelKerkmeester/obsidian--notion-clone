@@ -37,12 +37,23 @@ A task missing any of the three is not ready to start.
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 [P0] **Measure every threshold in `acceptance-criteria.md` against the current tree and
-      write the observed failing figure into `checklist.md`.** The figures are already visible in
-      source — 0 of 247 notices with an action slot, 0 of 7 grammar elements on the confirm,
-      78 untokenized 120ms transitions, one empty state where three are owed — but T002's rule
-      stands: a figure written from memory is a figure nobody can check against the tree that
-      produced it. Run each check, read the output, record the number (goal D2) (`checklist.md`)
+- [x] T001 [P0] **Measure every threshold in `acceptance-criteria.md` against the current tree and
+      against the evidence, and record the observed figure.** Done 2026-09-05. The output is
+      `design-trueup.md` — one row per state, feedback shape and motion token, each read off a
+      capture in `screenshots/anytype/`, off a `file:line` in `specs/context/anytype-ts/src/scss/`,
+      or off a `file:line` in `src/`, with the gap named where neither exists. The measured figures
+      are written into `acceptance-criteria.md`'s Verification cells, which is where a threshold is
+      audited; `checklist.md` remains the implementation legs' record of red-then-green and is
+      filled per leg, not here.
+      **Deviation, named rather than absorbed:** the task as drafted named `checklist.md` as the
+      sole output. A threshold's failing figure belongs beside the threshold, and `050`'s
+      precedent (its own T001) is a `design-trueup.md`. Both files now carry their half.
+      **What the measurement changed:** nine contradictions, listed in `design-trueup.md` §1 and
+      ruled in ADR-004 and ADR-005. The corrected headline figures are **42 `transition:`
+      declarations** carrying **78** `120ms` occurrences (not 78 transitions), **7**
+      `var(--db-transition-fast)` uses (not 8), **16** further durations written in seconds that the
+      census had missed, and **0** `prefers-reduced-motion` rules in `anytype-ts` (goal D2)
+      (`design-trueup.md`, `acceptance-criteria.md`)
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -62,9 +73,12 @@ A task missing any of the three is not ready to start.
       **Red first:** 0 of 247 call sites carry an action affordance today; the migration notice
       promises Undo over a surface that cannot carry it (`src/i18n.ts:1455`,
       `database-view.ts:2744`).
-      **Capture:** none — no Anytype capture shows a toast surface and no `047` finding names one;
-      the component's design is the vocabulary's consistency requirement, stated in
-      `state-feedback-vocabulary.md` §3, with the gap named rather than a screen invented
+      **Capture:** none — no capture on either platform shows a toast. **But the geometry is no
+      longer invented:** `anytype-ts/src/scss/notification/common.scss` is a complete source read
+      (`design-trueup.md` §2) giving 384px width, fixed 12px bottom-right, 12px radius, 16px
+      padding, 64px min-height, an action row at `gap: 8px` / `margin-top: 12px` that auto-hides
+      when empty, and a collapsed stack where only the first card renders content. Severity is
+      **ours** — the reference toast has no severity axis
       (`src/views/toast.ts`, `src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`)
 - [ ] T003 [B] [P0] **REQ-055-1 — make the migration notice's Undo deliverable.** Route
       `notice.galleryMigrated` through the toast with its Undo action wired to
@@ -95,9 +109,14 @@ A task missing any of the three is not ready to start.
       **Red first:** `getEmptyStateReason` maps `sourceCount === 0` to the same
       `no-matching-data` reason a no-match view gets (`empty-state-renderer.ts:210-211`), and a
       deleted board group field silently re-groups (`database-view.ts:2678`, `:2890`, `:3378`).
-      **Capture:** `anytype-inlinecollection-empty-dark.png` for the "view" flavour's add
-      affordance; the "target" flavour and the deleted-relation state were **not captured** —
-      designed from `047` §9's findings with the gap named (`src/views/empty-state-renderer.ts`,
+      **Capture:** the desktop `anytype-inlinecollection-empty-dark.png` renders **no** empty block
+      at all, so the design comes from the iOS set's **three-tier ladder** — tier 1
+      `mobile/anytype-mobile-sheet-view-filters-empty-dark.png`, tier 2
+      `mobile/anytype-mobile-sheet-grid-cell-objecttype-empty-dark.png`, tier 3
+      `mobile/anytype-mobile-sheet-cell-multiselect-empty-dark.png`, measured in `design-trueup.md`
+      §3. The **deleted-relation state is still not captured on either platform** and stays
+      designed from `047` §9 with the gap named; its destination is proved by
+      `mobile/anytype-mobile-sheet-kanban-groupby-dark.png` (`src/views/empty-state-renderer.ts`,
       `src/views/database-view.ts`)
 - [ ] T006 [B] [P0] **REQ-055-6 — absorb chart's private vocabulary.** `chart-renderer.ts`'s
       `renderEmptyState` (`chart-renderer.ts:601-604`) and its action builder (`:609-641`) render through
@@ -132,13 +151,17 @@ A task missing any of the three is not ready to start.
       change, shimmer's `infinite` loop included.
       **Threshold:** the tokens resolve on all nine token selectors, and
       `owned-menu-reduced-motion.test.ts`'s coverage mechanism holds for the toast and confirm.
-      **Red first:** the tokens do not exist; 78 transitions hand-type `120ms` outside any token.
+      **Red first:** the tokens do not exist; **42 `transition:` declarations** hand-type `120ms`
+      outside any token, carrying 78 occurrences between them, and `var(--db-transition-fast)`
+      reaches 7 uses. `--db-motion-surface` is **200ms**, not 180ms (ADR-005).
       **Capture:** none — stylesheet, measured by lane, not capture
       (`styles.css`)
 - [ ] T010 [B] [P1] **REQ-055-8 — migrate the legs' own durations.** The files L1-L3 touched read
       tokens; no new literal duration lands in this phase's files.
-      **Threshold:** zero untokenized durations in the files this phase changed; the wider census
-      (150/180/160/100/80ms strays) is recorded in `state-feedback-vocabulary.md` §4, not swept.
+      **Threshold:** zero untokenized durations in the files this phase changed; the wider census is
+      recorded, not swept. **Corrected count:** the `ms` strays (4x150, 3x180, 1x160, 1x100, 1x80)
+      plus **16 written in seconds** (10x`0.15s`, 3x`0.2s`, 2x`0.1s`, 1x`0.3s`) that
+      `state-feedback-vocabulary.md` §4's census omits — see `design-trueup.md` C8.
       **Red first:** every touched file hand-types durations today.
       **Capture:** none (`styles.css`, the L1-L3 files)
 
@@ -150,10 +173,18 @@ A task missing any of the three is not ready to start.
       "No available actions" row; >1 disables open and link; >10 disables open-in-new-tab.
       **Threshold:** menu item count ≥ 1 in every capability state; caps asserted at the 1, 2, 10,
       11 boundaries.
-      **Red first:** a fully-restricted selection renders an empty menu — no gate, no caps, no
-      fallback exists in either file today (`row-menu.ts:80-187` builds rows unconditionally for
-      the non-readonly case).
-      **Capture:** none — `objectContext` was **not captured**; `047` §9's finding stands in
+      **Red first, restated (ADR-004):** the drafted premise is false for `row-menu.ts`, whose
+      first row `menu.openNote` (`row-menu.ts:88`) is unconditional — its guarantee is **asserted so
+      it cannot regress, not built**. The one real red is `bulk-edit-field-menu.ts`, which maps
+      `options` straight from `getBulkEditableColumns` at `:30`/`:38` with no floor and no fallback.
+      **The selection caps are not adopted**: our row menu operates on a single row, so >1 and >10
+      have no referent.
+      **Capture:** the "No available actions" wording is still **code-derived** — no capture shows
+      that state. But gating itself is now measured: the same iOS `···` menu carries `Undo/Redo` and
+      `Publish to Web` on an object and omits both on a set
+      (`mobile/anytype-mobile-sheet-object-more-dark.png` vs `-set-more-dark.png`), and Anytype's
+      never-empty answer is a **default row** rather than a message
+      (`menus/anytype-menu-set-sort-empty-dark.png`) — `design-trueup.md` §4
       (`src/views/row-menu.ts`, `src/views/bulk-edit-field-menu.ts`)
 
 ### L6 — scroll restore and load-more (050 items 5 and 14)
@@ -168,8 +199,13 @@ A task missing any of the three is not ready to start.
 - [ ] T013 [B] [P2] **REQ-055-11 — the embedded "Load more" row** (050 REQ-014 at AC-014's
       threshold, verbatim). An embedded view over one page renders its page plus an inline
       "Load more" row; the virtualization path is not entered.
-      **Threshold:** the row's presence and the virtualization mount's absence, asserted by lane.
-      **Red first:** the virtualization path is entered today for an embedded view over one page.
+      **Threshold:** the row's presence at a 60-row limit and the virtualization mount's absence,
+      asserted by lane.
+      **Red first, restated (ADR-004):** "the virtualization path is entered" is **false** — there
+      is no virtualization anywhere in `src/views`, so it could not be observed red as written. The
+      observable red is **0 embedded views honour a page limit and 0 render the row**; the
+      "never virtualizes" clause becomes a guard against a future regression. Page limit **60**,
+      inline row **~40px** against **48px** full-page.
       **Capture:** `anytype-inlinecollection-empty-dark.png`,
       `anytype-collection-grid-populated-dark.png` (`src/views/embedded-database-renderer.ts`)
 <!-- /ANCHOR:phase-2 -->
@@ -238,7 +274,8 @@ A task missing any of the three is not ready to start.
 ## Completion Criteria
 
 - [ ] All tasks marked `[x]`, or deferred with a recorded reason
-- [ ] No `[B]` blocked tasks remaining — T001 has released them
+- [x] No `[B]` blocked tasks remaining — T001 released them on 2026-09-05; every `[B]` task's
+      threshold now carries a measured figure in `acceptance-criteria.md`
 - [ ] Every row in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded`, and each waiver
       names an ADR that exists in this packet
 - [ ] Every `checklist.md` criterion carries both its failing figure and its passing one
@@ -254,6 +291,7 @@ A task missing any of the three is not ready to start.
 - **Acceptance Criteria**: See `acceptance-criteria.md`
 - **Checklist**: See `checklist.md`
 - **Vocabulary**: See `state-feedback-vocabulary.md`
+- **Design true-up (T001's output)**: See `design-trueup.md`
 - **Goal**: See `goal.md`
 - **050 requirement source**: `../050-anytype-adoption/acceptance-criteria.md`
 - **Capture index**: `../../../screenshots/anytype/README.md`

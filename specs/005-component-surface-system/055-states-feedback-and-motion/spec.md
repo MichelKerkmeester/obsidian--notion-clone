@@ -64,6 +64,9 @@ phase is their implementation leg (goal D3). The other ten items are not touched
   every new component declares through.
 
 **Deliverables**:
+- `design-trueup.md` — T001's output: every state, feedback shape and motion token measured
+  against the captures and against `anytype-ts` source, with nine contradictions resolved in the
+  evidence's favour.
 - `state-feedback-vocabulary.md` — the seven-state vocabulary, the per-surface must-render /
   renders-today table (also in `spec.md` §5), the motion spec, and the token map.
 - One empty-state component absorbing chart's private vocabulary.
@@ -94,8 +97,9 @@ most common stacked surface in the plugin (`048` inventory M-4) — declares `sh
 (`modals/confirm-modal.ts:42` (`super(app, "sheet")`)) and never calls `createSheetHeader`, scoring 0 of 7 on `044`'s grammar.
 Chart renders its own `db-chart-empty` with a private reason enum (`chart-renderer.ts:601`,
 `chart-aggregation.ts:64`) while eight sibling renderers share `EmptyStateRenderer`. And motion is
-42 hand-typed `120ms` transitions outside the token block, one shared `--db-transition-fast`
-reaching only 8 uses, with the reduced-motion reset held green by a coverage test
+**42 `transition:` declarations** hand-typing `120ms` outside the token block — 78 `120ms`
+occurrences between them, which is the same population counted two ways — one shared
+`--db-transition-fast` reaching only **7** uses, with the reduced-motion reset held green by a coverage test
 (`owned-menu-reduced-motion.test.ts`) that any new untokenized transition silently escapes.
 
 ### Purpose
@@ -148,6 +152,7 @@ surface asks for `empty.no-source` and gets the component; it does not build a c
 | `src/views/embedded-database-renderer.ts` (notices) | Modify | Route `notice.galleryMigrated` and `notice.deletedRow` through the toast |
 | `styles.css` | Modify | Motion tokens in the token block; `db-chart-empty` rules retired; toast rules; migrated durations — serialized by the parent's CSS lane |
 | `specs/.../055-states-feedback-and-motion/state-feedback-vocabulary.md` | Create | The vocabulary, table, motion spec and token map |
+| `specs/.../055-states-feedback-and-motion/design-trueup.md` | Create | T001's measured true-up of every state, feedback and motion row |
 <!-- /ANCHOR:scope -->
 
 ---
@@ -178,12 +183,18 @@ bar's affordance both survive as placements of the same component.
 
 | Token | Value | Used for | Evidence |
 |-------|-------|----------|----------|
-| `--db-motion-fast` | `120ms ease` (existing `--db-transition-fast`, `styles.css:113`) | Hover/active/focus tone changes, menu rows | 42 hand-typed `120ms` transitions collapse onto it |
-| `--db-motion-surface` | `180ms ease-out` | Small floating surfaces: popovers, dropdowns, toasts | 3 hand-typed `180ms` declarations today |
+| `--db-motion-fast` | `120ms ease` (existing `--db-transition-fast`, `styles.css:113`) | Hover/active/focus tone changes, menu rows | 42 `transition:` declarations collapse onto it. Kept against Anytype's neighbouring `0.15s` (`anytype-ts/src/scss/_mixins.scss:2`) because an established project value outranks a neighbouring measurement |
+| `--db-motion-surface` | **`200ms ease-out`** | Small floating surfaces: popovers, dropdowns, toasts | **Measured** (ADR-005): Anytype puts menu, popup and sidebar on one `0.2s` constant (`_mixins.scss:5-7`) with a decelerating curve (`:9`). The drafted 180ms was three stray literals, not a token, so the measurement wins; the three literals migrate in L4's own commit |
 | `--db-motion-sheet` | `260ms ease-out` (existing `--db-sheet-enter`, `styles.css:121`) | Sheet and scrim entrance; any surface over ~760px of travel | The sheet's own comment records why 260 and not 120 or 500 (`styles.css:114-120`) |
 | `--db-motion-emphatic` | `1.1s ease-in-out infinite` | Skeleton shimmer only (`styles.css:2749`) | The one loop; never on a blocking surface |
+| `--db-motion-scale-from` | `0.98` | Entrance scale for any floating surface: popover, toast | Our popover already enters from `0.98` (`styles.css:360`) and Anytype's popup from `0.95` (`popup/common.scss:18`) — both inside `sk-design`'s 0.95-1.05 bound, so the established value holds. A token because the toast needs the same number. Anytype's toast `scale3d(0.75)` (`notification/common.scss:25`) is **refused**: outside the bound, on the one surface this phase builds |
 
-Easings: `ease` for tone, `ease-out` for entrances. `prefers-reduced-motion: reduce` kills every
+Easings: `ease` for tone, `ease-out` for entrances — the keywords, not a ported cubic-bezier.
+`design-system.md` declares no easing vocabulary, and Anytype's `$easeInQuint`
+(`anytype-ts/src/scss/_mixins.scss:1`) is a curve whose name says the opposite of its shape, so it
+is recorded and not carried (`design-trueup.md` §2). **Reduced motion has no counterpart to adopt**
+— `prefers-reduced-motion` occurs **0 times** in `anytype-ts/src`, so ours is the only story there
+is. `prefers-reduced-motion: reduce` kills every
 token: the container-wide reset (`styles.css:918-947`) is extended to name each new token's
 consumers, and the `.db-surface` clause that keeps body-mounted menus covered
 (`owned-menu-reduced-motion.test.ts` proves the mechanism) gains the toast and any new surface.
@@ -221,8 +232,8 @@ container's near-zero duration and `.db-surface`'s real zero exist for exactly t
 | Chart (`chart-renderer.ts`) | Its empty reasons through the **shared** component | Private `renderEmptyState` at `chart-renderer.ts:601-604`, `db-chart-empty`, reasons in `chart-aggregation.ts:64` | **Second vocabulary** — the only renderer outside `EmptyStateRenderer` |
 | Embedded views (`embedded-database-renderer.ts`) | `read-failed`, `no-columns`, `no-matches`, `success.notice` (migration), `error` | `renderCard` at `:693-700`, `:1204`, `:1222-1233`, `:1990`; migration notice `:764`; delete notice `:3208` | No "Load more" row (050 REQ-014 gap); notices un-routed |
 | Record sheet (`record-detail-panel.ts`) | `error` (read failure), field-level empty/error states | Field renderers in `cell-renderer.ts`; relation miss tooltip `relation-value-renderer.ts:46-47` | Error surface is per-field bespoke |
-| Confirm (every destructive path, 19 `confirmWithModal` callers) | `destructive.confirm` in `044` grammar | `modals/confirm-modal.ts:35-98`; callers `column-operations.ts:167,340,347,355,363,376,873,879`, `database-view.ts:4419,4956,7522,9351,9898`, `row-menu.ts:169`, `cell-renderer.ts:1442`, `settings.ts:648`, `status-options-modal.ts:302`, `formula-modal.ts:1641`, `view-config-panel-renderer.ts:1642` | **0 of 7 grammar elements** — no header, no close (`048` inventory M-4) |
-| Notices (247 call sites) | `success.notice`, `error` with action | Raw `new Notice(...)`; no action affordance anywhere; `galleryMigrated` promises Undo it cannot carry (`src/i18n.ts:1455`) | No toast component; undo promised, never deliverable |
+| Confirm (every destructive path, 19 `confirmWithModal` callers) | `destructive.confirm` in `044` grammar | `modals/confirm-modal.ts:35-98`; callers `column-operations.ts:167,340,347,355,363,376,873,879`, `database-view.ts:4419,4956,7522,9351,9898`, `row-menu.ts:169`, `cell-renderer.ts:1442`, `settings.ts:648`, `status-options-modal.ts:302`, `formula-modal.ts:1641`, `view-config-panel-renderer.ts:1642` | **0 of 7 grammar elements** — no header, no close (`048` inventory M-4). No confirmation dialog appears in any capture; the sweep refused destructive actions by name (`design-trueup.md` §3) |
+| Notices (247 call sites) | `success.notice`, `error` with action | Raw `new Notice(...)`; no action affordance anywhere; `galleryMigrated` promises Undo it cannot carry (`src/i18n.ts:1455`) | No toast component; undo promised, never deliverable. Toast geometry is **measured from `anytype-ts` source**, not invented (`design-trueup.md` §2); undo is additionally captured as a persistent **menu row** on iOS (`mobile/anytype-mobile-sheet-object-more-dark.png`), which is a second placement recorded but not built here |
 | Selection bar (`database-view.ts:7581-7728`) | `success.notice`-class actions, undo affordance | Bar at `:7581`; undo button `:7719`; `044` keyboard docking at `styles.css:2601-2602` | Second undo shape, not shared with `showOperationResult` |
 | Undo/Retry rail (`showOperationResult`, `showOperationResult`, called at `database-view.ts:9433-9437`) | `error` with retry, `success.notice` with undo | Rail at `:11237-11261`, 2200ms timer, CSS `styles.css:2662-2700` | Component exists; not shared, not tokenized motion |
 
@@ -363,6 +374,10 @@ container's near-zero duration and `.db-surface`'s real zero exist for exactly t
   inherits the generic `no-matches` card until the operator rules.
 - Do per-format phone filter rows (050 REQ-013) reach the toast/confirm legs? No — they stay 050's
   L1 leg; this phase's phone surface is the confirm sheet only.
+- ~~Is Anytype's destructive treatment one decision?~~ **Resolved at T001.** It is two, and both are
+  measured: the desktop carries **no colour at all** on `Move to Bin` or `Empty Bin` (0 reddish
+  pixels), while iOS carries `#FF4A4D` **plus** a red trash glyph. We adopt the icon-beside-colour
+  pairing and keep `mod-warning`, which the host theme owns (`design-trueup.md` C3).
 <!-- /ANCHOR:questions -->
 
 ---
@@ -375,6 +390,9 @@ container's near-zero duration and `.db-surface`'s real zero exist for exactly t
 - **Acceptance Criteria**: See `acceptance-criteria.md`
 - **Decision Record**: See `decision-record.md`
 - **Vocabulary and tables**: See `state-feedback-vocabulary.md`
+- **Design true-up (T001)**: See `design-trueup.md`
+- **Method and binding restatements**: `../050-anytype-adoption/design-trueup.md`
+- **Motion source**: `../../context/anytype-ts/src/scss/`
 - **Packet Goal**: See `goal.md`
 - **050 requirement source**: `../050-anytype-adoption/acceptance-criteria.md` AC-005/008/009/014
 - **Research source**: `../047-competitor-references-and-pm-alignment/research/research.md` §9, §10

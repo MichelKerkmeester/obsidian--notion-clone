@@ -47,6 +47,7 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
       "src/views/empty-state-renderer.ts",
       "src/views/chart-renderer.ts",
       "src/views/modals/confirm-modal.ts",
@@ -93,6 +94,12 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -196,17 +203,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Technical Context Seven",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Every surface has states; nothing owns them",
     "created_at": "2026-09-05T11:08:14Z",
-    "last_save_at": "2026-09-05T12:19:38.077Z",
+    "last_save_at": "2026-09-05T13:43:05.410Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,15 +216,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:914378047933bd73cb0099740cd2a3911e44450a921a0819fb17598ed44b6c4f",
+    "source_fingerprint": "sha256:fe058671c05b897e6b1c716b89b0aaa9294402ef58b0935b3e3f0f9ac4e76602",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0a08ec3abe416c7577947969b77b097e27703925833bcc91a4a9e850b2ed6477",
-      "plan.md": "bab64bf00364fa853f9cbb26472331a9ac8d34b4e8dff0687cf5aabe237cbddd",
-      "tasks.md": "caff1c1b7da430c8700041694bcbf66257419e331a1a1486da3898f1e41762f2",
-      "decision-record.md": "baa00e3835531c5cd78adf1d3f14c6a2699bf4e828aec59b2c896bc6a3381a50"
+      "spec.md": "28c8d6313805534c28ebba1fea6f78eef7419c574669e989e54c8dc55ed58bf8",
+      "plan.md": "0b06ddc242ef7e734b6c322ef1a0bbea144830214e756d85b4cb911e3bbd172a",
+      "tasks.md": "4340ea06b68be0a129691ad83f00e3d2a79768c84eab94d7e24596da30f8ad0e",
+      "decision-record.md": "b3312c346befeee6cb83235343b45a7bfe27ffc6f3831a446c4cca369af176b5",
+      "implementation-summary.md": "348ebfbea559facee77035bd4235d08b54b2f3309652b4a5d238bebebb806215"
     },
     "last_active_child_id": null,
     "last_active_at": null
