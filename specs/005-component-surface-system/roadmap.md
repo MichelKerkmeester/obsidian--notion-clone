@@ -1061,7 +1061,20 @@ proof (`c0abb6ff`/`ba2b37f7`/`f240e8fa`); and `046-linked-views-notion-parity`'s
 acceptance plus its partially-landed capability leg (`ec893e67`) — AC-003/AC-006 `Met`, AC-001/002/
 004/005 `Unmet` pending `T002`'s host-layout answer. `manifest.json`, `package.json` and
 `versions.json` on main read **0.0.23**, and the tag is on `origin`. `npm run gate`: **25/25 green**.
-None of 0.0.7 through 0.0.23 is operator-confirmed yet. The cadence continues at **0.0.24** onward —
+**0.0.24 is cut** (`cabf595c`), carrying `048-stacked-sheets`' landing on top of 0.0.23: a child
+sheet now overlays its parent in place — the parent dims and stays put, one scrim covers the stack,
+and every child gets its own header with a close affordance (`265f736f`/`915591c2`, registered in
+the grammar lane `f1fffff2`, re-measured `012f7769`/`b363d1b5`, recorded `0d3192e9`/`3440dce9`/
+`c492cf66`), with the keyboard inset applying only to the top sheet and Create-property and confirm
+dialogs present as sheets in the stack; `044`'s phone-sheet-grammar closing leg — a header
+everywhere, 16px row inset and title padding, and pickers registered into the shared component set
+(`55253df8`, reconciled `28b505f3`, recorded `4cbaba7c`); `046-linked-views-notion-parity`'s desktop
+chrome — a linked database rendering at the page's reading width with no card furniture and a
+dedicated grab handle (`e955f8ee`, captured `8a58c0b8`, recorded `fb7bd820`); and `047`'s gallery
+view migrating to board on open (`e85fc31a`, recorded `01014484`, re-measured `ceaa49ee`). The
+0.0.23 sheet-inside-tap fix carries forward unchanged. `manifest.json`, `package.json` and
+`versions.json` on main read **0.0.24**, and the tag is on `origin`.
+None of 0.0.7 through 0.0.24 is operator-confirmed yet. The cadence continues at **0.0.25** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
@@ -1090,8 +1103,12 @@ remaining phone-sheet-grammar legs registering `sheet-grammar` as a gate lane (`
 list renderer's full retirement and stylesheet cleanup (`6f2aef3f`/`44e08bfb`), the frozen bench
 clock (`6bac9ce9`), the settings-body grammar (`4f090d2e`), the card-properties capture and grammar
 proof (`c0abb6ff`/`ba2b37f7`/`f240e8fa`), and `046`'s ADR-001/ADR-002 acceptance plus its partial
-capability landing (`ec893e67`), cut in `d3979cf5`. The `0.0.16` through `0.0.23` tags are all
-present on `origin`. None of 0.0.7 through 0.0.23 is operator-confirmed yet.
+capability landing (`ec893e67`), cut in `d3979cf5`; and **0.0.24**, the current cut —
+`048-stacked-sheets`' phone stacking model (`265f736f`/`915591c2`, reconciled `012f7769`/`b363d1b5`),
+`044`'s phone-sheet-grammar closing leg (`55253df8`/`28b505f3`), `046`'s desktop linked-view chrome
+(`e955f8ee`/`fb7bd820`), and `047`'s gallery-to-board migration on open (`e85fc31a`/`ceaa49ee`), cut
+in `cabf595c`. The `0.0.16` through `0.0.24` tags are all present on `origin`. None of 0.0.7 through
+0.0.24 is operator-confirmed yet.
 
 **Release-mechanics gotcha, surfaced during the rename:** `.github/workflows/release.yml`
 auto-creates a GitHub release on any `*.*.*` tag push, and it raced the manual tag-recreation pass —
