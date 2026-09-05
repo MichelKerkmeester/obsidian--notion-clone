@@ -739,6 +739,28 @@ capture to resolve. Every row below now names a capture in `menus/` or `mobile/`
 **Five rows have no Anytype capture and now say so: M4, M5, M12, M15 and the desktop half of M7.**
 Four of them are surfaces Anytype does not ship at all (number styles, text render modes, a timeline,
 a chip row) and one is a right-click nobody drove. None may be designed from a screen.
+
+**M7's transition is answered even though its surface is not** (read 2026-09-05, on the migration of
+the view-tab menu onto the owned-menu primitive). The desktop tab right-click stays uncaptured, but
+the question that leg had to settle — what happens to the parent when a row opens the layout picker —
+has a direct answer in the pair `menus/anytype-menu-set-view-settings-light-full.png` →
+`menus/anytype-menu-set-view-layout-light-full.png`. Anytype **replaces the parent in place**: the
+picker takes the same anchored rectangle the View settings panel held, same corner and same right
+edge, and the panel's title is replaced by a back chevron reading `‹ Layout`. It neither leaves the
+parent open behind a second surface nor drops it and re-anchors somewhere new — it is one surface
+with a navigation stack, pushed and popped.
+
+Two consequences for us, neither of them a change this leg makes:
+
+- **Closing the parent is the right half of the choice.** Anytype shows one surface at a time on this
+  path, so leaving our menu open behind the picker would have been the wrong direction independently
+  of the dismissal bug that also argued against it.
+- **The remaining gap is geometry, and it is real.** Our picker re-anchors on the tab rather than
+  taking over the menu's rectangle, and offers no way back to the menu it came from. Both belong to
+  the picker family's own geometry work, not to a menu migration; recorded here so the next leg
+  inherits the measurement rather than the guess. The same pair also shows Anytype's parent row
+  carrying its **current value** as trailing text (`Layout    Grid ›`) where ours carries a bare
+  chevron — `menu-row.ts` already has the `value` slot for it.
 <!-- /ANCHOR:surfaces -->
 
 ---

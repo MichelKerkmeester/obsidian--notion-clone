@@ -250,7 +250,29 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       serving all nine of this menu's rows; `menu-row-vocabulary-census.test.ts`'s baseline is
       re-pinned to 37,
       the family total to 63 outside `menu-row.ts` (69 including its own 6), and
-      `npx vitest run` stays green (1266/1266). No capture is registered for this menu — `design-
+      `npx vitest run` stays green. **Verified 2026-09-05 on the rebased tree**: the census
+      re-measures at exactly those figures (`toolbar-renderer.ts` 37, 63 outside `menu-row.ts`,
+      69 with it), and the red-first control reproduces exactly as claimed — restoring
+      `src/views/toolbar-renderer.ts` to `origin/main`'s hand-built menu turns the three tab-menu
+      assertions red with the quoted details ("no owned menu mounted on contextmenu", "rows:
+      none", "no delete row found"), `$?` → 1, and the migrated file returns them to green,
+      `$?` → 0. **One claim did not hold and was repaired in the same change.** The row did *not*
+      close the parent first: it left the closing to `addRow`, which runs a row's own `onClick`
+      and only then calls `close()` — so the menu's `returnFocus` fired *after* the picker had
+      focused its selected option, pulling focus back onto the tab. Driven end to end in the
+      harness's own headless Chrome against the real `toolbarPopover: "tab-menu"` scenario with
+      the container still mounted, `document.activeElement` after activating the row read
+      `BUTTON.db-view-tab.is-active` with an open five-option listbox nobody could arrow through.
+      The row now calls `menu.close()` itself, before opening the picker; `close()` is idempotent,
+      so the primitive's trailing close is a no-op. The same probe re-run reads
+      `BUTTON.db-dropdown-option.is-selected | Table view`, inside the picker. The ordering the
+      caller now depends on is pinned in `owned-menu.test.ts` ("runs onClick, then closes, then
+      returns focus"); inverting the two statements in `owned-menu.ts` reproduces its failure and
+      restoring them returns the suite to green. **Coverage gap, deliberate**: the focus behaviour
+      is not asserted in `render-assertion-harness.ts`, because activating a row there would close
+      the menu inside a function the capture pipeline also runs through
+      `runRenderAssertions` — a destructive assertion in a shared path is a worse trap than the
+      bug it guards. No capture is registered for this menu — `design-
       trueup.md` already records the desktop view-tab context menu as undriven — so none is added
       to the corpus; it was instead read through the same constructed-scenario bundle the capture
       pipeline itself uses (`prepareConstructedBundle`/`mountConstructed` against the real
@@ -258,6 +280,15 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       and viewed: rename/duplicate/copy-embed/change-type/delete render at the primitive's 28px row
       pitch with the first row focused and delete in the warning colour, matching every other
       migrated menu in this family. `npx tsc --noEmit` and `npm run build` both exit 0.
+      **Anytype read for the parent-versus-replace question** (`menus/anytype-menu-set-view-settings-light-full.png`
+      → `menus/anytype-menu-set-view-layout-light-full.png`, both opened): Anytype does neither of
+      the two things this row could do. It **replaces the parent in place** — the Layout picker
+      occupies the same anchored rectangle the View settings panel occupied, same corner and same
+      right edge, and grows a back chevron ("‹ Layout") where the parent's title was. One surface
+      at a time, with a way back. So closing the parent is the closer of our two options and the
+      choice stands; what we do not have is the shared rectangle or the back affordance, and our
+      picker re-anchors on the tab instead. Recorded in `design-trueup.md` §4 M7 rather than fixed
+      here — it is a geometry change to the picker, not to this migration.
 - [ ] T008 Toolbar action panels onto the primitive (`src/views/toolbar-renderer.ts` M14 —
       utilities, title actions, database switcher, export, new-template): menus-of-actions become
       `createOwnedMenu`; control surfaces keep panel shape with primitive rows for menu-like rows.
