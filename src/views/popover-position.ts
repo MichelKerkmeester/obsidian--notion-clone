@@ -58,21 +58,39 @@ export const COMPACT_MENU_POPOVER: ToolbarPopoverPositionOptions = {
 /**
  * Sizing for panel-shaped popovers: a working surface the user adjusts before closing.
  *
- * Filter, Sort and Column Manager are these. All three passed no options at all and were handed
- * the raw default, so three panels that sit next to each other in the same toolbar arrived at their
+ * Filter, Sort and Column Manager are these. All three passed no options at all and were handed the
+ * raw default, so three panels that sit next to each other in the same toolbar arrived at their
  * width by accident rather than by asking for one — which is most of why they look unrelated.
+ *
+ * All three still share one number, and that is the point of the preset: the width was derived from
+ * the Filter panel's row because that is the widest thing any of them builds, and the Column Manager
+ * gets it too. Giving the two reported panels their own preset would have left the third at a
+ * different width and re-created the exact drift this preset was written to end.
  *
  * Wider than a menu because these hold labelled controls in rows, not a single column of items.
  *
- * The numbers are not chosen here. They are the panel role's declared width, and a first version
- * of this preset invented its own — below the role's floor and disagreeing with the contract that
- * names it. Two definitions of "how wide is a panel" in one repository is how thirteen call sites
- * came to hold nine different answers.
+ * The preferred width is derived from the widest row either panel builds rather than picked, and the
+ * derivation is the reason it is not a rounder number. A filter condition is property + operator +
+ * value + a group button (26) + a NOT button (26) + a remove button (32), five 6px gaps between them,
+ * inside 2px of row padding, 16px of panel padding and a 1px border each side. The first three defend
+ * 140, 140 and 120 of readable width and each carries a 1px border of its own, so they claim 142 +
+ * 142 + 122: 490 + 84 + 30 + 4 + 16 + 2 = 542. The remaining ten cover the indent a condition loses
+ * when it sits inside a NOT node or a nested group, measured at 8px at the deepest nesting the panel
+ * builds — a floor that only holds for top-level conditions is not a floor — plus two so a sub-pixel
+ * rounding cannot land a control one pixel under its own.
+ *
+ * At 360 the same row had 458px for 514px of content, and the two controls with no fixed basis — the
+ * property name and the value box — absorbed the whole shortfall, which is how a value input came to
+ * be 17px wide with a panel around it that had room to give.
+ *
+ * `minWidth` is deliberately unchanged. Raising the floor with the preference would make a narrow
+ * split pane overflow rather than truncate, and truncating past the row's own floors is the declared
+ * behaviour.
  */
 export const PANEL_POPOVER: ToolbarPopoverPositionOptions = {
   minWidth: 292,
-  preferredWidth: 360,
-  maxWidth: 360,
+  preferredWidth: 552,
+  maxWidth: 552,
 };
 
 // ───────────────────────────────────────────────────────────────────

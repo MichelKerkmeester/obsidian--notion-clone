@@ -4041,14 +4041,12 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   line-height: 1.4;
 }
 
-/* "+ 新建"按钮（强调色） */
+/* "+ 新建"按钮 */
 .note-database-container .db-new-button {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 0 12px;
-  background: var(--interactive-accent);
-  color: var(--text-on-accent);
   font-weight: 600;
 }
 
@@ -4057,13 +4055,19 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   height: 15px;
 }
 
-.note-database-container .db-new-button:hover {
-  background: color-mix(in srgb, var(--interactive-accent) 88%, var(--text-on-accent) 12%);
-  color: var(--text-on-accent);
-}
+/* The create control is a member of the toolbar row, not a banner sitting in it.
 
-.note-database-container .db-toolbar .db-new-button:hover {
-  background: color-mix(in srgb, var(--interactive-accent) 88%, var(--text-on-accent) 12%);
+   It used to paint the accent at rest, which put a saturated block beside four transparent icon
+   buttons of the same height: the fill is what the eye measures, so the control read as taller and
+   out of line with its neighbours even where every box agreed to the pixel. Resting transparent and
+   taking the accent on hover keeps the emphasis and gives it back to the row.
+
+   The phone's floating action button is exempt below — it floats over content with nothing beside
+   it to align to, and a transparent circle over a row of records is not a control. */
+.note-database-container .db-new-button:hover,
+.note-database-container .db-toolbar .db-new-button:hover,
+.note-database-container .db-new-button:active {
+  background: var(--interactive-accent);
   color: var(--text-on-accent);
 }
 
@@ -12733,8 +12737,17 @@ body.is-phone .note-database-container .db-record-detail-panel {
   user-select: none;
 }
 
+/* The box model is stated rather than inherited from the host.
+
+   Every other control in these rows is a `button` the plugin puts on the border box itself, so the
+   two bare form elements were the only ones taking their box model from the host's global rule. That
+   is fine in the app and wrong everywhere the app is not: the same `height: 28px` produced a 30px
+   box, two pixels taller than the dropdowns beside it, and a width floor written to protect the box
+   a reader sees protected the box inside its border instead. A control's own sizing should not
+   depend on a declaration that belongs to somebody else. */
 .note-database-container .db-panel-row select,
 .note-database-container .db-panel-row input {
+  box-sizing: border-box;
   height: 28px;
   min-width: 0;
   border: 1px solid var(--background-modifier-border);
@@ -12814,6 +12827,38 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-panel-row input {
   flex: 1 1 0;
   padding: 0 8px;
+}
+
+/* Floors for the anchored panels' condition rows, so a shortfall truncates something legible.
+
+   A condition row's width goes to its fixed parts first — a 112px operator basis and three trailing
+   buttons — and whatever is left is split between the two controls that carry the words. With no
+   floor under either, a panel narrower than the row wanted put a property name into 82px and a value
+   box into 17px: "Ti…" and two characters of the value the rule is actually about. Both controls
+   truncate their own text already, so the fix is not to stop truncating, it is to stop truncating
+   before there is anything to read.
+
+   Sized to content, not to a share of the row: a rule on a short property name should not reserve
+   the same width as one on a long name, and the value box is the only control here that grows.
+
+   Two surfaces are excluded because they are not this row. A panel presenting as a phone sheet lays
+   its conditions out as a two-line grid with its own column rules, and the single-rule editor the
+   chip rail opens is a deliberately compact wrapping column that carries `db-filter-panel` for its
+   chrome and states its own 120px value floor. Both would be fought by a floor sized for the full
+   anchored panel: the compact editor is 292px wide, so a 140px property floor puts every control on
+   a line of its own. */
+.note-database-container .db-filter-panel:not(.db-mobile-bottom-sheet, .db-active-rule-popover) .db-panel-row .db-filter-field-dropdown,
+.note-database-container .db-filter-panel:not(.db-mobile-bottom-sheet, .db-active-rule-popover) .db-panel-row .db-filter-operator-dropdown,
+.note-database-container .db-sort-panel:not(.db-mobile-bottom-sheet, .db-active-rule-popover) .db-panel-row .db-sort-field-dropdown {
+  flex: 0 1 auto;
+  min-width: 140px;
+}
+
+.note-database-container .db-filter-panel:not(.db-mobile-bottom-sheet, .db-active-rule-popover) .db-panel-row > input,
+.note-database-container .db-filter-panel:not(.db-mobile-bottom-sheet, .db-active-rule-popover) .db-panel-row .db-filter-value-dropdown,
+.note-database-container .db-filter-panel:not(.db-mobile-bottom-sheet, .db-active-rule-popover) .db-panel-row .db-panel-date-value {
+  flex: 1 1 auto;
+  min-width: 120px;
 }
 
 .note-database-container .db-panel-empty-value {
@@ -22138,29 +22183,44 @@ body.is-tablet .note-database-container .db-record-open-btn {
   flex: 0 0 auto;
 }
 
-/* The two halves of the split button have to agree on their outer radius, or the group reads as
-   two mismatched shapes rather than one control. The shared toolbar rule gives this button the
-   large radius; the dropdown half opposite uses the medium one, so pin both ends to medium here. */
+/* The two halves of the split button have to agree on their outer radius, and both have to agree
+   with the icon buttons they sit beside, or one row holds two control families. The shared toolbar
+   rule already gives the primary half the large radius; the dropdown half takes the same one on its
+   own end, and the meeting edges are square so the pair reads as one pill. */
 .note-database-container .db-new-button-primary {
-  border-start-start-radius: var(--db-radius-md);
-  border-end-start-radius: var(--db-radius-md);
+  border-start-start-radius: var(--db-radius-lg);
+  border-end-start-radius: var(--db-radius-lg);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
 
+/* The dropdown half states its own height on purpose.
+
+   It used to state none, and a bare `button` is one of the few elements the host sizes itself. So
+   the half with no height took the host's, the primary half stayed pinned to the toolbar's 28px,
+   and `align-items: stretch` resolved the disagreement by making the group as tall as the taller
+   half and top-aligning the shorter one — a chevron hanging below its own plus sign, and a split
+   button taller than every icon button beside it. Neither half may leave its height to the host. */
 .note-database-container .db-new-button-dropdown {
   position: relative;
+  height: 28px;
   min-width: 32px;
   padding-inline: 7px;
   border: 0;
-  border-inline-start: 1px solid color-mix(in srgb, currentColor 28%, transparent);
-  border-radius: 0 var(--db-radius-md) var(--db-radius-md) 0;
-  background: var(--interactive-accent);
-  color: var(--text-on-accent);
+  /* Read off the surface rather than off `currentColor`: with the accent gone from the rest state
+     the text colour is a muted grey, and 28% of that is a divider nobody can see. */
+  border-inline-start: 1px solid var(--db-border-regular);
+  border-radius: 0 var(--db-radius-lg) var(--db-radius-lg) 0;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
+.note-database-container .db-new-button-dropdown:hover,
+.note-database-container .db-toolbar .db-new-button-dropdown:hover,
 .note-database-container .db-new-button-dropdown.is-open {
-  background: var(--interactive-accent-hover);
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
 }
 
 .note-database-container .db-new-template-popover,
@@ -22519,10 +22579,18 @@ body.is-tablet .note-database-container .db-record-open-btn {
     overflow: visible;
   }
 
+  /* The floating action button keeps the accent the inline control gave up.
+
+     Inline, the create button is one member of a row of transparent icon buttons and a resting fill
+     made it read as a different size to its neighbours. Floating, it has no neighbours: it sits over
+     the records themselves, where a transparent circle is not a control at all. Same class, two
+     presentations, and only one of them is a row member. */
   .note-database-container .db-new-button-primary.is-mobile-fab {
     position: fixed;
     z-index: var(--db-layer-sticky, 40);
     inset-inline-end: 20px;
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
     /* Clear both the home-indicator safe area and Obsidian's phone footer nav bar
        (its measured height, published from JS); without the bar's height the FAB
        renders underneath it and cannot be tapped. */

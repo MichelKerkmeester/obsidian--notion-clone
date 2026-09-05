@@ -28,6 +28,13 @@
 // which pass caught it.
 //
 // Exit 0 when nothing paints a UA default in either pass, 1 with the list, 2 when the scan rendered nothing.
+//
+// IT ALSO CARRIES A SECOND, UNRELATED MEASUREMENT, AND THE NAME DOES NOT SAY SO. The constructed
+// pass here is the only place in the gate that mounts the toolbar and the anchored rule panels
+// through their real renderers with the stylesheet attached, which is what a chrome-geometry check
+// needs; the gate's lane count is a deliberate ceiling, so the check rides this pass rather than
+// arriving as lane twenty-six. `chrome-geometry-measure.mjs` owns what it measures and why. If the
+// lane ever gains a third subject, the honest move is to rename it, not to keep appending.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -38,6 +45,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { buildRenderAssertionBundle, SCENARIOS_WITH_STATES as RENDERER_SCENARIOS } from "./render-assertion-bundle.mjs";
+import { judgeChromeGeometry } from "./chrome-geometry-measure.mjs";
 import { scenarioLabel } from "./render-scenario-utils.mjs";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
 import { asPageScript } from "./page-module-script.mjs";
@@ -117,12 +125,16 @@ const constructedFindings = [];
 let constructedScenariosRendered = 0;
 let constructedElementsSeen = 0;
 const provenanceFailures = [];
+const chromeFindings = [];
+let chromeSurfacesMeasured = 0;
 
 const { work, missingSources } = await buildRenderAssertionBundle(`
 import { measureLinkColours } from "${resolve(HERE, "unstyled-links-measure.mjs")}";
+import { measureChromeGeometry } from "${resolve(HERE, "chrome-geometry-measure.mjs")}";
 window.__measureConstructedLinks = (scenario, control, defaults) => {
   const perTheme = [];
   let provenance = false;
+  let geometry = null;
   runRenderAssertions(document.body, scenario, control, (container, results) => {
     provenance = results.length > 0 && results[0].pass;
     for (const themeName of ["theme-dark", "theme-light"]) {
@@ -132,8 +144,12 @@ window.__measureConstructedLinks = (scenario, control, defaults) => {
     }
     document.body.classList.remove("theme-light");
     document.body.classList.add("theme-dark");
+    // Geometry is read once, in the dark theme, because a box's size and radius do not vary with
+    // the palette; only its colours do, and the resting fill this reads is compared to
+    // transparency rather than to a specific colour.
+    geometry = measureChromeGeometry(container);
   });
-  return { perTheme, provenance };
+  return { perTheme, provenance, geometry };
 };
 `);
 
@@ -153,7 +169,7 @@ for (const content of [styles, theme, runtime]) await page.addStyleTag({ content
 
 for (const scenario of RENDERER_SCENARIOS) {
   const label = scenarioLabel(scenario);
-  const { perTheme, provenance } = await page.evaluate(
+  const { perTheme, provenance, geometry } = await page.evaluate(
     ({ scenario, defaults }) => window.__measureConstructedLinks(scenario, "", defaults),
     { scenario, defaults: Object.fromEntries(UA_DEFAULTS) },
   );
@@ -165,6 +181,10 @@ for (const scenario of RENDERER_SCENARIOS) {
   for (const found of perTheme) {
     constructedElementsSeen += found.seen;
     constructedFindings.push(...found.rows);
+  }
+  if (geometry && (geometry.splitButton || geometry.ruleRows.length > 0)) {
+    chromeSurfacesMeasured += 1;
+    for (const row of judgeChromeGeometry(geometry)) chromeFindings.push({ scenario: label, ...row });
   }
 }
 
@@ -208,6 +228,23 @@ if (constructedElementsSeen === 0) {
   console.log("  .internal-link markup, is ever built here — this pass proves nothing about them.");
 }
 
+console.log(`unstyled-links: [chrome geometry] ${chromeSurfacesMeasured} constructed scenario(s) carried a `
+  + "split button or an anchored rule row");
+if (chromeSurfacesMeasured === 0) {
+  console.error("unstyled-links: FAIL — no constructed scenario built a toolbar or a rule panel, so the");
+  console.error("  chrome-geometry measurement scanned nothing. An empty scan is not a clean one.");
+  process.exit(2);
+}
+
+if (chromeFindings.length > 0) {
+  console.error(`\nunstyled-links: FAIL — ${chromeFindings.length} chrome-geometry finding(s)\n`);
+  for (const f of chromeFindings) {
+    console.error(`  [${f.scenario}] ${f.what}`);
+    console.error(`    ${f.detail}`);
+    console.error(`    ${f.why}`);
+  }
+}
+
 if (totalFindings > 0) {
   console.error(`\nunstyled-links: FAIL — ${totalFindings} element(s) painted a user-agent default `
     + `(${findings.length} fixture, ${constructedFindings.length} constructed)\n`);
@@ -221,18 +258,26 @@ if (totalFindings > 0) {
   process.exit(1);
 }
 
+if (chromeFindings.length > 0) process.exit(1);
+
 stamp("tools/live/unstyled-links.json", {
   fixture: { links: elementsSeen, scenarios: scenariosRendered },
   constructed: { links: constructedElementsSeen, scenarios: constructedScenariosRendered },
+  chrome: { surfaces: chromeSurfacesMeasured },
 }, [
   "styles.css",
   "tools/screenshots/theme.css",
   "tools/live/unstyled-links.mjs",
   "tools/live/unstyled-links-measure.mjs",
+  "tools/live/chrome-geometry-measure.mjs",
   "tools/live/render-assertion-bundle.mjs",
   "tools/live/render-assertion-harness.ts",
 ]);
-console.log("unstyled-links: PASS — nothing resolves to a user-agent link colour in either pass");
+console.log("unstyled-links: PASS — nothing resolves to a user-agent link colour in either pass, and the");
+console.log("  split button and anchored rule rows hold their geometry floors");
 console.log("  what this does not prove: a colour the harness supplies is the colour the host does.");
 console.log("  This catches silence, not disagreement — the pinned-values scan is the other half.");
+console.log("  Nor does it prove the split button survives the host's own button height: the stand-in");
+console.log("  stylesheet states no height for a bare button, so that half of the pill's geometry is");
+console.log("  only ever measured here against a shorter host than the app supplies.");
 process.exit(0);
