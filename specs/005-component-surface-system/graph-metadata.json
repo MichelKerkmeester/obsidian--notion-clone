@@ -89,7 +89,12 @@
     "005-component-surface-system/047-competitor-references-and-pm-alignment",
     "005-component-surface-system/048-stacked-sheets",
     "005-component-surface-system/049-test-environments-and-mock-data",
-    "005-component-surface-system/050-anytype-adoption"
+    "005-component-surface-system/050-anytype-adoption",
+    "005-component-surface-system/051-modal-and-sheet-componentization",
+    "005-component-surface-system/052-dropdown-menu-and-picker-componentization",
+    "005-component-surface-system/053-toolbar-and-view-controls",
+    "005-component-surface-system/054-record-and-relation-surfaces",
+    "005-component-surface-system/055-states-feedback-and-motion"
   ],
   "manual": {
     "depends_on": [],
@@ -283,13 +288,13 @@
         "source": "derived"
       },
       {
-        "name": "Phase Transition Rules",
+        "name": "Project Manager",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Phase Handoff Criteria",
+        "name": "Phase Transition Rules",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -297,7 +302,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-05T08:19:37.153Z",
+    "last_save_at": "2026-09-05T12:26:49.887Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -305,11 +310,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:1d1223d6e434aee3a17ceb92a5de5e5f526fa64b71c741de61fb1c8a6bdb4bcf",
+    "source_fingerprint": "sha256:cef747e1891bbbd671cc291380b6394eff7e3a224925e8b6933dc6c7942355ed",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "5e3e3eb6be17ff2397e863a5013c2293e9fb2d958f8d4a0d878310bef8752662",
-      "handover.md": "5a27215f881b4deb39ebc85b8a62034401636296af477316845c0e42a9adcbde"
+      "spec.md": "a08b1f6826f967f63186ba31e5b0ea0a919bab85c572048cf3386972b56d0de8",
+      "handover.md": "9dc074e86cfb911afc2b8df4ef76b0e476992c740bd117827232d0e4fe0caca1"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"

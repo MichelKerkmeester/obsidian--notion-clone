@@ -17,7 +17,7 @@ _memory:
     blockers:
       - "0.0.23: rows 34-36 CLOSED; 29-33/39-41/43 deferred, blocker discharged"
       - "Rows 44-46 NEW: stacked sheets, owned by 048; its D1 is operator-owned"
-      - "Rows 37/38 need 047: the fidelity pass and the Anytype/AppFlowy captures"
+      - "Rows 37/38 need 047: the fidelity pass and the Anytype captures (AppFlowy was removed 2026-09-05)"
       - "007-gallery-view-deprecation and 047 opened, nothing landed"
       - "006-list-view-deprecation owes only its 0.0.23 release cut"
       - "Earlier blockers are in the LOG and roadmap.md rather than here"
@@ -788,14 +788,25 @@ and this row is a defect.**
 | `044-phone-sheet-alignment` | [`044-phone-sheet-alignment/goal.md`](044-phone-sheet-alignment/goal.md) | Zero phone bottom-sheet surfaces bypassing `applySheetChrome` (today 3), the column-width adjuster carrying all seven grammar elements (today 0), a focused field staying inside the reduced `visualViewport`, the settings sheet closing from its grab band with no label wrapping, the Add view sheet on a shared row type (today 0 of its controls), a green `sheet-grammar` lane that does not yet exist, and the operator reading all three sheets as aligned on iOS. **Shipped in 0.0.22, and 0.0.23 closed the one follow-on gap it left (the settings body grammar): all inventoried instances now conform, AC-001 through AC-005 and AC-007 are `Met`, and AC-006 (the operator's own device read) is the only row left.** | 0/7 |
 | `045-board-card-properties` | [`045-board-card-properties/goal.md`](045-board-card-properties/goal.md) | One per-view ordered property list with per-field visibility, the renderer moved onto it, an upgrade with no stored list leaving every existing card byte-identical, a stored list having zero effect on `038`'s one-to-one reference path, and the operator arranging a card's properties on a phone and reading it as close to Notion's. **Shipped in 0.0.22; both open questions answered as `decision-record.md` ADR-001/ADR-002, and 0.0.23's settings-body grammar closed AC-005 (7 of 7 `sheet-grammar` elements). AC-006, the operator's own device read, is the only row left.** | 0/6 |
 | `046-linked-views-notion-parity` | [`046-linked-views-notion-parity/goal.md`](046-linked-views-notion-parity/goal.md) | The embed unboxed from its ancestor-walk clip, the duplicate `db-header` and its hide-the-title chevron gone, ADR-001 (may an embed write) taken before the four `persistMode === "codeblock"` read-only gates are touched, a linked view movable to another page, a create flow writing the fence `serializeCodeBlockReference` already builds, and the operator reading the Overview page's nested views as real databases. **ADR-001/ADR-002 Accepted 2026-09-05; the capability leg landed partially in 0.0.23 (`ec893e67`) — the duplicate title/chevron are gone and the four read-only gates are one `isViewReadOnly()` seam (AC-003/AC-006 `Met`), but the card border, embed width and device-driven move/create rows stay `Unmet` behind `T002`'s open host-layout question, and `T016` (a settings-flag gate) is a fresh operator call.** | 0/7 |
-| `047-competitor-references-and-pm-alignment` | [`047-competitor-references-and-pm-alignment/goal.md`](047-competitor-references-and-pm-alignment/goal.md) | Anytype and AppFlowy reference captures under `screenshots/anytype/` and `screenshots/appflowy/` — official product images and locally installed apps both — carrying the same manifest shape as `screenshots/project-manager/`, a board and gantt fidelity pass against Project Manager with every gap measured before it is closed, and the operator reading the two views as aligned. Opened 2026-09-05 from the rows 37/38 *"align closer"* ruling. | 0/6 |
+| `047-competitor-references-and-pm-alignment` | [`047-competitor-references-and-pm-alignment/goal.md`](047-competitor-references-and-pm-alignment/goal.md) | **Anytype** reference captures under `screenshots/anytype/` — official product images and the locally installed app both — carrying the same manifest shape as `screenshots/project-manager/`, a board and gantt fidelity pass against Project Manager with every gap measured before it is closed, and the operator reading the two views as aligned. Opened 2026-09-05 from the rows 37/38 *"align closer"* ruling. **AppFlowy was in this scope and was removed by operator decision on 2026-09-05** — *"let's ditch AppFlowy screenshots"* — so `screenshots/appflowy/` is deleted and AC-001 moved from `Waived` to `Met` on the narrower Anytype-only matrix (`047/decision-record.md` ADR-003, `roadmap.md` §6A). | 0/6 |
 | `048-stacked-sheets` | [`048-stacked-sheets/goal.md`](048-stacked-sheets/goal.md) | A code-derived inventory of every surface that can open while another sheet is open, a parent sheet whose bounding box does not move while a child is open, exactly one scrim sitting between two open sheets rather than behind both, a header with a 44px close on every stacked child, the keyboard inset published to the topmost sheet only, a green `sheet-grammar` lane carrying one row per stacked pair with a stacking negative control observed red, and the operator reading the Properties sheet and the filter sheet's two dropdowns as one stack rather than two sheets. Opened 2026-09-05 from §4 rows 44-46. | 0/7 |
-| `049-test-environments-and-mock-data` | [`049-test-environments-and-mock-data/goal.md`](049-test-environments-and-mock-data/goal.md) | One catalogue producing every environment — ten use cases, 326 records, 28 columns each — regenerating byte-identically under a fixed seed and differing under another, every plugin column type exercised in every use case rather than in the union across them, the vault holding all ten databases beside the existing Testbed with its 31 pre-existing files untouched, each database opening in the shipped renderer at its own record count with the capture read, and then the same ten in Anytype and AppFlowy before the operator reads the upgraded vault on a device. Opened 2026-09-05 from the operator's *"set similar test environment… add a lot of mock data… do same for AppFlowy"* ask. **The Obsidian leg is landed:** 336 files written, 0 of 31 pre-existing files changed, a second run at `0 written`, all ten databases rendering at their record count, and both negative controls observed red first. The two competitor legs and the device read are what remain. | 5/8 |
+| `049-test-environments-and-mock-data` | [`049-test-environments-and-mock-data/goal.md`](049-test-environments-and-mock-data/goal.md) | One catalogue producing every environment — ten use cases, 326 records, 28 columns each — regenerating byte-identically under a fixed seed and differing under another, every plugin column type exercised in every use case rather than in the union across them, the vault holding all ten databases beside the existing Testbed with its 31 pre-existing files untouched, each database opening in the shipped renderer at its own record count with the capture read, and then the same ten in **Anytype** before the operator reads the upgraded vault on a device. Opened 2026-09-05 from the operator's *"set similar test environment… add a lot of mock data… do same for AppFlowy"* ask — **the AppFlowy half of which the operator withdrew the same day** (*"let's ditch AppFlowy screenshots"*), so AC-008 moved from `Waived` to `Superseded`: the environment is gone, not merely deferred (`049/decision-record.md` ADR-002). **The Obsidian leg is landed:** 336 files written, 0 of 31 pre-existing files changed, a second run at `0 written`, all ten databases rendering at their record count, and both negative controls observed red first. The two competitor legs and the device read are what remain. | 5/8 |
 | `050-anytype-adoption` | [`050-anytype-adoption/goal.md`](050-anytype-adoption/goal.md) | All fourteen adoption items `047` ranked, each designed against a real Anytype screen before it is written and each closed on a threshold observed failing first: a filter/sort chip row present exactly when a filter or sort is active with state-dependent trigger icons, view settings open within 100ms of a view being created or duplicated, a board scrollbar sticky at the viewport bottom while the board is taller than the viewport, a duplicate view that is config-identical with a new id, per-view scroll restored within ±2px, a cell editor that flips within 92px of the right edge instead of clipping, a drag reorder under an active sort that asks first, menus that are never empty under any capability state, an empty state with its two flavours plus the deleted-relation case, per-view new-row presets applied at creation, `positionLock` while a name is typed in a sorted view, a measured toolbar collapse for embedded views, per-format filter rows on phone sheets carrying all seven grammar elements, and an inline "Load more" row — then the operator reading the adopted surfaces on iOS and on desktop. **Opened 2026-09-05 from the operator's ruling, *"I find Anytype to have amazing UI/UX"*. Implementation waits on the Anytype capture sweep: goal D1 makes T001 a gate, and six of the fourteen items have no reference screen because the first capture pass could reach no mouse-driven surface.** | 0/8 |
+| `051-modal-and-sheet-componentization` | [`051-modal-and-sheet-componentization/goal.md`](051-modal-and-sheet-componentization/goal.md) | One shell primitive producing every modal and every sheet from one definition — today **four** places decide a surface's chrome and a sheet title is recovered by scraping the surface's own headings — every family surface dispositioned in `modal-surface-inventory.md`, a sub-page that replaces in place with a back affordance while a picker opens over an undimmed parent, **one exported confirm primitive** carrying `044`'s seven grammar elements that `053` and `055` both consume, geometry and motion read from `050`'s measured values, and the operator reading the family as one surface family on iOS and on desktop. **Opened 2026-09-05 from the operator's componentization instruction. Awaiting T001, the surface inventory.** | 0/7 |
+| `052-dropdown-menu-and-picker-componentization` | [`052-dropdown-menu-and-picker-componentization/goal.md`](052-dropdown-menu-and-picker-componentization/goal.md) | One menu primitive and one picker family for every dropdown, menu, popover and picker — today **71** hand-built row constructions across four files, submenus built outside the menu factory beside a chevron that promises a nested menu nothing can open, three separate active-picker registries, four search implementations and nine bespoke widths — plus `anytype-menu-grammar.md` and `componentization-plan.md` dispositioning every family surface, and the operator reading the menus as componentized on iOS and desktop. **Opened 2026-09-05. Five grammar rows corrected against `050`'s true-up at landing; awaiting T001 for the captures that read did not reach.** | 0/7 |
+| `053-toolbar-and-view-controls` | [`053-toolbar-and-view-controls/goal.md`](053-toolbar-and-view-controls/goal.md) | The toolbar rebuilt from five composed primitives with the replaced vocabularies deleted — today **17** repeated close runs, two dual-classed row sites and **seven** dead settings-entry methods with zero call sites — plus `050` items 1, 2, 4, 7, 10 and 12 at the thresholds ADR-004 restated, and the operator reading the rebuilt toolbar as the improvement they asked for. **Opened 2026-09-05. Seven inventory rows corrected against the true-up; its three ADRs stay Proposed and are operator questions.** | 0/8 |
+| `054-record-and-relation-surfaces` | [`054-record-and-relation-surfaces/goal.md`](054-record-and-relation-surfaces/goal.md) | The record and property surfaces on one set of primitives — the census reading **1** header builder, **1** property-row vocabulary and **1** type list against today's **4 / 3 / 3** — a hidden-properties group whose expanded state survives a refresh, empty rows carrying an add affordance instead of the word "Empty", **one exported editor primitive per column type** extracted from a 3,152-line class no check can mount, and the operator reading a record as one object page with formulas and rollups behaving exactly as before. **Opened 2026-09-05, raised to Level 3 at landing. Awaiting T001's image true-up, which gates every design row.** | 0/7 |
+| `055-states-feedback-and-motion` | [`055-states-feedback-and-motion/goal.md`](055-states-feedback-and-motion/goal.md) | One state and feedback vocabulary — empty, loading, error, success, destructive confirm, undo — reduced to shared components, with `050` items 5, 8, 9 and 14 implemented at ADR-004's restated thresholds: today **247** notice call sites carry no action affordance, one migration notice promises an Undo it cannot carry, a ninth renderer keeps a private empty-state vocabulary, a deleted board group relation renders no state at all, and **42** transitions hand-type `120ms` outside any token. Then the operator reads the states as debugged, refined, perfected. **Opened 2026-09-05, renamed from `051-*` at landing. This packet carried the most true-up correction of the five: all four of its `050` items were among the six thresholds that could not be observed red as written.** | 0/8 |
+
 
 | **`006-list-view-deprecation`** — a **sibling packet**, not a phase here | [`../006-list-view-deprecation/goal.md`](../006-list-view-deprecation/goal.md) | No surface offering list, a list-configured vault opening as a table with the same columns once with a notice, `list-renderer.ts` gone, the `list-window` lane **removed not skipped** with `npm run gate` at 0, the coverage floor lowered with its reason beside the number, `033-list-virtualisation` and `024-list-view-freeze` closed against the retirement, and the operator reporting a migrated vault. Its four live children each carry their own goal; see [`../006-list-view-deprecation/roadmap.md`](../006-list-view-deprecation/roadmap.md). **Children `005` through `007` are done; `008`'s release row is satisfied by 0.0.23 (`d3979cf5`), leaving only its and `006`'s own operator rows open.** | 7/9 |
 
 | **`007-gallery-view-deprecation`** — the **second sibling packet**, opened 2026-09-05 | [`../007-gallery-view-deprecation/goal.md`](../007-gallery-view-deprecation/goal.md) | No surface offering gallery and no path minting one, every gallery-configured view opening as a board with the same cover once and with a notice, `gallery-renderer.ts` gone, its bench and coverage pin and constructed scenario removed rather than skipped with `npm run gate` still exiting 0, the dead `db-gallery-*` CSS gone, and the operator opening a migrated vault and reporting it as migrated rather than broken. Its four children each carry their own goal; see [`../007-gallery-view-deprecation/roadmap.md`](../007-gallery-view-deprecation/roadmap.md). | 0/8 |
+
+**The five family phases 051-055 were added to this table 2026-09-05**, opened together by one
+operator instruction and landed together after review. Each is `0/N` because none has run its T001 —
+which is the honest figure, not a placeholder: the documents are reviewed and corrected, and no
+design in any of them has been checked against the captures its own rows name.
 
 **Every other phase's subgoal is reachable the same way**, at `<phase>/goal.md`. The full inventory
 with a derived figure and a current state per phase is `roadmap.md` §5.A, and the 109 rows that only
@@ -1854,7 +1865,11 @@ recorded deferral, which §4A of the roadmap has always required and which twelv
 *"align closer"* on the board and timeline against Project Manager, plus reference captures of
 **Anytype** and **AppFlowy** — boards, tables, calendar, timeline — from both the official product
 images and the apps installed locally through Homebrew casks, under `screenshots/anytype/` and
-`screenshots/appflowy/`. `047-competitor-references-and-pm-alignment` was opened for both halves:
+`screenshots/appflowy/`. **AppFlowy left the reference set later the same day** — the operator's
+*"let's ditch AppFlowy screenshots"* at ~12:10 — so `screenshots/appflowy/` is deleted and the
+active scope is Anytype plus the Project Manager reference. This paragraph records the ruling as it
+was given; `roadmap.md` §6A carries the supersession.
+`047-competitor-references-and-pm-alignment` was opened for both halves:
 `recommend-level.sh` 53/100 at 92% confidence, phase score 10/50, so a standard Level 2 child rather
 than a phased packet — the phase threshold is 25 and it is not met, and the level threshold of 3 is
 not met either, so neither condition licenses decomposition.
@@ -1965,7 +1980,8 @@ named override of the default 5-iteration research cap, scoped to this one compe
 this one packet. Recorded Accepted in `047-competitor-references-and-pm-alignment/decision-record.md`
 and in `roadmap.md` §6A. The captures leaf reports **Anytype 0.56.5** and **AppFlowy 0.14.1**
 installed via Homebrew; app launch hung for the agent, the operator opened both apps by hand, and
-captures resume from those windows.
+captures resume from those windows. **AppFlowy's captures were later removed entirely** (operator,
+~12:10 the same day), so only the Anytype figure still describes a live reference.
 
 **Hub re-mint, closed.** The Public checkout was already fresh; no change was needed, and the
 pre-push override that the staleness would have required is no longer necessary. Closing note added
@@ -1974,5 +1990,57 @@ to `roadmap.md` §6A next to the original re-mint decision.
 **What this entry does not claim.** No product code was written in this pass and no gate was run.
 The parent's `completion_pct` is unchanged by this entry — it records decisions and reports, not
 phase progress — and stays at the value the immediately preceding entry recorded: **5 of 7 = 71**.
+
+### 2026-09-05 (afternoon): five family phases land, drafted outside this runtime and corrected against the capture true-up
+
+**The operator's componentization instruction opened five phases at once.** Verbatim, 2026-09-05:
+*"research recommendations and how to tackle / update / improve every modal, sheet and general ui ux
+to take the best from AnyType and componentize stuff as much as possible."* `050` owns the fourteen
+view-level adoption items; nothing owned the componentization half. Five phases now do, split by
+surface family so that one owner holds each surface:
+
+| Phase | Family | Owns |
+|---|---|---|
+| `051-modal-and-sheet-componentization` | Modals and sheets | One shell primitive; **the confirm primitive** |
+| `052-dropdown-menu-and-picker-componentization` | Dropdowns, menus, pickers | The menu primitive and the picker family |
+| `053-toolbar-and-view-controls` | The toolbar | Five composed primitives; **the condition row**; `050` items 1, 2, 4, 7, 10, 12 |
+| `054-record-and-relation-surfaces` | Records and relations | Record primitives; **one inline editor per column type** |
+| `055-states-feedback-and-motion` | States, feedback, motion | Empty/toast/motion components; `050` items 5, 8, 9, 14 |
+
+`048`'s stacking model is a **constraint** to all five and is re-specified by none of them.
+
+**Four of the five were drafted outside this runtime, by GLM 5.3 flash through cli-pi, in parallel.**
+That was a deliberate operator decision recorded in `roadmap.md` §6A — parallel GLM planning waves
+are allowed for planning work, on the condition that a landing pass reads every leaf's output. The
+condition earned itself twice over.
+
+**`051`'s leaf died silently after `create.sh`.** It left a 15-line `spec.md` of scaffold comment,
+an 8-line `plan.md`, a bare-title `tasks.md`, and no `goal.md`, `checklist.md`,
+`acceptance-criteria.md` or `decision-record.md` at all — with no error the orchestrator saw. The
+whole packet was written in-runtime instead. **This is the fan-out's real failure mode**: not a bad
+draft, an absent one that reports as present.
+
+**And the capture true-up landed while the drafts were running**, which turned every one of them
+into a document written against superseded evidence. `050-anytype-adoption/design-trueup.md` read
+the sweep pixel by pixel and `050` ADR-003 rules the capture beats the research. Four kinds of
+disagreement followed, and they are tabulated with their resolutions in `roadmap.md` §7.9:
+a behaviour adopted that does not exist (dual-mode trigger icons, rejected on 120 captures and on
+WCAG 1.4.11); four "today" premises the tree does not have (all of `055`'s `050` items); two designs
+built from a screen nobody saw (now labelled *design inferred from source code, not seen*); and
+line drift in twenty-five `file:line` citations across four drafts.
+
+**What was landed, and what was not.** All five packets pass
+`validate.sh --strict` with `Errors: 0` on the first `RESULT:` line. All five now carry a binding
+`goal.md`. Levels were re-run and recorded: the script returns Level 2 for `051`-`054` and Level 1
+for `055`; all five sit at **Level 3** on judgment, and none qualifies for phase decomposition
+(phase scores 20, 10, 10, 10, 10 against a threshold of 25). **`053`'s three ADRs stay Proposed** —
+each was tested against `roadmap.md` §6A and none sits inside a decision the operator has already
+taken — and all three are operator questions in `handover.md`.
+
+**What this entry does not claim.** No product code was written. No T001 has run in any of the five,
+so no design in any of them has been checked against the captures its own rows name — which is why
+every one reads `0/N` in the DONE table above and why their `roadmap.md` §5.A state cell reads
+*open, drafted 2026-09-05, awaiting T001 true-up*. The parent's `completion_pct` is unchanged by
+this entry — it records phases opened, not phase progress — and stays at **5 of 7 = 71**.
 
 <!-- /ANCHOR:log -->

@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: main is at b4be45bc, release 0.0.23 is cut (d3979cf5) and pushed to origin, carrying the sheet-inside-tap fix the twelve deferred rows were waiting on, the full list-renderer retirement, the settings-body grammar, the board card properties capture proof, the frozen bench clock, and 046's ADR-001/ADR-002 acceptance plus a partial capability landing. Not yet installed to the iCloud vault or operator-confirmed. `npm run gate` reads 25/25 green. Three worktrees carry uncommitted work discovered this pass and none has been read for content: 059 (046's stylesheet/code residual, 18 files), 062 (a new 048-stacked-sheets phase, scaffolded not committed), and 061 (047's Anytype/AppFlowy captures, untracked)."
+description: "Resume point: main carries 0.0.25 (2334046b, bundle f2518f5e) with the five desktop fixes from the operator's 0.0.23 desktop pass. This pass landed five new family phases 051-055 — the operator's componentization instruction — four drafted externally by GLM 5.3 flash and one written in-runtime after its leaf died at the scaffold. All five were corrected against 050's design-trueup.md, which landed while they were drafting and overturned twenty-five claims across them. All five pass validate.sh --strict with Errors 0. No T001 has run in any of them. 053's three ADRs stay Proposed and are operator questions."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,35 +10,37 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-05T05:12:29Z"
-    last_updated_by: "orchestrate-handover-18"
-    recent_action: "Recorded 0.0.23: sheet-tap fix, list retirement, ADR-001/002 accepted"
-    next_safe_action: "Continue 046: close AC-001/002/004/005 behind T002's answer"
+    last_updated_at: "2026-09-05T14:30:00Z"
+    last_updated_by: "orchestrate-handover-19"
+    recent_action: "Landed phases 051-055 and corrected them against the capture true-up"
+    next_safe_action: "Ask the operator the five open questions in section 2, then run 051-055 T001"
     blockers:
-      - "Rows 29-36, 39-41, 43: shipped in 0.0.23; operator device confirmation owed against it"
-      - "Rows 37/38: the operator's own vault side-by-side; the in-repo half is MET"
-      - "044 AC-006: operator reads the three sheets as aligned on iOS"
-      - "045 AC-006: operator arranges a board card's properties, close to Notion's"
-      - "046 AC-007: operator reads the Overview page's nested views as real databases"
-      - "046 T016: operator call on whether writes ship behind a settings flag"
-      - "006's 006 and 008: operator reports the migrated vault as working"
+      - "Rows 47-51 shipped in 0.0.25; operator confirmation owed"
+      - "Rows 29-33, 39-41, 43 re-asked against 0.0.25, unanswered"
+      - "053's three ADRs Proposed; none disposed by roadmap 6A"
+      - "051-055: none past T001"
+      - "046 T002/T016 and 044/045 AC-006 stay open"
     key_files:
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
-      - "specs/005-component-surface-system/046-linked-views-notion-parity/tasks.md"
-      - "specs/005-component-surface-system/046-linked-views-notion-parity/decision-record.md"
-      - "specs/006-list-view-deprecation/008-docs-and-release/goal.md"
+      - "specs/005-component-surface-system/050-anytype-adoption/design-trueup.md"
+      - "specs/005-component-surface-system/053-toolbar-and-view-controls/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
       parent_session_id: null
     completion_pct: 71
     open_questions:
-      - "046 T016: does the write capability ship behind a settings flag, per CHK-121"
-      - "046 T002: can an embed reach reading-view content width without breaking prose around it"
+      - "053 ADR-001: extend the chip rail or rebuild it"
+      - "053 ADR-002: delete the seven dead methods, keep their classes"
+      - "053 ADR-003: confirm gates the drop or the gesture"
+      - "051: does fullscreen survive as a third presentation"
+      - "051: may a registered stacked pair become an in-place sub-page"
     answered_questions:
-      - "ADR-001 (may an embed write): Accepted 2026-09-05, full parity, operator verbatim \"Allow db writing from linked views\""
-      - "045's two open questions: gallery does not share the mechanism (ADR-001); hiding a card field is cards only (ADR-002)"
+      - "The confirm primitive is 051's; 053 and 055 consume it"
+      - "Anytype dual-mode trigger icons rejected: 120 captures, WCAG 1.4.11"
+      - "Selection caps not adopted: no multi-select referent"
+      - "055 was renamed from 051-states-feedback-and-motion"
 ---
 # Session Handover: Component Surface System
 
@@ -48,127 +50,122 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-**Main is at `b4be45bc`, pushed, and `0.0.23` is cut** (release commit `d3979cf5`) but **not yet
-installed** to the iCloud vault and **not operator-confirmed on any row**. `npm run gate` on this
-checkout reads **25/25 green** (`operator-list` was regenerated this pass after drifting stale —
-see Gotchas). `0.0.23` carries six lanes landed after `0.0.22`'s cut, in chronological order:
+**Main carries `0.0.25`** (cut `2334046b`, bundle `f2518f5e`, cadence row `9e0abab4`). It ships the
+five desktop fixes from the operator's 0.0.23 desktop pass — `roadmap.md` §4 rows **47-51**, all
+five now reading *shipped in 0.0.25, awaiting operator*. `0.0.24` before it carried `048`'s stacked
+sheets, `044`'s sheet grammar, `046`'s linked-view chrome and `007`'s gallery migration. **Nothing
+in either release is operator-confirmed**, which is D3 working as written, not a gap.
 
-- **The tap-inside-sheet dismissal fix** (`3a77d523`, `308ba2d3`), root-caused and recorded at
-  `66b69842`/`2be66ba5`: both views' outside-press dismissal read a portalled sheet as outside
-  itself on `mousedown`, closing the sheet under the thumb and clearing the cell selection. This is
-  the named blocker the operator's 2026-09-05 device check deferred rows 29-36, 39-41 and 43 on —
-  the release-side half of that deferral is now met; the operator-side half (a fresh device check
-  against `0.0.23`) is still owed.
-- **The list renderer's full retirement** (`006-list-view-deprecation`'s child `007`), landed
-  `6f2aef3f`, reconciled `ac7c78ac`, recorded `6dec09b9`/`3818298f`: `list-renderer.ts` is gone,
-  `list-window` is absent from the gate's lane list (25, not 26), `renderer-coverage.json` carries
-  its lowered floor with a reason, and `033`/`024` are both closed against the retirement. The
-  retired view's stylesheet rules were dropped separately (`44e08bfb`, recorded `c871148c`).
-- **The board/timeline bench's frozen clock** (`6bac9ce9`, recorded `15f79b70`): the timeline bench
-  and its captures now read `renderNow()` instead of the real clock, so gantt/calendar renders stop
-  drifting daily and no longer force a "restored to HEAD, real-clock drift" note on every
-  reconciliation.
-- **The settings sheet's own body grammar** (`4f090d2e`, recorded `5b6996da`/`07be64fe`): the
-  `.db-view-config-body` shared row/segmented grammar now covers the settings sheet too —
-  `sheet-grammar` is 7 surfaces × 7 elements, closing `044`'s AC-005 and, once `045`'s own capture
-  registered against it, `045`'s AC-005 as well.
-- **The board card properties capture and grammar proof** (`c0abb6ff`/`ba2b37f7`, plus the phone
-  record-peek assertion `5c5e7f42` and the T015-onto-main proof `f240e8fa`/`2a7db8cf`): the
-  Properties panel is photographed on desktop and phone, `board-card-properties` is registered in
-  `sheet-grammar.mjs` at 7/7, and `045`'s AC-005 is `Met`.
-- **`046-linked-views-notion-parity`'s ADR-001 and ADR-002** were Accepted 2026-09-05
-  (`decision-record.md`) — operator verbatim *"Allow db writing from linked views"* — and its
-  capability leg landed **partially** on main (`ec893e67`, reconciled `e544a2c5`): the duplicate
-  title and collapse chevron are gone, and the four `persistMode === "codeblock"` read-only gates
-  are now one `isViewReadOnly()` seam (10 → 3 survivors, all presentation). AC-003 and AC-006 are
-  `Met`. AC-001, AC-002, AC-004 and AC-005 stay `Unmet`: the card border and embed width are
-  untouched in `styles.css` pending `T002`'s unanswered host-layout question against real Obsidian,
-  and move/create are code-complete but unmeasured on a device. `T016` (ship the write behind a
-  settings flag, per `checklist.md` CHK-121) is a fresh, unasked operator call.
+**This pass landed five new phases: `051`-`055`.** They come from one operator instruction on
+2026-09-05 — *"research recommendations and how to tackle / update / improve every modal, sheet and
+general ui ux to take the best from AnyType and componentize stuff as much as possible."* `050`
+already owned the fourteen view-level adoption items; nothing owned the componentization half. The
+split is by surface family, with **one owner per surface**:
 
-**A CI-adjacent fix also shipped**: `4ab702ee` stops the gate's drift check from failing on the
-release-only bundle (`main.js`/`manifest.json`/`package.json`/`versions.json` changing together on
-a release commit was tripping a check meant to catch source drift).
+| Phase | Family | Owns | Level |
+|---|---|---|---|
+| `051-modal-and-sheet-componentization` | Modals and sheets | One shell primitive; **the confirm primitive** | 3 |
+| `052-dropdown-menu-and-picker-componentization` | Dropdowns, menus, pickers | The menu primitive and the picker family | 3 |
+| `053-toolbar-and-view-controls` | The toolbar | Five composed primitives; **the condition row**; `050` items 1, 2, 4, 7, 10, 12 | 3 |
+| `054-record-and-relation-surfaces` | Records and relations | Record primitives; **one inline editor per column type** | 3 |
+| `055-states-feedback-and-motion` | States, feedback, motion | Empty/toast/motion components; `050` items 5, 8, 9, 14 | 3 |
 
-**Rows 29-36, 39-41 and 43 are shipped in `0.0.23`, none is operator-confirmed.** They were
-DEFERRED on 2026-09-05 pending exactly this release; the code-side half of that deferral is now
-met and each row's boilerplate was updated in `roadmap.md` §4 to say so. Rows 37/38 still need the
-operator's own vault side-by-side; the in-repo half (gantt zero gaps, board aligned) is MET.
+`048`'s stacking model is a **constraint** to all five and is re-specified by none of them.
 
-**The parent DONE table stays 5 of 7 = 71%**, unchanged this pass — rows 1 and 2 are the only open
-rows, both operator device confirmation.
+**Four of the five were drafted outside this runtime**, by GLM 5.3 flash through cli-pi, in parallel
+worktrees `080`-`084`. Two things happened that a later reader needs to know about, and both are
+recorded rather than smoothed over.
 
-**`006-list-view-deprecation`**: children `005` through `007` are done (`007` landed this pass, per
-above). Child `008-docs-and-release` has its three in-repo rows done (changelog, README, no open
-planning work) and its release row satisfied by `0.0.23` — only its own operator row and
-`006-hide-and-migrate`'s operator row stay open. Its own top-level checklist reads 7 of 9.
+**`051`'s leaf died silently after `create.sh`.** It left a 15-line `spec.md` of scaffold comment,
+an 8-line `plan.md`, a bare-title `tasks.md`, and no `goal.md`, `checklist.md`,
+`acceptance-criteria.md` or `decision-record.md` at all — with no error the orchestrator saw. The
+whole packet was written in-runtime. **This is the fan-out's real failure mode**: not a bad draft,
+an absent one that reports as present.
 
-**`044-phone-sheet-alignment`** and **`045-board-card-properties`**: both fully landed, both at
-6-of-7 / 5-of-6 acceptance criteria `Met` with only their operator row (AC-006) open. `045`'s two
-open questions were answered this session as ADR-001/ADR-002 (gallery does not share the
-mechanism; hiding a card field is cards only).
+**`050`'s `design-trueup.md` landed while the drafts were running**, and it overturned claims in
+every one of them. Under `050` ADR-003 the capture beats `047`'s code-derived research, and four
+kinds of disagreement followed — tabulated with their resolutions in `roadmap.md` §7.9:
 
-**`046-linked-views-notion-parity`**: ADR-001/ADR-002 Accepted; capability partially landed (above).
-**Three worktrees carry uncommitted, unread content discovered this pass** — see §2 and Gotchas.
-None of it is represented as landed anywhere in this pass's docs, because none of it is committed.
+1. **A behaviour adopted that does not exist.** `053` D7 and its ADR-001, and `052` §7, adopted
+   Anytype's "dual-mode" filter and sort trigger icons. The funnel measures `ink=52, blue=0` on a
+   filtered view **and** an unfiltered one — identical to the pixel, across all 120 catalogue
+   captures, cross-checked against `tools/mock-data/anytype/views-report.json`. Rejected, and
+   rejected a second time on contrast: colour-only signalling fails WCAG 1.4.11 where our count
+   badge already carries text. Adopted instead: the `N applied` count label in the settings panel.
+2. **"Today" premises the tree does not have.** All four of `055`'s `050` items were among the six
+   thresholds the true-up found unfalsifiable. The scroll-restore machinery already exists
+   (`database-viewport.ts`, four request kinds); `row-menu.ts` **cannot** render empty; **twelve**
+   empty-state reasons ship, not one; and there is **no virtualization anywhere in `src/views`** to
+   avoid. All four reds were rewritten from the tree.
+3. **Designs built from a screen nobody saw.** `053` T1's view-tab context menu and `054` A5's
+   search-first add-relation picker are both `047` source reads. Now labelled *design inferred from
+   source code, not seen*.
+4. **Line drift.** Twenty-five `file:line` citations across four drafts were wrong. `053`'s were the
+   most accurate — all seven dead-method line numbers exact — and `055`'s the least, including a
+   `120ms` transition count of **78** that recounts to **42**.
 
-**Delegation rung**: unchanged from the prior pass — devin's daily quota resets daily; Grok 4.6
-xhigh via cli-cursor was the first rung reached for tonight's overnight work.
-
-**Worktrees `.worktrees/022` through `.worktrees/062` all exist.** Most are at-or-behind main and
-are the operator's to remove through `sk-git`. Three are not — read them fresh, do not trust this
-sentence's list: see §2.
+**All five packets pass** `validate.sh --strict` with `Errors: 0` on the first `RESULT:` line, and
+each carries a binding `goal.md`. **None has run its T001**, so no design in any of them has been
+checked against the captures its own rows name. That is why every one reads `0/N` in the parent's
+DONE table and *open, drafted 2026-09-05, awaiting T001 true-up* in `roadmap.md` §5.A.
 <!-- /ANCHOR:handover-summary -->
 
 ---
 
 <!-- ANCHOR:context-transfer -->
-## 2. NEXT SAFE ACTION: READ THE THREE UNREAD WORKTREES, THEN RESUME 046
+## 2. NEXT SAFE ACTION: ASK THE FIVE OPEN QUESTIONS, THEN RUN 051-055 T001
 
-**This pass did not open or read the content of any worktree — only `git status`/`git log` against
-each tip, which is a directory listing, not a review.** Three need a fresh read before anything
-else, because their state is unknown and could change what is true above:
+### The operator questions this pass opened, and did not answer
 
-1. **`.worktrees/059-linked-views-chrome`** — 18 files uncommitted, 545 insertions / 348 deletions,
-   touching `embedded-database-renderer.ts`, `styles.css` (125 lines), `toolbar-renderer.ts`,
-   `i18n.ts`, `linked-view-block.ts` (45 deletions — possibly a removed modal), plus `046`'s own
-   `acceptance-criteria.md`/`checklist.md`/`decision-record.md`/`tasks.md`. This shape matches
-   `046`'s `T002`/`T004`/`T005`/`T015` (the stylesheet leg and the host-layout answer) — **but this
-   is a pattern match, not a verified read.** Read the diff, run the gate inside the worktree, and
-   only then decide whether it supersedes what `046`'s row says on main.
-2. **`.worktrees/062-stacked-sheets`** — a new phase, `048-stacked-sheets`, fully scaffolded
-   (`spec.md`, `plan.md`, `tasks.md`, `acceptance-criteria.md`, `implementation-summary.md`,
-   `graph-metadata.json`) but **not committed**, plus a 2-line uncommitted edit to this packet's own
-   `spec.md`. Nothing above references phase `048` because it does not exist on main. Read
-   `048/spec.md` before assuming what it scopes.
-3. **`.worktrees/061-competitor-captures`** — untracked `screenshots/anytype/` and
-   `screenshots/appflowy/`, matching `047-competitor-references-and-pm-alignment`'s first leg. Not
-   committed; row counts in `047`'s own docs still read 0/6.
+**`053`'s three ADRs stay PROPOSED.** Each was tested against one question at landing — *does it sit
+inside a decision the operator has already taken in `roadmap.md` §6A?* — and **none of the three
+does**. §6A covers the chip rail's neighbours but not the chip rail, and the confirm's presentation
+but not its timing. Two carry an upstream constraint that narrows them without deciding them.
 
-**A fourth worktree likely needs discarding, not landing**: `.worktrees/057-sheet-grammar-close`'s
-tip (`2a7db8cf`) is already an ancestor of main, but it carries 89 modified files, mostly
-`screenshots/` capture noise. Confirm with a byte-hash diff before assuming it is inert; if it is,
-it is the operator's to remove through `sk-git` like any other landed worktree.
+1. **`053` ADR-001 — extend the existing chip rail, or rebuild it on a new primitive?** The rail
+   ships (`active-view-controls-renderer.ts`, auto-hiding at `:97`, on both the full-page and
+   embedded paths) and the fixtures and screenshot manifest already track it. Its dual-mode clause
+   was **amended at landing** and is no longer part of the question.
+2. **`053` ADR-002 — delete the seven dead settings-entry methods and keep their classes?** Seven
+   methods have zero call sites (`toolbar-renderer.ts:512`, `:519`, `:551`, `:1594`, `:2239`,
+   `:2252`, `:2290`), and two anchor-fallback queries still read the classes they would stamp
+   (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`).
+3. **`053` ADR-003 — does the sort-conflict confirm gate the drop, or the gesture?** Gating the
+   gesture changes the surface the board parity lane photographs; gating the drop leaves the
+   surprise until drop time. `design-trueup.md` REQ-007 already ruled **confirm, not disable**, and
+   `051` ADR-003 makes the confirm primitive `051`'s — neither says *when* it fires.
+4. **`051` — does `fullscreen` survive as a third presentation?** Four surfaces use it, one of them
+   the 1,664-line formula workbench that stays ours.
+5. **`051` — may a registered stacked pair become an in-place sub-page?** Converting one changes a
+   green `sheet-grammar` row's subject, which is the operator's call, not an agent's.
 
-**`.worktrees/054-linked-views` and `.worktrees/056-sheet-inside-tap`** are also at ancestors of
-main (`e544a2c5`, `2be66ba5`) with only an untracked `specs/context` symlink target each — normal
-worktree residue, safe to remove through `sk-git` once the operator confirms they are not needed
-for reference. **`.worktrees/058-decisions-and-phases`** and **`.worktrees/060-gallery-audit`** are
-likewise at main ancestors (`b240a8d5`, `b4be45bc`) with only the same symlink residue.
-**`.worktrees/062-stacked-sheets`** is at `d3979cf5` (the release commit) plus its own uncommitted
-`048` scaffold, named above.
+### The in-flight worktrees, with their tips
 
-**Then resume `046-linked-views-notion-parity`** (`goal-prompt.md`'s step 7): read
-`.worktrees/059-linked-views-chrome` first — it may already answer `T002` and finish `T004`/`T005`/
-`T015` — before starting fresh work on the host-layout question or the stylesheet leg. `T016` (the
-settings-flag call) is the operator's, not this session's, to start.
+Read before assuming any state they touch. **None of these was opened for content this pass except
+the five draft trees, which were read in full.**
 
-**Still owed from the operator regardless of the above**: a fresh device check against `0.0.23` for
-rows 29-36/39-41/43; the vault side-by-side for rows 37/38; `044`'s and `045`'s AC-006; `046`'s
-AC-007 and its `T016` flag decision; and `006`'s two operator rows (`006-hide-and-migrate`,
-`008-docs-and-release`). Each confirmation closes its `roadmap.md` §4 row or its phase's own AC row;
-a "still broken" answer reopens the row with the device fact given, never argued with. **No agent
-ticks an operator row.**
+| Worktree | Tip | State |
+|---|---|---|
+| `.worktrees/074-anytype-ios-sim` | `964a0b2a`, clean | The simulator route for mobile screens — the operator's decision that Anytype's mobile clients get captured in a simulator rather than scraped again from the stores. The twenty mobile images in `screenshots/anytype/` are **App Store / Google Play marketing creative**, and `design-trueup.md` REQ-012 refuses to take a number from them |
+| `.worktrees/079-anytype-menus` | `396e1532`, **220 files dirty** | Every Anytype dropdown and mobile sheet screenshotted, per the operator's decision. This is the capture set `052`'s `anytype-menu-grammar.md` §4 lists as still missing and `054`'s §5B rows still need. **Uncommitted and unread** |
+| `.worktrees/085-record-open-dock` | `9e0abab4`, clean | "Fix record open for all callers" — generalising row 48's fix from the one board card the report named to every caller of the record-open path. Running on GLM |
+| `.worktrees/080-phase-modal-componentization` | `4a5b339b` | **Superseded.** Its `051` draft was scaffold only; the packet was written in-runtime |
+| `.worktrees/081-phase-menu-componentization` | `4a5b339b` | **Superseded** by the landed `052` |
+| `.worktrees/082-phase-toolbar-view-controls` | `4a5b339b` | **Superseded** by the landed `053` |
+| `.worktrees/083-phase-record-relation-surfaces` | `4a5b339b` | **Superseded** by the landed `054` |
+| `.worktrees/084-phase-states-feedback` | `4a5b339b` | **Superseded** by the landed `055`. Its copy of the parent `spec.md` carries two injected placeholder rows (`[Phase 51 scope]`, `[Criteria TBD]`) from `create.sh`; **they were not carried over** — this landing branched from `origin/main`, whose parent spec has none, and the phase map was written by hand |
+| `.worktrees/086-land-phases-051-055` | this pass | The landing branch |
+
+The five draft worktrees are the operator's to remove through `sk-git` once they confirm the landed
+packets supersede them. Removing a worktree is not removing its branch.
+
+### Still owed from the operator
+
+A fresh device check against **`0.0.25`** for rows 29-33, 39-41 and 43, and a first look at rows
+47-51; the vault side-by-side for rows 37/38; `044`'s and `045`'s AC-006; `046`'s AC-007 and its
+`T016` settings-flag call; `006`'s two operator rows; and the five questions above. Each
+confirmation closes its `roadmap.md` §4 row or its phase's own AC row; a "still broken" answer
+reopens the row with the device fact given, never argued with. **No agent ticks an operator row.**
 <!-- /ANCHOR:context-transfer -->
 
 ---
@@ -176,17 +173,19 @@ ticks an operator row.**
 <!-- ANCHOR:session-notes -->
 ## 3. RESUME ORDER
 
-1. Read this handover in full before touching anything.
-2. Run `npm run gate` from a clean `main` checkout and confirm 25/25 green before assuming the tree
-   is as described here (verified at `b4be45bc` this pass; `operator-list` was stale on pull and
-   was regenerated — rerun `node tools/naming/build-operator-checklist.mjs --check` if it drifts
-   again).
-3. **Read the three unread worktrees in §2 before trusting any stated state for `046`, `047` or a
-   possible `048`** — none of their content was reviewed this pass, only their file lists.
-4. Wait for the operator's confirmations named in §2's closing paragraph before ticking any row
-   they own; work `046`'s remaining code (`T002` onward) in the meantime.
-5. Once the operator confirms a landed worktree is no longer needed for reference, offer to remove
-   it through `sk-git`.
+1. Read this handover in full, then `goal-prompt.md`, before touching anything. The prompt was
+   rewritten this pass and is under the 4,000-character cap at **3,912**.
+2. Run `npm run gate` from a clean `main` checkout and confirm it green before assuming the tree is
+   as described here. If the parent's phase count moved, regenerate `operator-checklist.md` with
+   `node tools/naming/build-operator-checklist.mjs` — the `operator-list` lane reads it.
+3. Ask the five operator questions in §2. Three of them (`053`'s ADRs) block that phase's first
+   implementation leg; the other two block `051`'s.
+4. **Run `051`-`055`'s T001 before any implementation in them.** Each phase's T001 is its capture
+   read or its surface inventory, and each is a gate rather than a step — which is precisely the
+   lesson this pass paid for.
+5. Read `.worktrees/079-anytype-menus` before `052`'s or `054`'s T001: it holds the dropdown and
+   mobile-sheet captures both of them are missing.
+6. Work `050` T002 onward against the **restated** thresholds (ADR-004), never the originals.
 <!-- /ANCHOR:session-notes -->
 
 ---
@@ -194,80 +193,51 @@ ticks an operator row.**
 <!-- ANCHOR:next-session -->
 ## 4. GOTCHAS LEARNED THIS SESSION
 
-- CI's "Capture staleness" step was red while the local gate stayed green on the identical commit:
-  `specs/**/context/` is gitignored, so a reference-capture's declared source dependency (the
-  vendored `obsidian-pm-main` tree, read locally through a symlink) had nothing to read in CI's
-  checkout. A lane that is green locally is not evidence it is green in CI when its inputs include
-  a gitignored path — check what the lane actually reads, not just its local exit code. Fixed by
-  classifying a git-ignored, absent source as expected-missing rather than broken (`e0145ac9`).
-- A pre-release local install and the tagged release can coexist under adjacent backup names:
-  `.backup-<version>-preview` is not the shipped `<version>` — confirm the release tag on `origin`
-  and the live manifest's version field together, never infer shipped status from a versioned
-  backup folder's presence alone.
-- Reading a fresh in-repo side-by-side against a CAPTURED reference (not just its source) can find
-  gaps a source-only comparison missed entirely: the board's inherited `line-height` cascade and
-  its uncopied `::-webkit-scrollbar` rules were both invisible to every earlier CSS-source read,
-  because neither shows up in a component that never scrolls in the capture that exercised it.
-- A worktree showing `UU` in `git status` can have some files fully resolved (zero conflict
-  markers, just unstaged) and others still genuinely conflicted — check each file's own marker
-  count, not the worktree's aggregate unmerged-paths list, before assuming a rebase needs full
-  re-resolution.
-- `tools/` is neither typechecked nor linted for TypeScript. Root `tsconfig.json` includes
-  `src/**/*.ts` only, and `lint:tools` runs eslint over `tools/**/*.mjs`, so
-  `render-assertion-harness.ts` — the file every constructed pass mounts through — has no gate
-  covering it. Do not cite a type annotation as evidence in this repo without checking which
-  config actually compiles the file.
-- A lane can depend strictly on a fixture and still not be harness-dependent. Ask what the value
-  IS, not only where it was measured.
-- Two exported lists in this tree are both called `SCENARIOS` and cover different sets — check
-  which list a lane imports before claiming that lane covers a scenario.
-- A lane's own evidence JSON is a before/after instrument: `git show <old-sha>:tools/live/<lane>.json`
-  against the current file settles a coverage claim in one command.
-- A worktree rebased or branched before a sibling lane lands can go stale at its `--onto` target;
-  check the target's distance from the current main tip before landing, not just before starting.
-- Rebase a phase branch onto main before its verification, not after. Write the packet's
-  implementation summary in the same pass as its first checklist ticks; `validate.sh` fails
-  without it.
-- The full landing sequence for a phase: verify in the worktree, commit on its own branch,
-  fast-forward main, gate main, push, then release from a clean clone.
-- The capture harness is not byte-deterministic: hash decoded pixels, not raw bytes.
-- Run `npm run screenshots` detached; `check-lane` needs `SURFACE_PHASE` set.
-- A review-type agent cannot write; hand its release, checklist-tick and commit steps to a code
-  leaf.
-- Every external delegate's claim is verified in-runtime: a browser number from a sandboxed or
-  cloud lane is not evidence.
-- A pipe makes `$?` the pipe's status; read exit codes directly, unpiped.
-- `validate.sh` on a phase parent recurses into children; take the FIRST `RESULT:` line for this
-  packet's own verdict. Regenerate metadata after any spec-doc edit.
-- Where `.opencode` is a symlink, spec-kit scripts can silently no-op; invoke through `realpath`
-  with `NODE_PRESERVE_SYMLINKS=1` and confirm by content, not exit code.
-- A docs commit that cites the sha where a rebasing branch "closed on main" can be wrong the moment
-  a sibling lane lands underneath it before that branch pushes — `git merge-base --is-ancestor
-  <sha> HEAD` answers this in one command.
-- **A lander must wait for the verifier's own completion notification, not for a poll on "clean
-  tree."** A working tree can read clean between two of a verifier's own writes — a race, not a
-  signal — so a landing step that polls `git status` for cleanliness can act on a mid-verification
-  snapshot instead of the verifier's actual finish.
-- **A wait loop must inspect process commands starting with `node`, not just a fixed process name.**
-  This program's own verification and gate scripts are invoked as `node tools/...`; a wait loop
-  that greps for a narrower literal can miss every one of them and report idle when work is live.
-- **A `theme.css` edit stales every capture, not just the ones that touch the changed rule.** The
-  capture pipeline fingerprints the whole stylesheet bundle as one input, so editing the harness's
-  own host-control baseline invalidates the entire manifest's freshness, not a scoped subset —
-  budget a full recapture, not a partial one, after any `theme.css` change.
-- **Real-clock anchors are now frozen via `renderNow()`** (`6bac9ce9`, `calendar-date-time.ts:100`).
-  A bench or capture that still reads `new Date()` directly instead of `renderNow()` will drift
-  again the way the timeline bench did before this fix; grep for the raw constructor before
-  trusting a "today"-anchored render as reproducible.
-- **The `sk-git` live-sync hook can rebase a worktree under a working agent.** Local `main` advanced
-  from `d3979cf5` to `b4be45bc` mid-session with no action from this agent — a legitimate
-  fast-forward from `origin/main`, but one that can land between a read and a write if not
-  re-checked. Re-verify `HEAD` immediately before any commit or push, not just at session start.
+- **The spec-kit relocated to `runtime/cli`, and the validator is flaky inside a worktree.** Scripts
+  now live under `.opencode/skills/system-spec-kit/runtime/cli/` (was `scripts/`), and the compiled
+  validator is at `runtime/dist/lib/validation/orchestrator.js`. Validate every folder **from the
+  primary checkout's cwd**, invoking through `realpath`, because a worktree's symlinked
+  `node_modules` makes the run unreliable:
+  `node "$(realpath .opencode)/skills/system-spec-kit/runtime/dist/lib/validation/orchestrator.js" <worktree-folder> --strict`.
+  Take the **first** `RESULT:` line as a folder's own verdict — a phase parent recurses into its
+  children and the tail describes the last child, not your packet.
+- **`repair-derived.cjs` refuses a target outside the packet tree** when run from the primary
+  checkout against a worktree path. Use
+  `runtime/cli/dist/graph/backfill-graph-metadata.js <folder>` instead, scoped to the touched
+  folders — **never `--all`**.
+- **The `specs/context` symlink incident, and why this landing made no symlink in the draft trees.**
+  A convenience symlink at `specs/context` was once staged as a self-referencing `120000` entry,
+  and pulling it replaced the gitignored vendored `obsidian-pm-main` tree that
+  `tools/live/reference-mount.ts` imports from. This pass symlinked only `.opencode` and
+  `node_modules` into its own worktree, quoted, and read the five draft trees read-only.
+- **A release commit must carry `main.js`.** `0.0.25` needed a second commit (`f2518f5e`) to
+  include the rebuilt bundle after the cut (`2334046b`). A tag on a cut without its bundle installs
+  as the previous version on the operator's phone and reads as "the fix did not ship."
+- **The fan-out `iterations` field is load-bearing, and a leaf can die silently.** `051`'s leaf
+  reported nothing and left scaffold. A wave needs a landing pass that reads each leaf's output;
+  the file list is not the read.
+- **Executor caps are real and they differ.** codex has a hard cap; opencode-go is a monthly cap.
+  Neither is a per-run limit, so a wave that fits today may not tomorrow — check before dispatching
+  five leaves, not after four of them return.
+- **A "today" cell written from a prior document rather than from the tree is the expensive
+  mistake.** Six of `050`'s fourteen thresholds asserted a failing value the tree does not have, and
+  a threshold whose failing value is wrong cannot be observed red — so the criterion is
+  unfalsifiable while looking rigorous. Every red in the five landed packets was re-measured.
 <!-- /ANCHOR:next-session -->
 
 ---
 
 ## 5. CONTINUITY LOG
+
+- **2026-09-05, `orchestrate-handover-19`: five family phases landed.** `051`-`055` opened from the
+  operator's componentization instruction, four drafted by GLM 5.3 flash through cli-pi in parallel
+  worktrees `080`-`084` and one (`051`) written in-runtime after its leaf died at the scaffold. All
+  five reviewed against the parent's D1-D14, `050`'s `design-trueup.md` and the current tree;
+  twenty-five `file:line` citations corrected; `055` renamed from `051-states-feedback-and-motion`
+  with every internal identifier moved; `054` raised to Level 3. All five pass `--strict` with
+  `Errors: 0`. Parent updated: `roadmap.md` §4 rows 47-51, §5.A rows 051-055, §6A's five afternoon
+  decisions, §7.9's conflict table; `goal.md`'s DONE table and log; `spec.md`'s phase map extended
+  to `055`; `goal-prompt.md` rewritten to 3,912 characters. `053`'s three ADRs left **Proposed**.
 
 Compacted out of frontmatter (SPECDOC_FRONTMATTER_007) into this section so no fact is lost. Each
 phase's own `goal.md`/`implementation-summary.md` carries its full audit trail; this is the
