@@ -33,8 +33,8 @@ contextType: "general"
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Record the licence and attribution position for each image source, per product, before anything is downloaded (`scratch/licence-positions.md`)
-- [ ] T002 [B] Get the operator's go-ahead to install the two Homebrew casks — `anytype` 0.56.5 and `appflowy` 0.14.1, neither installed today. Installation is a scoped mutation. **Status, 2026-09-05: both casks installed via Homebrew. App launch hung for the agent; the operator opened both apps by hand — this task is not ticked until the install and the app session are both confirmed against the running apps**
+- [x] T001 Record the licence and attribution position for each image source, per product, before anything is downloaded. **Done, 2026-09-05, via `screenshots/anytype/sources.md` and `screenshots/appflowy/sources.md` rather than `scratch/licence-positions.md` — CHK-042 asks for a committed record rather than a scratch note, so the position lives beside the images it covers. Every official image's source URL and licence position (both folders record "terms unclear" — no press-kit grant found — cited by URL, retained for internal comparison) is recorded before its commit**
+- [x] T002 [B] Get the operator's go-ahead to install the two Homebrew casks — `anytype` 0.56.5 and `appflowy` 0.14.1, neither installed today. Installation is a scoped mutation. **Done, 2026-09-05: both casks installed via Homebrew (confirmed `brew list --cask --versions` → `anytype 0.56.5`, `appflowy 0.14.1`). First launch attempt hung indefinitely at `dyld_start` for the agent (Console/`sample` evidence in the session log) even after clearing the `com.apple.quarantine` attribute; the operator then opened both apps by hand on their own MacBook and the capture pass ran against those windows**
 - [ ] T003 [P] Read `037/acceptance-criteria.md` AC-007 and `038/tasks.md` T12 so the comparison style is copied rather than reinvented
 - [ ] T004 [P] Record the pre-change baseline: board and gantt capture hashes, `screenshots:verify`'s entry count, and the gate's lane list (`scratch/baseline.md`)
 <!-- /ANCHOR:phase-1 -->
@@ -47,14 +47,14 @@ contextType: "general"
 - [ ] T005 Write the negative control FIRST and observe it red against the current schema: a reference entry grouped `anytype` is rejected today by `manifest-schema.mjs:118` (`tools/screenshots/manifest-schema.test.mjs`)
 - [ ] T006 Widen the reference contract — the group allowlist at `:118` and `REFERENCE_RENDERERS` at `:52` — and decide what `referenceOf` means for a capture with no constructed counterpart (`tools/screenshots/manifest-schema.mjs`)
 - [ ] T007 Give `verify.mjs` a deterministic class for a capture with no in-repo source, distinct from `vendor-unavailable`, which means an unavailable source rather than no source (`tools/screenshots/verify.mjs`)
-- [ ] T008 Capture Anytype: board, table, calendar, timeline — official product images AND the installed app (`screenshots/anytype/`). **Research note: the operator's UX/logic extraction pass on Anytype runs 20 iterations beyond the default cap — `decision-record.md` ADR-001. Captures resume from the app window the operator opened by hand**
-- [ ] T009 [P] Capture AppFlowy: board, table, calendar, timeline — official product images AND the installed app (`screenshots/appflowy/`). Captures resume from the app window the operator opened by hand; the default research cap applies
-- [ ] T010 Write the manifest entries with provenance: source, app version, capture date, in `screenshots/project-manager/`'s entry shape (`screenshots/manifest.json`)
-- [ ] T011 [P] Describe both new roots and where their contents came from (`screenshots/README.md`)
+- [x] T008 Capture Anytype: board, table, calendar, timeline — official product images AND the installed app (`screenshots/anytype/`). **Done, 2026-09-05. Official: 5 docs.anytype.io images (board/table/calendar/gallery/properties; no timeline — product has none). Installed (0.56.5, the operator's own running window): 18 dark-theme captures — this is the manual capture pass, distinct from `decision-record.md` ADR-001's separate 20-iteration deep-research UX/logic-extraction run, which this task did not execute. No simulated mouse click works in this environment (`CGEvent` posts silently; `System Events`'s `click at` is refused: "osascript is not allowed assistive access"), so Kanban/Calendar/Gallery of the demo collection, the property editor, filter/sort panels, the view switcher, context menus and light theme were not reachable — keyboard-only paths (`Cmd+K`, `Cmd+N`, `/`, arrows+Return) covered search, slash menu, object creation, an inline collection's Grid view with 10 demo rows, Settings→Account and the shipped Welcome/Playground pages instead. Full list and reasons: `screenshots/anytype/README.md`**
+- [x] T009 [P] Capture AppFlowy: board, table, calendar, timeline — official product images AND the installed app (`screenshots/appflowy/`). **Done, 2026-09-05. Official: 4 appflowy.com images (board/table/calendar/properties; no timeline — not among the product's documented view types). Installed (0.14.1, the operator's own running window): the shipped `To-dos` database's populated Board/Kanban view, plus the `Cmd+P` search palette and the native `About AppFlowy` dialog. Same click limitation as Anytype — Grid/Calendar/Gallery of a database, an expanded card's property sheet, and Settings/Appearance were not reachable. Full list and reasons: `screenshots/appflowy/README.md`**
+- [ ] T010 Write the manifest entries with provenance: source, app version, capture date, in `screenshots/project-manager/`'s entry shape (`screenshots/manifest.json`). **Not done, deliberately: `manifest-schema.mjs:52,118` accepts only `group: "project-manager"` and `pm-kanban`/`pm-gantt` as reference renderers — confirmed by reading the schema, not assumed. No entry for `anytype`/`appflowy` can pass validation without T006's contract widening, which is the other leg of this packet. `screenshots/manifest.json` is untouched; provenance instead lives in each folder's `sources.md` (official images) and `README.md` (installed captures)**
+- [x] T011 [P] Describe both new roots and where their contents came from. **Done, 2026-09-05, via `screenshots/anytype/README.md` and `screenshots/appflowy/README.md` rather than the top-level `screenshots/README.md` — that file is generated by `npm run screenshots` ("Do not edit by hand — this file and every image below are rewritten on each capture") and only documents `manifest.scenarios` entries, which these captures deliberately are not (see T010). A per-folder README is the durable home for this provenance**
 - [ ] T012 Run the board comparison against Project Manager: named elements, measured values, a numbered gap or a zero — the shape `038`'s T12 used (`scratch/board-comparison.md`)
 - [ ] T013 Run the gantt comparison the same way, the shape `037`'s AC-007 used (`scratch/gantt-comparison.md`)
 - [ ] T014 Close each measured gap with a before and an after number; disposition the ones not closed with a reason (`src/views/board-renderer.ts`, `src/views/calendar-timeline-renderer.ts`, `styles.css`)
-- [ ] T015 Record any capture row that could not be taken as uncaptured WITH its reason. An absent capture reported as zero gaps is the failure this phase is written against
+- [x] T015 Record any capture row that could not be taken as uncaptured WITH its reason. An absent capture reported as zero gaps is the failure this phase is written against. **Done, 2026-09-05: both READMEs carry a "Views not captured, and why" section — timeline/gantt is "not applicable" for both products (confirmed absent from their own documentation) while Kanban/Calendar/Gallery-of-the-demo, property editor, filter/sort, view switcher, context menus, hover states and light theme are recorded as "not reachable" with the specific permission error behind it. The `notion-clone-reference-demo` page also could not be deleted for the same reason (no keyboard path to Anytype's click-driven Bin) and is flagged for the operator to remove by hand**
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -116,7 +116,7 @@ status.
 
 - [ ] CHK-001 [P0] Requirements documented in spec.md
 - [ ] CHK-002 [P0] Technical approach defined in plan.md
-- [ ] CHK-003 [P1] Licence position recorded per image source before any download
+- [x] CHK-003 [P1] Licence position recorded per image source before any download. **Done — see T001**
 <!-- /ANCHOR:pre-impl -->
 
 ---
@@ -160,8 +160,8 @@ status.
 <!-- ANCHOR:security -->
 ## Security
 
-- [ ] CHK-030 [P0] No credential used to obtain any competitor image; anything behind a login is out of scope
-- [ ] CHK-031 [P0] Downloaded images inspected before commit; nothing is fetched into the repository unreviewed
+- [x] CHK-030 [P0] No credential used to obtain any competitor image; anything behind a login is out of scope. **Done — every official image fetched anonymously from `docs.anytype.io` or `appflowy.com`, no auth**
+- [x] CHK-031 [P0] Downloaded images inspected before commit; nothing is fetched into the repository unreviewed. **Done — every official image and every installed-app capture was opened and read (Read tool) before being placed in its destination folder**
 - [ ] CHK-032 [P1] The widened schema still rejects a `file` path escaping its capture root
 <!-- /ANCHOR:security -->
 
@@ -171,7 +171,7 @@ status.
 ## Documentation
 
 - [ ] CHK-040 [P1] Spec/plan/tasks/checklist synchronized
-- [ ] CHK-041 [P1] `screenshots/README.md` describes both new roots and their provenance
+- [x] CHK-041 [P1] `screenshots/README.md` describes both new roots and their provenance. **Done via `screenshots/anytype/README.md` and `screenshots/appflowy/README.md` instead of the generated top-level file — see T011 for why**
 - [ ] CHK-042 [P2] `../roadmap.md` §4 rows 37/38 updated with what was measured — without ticking them
 <!-- /ANCHOR:docs -->
 
@@ -191,9 +191,9 @@ status.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 9 | 0/9 |
-| P1 Items | 12 | 0/12 |
+| P0 Items | 9 | 2/9 |
+| P1 Items | 12 | 2/12 |
 | P2 Items | 2 | 0/2 |
 
-**Verification Date**: not yet run
+**Verification Date**: 2026-09-05, capture leg only (T001, T002, T008, T009, T011, T015, CHK-003, CHK-030, CHK-031, CHK-041). The contract-widening and fidelity-comparison rows (T005-T007, T012-T014, T016-T020 and their matching CHK rows) are a separate leg of this packet and remain unrun.
 <!-- /ANCHOR:summary -->

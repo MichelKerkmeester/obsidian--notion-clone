@@ -126,7 +126,7 @@ into the objective, and it is expected to grow.
 | Cask availability checked | Done | `brew info --cask anytype` → 0.56.5, auto_updates, **Not installed**. `brew info --cask appflowy` → 0.14.1, **Not installed** |
 | Contract blocker found | Done | `tools/screenshots/manifest-schema.mjs:118` rejects any reference `group` but `project-manager`; `:52` limits `REFERENCE_RENDERERS` to `pm-kanban` and `pm-gantt` |
 | Contract widened | Not started | `tasks.md` T005, T006 |
-| Captures | Not started | `tasks.md` T008, T009 |
+| Captures | Done, partial | `tasks.md` T008, T009 — 8 of 16 matrix rows captured, 4 N/A (no timeline in either product), 4 not reachable (no simulated click in this environment); demo page cleanup deferred to the operator |
 | Fidelity comparison | Not started | `tasks.md` T012, T013 |
 
 ### Deviations and findings
@@ -138,4 +138,6 @@ into the objective, and it is expected to grow.
 | "Align closer" arrives after two zero-divergence measurements | `037`'s AC-007 measured 60 of 60 `pm-gantt-*` classes with zero divergence; `038`'s T12 matched fourteen elements to the pixel. Neither is contradicted by the operator's verdict. The likely reading is that matching the reference on the elements we chose to carry is not the same as looking like it — which, if the second pass also measures zero, is a scope conversation rather than a fidelity fix. |
 | `anytype` auto-updates | The cask is marked `auto_updates`, so a capture drifts from the app without warning. The entry records the version so a later reader knows what they are looking at. |
 | Neither app is installed | So the installed-app half of the operator's ask starts with an installation, which is a scoped mutation and waits for a go-ahead rather than being assumed. |
+| No simulated mouse click works in this environment | Confirmed three ways: `CGEvent` posts (Quartz, from Python) return no error and have no visible effect; `System Events`'s `click at {x,y}` is refused outright — `osascript is not allowed assistive access` (-25211); and both apps' content areas expose no accessibility tree to click through instead (their whole window body is one opaque `AXGroup` — only native window-chrome buttons and the native macOS menu bar are real accessibility elements). What does work: `keystroke`/`key code` sent to whatever is frontmost, and clicking a native menu-bar item via the accessibility API's menu action. Every installed-app capture was reached through some combination of `Cmd+K`/`Cmd+P`, `Cmd+N`, `/`, arrows + Return, Escape, and native-menu clicks — never a coordinate click. This caps what could be captured: view-switcher tabs, toolbar icons, table cells, and context menus were all unreachable. |
+| The Anytype demo page could not be deleted | Anytype's own deletion docs (`docs.anytype.io/anytype/organize/deletion`) describe a click/checkbox-driven Bin flow with no keyboard shortcut, and neither app's native menu bar carries a Delete/Move-to-Bin item. `notion-clone-reference-demo` and its inline collection remain in the operator's Anytype vault; removing them is a one-click action left for the operator. |
 <!-- /ANCHOR:log -->
