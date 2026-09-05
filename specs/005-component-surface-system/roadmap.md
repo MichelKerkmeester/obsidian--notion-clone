@@ -1126,7 +1126,18 @@ Rebuilding `main.js` from `ae46da94`'s tree twice in a row produced a byte-ident
 (`628bf722...`), already matching the bundle `ae46da94` itself committed, so the version-bump commit
 carried it forward with no drift and no separate rebuild leg was needed. `manifest.json`,
 `package.json` and `versions.json` on main read **0.0.26**, and the tag is on `origin`.
-None of 0.0.7 through 0.0.26 is operator-confirmed yet. The cadence continues at **0.0.27** onward —
+**0.0.27 is cut** (`a7e3db83`), carrying `053`'s toolbar componentization: the database toolbar's
+eight hand-rolled popover shells, duplicated close runs, dual-classed rows and seven dead settings
+methods are replaced by five shared primitives — popover shell, tab strip, control-cluster button,
+condition row and settings entry (`toolbar-primitives.ts`) — migrated across the toolbar, active-view-
+controls, filter-panel and sort-panel renderers (`c45c53c3`). Filter and sort now share one condition
+row, the chip rail's active filter/sort trigger shows an "N applied" count on every column, the New
+button's Settings section lets a view carry per-column new-row presets (`view-row-presets.ts`), and a
+manual drag reorder under an active sort on board or table raises a confirm before it clears the sort.
+58 content-changed captures were reviewed across every migrated family and the css lane retaken against
+the fixed stylesheet (`56e656ef`). Carries forward 0.0.26's record-panel docking unchanged.
+`manifest.json`, `package.json` and `versions.json` on main read **0.0.27**, and the tag is on `origin`.
+None of 0.0.7 through 0.0.27 is operator-confirmed yet. The cadence continues at **0.0.28** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
