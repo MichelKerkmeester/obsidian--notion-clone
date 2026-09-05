@@ -35,9 +35,12 @@ a real reading view, not on a harness mount, because the ancestor chain is the m
 | C5 | Ways to move a placed linked view | 0 (cut and paste in the editor is not one of ours) | 2: desktop drag, phone action | [x] both built — dedicated six-dot handle drag and a **Move to page…** row; neither driven on a device yet |
 | C6 | Block shapes covered by a round-trip test | 0 — no such test exists | 16 plus 3 adversarial | [x] green at `embedded-database-renderer.test.ts:653`, plus a cross-check against the rendering path's own parser at `:630` |
 | C7 | Embeds with a photographed constructed scenario | 0 committed captures | at least 1 at both widths and themes | [x] 4 committed — both device widths, both themes, each read by hand |
+| C8 | Row-insertion seams painting as a visible empty row inside a linked-view embed (`review-ui-2026-09-05.md` P0 #1) | 1999 (one per insertion row in the 2000-row `table/embed` scenario), each 34px against a 1px ceiling — `tools/live/unstyled-links.mjs`'s constructed pass, `chrome-geometry-measure.mjs`'s `insertLineRows` reading | 0 | [x] measured 0 — a same-specificity `.note-database-embed.note-database-container table.db-table tr.db-row-insert-line > td { height: 0; border: 0 }` rule added after the embed's `th, td` height rule; `constructed-linked-view-host-*.png` (4) recaptured and read, row pitch now matches the standalone table's exactly |
+| C9 | The SUM/AVERAGE/EARLIEST/UNIQUE summary footer on the codeblock (linked-view) render path (`review-ui-2026-09-05.md` P1 #10) | Reported missing against the standalone view | Present, same as standalone | [x] does not reproduce on this tree — `EmbeddedDatabaseRenderer.renderResults()`'s `summaryRenderer.render()` call is unconditional on `persistMode`, gated only on `viewType !== "chart"`. A new regression test (`embedded-database-renderer.test.ts`, "linked-view summary footer") is green on the codeblock instance and was confirmed red when the call was artificially persistMode-gated, then reverted — no code change needed |
 
 **C1 and C2 are the operator's complaint. C3 is why the fix cannot be incremental. C7 is what stops
-the parity claim resting on one screenshot.**
+the parity claim resting on one screenshot. C8 and C9 close `review-ui-2026-09-05.md`'s two 046
+findings, P0 #1 and P1 #10.**
 
 ### Blank Failing Numbers
 

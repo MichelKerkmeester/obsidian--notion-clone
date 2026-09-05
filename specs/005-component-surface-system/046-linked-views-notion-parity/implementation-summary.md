@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-05T04:55:00Z"
+    last_updated_at: "2026-09-05T21:25:00Z"
     last_updated_by: "implementation-verifier"
-    recent_action: "Verified the external pass, fixed the scroll-host measurement, read the captures"
+    recent_action: "Fixed the review's P0 row-pitch defect; row-0-under-header stays device-only"
     next_safe_action: "Operator reads the released build on device to close AC-007"
     blockers:
       - "AC-002's not-clipped half and AC-005 need a device pass; the constructed host cannot reproduce the code-block clipping"
@@ -218,10 +218,25 @@ reaches the move path while a toolbar-button press/drag does not.
    ancestors, which the fixture does not model. So the width half of the criterion is measured and
    the not-clipped half is not — it rides on the device pass.
 
-2. **Two harness artefacts are visible in the capture and are not this change's.** The linked
-   section draws taller rows than the standalone one and its first row sits under the sticky header.
-   Both appear identically with the linked rule neutralised, and `runtime-vars.css` documents the
-   sticky-header offset as a stand-in for a toolbar height a screenshot has no way to supply.
+2. **Superseded, in part, by the 2026-09-05 fresh review (`review-ui-2026-09-05.md` P0 #1,
+   `roadmap.md` §4 row 42).** This limitation originally read: "Two harness artefacts are visible
+   in the capture and are not this change's. The linked section draws taller rows than the
+   standalone one and its first row sits under the sticky header. Both appear identically with the
+   linked rule neutralised, and `runtime-vars.css` documents the sticky-header offset as a stand-in
+   for a toolbar height a screenshot has no way to supply." That first half was not a harness
+   artefact: `styles.css`'s `.note-database-embed.note-database-container table.db-table th, td {
+   height: 34px }` tied in specificity (0,3,2) with the table renderer's own
+   `tr.db-row-insert-line > td { height: 0 }` and won by source order, so every insertion seam
+   between rows painted as an empty 34px band only inside an embed — doubling the linked table's
+   height against the standalone one's. **Fixed**, red first (`tools/live/unstyled-links.mjs`'s
+   constructed pass, 1999 findings before, 0 after — see `checklist.md` C8 and
+   `acceptance-criteria.md` AC-002 for the full evidence). The second half — row 0 sitting under
+   the sticky header — is still open and is still a stand-in artefact: this scenario mounts
+   `TableRenderer` directly with no `EmbeddedDatabaseRenderer` and no `.db-header`, so it never
+   runs `updateStickyOffsets()` (`embedded-database-renderer.ts:1842`), the seam that measures a
+   real header's rendered height and writes `--db-table-header-top` from it. Absent that, the
+   container falls back to `runtime-vars.css`'s fixed 22px stand-in for every capture rather than
+   the 0px a header-less mount should carry. Recorded as device-only; not chased in this pass.
 
 3. **Device confirmation remains open.** The source and stylesheet tests prove the handle binding,
    but the operator still needs to read the phone target and the released page. The constructed
@@ -247,3 +262,35 @@ reaches the move path while a toolbar-button press/drag does not.
 <!-- /ANCHOR:limitations -->
 
 ---
+
+<!-- ANCHOR:roadmap-row-42-fix-note -->
+## Roadmap §4 Row 42 — Fix Note (2026-09-05)
+
+For `../../roadmap.md` §4 row 42, not written there directly — that file is another leaf's.
+
+**What was wrong:** the production embed renderer painted an empty 34px band between every data
+row in a linked (codeblock) view, doubling the embed's height against the standalone table's, and
+row 0 sat under the sticky header. Reported by the fresh UI review (`review-ui-2026-09-05.md` P0
+#1) against `constructed-linked-view-host-{desktop,mobile}-{dark,light}.png`.
+
+**Root cause:** `styles.css`'s `.note-database-embed.note-database-container table.db-table th,
+td { height: 34px }` tied in specificity (0,3,2) with `.note-database-container .db-table
+tr.db-row-insert-line > td { height: 0 }` and won by source order, so the insertion-line row
+`table-renderer.ts` emits between every pair of rows painted as an empty 34px row only inside an
+embed.
+
+**Fix:** one same-specificity rule scoped to the embed,
+`.note-database-embed.note-database-container table.db-table tr.db-row-insert-line > td { height:
+0; border: 0; }`, added immediately after the rule it ties with.
+
+**Row 0 under the header:** does not reproduce as a shipped defect. The reproducing capture mounts
+`TableRenderer` directly with no `EmbeddedDatabaseRenderer` and no `.db-header`, so it never runs
+`updateStickyOffsets()` (`embedded-database-renderer.ts:1842`) and instead carries
+`runtime-vars.css`'s fixed 22px stand-in for every capture. Recorded as device-only, not fixed
+here.
+
+**Evidence:** red first in `tools/live/unstyled-links.mjs`'s constructed pass — a new
+`insertLineRows` reading in `chrome-geometry-measure.mjs` (own 4-case unit test) — 1999 findings
+at 34px against a 1px ceiling; 0 after. `checklist.md` C8, `acceptance-criteria.md` AC-002.
+`npx tsc --noEmit` 0, `npx vitest run` 1271/1271, `npm run build` 0, `npm run gate` 25 green.
+<!-- /ANCHOR:roadmap-row-42-fix-note -->
