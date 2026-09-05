@@ -164,11 +164,13 @@ rather than one being picked.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **`state-feedback-vocabulary.md` §4's census is now superseded and was not edited.** It carries
-   the 42-versus-78 confusion, the `8 uses` figure and the `ms`-only stray list. The corrected
-   figures live in `design-trueup.md` and in `acceptance-criteria.md` AC-007/AC-008. Editing that
-   file was outside this change's write scope; reconciling it is the first thing the L4 leg should
-   do.
+1. ~~**`state-feedback-vocabulary.md` §4's census is now superseded and was not edited.**~~
+   **CLOSED 2026-09-05 (`cd8030a8`).** It carried the 42-versus-78 confusion, the `8 uses` figure and
+   the `ms`-only stray list. §4 now states both populations in their own units, corrects the token's
+   reach to **7** uses, and adds the sixteen `s`-notation durations the `ms`-only grep missed — so
+   the real populations read 150ms → 14, 200ms → 3, 100ms → 3, 300ms → 1. `design-trueup.md` and
+   `acceptance-criteria.md` AC-007/AC-008 agree with it. The L4 leg inherits a census, not a
+   correction.
 2. **`checklist.md` is unfilled.** T001 wrote its measured figures into the Verification cells of
    `acceptance-criteria.md`, where a threshold is audited. `checklist.md` remains the per-leg record
    of red-then-green and is filled as each leg lands, not up front.

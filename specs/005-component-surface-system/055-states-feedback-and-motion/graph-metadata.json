@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Every surface has states; nothing owns them",
     "created_at": "2026-09-05T11:08:14Z",
-    "last_save_at": "2026-09-05T13:43:05.410Z",
+    "last_save_at": "2026-09-05T14:38:35.788Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,14 +219,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:fe058671c05b897e6b1c716b89b0aaa9294402ef58b0935b3e3f0f9ac4e76602",
+    "source_fingerprint": "sha256:8ab575c4d66e7bbeb97e3a11b3237e51195a4cb38892d022a23c0c4fe325d47d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "28c8d6313805534c28ebba1fea6f78eef7419c574669e989e54c8dc55ed58bf8",
       "plan.md": "0b06ddc242ef7e734b6c322ef1a0bbea144830214e756d85b4cb911e3bbd172a",
       "tasks.md": "4340ea06b68be0a129691ad83f00e3d2a79768c84eab94d7e24596da30f8ad0e",
       "decision-record.md": "b3312c346befeee6cb83235343b45a7bfe27ffc6f3831a446c4cca369af176b5",
-      "implementation-summary.md": "348ebfbea559facee77035bd4235d08b54b2f3309652b4a5d238bebebb806215"
+      "implementation-summary.md": "a414291ec061f721a3cdba745dcacfcca02a0a1d17730215dd35360abfbc25c7"
     },
     "last_active_child_id": null,
     "last_active_at": null
