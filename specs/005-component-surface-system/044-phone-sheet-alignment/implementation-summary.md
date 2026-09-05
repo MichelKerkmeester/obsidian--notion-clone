@@ -136,6 +136,20 @@ manifest-schema validation refused to write the wrong path; fixed, with regressi
 | `tools/gate.mjs` | Modified | `sheet-grammar` registered (21 → 26 checks) |
 | `tools/live/touch-targets-baseline.json`, `touch-targets-constructed-baseline.json` | Modified | Corrected to the measured 199/1220 (see Verification) |
 | `tools/lane/css-lane.json` | Modified | Acquired, edited, released with all 30 changed captures named |
+
+**T015 follow-up (settings body onto the shared row grammar):**
+
+| File | Action | Purpose |
+|------|--------|---------|
+| `src/views/view-config-panel-renderer.ts` | Modified | `asSheet` captured at render; `rowClass()`/`hintClass()` helpers; phone rows → `db-panel-row`/`db-panel-hint`, computed-sync → `db-new-placement`, switches → the shared checkbox; desktop path (`db-view-config-row`, native radios, `db-toggle-switch`) untouched |
+| `src/views/view-config-panel-renderer.test.ts` | Added | Phone-tree `describeSheetGrammar` assertions plus the desktop grid/radio/switch residue and computed-sync persistence through the segmented control |
+| `src/views/board-card-properties-panel.ts` | Modified | Optional `asSheet` on `BoardCardPropertiesActions`, threaded from the renderer's own flag; the Cover/Title fixed rows pick `db-panel-row` over `db-view-config-row` on phone, desktop untouched |
+| `src/views/board-card-properties-panel.test.ts` | Modified | Two new tests pinning both the default (desktop grid) and `asSheet: true` (shared row) branches |
+| `styles.css` | Modified | Retired the phone-only `.db-view-config-row`/`.db-view-config-help` overrides the conversion made dead; `flex-shrink: 0` on the phone label (mirrors `.db-record-detail-field-label`) so a stacked field's own full-width child no longer wraps it; `min-width: 0` + `overflow-wrap: anywhere` on `.db-new-placement-option` so a full-sentence option no longer bleeds past its own button |
+| `tools/live/sheet-grammar.mjs` | Modified | `settings` registered (7 surfaces × 7 elements) |
+| `tools/screenshots/scenarios/panels.mjs` | Modified | New `devices: ["mobile"]` fixture `panel-view-config-sheet`, `fixtureOf: constructed-view-config`, documenting the computed-sync segmented group the real capture's own viewport crop never reaches |
+| `tools/screenshots/constructed-capture.test.mjs` | Modified | Fixture-declaration snapshot extended for `panel-view-config-sheet -> constructed-view-config` |
+| `tools/lane/css-lane.json` | Modified | Re-acquired, edited, released with all 4 changed captures named |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -202,9 +216,11 @@ was observed both ways before this phase called itself proven.
 2. **tasks.md T014 is not done.** `../roadmap.md` §4 rows 40/41/43 and `../spec.md`'s Phase
    Documentation Map row still carry their pre-work text; explicitly out of this leg's dispatched
    scope, left for a follow-up pass.
-3. **The settings sheet's body grammar is a known, unregistered gap.** `.db-view-config-row` and a
-   native `input[type="radio"]` group are pre-existing, not introduced here; closing them is a larger
-   change to a file this leg did not otherwise need to restructure.
+3. ~~**The settings sheet's body grammar is a known, unregistered gap.**~~ **Closed by T015.**
+   `rowClass()`/`hintClass()` route the body onto `db-panel-row`/`db-panel-hint`, the computed-sync
+   radios onto `db-new-placement`, and the switches onto the shared checkbox; `settings` is now
+   registered in `sheet-grammar.mjs` at 7 surfaces × 7 elements. The board Cover/Title fixed rows
+   (`board-card-properties-panel.ts`) came onto the same grammar in the same pass.
 4. **CHK-043 (README naming the grammar module) is open.** `src/views/README.md`/`CODE.md` name no
    individual file today; adding one entry for `sheet-grammar.ts` alone would invent a convention the
    folder doc doesn't otherwise use.
