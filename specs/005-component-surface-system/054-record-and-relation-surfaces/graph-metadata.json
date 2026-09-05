@@ -47,6 +47,7 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
       "src/views/cell-renderer.ts",
       "src/views/record-detail-panel.ts",
       "src/views/table-record-peek.ts",
@@ -95,6 +96,12 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -198,17 +205,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Scope Boundary",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-05T12:32:19.572Z",
+    "last_save_at": "2026-09-05T14:08:10.334Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,15 +218,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:23cfd2a8de3791258c3b73274721f95feec772a09fd5a174ff7b4f534b92e423",
+    "source_fingerprint": "sha256:02fb674d4adb974069f43e4e47f4c7c261798afb645a1d71757eb719af188941",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e4fa19214f815693f00d6346611138127d77445c7c1fea82da987bdfacb35165",
-      "plan.md": "f1160499d711022550908d997f40e670aa80427c6e95cb620efab4abb24a9bd8",
-      "tasks.md": "ba623f1a54b0860ccf65e809b4186aa9ff23f16db60fc9496e79c8781afed47a",
-      "decision-record.md": "b0b4cdffaabfcc3a3cfcfda3a04ee3dc7a336a0c7bafd5160d523e3421deff3e"
+      "spec.md": "50f470cd7cf2edb7cfab0196a5a42b5011c8dc5988af4515becbdc766c1f925f",
+      "plan.md": "24cd0245479ee276caf3a5df6b566b61596ad981890334df69650a845e19ca6c",
+      "tasks.md": "bc5beaebbf67248c658b02ebae814893d89213c56a2b6167552e7f7edd541612",
+      "decision-record.md": "a7310dc8869d1f517798499c37d2022daf8c416f27850c41bfd6c37fd50a5770",
+      "implementation-summary.md": "4d4b08a1d740cdfb0fb66bee4c8d15305afcf695771e73e6283eee925201b878"
     },
     "last_active_child_id": null,
     "last_active_at": null

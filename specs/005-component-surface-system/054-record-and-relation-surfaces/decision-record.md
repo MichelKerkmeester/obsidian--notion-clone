@@ -178,3 +178,90 @@ takes from this phase is consuming the shared type picker for their existing typ
 - Negative: none recorded. A future operator ruling can reopen it; this ADR is the record of today's.
 
 <!-- /ANCHOR:adr-003 -->
+
+---
+
+<!-- ANCHOR:adr-004 -->
+## ADR-004: Where the captures and this packet's own draft disagree, the capture is the fact
+
+**Status: DECIDED — 2026-09-05 (T001, `design-trueup.md`).**
+
+### Context
+
+`spec.md` §5B was drafted from `screenshots/anytype/README.md`'s written descriptions, because the
+authoring pass could not open image files — recorded honestly in `goal.md`'s log rather than hidden.
+The landing pass corrected one row (A5) from `050`'s view-surface true-up and left the rest standing.
+T001 has now opened 31 captures by hand: the 25 `anytype-menu-object-*` object-page menus, the 12
+`anytype-menu-cell-*` grid-cell editors, the iOS relations panel with its per-format editors and its
+property-management sheet, and the catalogue grids.
+
+Nine of §5B's claims did not survive the reading. Three of them are structural: they describe the
+shape of a primitive this phase exists to build, so leaving them uncorrected would have built the
+wrong thing and passed its own lane.
+
+### Decision
+
+**The capture is the fact; the draft and `047`'s research are source readings.** This is `050`
+ADR-003's rule, applied to the record surfaces, and `design-trueup.md` §1 carries all nine
+contradictions with their measurements. The three that change work:
+
+1. **A2's anatomy is wrong on both halves.** No format icon belongs on a value row — neither
+   platform draws one, and the icons `050` found live in pickers and in the type's property editor.
+   And nothing is right-aligned: desktop flows the value 12px after its own label, iOS pins the
+   value's **left** edge at 174pt. P2's anatomy is **label, then value, value left-aligned**. Our own
+   desktop record sheet right-aligns (`styles.css:10161`, inherited from the board card), which is
+   the defect this row now names.
+2. **A4's hidden-properties group is absent from the product.** The surface that would carry it —
+   `mobile/anytype-mobile-sheet-object-properties-settings-dark.png` — splits properties into
+   `Header` and `Properties panel`, both always expanded, nothing counted, membership changed by
+   drag. REQ-003 is **ours**, and its provenance is corrected rather than the criterion dropped.
+   Anytype's model is a type-level authoring decision and goal D6 puts a type system out of scope.
+3. **A5 reverts from code-derived to captured.** `mobile/anytype-mobile-sheet-relation-add-dark.png`
+   is a search-first picker whose placeholder reads **"Search or create new"**, offering
+   `Properties formats` first and `Existing properties` second — the opposite order to the row's.
+   Three further pickers corroborate that search-first is the product's grammar, not one surface's
+   habit.
+
+Two further rulings follow from the same reading and bind the same way:
+
+- **Two platforms, two designs.** The desktop properties panel is a card-per-property flow; the iOS
+  panel is a fixed two-column list with dividers. Neither is a narrowing of the other, and §5D's
+  "S1's exact analogue" is corrected. Where they disagree, **the platform's own answer wins for that
+  platform** — which is `055` ADR-005's destructive-treatment ruling applied to layout.
+- **Four measured refusals.** Anytype's desktop placeholder grey (`#5C5C5C`, **2.49:1**), its iOS
+  placeholder grey (`#646464`, **2.88:1**), its iOS `Create` pill (border **2.08:1**, box **36pt**
+  against the 44pt floor — confirming `055`'s refusal with a second measurement) and its property
+  card as an affordance (**1.08:1** against its own panel). Geometry is adopted where it is sound;
+  contrast is never adopted below the floor.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| Keep §5B as drafted and note the differences in `migration-table.md` | No spec churn; the table is T003's job anyway | AC-010 gates every design row on the true-up, and a spec whose §5B still says "type icon on the left, value on the right" is what a leg author reads. The correction has to be where the requirement is |
+| Treat the desktop panel as authoritative and the iOS panel as its narrowing | One design to build; fewer variants | Measurably false — a card flow and a fixed-column list are not one design. It would also aim P2 at the platform our record sheet is *least* like, since our phone sheet already ships the iOS model |
+| Drop REQ-003 because Anytype has no hidden group | Fewer requirements; strictly capture-driven | The peek already ships the group and it works. "Anytype does not do it" is not a reason to remove something of ours — goal D6 already says Anytype is a design source, not a data model. Correcting the provenance is the honest fix |
+
+### Consequences
+
+- Positive: P2 is built to the anatomy the captures show rather than to a prose summary, and three
+  acceptance criteria that could never have been observed red are restated before any leg starts.
+- Positive: A5 gains real evidence, so P3 is designed from a screen rather than from `047` §9.
+- Negative: the desktop value-alignment fix needs an override rather than a fix at
+  `styles.css:10161`, because that rule is the **board card's** and `renderCardField`'s four external
+  callers depend on it. A second declaration for one decision is an anti-pattern
+  (`design-system.md` §10), taken deliberately to protect the `038` PM 1:1 parity (goal D5, D7), and
+  it retires when P2 lands and `card-field-renderer.ts` becomes a shim — L2's job.
+- Neutral: REQ-003 keeps its threshold and loses its citation. AC-010 is Met.
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — goal D1 makes the capture read a gate on every design row, and three of those rows describe a primitive's shape incorrectly |
+| **Is there a simpler existing thing?** | `050` ADR-003 already states the capture-wins rule. This ADR applies it and records what it decided here; it does not restate the rule |
+| **What does it touch?** | `spec.md` §2, §5B, §5D and §10; `acceptance-criteria.md` AC-002, AC-003, AC-005, AC-010. No code |
+| **What is the real caller that must not break?** | The leg author reading `spec.md` §5B to build P2 and P3 — the reason the correction lands in the spec rather than only in the true-up |
+| **What contract must not break?** | Goal D5's keep-list (the board card's rendering, the `038` parity) and goal D6's Anytype-is-not-a-data-model boundary. The A4 ruling is where D6 does the work |
+
+<!-- /ANCHOR:adr-004 -->

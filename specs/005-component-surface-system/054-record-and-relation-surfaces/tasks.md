@@ -73,14 +73,22 @@ in the parent program's escalation format rather than retrying. A task blocked o
 ## Phase 1 — Setup and measurement (before any leg)
 <!-- /ANCHOR:setup -->
 
-- [ ] T001 [P0] Open, by hand, every capture §5B names — `anytype-object-page-empty-dark.png`,
-      `anytype-relation-editor-tag-dark.png`, `anytype-properties-official.jpg`,
-      `anytype-filter-property-picker-dark.png`, `anytype-newobject-type-picker-dark.png` — and
-      record adopted / adapted / rejected-with-reason per behaviour row in `migration-table.md` §3.
-      **Proof:** the record exists, every named filename resolves under `screenshots/anytype/`, and
-      each row carries one of the three dispositions. If an image cannot be opened in the working
-      environment, the row records the gap and stands on the README's description — named, never
-      silent.
+- [x] T001 [P0] Open, by hand, every capture §5B names and every capture that supersedes one, and
+      record adopted / adapted / rejected-with-reason per behaviour row. **Deliverable corrected:**
+      T001's record is **`design-trueup.md`**, as it is in `050` and `055`; `migration-table.md` is
+      T003's and consumes it. Writing T001's record into T003's file was a circular dependency in the
+      draft.
+      **Proof — done 2026-09-05.** `design-trueup.md` exists and carries all seven §5B rows plus the
+      S9 editor taxonomy against **31 named captures**: the 25 `anytype-menu-object-*` object-page
+      menus, the 12 `anytype-menu-cell-*` grid-cell editors, the iOS relations panel with its
+      per-format editors and its property-management sheet, and the catalogue grids. Every filename
+      resolves under `screenshots/anytype/`. **Nine contradictions** are recorded in §1 and ruled on
+      by `decision-record.md` ADR-004, three of them structural (A2's anatomy, A4's absent group,
+      A5's reversion to captured). **Two named gaps, never silent:** A4 has no reference screen on
+      either platform and says so, and `menus/anytype-menu-cell-type-dark.png` could not be read —
+      its menu fell outside the crop — with the same menu legible in
+      `menu-object-type-picker-dark.png`, which the row does not depend on. AC-010 is **Met**. The
+      three `spec.md` §10 open questions are answered in `design-trueup.md` §5.
 - [ ] T002 [P0] Measure the red numbers on the current tree and write them into `checklist.md`'s
       Today cells: header-builder census (4), property-row vocabulary census (3), type-list census
       (3), the record sheet's hidden-group absence, the "Empty" placeholder in
@@ -90,7 +98,9 @@ in the parent program's escalation format rather than retrying. A task blocked o
       yet) fails or reports the counts as recorded.
 - [ ] T003 [P0] Write `migration-table.md`: one row per §5A surface (10) and one per §5B behaviour
       (7), columns surface → primitive → changes → Anytype pattern with capture filename → stays
-      ours. **Proof:** AC-008's file check passes against the table.
+      ours. The behaviour rows **consume `design-trueup.md` §3 and §4** rather than re-reading the
+      captures; A4's row records its named gap and cites no capture. **Proof:** AC-008's file check
+      passes against the table.
 
 ---
 

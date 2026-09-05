@@ -106,7 +106,7 @@ pattern the body draft already uses (`record-detail-panel.ts:309-319`).
 
 | Leg | Files | Primitives | Consumers switched |
 |-----|-------|------------|--------------------|
-| T1 | capture files, `migration-table.md` | — (design) | — |
+| T1 | capture files, **`design-trueup.md`** (T001, done), `migration-table.md` (T003) | — (design) | — |
 | L1 | `record-surface/record-header.ts`, `record-surface/index.ts`, `styles.css` | P1 | built beside consumers |
 | L2 | `record-surface/property-row.ts`, `record-surface/hidden-properties.ts`, `record-surface/add-property-row.ts`, `styles.css` | P2, P3, P5 | built beside consumers |
 | L3 | `record-detail-panel.ts`, `table-record-peek.ts` | P1, P2, P3, P5, P6-host | record sheet, peek |
@@ -131,8 +131,14 @@ retirement sweep is its own verified pass, not a tail of the consumer legs.
 <!-- ANCHOR:phases -->
 ## 4. IMPLEMENTATION PHASES
 
-Setup is T001 alone — the capture-image read, the design true-up recorded in `migration-table.md` —
-and it gates every design row in L3. L1/L2 build the primitives beside their consumers (nothing
+Setup is T001 alone — the capture-image read, the design true-up recorded in **`design-trueup.md`**
+(not `migration-table.md`, which is T003's and consumes it) — and it gates every design row in L3.
+**T001 is done**, and it moved three things before any leg starts: P2's anatomy is **label, then
+value, value left-aligned, no format icon on the row**; REQ-003's hidden group is **ours** rather than
+adopted; and P3's picker is designed from a screen rather than from `047` §9. `decision-record.md`
+ADR-004 rules on all nine contradictions, and L3 additionally carries one CSS override that L2
+retires — the desktop record sheet's `text-align: left`, which cannot be fixed at
+`styles.css:10161` without touching the board card's `038` parity. L1/L2 build the primitives beside their consumers (nothing
 switches yet, so every existing capture still holds). L3-L6 switch consumers one file group per leg.
 L7 retires, registers and asserts.
 
@@ -196,7 +202,7 @@ sweep is last so a revert upstream never strands dead CSS.
 
 | Leg | Content | Estimated LOC | Note |
 |-----|---------|---------------|------|
-| T1 | Capture read, `migration-table.md` | ~250 (doc) | one row per surface + one per Anytype behaviour |
+| T1 | Capture read, `design-trueup.md` (done) + `migration-table.md` | ~250 (doc) | 31 captures read; one row per surface + one per Anytype behaviour |
 | L1 | P1 header primitive | ~180 | phone + desktop variants |
 | L2 | P2/P3/P5 | ~420 | the largest primitive leg; three modules + tests |
 | L3 | Record sheet + peek migration | ~200 (net negative in duplicates) | the two record surfaces |
@@ -288,7 +294,7 @@ the path; L4/L5 fan off L2.
 
 | Milestone | Content | Gate |
 |-----------|---------|------|
-| M1 | `migration-table.md` complete: ten surface rows, seven Anytype behaviour rows, gaps named | Every design row has a capture read or a named gap |
+| M1 | `design-trueup.md` complete (T001, **done**) and `migration-table.md` complete: ten surface rows, seven Anytype behaviour rows, gaps named | Every design row has a capture read or a named gap. A4 and `menu-cell-type` are the two named gaps |
 | M2 | The primitives exist and are green beside their consumers; every existing capture still holds | L1+L2 merged, no capture moved |
 | M3 | All ten surfaces consume the primitives; the vocabulary counts read 1/1/1 | SC-001's four-consumer lane row green, negative control seen red |
 | M4 | Operators' device read | SC-002; the operator's own words, not tickable by an agent |

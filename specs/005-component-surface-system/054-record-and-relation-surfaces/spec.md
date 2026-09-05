@@ -107,18 +107,24 @@ everywhere"; nothing decided "header built once".
 **The record sheet has no hidden-properties group.** The peek has one
 (`table-record-peek.ts:259-278`); the record sheet instead filters empty fields away wholesale on
 `config.showEmptyFields` (`record-detail-panel.ts:387-396`) — an all-or-nothing switch with no
-affordance on the surface itself, where Anytype's object page shows a hidden-relations group with a
-count.
+affordance on the surface itself. **Trued at T001:** Anytype has no hidden-relations group and no
+count on either platform (`design-trueup.md` C3), so this gap is measured against our own peek, not
+against a competitor. REQ-003 is ours.
 
-**Empty values say "Empty" instead of offering the add.** An empty multi-select renders the word
-`Empty` (`record-detail-panel.ts:636`, `getEmptyDisplayValue`); Anytype's empty relation renders
-an affordance that opens the editor — `anytype-relation-editor-tag-dark.png` is exactly that state
-captured.
+**Empty values say "Empty" instead of naming the action.** An empty multi-select renders the word
+`Empty` (`record-detail-panel.ts:636`, `getEmptyDisplayValue`; `src/i18n.ts:77`) — one word for every
+format, naming the absence. **Trued at T001:** Anytype's answer is not an add affordance either but a
+**format-specific prompt naming the action** — `Select options`, `Add email`, `Enter number` — and it
+renders that prompt only on a property list, leaving a grid cell blank and giving an opened editor a
+full empty state instead (`design-trueup.md` C5, three rungs).
 
-**The type list is written three times.** `PROPERTY_TYPES` in `create-property-modal.ts:69-74`
-(thirteen types), `getTypeOptions` in `property-type-conflict-modal.ts:364-369` (two subsets by
-source kind), and the column-menu type submenu's own list (`column-menu.ts:224`'s branch). Three
-lists to update the next time a format is added, which is how drift starts.
+**The type list is written once, filtered once, and repeated once.** `PROPERTY_TYPES` in
+`create-property-modal.ts:48-52` (thirteen types); `getTypeOptions` in
+`property-type-conflict-modal.ts:377-380`, which is **not a second list but a filtered subset** of
+that one (nine for a normal writer, five for a computed one); and the column-menu type submenu's own
+list (`column-menu.ts:224`'s branch). **Trued at T001:** Anytype ships **one unfiltered list in both
+its picker surfaces**, so the fix for the middle site is a gate carrying its reason, not a merge
+(`design-trueup.md` C7).
 
 ### Purpose
 
@@ -278,15 +284,25 @@ seen**. T001 still opens every named image by hand before the primitive that ado
 (goal D1) — the true-up covered the view surfaces, not the object-page and relation-panel captures
 this table leans on.
 
+**Trued at T001, 2026-09-05 (later).** `design-trueup.md` has now read the 25 `anytype-menu-object-*`
+captures, the 12 `anytype-menu-cell-*` grid-cell editors, the iOS relations panel and its per-format
+editors, and the catalogue grids, pixel by pixel. **That document is this table's read of record**,
+and the rows below are corrected against it. Three corrections are structural rather than cosmetic:
+**A2's stated anatomy is wrong on both halves** (no format icon belongs on a value row, and neither
+platform right-aligns a value); **A4's hidden group does not exist in the product** and REQ-003 is
+ours rather than adopted; and **A5 reverts from code-derived to captured**, on the phone. The
+`design-trueup.md` §1 contradiction table carries all nine, and `decision-record.md` ADR-004 rules
+on them.
+
 | # | Behaviour | Anytype evidence | What we take | What we keep |
 |---|-----------|------------------|--------------|--------------|
-| A1 | **Object-page header block**: icon, title, then featured relations laid out under the title | `anytype-object-page-empty-dark.png` (a record opened as its own object page); research §7 "featured block" | S1's header becomes P1 with the property list reading as the page under the header, not as a form | The open-note button and our title-field resolution (`resolveTitleFieldDisplay`) |
-| A2 | **Relation row layout**: type icon + name on the left, value on the right, one row per relation, in-place editing | `anytype-relation-editor-tag-dark.png`; `anytype-properties-official.jpg`; research §7 | P2's anatomy is exactly this; the label never wraps under the value | Option badge colours, conditional formatting, rating/progress/ring displays |
-| A3 | **Empty value affordance**: an empty relation shows an add affordance, and clicking it opens the same editor an occupied row opens | `anytype-relation-editor-tag-dark.png` (an *empty* Tag relation clicked open) | REQ-004: empty rows render the affordance instead of the word "Empty" | `showEmptyFields` stays as the show/hide switch for *whether* empties render at all |
-| A4 | **Hidden relations group**: properties hidden from the page collapse into a labelled group with a count | `anytype-properties-official.jpg`; research §7 | REQ-003: P5 on the record sheet, fed by the columns the view hides | The peek's existing group, which becomes the same primitive rather than a second one |
-| A5 | **Add-relation search-first**: the add control opens a search-first picker offering existing properties and "create new" **[trued 2026-09-05 — code-derived]** | `047` §9's source read (three picker surfaces share one component, each adding create-new entries). **Not confirmed by any capture**: `design-trueup.md` REQ-013 read `anytype-filter-property-picker-dark.png` and found per-format leading icons per property row — `Aa` for text, a page glyph for object type, a calendar for dates, a list glyph for Tag, an `ⓘ` for Description — which is the **format vocabulary**, not a search-first picker; and REQ-002 read the Filter panel as a 360px frame whose entire body is one `+ New filter` row. `anytype-filter-tag-value-picker-dark.png`'s "Filter or create options…" placeholder is the one captured create affordance | P3 opens a search-first picker for adding a property on the record sheet, with create-new falling through to S4 — **built from the source read with the gap named**, not from a screen. The **format-icon vocabulary is adopted** and is the part the captures actually support | Our `QUICK_ADD_FILE_FIELDS` quick-add row in S3 |
-| A6 | **Type change flow**: a property's type is changed from its row's menu, with the picker offering every format | `anytype-newobject-type-picker-dark.png`; research §7 | P7 is the one list behind the column-menu type submenu and every modal's type dropdown | Our type-migration semantics in `ColumnRenameModal` (untouched) |
-| A7 | **No equivalent — stays ours**: formulas, rollups, aggregations | `screenshots/anytype/README.md`: "formula and rollup carry no values, and cannot. Anytype has neither" | Nothing | The formula workbench (S7), the 12 aggregations, the output-number-format editor |
+| A1 | **Object-page header block**: icon, title, then the featured relations as one inline middot-separated line under the title | **Seen, both platforms.** `anytype-object-page-empty-dark.png` (`Page · Tag`); `mobile/anytype-mobile-object-page-dark.png` (`Project Tracker · Tag · 1 backlink`); `menus/anytype-menu-object-featured-tag-dark.png` (the featured `Tag` opening a `Filter or create options…` picker in place) | S1's header becomes P1, and the featured line — **inline text, middot-separated, secondary colour, one line, directly under the title** — is what makes the surface read as a page. An unset featured relation shows its **label**, and clicking it opens the same editor an occupied one opens | The open-note button, our title-field resolution (`resolveTitleFieldDisplay`) and our title sizing (`design-system.md` §5 owns panel type; Anytype's 34px is a full-page object title). **And our divergence, recorded deliberately**: Anytype puts no properties on the object page, S1 *is* the properties surface, so P1 keeps them |
+| A2 | **Relation row layout**: label then value, one row per relation, in-place editing | **Seen, both platforms, and they are two designs.** `menus/anytype-menu-object-properties-panel-dark.png` — a **card per property**, `#1E1E1E` on `#171717`, 288px wide, 46px one line / 70px two, 8px apart, label at x 50 on every row and the value **12px after its own label ends** (x 84…153, no column). `mobile/anytype-mobile-sheet-object-properties-dark.png` — a **fixed two-column list**, 48.33pt rows, 1px divider inset 20pt, label at 20.7pt truncating at 154pt, **value pinned at 174pt on every row** | P2's anatomy is **label, then value, value left-aligned** — never right-aligned, and with **no format icon on the row** (`design-trueup.md` C1). Adopted: the desktop left-alignment; **equal type size** for label and value on desktop with the colour split carrying the hierarchy; the **single-select-as-coloured-text / multi-select-as-filled-chip** split (C9); a **4.5:1 floor on every option colour pair**, which Anytype's meet by pairing a dark tinted fill with a light tint of the same hue | Our option palette, conditional formatting, rating/progress/ring displays. Our mobile label column (`flex: 0 0 96px`, `styles.css:10463`) over Anytype's 154pt — an established documented value beats a neighbouring measurement of a longer label population. Our mobile label/value size split, which `styles.css:10479` forces (below 16px iOS zooms the page on tap). Our 44px `--db-sheet-row-min-height`, which Anytype's 48.33pt clears anyway. **And the board card's own right-alignment** (`styles.css:10161`), untouched — `038` parity, goal D5 |
+| A3 | **Empty value affordance**: an empty relation offers a way in, and it opens the same editor an occupied row opens | **Seen, three rungs, keyed to surface density.** Grid cell: **nothing at all** (`anytype-crm-contacts-deals-grid-dark.png`). Property list: a **format-specific prompt naming the action** — `Select options`, `Select option`, `Enter number`, `Add email`. Opened editor: a **full empty state** — `No options` / `Nothing found. Create first option to start.` / `Create` (`mobile/anytype-mobile-sheet-cell-multiselect-empty-dark.png`), or the leaner `No Objects found` + `+ Add` default row (`menus/anytype-menu-object-relation-file-dark.png`) | REQ-004: the **second rung**, not a `+` button — the word "Empty" is replaced by a **format-specific prompt naming the action**, one string per format, on the record sheet and board cards. Plus the row-versus-input copy split the captures show: `Add email` on the row, `Enter email` in the input | `showEmptyFields` stays the show/hide switch for *whether* empties render. The grid keeps rendering **nothing** — the first rung is correct for a dense surface. **Anytype's placeholder greys are refused**: `#5C5C5C` at 2.49:1 desktop, `#646464` at 2.88:1 iOS; a prompt naming the only way to fill a field is normal text and owes 4.5:1 |
+| A4 | **Hidden relations group**: properties hidden from the page collapse into a labelled group with a count | **Not seen — proved absent.** `mobile/anytype-mobile-sheet-object-properties-settings-dark.png` shows the surface that would carry one and it does something else: a **`Header` section** (Object type, Tag, Backlinks) and a **`Properties panel` section** (the rest) with a `+` on the second, every row `format icon · label · drag handle`, **both always expanded, nothing counted, nothing collapsing**. Membership changes by dragging a row across the boundary. The marketing JPEG the row cited is not evidence of a shipped surface | REQ-003 stays, **as ours rather than adopted** (`design-trueup.md` C3). The count stays too, for `050` REQ-001's reason: a number is a text second signal, and `t("panel.hiddenProperties")` (`src/i18n.ts:549`) carries none today. P5's shape is the peek's existing disclosure **moved, not redesigned** | The peek's group (`table-record-peek.ts:259-278`), which becomes the primitive. **Anytype's Header/Properties-panel model is not adopted**: its axis is *where* a property appears, decided at the type level, and a type system is out of scope by goal D6 |
+| A5 | **Add-relation search-first**: the add control opens a search-first picker offering formats and existing properties, with create folded into the search | **Seen, on the phone. The landing correction is reverted.** `mobile/anytype-mobile-sheet-relation-add-dark.png`: title `Add property`, a search field placeholded **"Search or create new"**, then **`Properties formats`** (all eleven) and then **`Existing properties`** — formats **first**, which inverts the row's original order. Corroborated by three more pickers: `Filter or create options…` (featured tag), `Type to create a new option` (multi-select relation), `Filter Types…` (change type). Search-first is the product's picker grammar, not one surface's habit | P3 opens a search-first picker with **create folded into the search field's placeholder**, formats before existing properties. Row geometry: 52.33pt, 18pt icon box with a 14pt glyph at 23pt, label at 54.7pt, dividers inset 20pt. **The format-icon vocabulary is adopted and now placed**: pickers and the property-management surface, never a value row | Our `QUICK_ADD_FILE_FIELDS` quick-add row in S3, **beside** the picker — Anytype's picker leads with the format question and the quick-add row skips it, so the two do not compete (`spec.md` §10, answered) |
+| A6 | **Type change flow**: a property's type is changed from its row, with the picker offering every format | **Seen, both platforms, and it is search-first.** `menus/anytype-menu-object-type-picker-dark.png` — a two-row menu, `Open type` / `Change type ›`. `menus/anytype-menu-object-type-picker-change-type-dark.png` — the submenu is a **`Filter Types…` search field** over a `My Types` section over the list. `mobile/anytype-mobile-sheet-relation-new-format-dark.png` — the **same eleven formats in the same order** as the add picker, current one carrying a **right-aligned checkmark**. **One list, twice, unfiltered** | P7 is the one list behind the column-menu type submenu and every modal's type dropdown, **search-first**, with the current value marked by a **checkmark** (a shape) rather than a row fill (a colour `050` already refused at 1.14:1). **The conflict modal's shortened list becomes a gate, not a filter**: `property-type-conflict-modal.ts:377-380` returns 9-of-13 or 5-of-13 today; Anytype hides no format anywhere, and `row-menu.ts` already sets our precedent — disable with a reason rather than remove | Our type-migration semantics in `ColumnRenameModal` (untouched). **Anytype's list order is not taken** — half its formats (URL, email, phone) we do not have and half of ours (currency, computed, rollup, status, files) it does not |
+| A7 | **No equivalent — stays ours**: formulas, rollups, aggregations | **Not seen, and the absence is the evidence.** Scanned all 156 root, 600 menu and 118 iOS captures: **no formula, no rollup, no aggregation surface anywhere.** The 12 `menus/anytype-menu-cell-*` editors cover eleven formats plus type, none of them computed. `screenshots/anytype/README.md`: "formula and rollup carry no values, and cannot. Anytype has neither" | Nothing. ADR-003 is confirmed rather than re-litigated | The formula workbench (S7), the 12 aggregations, the output-number-format editor. Their only change from this phase is consuming P7 for their existing type dropdowns (REQ-005) — wiring, not design |
 
 **The operator's keep-list, restated as constraints:** the table, the bottom sheets' ownership
 (`003`/`016`/`031`), formulas/rollups/calculations, and the Project Manager 1:1 board and gantt.
@@ -313,6 +329,17 @@ Each carries a written description in `screenshots/anytype/README.md`.
 capture index and two stood on `047`'s source read alone. The pixels are unread here — this landing
 pass could not open images — so what follows names the file each row should now be trued against.
 T001 opens them.
+
+**T001 opened them, 2026-09-05 (later).** The table below stands as the routing it was written to be,
+and every prediction in it held except two. **A4's prediction was right and its conclusion was
+wrong**: the file does show a Header-versus-Properties-panel split rather than visible-versus-hidden,
+and T001's answer to "which model this packet wants" is *neither adopted* — REQ-003 stays ours,
+because Anytype's axis is a type-level authoring decision and goal D6 puts a type system out of
+scope. **A2's prediction that the iOS panel is "S1's exact analogue" is the one thing this section
+got wrong**: the desktop and iOS panels are two different designs, not one design at two widths
+(`design-trueup.md` C6), and the desktop one is the further from ours. The per-format editor
+inventory at the foot of this section is confirmed and reduced to **three shells over eleven formats
+plus one toggle** in `design-trueup.md` §4.
 
 | §5B row | Was | Now readable in |
 |---|---|---|
@@ -450,15 +477,31 @@ record-surface slice of that obligation.
 <!-- ANCHOR:questions -->
 ## 10. OPEN QUESTIONS
 
-- Does the record sheet's desktop anchored panel keep its own close button (today
+**All three are answered at T001**, from the captures where the captures reach and from our own tree
+where they do not. `design-trueup.md` §5 carries the reasoning; the answers are recorded here.
+
+- ~~Does the record sheet's desktop anchored panel keep its own close button (today
   `db-cell-edit-close`, CSS-hidden on desktop) or does P1 give the desktop panel the peek's
-  no-chrome header? The record sheet is operator-verified on desktop; the primitive must not
-  silently change what was verified. Proposed: desktop keeps today's DOM, asserted by the lane.
-- Does P3's search-first picker replace S3's quick-add file-field row or sit beside it? Proposed:
-  beside — the quick-add row is a documented, working affordance and A5's picker is for the record
-  sheet.
-- Should the board card gain the add-property affordance (A3), or is a card summary the wrong place
-  to add a property? Proposed: record sheet only, at T001's discretion after reading the captures.
+  no-chrome header?~~ **ANSWERED: desktop keeps today's DOM, asserted by the lane** — the proposed
+  answer, unchanged. With one addition that moves part of this question out of the packet: **the
+  desktop panel's placement is `006-record-open-target`'s, not P1's.** That packet's in-flight work
+  (worktree `085-record-open-dock`) adds AC-014 and AC-015 against a measured red of **72px tall at
+  `top 12 · bottom 84` on a 900px viewport** when the affordance carries no anchor. P1 changes the
+  header's DOM and nothing about where the panel lands; any placement assertion this packet's lane
+  makes must **read `006`'s stated `placement` field rather than measure a box**, or two packets will
+  assert different answers about one surface.
+- ~~Does P3's search-first picker replace S3's quick-add file-field row or sit beside it?~~
+  **ANSWERED: beside.** The captures supply the reason the proposal lacked — Anytype's add-property
+  picker leads with `Properties formats` and puts `Existing properties` second, so the format
+  question comes first. `QUICK_ADD_FILE_FIELDS` is a shortcut *past* that question for a fixed known
+  set; it skips the picker rather than competing with it.
+- ~~Should the board card gain the add-property affordance (A3)?~~ **ANSWERED: no button, yes the
+  prompt.** A grid cell — the densest surface — renders nothing for an empty value, and a board card
+  is nearer a grid cell than a property list. But the format-specific prompt costs one string and is
+  what keeps SC-001's "reads identically on every surface" true, so `renderCardField`'s
+  `is-empty-field` path gains it on both consumers and **no add button lands on a card**. This also
+  keeps the change inside the `card-field-renderer.ts` shim rather than reaching into
+  `board-renderer.ts`, whose `038` parity captures goal D5 protects.
 
 <!-- /ANCHOR:questions -->
 
