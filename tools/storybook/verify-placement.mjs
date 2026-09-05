@@ -9806,14 +9806,20 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
   // opening a second owned menu. So what is asserted is the mechanism, which is decidable: one
   // document handler per open menu. The consequence is recorded in `003`'s packet as a question
   // with its number, rather than as a defect nobody has shown a user can reach.
+  // Counted as an INCREMENT, not as a total. The shared overlay stack installs one capturing
+  // pointerdown per document the first time any surface registers, and every sheet now registers so
+  // that depth can be read from one place. That arbiter is per-document, not per-menu, so it lands
+  // once in the first menu's count and never again — asserting a total would fail on a listener the
+  // design specifically requires there to be only one of.
   record("each open menu owns exactly one document-level dismissal handler",
-    m.handlersOneMenu === 1 && m.handlersTwoMenus === 2,
+    m.handlersTwoMenus - m.handlersOneMenu === 1 && m.handlersOneMenu <= 2,
     `${m.handlersOneMenu} capturing pointerdown handler(s) with one menu open, `
-      + `${m.handlersTwoMenus} with two. That is the factory's stated design — a press outside a `
-      + `menu arrives at that menu's own handler — and it is why one backdrop press dismissed both `
-      + `(top=${m.topClosed}, beneath survived=${m.bottomSurvived}). Whether two independent owned `
-      + `menus ever stack in the shipped app is a separate question, recorded in \`003\` rather `
-      + `than assumed here`);
+      + `${m.handlersTwoMenus} with two: one per menu, plus the single shared stack arbiter the `
+      + `first registration installs for the document. That is the factory's stated design — a `
+      + `press outside a menu arrives at that menu's own handler — and it is why one backdrop press `
+      + `dismissed both (top=${m.topClosed}, beneath survived=${m.bottomSurvived}). Whether two `
+      + `independent owned menus ever stack in the shipped app is a separate question, recorded in `
+      + `\`003\` rather than assumed here`);
 });
 
 // ───────────────────────────────────────────────────────────────────
