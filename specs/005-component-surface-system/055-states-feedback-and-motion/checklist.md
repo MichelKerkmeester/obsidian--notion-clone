@@ -37,11 +37,11 @@ written after the fix is a cell nobody can check against the tree that produced 
 | C4 | Confirm's stacked-pair treatment | **unregistered** — `048` inventory M-4 names the pair; no dim, no scale-back, shared scrim | parent |Δ| ≤ 1px, one scrim between, per registered pair | [ ] |
 | C5 | Distinct empty states | **12 reasons ship** (`empty-state-renderer.ts:24-36`); **0 of 12 is the deleted-relation state** — deleted group field → silent re-group (`database-view.ts:2678`, `:2890`, `:3378`). `050`'s "all conditions render the same state" was false (`design-trueup.md` REQ-009) | the existing 12-to-3 mapping **asserted**, plus the deleted-relation state **built** and pointing at view settings | [ ] |
 | C6 | Chart's empty-state component | **private** — `renderEmptyState` (`chart-renderer.ts:601-604`), `db-chart-empty`, six reasons (`chart-aggregation.ts:64`) | rendered through `EmptyStateRenderer`; `db-chart-empty` markup 0 | [ ] |
-| C7 | Untokenized `120ms` transitions in `styles.css` | **42** (`grep -o "transition:[^;]*" styles.css | grep -c 120ms`); the shared token reaches 8 uses (`styles.css:113`) | 0 in this phase's files; census recorded for the rest | [ ] |
-| C8 | Reduced-motion coverage of new surfaces | reset covers container descendants + `.db-surface` (`styles.css:918-947`), proven by `owned-menu-reduced-motion.test.ts`; toast and confirm do not exist yet | every touched surface named in the reset; coverage test extended | [ ] |
-| C9 | Menu item count, fully-restricted selection; caps | **0 — empty menu**; no gate, no caps in `row-menu.ts` or `bulk-edit-field-menu.ts` | **≥ 1** with the fallback row; caps at >1 and >10 asserted at the boundaries | [ ] |
+| C7 | Untokenized `120ms` transitions in `styles.css` | **42 `transition:` declarations** (`grep -o "transition:[^;]*" styles.css | grep -c 120ms`), holding **78** `120ms` occurrences between them — one population, two units; the shared token reaches **7** uses, not 8 (`styles.css:113`). The wider census also missed **16** durations written in seconds (10×`0.15s`, 3×`0.2s`, 2×`0.1s`, 1×`0.3s`), so the real 150ms population is 14 (`state-feedback-vocabulary.md` §4, `design-trueup.md` C6/C8) | 0 in this phase's files; census recorded for the rest, at both spellings | [ ] |
+| C8 | Reduced-motion coverage of new surfaces | reset covers container descendants + `.db-surface` (`styles.css:918-947`), proven by `owned-menu-reduced-motion.test.ts`; toast and confirm do not exist yet. **Nothing is being adopted here** — `prefers-reduced-motion` occurs **0 times** in `anytype-ts/src` (`design-trueup.md` C5) | every touched surface named in the reset, the shimmer's `infinite` included; coverage test extended | [ ] |
+| C9 | Menu item count, fully-restricted selection; caps | **1 file can violate it, not two** (ADR-004). `row-menu.ts` **cannot** render empty — `menu.openNote` at `:88` is unconditional — so its guarantee is asserted, not built. The violator is `bulk-edit-field-menu.ts`, mapping `options` straight from `getBulkEditableColumns` at `:30`/`:38` with no floor. **Caps not adopted**: a single-row menu has no referent for >1 or >10 | **≥ 1** in every capability state; `row-menu`'s guarantee asserted, `bulk-edit`'s fallback row built | [ ] |
 | C10 | Per-view scroll restore | **0 views restore**, but the machinery exists — `database-viewport.ts` has four request kinds (`:37`), captures `scrollTop` (`:67`) and restores raw (`:76`) or anchor-relative (`:84`); view switching asks `reset-top` | restored within **±2px**, per view, by **wiring the existing snapshot** — a second mechanism is the failure mode | [ ] |
-| C11 | Embedded view paging path | **virtualization entered** | a page plus a "Load more" row; virtualization not entered | [ ] |
+| C11 | Embedded view paging path | **not virtualization — there is none** (ADR-004). No `virtualis*` match exists anywhere in `src/views`, so the drafted premise could not be observed red. The real red is **0 embedded views honour a page limit and 0 render the row** | a page at the **60**-row limit plus a "Load more" row, inline rows **~40px** against **48px** full-page; the virtualization clause becomes a future-regression guard | [ ] |
 | C12 | `npm run gate` exit status with every negative control observed red | not yet run for this phase | exit **0**, each control red then green | [ ] |
 | C13 | `screenshots/project-manager/` board and gantt `pixelHash` | baseline to be captured before the first leg that could move the board | identical, or operator-ruled | [ ] |
 
@@ -53,17 +53,24 @@ theatre; C13 is the check that the state work did not cost Project Manager.**
 Three deliverables have no Anytype reference screen, and each is designed from a named finding
 with the gap recorded here — `050` goal D1's discipline, carried:
 
-- **The toast** — no Anytype capture shows a feedback surface and no `047` finding names one. The
-  design is the vocabulary's consistency requirement (`state-feedback-vocabulary.md` §3); the
-  Anytype contribution is never-empty menus and subtle motion, not a toast screen.
-- **The "target" empty flavour and the deleted-relation state** — `047` §9 names both states but
-  no capture shows them; `anytype-inlinecollection-empty-dark.png` shows only the "view" flavour.
+- **The toast** — no capture on either platform shows a feedback surface, and that gap stands.
+  **Its geometry is no longer invented, though**: `anytype-ts/src/scss/notification/common.scss` is
+  a complete source read (384px wide, 12px bottom-right, 12px radius, 16px padding, action row
+  auto-hiding when empty, collapsed stack). Severity is ours — the reference toast has none. Undo
+  is separately captured as an iOS **menu row**, a placement recorded but not built
+  (`design-trueup.md` §2, §3).
+- **The deleted-relation state** — `047` §9 names it and no capture shows it, on either platform.
+  The **"target" flavour is now captured** on the phone
+  (`mobile/anytype-mobile-sheet-grid-cell-objecttype-empty-dark.png`), and the desktop
+  `anytype-inlinecollection-empty-dark.png` shows **no empty block at all** rather than a "view"
+  flavour — that finding is desktop-scoped (`design-trueup.md` C4).
 - **The grammar and stacking rows** — measured by `044`'s and `048`'s own lanes, not by a
   competitor screen.
 
-The only mobile reference set is `screenshots/anytype/mobile-official/` — 20 official images, no
-installed-app mobile capture. Every phone expression here is measured against `044`'s grammar, not
-against an Anytype screen.
+The mobile reference is now `screenshots/anytype/mobile/` — **118 real iOS simulator captures, 59
+states in both themes** — which supersedes `mobile-official/`'s 20 marketing images. Every phone
+expression here is still measured against `044`'s grammar; the Anytype screens inform the design
+and never the pass/fail.
 <!-- /ANCHOR:protocol -->
 
 ---

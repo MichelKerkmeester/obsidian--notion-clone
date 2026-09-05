@@ -78,16 +78,20 @@ code-derived and the gap is stated — never guessed at a screen (`050` goal D1'
 | Deleted group relation state | A board whose grouping column was deleted renders a dedicated state pointing at view settings | `047` §9 | REQ-055-3's third state replaces the silent `getDefaultBoardField` fallback | `database-view.ts:2678`/`:2890`/`:3378`'s caller |
 | Never-empty menus | `objectContext` is capability-gated per selection; the fully-restricted case renders "No available actions"; caps at >1 and >10 selections | `047` §9 | 050 REQ-008 verbatim; the fallback row is the vocabulary's guarantee that no menu renders empty | `row-menu.ts`, `bulk-edit-field-menu.ts` |
 | Per-format condition rows on mobile sheets | Android filter sheets render one condition row per relation format | `047` §10 (from `anytype-kotlin`, code-derived; no capture) | **Not this phase** — 050 REQ-013's leg; named here so the boundary is explicit | — |
-| Subtle, centralized motion | One `animationProps` helper; 0.2s enter / 0.1s exit observed; explicit no-animation paths for chained menus; interaction lock during drags | `047` §10 | The motion-token set (§4); the chained-menu no-animation rule maps onto our owned-menu submenu suppression | `styles.css` token block |
+| Subtle, centralized motion | **`047` §10 is superseded on both halves** (`design-trueup.md` C1, C2). There is no `0.1s` exit — the toast's enter and exit share one `transition-duration: 0.2s` (`anytype-ts/src/scss/notification/common.scss:21`, `:25`) — and the "centralized helper" is three constants (`_mixins.scss:2`, `:5-7`) plus 18 hand-typed `0.3s` and 96 bare `ease` against 2 `ease-out`. The no-animation hatch is real: `.noAnimation { transition: none !important; }` (`common.scss:89`) | `anytype-ts/src/scss/`, read directly | The motion-token set (§4), measured rather than quoted (ADR-005); the chained-menu no-animation rule maps onto our owned-menu submenu suppression | `styles.css` token block |
 | Never-empty view tab row | Removing a view pre-selects the next view | `047` §5 | Already true of our view handling; recorded so it is not re-derived | — |
-| Inline undo | **Not observed in Anytype** — no capture, no finding | — | Ours already exists in two shapes; this phase makes it one component and makes the migration notice's Undo real. The adoption is consistency, not a screen | `toast.ts` |
+| Inline undo | **Partly observed, in a different placement.** No toast appears in any capture, but iOS carries `Undo/Redo` as a persistent **menu row** (`mobile/anytype-mobile-sheet-object-more-dark.png`), which does not depend on catching a transient. The toast's *geometry*, meanwhile, is a complete source read — 384px wide, 12px bottom-right, 12px radius, 16px padding, 70px min-height, action row `gap: 8px` at `margin-top: 12px` that **auto-hides when empty**, collapsed stack with only the first card rendering content (`notification/common.scss:6`, `:20`, `:38-39`, `:50-52`) | `mobile/anytype-mobile-sheet-object-more-dark.png`; `anytype-ts/src/scss/notification/common.scss` | The measured geometry, at our on-scale neighbours (64px min-height). **Severity is ours** — the reference toast has one visual and no severity axis. The persistent-undo placement is recorded, not built | `toast.ts` |
 
 Capture files that inform the empty-state design directly:
 `anytype-inlinecollection-empty-dark.png` (the "view" flavour with its `+ New Object` row — the
 model for our per-layout add affordance), `anytype-collection-grid-populated-dark.png` (populated
-contrast), `mobile-official/` (7 iOS + 7 Android official captures, the only mobile reference; no
-installed-app mobile capture exists). The "target" flavour and the deleted-relation state were
-**not captured**; their designs are code-derived from `047` §9 with the gap named here.
+contrast), and — since `964a0b2a` — the **118 real iOS simulator captures** under
+`screenshots/anytype/mobile/`, which supersede `mobile-official/` as the mobile reference (the
+official creative remains marketing, good evidence of intent and weak evidence of pixels). T001
+read them: the desktop's no-empty-block finding is **desktop-scoped**, and the phone renders a
+**three-tier ladder** — message only, illustration plus one line, illustration plus title plus
+body plus action (`design-trueup.md` §3). The deleted-relation state is still **not captured** on
+either platform; its design stays code-derived from `047` §9 with the gap named here.
 
 ---
 
@@ -95,27 +99,56 @@ installed-app mobile capture exists). The "target" flavour and the deleted-relat
 
 | Token | Value | Used for | Replaces |
 |-------|-------|----------|----------|
-| `--db-motion-fast` | `120ms ease` | Tone transitions: hover, active, focus; menu rows | 42 hand-typed `120ms` declarations (`grep -o "transition:[^;]*" styles.css | grep -c 120ms`); the existing `--db-transition-fast` (`styles.css:113`), which reaches only 8 uses, is renamed to this or aliased |
-| `--db-motion-surface` | `180ms ease-out` | Small floating surfaces: popovers, dropdowns, toasts | 3 hand-typed `180ms` declarations |
+| `--db-motion-fast` | `120ms ease` | Tone transitions: hover, active, focus; menu rows | **42** `transition:` declarations carrying `120ms` (`grep -o "transition:[^;]*" styles.css | grep -c 120ms`), which hold **78** `120ms` occurrences between them — one population, two units; the existing `--db-transition-fast` (`styles.css:113`), which reaches **7** uses, is renamed to this or aliased. Kept at 120ms against Anytype's neighbouring `0.15s` (`_mixins.scss:2`) because an established project value outranks a neighbouring measurement |
+| `--db-motion-surface` | **`200ms ease-out`** | Small floating surfaces: popovers, dropdowns, toasts | **Measured** (ADR-005): Anytype puts menu, popup and sidebar on one `0.2s` constant (`_mixins.scss:5-7`) with a decelerating curve (`:9`). The 3 hand-typed `180ms` declarations **and** the 3 written as `0.2s` all migrate onto it; 180ms was three strays, not a token, so the measurement wins |
 | `--db-motion-sheet` | `260ms ease-out` | Sheet + scrim entrance; surfaces with ~760px of travel | Existing `--db-sheet-enter` (`styles.css:121`) — renamed, value and comment kept |
-| `--db-motion-emphatic` | `1.1s ease-in-out infinite` | Skeleton shimmer only (`styles.css:2749`) | The shimmer's inline duration |
+| `--db-motion-emphatic` | `1.1s ease-in-out infinite` | Skeleton shimmer only (`styles.css:2749`) | The shimmer's inline duration. Anytype's loops run `1.2s`/`2s` `linear`; same order, and a sheen is not a progress measure |
+| `--db-motion-scale-from` | `0.98` | Entrance scale for any floating surface: popover, toast | Our popover's inline `0.98` (`styles.css:360`) against Anytype's popup `0.95` (`popup/common.scss:18`) — both inside the 0.95-1.05 bound, so the established value holds. A token because the toast needs the same number. Anytype's toast `scale3d(0.75)` (`notification/common.scss:25`) is **refused**: outside the bound, on the one surface this phase builds |
 
 **Easings:** `ease` for tone, `ease-out` for entrances, matching the existing `db-sheet-scrim-in`
-and sheet transition (`styles.css:272, 385`). No new easing curves.
+and sheet transition (`styles.css:272, 385`). **No new easing curves, and Anytype's are not
+ported**: `design-system.md` declares no easing vocabulary, so one bespoke `cubic-bezier` beside
+the keywords would be a second system of the same kind. `$easeInQuint`
+(`anytype-ts/src/scss/_mixins.scss:1`) is additionally a curve whose name says the opposite of its
+shape — it is `cubic-bezier(0.22, 1, 0.36, 1)`, an ease-**out** — so porting it by name would
+reverse the direction (`design-trueup.md` §2).
 
-**Reduced motion:** the reset at `styles.css:918-947` covers container descendants and takes a
+**Reduced motion — ours alone.** `prefers-reduced-motion` occurs **0 times** in
+`specs/context/anytype-ts/src`, so there is no counterpart to adopt and no counterpart to measure
+against (`design-trueup.md` C5). The reset at `styles.css:918-947` covers container descendants and takes a
 real zero on `.db-surface` (the body-mounted-menu case proven by
 `owned-menu-reduced-motion.test.ts`). Every new token consumer is named in the reset in the same
 change that introduces the token; the coverage test's anchor-text mechanism extends to the toast
 and confirm. The shimmer's `infinite` loop must appear in the reset or it never stops for a
 reduced-motion reader.
 
-**Residual inventory (measured, not swept):** 87 `transition:` and 21 `animation:` declarations in
-`styles.css`. Duration census: 78×120ms, 4×150ms, 3×180ms, 1×80ms, 1×160ms, 1×100ms on
-transitions; on animations, multi-second timers (1.2s, 2.2s, 0.8s, 700ms, 650ms, 220ms, 1.1s
-shimmer) that are schedules, not state feedback, and stay out of scope. Migration is per-file
-through the parent's serialized CSS lane (goal D6); the 150/180/160/100/80ms strays are recorded
-here so a later lane pass finds the census rather than re-measuring.
+**Residual inventory (re-measured at T001, not swept).** 87 `transition:` and 21 `animation:`
+declarations in `styles.css`. Two corrections to the original census, both from
+`design-trueup.md` C6 and C8.
+
+**First, 42 and 78 are the same population counted in different units** and the earlier census used
+them interchangeably. `120ms` appears in **42 `transition:` declarations**, and those declarations
+contain **78 `120ms` occurrences**, because one declaration may list several properties each with
+its own duration. Quote the declaration count when talking about sites to migrate, and the
+occurrence count when talking about literals to replace.
+
+**Second, the census only counted `ms` spellings and so missed 16 durations written in seconds.**
+
+| Notation | Population on `transition:` |
+|---|---|
+| `ms` | 78×`120ms` (across 42 declarations) · 4×`150ms` · 3×`180ms` · 1×`160ms` · 1×`100ms` · 1×`80ms` |
+| `s` — **previously uncounted** | 10×`0.15s` · 3×`0.2s` · 2×`0.1s` · 1×`0.3s` |
+
+So the real populations, combining both spellings: **150ms → 14** (not 4), **200ms → 3**,
+**100ms → 3**, **300ms → 1**. The 200ms group is a second, independent reason
+`--db-motion-surface` lands at 200ms rather than 180ms.
+
+On animations: 3×`2.2s` · 3×`1.2s` · 2×`160ms` · 1×`1.1s` (shimmer) · 1×`800ms` · 1×`700ms` ·
+1×`650ms` · 1×`220ms`. The multi-second ones are schedules, not state feedback, and stay out of
+scope; the two `160ms` were missing from the earlier list.
+
+Migration is per-file through the parent's serialized CSS lane (goal D6); every stray above is
+recorded here so a later lane pass finds the census rather than re-measuring.
 
 ---
 
@@ -176,4 +209,19 @@ indexed as "horizontally scrolling grid over the catalogue's 28 typed columns" a
 326-record space — so the phone renders a large set without a `Load more` row visible in the index's
 description. That is not evidence of absence, but it is the screen to check first when T001 trues
 the 60-row page limit, because 326 records is well past 60.
+
+### Closed at T001, 2026-09-05
+
+The pixels above are no longer unread. `design-trueup.md` is the reading, and it settles each row:
+the phone empty states resolve into a **three-tier ladder**; the confirm is **still uncaptured on
+both platforms** and stays `051`'s primitive; undo is confirmed as an iOS **menu row**, a placement
+recorded but not built here; the deleted-relation state, `loading` and `error` remain uncaptured.
+The `Load more` check was made and **no phone figure was taken** — a viewport is not a scroll to
+the end — so the 60 stands from `anytype-set-gallery-view-dark.png`'s `Page limit  60 ›`.
+
+One finding the mobile set added that the index could not: **destructive treatment is
+platform-split.** A per-pixel scan of the desktop `···` menu returns **0 reddish pixels** on
+`Move to Bin`, and 0 again on `Empty Bin`, while iOS renders `Delete` in `#FF4A4D` beside a red
+trash glyph at 5.75:1. We adopt the icon-beside-colour pairing and keep `mod-warning`, which the
+host theme owns (`design-trueup.md` C3).
 
