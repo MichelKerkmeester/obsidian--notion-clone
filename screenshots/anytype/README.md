@@ -79,11 +79,11 @@ context menu — and used the same method to delete the demo content at the end.
   the higher-value shot.
   **Corrected on 2026-09-05: this bullet used to say "a few hover-only states" and it was read as
   "no hover state was captured". That reading is false, and five documents inherited it.** The
-  submenu walk in the catalogue pass *is* a hover: **37 of the 150 menus under `menus/` were reached
+  submenu walk in the catalogue pass *is* a hover: **37 of the 150 menus under `desktop/menus/` were reached
   by hovering a row of their parent**, and each of those files photographs that parent row in its
   hovered state — the catalogue table's own "How it was reached" column says `▸ hover "align"`,
   `▸ hover "advanced"`, `▸ hover "change type"`. Measured on
-  `menus/anytype-menu-object-more-add-link-to-object-dark.png` by `052`'s T001: the hovered
+  `desktop/menus/anytype-menu-object-more-add-link-to-object-dark.png` by `052`'s T001: the hovered
   `Add Link to Object` row is **`#232323`, 28px tall, inset ~10px inside a 16px content inset,
   1.14:1 against its own `#171717` panel**. The hover grammar was on disk the whole time; what is
   genuinely missing is a **drag** state, not a hover one.

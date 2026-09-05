@@ -65,7 +65,7 @@ seen* in `design-trueup.md` §4. Two of the four (REQ-005, REQ-011) need no scre
 over time and no still can show them.
 
 **Two corrections landed 2026-09-05 from `053`'s T001.** **REQ-013 leaves the list**: twelve desktop
-relation formats with their condition pickers are captured under `menus/`, and the iOS simulator set
+relation formats with their condition pickers are captured under `desktop/menus/`, and the iOS simulator set
 added four phone filter and sort sheets. And **C10's "absent from the shipped product" is withdrawn**
 — the per-view default lives in the `New ⌄` menu's `Settings` section, not the view-settings panel
 this read searched. Both are recorded in `design-trueup.md` §1's correction block.

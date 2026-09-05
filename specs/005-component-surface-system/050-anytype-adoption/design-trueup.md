@@ -57,7 +57,7 @@ before the tables that used to be wrong.
 |---|---|---|
 | **C2**: no chip row on any capture, including the view that carries a filter | The chip rail is on **eleven** captures — `anytype-project-tracker-list-light.png` and its dark pair, `anytype-crm-contacts-deals-list-light.png`, `anytype-reading-list-list-light.png`, `anytype-course-notes-list-light.png`, `anytype-content-calendar-list-light.png` and `anytype-menu-set-viewlist-dark-full.png` — and it is **conditional**: present on 5 of 5 List views (each carrying a filter), absent on Grid, Gallery, Kanban, Calendar and Graph in the same sets. Measured: 28px chip, r≈14, ~12px horizontal padding, 99px wide, fill `#E2ECFE` light / `#1D2739` dark, on a rail band at y 274..301 under a 1px divider at y 261 (`053` design-trueup D1, T14) | C2, REQ-001 |
 | **C7**: no per-view default exists in the shipped product | It exists, one surface over from the panel this read searched: the `New ⌄` split button's menu carries a `Settings` section with `Default Type for this View   Page ›` and `Template for this View   Blank ›`, each opening its own anchored picker. `anytype-menu-set-new-object-light.png`, with `-default-type-for-this-view-` and `-template-for-this-view-` pairs (`053` D2, T10) | C7, REQ-010 |
-| **REQ-013**: Anytype's filter panel "is a 360px frame whose entire body is one `+ New filter` row" | That is the **empty state**. The populated panel is captured across **twelve relation formats** — checkbox, date, email, file, multiselect, number, object, phone, select, text-long, text-short, url — as `menus/anytype-menu-set-filter-{format}-light.png` each with a `-condition-` pair, plus the date picker, the relative-date picker and four mobile filter sheets (`053` D3, T15/T16) | REQ-013 |
+| **REQ-013**: Anytype's filter panel "is a 360px frame whose entire body is one `+ New filter` row" | That is the **empty state**. The populated panel is captured across **twelve relation formats** — checkbox, date, email, file, multiselect, number, object, phone, select, text-long, text-short, url — as `desktop/menus/anytype-menu-set-filter-{format}-light.png` each with a `-condition-` pair, plus the date picker, the relative-date picker and four mobile filter sheets (`053` D3, T15/T16) | REQ-013 |
 | **60** is "Anytype's own captured default page limit", adopted flat | The page limit is **per-layout**: Gallery **60**, Kanban **10**, and Grid, List, Calendar and Graph carry **no page-limit row at all**. A flat 60 is not the captured behaviour (`053` D4, T19/T24) | Measured table, REQ-010, REQ-014 |
 
 **A fifth correction, from `052`'s true-up**: this document's §2 says hover states were never
@@ -106,11 +106,11 @@ our own motion band rather than quoted as measured.
 
 **Hover is not on that list, and this document used to say it was.** The sentence "the README
 records that hover states were never captured" stood here until 2026-09-05 and four other documents
-inherited it. `052`'s T001 disproved it: **37 of the 150 menus under `menus/` were reached by
+inherited it. `052`'s T001 disproved it: **37 of the 150 menus under `desktop/menus/` were reached by
 hovering a row of their parent**, and each of those files photographs that parent row in its hovered
 state — the capture index's own "How it was reached" column reads `▸ hover "align"`,
 `▸ hover "advanced"`, `▸ hover "change type"`. Measured on
-`menus/anytype-menu-object-more-add-link-to-object-dark.png`: the hovered row is `#232323`, **28px
+`desktop/menus/anytype-menu-object-more-add-link-to-object-dark.png`: the hovered row is `#232323`, **28px
 tall**, inset ~10px inside a 16px content inset, **1.14:1** against its own panel. What a still
 genuinely cannot show is a **drag** state. `screenshots/anytype/README.md` is corrected to match.
 
@@ -679,7 +679,7 @@ description of it.**
 sort sheet appears in any of the 151 files."* Both halves of that gap have since closed: the iOS
 simulator set (`964a0b2a`) landed four phone filter and sort sheets, and **`053` T001 (D3) opened the
 populated desktop panel across twelve relation formats** —
-`menus/anytype-menu-set-filter-{checkbox,date,email,file,multiselect,number,object,phone,select,text-long,text-short,url}-light.png`,
+`desktop/menus/anytype-menu-set-filter-{checkbox,date,email,file,multiselect,number,object,phone,select,text-long,text-short,url}-light.png`,
 each with a `-condition-` pair, plus `-filter-date-picker-`, `-filter-date-relative-`, the property
 picker, and the mobile `-view-filters-empty-`, `-filter-relation-picker-`, `-filter-condition-text-`
 and `-filter-condition-operators-` sheets. The 20 mobile images are official marketing creative and
@@ -790,7 +790,7 @@ view cannot enter a virtualization path because none exists.
 | REQ-010 new-row presets | **Seen as of 2026-09-05** — in the `New ⌄` menu, not the settings panel | `anytype-menu-set-new-object-light.png` + its two sub-pickers; `anytype-mobile-sheet-set-newobject-templates-light.png` | Yes |
 | REQ-011 `positionLock` | **Not seen**, none needed | — | Yes |
 | REQ-012 measured collapse | **Half** — end state seen, mechanism not | inline + full-page + phone creative | Yes |
-| REQ-013 phone condition rows | **Seen as of 2026-09-05** — twelve desktop formats and four iOS sheets | `menus/anytype-menu-set-filter-{12 formats}-light.png` + `-condition-` pairs; the iOS filter/sort sheets | Yes — this item *is* the phone item |
+| REQ-013 phone condition rows | **Seen as of 2026-09-05** — twelve desktop formats and four iOS sheets | `desktop/menus/anytype-menu-set-filter-{12 formats}-light.png` + `-condition-` pairs; the iOS filter/sort sheets | Yes — this item *is* the phone item |
 | REQ-014 inline `Load more` | **Half** — page limit seen (**per-layout**, not flat), row not | `anytype-set-gallery-view-dark.png` (60), `anytype-menu-set-layout-kanban-*` (10), four layouts with no row | Yes |
 
 **The list with no capture at all, named as goal D1's second clause requires — design inferred from

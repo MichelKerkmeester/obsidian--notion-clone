@@ -205,7 +205,7 @@ the five draft trees, which were read in full.**
 | `.worktrees/074-anytype-ios-sim` | `964a0b2a` — **now on `origin/main`** | **Landed during this pass.** The open-source Anytype iOS client built from source and run on a simulator: **59 states in light and dark, 118 files** under `screenshots/anytype/mobile/`, against the same 326-record demo space the desktop captures used. It closes `050` item 13's capture gap — `design-trueup.md` REQ-013 recorded that no filter or sort sheet appears in any of the 151 desktop files, and four now do — and gives `051`-`055` the phone reference every one of them was designed without. Each of the five gained a dated reconciliation block; **the pixels are unread in all of them** |
 | `.worktrees/079-anytype-menus` | `396e1532`, **220 files dirty** | Every Anytype dropdown and mobile sheet screenshotted, per the operator's decision. This is the capture set `052`'s `anytype-menu-grammar.md` §4 lists as still missing and `054`'s §5B rows still need. **Uncommitted and unread** |
 | `.worktrees/094-impl-053-toolbar` | `ae46da94` at dispatch | **In flight, on codex.** `053`'s implementation leg — the first of the five families to start. It holds the toolbar's five composed primitives and `050` items 1, 2, 4, 7, 10, 12. Do not open the same files from another leaf |
-| `.worktrees/096-screenshots-regroup` | `a58bbcd5` at branch | **In flight.** Regrouping `screenshots/` into platform/subject subfolders and rewriting every path citation across the spec tree. **On a rebase conflict over a capture path, keep THEIR path form and YOUR content** — the true-ups already cite the `menus/` and `mobile/` forms |
+| `.worktrees/096-screenshots-regroup` | `a58bbcd5` at branch | **In flight.** Regrouping `screenshots/` into platform/subject subfolders and rewriting every path citation across the spec tree. **On a rebase conflict over a capture path, keep THEIR path form and YOUR content** — the true-ups already cite the `desktop/menus/` and `mobile/` forms |
 | `.worktrees/087-trueup-051` … `092-trueup-054` | `8e0149af`, `a58bbcd5`, `fbbddc13`, `621de37f`, `cd8030a8`, `7b516cba` | **Landed. Removable.** All six are ancestors of `origin/main`; removing a worktree is not removing its branch |
 | `.worktrees/085-record-open-dock` | `ae46da94`, landed | **Landed and shipped in 0.0.26.** "Fix record open for all callers" — row 48's fix generalised to every caller of the record-open path. Removable |
 | `.worktrees/080-phase-modal-componentization` | `4a5b339b` | **Superseded.** Its `051` draft was scaffold only; the packet was written in-runtime |
@@ -282,7 +282,7 @@ ticks an operator row.**
    platform/subject subfolders is in flight and it rewrites path citations across the spec tree. On a
    conflict, **their path form, your content**.
 7. `.worktrees/079-anytype-menus` is still uncommitted and holds desktop dropdown captures; the
-   `menus/` set the true-ups cite is on main.
+   `desktop/menus/` set the true-ups cite is on main.
 <!-- /ANCHOR:session-notes -->
 
 ---
