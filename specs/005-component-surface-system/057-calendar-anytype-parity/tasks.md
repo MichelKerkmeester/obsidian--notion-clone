@@ -10,12 +10,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T23:40:00Z"
+    last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "ticked t001, the calendar capture true-up"
-    next_safe_action: "Run T002's red-first pass, then leg A against design-trueup.md"
+    recent_action: "ticked t002, the red-first measurement pass over checklist.md"
+    next_safe_action: "Run leg A against design-trueup.md (T005)"
     blockers:
-      - "T005 onward are blocked on T002's red-first figures"
+      - "T005 onward still need ADR-002's implementation half closed under AC-002"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "screenshots/anytype/desktop/sets"
@@ -23,11 +23,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 30
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
+      - "T002 landed: C3, C8 and C9 turned into figures on cc5a7ff2, 2026-09-06"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -69,7 +70,7 @@ _memory:
       Six contradictions recorded (`design-trueup.md` §5), including that the captures are **1:1,
       not 2x**, and that the 24 menu files are **5 distinct menus**, not 6. Five accessibility
       refusals with their ratios (§6).
-- [ ] T002 **The red-first measurement pass.** Fill every `Today` cell in `checklist.md` with a
+- [x] T002 **The red-first measurement pass.** Fill every `Today` cell in `checklist.md` with a
       figure read off the current tree, before any code is written. At minimum:
       `grep -o 'db-calendar[a-z-]*' src/views/calendar-renderer.ts | sort -u | wc -l`;
       `grep -o 'db-calendar[a-z-]*' styles.css | sort -u | wc -l`;
@@ -77,6 +78,15 @@ _memory:
       as REQ-009's baseline; and the pass counts of `calendar-keyboard-navigation.test.ts` and
       `calendar-search-placement.test.ts` as REQ-010's. A `Today` cell written after the fix is a
       cell nobody can check. (`checklist.md`)
+      **Done 2026-09-06 on `cc5a7ff2`.** C1, C2, C4, C5, C6 and C7 already carried a figure from
+      T001; C3, C8 and C9 carried a mechanism and now carry one: C3 the toolbar's 6-control header
+      against Anytype's 3, with the title, nav-button and header CSS read off `styles.css`; C8
+      `sheet-grammar.mjs` at exit 0 with 12 surfaces and 31 stacked pairs; C9 the three mandated
+      greps (**91**, **133**, **119** raw / **117** real `pm-gantt-*` tokens after excluding two
+      comment-prose matches), the 8 `reference-gantt-*.png` MD5s, and `calendar-keyboard-
+      navigation.test.ts` + `calendar-search-placement.test.ts` at **16 of 16** passing. Every
+      `checklist.md` row now carries a measured figure or a labelled non-measurement (C10 is the
+      operator's).
 - [ ] T003 **Put the scale question to the operator as ADR-002.** Present what T001 found — one
       Anytype calendar layout, no captured scale switch — against what we ship: three scales
       (`calendar-renderer.ts:82`), a scale control/menu/popover/segment class family, a week body
