@@ -1,7 +1,7 @@
 {
-  "holder": "052-dropdown-menu-and-picker-componentization",
-  "acquiredAt": "2026-09-05T20:10:00Z",
-  "baselineHash": "2b51f568ad68",
+  "holder": "055-states-feedback-and-motion",
+  "acquiredAt": "2026-09-05T21:05:00Z",
+  "baselineHash": "72977de79a32",
   "baselineCommit": "fc730ed9",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -3521,6 +3521,21 @@
         "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-dark.png",
         "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-light.png"
       ]
+    },
+    {
+      "event": "acquire",
+      "phase": "055-states-feedback-and-motion",
+      "at": "2026-09-05T21:05:00Z",
+      "hash": "2b51f568ad68",
+      "note": "Taking the lane over from 052-dropdown-menu-and-picker-componentization, already released on this same hash. Naming the five --db-motion-* tokens beside --db-transition-fast (fast and sheet alias their established values so the pair cannot drift; surface is the measured 200ms, not the drafted 180ms), migrating 38 of the 42 plain-ease 120ms transition declarations and both 180ms surface declarations onto them, and adding the toast component's rules at the geometry read off anytype-ts/src/scss/notification/common.scss. Also repairing the .db-surface reduced-motion clause, which resets only the rules written above it: its selector is one class plus a universal, so it ties with every later single-class rule and loses on order. Measured on the shipped tree, the toast kept its full 0.2s entrance under prefers-reduced-motion: reduce."
+    },
+    {
+      "event": "release",
+      "phase": "055-states-feedback-and-motion",
+      "at": "2026-09-05T21:20:00Z",
+      "hash": "72977de79a32",
+      "reviewed": [],
+      "note": "Named --db-motion-fast/surface/sheet/emphatic/scale-from beside --db-transition-fast. Migrated 38 of the 42 plain-ease 120ms transition declarations and both 180ms surface declarations onto them, plus the skeleton shimmer's duration and the popover entrance scale. The 4 remaining 120ms declarations are ease-out and stay literal: --db-motion-fast resolves to plain ease and aliasing them would silently change their curve. Added the toast component's rules at the geometry read off anytype-ts source, now measured on the built card rather than transcribed -- 384px wide, 12px from the right and bottom, 12px radius, 16px padding, 64px min-height, action row gap 8px at margin-top 12px. Repaired the .db-surface reduced-motion clause with !important on animation-duration, animation-iteration-count and transition-duration: its selector tied with .db-toast and lost on source order, so the toast kept its full 0.2s entrance under reduce. Measured after, 1e-05s under reduce against 0.2s with no preference. The second prefers-reduced-motion block lower in this file already wrote !important on all four of its properties, so the two blocks now agree rather than disagreeing about whether a reset is enforceable. REVIEWED IS EMPTY BECAUSE NOTHING MOVED: all captures re-taken and compared entry-by-entry against the previous commit's manifest -- 0 moved pixelHash, the project-manager board and gantt references included. The byte-only movers are the encoder jitter pixel-hash.mjs exists to absorb, and check-lane classified them the same way independently; three were opened and read anyway to check that classification rather than trust it, all intact. A still capture cannot show a duration, so this proves the aliases resolved to the same painted values and nothing more -- the timing is measured by seven new rows in verify-placement.mjs instead. ONE CAPTURE IS NOT DETERMINISTIC UNDER pixelHash AND THE NEXT PHASE SHOULD KNOW: screenshots/notion-clone/views/timeline-subtask-tree-desktop-light.png moved pixelHash on the first recapture, and moved it again on a second recapture of a completely unchanged tree, landing back on the value HEAD carries. Both images were opened and read, and decoded and differenced: 0.0969% of channel samples differ, max delta 12 of 255, clustered on the row separator lines at a regular 88px pitch -- antialiasing on a low-contrast hairline that sits on one of the hash's own quantisation boundaries. So it is the jitter pixel-hash.mjs exists to absorb, in the one place the bucketing cannot absorb it, not a paint change and not caused by this phase. This release names no reviewed capture because the second run put it back on HEAD's bucket, which is luck rather than proof; the finding is recorded here so the next phase reads a spurious red on that file as this and not as its own regression."
     }
   ],
   "outstanding": [

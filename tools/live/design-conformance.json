@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T20:17:54.574Z",
+  "measuredAt": "2026-09-05T20:57:41.940Z",
   "inputs": {
-    "styles.css": "2b51f568ad68",
+    "styles.css": "72977de79a32",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -90,9 +90,9 @@
     {
       "name": "reachability — source modules no entry point and no test reaches",
       "enforced": false,
-      "value": 1,
+      "value": 2,
       "target": 0,
-      "note": "src/views/modals/create-record-icon-field-modal.ts",
+      "note": "src/views/modals/create-record-icon-field-modal.ts, src/views/record-surface/index.ts",
       "gated": false,
       "conforms": false
     }
@@ -165,9 +165,9 @@
     "src/views/column-width.ts:363  .db-panel-title",
     "src/views/column-width.ts:373  .db-panel-row",
     "src/views/column-width.ts:397  .db-panel-row",
-    "src/views/database-view.ts:3174  .db-group-order-popover",
-    "src/views/database-view.ts:3288  .db-panel-button",
-    "src/views/database-view.ts:7067  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:3179  .db-group-order-popover",
+    "src/views/database-view.ts:3293  .db-panel-button",
+    "src/views/database-view.ts:7072  .db-calendar-search-results-popover",
     "src/views/date-value-picker.ts:142  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:153  .db-date-picker-body",
     "src/views/date-value-picker.ts:214  .db-calendar-mini-popover",
@@ -176,9 +176,9 @@
     "src/views/dropdown-field.ts:216  .db-dropdown-options",
     "src/views/dropdown-field.ts:220  .db-dropdown-empty",
     "src/views/dropdown-field.ts:267  .db-dropdown-section-title",
-    "src/views/embedded-database-renderer.ts:1368  .db-calendar-search-results-popover",
-    "src/views/embedded-database-renderer.ts:2993  .db-group-order-popover",
-    "src/views/embedded-database-renderer.ts:3109  .db-panel-button",
+    "src/views/embedded-database-renderer.ts:1373  .db-calendar-search-results-popover",
+    "src/views/embedded-database-renderer.ts:2998  .db-group-order-popover",
+    "src/views/embedded-database-renderer.ts:3114  .db-panel-button",
     "src/views/filter-panel-renderer.ts:176  .db-filter-panel",
     "src/views/filter-panel-renderer.ts:198  .db-panel-empty",
     "src/views/filter-panel-renderer.ts:218  .db-panel-button",
