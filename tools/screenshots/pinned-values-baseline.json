@@ -16,7 +16,7 @@
     "accentChain": "--interactive-accent-hsl and --text-accent-hover both resolve through the host's --accent-h/--accent-s/--accent-l triple (258, 88%, 66%). The harness pins --interactive-accent to #5a67d8 and #6b74e0, which that triple does not produce, so supplying them means first deciding which accent this harness represents. That is a decision, not a transcription.",
     "productDefect": "--background-interactive-hover is read once, at styles.css:9153, and appears nowhere in the host stylesheet of Obsidian 1.13.7 — searched, zero occurrences. It is not a harness gap: it is a hover background the plugin asks for and no device can supply, so the declaration is dropped for every user. Recorded here because this scan is where it was found; it is fixed in the stylesheet, not here."
   },
-  "standIns": 41,
+  "standIns": 38,
   "recorded": "2026-09-01",
   "why": "Harness declarations of a custom property that src/ also assigns. Not defects: a screenshot runs no plugin, so the harness supplies what the plugin would compute. Recorded so a NEW one cannot arrive unnoticed, which is what AC-016 was actually worried about — its own row names the fear as \"a fifth would be invisible\". The criterion asks for zero of these; zero would fail a correct harness, so what is enforced is the concern rather than the threshold.",
   "properties": [
@@ -35,9 +35,6 @@
     "--db-conditional-format-accent",
     "--db-conditional-format-bg",
     "--db-conditional-format-fg",
-    "--db-gallery-card-width",
-    "--db-gallery-cover-ratio",
-    "--db-gallery-image-fit",
     "--db-group-depth",
     "--db-table-header-top",
     "--db-timeline-band-span",
