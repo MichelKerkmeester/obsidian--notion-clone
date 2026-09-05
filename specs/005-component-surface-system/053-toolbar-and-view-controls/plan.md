@@ -119,10 +119,19 @@ grep count 0; dual-class count 0.
 
 ### L3 — Clusters and chips (`toolbar-renderer.ts` clusters + `active-view-controls-renderer.ts`)
 
-Migrate T11-T15: the dual-mode filter and sort triggers (`050` item 1), the properties trigger's
-state plumbing, the chip rail's direction colour and in-toolbar placement, the active-rule
-popover's shared row. Lane: the four-combination filter × sort assertion (`050` AC-001's shape);
-header-height before/after.
+Migrate T11-T15: the filter and sort triggers' **declared** `add`/`active` state (`050` item 1 —
+dual-mode behaviour is rejected, ADR-001 as amended), the properties trigger's state plumbing, the
+chip rail's measured anatomy, the active-rule popover's shared row. Lane: the four-combination
+filter × sort assertion (`050` AC-001's shape).
+
+**Two clauses this leg no longer carries, removed at T001.** The rail does **not** move into the
+toolbar band — `anytype-project-tracker-list-light.png` places it below a full-content-width
+divider in its own band, which is where `active-view-controls-renderer.ts` already renders it — so
+the header-height before/after measurement goes with the retired risk row. And the leading sort
+chip's direction is **not** carried by colour: the accent-on-tint pair measures 3.14:1 and the
+fill-on-bar 1.19:1, so direction rides the arrow glyph and, where a second line fits, the direction
+word, with colour permitted only as a redundant third signal. What the leg does gain is measured:
+the chip at **28px** (from 26), an 8px/12px group separator, and the condition-as-a-phrase label.
 
 ### L4 — Rule panels and conflict confirm (`filter-panel-renderer.ts`, `sort-panel-renderer.ts`,
 `board-renderer.ts`, `table-renderer.ts`, `database-view.ts`)
@@ -137,7 +146,12 @@ clears-sort on both renderers; board reference `pixelHash` unchanged.
 Migrate T19, T23, T24 and T10's preset read: settings landing within 100ms of create/duplicate
 (item 2), the presets section and creation read (item 10), the measured embed collapse (item 12).
 Lane: timing assertion; byte-identical no-preset creation; width sweep from 250px with zero
-overflow.
+overflow and the captured drop order.
+
+**Two amendments from T001.** The presets section lands in the **New button's dropdown** under a
+`Settings` section label, not in the view-config panel — `anytype-menu-set-new-object-light.png`
+is the captured home, overturning `050` C7's "absent from the product". And the embed's drop order
+includes the **add-view `+`**: the inline rung is the tab row without it.
 
 ### Leg order and why
 
@@ -154,19 +168,31 @@ preset read is the smallest slice.
 
 ### ADR-001: The existing chip rail is extended, not rebuilt
 
-**Status**: Proposed
+**Status**: **Accepted**, 2026-09-05 (~14:15) — operator: *"Extend the existing rail."* The
+canonical record, with the full context, alternatives and five checks, is
+[`decision-record.md`](decision-record.md) ADR-001; this is its summary.
 
 **Context**: `050`'s checklist says item 1 starts from zero chips; the tree disagrees —
 `active-view-controls-renderer.ts` ships a sort-then-filter rail with logic toggle, clear-all and
-auto-hide. Rebuilding it would discard conformed, captured surface.
+auto-hide at `:97`. Rebuilding it would discard conformed, captured surface. T001 then measured
+Anytype's own rail and found ours already the closer of the two to it.
 
-**Decision**: Extend. The rail gains the direction-coloured leading sort chip and the in-toolbar
-band placement; the triggers gain their dual-mode states. The `050` AC-001 threshold is asserted
-against the finished whole.
+**Decision**: Extend. The rail is reshaped to the measured anatomy — chip **28px** (from 26), an
+8px/12px group separator, the condition-as-a-phrase label — and the triggers gain a **declared**
+`add`/`active` state. The `050` AC-001 threshold is asserted against the finished whole.
+
+**Amended twice.** At landing, the *dual-mode trigger* clause was struck: the funnel and sort
+glyphs are pixel-identical across all 120 catalogue captures, so there is no second mode to adopt,
+and the colour-only signalling Anytype does carry fails WCAG 1.4.11. At **T001**, two more clauses
+went: the **in-toolbar band placement** (the capture puts the rail below a full-content-width
+divider, where ours already renders — there is nothing to move) and the **direction colour** as a
+load-bearing signal (accent-on-tint **3.14:1**, fill-on-bar **1.19:1**; direction rides the arrow
+glyph and the direction word, with colour redundant at most).
 
 **Consequences**:
 - Positive: less churn in a surface `003`'s inventory and the screenshot manifest already track;
-  the auto-hide and overflow behaviour is already correct.
+  the auto-hide and overflow behaviour is already correct; and after T001, three of the four
+  changes this ADR originally proposed turn out to be unnecessary or wrong, so the leg shrinks.
 - Negative: `050`'s "Today" cell for item 1 is wrong as written. Mitigation: the correction is
   recorded in the parent `goal.md` §2 with citations, and the threshold itself is unchanged.
 

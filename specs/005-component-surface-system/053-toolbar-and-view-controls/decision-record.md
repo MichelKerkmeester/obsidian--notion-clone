@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-05T14:50:00Z"
-    last_updated_by: "adr-answers-051-053"
-    recent_action: "Recorded the operator's 2026-09-05 (~14:15) answers; all three ADRs move to Accepted"
-    next_safe_action: "Execute T001 (capture read); the legs gated on ADR-001/002/003 may proceed"
+    last_updated_at: "2026-09-05T18:30:00Z"
+    last_updated_by: "design-trueup-t001"
+    recent_action: "Amended ADR-001 on the T001 measurements"
+    next_safe_action: "Execute T002 (red-first measurements); the legs gated on ADR-001/002/003 may proceed"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
@@ -29,6 +29,8 @@ _memory:
       - "ADR-001: extend the existing chip rail; no new chip-row component"
       - "ADR-002: delete the seven dead methods, keep their classes"
       - "ADR-003: the confirm fires on drop, not on gesture start"
+      - "ADR-001 amendment 2 (T001): the rail's in-toolbar band move is withdrawn — the capture puts Anytype's rail where ours already renders"
+      - "ADR-001 amendment 2 (T001): the direction colour is demoted to a redundant third signal at 3.14:1 accent-on-tint and 1.19:1 fill-on-bar; direction rides the arrow glyph and the direction word"
 ---
 
 # Decision Record: Toolbar and View Controls
@@ -102,9 +104,9 @@ strongest in-repo evidence this program accepts short of a device confirmation.
 `active-view-controls-renderer.ts` and reshape it to the Anytype-derived layout; no new chip-row
 component.
 
-**Extend the rail.** The rail gains the two things it lacks — the direction-coloured leading sort
-chip, and placement in the toolbar band under the clusters — plus a **declared state** on each
-trigger that a lane can read.
+**Extend the rail.** The rail is reshaped to the anatomy the captures show, plus a **declared
+state** on each trigger that a lane can read. What "reshaped" means is now measured rather than
+guessed — see the second amendment below.
 
 **Amended 2026-09-05 at landing.** This decision originally read *"and the triggers gain their
 dual-mode states."* `design-trueup.md` REQ-001 **rejects** dual-mode on two independent grounds. The
@@ -118,12 +120,43 @@ panel's value column, which lands in T19. `050`'s AC-001 threshold **as restated
 asserted against the finished whole. The Today-value discrepancy is recorded as correction 1 in the
 parent `goal.md` §2 with citations, not absorbed silently.
 
+**Amended a second time, 2026-09-05 at T001.** The capture read this ADR was waiting on landed, and
+it removes two more clauses while confirming the decision itself.
+
+1. **The in-toolbar band placement is withdrawn.** `050` C2 recorded that no chip row appears on any
+   capture; the 600-file menu sweep and the catalogue's List views show one on eleven files, and
+   `anytype-project-tracker-list-light.png` places it at **y 274..301, below a 1px
+   full-content-width divider at y 261** — its own band, under the toolbar. That is exactly where
+   `active-view-controls-renderer.ts` already renders it. There is nothing to move, so the clause
+   goes, and `spec.md` §8's sticky-offset risk row and `goal.md`'s open question retire with it.
+2. **The direction colour is demoted to a redundant signal.** Anytype never carries sort direction
+   by colour: the desktop chip carries a `↓` **glyph** and the phone's Sorts sheet carries the
+   **word** `Ascending` on a second line. And its own chip colours would not survive our bar —
+   accent-on-tint measures **3.14:1** (below 4.5:1 for a ~13px label) and the chip fill measures
+   **1.19:1** against the bar it sits on (below 3:1 for a non-text state indicator). So direction
+   rides the arrow glyph and, where a second line fits, the word; colour may be a third signal and
+   may never be the only one. `sk-design` ALWAYS-5 and WCAG 1.4.11 both bind here.
+
+**What the rail does gain**, all measured: chip **26px → 28px** (the measurement and our own
+`design-system.md` §9 coarse-pointer floor agree — the same justification `050` used for its 28px
+row), a group separator at 8px before and 12px after, and the condition-as-a-phrase chip label
+Anytype reads better than we do (`Starts is today`). The **radius stays 8px**: the measured chip is
+a full pill at r≈14, which is off our 4/6/8 scale, and mixing pill and square corners in one
+interface degrades both.
+
+**The decision itself is corroborated a third time.** T001 measured Anytype's rail and found ours
+structurally the same surface — sorts first, then filters, an add control, a clear-all, auto-hiding
+when empty. Rebuilding it would have thrown away the closer of the two.
+
 ### Consequences
 
 - `050`'s item-1 checklist row reads wrong as written until its C1 cell is re-measured; this
   packet's parent-goal correction is the record of that, and `050`'s threshold is untouched.
 - Less churn in a surface the screenshot manifest and `003`'s inventory already track; the
   auto-hide and overflow behaviours are already correct and already captured.
+- **After T001 the leg is smaller than this ADR first scoped.** Three of the four changes it
+  originally proposed — dual-mode triggers, the band move, the direction colour — are struck on
+  evidence. What remains is a height change, a separator, a label format and the declared state.
 
 ### Alternatives
 
@@ -137,9 +170,9 @@ parent `goal.md` §2 with citations, not absorbed silently.
 
 | Check | Answer |
 |---|---|
-| **Does this need to exist at all?** | The rail exists; only its missing halves (direction colour, band placement, dual-mode triggers) need to |
-| **Is there a simpler existing thing?** | The rail itself — extending is the simpler thing |
-| **What does it touch?** | `active-view-controls-renderer.ts` (chip styling, mount point), `toolbar-renderer.ts` (trigger states) |
+| **Does this need to exist at all?** | The rail exists. **After T001, three of its four "missing halves" turn out not to be missing or not to be wanted** — dual-mode triggers, the band move and the direction colour are all struck on evidence. What is left: the 28px height, the group separator, the phrase label and the declared trigger state |
+| **Is there a simpler existing thing?** | The rail itself — extending is the simpler thing, and T001 made it simpler still |
+| **What does it touch?** | `active-view-controls-renderer.ts` (chip styling and label format only — **not the mount point**, since the rail does not move), `toolbar-renderer.ts` (trigger states) |
 | **What is the real caller that must not break?** | `database-view.ts:2201` and `embedded-database-renderer.ts:1700`, the two `activeViewControlsRenderer.render` call sites — both keep the same action interface |
 | **What contract must not break?** | The rail's auto-hide-when-empty and its per-chip edit popover contract (`active-rule-popover-renderer.ts`) |
 

@@ -38,16 +38,25 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Gate
 
-- [ ] **T001 — Read the Anytype capture set and record the true-up per surface.**
-      Open every PNG named in `toolbar-surface-inventory.md` §3 and §4 (the
-      `anytype-view-settings-panel`, `anytype-set-kanban-view`, `anytype-set-calendar-view`,
-      `anytype-filter-property-picker`, `anytype-filter-tag-value-picker`,
-      `anytype-page-with-inline-collection`, `anytype-object-more-menu`,
-      `anytype-newobject-type-picker` captures), and record one sentence per row: what the design
-      takes, what the capture showed that the written description missed. **Threshold**: 24 of 24
-      migration rows carry a capture-read record or a named gap. **Red-first proof**: today 0 of
-      24 carry one (this document is the claim, not the evidence). **Proof**: the record appended
-      to `toolbar-surface-inventory.md` §6, one line per row, with the file names actually opened.
+- [x] **T001 — Read the Anytype capture set and record the true-up per surface.** ✅ 2026-09-05
+      Opened every PNG named in `toolbar-surface-inventory.md` §3 and §4, plus the 600-file menu
+      sweep and the 118-file iOS set that landed after the inventory was drafted, and measured
+      them per-pixel rather than describing them. **Threshold met**: **24 of 24** migration rows
+      carry a capture-read record or a named gap. **Red-first proof**: 0 of 24 carried one before
+      this task — the inventory was the claim, not the evidence, and said so in its §5.
+      **Proof**: [`design-trueup.md`](design-trueup.md) (the read) and
+      `toolbar-surface-inventory.md` **§8.1** (the per-row record, naming the files opened) and
+      **§8.2** (the eight contradictions resolved). Closes **AC-112**.
+
+      **What the read changed, in one line each.** `050` C2 is overturned — the chip rail is
+      captured on 11 files and fully measured, so REQ-102's band move is **withdrawn** and its
+      direction colour **demoted** to a redundant signal at 3.14:1. `050` C7 is overturned — the
+      per-view default type and template exist in the **New menu**, so REQ-106's section moves
+      there. `050`'s single page-limit **60** is per-layout (Gallery 60, Kanban 10). The sort panel
+      and the properties/column-header menus were `no capture` and are now measured. The inline
+      rung also drops its trailing `+`. `Calculate ›` exists, so the inventory §4 row keeps its
+      ruling and loses its reason. Six rows stay **design inferred from source, not seen** —
+      T5, T6, T9, T18, T20, T22 — and three of those six have no possible capture.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -82,10 +91,16 @@ and stay unticked — an agent never ticks them.
       repeated close runs.** (src/views/toolbar-renderer.ts) **Threshold**: close-run grep count 17
       → 0 outside the shell; dead-method count 7 → 0; `db-view-tab-popover-row db-menu-item`
       dual class 2 sites → 0; dismissal order preserved (database → group → view-tab → export →
-      title). **Red-first proof**: T002's counts. **Capture**: `anytype-view-settings-panel-dark.png`
-      (context menu rows), `anytype-object-more-menu-dark.png` (utilities sections). **Proof**:
-      lane row asserting the close sequence on the view-tab menu + the three grep counts + a
-      negative control that re-adds one close run and reddens.
+      title). **Red-first proof**: T002's counts. **Capture**:
+      `anytype-menu-set-viewlist-light.png` (the hub — 360px, 28px rows, drag grips, and **no
+      per-row action**, which is why the tab context menu stays ours),
+      `anytype-menu-set-view-settings-light.png` (`Duplicate view` / `Remove view` as the last
+      section), `anytype-menu-object-more-light.png` (utilities sections),
+      `anytype-menu-set-new-object-light.png` (the New menu at 288px — our `menu` role's 292px
+      holds), `anytype-mobile-sheet-set-viewswitcher-edit-light.png` (the phone per-view action
+      surface: an explicit Edit mode with delete, rename and reorder affordances, **not** a
+      long-press). **Proof**: lane row asserting the close sequence on the view-tab menu + the
+      three grep counts + a negative control that re-adds one close run and reddens.
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -94,16 +109,23 @@ and stay unticked — an agent never ticks them.
 ## Phase 4: Clusters and chips (L3) — `050` item 1
 
 - [ ] **T005 — Give the filter and sort triggers a declared `active`/`add` state (ADR-001, Accepted:
-      dual-mode icon behaviour is rejected) and move the chip rail into the toolbar band with a
-      direction-coloured leading sort chip.** (src/views/toolbar-renderer.ts,
-      src/views/active-view-controls-renderer.ts, styles.css) **Threshold** (`050` AC-001, kept):
-      chip row present iff a rule is active; trigger icons report `add` vs `active`; all four
-      filter × sort combinations assertable. **Red-first proof**: today both triggers open the
-      panel unconditionally (`toolbar-renderer.ts:2211`, `:2229`) and the leading chip carries no
-      direction colour. **Capture**: `anytype-set-kanban-view-dark.png`,
-      `anytype-set-calendar-view-dark.png`. **Proof**: lane row on the four combinations +
-      negative control forcing the icon state constant, require red; header-height before/after
-      measurement.
+      dual-mode icon behaviour is rejected) and reshape the existing chip rail to the measured
+      anatomy.** (src/views/toolbar-renderer.ts, src/views/active-view-controls-renderer.ts,
+      styles.css) **Threshold** (`050` AC-001, kept; AC-102 as restated at T001): chip row present
+      iff a rule is active; trigger icons report `add` vs `active`; all four filter × sort
+      combinations assertable; chip **28px** (from 26); group separator 8px before / 12px after;
+      direction on the arrow glyph plus the direction word where a second line fits; the
+      condition-as-a-phrase chip label. **Red-first proof**: today both triggers open the panel
+      unconditionally (`toolbar-renderer.ts:2211`, `:2229`), the chip is 26px
+      (`styles.css:1776`), and no chip carries a direction word. **Capture**:
+      `anytype-project-tracker-list-light.png` (the rail, measured — `design-trueup.md` T14),
+      `anytype-menu-set-viewlist-dark-full.png` (the band and its divider),
+      `anytype-mobile-sheet-view-sorts-light.png` (direction as a word). **Proof**: lane row on the
+      four combinations + negative control forcing the icon state constant, require red.
+      **Two clauses were removed at T001 and must not be reinstated**: the rail does **not** move
+      into the toolbar band (the capture puts it where it already renders, so the header-height
+      before/after measurement is dropped with the retired risk row), and the direction is **not**
+      carried by colour alone (3.14:1 accent-on-tint, 1.19:1 fill-on-bar).
 <!-- /ANCHOR:phase-4 -->
 
 ---
@@ -114,11 +136,19 @@ and stay unticked — an agent never ticks them.
 - [ ] **T006 — [P] Bind filter and sort condition rows onto `createConditionRow`.**
       (src/views/filter-panel-renderer.ts, src/views/sort-panel-renderer.ts) **Threshold**: one
       row implementation, both panels; the `condition panel` row floors hold at 552px (property
-      140, operator 140, value 120-140, zero overflow). **Red-first proof**: T002's two-vocabulary
-      count. **Capture**: `anytype-filter-property-picker-dark.png`,
-      `anytype-filter-tag-value-picker-dark.png`. **Proof**: lane row measuring the row floors on
-      both panels + unit test that the operator list per column type matches
-      `getFilterOperatorsForColumn`.
+      140, operator 140, value 120-140, zero overflow); the sort binding renders at the measured
+      **36px row on a 48px pitch**; the current operator carries a **`✓`**; every long picker opens
+      with a filter field. **Red-first proof**: T002's two-vocabulary count. **Capture**: the
+      twelve `anytype-menu-set-filter-<format>-light.png` files with their `-condition-` pairs,
+      `-date-picker-`, `-date-relative-` (the segmented `Exact | Relative`),
+      `anytype-menu-set-filter-property-picker-light.png`,
+      `anytype-menu-set-sort-{empty,added,property-picker}-light.png`, and the phone stack
+      `anytype-mobile-sheet-{view-filters-empty,filter-condition-text,filter-condition-operators}-light.png`.
+      **Do not take Anytype's 360px panel width** — it fits because Anytype splits one condition
+      across three popovers; our row carries property, operator, value, group, NOT and remove on
+      one line, so `design-system.md` §5's 440-560px `condition panel` role stands
+      (`design-trueup.md` T16). **Proof**: lane row measuring the row floors on both panels + unit
+      test that the operator list per column type matches `getFilterOperatorsForColumn`.
 - [ ] **T007 — Raise the sort-conflict confirm on manual drag reorder under an active sort, on
       board and table.** (src/views/board-renderer.ts, src/views/table-renderer.ts,
       src/views/database-view.ts) **Threshold** (`050` AC-007, kept): confirm raised; decline
@@ -138,20 +168,34 @@ and stay unticked — an agent never ticks them.
       the embedded toolbar by measurement.** (src/views/database-view.ts,
       src/views/embedded-database-renderer.ts) **Thresholds** (`050` AC-002 and AC-012, kept):
       settings open ≤100ms after the create/duplicate callback; the embed sweep from 250px upward
-      finds zero overflowing controls, measurement once per resize. **Red-first proof**: today
-      nothing opens (`database-view.ts:3460-3462`, `:3941-3943`) and the sweep's first overflow
-      width is recorded in T002. **Capture**: `anytype-view-settings-panel-dark.png` (landing),
-      `anytype-page-with-inline-collection-dark.png` (collapse). **Proof**: lane timing assertion
-      + the sweep lane + negative control that reverts to the boolean hide and reddens the sweep.
+      finds zero overflowing controls, measurement once per resize, and the drop order matches the
+      captured ladder — `New`, the icon cluster **and the add-view `+`** all before the tab row,
+      which becomes a dropdown before it is dropped. **Red-first proof**: today nothing opens
+      (`database-view.ts:3460-3462`, `:3941-3943`) and the sweep's first overflow width is recorded
+      in T002. **Capture**: `anytype-menu-set-view-settings-light.png` and
+      `anytype-view-settings-panel-dark.png` (the landing surface, 360×315px, 28px rows, 56px name
+      field), `anytype-mobile-sheet-view-edit-light.png` (its phone form — the landing applies on
+      the phone, `spec.md` §11 closed), `anytype-page-with-inline-collection-dark.png` (the inline
+      rung, **tab row without its `+`**), `anytype-mobile-sheet-set-viewswitcher-light.png` (the
+      phone rung, real client). **Proof**: lane timing assertion + the sweep lane + negative
+      control that reverts to the boolean hide and reddens the sweep. The 100ms budget stays ours —
+      no capture can time a transition.
 - [ ] **T009 — Add per-view new-row presets: settings section, config field, creation read.**
       (src/data/types.ts, src/views/view-config-panel-renderer.ts,
       src/views/toolbar-renderer.ts) **Threshold** (`050` AC-010, kept): every preset value
       applied at creation; a view with no presets produces creation calls byte-identical to
-      today's. **Red-first proof**: today no preset can be stored (`types.ts:415-432` carries no
-      map; `createEntry`'s `defaults` is never passed a value). **No capture — gap named**: the
-      adopted slice is deliberately template-lite (`050` goal D6). **Proof**: unit test on the
-      creation path + byte-comparison of the no-preset case against a pre-change baseline +
-      negative control that applies presets to a preset-less view and reddens.
+      today's; the section is reachable from the **New button's dropdown** under a `Settings`
+      section label. **Red-first proof**: today no preset can be stored (`types.ts:415-432` carries
+      no map; `createEntry`'s `defaults` is never passed a value) and the New menu has no
+      `Settings` section. **Capture — the gap closed at T001**:
+      `anytype-menu-set-new-object-light.png` (a 288px menu whose `Settings` section carries
+      `Default Type for this View  Page ›` and `Template for this View  Blank ›` at a 28px pitch),
+      `-default-type-for-this-view-light.png` and `-template-for-this-view-light.png` (each picker
+      as an anchored popover over an undimmed parent). The slice stays **template-lite** — we have
+      no type or template system to default — but that is now a scope choice against a seen
+      alternative, not a gap (`050` goal D6). **Proof**: unit test on the creation path +
+      byte-comparison of the no-preset case against a pre-change baseline + negative control that
+      applies presets to a preset-less view and reddens.
 - [ ] **T010 — [P] Delete the dual classes, verify the anchor fallbacks, and re-derive the graph
       metadata.** (styles.css, src/views/*) **Threshold**: `db-view-tab-popover-row` dual class
       count 0; `db-view-config-btn`/`db-chart-options-toolbar-btn`/`db-calendar-timeline-options-toolbar-btn`

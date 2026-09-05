@@ -10,26 +10,26 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-05T12:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored one threshold per criterion, with 050's item thresholds kept verbatim"
-    next_safe_action: "Execute T001 (capture read) and T002 (red-first measurements)"
+    last_updated_at: "2026-09-05T18:30:00Z"
+    last_updated_by: "design-trueup-t001"
+    recent_action: "Marked AC-112 Met; restated AC-102, AC-106, AC-107"
+    next_safe_action: "Execute T002 (red-first measurements), then the primitive legs in plan order"
     blockers:
-      - "AC-108 is operator-owned and nothing here can close it"
-      - "T001's capture-read record blocks every design row's evidence"
+      - "AC-111 is operator-owned and nothing here can close it"
     key_files:
       - "src/views/toolbar-renderer.ts"
       - "src/views/active-view-controls-renderer.ts"
       - "src/views/embedded-database-renderer.ts"
+      - "specs/005-component-surface-system/053-toolbar-and-view-controls/design-trueup.md"
       - "specs/005-component-surface-system/053-toolbar-and-view-controls/toolbar-surface-inventory.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-053-ac"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Does the chip rail's move shift the header height the sticky-offset measurement reads?"
-    answered_questions: []
+    completion_pct: 8
+    open_questions: []
+    answered_questions:
+      - "T001: the rail does not move, so the header-height question is void and spec.md §8's sticky-offset risk row is retired"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Toolbar and View Controls
@@ -68,17 +68,17 @@ observed before the fix (goal D2). Exit statuses are read from `$?` and never th
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
 | AC-101 | REQ-101 | **Given** the toolbar family, **When** the migration table's rows are read against the tree, **Then** every row whose target names a primitive renders through that primitive, and its replaced vocabulary is deleted: the close-run count is **0** outside `createPopoverShell` (today **17**), the dual-class count is **0** (today **2** — `toolbar-renderer.ts:1249`, `:1341`), the dead-method count is **0** (today **7**) | Grep counts read on the final tree + the close-sequence lane row + a negative control re-adding one close run, require red | Unmet | - |
-| AC-102 | REQ-102 | **Given** a view (`050` item 1 threshold, **as restated by `050` ADR-004**), **When** at least one filter or one sort is active, **Then** the chip row is present with a leading direction-coloured sort chip before the filter chips and the trigger carries a declared `active` state; **and When** neither is active, **Then** the row is absent entirely and the state reads `add`; **and** the view-settings panel's Filter and Sort rows carry the **`N applied`** count label in their value column | Lane row asserting chip-row presence, declared state and the count label in all four combinations of filter × sort. Negative control: force the state constant and strip the label, require red. Today: **the rail exists but carries no direction colour, no trigger declares a state, and 0 settings rows carry the count label**. **Dual-mode icon behaviour is not asserted — it is rejected** (`design-trueup.md` REQ-001: one icon state across 120 captures; colour-only signalling fails WCAG 1.4.11) | Unmet | - |
+| AC-102 | REQ-102 | **Restated at T001 against this packet's `design-trueup.md` T14** (`050` item 1 threshold as restated by `050` ADR-004, kept). **Given** a view, **When** at least one filter or one sort is active, **Then** the chip row is present with a leading sort chip whose **direction is carried by the arrow glyph** — and by the **direction word** on any surface with room for a second line — before the filter chips, and the trigger carries a declared `active` state; **and When** neither is active, **Then** the row is absent entirely and the state reads `add`; **and** **every** value column of the view-settings surface carries a state summary, the empty case reading as a **word** (`No filters`) rather than a blank | Lane row asserting chip-row presence, declared state, the direction signal and the summary label in all four combinations of filter × sort. Negative control: force the state constant and strip the label, require red. Today: **the rail exists at 26px, carries an arrow and an ordinal but no direction word, no trigger declares a state, and 0 settings rows carry a summary label**. **Three things are not asserted because they are rejected**: dual-mode icons (`ink=52, sat=0` on filtered and unfiltered alike, 120 captures, re-derived on light theme at T001); **direction by colour alone** (accent-on-tint **3.14:1**, fill-on-bar **1.19:1** — WCAG 1.4.11); and **the rail's move into the toolbar band**, withdrawn because the capture puts the rail where ours already renders | Unmet | - |
 | AC-103 | REQ-103 | **Given** a database view (`050` item 2 threshold, kept), **When** a view is created or duplicated, **Then** the view-settings surface is open within **100ms** of the create completing | Lane row timing from the create callback to the settings mount. Today's failing value: **never — nothing opens** (`database-view.ts:3460-3462`, `:3941-3943`) | Unmet | - |
 | AC-104 | REQ-104 | **Given** a view (`050` item 4 threshold, kept), **When** it is duplicated, **Then** the duplicate's config equals the source's on every field except `id` and the name suffix, and its `id` is **new**; **and When** a view tab's context menu opens, **Then** it offers rename, duplicate and remove through the shared shell | Unit test on config equality (the existing `duplicateView` semantics, `database-view.ts:3925-3956`, preserved through the migration) + a lane row for the menu. Today: **the behaviour exists hand-rolled** (correction 2, parent `goal.md` §2) — the criterion binds the migration, not the creation | Unmet | - |
 | AC-105 | REQ-105 | **Given** a board or table view with an active sort (`050` item 7 threshold, kept), **When** a row or card is dragged to a new position, **Then** a confirmation is raised; declining leaves both the order and the sort unchanged, and accepting clears the sort and commits the drop | Lane rows on both renderers, both branches. Today: **the drop is accepted and then silently undone by the sort — no confirmation exists on either renderer** | Unmet | - |
-| AC-106 | REQ-106 | **Given** a view carrying new-row default presets (`050` item 10 threshold, kept), **When** a row is created in it, **Then** every preset value is applied at creation; **and Given** a view with no presets, **Then** the new row is byte-identical to one created today | Unit test on the creation path plus a byte-comparison of the no-preset case against a pre-change baseline. Today: **no preset can be stored, so nothing is applied** | Unmet | - |
-| AC-107 | REQ-107 | **Given** an embedded view (`050` item 12 threshold, kept), **When** its container is swept from **250px** upward, **Then** the toolbar collapses on a measured natural-width comparison rather than a fixed breakpoint, and **no** control overflows its container at any width in the sweep | Lane row sweeping container widths and asserting zero overflow. Today: the collapse is a boolean hide-or-nothing (`embedded-database-renderer.ts:2410-2416`) and the sweep's first overflowing width is recorded by T002 | Unmet | - |
+| AC-106 | REQ-106 | **Given** a view carrying new-row default presets (`050` item 10 threshold, kept), **When** a row is created in it, **Then** every preset value is applied at creation; **and Given** a view with no presets, **Then** the new row is byte-identical to one created today; **and** the presets section is reachable from the **New button's dropdown** under a `Settings` section label | Unit test on the creation path plus a byte-comparison of the no-preset case against a pre-change baseline, plus a lane row for the section's placement. Today: **no preset can be stored, so nothing is applied**, and **0 New-menu rows carry a `Settings` section**. **Placement amended at T001**: `anytype-menu-set-new-object-light.png` puts `Default Type for this View` and `Template for this View` in this menu, not in the settings panel — overturning `050` C7's "absent from the product" | Unmet | - |
+| AC-107 | REQ-107 | **Given** an embedded view (`050` item 12 threshold, kept), **When** its container is swept from **250px** upward, **Then** the toolbar collapses on a measured natural-width comparison rather than a fixed breakpoint, **no** control overflows its container at any width in the sweep, and the drop order matches the captured ladder — the `New` button, the icon cluster **and the add-view `+`** all go before the tab row, which becomes a dropdown before it is dropped | Lane row sweeping container widths, asserting zero overflow and asserting the drop order. Today: the collapse is a boolean hide-or-nothing (`embedded-database-renderer.ts:2410-2416`) and the sweep's first overflowing width is recorded by T002. **Sharpened at T001**: `anytype-page-with-inline-collection-dark.png` shows the inline rung as the tab row **without its trailing `+`**, which `050`'s "view tab row only" did not distinguish. The measured-versus-breakpoint clause stays **source-derived** — one inline width exists in the sweep, so no capture can decide the mechanism | Unmet | - |
 | AC-108 | REQ-108 | **Given** any view type, **When** the settings trigger is pressed, **Then** exactly one settings path resolves it — the view-config panel or the view-type options panel — and the anchor-fallback queries still resolve against the live trigger | Unit test on per-view-type resolution + grep proof the fallback classes resolve (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`). Today: **one live path through the utilities row and seven dead methods** | Unmet | - |
 | AC-109 | REQ-109 | **Given** every toolbar surface this phase changed, **When** it presents on a phone, **Then** it carries `044`'s seven grammar elements, and **When** it can open over another sheet, **Then** it obeys `048`'s stacking model | `sheet-grammar` rows for the changed surfaces (added, not replaced); the stacking lane's existing rows stay green. Negative control: strip one grammar element from a registered row, require red. Today: **the toolbar surfaces conform; this criterion binds the migrations not to regress it** | Unmet | - |
 | AC-110 | All | **Given** the gate, **When** `npm run gate` runs to completion and its status is read from `$?`, **Then** it exits **0** with one permanent row per criterion, each negative control observed **red then green**, `npm run replay` holds with reversed 0, and the `screenshots/project-manager/` board and gantt references are `pixelHash`-identical to their pre-phase baseline | `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0; the replay's own reversed count; the parity recapture diff (parent goal D5) | Unmet | - |
 | AC-111 | REQ-102, REQ-103, REQ-107 | **Given** a released build, **When** the operator opens a filtered view, creates a view, and resizes an embedded view on iOS and on desktop, **Then** they read the rebuilt toolbar as the improvement they asked for | The operator's own words. **Only the operator closes this row; nothing in this repository can** | Unmet | - |
-| AC-112 | REQ-101 | **Given** the Anytype capture set, **When** T001 has read it, **Then** `toolbar-surface-inventory.md` §6 carries a capture-read record per migration row naming the file opened, and **no** surface was implemented before its record existed | The record itself, per row; each named capture resolves under `screenshots/anytype/`. **This row gates every design row's evidence** (goal D1) | Unmet | - |
+| AC-112 | REQ-101 | **Given** the Anytype capture set, **When** T001 has read it, **Then** `toolbar-surface-inventory.md` carries a capture-read record per migration row naming the file opened, and **no** surface was implemented before its record existed | **Met, 2026-09-05.** `design-trueup.md` is the read; `toolbar-surface-inventory.md` **§8.1** carries the per-row record — **24 of 24 rows** name the files opened or the named gap, and every named capture resolves under `screenshots/anytype/`. §8.2 lists the eight contradictions the read resolved. No surface has been implemented, so the second clause holds vacuously and stays binding for T003 onward | **Met** | - |
 
 ### Status values
 
@@ -105,7 +105,13 @@ treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Every row is open, which is correct for a packet opened the day it was authored. AC-112 is the
-evidence gate (D1) and must move before any design row's implementation is trusted; AC-111 is the
+**AC-112 is Met as of 2026-09-05** — the evidence gate (D1) has moved, so the design rows may now
+be implemented against `design-trueup.md` and `toolbar-surface-inventory.md` §8. Eleven rows remain
+open, which is correct for a packet whose first implementation leg has not run. AC-111 is the
 operator's and is the only row that closes the ask behind the phase (parent D3).
+
+**Three rows were restated by the same read**, and each says so in its own cell: AC-102 (the rail's
+band move withdrawn, the direction colour demoted, the summary label widened), AC-106 (the presets
+section moved to the New menu), AC-107 (the inline rung also drops the `+`). None of the three
+changed its `050` threshold — only the failing values and the clauses the captures disproved.
 <!-- /ANCHOR:closure -->

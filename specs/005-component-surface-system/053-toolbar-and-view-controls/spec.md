@@ -156,7 +156,7 @@ ours — with the failing numbers that prove each change was needed, recorded be
 |-----------|-------------|-------------|
 | `src/views/toolbar-renderer.ts` | Modify | Tab strip, control cluster, chip-row host, settings entry; delete the seven dead methods and the repeated close runs |
 | `src/views/toolbar-primitives.ts` | Create | The five shared primitives: `createPopoverShell`, `createConditionRow`, `createControlClusterButton`, `createSettingsEntry`, `createTabStrip` |
-| `src/views/active-view-controls-renderer.ts` | Modify | Direction-coloured leading sort chip; in-toolbar placement; the trigger's declared state (**not** dual-mode — see §5 B1) |
+| `src/views/active-view-controls-renderer.ts` | Modify | Leading sort chip at the measured 28px with its direction on the arrow glyph and, where a second line fits, the direction word; the condition-as-a-phrase chip label. **Not** in-toolbar placement (withdrawn at T001 — the rail is already where the capture puts it) and **not** direction by colour alone (3.14:1 / 1.19:1) |
 | `src/views/filter-panel-renderer.ts` | Modify | Migrate condition rows onto the shared primitive |
 | `src/views/sort-panel-renderer.ts` | Modify | Migrate condition rows onto the shared primitive |
 | `src/views/chart-toolbar-renderer.ts` | Modify | Migrate the popover shell and child-popover stack onto the shell primitive |
@@ -198,18 +198,19 @@ the primitive would be wider than the duplication it removed (the restraint ladd
 <!-- ANCHOR:anytype -->
 ## 6. ANYTYPE BEHAVIOURS TO TAKE — AND WHAT STAYS OURS
 
-Design rows name the capture each behaviour is read against (goal D1). This author could not
-render images this session; the descriptions below come from `screenshots/anytype/README.md`'s
-written index and `047`'s research, and T001 makes the implementer open the file before building.
+Design rows name the capture each behaviour is read against (goal D1). **T001 closed that gate on
+2026-09-05**: the pixels were measured and the record is `design-trueup.md`, indexed per row in
+`toolbar-surface-inventory.md` §8. Rows below carrying a measurement cite it; rows still reading
+`no capture` are designed from `047`'s source findings with the gap named.
 
 | # | Behaviour | Our state today (cited) | Anytype pattern (capture) | Take? |
 |---|-----------|--------------------------|---------------------------|-------|
 | B1 | **Rewritten 2026-09-05.** The `N applied` count label in the view-settings panel's value column (`Sort   1 applied ›` beside a bare `Filter   ›`) — a count, as text, one level in | **0 settings rows carry it.** Both triggers open the panel unconditionally (`toolbar-renderer.ts:2211`, `:2229`); the count badge on the trigger already ships (`:2575-2579`) | `anytype-view-settings-panel-dark.png` via `design-trueup.md` REQ-001 | **Take the label.** **Reject the dual-mode icons** — the funnel measures `ink=52, blue=0` on a filtered *and* an unfiltered view, identical to the pixel, across all 120 catalogue captures; there is no second mode to adopt. **Reject colour-only active-state signalling** on contrast (WCAG 1.4.11); our count badge carries a text second signal and is strictly better |
-| B2 | Leading direction-coloured sort chip, then filter chips, add control, clear-all, auto-hide when empty | Rail exists with sort-then-filter groups, logic toggle, clear-all, auto-hide (`active-view-controls-renderer.ts:99-189`) but no direction colour, and it sits below the toolbar, not in it | `anytype-set-kanban-view-dark.png` / `anytype-set-calendar-view-dark.png`; `047` §6: "a leading, direction-colored sort chip" | **Take** — extend the existing rail (parent `goal.md` §2 correction 1) |
+| B2 | **Rewritten at T001.** Leading sort chip carrying direction as an **arrow glyph** (and as a **word** where a second line fits), then filter chips, add control, clear-all, auto-hide when empty | Rail exists with sort-then-filter groups, logic toggle, clear-all, auto-hide (`active-view-controls-renderer.ts:97-189`); chip is **26px** with a 6px radius; no direction word. It **already sits where the capture puts it** — below the toolbar in its own band | `anytype-project-tracker-list-light.png` measured (`design-trueup.md` T14): rail y 274..301; sorts chip **99×28px**; 1px separator; unfilled filter chips; `+ Filter`; right-aligned `Clear`. Present on 5 of 5 List views, absent on the other five layouts | **Take, with two amendments.** Chip **26px → 28px** (the measurement and our own coarse-pointer floor agree). **Radius stays 8px** — the measured pill (r≈14) is off our 4/6/8 scale. **The band move is withdrawn** and **the direction colour is demoted** to a redundant signal (3.14:1 / 1.19:1) |
 | B3 | Land in view settings ~immediately after create/duplicate | Ends at `refresh({ viewport: "reset-top" })` (`database-view.ts:3460-3462`, `:3941-3943`) | `anytype-view-settings-panel-dark.png` — a newly added view's settings popover open; `047` §5: "land directly in view settings ~50ms after the switch" | **Take** (`050` item 2, 100ms budget) |
 | B4 | Duplicate view + view-tab context menu | Both exist (`database-view.ts:3925-3956`, `toolbar-renderer.ts:1229-1284`) and are hand-rolled | `anytype-view-settings-panel-dark.png` — Duplicate/Remove view rows in the settings popover | **Keep ours**, migrated onto `createPopoverShell` (`050` item 4's componentization half) |
 | B5 | Sort-conflict confirmation on manual drag reorder | No confirm in `board-renderer.ts` or `table-renderer.ts` | No capture — the moment was never reached; `047` §8 records the sorted-subscription repositioning this pairs with. **Gap named** | **Take**, designed from `047`'s finding (`050` item 7) |
-| B6 | Per-view new-row presets applied at creation | `createEntry` accepts `defaults` (`toolbar-renderer.ts:157-159`) but no caller passes any; `ViewConfig` carries no preset map (`types.ts:415-432`) | No capture — Anytype's template picker was not captured; the adopted slice is deliberately template-lite. **Gap named** | **Take**, the `050` item 10 slice only (`050` goal D6) |
+| B6 | Per-view new-row presets applied at creation | `createEntry` accepts `defaults` (`toolbar-renderer.ts:157-159`) but no caller passes any; `ViewConfig` carries no preset map (`types.ts:415-432`) | **Captured at T001, and it overturns `050` C7.** `anytype-menu-set-new-object-light.png` — a 288px menu whose `Settings` section carries `Default Type for this View  Page ›` and `Template for this View  Blank ›`, each opening its own anchored picker. **The gap is closed** | **Take**, the `050` item 10 slice only (`050` goal D6), **in the New menu's `Settings` section**. The type and template halves stay unadopted because we have no type or template system — a scope fact now recorded against a seen alternative rather than against a gap |
 | B7 | Measured toolbar collapse for embedded views | Boolean hide-or-nothing from codeblock options (`embedded-database-renderer.ts:2410-2416`); only the tab strip measures (`toolbar-renderer.ts:895-917`) | `anytype-page-with-inline-collection-dark.png` — the inline collection's collapsed controls; `047` §5: the toolbar collapses "by measuring its own natural width against available space" | **Take** (`050` item 12) |
 | B8 | Removing a view pre-selects the next so the tab row never loses a selection | `deleteView` already re-selects (`database-view.ts:3989-3992`); the strip keeps the active tab visible (`toolbar-renderer.ts:905-915`) | `anytype-set-kanban-view-dark.png` — tab renamed to match layout; `047` §5 | **Keep ours** — behaviour already matches |
 | B9 | The split New button (primary action + template dropdown) | Already ours: `db-new-button-group` with primary + chevron (`toolbar-renderer.ts:2346-2407`), FAB on touch | Not in Anytype's toolbar (its creation is contextual, `047` §8) | **Keep ours** — the program's own creation pattern |
@@ -231,11 +232,11 @@ Requirement ids carry their `050` item number where one exists, so a reader can 
 | ID | `050` item | Requirement |
 |----|-----------|-------------|
 | REQ-101 | — | The five primitives of §5 exist in `toolbar-primitives.ts`, and every surface in `toolbar-surface-inventory.md` §3 whose target names that primitive is migrated onto it, with its replaced vocabulary deleted (goal D3) |
-| REQ-102 | 1 | The chip row leads with a direction-coloured sort chip, then filter chips, an add control and a clear-all, auto-hiding when empty; each trigger carries a **declared state** the lane can read; and the view-settings panel's Filter and Sort rows carry the **`N applied` count label** in their value column. **Dual-mode trigger icons are rejected** (`design-trueup.md` REQ-001) — the threshold is `050` AC-001 **as restated by ADR-004**, not as first written |
+| REQ-102 | 1 | **Amended at T001 against this packet's `design-trueup.md` T14.** The chip row leads with a sort chip carrying its direction as the **arrow glyph** — and, where the surface has room for a second line, as the **direction word** — then filter chips, an add control and a clear-all, auto-hiding when empty; each trigger carries a **declared state** the lane can read; and **every** value column of the view-settings surface carries a state summary, with the empty case rendered as a **word** (`No filters`) rather than a blank. **Three rejections, each measured**: dual-mode trigger icons (the funnel is `ink=52, sat=0` on filtered and unfiltered views alike, across 120 catalogue captures and re-derived on light theme at T001); **direction by colour alone** (the accent-on-tint pair measures **3.14:1** and the chip fill **1.19:1** against its own bar, so colour can only ever be a redundant third signal — `sk-design` ALWAYS-5, WCAG 1.4.11); and **the rail's move into the toolbar band**, which is withdrawn because `anytype-project-tracker-list-light.png` places the rail below a full-content-width divider in its own band, which is where `active-view-controls-renderer.ts` already renders it. The threshold is `050` AC-001 **as restated by ADR-004** |
 | REQ-103 | 2 | Creating or duplicating a view lands in that view's settings within **100ms** of the create/duplicate completing (threshold: `050` AC-002) |
 | REQ-104 | 4 | Duplicate view and the view-tab context menu are carried by the tab-strip/shell primitives with unchanged behaviour — duplicate is config-identical with a new id and a suffixed name; the menu offers rename, duplicate, remove (threshold: `050` AC-004) |
 | REQ-105 | 7 | A manual drag reorder while a sort is active asks before it commits, on board and table both: decline leaves order and sort unchanged; accept clears the sort and commits the drop (threshold: `050` AC-007) |
-| REQ-106 | 10 | A view can carry new-row default presets, applied at creation; a view without presets produces rows byte-identical to today's (threshold: `050` AC-010) |
+| REQ-106 | 10 | A view can carry new-row default presets, applied at creation; a view without presets produces rows byte-identical to today's (threshold: `050` AC-010). **Placement amended at T001**: the presets section lands in the **New button's dropdown**, under a `Settings` section label — the captured home for a per-view creation default (`anytype-menu-set-new-object-light.png`: `Default Type for this View  Page ›`, `Template for this View  Blank ›`), and where the reader already is when they create a row. The narrowing to **per-field values** stands, on a corrected reason: `050` C7 said the product has no per-view default at all, which T001 disproves; we narrow because we have no type or template system to default, which is a scope fact |
 
 ### P1 - Required (complete OR user-approved deferral)
 
@@ -272,7 +273,7 @@ Requirement ids carry their `050` item number where one exists, so a reader can 
 | Type | Item | Impact | Mitigation |
 |------|------|--------|------------|
 | Risk | `toolbar-renderer.ts` is 2,626 lines with 17 duplicated close runs; a primitive migration can silently change dismissal order | H | The close run's *sequence* is the contract (database → group → view-tab → export → title). `createPopoverShell` encodes it once; the lane asserts the sequence on a representative surface |
-| Risk | The chip rail moving into the toolbar shifts the `.db-header` layout the table's sticky-offset measurement reads (`embedded-database-renderer.ts:1833-1841`) | M | Measure the header height before and after; the lane asserts the sticky offset still tracks the real header box |
+| ~~Risk~~ **Retired at T001** | ~~The chip rail moving into the toolbar shifts the `.db-header` layout the table's sticky-offset measurement reads (`embedded-database-renderer.ts:1833-1841`)~~ | — | **The rail does not move**, so the risk has no cause. `anytype-project-tracker-list-light.png` places the rail below a 1px full-content-width divider in its own band — where `active-view-controls-renderer.ts` already renders it. The before/after header-height measurement is dropped from T005 |
 | Risk | A trigger carrying a declared state changes what the filter/sort panel anchors to | M | The anchor is unchanged: the state is reported, not acted on — dual-mode *behaviour* is rejected (`design-trueup.md` REQ-001), so both states go through `createControlClusterButton`'s single existing anchor contract |
 | Risk | Item 7's confirm touches `board-renderer.ts`, which carries PM 1:1 parity | H | Parent D5: recapture the board reference and compare `pixelHash` before the leg closes; the confirm is a commit-time gate, not a drag-visual change |
 | Risk | Deleting seven dead methods breaks an anchor fallback | M | The classes stay; only the uncalled methods go. Grep both query sites after the deletion |
@@ -327,13 +328,26 @@ Requirement ids carry their `050` item number where one exists, so a reader can 
 <!-- ANCHOR:questions -->
 ## 11. OPEN QUESTIONS
 
-- Does the direction-coloured sort chip change the `.db-header` height the table's sticky-offset
-  measurement reads? The lane measures before the leg closes (risk table row 2).
-- Does the settings-landing continuation (item 2) also apply on phone, where the settings surface
-  is a sheet? Default: yes — the sheet opens like any other; confirm at T001.
-- Should the timeline and calendar option popovers merge into the settings entry, or keep their
-  own trigger with the shared shell? Default: own trigger, shared shell — the PM parity keeps
-  their surfaces stable.
+All three were T001's to answer. Two are closed; the third is answered against its default and the
+default is kept for a stated reason.
+
+- ~~Does the direction-coloured sort chip change the `.db-header` height the table's sticky-offset
+  measurement reads?~~ **Closed: the question is void.** The rail does not move into the toolbar
+  band, because the capture puts it where it already is (`design-trueup.md` T14). The risk row is
+  retired and no header-height measurement is needed.
+- ~~Does the settings-landing continuation (item 2) also apply on phone?~~ **Closed: yes.**
+  `anytype-mobile-sheet-view-edit-light.png` is the phone form of the 360px desktop panel — the
+  same four rows as a sheet, with `Duplicate` and `Delete view` moved into a `···` menu. The
+  surface exists on the phone, so the landing applies there like any other sheet.
+- Should the timeline and calendar option popovers merge into the settings entry, or keep their own
+  trigger with the shared shell? **Answered against the default, and the default is kept.** Anytype
+  has exactly one settings trigger per view and reaches every per-layout option through it — the
+  calendar's whole option set is two rows inside the Layout sub-page
+  (`anytype-menu-set-layout-calendar-light.png`), and the phone toolbar carries the settings icon
+  and nothing else. So the capture argues for merging. **We keep the own-trigger default anyway**,
+  because merging moves surfaces that carry the Project Manager parity and parent goal D5 forbids
+  that without a recapture read. The evidence is recorded here so a later phase can revisit it
+  rather than rediscover it.
 <!-- /ANCHOR:questions -->
 
 ---

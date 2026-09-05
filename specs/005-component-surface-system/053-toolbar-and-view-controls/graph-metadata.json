@@ -47,6 +47,7 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
       "screenshots/anytype/README.md",
       "src/views/toolbar-renderer.ts",
       "src/views/active-view-controls-renderer.ts",
@@ -59,8 +60,7 @@
       "src/views/database-view.ts",
       "src/views/board-renderer.ts",
       "src/views/view-config-panel-renderer.ts",
-      "src/data/types.ts",
-      "tools/mock-data/anytype/views-report.json"
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -97,6 +97,12 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "views-report.json",
-        "kind": "config",
-        "path": "tools/mock-data/anytype/views-report.json",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "A person using the toolbar cannot see which rules are active without opening panels (the triggers",
     "created_at": "2026-09-05T11:46:15.524Z",
-    "last_save_at": "2026-09-05T12:54:46.615Z",
+    "last_save_at": "2026-09-05T13:56:28.401Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b4eb6d7089250eb4567e09e3e154dc3e70eba666055c677379c330463c230df3",
+    "source_fingerprint": "sha256:3ebc0c5d9ed2c5f27e1ef8ecf02bc6efec2b1176ed5eaf067034c96cad7a6d64",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "54984308bf676d167d7de139adf005acab0e87d1dabecf3fe057f9fece5be4cf",
-      "plan.md": "dca32715a4499eaf267d596a1e8c98fbc72b97bfdc572ffe58e15bf20003db36",
-      "tasks.md": "2b9a3d2048322de7c9b1f9e9e1a231159c027ce0d341ccad9c27644deda3cf81",
-      "decision-record.md": "a00ba002846d141e97bc9ee0d94a11e4dc15b05a13bdafc1e1cd85572c631a26"
+      "spec.md": "5f1204624fde24b51930fb952739884f6f418dee99b06a1a199c823ea37861f1",
+      "plan.md": "2a078f818e3ae5f2ae0e557e7b7e51b4cc3d51807b8d0cbc3c4125c11a7f01ca",
+      "tasks.md": "732fc3e00ca1d710d14d1b53f07903cb27e8ef8d9f5d1c5c7268b197c87c7450",
+      "decision-record.md": "6e299c24f05cf21cff331205f88d0746e0cfd14edcdc7a1d99a8259542cc437f",
+      "implementation-summary.md": "2d90ed900a87e310875959869a009c5f83591a2851fb083c44ddc66674bbc399"
     },
     "last_active_child_id": null,
     "last_active_at": null
