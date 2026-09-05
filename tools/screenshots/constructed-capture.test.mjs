@@ -125,6 +125,7 @@ describe("constructed scenario registry", () => {
       "constructed-gallery",
       "constructed-group-selection-controls",
       "constructed-icon-picker",
+      "constructed-linked-view-host",
       "constructed-list-migrated",
       "constructed-number-displays",
       "constructed-option-color-picker",

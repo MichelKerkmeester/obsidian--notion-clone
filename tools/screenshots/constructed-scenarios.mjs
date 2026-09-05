@@ -55,15 +55,42 @@ window.__mountConstructed = (spec) => {
   // still body's DIRECT child, which is what lets its own height: 100% keep resolving
   // against the viewport the same way it did before this fix.
   const shot = document.getElementById("shot");
+  const shotParent = shot.parentElement || document.body;
   const shotNextSibling = shot.nextSibling;
   shot.remove();
+
+  if (spec.comparisonHost) {
+    const renderComparison = (bag, className, linked) => {
+      let container = null;
+      let provenance = false;
+      runRenderAssertions(document.body, { ...spec, bag }, "", (mounted, results) => {
+        container = mounted;
+        provenance = results.length > 0 && results[0].pass;
+      });
+      if (!container || !provenance) return null;
+      if (linked) container.classList.add("note-database-embed", "note-database-embed-linked");
+      const section = document.createElement("section");
+      section.className = \`constructed-view-comparison \${className}\`;
+      const label = document.createElement("div");
+      label.className = "constructed-view-comparison-label";
+      label.textContent = linked ? "Linked view" : "Standalone view";
+      section.append(label, container);
+      return section;
+    };
+    const standalone = renderComparison("file-view", "constructed-standalone-view", false);
+    const linked = renderComparison("embed", "constructed-linked-view", true);
+    shotParent.insertBefore(shot, shotNextSibling);
+    if (!standalone || !linked) return false;
+    shot.append(standalone, linked);
+    return true;
+  }
   let container = null;
   let provenance = false;
   runRenderAssertions(document.body, spec, "", (mounted, results) => {
     container = mounted;
     provenance = results.length > 0 && results[0].pass;
   });
-  document.body.insertBefore(shot, shotNextSibling);
+  shotParent.insertBefore(shot, shotNextSibling);
   if (!container || !provenance) return false;
   shot.appendChild(container);
   return true;
@@ -100,7 +127,54 @@ export function disposeConstructedBundle() {
 // meta keeps a phone layout from collapsing to a 980px desktop one, and the three stylesheets
 // load in the same order the fixture page inlines them. The bundle loads from the work
 // directory the capture run built it into.
-function constructedHostHtml(device, theme) {
+function constructedHostHtml(device, theme, comparisonHost = false) {
+  const readingHost = comparisonHost ? `
+<style>
+.markdown-preview-view {
+  --file-line-width: 900px;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+.markdown-preview-sizer {
+  width: 100%;
+  max-width: var(--file-line-width);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.markdown-preview-sizer #shot {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+}
+.constructed-host-prose {
+  width: 100%;
+  margin: 16px 0;
+}
+.constructed-view-comparison {
+  width: 100%;
+  margin: 18px 0;
+}
+.constructed-view-comparison-label {
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.constructed-view-comparison > .note-database-container {
+  height: auto;
+  min-height: 0;
+}
+</style>
+` : "";
+  const body = comparisonHost ? `
+<div class="markdown-preview-view">
+  <div class="markdown-preview-sizer">
+    <p class="constructed-host-prose">Prose above the database establishes the reading width.</p>
+    <div id="shot"></div>
+    <p class="constructed-host-prose">Prose below the database confirms the host remains in flow.</p>
+  </div>
+</div>` : `<div id="shot"></div>`;
   return `<!doctype html>
 <html class="${theme === "dark" ? "theme-dark" : "theme-light"}">
 <head><meta charset="utf-8">
@@ -108,8 +182,8 @@ function constructedHostHtml(device, theme) {
 <link rel="stylesheet" href="file://${join(HERE, "theme.css")}">
 <link rel="stylesheet" href="file://${join(REPO, "styles.css")}">
 <link rel="stylesheet" href="file://${join(HERE, "runtime-vars.css")}">
-</head>
-<body class="${device.bodyClass}"><div id="shot"></div><script src="render-bundle.js"></script></body></html>`;
+${readingHost}</head>
+<body class="${device.bodyClass}">${body}<script src="render-bundle.js"></script></body></html>`;
 }
 
 export async function mountConstructed(page, device, theme, spec) {
@@ -117,11 +191,87 @@ export async function mountConstructed(page, device, theme, spec) {
     throw new Error("constructed capture: no bundle prepared — build it before mounting");
   }
   const host = join(constructedBundle.work, `host-${spec.renderer}-${device.id}-${theme}.html`);
-  writeFileSync(host, constructedHostHtml(device, theme));
+  writeFileSync(host, constructedHostHtml(device, theme, spec.comparisonHost));
   await page.goto(pathToFileURL(host).href, { waitUntil: "load" });
   const ready = await page.evaluate((s) => window.__mountConstructed(s), spec);
   if (!ready) return null;
-  return page.$("#shot > .note-database-container");
+  if (spec.comparisonHost) {
+    const measurement = await page.evaluate(() => {
+      const prose = document.querySelector(".constructed-host-prose");
+      const embed = document.querySelector("#shot .note-database-embed-linked");
+      const table = embed?.querySelector("table.db-table");
+      if (!prose || !embed || !table) return null;
+      const contentBoxWidth = (element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return rect.width
+          - parseFloat(style.paddingLeft)
+          - parseFloat(style.paddingRight)
+          - parseFloat(style.borderLeftWidth)
+          - parseFloat(style.borderRightWidth);
+      };
+      // The element that actually scrolls is found by computed overflow, never by class name.
+      // `.db-table-wrap` is `width: fit-content`, so it always reports clientWidth === scrollWidth
+      // and comparing the table against it measures the table against itself.
+      let scrollHost = null;
+      for (let el = table.parentElement; el; el = el.parentElement) {
+        const overflowX = getComputedStyle(el).overflowX;
+        if (overflowX === "auto" || overflowX === "scroll") { scrollHost = el; break; }
+        if (el === embed) break;
+      }
+      // AC-001's card furniture, read off the shipped stylesheet rather than counted by eye.
+      const embedStyle = getComputedStyle(embed);
+      const furniture = {
+        borderTopWidth: parseFloat(embedStyle.borderTopWidth),
+        borderLeftWidth: parseFloat(embedStyle.borderLeftWidth),
+        borderRadius: parseFloat(embedStyle.borderTopLeftRadius),
+        paddingLeft: parseFloat(embedStyle.paddingLeft),
+        paddingRight: parseFloat(embedStyle.paddingRight),
+      };
+      const furnitureTotal = Object.values(furniture).reduce((sum, value) => sum + value, 0);
+      const proseWidth = contentBoxWidth(prose);
+      const embedContentWidth = contentBoxWidth(embed);
+      const tableWidth = table.scrollWidth;
+      const pageWidth = document.documentElement.clientWidth;
+      const pageScrollWidth = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
+      const delta = Math.abs(embedContentWidth - proseWidth);
+      const scrollHostClientWidth = scrollHost ? scrollHost.clientWidth : null;
+      const scrollHostScrollWidth = scrollHost ? scrollHost.scrollWidth : null;
+      // A column is clipped when content extends past the edge with no way to reach it. The
+      // table is fully reachable when a scrolling ancestor's scroll extent covers its width.
+      const columnsReachable = scrollHost != null && scrollHostScrollWidth >= tableWidth - 1;
+      const tableOverflowsHost = scrollHost != null && tableWidth > scrollHostClientWidth + 1;
+      const pageContainsOverflow = pageScrollWidth <= pageWidth + 1;
+      return {
+        ...furniture,
+        furnitureTotal,
+        proseWidth,
+        embedContentWidth,
+        delta,
+        tableWidth,
+        scrollHostClass: scrollHost ? scrollHost.className : null,
+        scrollHostClientWidth,
+        scrollHostScrollWidth,
+        columnsReachable,
+        tableOverflowsHost,
+        pageWidth,
+        pageScrollWidth,
+        pageContainsOverflow,
+        phone: document.body.classList.contains("is-phone"),
+        ok: delta <= 1 && columnsReachable && pageContainsOverflow && furnitureTotal === 0,
+      };
+    });
+    if (!measurement) return null;
+    const rounded = Object.fromEntries(Object.entries(measurement).map(([key, value]) => [
+      key,
+      typeof value === "number" ? Math.round(value * 100) / 100 : value,
+    ]));
+    console.log(`  linked-view-layout ${device.id}-${theme}: ${JSON.stringify(rounded)}`);
+    if (!measurement.ok && process.env.ALLOW_CONSTRUCTED_MEASURE_FAILURE !== "1") return null;
+  }
+  return spec.comparisonHost
+    ? page.$("#shot .note-database-embed-linked")
+    : page.$("#shot > .note-database-container");
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -177,7 +327,7 @@ const SPEC_OPTIONS = [
   "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
   "boardEmptyColumn", "galleryImageField", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "columnHeaderController", "longHeaderLabel", "migratedFromList",
-  "viewConfigVariant", "boardCardFieldsHidden",
+  "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount",
 ];
 
 function constructedScenario(view, opts) {
@@ -192,6 +342,7 @@ function constructedScenario(view, opts) {
     bag: "file-view",
     ...(opts.scale ? { scale: opts.scale } : {}),
     ...(opts.captureData === false ? {} : { captureData: true }),
+    ...(opts.comparisonHost ? { comparisonHost: true } : {}),
     ...Object.fromEntries(SPEC_OPTIONS
       .filter((key) => opts[key] !== undefined)
       .map((key) => [key, opts[key]])),
@@ -221,6 +372,17 @@ function constructedScenario(view, opts) {
 }
 
 export const CONSTRUCTED_SCENARIOS = [
+  constructedScenario("linked-view-host", {
+    renderer: "table",
+    tableColumnCount: 5,
+    tableFooter: true,
+    comparisonHost: true,
+    title: "Linked view in a reading host (constructed)",
+    group: "views",
+    sources: constructedSources("src/views/table-renderer.ts", "tools/bench/table-render-bench.ts"),
+    note: "The shipped table renderer paints the same capture-sized data once as a standalone view "
+      + "and once as a linked view inside a readable-line-width host, with prose before and after it.",
+  }),
   constructedScenario("table", {
     renderer: "table",
     title: "Table view (constructed)",

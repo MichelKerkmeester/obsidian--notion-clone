@@ -212,6 +212,8 @@ export interface ScenarioSpec {
     | "relation-values" | "file-fields" | "number-display" | "record-icon" | "dropdown"
     | "empty-state" | "column-header" | "group-selection-controls" | "card-covers";
   bag: "file-view" | "embed";
+  /** Opt-in table shape for a width comparison that fits on desktop and overflows on a phone. */
+  tableColumnCount?: number;
   /** The calendar scale to construct (month/week/day) or the timeline scale to construct
    *  (day/week/month/quarter/year) — whichever the named `renderer` owns. A ScenarioSpec names
    *  one renderer, so the two scale sets never need this field at once. Calendar defaults to
@@ -3537,7 +3539,10 @@ export function runRenderAssertions(
     // which repeats one under-floor control thousands of times in the touch-target lane without
     // saying anything the first row did not. The structural-cost shape stays the lanes' own
     // no-captureData scenarios, which still mount 2000 rows here.
-    const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
+    const columns = makeTableColumns(
+      scenario.tableColumnCount ?? TABLE_COLUMNS,
+      scenario.captureData ? "mixed" : "text",
+    );
     // The footer sits under the last row, and a phone crops the table at its own viewport height:
     // at the capture row count the row the scenario exists to show falls below the fold, so the
     // footer variant takes the shorter set that fits both devices.

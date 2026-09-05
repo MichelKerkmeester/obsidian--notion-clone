@@ -15544,6 +15544,75 @@ body.is-phone .note-database-container .db-record-detail-panel {
   line-height: 1.4;
 }
 
+/* A linked view is a page block, so its surface owns no second card around the database. The
+   readable-line-width host supplies the containing block; keeping the width here as a percentage
+   lets the same block follow desktop and phone hosts without copying a measured pixel value. */
+.note-database-embed.note-database-embed-linked.note-database-container {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.note-database-embed.note-database-embed-linked.note-database-container > .db-header {
+  left: 0;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 36px;
+}
+
+.note-database-embed.note-database-embed-linked .db-linked-view-drag-handle {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 3px);
+  grid-template-rows: repeat(3, 3px);
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: transparent;
+  color: var(--text-faint);
+  cursor: grab;
+  gap: 3px;
+  touch-action: none;
+}
+
+.note-database-embed.note-database-embed-linked .db-linked-view-drag-handle:active {
+  cursor: grabbing;
+}
+
+.note-database-embed.note-database-embed-linked .db-linked-view-drag-handle:hover,
+.note-database-embed.note-database-embed-linked .db-linked-view-drag-handle:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+}
+
+.note-database-embed.note-database-embed-linked .db-linked-view-drag-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: var(--db-radius-full);
+  background: currentColor;
+}
+
+.is-phone .note-database-embed.note-database-embed-linked.note-database-container > .db-header {
+  padding-left: 56px;
+}
+
+.is-phone .note-database-embed.note-database-embed-linked .db-linked-view-drag-handle {
+  top: 4px;
+  width: 44px;
+  height: 44px;
+}
+
 .note-database-embed-headerless.note-database-container {
   --db-table-header-top: 0px;
   --db-group-header-top: 0px;
@@ -15727,16 +15796,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   pointer-events: auto;
 }
 
-.note-database-embed-codeblock-host {
-  position: relative;
-}
-
-.note-database-embed-codeblock-host .edit-block-button {
-  position: absolute !important;
-  z-index: 80 !important;
-  pointer-events: auto;
-}
-
 .markdown-rendered:has(.note-database-embed) .edit-block-button {
   position: absolute !important;
   z-index: 80 !important;
@@ -15747,52 +15806,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   position: absolute !important;
   z-index: 80 !important;
   pointer-events: auto;
-}
-
-.note-database-embed.note-database-container > .db-embed-header-toggle {
-  position: sticky;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 45;
-  display: flex;
-  width: 30px;
-  height: 30px;
-  margin: 6px auto -36px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-full);
-  background: color-mix(in srgb, var(--background-primary) 92%, transparent);
-  box-shadow: var(--db-elevation-1);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 120ms ease, background-color 120ms ease;
-}
-
-.note-database-embed.note-database-container:hover > .db-embed-header-toggle,
-.note-database-embed.note-database-container > .db-embed-header-toggle:focus-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.note-database-embed.note-database-container > .db-embed-header-toggle:hover {
-  background: var(--background-modifier-hover);
-}
-
-.note-database-container .db-embed-header-inline-toggle {
-  display: none;
-}
-
-.is-mobile .note-database-container .db-embed-header-inline-toggle {
-  display: inline-flex;
-}
-
-.is-mobile .note-database-embed.note-database-container > .db-embed-header-toggle {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.is-mobile .note-database-embed.note-database-container:not(.note-database-embed-headerless) > .db-embed-header-toggle {
-  display: none;
 }
 
 /* Embed: 未分组时，属性行紧贴 header 底边 */

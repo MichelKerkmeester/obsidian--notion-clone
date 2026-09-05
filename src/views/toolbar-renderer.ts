@@ -159,7 +159,6 @@ export interface ToolbarActions {
   toggleColumnManager(anchorEl: HTMLElement): void;
   closeToolbarPopovers?(): void;
   openFullView?(): void;
-  toggleHeaderChrome?(hidden: boolean): void;
   createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition, intent?: CreateEntryIntent): void;
   getCreateEntryPosition?(placement: NewRecordPlacement): CreateEntryPosition | undefined;
   readonly isReadOnly?: boolean;
@@ -241,7 +240,6 @@ export class ToolbarRenderer {
     const phoneLayout = isTouchDevice(containerEl);
     const viewType = currentView?.viewType || "table";
     const isChartView = viewType === "chart";
-    const isCalendarTimelineView = viewType === "calendar" || viewType === "timeline";
     const showSortButton = viewType !== "chart";
     const showGroupButton = viewType !== "chart" && viewType !== "calendar";
     const showColumnButton = viewType !== "chart";
@@ -250,6 +248,7 @@ export class ToolbarRenderer {
 
     const header = containerEl.createDiv({ cls: "db-header" });
     containerEl.insertBefore(header, containerEl.firstChild);
+    if (actions.moveLinkedView) this.renderLinkedViewDragHandle(header);
 
     // Row 0: Database name heading
     if (actions.showDatabaseChrome) {
@@ -364,7 +363,6 @@ export class ToolbarRenderer {
 
       const titleActions = titleRow.createDiv({ cls: "db-title-actions" });
       this.renderFullViewButton(titleActions, actions);
-      if (actions.toggleHeaderChrome && phoneLayout) this.renderHeaderChromeButton(titleActions, actions, false);
       if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions, currentDb);
       if (currentDb?.description) {
         header.createDiv({
@@ -2517,10 +2515,18 @@ export class ToolbarRenderer {
     fullBtn.onclick = () => actions.openFullView?.();
   }
 
-  private renderHeaderChromeButton(toolbar: HTMLElement, actions: ToolbarActions, hidden: boolean): void {
-    const label = hidden ? t("toolbar.showEmbedHeader") : t("toolbar.hideEmbedHeader");
-    const btn = this.createIconButton(toolbar, hidden ? "chevron-down" : "chevron-up", label, "db-embed-header-inline-toggle");
-    btn.onclick = () => actions.toggleHeaderChrome?.(!hidden);
+  private renderLinkedViewDragHandle(header: HTMLElement): void {
+    const handle = header.createEl("button", {
+      cls: "db-linked-view-drag-handle",
+      attr: {
+        type: "button",
+        draggable: "true",
+        "aria-label": t("toolbar.moveToPage"),
+      },
+    });
+    for (let index = 0; index < 6; index += 1) {
+      handle.createSpan({ cls: "db-linked-view-drag-dot", attr: { "aria-hidden": "true" } });
+    }
   }
 
   private renderDatabaseFileButton(toolbar: HTMLElement, actions: ToolbarActions): void {

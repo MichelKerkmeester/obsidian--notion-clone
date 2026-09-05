@@ -363,6 +363,15 @@ describe("subtask screenshot fixture parity", () => {
     expect(styles).toMatch(/\.note-database-container \.pm-chip\s*\{[^}]*line-height:\s*1\.5;/);
   });
 
+  it("lets a linked database own the reading host width without card furniture", () => {
+    const linkedSurface = styles.match(/\.note-database-embed\.note-database-embed-linked\.note-database-container\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(linkedSurface).toMatch(/width:\s*100%;/);
+    expect(linkedSurface).toMatch(/padding:\s*0;/);
+    expect(linkedSurface).toMatch(/border:\s*0;/);
+    expect(linkedSurface).toMatch(/border-radius:\s*0;/);
+    expect(styles).toMatch(/\.is-phone \.note-database-embed\.note-database-embed-linked \.db-linked-view-drag-handle\s*\{[^}]*width:\s*44px;[^}]*height:\s*44px;/s);
+  });
+
   it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {
     // The five scale captures exist to show an un-related bar; the tree has its own scenario.
     for (const lane of TL_LANES) {

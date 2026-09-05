@@ -49,4 +49,10 @@ describe("ToolbarRenderer toggle state language", () => {
     expect(toolbarContent).toContain('"aria-selected": i === currentViewIndex ? "true" : "false"');
     expect(toolbarContent).toContain('cls: `db-view-tab${i === currentViewIndex ? " is-active" : ""}`');
   });
+
+  it("renders six dots in the linked-view grab handle", () => {
+    expect(toolbarContent).toContain("db-linked-view-drag-handle");
+    expect(toolbarContent).toContain("index < 6");
+    expect(toolbarContent).toContain("actions.moveLinkedView");
+  });
 });

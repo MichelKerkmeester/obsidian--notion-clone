@@ -128,16 +128,12 @@ import {
 import { MarkdownFileSuggestModal } from "./markdown-file-suggest-modal";
 import {
   applyLinkedViewMove,
-  EMBED_CONTENT_HOST_CLASS,
   EMBED_LINKED_CLASS,
-  findReadingContentHost,
   formatLinkedViewFence,
   LINKED_VIEW_DRAG_TYPE,
-  releaseEmbedWidthToHost,
   serializeLinkedViewSource,
   undoLinkedViewMove,
   vaultFilesAdapter,
-  type EmbedHostNode,
   type LinkedViewLanguage,
   type LinkedViewMoveResult,
 } from "./modals/linked-view-block";
@@ -367,8 +363,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private unsubscribeViewConfig?: () => void;
   private configHistoryStack: DatabaseConfig[] = [];
   historyStack: EmbedHistoryEntry[] = [];
-  private headerChromeHiddenOverride: boolean | null = null;
-  private embedWidthHosts: EmbedHostNode[] = [];
   private removeLinkedViewDropTarget?: () => void;
   private refreshCoordinator: RefreshCoordinator;
   private pendingSourceReload = false;
@@ -589,7 +583,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.render();
     });
     installNoteHoverPreview(this, this.containerEl, this.app, this);
-    this.bindEmbedToReadingWidth();
     registerLiveLinkedViewEmbed(this);
     this.unsubscribe = this.dataSource.onDataChanged((batch) => this.handleDataChanged(batch));
     this.unsubscribeViewConfig = this.dataSource.onViewConfigChanged((mutation) => this.handlePeerViewConfigChanged(mutation));
@@ -625,45 +618,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.containerEl.removeEventListener("keydown", this.handleEmbedKeydownBound);
     this.intersectionObserver?.disconnect();
     this.clearFileViewWidthClass();
-    this.clearEmbedWidthBinding();
     this.removeLinkedViewDropTarget?.();
     unregisterLiveLinkedViewEmbed(this);
     // 取消可能仍在调度的无效时间事件分块扫描，避免卸载后继续占用 idle 回调
     this.timelineInvalidEventsScanner.clear();
-  }
-
-  private bindEmbedToReadingWidth(): void {
-    if (this.persistMode !== "codeblock") return;
-    this.clearEmbedWidthBinding();
-    const start = this.containerEl as unknown as EmbedHostNode;
-    if (typeof start.addClass !== "function") return;
-    const host = findReadingContentHost(start);
-    if (host) {
-      this.embedWidthHosts = releaseEmbedWidthToHost(start, host);
-      this.embedWidthHosts.push(host);
-      return;
-    }
-    if (start.style) {
-      start.style.width = "100%";
-      start.style.maxWidth = "none";
-    }
-  }
-
-  private clearEmbedWidthBinding(): void {
-    for (const node of this.embedWidthHosts) {
-      node.removeClass(EMBED_CONTENT_HOST_CLASS);
-      if (node.style) {
-        node.style.width = "";
-        node.style.maxWidth = "";
-        node.style.overflowX = "";
-      }
-    }
-    this.embedWidthHosts = [];
-    const container = this.containerEl as unknown as EmbedHostNode;
-    if (container.style) {
-      container.style.width = "";
-      container.style.maxWidth = "";
-    }
   }
 
   private observeVisibility(): void {
@@ -1666,7 +1624,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       toggleViewConfig: (anchorEl) => this.toggleHeaderPopover(config, "view", anchorEl),
       closeToolbarPopovers: () => this.closePopovers(),
       openFullView: () => { void this.openFullDatabaseView(config); },
-      toggleHeaderChrome: (hidden) => this.toggleHeaderChrome(config, hidden),
       copyViewCode: () => { void this.copyEmbeddedViewCode(config); },
       exportData: (format) => this.exportData(config, format),
       exportCsvMarkdownZip: () => { void this.exportCsvMarkdownZip(); },
@@ -1804,13 +1761,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.updateToolbarIndicators(config);
     this.renderResults(config, { viewport: "reset-top" });
     this.saveEmbeddedConfigInBackground();
-  }
-
-  private toggleHeaderChrome(config: ViewConfig, hidden: boolean): void {
-    this.headerChromeHiddenOverride = hidden;
-    this.containerEl.toggleClass("note-database-embed-headerless", hidden);
-    this.render();
-    this.saveCodeBlockReferenceInBackground(config);
   }
 
   private rerenderToolbar(config: ViewConfig): void {
@@ -2409,7 +2359,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private shouldHideHeaderChrome(): boolean {
     if (this.persistMode !== "codeblock") return false;
-    if (this.headerChromeHiddenOverride != null) return this.headerChromeHiddenOverride;
     const options = this.parseEmbeddedOptions();
     return this.isTrueOption(options.hideHeader) ||
       this.isTrueOption(options.hideToolbar) ||
@@ -3735,11 +3684,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private bindLinkedViewMoveAffordance(): void {
     if (this.persistMode !== "codeblock") return;
-    const header = this.containerEl.querySelector(":scope > .db-header");
-    if (!isHTMLElement(header)) return;
-    header.draggable = true;
-    header.addEventListener("dragstart", (event) => this.onLinkedViewDragStart(event));
-    header.addEventListener("dragend", () => this.removeLinkedViewDropTarget?.());
+    const handle = this.containerEl.querySelector(":scope > .db-header .db-linked-view-drag-handle");
+    if (!isHTMLElement(handle)) return;
+    handle.draggable = true;
+    handle.addEventListener("dragstart", (event) => this.onLinkedViewDragStart(event));
+    handle.addEventListener("dragend", () => this.removeLinkedViewDropTarget?.());
   }
 
   private onLinkedViewDragStart(event: DragEvent): void {

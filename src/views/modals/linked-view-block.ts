@@ -32,15 +32,6 @@ export interface LinkedViewBlockRef {
   hideHeader?: boolean;
 }
 
-export interface EmbedHostNode {
-  parentElement: EmbedHostNode | null;
-  addClass(name: string): void;
-  removeClass(name: string): void;
-  hasClass(name: string): boolean;
-  style?: { width?: string; maxWidth?: string; overflowX?: string };
-}
-
-export const EMBED_CONTENT_HOST_CLASS = "note-database-embed-content-host";
 export const EMBED_LINKED_CLASS = "note-database-embed-linked";
 export const LINKED_VIEW_DRAG_TYPE = "application/x-note-database-linked-view";
 
@@ -96,42 +87,6 @@ export function parseLinkedViewFence(fence: string): LinkedViewBlockRef {
 /** Parse then serialise. Canonical rows are byte-identical; trailing whitespace is stripped. */
 export function roundTripLinkedViewFence(fence: string): string {
   return formatLinkedViewFence(parseLinkedViewFence(fence));
-}
-
-export function findReadingContentHost(start: EmbedHostNode): EmbedHostNode | null {
-  let el: EmbedHostNode | null = start;
-  while (el) {
-    if (el.hasClass("markdown-preview-sizer") || el.hasClass("markdown-preview-view") || el.hasClass("markdown-source-view")) {
-      return el;
-    }
-    el = el.parentElement;
-  }
-  return null;
-}
-
-/**
- * Release width clips between the embed and the reading-view content host
- * so the table uses that host's width, not a code-block box. Percentage
- * width, never a measured pixel value.
- */
-export function releaseEmbedWidthToHost(container: EmbedHostNode, host: EmbedHostNode): EmbedHostNode[] {
-  const released: EmbedHostNode[] = [];
-  host.addClass(EMBED_CONTENT_HOST_CLASS);
-  let el = container.parentElement;
-  while (el && el !== host) {
-    if (el.style) {
-      el.style.maxWidth = "none";
-      el.style.width = "100%";
-      el.style.overflowX = "visible";
-    }
-    released.push(el);
-    el = el.parentElement;
-  }
-  if (container.style) {
-    container.style.maxWidth = "none";
-    container.style.width = "100%";
-  }
-  return released;
 }
 
 export interface LinkedViewMoveFiles {

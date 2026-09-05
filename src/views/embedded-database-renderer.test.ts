@@ -32,16 +32,12 @@ import {
   applyLinkedViewMove,
   appendLinkedViewToDatabase,
   buildLinkedViewFence,
-  EMBED_CONTENT_HOST_CLASS,
-  findReadingContentHost,
   formatLinkedViewFence,
   linkedViewBlockCount,
   parseLinkedViewFence,
-  releaseEmbedWidthToHost,
   roundTripLinkedViewFence,
   serializeLinkedViewSource,
   undoLinkedViewMove,
-  type EmbedHostNode,
 } from "./modals/linked-view-block";
 
 vi.mock("obsidian", () => {
@@ -172,8 +168,14 @@ class FakeElement {
   isConnected = false;
   ownerDocument = { defaultView: null };
   onclick: (() => void) | null = null;
+  draggable = false;
   style: { width?: string; maxWidth?: string; overflowX?: string } = {};
   private classes = new Set<string>();
+  private listeners = new Map<string, Set<(event: unknown) => void>>();
+
+  instanceOf(constructor: unknown): boolean {
+    return typeof HTMLElement !== "undefined" && constructor === HTMLElement;
+  }
 
   createDiv(options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): FakeElement {
     return this.createEl("div", options);
@@ -228,7 +230,11 @@ class FakeElement {
   querySelector(selector?: string): FakeElement | null {
     if (selector?.startsWith(":scope > ")) {
       const rest = selector.slice(":scope > ".length);
-      return this.children.find((child) => child.matchesSelector(rest)) ?? null;
+      const [directSelector, ...descendantSelectors] = rest.split(/\s+/);
+      const direct = this.children.find((child) => child.matchesSelector(directSelector)) ?? null;
+      return descendantSelectors.length > 0
+        ? direct?.querySelector(descendantSelectors.join(" ")) ?? null
+        : direct;
     }
     return this.querySelectorAll(selector)[0] ?? null;
   }
@@ -240,6 +246,22 @@ class FakeElement {
       current = current.parentElement;
     }
     return null;
+  }
+
+  addEventListener(type: string, listener: (event: unknown) => void): void {
+    const listeners = this.listeners.get(type) ?? new Set<(event: unknown) => void>();
+    listeners.add(listener);
+    this.listeners.set(type, listeners);
+  }
+
+  removeEventListener(type: string, listener: (event: unknown) => void): void {
+    this.listeners.get(type)?.delete(listener);
+  }
+
+  dispatchEvent(event: { type: string; bubbles?: boolean }): void {
+    if (event.type === "click") this.onclick?.();
+    for (const listener of this.listeners.get(event.type) ?? []) listener(event);
+    if (event.bubbles) this.parentElement?.dispatchEvent(event);
   }
 
   matchesSelector(selector: string): boolean {
@@ -477,12 +499,6 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
   });
 });
 
-function makeHost(className = ""): EmbedHostNode & FakeElement {
-  const el = new FakeElement();
-  if (className) el.addClass(className);
-  return el;
-}
-
 describe("linked embed chrome", () => {
   it("asks the toolbar for a headerless embed and offers the move action", () => {
     const { harness, viewConfig } = createRenderer();
@@ -509,31 +525,33 @@ describe("linked embed chrome", () => {
     expect(toolbar).toContain("!actions.showDatabaseChrome && !actions.hideDatabaseTitle");
     expect(toolbar).toContain("hideDatabaseTitle?: boolean");
   });
-});
 
-describe("linked embed width", () => {
-  it("releases the embed to the reading-view sizer without a pixel width", () => {
-    const sizer = makeHost("markdown-preview-sizer");
-    const pre = makeHost();
-    pre.parentElement = sizer;
-    const container = makeHost();
-    container.parentElement = pre;
-    const host = findReadingContentHost(container);
-    expect(host).toBe(sizer);
-    releaseEmbedWidthToHost(container, sizer);
-    expect(sizer.hasClass(EMBED_CONTENT_HOST_CLASS)).toBe(true);
-    expect(container.style.width).toBe("100%");
-    expect(container.style.maxWidth).toBe("none");
-    // A measured width would be right once and wrong at every other host width.
-    expect(container.style.width?.endsWith("px")).toBe(false);
-    expect(pre.style.width).toBe("100%");
-    expect(pre.style.maxWidth).toBe("none");
-    expect(pre.style.overflowX).toBe("visible");
-  });
+  it("starts a move from the handle but not from a toolbar button", () => {
+    const { harness } = createRenderer();
+    const container = (harness as unknown as { containerEl: FakeElement }).containerEl;
+    const header = new FakeElement();
+    header.addClass("db-header");
+    const handle = new FakeElement();
+    handle.addClass("db-linked-view-drag-handle");
+    handle.parentElement = header;
+    const button = new FakeElement();
+    button.addClass("db-toolbar-icon-button");
+    button.parentElement = header;
+    header.children.push(handle, button);
+    header.parentElement = container;
+    container.children.push(header);
 
-  it("leaves the embed at its own width when no reading host is above it", () => {
-    const orphan = makeHost();
-    expect(findReadingContentHost(orphan)).toBeNull();
+    const startDrag = vi.spyOn(harness as unknown as { onLinkedViewDragStart: (event: unknown) => void }, "onLinkedViewDragStart");
+    (harness as unknown as { bindLinkedViewMoveAffordance(): void }).bindLinkedViewMoveAffordance();
+
+    expect(handle.draggable).toBe(true);
+    expect(header.draggable).toBe(false);
+    // The drag bubbles from the button through the header, so a listener left on the header
+    // would still fire here. It is the negative control for the handle-only binding below.
+    button.dispatchEvent({ type: "dragstart", bubbles: true });
+    expect(startDrag).not.toHaveBeenCalled();
+    handle.dispatchEvent({ type: "dragstart", bubbles: true });
+    expect(startDrag).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -587,6 +605,64 @@ describe("moving a linked view", () => {
     await undoLinkedViewMove(adapter, { ...result, sourcePath: "from.md", destPath: "to.md" });
     expect(files.get("from.md")).toBe(result.sourceBefore);
     expect(files.get("to.md")).toBe(result.destBefore);
+  });
+
+  it("re-reads both vault-shaped pages with the same linked view after moving it", async () => {
+    const files = new Map<string, string>([
+      ["pages/overview.md", [
+        "---",
+        "cssclasses: overview",
+        "---",
+        "# Overview",
+        "",
+        "The source page keeps its ordinary prose.",
+        "```database-view",
+        "dbPath: Databases/Tasks:2026.md",
+        "viewId: board-view",
+        "hideHeader: true",
+        "```",
+        "",
+        "Source page footer.",
+        "",
+      ].join("\n")],
+      ["pages/archive.md", [
+        "---",
+        "cssclasses: archive",
+        "---",
+        "# Archive",
+        "",
+        "Destination page content.",
+        "",
+      ].join("\n")],
+    ]);
+    const adapter = {
+      read: async (path: string) => files.get(path) ?? "",
+      write: async (path: string, content: string) => { files.set(path, content); },
+    };
+    await applyLinkedViewMove(adapter, {
+      sourcePath: "pages/overview.md",
+      destPath: "pages/archive.md",
+      sourceLineStart: 6,
+      sourceLineEnd: 10,
+      block: "```database-view\ndbPath: Databases/Tasks:2026.md\nviewId: board-view\nhideHeader: true\n```",
+      destInsertLine: 6,
+    });
+
+    const sourceAfter = await adapter.read("pages/overview.md");
+    const destAfter = await adapter.read("pages/archive.md");
+    const movedFence = destAfter.match(/```(?:note-database|database-view)\n[\s\S]*?\n```/);
+    expect(movedFence).not.toBeNull();
+    if (!movedFence) return;
+    const parsed = parseLinkedViewFence(movedFence[0]);
+
+    expect(parsed.dbPath).toBe("Databases/Tasks:2026.md");
+    expect(parsed.dbId).toBeUndefined();
+    expect(parsed.viewId).toBe("board-view");
+    expect(parsed.viewIdPresent).toBe(true);
+    expect(parsed.hideHeader).toBe(true);
+    expect(sourceAfter).toContain("# Overview");
+    expect(destAfter).toContain("# Archive");
+    expect(linkedViewBlockCount(sourceAfter, destAfter)).toBe(1);
   });
 
   it("leaves a recoverable duplicate, never a loss, when the second write fails", async () => {
