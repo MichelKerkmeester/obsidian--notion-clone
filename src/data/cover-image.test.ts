@@ -98,7 +98,7 @@ describe("CoverImage safety: external URLs never yield a network src for Files c
     const externalImage = parseCoverImage("https://evil.example/x.png", row(), app);
     if (!externalImage) throw new Error("expected an external image to parse");
 
-    // The exact guard used by GalleryRenderer/BoardRenderer before painting a cover <img>.
+    // The exact guard used by BoardRenderer before painting a cover <img>.
     expect(isCoverImageBlocked(externalImage, "files")).toBe(true);
 
     // A URL-typed (non-Files) cover field is allowed to render network images by design.
