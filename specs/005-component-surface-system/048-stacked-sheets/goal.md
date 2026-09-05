@@ -81,7 +81,8 @@ Frozen choices. Changing one is an amendment.
 - [x] **The inventory exists and is code-derived.** Every surface that can open while another sheet
       is open, grouped parent → child → opener kind → current → target, each row citing a
       `file:line` opener. **Today: no such document exists**; `../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md`
-      censuses surfaces one at a time and never asks which opens over which.
+      censuses surfaces one at a time and never asks which opens over which. **Pre-fix: 0 stacked
+      pairs named anywhere in the tree; now 31 registered in the lane, three of them three deep.**
 - [x] **A parent sheet's bounding box does not move when a child opens**, measured on both edges.
       **Today: unmeasured, and no code path reads the parent when a child mounts** —
       `setSheetMount` (`mobile-bottom-sheet.ts:274`) appends the child to the body and touches
@@ -96,7 +97,8 @@ Frozen choices. Changing one is an amendment.
 - [x] **The topmost sheet holds the keyboard inset and the sheet beneath it holds zero**, proven by
       a negative control. **Today: each sheet writes its own `--db-mobile-sheet-bottom` at its own
       placement time** (`popover-position.ts:406`), which is why the operator's filter sheet sits
-      at the top of the screen while its own dropdown sits at the bottom.
+      at the top of the screen while its own dropdown sits at the bottom. **Pre-fix: red on all 31
+      registered pairs, the parent holding 336px; now child 336px and parent 0px on all 31.**
 - [x] **`npm run gate` exits 0 with a permanent lane row per stacked pair, each observed red before
       green.** **Today: `sheet-grammar`'s registry holds 8 surfaces and every one of them is a
       first sheet** (`tools/live/sheet-grammar.mjs:46-68`); no stacked pair is registered.
