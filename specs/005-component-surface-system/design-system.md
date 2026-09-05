@@ -192,6 +192,48 @@ The other 30 call sites split into 15 using the compact preset (all in `toolbar-
 3. **No code path may produce a menu-role surface wider than its role permits.** The check is
    `rect.width <= 320` measured on every menu-role surface the census reaches.
 
+### The condition panel — a named wider role, not a bespoke number
+
+**Operator ruling, 2026-09-05 (~11:40).** The `panel` role's 292-360px range does not fit a panel
+whose rows carry conditions — property, operator, value, plus a group button, a NOT button and a
+remove button — because the row's two word-carrying controls have no floor under either one, and they
+absorb whatever the container's width does not cover. Measured on the shipped renderer at 360px:
+property 82px, operator 110px, value 16-40px (`roadmap.md` §4 row 50). This is not a defect in an
+otherwise-correct number; it is the `panel` role applied to a row shape it was never sized for.
+
+Policy item 2 above already says what to do when a role's declared width does not hold: **declare a
+wider role**, not a bespoke number at the call site. `condition panel` is that role.
+
+**Who it applies to.** The three callers of `PANEL_POPOVER` in `src/views/popover-position.ts` —
+`filter-panel-renderer.ts:228`, `sort-panel-renderer.ts:142`, `column-manager-renderer.ts:153` — and
+no one else. Column Manager widens with Filter and Sort deliberately: splitting the preset would
+restore the per-panel width drift it exists to end (`roadmap.md` §4 row 50). View config and every
+other `panel`-role surface are unaffected and keep the range below.
+
+**Width range: 440-560px.** `PANEL_POPOVER` today is `{ minWidth: 292, preferredWidth: 552, maxWidth:
+552 }` (`popover-position.ts:90-94`), derived from the widest row a condition builds rather than
+picked — the derivation is documented in the constant's own comment. 552px sits inside the range; the
+range itself is not one fixed number so a future derivation change (a new button, a wider label) is
+not itself a doc violation, the way a single fixed width would make every future measurement a
+rewrite.
+
+**The row floor rule.** Inside a condition panel's row, the two word-carrying controls — property and
+operator — each carry a 140px floor (`flex: 0 1 auto`, `min-width: 140px`), and the value control
+carries a 120px floor (`flex: 1 1 auto`, `min-width: 120px`). Measured after the fix, at 552px: property
+140px, operator 140px, value 120-140px, zero row overflow at every nesting depth the panel builds
+(`roadmap.md` §4 row 50). The floors are scoped away from `.db-mobile-bottom-sheet` (the phone grid is
+untouched) and away from `.db-active-rule-popover` (the compact single-rule editor, which wraps onto
+three lines if given the same floors).
+
+**The existing `panel` role is unchanged: 292-360px for everything else.** This range is additive, not
+a replacement — a panel that is not one of the three named callers above still sizes from 292-360px as
+before.
+
+**Known gap, not silently absorbed.** §3's role vocabulary table and §4's decision table still list
+Filter, Sort and Column Manager at the `panel` role's 292-360px range; both predate this ruling and are
+out of scope for this edit, whose write authority is §5. They need the same amendment this section
+just made, as a follow-up.
+
 ### One trap in the harness, before you trust the geometry gate
 
 `tools/storybook/verify-placement.mjs:164-171` currently asserts `wr.width > 320` for a widthless

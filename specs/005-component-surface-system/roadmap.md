@@ -1148,7 +1148,7 @@ with no specification, and the only reason that is not still true is that its ag
 
 ## 6A. OPERATOR DECISIONS ON RECORD
 
-Four decisions were taken on 2026-08-30, and **thirteen more on 2026-09-05** — across four tables
+Four decisions were taken on 2026-08-30, and **fourteen more on 2026-09-05** — across five tables
 further down, not folded into this one. Each closes a question, and each is recorded here
 because a decision that lives only in a conversation gets relitigated by the next agent.
 
@@ -1241,6 +1241,12 @@ is again what Apple does and again a presentation choice, not a repair.
 | Decision | What it settles | Where it binds |
 |---|---|---|
 | **Skip AppFlowy installed captures; Anytype's demo space is the persistent test environment.** Operator: *"Skip AppFlowy installed captures."* | AppFlowy is Flutter with no DOM or accessibility tree, so its CSV import and remaining view captures need real mouse clicks — about 10 minutes of the operator's Mac, taken away from their concurrent use of it. The operator chose to keep only the official AppFlowy images. Separately, Anytype's demo space stays the persistent test environment (kept across sessions, not deleted and rebuilt) | `047-competitor-references-and-pm-alignment/decision-record.md` ADR-002 and `049-test-environments-and-mock-data/decision-record.md` ADR-001. `047`'s two remaining AppFlowy installed-app rows (AC-001) and `049`'s AppFlowy environment leg (AC-008/T022) both close as skipped by operator decision — not failed, not deferred. The retained CSVs stay in `tools/mock-data/csv/` for a future operator window |
+
+### One more, taken 2026-09-05 (~11:40)
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **A `condition panel` role, 440-560px, is added for Filter, Sort and Column Manager; `panel` keeps 292-360px for everything else.** Operator: *"Amend the document."* | Row 50's fix (`worktrees/064-desktop-chrome-bugs`, landed `f5a69e9f`) widened `PANEL_POPOVER` to 552px so a condition row's property, operator and value controls never truncate — measured chips 140px, value control 120-140px, row overflow 0. That value sits outside `design-system.md` §5's declared `panel` range of 292-360px, which row 50 itself flagged as "now a defect for the operator to rule on." The operator ruled: a named wider role, not a widened existing one, per the row-floor rule (property/operator 140px floors, value 120px floor) | `design-system.md` §5 (amended), `roadmap.md` §4 rows 47 and 50 (measurement source), `015-desktop-dropdown-placement/decision-record.md` ADR-001 (Accepted) |
 
 ---
 

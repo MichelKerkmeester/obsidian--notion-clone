@@ -38,7 +38,7 @@
       "popover",
       "sidebar"
     ],
-    "importance_tier": "critical",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "probe-inventory.mjs",
       "probe-desktop-placement.mjs",
@@ -57,7 +58,9 @@
       "tools/live/chrome-geometry-measure.mjs",
       "tools/storybook/verify-placement.mjs",
       "tools/live/renderer-coverage.json",
-      "src/views/calendar-search-placement.test.ts"
+      "src/views/calendar-search-placement.test.ts",
+      "specs/005-component-surface-system/design-system.md",
+      "specs/005-component-surface-system/roadmap.md"
     ],
     "entities": [
       {
@@ -88,6 +91,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -163,6 +172,18 @@
         "source": "derived"
       },
       {
+        "name": "design-system.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/design-system.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/roadmap.md",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -185,29 +206,11 @@
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "its",
-        "kind": "key_phrase",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "an",
-        "kind": "key_phrase",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Measure where every desktop dropdown, popover and menu actually lands, against where it should land, and repair the two seams that explain five of the six defects found.",
     "created_at": "2026-08-30T16:46:50.351Z",
-    "last_save_at": "2026-09-05T08:16:23.903Z",
+    "last_save_at": "2026-09-05T09:56:06.338Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,14 +219,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9541fdaf92c4eb9ded2bcd88087c0d9bb36c16a6f6bedd772e598b3649994df6",
+    "source_fingerprint": "sha256:a05140c98734730691c79f6d7e74cb22d5f1e73cda2fad0a14fa4310e8397717",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "f3ff29a4c912c6c5469b043321d77e6e9a27d555aa0a14fc5ab8c6766d36da85",
       "plan.md": "3077a030820f6dd48a5ba05d9116563c0e9ae58c8796927eefeb67941b59c642",
       "tasks.md": "71293bcc99a0d6e27024bada5453f548b6d91adaa1064621eaf49da7f3c81197",
+      "decision-record.md": "7ab8cb706ee921847aa4a0c33a89d051a817dd31e869ca57575840429860dadb",
       "implementation-summary.md": "edf635d958c4f57a16d6a32e5a42fe38982f05ba967528f41e7f0c538f8f6f19"
     },
     "last_active_child_id": null,
