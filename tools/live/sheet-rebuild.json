@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-05T04:03:55.137Z",
+  "measuredAt": "2026-09-05T04:30:52.576Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "d81a303f70a8",
-    "tools/live/sheet-rebuild-harness.ts": "93627b8c0cee",
-    "src/views/toolbar-renderer.ts": "dca7a1d16d74",
+    "tools/live/sheet-rebuild.mjs": "c0bf923ce8b9",
+    "tools/live/sheet-rebuild-harness.ts": "d36bd65f96f3",
+    "src/views/toolbar-renderer.ts": "390a30ea3ef6",
     "src/views/popover-position.ts": "9523ac9d8791",
     "src/views/mobile-bottom-sheet.ts": "804765323cbc",
     "src/views/sort-panel-renderer.ts": "3b916d60a109",
@@ -12,7 +12,7 @@
     "src/views/overlay-stack.ts": "4f35a9904a53",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
-  "cases": 47,
+  "cases": 53,
   "barsLost": 0,
   "gesturesMeasured": 4,
   "enginesMeasured": [
@@ -219,6 +219,24 @@
       "preFixFailure": null
     },
     {
+      "name": "Chrome: a press inside the sort sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "Chrome: a press inside the filter sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "Chrome: a wheel inside a sheet cannot reach the container's wheel handler",
+      "pass": true,
+      "detail": "it does not propagate, so the bare containment test there is answering only about nodes it can actually see",
+      "preFixFailure": null
+    },
+    {
       "name": "Chrome: an anchored popover still goes when its anchor does",
       "pass": true,
       "detail": "hidden, as a surface with no anchor left to sit beside should be",
@@ -294,6 +312,24 @@
       "name": "WebKit: the filter sheet's add control wins the hit test at its own centre",
       "pass": true,
       "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a press inside the sort sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "WebKit: a press inside the filter sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "WebKit: a wheel inside a sheet cannot reach the container's wheel handler",
+      "pass": true,
+      "detail": "it does not propagate, so the bare containment test there is answering only about nodes it can actually see",
       "preFixFailure": null
     },
     {
