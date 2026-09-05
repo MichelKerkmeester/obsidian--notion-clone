@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "006-list-view-deprecation"
-    last_updated_at: "2026-09-05T03:30:00Z"
-    last_updated_by: "phase-007-landing"
-    recent_action: "007 landed on main after reconciliation, gate 25/25 green"
-    next_safe_action: "Proceed to 008-docs-and-release; T010 (styles.css) stays deferred"
+    last_updated_at: "2026-09-05T04:30:00Z"
+    last_updated_by: "phase-008-docs"
+    recent_action: "008 docs shipped: README and CHANGELOG.md written, 033/024 confirmed already closed"
+    next_safe_action: "Release owed to the orchestrator's next cut (0.0.23); T010 (styles.css) stays deferred"
     blockers:
       - "One operator report against a released 006 build is still unconfirmed. 007 ran and landed without it (recorded in 007/tasks.md T001), so this is now a gap behind the work rather than a gate in front of it."
     key_files:
@@ -108,6 +108,12 @@ Three to seven bullets, each checkable without opening another file.
 - [x] `033-list-virtualisation` and `024-list-view-freeze` are closed against this decision rather
       than left open against a view that no longer exists. **Done**: both `spec.md`s read superseded
       2026-09-05, each keeping its own historical measurement as evidence rather than deleting it.
+- [x] README and CHANGELOG.md tell a user whose list view became a table what happened, what it cost,
+      and what a rollback does not undo. **Done 2026-09-05** by `008-docs-and-release` —
+      `README.md`'s view list and `CHANGELOG.md`'s `## 0.0.23 (unreleased)` entry, all four `005`
+      losses named individually.
+- [ ] The release ships, carrying the removal. **Owed to the orchestrator's next release (0.0.23)**;
+      `008-docs-and-release` prepared the docs but did not cut it.
 - [ ] **The operator opens a vault that had a list view and reports it as migrated rather than
       broken.** Only the operator closes this row.
 <!-- /ANCHOR:completion -->
@@ -131,6 +137,7 @@ into the objective, and it is expected to grow.
 | Usage audit | Done | `005-usage-and-migration-audit/implementation-summary.md` — migration target confirmed, 4 declared losses, measurement surface enumerated, 2 open questions answered with recommended defaults |
 | Hide and migrate | Shipped + verified, operator confirmation open | `006-hide-and-migrate/implementation-summary.md` — list withdrawn from every picker and switcher, migration on open with a locale-complete notice, `npm run gate` 25/25 green; open item is one operator report against a released build |
 | Remove renderer and harness | Shipped + verified on main | `007-remove-renderer-and-harness/implementation-summary.md` — `list-renderer.ts` and its whole measurement surface (lane, harness, ratchet pins, fixtures, constructed scenarios, replay claims, unit specs) removed together; `list` stays on `DatabaseViewType`, migrated permanently (ADR-001); `npm run gate` was 24/24 green on this phase's own pre-rebase branch (dropped from 25 with `list-window` gone), then reconciled onto main — which had independently landed a `sheet-grammar` lane in the same window — to **25/25 green** (26 with `sheet-grammar` added, minus 1 for `list-window` retired; the total lands back at 25 by coincidence of timing, not because nothing changed — see `roadmap.md` §5 for the lane-count history). `styles.css`'s now-dead `db-list-*` rules deferred to a follow-up (T010). The parent's own operator-report precondition above was still unconfirmed when this phase ran — recorded as a gap in `007/tasks.md` T001, not treated as cleared. |
+| Docs and release | Docs shipped, release pending | `008-docs-and-release/implementation-summary.md` — `README.md`'s view count and screenshot table drop list; root `CHANGELOG.md` created (did not previously exist) with a `## 0.0.23 (unreleased)` entry naming all four `005`-declared losses individually and stating the rollback sentence; `033-list-virtualisation`/`024-list-view-freeze` confirmed already Superseded from a prior session's `007`-landing commit (`3818298f`); the in-app "What's new" modal decided out of scope for this phase. The release itself is deferred to the orchestrator's next cut (0.0.23) — `manifest.json`/`package.json`/`versions.json` unmodified, still reading `0.0.22`. |
 
 ### Deviations and findings
 

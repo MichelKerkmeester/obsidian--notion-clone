@@ -21,9 +21,9 @@ contextType: "general"
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | Docs shipped, release pending — README and CHANGELOG.md written, `033`/`024` closed, release owed to the orchestrator's next cut |
 | **Created** | 2026-09-04 |
-| **Branch** | Not yet dispatched |
+| **Branch** | `main` |
 | **Parent Spec** | ../spec.md |
 | **Phase** | 4 of 4 in the deprecation (folder `008` of `008`) |
 | **Predecessor** | 007-remove-renderer-and-harness |
@@ -161,10 +161,14 @@ planning to fix the view that was removed.
 ## 7. OPEN QUESTIONS
 
 - Does the removal ride an existing release or get its own? The operator's cadence publishes each
-  milestone; a removal is arguably a milestone. Recorded, not decided.
-- Does the in-app changelog modal carry the notice, or only the repository changelog? The modal is
-  what a phone user actually sees, and it is i18n'd, which makes it the more expensive option and
-  probably the right one.
+  milestone; a removal is arguably a milestone. Recorded, not decided — owed to the orchestrator's
+  release-cut step.
+- **Answered.** Does the in-app changelog modal carry the notice, or only the repository changelog?
+  Only the repository `CHANGELOG.md` and the one-time `notice.listMigrated` toast (already shipped
+  by `006-hide-and-migrate`) carry it. The `changelog.releaseNotes` "What's new" modal string is
+  curated fresh at release-cut time against everything that release ships, which this phase does not
+  decide; rewriting it now, ahead of the cut, risks describing a release whose final contents are not
+  this phase's to set. `src/i18n.ts` is left untouched.
 <!-- /ANCHOR:questions -->
 
 ---

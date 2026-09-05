@@ -39,20 +39,25 @@
       "tasks"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "goal.md",
       "implementation-summary.md",
+      "specs/006-list-view-deprecation/008-docs-and-release/tasks.md",
+      "specs/006-list-view-deprecation/008-docs-and-release/spec.md",
+      "specs/006-list-view-deprecation/008-docs-and-release/goal.md",
+      "specs/006-list-view-deprecation/spec.md",
+      "specs/006-list-view-deprecation/goal.md",
       "src/i18n.ts"
     ],
     "entities": [
       {
         "name": "spec.md",
         "kind": "doc",
-        "path": "spec.md",
+        "path": "specs/006-list-view-deprecation/008-docs-and-release/spec.md",
         "source": "derived"
       },
       {
@@ -64,13 +69,13 @@
       {
         "name": "tasks.md",
         "kind": "doc",
-        "path": "tasks.md",
+        "path": "specs/006-list-view-deprecation/008-docs-and-release/tasks.md",
         "source": "derived"
       },
       {
         "name": "goal.md",
         "kind": "doc",
-        "path": "goal.md",
+        "path": "specs/006-list-view-deprecation/008-docs-and-release/goal.md",
         "source": "derived"
       },
       {
@@ -164,20 +169,20 @@
         "source": "derived"
       },
       {
-        "name": "Completion Criteria",
+        "name": "Enhanced Rollback",
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "the",
-        "kind": "key_phrase",
+        "name": "Data Reversal",
+        "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "Phase 1: Setup",
-        "kind": "heading",
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
       },
@@ -196,7 +201,7 @@
     ],
     "causal_summary": "A removed view that nobody documented is a bug report waiting to be filed",
     "created_at": "2026-09-04T19:33:28Z",
-    "last_save_at": "2026-09-04T20:07:56.905Z",
+    "last_save_at": "2026-09-05T02:07:46.306Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e32d22c062fc4f564341f060f7e918d81501a9ed4328e3cb55ed26c51caf72e9",
+    "source_fingerprint": "sha256:e17ac28e0a4d90d7b6ddb5aba668342d163e158c8195e2b5aa16649b8c871dfe",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fa946099b84a6fdae85884bd24640e10817c05f7cf45b1661d74d22a25705c19",
+      "spec.md": "e18b7148a1a1b93f02b09b8764e064d9be6aa516b7c8691f9602ee624066bd6d",
       "plan.md": "ee9ad0c3f7d81b983b2ee8ced1e4482129095c46846781bc7fb13efcb8210dbc",
-      "tasks.md": "d372a3e79afc5e338a2a161b2cee5e209db167c91ece51faf35adc7e8e220768",
-      "implementation-summary.md": "b82e3f5149e97840a23a1d491df14d013ccccf263b151a3c5d52820e1fb704b4"
+      "tasks.md": "10cf3632d85c421ff35211797f61c45eb86bb2a83b961a516053b8c3373e741c",
+      "implementation-summary.md": "66012985f3960ed938e5d2e8e75770b234226c3d675d371ef81ec713ef2b403d"
     },
     "last_active_child_id": null,
     "last_active_at": null

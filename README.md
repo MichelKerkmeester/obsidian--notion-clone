@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong>Turn Markdown notes into editable, visual databases inside Obsidian.</strong><br>
-  Same notes. Seven views. Still plain Markdown.
+  Same notes. Six views. Still plain Markdown.
 </p>
 
 <p align="center">
@@ -19,7 +19,7 @@ Edit frontmatter in place, save several views of the same notes, and keep every 
 
 ## Highlights
 
-- **Seven database views:** see the same notes as a table, board, gallery, list, chart, calendar, or timeline.
+- **Six database views:** see the same notes as a table, board, gallery, chart, calendar, or timeline.
 - **Local Markdown storage:** each database is an ordinary Markdown file with `db_view: true`; records, properties, and relations also stay inside your vault.
 - **Direct property editing:** edit text, numbers, currency, dates, options, statuses, checkboxes, and file names without opening every note; one dialog confirms the display name, property key, and type for new properties.
 - **Spreadsheet-style workflows:** use keyboard navigation, range selection, copy/paste, fill, paste-to-create, bulk editing, and single-step undo.
@@ -33,17 +33,17 @@ Edit frontmatter in place, save several views of the same notes, and keep every 
 - **Embedding and portability:** place read-only database views in notes, copy or export data, and convert Obsidian `.base` files.
 - **Local and private:** no cloud data copy and no external transmission of vault content, metadata, formulas, or settings.
 
-## Seven views, one vault
+## Six views, one vault
 
 | Table | Board |
 | --- | --- |
 | ![Table view](assets/screenshots/en-1.2.7-overview.png) | ![Board view](assets/screenshots/status-board.png) |
 | Edit dense records, paste ranges, fill cells, group, sort, and navigate by keyboard. | Move cards through stages, use subgroups, covers, colored options, and drag-and-drop. |
 
-| Gallery | List |
-| --- | --- |
-| ![Gallery view](assets/screenshots/gallery-view.png) | ![List view](assets/screenshots/list-view.png) |
-| Browse visual libraries with covers, properties, groups, and summaries. | Scan compact inventories, tasks, directories, and research notes. |
+| Gallery |
+| --- |
+| ![Gallery view](assets/screenshots/gallery-view.png) |
+| Browse visual libraries with covers, properties, groups, and summaries. |
 
 | Chart | Timeline |
 | --- | --- |
@@ -84,7 +84,7 @@ Each view keeps its own filters, sorting, grouping, visible properties, title pr
 | ![Obsidian Page Preview opened from a record link](assets/screenshots/en-1.2.7-page-preview.png) |
 | Preview internal links with Obsidian's Page Preview and the user's chosen modifier key. |
 
-Enable Obsidian's core **Page preview** plugin first. Preview works on record titles, Relation properties, clickable `file.*` metadata, text properties in Link display mode, and internal links or `[[wikilinks]]` in inline-Markdown text/computed-text properties. Table, Board, Gallery, List, Calendar, Timeline, the record detail panel, database-file views, and embedded views share the same behavior.
+Enable Obsidian's core **Page preview** plugin first. Preview works on record titles, Relation properties, clickable `file.*` metadata, text properties in Link display mode, and internal links or `[[wikilinks]]` in inline-Markdown text/computed-text properties. Table, Board, Gallery, Calendar, Timeline, the record detail panel, database-file views, and embedded views share the same behavior.
 
 ## Edit many notes without opening them
 
@@ -120,7 +120,7 @@ No `eval`, hidden relation database, or cloud copy is used.
 | ![Database and record icons](assets/screenshots/en-database-icons.png) | ![Database, board, and gallery cover settings](assets/screenshots/en-dataset-covers-setting.png) ![](assets/screenshots/en-board-covers-setting.png) |
 | Use Unicode Emoji or Lucide icons, with database defaults and per-view record-icon fields. | Add a draggable database cover and choose independent cover settings for board and gallery views. |
 
-Option-based group titles keep their colors across table, board, gallery, and list views. Search highlights file names and visible values, including localized dates.
+Option-based group titles keep their colors across table, board, and gallery views. Search highlights file names and visible values, including localized dates.
 
 ## Plan dates and inspect results
 
