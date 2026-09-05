@@ -169,6 +169,20 @@ status.
 
 ---
 
+<!-- ANCHOR:phase-mobile -->
+## Phase 4: Anytype mobile reference captures (ADR-005)
+
+- [x] T022 Build the open-source Anytype iOS client for the simulator, without a GitHub `read:packages` token and without a local Go build of the middleware. **Done, 2026-09-05: `anyproto/anytype-swift` cloned at `77ef5ea2` into the gitignored `specs/context/anytype-swift/`; the pinned middleware `v0.50.21-nightly.20260824.1` pulled as a public release asset (`ios_framework_*.tar.gz`) from `anyproto/anytype-heart` after both the tokened and anonymous Packages-registry requests returned 401. `make generate-middle` was unnecessary — all 679 generated protobuf Swift files are committed. `xcodebuild -scheme Anytype -configuration Debug -destination 'id=94E4B156-…' CODE_SIGNING_ALLOWED=NO build` → `** BUILD SUCCEEDED **`, first attempt**
+- [x] T023 Give the simulator a touch input path that never moves the Mac's pointer or takes focus. **Done, 2026-09-05: `simctl` has no tap, so an `AnytypeDriverUITests` UI-test target was added to the vendored project with the `xcodeproj` gem (1.27.0) and holds one long-lived test polling `/tmp/anytype-driver/req.json` for `tap`/`tapLabel`/`type`/`swipe`/`drag`/`labels` against `XCUIApplication(bundleIdentifier:)`. Captures use `xcrun simctl io booted screenshot`, which renders from the device — `Simulator.app` was never launched**
+- [x] T024 Put the desktop's `notion-clone-reference-demo` catalogue on the phone without using the operator's recovery phrase or account. **Done, 2026-09-05: a new local vault was created through the app's own onboarding; the desktop generated an invite over CDP (`spaceShare` → "Add members via link" → Copy link → `navigator.clipboard.readText()`); the simulator opened it and sent a join request; the desktop approved it over CDP as **Editor**, including the `Are you sure?` confirmation popup that the permission select alone does not commit. `GET /v1/spaces/<id>/members` then read `role=editor status=active`, and all ten collections and 326 records appeared on the phone**
+- [x] T025 Record why `simctl openurl` could not carry the invite, with a negative control rather than an assumption. **Done, 2026-09-05: SpringBoard's "Open in Anytype Dev?" prompt is confirmed and nothing reaches the app. `anytype://networkConfig?config=probe` — whose only effect is a local toast needing no network — produced no toast either, so the failure is delivery, not the invite. The invite instead arrives through a five-line `#if DEBUG` patch in the clone's `SpaceHubCoordinatorViewModel.setup()` reading `ANYTYPE_JOIN_CID`/`ANYTYPE_JOIN_KEY`, which opens the app's own join sheet and changes no captured screen**
+- [x] T026 Capture every mobile sheet, picker and menu reachable, in both appearances (`screenshots/anytype/mobile/`). **Done, 2026-09-05: 59 states × light and dark = 118 files, switched with `simctl ui booted appearance` without leaving the state. Covers the space hub and space settings, search and its type filter, quick capture, all four set layouts, the view switcher and its edit mode, Edit view with layout/properties/filters/sorts, the gallery card-size and image-preview pickers, the kanban group-by and column sheets, the new-object template sheet, icon and cover pickers, the object `···` menu and its submenu, the relations panel, the type property editor, the add-property sheet with all eleven formats, the format picker, and a cell editor per format**
+- [x] T027 Index the mobile captures with the app version, the clone commit and how each was reached; list what is unreachable with the exact reason. **Done, 2026-09-05: `screenshots/anytype/README.md` "Mobile (iOS Simulator)" — provenance table, the build recipe, the driver contract and its two traps (the accessibility tree stacks presented sheets; `isHittable` is false for rows inside one), the join procedure, per-capture tables, and the unreachable list. iOS has **no Calendar and no Graph layout** (the view switcher marks Calendar `Unsupported`); the checkbox cell toggles in place with no sheet; `file` columns hold no values by design; the QR join needs a camera the simulator lacks**
+- [x] T028 Leave the shared space as it was found, apart from the intended invite and membership. **Done, 2026-09-05: two empty `Untitled` Page objects created by stray taps were deleted over the API and the space read back 382 objects, 0 untitled; the affected capture was retaken. No filter, sort, layout or view name was committed — the Filters sheet still reads "No filters" and no relation was created. The invite link and the Editor membership are intentional and their rollback is written down in ADR-005**
+<!-- /ANCHOR:phase-mobile -->
+
+---
+
 <!-- ANCHOR:security -->
 ## Security
 
@@ -207,5 +221,5 @@ status.
 | P1 Items | 12 | 2/12 |
 | P2 Items | 2 | 0/2 |
 
-**Verification Date**: 2026-09-05, capture leg only (T001, T002, T008, T009, T011, T015, CHK-003, CHK-030, CHK-031, CHK-041). The contract-widening and fidelity-comparison rows (T005-T007, T012-T014, T016-T020 and their matching CHK rows) are a separate leg of this packet and remain unrun.
+**Verification Date**: 2026-09-05, capture legs only (T001, T002, T008, T009, T011, T015, T022-T028, CHK-003, CHK-030, CHK-031, CHK-041) — the desktop capture leg in the morning, the Anytype mobile leg (ADR-005) in the afternoon. The contract-widening and fidelity-comparison rows (T005-T007, T012-T014, T016-T020 and their matching CHK rows) are a separate leg of this packet and remain unrun.
 <!-- /ANCHOR:summary -->

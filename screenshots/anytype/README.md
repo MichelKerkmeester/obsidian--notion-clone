@@ -344,3 +344,248 @@ focus, no visible window and no pointer — the operator kept working on the sam
   relation Anytype ships, so the values live on Anytype's own `assignee` key rather than on a
   catalogue-owned one. The data is there and correctly typed; it is the one column of the 270 that
   the Grid view does not list separately.
+
+---
+
+# Mobile (iOS Simulator)
+
+`mobile/` holds 59 mobile states, each in light and dark — 118 files. They are screenshots of the
+**official open-source Anytype iOS client built from source** and run on a simulator, not of the
+desktop app at a narrow width. Everything they show is real iOS chrome: sheets that slide from the
+bottom, iOS pickers, the SpringBoard status bar.
+
+They are the counterpart to `mobile-official/` above: those are the vendor's own marketing images,
+these are the running app.
+
+## Provenance
+
+| Field | Value |
+|-------|-------|
+| **Source** | `github.com/anyproto/anytype-swift`, cloned at `77ef5ea2ecf7a439234152d024cf5139241bc842` (2026-09-01), vendored under the gitignored `specs/context/anytype-swift/` |
+| **App version** | `CFBundleShortVersionString` 0.49.0, bundle id `io.anytype.app.dev`, `Debug` configuration |
+| **Middleware** | `anytype-heart` `v0.50.21-nightly.20260824.1`, the version pinned in the repo's `Libraryfile` |
+| **Device** | iPhone 17 Pro, iOS 26.5 (`94E4B156-26E9-474C-8AED-A2A461F5F108`), 402x874pt / 1206x2622px |
+| **Data** | the desktop's `notion-clone-reference-demo` space — ten catalogue sets, 326 records — joined over the network, not re-created |
+
+**iPhone 16 Pro was asked for and does not exist on this machine.** Xcode 26.6 ships iOS 26.3 and
+26.5 runtimes, whose newest iPhone profiles start at iPhone 17. iPhone 17 Pro is the same 402x874pt
+class, so the layout these captures show is the one iPhone 16 Pro would show.
+
+## Building it
+
+Two things about the build are worth keeping, because both cost time to find.
+
+**The prebuilt middleware does not need a GitHub token.** `make setup-middle` reads
+`Scripts/middle-download.sh`, which pulls the `Lib.xcframework` from the GitHub *Packages* Maven
+registry and needs a personal access token with `read:packages` — which the machine's `gh` token
+does not carry (`gist, read:org, repo, workflow`; the request returns 401, and so does an anonymous
+one). The identical artifact is a **public release asset** on `anyproto/anytype-heart`:
+
+```bash
+gh release download v0.50.21-nightly.20260824.1 --repo anyproto/anytype-heart \
+  --pattern 'ios_framework_*.tar.gz' --dir .libcache
+tar xzf .libcache/ios_framework_v0.50.21-nightly.20260824.1.tar.gz -C Dependencies/Middleware
+```
+
+Its layout — `Lib.xcframework/`, `json/`, `protobuf/` — is exactly what the download script
+extracts, and its simulator slice carries `arm64` as well as `x86_64`. Building `anytype-heart`
+locally with Go is therefore unnecessary.
+
+**`make generate-middle` is not needed either.** All 679 generated protobuf Swift files are
+committed; only `Dependencies/Middleware/*` is gitignored. With the xcframework in place the build
+runs with no codegen and no `setup-env` Homebrew chain:
+
+```bash
+xcodebuild -project Anytype.xcodeproj -scheme Anytype -configuration Debug \
+  -destination 'id=<simulator udid>' -derivedDataPath <scratch> \
+  CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+```
+
+**BUILD SUCCEEDED on the first attempt**, and again after the one source patch described below.
+
+## How the simulator was driven, and why
+
+`simctl` has no tap. Every other way to click a simulator moves the Mac's own pointer, which was
+ruled out. So input runs through **XCUITest**: a `AnytypeDriverUITests` target added to the vendored
+project with Ruby's `xcodeproj` gem, holding one long-lived test that polls `/tmp/anytype-driver/req.json`,
+performs one action against `XCUIApplication(bundleIdentifier:)`, and writes `res.json`. The shell
+sends `tap` (normalized coordinates), `tapLabel`, `type`, `swipe`, `drag` and `labels` (the
+accessibility tree with frames) and never blocks on Xcode.
+
+`xcrun simctl io booted screenshot` renders from the device, so no capture needed focus, a visible
+Simulator window, or a foreground app. **`Simulator.app` was never launched** — `simctl boot` alone
+is enough for both input and capture.
+
+Two properties of this harness shape how the captures were taken:
+
+- **The accessibility tree stacks every presented sheet.** A row's reported frame can belong to a
+  sheet one level down, so a coordinate computed from `labels` alone lands on the wrong control.
+  Each deep tap was therefore aimed from a screenshot, not from the tree.
+- **`isHittable` is false for rows inside a presented sheet's scroll view.** `tapLabel` reports
+  "no hittable match" for a row that is plainly on screen, so sheet rows are tapped by coordinate.
+
+The test runner crashes every twenty minutes or so ("Restarting after unexpected exit"); the client
+restarts it automatically on a transport timeout and the app under test survives.
+
+## How the demo data reached the phone
+
+The desktop's demo space was joined, not rebuilt. In order:
+
+1. A **new local vault** was created in the simulator through the app's own onboarding — "I am new
+   here", key reveal skipped, e-mail and persona screens skipped. The operator's recovery phrase was
+   never used and their account was never signed into.
+2. The desktop generated an invite over CDP: space settings → `spaceShare` → the "Add members via
+   link" switch → **Copy link** → `navigator.clipboard.readText()`. The link is
+   `https://invite.any.coop/<cid>#<key>` and is held only in this session's gitignored scratch.
+3. The simulator opened `anytype://invite?cid=<cid>&key=<key>` and the app's own **Join a space**
+   sheet resolved it over the network. "Request to join" was tapped.
+4. The desktop approved it over CDP: the pending row's permission select → **Editor** → the
+   `Are you sure?` popup's **Ok**. That confirmation popup is the step that is easy to miss —
+   selecting a permission alone commits nothing, and the API keeps reporting
+   `role=no_permissions status=joining` until Ok is clicked.
+5. `GET /v1/spaces/<id>/members` then reported `Groovy Spinach | role=editor | status=active`, and
+   all ten collections and 326 records appeared on the phone.
+
+**`simctl openurl` cannot deliver a deep link to this build.** SpringBoard raises its
+"Open in Anytype Dev?" confirmation, the Open button is tapped, and nothing reaches the app —
+verified with a negative control (`anytype://networkConfig?config=probe`, whose only effect is a
+local toast, produced no toast either), so the failure is in delivery, not in the invite. The QR
+join path is equally unavailable: the simulator has no camera. The invite therefore arrives through
+a **five-line DEBUG-only patch** in the vendored clone's
+`SpaceHubCoordinatorViewModel.setup()`, which reads `ANYTYPE_JOIN_CID` / `ANYTYPE_JOIN_KEY` from the
+process environment and opens the app's *own* `SpaceJoinModuleData` sheet. It changes how the invite
+arrives, never what any captured screen looks like, and the clone is gitignored reference material.
+
+**The vault does not survive a relaunch.** `CODE_SIGNING_ALLOWED=NO` strips the keychain-access-group
+entitlement, so a terminated app comes back at onboarding with the account gone. Onboarding and the
+join must happen in one session, which is why the invite is read at launch rather than after.
+
+## What was changed in the shared space, and what was put back
+
+- An invite link now exists on `notion-clone-reference-demo` (approval required, held by the owner).
+  Roll back in the desktop: Settings → Share → toggle "Add members via link" off, or Manage link →
+  Reset.
+- The simulator identity `Groovy Spinach` is an **Editor** member. Roll back: Members → its row →
+  Remove member.
+- Two empty `Untitled` Page objects were created by stray taps and **deleted** via
+  `DELETE /v1/spaces/<id>/objects/<id>`; the space read back 382 objects, 0 untitled. The captures
+  that show them (`set-list`) were retaken afterwards.
+- No filter, sort, layout or view name was committed. Pickers were opened and dismissed; the
+  `Filters` sheet still reads "No filters" and no relation was created.
+
+## Captures
+
+Every row exists as `<name>-light.png` and `<name>-dark.png`. Themes were switched with
+`xcrun simctl ui booted appearance light|dark` without leaving the state, so both files show the
+same screen.
+
+### Navigation and space
+
+| File stem | Reached by | Shows |
+|-----------|-----------|-------|
+| `anytype-mobile-space-typeslist` | space hub → the space | Space home: cover, the ten `… records` types, Pages/Tasks/Collections, Bin |
+| `anytype-mobile-type-collections-list` | space home → `Collections` | The `Collections` type page listing all ten use-case sets, with its own view bar |
+| `anytype-mobile-sheet-space-more` | space home → `···` | Channel Settings, Members, Notifications, Manage sections |
+| `anytype-mobile-sheet-space-settings` | that menu → Channel Settings | Space settings: Collaboration, Content Model, Preferences, Data Management |
+| `anytype-mobile-sheet-space-members` | that menu → Members | Invite-link notice plus the owner and this simulator as Editor |
+| `anytype-mobile-sheet-app-settings` | space hub → profile avatar | Profile sheet: Appearance, Notifications, Login Key, Membership, Channels, Local Storage |
+| `anytype-mobile-sheet-appearance` | that sheet → Appearance | Mode Light/Dark/System and the three application icons |
+| `anytype-mobile-sheet-search` | search island | Global search: recent objects, filter chips, "Meet the new search" onboarding |
+| `anytype-mobile-sheet-search-query` | typing into it | Results for a typed query, across spaces, keyboard up |
+| `anytype-mobile-sheet-search-typefilter` | search → `Types` chip | The type filter's searchable picker |
+| `anytype-mobile-sheet-quickcapture` | quick-capture island | Page / Task / More |
+| `anytype-mobile-sheet-quickcapture-more` | that menu → More | Photos, Camera, Files and every space type |
+
+### Set layouts
+
+| File stem | Reached by | Shows |
+|-----------|-----------|-------|
+| `anytype-mobile-set-grid` | Project Tracker, Grid view | Horizontally scrolling grid over the catalogue's 28 typed columns |
+| `anytype-mobile-set-gallery` | view switcher → Gallery | Cards with tags, checkbox, dates, money, status |
+| `anytype-mobile-set-list` | view switcher → List | One row per record, every visible property inline |
+| `anytype-mobile-set-kanban` | view switcher → Kanban | Columns grouped by Status, per-column count, `+ New` |
+
+### View configuration
+
+| File stem | Reached by | Shows |
+|-----------|-----------|-------|
+| `anytype-mobile-sheet-set-viewswitcher` | the view name | Views list — Grid, Gallery, List, Kanban, Calendar |
+| `anytype-mobile-sheet-set-viewswitcher-edit` | that sheet → Edit | Delete handles, reorder grips, a pencil per view |
+| `anytype-mobile-sheet-view-edit` | a view's pencil | Edit view: Name, Layout, Properties, Filters, Sorts |
+| `anytype-mobile-sheet-view-edit-more` | Edit view → `···` | The view's own action menu |
+| `anytype-mobile-sheet-view-settings-gallery` | the sliders icon on a Gallery view | Edit view opened straight from the toolbar |
+| `anytype-mobile-sheet-view-layout-picker` | Edit view → Layout, on Grid | Layout tiles plus the Icon toggle |
+| `anytype-mobile-sheet-view-layout-gallery` | Edit view → Layout, on Gallery | Gallery's extra rows: Card size, Image preview, Fit image |
+| `anytype-mobile-sheet-view-layout-kanban` | Edit view → Layout, on Kanban | Kanban selected, with Group by and Color columns |
+| `anytype-mobile-sheet-view-gallery-cardsize` | that sheet → Card size | Small / Large |
+| `anytype-mobile-sheet-view-gallery-imagepreview` | that sheet → Image preview | Cover-property picker |
+| `anytype-mobile-sheet-kanban-groupby` | Kanban layout → Group by | Every groupable relation, current one ticked |
+| `anytype-mobile-sheet-kanban-column-menu` | a column's `···` | Hide column, Column color, Apply |
+| `anytype-mobile-sheet-view-filters-empty` | Edit view → Filters | Empty state and the `+` |
+| `anytype-mobile-sheet-filter-relation-picker` | Filters → `+` | Every filterable relation, typed icons. Its placeholder reads **"Choose a property to sort"** in the filter flow — a product string bug |
+| `anytype-mobile-sheet-filter-condition-text` | that picker → Name | Condition sheet: relation, operator, Value, Apply |
+| `anytype-mobile-sheet-filter-condition-operators` | that sheet → the operator | All / Is / Is not / Contains / Doesn't contain / Is empty / Is not empty |
+| `anytype-mobile-sheet-view-sorts` | Edit view → Sorts | The two applied sorts, Edit and `+` |
+| `anytype-mobile-sheet-sort-direction` | a sort row | Ascending / Descending plus empty-value placement |
+| `anytype-mobile-sheet-set-newobject-templates` | the `New` chevron | Create Object: object-type chips and the template gallery |
+| `anytype-mobile-sheet-set-more` | the set's `···` | Properties/Icon/Cover, Show Description, Favorite, Copy Invite Link, More, Duplicate, Delete |
+| `anytype-mobile-sheet-icon-picker` | that menu → Icon | Change icon: emoji grid, search, Emoji/Random/Upload |
+| `anytype-mobile-sheet-cover-picker` | that menu → Cover | Change cover: gradients, solid colors, Gallery/Unsplash/Upload |
+
+### Object and relations
+
+| File stem | Reached by | Shows |
+|-----------|-----------|-------|
+| `anytype-mobile-object-page` | a record from the set | Record page: title, type, backlink count, empty body |
+| `anytype-mobile-sheet-object-more` | its `···` | Properties/Icon/Cover, Show Description, Favorite, Undo/Redo, Publish to Web, Copy Invite Link, More, Duplicate, Delete |
+| `anytype-mobile-sheet-object-more-submenu` | that menu → More | Link to, History, Make template, Lock, Copy Deeplink |
+| `anytype-mobile-sheet-object-properties` | that menu → Properties | The record's relations panel, every catalogue column with its value |
+| `anytype-mobile-sheet-object-properties-settings` | that panel → the sliders icon | The **type's** property editor — Header vs Properties panel, drag handles, `+` |
+| `anytype-mobile-sheet-relation-add` | that editor → `+` | Add property: **all eleven formats** — Relation object, Text, Number, Select, Multi-select, Date, File & Media, Checkbox, URL, Email, Phone number |
+| `anytype-mobile-sheet-relation-new` | picking a format | New property: Name, Format, Create |
+| `anytype-mobile-sheet-relation-new-format` | that sheet → Format | Select property format, current one ticked |
+
+### Cell editors, one per relation format
+
+| File stem | Format | Shows |
+|-----------|--------|-------|
+| `anytype-mobile-sheet-cell-text-longtext` | text / long text | Inline editor with Clear and the full value |
+| `anytype-mobile-sheet-cell-number` | number | Inline numeric editor |
+| `anytype-mobile-sheet-cell-select-priority` | select | Search, options in their colours, tick on the current one |
+| `anytype-mobile-sheet-cell-multiselect-team` | multi-select | Ordered selection badges (1, 2) and colored chips |
+| `anytype-mobile-sheet-cell-multiselect-empty` | multi-select, empty | "No options — create first option to start" |
+| `anytype-mobile-sheet-cell-date` | date | Month calendar, selected day, Today / Tomorrow / Open selected date |
+| `anytype-mobile-sheet-cell-date-monthpicker` | date | The month/year wheel |
+| `anytype-mobile-sheet-cell-object-assignee` | object | Searchable object list with radio selection |
+| `anytype-mobile-sheet-cell-backlinks` | object, read-only | Backlinks list |
+| `anytype-mobile-sheet-cell-url` | url | Value plus Open link / Copy link |
+| `anytype-mobile-sheet-cell-email-empty` | email, empty | "Enter email" |
+| `anytype-mobile-sheet-cell-phone` | phone | Value plus Copy phone number, and the product's own typo **"Call phone numbler"** |
+| `anytype-mobile-sheet-grid-cell-objecttype-empty` | object type, empty | "The property is empty" state opened from a grid cell |
+
+## Not reachable, with the reason
+
+- **Calendar view.** The iOS view switcher lists Calendar as **`Unsupported`** and the layout picker
+  offers only Grid, Gallery, List and Kanban. There is no calendar to open, so there are no calendar
+  event sheets either. This is a real gap between Anytype's desktop and iOS clients, not a harness
+  limit — the desktop renders Calendar (`anytype-set-calendar-view-dark.png`).
+- **Graph view.** Absent from the iOS layout picker for the same reason.
+- **Checkbox cell editor.** A checkbox row toggles in place and presents no sheet. Capturing the
+  "open" state would have meant writing to a record in the shared space, which was not worth a
+  screenshot of a tick.
+- **File cell editor.** The catalogue's `file` columns carry no values by design (the loader cannot
+  do multipart upload), so no populated file cell exists to open.
+- **Filter conditions for the other formats.** Only the text condition and its operator list were
+  captured. Each further format needs a filter committed to a view in the shared space and then
+  removed again; the operator picker above already shows the shape, and the relation picker shows
+  every format that can be chosen.
+- **Type change picker.** Reached from a record's Object type cell, which in the row that was open
+  is the empty state already captured as `sheet-grid-cell-objecttype-empty`.
+- **Camera-based join.** "Join via QR Code" opens the camera; the simulator has none, and the
+  permission prompt is as far as it goes.
+
+## Manifest
+
+Like the desktop captures above, nothing in `mobile/` has a `tools/screenshots/manifest.json` entry —
+`manifest-schema.mjs` still accepts only `group: "project-manager"` for `source: "reference"`.
+`npm run screenshots:verify` walks `manifest.scenarios` and so does not see this folder.

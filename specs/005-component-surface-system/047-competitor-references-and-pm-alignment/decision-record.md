@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Competitor References and PM Alignment"
-description: "ADR-001 overrides the deep-research cap for Anytype; ADR-002 skips AppFlowy's remaining installed-app captures and keeps Anytype's demo space persistent; ADR-003 supersedes ADR-002 and removes AppFlowy from the reference set entirely; ADR-004 scopes the css lane's review obligation to this repo's own render roots."
+description: "ADR-001 overrides the deep-research cap for Anytype; ADR-002 skips AppFlowy's remaining installed-app captures and keeps Anytype's demo space persistent; ADR-003 supersedes ADR-002 and removes AppFlowy from the reference set entirely; ADR-004 scopes the css lane's review obligation to this repo's own render roots; ADR-005 gets Anytype's mobile screens from the open-source iOS client on a simulator."
 trigger_phrases:
   - "047 decision record"
   - "anytype research override"
@@ -8,18 +8,21 @@ trigger_phrases:
   - "competitor references adr"
   - "appflowy removed decision"
   - "css lane scope adr"
+  - "anytype ios simulator captures"
+  - "anytype mobile screenshots"
 importance_tier: "normal"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T12:50:00Z"
+    last_updated_at: "2026-09-05T14:10:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Recorded ADR-004: css lane review scope"
+    recent_action: "Recorded ADR-005: build the Anytype iOS client and capture 59 mobile states on a simulator"
     next_safe_action: "Reconcile 049's mirror decision and the roadmap §6A entry"
     blockers: []
     key_files:
       - "screenshots/anytype/"
+      - "screenshots/anytype/mobile/"
       - "tools/lane/css-lane.json"
       - "tools/lane/check-lane.mjs"
       - "../049-test-environments-and-mock-data/decision-record.md"
@@ -559,3 +562,139 @@ its input unfiltered with no roots configured, restoring today's behavior with n
 <!-- /ANCHOR:adr-004 -->
 
 ---
+
+<!-- ANCHOR:adr-005 -->
+## ADR-005: Get Anytype's mobile screens by building the open-source iOS client and driving a simulator over XCUITest
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-005-context -->
+### Context
+
+The desktop captures in `screenshots/anytype/` answer what Anytype's *desktop* surfaces look like.
+They do not answer what its **phone** surfaces look like, and the phone is where this repository's
+own work lands — Obsidian on iOS is the target the board and property surfaces are being aligned to.
+A desktop window narrowed to phone width is not the answer: Anytype's iOS client is a separate
+SwiftUI codebase whose sheets, pickers and menus have no desktop equivalent.
+
+Three routes were available. Photographing a physical phone needs the operator's hands. Driving the
+App Store build on a device needs the operator's account. Building the open-source client for the
+iOS Simulator needs neither, and the simulator can be captured with `xcrun simctl io booted
+screenshot`, which renders from the device rather than the screen — no window, no focus, no pointer.
+
+### Constraints
+
+- **Never move the Mac's pointer, take focus, or activate a window.** This is what ruled out every
+  ordinary UI-automation route and, transitively, what selected XCUITest: `simctl` has no tap, and
+  everything else clicks the host.
+- **Never use the operator's recovery phrase or sign into their account.** The simulator gets its
+  own new local vault.
+- **Do not disturb the desktop's content.** The demo space `notion-clone-reference-demo` is the data
+  to show; it is joined, not rebuilt, and nothing else is touched.
+<!-- /ANCHOR:adr-005-context -->
+
+---
+
+<!-- ANCHOR:adr-005-decision -->
+### Decision
+
+**We chose**: clone `anyproto/anytype-swift` into the gitignored `specs/context/`, build the
+`Anytype` scheme for an iPhone 17 Pro simulator with signing disabled, drive it through a
+file-transport XCUITest target added to that clone, and capture with `simctl`. The demo space
+reaches the phone by **joining it over the Anytype network** from a new local vault, using an invite
+the desktop generates over CDP and approves over CDP.
+
+Two sub-decisions are worth recording because each replaced a documented step that does not work:
+
+1. **The middleware comes from a public GitHub release asset, not the Packages registry.**
+   `make setup-middle` needs a `read:packages` token this machine's `gh` credential does not carry.
+   `anyproto/anytype-heart` publishes the identical `ios_framework_<version>.tar.gz` as a public
+   release asset for the exact version pinned in `Libraryfile`, and its archive layout is what the
+   download script extracts. No token, and no local Go build of `anytype-heart`.
+
+2. **The invite arrives through a five-line DEBUG-only patch, because `simctl openurl` cannot deliver
+   a deep link to this build.** The SpringBoard "Open in…" prompt is confirmed and nothing reaches
+   the app. A negative control settles that it is delivery and not the invite:
+   `anytype://networkConfig?config=probe`, whose only effect is a local toast requiring no network,
+   produced no toast either. The patch reads `ANYTYPE_JOIN_CID`/`ANYTYPE_JOIN_KEY` at launch and
+   opens the app's **own** join sheet, so every captured screen is the shipped one.
+<!-- /ANCHOR:adr-005-decision -->
+
+---
+
+<!-- ANCHOR:adr-005-alternatives -->
+### Alternatives Considered
+
+| Option | Why not |
+|--------|---------|
+| Photograph a physical iPhone | Needs the operator's hands, which the brief forbids |
+| Drive the App Store build on a device | Needs the operator's Anytype account and a signed install |
+| `idb` / `fb-idb` for taps | Two package installs, Xcode-version-sensitive, and XCUITest needs neither |
+| Build `anytype-heart` locally with Go | Works, but a large `gomobile` build to obtain a binary that is already published publicly |
+| Load a catalogue subset into the phone's own vault by hand | The operator's named fallback. Hundreds of DOM-equivalent taps for data the desktop already holds, and the result would not match the desktop |
+| Scan the invite QR in the simulator | The simulator has no camera; the permission prompt is as far as it goes |
+<!-- /ANCHOR:adr-005-alternatives -->
+
+---
+
+<!-- ANCHOR:adr-005-consequences -->
+### Consequences
+
+**Positive**
+
+- 59 mobile states in both themes, on the same 326-record catalogue the desktop shows, so a mobile
+  and a desktop capture of the same surface are comparable rather than merely adjacent.
+- The route is reproducible from the repository: the clone commit, the middleware version, the build
+  flags and the driver are all recorded in `screenshots/anytype/README.md`.
+- It found two things a narrowed desktop window never would: **iOS has no Calendar and no Graph
+  layout** (the view switcher marks Calendar `Unsupported`), and two product string bugs.
+
+**Negative**
+
+- The vendored clone carries a local patch, so it is not a pristine checkout. It is gitignored
+  reference material and the patch is documented where it is used.
+- `CODE_SIGNING_ALLOWED=NO` strips the keychain entitlement, so the simulator vault does not survive
+  a relaunch. Any repeat run re-onboards and re-joins.
+- The demo space now carries an invite link and a second member. Both are reversible and the rollback
+  is written down.
+<!-- /ANCHOR:adr-005-consequences -->
+
+---
+
+<!-- ANCHOR:adr-005-five-checks -->
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Explicit operator instruction; and the mobile surfaces genuinely do not exist in the desktop captures |
+| 2 | **Beyond Local Maxima?** | PASS | Six routes weighed above; the two cheapest-looking (`make setup-middle`, `simctl openurl`) were both tried and both failed for recorded reasons |
+| 3 | **Sufficient?** | PASS | Scoped to Anytype mobile captures and the docs that index them; no product code, no schema, no other packet |
+| 4 | **Fits Goal?** | PASS | Extends AC-001's evidence to the phone, which is the form factor rows 37/38 are aligned against |
+| 5 | **Open Horizons?** | PASS | The clone, the driver contract and the join procedure are all documented, so a later pass can re-enter without rediscovering any of it |
+
+**Checks Summary**: 5/5 PASS
+<!-- /ANCHOR:adr-005-five-checks -->
+
+---
+
+<!-- ANCHOR:adr-005-impl -->
+### Implementation
+
+**What changes**: no product code. `screenshots/anytype/mobile/` gains 118 files,
+`screenshots/anytype/README.md` gains a "Mobile (iOS Simulator)" section carrying the provenance,
+the build recipe, the driver contract, the join procedure and the unreachable list, and this
+packet's `tasks.md` gains the mobile leg's rows.
+
+**How to roll back**: delete `screenshots/anytype/mobile/` and the README section. In the desktop
+app, Settings → Share → toggle "Add members via link" off, and Members → the simulator identity →
+Remove member. The vendored clone is gitignored and can be deleted outright.
+<!-- /ANCHOR:adr-005-impl -->
+<!-- /ANCHOR:adr-005 -->
