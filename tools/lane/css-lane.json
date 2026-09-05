@@ -1,8 +1,8 @@
 {
   "holder": null,
-  "acquiredAt": null,
-  "baselineHash": "b5d5122d5b5b",
-  "baselineCommit": "07be64fed44b13d0f70bfbaac1aefb2db39eb0fd",
+  "acquiredAt": "2026-09-05T09:20:00Z",
+  "baselineHash": "2652bdf59059",
+  "baselineCommit": "165b95eb8f04dfcd6108301344d50cf0c15c0715",
   "history": [
     {
       "event": "acquire",
@@ -3210,6 +3210,29 @@
         "screenshots/notion-clone/views/constructed-linked-view-host-mobile-light.png"
       ],
       "note": "5 content-changed captures, each opened and read. Four are the new linked-view host pair at both device widths and themes: measured against the constructed reading host, the embed's content box matches the prose content box exactly (900/900 desktop, 402/402 phone, delta 0px) where the same fixture with the linked rule neutralised measures 874/900 and 376/402, a 26px deficit that is the 1px border plus 12px padding on each side; card furniture measures 0 for border, radius and padding against 34 combined in that red control. The fifth, panel-column-manager-mobile-dark.png, is NOT this phase's: recapturing it against origin/main's own stylesheet produces a byte-identical file, so the committed image predates main's phone checkbox sizing and this full recapture is what surfaced the drift. Its layoutHash is unchanged; only pixelHash moved. Every other capture the recapture touched was pixelHash-identical to HEAD and was restored. npm run screenshots:verify: 550 current, 0 stale."
+    },
+    {
+      "event": "edit",
+      "phase": "048-stacked-sheets",
+      "at": "2026-09-05T09:20:00Z",
+      "hash": "2652bdf59059",
+      "note": "The stylesheet learns depth. A sheet's z-index reads --db-sheet-z-index so a child paints above the surface that opened it instead of tying with it, the scrim reads --db-sheet-scrim-z-index so the single backdrop sits between the top two rather than behind both, and a parent under an open child dims and pulls its content back. That parent rule doubles its marking class: the entrance rule sets opacity 1 at the same two-class weight and sits later in the file, so an equal-weight rule was written and never rendered. Dropdown and relation sheets became flex columns whose option list owns the scrolling, with a mask at the cut, so a long picker keeps its title and close on screen; sheet-presented modals hide the host's own close and let their content box scroll under a shared header."
+    },
+    {
+      "event": "release",
+      "phase": "048-stacked-sheets",
+      "at": "2026-09-05T09:25:00Z",
+      "hash": "2652bdf59059",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-dropdown-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-dropdown-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png"
+      ],
+      "note": "7 content-changed captures of 550, each opened and read; the other 19 git reported were pixelHash-identical to HEAD and were restored. The column manager gains the close it never had, beside its existing All checkbox, and the settings sheet and the board variant of it carry the same header from the shared builder rather than a hand-built row. The dropdown sheet is the visible half of the fix the operator reported: a title and a 44px close above an option list that scrolls under a fade, where the same surface previously mounted with no header at all and cut its last row against the sheet edge. The datetime picker fixture moved in light only and is unchanged in shape. npm run screenshots:verify: 550 current, 0 stale."
     }
   ],
   "outstanding": [

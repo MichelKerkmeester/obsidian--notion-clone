@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-05T06:22:33.610Z",
+  "measuredAt": "2026-09-05T07:24:04.885Z",
   "inputs": {
-    "styles.css": "b5d5122d5b5b",
+    "styles.css": "2652bdf59059",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
     "rendered": 83,
-    "buildable": 219,
+    "buildable": 222,
     "declared": 5,
     "renderedOnly": 0,
-    "buildableNotRendered": 136,
+    "buildableNotRendered": 139,
     "untokened": 0,
     "unroled": 83
   },
@@ -1535,6 +1535,9 @@
     "db-filter-value-dropdown",
     "db-icon-picker-body",
     "db-icon-picker-empty",
+    "db-sheet-modal-header",
+    "db-sheet-original-title",
+    "db-sheet-stack-change",
     "db-mobile-sheet-scrim",
     "db-modal-dropdown",
     "db-base-import-type-dropdown",
