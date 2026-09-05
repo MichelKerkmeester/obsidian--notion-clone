@@ -210,7 +210,7 @@
     ],
     "causal_summary": "After `006` nobody can reach the list, but the code and everything that measures it are still there",
     "created_at": "2026-09-04T19:33:27Z",
-    "last_save_at": "2026-09-05T02:38:36.983Z",
+    "last_save_at": "2026-09-05T02:58:47.337Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:573170b29759b2ec3395bbf973e0a0e7059c2811dc881a074e9b8fc6e602c1a8",
+    "source_fingerprint": "sha256:fbcbf1ccc007fcfcaea9557b1807d4b8695dd8ade07625b30948b79b3c48e0a9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d654136b4535406719fae80879a3619a5ca0aa75f2006747dc9027e975cf6b3f",
       "plan.md": "07b48f1d6423408edad08ce5f8514c9a3416fbac33b920e8031d72e1c1548e9c",
-      "tasks.md": "003afe0ac4682ff80780802d4ccfb8ee8b6d925a00aec50ed5e4050aa0db6d8d",
-      "implementation-summary.md": "763f3191c535bb62550282bfddd772c7c1f1980499cd9c5f6cc23eb306782353"
+      "tasks.md": "2f948bd1144bc357fbabc1fe513bc26ca4e4971da4b2fe2494257aef3c49d20e",
+      "implementation-summary.md": "d4b4323a37aa72a24581e7e44cfdf2813881c6d2d9b5b28dc1afc261ee681617"
     },
     "last_active_child_id": null,
     "last_active_at": null

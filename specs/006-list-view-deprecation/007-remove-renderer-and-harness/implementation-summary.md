@@ -238,6 +238,21 @@ that actually list `styles.css` in their `inputs`.
 than this phase's own 1090, all from unrelated work that landed on `main` between this phase's
 landing and this follow-up). `npm run lint:tools`: 0 problems. `npm run gate`: **25/25 green**, `$?`
 read directly, re-run twice for stability.
+
+**Reconciled with main a second time** (`chore(styles): reconcile the list stylesheet cleanup with
+main`): rebasing onto `044-phone-sheet-alignment`'s own settings-body-grammar landing picked up a
+second, independent `styles.css` edit branched from the same `0785e72944dd` baseline this follow-up
+used. The two edits touch disjoint regions, so the rebase auto-merged `styles.css` textually with no
+conflict (merged hash `bf0e11a3d7bf`); `tools/lane/css-lane.json`'s history was merged by hand to keep
+both phases' acquire/edit/release sequences in order rather than picking one side. Every evidence
+artifact that fingerprints `styles.css` went stale a second time and was re-run fresh rather than
+carrying the conflict-resolution placeholders forward. `view-census.json`'s `rowMatrix`/`rail` — the
+fields this follow-up's own removal is measured against — are still byte-identical to the
+pre-removal tree; its `rows`/`totals` moved by exactly 8 rows, all from `044`'s own new
+`panel-view-config-sheet` fixture and unrelated to `db-list`. `npm run screenshots`: 534 entries
+(`044` added 2 real captures), 20 more encoder-byte-only moves confirmed and restored. `npm run
+screenshots:verify`: 534/534 current, 0 stale. `tsc` clean; `vitest` 1129/1129 (108 files);
+`lint:tools` clean; `npm run gate` 25/25 green, twice.
 <!-- /ANCHOR:t010-followup -->
 
 ---
