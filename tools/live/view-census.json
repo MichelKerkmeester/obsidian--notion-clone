@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T02:29:40.109Z",
+  "measuredAt": "2026-09-05T02:51:56.404Z",
   "inputs": {
-    "styles.css": "8c168bae706d",
+    "styles.css": "bf0e11a3d7bf",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 69,
-    "escaping": 617,
-    "growing": 297,
-    "scrolling": 320,
+    "fixtures": 70,
+    "escaping": 625,
+    "growing": 302,
+    "scrolling": 323,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 40
@@ -2092,6 +2092,28 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
       "by": 25.9,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-new-placement",
+      "parentCls": "db-view-config-field.db-view-config-field-stack",
+      "by": 12,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4812,6 +4834,28 @@
     },
     {
       "width": 402,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-new-placement",
+      "parentCls": "db-view-config-field.db-view-config-field-stack",
+      "by": 12,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -6185,6 +6229,28 @@
     },
     {
       "width": 768,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 40,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-new-placement",
+      "parentCls": "db-view-config-field.db-view-config-field-stack",
+      "by": 12,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -6986,6 +7052,28 @@
     },
     {
       "width": 1440,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-mobile-bottom-sheet",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 340,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-view-config-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-new-placement",
+      "parentCls": "db-view-config-field.db-view-config-field-stack",
+      "by": 12,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -7390,6 +7478,11 @@
     },
     {
       "width": 320,
+      "fixture": "panel-view-config-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -7735,6 +7828,11 @@
     },
     {
       "width": 402,
+      "fixture": "panel-view-config-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -8080,6 +8178,11 @@
     },
     {
       "width": 768,
+      "fixture": "panel-view-config-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -8421,6 +8524,11 @@
     {
       "width": 1440,
       "fixture": "panel-view-config",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-view-config-sheet",
       "probe": "4px"
     },
     {

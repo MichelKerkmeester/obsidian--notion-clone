@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T02:29:57.352Z",
+  "measuredAt": "2026-09-05T02:52:24.516Z",
   "inputs": {
-    "styles.css": "8c168bae706d",
+    "styles.css": "bf0e11a3d7bf",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -99,6 +99,7 @@
         "panel-sort-rules",
         "panel-sort-calendar-empty",
         "panel-view-config",
+        "panel-view-config-sheet",
         "panel-column-manager",
         "panel-column-width-sheet",
         "chrome-utilities-popover",
@@ -120,6 +121,7 @@
         "panel-sort-rules",
         "panel-sort-calendar-empty",
         "panel-view-config",
+        "panel-view-config-sheet",
         "panel-column-manager",
         "panel-column-width-sheet",
         "chrome-utilities-popover",
@@ -133,7 +135,8 @@
       "role": null,
       "rect": "44x44",
       "scenarios": [
-        "add-view-popover"
+        "add-view-popover",
+        "panel-view-config-sheet"
       ]
     },
     "db-menu-section": {
@@ -169,6 +172,13 @@
         "panel-filter-nested-group",
         "panel-sort-rules",
         "panel-sort-rules",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
         "panel-column-width-sheet",
         "panel-column-width-sheet",
         "chrome-active-rule-popover-filter",
@@ -226,6 +236,8 @@
         "panel-view-config",
         "panel-view-config",
         "panel-view-config",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
@@ -289,6 +301,8 @@
         "panel-view-config",
         "panel-view-config",
         "panel-view-config",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
@@ -352,6 +366,8 @@
         "panel-view-config",
         "panel-view-config",
         "panel-view-config",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
@@ -415,6 +431,8 @@
         "panel-view-config",
         "panel-view-config",
         "panel-view-config",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
@@ -478,6 +496,8 @@
         "panel-view-config",
         "panel-view-config",
         "panel-view-config",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
@@ -805,6 +825,7 @@
         "panel-sort-rules",
         "panel-sort-rules",
         "panel-view-config",
+        "panel-view-config-sheet",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort"
       ]
@@ -873,7 +894,9 @@
       "role": null,
       "rect": "520x42",
       "scenarios": [
-        "panel-sort-calendar-empty"
+        "panel-sort-calendar-empty",
+        "panel-view-config-sheet",
+        "panel-view-config-sheet"
       ]
     },
     "db-panel-empty": {
@@ -893,7 +916,23 @@
       "role": null,
       "rect": "458x527",
       "scenarios": [
-        "panel-view-config"
+        "panel-view-config",
+        "panel-view-config-sheet"
+      ]
+    },
+    "db-mobile-bottom-sheet-handle": {
+      "cls": "db-mobile-bottom-sheet-handle",
+      "mountParent": "db-view-config-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "36x4",
+      "scenarios": [
+        "panel-view-config-sheet",
+        "panel-record-detail-sheet",
+        "panel-record-detail-sheet-body-editing",
+        "panel-record-detail-sheet-body-empty",
+        "panel-column-width-sheet",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-panel-header-actions": {
@@ -901,8 +940,9 @@
       "mountParent": "db-panel-header",
       "tokens": true,
       "role": null,
-      "rect": "37x18",
+      "rect": "44x44",
       "scenarios": [
+        "panel-view-config-sheet",
         "panel-column-manager",
         "field-cell-edit-select"
       ]
@@ -929,20 +969,6 @@
         "panel-record-detail-sheet",
         "panel-record-detail-sheet-body-editing",
         "panel-record-detail-sheet-body-empty"
-      ]
-    },
-    "db-mobile-bottom-sheet-handle": {
-      "cls": "db-mobile-bottom-sheet-handle",
-      "mountParent": "db-record-detail-panel",
-      "tokens": true,
-      "role": null,
-      "rect": "36x4",
-      "scenarios": [
-        "panel-record-detail-sheet",
-        "panel-record-detail-sheet-body-editing",
-        "panel-record-detail-sheet-body-empty",
-        "panel-column-width-sheet",
-        "chrome-owned-menu-sheet"
       ]
     },
     "db-mobile-column-width-panel": {
