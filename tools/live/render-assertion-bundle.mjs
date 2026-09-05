@@ -40,8 +40,6 @@ export const SCENARIOS = [
   { name: "table/embed", renderer: "table", bag: "embed" },
   { name: "board/file-view", renderer: "board", bag: "file-view" },
   { name: "board/embed", renderer: "board", bag: "embed" },
-  { name: "gallery/file-view", renderer: "gallery", bag: "file-view" },
-  { name: "gallery/embed", renderer: "gallery", bag: "embed" },
   { name: "calendar/file-view", renderer: "calendar", bag: "file-view" },
   { name: "calendar/embed", renderer: "calendar", bag: "embed" },
   { name: "calendar-week/file-view", renderer: "calendar", bag: "file-view", scale: "week" },
@@ -137,11 +135,10 @@ export const STATE_SCENARIOS = [
   { name: "core-empty-state/file-view", renderer: "empty-state", bag: "file-view" },
   { name: "core-column-header/file-view", renderer: "column-header", bag: "file-view", captureData: true },
   { name: "table-column-headers/file-view", renderer: "table", bag: "file-view", captureData: true, columnHeaderController: true, longHeaderLabel: true },
-  // The board/gallery state variants.
+  // The board state variants.
   { name: "board-empty-column/file-view", renderer: "board", bag: "file-view", captureData: true, boardEmptyColumn: true },
   { name: "board-extensions-selection/file-view", renderer: "board", bag: "file-view", captureData: true, boardExtensions: true },
   { name: "board-covers/file-view", renderer: "board", bag: "file-view", captureData: true, boardExtensions: true, boardImageField: true },
-  { name: "gallery-covers/file-view", renderer: "gallery", bag: "file-view", captureData: true, galleryImageField: true },
 ];
 
 // touch-targets.mjs and unstyled-links.mjs's own constructed pass: every scenario SCENARIOS
@@ -152,7 +149,6 @@ export const SCENARIOS_WITH_STATES = [...SCENARIOS, ...STATE_SCENARIOS];
 export const RENDERER_SOURCES = [
   "src/views/table-renderer.ts",
   "src/views/board-renderer.ts",
-  "src/views/gallery-renderer.ts",
   "src/views/calendar-renderer.ts",
   "src/views/calendar-timeline-renderer.ts",
   "src/views/chart-renderer.ts",

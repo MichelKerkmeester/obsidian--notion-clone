@@ -110,7 +110,6 @@ import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
 import { ColumnOperations, FrontmatterValueChange } from "./column-operations";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
 import type { BoardSubtaskMove } from "./board-renderer";
-import { GalleryRenderer } from "./gallery-renderer";
 import { ChartRenderer } from "./chart-renderer";
 import { ChartToolbarRenderer } from "./chart-toolbar-renderer";
 import { getDefaultChartDateBucket, getDefaultChartField, getDefaultChartNumberBucket } from "../data/chart-aggregation";
@@ -398,7 +397,6 @@ export class DatabaseView extends FileView {
   private activeViewControlsRenderer = new ActiveViewControlsRenderer();
   private activeRulePopoverRenderer = new ActiveRulePopoverRenderer();
   private boardRenderer: BoardRenderer;
-  private galleryRenderer: GalleryRenderer;
   private chartRenderer = new ChartRenderer();
   private chartToolbarRenderer = new ChartToolbarRenderer();
   private mobileColumnWidthPanelCleanup?: () => void;
@@ -808,38 +806,6 @@ export class DatabaseView extends FileView {
       saveCellValue: (row, col, value) => this.saveCellValueWithHistory(row, col, value),
       editFileName: (target, row, currentName) => this.cellRenderer.editFileName(target, row, currentName),
       getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
-      isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
-      toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
-      showRowMenu: (event, row, context) => this.rowMenu.show(event, row, context),
-      showColumnMenu: (event, col, anchorEl) => this.showContextMenu(event, col, anchorEl, {
-        includeWidthActions: false,
-      }),
-      editFormula: (col) => this.showFormulaModal(col),
-      renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
-      renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.getActiveDb()),
-      applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.getActiveDb(), targetField),
-      get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
-    });
-    this.galleryRenderer = new GalleryRenderer(this.app, {
-      openRow: (row) => { void this.openRecordAt(row); },
-      openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
-      createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
-      isRowSelected: (row) => this.selectedRows.has(row.file.path),
-      toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
-      areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
-      toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
-      editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
-      saveCellValue: (row, col, value) => this.saveCellValueWithHistory(row, col, value),
-      editFileName: (target, row, currentName) => this.cellRenderer.editFileName(target, row, currentName),
-      getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
-      updateCardSize: (width) => this.updateGalleryCardSize(width),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
-      moveRowsToGroup: (row, field, fromGroupKey, toGroupKey) => this.updateBoardGroup(row, field, toGroupKey, fromGroupKey),
-      moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath, movedPaths) =>
-        this.moveRowWithGroupUpdatesAndPosition(row, [{ field, fromGroupKey, toGroupKey }], beforePath, afterPath, movedPaths),
-      moveRowsToPosition: (paths, beforePath, afterPath) => this.moveRowsToPosition(paths, beforePath, afterPath),
-      getSelectedRows: () => this.rows.filter((row) => this.selectedRows.has(row.file.path)),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
@@ -2682,12 +2648,6 @@ export class DatabaseView extends FileView {
     if (value === "board" && !config.boardGroupField) {
       config.boardGroupField = this.getDefaultBoardField(config);
     }
-    if (value === "gallery") {
-      config.galleryImageField = config.galleryImageField || this.getDefaultGalleryImageField(config);
-      config.galleryCardSize = config.galleryCardSize || 250;
-      config.galleryImageAspectRatio = config.galleryImageAspectRatio || 0.75;
-      config.galleryImageFit = config.galleryImageFit || "cover";
-    }
     if (value === "chart") {
       config.chartType = config.chartType || "bar";
       config.chartAggregation = config.chartAggregation || "count";
@@ -3444,12 +3404,6 @@ export class DatabaseView extends FileView {
       boardGroupField: viewType === "board"
         ? (db.schema.columns.find(c => c.key !== "file.name")?.key || "file.name")
         : undefined,
-      galleryImageField: viewType === "gallery"
-        ? this.getDefaultGalleryImageField(sourceView || { schema: db.schema } as ViewConfig)
-        : undefined,
-      galleryCardSize: viewType === "gallery" ? 250 : undefined,
-      galleryImageAspectRatio: viewType === "gallery" ? 0.75 : undefined,
-      galleryImageFit: viewType === "gallery" ? "cover" : undefined,
       chartType: viewType === "chart" ? "bar" : undefined,
       chartGroupField: viewType === "chart" ? getDefaultChartField(db.schema.columns, db.schema.computedFields) : undefined,
       chartDateBucket: viewType === "chart" ? getDefaultChartDateBucket(db.schema.columns, getDefaultChartField(db.schema.columns, db.schema.computedFields), db.schema.computedFields) : undefined,
@@ -7015,8 +6969,6 @@ export class DatabaseView extends FileView {
 
     if (config.viewType === "board") {
       this.renderBoard(config);
-    } else if (config.viewType === "gallery") {
-      this.renderGallery(config);
     } else if (config.viewType === "chart") {
       this.renderChart(config);
     } else if (config.viewType === "calendar") {
@@ -8949,9 +8901,6 @@ export class DatabaseView extends FileView {
       case "board":
         this.updateCardFieldDOM(row, col, config, this.boardRenderer.renderCardFieldContent(row, col, config));
         break;
-      case "gallery":
-        this.updateCardFieldDOM(row, col, config, this.galleryRenderer.renderCardFieldContent(row, col, config));
-        break;
       default:
         this.refresh();
         break;
@@ -10605,28 +10554,6 @@ export class DatabaseView extends FileView {
     );
   }
 
-  private renderGallery(config: ViewConfig): void {
-    // Only the list is windowed, so only the list records an order. Cleared here or a stale list
-    // order would outlive its view and answer for a table's rows.
-    this.renderedRowOrder = null;
-    if (!this.containerEl_) return;
-    const renderConfig = this.getStatefulConfig(config);
-    if (this.vs().groupByField) {
-      const field = this.vs().groupByField;
-      const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
-      const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-      this.galleryRenderer.renderGrouped(
-        this.containerEl_,
-        renderConfig,
-        this.queryEngine.sortGroups(groups, order),
-        field,
-        this.getEmptyStateOptions(config),
-      );
-      return;
-    }
-    this.galleryRenderer.render(this.containerEl_, renderConfig, this.rows, this.getEmptyStateOptions(config));
-  }
-
   private getStatefulConfig(config: ViewConfig): ViewConfig {
     const state = this.vs();
     return {
@@ -10644,15 +10571,6 @@ export class DatabaseView extends FileView {
       config.schema.columns.find((col) => col.key === "category")?.key ||
       config.schema.columns[0]?.key ||
       "status";
-  }
-
-  private getDefaultGalleryImageField(config: ViewConfig): string | undefined {
-    return config.galleryImageField ||
-      config.schema.columns.find((col) =>
-        /封面|cover|image|图片|图像|thumbnail|poster/i.test(col.key) ||
-        /封面|图片|图像/.test(col.label) ||
-        col.type === "files"
-      )?.key;
   }
 
   private getBoardGroups(config: ViewConfig, field: string): BoardGroup[] {
@@ -11107,15 +11025,6 @@ export class DatabaseView extends FileView {
     this.pendingUndoLabel = t("undo.groupConfig");
     this.scheduleConfigSave();
     this.refresh({ viewport: "reset-top" });
-  }
-
-  private updateGalleryCardSize(width: number): void {
-    const config = this.getConfig();
-    if (!config) return;
-    config.galleryCardSize = width;
-    this.pendingUndoLabel = t("undo.cardSizeConfig");
-    this.scheduleConfigSave();
-    this.renderViewConfigPanel();
   }
 
   private async updateBoardGroup(row: RowData, field: string, value: string, fromValue?: string): Promise<void> {

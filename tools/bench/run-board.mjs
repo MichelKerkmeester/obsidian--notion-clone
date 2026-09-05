@@ -4,8 +4,9 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // Bundling, surfaces, sample table, exponent fit and verdict all live in
-// card-bench-driver, which the gallery bench shares. This file is the board's
-// half: which module to measure, and what to call it in the output.
+// card-bench-driver, which the calendar and timeline benches also share. This
+// file is the board's half: which module to measure, and what to call it in
+// the output.
 //
 // The default row ladder starts at 400 and ends at 6,400 for a reason. A
 // quadratic term is invisible while the linear term dominates, so a run that

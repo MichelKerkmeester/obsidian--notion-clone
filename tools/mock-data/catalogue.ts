@@ -245,9 +245,9 @@ function buildColumns(vocabulary: UseCaseVocabulary): CatalogueColumn[] {
 function buildViews(vocabulary: UseCaseVocabulary): CatalogueView[] {
   const prefix = vocabulary.id;
   // Table, board, calendar, timeline and chart are the view types the plugin
-  // ships and keeps. List has already been removed from the tree and gallery is
-  // being withdrawn, so a generated gallery view would be new configuration for
-  // a surface whose migration path is the work in progress.
+  // ships and keeps. List and gallery have both been removed from the tree,
+  // so a generated view of either would be configuration for a surface the
+  // plugin no longer renders.
   return [
     { id: `${prefix}-table`, name: "All records", type: "table" },
     { id: `${prefix}-board`, name: "By status", type: "board", groupField: FACET_SHAPES.status.key },

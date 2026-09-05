@@ -3,12 +3,12 @@
 // COMPONENT: shared bundle/run/verdict machinery for the card-view render benches
 // ───────────────────────────────────────────────────────────────────
 //
-// The board and the gallery are the same measurement: build one card per row in
-// a loop that appends to a single container, then read what the browser had to
-// do about it. Only the renderer under test and its fixture differ, so the
-// bundling, the two surfaces, the table of samples and the verdict live here
-// once. A second copy of this file would be a second set of thresholds to keep
-// in step, and they would not stay in step.
+// The card views are the same measurement: build one card per row in a loop
+// that appends to a single container, then read what the browser had to do
+// about it. Only the renderer under test and its fixture differ, so the
+// bundling, the surface, the table of samples and the verdict live here once.
+// A second copy of this file would be a second set of thresholds to keep in
+// step, and they would not stay in step.
 //
 // The budget is on render plus forced layout, not on render alone. Nothing the
 // user experiences distinguishes the two: both are synchronous work in the same

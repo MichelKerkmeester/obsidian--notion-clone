@@ -64,7 +64,6 @@ import { renderRecordIcon } from "./record-icon-renderer";
 import { SortPanelRenderer } from "./sort-panel-renderer";
 import { SummaryRenderer } from "./summary-renderer";
 import { applyConditionalFormat } from "../data/conditional-formatting";
-import { GalleryRenderer } from "./gallery-renderer";
 import { ChartRenderer } from "./chart-renderer";
 import { CalendarToolbarRenderer } from "./calendar-toolbar-renderer";
 import { ChartToolbarRenderer } from "./chart-toolbar-renderer";
@@ -225,7 +224,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private columnHeaderController: ColumnHeaderController;
   private tableRenderer: TableRenderer;
   private boardRenderer: BoardRenderer;
-  private galleryRenderer: GalleryRenderer;
   private chartRenderer = new ChartRenderer();
   private calendarToolbarRenderer = new CalendarToolbarRenderer();
   private chartToolbarRenderer = new ChartToolbarRenderer();
@@ -516,28 +514,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
       get isReadOnly() { return embed.isViewReadOnly(); },
       canReorderGroups: true,
-      get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
-    });
-    this.galleryRenderer = new GalleryRenderer(this.app, {
-      openRow: (row) => this.dataSource.openNote(row.file),
-      createEntry: (defaults) => { void this.createBlankEntry(defaults); },
-      isRowSelected: (row) => this.selectedRows.has(row.file.path),
-      toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
-      areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
-      toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
-      editCell: (target, row, col, event) => this.cellRenderer.startEdit(target, row, col, event),
-      getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
-      updateCardSize: (width) => this.updateGalleryCardSize(width),
-      moveRowToPosition: (movedPath, beforePath, afterPath) => void this.moveRowToPosition(movedPath, beforePath, afterPath),
-      isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
-      toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
-      showRowMenu: (event, row) => this.rowMenu.show(event, row),
-      showColumnMenu: (event, col, anchorEl) => this.showColumnContextMenu(event, col, anchorEl, false),
-      renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
-      renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
-      applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
-      get isReadOnly() { return embed.isViewReadOnly(); },
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.refreshCoordinator = new RefreshCoordinator({
@@ -1267,21 +1243,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         field,
         this.getEmptyStateOptions(config),
       );
-    } else if (config.viewType === "gallery") {
-      if (this.vs(config).groupByField) {
-        const field = this.vs(config).groupByField;
-        const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
-        const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-        this.galleryRenderer.renderGrouped(
-          target,
-          renderConfig,
-          this.queryEngine.sortGroups(groups, order),
-          field,
-          this.getEmptyStateOptions(config),
-        );
-      } else {
-        this.galleryRenderer.render(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
-      }
     } else if (config.viewType === "chart") {
       this.chartRenderer.render(target, renderConfig, this.rows, config.schema.columns, {
         onFilter: (rules) => this.applyChartFilters(config, rules),
@@ -2171,12 +2132,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         if (value === "board" && !config.boardGroupField) {
           config.boardGroupField = this.getDefaultBoardField(config);
         }
-        if (value === "gallery") {
-          config.galleryImageField = config.galleryImageField || this.getDefaultGalleryImageField(config);
-          config.galleryCardSize = config.galleryCardSize || 250;
-          config.galleryImageAspectRatio = config.galleryImageAspectRatio || 0.75;
-          config.galleryImageFit = config.galleryImageFit || "cover";
-        }
         if (value === "chart") {
           config.chartType = config.chartType || "bar";
           config.chartAggregation = config.chartAggregation || "count";
@@ -2293,12 +2248,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private initializeEmbeddedViewTypeDefaults(config: ViewConfig, value: NonNullable<ViewConfig["viewType"]>): void {
-    if (value === "gallery") {
-      config.galleryImageField = config.galleryImageField || this.getDefaultGalleryImageField(config);
-      config.galleryCardSize = config.galleryCardSize || 250;
-      config.galleryImageAspectRatio = config.galleryImageAspectRatio || 0.75;
-      config.galleryImageFit = config.galleryImageFit || "cover";
-    }
     if (value === "chart") {
       config.chartType = config.chartType || "bar";
       config.chartAggregation = config.chartAggregation || "count";
@@ -2698,15 +2647,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       "status";
   }
 
-  private getDefaultGalleryImageField(config: ViewConfig): string | undefined {
-    return config.galleryImageField ||
-      config.schema.columns.find((col) =>
-        /封面|cover|image|图片|图像|thumbnail|poster/i.test(col.key) ||
-        /封面|图片|图像/.test(col.label) ||
-        col.type === "files"
-      )?.key;
-  }
-
   private getBoardGroups(config: ViewConfig, field: string): BoardGroup[] {
     const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
     const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
@@ -2960,15 +2900,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     config.calendarDay = anchorDateKey;
     this.persistEmbeddedConfigLocally(config);
     this.renderResults(config);
-    this.saveEmbeddedConfigInBackground();
-  }
-
-  private updateGalleryCardSize(width: number): void {
-    const config = this.config;
-    if (!config) return;
-    config.galleryCardSize = width;
-    this.persistEmbeddedConfigLocally(config);
-    this.renderViewConfigPanel(config);
     this.saveEmbeddedConfigInBackground();
   }
 

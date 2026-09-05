@@ -23,7 +23,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph,
+import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, glyph,
   optionPill, rowCheckbox, tableGroupTitle } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -827,14 +827,13 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 620,
     fixtureOf: "constructed-group-selection-controls",
-    sources: ["src/views/gallery-renderer.ts", "src/views/board-renderer.ts"],
-    // Two remaining families: renderGroupCheckbox in the gallery, and the board column-header
-    // box. They are captured together so one role paints one box and a divergence is visible
-    // at a glance.
-    note: "The whole-group selection box from the gallery and a board subgroup. One role, so both boxes must be the same size and radius.",
+    sources: ["src/views/board-renderer.ts"],
+    // The board subgroup's whole-group selection box. This used to sit beside the gallery's own
+    // group box so a divergence between the two was visible at a glance; the gallery is retired
+    // and its half of the comparison went with it.
+    note: "The whole-group selection box from a board subgroup.",
     html: () => `
       <div class="note-database-container">
-        ${galleryGroupHeader("Business", 7)}
         ${boardSubgroupHeader("Monthly", 3)}
       </div>`,
   },

@@ -4,9 +4,9 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // Bundling, surfaces, sample table, exponent fit and verdict all live in
-// card-bench-driver, which the board and gallery benches share. This file is
-// the timeline's half: which module to measure, and what to call it in the
-// output.
+// card-bench-driver, which the board and calendar benches also share. This
+// file is the timeline's half: which module to measure, and what to call it
+// in the output.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS

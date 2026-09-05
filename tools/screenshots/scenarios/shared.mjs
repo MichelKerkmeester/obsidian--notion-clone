@@ -21,8 +21,8 @@
 // 1. FIXTURE ROWS
 // ───────────────────────────────────────────────────────────────────
 
-/* Enough rows, across enough groups and dates, that a board shows several populated columns,
-   a gallery fills more than one row, and a calendar month has events in most weeks. A
+/* Enough rows, across enough groups and dates, that a board shows several populated columns
+   and a calendar month has events in most weeks. A
    five-row fixture photographs as an empty-looking product however good the layout is. One
    name is deliberately long so truncation stays visible in every view. */
 export const ROWS = [
@@ -95,24 +95,22 @@ export const ICONS = {
 /**
  * A card cover with no image behind it.
  *
- * Both card views build this and only when an image field is configured: `renderCover` creates the
+ * The board card builds this only when an image field is configured: `renderCover` creates the
  * wrapper, and with nothing to resolve it adds `is-empty` and puts Lucide's `image` glyph in a
  * placeholder span. The wrapper is what carries the aspect ratio, so a card that has one is roughly
  * three times the height of a card that does not — which is why a fixture cannot leave it out and
  * still be a picture of the surface.
  *
- * The gallery fixture had the placeholder class from the OTHER view, with no wrapper and no glyph,
- * so `.db-gallery-cover`, `.db-gallery-cover-placeholder`, `.db-board-card-cover` and
- * `.db-board-card-cover-placeholder` were four families the whole corpus never photographed, and
- * the one class it did name matched no rule.
+ * A fixture once carried the wrong view's placeholder class here, with no wrapper and no glyph, so
+ * `.db-board-card-cover` and `.db-board-card-cover-placeholder` went the whole corpus unphotographed
+ * and the class it did name matched no rule.
  */
 export const emptyCover = (base) => `
   <div class="${base} is-empty">
     <span class="${base}-placeholder">${ICONS.image}</span>
   </div>`;
 
-/** The two bases, spelt out because they do not follow one pattern: the board's carries `card`. */
-export const COVER_BASES = { board: "db-board-card-cover", gallery: "db-gallery-cover" };
+export const COVER_BASES = { board: "db-board-card-cover" };
 
 // ───────────────────────────────────────────────────────────────────
 // 3. RENDER HELPERS
@@ -417,26 +415,10 @@ export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnCla
 }
 
 /**
- * Group-level selection headers.
- *
- * These are the controls that select a whole group at once, and they are a different family from
- * the per-row box beside them: board subgroup and gallery group each pass their own class to the
- * factory.
- *
- * The nesting mirrors each renderer: the gallery puts them straight on the header, and the board's
- * subgroup keeps its title and count in `db-board-header-text`.
+ * The board's group-level selection header — the control that selects a whole subgroup at once,
+ * a different family from the per-row box beside it. Keeps its title and count in
+ * `db-board-header-text`.
  */
-export const galleryGroupHeader = (title, count, tone = OPTION_TONES[title]) => `
-  <div class="db-gallery-group">
-    <div class="db-gallery-group-header">
-      ${collapseToggle("db-gallery-group-toggle")}
-      ${rowCheckbox("db-gallery-group-checkbox")}
-      ${groupTitle("db-gallery-group-title", title, tone)}
-      <span class="db-gallery-group-count">${count}</span>
-      <button type="button" class="db-gallery-group-new">+ New</button>
-    </div>
-  </div>`;
-
 export const boardSubgroupHeader = (title, count, tone = OPTION_TONES[title]) => `
   <div class="db-board-subgroup">
     <div class="db-board-subgroup-header">

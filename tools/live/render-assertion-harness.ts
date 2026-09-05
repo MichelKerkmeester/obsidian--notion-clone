@@ -29,9 +29,9 @@
 // NEGATIVE CONTROLS. Every bound below must have been observed failing before
 // it counts as evidence, and a bound that was never seen failing is not
 // evidence. The list, calendar and timeline bounds reddened on the trees that
-// shipped their defects; board and gallery read 1 against the same bound of 8
-// with no red on this tree, and the table's per-row bound is new here, so all
-// three own a switch that reintroduces the shape the bound exists to catch.
+// shipped their defects; board reads 1 against the same bound of 8 with no red
+// on this tree, and the table's per-row bound is new here, so all three own a
+// switch that reintroduces the shape the bound exists to catch.
 // The calendar week and day scenarios are new here and own the same switch;
 // the chart scenario's switch is separate, because the chart has no bag member
 // called per item.
@@ -40,8 +40,8 @@
 // `runRenderAssertions`, arms it: the card and row renderers call the bag's
 // `applyConditionalFormat` once per item with no target field — field-level
 // calls always name the field — and the armed wrapper reads the item's box at
-// that call. Board and gallery then read one per card plus the touch probe,
-// the table one per row plus its O(1) reads, and the check fails naming the
+// that call. Board then reads one per card plus the touch probe, the table one
+// per row plus its O(1) reads, and the check fails naming the
 // scenario; disarmed, each reads its O(1) count. The chart's armed wrapper
 // reads the host's box once per row at the render entry, since neither host
 // passes an action the renderer calls per item.
@@ -77,7 +77,6 @@ import {
   makeConfig as makeTableConfig,
 } from "../bench/table-render-bench";
 import { BoardRenderer, type BoardRendererActions } from "../../src/views/board-renderer";
-import { GalleryRenderer, type GalleryRendererActions } from "../../src/views/gallery-renderer";
 import {
   makeColumns as makeBoardColumns,
   makeRows as makeBoardRows,
@@ -85,11 +84,6 @@ import {
   makeConfig as makeBoardConfig,
   GROUP_FIELD as BOARD_GROUP_FIELD,
 } from "../bench/board-render-bench";
-import {
-  makeColumns as makeGalleryColumns,
-  makeRows as makeGalleryRows,
-  makeConfig as makeGalleryConfig,
-} from "../bench/gallery-render-bench";
 import {
   makeColumns as makeCalendarColumns,
   makeRows as makeCalendarRows,
@@ -133,7 +127,6 @@ import type { DatabaseConfig, RecordSchema } from "../../src/data/types";
 import type { DatabaseViewState } from "../../src/views/view-state-store";
 import type { BoardGroup } from "../../src/views/board-renderer";
 import type { TableGroup } from "../../src/views/table-renderer";
-import type { GalleryGroup } from "../../src/views/gallery-renderer";
 
 // The constructed timeline capture mounts the real CalendarTimelineRenderer against the real
 // bench fixture, and both anchor their dates on "today" (the bars, the gantt's today line and
@@ -178,15 +171,12 @@ export const TIMELINE_COLUMNS = 21;
 export const TIMELINE_ROWS = 1600;
 export const TIMELINE_FILL = 0.3;
 
-// The two card views, at the same shape their benches time. Both build one card per row into a
+// The board card view, at the same shape its bench times. It builds one card per row into a
 // single container, which is the arrangement the per-item layout read is dangerous in.
 export const BOARD_COLUMNS = 21;
 export const BOARD_ROWS = 1600;
 export const BOARD_FILL = 0.3;
 export const BOARD_GROUPS = 5;
-export const GALLERY_COLUMNS = 21;
-export const GALLERY_ROWS = 1600;
-export const GALLERY_FILL = 0.3;
 
 // The chart is fed the board bench's measured shape — the operator's twenty-one-column database
 // at thirty percent fill, grouped by the bench's five-status field. The chart has no bench of
@@ -204,7 +194,7 @@ export const CHART_GROUPS = BOARD_GROUPS;
 export const MAX_CHART_LAYOUT_READS = 48;
 
 export interface ScenarioSpec {
-  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery" | "chart"
+  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "chart"
     | "calendar-toolbar" | "timeline-toolbar" | "chart-toolbar"
     | "toolbar" | "active-view-controls" | "active-rule-popover" | "filter-panel" | "sort-panel"
     | "view-config" | "column-manager" | "record-detail" | "record-detail-body" | "record-peek"
@@ -397,11 +387,6 @@ export interface ScenarioSpec {
    * existing board consumer is unaffected.
    */
   boardCardFieldsHidden?: boolean;
-  /**
-   * Opt-in, renderer "gallery" only: sets `galleryImageField` to a real schema column the rows
-   * resolve no image for, so `renderCover` draws its placeholder cover on every card.
-   */
-  galleryImageField?: boolean;
   /**
    * Opt-in, renderer "table" only: renders the grouped table instead of the flat one — the
    * `renderGroupedTable` public entry the host calls when a group field is configured, with a
@@ -792,63 +777,6 @@ function embedBoardBag(columns: ColumnDef[]): BoardRendererActions {
   };
 }
 
-function fileViewGalleryBag(columns: ColumnDef[]): GalleryRendererActions {
-  return {
-    openRow: () => undefined,
-    openRecordDetail: () => undefined,
-    createEntry: () => undefined,
-    isRowSelected: () => false,
-    toggleRowSelected: () => undefined,
-    areAllRowsSelected: () => false,
-    toggleRowsSelected: () => undefined,
-    editCell: () => undefined,
-    saveCellValue: () => undefined,
-    editFileName: () => undefined,
-    getColumns: () => columns,
-    updateCardSize: () => undefined,
-    moveRowToPosition: () => undefined,
-    moveRowsToGroup: () => undefined,
-    moveRowToGroupAndPosition: () => undefined,
-    moveRowsToPosition: () => undefined,
-    getSelectedRows: () => [],
-    isGroupCollapsed: () => false,
-    toggleGroupCollapsed: () => undefined,
-    expandGroup: () => undefined,
-    showRowMenu: () => undefined,
-    showColumnMenu: () => undefined,
-    editFormula: () => undefined,
-    renderRecordIcon: () => null,
-    renderGroupSummaries: () => undefined,
-    applyConditionalFormat: () => undefined,
-    get hideCreateEntry() { return false; },
-  };
-}
-
-function embedGalleryBag(columns: ColumnDef[]): GalleryRendererActions {
-  return {
-    openRow: () => undefined,
-    createEntry: () => undefined,
-    isRowSelected: () => false,
-    toggleRowSelected: () => undefined,
-    areAllRowsSelected: () => false,
-    toggleRowsSelected: () => undefined,
-    editCell: () => undefined,
-    getColumns: () => columns,
-    updateCardSize: () => undefined,
-    moveRowToPosition: () => undefined,
-    isGroupCollapsed: () => false,
-    toggleGroupCollapsed: () => undefined,
-    expandGroup: () => undefined,
-    showRowMenu: () => undefined,
-    showColumnMenu: () => undefined,
-    renderRecordIcon: () => null,
-    renderGroupSummaries: () => undefined,
-    applyConditionalFormat: () => undefined,
-    isReadOnly: true,
-    get hideCreateEntry() { return false; },
-  };
-}
-
 function fileViewCalendarBag(columns: ColumnDef[]): CalendarRendererActions {
   return {
     openRow: () => undefined,
@@ -974,19 +902,6 @@ function tagBoardRenders(): void {
   ): void {
     original.call(this, container, config, groups, groupField, emptyState);
     container.setAttribute(PROVENANCE_ATTR, "board-renderer");
-  };
-}
-
-function tagGalleryRenders(): void {
-  const original = GalleryRenderer.prototype.render;
-  GalleryRenderer.prototype.render = function taggedRender(
-    container: HTMLElement,
-    config: ViewConfig,
-    rows: RowData[],
-    emptyState?: Parameters<GalleryRenderer["render"]>[3],
-  ): void {
-    original.call(this, container, config, rows, emptyState);
-    container.setAttribute(PROVENANCE_ATTR, "gallery-renderer");
   };
 }
 
@@ -1241,25 +1156,10 @@ function tagCellStartEdits(): void {
   };
 }
 
-function tagGalleryGroupedRenders(): void {
-  const original = GalleryRenderer.prototype.renderGrouped;
-  GalleryRenderer.prototype.renderGrouped = function taggedRenderGrouped(
-    container: HTMLElement,
-    config: ViewConfig,
-    groups: GalleryGroup[],
-    groupField: string,
-    emptyState?: unknown,
-  ): void {
-    original.call(this, container, config, groups, groupField, emptyState);
-    container.setAttribute(PROVENANCE_ATTR, "gallery-renderer");
-  };
-}
-
 // Armed once at module load, in the browser only: the harness is bundled into
 // the render entry and never runs outside it.
 tagTableRenders();
 tagBoardRenders();
-tagGalleryRenders();
 tagCalendarRenders();
 tagTimelineRenders();
 tagChartRenders();
@@ -1278,7 +1178,6 @@ tagSummaryRenders();
 tagEmptyStateRenders();
 tagColumnHeaderSetups();
 tagCellStartEdits();
-tagGalleryGroupedRenders();
 
 function provenanceResult(container: HTMLElement, expected: string): AssertionResult {
   const marker = container.getAttribute(PROVENANCE_ATTR);
@@ -1465,18 +1364,6 @@ function boardAssertions(container: HTMLElement, rows: RowData[]): AssertionResu
     name: "the board drew its columns",
     pass: columns === BOARD_GROUPS,
     detail: `${columns} columns, want ${BOARD_GROUPS}`,
-  });
-  return results;
-}
-
-function galleryAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
-  const results: AssertionResult[] = [];
-  const cards = container.querySelectorAll<HTMLElement>(".db-gallery-card").length;
-
-  results.push({
-    name: "every row becomes a card",
-    pass: cards === rows.length,
-    detail: `${cards} cards for ${rows.length} rows`,
   });
   return results;
 }
@@ -2529,45 +2416,6 @@ export function runRenderAssertions(
             : " (the touch-mode probe is the legitimate O(1) read)"),
       });
     }
-  } else if (scenario.renderer === "gallery") {
-    const columns = makeGalleryColumns(GALLERY_COLUMNS, scenario.captureData ? "mixed" : "text");
-    const rows = makeGalleryRows(
-      scenario.captureData ? CAPTURE_ROWS : GALLERY_ROWS,
-      columns,
-      scenario.captureData ? CAPTURE_FILL : GALLERY_FILL,
-    );
-    if (scenario.captureData) applyCaptureOptions(columns, rows);
-    const config = {
-      ...makeGalleryConfig(columns),
-      ...(scenario.galleryImageField ? { galleryImageField: columnOfType(columns, "text")?.key } : {}),
-    } as ViewConfig;
-    if (scenario.galleryImageField) applyEmptyMetadataCache(rows);
-    const bag = scenario.bag === "file-view" ? fileViewGalleryBag(columns) : embedGalleryBag(columns);
-    bagKeys = Object.keys(bag).sort();
-    if (control === "per-item") armPerItemRead(bag);
-    const renderer = new GalleryRenderer(app, bag);
-
-    const stopCounting = countLayoutReads();
-    renderer.render(container, config, rows);
-    const layoutReads = stopCounting();
-
-    results.push(provenanceResult(container, "gallery-renderer"));
-    if (results[0].pass) {
-      results.push(...galleryAssertions(container, rows));
-      if (scenario.galleryImageField) {
-        results.push(multiMarkerAssertion(container,
-          [".db-gallery-cover.is-empty", ".db-gallery-cover-placeholder"],
-          "the gallery cards drew their empty covers"));
-      }
-      results.push({
-        name: "no forced layout inside the card loop",
-        pass: layoutReads <= MAX_LAYOUT_READS,
-        detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
-          + (layoutReads > MAX_LAYOUT_READS
-            ? " — reads scale with cards, which is the quadratic shape that froze the app"
-            : " (the touch-mode probe is the legitimate O(1) read)"),
-      });
-    }
   } else if (scenario.renderer === "calendar") {
     // Narrowed rather than cast: ScenarioSpec.scale is shared with the timeline branch's five
     // scales, and a calendar scenario is only ever constructed with its own three (see
@@ -3562,18 +3410,15 @@ export function runRenderAssertions(
         "the column headers carry their menu triggers, resize handles and property-type icons"));
     }
   } else if (scenario.renderer === "group-selection-controls") {
-    // One role, two remaining views: the whole-group selection box from the gallery and the
-    // extensions board's column header, each through its renderer's own grouped entry.
+    // The extensions board's whole-group selection box, through its renderer's own grouped
+    // entry. This used to mount the gallery's own group box alongside it, comparing the two roles
+    // in one render; the gallery is retired, so only the board's is constructed here now.
     const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
     const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
     applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
     applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
     const groups = makeBoardGroups(rows, BOARD_GROUPS);
-    const galleryHost = container.createDiv({ cls: "db-group-selection-host" });
     const boardHost = container.createDiv({ cls: "db-group-selection-host" });
-    const galleryRenderer = new GalleryRenderer(undefined as unknown as App, fileViewGalleryBag(columns));
-    galleryRenderer.renderGrouped(galleryHost, { ...makeBoardConfig(columns), viewType: "gallery" } as ViewConfig,
-      groups.map((g) => ({ key: g.key, rows: g.rows, count: g.count })), BOARD_GROUP_FIELD);
     const boardRenderer = new BoardRenderer(undefined as unknown as App, fileViewBoardBag(columns));
     boardRenderer.render(boardHost, {
       ...makeBoardConfig(columns),
@@ -3583,23 +3428,23 @@ export function runRenderAssertions(
     bagKeys = [];
 
     const markers = [
-      ["gallery", galleryHost.getAttribute(PROVENANCE_ATTR)],
       ["board", boardHost.getAttribute(PROVENANCE_ATTR)],
     ];
     results.push({
-      name: "both grouped renders mounted through their production entries",
+      name: "the grouped render mounted through its production entry",
       pass: markers.every(([, marker]) => marker !== null),
       detail: markers.map(([name, marker]) => `${name}:${marker ?? "none"}`).join(", "),
     });
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-gallery-group-checkbox", ".db-board-column-checkbox"],
-        "the whole-group selection boxes rendered in gallery and board"));
+        [".db-board-column-checkbox"],
+        "the whole-group selection box rendered in board"));
     }
   } else if (scenario.renderer === "card-covers") {
-    // The empty card cover in the two card views: board with its extensions vocabulary and an
-    // image field the rows resolve nothing for, gallery with the same — the only cover state a
-    // capture without a vault can show.
+    // The empty card cover in the board card view: extensions vocabulary and an image field the
+    // rows resolve nothing for, which is the only cover state a capture without a vault can show.
+    // This used to mount the gallery's own empty cover alongside it; the gallery is retired, so
+    // only the board host is constructed here now.
     const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
     const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
     applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
@@ -3608,7 +3453,6 @@ export function runRenderAssertions(
     applyEmptyMetadataCache(rows);
     const imageKey = columnOfType(columns, "text")?.key;
     const boardHost = container.createDiv({ cls: "db-cover-host" });
-    const galleryHost = container.createDiv({ cls: "db-cover-host" });
     const boardRenderer = new BoardRenderer(undefined as unknown as App, fileViewBoardBag(columns));
     boardRenderer.render(boardHost, {
       ...makeBoardConfig(columns),
@@ -3616,27 +3460,20 @@ export function runRenderAssertions(
       boardExtensionsEnabled: true,
       boardImageField: imageKey,
     } as ViewConfig, groups, BOARD_GROUP_FIELD);
-    const galleryRenderer = new GalleryRenderer(undefined as unknown as App, fileViewGalleryBag(columns));
-    galleryRenderer.render(galleryHost, {
-      ...makeBoardConfig(columns),
-      viewType: "gallery",
-      galleryImageField: imageKey,
-    } as ViewConfig, rows);
     bagKeys = [];
 
     const markers = [
       ["board", boardHost.getAttribute(PROVENANCE_ATTR)],
-      ["gallery", galleryHost.getAttribute(PROVENANCE_ATTR)],
     ];
     results.push({
-      name: "both card views mounted through their production entries",
+      name: "the card view mounted through its production entry",
       pass: markers.every(([, marker]) => marker !== null),
       detail: markers.map(([name, marker]) => `${name}:${marker ?? "none"}`).join(", "),
     });
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-board-card-cover.is-empty .db-board-card-cover-placeholder", ".db-gallery-cover.is-empty .db-gallery-cover-placeholder"],
-        "the empty cover rendered in the board card and the gallery card"));
+        [".db-board-card-cover.is-empty .db-board-card-cover-placeholder"],
+        "the empty cover rendered in the board card"));
     }
   } else if (scenario.renderer === "table" && scenario.migratedFromList) {
     const columns = makeTableColumns(TABLE_COLUMNS, scenario.captureData ? "mixed" : "text");
@@ -3670,8 +3507,8 @@ export function runRenderAssertions(
       results.push(...tableAssertions(container, rows, columns));
     }
   } else {
-    // captureData sizes the data as well as typing it, the way it already does for board
-    // and gallery. The table has no window, so every row becomes a real <tr>: at the bench's 2000
+    // captureData sizes the data as well as typing it, the way it already does for board.
+    // The table has no window, so every row becomes a real <tr>: at the bench's 2000
     // the container measures over 80,000px tall, which no element-mode capture can photograph and
     // which repeats one under-floor control thousands of times in the touch-target lane without
     // saying anything the first row did not. The structural-cost shape stays the lanes' own

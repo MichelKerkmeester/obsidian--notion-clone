@@ -5,10 +5,10 @@
 //            redirected on open in both render hosts
 // ───────────────────────────────────────────────────────────────────
 //
-// The gallery renderer needs a live Obsidian App, so the surfaces that host it are asserted on the
-// source they ship, the same way the list retirement's equivalent suite keeps the picker and its
-// fixture in step. Two of the pins below are NEGATIVE on purpose: the two pickers already withdrew
-// gallery before this phase started, and the parser that reads a vault file's frontmatter must keep
+// The hosts this suite reads need a live Obsidian App, so the wiring is asserted on the source
+// they ship, the same way the list retirement's equivalent suite keeps the picker and its fixture
+// in step. Two of the pins below are NEGATIVE on purpose: the two pickers already withdrew gallery
+// before this phase started, and the parser that reads a vault file's frontmatter must keep
 // accepting the value so the on-open migration below ever gets a view to convert — closing it would
 // coerce a persisted gallery straight to a table before either host had a chance to carry the cover.
 
@@ -119,19 +119,5 @@ describe("the migration runs on open in both hosts, once, with a notice", () => 
     expect(embeddedSource).toContain("planGalleryMigration");
     expect(embeddedSource).toContain("migrateGalleryViewOnOpen");
     expect(embeddedSource).toContain("galleryMigrationNotices");
-  });
-});
-
-// ───────────────────────────────────────────────────────────────────
-// 6. THE RENDERER ITSELF IS UNTOUCHED — 003'S JOB, NOT THIS PHASE'S
-// ───────────────────────────────────────────────────────────────────
-
-describe("the gallery renderer keeps working for a view not yet migrated", () => {
-  it("still dispatches to the gallery renderer in the file view", () => {
-    expect(databaseViewSource).toMatch(/viewType === "gallery"/);
-  });
-
-  it("still dispatches to the gallery renderer on the embed path", () => {
-    expect(embeddedSource).toMatch(/viewType === "gallery"/);
   });
 });

@@ -76,9 +76,8 @@ Neither portable output invents a created or modified timestamp. Those two colum
 ## 4. VIEWS
 
 Each database declares table, board, calendar, timeline and chart. Those are the five view types the
-plugin ships and keeps. The list renderer has already been removed from the tree, and gallery is
-being withdrawn, so a generated gallery view would be new configuration for a surface whose migration
-path is the work in progress.
+plugin ships and keeps. The list and gallery renderers have both been removed from the tree, so a
+generated view of either would be configuration for a surface the plugin no longer renders.
 
 ## 5. WHAT A GREEN RUN HERE DOES NOT PROVE
 

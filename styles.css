@@ -1264,7 +1264,6 @@
 
 .note-database-container td.db-conditional-format,
 .note-database-container .db-board-card-field.db-conditional-format,
-.note-database-container .db-gallery-field.db-conditional-format,
 .db-mobile-bottom-sheet .db-record-detail-field.db-conditional-format,
 .note-database-container .db-record-detail-field.db-conditional-format,
 .note-database-container .db-record-detail-title.db-conditional-format,
@@ -1484,10 +1483,6 @@
 
 .note-database-container .db-board-header-summaries .db-group-summary-value {
   display: inline;
-  margin-left: 4px;
-}
-
-.note-database-container .db-gallery-group-header .db-group-summary-item {
   margin-left: 4px;
 }
 
@@ -6357,8 +6352,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   white-space: nowrap;
 }
 
-.note-database-container .db-board-card-title .db-file-title-name,
-.note-database-container .db-gallery-card-title .db-file-title-name {
+.note-database-container .db-board-card-title .db-file-title-name {
   white-space: normal;
   display: flex;
   flex-wrap: wrap;         /* 允许换行 */
@@ -6387,8 +6381,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   margin-bottom: -2px;
 }
 
-.note-database-container .db-board-card:hover .db-file-title-prefix,
-.note-database-container .db-gallery-card:hover .db-file-title-prefix {
+.note-database-container .db-board-card:hover .db-file-title-prefix {
   opacity: 0.6;
 }
 
@@ -6691,8 +6684,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: none;
 }
 
-.note-database-container .db-table tr.is-dragging,
-.note-database-container .db-gallery-card.is-dragging {
+.note-database-container .db-table tr.is-dragging {
   opacity: 0.45;
   box-shadow: var(--db-elevation-2);
 }
@@ -6763,9 +6755,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-group-header.is-drop-target,
-.note-database-container .db-table-wrap.is-drop-target,
-.note-database-container .db-gallery-group-header.is-drop-target,
-.note-database-container .db-gallery.is-drop-target {
+.note-database-container .db-table-wrap.is-drop-target {
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 72%, transparent);
 }
 
@@ -7677,7 +7667,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-board-new-card.is-disabled,
-.note-database-container .db-gallery-new-card.is-disabled,
 .note-database-container .db-new-row-button.is-disabled { opacity: 0.5; cursor: not-allowed; }
 .note-database-changelog {
   max-height: 80vh;
@@ -8026,13 +8015,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   background: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
 }
 
-.note-database-container .db-gallery-empty-group {
-  width: min(100%, 520px);
-  border-style: dashed;
-  border-color: var(--background-modifier-border);
-  background: transparent;
-}
-
 @media (max-width: 640px) {
   .note-database-container .db-empty-hero {
     align-items: stretch;
@@ -8134,7 +8116,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 
-.note-database-container .db-gallery-group-toggle,
 .note-database-container .db-group-collapse-toggle,
 .note-database-container .db-board-group-toggle,
 .note-database-container .db-board-subgroup-toggle {
@@ -8156,7 +8137,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-group-collapse-toggle:hover,
-.note-database-container .db-gallery-group-toggle:hover,
 .note-database-container .db-board-group-toggle:hover,
 .note-database-container .db-board-subgroup-toggle:hover {
   color: var(--text-normal);
@@ -9808,8 +9788,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   vertical-align: middle;
 }
 
-.note-database-container .db-group-title-text,
-.note-database-container .db-gallery-group-title {
+.note-database-container .db-group-title-text {
   display: inline-flex;
   min-width: 0;
   max-width: 100%;
@@ -9817,8 +9796,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .note-database-container .db-board-column-title > .status-badge,
 .note-database-container .db-board-subgroup-title > .status-badge,
-.note-database-container .db-group-title-text > .status-badge,
-.note-database-container .db-gallery-group-title > .status-badge {
+.note-database-container .db-group-title-text > .status-badge {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -10940,351 +10918,8 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 15px;
 }
 
-/* ───────────────────────────────────────────────────────────────
-   18. GALLERY VIEW
-   Responsive card grid for a gallery-style layout.
-─────────────────────────────────────────────────────────────── */
-
-.note-database-container .db-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--db-gallery-card-width, 250px)), var(--db-gallery-card-width, 250px)));
-  align-items: start;
-  gap: var(--db-space-6);
-  width: 100%;
-  padding-bottom: 16px;
-}
-
-.note-database-container .db-gallery-grouped {
-  display: flex;
-  flex-direction: column;
-  gap: var(--db-space-6);
-  width: 100%;
-  padding-bottom: 16px;
-}
-
-.note-database-container .db-gallery-group {
-  min-width: 0;
-}
-
-.note-database-container .db-gallery-group-header,
-.note-database-container .db-gallery-total-header {
-  position: sticky;
-  top: calc(var(--db-table-header-top) - 22px + var(--db-selection-status-offset));
-  z-index: 23;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 32px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--background-modifier-border);
-  background: var(--background-primary);
-  padding: 4px 4px;
-}
-
-.note-database-container .db-gallery-group-header {
-  border-bottom: 0;
-}
-
-.note-database-container .db-gallery-group-checkbox {
-  flex: 0 0 auto;
-  margin: 0 4px;
-}
-
-.note-database-container .db-gallery-group-title {
-  color: var(--text-normal);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.note-database-container .db-gallery-group-count {
-  color: var(--text-faint);
-  font-size: 12px;
-}
-
-.note-database-container .db-gallery-group.is-collapsed {
-  padding-bottom: 0;
-}
-
-.note-database-container .db-gallery-card {
-  position: relative;
-  overflow: hidden;
-  min-width: 0;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg);
-  background: var(--background-primary);
-  cursor: pointer;
-  transition: background-color var(--db-motion-fast), border-color var(--db-motion-fast), box-shadow var(--db-motion-fast), transform var(--db-motion-fast);
-}
-
-.note-database-container .db-gallery-card-resize-handle {
-  position: absolute;
-  top: 0;
-  right: -4px;
-  bottom: 0;
-  z-index: 2;
-  width: 8px;
-  cursor: col-resize;
-}
-
-.note-database-container .db-gallery-card-resize-handle::after {
-  position: absolute;
-  top: 10px;
-  right: 3px;
-  bottom: 10px;
-  width: 2px;
-  border-radius: var(--db-radius-xs);
-  background: transparent;
-  content: "";
-}
-
-@media (hover: hover) {
-  .note-database-container .db-gallery-card-resize-handle:hover::after {
-    background: var(--interactive-accent);
-  }
-}
-
-@media (hover: none) {
-  .note-database-container .db-gallery-card-resize-handle {
-    display: none;
-  }
-}
-
-.note-database-container .db-gallery-card:hover {
-  border-color: var(--background-modifier-border-hover);
-  background: var(--background-modifier-hover);
-  box-shadow: var(--db-elevation-1);
-  transform: translateY(-1px);
-}
-
-.note-database-container .db-gallery-card.is-drop-before,
-.note-database-container .db-gallery-card.is-drop-after {
-  border-color: color-mix(in srgb, var(--interactive-accent) 72%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--interactive-accent) 6%, var(--background-primary));
-  transition: none;
-}
-
-.note-database-container .db-gallery-card.is-drop-before {
-  box-shadow: inset 4px 0 0 -2px var(--interactive-accent),
-    inset 20px 0 14px -18px var(--interactive-accent),
-    var(--db-elevation-2);
-}
-
-.note-database-container .db-gallery-card.is-drop-after {
-  box-shadow: inset -4px 0 0 -2px var(--interactive-accent),
-    inset -20px 0 14px -18px var(--interactive-accent),
-    var(--db-elevation-2);
-}
-
-.note-database-container .db-gallery-cover {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  aspect-ratio: var(--db-gallery-cover-ratio, 0.75);
-  border-bottom: 1px solid var(--background-modifier-border);
-  background: var(--background-secondary);
-}
-
-.note-database-container .db-gallery-cover.is-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-faint);
-}
-
-.note-database-container .db-gallery-cover-placeholder svg {
-  width: 28px;
-  height: 28px;
-}
-
-.note-database-container .db-gallery-cover-button {
-  display: block;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  cursor: zoom-in;
-  line-height: 0;
-  padding: 0;
-}
-
-.note-database-container .db-gallery-cover-button img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: var(--db-gallery-image-fit, cover);
-}
-
-.note-database-container .db-gallery-card-body {
-  padding: var(--db-space-5);
-}
-
-.note-database-container .db-gallery-card-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: 24px;
-  margin-bottom: 6px;
-}
-
-.note-database-container .db-gallery-card-checkbox {
-  margin: 0;
-}
-
-.note-database-container .db-gallery-card-open {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  margin: 0 0 0 auto;
-  border: 0;
-  border-radius: var(--db-radius-md);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 0;
-}
-
-.note-database-container .db-gallery-card-open:hover {
-  background: var(--background-modifier-hover);
-  color: var(--text-normal);
-}
-
-.note-database-container .db-gallery-card-title {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  color: var(--text-normal);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.note-database-container .db-gallery-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 8px;
-}
-
-.note-database-container .db-gallery-field {
-  display: grid;
-  grid-template-columns: minmax(64px, auto) minmax(0, var(--db-card-field-width, 1fr));
-  align-items: start;
-  gap: 8px;
-  border-radius: var(--db-radius-md);
-  color: var(--text-muted);
-  cursor: text;
-  font-size: 12px;
-  padding: 2px;
-}
-
-.note-database-container .db-gallery-field:hover {
-  background: var(--background-modifier-hover);
-}
-
-.note-database-container .db-gallery-field-wrap {
-  display: block;
-}
-
-.note-database-container .db-gallery-field-wrap .db-gallery-field-label {
-  display: block;
-  margin-bottom: 3px;
-}
-
-.note-database-container .db-gallery-field-label {
-  color: var(--text-faint);
-}
-
-.note-database-container .db-gallery-field-value {
-  min-width: 0;
-  color: var(--text-normal);
-  text-align: right;
-  overflow-wrap: anywhere;
-}
-
-.note-database-container .db-gallery-field:not(.db-gallery-field-wrap):not(.is-checkbox-field) .db-gallery-field-value:not(.has-badges),
-.note-database-container .db-gallery-field:not(.db-gallery-field-wrap):not(.is-checkbox-field) .db-gallery-link {
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
-
-.note-database-container .db-gallery-field-wrap .db-gallery-field-value {
-  text-align: left;
-}
-
-.note-database-container .db-gallery-field.is-checkbox-field .db-gallery-field-value {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  text-align: right;
-}
-
-.note-database-container .db-gallery-field.is-checkbox-field .db-checkbox-cell input {
-  margin: 0;
-}
-
-.note-database-container .db-gallery-field-value.db-cell-editing {
-  text-align: left;
-}
-
-.note-database-container .db-gallery-badges {
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.note-database-container .db-gallery-link {
-  display: block;
-  overflow: hidden;
-  color: var(--text-accent);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-gallery-field-wrap .db-gallery-link {
-  overflow: visible;
-  text-overflow: clip;
-  white-space: normal;
-  word-break: break-word;
-}
-
 .note-database-container .db-card-empty-placeholder {
   color: var(--text-faint);
-}
-
-.note-database-container .db-gallery-group-footer {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.note-database-container .db-gallery-new-card {
-  width: 100%;
-  min-height: 44px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg);
-  background: transparent;
-  box-shadow: none;
-  color: var(--text-faint);
-  cursor: pointer;
-  text-align: left;
-  padding: var(--db-space-5);
-}
-
-.note-database-container .db-gallery-new-card:hover {
-  background: var(--background-modifier-hover);
-  box-shadow: none;
-  color: var(--text-normal);
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -15987,7 +15622,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   --db-group-header-top: calc(var(--db-table-header-top) - 2px);
   --db-group-table-head-top: calc(var(--db-group-header-top) + var(--db-group-header-height));
   --db-board-header-top: calc(var(--db-table-header-top) - 7px);
-  --db-gallery-header-top: calc(var(--db-table-header-top) - 2px);
   height: auto;
   max-height: 80vh;    /* 超过视口 80% 时出现垂直滚动条 */
   overflow: auto;       /* 同时处理水平和垂直滚动 */
@@ -16071,7 +15705,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   --db-group-header-top: 0px;
   --db-group-table-head-top: var(--db-group-header-height);
   --db-board-header-top: 0px;
-  --db-gallery-header-top: 0px;
   padding-top: 0;
 }
 
@@ -16273,11 +15906,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
 /* Embed: 分组标题紧贴 header 底边 */
 .note-database-embed.note-database-container .db-group-header {
   top: var(--db-group-header-top);
-}
-
-.note-database-embed.note-database-container .db-gallery-group-header,
-.note-database-embed.note-database-container .db-gallery-total-header {
-  top: var(--db-gallery-header-top);
 }
 
 /* Embed: 分组模式下属性行在分组标题下方 */
@@ -20382,7 +20010,6 @@ body.pm-resize-active * {
 .is-phone .note-database-container .db-resize-handle,
 .is-phone .note-database-container .db-cell-fill-handle,
 .is-phone .note-database-container .db-board-column-resize-handle,
-.is-phone .note-database-container .db-gallery-card-resize-handle,
 .is-phone .note-database-modal .db-status-option-drag,
 .is-phone .note-database-modal .db-group-order-drag,
 .is-phone .note-database-modal .db-file-list-drag,
@@ -20653,7 +20280,6 @@ body.pm-resize-active * {
 }
 
 .is-phone .note-database-container .db-board-card,
-.is-phone .note-database-container .db-gallery-card,
 .is-phone .note-database-container .db-list-row {
   position: relative;
 }
@@ -20995,7 +20621,6 @@ img.db-text-md-image {
 .note-database-container .db-active-control-edit,
 .note-database-container .db-active-control-remove,
 .note-database-container .db-group-collapse-toggle,
-.note-database-container .db-gallery-group-toggle,
 .note-database-container .db-board-group-toggle,
 .note-database-container .db-board-subgroup-toggle,
 .note-database-container .db-table-mobile-move-btn,
@@ -21014,7 +20639,6 @@ img.db-text-md-image {
     .db-column-menu-trigger,
     .db-board-column-options,
     .db-group-collapse-toggle,
-    .db-gallery-group-toggle,
     .db-board-group-toggle,
     .db-board-subgroup-toggle,
     .db-timeline-window-jump,
@@ -21082,7 +20706,6 @@ img.db-text-md-image {
   .note-database-container .db-toolbar-button::before,
   .note-database-container .db-active-control-edit::before,
   .note-database-container .db-group-collapse-toggle::before,
-  .note-database-container .db-gallery-group-toggle::before,
   .note-database-container .db-board-group-toggle::before,
   .note-database-container .db-board-subgroup-toggle::before,
   .note-database-container .db-table-mobile-move-btn::before,
@@ -21212,8 +20835,7 @@ img.db-text-md-image {
 
 .note-database-container .db-table td[data-note-database-column-key],
 .note-database-container .db-board-card,
-.note-database-container .db-list-row,
-.note-database-container .db-gallery-card {
+.note-database-container .db-list-row {
   scroll-margin-top: calc(var(--db-header-height, 34px) + 8px);
   scroll-margin-bottom: calc(var(--db-mobile-bar-height, 48px) + 8px);
 }
@@ -21230,7 +20852,6 @@ img.db-text-md-image {
 
 .note-database-container .db-table,
 .note-database-container .db-board,
-.note-database-container .db-gallery,
 .note-database-container .db-list {
   touch-action: manipulation;
 }
@@ -21525,8 +21146,7 @@ img.db-text-md-image {
 @media (forced-colors: active) {
   .note-database-container :is(.db-cell-selected, .db-cell-range-selected, .db-cell-focus),
   .note-database-container .db-board-card:focus-visible,
-  .note-database-container .db-list-row:focus-visible,
-  .note-database-container .db-gallery-card:focus-visible {
+  .note-database-container .db-list-row:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: -2px;
     border-color: Highlight;
@@ -21535,7 +21155,7 @@ img.db-text-md-image {
     forced-color-adjust: none;
   }
 
-  .note-database-container :is(.db-group-collapse-toggle, .db-gallery-group-toggle, .db-board-group-toggle, .db-board-subgroup-toggle):focus-visible,
+  .note-database-container :is(.db-group-collapse-toggle, .db-board-group-toggle, .db-board-subgroup-toggle):focus-visible,
   .db-column-menu-subpopover :is(button, input, select, textarea):focus-visible,
   .db-icon-picker-popover :is(button, input, select, textarea):focus-visible,
   .db-color-picker-popup :is(button, input, select, textarea):focus-visible,
@@ -23104,13 +22724,12 @@ input[type="checkbox"].db-checkbox.db-checkbox-field {
     min-height: 28px;
   }
 
-  /* A row's hover-to-insert button, a gallery card's open button, and the timeline's phone-only
-     overflow menu button — three controls painting at 22-24px with no compensating hit area and no
-     coarse-pointer rule at all. Raised the same way as the pair above: `min-width`/`min-height`
-     rather than `width`/`height`, because the declaration already sets an explicit width, and a bare
-     width alone loses to it — the box would simply not grow, and a census would read the old number. */
+  /* A row's hover-to-insert button and the timeline's phone-only overflow menu button — two
+     controls painting at 22-24px with no compensating hit area and no coarse-pointer rule at all.
+     Raised the same way as the pair above: `min-width`/`min-height` rather than `width`/`height`,
+     because the declaration already sets an explicit width, and a bare width alone loses to it —
+     the box would simply not grow, and a census would read the old number. */
   .note-database-container .db-row-insert-button,
-  .note-database-container .db-gallery-card-open,
   .note-database-container .db-timeline-mobile-menu-button {
     min-width: 28px;
     min-height: 28px;

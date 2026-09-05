@@ -32,7 +32,7 @@
 // `RENDER_READ_CONTROL=per-item` arms the owned negative control for the card
 // and row renderers: the harness reintroduces one forced layout read per item,
 // so each scenario's count exceeds its bound and this check fails naming the
-// scenario. Board and gallery read 1 against a bound of 8 and have no shipped
+// scenario. Board reads 1 against a bound of 8 and has no shipped
 // defect on this tree — a bound that was never observed failing is not
 // evidence — and the table's per-row bound (measured 3, same bound of 8) has
 // the same need. The calendar week/day and chart scenarios are new here and
@@ -140,21 +140,6 @@ const BAGS = {
     "showColumnMenu", "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected",
     "toggleRowsSelected", "updateCardOrder", "updateColumnWidth", "updateGroup",
     "updateGroupOrder",
-  ],
-  "gallery/file-view": [
-    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "editCell", "editFileName",
-    "editFormula", "expandGroup", "getColumns", "getSelectedRows", "hideCreateEntry",
-    "isGroupCollapsed", "isRowSelected", "moveRowToGroupAndPosition", "moveRowToPosition",
-    "moveRowsToGroup", "moveRowsToPosition", "openRecordDetail", "openRow",
-    "renderGroupSummaries", "renderRecordIcon", "saveCellValue", "showColumnMenu", "showRowMenu",
-    "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected", "updateCardSize",
-  ],
-  "gallery/embed": [
-    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "editCell", "expandGroup",
-    "getColumns", "hideCreateEntry", "isGroupCollapsed", "isReadOnly", "isRowSelected",
-    "moveRowToPosition", "openRow", "renderGroupSummaries", "renderRecordIcon", "showColumnMenu",
-    "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected",
-    "updateCardSize",
   ],
   "calendar/file-view": [
     "applyConditionalFormat", "createEntryForDate", "getCalendarInvalidEventCount", "getColumns",
@@ -506,14 +491,13 @@ if (failures.length > 0) {
 
 stamp(
   STAMP_PATH,
-  { constructed, total, note: "was 7/22; list renderer retired" },
+  { constructed, total, note: "was 6/21; gallery renderer retired" },
   [
     "tools/live/render-assertions.mjs",
     "tools/live/render-assertion-harness.ts",
     ...RENDERER_SOURCES,
     "tools/bench/table-render-bench.ts",
     "tools/bench/board-render-bench.ts",
-    "tools/bench/gallery-render-bench.ts",
     "tools/bench/calendar-render-bench.ts",
     "tools/bench/timeline-render-bench.ts",
     "src/views/database-view.ts",

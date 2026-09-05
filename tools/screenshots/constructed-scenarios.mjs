@@ -325,7 +325,7 @@ const SPEC_OPTIONS = [
   "subtaskTree", "sparseFields", "emptyState", "chartVariant", "miniCalendar",
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
   "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
-  "boardEmptyColumn", "galleryImageField", "tableGroups", "tableFooter", "fullStatusPalette",
+  "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement",
 ];
@@ -395,12 +395,6 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Board view (constructed)",
     sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts"),
     note: "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
-  }),
-  constructedScenario("gallery", {
-    renderer: "gallery",
-    title: "Gallery view (constructed)",
-    sources: constructedSources("src/views/gallery-renderer.ts", "tools/bench/gallery-render-bench.ts"),
-    note: "The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid.",
   }),
   constructedScenario("calendar-month", {
     renderer: "calendar",
@@ -850,26 +844,24 @@ export const CONSTRUCTED_SCENARIOS = [
     group: "components",
     title: "Group selection controls (constructed)",
     fixtureOf: "chrome-group-selection-controls",
-    sources: constructedSources("src/views/gallery-renderer.ts", "tools/bench/board-render-bench.ts")
-      .concat(["src/views/board-renderer.ts", "src/views/group-label-renderer.ts"]),
-    note: "One role, two views: the whole-group selection box from the gallery and the "
-      + "extensions board's column header, each through its renderer's own grouped entry. The "
-      + "fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface "
-      + "is the swimlane lane header, which carries no box. Gallery and board boxes are asserted "
-      + "by constructed-state-assertions rather than photographed here.",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/group-label-renderer.ts"]),
+    note: "The extensions board's column-header selection box, through the renderer's own grouped "
+      + "entry. The fixture's board-subgroup box no longer exists on the shipped board — the "
+      + "subgroup surface is the swimlane lane header, which carries no box. This used to mount the "
+      + "gallery's own group box alongside it; the gallery is retired, so only the board's box is "
+      + "asserted here now.",
   }),
   constructedScenario("card-covers", {
     renderer: "card-covers",
     group: "components",
-    title: "Card covers, board and gallery (constructed)",
+    title: "Card covers, board (constructed)",
     fixtureOf: "card-cover-states",
-    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
-      .concat(["src/views/gallery-renderer.ts"]),
-    note: "The empty cover in both card views: each renderer with an image field the rows resolve "
-      + "nothing for, which is the only cover state a capture without a vault can show. Framing "
-      + "bound: a board of covered cards already fills the viewport an element capture crops to, "
-      + "so the picture holds the board host; the gallery's empty cover is asserted by "
-      + "constructed-state-assertions rather than photographed here.",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts"),
+    note: "The empty cover in the board card: the renderer with an image field the rows resolve "
+      + "nothing for, which is the only cover state a capture without a vault can show. This used to "
+      + "mount the gallery's own empty cover beside it, asserted by constructed-state-assertions "
+      + "rather than photographed; the gallery is retired, so only the board host is built here now.",
   }),
 
   // ── The field editors, pickers and value renderers.

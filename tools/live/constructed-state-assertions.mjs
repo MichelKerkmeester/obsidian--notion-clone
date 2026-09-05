@@ -106,10 +106,8 @@ window.__stateMarkers = (scenario) => {
     tableGrouped: !!container.querySelector(".db-grouped-table tr.db-group-divider-row"),
     summaryRow: !!container.querySelector(".db-summary .db-summary-item"),
     ownedMenu: !!doc.querySelector(".db-owned-menu .db-menu-item"),
-    groupSelectionBoxes: !!container.querySelector(".db-gallery-group-checkbox")
-      && !!container.querySelector(".db-board-column-checkbox"),
-    cardCovers: !!container.querySelector(".db-board-card-cover.is-empty .db-board-card-cover-placeholder")
-      && !!container.querySelector(".db-gallery-cover.is-empty .db-gallery-cover-placeholder"),
+    groupSelectionBoxes: !!container.querySelector(".db-board-column-checkbox"),
+    cardCovers: !!container.querySelector(".db-board-card-cover.is-empty .db-board-card-cover-placeholder"),
     cellEditorText: !!container.querySelector('.db-cell-edit-popover[data-note-database-editor-kind="text"] .db-md-toolbar'),
     cellEditorSelect: !!container.querySelector(".db-cell-option-popover .db-cell-option-item"),
     datePicker: !!container.querySelector(".db-date-value-popover .db-calendar-mini-grid"),

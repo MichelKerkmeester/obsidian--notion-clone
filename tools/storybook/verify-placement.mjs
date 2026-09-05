@@ -4284,10 +4284,11 @@ await keyboardPhone.close();
 //
 // The document is two fixtures, not one. Appearance is asserted as a comparison against a role-mate
 // the same factory builds in another family, and the table fixture holds no second family — so the
-// gallery is mounted beside it and both are read out of one document. Two absolute assertions in two
-// documents can drift together and still agree, which is the failure a comparison exists to catch.
-// The gallery contributes no select cell, so every number the three geometry checks report is
-// unchanged by its presence.
+// board extensions' selection controls are mounted beside it and both are read out of one document
+// (the gallery held this role until its retirement; any family whose checkbox the factory builds
+// works equally). Two absolute assertions in two documents can drift together and still agree,
+// which is the failure a comparison exists to catch. The role-mate contributes no select cell, so
+// every number the three geometry checks report is unchanged by its presence.
 //
 // `PLACEMENT_SELECT_CONTROL=<name>` arms one of this section's negative controls. styles.css is not
 // this harness's to edit, so a control that has to reproduce the pre-fix cascade appends the guard
@@ -4322,7 +4323,7 @@ const SELECT_CONTROL_CSS = {
     + ' .db-select-inner input[type="checkbox"].db-checkbox { position: static; right: auto; }',
 }[SELECT_CONTROL] || "";
 
-const SELECT_FIXTURE = ["table-view", "gallery-view"]
+const SELECT_FIXTURE = ["table-view", "chrome-board-extensions-selection"]
   .map((id) => SCENARIOS.find((s) => s.id === id).html()).join("");
 
 const selectStyles = (extra) => readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS + extra;

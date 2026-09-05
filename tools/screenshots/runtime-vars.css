@@ -42,9 +42,6 @@
 
   --db-board-column-width: 280px;
   --db-board-image-fit: cover;
-  --db-gallery-card-width: 220px;
-  --db-gallery-cover-ratio: 0.6;
-  --db-gallery-image-fit: cover;
   --db-group-depth: 0;
 
   --db-status-fg: var(--text-normal);
