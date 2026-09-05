@@ -19,7 +19,7 @@ _memory:
       - "Rows 29-33, 39-41, 43 re-asked against 0.0.26, unanswered"
       - "050-055: all past T001, none past T002; no implementation has landed"
       - "046 T002/T016 and 044/045 AC-006 stay open"
-      - "worktrees/096-screenshots-regroup is rewriting capture paths; rebase onto its path form"
+      - "052 design-trueup still cites ~70 bare menus/ paths after the d486eab9 regrouping"
     key_files:
       - "specs/005-component-surface-system/roadmap.md"
       - "specs/005-component-surface-system/goal.md"
@@ -205,7 +205,7 @@ the five draft trees, which were read in full.**
 | `.worktrees/074-anytype-ios-sim` | `964a0b2a` — **now on `origin/main`** | **Landed during this pass.** The open-source Anytype iOS client built from source and run on a simulator: **59 states in light and dark, 118 files** under `screenshots/anytype/mobile/`, against the same 326-record demo space the desktop captures used. It closes `050` item 13's capture gap — `design-trueup.md` REQ-013 recorded that no filter or sort sheet appears in any of the 151 desktop files, and four now do — and gives `051`-`055` the phone reference every one of them was designed without. Each of the five gained a dated reconciliation block; **the pixels are unread in all of them** |
 | `.worktrees/079-anytype-menus` | `396e1532`, **220 files dirty** | Every Anytype dropdown and mobile sheet screenshotted, per the operator's decision. This is the capture set `052`'s `anytype-menu-grammar.md` §4 lists as still missing and `054`'s §5B rows still need. **Uncommitted and unread** |
 | `.worktrees/094-impl-053-toolbar` | `ae46da94` at dispatch | **In flight, on codex.** `053`'s implementation leg — the first of the five families to start. It holds the toolbar's five composed primitives and `050` items 1, 2, 4, 7, 10, 12. Do not open the same files from another leaf |
-| `.worktrees/096-screenshots-regroup` | `a58bbcd5` at branch | **In flight.** Regrouping `screenshots/` into platform/subject subfolders and rewriting every path citation across the spec tree. **On a rebase conflict over a capture path, keep THEIR path form and YOUR content** — the true-ups already cite the `desktop/menus/` and `mobile/` forms |
+| `.worktrees/096-screenshots-regroup` | `d486eab9`, **landed on `origin/main`** | **Landed.** The Anytype captures are regrouped into `screenshots/anytype/{official, desktop/{sets/<use-case>, app, menus}, mobile/{official, sheets, app}}`, filenames unchanged, and the citing docs under `047`, `051`-`055` follow. **Cite the new form.** One residue it left: `052`'s `design-trueup.md` still carries ~70 bare `menus/` shorthand references — that packet's to normalise. Removable |
 | `.worktrees/087-trueup-051` … `092-trueup-054` | `8e0149af`, `a58bbcd5`, `fbbddc13`, `621de37f`, `cd8030a8`, `7b516cba` | **Landed. Removable.** All six are ancestors of `origin/main`; removing a worktree is not removing its branch |
 | `.worktrees/085-record-open-dock` | `ae46da94`, landed | **Landed and shipped in 0.0.26.** "Fix record open for all callers" — row 48's fix generalised to every caller of the record-open path. Removable |
 | `.worktrees/080-phase-modal-componentization` | `4a5b339b` | **Superseded.** Its `051` draft was scaffold only; the packet was written in-runtime |
@@ -278,9 +278,9 @@ ticks an operator row.**
    `worktrees/094-impl-053-toolbar` before opening any toolbar file.
 5. Work `050` T002 onward against the **restated** thresholds (ADR-004 **as amended 2026-09-05**),
    never the originals — and note that AC-014's `60` is now ours to argue, not Anytype's to quote.
-6. Before citing a capture path, check `worktrees/096-screenshots-regroup`: the regrouping into
-   platform/subject subfolders is in flight and it rewrites path citations across the spec tree. On a
-   conflict, **their path form, your content**.
+6. Cite captures in the regrouped form (`d486eab9`): `desktop/sets/<use-case>/`, `desktop/app/`,
+   `desktop/menus/`, `mobile/official/`, `mobile/sheets/`, `mobile/app/`. Filenames did not change.
+   `052`'s `design-trueup.md` still carries ~70 bare `menus/` references and is the one file left.
 7. `.worktrees/079-anytype-menus` is still uncommitted and holds desktop dropdown captures; the
    `desktop/menus/` set the true-ups cite is on main.
 <!-- /ANCHOR:session-notes -->
@@ -390,7 +390,7 @@ ticks an operator row.**
   summary. **Nothing was ticked and no operator row was touched.** All six packets stay `0/N`: every
   T001 is done and no T002 has run, so not one threshold has been observed red. `053`'s
   implementation leg is running on codex in `worktrees/094-impl-053-toolbar`; `096-screenshots-regroup`
-  is rewriting capture paths in parallel and its path form wins on a conflict.
+  landed the capture regrouping at `d486eab9` and its path form is the one to cite.
 - **2026-09-05, `orchestrate-handover-19`: five family phases landed.** `051`-`055` opened from the
   operator's componentization instruction, four drafted by GLM 5.3 flash through cli-pi in parallel
   worktrees `080`-`084` and one (`051`) written in-runtime after its leaf died at the scaffold. All
