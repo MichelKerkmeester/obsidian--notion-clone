@@ -9,7 +9,7 @@ _memory:
     packet_pointer: "005-component-surface-system/038-board-kanban-port"
     last_updated_at: "2026-09-05T01:30:00Z"
     last_updated_by: "046-board-line-height"
-    recent_action: "T32's line-height fix landed on main (b42abea0, reconciled 45d000a1); npm run gate 25/25 green"
+    recent_action: "T32's line-height fix landed on main (74a26419); npm run gate 25/25 green"
     next_safe_action: "Operator vault compare (roadmap.md row 37/38), then T8"
     blockers: []
     key_files: ["spec.md", "plan.md", "implementation-summary.md"]

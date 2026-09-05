@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Port obsidian-pm-main's Kanban board near one-to-one into board-renderer.ts: status-column hierarchy, card information density, and hover/drag/drop visual language, rewritten to this repo's RowData/ViewConfig contracts.",
     "created_at": "2026-09-02T21:56:17.102Z",
-    "last_save_at": "2026-09-04T23:50:54.389Z",
+    "last_save_at": "2026-09-05T00:11:48.671Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0f63480b471ae59780f1f6331d6f364de8d4035305f3d4a5bdf62625b77ae1bb",
+    "source_fingerprint": "sha256:722f6273fe054b8bb87f6c2a174b5d1f8a2bdfe85f095896dd3fd086f15220f4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "169448c930dba334c3a4b7e0639eef21eb7fc70f8de0459a37017c5a53352a5a",
       "plan.md": "6519d27a955160cb441921b511e1c005ff2c12ffa3c2756ac5fdb5139479c3e8",
-      "tasks.md": "bd668f4234e0c534561da371157035a522e80e733a38b47fd238f368f1cf5504",
-      "implementation-summary.md": "784025b04df831fd859a461da32198aa9ab3ca1ca0c32606b8cf1e46b50b063a"
+      "tasks.md": "8ee97a805a8dbdd714051831a414f696e3c609bc6154eafe7350f4e06e19626d",
+      "implementation-summary.md": "6332f24e8157384d8a778f20ca55e9a36746603a92e5e87c96db230128e33006"
     },
     "last_active_child_id": null,
     "last_active_at": null

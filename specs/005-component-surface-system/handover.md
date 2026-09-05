@@ -73,7 +73,8 @@ The board came out with line-height-driven gaps instead: `.note-database-contain
 1.45 line-height inflates the count chip, the column header and the subtask parent line 2-3px
 taller than the reference, and the reference's `::-webkit-scrollbar` rules for the board and its
 card list were never copied. The fix (`line-height: normal` reset on the kanban host) has landed
-on main (`b42abea0`, reconciled `45d000a1`); `constructed-board-desktop-dark.png` read beside
+on main (`74a26419`, reconciled `4df2720c`/`b7dc7cf5` across the list hide-and-migrate and
+board-card-properties landings); `constructed-board-desktop-dark.png` read beside
 `reference-kanban-desktop-dark.png` confirms the count pill and every card band now align. Rows 37
 and 38 stay open either way, pending the operator's own vault side-by-side.
 
