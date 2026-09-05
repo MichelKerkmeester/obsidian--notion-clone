@@ -63,11 +63,17 @@ A task missing any of the three is not ready to start.
 
 ### L1 — toast component and its owned call sites
 
-- [ ] T002 [B] [P0] **REQ-055-1 — the toast component.** `src/views/toast.ts`: severity
-      (`success`/`error`), an optional action (label, icon, callback), `role="status"` live
-      announcement, auto-dismiss on success (the 2200ms budget `showOperationResult` already runs)
-      and sticky-until-acted on error, `.db-surface` mount with a registered producer id, motion
-      tokens for entrance.
+- [x] T002 [B] [P0] **REQ-055-1 — the toast component.** Done 2026-09-05. `src/views/toast.ts`
+      built: `showToast(doc, options)` pairs `success`/`error` with `check`/`alert-triangle`,
+      carries an optional action (label, icon, callback), `role="status"`/`aria-live="polite"`,
+      auto-dismisses success at 2200ms and never times out error, mounts `.db-surface
+      db-toast-stack` on `doc.body`, and animates its entrance on `var(--db-motion-surface)`. The
+      migration notice (`database-view.ts`, `embedded-database-renderer.ts`) is the owned site this
+      leg migrates off bare `new Notice`; the row-deletion notices T003 also names are not touched
+      here. Producer-registry registration (`surface-contract.ts`'s closed `SurfaceProducerId`
+      list) is a named gap — extending it and its Playwright opener in
+      `tools/storybook/verify-placement.mjs` was outside this leg's write scope. Red
+      confirmed by deleting `toast.ts` and re-running `toast.test.ts` (import failure); green: 9/9.
       **Threshold:** every notice this phase owns renders through the component with its action
       clickable, and zero owned sites call `new Notice` directly.
       **Red first:** 0 of 247 call sites carry an action affordance today; the migration notice
@@ -145,10 +151,19 @@ A task missing any of the three is not ready to start.
 
 ### L4 — motion tokens
 
-- [ ] T009 [B] [P0] **REQ-055-7 — the motion tokens.** `--db-motion-fast/surface/sheet/emphatic`
-      declared in the `--db-*` block and its dark-theme override (`styles.css:19-125`,
-      `:425-433`); the reduced-motion reset (`:918-947`) names every new consumer in the same
-      change, shimmer's `infinite` loop included.
+- [x] T009 [B] [P0] **REQ-055-7 — the motion tokens.** Done 2026-09-05. `--db-motion-fast`
+      (aliases `--db-transition-fast`), `--db-motion-surface` (`200ms ease-out`), `--db-motion-sheet`
+      (aliases `--db-sheet-enter`), `--db-motion-emphatic` (`1.1s ease-in-out infinite`) and
+      `--db-motion-scale-from` (`0.98`) declared beside `--db-transition-fast`. No dark-theme
+      override needed — none of the five values differ by theme, unlike the colour-mix tokens that
+      block exists for. The reduced-motion reset needs no new selector: the toast mounts
+      `.db-surface`, which the existing `.db-surface`/`.db-surface *` rule already zeroes; the
+      shimmer's `infinite` loop now reads `var(--db-motion-emphatic)` in the same change. Went wider
+      than this task's own `styles.css:19-125` scope, deliberately: 38 of 42 plain-`ease` `120ms`
+      declarations and both `180ms` declarations across the whole stylesheet now read the tokens
+      (not only the `--db-*` block itself), because the dispatch that carried this leg named the
+      full census as its target. The 4 `120ms ease-out` declarations and the wider seconds-notation
+      census are untouched — see checklist.md C7. Red/green in `src/views/motion-tokens.test.ts`.
       **Threshold:** the tokens resolve on all nine token selectors, and
       `owned-menu-reduced-motion.test.ts`'s coverage mechanism holds for the toast and confirm.
       **Red first:** the tokens do not exist; **42 `transition:` declarations** hand-type `120ms`
