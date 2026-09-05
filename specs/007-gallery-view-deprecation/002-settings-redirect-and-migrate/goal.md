@@ -85,21 +85,22 @@ it. Name a conflict rather than resolving it silently.
 Each row is checkable without opening another file, and each records what is true today so the check
 has a value to move from.
 
-- [ ] The settings-load sanitizer coerces a gallery like any other unrecognised type. **Today it
-      does not**: `main.ts:146` and `:182` exempt `gallery` explicitly.
-- [ ] An imported `.base` `cards` view lands on **board**, with the `:1580` schema guard intact,
-      **and a test says so**. **Today the behaviour already holds** (`main.ts:1577`, fixed upstream)
-      **and nothing asserts it**, so a later edit could reintroduce the gallery landing in silence.
-- [ ] A gallery-configured view opens as a board with the same cover, once, with a notice, in the
-      standalone host. **Today this works** — the criterion exists to catch a regression, not
-      because it is new.
-- [ ] The embedded codeblock host either migrates too or carries an ADR saying why not. **Today:
-      one call site (`database-view.ts:11678`), none in `embedded-database-renderer.ts`.**
-- [ ] Every closed surface has a test that was observed red before green, with the failing value
-      recorded.
-- [ ] `npm run gate` exits 0 read from `$?`, never through a pipe.
+- [x] The settings-load sanitizer no longer leaves a loaded gallery as a gallery. Closed by routing
+      it through the real migration (`main.ts:146`, `:182`), not by deleting the exemption the way
+      `006` did — `decision-record.md` ADR-002 explains why that would strand the cover.
+- [x] An imported `.base` `cards` view lands on **board**, with the `:1580` schema guard intact,
+      **and a test says so** — `gallery-hide-and-migrate.test.ts` pins both the mapping line and the
+      image-field carry, so a later edit cannot silently reintroduce the gallery landing.
+- [x] A gallery-configured view opens as a board with the same cover, once, with a notice, in the
+      standalone host — now on the same persisted-notice shape `migrateListViewOnOpen` uses.
+- [x] The embedded codeblock host migrates too — ADR-001 in `decision-record.md`.
+      `embedded-database-renderer.ts` gained `migrateGalleryViewOnOpen(config)`, copying
+      `migrateListViewOnOpen`'s exact shape.
+- [x] Every closed surface has a test that was observed red before green, with the failing value
+      recorded — `tasks.md` T004/T006.
+- [x] `npm run gate` exits 0 read from `$?`, never through a pipe — 25/25 lanes green.
 - [ ] A **released** version number carries this work. Merged is not shipped, and `003` does not
-      start without it.
+      start without it. **Not this dispatch's to cut** — handed to the orchestrator, `tasks.md` T013.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -115,11 +116,13 @@ into the objective, and it is expected to grow.
 | Item | State | Evidence |
 |------|-------|----------|
 | Phase opened | Done | Parent packet opened 2026-09-05; `../spec.md` PHASE DOCUMENTATION MAP |
-| REQ set written from `001` | Blocked | `tasks.md` T001 — `001` has not run |
-| Sanitizer closed | Not started | `tasks.md` T004 |
-| Importer closed | Not started | `tasks.md` T005 |
-| Migration symmetry decided | Not started | `tasks.md` T008, ADR-001 in `plan.md` |
-| Released | Not started | `tasks.md` T013 |
+| REQ set written from `001` | Done | `001/implementation-summary.md` landed; REQ set confirmed against it, `tasks.md` T001 |
+| Sanitizer closed | Done | `tasks.md` T004; `decision-record.md` ADR-002 |
+| Importer closed | Done — already correct, now pinned | `tasks.md` T005 |
+| Migration symmetry decided | Done | `tasks.md` T008, ADR-001 in `decision-record.md` |
+| Declared losses carried where possible | Done | `tasks.md` T007; `gallery-migration.ts` carries fit and aspect ratio, resolves a preset to its number |
+| Gate | Green | `npm run gate` exit 0, 25/25 lanes, `tasks.md` T010 |
+| Released | Not started | `tasks.md` T013 — orchestrator's to cut |
 
 ### Deviations and findings
 

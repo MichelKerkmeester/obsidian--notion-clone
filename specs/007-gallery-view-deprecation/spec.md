@@ -175,7 +175,7 @@ The ones that decide behaviour rather than merely name the string:
 | `src/views/database-view.ts` | 60 | `migrateGalleryViewOnOpen()` at `:2711`, called once at `:11663`. The gallery render branch |
 | `src/views/view-config-panel-renderer.ts` | 37 | The picker filter (`:510`, `:515`), the gallery-only config section (`:470`), and the shared cover-settings renderer (`:1843-1845`, `:1910-1914`) |
 | `src/views/embedded-database-renderer.ts` | 29 | Renders the gallery **and never calls the migration** — see §6 |
-| `src/data/data-source.ts` | 28 | Parses the six `gallery*` fields in two places (`:798-803`, `:978-983`) |
+| `src/data/data-source.ts` | 28 | Parses the six `gallery*` fields in two places (`:798-803`, `:978-983`), and `parseViewType()` (`:1527-1529`) is a **second accepting surface** `001`'s audit found beyond the sanitizer this table already named — it gates every `viewType` parsed from a `db_view: true` file's frontmatter and accepts `"gallery"` today |
 | `src/i18n.ts` | 21 | 21 keys across `en`, `zh-CN` and `zh-TW`, including `notice.galleryMigrated` at `:1456` |
 | `src/data/types.ts` | 15 | `DatabaseViewType` at `:317`; `galleryImageField`, `galleryImageAspectRatio`, `galleryCardSize`, `galleryCardSizePreset`, `galleryImageAspectRatioPreset`, `galleryImageFit` at `:562-574` |
 | `src/main.ts` | 9 | The settings sanitizer at `:146`/`:182`, which still exempts `gallery` from the unknown-type coercion. The `.base` importer at `:1571-1641` **already lands on `board`** (`:1577`) and keeps gallery-named locals (`:1578`, `:1580`, `:1583`, `:1641`) |
@@ -185,6 +185,12 @@ The ones that decide behaviour rather than merely name the string:
 The remaining 32 files carry one or two mentions each — mostly a `viewType === "gallery"` branch, a
 test fixture name, or a doc comment. `001` enumerates them; this table names the ones that hold a
 decision.
+
+**Correction from `001`'s audit (`implementation-summary.md` §7):** `src/settings.ts:79`'s
+`DEFAULT_VIEW_TYPES` is a **third already-closed minting surface**, undocumented until the audit
+read it — its own comment states "Gallery and list stay out... never offered when creating
+something new." It needed no action, the same way the two pickers `030` already closed needed none;
+it is named here so the enumeration is complete rather than because it is open.
 
 ### 4.3 `tools/` — 31 files mention the gallery
 
