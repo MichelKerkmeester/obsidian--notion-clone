@@ -47,8 +47,8 @@ export function installPopoverAutoClose(options: PopoverAutoCloseOptions): () =>
     anchor: options.anchorEl,
     parentId: options.parentId,
     close: options.close,
-    closeOnOutsidePointerDown: options.closeOnOutsidePointerDown,
-    closeOnEscape: options.closeOnEscape,
+    closeOnOutsidePointerDown: options.closeOnOutsidePointerDown ?? true,
+    closeOnEscape: options.closeOnEscape ?? true,
   });
   let cleaned = false;
   return () => {

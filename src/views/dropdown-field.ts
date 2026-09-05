@@ -16,8 +16,9 @@
 import { setIcon } from "obsidian";
 import { isImeComposing } from "../data/keyboard-utils";
 import { t } from "../i18n";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. STATE
@@ -187,6 +188,7 @@ export function openDropdownMenu(options: DropdownMenuOptions): () => void {
 function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions, valueEl: HTMLElement, close: () => void): () => void {
   const contextClass = getDropdownPopoverContextClass(anchor);
   const host = getDropdownPopoverHost(anchor);
+  const phoneSheet = isMobileBottomSheet(anchor.ownerDocument);
   const searchable = options.searchable === true && options.options.length > 8;
   const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${searchable ? " is-searchable" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
   const popupId = `db-dropdown-${++nextDropdownId}`;
@@ -194,6 +196,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   panel.setAttr("role", "listbox");
   panel.setAttr("aria-label", options.label);
   anchor.setAttr("aria-controls", popupId);
+  if (phoneSheet) createSheetHeader(panel, { title: options.label, onClose: close });
   let searchInput: HTMLInputElement | undefined;
   if (searchable) {
     const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
@@ -209,7 +212,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   }
   // When searchable, options live in their own scroll container so the search box stays
   // fixed at the top (no sticky drift). Otherwise the panel itself scrolls.
-  const optionsHost = searchable ? panel.createDiv({ cls: "db-dropdown-options" }) : panel;
+  const optionsHost = searchable || phoneSheet ? panel.createDiv({ cls: "db-dropdown-options" }) : panel;
   let currentSection = "";
   let currentSectionEl: HTMLElement | undefined;
   const sectionRows: DropdownRow[] = [];
@@ -300,6 +303,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
       const visibleRows = filterDropdownOptions(sectionRows, searchInput?.value || "", emptyRow);
       activeIndex = visibleRows.length ? sectionRows.indexOf(visibleRows[0]) : -1;
       syncActiveOption();
+      updateScrollAffordance();
     };
     searchInput.onkeydown = (event) => {
       if (isImeComposing(event)) return;
@@ -321,10 +325,18 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     };
     window.setTimeout(() => searchInput?.focus(), 0);
   }
+  const updateScrollAffordance = (): void => {
+    if (!phoneSheet) return;
+    const canScroll = optionsHost.scrollHeight > optionsHost.clientHeight + 1;
+    const atEnd = optionsHost.scrollTop + optionsHost.clientHeight >= optionsHost.scrollHeight - 1;
+    panel.toggleClass("has-scroll-overflow", canScroll && !atEnd);
+  };
+  if (phoneSheet) optionsHost.addEventListener("scroll", updateScrollAffordance, { passive: true });
   positionToolbarPopover(panel, anchor, { preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6 });
   if (!searchInput) {
     syncActiveOption(true);
   }
+  if (phoneSheet) window.setTimeout(updateScrollAffordance, 0);
 
   const onKeydown = (event: KeyboardEvent) => {
     if (isImeComposing(event) || event.target === searchInput) return;
@@ -365,6 +377,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: anchor, close });
   return () => {
     panel.removeEventListener("keydown", onKeydown);
+    if (phoneSheet) optionsHost.removeEventListener("scroll", updateScrollAffordance);
     if (typeaheadTimer !== undefined) window.clearTimeout(typeaheadTimer);
     removeAutoClose();
     anchor.removeAttribute("aria-controls");
@@ -377,7 +390,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
 // ───────────────────────────────────────────────────────────────────
 
 function getDropdownPopoverHost(anchor: HTMLElement): HTMLElement {
-  if (anchor.closest(".note-database-settings, .note-database-modal")) return anchor.ownerDocument.body;
+  if (anchor.closest(".db-mobile-bottom-sheet, .note-database-settings, .note-database-modal")) return anchor.ownerDocument.body;
   const container = anchor.closest(".note-database-container");
   if (container instanceof HTMLElement) return container;
   return anchor.parentElement || anchor;

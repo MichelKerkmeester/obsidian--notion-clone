@@ -28,8 +28,7 @@ import { getVaultProperties, VaultProperty } from "../data/vault-properties";
 import { createConditionalFormatLeaf, getConditionalFormatCondition, isConditionalFormatOperator } from "../data/conditional-format-editor";
 import { t } from "../i18n";
 import { COMPACT_MENU_POPOVER, isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
-import { carrySheetEntrance } from "./mobile-bottom-sheet";
-import { overlayStack } from "./overlay-stack";
+import { carrySheetEntrance, createSheetHeader } from "./mobile-bottom-sheet";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
 import { createCheckbox } from "./checkbox";
@@ -324,41 +323,6 @@ export class ViewConfigPanelRenderer {
     if (host) host.scrollTop = savedScroll;
   }
 
-  /**
-   * The sheet's own way out, beside its title.
-   *
-   * A phone sheet closes by a drag from a band at its very top, and that is the whole of it on this
-   * surface today. It is the wrong sole affordance for a form this long: the band is the only
-   * dismissal, it is 48px of a 760px sheet, and the operator reported the sheet as one they could
-   * not close. A button in the header is the answer every other sheet grammar already reaches for.
-   *
-   * Dismissal is not reinvented here. It is handed to the overlay stack, which is the same close
-   * the backdrop, Escape and the drag gesture all run through, so a surface with an owner is closed
-   * by that owner rather than by this button deciding what closing means. A surface that registered
-   * nothing has no owner to ask, and removing the panel is then the honest answer — the sheet
-   * module takes the backdrop down with it.
-   *
-   * Only on a sheet. The anchored panel has an anchor to press again and a backdrop-free surface
-   * that never trapped anybody, and adding a control there would change a surface nobody reported.
-   *
-   * Carries `db-sheet-close` alongside its own `db-view-config-close`, additively: the sheet-grammar
-   * contract (`sheet-grammar.ts`'s `hasSheetHeader`) checks for that shared class, and this control's
-   * own 44px sizing and dismissal already satisfy the same floor under its own name — the second
-   * class makes that conformance legible to the lane rather than changing what the button does.
-   */
-  private renderSheetClose(header: HTMLElement, panel: HTMLElement): void {
-    const actionsEl = header.createDiv({ cls: "db-panel-header-actions" });
-    const close = actionsEl.createEl("button", {
-      cls: "db-icon-only-button db-view-config-close db-sheet-close",
-      attr: { type: "button", "aria-label": t("common.close") },
-    });
-    setIcon(close, "x");
-    close.onclick = () => {
-      if (overlayStack.dismissPanel(panel, "programmatic")) return;
-      panel.remove();
-    };
-  }
-
   render(
     containerEl: HTMLElement,
     visible: boolean,
@@ -383,9 +347,15 @@ export class ViewConfigPanelRenderer {
     // is what keeps the sheet from replaying its rise and moving out from under the thumb.
     if (wasOpen) carrySheetEntrance(panel);
     this.asSheet = isMobileBottomSheet(panel.ownerDocument);
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
-    if (this.asSheet) this.renderSheetClose(header, panel);
+    if (this.asSheet) {
+      createSheetHeader(panel, {
+        title: t("toolbar.settings"),
+        onClose: () => panel.remove(),
+      });
+    } else {
+      const header = panel.createDiv({ cls: "db-panel-header" });
+      header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
+    }
 
     // Everything below the header scrolls; the header and the grab bar above it do not.
     //

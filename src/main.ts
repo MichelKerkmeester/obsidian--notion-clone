@@ -50,6 +50,7 @@ import { isElement } from "./views/dom-guards";
 import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/hover-link-preview";
 import { DbModal } from "./views/modals/db-modal";
 import { attachSheetChromeToModal } from "./views/mobile-bottom-sheet";
+import { keepSheetPlaced, placeSheet } from "./views/popover-position";
 import { isTouchDevice } from "./data/touch-environment";
 
 // ───────────────────────────────────────────────────────────────────
@@ -3019,6 +3020,7 @@ class CsvMarkdownImportModal extends DbModal {
 
 class BaseFileSuggestModal extends FuzzySuggestModal<TFile> {
   private releaseSheetChrome: (() => void) | undefined;
+  private releaseSheetPlacement: (() => void) | undefined;
 
   constructor(
     app: App,
@@ -3041,16 +3043,25 @@ class BaseFileSuggestModal extends FuzzySuggestModal<TFile> {
   onOpen(): void {
     void super.onOpen();
     this.titleEl.setText(t("baseImport.chooseBaseFile"));
-    // The suggest behaviour is Obsidian's and stays; only the modal's own element wears the
-    // sheet chrome, the same move the plugin's modal base makes for its own subclasses.
+    const asSheet = isTouchDevice(this.contentEl);
     this.releaseSheetChrome = attachSheetChromeToModal(
       this.modalEl,
-      isTouchDevice(this.contentEl),
+      asSheet,
       () => this.close(),
+      {
+        title: t("baseImport.chooseBaseFile"),
+        getTitle: () => this.titleEl?.textContent?.trim() || t("baseImport.chooseBaseFile"),
+      },
     );
+    if (asSheet) {
+      placeSheet(this.modalEl);
+      this.releaseSheetPlacement = keepSheetPlaced(this.modalEl);
+    }
   }
 
   onClose(): void {
+    this.releaseSheetPlacement?.();
+    this.releaseSheetPlacement = undefined;
     this.releaseSheetChrome?.();
     this.releaseSheetChrome = undefined;
     super.onClose();

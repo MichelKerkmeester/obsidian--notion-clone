@@ -505,7 +505,10 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   if (sheet) {
     // The shared scrim is the backdrop here, and it takes the tap: dismissing the adjuster must
     // not also edit a cell underneath on the way out.
-    applySheetChrome(panel, true, { scrimCapturesPointer: true });
+    applySheetChrome(panel, true, {
+      scrimCapturesPointer: true,
+      close,
+    });
     placeSheet(panel);
     releasePlacement = keepSheetPlaced(panel);
     playSheetEntrance(panel);

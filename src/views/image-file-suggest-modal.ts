@@ -10,6 +10,7 @@
 import { App, FuzzySuggestModal, TFile } from "obsidian";
 import { isTouchDevice } from "../data/touch-environment";
 import { attachSheetChromeToModal } from "./mobile-bottom-sheet";
+import { keepSheetPlaced, placeSheet } from "./popover-position";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -27,7 +28,7 @@ export class ImageFileSuggestModal extends FuzzySuggestModal<TFile> {
   constructor(
     app: App,
     private readonly onChoose: (file: TFile) => void,
-    placeholder: string,
+    private readonly placeholder: string,
   ) {
     super(app);
     this.setPlaceholder(placeholder);
@@ -35,20 +36,31 @@ export class ImageFileSuggestModal extends FuzzySuggestModal<TFile> {
 
   onOpen(): void {
     void super.onOpen();
-    // The suggest behaviour is Obsidian's and stays; only the modal's own element wears the
-    // sheet chrome, the same move the plugin's modal base makes for its own subclasses.
+    const asSheet = isTouchDevice(this.contentEl);
     this.releaseSheetChrome = attachSheetChromeToModal(
       this.modalEl,
-      isTouchDevice(this.contentEl),
+      asSheet,
       () => this.close(),
+      {
+        title: this.placeholder,
+        getTitle: () => this.titleEl?.textContent?.trim() || this.placeholder,
+      },
     );
+    if (asSheet) {
+      placeSheet(this.modalEl);
+      this.releaseSheetPlacement = keepSheetPlaced(this.modalEl);
+    }
   }
 
   onClose(): void {
+    this.releaseSheetPlacement?.();
+    this.releaseSheetPlacement = undefined;
     this.releaseSheetChrome?.();
     this.releaseSheetChrome = undefined;
     super.onClose();
   }
+
+  private releaseSheetPlacement: (() => void) | undefined;
 
   getItems(): TFile[] {
     return this.app.vault.getFiles()

@@ -46,9 +46,10 @@ import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonly
 import { getRenamedMarkdownPath } from "../data/file-rename-plan";
 import { ColumnDef, ComputedFieldDef, RowData, StatusOptionDef } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
-import { clamp, getVisiblePopoverBounds, resolveAnchoredPopoverTop, resolvePopoverHorizontalLeft, setPosition } from "./popover-position";
+import { clamp, getVisiblePopoverBounds, isMobileBottomSheet, resolveAnchoredPopoverTop, resolvePopoverHorizontalLeft, setPosition } from "./popover-position";
 import { positionToolbarPopover } from "./popover-position";
 import { claimBottomDock } from "./mobile-bottom-sheet";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { openDropdownMenu } from "./dropdown-field";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { setFieldTooltip } from "./field-tooltip";
@@ -937,8 +938,20 @@ export class CellRenderer {
     const popover = host.createDiv({ cls: "db-cell-option-popover db-relation-popover" });
     popover.setAttr("role", "dialog");
     popover.setAttr("aria-label", col.label || col.key);
+    let closed = false;
+    let removeAutoClose: (() => void) | undefined;
+    const close = () => {
+      if (closed) return;
+      closed = true;
+      removeAutoClose?.();
+      popover.remove();
+      if (this.activeOptionPopoverClose === close) this.activeOptionPopoverClose = undefined;
+      session?.onClose?.();
+    };
+    const phoneSheet = isMobileBottomSheet(host.ownerDocument);
+    if (phoneSheet) createSheetHeader(popover, { title: col.label || col.key, onClose: close });
     const header = popover.createDiv({ cls: "db-relation-popover-header" });
-    header.createDiv({ cls: "db-relation-popover-title", text: col.label || col.key });
+    if (!phoneSheet) header.createDiv({ cls: "db-relation-popover-title", text: col.label || col.key });
     const search = header.createEl("input", {
       cls: "db-cell-option-search",
       attr: { type: "search", placeholder: t("relation.search"), "aria-label": t("relation.search"), "aria-autocomplete": "list" },
@@ -953,20 +966,10 @@ export class CellRenderer {
     const clear = footer.createEl("button", { text: t("common.clear"), cls: "db-relation-clear", attr: { type: "button" } });
     const actions = footer.createDiv({ cls: "db-relation-footer-actions" });
     const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta db-relation-footer-button", attr: { type: "button" } });
-    let closed = false;
-    let removeAutoClose: (() => void) | undefined;
     let activeIndex = 0;
     const rowHeight = 34;
     const windowSize = 80;
     let scrollFrame: number | undefined;
-    const close = () => {
-      if (closed) return;
-      closed = true;
-      removeAutoClose?.();
-      popover.remove();
-      if (this.activeOptionPopoverClose === close) this.activeOptionPopoverClose = undefined;
-      session?.onClose?.();
-    };
     const getFilteredRecords = () => {
       const query = search.value.trim().toLowerCase();
       return records.filter((record) => {

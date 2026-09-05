@@ -29,7 +29,10 @@
 
 import { App, Modal } from "obsidian";
 import { isTouchDevice } from "../../data/touch-environment";
-import { applySheetChrome, attachSheetDragToDismiss } from "../mobile-bottom-sheet";
+import { t } from "../../i18n";
+import { applySheetChrome, attachSheetChromeToModal } from "../mobile-bottom-sheet";
+import { keepSheetPlaced, placeSheet } from "../popover-position";
+import { overlayStack } from "../overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -52,7 +55,8 @@ export const DB_MODAL_FULLSCREEN_CLASS = "db-modal-fullscreen";
 // ───────────────────────────────────────────────────────────────────
 
 export class DbModal extends Modal {
-  private releaseSheetDrag?: () => void;
+  private releaseSheetChrome?: () => void;
+  private releaseSheetPlacement?: () => void;
 
   constructor(app: App, private readonly presentation: DbModalPresentation = "sheet") {
     super(app);
@@ -64,34 +68,47 @@ export class DbModal extends Modal {
   }
 
   onClose(): void {
-    this.releaseSheetDrag?.();
-    this.releaseSheetDrag = undefined;
+    this.releaseSheetPlacement?.();
+    this.releaseSheetPlacement = undefined;
+    this.releaseSheetChrome?.();
+    this.releaseSheetChrome = undefined;
+    // Take the chrome down whether or not a handle was held. The backdrop is a body sibling, so a
+    // modal that closes by a path which never stored a teardown strands it over the whole app,
+    // where it swallows every tap. `applySheetChrome` is idempotent, so asserting the off state
+    // costs nothing on the ordinary path and is the only thing that runs on the unusual one.
     applySheetChrome(this.modalEl, false);
+  }
+
+  protected getSheetTitle(): string {
+    const heading = Array.from(this.contentEl.querySelectorAll<HTMLElement>("h1, h2, h3"))
+      .find((candidate) => !candidate.closest(".db-sheet-modal-header"))
+      ?.textContent?.trim();
+    return heading || t("menu.title");
   }
 
   /** Re-apply after a layout change, such as rotation moving the surface across the touch boundary. */
   protected applyPresentation(): void {
     const touch = isTouchDevice(this.contentEl);
-    const asSheet = touch && this.presentation === "sheet";
-    const asFullscreen = touch && this.presentation === "fullscreen";
+    const hasSheetParent = Boolean(overlayStack.getTopSurfaceForDocument(this.modalEl.ownerDocument, { sheetsOnly: true }));
+    const asSheet = touch && (this.presentation === "sheet" || hasSheetParent);
+    const asFullscreen = touch && this.presentation === "fullscreen" && !hasSheetParent;
 
-    applySheetChrome(this.modalEl, asSheet);
     this.modalEl.toggleClass(DB_MODAL_FULLSCREEN_CLASS, asFullscreen);
-
-    // This call is what draws the grab bar, and that ordering is the point.
-    //
-    // Asking for `sheet` used to give a modal a bar and no gesture, on every one of the surfaces
-    // that present this way — an affordance that says the sheet can be pulled down and then ignores
-    // the thumb, which reads as a frozen app rather than a missing feature. The bar now comes from
-    // the gesture, so a modal that skipped this line would get no bar rather than a dead one.
-    //
-    // `this.close()` rather than `super.close()` on purpose. One modal here overrides `close()` to
-    // raise a confirm dialog before discarding edits, and a drag has to go through that override
-    // for the same reason the button does — otherwise the gesture becomes the one way to lose work
-    // silently.
-    this.releaseSheetDrag?.();
-    this.releaseSheetDrag = undefined;
-    if (!asSheet) return;
-    this.releaseSheetDrag = attachSheetDragToDismiss(this.modalEl, () => this.close());
+    this.releaseSheetPlacement?.();
+    this.releaseSheetPlacement = undefined;
+    this.releaseSheetChrome?.();
+    this.releaseSheetChrome = undefined;
+    if (!asSheet) {
+      applySheetChrome(this.modalEl, false);
+      return;
+    }
+    this.releaseSheetChrome = attachSheetChromeToModal(
+      this.modalEl,
+      true,
+      () => this.close(),
+      { getTitle: () => this.getSheetTitle() },
+    );
+    placeSheet(this.modalEl);
+    this.releaseSheetPlacement = keepSheetPlaced(this.modalEl);
   }
 }

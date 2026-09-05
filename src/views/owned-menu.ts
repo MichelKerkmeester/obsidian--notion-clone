@@ -195,7 +195,10 @@ export function createOwnedMenu(
         // The backdrop takes the tap on this surface. A menu dismisses on an outside press, so an
         // inert backdrop means the press that closes the menu also lands on the table underneath
         // and starts editing a cell on the way out.
-        applySheetChrome(el, true, { scrimCapturesPointer: true });
+        applySheetChrome(el, true, {
+          scrimCapturesPointer: true,
+          close: () => close(),
+        });
         placeSheet(el);
         // And keep it placed. A single call fixes the sheet at whatever the keyboard inset was when
         // it opened, so a menu opened over an open keyboard stays lifted after it closes, and one

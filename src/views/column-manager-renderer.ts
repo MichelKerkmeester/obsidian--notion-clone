@@ -21,8 +21,8 @@ import { applyRangeSelection } from "../data/range-selection";
 import { ColumnDef, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { getFileFieldFixedType, QUICK_ADD_FILE_FIELDS } from "../data/file-fields";
-import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
-import { carrySheetEntrance } from "./mobile-bottom-sheet";
+import { isMobileBottomSheet, PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { carrySheetEntrance, createSheetHeader } from "./mobile-bottom-sheet";
 import { getPropertyDropdownIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { isHTMLElement } from "./dom-guards";
@@ -162,20 +162,31 @@ export class ColumnManagerRenderer {
     state: DatabaseViewState,
     actions: ColumnManagerActions
   ): void {
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createSpan({ text: t("toolbar.properties"), cls: "db-panel-title" });
-    const right = header.createDiv({ cls: "db-panel-header-actions" });
-    const toggleLabel = right.createEl("label", { cls: "db-column-manager-toggle-all" });
-    const toggleAll = createCheckbox(toggleLabel, { role: "field" });
-    const visibleCount = columns.filter((col) => !state.hiddenColumns.has(col.key)).length;
-    toggleAll.checked = visibleCount === columns.length;
-    toggleAll.indeterminate = visibleCount > 0 && visibleCount < columns.length;
-    toggleAll.onchange = () => {
-      actions.setAllColumnsVisible(toggleAll.checked);
-      const selectableKeys = this.getColumnVisibilityKeys(columns, config, state);
-      this.lastSelectedColumnVisibilityKey = toggleAll.checked ? selectableKeys[selectableKeys.length - 1] || null : null;
+    const addToggle = (header: HTMLElement): void => {
+      const right = header.createDiv({ cls: "db-panel-header-actions" });
+      const toggleLabel = right.createEl("label", { cls: "db-column-manager-toggle-all" });
+      const toggleAll = createCheckbox(toggleLabel, { role: "field" });
+      const visibleCount = columns.filter((col) => !state.hiddenColumns.has(col.key)).length;
+      toggleAll.checked = visibleCount === columns.length;
+      toggleAll.indeterminate = visibleCount > 0 && visibleCount < columns.length;
+      toggleAll.onchange = () => {
+        actions.setAllColumnsVisible(toggleAll.checked);
+        const selectableKeys = this.getColumnVisibilityKeys(columns, config, state);
+        this.lastSelectedColumnVisibilityKey = toggleAll.checked ? selectableKeys[selectableKeys.length - 1] || null : null;
+      };
+      toggleLabel.createSpan({ text: t("panel.all") });
     };
-    toggleLabel.createSpan({ text: t("panel.all") });
+    if (isMobileBottomSheet(panel.ownerDocument)) {
+      createSheetHeader(panel, {
+        title: t("toolbar.properties"),
+        onClose: () => actions.close(),
+        beforeClose: addToggle,
+      });
+    } else {
+      const header = panel.createDiv({ cls: "db-panel-header" });
+      header.createSpan({ text: t("toolbar.properties"), cls: "db-panel-title" });
+      addToggle(header);
+    }
   }
 
   // ───────────────────────────────────────────────────────────────────

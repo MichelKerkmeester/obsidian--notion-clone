@@ -16,7 +16,6 @@ import type { DataSource } from "../../data/data-source";
 import type { DatabaseViewType } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
-import { createSheetHeader } from "../mobile-bottom-sheet";
 import { getViewTypeOptions } from "../toolbar-renderer";
 import type { EmbeddedDatabaseEntry } from "../embedded-database-renderer";
 import {
@@ -53,13 +52,13 @@ export class CreateLinkedViewModal extends DbModal {
     this.renderForm();
   }
 
+  protected getSheetTitle(): string {
+    return t("linkedView.title");
+  }
+
   private renderForm(): void {
     const { contentEl } = this;
     contentEl.empty();
-    createSheetHeader(contentEl, {
-      title: t("linkedView.title"),
-      onClose: () => this.close(),
-    });
 
     const dbRow = contentEl.createDiv({ cls: "db-panel-row" });
     createDropdownField({
