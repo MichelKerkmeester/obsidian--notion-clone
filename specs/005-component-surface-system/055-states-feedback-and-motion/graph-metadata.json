@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/055-states-feedback-and-motion",
+  "spec_folder": "005-component-surface-system/055-states-feedback-and-motion",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "055 spec",
+      "states feedback spec",
+      "state vocabulary",
+      "motion spec",
+      "toast component",
+      "055 plan",
+      "states feedback plan",
+      "toast plan",
+      "motion leg",
+      "055 tasks",
+      "states feedback tasks",
+      "toast tasks"
+    ],
+    "key_topics": [
+      "spec",
+      "states",
+      "feedback",
+      "state",
+      "vocabulary",
+      "motion",
+      "toast",
+      "component",
+      "plan",
+      "leg",
+      "tasks",
+      "every"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "src/views/empty-state-renderer.ts",
+      "src/views/chart-renderer.ts",
+      "src/views/modals/confirm-modal.ts",
+      "src/views/row-menu.ts",
+      "src/views/bulk-edit-field-menu.ts",
+      "src/views/view-state-store.ts",
+      "src/views/embedded-database-renderer.ts",
+      "src/views/database-view.ts",
+      "repo-rules/screenshot-currency.md",
+      "tools/live/sheet-grammar.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "empty-state-renderer.ts",
+        "kind": "code",
+        "path": "src/views/empty-state-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "chart-renderer.ts",
+        "kind": "code",
+        "path": "src/views/chart-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/confirm-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "row-menu.ts",
+        "kind": "code",
+        "path": "src/views/row-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "bulk-edit-field-menu.ts",
+        "kind": "code",
+        "path": "src/views/bulk-edit-field-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-state-store.ts",
+        "kind": "code",
+        "path": "src/views/view-state-store.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "screenshot-currency.md",
+        "kind": "doc",
+        "path": "repo-rules/screenshot-currency.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Scope Boundary",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Project Manager",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context Seven",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Every surface has states; nothing owns them",
+    "created_at": "2026-09-05T11:08:14Z",
+    "last_save_at": "2026-09-05T12:19:38.077Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:914378047933bd73cb0099740cd2a3911e44450a921a0819fb17598ed44b6c4f",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "0a08ec3abe416c7577947969b77b097e27703925833bcc91a4a9e850b2ed6477",
+      "plan.md": "bab64bf00364fa853f9cbb26472331a9ac8d34b4e8dff0687cf5aabe237cbddd",
+      "tasks.md": "caff1c1b7da430c8700041694bcbf66257419e331a1a1486da3898f1e41762f2",
+      "decision-record.md": "baa00e3835531c5cd78adf1d3f14c6a2699bf4e828aec59b2c896bc6a3381a50"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

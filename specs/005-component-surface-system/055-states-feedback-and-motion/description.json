@@ -1,0 +1,25 @@
+{
+  "specFolder": "005-component-surface-system/055-states-feedback-and-motion",
+  "description": "One state and feedback vocabulary for every surface \u2014 empty (no-source / no-matches / deleted-relation), loading, error, success notice with an undo affordance, destructive confirm \u2014 reduced to shared primitives: one empty-state component absorbing chart's private vocabulary, one toast component with severity and an action slot, one confirm primitive carrying 044's sheet grammar and 048's stacking, one motion-token set with reduced-motion coverage. Implements 050 items 5, 8, 9 and 14 at their recorded thresholds.",
+  "keywords": [
+    "phase",
+    "states-feedback-and-motion",
+    "state-vocabulary",
+    "empty-states",
+    "toast",
+    "confirm",
+    "undo",
+    "motion-tokens",
+    "reduced-motion",
+    "anytype-adoption"
+  ],
+  "lastUpdated": "2026-09-05T14:00:00.000Z",
+  "specId": "055",
+  "folderSlug": "states-feedback-and-motion",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
