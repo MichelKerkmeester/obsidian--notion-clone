@@ -322,6 +322,24 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       the trailing check is now a blue tick icon rather than the ASCII glyph, position
       unchanged (already after the label, per G14's own finding that ours was leading only in
       the *option colour picker* and *dropdown field*, not here).
+      **Corrected 2026-09-06, verify-and-land.** The "position unchanged" clause above was
+      wrong, and the leg's own capture said so: at `ae0477cb`,
+      `constructed-cell-editor-select-desktop-dark.png` puts the drag handle at x793 against
+      `origin/main`'s x758 and the popover's right edge at x1053 against x1030. Adding
+      `db-menu-item` to a row that had never carried it handed three rules of the shared menu
+      grammar a surface none of them was measured against — the icon-slot `::before` spacer
+      (16px plus the row's 8px gap, ahead of the drag handle, every row, both platforms),
+      `.is-phone .db-menu-item.db-menu-item` (44px min-height and 16px inline padding, which
+      pushed the phone row's three leading controls inward and grew the list until its own
+      `Clear` footer fell off the popover), and `.db-mobile-bottom-sheet .db-menu-item`'s
+      `::after` hairline (a second divider under the `border-bottom` this row already draws).
+      All three are declined in the option editor's own scoped block in `styles.css`, at the
+      specificity each generic rule actually carries — the spacer rule is four classes deep, so
+      a two-class override loses to it silently. Post-fix the desktop and phone frames are
+      geometrically identical to `origin/main`'s in both themes, with the icon check as the
+      only change. The fixture at `tools/screenshots/scenarios/fields.mjs` had also drifted from
+      the shipped class list and is corrected in the same commit; it now carries `db-menu-item`,
+      the checkable role and state, and the builder's label class.
 - [x] T011 Relation editor onto the picker host (`src/views/cell-renderer.ts:899`): search, list,
       footer onto the host; checkmark unified **and moved trailing** (G14) — the `✓` text node at
       `cell-renderer.ts:1420`, `:1478`, `:1483` is deleted rather than restyled, because a text glyph
@@ -376,12 +394,31 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       shipped). **Fable review P1 #9, red first**: the phone swatch measured 18×18px, no
       `.db-mobile-bottom-sheet` override existed for it at all — green at
       `.db-mobile-bottom-sheet .db-color-picker-body .db-color-picker-swatch { width: 44px; height:
-      44px; }` (checklist C11). `npx tsc --noEmit` 0; `npx vitest run` 1311/1311 (10 new
-      `popover-host.test.ts` cases exercising the unified navigator on both grid shapes). Captures:
+      44px; }` (checklist C11). `npx tsc --noEmit` 0; `npx vitest run` green (3 new
+      `popover-host.test.ts` cases, 14 assertions, exercising the unified navigator on both grid
+      shapes). **Corrected 2026-09-06**: this read "10 new cases" and "1311/1311"; the file gains
+      three `it` blocks and the suite total moved with the rebase, so the count is stated as the
+      cases added rather than as a total that goes stale on the next landing. The three cases are
+      characterisation tests written against both legacy grids' shapes, not a harness that runs
+      the two deleted functions — negative control observed 2026-09-06: inverting the
+      nearest-by-x tiebreak in `getGridNavigationTarget` turns 2 of the 3 red (`2 failed |
+      8 passed`), and restoring it returns 10/10. Captures:
       `field-date-value-picker`, `field-icon-picker` unchanged (their widths hold the same numbers
       the roles now name, so neither moved a pixel); `field-option-color-picker-*` and
       `constructed-option-color-picker-*` re-taken in both themes and both device profiles and
-      opened — the trailing tick and the 44px phone grid both read correctly; `constructed-cell-
+      opened — the trailing tick reads correctly in both themes (`mix-blend-mode: difference`
+      resolving yellow on blue in light and near-black on pale blue in dark). **Corrected
+      2026-09-06**: the 44px phone grid is **not** in the `field-*` pair, which photographs the
+      anchored desktop popover at 18px on both device profiles; the capture that evidences
+      review P1 #9 is `constructed-option-color-picker-mobile-dark/-light`, which mounts the real
+      renderer and shows the sheet presentation — grab handle, header, and sixteen 44px swatches
+      wrapping on `.db-color-picker-body`. Opened and read.
+      Named and left alone: that same frame shows the picker's sheet header is not laid out — its
+      close button sits against the title rather than at the trailing edge, because
+      `.db-panel-header`'s `display: flex`/`justify-content: space-between` is scoped under
+      `.note-database-container` and this picker is created on `document.body`. It predates this
+      leg (the pre-T012 code called `createSheetHeader` on the same root) and is a shared-header
+      question, not this row's; `constructed-cell-
       editor-select-*` and `field-cell-edit-select-*` also moved (T010's check-icon change) and were
       opened in the same pass. `screenshots:verify` and `check-lane` (`SURFACE_PHASE=052-dropdown-
       menu-and-picker-componentization`) both exit 0 with the 13 real content moves named in
