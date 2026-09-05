@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-05T21:25:00Z"
+    last_updated_at: "2026-09-06T00:05:00Z"
     last_updated_by: "implementation-verifier"
-    recent_action: "Fixed the review's P0 row-pitch defect; row-0-under-header stays device-only"
+    recent_action: "Rebased, re-derived evidence, corrected the row-0 mechanism and pitch claim"
     next_safe_action: "Operator reads the released build on device to close AC-007"
     blockers:
       - "AC-002's not-clipped half and AC-005 need a device pass; the constructed host cannot reproduce the code-block clipping"
@@ -231,12 +231,19 @@ reaches the move path while a toolbar-button press/drag does not.
    height against the standalone one's. **Fixed**, red first (`tools/live/unstyled-links.mjs`'s
    constructed pass, 1999 findings before, 0 after — see `checklist.md` C8 and
    `acceptance-criteria.md` AC-002 for the full evidence). The second half — row 0 sitting under
-   the sticky header — is still open and is still a stand-in artefact: this scenario mounts
-   `TableRenderer` directly with no `EmbeddedDatabaseRenderer` and no `.db-header`, so it never
-   runs `updateStickyOffsets()` (`embedded-database-renderer.ts:1842`), the seam that measures a
-   real header's rendered height and writes `--db-table-header-top` from it. Absent that, the
-   container falls back to `runtime-vars.css`'s fixed 22px stand-in for every capture rather than
-   the 0px a header-less mount should carry. Recorded as device-only; not chased in this pass.
+   the sticky header — is still open and is still a stand-in artefact, though not for the reason
+   first recorded. Measured live in the same host, the linked view's `thead` computes
+   `top: 20px` and covers exactly 20px of row 0, identically before and after this fix. The
+   producer is the embed's own sticky rule, `.note-database-embed.note-database-container
+   .db-table thead { top: calc(var(--db-table-header-top) - 2px) }` (`styles.css:16274`), which
+   resolves to 22 - 2 against `runtime-vars.css`'s 22px stand-in where the standalone rule
+   (`styles.css:5415`) subtracts a full 22px and lands on 0. The stand-in itself is therefore
+   correct; what the harness omits is the `note-database-embed-headerless` class that zeroes that
+   rule (`styles.css:16278`), because this scenario mounts `TableRenderer` directly with no
+   `EmbeddedDatabaseRenderer` and so runs neither the class toggle
+   (`embedded-database-renderer.ts:696`) nor `updateStickyOffsets()` (`:1842`), which writes the
+   measured header height into `--db-table-header-top` (`:1847`). Recorded as device-only; not
+   chased in this pass.
 
 3. **Device confirmation remains open.** The source and stylesheet tests prove the handle binding,
    but the operator still needs to read the phone target and the released page. The constructed
@@ -283,14 +290,16 @@ embed.
 `.note-database-embed.note-database-container table.db-table tr.db-row-insert-line > td { height:
 0; border: 0; }`, added immediately after the rule it ties with.
 
-**Row 0 under the header:** does not reproduce as a shipped defect. The reproducing capture mounts
-`TableRenderer` directly with no `EmbeddedDatabaseRenderer` and no `.db-header`, so it never runs
-`updateStickyOffsets()` (`embedded-database-renderer.ts:1842`) and instead carries
-`runtime-vars.css`'s fixed 22px stand-in for every capture. Recorded as device-only, not fixed
-here.
+**Row 0 under the header:** does not reproduce as a shipped defect, and is unchanged by this fix
+(measured live: `thead` `top: 20px`, 20px of row 0 covered, before and after). The producer is the
+embed's own `.db-table thead { top: calc(var(--db-table-header-top) - 2px) }` (`styles.css:16274`)
+against the 22px capture stand-in; the harness never applies `note-database-embed-headerless`
+(`styles.css:16278`), which zeroes it, because it mounts `TableRenderer` directly and so runs
+neither that class toggle (`embedded-database-renderer.ts:696`) nor `updateStickyOffsets()`
+(`:1842`). Recorded as device-only, not fixed here.
 
 **Evidence:** red first in `tools/live/unstyled-links.mjs`'s constructed pass — a new
 `insertLineRows` reading in `chrome-geometry-measure.mjs` (own 4-case unit test) — 1999 findings
 at 34px against a 1px ceiling; 0 after. `checklist.md` C8, `acceptance-criteria.md` AC-002.
-`npx tsc --noEmit` 0, `npx vitest run` 1271/1271, `npm run build` 0, `npm run gate` 25 green.
+`npx tsc --noEmit` 0, `npm test` 1341/1341, `npm run build` 0, `npm run gate` 26/26 green (rebased onto `origin/main` cc5a7ff2; the pre-rebase run measured 25 lanes and 1271 tests).
 <!-- /ANCHOR:roadmap-row-42-fix-note -->
