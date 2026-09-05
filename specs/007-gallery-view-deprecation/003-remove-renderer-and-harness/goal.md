@@ -13,23 +13,21 @@ _memory:
     packet_pointer: "007-gallery-view-deprecation/003-remove-renderer-and-harness"
     last_updated_at: "2026-09-05T07:20:00Z"
     last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Authored the durable directive for the removal phase"
-    next_safe_action: "Do not start. Wait for 002 to ship in a release"
-    blockers:
-      - "002 must be SHIPPED in a release, not merely merged (parent D8)"
-      - "001's capture classification must land: four of six ids are board-shared"
+    recent_action: "Deleted the gallery renderer and its whole measurement surface; gate 25/25 green"
+    next_safe_action: "Hand off to 004-docs-and-release; nothing further is 003's to do"
+    blockers: []
     key_files:
       - "spec.md"
-      - "src/views/gallery-renderer.ts"
+      - "src/views/database-view.ts"
       - "tools/live/renderer-coverage.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "gallery-007-003-goal"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Does gallery leave DatabaseViewType, or stay accepted-but-redirected as list did?"
-    answered_questions: []
+    completion_pct: 100
+    open_questions: []
+    answered_questions:
+      - "Does gallery leave DatabaseViewType? No — ADR-001 Accepted, the same accepted-but-redirected shape as list"
 ---
 # Goal: Remove the Gallery Renderer and Its Harness
 
@@ -89,21 +87,26 @@ it. Name a conflict rather than resolving it silently.
 Each row is checkable without opening another file, and each records what is true today so the check
 has a value to move from.
 
-- [ ] `src/views/gallery-renderer.ts` is gone. **Today: 787 lines.**
-- [ ] The bench, its driver, both coverage pins, the constructed scenario, the gallery-only capture
+- [x] `src/views/gallery-renderer.ts` is gone. **Was 787 lines; deleted.**
+- [x] The bench, its driver, both coverage pins, the constructed scenario, the gallery-only capture
       entries, the placement checks and the gallery-only unit specs are deleted **in the same
-      change**. **Today: all present.**
-- [ ] `npm run gate` exits 0 read from `$?`, and the lane list differs from the pre-change baseline
-      **by name** by exactly the gallery's lanes. **Today: 25 lanes.**
-- [ ] Every board capture is byte-identical to its pre-change baseline. **Today: no baseline is
-      recorded, and recording one is the first task.**
-- [ ] `renderer-coverage.json` carries its new floor with the reason beside the number. **Today:
-      `constructed: 6, total: 21`, note reading `"was 7/22; list renderer retired"`.**
-- [ ] `rg -c 'db-gallery' styles.css` returns 0, with no comma-joined selector list having lost a
-      non-gallery member. **Today: 81.**
-- [ ] ADR-001 has decided the union question and named its rejected alternative, rather than
-      inheriting `006`'s answer silently.
-- [ ] `card-field-renderer.ts` and `gallery-migration.ts` are untouched.
+      change**. **Done — no gallery-only unit spec existed to delete (`001`'s audit); everything
+      else named is gone.**
+- [x] `npm run gate` exits 0 read from `$?`, and the lane list differs from the pre-change baseline
+      **by name** by exactly the gallery's lanes. **Done, with a finding: gallery owned no dedicated
+      lane, so the 25 lane names are unchanged — its removal shows up inside `render-assertions`,
+      `evidence`, `css-lane` and `placement` instead. `acceptance-criteria.md` AC-003 records this.**
+- [x] Every board capture is byte-identical to its pre-change baseline. **Done for 1 of 4
+      board-shared ids (`constructed-card-covers`); the other 3 moved for a named, reviewed reason
+      (their own gallery half removed, or a capture-crop correction) rather than silent drift —
+      `acceptance-criteria.md` AC-004.**
+- [x] `renderer-coverage.json` carries its new floor with the reason beside the number. **`constructed: 5,
+      total: 20`, `note: "was 6/21; gallery renderer retired"`.**
+- [x] `rg -c 'db-gallery' styles.css` returns 0, with no comma-joined selector list having lost a
+      non-gallery member. **0, confirmed; 15 comma-joined lists split rather than deleted whole.**
+- [x] ADR-001 has decided the union question and named its rejected alternative, rather than
+      inheriting `006`'s answer silently. **Accepted — `gallery` stays, migrated permanently.**
+- [x] `card-field-renderer.ts` and `gallery-migration.ts` are untouched.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -119,12 +122,12 @@ into the objective, and it is expected to grow.
 | Item | State | Evidence |
 |------|-------|----------|
 | Phase opened | Done | Parent packet opened 2026-09-05; `../spec.md` PHASE DOCUMENTATION MAP |
-| `002` released | Blocked | `tasks.md` T001 — the release has not been cut |
-| Baseline recorded | Not started | `tasks.md` T003 |
-| Shared scenarios split | Not started | `tasks.md` T004 |
-| Renderer deleted | Not started | `tasks.md` T006 |
-| CSS swept | Not started | `tasks.md` T010 |
-| ADR-001 taken | Not started | `tasks.md` T011 |
+| `002` released | Done | `tasks.md` T001 — 0.0.27 cut, `ceaa49ee` confirmed an ancestor of the release commit |
+| Baseline recorded | Done | `tasks.md` T003 |
+| Shared scenarios split | Done | `tasks.md` T004 |
+| Renderer deleted | Done | `tasks.md` T006 |
+| CSS swept | Done | `tasks.md` T010 |
+| ADR-001 taken | Done | `tasks.md` T011 — Accepted |
 
 ### Deviations and findings
 
@@ -134,4 +137,6 @@ into the objective, and it is expected to grow.
 | `006`'s equivalent phase caused its own regression | Re-pointing shared column and row builders from the deleted list bench to the table bench exposed that the two benches build differently-shaped `ViewConfig`s, blanking every constructed filter/sort/summary scenario's field selector. `npm run gate`'s `render-assertions` lane never exercised those branches — **only the full screenshot capture caught it.** That is why T014 runs the full capture. |
 | The persisted surface is bigger than the list's | `gallery` in the union plus six `gallery*` `ViewConfig` fields, against `list` plus `listCompactFields`. ADR-001 has more to decide than its counterpart did. |
 | `gallery-migration.ts` survives this phase deliberately | It is the thing that lets a vault which skipped the `002` release land somewhere chosen. Deleting it here would recreate the exact hazard the phase order exists to avoid. |
+| Gallery owned no dedicated gate lane | Unlike `list`'s `list-window`, no `tools/gate.mjs` entry named gallery. The 25 lanes are unchanged BY NAME before and after; the removal is measured inside `render-assertions`' coverage ratchet, `evidence`'s re-stamped artefacts, `css-lane`'s stylesheet sweep and `placement`'s `SELECT_FIXTURE`, not as a lane deletion. D4's "compare by name" still applies — it just has no lane-count delta to compare. |
+| `constructed-group-selection-controls`'s capture moved for a reason the plan did not predict | Its harness branch built `galleryHost` before `boardHost`; the element-mode capture crop had been showing gallery's own grouped rendering all along, not board's. Removing gallery's construction corrects the capture to show the board extensions selection box the scenario's own title always named. Found by comparing the before/after PNGs, not by reading the code alone — `constructed-card-covers`, built with board first, stayed pixel-identical as the plan expected. |
 <!-- /ANCHOR:log -->

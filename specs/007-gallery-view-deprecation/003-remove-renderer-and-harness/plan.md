@@ -276,24 +276,47 @@ Follow the ordered tasks in `tasks.md`. It owns the Setup, Implementation and Ve
 
 ### ADR-001: Does `gallery` leave `DatabaseViewType`?
 
-**Status**: Proposed
+**Status**: Accepted
 
 **Context**: `gallery` sits in the union at `types.ts:317` alongside six `gallery*` `ViewConfig`
 fields at `:562-574`. All of it is persisted vault data. `006`'s `007` faced the identical question
-for `list` and decided it stays: accepted-but-redirected, migrated permanently.
+for `list` and decided it stays: accepted-but-redirected, migrated permanently. `001`'s vault count
+found 0 gallery-configured views in the operator's own vault, which answers exposure, not the
+question of a vault this packet cannot read — the settings-load sanitizer and the frontmatter
+parser (`data-source.ts:1527`) both still accept a persisted `"gallery"` on purpose, per `002`'s
+ADR-002, precisely so the on-open migration has a value to convert. A union that stopped
+recognising `"gallery"` the moment this phase lands would race that migration on every vault this
+packet has no way to have measured.
 
-**Decision**: to be taken in this phase, informed by `001`'s vault count rather than by the
-precedent alone.
+**Decision**: `gallery` **stays** on `DatabaseViewType`, accepted-but-redirected, migrated
+permanently — the same shape `006`'s `007` chose for `list`. All six `gallery*` `ViewConfig` fields
+(`galleryImageField`, `galleryImageAspectRatio`, `galleryCardSize`, `galleryCardSizePreset`,
+`galleryImageAspectRatioPreset`, `galleryImageFit`) stay on the type unchanged: `002`'s migration
+already carries three of them forward (`galleryImageField`, `galleryImageAspectRatio`,
+`galleryImageFit`) and copies all six between the source view and a rendered config
+(`embedded-database-renderer.ts`'s `copyConfigToSourceView`), so narrowing the type now would break
+a persisted-field round-trip `002` already depends on, not just a hypothetical future read.
+`types.ts` therefore carries no diff from this phase — the ADR's decision is to leave it exactly as
+`001`/`002` left it, not to touch it and arrive at the same value.
 
 **Consequences**:
 - Keeping it: an unmigrated view lands where the migration chooses rather than where unknown-type
-  coercion drops it. `gallery-migration.ts` survives, which is why the scope excludes it.
-- Removing it: a smaller type, and a vault that skipped the `002` release gets a card grid coerced
-  into a table with no notice — the exact outcome the whole order exists to prevent.
+  coercion drops it. `gallery-migration.ts` survives untouched, which is why the scope excludes it.
+  Every renderer-side dead branch this phase found and removed (the creation-time defaults in
+  `initializeViewTypeDefaults`, the new-view object literal, `getDefaultGalleryImageField`,
+  `updateGalleryCardSize`, `renderGallerySettings`) was dead specifically because no picker can
+  produce a *fresh* `"gallery"` value anymore — not because the persisted value stopped being
+  legitimate.
+- Removing it: a smaller type, and a vault that skipped the `002` release, or whose settings load
+  and on-open migration race in a way this phase cannot exercise, gets a card grid coerced into a
+  table with no notice and no cover — the exact outcome the whole program order exists to prevent.
 
 **Alternatives Rejected**:
 - **Removing the union value and keeping the config fields**: the worst of both. The fields become
   unreachable and the value becomes unrecognised in the same change.
+- **Removing the union value now that `001` measured 0 live gallery views**: rejected because the
+  measurement is one vault, read once, and the two accepting surfaces `002` deliberately left open
+  exist for exactly the vault that measurement cannot see.
 
 ---
 

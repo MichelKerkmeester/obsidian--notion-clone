@@ -39,7 +39,7 @@
       "breakdown"
     ],
     "importance_tier": "normal",
-    "status": "in_progress",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -47,20 +47,20 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
-      "src/views/gallery-renderer.ts",
       "tools/live/renderer-coverage.json",
       "styles.css",
-      "tools/bench/gallery-render-bench.ts",
-      "tools/bench/run-gallery.mjs",
-      "screenshots/manifest.json",
-      "tools/gate.mjs",
+      "src/data/gallery-migration.ts",
       "tools/screenshots/scenarios/core.mjs",
       "tools/live/render-assertion-harness.ts",
+      "tools/live/render-assertion-bundle.mjs",
+      "tools/live/render-assertions.mjs",
+      "tools/live/constructed-state-assertions.mjs",
       "tools/storybook/verify-placement.mjs",
+      "tools/screenshots/runtime-vars.css",
+      "tools/screenshots/pinned-values-baseline.json",
       "src/i18n.ts",
-      "src/data/gallery-migration.ts",
-      "tools/screenshots/constructed-scenarios.mjs",
-      "src/views/database-view.ts"
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts"
     ],
     "entities": [
       {
@@ -100,12 +100,6 @@
         "source": "derived"
       },
       {
-        "name": "gallery-renderer.ts",
-        "kind": "code",
-        "path": "src/views/gallery-renderer.ts",
-        "source": "derived"
-      },
-      {
         "name": "renderer-coverage.json",
         "kind": "config",
         "path": "tools/live/renderer-coverage.json",
@@ -118,27 +112,9 @@
         "source": "derived"
       },
       {
-        "name": "gallery-render-bench.ts",
+        "name": "gallery-migration.ts",
         "kind": "code",
-        "path": "tools/bench/gallery-render-bench.ts",
-        "source": "derived"
-      },
-      {
-        "name": "run-gallery.mjs",
-        "kind": "file",
-        "path": "tools/bench/run-gallery.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
-        "name": "gate.mjs",
-        "kind": "file",
-        "path": "tools/gate.mjs",
+        "path": "src/data/gallery-migration.ts",
         "source": "derived"
       },
       {
@@ -154,9 +130,39 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-bundle.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertion-bundle.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-state-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/constructed-state-assertions.mjs",
+        "source": "derived"
+      },
+      {
         "name": "verify-placement.mjs",
         "kind": "file",
         "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
+        "source": "derived"
+      },
+      {
+        "name": "pinned-values-baseline.json",
+        "kind": "config",
+        "path": "tools/screenshots/pinned-values-baseline.json",
         "source": "derived"
       },
       {
@@ -166,21 +172,15 @@
         "source": "derived"
       },
       {
-        "name": "gallery-migration.ts",
-        "kind": "code",
-        "path": "src/data/gallery-migration.ts",
-        "source": "derived"
-      },
-      {
-        "name": "constructed-scenarios.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/constructed-scenarios.mjs",
-        "source": "derived"
-      },
-      {
         "name": "database-view.ts",
         "kind": "code",
         "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The renderer and its measurements are one unit, and taking them apart in two changes is how a gate",
     "created_at": "2026-09-05T03:46:38Z",
-    "last_save_at": "2026-09-05T04:35:19.798Z",
+    "last_save_at": "2026-09-05T21:34:12.211Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d574bf17173b203bf66739de3911e3ddd6aa43f38f58b93fd44618efa13f293a",
+    "source_fingerprint": "sha256:0c5af1d3db11bfe945b58aa8dfc7236cdef0d9b8ae48845c9fdaf9b6ee34472e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "79b786d70dd96e162a600a05c299195b7cd9b5f04a675af0d1ab464436a4d842",
-      "plan.md": "bfd30ab63534fa18485e9c1016b0f90827b218b7798f39af553633544fde3f40",
-      "tasks.md": "0924045b9cf3bf210cfab4a4d82cbb6526c5708db44da29382d737397e7ded09",
-      "implementation-summary.md": "a09ea0e3caa992176d7f430529018052ad3b05ef2266e0dea1fd5005989b1d24"
+      "spec.md": "e2f002a54c3ce5750dfa8dc34545bb34c183e4d4d0f678c1aad7473cd6f02786",
+      "plan.md": "2ba2b8d0e4cffa16553bba008a45857ec26204a2d2eecec03cd544e8117bdec7",
+      "tasks.md": "c736af3b2281fc869e88b7c4d377aecafff39101f0546e788d9e8ba26946d129",
+      "implementation-summary.md": "d97459d08d490b40b8774737b162d24a3248994ace366ca95f93b30d51c7f6aa"
     },
     "last_active_child_id": null,
     "last_active_at": null
