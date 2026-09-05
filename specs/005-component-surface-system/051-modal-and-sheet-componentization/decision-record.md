@@ -1,12 +1,13 @@
 ---
 title: "Decision Record: Modal and Sheet Componentization"
-description: "ADR-001 the sheet engine stays and the shell composes it. ADR-002 a sub-page replaces in place rather than stacking, per pair, where the Anytype capture shows it. ADR-003 the confirm primitive is this packet's and is the only one. ADR-004 fullscreen survives only for the formula workbench."
+description: "ADR-001 the sheet engine stays and the shell composes it. ADR-002 a sub-page replaces in place rather than stacking, per pair, with the list of two converts out of thirty-one. ADR-003 the confirm primitive is this packet's and is the only one. ADR-004 fullscreen survives only for the formula workbench. ADR-005 the phone close survives the capture that contradicts it, on a measured 2.21:1."
 trigger_phrases:
   - "051 decision record"
   - "shell composition decision"
   - "sub-page decision"
   - "confirm primitive ownership"
   - "fullscreen presentation decision"
+  - "phone close contrast decision"
 importance_tier: "important"
 contextType: "planning"
 _memory:
@@ -14,8 +15,8 @@ _memory:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
     last_updated_at: "2026-09-05T14:50:00Z"
     last_updated_by: "adr-answers-051-053"
-    recent_action: "Recorded ADR-002 and new ADR-004 Accepted: operator's 2026-09-05 (~14:15) answers"
-    next_safe_action: "Unblock T009 (fullscreen disposition) and resume T001's per-pair sub-page reads against ADR-002"
+    recent_action: "Added ADR-002's per-pair list and ADR-005"
+    next_safe_action: "Execute T002, the red measurement, against design-trueup.md's value list"
     blockers: []
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
@@ -31,6 +32,8 @@ _memory:
     answered_questions:
       - "ADR-002: a registered stacked pair may become an in-place sub-page where the Anytype capture shows that pattern; 048's stacking model stays the default for every other pair"
       - "ADR-004: fullscreen survives only for the formula workbench; the other three fullscreen users become modal (desktop) / sheet (phone)"
+      - "ADR-002 per-pair list: properties property type picker and add view property picker convert; 29 keep 048 stacking"
+      - "ADR-005: 044's 44px phone close survives every contradicting capture, because the handle it would be replaced by is 2.21:1"
 ---
 # Decision Record: Modal and Sheet Componentization
 
@@ -113,8 +116,37 @@ exception, not a replacement of the stacking model, and `048/decision-record.md`
 scoped exception.
 
 **A sub-page replaces in place with a back affordance; a picker opens as its own surface over an
-undimmed parent.** Two distinct moves, both captured, and the shell offers both rather than making
-every child a stacked pair.
+undimmed parent.** Two distinct moves — and, after T001 opened the phone captures, **three**: a
+stacked *sheet* and a stacked *menu* behave differently and the reference marks them differently.
+The shell offers all three rather than making every child a stacked pair.
+
+**The three moves, and the affordance that identifies each** (`design-trueup.md` §3):
+
+| Move | The frame | Affordance |
+|---|---|---|
+| Replace in place | anchored edge unmoved; title and body swap | **one** grab handle, unmoved |
+| Stack a sheet | a second sheet rises; the parent stays mounted, dimmed to **0.710** of its luminance | **two** handles, the parent's peeking ~10pt above the child's |
+| Stack a menu or popover | an anchored surface opens; the parent does not move, and on desktop is **undimmed** | **no** handle on the child |
+
+**The per-pair list, which this ADR asked for and did not have.** `design-trueup.md` §4 reads all
+thirty-one registered pairs. **Two convert**:
+
+- **`properties property type picker`** (`sheet-grammar.mjs:98`, `depth: 3`) — Anytype's identical
+  chain replaces at the third level rather than stacking it
+  (`anytype-mobile-sheet-relation-new-format-dark.png` carries `Add property`'s doubled handle and
+  none of `New property`'s body).
+- **`add view property picker`** (`:114`) — a property chosen from a chevron row inside a view-config
+  sheet, which is exactly `Image preview ›`: `anytype-mobile-sheet-view-gallery-imagepreview-dark.png`
+  sits at the same frame top **1261** and handle **1278** as `-view-edit-` and `-view-layout-picker-`.
+
+**Twenty-nine keep `048`'s stacking**, ten of them because nothing equivalent was captured, each
+labelled rather than guessed.
+
+**The tolerance this ADR was written with is wrong and is corrected here.** "The parent does not
+move" holds on the phone to the pixel and is false on the desktop: the same navigation takes the
+popover through 316 → 298 → 90 → 166 → 390px of height inside an invariant 360px width. What holds
+on both is the **width and the anchored edge**; the cross-axis extent is content-driven on desktop
+and fixed on phone (`design-trueup.md` §6 C1). `NFR-P02` and `AC-003` are rewritten to that shape.
 
 ### Consequences
 
@@ -128,6 +160,15 @@ every child a stacked pair.
   makes the change — never a bulk rewrite ahead of the per-pair capture read.
 - The sub-page needs its own back affordance and its own keyboard path; the stacked child already
   had both through `048`.
+- **The per-pair read cost two conversions, not a wave.** Twenty-nine of thirty-one pairs keep the
+  model `048` landed, which is the outcome a per-pair rule should produce and the argument against
+  having applied it as a blanket.
+- **A depth cap fell out of the read that nobody asked for.** Anytype's phone client never stacks a
+  third sheet, in any of 118 states; where a third level is needed it replaces the second. Three of
+  our pairs declare `depth: 3`. One converts here; `record column submenu` is menu-from-menu, which
+  Anytype does stack, and `import confirm dropdown chain` has no equivalent — both keep `048` and
+  the question goes to `054` rather than being answered by this packet
+  (`design-trueup.md` §6 C4).
 
 ### Alternatives
 
@@ -246,3 +287,74 @@ phone — the shell's ordinary two-presentation resolution, the same as every ot
 | **What is the real caller that must not break?** | The formula workbench's own `fullscreen` open path — explicitly out of scope, so nothing here may touch it |
 | **What contract must not break?** | `spec.md` §3's Out of Scope line naming the workbench `fullscreen`, untouched |
 <!-- /ANCHOR:adr-004 -->
+
+---
+
+<!-- ANCHOR:adr-005 -->
+## ADR-005: The phone close survives the capture that contradicts it
+
+**Status: Accepted, 2026-09-05. It changes nothing and supplies the reason `044`'s amendment lacked.**
+
+### Context
+
+`044` REQ-007 was amended by an operator decision to *"header everywhere"* — every phone sheet gets a
+title row with a **44px close**, with no title-less variant. That amendment was a preference, stated
+without a reference screen, because none existed at the time.
+
+T001 opened the reference screens, and **every one of them contradicts it.** No Anytype iOS sheet
+carries a close control: `anytype-mobile-sheet-view-edit-dark.png`,
+`anytype-mobile-sheet-object-more-dark.png`, `anytype-mobile-sheet-icon-picker-dark.png`,
+`anytype-mobile-sheet-cover-picker-dark.png`, `anytype-mobile-sheet-cell-url-dark.png`,
+`anytype-mobile-sheet-view-sorts-dark.png` and `anytype-mobile-sheet-view-filters-empty-dark.png` all
+carry a centred title, sometimes a leading and a trailing action, and never an `×`. Dismissal is the
+grab handle and the scrim.
+
+This task's rule is that the capture wins. This is the one place in `design-trueup.md` where it does
+not, and a rule broken without a written reason is the thing a decision record exists to prevent.
+
+### Decision
+
+**`044`'s 44px close stands.** The reason is measured, not preferred: the affordance the reference
+substitutes for it — the grab handle — is `#555555` on `#1F1F1F`, which is **2.21:1**. On a sheet
+with no other dismissal control that handle is the only non-text element identifying a control, which
+is exactly WCAG 1.4.11's 3:1 case, and it misses by a third. Anytype's sheet is dismissible by a
+gesture nobody with low vision can see the affordance for.
+
+Two secondary facts point the same way and neither is the argument on its own. Our host is Obsidian,
+not iOS, so the platform's edge-swipe-back habit is not available to lean on. And our own render
+already shows the gap: `screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png`
+has a leading grey title and **no close** — so row 26 of the inventory is a `044` conformance gap the
+shell closes, not a place where we had already chosen the reference's answer.
+
+### Consequences
+
+- The divergence is now **deliberate with a number behind it**, not unnoticed drift, and the number
+  is re-checkable off the same file.
+- `044` is unchanged. This ADR does not amend another packet's landed ruling; it supplies the
+  evidence that ruling was made without.
+- The header keeps a trailing close, so the **trailing** action Anytype puts there — the `+` on
+  `Filters` and `Sorts`, the `···` on `Edit view` — sits beside the close rather than in its place.
+  That is `design-trueup.md` §6 C6's three-slot header, and the leading slot is what absorbs the
+  pressure.
+- Anything else the captures show about the handle is still adopted: its **34 × 5pt** geometry and
+  its 6pt offset are measured values under REQ-006. Only its use as the *sole* dismissal affordance
+  is refused.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Follow the capture: drop the close, dismiss by handle and scrim** | Matches the reference exactly; a cleaner header; one fewer target to place | The only visible dismissal affordance measures 2.21:1, below WCAG 1.4.11's 3:1; reverses a landed operator amendment on the strength of a screenshot |
+| **Keep the close and drop the handle** | One affordance, unambiguous | Loses drag-to-dismiss, which `016` measured and `044` conformance asserts; the gesture is not the problem, its being *alone* is |
+| **Keep both; the close is the accessible affordance, the handle the fast one (chosen)** | Clears 1.4.11; keeps the gesture; `044` and `048` lanes stay green unchanged | Diverges visibly from the reference on a surface the operator will compare side by side, which is why the reason is written here rather than assumed |
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — `design-trueup.md` resolves eight contradictions in the capture's favour and one against, and the one against needs its reason on the record |
+| **Is there a simpler existing thing?** | `044` REQ-007 itself. This adds the evidence, not a second rule |
+| **What does it touch?** | Nothing in code. It constrains what the shell's header may drop |
+| **What is the real caller that must not break?** | `createSheetHeader`'s close button (`mobile-bottom-sheet.ts:163-176`) and the touch-target ratchet that measures it |
+| **What contract must not break?** | `044` REQ-007 as amended, and the `sheet-grammar` lane rows that assert the close on twelve registered surfaces |
+<!-- /ANCHOR:adr-005 -->

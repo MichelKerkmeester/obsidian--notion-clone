@@ -85,25 +85,32 @@ with the owner named, never self-closed.
 <!-- ANCHOR:phase-1 -->
 ## Phase 1 — Evidence
 
-- [ ] **T001 — Build `modal-surface-inventory.md`: one row per family surface.**
+- [x] **T001 — Build the surface inventory: one row per family surface.** **Done 2026-09-05 —
+      `design-trueup.md`**, which is the file this row drafted as `modal-surface-inventory.md`;
+      the filename changed and nothing else did.
       Surface → shell role → presentation → changes → Anytype pattern with its capture filename or
       its named gap → stays ours. Covers the 20 `extends DbModal` subclasses, the 3
       `FuzzySuggestModal` subclasses outside `DbModal`, and the 12 independent `createSheetHeader`
       sites. **Threshold**: every census surface carries a row with all six cells filled; zero
-      "unknown". **Red-first proof**: today the file does not exist. **Capture**: the shell
-      behaviours are read from `../050-anytype-adoption/design-trueup.md` §2 and REQ-002, whose own
-      sources are `anytype-view-settings-panel-dark.png` and `anytype-set-kanban-view-dark.png`;
-      rows with no captured pattern say **design inferred from source code, not seen**. **Per
-      ADR-002 (Accepted, operator 2026-09-05 ~14:15: "Yes, where the capture shows it")**: a `048`
-      registered stacked pair's row converts to the sub-page presentation only where its equivalent
-      Anytype surface's capture shows the replace-in-place pattern, judged per pair; every other
-      pair's row keeps `048`'s stacking model as the default.
+      "unknown". **Met**: 35 of 35 rows; 25 name a capture, 10 carry **design inferred from source
+      code, not seen**. **Red-first proof**: the file did not exist. **Capture**: the shell
+      behaviours were read directly — 151 desktop states in `screenshots/anytype/`, 600 menu files
+      in `screenshots/anytype/menus/`, 118 iOS sheet files in `screenshots/anytype/mobile/` — not
+      taken second-hand from `../050-anytype-adoption/design-trueup.md`, which had no phone
+      captures to read. The desktop values came back identical off the second set
+      (`design-trueup.md` §2a). **Per ADR-002 (Accepted, operator 2026-09-05 ~14:15: "Yes, where
+      the capture shows it")**: all thirty-one registered pairs were read; **two convert** —
+      `properties property type picker` and `add view property picker` — and twenty-nine keep
+      `048`'s stacking, ten of them because nothing equivalent was captured
+      (`design-trueup.md` §4).
 - [ ] **T002 — [P] Measure every red in `acceptance-criteria.md` and write it into
       `checklist.md`.** Chrome-deciding sites (4), independent header sites (12), undeclared titles
       (20 of 20), exported confirm primitives (0), sub-page affordances (0), shell geometry
       literals, motion literals. **Threshold**: one failing figure per criterion. **Red-first
       proof**: the figures themselves. **Proof**: `checklist.md`'s Today column, every cell filled
-      from the tree rather than from this document.
+      from the tree rather than from this document. **Unblocked**: T001 landed, so the geometry and
+      motion literal counts have a target list to be counted against
+      (`design-trueup.md` §2a, §2b).
 - [ ] **T003 — [P] Capture the board and gantt parity baseline before any `styles.css` or shared
       chrome commit.** **Threshold**: a recorded `pixelHash` per reference capture. **Red-first
       proof**: n/a — this is the baseline the later comparison is meaningful against. **Proof**: the
@@ -129,20 +136,37 @@ with the owner named, never self-closed.
       chrome-deciding sites 4 → 2 (the shell and the three outliers, still direct). **Red-first
       proof**: the count of 4, recorded at T002. **Capture**: none needed.
 - [ ] **T006 — Add the sub-page stack to the shell: replace in place, back affordance in the
-      header.** **Threshold**: a sub-page push changes the frame's body and header without moving
-      the parent's bounding box (`|Δ| ≤ 1px`, the tolerance `048` AC-002 already measures).
-      **Red-first proof**: today no shell affordance exists — the measurement has nothing to run
-      against, so the negative control is a push that stacks instead of replacing, observed moving
-      the box. **Capture**: `anytype-view-settings-panel-dark.png` via `design-trueup.md` REQ-002 —
-      tapping `Layout` swaps the body inside the same 360px frame and the header becomes `‹ Layout`.
-- [ ] **T007 — Give the shell its geometry and motion, read from `050`'s measured values.**
-      8px radius, 16px/8px padding, 8px divider clearance, 28px rows, 360px `panel` width, 44px
-      phone close; motion enter 200ms `ease-out`, exit 150ms `ease-in`. **Threshold**: zero
-      per-surface geometry literals in the shell's own path; every migrated literal named or
-      reasoned in the inventory. **Red-first proof**: the literal count at T002. **Capture**:
-      `design-trueup.md` §2's measured table and §4's motion paragraph; the two **refused** values
-      (the `#232323` row highlight at 1.14:1, and colour-only active-state signalling) are not
-      adopted and the refusal is repeated in the inventory so nobody re-adopts them.
+      header.** **Threshold**: a sub-page push changes the frame's body and header while the
+      frame's **width and anchored edge** hold to `|Δ| ≤ 1px` (the tolerance `048` AC-002 already
+      measures); the **cross-axis extent is not asserted** — it is content-driven on desktop and
+      unchanged on phone, measured (`design-trueup.md` §6 C1). **Red-first proof**: today no shell
+      affordance exists — the measurement has nothing to run against, so the negative control is a
+      push that stacks instead of replacing, observed moving the anchored edge. **Capture**: read
+      directly. Desktop `anytype-menu-set-view-settings-dark.png` (360 × 316) →
+      `anytype-menu-set-view-layout-dark.png` (360 × 298), header `‹ Layout`, width invariant.
+      Phone `anytype-mobile-sheet-view-edit-dark.png` →
+      `anytype-mobile-sheet-view-layout-picker-dark.png` →
+      `anytype-mobile-sheet-view-gallery-imagepreview-dark.png`, all three at frame top **1261** and
+      handle **1278** device px. **Third move**: the shell also offers a stacked *menu* — no handle
+      on the child, parent undimmed on desktop — which is neither of the two this task was drafted
+      with (`design-trueup.md` §3).
+- [ ] **T007 — Give the shell its geometry and motion, read from the measured values.**
+      **Desktop**: 8px radius, 16px/8px padding, 8px divider clearance, 28px rows, 360px `panel`
+      width. **Phone**: an 8pt inset on three sides, ≈16pt radius, a 34 × 5pt grab handle 6pt below
+      the top edge, 50pt rows, an ≈70pt header, and `044`'s 44px close. Motion enter 200ms
+      `ease-out`, exit 150ms `ease-in`. **Threshold**: zero per-surface geometry literals in the
+      shell's own path; every migrated literal named or reasoned in the inventory. **Red-first
+      proof**: the literal count at T002. **Capture**: `design-trueup.md` §2a and §2b; motion stays
+      `050` §4's reconciled band, labelled as a source read rather than a measurement, because no
+      static capture carries timing. **Five refused values, each with its number**: `050`'s
+      `#232323` row highlight (1.14:1) and its colour-only active-state signalling; the iOS
+      empty-value grey `#7B7B7B` (3.89:1, replaced by the applied-value grey at 5.16:1); the iOS
+      grab handle `#555555` (2.21:1) as a *dismissal affordance*, which is why `044`'s close
+      survives; and the reference's own divider inset, which has three different answers and so
+      supplies no rule (`design-trueup.md` §6 C8). The refusals are repeated in the inventory so
+      nobody re-adopts them.
+      **The 8pt phone inset is the regression surface**: every `sheet-grammar` selector measuring a
+      sheet rect moves with it, so it lands with T012's row updates, in the same commit.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -179,6 +203,11 @@ with the owner named, never self-closed.
       **Red-first proof**: 12 today. **Coordinate**: `owned-menu.ts` and `dropdown-field.ts` are
       `052`'s files, the three panel renderers are `053`'s, `cell-renderer.ts` is `054`'s — this
       task changes the header call only, and the owning phase's leg carries the row change.
+      **Header shape**: `createSheetHeader` (`mobile-bottom-sheet.ts:160-176`) builds two slots — a
+      leading title, then `beforeClose`, then the close. Every Anytype sheet header is three slots
+      with the **title centred** and a **leading action**: `Clear | Priority (Project Tracker) | +`,
+      `Edit | Sorts | +`, `Filters | +`, `Edit view | ···` (`design-trueup.md` §6 C6). The shell's
+      header gains the leading slot and centres the title; `044`'s close keeps the trailing edge.
 - [ ] **T012 — [P] Update `tools/live/sheet-grammar.mjs` rows in the same commit as any markup
       move.** **Threshold**: the twelve registered surfaces and thirty-one registered pairs stay
       green after every leg. **Red-first proof**: the negative control each row already carries.
@@ -194,9 +223,16 @@ with the owner named, never self-closed.
       confirm; `ConfirmModal`'s `super(app, "sheet")` (`:42`) keeps its presentation. **Threshold**:
       7 of 7 grammar elements on the confirm sheet, and exactly one confirm path in `src/`.
       **Red-first proof**: no exported primitive exists today, so both `053` and `055` name one that
-      is not there. **Capture**: none — the confirm surface is not in the Anytype sweep, and
-      `design-trueup.md` REQ-007 records the confirm-versus-disable ruling as
-      **design inferred from source code, not seen**.
+      is not there. **Capture**: **none, and now confirmed as none.** No destructive confirm appears
+      in any of the 118 iOS states or the 600 desktop menu files, and the desktop crawler refuses
+      destructive actions by name (`screenshots/anytype/README.md`, "Not captured"). What the
+      captures do show is Anytype's *posture*: `Delete`
+      (`anytype-mobile-sheet-object-more-dark.png`) and `Empty Bin`
+      (`anytype-menu-nav-widget-bin-dark.png`) raise **no confirm at all**, because deletion is
+      reversible into a Bin. Ours is not, so the posture is **refused, not adopted** — this row's
+      design stays **inferred from source code, not seen** (`design-trueup.md` row 1). One thing is
+      adopted: a destructive row is red **and** carries a trash icon, a second signal beside the
+      colour.
 - [ ] **T014 — [P] Register `053`'s sort-conflict confirm and `055`'s destructive-confirm as
       consumers, not as new surfaces.** **Threshold**: zero second confirm implementations across
       the three packets. **Red-first proof**: both sibling packets currently name a primitive that

@@ -47,6 +47,7 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
       "src/views/modals/db-modal.ts",
       "src/views/mobile-bottom-sheet.ts",
       "src/views/modals/confirm-modal.ts",
@@ -54,7 +55,8 @@
       "src/views/image-file-suggest-modal.ts",
       "src/views/markdown-file-suggest-modal.ts",
       "tools/live/sheet-grammar.mjs",
-      "screenshots/anytype/README.md"
+      "screenshots/anytype/README.md",
+      "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png"
     ],
     "entities": [
       {
@@ -91,6 +93,12 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -142,6 +150,12 @@
         "source": "derived"
       },
       {
+        "name": "chrome-owned-menu-sheet-mobile-dark.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -188,23 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Overview Four",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Every Today",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The family works surface by surface and drifts as a family",
     "created_at": "2026-09-05T14:00:00Z",
-    "last_save_at": "2026-09-05T12:56:51.637Z",
+    "last_save_at": "2026-09-05T13:49:18.923Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,15 +215,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:982b2cd5f36573ae08bd0b6ac27d783c56baf9dd8aff5435f79b0546507651f3",
+    "source_fingerprint": "sha256:38ce98c70aa92c2b6133d38d266f474fba2f898ab32c515d7564f70f9d34f435",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "001d49b0f42ada14babc5a4271cefc064ff43b0b234a91de587352cf590db062",
-      "plan.md": "6229f7a41dcf5e929f6b32d769d0140a8d79a4a936b80b50e89643733aec301a",
-      "tasks.md": "41f7ec75d26e000f132a8f3d2f962ae5bbfaaf12793eba8e4bcf3058a253c183",
-      "decision-record.md": "e2abf67e6fab2212ea304b3b874501d47a29bb9b07caa168f54434ad082ff016"
+      "spec.md": "29a946e54f3cf40175d69f63a6febba723686c364600a1d68fade93d12807159",
+      "plan.md": "cf5d8fda4c067e28a2ee488195e7cc8983e4357da7b72229e70121a1340a5541",
+      "tasks.md": "cbf390ae3d01d90096d7b9f4cd312bf0cfa1e465bf33ce09b86aecae6c1e2de5",
+      "decision-record.md": "723959d65b2a52df2c698c3b01e769169f76e28217672be0121322c5d42291c0",
+      "implementation-summary.md": "05840554b4708bbdd662ca29ed7898e9b9c64584bdaad0b8d3d7ce94919ebd3c"
     },
     "last_active_child_id": null,
     "last_active_at": null

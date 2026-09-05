@@ -68,8 +68,10 @@ are `054`'s. A state's copy and its icon are `055`'s. The stacking of one surfac
 `048`'s and is a constraint here.
 
 **Deliverables**:
-- `modal-surface-inventory.md` — the per-surface migration table: surface → shell role →
-  presentation → changes → Anytype pattern with its capture → stays ours.
+- `design-trueup.md` — the per-surface migration table: surface → shell role → presentation →
+  changes → Anytype pattern with its capture → stays ours. **Landed 2026-09-05 as T001's output**;
+  it is the file the packet drafted as `modal-surface-inventory.md`, renamed and nothing else, the
+  way `050`'s `design-trueup.md` replaced its `capture-alignment.md`.
 - One shell primitive: one definition, desktop modal and phone sheet, declared title, close, drag,
   placement, entrance, sub-page navigation.
 - One confirm primitive, exported, carrying `044`'s seven grammar elements.
@@ -165,7 +167,7 @@ decisions from three modules and hoping the order is the one everything else use
 | `src/views/modals/*.ts` (17 subclasses) | Modify | Declare a title and a role; stop composing chrome |
 | `tools/live/sheet-grammar.mjs` | Modify | Row updates for any registered surface or pair whose markup moved, in the same leg |
 | `styles.css` | Modify | Shell geometry and motion tokens; serialized by the parent's CSS lane |
-| `modal-surface-inventory.md` | Create | The migration table |
+| `design-trueup.md` | Create | The migration table — **landed**; T001's output, and ADR-002's per-pair list |
 <!-- /ANCHOR:scope -->
 
 ---
@@ -177,17 +179,17 @@ decisions from three modules and hoping the order is the one everything else use
 
 | ID | Requirement |
 |----|-------------|
-| REQ-001 | One shell constructor produces both presentations from one definition. `DbModal.applyPresentation`'s branch, the three direct `attachSheetChromeToModal` callers and the twelve independent `createSheetHeader` sites resolve to it, or each survivor is individually dispositioned in `modal-surface-inventory.md` with a written reason. |
+| REQ-001 | One shell constructor produces both presentations from one definition. `DbModal.applyPresentation`'s branch, the three direct `attachSheetChromeToModal` callers and the twelve independent `createSheetHeader` sites resolve to it, or each survivor is individually dispositioned in `design-trueup.md` with a written reason. |
 | REQ-002 | Every surface declares its own sheet title and its shell role. `getSheetTitle`'s heading scrape survives only as the fallback for a surface that declares none, and the fallback's use is counted rather than assumed. |
-| REQ-003 | A sub-page opened inside a shell **replaces in place** with a back affordance in the header, inside the same frame; a picker opened from a shell opens as **its own surface over an undimmed parent**. Both are `design-trueup.md` REQ-002's captured patterns; the phone expression of the first is the one `048` REQ-002 already prefers, and the second registers as a stacked pair like any other child. |
-| REQ-004 | `modal-surface-inventory.md` carries one row per family surface: surface → shell role → presentation → changes → Anytype pattern with capture filename or named gap → stays ours. No surface in the census is undispositioned. |
+| REQ-003 | The shell offers **three** navigation moves, each with the affordance the captures mark it by (`design-trueup.md` §3). **Replace in place**: the frame's title and body swap, a back affordance appears in the header, one grab handle stays at an unmoved edge. **Stack a sheet**: a second sheet rises over the first, the parent stays mounted and dimmed, and the parent's own handle stays visible above the child's. **Stack a menu**: an anchored surface opens over the parent with no handle of its own, and on desktop the parent stays undimmed. The frame's **width and its anchored edge** hold to `\|Δ\| ≤ 1px` across a replace; its **cross-axis extent is content-driven on desktop and fixed on phone** — measured, `design-trueup.md` §6 C1. A stacked child registers as a stacked pair like any other; which pairs convert to a replace is `decision-record.md` ADR-002's list, resolved per pair in `design-trueup.md` §4. |
+| REQ-004 | `design-trueup.md` carries one row per family surface: surface → shell role → presentation → changes → Anytype pattern with capture filename or named gap → stays ours. No surface in the census is undispositioned. **Met 2026-09-05**: 35 rows — 20 `DbModal` subclasses, 3 `FuzzySuggestModal` outliers, 12 `createSheetHeader` sites — of which 25 name a capture and 10 carry **design inferred from source code, not seen**. |
 | REQ-005 | The confirm primitive is exported, carries `044`'s seven grammar elements, and is the only confirm path in `src/`. `053`'s sort-conflict confirm and `055`'s destructive-confirm state consume it; neither builds a second. |
 
 ### P1 - Required (complete OR user-approved deferral)
 
 | ID | Requirement |
 |----|-------------|
-| REQ-006 | The shell's geometry reads from named values, not per-surface literals: **8px** radius, **16px**/**8px** padding, **8px** divider clearance, **28px** rows, **360px** `panel` width, **44px** phone close (`044`). Every former literal is a named value or carries a written reason in `modal-surface-inventory.md`. |
+| REQ-006 | The shell's geometry reads from named values, not per-surface literals. **Desktop**: **8px** radius, **16px**/**8px** padding, **8px** divider clearance, **28px** rows, **360px** `panel` width — all re-measured off a second capture set and unchanged (`design-trueup.md` §2a). **Phone**: an **8pt inset on three sides**, **≈16pt** radius, a **34 × 5pt** grab handle 6pt below the top edge, **50pt** rows, an **≈70pt** header, and `044`'s **44px** close (`design-trueup.md` §2b). Every former literal is a named value or carries a written reason in `design-trueup.md`. The phone frame's 8pt inset is the one geometry change with a regression surface — every `sheet-grammar` selector that measures a sheet's rect moves with it, so it lands in the leg that updates those rows. |
 | REQ-007 | The shell's motion is **enter 200ms `ease-out`, exit 150ms `ease-in`** (`design-trueup.md` §4 Motion — 150ms is the closest in-band value to `047`'s source-read 0.1s exit, which sits below the 120ms floor for direct feedback and would read as a cut). Reduced-motion coverage holds for every surface the shell produces. |
 | REQ-008 | `npm run gate` exits 0 with one permanent lane row per shell deliverable, each negative control observed red then green; `npm run replay` holds with reversed 0; the twelve registered `sheet-grammar` surfaces and the thirty-one registered stacked pairs stay green. |
 
@@ -200,8 +202,8 @@ decisions from three modules and hoping the order is the one everything else use
 <!-- ANCHOR:success-criteria -->
 ## 5. SUCCESS CRITERIA
 
-- **SC-001**: `modal-surface-inventory.md` dispositions every surface in the census with no
-  "unknown" cells, and every cited capture resolves under `screenshots/anytype/`.
+- **SC-001**: `design-trueup.md` dispositions every surface in the census with no "unknown" cells,
+  and every cited capture resolves under `screenshots/anytype/`. **Met 2026-09-05**, 35 of 35.
 - **SC-002**: A sub-page opened from the view-settings sheet replaces in place with a back
   affordance on desktop, on phone and by keyboard, and the parent's bounding box does not move.
 - **SC-003**: The four chrome-deciding sites reduce to one, measured by a count against a recorded
@@ -244,7 +246,7 @@ each phase's one-leg-one-file rule coordinate them.
 | Empty, loading, error, success copy and icons | **055** | Not this phase's. The surface they render inside is |
 | The stacking model | **048** | A constraint. Consumed unchanged, asserted after every leg, never re-specified |
 | The seven phone grammar elements | **044** | A constraint, same terms |
-| `050`'s fourteen adoption items | **050** | None of the fourteen is a shell item. `050`'s `design-trueup.md` is this phase's design read of record; its REQ-002 sub-page finding is the only row this phase implements against, and it implements the *shell* half while `050` keeps the requirement |
+| `050`'s fourteen adoption items | **050** | None of the fourteen is a shell item. `050`'s `design-trueup.md` remains the **desktop** read of record; its REQ-002 sub-page finding is the only row this phase implements against, and it implements the *shell* half while `050` keeps the requirement. **This packet's own `design-trueup.md` extends it rather than replacing it**: `050` was written before the 118 iOS captures landed, so the phone half of every shell value is measured here for the first time, and `050` C6's desktop empty-state finding is left standing (`design-trueup.md` §6 C7) |
 <!-- /ANCHOR:overlaps -->
 
 ---
@@ -255,8 +257,12 @@ each phase's one-leg-one-file rule coordinate them.
 ### Performance
 - **NFR-P01**: A shell opens within the same budget the surface has today; the shell composes the
   same chrome calls in the same order rather than adding a layer that re-measures.
-- **NFR-P02**: A sub-page replace does not remount the frame. The parent's bounding box delta is
-  `|Δ| ≤ 1px`, the same tolerance `048` AC-002 already measures for a stacked parent.
+- **NFR-P02**: A sub-page replace does not remount the frame. The frame's **width and its anchored
+  edge** move by `|Δ| ≤ 1px`, the same tolerance `048` AC-002 already measures for a stacked parent.
+  The **cross-axis extent is not held**: measured on the reference, a desktop replace changes the
+  frame's height by up to 300px within an invariant 360px width, while a phone replace changes
+  nothing at all (`design-trueup.md` §6 C1). A tolerance written across both axes could not be
+  observed failing on the surface it was written for, which is what `SC-004` requires of it.
 
 ### Security
 - **NFR-S01**: No new document-level listeners per surface. The shell registers through
@@ -330,7 +336,10 @@ each phase's one-leg-one-file rule coordinate them.
   shows that pattern for the equivalent surface, judged per pair; per pair the `sheet-grammar` lane
   row is rewritten to the sub-page shape red-first. `048`'s stacking model stays the default for
   every other pair — see `decision-record.md` ADR-002 (Accepted) and `048/decision-record.md`'s
-  scoped-exception note.
+  scoped-exception note. **The list is now written**: `design-trueup.md` §4 reads all thirty-one
+  registered pairs against the captures and converts **two** — `properties property type picker`
+  and `add view property picker`. Twenty-nine keep `048`'s stacking, ten of them because nothing
+  equivalent was captured.
 <!-- /ANCHOR:questions -->
 
 ---
@@ -370,6 +379,30 @@ T001 opens each one and trues the design; that obligation is unchanged and is no
 reference screen for the first time. The `fullscreen` presentation question does not — iOS has no
 equivalent, and the index records that the iOS client ships **no Calendar and no Graph layout at
 all**, so its surface set is narrower than the desktop's rather than a translation of it.
+
+---
+
+## T001, 2026-09-05 (later still): the captures were opened and the pixels were read
+
+The reconciliation above said the honest thing — *"The pixels are unread here … Naming the file is
+not reading it."* They have now been read. `design-trueup.md` is that read: 35 census rows against
+151 desktop states, 600 desktop menu files and 118 iOS sheet files, with every number sampled off a
+file rather than eyeballed, and the iOS files divided by three because they are 1206 × 2622 at 3×.
+
+**It confirmed more than it changed, which is the outcome a second capture set should produce.** The
+360 × 316px popover, the 28px row, the 8px divider clearance, the 16px inset and the four surface
+colours all came back identical off `menus/` to what `050` measured off the earlier panel
+captures — two crawlers, two file sets, one answer, which is what licenses REQ-006's desktop half.
+
+**It changed four things, each inside an existing requirement**: REQ-003 gains a third navigation
+move and loses a tolerance that could not have been observed failing; REQ-004 is met; REQ-006 gains
+the phone half nobody had measured; and ADR-002's per-pair list exists, with two converts out of
+thirty-one. `design-trueup.md` §7 is the change list and §6 the nine contradictions, each named with
+the capture that shows it.
+
+**It did not answer §11's second question**, and could not: whether the three `FuzzySuggestModal`
+subclasses join the shell or stay Obsidian-native behind a shim is a question about our host, and
+Anytype has no host. T010 stays blocked.
 
 ---
 
