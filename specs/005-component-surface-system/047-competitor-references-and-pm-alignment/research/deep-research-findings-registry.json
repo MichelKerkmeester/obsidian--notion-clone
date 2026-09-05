@@ -1,0 +1,1196 @@
+{
+  "mergedFrom": [
+    "anytype-glm"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "MB-4",
+      "iteration": 18,
+      "title": "anytype-kotlin module map",
+      "fit": "process",
+      "sources": [
+        "https://api.github.com/repos/anyproto/anytype-kotlin/contents/"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SV-5",
+      "iteration": 3,
+      "title": "anytype-ts code map: view code under component/block (dataview) + menu; graph/search/settings pages located",
+      "fit": "process: enables targeted raw fetches",
+      "sources": [
+        "https://api.github.com/repos/anyproto/anytype-ts/contents/src/ts/component?ref=develop"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "BD-1",
+      "iteration": 7,
+      "title": "Board columns are group subscriptions; column order is view config; deleted relation renders dedicated empty state",
+      "fit": "high: deleted-relation empty state adoptable",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/board.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-4",
+      "iteration": 2,
+      "title": "Bulk edit: layout-specific selection affordances and right-click action set; pre-filter before bulk edit",
+      "fit": "medium-high: compare against bulk-edit-field-menu + row-menu",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CL-1",
+      "iteration": 8,
+      "title": "Calendar ships own toolbar: month/year selects (0-3000), arrows, Today; no mini-calendar popover",
+      "fit": "medium-high: deliberate divergence vs our mini-calendar",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/calendar.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FL-2",
+      "iteration": 6,
+      "title": "Chip anatomy: type icon + name(:) + short condition + formatted value; date quick options; per-format formatting",
+      "fit": "high: short-condition + date quick options",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/filters/item.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FL-3",
+      "iteration": 6,
+      "title": "Chip click=edit menu, right-click Clear vs Delete, last removal hides row; advanced-first ordering",
+      "fit": "medium-high: Clear-vs-Delete verbs",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/filters.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-7",
+      "iteration": 2,
+      "title": "Collection verbs: Add; Unlink (keep object) vs Move to Bin; per-collection default type+template",
+      "fit": "medium: unlink-vs-delete distinction for row-menu in filtered views",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/collections.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VF-2",
+      "iteration": 20,
+      "title": "Convergence summary: 20/20 iterations, avg newInfoRatio ~0.86, never below threshold",
+      "fit": "report",
+      "sources": [
+        "research/lineages/anytype-glm/deep-research-state.jsonl"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DM-5",
+      "iteration": 1,
+      "title": "Creation entry points are plural and contextual (sidebar button+dropdown, type-section +, /-menu leaving backlink, Cmd+N, turn-into-object); default type per channel",
+      "fit": "medium: contextual entry points + creation-leaves-link",
+      "sources": [
+        "https://doc.anytype.io/anytype/create/objects.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "TY-3",
+      "iteration": 11,
+      "title": "Creation flows decision tree consolidated across entry points; landing in inline edit or config popup by view type",
+      "fit": "high: 047 checklist",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/types.md",
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "BD-3",
+      "iteration": 7,
+      "title": "Cross-column drag carries selection, one ObjectListSetDetails commit; same-column arrayMove with no-op guard",
+      "fit": "medium-high: batched multi-drag commit",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/board.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-7",
+      "iteration": 4,
+      "title": "Cross-view drop writes target group properties, removes values matching negative filters",
+      "fit": "medium: noted for 046",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CL-2",
+      "iteration": 8,
+      "title": "Day cells self-load; classes other/active/weekend/first; two-letter weekday headers",
+      "fit": "medium: headers fidelity item",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/calendar.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CL-4",
+      "iteration": 8,
+      "title": "Day-click create merges view details + day date; SelectTemplate; opens config popup; day menu width synced to cell",
+      "fit": "medium: create-on-day inheritance",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/calendar.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DM-6",
+      "iteration": 1,
+      "title": "Docs terminology drift: Spaces->Channels, Sets->Queries; capture manifest must record app version to map vocabulary",
+      "fit": "process: 047 manifest entries",
+      "sources": [
+        "https://doc.anytype.io/anytype/sitemap.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-3",
+      "iteration": 2,
+      "title": "Drag object between views writes properties to satisfy target view filters",
+      "fit": "medium: noted; cross-view drag not adopted without a 046 use case",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "IN-2",
+      "iteration": 12,
+      "title": "Dynamic filter values: Current User and This Object",
+      "fit": "medium: backlink-filter analogue noted",
+      "sources": [
+        "https://doc.anytype.io/anytype/features/inline-queries.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-9",
+      "iteration": 4,
+      "title": "Empty states two flavors: target and view, with per-layout add affordances (List AddRow, Gallery animated card)",
+      "fit": "high: two-flavor empty model",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "EL-2",
+      "iteration": 16,
+      "title": "Empty/loading/deleted state x surface matrix consolidated",
+      "fit": "high: test checklist for empty-state-renderer + 026",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx",
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/set.tsx"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DM-1",
+      "iteration": 1,
+      "title": "Everything is an Object; no folder tree; Views replace hierarchy as organization surface",
+      "fit": "presentation-only for file-backed plugin",
+      "sources": [
+        "https://doc.anytype.io/anytype/create/objects.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FR-4",
+      "iteration": 19,
+      "title": "Explicit non-adoptions with reasons",
+      "fit": "synthesis input",
+      "sources": [
+        "research/lineages/anytype-glm/findings-registry.json"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "RL-2",
+      "iteration": 10,
+      "title": "Featured header block: type + setOf + featured relations, bullets; Line vs Column layout per type; noInplace titled menu editing",
+      "fit": "high: featured-few-in-header pattern",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/featured.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-4",
+      "iteration": 4,
+      "title": "Filter/sort chip row: per-view toggle, chips-only render, auto-hide, immediate value menu on add",
+      "fit": "high: chip-row adoption candidate",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CT-3",
+      "iteration": 5,
+      "title": "Filter/Sort icons dual-mode: toggle chips when present, open add-relation menu when absent; sort default Asc empties End",
+      "fit": "high: state-dependent single control",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FL-4",
+      "iteration": 6,
+      "title": "Filters code map: item/advanced/group/rule; value menus are system menus under component/menu",
+      "fit": "process",
+      "sources": [
+        "https://api.github.com/repos/anyproto/anytype-ts/contents/src/ts/component/block/dataview?ref=develop"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "GR-5",
+      "iteration": 9,
+      "title": "FootRow aggregates share grid template; AddRow; column-add menu anchors last head cell",
+      "fit": "medium-high: footer + add-column comparison",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/grid.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CX-2",
+      "iteration": 15,
+      "title": "Gating matrix per object: restrictions, layout rules, archived, permissions; >1 and >10 selection caps",
+      "fit": "high: numeric selection caps",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/menu/object/context.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "MS-3",
+      "iteration": 17,
+      "title": "Global interaction locks during drags/menus (setDragging, disableSelection, body.grab)",
+      "fit": "medium-high: exclusivity comparison vs overlay-stack",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx",
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/set.tsx"
+      ],
+      "newInfo": "partially-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VF-3",
+      "iteration": 20,
+      "title": "Hand-off notes for 047: screenshots vocabulary, fidelity checklists, findings-only boundary",
+      "fit": "047 hand-off",
+      "sources": [
+        "research/lineages/anytype-glm/iterations/iteration-019.md"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "BD-2",
+      "iteration": 7,
+      "title": "Hand-rolled HTML5 drag: clone drag image, cached-rect hit-testing in rAF, isOver + edge classes, add-card as target",
+      "fit": "high: drag vocabulary for drag-drop-feedback",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/board.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "IN-1",
+      "iteration": 12,
+      "title": "Inline = same dataview block with isInline: collapsible controls, LoadMore paging, responsive classes, re-anchored empty states",
+      "fit": "high: collapsible controls + LoadMore gaps",
+      "sources": [
+        "https://doc.anytype.io/anytype/features/inline-queries.md",
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-5",
+      "iteration": 2,
+      "title": "Inline Query/Collection blocks: view edits block-local, object edits global; types appear in same picker",
+      "fit": "high: explicit data-flow rule for embedded-database-renderer tests",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md",
+        "https://doc.anytype.io/anytype/organize/collections.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "RL-5",
+      "iteration": 10,
+      "title": "Links/backlinks cells render counts with a select menu of linked objects",
+      "fit": "medium: count-first pattern",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/featured.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "EL-1",
+      "iteration": 16,
+      "title": "Loader two types: Dots and Spinner; fitToContainer via ResizeObserver+rAF",
+      "fit": "medium: loading twin for mount states",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/util/loader.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SV-2",
+      "iteration": 3,
+      "title": "Loading = full-body Loader swap; deleted swaps to <Deleted>; explicit forceUpdate chain on load",
+      "fit": "medium: three-way state machine for database-view.ts",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/set.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-6",
+      "iteration": 4,
+      "title": "Manual reorder under active sort requires confirm popup removing sorts; objectOrder per view+group",
+      "fit": "high: sort-conflict confirm safety",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "MB-1",
+      "iteration": 18,
+      "title": "Mobile filter editing: per-format condition rows in a sheet (FilterByAdapter + Filter*ViewHolder)",
+      "fit": "high: per-format rows for 044 sheets",
+      "sources": [
+        "https://api.github.com/repos/anyproto/anytype-kotlin/git/trees/f2922692e711109326f6e026a63797f6d2e2e258?recursive=1"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "MB-2",
+      "iteration": 18,
+      "title": "Mobile grid: RecyclerView adapters + diff utils; dedicated modify-order screen instead of inline drag",
+      "fit": "medium-high: modify-order pattern",
+      "sources": [
+        "https://api.github.com/repos/anyproto/anytype-kotlin/git/trees/f2922692e711109326f6e026a63797f6d2e2e258?recursive=1"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "MB-3",
+      "iteration": 18,
+      "title": "Mobile loading is shimmer vs desktop dots",
+      "fit": "medium: shimmer skeletons for sheets",
+      "sources": [
+        "https://api.github.com/repos/anyproto/anytype-kotlin/git/trees/f2922692e711109326f6e026a63797f6d2e2e258?recursive=1"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-8",
+      "iteration": 2,
+      "title": "Mobile view availability gated explicitly with a visible docs warning, not silent degradation",
+      "fit": "medium: document per-view mobile availability instead of silent hiding (044)",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "MS-2",
+      "iteration": 17,
+      "title": "Motion centralized in animationProps + AnimatePresence; menus CSS-animated with noAnimation hatches",
+      "fit": "medium-high: motion helper parity",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "partially-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "IN-4",
+      "iteration": 12,
+      "title": "Multiple independent inline views per page as dashboard pattern",
+      "fit": "medium-high: validates multi-embed direction",
+      "sources": [
+        "https://doc.anytype.io/anytype/features/inline-queries.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "IN-3",
+      "iteration": 12,
+      "title": "New inline query also saved as standalone sidebar object",
+      "fit": "medium: promote-embed analogue",
+      "sources": [
+        "https://doc.anytype.io/anytype/features/inline-queries.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CT-2",
+      "iteration": 5,
+      "title": "New view inherits current shape emptied, then auto-opens settings 50ms after switch; duplicate lands in settings too",
+      "fit": "high: land-in-settings-after-create",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "RL-1",
+      "iteration": 10,
+      "title": "Nine property formats; properties independent of types; Content Model usage counts",
+      "fit": "high: property set parity check",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/properties.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CX-1",
+      "iteration": 15,
+      "title": "objectContext: four sections, capability-gated items, 'No available actions' fallback",
+      "fit": "high: capability-computed menu pattern",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/menu/object/context.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FL-1",
+      "iteration": 6,
+      "title": "One chip surface for sorts+filters with leading sort chip and Clear all",
+      "fit": "high: single-surface IA vs separate panels",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/filters.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "GR-2",
+      "iteration": 9,
+      "title": "One gridTemplateColumns string across head/foot/selection; widths persist per relation with format-aware floors",
+      "fit": "high: format-aware width floor",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/grid.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "GR-4",
+      "iteration": 9,
+      "title": "Open cell editors flip right-aligned within 92px of viewport edge",
+      "fit": "high: anti-clip rule for cell editors",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/grid.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FR-1",
+      "iteration": 19,
+      "title": "overlay-stack vs S.Menu: missing closeAll-family/replace/isAnimating guards",
+      "fit": "high: small concrete upgrade",
+      "sources": [
+        "src/views/overlay-stack.ts:1-60"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-10",
+      "iteration": 4,
+      "title": "Per-block responsive classes: isVertical <=50% wrapper, isNarrow <=250px",
+      "fit": "medium-high: embedded-renderer thresholds",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CX-3",
+      "iteration": 15,
+      "title": "Pin/Favorite labels state-derived (Unpin only when all pinned)",
+      "fit": "medium: state-derived toggle labels",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/menu/object/context.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DM-3",
+      "iteration": 1,
+      "title": "Query (live, rule-driven, source->filters->sorts->layout creation flow) vs Collection (curated, manual); deletion never touches objects",
+      "fit": "high: guided add-view flow candidate",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/queries.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SE-1",
+      "iteration": 14,
+      "title": "Quick search is a dedicated window hosting only the search popup; opens redirect to main window",
+      "fit": "medium-high: open-target redirect rule",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/quickSearch.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FR-3",
+      "iteration": 19,
+      "title": "Ranked adoption list of 14 items with file touch lists",
+      "fit": "synthesis input",
+      "sources": [
+        "research/lineages/anytype-glm/findings-registry.json"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-8",
+      "iteration": 4,
+      "title": "Record create: template-aware, optimistic, board empty-group default, positionLock while name editing",
+      "fit": "high: positionLock applicable to sorted tables",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SV-3",
+      "iteration": 3,
+      "title": "Scroll persisted per set; restored by polling until container height suffices; selection re-rendered on scroll",
+      "fit": "medium-high: per-view scroll restore adoption item",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/set.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CT-4",
+      "iteration": 5,
+      "title": "Search expands in place; outside mousedown + Escape hide, clear value, reset",
+      "fit": "medium-high: clear-on-dismiss detail",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SV-4",
+      "iteration": 3,
+      "title": "Set keyboard: search targets view search icon; create centered; selectAll; delete guarded while menu open; readonly = locked|archived|no-write",
+      "fit": "medium-high: shortcut-targets-affordance + menu-open delete guard",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/set.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SV-1",
+      "iteration": 3,
+      "title": "Set page = object skeleton + one dataview block; set object carries layout detail",
+      "fit": "high: confirms container+renderer architecture",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/page/main/set.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "RL-4",
+      "iteration": 10,
+      "title": "setOf cell: source summary, auto-opens picker when empty, onboarding when deleted",
+      "fit": "medium: guided auto-open",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/featured.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-1",
+      "iteration": 4,
+      "title": "Seven view components (grid/board/gallery/list/calendar/graph/timeline); remount on key=view<id>",
+      "fit": "high: remount-on-view-change discipline",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "FR-2",
+      "iteration": 19,
+      "title": "sheet-grammar gates per-format condition rows from Android",
+      "fit": "high: mobile filter/sort sheets",
+      "sources": [
+        "src/views/sheet-grammar.ts:1-50"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "NV-3",
+      "iteration": 13,
+      "title": "Sidebar resize-to-collapse, auto show/hide, compact vault, focus mode",
+      "fit": "low: app-shell completeness",
+      "sources": [
+        "https://doc.anytype.io/anytype/basics/sidebar.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-6",
+      "iteration": 2,
+      "title": "Sidebar widgets pin views/collections, cycle views in place; hierarchical structure widget; folder drag-drop import",
+      "fit": "low-medium: Obsidian owns sidebar; view-cycling idea noted",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md",
+        "https://doc.anytype.io/anytype/organize/collections.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-1",
+      "iteration": 2,
+      "title": "Six layouts (List/Grid/Calendar/Kanban/Gallery/Graph) each with a small layout-scoped extra-options set",
+      "fit": "high: layout-scoped settings contract for view-config-panel comparison",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "GR-3",
+      "iteration": 9,
+      "title": "Sticky header via second React root on cloned node, transform-synced",
+      "fit": "medium-high: freeze jitter comparison",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/grid.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "BD-4",
+      "iteration": 7,
+      "title": "StickyScrollbar synced to board scroll; edge bleed negative margins PADDING=46; J.Size.dataview.board tokens",
+      "fit": "high: sticky scrollbar + edge bleed adoptable",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/board.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CX-4",
+      "iteration": 15,
+      "title": "Submenus on hover with pre-filtered pickers incl. create-new option",
+      "fit": "medium-high: hover-picker motion",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/menu/object/context.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "TY-2",
+      "iteration": 11,
+      "title": "Template cascade: type default -> per-view override; apply-only-at-creation; switch until first edit; lock/duplicate/bin",
+      "fit": "high: per-view new-row presets slice",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/templates.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "SE-2",
+      "iteration": 14,
+      "title": "Three search surfaces: global window, view-scoped debounced, searchObject picker with create entries",
+      "fit": "medium-high: one-picker-with-create consolidation",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "MS-1",
+      "iteration": 17,
+      "title": "Three-tier layering: S.Menu -> S.Popup -> windows; replace() for back-nav; isAnimating guards",
+      "fit": "high: 048 tier mapping; 027 replace mechanism",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx",
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/menu/object/context.tsx"
+      ],
+      "newInfo": "partially-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CL-3",
+      "iteration": 8,
+      "title": "Today scrolls today row to viewport bottom (st+pt+eh-ch floor 0)",
+      "fit": "medium-high: testable jump-to-today",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/calendar.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CT-1",
+      "iteration": 5,
+      "title": "Toolbar anatomy: view-selector dropdown + sortable tab row (context menu, dnd-kit horizontal) + add icon | search, filter/sort/settings icons, split New button",
+      "fit": "high: tab context menu + dropdown + split New deltas",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CT-5",
+      "iteration": 5,
+      "title": "Toolbar small mode by measured natural widths (width+16 > container); inline collapsible right section persisted + animated",
+      "fit": "high: measured-collapse for embedded renderer",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-3",
+      "iteration": 4,
+      "title": "Toolbar split: controls / selection-bar swap / filters chip row / empty",
+      "fit": "high: selection swap contract for 022",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VF-1",
+      "iteration": 20,
+      "title": "Touch-list corrections: styles.css at repo root; add-view flow in database-view.ts",
+      "fit": "synthesis accuracy",
+      "sources": [
+        "repo file check"
+      ],
+      "newInfo": "mostly-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-2",
+      "iteration": 4,
+      "title": "Two load paths: getData for grid/gallery/list, viewRef.load() self-subscription for calendar/timeline/graph/board",
+      "fit": "medium-high: architecture contract to document",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "GR-1",
+      "iteration": 9,
+      "title": "Two regimes: react-virtualized page grid (48px) vs plain inline rows (40px) with LoadMore row",
+      "fit": "high: inline LoadMore comparison",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/view/grid.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "NV-1",
+      "iteration": 13,
+      "title": "Two sidebars; default section order; sections tunable",
+      "fit": "low-medium: vocabulary",
+      "sources": [
+        "https://doc.anytype.io/anytype/basics/sidebar.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DM-2",
+      "iteration": 1,
+      "title": "Type == built-in Query; types have views; sidebar shows only non-empty types with + affordance",
+      "fit": "high: adopt non-empty-listing rule; informs view-state model",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/queries.md",
+        "https://doc.anytype.io/anytype/create/objects.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "RL-3",
+      "iteration": 10,
+      "title": "Type cell menu: Open / Change type with template application / Turn set into collection",
+      "fit": "medium-high: turn-into-collection analogue",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/featured.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "TY-1",
+      "iteration": 11,
+      "title": "Type editor panel owns name/icon, width, properties, templates, header config, layout; change type retains properties",
+      "fit": "medium-high: single ownership panel",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/types.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "VW-2",
+      "iteration": 2,
+      "title": "View header anatomy: tabs below title + New + view-scoped search + settings menu (Layout/Properties/Filter&Sort/Duplicate/Remove); tabs drag-reorderable",
+      "fit": "high: duplicate-view action and temporary view search are concrete deltas to check in our toolbar",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/views.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DV-5",
+      "iteration": 4,
+      "title": "View search = debounced fulltext subscription -> id set -> transient In-filter",
+      "fit": "medium: search orthogonal to saved filters",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "DM-4",
+      "iteration": 1,
+      "title": "Views are saved filter/sort/layout configurations, switchable in one click; sidebar widgets; inline embedding",
+      "fit": "high: matches toolbar+view-state-store model; doc-copy pattern adoptable",
+      "sources": [
+        "https://doc.anytype.io/anytype/organize/queries.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "CT-6",
+      "iteration": 5,
+      "title": "ViewSet = meta write + SetActive RPC + analytics; removal pre-picks next view",
+      "fit": "medium: robustness rule",
+      "sources": [
+        "https://github.com/anyproto/anytype-ts/blob/develop/src/ts/component/block/dataview/controls.tsx"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    },
+    {
+      "id": "NV-2",
+      "iteration": 13,
+      "title": "Widgets: link vs live-lens duality; five layouts; object cap default 6; density mode",
+      "fit": "medium-high: 046 vocabulary; caps adoptable",
+      "sources": [
+        "https://doc.anytype.io/anytype/basics/sidebar/widgets.md"
+      ],
+      "newInfo": "fully-new",
+      "_lineages": [
+        "anytype-glm"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 89,
+    "sourceFindings": 89,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  },
+  "schema_mismatch": [
+    {
+      "type": "schema_mismatch",
+      "severity": "warn",
+      "lineage": "anytype-glm",
+      "message": "Registry uses non-canonical key \"findings\" instead of \"keyFindings\"; coerced 89 entries.",
+      "aliasKey": "findings",
+      "canonicalKey": "keyFindings",
+      "coercedCount": 89
+    }
+  ]
+}

@@ -1,17 +1,21 @@
 {
+  "level": "2",
   "specFolder": "005-component-surface-system/047-competitor-references-and-pm-alignment",
   "description": "Phase 1: competitor-references-and-pm-alignment",
   "keywords": [
     "phase",
     "competitor-references-and-pm-alignment"
   ],
-  "lastUpdated": "2026-09-05T03:47:55.183Z",
+  "lastUpdated": "2026-09-05T07:38:18.391Z",
   "specId": "047",
   "folderSlug": "competitor-references-and-pm-alignment",
   "parentChain": [
     "005-component-surface-system"
   ],
-  "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "2"
+  "memorySequence": 3,
+  "memoryNameHistory": [
+    "05-09-26_08-37__worktree-065-anytype-research-created-off-origin.md",
+    "05-09-26_08-37__worktree-065-anytype-research-created-off-origin.md",
+    "05-09-26_08-38__worktree-065-anytype-research-created-off-origin.md"
+  ]
 }

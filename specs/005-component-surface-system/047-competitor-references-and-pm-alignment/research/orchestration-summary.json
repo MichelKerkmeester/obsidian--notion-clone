@@ -1,0 +1,71 @@
+{
+  "run_id": "1788590123471-qp1mid",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/047-competitor-references-and-pm-alignment",
+  "base_artifact_dir": "specs/005-component-surface-system/047-competitor-references-and-pm-alignment/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "anytype-glm",
+      "state_log": "specs/005-component-surface-system/047-competitor-references-and-pm-alignment/research/lineages/anytype-glm/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-09-05T06:35:23.475Z",
+        "end_at_iso": "2026-09-05T07:25:07.356Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 22,
+        "untimestamped": 0,
+        "unparseable": 0,
+        "total": 22
+      },
+      "sample": [
+        {
+          "index": 0,
+          "reason": "after_window",
+          "timestamp": "2026-09-05T08:42:00Z",
+          "deltaMs": 4492644
+        },
+        {
+          "index": 1,
+          "reason": "after_window",
+          "timestamp": "2026-09-05T08:52:00Z",
+          "deltaMs": 5092644
+        },
+        {
+          "index": 2,
+          "reason": "after_window",
+          "timestamp": "2026-09-05T09:00:00Z",
+          "deltaMs": 5572644
+        },
+        {
+          "index": 3,
+          "reason": "after_window",
+          "timestamp": "2026-09-05T09:12:00Z",
+          "deltaMs": 6292644
+        },
+        {
+          "index": 4,
+          "reason": "after_window",
+          "timestamp": "2026-09-05T09:26:00Z",
+          "deltaMs": 7132644
+        }
+      ]
+    }
+  ]
+}
