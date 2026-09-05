@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-05T01:51:45.730Z",
+  "measuredAt": "2026-09-05T02:30:12.285Z",
   "inputs": {
-    "styles.css": "ad1dea7437ad",
+    "styles.css": "8c168bae706d",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "fixtures": 73,
-    "differences": 50
+    "fixtures": 69,
+    "differences": 49
   },
   "differences": [
     {
@@ -224,14 +224,6 @@
       "index": 7,
       "notes": [
         "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "panel-view-config-sheet",
-      "selector": "input[type=\"text\"]",
-      "index": 0,
-      "notes": [
-        "width 193 vs 215.31"
       ]
     },
     {

@@ -377,3 +377,56 @@ describe("subtask screenshot fixture parity", () => {
     expect(TL_SUBTASK_LANES.find((lane) => lane.key === "personal").events.every((event) => !event.subtask)).toBe(true);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 4. LIST-VIEW STYLESHEET REACHABILITY
+// ───────────────────────────────────────────────────────────────────
+
+// src/views/list-renderer.ts is retired, and nothing else builds `db-list*` markup except
+// tools/live/view-census.mjs's row-rhythm matrix -- a reproduction kept on purpose to measure the
+// stylesheet's row layout independent of a live view. Every `db-list*` class the stylesheet still
+// selects on has to be one that fixture actually mounts, together with only the wrapper classes it
+// puts around that markup (`note-database-container`, `is-phone`, `is-mobile`); anything else is a
+// selector no producer can ever satisfy.
+describe("list retirement leaves no unreachable db-list selector", () => {
+  const styles = readFileSync(new URL("../../../styles.css", import.meta.url), "utf8");
+  const viewCensus = readFileSync(new URL("../../live/view-census.mjs", import.meta.url), "utf8");
+
+  const WRAPPER_CLASSES = new Set(["note-database-container", "is-phone", "is-mobile"]);
+
+  /** Every class the row-rhythm fixture's own markup strings mount, `db-list*` or not. */
+  function fixtureClasses(source) {
+    const classes = new Set();
+    for (const match of source.matchAll(/class="([^"]*)"/g)) {
+      for (const cls of match[1].split(/\s+/).filter(Boolean)) classes.add(cls);
+    }
+    return classes;
+  }
+
+  /** One rule's selector text, paired with its declaration body -- ignores at-rule nesting
+   *  (`@media` etc.), which changes when a rule applies, not what elements can satisfy it. */
+  function ruleSelectors(css) {
+    const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    return [...withoutComments.matchAll(/([^{}]+)\{[^{}]*\}/g)]
+      .flatMap((m) => m[1].split(","))
+      .map((arm) => arm.trim())
+      .filter(Boolean);
+  }
+
+  it("keeps every db-list selector arm inside the classes the row-rhythm fixture mounts", () => {
+    const mounted = fixtureClasses(viewCensus);
+    const listMounted = [...mounted].filter((cls) => cls.startsWith("db-list"));
+    // A regression in the fixture itself (nothing left mounting db-list markup) would silently
+    // pass every check below by having nothing left to disagree with -- guard against that first.
+    expect(listMounted.length).toBeGreaterThan(0);
+
+    const unreachable = [];
+    for (const arm of ruleSelectors(styles)) {
+      const classes = [...arm.matchAll(/\.([a-zA-Z0-9_-]+)/g)].map((m) => m[1]);
+      if (!classes.some((cls) => cls.startsWith("db-list"))) continue;
+      const unknown = classes.filter((cls) => !mounted.has(cls) && !WRAPPER_CLASSES.has(cls));
+      if (unknown.length > 0) unreachable.push(`${arm}  [${unknown.join(", ")}]`);
+    }
+    expect(unreachable, `selector arms no producer can satisfy:\n${unreachable.join("\n")}`).toEqual([]);
+  });
+});

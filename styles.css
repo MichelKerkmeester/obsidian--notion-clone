@@ -1186,7 +1186,6 @@
 .note-database-container td.db-conditional-format,
 .note-database-container .db-board-card-field.db-conditional-format,
 .note-database-container .db-gallery-field.db-conditional-format,
-.note-database-container .db-list-field.db-conditional-format,
 .db-mobile-bottom-sheet .db-record-detail-field.db-conditional-format,
 .note-database-container .db-record-detail-field.db-conditional-format,
 .note-database-container .db-record-detail-title.db-conditional-format,
@@ -1409,8 +1408,7 @@
   margin-left: 4px;
 }
 
-.note-database-container .db-gallery-group-header .db-group-summary-item,
-.note-database-container .db-list-group-header-label .db-group-summary-item {
+.note-database-container .db-gallery-group-header .db-group-summary-item {
   margin-left: 4px;
 }
 
@@ -6036,8 +6034,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   opacity: 0.7;
 }
 
-.note-database-container .db-title-cell:hover .db-file-title-inline .db-file-title-prefix,
-.note-database-container .db-list-row:hover .db-file-title-inline .db-file-title-prefix {
+.note-database-container .db-title-cell:hover .db-file-title-inline .db-file-title-prefix {
   opacity: 0.5;
   max-width: 100%;
 }
@@ -6083,55 +6080,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board-card:hover .db-file-title-prefix,
 .note-database-container .db-gallery-card:hover .db-file-title-prefix {
   opacity: 0.6;
-}
-/* ───────────────────────────────────────────────────────────────
-   8. FILENAME PATH PREFIX
-   List view: the path prefix sits before the file name and slides open
-   on hover.
-─────────────────────────────────────────────────────────────── */
-
-/* 1. 强制列表行的标题变为 flex 行内布局 */
-.note-database-container .db-list-row .db-file-title-stacked,
-.note-database-container .db-list-row .db-file-title-inline {
-  display: flex;
-  align-items: baseline;
-  overflow: hidden;
-  flex-wrap: nowrap;
-  gap: 0px;
-}
-
-/* 2. 路径前缀：放在左侧，默认宽度为 0（隐藏） */
-.note-database-container .db-list-row .db-file-title-prefix {
-  display: inline;
-  order: 0;
-  width: auto;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex-shrink: 0;
-  font-size: 1em;
-  color: var(--text-muted);
-  transition: opacity 0.2s ease, max-width 0.2s ease;
-  margin-bottom: 0;            /* 覆盖 stacked 的 margin-bottom */
-}
-
-/* 3. hover 整行时滑入展开 */
-.note-database-container .db-list-row:hover .db-file-title-prefix {
-  opacity: 0.5;
-  max-width: 100%;
-}
-
-/* 4. 文件名：允许收缩，确保 ellipsis 生效 */
-.note-database-container .db-list-row .db-file-title-name {
-  display: inline;
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  order: 1;
 }
 
 
@@ -6434,8 +6382,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-table tr.is-dragging,
-.note-database-container .db-gallery-card.is-dragging,
-.note-database-container .db-list-row.is-dragging {
+.note-database-container .db-gallery-card.is-dragging {
   opacity: 0.45;
   box-shadow: var(--db-elevation-2);
 }
@@ -6508,9 +6455,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-group-header.is-drop-target,
 .note-database-container .db-table-wrap.is-drop-target,
 .note-database-container .db-gallery-group-header.is-drop-target,
-.note-database-container .db-gallery.is-drop-target,
-.note-database-container .db-list-group-header.is-drop-target,
-.note-database-container .db-list.is-drop-target {
+.note-database-container .db-gallery.is-drop-target {
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 72%, transparent);
 }
 
@@ -7417,7 +7362,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .note-database-container .db-board-new-card.is-disabled,
 .note-database-container .db-gallery-new-card.is-disabled,
-.note-database-container .db-list-new-row.is-disabled,
 .note-database-container .db-new-row-button.is-disabled { opacity: 0.5; cursor: not-allowed; }
 .note-database-changelog {
   max-height: 80vh;
@@ -7766,8 +7710,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   background: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
 }
 
-.note-database-container .db-gallery-empty-group,
-.note-database-container .db-list-empty-group {
+.note-database-container .db-gallery-empty-group {
   width: min(100%, 520px);
   border-style: dashed;
   border-color: var(--background-modifier-border);
@@ -7876,7 +7819,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 
 .note-database-container .db-gallery-group-toggle,
-.note-database-container .db-list-group-toggle,
 .note-database-container .db-group-collapse-toggle,
 .note-database-container .db-board-group-toggle,
 .note-database-container .db-board-subgroup-toggle {
@@ -7900,8 +7842,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-group-collapse-toggle:hover,
 .note-database-container .db-gallery-group-toggle:hover,
 .note-database-container .db-board-group-toggle:hover,
-.note-database-container .db-board-subgroup-toggle:hover,
-.note-database-container .db-list-group-toggle:hover {
+.note-database-container .db-board-subgroup-toggle:hover {
   color: var(--text-normal);
 }
 
@@ -9552,8 +9493,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .note-database-container .db-group-title-text,
-.note-database-container .db-gallery-group-title,
-.note-database-container .db-list-group-title {
+.note-database-container .db-gallery-group-title {
   display: inline-flex;
   min-width: 0;
   max-width: 100%;
@@ -9562,8 +9502,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board-column-title > .status-badge,
 .note-database-container .db-board-subgroup-title > .status-badge,
 .note-database-container .db-group-title-text > .status-badge,
-.note-database-container .db-gallery-group-title > .status-badge,
-.note-database-container .db-list-group-title > .status-badge {
+.note-database-container .db-gallery-group-title > .status-badge {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11037,83 +10976,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
    Compact single-column record list.
 ─────────────────────────────────────────────────────────────── */
 
-.note-database-container .db-list,
-.note-database-container .db-list-grouped {
+.note-database-container .db-list {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
   gap: 4px;
   width: max-content;
   min-width: 100%;
-}
-
-.note-database-container .db-list-group {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 2px;
-  width: max-content;
-  min-width: 100%;
-}
-
-.note-database-container .db-list-group > .db-list {
-  margin-top: 0;
-}
-
-.note-database-container .db-list-group-header,
-.note-database-container .db-list-total-header {
-  display: flex;
-  align-items: center;
-  min-height: 30px;
-  width: max-content;
-  min-width: 100%;
-  margin: 0;
-  position: sticky;
-  top: calc(var(--db-group-header-top) + 8px + var(--db-selection-status-offset));
-  z-index: 26;
-  background: var(--background-primary);
-  box-shadow: inset 0 -1px 0 var(--background-modifier-border);
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 0px 4px;
-}
-
-.note-database-container .db-list-group-header {
-  box-shadow: none;
-}
-
-
-.note-database-container .db-list-group-header-label {
-  position: sticky;
-  left: 0;
-  z-index: 27;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  max-height: calc(var(--db-group-header-height) - 10px);
-  max-width: min(480px, calc(100vw - 48px));
-  overflow: hidden;
-  background: var(--background-primary);
-  padding: var(--db-space-3) var(--db-space-5) var(--db-space-2) 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-list-group-checkbox {
-  flex: 0 0 auto;
-  margin: 4px;
-}
-
-.note-database-container .db-list-group-count {
-  min-width: 18px;
-  border-radius: var(--db-radius-full);
-  background: var(--background-secondary);
-  color: var(--text-faint);
-  font-size: 11px;
-  line-height: 18px;
-  text-align: center;
-  padding: 0 6px;
 }
 
 .note-database-container .db-list-row {
@@ -11145,25 +11014,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   }
 }
 
-.note-database-container .db-list-row.is-drop-before,
-.note-database-container .db-list-row.is-drop-after {
-  border-color: color-mix(in srgb, var(--interactive-accent) 72%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--interactive-accent) 6%, var(--background-primary));
-  transition: none;
-}
-
-.note-database-container .db-list-row.is-drop-before {
-  box-shadow: inset 0 4px 0 -2px var(--interactive-accent),
-    inset 0 20px 14px -18px var(--interactive-accent),
-    0 5px 16px rgba(0, 0, 0, 0.08);
-}
-
-.note-database-container .db-list-row.is-drop-after {
-  box-shadow: inset 0 -4px 0 -2px var(--interactive-accent),
-    inset 0 -20px 14px -18px var(--interactive-accent),
-    0 5px 16px rgba(0, 0, 0, 0.08);
-}
-
 .note-database-container .db-list-row-controls {
   display: inline-flex;
   align-items: center;
@@ -11186,18 +11036,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* A property with no value holds its place instead of leaving the row.
-   The renderer used to drop it, and every field after it moved up one slot, so the first column
-   held Cost on one card and Payment on the next and no column could be read down. Claiming the
-   column by index fixed that on the desktop grid — and not on the phone, where this same element
-   is a wrapping flex line that ignores grid-column entirely: four properties measured across
-   fourteen x-positions on twelve cards. The field is now rendered either way and hidden when
-   empty, so the column is an index rather than a count in whichever layout the surface is in. */
-.note-database-container .db-list-field.is-placeholder {
-  visibility: hidden;
-  pointer-events: none;
 }
 
 /* A grid, not a flex line, on the desktop: each field claims the column its property owns. */
@@ -11256,18 +11094,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   font-size: 12px;
 }
 
-.note-database-container .db-list.is-compact-fields .db-list-field:not(.db-list-field-wrap) {
-  flex: 0 1 auto;
-  width: max-content;
-  max-width: var(--db-card-field-width, 150px);
-}
-
-.note-database-container .db-list-field-wrap {
-  align-items: center;
-  width: max-content;
-  max-width: none;
-}
-
 .note-database-container .db-list-field-label {
   flex: 0 0 auto;
   color: var(--text-faint);
@@ -11279,91 +11105,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.note-database-container .db-list-field-wrap .db-list-field-value {
-  overflow: visible;
-  text-overflow: clip;
-  white-space: nowrap;
-}
-
-.note-database-container .db-list-field.is-checkbox-field .db-list-field-value {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-  text-align: right;
-}
-
-.note-database-container .db-list-field.is-checkbox-field .db-checkbox-cell input {
-  margin: 0;
-}
-
-.note-database-container .db-list-badges {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  gap: 4px;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.note-database-container .db-list-field-wrap .db-list-badges {
-  overflow: visible;
-}
-
-.note-database-container .db-list-link {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  color: var(--text-accent);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-list-field-wrap .db-list-link {
-  overflow: visible;
-  text-overflow: clip;
-  white-space: nowrap;
-}
-
-.note-database-container .db-list-row-open {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border: 0;
-  border-radius: var(--db-radius-md);
-  background: transparent;
-  color: var(--text-faint);
-  cursor: pointer;
-  padding: 0;
-}
-
-.note-database-container .db-list-row-open:hover {
-  background: var(--background-modifier-hover);
-  color: var(--text-normal);
-}
-
-.note-database-container .db-list-new-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 36px;
-  border: 0;
-  border-radius: var(--db-radius-lg);
-  background: transparent;
-  box-shadow: none;
-  color: var(--text-faint);
-  cursor: pointer;
-  text-align: left;
-  padding: var(--db-space-4) var(--db-space-5);
-}
-
-.note-database-container .db-list-new-row:hover {
-  background: var(--background-modifier-hover);
-  color: var(--text-normal);
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -15935,11 +15676,6 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-embed.note-database-container .db-group-header {
   top: var(--db-group-header-top);
 }
-/* Embed: 分组标题紧贴 header 底边 */
-.note-database-embed.note-database-container .db-list-group-header,
-.note-database-embed.note-database-container .db-list-total-header {
-  top: var(--db-group-header-top);
-}
 
 .note-database-embed.note-database-container .db-gallery-group-header,
 .note-database-embed.note-database-container .db-gallery-total-header {
@@ -20112,7 +19848,6 @@ body.pm-resize-active * {
 }
 
 .note-database-container .db-card-mobile-move-btn,
-.note-database-container .db-list-mobile-move-btn,
 .note-database-container .db-table-mobile-move-btn {
   display: none;
 }
@@ -20137,24 +19872,6 @@ body.pm-resize-active * {
 .is-phone .note-database-container .db-card-mobile-move-btn:active {
   color: var(--db-text-primary, var(--text-normal));
   background: var(--db-surface-interactive-hover, var(--background-modifier-hover));
-}
-
-.is-phone .note-database-container .db-list-mobile-move-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--db-radius-md);
-  color: var(--text-faint);
-  background: transparent;
-}
-
-.is-phone .note-database-container .db-list-mobile-move-btn:active {
-  color: var(--text-normal);
-  background: var(--background-modifier-hover);
 }
 
 .is-phone .note-database-container .db-table col.db-select-colgroup,
@@ -20218,8 +19935,7 @@ body.pm-resize-active * {
   background: var(--background-modifier-hover);
 }
 
-.is-phone .note-database-container .db-card-mobile-move-btn svg,
-.is-phone .note-database-container .db-list-mobile-move-btn svg {
+.is-phone .note-database-container .db-card-mobile-move-btn svg {
   width: 16px;
   height: 16px;
 }
@@ -20679,12 +20395,10 @@ img.db-text-md-image {
 .note-database-container .db-active-control-remove,
 .note-database-container .db-group-collapse-toggle,
 .note-database-container .db-gallery-group-toggle,
-.note-database-container .db-list-group-toggle,
 .note-database-container .db-board-group-toggle,
 .note-database-container .db-board-subgroup-toggle,
 .note-database-container .db-table-mobile-move-btn,
 .note-database-container .db-card-mobile-move-btn,
-.note-database-container .db-list-mobile-move-btn,
 .note-database-container .db-timeline-window-jump,
 .note-database-container .db-calendar-nav-button,
 .note-database-container .db-calendar-add-button {
@@ -20700,7 +20414,6 @@ img.db-text-md-image {
     .db-board-column-options,
     .db-group-collapse-toggle,
     .db-gallery-group-toggle,
-    .db-list-group-toggle,
     .db-board-group-toggle,
     .db-board-subgroup-toggle,
     .db-timeline-window-jump,
@@ -20769,12 +20482,10 @@ img.db-text-md-image {
   .note-database-container .db-active-control-edit::before,
   .note-database-container .db-group-collapse-toggle::before,
   .note-database-container .db-gallery-group-toggle::before,
-  .note-database-container .db-list-group-toggle::before,
   .note-database-container .db-board-group-toggle::before,
   .note-database-container .db-board-subgroup-toggle::before,
   .note-database-container .db-table-mobile-move-btn::before,
   .note-database-container .db-card-mobile-move-btn::before,
-  .note-database-container .db-list-mobile-move-btn::before,
   .note-database-container .db-timeline-window-jump::before,
   .note-database-container .db-calendar-nav-button::before,
   .note-database-container .db-calendar-add-button::before {
@@ -20848,7 +20559,6 @@ img.db-text-md-image {
    declared inside `.is-phone`, which is what says where it belongs. The floor stays; display is
    not the floor's business. */
 .note-database-container .db-card-mobile-move-btn,
-.note-database-container .db-list-mobile-move-btn,
 .note-database-container .db-table-mobile-move-btn {
   min-width: 28px;
   min-height: 28px;
@@ -21075,10 +20785,6 @@ img.db-text-md-image {
    phone that overflows the card past the viewport and the meta row's visible
    overflow paints values past the card border. Constrain the row and its parts
    to the viewport, let the field row wrap, and clip stray overflow. */
-.is-phone .note-database-container .db-list-grouped,
-.is-phone .note-database-container .db-list-group,
-.is-phone .note-database-container .db-list-group > .db-list,
-.is-phone .note-database-container .db-list-group-header,
 .is-phone .note-database-container .db-list-row,
 .is-phone .note-database-container .db-list-row-main,
 /* On a phone the list fits the screen and its fields wrap; it does not scroll sideways.
@@ -21228,7 +20934,7 @@ img.db-text-md-image {
     forced-color-adjust: none;
   }
 
-  .note-database-container :is(.db-group-collapse-toggle, .db-gallery-group-toggle, .db-list-group-toggle, .db-board-group-toggle, .db-board-subgroup-toggle):focus-visible,
+  .note-database-container :is(.db-group-collapse-toggle, .db-gallery-group-toggle, .db-board-group-toggle, .db-board-subgroup-toggle):focus-visible,
   .db-column-menu-subpopover :is(button, input, select, textarea):focus-visible,
   .db-icon-picker-popover :is(button, input, select, textarea):focus-visible,
   .db-color-picker-popup :is(button, input, select, textarea):focus-visible,
@@ -22755,7 +22461,6 @@ input[type="checkbox"].db-checkbox.db-checkbox-field {
      `min-width: 26px` beside its width, and a width alone loses to it. That is the same defeat the
      checkbox rule above was written for, and it is worth stating twice because the failure is
      silent — the box simply does not grow, and a census reads the old number. */
-  .note-database-container .db-list-row-open,
   .note-database-container .db-source-rule-icon-button {
     min-width: 28px;
     min-height: 28px;
