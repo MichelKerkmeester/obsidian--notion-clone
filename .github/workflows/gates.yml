@@ -92,12 +92,29 @@ jobs:
 
       # A build that leaves the tree dirty means a generated artifact is tracked but not committed,
       # which is how a stale bundle ships while every check above stays green.
+      #
+      # `main.js` is the one tracked file this rule cannot hold to that standard on every push.
+      # It is committed only by a release commit (`chore(release): ...`); every commit in between
+      # ships whatever bundle the last release produced, so a `src/` change since that release makes
+      # a fresh build differ from the committed one by design, not by accident. Failing the gate on
+      # that difference would force every ordinary commit to also commit a bundle nobody ships from
+      # it — the tagged release rebuilds its own in the separate release workflow, and that build,
+      # not this tree's `main.js`, is what gets uploaded and attested. So `main.js` is excluded from
+      # this check except on a release commit, where the committed bundle must still match what
+      # `src/` actually produces.
       - name: Working tree is clean after a full run
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
+          subject="$(git log -1 --pretty=%s)"
+          if [[ "$subject" == chore\(release\):* ]]; then
+            pathspec=(".")
+          else
+            pathspec=("." ":!main.js")
+          fi
+          dirty="$(git status --porcelain -- "${pathspec[@]}")"
+          if [ -n "$dirty" ]; then
             echo "::error::the gate run modified tracked files:"
-            git status --porcelain
-            git diff --stat
+            echo "$dirty"
+            git diff --stat -- "${pathspec[@]}"
             exit 1
           fi
           echo "tree clean"
