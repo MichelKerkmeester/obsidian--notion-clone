@@ -200,6 +200,7 @@ describe("fixture declarations", () => {
       "chrome-group-selection-controls -> constructed-group-selection-controls",
       "chrome-owned-menu -> constructed-owned-menu",
       "chrome-owned-menu-sheet -> constructed-owned-menu",
+      "chrome-owned-menu-submenu-open -> constructed-owned-menu",
       "chrome-summary-row -> constructed-summary",
       "chrome-table-footer -> constructed-table-footer",
       "chrome-toolbar -> constructed-toolbar",

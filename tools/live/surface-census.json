@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T15:23:49.011Z",
+  "measuredAt": "2026-09-05T20:18:04.135Z",
   "inputs": {
-    "styles.css": "9c4b9f65e443",
+    "styles.css": "2b51f568ad68",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -151,6 +151,7 @@
         "add-view-popover",
         "add-view-popover",
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet"
       ]
     },
@@ -521,6 +522,7 @@
       "scenarios": [
         "add-view-popover",
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet"
       ]
     },
@@ -548,6 +550,9 @@
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
+        "chrome-owned-menu-submenu-open",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
@@ -580,6 +585,9 @@
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
+        "chrome-owned-menu-submenu-open",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
@@ -612,6 +620,9 @@
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
+        "chrome-owned-menu-submenu-open",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
@@ -634,6 +645,7 @@
         "add-view-popover",
         "add-view-popover",
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet"
       ]
     },
@@ -1207,6 +1219,7 @@
       "rect": "230x192",
       "scenarios": [
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet"
       ]
     },
@@ -1218,6 +1231,7 @@
       "rect": "36x15",
       "scenarios": [
         "chrome-owned-menu",
+        "chrome-owned-menu-submenu-open",
         "chrome-owned-menu-sheet"
       ]
     },

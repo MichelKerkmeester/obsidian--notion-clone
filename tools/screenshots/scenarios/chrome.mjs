@@ -732,6 +732,38 @@ export const CHROME_SCENARIOS = [
       </div>`,
   },
   {
+    id: "chrome-owned-menu-submenu-open",
+    title: "Owned menu — the row whose submenu is open",
+    group: "components",
+    width: 420,
+    fixtureOf: "constructed-owned-menu",
+    sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts"],
+    note: "The same menu as the fixture above with one row in its open-submenu state, which is the only state the stylesheet draws differently and the one no other capture reaches. The child menu itself is not drawn here: where it lands is arithmetic the plugin runs in JavaScript against a live viewport, and a fixture that placed it would be photographing a guess at that arithmetic rather than the stylesheet this harness exists to photograph.",
+    // Two signals belong to this state and both are stylesheet-owned, so both have to be visible in
+    // a capture or a theme could silently drop either one: the row keeps its hover fill after the
+    // pointer has moved onto the child, and its chevron rotates from pointing right to pointing
+    // down. Drawn without `:hover`, exactly as the real row sits once the pointer has left it.
+    html: () => `
+      <div class="db-surface db-menu db-owned-menu" role="menu" tabindex="-1">
+        <div class="db-menu-section">Column</div>
+        <button type="button" class="db-menu-item" aria-checked="false">
+          <span class="db-menu-item-icon">${I.arrowUpDown}</span>
+          <span class="db-menu-item-label">Sort ascending</span>
+        </button>
+        <button type="button" class="db-menu-item is-submenu-open" aria-checked="false" aria-haspopup="true" aria-expanded="true">
+          <span class="db-menu-item-icon">${I.columns3}</span>
+          <span class="db-menu-item-label">Property type</span>
+          <span class="db-menu-item-current">Select</span>
+          <span class="db-menu-item-chevron">${I.chevronRight}</span>
+        </button>
+        <div class="db-menu-separator" role="separator"></div>
+        <button type="button" class="db-menu-item is-warning" aria-checked="false">
+          <span class="db-menu-item-icon">${I.trash}</span>
+          <span class="db-menu-item-label">Delete property</span>
+        </button>
+      </div>`,
+  },
+  {
     id: "chrome-owned-menu-sheet",
     title: "Owned menu — the sheet presentation on a phone",
     group: "components",

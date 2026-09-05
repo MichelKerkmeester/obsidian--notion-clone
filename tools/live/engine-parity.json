@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-09-05T15:23:45.587Z",
+  "measuredAt": "2026-09-05T20:18:01.194Z",
   "inputs": {
-    "styles.css": "9c4b9f65e443",
+    "styles.css": "2b51f568ad68",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "fixtures": 71,
+    "fixtures": 72,
     "differences": 50
   },
   "differences": [

@@ -159,6 +159,16 @@ The phone form of the owned menu. Rows share one left edge with the icon in a fi
 
 Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
 
+### Owned menu — the row whose submenu is open
+
+The same menu as the fixture above with one row in its open-submenu state, which is the only state the stylesheet draws differently and the one no other capture reaches. The child menu itself is not drawn here: where it lands is arithmetic the plugin runs in JavaScript against a live viewport, and a fixture that placed it would be photographing a guess at that arithmetic rather than the stylesheet this harness exists to photograph.
+
+| dark | light |
+|---|---|
+| ![chrome-owned-menu-submenu-open dark](notion-clone/components/chrome-owned-menu-submenu-open-mobile-dark.png) | ![chrome-owned-menu-submenu-open light](notion-clone/components/chrome-owned-menu-submenu-open-mobile-light.png) |
+
+Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`
+
 ### Cell selection status bar
 
 The bar that appears while table cells are selected. Its checkbox clears the selection, so it is always rendered checked.

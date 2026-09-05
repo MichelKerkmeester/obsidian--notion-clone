@@ -1,8 +1,8 @@
 {
-  "holder": "053-toolbar-and-view-controls",
-  "acquiredAt": "2026-09-05T09:05:00Z",
-  "baselineHash": "9c4b9f65e443",
-  "baselineCommit": "4f87de0878c5e3466f2f0f848665b19fb8c0fd83",
+  "holder": "052-dropdown-menu-and-picker-componentization",
+  "acquiredAt": "2026-09-05T20:10:00Z",
+  "baselineHash": "2b51f568ad68",
+  "baselineCommit": "fc730ed9",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3501,6 +3501,26 @@
         "screenshots/notion-clone/panels/panel-view-config-mobile-light.png"
       ],
       "note": "58 content-changed captures of 554, each opened and read across every family in at least one theme/device variant: chrome-active-view-controls and constructed-active-view-controls (28px chip, 8/12px separator, direction word on the leading sort chip, condition-as-phrase filter label), chrome-toolbar/chrome-view-switcher (16px tab gap), constructed-toolbar/-utilities/-add-view/-search (createPopoverShell header chrome, unchanged behaviour), constructed-filter-panel/-sort-panel/-filter-panel-nested (createConditionRow's 140/140/120px floors), constructed-view-config and panel-view-config (360x315 panel; the applied-count summary rows sit inside the view section, below the database section's own scroll height in the desktop capture's fixed viewport crop -- confirmed rendering instead through the render-assertions gate lane's `.db-view-config-summary` DOM assertion, which the desktop screenshot's crop does not reach), constructed-board-card-properties/panel-board-card-properties (28px control-cluster/list-row pitch shared with the toolbar's own icon buttons), panel-sort-rules (36px row / 48px pitch). 11 further captures moved bytes but not pixelHash/layoutHash (re-encode only) and were restored to their committed bytes rather than reviewed. Project Manager board/gantt captures were re-run and are pixelHash-identical to the pre-phase baseline (ADR-003's drag path is a commit-time confirm only; zero drag-visual change), so no project-manager/ path needed review. GATE at handover: npx tsc --noEmit 0, npm test 1246/1246 green, npm run build 0."
+    },
+    {
+      "event": "acquire",
+      "phase": "052-dropdown-menu-and-picker-componentization",
+      "at": "2026-09-05T20:10:00Z",
+      "hash": "9c4b9f65e443",
+      "note": "Taken over from 053 after rebasing this leg onto its landing. Two state rules are added to the shared menu-row block: a row whose child menu is open keeps its hover fill after the pointer has moved onto the child, and its chevron rotates. The existing transparent-background rule gains one :not(.is-submenu-open) so exactly one rule still sets a row background. No selector changed the set of elements it matches for a row that never carries the new class, which is every row in every capture that existed before this release."
+    },
+    {
+      "event": "release",
+      "phase": "052-dropdown-menu-and-picker-componentization",
+      "at": "2026-09-05T20:45:00Z",
+      "hash": "2b51f568ad68",
+      "note": "npm run screenshots regenerated all 558 captures after the stylesheet edit. git reported 14 changed captures; check-lane reads 10 of them as byte-only re-encode noise on pictures whose pixelHash is unchanged, and 4 as real content. The 4 are the new chrome-owned-menu-submenu-open scenario, registered in this same change because the two rules above draw a state no existing fixture carries, and an unphotographed state is one a theme can drop silently. All 4 were opened and read: the row holds its fill without :hover and the chevron points down rather than right, in both themes and at both widths. The child menu itself is deliberately not in the fixture. Where it lands is JavaScript arithmetic against a live viewport rather than anything this stylesheet decides, so a fixture that placed it would photograph a guess at that arithmetic. GATE at handover: npx tsc --noEmit 0, npx vitest run 1266/1266, npm run build 0, npm run gate 25 green 0 red exit 0.",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-desktop-dark.png",
+        "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-desktop-light.png",
+        "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-light.png"
+      ]
     }
   ],
   "outstanding": [
