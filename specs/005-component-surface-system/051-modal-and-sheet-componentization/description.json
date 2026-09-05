@@ -1,0 +1,22 @@
+{
+  "specFolder": "005-component-surface-system/051-modal-and-sheet-componentization",
+  "description": "One shell primitive for every modal and sheet in the plugin — one definition, two presentations, declared titles, sub-page navigation and one confirm primitive — with a per-surface migration table and the Anytype shell behaviours each migration takes or declines.",
+  "keywords": [
+    "modal",
+    "sheet",
+    "shell primitive",
+    "componentization",
+    "confirm primitive",
+    "sub-page navigation",
+    "anytype adoption"
+  ],
+  "lastUpdated": "2026-09-05T14:00:00.000Z",
+  "specId": "051",
+  "folderSlug": "modal-and-sheet-componentization",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
