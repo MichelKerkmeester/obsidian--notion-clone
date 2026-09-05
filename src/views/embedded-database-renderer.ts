@@ -94,6 +94,7 @@ import { removeFilterRuleAt, removeSortRuleAt } from "./view-rule-operations";
 import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
 import { DATABASE_VIEW_TYPE, DatabaseView, getNoteDatabasePlugin } from "./database-view";
 import { applyListMigration, planListMigration } from "../data/list-migration";
+import { applyGalleryMigration, planGalleryMigration } from "../data/gallery-migration";
 import { resolveViewIndex } from "../data/view-selection";
 
 import { isInsideOpenSheet } from "./mobile-bottom-sheet";
@@ -336,6 +337,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
    * be retried, and re-announced, on every render.
    */
   private migratedListViews = new Set<string>();
+  /**
+   * Databases already offered the gallery migration this session, by database id.
+   *
+   * Same reasoning as `migratedListViews`: the persisted notice record guards across sessions, this
+   * set guards the attempt within one, since an embed re-renders on every data change.
+   */
+  private migratedGalleryViews = new Set<string>();
   private viewIndexOverride: number | null = null;
   private selectedRows = new Set<string>();
   private lastSelectedRowPath: string | null = null;
@@ -697,6 +705,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.restoreEmbeddedHostViewport(hostViewport);
       return;
     }
+    this.migrateGalleryViewOnOpen(config);
     this.migrateListViewOnOpen(config);
     // Reset scroll to the top on an actual view-type switch: switching into a
     // tall calendar/timeline embed must start at the top instead of keeping the
@@ -717,6 +726,47 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.restoreScroll(viewTypeChanged ? { top: 0, left: pos.left } : pos);
     this.restoreDescriptionScroll(descriptionScroll);
     this.restoreEmbeddedHostViewport(hostViewport);
+  }
+
+  /**
+   * Turn an embedded gallery into a board the first time its view renders.
+   *
+   * The embed holds a CLONE of the database's view, so migrating here rewrites the clone and
+   * persists it back through the same config-mutation path the embed uses for every other edit —
+   * the full view's migration runs on its own schedule, and whichever host opens the database first
+   * is the one that migrates it. This is the call the embedded host never had: the standalone file
+   * view has migrated a gallery since `030`, and a gallery-configured codeblock rendered unmigrated
+   * until now.
+   *
+   * The notice fires once per database, remembered in the plugin data rather than per session, and a
+   * failed attempt is not retried on the next render: the session set is filled before the attempt,
+   * so a failure announces itself once, not per data change.
+   */
+  private migrateGalleryViewOnOpen(config: ViewConfig): void {
+    const db = this.currentDbConfig;
+    if (!config?.id || !db?.id) return;
+    const plan = planGalleryMigration(config);
+    if (!plan) return;
+    const plugin = getNoteDatabasePlugin(this.app);
+    const alreadyNotified = plugin?.settings.galleryMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedGalleryViews.has(db.id)) return;
+      this.migratedGalleryViews.add(db.id);
+    }
+    try {
+      if (!applyGalleryMigration(config, plan)) return;
+      this.persistEmbeddedConfigToSource();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.galleryMigrationNotices = [...(plugin.settings.galleryMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.galleryMigrated", { name: config.name || t("common.galleryView") }));
+      }
+    } catch (err) {
+      if (config.viewType === "board") config.viewType = "gallery";
+      console.error("Note Database: failed to migrate an embedded gallery view to a board", err);
+    }
   }
 
   /**

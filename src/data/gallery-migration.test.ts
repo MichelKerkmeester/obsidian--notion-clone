@@ -91,6 +91,34 @@ describe("the migration leaves the way back intact", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
+// 4. THE FIT AND ASPECT RATIO CARRY TO THEIR BOARD EQUIVALENTS
+// ───────────────────────────────────────────────────────────────────
+
+describe("the cover's fit and aspect ratio carry across, where a board field exists", () => {
+  it("carries a custom fit and a custom numeric aspect ratio onto the board's own fields", () => {
+    const view = gallery({ galleryImageFit: "contain", galleryImageAspectRatio: 1.5 } as Partial<ViewConfig>);
+    const plan = planGalleryMigration(view)!;
+    expect(plan.imageFit).toBe("contain");
+    expect(plan.imageAspectRatio).toBe(1.5);
+    applyGalleryMigration(view, plan);
+    expect(view.boardImageFit).toBe("contain");
+    expect(view.boardImageAspectRatio).toBe(1.5);
+  });
+
+  it("resolves an aspect-ratio preset into the numeric value the board reads, since the preset label itself has no board equivalent", () => {
+    // "banner" has no board-side preset system to land on — only the number the gallery renderer
+    // itself would have used survives, which is the softened half of this declared loss.
+    const view = gallery({ galleryImageAspectRatioPreset: "banner" } as Partial<ViewConfig>);
+    const plan = planGalleryMigration(view)!;
+    expect(plan.imageAspectRatio).toBe(1.777);
+    applyGalleryMigration(view, plan);
+    expect(view.boardImageAspectRatio).toBe(1.777);
+    // The preset label is not carried — the board has no field that reads it.
+    expect((view as { boardImageAspectRatioPreset?: string }).boardImageAspectRatioPreset).toBeUndefined();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
 // 5. A CONFIG THE PLUGIN DID NOT WRITE
 // ───────────────────────────────────────────────────────────────────
 

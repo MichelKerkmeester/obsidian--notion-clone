@@ -16,6 +16,7 @@
 import { readSheetTrace, setSheetTraceEnabled } from "./views/sheet-trace";
 import { App, Component, FuzzySuggestModal, loadMathJax, MarkdownRenderer, MarkdownView, Modal, Plugin, WorkspaceLeaf, Notice, TFile, normalizePath, parseYaml, stringifyYaml } from "obsidian";
 import { DataSource } from "./data/data-source";
+import { applyGalleryMigration, planGalleryMigration } from "./data/gallery-migration";
 import { sortDatabaseFileEntries } from "./data/database-file-order";
 import { DatabaseView, DATABASE_VIEW_TYPE } from "./views/database-view";
 import { DatabaseFileDashboardView, DATABASE_FILE_VIEW_TYPE } from "./views/database-file-view";
@@ -143,7 +144,17 @@ export default class NoteDatabasePlugin extends Plugin {
             if (v.filters != null && !Array.isArray(v.filters)) v.filters = undefined;
             if (v.filterLogic !== "or") v.filterLogic = "and";
             if (!v.name) v.name = `${t("common.database")} ${i + 1}`;
-            if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "chart") v.viewType = "table";
+            // Gallery is no longer exempt from this coercion, but a bare fallback to "table" would
+            // strand the cover before any render ever sees the view: this runs at settings load,
+            // before the on-open migration in database-view.ts/embedded-database-renderer.ts gets a
+            // chance to carry it. Route it through the real migration instead of the unknown-type
+            // default so the redirect and the cover carry happen together.
+            if (v.viewType === "gallery") {
+              const galleryPlan = planGalleryMigration(v as unknown as ViewConfig);
+              if (galleryPlan) applyGalleryMigration(v as unknown as ViewConfig, galleryPlan);
+            } else if (v.viewType !== "board" && v.viewType !== "chart") {
+              v.viewType = "table";
+            }
             // Wrap as DatabaseConfig with one ViewConfig child
             const viewCopy = { ...v, id: (v.id as string) || generateId() };
             const migrated = {
@@ -179,7 +190,14 @@ export default class NoteDatabasePlugin extends Plugin {
             if (!db.schema) db.schema = (isRecord(dbViews[0]) ? dbViews[0].schema : undefined) || { columns: [], computedFields: [] };
             for (const view of dbViews) {
               if (!isRecord(view)) continue;
-              if (view.viewType !== "board" && view.viewType !== "gallery" && view.viewType !== "chart") view.viewType = "table";
+              // Same reasoning as the legacy-migration sanitizer above: route a persisted gallery
+              // through the real migration rather than the bare unknown-type fallback.
+              if (view.viewType === "gallery") {
+                const galleryPlan = planGalleryMigration(view as unknown as ViewConfig);
+                if (galleryPlan) applyGalleryMigration(view as unknown as ViewConfig, galleryPlan);
+              } else if (view.viewType !== "board" && view.viewType !== "chart") {
+                view.viewType = "table";
+              }
             }
             return db as unknown as DatabaseConfig;
           });

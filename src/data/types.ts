@@ -784,6 +784,13 @@ export interface PluginSettings {
    * database opened in two leaves does not announce the retirement twice.
    */
   listMigrationNotices?: string[];
+  /**
+   * Database ids whose gallery-view retirement notice has been shown.
+   *
+   * Same reasoning as `listMigrationNotices`: the migration rewrites the view once and the notice
+   * fires once per database, remembered here rather than per session.
+   */
+  galleryMigrationNotices?: string[];
 }
 
 export interface TrashedDatabase {

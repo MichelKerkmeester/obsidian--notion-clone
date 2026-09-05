@@ -549,11 +549,11 @@ export class DatabaseView extends FileView {
   private applyingHistory = false;
   private pendingUndoLabel: string | null = null;
   /**
-   * Views already offered the gallery migration this session, by id.
+   * Databases already offered the gallery migration this session, by database id.
    *
-   * `refresh` runs on every scroll, resize and edit, so the migration has to be idempotent AND
-   * quiet. Without this a user who undid the change would be shown the notice again on the next
-   * render, and the undo they just performed would be re-applied on top of itself.
+   * The persisted notice record guards the notice across sessions; this set guards the attempt
+   * within one, for the same reason the list migration keeps one: `refresh` runs on every scroll and
+   * edit, and a migration that failed must not be retried — and re-announced — on every render.
    */
   private migratedGalleryViews = new Set<string>();
   /**
@@ -2712,20 +2712,41 @@ export class DatabaseView extends FileView {
    * so the undo restores the surface exactly. And the renderer is still shipped, so an undone view
    * renders as it always did.
    *
-   * Once per view id per session. `refresh` runs on every scroll and edit, so a migration that
-   * re-applied would fight the undo the notice just asked for.
+   * The notice is remembered in plugin data, keyed by database, rather than per session — the same
+   * shape the list migration already uses — so a database opened in two leaves does not announce the
+   * retirement twice, and a hand revert stays quiet on the next open rather than re-notifying.
+   *
+   * A migration that throws leaves the view as it was and is not retried on the next render: the
+   * session set is filled before the attempt, so a failure announces itself once, not per scroll.
    */
   private migrateGalleryViewOnOpen(): void {
     if (!this.hasActiveDatabase()) return;
+    const db = this.getActiveDb();
     const view = this.getActiveView();
-    if (!view?.id || this.migratedGalleryViews.has(view.id)) return;
+    if (!view?.id || !db?.id) return;
     const plan = planGalleryMigration(view);
     if (!plan) return;
-    this.migratedGalleryViews.add(view.id);
-    if (!applyGalleryMigration(view, plan)) return;
-    this.pendingUndoLabel = t("undo.galleryMigration");
-    this.scheduleConfigSave();
-    new Notice(t("notice.galleryMigrated", { name: view.name || t("common.galleryView") }));
+    const plugin = getNoteDatabasePlugin(this.app);
+    const alreadyNotified = plugin?.settings.galleryMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedGalleryViews.has(db.id)) return;
+      this.migratedGalleryViews.add(db.id);
+    }
+    try {
+      if (!applyGalleryMigration(view, plan)) return;
+      this.pendingUndoLabel = t("undo.galleryMigration");
+      this.scheduleConfigSave();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.galleryMigrationNotices = [...(plugin.settings.galleryMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.galleryMigrated", { name: view.name || t("common.galleryView") }));
+      }
+    } catch (err) {
+      if (view.viewType === "board") view.viewType = "gallery";
+      console.error("Note Database: failed to migrate a gallery view to a board", err);
+    }
   }
 
   /**
