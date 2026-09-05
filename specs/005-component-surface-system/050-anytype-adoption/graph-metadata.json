@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Our view surfaces work but do not cohere",
     "created_at": "2026-09-05T08:01:32Z",
-    "last_save_at": "2026-09-05T11:13:38.882Z",
+    "last_save_at": "2026-09-05T14:38:35.318Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e0dea8a0147adc8f18565df364d3e3d954634949d2d19e160fe6ed0bf765b06b",
+    "source_fingerprint": "sha256:18639a9e055f620fd7e255d1595ebae4c41a38a4ee449c0edbf5f2716d91031a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0f1f432373e966644339eee7a5cadc71e4655b5286422e47ae7df491543fa8d7",
+      "spec.md": "d68f07b81ee6c7eea018015be70cc6d6d427f9e059e1fdd516d450f550fe611c",
       "plan.md": "60bdd1aabc78f27972a80bfd68d66387a768f85edddfccce35b62f61e7de6fd6",
       "tasks.md": "4513f776af1b6c5961ab767f9d8f19531d6508ed016fa2ac167212cb3d70995b",
-      "decision-record.md": "63d79ebca101d43f8799928f90d4c18911e25c406f12b02c29ebcc7024ad5d80",
-      "implementation-summary.md": "194e9c63bec9103906bfebc91fcd03397aa739b59e17b103a85d471f6ed10b24"
+      "decision-record.md": "e295bb1dfe001ee46922058171c38a0da714fe4406fc6f318de5f39e44188e54",
+      "implementation-summary.md": "47b0e8abdd1b8297ce8c42e5fb1b85e6c6f479aecb978ebb5954bc6ea503813b"
     },
     "last_active_child_id": null,
     "last_active_at": null

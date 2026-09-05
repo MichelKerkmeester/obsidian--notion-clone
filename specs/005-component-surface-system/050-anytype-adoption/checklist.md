@@ -55,13 +55,20 @@ not close until T002 has put a number in them and the fix has moved it.
 **C1, C2, C3 and C7 are what the operator will notice first. C16 is the check that C1-C15 are not
 theatre, and C17 is the check that adopting Anytype did not cost us Project Manager.**
 
-### Five items have no reference screen — settled at T001
+### Four items have no reference screen — settled at T001, reduced 2026-09-05
 
 The packet expected six gaps: C1, C4, C6, C7, C8 and C10. The sweep closed C1's and half of C4's
-and C8's, and it turned C10's from unphotographed into **absent from the shipped product**. The
-final list of items with **no capture at all** is **REQ-005, REQ-006, REQ-007, REQ-011 and
-REQ-013**, each marked *design inferred from source code, not seen* in `design-trueup.md` §4. Two of
-the five (REQ-005, REQ-011) need no screen: they are behaviour over time and no still can show them.
+and C8's, and it turned C10's from unphotographed into "absent from the shipped product". The
+list of items with **no capture at all** was **REQ-005, REQ-006, REQ-007, REQ-011 and REQ-013**; it
+is now **REQ-005, REQ-006, REQ-007 and REQ-011**, each marked *design inferred from source code, not
+seen* in `design-trueup.md` §4. Two of the four (REQ-005, REQ-011) need no screen: they are behaviour
+over time and no still can show them.
+
+**Two corrections landed 2026-09-05 from `053`'s T001.** **REQ-013 leaves the list**: twelve desktop
+relation formats with their condition pickers are captured under `menus/`, and the iOS simulator set
+added four phone filter and sort sheets. And **C10's "absent from the shipped product" is withdrawn**
+— the per-view default lives in the `New ⌄` menu's `Settings` section, not the view-settings panel
+this read searched. Both are recorded in `design-trueup.md` §1's correction block.
 
 Each is designed from `047`'s code-derived findings **with the gap named in `design-trueup.md`** —
 never from a guess about what the screen looks like (goal D1).
@@ -89,7 +96,9 @@ restated form, not the wording above.
 - [x] CHK-005 [P0] The four non-adoptions `047` recorded are carried into this packet as frozen
       (`goal.md` D6, `spec.md` §3 Out of Scope)
 - [x] CHK-006 [P0] T001 complete: `design-trueup.md` exists with a section for all fourteen items,
-      five gaps named, seven contradictions recorded and six thresholds restated
+      the gaps named (five at landing, **four after the 2026-09-05 corrections**), seven
+      contradictions recorded (**C2 since withdrawn, C7 narrowed**) and six thresholds restated
+      (**a seventh, AC-014's citation of a flat 60, restated 2026-09-05**)
 - [ ] CHK-007 [P0] T002 complete: every mechanism-only `Today` cell above carries a measured number
 <!-- /ANCHOR:pre-impl -->
 

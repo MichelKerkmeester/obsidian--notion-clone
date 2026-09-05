@@ -69,6 +69,25 @@ duplicate/remove actions live in the settings panel rather than a tab menu; the 
 has five sections rather than four; an empty collection renders no empty-state block at all; and the
 view-settings panel has no per-view default-template row in either of its captured forms.
 
+**Amended 2026-09-05: two of the seven do not survive `053`'s T001, and this ruling is the reason
+why.** ADR-003 says a capture beats a source read. It follows that a capture that was **opened**
+beats a capture that was **not**, and `053` opened the catalogue List views and the `New ⌄` menu that
+this packet's read never did.
+
+- **C2 is withdrawn.** The chip rail is on eleven captures and is conditional — present on 5 of 5
+  List views carrying a filter, absent on Grid, Gallery, Kanban, Calendar and Graph. This read
+  scanned the four toolbar icons and never scanned the band beneath them, then reported an absence
+  from a region it had not examined. `047` was right.
+- **C7 narrows to the settings panel.** There is indeed no default-template row there; the control
+  is one surface over, in the `New ⌄` menu's `Settings` section (`Default Type for this View`,
+  `Template for this View`). `047` was right about the capability and wrong only about the surface.
+
+Both errors are the same shape — **generalising from a single surface to the product** — and the
+adopted page limit was a third instance of it (a flat 60 read off the gallery panel; the limit is
+per-layout, Gallery 60 and Kanban 10, absent on four layouts). ADR-003 gains a second corollary:
+**absence in one captured surface is evidence about that surface only.** C1, C3, C4, C5 and C6 are
+unaffected and stand.
+
 Two of these were checked against a natural control rather than accepted from one screen. The icon
 result was scanned across all 120 catalogue captures and cross-checked against
 `tools/mock-data/anytype/views-report.json`, which records which view carries the sort and which
@@ -217,8 +236,11 @@ packet as "already done". Deleting it loses the guard; keeping it as-written los
 The sweep yields a complete, internally consistent geometry for Anytype's popover system: 360px
 panels, 256px menus, 28px rows everywhere, 8px radius, 16px horizontal and 8px vertical padding, 8px
 divider clearance, 104 × 88px layout tiles on an 8px gutter, a 10px horizontal scrollbar 8px above the
-viewport bottom, 48px full-page and ≈40px inline rows, and a 60-row default page limit. A measurement
-outranks a default for the surface it covers, so most of that is simply adopted.
+viewport bottom, 48px full-page and ≈40px inline rows, and ~~a 60-row default page limit~~ **a
+per-layout page limit — Gallery 60, Kanban 10, and no limit row on Grid, List, Calendar or Graph
+(corrected 2026-09-05, `053` D4)**. A measurement outranks a default for the surface it covers, so
+most of that is simply adopted — and the page limit is the reminder that "the surface it covers" is a
+real constraint: a value measured on one layout's panel is a value for that layout.
 
 Two of its values are not geometry, and they fail the bar this repository already holds.
 
@@ -226,7 +248,12 @@ Two of its values are not geometry, and they fail the bar this repository alread
   3:1 of a non-text element that is the only thing identifying state, and this is the only thing
   identifying which row the keyboard is on.
 - Active filter and sort state is signalled by nothing at all in the toolbar, and where Anytype does
-  signal state it signals with hue alone.
+  signal state it signals with hue alone. **Strengthened 2026-09-05 (`053` D1):** it does signal
+  filter state, on a chip rail — and with hue alone at every level. The chip label `#3C7FFB` on its
+  `#E2ECFE` fill measures **3.14:1** against the 4.5:1 a ~13px label needs; the fill against the bar
+  measures **1.19:1**; the inactive view tab `#B6B6B6` on white measures **2.03:1**; the `New`
+  button's white label measures **3.74:1**. The refusal is unchanged and now has four more
+  measurements behind it, and the rail's **geometry** is adopted where its colour is not.
 
 A third class is not a quality question but an ownership one: `#3C7FFB`, `#B6B6B6` and `#EBEBEB` are
 fixed values in a product that owns its own palette. This is an Obsidian plugin, where the user's

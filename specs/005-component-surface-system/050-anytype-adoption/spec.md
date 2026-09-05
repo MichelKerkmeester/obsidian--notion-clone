@@ -36,7 +36,8 @@ mobile images. `design-trueup.md` is the read.
 
 **What the read changed.** Seven of `047`'s source-derived claims do not hold in the shipped 0.56.5
 build, and six of this packet's "today" premises do not hold against the current tree. Five items
-have no reference screen at all — REQ-005, REQ-006, REQ-007, REQ-011, REQ-013 — and carry their gap.
+have no reference screen at all — REQ-005, REQ-006, REQ-007 and REQ-011, reduced from five on
+2026-09-05 when REQ-013's screens were found — and carry their gap.
 Six thresholds are restated so they can be observed red at all (ADR-004).
 
 ---
@@ -150,7 +151,7 @@ phone, with the failing number that proved it was broken recorded beside the fix
 | `src/views/bulk-edit-field-menu.ts` | Modify | The never-empty fallback this file lacks — `:31-45` maps a possibly empty column set straight into `options` (REQ-008) |
 | `src/views/empty-state-renderer.ts` | Modify | The deleted-group-relation state, which is the one of thirteen that does not exist; the other twelve are asserted (REQ-009) |
 | `src/views/embedded-database-renderer.ts` | Modify | Measured toolbar collapse; inline "Load more" row (REQ-012, REQ-014) |
-| `src/views/sheet-grammar.ts` | Assert | The filter and sort sheets are already registered; the residue is the three elements a still capture cannot show (REQ-013) |
+| `src/views/sheet-grammar.ts` | Assert | The filter and sort sheets are already registered; the residue is the three elements a still capture cannot show (REQ-013). The twelve captured desktop formats and four iOS sheets are the coverage reference, not a new registration |
 | `styles.css` | Modify | Chip row, sticky scrollbar, collapse and empty-state rules — serialized by the parent's CSS lane |
 | `design-trueup.md` | Created | The T001 design true-up, one section per item |
 | `decision-record.md` | Created | ADR-003 capture over research, ADR-004 threshold restatement, ADR-005 adopted geometry and refused contrast |
@@ -173,7 +174,7 @@ the requirement, not the design.
 | ID | Fit | Requirement |
 |----|-----|-------------|
 | REQ-000 | Gate | The capture sweep is read and every item below carries a design trued against a real Anytype screen, or a named gap where the sweep did not reach one. No item is implemented before this. **Satisfied by `design-trueup.md`** |
-| REQ-001 | High | An active filter or sort is legible without opening a panel, on the view surface and in the view's settings. The chip row and the trigger-count badge already ship and are asserted rather than built; the residue is the `N applied` count in the settings panel's value column. **The captured build does neither** — no chip row on any of 151 captures and pixel-identical trigger icons in every state — so Anytype's dual-mode icons are not adopted (`design-trueup.md` C1, C2) |
+| REQ-001 | High | An active filter or sort is legible without opening a panel, on the view surface and in the view's settings. The chip row and the trigger-count badge already ship and are asserted rather than built; the residue is the `N applied` count in the settings panel's value column. Anytype's trigger icons are pixel-identical in every state, so its dual-mode icons are not adopted (`design-trueup.md` C1). **Corrected 2026-09-05 (`053` D1): C2 is withdrawn.** The captured build *does* carry a chip rail — eleven captures, present on 5 of 5 List views with a filter and absent on the five ruleless layouts — so its **geometry** is adopted (a 28px fully-rounded chip on its own band under a 1px divider) and its **contrast** is refused (label 3.14:1, fill 1.19:1) |
 | REQ-002 | High | Creating or duplicating a view lands directly in that view's settings, so a new view is configured rather than merely made. The panel is 360px wide with 28px rows, an 8px radius and 16px horizontal padding, and it gains one `Groups` row on a board — all measured |
 | REQ-003 | High | The horizontal scrollbar of **every horizontally scrolling view surface** — board and table both — is sticky to the viewport rather than to the bottom of the content: 10px tall, its bottom edge 8px above the viewport's, spanning the container's full content width with no gutter inset. The capture shows the grid carrying this at identical geometry to the board, so it is not a board affordance (`design-trueup.md` C3) |
 | REQ-004 | High | A view can be duplicated, and **Duplicate view and Remove view live in the view-settings panel's last section**, where the capture puts them. A view-tab context menu is design inferred from source code, not seen, and is built only if wanted (`design-trueup.md` C4) |
@@ -181,14 +182,14 @@ the requirement, not the design.
 | REQ-007 | High | A manual drag reorder while a sort is active asks before it commits, rather than dropping the row where the sort will immediately move it. It gates on the existing `isExplicitlySorted(config)` predicate, not a second one |
 | REQ-008 | High | Menus are capability-gated and never empty. `row-menu.ts`'s guarantee is asserted so it cannot regress; `bulk-edit-field-menu.ts` gains the fallback it lacks. Anytype's numeric selection caps are **not adopted** — our row menu has no multi-select, so they have no referent |
 | REQ-009 | High | The empty state distinguishes a missing source from a present source with no matches — twelve reasons already do, and the mapping is asserted — **plus the one state that does not exist**: a board whose group relation was deleted, pointing at view settings |
-| REQ-013 | High (mobile) | Filter and sort condition rows on phone sheets are per format — already shipped on both viewports — and every such sheet carries **all seven** of `044`'s grammar elements. The residue is the three a still capture cannot show: segmented choices, keyboard avoidance, safe-area inset. No Anytype phone filter surface exists in the sweep |
+| REQ-013 | High (mobile) | Filter and sort condition rows on phone sheets are per format — already shipped on both viewports — and every such sheet carries **all seven** of `044`'s grammar elements. The residue is the three a still capture cannot show: segmented choices, keyboard avoidance, safe-area inset. **Corrected 2026-09-05: Anytype filter surfaces do exist in the sweep** — twelve desktop relation formats with their condition pickers (`053` D3) and four iOS sheets (`964a0b2a`). The one-`+ New filter`-row description was the panel's **empty state**. Ours stays ahead structurally (no conjunction, group or negate control in Anytype's); the twelve formats become the coverage bar |
 
 ### P1 - Required (complete OR user-approved deferral)
 
 | ID | Fit | Requirement |
 |----|-----|-------------|
 | REQ-005 | Med-high | Scroll position is remembered per view and restored on return, within ±2px. It **wires `database-viewport.ts`'s existing snapshot into per-view state**; it does not build a second snapshot mechanism |
-| REQ-010 | Med-high | A view can carry default **field values** for a new row, applied at creation. A per-view status preset and a per-database template already ship, so field values are the whole residue. The captured settings panel has **no** per-view default-template row in either form, contradicting `047` §8 (`design-trueup.md` C7) |
+| REQ-010 | Med-high | A view can carry default **field values** for a new row, applied at creation. A per-view status preset and a per-database template already ship, so field values are the whole residue. The captured settings panel has no per-view default-template row in either form — **but the control is not absent from the product**, corrected 2026-09-05 (`053` D2): it lives in the `New ⌄` split button's `Settings` section as `Default Type for this View` and `Template for this View`. `047` §8 was right about the capability and wrong about the surface, so C7 narrows to the panel and **our row belongs beside the create affordance** |
 | REQ-011 | Med-high | A row being renamed in a sorted view holds its position until the edit commits or blurs, then repositions exactly once, instead of jumping mid-keystroke |
 | REQ-012 | Med-high | An embedded view's toolbar collapses by dropping whole controls in a stated order — icon cluster before the `New` button, tab row to a dropdown before either — driven by a measured natural-width comparison rather than a fixed breakpoint. Only the end state is captured; the mechanism is source-derived |
 
@@ -196,7 +197,7 @@ the requirement, not the design.
 
 | ID | Fit | Requirement |
 |----|-----|-------------|
-| REQ-014 | Medium | An embedded view honours a per-view page limit — **60 rows, Anytype's own captured default** — and renders an inline "Load more" row past it. The original "instead of entering the virtualization path" clause becomes a regression guard: no virtualization exists in `src/views` today, so it cannot be entered |
+| REQ-014 | Medium | An embedded view honours a per-view page limit and renders an inline "Load more" row past it. **Corrected 2026-09-05 (`053` D4): there is no flat 60 to cite.** Anytype's limit is per-layout — Gallery **60**, Kanban **10**, and no limit row on Grid, List, Calendar or Graph — so the captured behaviour we adopt is the **shape** (a per-view page-limit setting in the layout block, defaulting per layout) and **60 is our own chosen number for an embedded table, argued rather than quoted**. The original "instead of entering the virtualization path" clause becomes a regression guard: no virtualization exists in `src/views` today, so it cannot be entered |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.
@@ -262,7 +263,8 @@ the requirement, not the design.
 
 ### Data Boundaries
 - Empty input: a view with zero filters and zero sorts renders **no** chip row at all, not an empty
-  one. A selection of zero rows opens no menu.
+  one — which is also what Anytype does, confirmed 2026-09-05 on five ruleless layouts against five
+  ruled List views (`053` D1). A selection of zero rows opens no menu.
 - Maximum length: a chip row wider than its container scrolls horizontally rather than wrapping; a
   selection above 10 disables the actions Anytype disables at that cap.
 
@@ -339,9 +341,11 @@ than deleted, because the answers are the reason several requirements above chan
 - **Did the sweep reach the six surfaces the first pass could not?** Partly. It reached the view
   switcher, view settings, the layout picker, the filter panel, the property and value pickers, the
   relation editor, the type picker and the object context menu. It did **not** reach a view-tab
-  right-click, an open cell editor near an edge, a drag under an active sort, or any phone filter
-  surface. Five items therefore ship on code-derived design and are named as such in
-  `design-trueup.md` §4: REQ-005, REQ-006, REQ-007, REQ-011, REQ-013.
+  right-click, an open cell editor near an edge, or a drag under an active sort. ~~Five items~~
+  **Four items, since 2026-09-05,** ship on code-derived design and are named as such in
+  `design-trueup.md` §4: REQ-005, REQ-006, REQ-007, REQ-011. **REQ-013 leaves the list** — `053` T001
+  opened twelve desktop filter formats and the iOS simulator set landed four phone filter and sort
+  sheets.
 - **Do REQ-005 and REQ-011 need a visual reference?** No. Both are behaviour over time and no still
   can show either. Their tasks stop carrying a capture field.
 - **Does REQ-003's sticky scrollbar belong to the board only?** No. The grid carries it at the same

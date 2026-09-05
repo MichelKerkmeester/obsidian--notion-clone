@@ -86,10 +86,16 @@ Frozen choices. Changing one is an amendment.
 ## 3. COMPLETION CRITERIA
 
 - [ ] **The capture sweep has been read and every one of the fourteen items carries a design trued
-      against a real screen or a named gap.** **Today: no such document exists**, and
-      `screenshots/anytype/README.md` records that the first pass reached no view switcher, no
-      filter or sort panel with a condition open, no property editor, no context menu and no hover
-      state — every mouse-driven surface was unreachable in that environment.
+      against a real screen or a named gap.** Today: the document exists — `design-trueup.md`, T001's
+      output, one section per item (AC-015 `Met`) — and **4 of the 14 items still carry a named gap
+      rather than a screen** (REQ-005, REQ-006, REQ-007, REQ-011), down from five.
+      **The five corrections of 2026-09-05, in one place.** `053`'s T001 withdrew C2 (the chip rail
+      is on eleven captures and is conditional), narrowed C7 to the settings panel (the per-view
+      default is in the `New ⌄` menu), superseded REQ-013's account of the filter panel as its empty
+      state against twelve captured formats, and made the 60-row page limit per-layout (Gallery 60,
+      Kanban 10, absent elsewhere). `052`'s T001 disproved the "no hover state was captured" caveat —
+      37 menus show it — and recomputed §2's secondary-text ratio to 7.11:1. The row stays unticked
+      because it reads *every one of the fourteen*, and T002 is what measures them.
 - [ ] **The filter/sort chip row exists and its trigger icons are state-dependent.** **Today: 0
       chips and one fixed icon state** — `filter-panel-renderer.ts` and `sort-panel-renderer.ts`
       render panels with no chip surface, and the toolbar's filter and sort icons do the same thing

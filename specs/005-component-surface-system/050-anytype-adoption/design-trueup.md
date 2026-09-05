@@ -29,10 +29,10 @@ Reading the sweep changed the packet more than it confirmed it, in two direction
 
 **Anytype ships less than the research described.** `047` read `anytype-ts` source and reported a
 filter/sort chip row with dual-mode trigger icons, a per-view template override and two empty-state
-flavours. None of the three is in the shipped 0.56.5 build the sweep photographed. The chip row
-appears on **none** of the 151 captures, including the one whose view demonstrably carries a filter.
-The trigger icons are pixel-identical whether or not a view is filtered or sorted. The view-settings
-panel has no default-template row. An empty collection renders no empty state at all.
+flavours. The trigger icons are pixel-identical whether or not a view is filtered or sorted, and an
+empty collection renders no empty state at all. **Two of the three "it does not exist" findings were
+wrong, and `053`'s T001 proved them wrong by opening captures this read never opened** — see the
+correction block below. What survives unamended is C1 (the icons), C3, C4, C5 and C6.
 
 **We ship more than the packet claimed we did.** Six of the fourteen "today" premises are false
 against the current tree. The chip row exists and is wired into both the full-page and the embedded
@@ -45,6 +45,24 @@ The consequence for the work is not "do less". It is that **the thresholds have 
 before D2 can be satisfied at all**: a threshold whose failing value is asserted wrongly cannot be
 observed red, and six of them are in that state today.
 
+### Corrected 2026-09-05 by `053`'s true-up — four claims in this document are wrong
+
+`053-toolbar-and-view-controls/design-trueup.md` read the catalogue List views, the menu sweep and
+the per-layout settings blocks that this read did not open, and it overturns four claims below. The
+same rule that made a capture beat `047` (ADR-003) makes a capture that was **read** beat a capture
+that was **not**. Each is corrected at its own site; they are gathered here so a reader meets them
+before the tables that used to be wrong.
+
+| This document said | `053` T001 shows | Corrected at |
+|---|---|---|
+| **C2**: no chip row on any capture, including the view that carries a filter | The chip rail is on **eleven** captures — `anytype-project-tracker-list-light.png` and its dark pair, `anytype-crm-contacts-deals-list-light.png`, `anytype-reading-list-list-light.png`, `anytype-course-notes-list-light.png`, `anytype-content-calendar-list-light.png` and `anytype-menu-set-viewlist-dark-full.png` — and it is **conditional**: present on 5 of 5 List views (each carrying a filter), absent on Grid, Gallery, Kanban, Calendar and Graph in the same sets. Measured: 28px chip, r≈14, ~12px horizontal padding, 99px wide, fill `#E2ECFE` light / `#1D2739` dark, on a rail band at y 274..301 under a 1px divider at y 261 (`053` design-trueup D1, T14) | C2, REQ-001 |
+| **C7**: no per-view default exists in the shipped product | It exists, one surface over from the panel this read searched: the `New ⌄` split button's menu carries a `Settings` section with `Default Type for this View   Page ›` and `Template for this View   Blank ›`, each opening its own anchored picker. `anytype-menu-set-new-object-light.png`, with `-default-type-for-this-view-` and `-template-for-this-view-` pairs (`053` D2, T10) | C7, REQ-010 |
+| **REQ-013**: Anytype's filter panel "is a 360px frame whose entire body is one `+ New filter` row" | That is the **empty state**. The populated panel is captured across **twelve relation formats** — checkbox, date, email, file, multiselect, number, object, phone, select, text-long, text-short, url — as `menus/anytype-menu-set-filter-{format}-light.png` each with a `-condition-` pair, plus the date picker, the relative-date picker and four mobile filter sheets (`053` D3, T15/T16) | REQ-013 |
+| **60** is "Anytype's own captured default page limit", adopted flat | The page limit is **per-layout**: Gallery **60**, Kanban **10**, and Grid, List, Calendar and Graph carry **no page-limit row at all**. A flat 60 is not the captured behaviour (`053` D4, T19/T24) | Measured table, REQ-010, REQ-014 |
+
+**A fifth correction, from `052`'s true-up**: this document's §2 says hover states were never
+captured. They were, 37 times — see §2.
+
 ### Where the capture wins, in one list
 
 Seven contradictions, each resolved in the capture's favour per this task's rule. Each is expanded in
@@ -53,12 +71,12 @@ its item's row and each is carried into `decision-record.md`.
 | # | `047` says | The captures show | Item |
 |---|---|---|---|
 | C1 | Filter and sort toolbar icons are **dual-mode / state-dependent** | Pixel-identical in every state, on every capture | REQ-001 |
-| C2 | One chip surface serves sorts and filters, auto-hiding when empty | No chip row on any capture, including a view carrying a filter | REQ-001 |
+| C2 | One chip surface serves sorts and filters, auto-hiding when empty | ~~No chip row on any capture, including a view carrying a filter~~ **Withdrawn 2026-09-05.** `047` was right and this read was wrong: the rail is on eleven captures and is conditional — present on 5 of 5 List views carrying a filter, absent on the five other layouts (`053` D1) | REQ-001 |
 | C3 | The sticky horizontal scrollbar is a **board** affordance | The grid carries it at identical geometry | REQ-003 |
 | C4 | A sortable tab row with right-click copy/remove, plus a view-selector dropdown | A tab row and a trailing `+`; duplicate and remove live in the settings panel | REQ-004 |
 | C5 | `objectContext` is organized into **four** fixed sections | Five sections, separated by four dividers | REQ-008 |
 | C6 | Two empty-state flavours, each with a per-layout add affordance | The add affordance alone; no message, no illustration, no card | REQ-009 |
-| C7 | A type's default template can be overridden **per view** | No default-template row in either the Grid or the Kanban settings panel | REQ-010 |
+| C7 | A type's default template can be overridden **per view** | ~~No default-template row in either the Grid or the Kanban settings panel~~ **Narrowed 2026-09-05 to the panel alone.** The settings panel indeed has no such row; the control is in the `New ⌄` menu's `Settings` section — `Default Type for this View` and `Template for this View` (`053` D2). `047` was right that it exists | REQ-010 |
 <!-- /ANCHOR:headline -->
 
 ---
@@ -82,10 +100,19 @@ funnel blue at 2× zoom; the pixel scan showed 0 saturated pixels in its boundin
 sort glyph's. That is exactly the error a "looks blue to me" reading produces, and it would have
 carried a false confirmation of C1 into the design.
 
-**What a static capture cannot answer.** Motion, hover, focus, and any state that needs a pointer.
-The README records that hover states were never captured. Every timing figure in this document is
-therefore `047`'s source read, labelled as such, and reconciled against our own motion band rather
-than quoted as measured.
+**What a static capture cannot answer.** Motion, focus, and any state that needs a held pointer.
+Every timing figure in this document is `047`'s source read, labelled as such, and reconciled against
+our own motion band rather than quoted as measured.
+
+**Hover is not on that list, and this document used to say it was.** The sentence "the README
+records that hover states were never captured" stood here until 2026-09-05 and four other documents
+inherited it. `052`'s T001 disproved it: **37 of the 150 menus under `menus/` were reached by
+hovering a row of their parent**, and each of those files photographs that parent row in its hovered
+state — the capture index's own "How it was reached" column reads `▸ hover "align"`,
+`▸ hover "advanced"`, `▸ hover "change type"`. Measured on
+`menus/anytype-menu-object-more-add-link-to-object-dark.png`: the hovered row is `#232323`, **28px
+tall**, inset ~10px inside a 16px content inset, **1.14:1** against its own panel. What a still
+genuinely cannot show is a **drag** state. `screenshots/anytype/README.md` is corrected to match.
 
 ### The measured Anytype system, as one table
 
@@ -103,7 +130,7 @@ both themes and the panels were all captured dark.
 | Popover padding | **16px** horizontal, **8px** vertical | Dividers inset to x 671..998 inside a 654..1013 frame; first row box 8px below the top edge |
 | Section divider clearance | **8px** each side | Menu item box 328.5 → divider 337 → next box 345.5 |
 | Primary text | **`#E1E1E1`**, 13.7:1 on the panel | Header, labels, action rows |
-| Secondary text | **`#A3A3A3`**, 7.95:1 on the panel | Right-hand values, field labels |
+| Secondary text | **`#A3A3A3`**, **7.11:1** on the panel | Right-hand values, field labels. *Corrected 2026-09-05 from 7.95:1 — `052` C10 recomputed the ratio from the sampled RGB rather than quoting it, and 7.11 is what the WCAG formula returns for `#A3A3A3` on `#171717`. Immaterial to any decision, both clear 4.5:1, but it is a quoted number* |
 | Accent | **`#3C7FFB`** | New button fill, selected-tile ring, sort glyph |
 | Selected-tile ring | **2px accent** | Layout picker, `anytype-set-gallery-view-dark.png` x 782 and x 884 |
 | Row highlight / hover | **`#232323`**, **1.14:1** on the panel | Preselected "Name" row, hovered "+ New filter" row |
@@ -111,7 +138,7 @@ both themes and the panels were all captured dark.
 | Toggle | **26 × 16px track, 12px knob** | `Fit media` off, `Show icon` on |
 | Horizontal scrollbar | **10px tall, 8px above the viewport bottom, full content width** | y 1199..1208 of a 1217px viewport, on both the grid and the kanban |
 | Full-page row | **48px** · Inline row | **≈40px** |
-| Default page limit | **60** | `Page limit  60 ›`, gallery layout panel |
+| Default page limit | **Per-layout: Gallery 60, Kanban 10, absent elsewhere** | `Page limit  60 ›` in the gallery layout panel, `Page limit  10 ›` in the kanban's; Grid, List, Calendar and Graph carry no such row. *Corrected 2026-09-05 — this read saw the gallery panel only and generalised it to a product default (`053` D4)* |
 
 **Two of these are rejected rather than adopted, and both for the same reason.** The `#232323` row
 highlight is **1.14:1** against its own panel — a selection indicator effectively invisible to a
@@ -147,7 +174,21 @@ grey, filter grey, sort blue, settings grey. The filter funnel measures `ink=52,
 `anytype-project-tracker-grid-light.png` (no filter) — identical to the pixel. The sort glyph measures
 `ink=80, blue=60` on both, and again on `anytype-collection-grid-populated-dark.png`, whose default
 "All" view carries neither a sort nor a filter. **The sort icon's blue is a static two-tone glyph, not
-a state.** And no chip row renders anywhere, on any capture, in either theme.
+a state.**
+
+~~And no chip row renders anywhere, on any capture, in either theme.~~ **Corrected 2026-09-05 by
+`053` T001 (D1): the chip rail is photographed eleven times and it is conditional.** It is present on
+**5 of 5 List views** in the catalogue — each of which carries a filter — and absent on Grid,
+Gallery, Kanban, Calendar and Graph in the same sets; scanned at x 705 and x 760, y 288.
+`anytype-project-tracker-list-light.png` and its dark pair, `anytype-crm-contacts-deals-list-light.png`,
+`anytype-reading-list-list-light.png`, `anytype-course-notes-list-light.png`,
+`anytype-content-calendar-list-light.png`, and `anytype-menu-set-viewlist-dark-full.png` from the menu
+sweep. Measured there: a **28px** chip at r≈14 with ~12px horizontal padding, 99px wide, filled
+`#E2ECFE` in light and `#1D2739` in dark, sitting on a rail band at y 274..301 beneath a 1px
+full-content-width divider at y 261, under a tab row at y 219..246. This read scanned the four toolbar
+icons' bounding boxes and never scanned the band below them, which is the whole error: **an
+absence claimed from a region that was never examined.** `047`'s chip-surface finding stands, and its
+"auto-hides when empty" half is confirmed on screen — five layouts with no rule show no rail.
 
 The one place Anytype does surface the state is the view-settings panel's value column:
 `Sort   1 applied ›` beside a bare `Filter   ›`. A count, as text, one level in.
@@ -172,6 +213,7 @@ The one place Anytype does surface the state is the view-settings panel's value 
 |---|---|
 | "Today: 0 chips and one fixed icon state" | The chip row and the count badge both ship; the premise is false and AC-001 cannot be observed red as written |
 | Adopt Anytype's dual-mode icons | Rejected. There is no dual-mode behaviour to adopt — the captures show one mode, and the source-derived description of a second is unverifiable |
+| "No chip row exists to compare ours against" | **Corrected 2026-09-05 (`053` D1).** There is one, measured, and it is conditional in exactly the way ours is. Adopt its **geometry** — a 28px fully-rounded chip on its own rail band under a 1px divider — and refuse its **contrast**: `053` measures the chip label `#3C7FFB` on `#E2ECFE` at **3.14:1** and the fill on the bar at **1.19:1**, so the rail signals with hue alone at both levels |
 | Adopt Anytype's active-state signalling | Rejected on contrast. Colour-only fails WCAG 1.4.11; our count badge already carries a text second signal, which is strictly better |
 | — | **Adopt**: the `N applied` count label in the view-settings panel's value column. It is the one thing the captures do that we do not, it costs one string per row, and it puts the state where someone configuring the view will read it |
 
@@ -384,9 +426,12 @@ mechanism.
 **Not seen. No drag, no confirmation dialog and no sort panel with a condition open exists in the
 sweep.**
 
-**Captures.** None. The README is explicit that no hover-only or drag state was captured, and the
-filter and sort panels were reached only in their empty state (`anytype-filter-property-picker-
-dark.png` shows a Filter panel whose entire body is one `+ New filter` row).
+**Captures.** None. No **drag** state was captured — that gap is real and the README still records
+it — and the sort panel was reached only in its empty state. *(Corrected 2026-09-05: this paragraph
+used to say "no hover-only or drag state", and hover was captured 37 times (`052` C1). It also said
+the filter panel was reached only empty; `053` D3 opened it populated across twelve relation
+formats. Neither correction gives this item a screen: a drag under an active sort and its
+confirmation dialog remain unphotographed.)*
 
 **What the real screen does.** Unknown. `047` §5's board drag vocabulary — off-screen clone as drag
 image, cached-rect hit-testing inside `requestAnimationFrame`, `isOver` plus edge classes — stands in,
@@ -513,11 +558,22 @@ exists.
 **Captures.** `anytype-view-settings-panel-dark.png`, `anytype-set-kanban-view-dark.png`,
 `anytype-set-gallery-view-dark.png`, `anytype-newpage-created-dark.png`.
 
-**The contradiction (C7).** `047` §8 says "a type's default template can be overridden per-view". The
-captured view-settings panel — in both its Grid form and its Kanban form — contains exactly these
-rows: View name, Layout, [Groups], Properties, Filter, Sort, Duplicate view, Remove view. **There is
-no default-template row and no default-value row.** Whatever `anytype-ts` supports, the 0.56.5
-settings panel does not offer it.
+**The contradiction (C7), and its correction.** `047` §8 says "a type's default template can be
+overridden per-view". The captured view-settings panel — in both its Grid form and its Kanban form —
+contains exactly these rows: View name, Layout, [Groups], Properties, Filter, Sort, Duplicate view,
+Remove view. There is no default-template row and no default-value row **in that panel**.
+
+**That much survives; the conclusion drawn from it does not.** This read went on to say the control
+is "absent from the product", and **`053` T001 (D2) found it one surface over**: the `New ⌄` split
+button's menu carries a `Settings` section with `Default Type for this View   Page ›` and
+`Template for this View   Blank ›`, each opening its own anchored picker — a 288px menu on a 28px row
+pitch with its divider at y 56. `anytype-menu-set-new-object-light.png`,
+`anytype-menu-set-new-object-default-type-for-this-view-light.png`,
+`anytype-menu-set-new-object-template-for-this-view-light.png`, and on the phone
+`anytype-mobile-sheet-set-newobject-templates-light.png`. **`047` was right that a per-view default
+exists; it was wrong only about where.** The lesson is ADR-003's corollary read the other way:
+absence in one surface is not absence in the product, and this document asserted the second from the
+first.
 
 **What the captures do show, adjacent to it.** Two things worth having.
 - `anytype-newpage-created-dark.png`: a freshly created object carries a top-bar pill reading
@@ -536,9 +592,10 @@ renders a template setting with a path picker and an engine choice (markdown / c
 
 | Was | Is |
 |---|---|
-| "the per-view default control itself was **not captured**" | Correct, and now known to be **absent from the shipped panel**, not merely unphotographed. Marked: **design inferred from source code, not seen** |
+| "the per-view default control itself was **not captured**" | **Superseded 2026-09-05 (`053` D2).** It is captured, in the `New ⌄` menu, twice over — a default **type** and a default **template**, per view. The "design inferred from source code, not seen" marking is **removed**: this item now has a reference screen |
+| "absent from the shipped panel, therefore absent from the product" | **Withdrawn.** Absent from the panel, present in the New menu. The surface, not the product |
 | ADR-002: REQ-010 is the preset map and nothing else | Narrows again. A per-view status preset and a per-database template already ship; the residue is **per-field default values for a new row**, and only that |
-| No captured precedent for a per-view default | `Page limit  60 ›` is one, and it is where a new per-view default row belongs — the settings panel's per-layout block |
+| No captured precedent for a per-view default | Two, now. The `New ⌄` menu's `Settings` section is the **direct** precedent and is where our per-view default row belongs — beside the create affordance, not buried in view settings. The per-layout `Page limit` row is the second, and it is **per-layout**, not a flat default (`053` D4) |
 
 **Phone.** Relevant. The control lands in the settings sheet, already `sheet-grammar`-registered, and
 its value editors are dropdowns that already stack per `048` (`settings dropdown field` is a
@@ -586,8 +643,11 @@ the tab row for a dropdown.
 
 **What cannot be read.** Only one inline width exists in the sweep, so nothing distinguishes a
 measured collapse from a fixed breakpoint — `047` §5's "measures its own natural width against
-available space" stays a source claim. And the inline icons may be hover-revealed rather than absent;
-hover was never captured, which the README states.
+available space" stays a source claim. And the inline icons may be hover-revealed rather than
+absent. *(Corrected 2026-09-05: the reason given here — "hover was never captured, which the README
+states" — was wrong; 37 menu captures show a hovered row (`052` C1). The hover captures are all
+**menu rows**, though, and none is an inline collection's toolbar, so this item's gap survives its
+stated reason.)*
 
 **What we do today.** `embedded-database-renderer.ts` contains **no** `ResizeObserver` — the only one
 in `src/views` is `chart-renderer.ts:876`, which resolves the constructor off the owner window
@@ -612,10 +672,18 @@ intent and weak evidence of pixels, so no number is taken from it.
 
 ### REQ-013 — Per-format filter and sort condition rows on phone sheets
 
-**Not seen — and it is the item where our tree is furthest ahead of the packet's description of it.**
+**Seen after all, and it is also the item where our tree is furthest ahead of the packet's
+description of it.**
 
-**Captures.** None. No filter or sort sheet appears in any of the 151 files. The 20 mobile images are
-official marketing creative and none shows a filter surface. The nearest evidence is desktop:
+**Captures — restated 2026-09-05, twice over.** This section originally read *"None. No filter or
+sort sheet appears in any of the 151 files."* Both halves of that gap have since closed: the iOS
+simulator set (`964a0b2a`) landed four phone filter and sort sheets, and **`053` T001 (D3) opened the
+populated desktop panel across twelve relation formats** —
+`menus/anytype-menu-set-filter-{checkbox,date,email,file,multiselect,number,object,phone,select,text-long,text-short,url}-light.png`,
+each with a `-condition-` pair, plus `-filter-date-picker-`, `-filter-date-relative-`, the property
+picker, and the mobile `-view-filters-empty-`, `-filter-relation-picker-`, `-filter-condition-text-`
+and `-filter-condition-operators-` sheets. The 20 mobile images are official marketing creative and
+none shows a filter surface. The desktop evidence this read did reach was one level up:
 `anytype-filter-property-picker-dark.png` renders a per-format **icon** on each property row — `Aa`
 for text, a page glyph for object type, a calendar for the three date properties, a list glyph for
 Tag, an `ⓘ` for Description — which is the format vocabulary, not the condition row.
@@ -635,17 +703,26 @@ Tag, an `ⓘ` for Description — which is the format vocabulary, not the condit
   six stacked pairs off the filter panel — property picker, operator picker, select value picker,
   checkbox value picker, conjunction picker and date value picker — and two off the sort panel.
 
-Anytype's captured filter panel, for comparison, is a 360px frame whose entire body is one `+ New
-filter` row.
+~~Anytype's captured filter panel, for comparison, is a 360px frame whose entire body is one `+ New
+filter` row.~~ **Corrected 2026-09-05 (`053` D3): that is the panel's *empty state*, not the panel.**
+The populated form carries per-format condition rows and is captured across twelve formats — checkbox,
+date, email, file, multiselect, number, object, phone, select, text-long, text-short and url — each
+with its own condition picker, plus a date picker and a relative-date picker. Both screens are real;
+the empty one is not "the filter panel", and describing a surface from its empty state is the same
+error C7 made from the settings panel. **What this changes for us is the comparison, not the work**:
+our own compound builder is still ahead of Anytype's — Anytype has no conjunction control, no group
+button and no negate — but the claim that Anytype has "no per-format rows to adopt" is withdrawn. It
+has twelve of them, and the **format-icon vocabulary** we adopt is confirmed rather than inferred.
 
 **Values that change.**
 
 | Was | Is |
 |---|---|
 | "Today: **0** of the phone filter surfaces render per-format rows" | False. They render, on desktop and on phone, with per-format value controls and format icons |
+| "No Anytype filter surface exists in the sweep" | **False as of 2026-09-05.** Twelve desktop formats (`053` D3) and four iOS sheets (`964a0b2a`). This item is **no longer** one of the five with no reference screen |
 | "Red first: register the sheet in the `sheet-grammar` lane before the rows exist and observe the row red" | **Unexecutable.** Both surfaces are already registered and the rows already exist. The threshold has to be rewritten before D2 can be satisfied |
 | Build per-format condition rows | Nothing to build. **The residue is the three grammar elements a still capture cannot show** — segmented choices, keyboard avoidance, safe-area inset — asserted on the filter and sort sheets, plus `048` conformance for the eight already-registered stacked pairs |
-| Adopt Anytype's per-format rows | Rejected — there are none to adopt. **Adopt the format-icon vocabulary only**, which we also already have |
+| Adopt Anytype's per-format rows | **Restated 2026-09-05.** There *are* twelve to compare against, and the comparison still favours ours: Anytype's row is property + condition + value with no conjunction, group or negate control. **Adopt the format-icon vocabulary and the twelve-format condition coverage as the completeness bar**; adopt nothing structural |
 
 **Phone.** This item *is* the phone item. `044`: surface, handle, header and padded rows are visible in
 our own capture; the other three are the work. `048`: eight registered pairs, each of which must show
@@ -664,8 +741,12 @@ dark.png` and `anytype-page-with-inline-collection-dark.png` (inline rows).
 limit, so none was ever reached.
 
 **What the real screens show.**
-- **`Page limit  60 ›`** — the last row of the gallery layout block. A per-view page size, default 60.
-  This is the number REQ-014 was missing.
+- **`Page limit  60 ›`** — the last row of the **gallery** layout block. A per-view page size.
+  **Corrected 2026-09-05 (`053` D4): it is per-layout, not a product default.** The kanban block
+  carries `Page limit  10 ›`, and Grid, List, Calendar and Graph carry no page-limit row at all
+  (`anytype-menu-set-layout-{grid,gallery,list,kanban,calendar,graph}-light.png`). This read saw one
+  layout's panel and generalised its value to the product — the same single-surface generalisation
+  C7 made.
 - **48px full-page rows against ≈40px inline rows.** Measured: full-page baselines 322 → 370 → 418 in
   `anytype-collection-grid-populated-dark.png`; inline header 346 → `+ New Object` 384. `047` §5's
   source-derived 48/40 split, confirmed on screen.
@@ -680,7 +761,7 @@ view cannot enter a virtualization path because none exists.
 |---|---|
 | "Today: **the virtualization path is entered**" | False. No virtualization path exists for an embedded view, so this threshold cannot be observed red as written |
 | Threshold: renders a page plus a `Load more` row and never enters virtualization | Restated to something observable: **an embedded view honours a per-view page limit and renders a `Load more` row past it**. The "never virtualizes" clause becomes a guard against a future regression, not today's red |
-| Page size unspecified | **60**, Anytype's own captured default, adopted as ours |
+| Page size unspecified | ~~**60**, Anytype's own captured default, adopted as ours~~ **Corrected 2026-09-05 (`053` D4).** There is no product default to adopt. The captured behaviour is **per layout**: Gallery 60, Kanban 10, no limit row on Grid, List, Calendar or Graph. What we adopt is the **shape** — a per-view page-limit setting living in the layout block, defaulting per layout — and the two captured numbers where a layout matches. An embedded table or list inherits **no** captured number, so its page size is ours to choose and must be argued rather than cited |
 | Inline row height unspecified | **≈40px inline against 48px full-page** — measured, and matching the source read |
 
 **Phone.** Relevant. An embedded view on the phone is the case where paging matters most, and a
@@ -697,7 +778,7 @@ view cannot enter a virtualization path because none exists.
 
 | Item | Surface seen? | Capture(s) | Phone-relevant |
 |---|---|---|---|
-| REQ-001 chip row + trigger icons | **Seen**, contradicts | 120 catalogue captures, view-settings panel, populated grid | Yes |
+| REQ-001 chip row + trigger icons | **Seen**; icons contradict, **rail confirmed 2026-09-05** | 120 catalogue captures, view-settings panel, populated grid, plus the 11 rail captures `053` found | Yes |
 | REQ-002 land in view settings | **Seen** | `anytype-view-settings-panel-dark.png`, `anytype-set-kanban-view-dark.png` | Yes |
 | REQ-003 sticky scrollbar | **Seen**, contradicts scope | kanban + grid catalogue captures | No — reason recorded |
 | REQ-004 duplicate + tab menu | **Half** — action seen, menu not | `anytype-view-settings-panel-dark.png` | Yes |
@@ -706,16 +787,20 @@ view cannot enter a virtualization path because none exists.
 | REQ-007 sort-conflict confirm | **Not seen** | — | Yes |
 | REQ-008 menu gating + fallback | **Half** — menu seen, fallback not | `anytype-object-more-menu-dark.png` | Yes |
 | REQ-009 empty-state flavours | **Half** — "view" seen, "target" not | `anytype-inlinecollection-empty-dark.png` | Yes |
-| REQ-010 new-row presets | **Not seen**, contradicts | — (absence proved on the settings panel) | Yes |
+| REQ-010 new-row presets | **Seen as of 2026-09-05** — in the `New ⌄` menu, not the settings panel | `anytype-menu-set-new-object-light.png` + its two sub-pickers; `anytype-mobile-sheet-set-newobject-templates-light.png` | Yes |
 | REQ-011 `positionLock` | **Not seen**, none needed | — | Yes |
 | REQ-012 measured collapse | **Half** — end state seen, mechanism not | inline + full-page + phone creative | Yes |
-| REQ-013 phone condition rows | **Not seen** | — | Yes — this item *is* the phone item |
-| REQ-014 inline `Load more` | **Half** — page limit seen, row not | `anytype-set-gallery-view-dark.png` | Yes |
+| REQ-013 phone condition rows | **Seen as of 2026-09-05** — twelve desktop formats and four iOS sheets | `menus/anytype-menu-set-filter-{12 formats}-light.png` + `-condition-` pairs; the iOS filter/sort sheets | Yes — this item *is* the phone item |
+| REQ-014 inline `Load more` | **Half** — page limit seen (**per-layout**, not flat), row not | `anytype-set-gallery-view-dark.png` (60), `anytype-menu-set-layout-kanban-*` (10), four layouts with no row | Yes |
 
-**The five with no capture at all, named as goal D1's second clause requires — design inferred from
-source code, not seen: REQ-005, REQ-006, REQ-007, REQ-011, REQ-013.** Two of them (REQ-005, REQ-011)
-need none and should stop carrying a capture field. Three (REQ-006, REQ-007, REQ-013) are designed
-from `047`'s source reading and say so in their tasks.
+**The list with no capture at all, named as goal D1's second clause requires — design inferred from
+source code, not seen. Reduced from five to four on 2026-09-05: REQ-005, REQ-006, REQ-007,
+REQ-011.** Two of them (REQ-005, REQ-011) need none and should stop carrying a capture field. Two
+(REQ-006, REQ-007) are designed from `047`'s source reading and say so in their tasks. **REQ-013
+leaves this list**: `053` T001 opened twelve desktop filter formats and the iOS set landed four phone
+sheets, so the item that "*is* the phone item" now has phone reference screens. REQ-010 was never on
+this list as an unseen item but was carried as *absent from the product*; that marking is also
+withdrawn (`053` D2).
 
 The packet predicted gaps for REQ-001, REQ-004, REQ-006, REQ-007, REQ-008 and REQ-010. The sweep
 closed REQ-001's and half of REQ-004's and REQ-008's; it left REQ-006's and REQ-007's open; and it
@@ -735,27 +820,48 @@ none may enter Phase 2 until its row in `acceptance-criteria.md` is restated.
 | AC-013 | 0 of the phone filter surfaces render per-format rows | False — they render, and both sheets are `sheet-grammar`-registered |
 | AC-014 | The virtualization path is entered | False — no virtualization exists in `src/views` |
 
+**A seventh, found 2026-09-05 and different in kind.** AC-014's restated form adopts *"more than
+**60** rows — Anytype's own captured default page limit"*. That number is not a product default
+(`053` D4): the limit is per-layout, Gallery 60 and Kanban 10, with four layouts carrying none. The
+threshold stays observable — an embedded view honours a page limit and renders a `Load more` row past
+it — but **60 becomes our own chosen number for an embedded table, argued rather than cited**, and
+the row is restated to say so. The first six were premises about *our* tree; this one is a premise
+about *Anytype's*, which is the failure mode ADR-003 was written to catch and this document
+nonetheless committed twice (C7 and the page limit), both times by generalising from a single
+surface.
+
 ### The values we adopt, and the two we refuse
 
 **Adopted from the captures**, because a measurement outranks a default for the surface it covers:
 360px panel width (also the top of our own `panel` role), 8px popover radius (also what
 `design-system.md` §10 already asks for), 28px row height, 16px horizontal and 8px vertical popover
 padding, 8px divider clearance, 104 × 88px layout tiles on an 8px gutter, a 10px horizontal scrollbar
-sitting 8px above the viewport bottom across the container's full content width, a 60-row default page
-limit, and the 48px / 40px full-page-versus-inline row split.
+sitting 8px above the viewport bottom across the container's full content width, **a per-layout page
+limit — Gallery 60, Kanban 10, and no limit row on Grid, List, Calendar or Graph — rather than a flat
+60** (corrected 2026-09-05, `053` D4), the 48px / 40px full-page-versus-inline row split, and, added
+2026-09-05 from `053`'s rail measurement, **the chip rail's geometry**: a 28px fully-rounded chip with
+~12px horizontal padding on its own band beneath a 1px full-content-width divider.
 
 **Adopted as behaviour**: the `N applied` count in the settings panel's value column; the
 replace-in-place-with-back pattern for settings sub-pages against a separate anchored popover for
 pickers; Duplicate and Remove living in the settings panel; a layout-adaptive settings panel that
-inserts one `Groups` row for a board.
+inserts one `Groups` row for a board. **Added 2026-09-05**: the chip rail is present exactly when the
+view carries a rule and absent otherwise — confirmed on screen at 5 of 5 List views against five
+ruleless layouts, which is what our `:93` auto-hide already does; and the per-view default lives
+**beside the create affordance** (`New ⌄` → `Settings` → `Default Type for this View` /
+`Template for this View`), not in the view-settings panel.
 
-**Refused, both on contrast.**
+**Refused, on contrast.**
 1. **The `#232323` row highlight**, which measures **1.14:1** against its own `#171717` panel. A
    selection indicator that is the only thing marking state has to clear 3:1 (WCAG 1.4.11), and this
    misses by a factor of three. Our hover and selection tokens stay ours and stay above 3:1.
-2. **Colour-only active-state signalling.** Anytype does not signal an active filter at all, and where
-   it does signal state — the accent — it signals with hue alone. Our count badge carries a number,
-   which is a text signal, and it stays.
+2. **Colour-only active-state signalling.** ~~Anytype does not signal an active filter at all~~ —
+   **corrected 2026-09-05: it does, with the chip rail (`053` D1) — and it signals with hue alone at
+   every level.** `053` measures the chip label `#3C7FFB` on its `#E2ECFE` fill at **3.14:1** (a
+   ~13px label needing 4.5:1), the fill against the bar at **1.19:1**, the inactive view tab
+   `#B6B6B6` on white at **2.03:1** and the `New` button's white label at **3.74:1**. The refusal is
+   unchanged and now has four more measurements behind it. Our count badge carries a number, which is
+   a text signal, and it stays.
 
 **Not adopted, with reasons**: Anytype's `#3C7FFB` accent and its `#B6B6B6` / `#EBEBEB` scrollbar pair
 are fixed values in a themed host; this is an Obsidian plugin and the user's theme owns those tokens.
@@ -773,9 +879,16 @@ On the phone the floor is `044`'s 44px close, unchanged.
 Nothing about motion is readable from a still. `047` §10's 0.2s enter / 0.1s exit is a source read of
 one centralized `animationProps` helper. The 200ms enter sits inside the 180-260ms band for a small
 state change; the 100ms exit sits below the 120ms floor for direct feedback and would read as a cut
-rather than a dismissal. **Enter 200ms `ease-out`, exit 150ms `ease-in`** — 150ms being the closest
-in-band value to what the source reports — with the deviation from Anytype's figure recorded here
-rather than silently rounded.
+rather than a dismissal. **Enter 200ms `ease-out`, exit 150ms `ease-in`** — with the deviation from
+`047`'s reported exit figure recorded here rather than silently rounded.
+
+**Corrected 2026-09-05 by `055`'s true-up.** `047`'s "0.1s exit" is not what the source says:
+`055` read `notification/common.scss` and `_mixins.scss` directly and found the toast's **enter and
+exit are one 0.2s transition**, with the common transition `0.15s cubic-bezier(0.22, 1, 0.36, 1)` and
+menus, popups and the sidebar at `0.2s`. So there was never a 100ms exit to be below the floor. Our
+**150ms `ease-in` exit stands unchanged** — it was chosen against our own band, not against Anytype's
+number — but the sentence justifying it by "the source reports 100ms" is withdrawn, and `055`'s
+`--db-motion-surface` at **200ms ease-out** is the token that carries the enter half.
 <!-- /ANCHOR:rollup -->
 
 ---
@@ -789,6 +902,10 @@ rather than silently rounded.
 - **Rulings**: `decision-record.md`
 - **Research source**: `../047-competitor-references-and-pm-alignment/research/research.md` §5-§11
 - **Capture index**: `../../../screenshots/anytype/README.md`
+- **Corrections to this document**: `../053-toolbar-and-view-controls/design-trueup.md` (D1-D4 — the
+  chip rail, the per-view default, the twelve filter formats, the per-layout page limit),
+  `../052-dropdown-menu-and-picker-componentization/design-trueup.md` (C1 hover, C10 the 7.11:1
+  secondary-text ratio), `../055-states-feedback-and-motion/design-trueup.md` (the 0.2s exit)
 - **Load and view reports**: `tools/mock-data/anytype/views-report.json`, `capture-report.json`
 - **Our own captures**: `../../../screenshots/notion-clone/`
 - **Token and role authority**: `../design-system.md`

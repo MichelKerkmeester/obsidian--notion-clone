@@ -73,10 +73,20 @@ context menu — and used the same method to delete the demo content at the end.
   `'dark'` is dark, `'system'` follows the OS. Both themes are captured in the catalogue set below.
   The lesson is that "the shortcut is unreachable" was mistaken for "the feature is unreachable"
   without reading what the shortcut's own handler calls.
-- **A worked view-switcher "+" popover appearing as a menu vs. a submenu** and a **few hover-only
-  states** (e.g. a row's inline "⋮⋮" drag handle) were not specifically captured — the settings
-  panel and layout picker capture the same underlying controls in their open state, which is the
-  higher-value shot.
+- **A worked view-switcher "+" popover appearing as a menu vs. a submenu** and the **drag-only
+  states** (a row's inline "⋮⋮" drag handle under a held pointer) were not specifically captured — the
+  settings panel and layout picker capture the same underlying controls in their open state, which is
+  the higher-value shot.
+  **Corrected on 2026-09-05: this bullet used to say "a few hover-only states" and it was read as
+  "no hover state was captured". That reading is false, and five documents inherited it.** The
+  submenu walk in the catalogue pass *is* a hover: **37 of the 150 menus under `menus/` were reached
+  by hovering a row of their parent**, and each of those files photographs that parent row in its
+  hovered state — the catalogue table's own "How it was reached" column says `▸ hover "align"`,
+  `▸ hover "advanced"`, `▸ hover "change type"`. Measured on
+  `menus/anytype-menu-object-more-add-link-to-object-dark.png` by `052`'s T001: the hovered
+  `Add Link to Object` row is **`#232323`, 28px tall, inset ~10px inside a 16px content inset,
+  1.14:1 against its own `#171717` panel**. The hover grammar was on disk the whole time; what is
+  genuinely missing is a **drag** state, not a hover one.
 - Everything else the operator's expanded brief asked for (every layout, view switcher, view
   settings, filter, property/relation editor, type picker, new-object flow, context menu on an
   object) **was** reached; see the table below.

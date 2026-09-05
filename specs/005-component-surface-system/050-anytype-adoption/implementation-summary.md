@@ -75,7 +75,13 @@ The research ranked fourteen surfaces it could not see. `screenshots/anytype/REA
 raw `CGEvent` clicks posted with no effect, `System Events` was refused assistive access (-25211),
 and Anytype's canvas exposes one opaque `AXGroup`, so **no mouse-driven surface was reachable** —
 no view switcher, no filter or sort panel with a condition open, no property editor, no context
-menu, no hover state. Six of the fourteen items therefore have no reference screen today.
+menu, no hover state. Six of the fourteen items therefore had no reference screen at that point.
+
+**Corrected 2026-09-05.** Two later passes closed most of that. The CDP catalogue pass reached the
+panels and, in doing so, photographed **37 hovered menu rows** without anyone noticing (`052` C1),
+and `053`'s T001 opened the chip rail, the `New ⌄` menu's per-view defaults and twelve filter formats
+this packet's read never opened. **Four items now have no reference screen: REQ-005, REQ-006,
+REQ-007, REQ-011** — and two of those need none.
 
 That is why T001 is a gate rather than a first step, and why the operator's instruction to wait for
 the capture sweep is written into `goal.md` as D1 rather than left as scheduling advice.
