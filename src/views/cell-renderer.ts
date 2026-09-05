@@ -51,6 +51,8 @@ import { positionToolbarPopover } from "./popover-position";
 import { claimBottomDock } from "./mobile-bottom-sheet";
 import { buildShellHeader } from "./surface-shell";
 import { openDropdownMenu } from "./dropdown-field";
+import { createMenuRow } from "./menu-row";
+import { RELATION_PICKER_POPOVER } from "./popover-host";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { setFieldTooltip } from "./field-tooltip";
 import { FileTitleDisplay, getFileTitleDisplay, renderInlineFileTitle } from "./file-title-display";
@@ -992,6 +994,11 @@ export class CellRenderer {
       const start = Math.max(0, Math.min(Math.max(0, filtered.length - windowSize), Math.floor(scrollTop / rowHeight) - 8));
       const end = Math.min(filtered.length, start + windowSize);
       if (start > 0) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${start * rowHeight}px` } });
+      // Built by hand rather than through the shared row builder: this list is a virtualised
+      // `listbox`, and its rows carry `role="option"`/`aria-selected` — the semantics the keyboard
+      // handler below selects on (`[role=option]`) — where the row builder's rows are
+      // `menuitem`/`menuitemcheckbox` for a `menu`. The trailing check icon here needs no change:
+      // it already sits after the label rather than before it.
       for (let filteredIndex = start; filteredIndex < end; filteredIndex++) {
         const record = filtered[filteredIndex];
         const title = record.file.basename || record.file.name.replace(/\.md$/i, "");
@@ -1093,7 +1100,7 @@ export class CellRenderer {
         });
     };
     renderList(false);
-    positionToolbarPopover(popover, target, { minWidth: 360, preferredWidth: 420, maxWidth: 520, gap: 4 });
+    positionToolbarPopover(popover, target, { ...RELATION_PICKER_POPOVER, gap: 4 });
     this.activeOptionPopoverClose = close;
     removeAutoClose = installPopoverAutoClose({ panel: popover, anchorEl: target, close });
     window.setTimeout(() => search.focus(), 0);
@@ -1267,7 +1274,19 @@ export class CellRenderer {
       optionDefs.forEach((opt, idx) => {
         const isTransient = !isFileTags && !registeredOptionValues.has(opt.value);
         if (selected.has(opt.value)) activeOptionIndex = idx;
-        const item = popover.createEl("button", { cls: "db-cell-option-item" });
+        // The row shell, its label and its checkable semantics come from the shared row builder —
+        // `role="menuitemcheckbox"`/`aria-checked` rather than a bare button, so the check this row
+        // carries is the same accessible affordance every other menu-shaped row in the family uses.
+        // The drag handle, reorder controls, colour dot and delete button have no home in that
+        // builder's fixed slots and are spliced in around the label exactly where they sat before.
+        const rowHandle = createMenuRow(popover, {
+          cls: "db-cell-option-item",
+          label: opt.value,
+          selected: selected.has(opt.value),
+        });
+        const item = rowHandle.row;
+        const label = rowHandle.labelEl;
+        label.addClass("db-option-label");
         popover.insertBefore(item, popover.querySelector(".db-cell-option-add"));
 
         // Drag handle for reorder
@@ -1375,9 +1394,11 @@ export class CellRenderer {
           e.preventDefault();
           showColorPicker(dot, opt, () => { commitOptions(); updateDot(); });
         };
+        // Each was appended after the label the row builder already created; move the three leading
+        // pieces back in front of it, in the same relative order they were built.
+        label.before(handle, moveControls, dot);
 
         // Label — double-click to rename
-        const label = item.createSpan({ text: opt.value, cls: "db-option-label" });
         label.ondblclick = (e) => {
           if (isFileTags || isTransient) return;
           e.stopPropagation();
@@ -1416,8 +1437,14 @@ export class CellRenderer {
           };
         };
 
-        // Check mark
-        const mark = item.createSpan({ text: selected.has(opt.value) ? "✓" : "", cls: "db-option-check" });
+        // Check mark — an icon carrying the row's own `menuitemcheckbox` semantics rather than a
+        // bare "✓" glyph, which a screen reader reads as a character, not a state.
+        const mark = item.createSpan({ cls: "db-option-check" });
+        const updateMark = () => {
+          mark.empty();
+          if (selected.has(opt.value)) setIcon(mark, "check");
+        };
+        updateMark();
         const deleteButton = item.createEl("button", {
           cls: "db-option-delete",
           attr: {
@@ -1473,14 +1500,16 @@ export class CellRenderer {
             selected.clear();
             selected.add(opt.value);
             commitValue(opt.value);
-            // Update check marks
-            popover.querySelectorAll(".db-option-check").forEach(el => { el.textContent = ""; });
-            mark.textContent = "✓";
+            // Clear every row's mark and checked state before setting this one.
+            clearAllChecks();
+            updateMark();
+            rowHandle.setSelected(true);
             return;
           }
           if (selected.has(opt.value)) selected.delete(opt.value);
           else selected.add(opt.value);
-          mark.textContent = selected.has(opt.value) ? "✓" : "";
+          updateMark();
+          rowHandle.setSelected(selected.has(opt.value));
           commitValue(Array.from(selected));
         };
       });
@@ -1552,7 +1581,7 @@ export class CellRenderer {
       if (!multiple) {
         selected.clear();
         selected.add(name);
-        popover.querySelectorAll(".db-option-check").forEach(el => { el.textContent = ""; });
+        popover.querySelectorAll<HTMLElement>(".db-option-check").forEach((el) => el.empty());
         if (isFileTags) commitValue(name);
         else commitOptions({ setValue: true, value: name });
       } else {
@@ -1567,15 +1596,22 @@ export class CellRenderer {
     const actions = popover.createDiv({ cls: "db-panel-header-actions" });
     const clearBtn = actions.createEl("button", { cls: "db-panel-button", text: t("cell.clear") });
     clearBtn.onmousedown = (event) => event.preventDefault();
+    const clearAllChecks = () => {
+      popover.querySelectorAll<HTMLElement>(".db-option-check").forEach((el) => el.empty());
+      popover.querySelectorAll<HTMLElement>(".db-cell-option-item").forEach((el) => {
+        el.toggleClass("is-selected", false);
+        el.setAttr("aria-checked", "false");
+      });
+    };
     clearBtn.onclick = () => {
       if (multiple) {
         selected.clear();
         commitValue([]);
-        popover.querySelectorAll(".db-option-check").forEach(el => { el.textContent = ""; });
+        clearAllChecks();
       } else {
         selected.clear();
         commitValue(null);
-        popover.querySelectorAll(".db-option-check").forEach(el => { el.textContent = ""; });
+        clearAllChecks();
       }
     };
 

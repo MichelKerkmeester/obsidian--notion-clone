@@ -14,12 +14,23 @@
 // dropdown's own behaviour cannot be told apart from before this module existed by anything that
 // only watches its rows, its sections or its empty state.
 //
-// The family's third shared question — which picker closes when another opens — is deliberately
-// NOT answered here yet. Three pickers each keep their own registry, and the one this module would
-// have been modelled on stores an `anchor` alongside its close callback to decide whether a second
-// click on the same trigger is a toggle or a re-open. A registry written before that consumer is
-// migrated would be a shape nothing had to fit, which is how a shared module ends up rewritten by
-// its own first adopter. It arrives with the leg that migrates the three.
+// The family's third shared question — which picker closes when another opens — is answered below
+// by one registry, written against the consumer that needed the most from it: the date picker
+// stores its trigger alongside its close callback to decide whether a second click on the same
+// anchor toggles the picker closed or re-opens it elsewhere, so the shared shape carries an anchor
+// from the start rather than being widened by its first real adopter.
+//
+// The fourth shared question — which cell of a keyboard grid an arrow key moves to — is answered
+// once here too: the colour and icon pickers each measured their own grid geometrically (nearest
+// swatch or icon by on-screen position, not by index), and the two measurers turned out to compute
+// the identical thing.
+
+// ───────────────────────────────────────────────────────────────────
+// 0. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { buildShellHeader } from "./surface-shell";
+import { isMobileBottomSheet, type ToolbarPopoverPositionOptions } from "./popover-position";
 
 // ───────────────────────────────────────────────────────────────────
 // 1. SEARCH FILTER
@@ -101,3 +112,146 @@ export function moveCreateOptionsFirst<T extends OrderableOption>(options: T[]):
   }
   return creates.length ? [...creates, ...rest] : options;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. ACTIVE-PICKER REGISTRY
+// ───────────────────────────────────────────────────────────────────
+
+/** What the registry needs to answer both questions a picker asks it: is a picker already open on
+ * this document, and is it the one anchored to the element about to be clicked again. */
+export interface ActivePicker {
+  anchor: HTMLElement;
+  close(commit?: boolean): void;
+}
+
+const activePickers = new WeakMap<Document, ActivePicker>();
+
+/** The picker currently open on `doc`, if any. */
+export function getActivePicker(doc: Document): ActivePicker | undefined {
+  return activePickers.get(doc);
+}
+
+/** Records `picker` as the open one for `doc`, replacing whatever was there without closing it —
+ * the caller closes the previous picker itself, before it has built the next one to replace it. */
+export function setActivePicker(doc: Document, picker: ActivePicker): void {
+  activePickers.set(doc, picker);
+}
+
+/** Removes `picker` from the registry, but only if it is still the current entry — a picker that
+ * already lost the slot to a newer one must not delete that newer one's entry on its own delayed
+ * cleanup. */
+export function clearActivePickerIfCurrent(doc: Document, picker: ActivePicker): void {
+  if (activePickers.get(doc) === picker) activePickers.delete(doc);
+}
+
+/** Closes whichever picker is open on `doc`, if any. Returns whether one was open to close. */
+export function closeActivePicker(doc: Document, commit = false): boolean {
+  const picker = activePickers.get(doc);
+  if (!picker) return false;
+  picker.close(commit);
+  return true;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4. PHONE SHEET HEADER
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Adds the phone sheet's title-and-close header ahead of a picker's own content, and hands back the
+ * element to build that content into.
+ *
+ * Three pickers built this same three-line dance independently — check `isMobileBottomSheet`, call
+ * the shell header builder, wrap the rest in a body div for the padded-row grammar to measure. Called
+ * before any other content is added (as the desktop branch already implicitly is, since there is
+ * nothing to prepend it ahead of), the header lands first with no separate reordering step.
+ */
+export function mountPickerSheetHeader(
+  panel: HTMLElement,
+  doc: Document,
+  options: { title: string; onClose(): void; bodyCls: string },
+): HTMLElement {
+  if (!isMobileBottomSheet(doc)) return panel;
+  buildShellHeader(panel, { title: options.title, onClose: options.onClose });
+  return panel.createDiv({ cls: options.bodyCls });
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 5. GEOMETRIC GRID NAVIGATION
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Finds the grid item an arrow key should move focus to, by on-screen position rather than index —
+ * so navigation stays correct however many columns a row holds, and however that count changes with
+ * the panel's width.
+ *
+ * The colour picker's fixed-column swatch grid and the icon picker's width-dependent icon grid each
+ * had their own copy of this, written independently for grids of different shapes, and the two
+ * turned out to be the same algorithm: find the row within a vertical tolerance of the current
+ * item's centre for a horizontal move, or the nearest item strictly above/below for a vertical one.
+ * Nothing here is keyed by a declared column count or row length — a caller with a laid-out grid of
+ * any shape gets correct behaviour from the same function.
+ */
+export function getGridNavigationTarget<T extends HTMLElement>(
+  items: T[],
+  index: number,
+  key: string,
+): number | undefined {
+  const current = items[index];
+  if (!current) return undefined;
+  const rect = current.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  const positions = items.map((item) => {
+    const itemRect = item.getBoundingClientRect();
+    return { item, x: itemRect.left + itemRect.width / 2, y: itemRect.top + itemRect.height / 2 };
+  });
+  if (key === "ArrowLeft" || key === "ArrowRight") {
+    const row = positions.filter((candidate) => Math.abs(candidate.y - centerY) <= Math.max(8, rect.height));
+    row.sort((a, b) => a.x - b.x);
+    const rowIndex = row.findIndex((candidate) => candidate.item === current);
+    const next = row[rowIndex + (key === "ArrowLeft" ? -1 : 1)];
+    return next ? items.indexOf(next.item) : undefined;
+  }
+  const direction = key === "ArrowUp" ? -1 : key === "ArrowDown" ? 1 : 0;
+  if (!direction) return undefined;
+  const candidates = positions
+    .filter((candidate) => direction < 0 ? candidate.y < centerY - 2 : candidate.y > centerY + 2)
+    .sort((a, b) => Math.abs(a.y - centerY) - Math.abs(b.y - centerY) || Math.abs(a.x - centerX) - Math.abs(b.x - centerX));
+  return candidates[0] ? items.indexOf(candidates[0].item) : undefined;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 6. WIDTH ROLES
+// ───────────────────────────────────────────────────────────────────
+
+/** The date picker's segmented-input-plus-calendar panel — the content floor its three/five
+ * segments and the mini calendar below them need, not a rounder number. */
+export const DATE_PICKER_POPOVER: ToolbarPopoverPositionOptions = {
+  minWidth: 252,
+  preferredWidth: 252,
+  maxWidth: 252,
+};
+
+/** The colour picker's swatch grid, sized from its own swatches rather than picked — see the
+ * grid's own module comment for the arithmetic. */
+export const SWATCH_PICKER_POPOVER: ToolbarPopoverPositionOptions = {
+  minWidth: 124,
+  preferredWidth: 124,
+  maxWidth: 124,
+};
+
+/** The icon/emoji grid picker — the content floor of its own tab/category/search chrome plus grid. */
+export const GRID_PICKER_POPOVER: ToolbarPopoverPositionOptions = {
+  minWidth: 318,
+  preferredWidth: 318,
+  maxWidth: 318,
+};
+
+/** The relation editor's row carries a record icon, a title and a trailing check on one line —
+ * wider than a plain select option needs, which is why this role is its own rather than reusing
+ * a narrower one. */
+export const RELATION_PICKER_POPOVER: ToolbarPopoverPositionOptions = {
+  minWidth: 360,
+  preferredWidth: 420,
+  maxWidth: 520,
+};

@@ -7064,9 +7064,19 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .db-cell-option-drag-preview .db-option-check {
-  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--icon-s, 16px);
+  width: var(--icon-s, 16px);
+  height: var(--icon-s, 16px);
   margin-left: 4px;
-  font-size: 12px;
+  color: var(--text-accent);
+}
+
+.db-cell-option-drag-preview .db-option-check svg {
+  width: 13px;
+  height: 13px;
 }
 
 .db-cell-option-drag-preview .db-option-delete {
@@ -7166,9 +7176,22 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   outline: none;
 }
 
+/* An icon now, not the "✓" text glyph this replaced — the glyph carried no accessible state of its
+   own, where the row itself now carries `aria-checked`. */
 .note-database-container .db-option-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 var(--icon-s, 16px);
+  width: var(--icon-s, 16px);
+  height: var(--icon-s, 16px);
   margin-left: 4px;
-  font-size: 12px;
+  color: var(--text-accent);
+}
+
+.note-database-container .db-option-check svg {
+  width: 13px;
+  height: 13px;
 }
 
 .note-database-container .db-cell-option-add {
@@ -7259,7 +7282,9 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 .db-color-picker-popup .db-color-picker-swatch {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 18px;
   height: 18px;
   margin: 0;
@@ -7271,6 +7296,16 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .db-color-picker-popup .db-color-picker-swatch.is-selected {
   box-shadow: 0 0 0 2px var(--interactive-accent);
+}
+
+/* A swatch's own hue is never the only signal that it is the current one, so the selected swatch
+   also carries a check icon. `mix-blend-mode` rather than a fixed colour, because the icon has to
+   read against every one of the palette's own fills. */
+.db-color-picker-popup .db-color-picker-swatch.is-selected svg {
+  width: 10px;
+  height: 10px;
+  color: #fff;
+  mix-blend-mode: difference;
 }
 
 .db-option-color-gray { background: var(--status-color-fg-gray); }
@@ -13203,6 +13238,21 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   padding: 2px;
   margin-bottom: 0;
   border-radius: 0;
+}
+
+/* The desktop swatch is 18px, a mouse-only size the phone review flagged (P1 #9): a thumb needs the
+   same 44px floor `044`'s close button and every other coarse-pointer target in this plugin already
+   carries. The grid wraps rather than scaling the popup's own width, the same way every other sheet
+   grid in this family wraps its rows. */
+.db-mobile-bottom-sheet .db-color-picker-body .db-color-picker-swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--db-radius-sm);
+}
+
+.db-mobile-bottom-sheet .db-color-picker-body .db-color-picker-swatch.is-selected svg {
+  width: 18px;
+  height: 18px;
 }
 
 .db-mobile-bottom-sheet .db-date-picker-body {

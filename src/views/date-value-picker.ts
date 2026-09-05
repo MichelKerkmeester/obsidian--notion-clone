@@ -3,12 +3,11 @@
 // COMPONENT: date/time field trigger and its segmented-input + calendar popover
 // ───────────────────────────────────────────────────────────────────
 //
-// Only one picker may be open per document at a time, tracked in a WeakMap
-// keyed by Document (Obsidian popout windows each have their own document),
-// so a click on an already-open trigger toggles it closed instead of
-// stacking a second popover. Closing without committing restores the
-// original value and display text so an aborted edit never leaks into the
-// underlying field.
+// The active-picker registry (one per document, shared with the colour and icon pickers) is the
+// picker host's — a click on an already-open trigger toggles it closed rather than stacking a
+// second popover, and opening any family member closes whichever of the three was open. Closing
+// without committing restores the original value and display text so an aborted edit never leaks
+// into the underlying field.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -33,9 +32,17 @@ import {
   normalizeDatePickerValue,
   shiftDatePickerMonth,
 } from "./date-picker-model";
-import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
+import { positionToolbarPopover } from "./popover-position";
+import {
+  clearActivePickerIfCurrent,
+  closeActivePicker,
+  DATE_PICKER_POPOVER,
+  getActivePicker,
+  mountPickerSheetHeader,
+  setActivePicker,
+  type ActivePicker,
+} from "./popover-host";
 import { isHTMLElement } from "./dom-guards";
 
 // ───────────────────────────────────────────────────────────────────
@@ -59,20 +66,10 @@ export interface DateValuePickerOptions {
   onChange(value: string): void;
 }
 
-interface ActiveDateValuePicker {
-  anchor: HTMLElement;
-  close(commit: boolean): void;
-}
-
-// ───────────────────────────────────────────────────────────────────
-// 3. ACTIVE PICKER REGISTRY
-// ───────────────────────────────────────────────────────────────────
-
-const activePickers = new WeakMap<Document, ActiveDateValuePicker>();
 let nextDatePickerId = 0;
 
 export function closeActiveDateValuePicker(doc: Document = window.activeDocument, commit = false): void {
-  activePickers.get(doc)?.close(commit);
+  closeActivePicker(doc, commit);
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -120,7 +117,7 @@ function openDateValuePicker(
 ): void {
   const doc = trigger.ownerDocument;
   const ownerWindow = doc.defaultView || window;
-  const active = activePickers.get(doc);
+  const active = getActivePicker(doc);
   if (active?.anchor === trigger) {
     active.close(true);
     return;
@@ -148,10 +145,15 @@ function openDateValuePicker(
   trigger.setAttr("aria-controls", popoverId);
   if (includeTime) popover.addClass("is-datetime");
   // The padded-row grammar needs somewhere structural to measure on a phone sheet; the desktop
-  // popover keeps building presets/segments/calendar as direct children exactly as before.
-  const content = isMobileBottomSheet(doc)
-    ? popover.createDiv({ cls: "db-date-picker-body db-panel-row" })
-    : popover;
+  // popover keeps building presets/segments/calendar as direct children exactly as before. `close`
+  // is referenced here ahead of its own declaration further down — safe, since `onClose` only runs
+  // from a later click, by which time the closure below has assigned it, the same deferred-reference
+  // pattern every preset button in this function already relies on.
+  const content = mountPickerSheetHeader(popover, doc, {
+    title: options.fieldLabel || t("filter.value"),
+    onClose: () => close(true),
+    bodyCls: "db-date-picker-body db-panel-row",
+  });
   const presets = content.createDiv({ cls: "db-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
   const createPreset = (label: string, onSelect: () => void) => {
     const button = presets.createEl("button", { cls: "db-date-preset", text: label, attr: { type: "button" } });
@@ -249,7 +251,8 @@ function openDateValuePicker(
     syncLabel();
   };
 
-  const close = (commit: boolean) => {
+  let entry: ActivePicker;
+  const close = (commit: boolean = false) => {
     if (closed) return;
     closed = true;
     if (commit) commitDraft();
@@ -262,9 +265,10 @@ function openDateValuePicker(
     popover.remove();
     trigger.setAttribute("aria-expanded", "false");
     trigger.removeAttribute("aria-controls");
-    if (activePickers.get(doc)?.anchor === trigger) activePickers.delete(doc);
+    clearActivePickerIfCurrent(doc, entry);
   };
-  activePickers.set(doc, { anchor: trigger, close });
+  entry = { anchor: trigger, close };
+  setActivePicker(doc, entry);
   trigger.setAttribute("aria-expanded", "true");
 
   const chooseDate = (dateKey: string) => {
@@ -404,23 +408,8 @@ function openDateValuePicker(
     };
   });
 
-  // Built once `close` exists, since the close button reads it by reference; `createSheetHeader`
-  // appends, so it is moved to the front rather than left sitting after the content it introduces.
-  if (isMobileBottomSheet(doc)) {
-    const header = buildShellHeader(popover, {
-      title: options.fieldLabel || t("filter.value"),
-      onClose: () => close(true),
-    });
-    popover.prepend(header.header);
-  }
-
   renderPicker();
-  positionToolbarPopover(popover, trigger, {
-    minWidth: 252,
-    preferredWidth: 252,
-    maxWidth: 252,
-    align: "left",
-  });
+  positionToolbarPopover(popover, trigger, { ...DATE_PICKER_POPOVER, align: "left" });
   cleanupAutoClose = installPopoverAutoClose({
     panel: popover,
     anchorEl: trigger,

@@ -1,7 +1,7 @@
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    popover-host.test
-// COMPONENT: unit coverage for the picker family's shared search filter
-//            and create-affordance ordering
+// COMPONENT: unit coverage for the picker family's shared search filter,
+//            create-affordance ordering, and geometric grid navigation
 // ───────────────────────────────────────────────────────────────────
 //
 // The search-filter oracle is the load-bearing case here: it asserts the
@@ -9,13 +9,17 @@
 // version did before the extraction — same visible rows, same section
 // hiding, same empty row — so the move itself is provably behavior-
 // preserving rather than merely "probably fine because it compiles".
+//
+// The grid-navigation oracle plays the same role for `getGridNavigationTarget`: the colour and icon
+// pickers each measured their own grid before this leg, on a fixed-column grid and a variable-column
+// one respectively. These cases reproduce both grid shapes against the unified function.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS & DOM SHIM
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it } from "vitest";
-import { filterPickerRows, moveCreateOptionsFirst, type PickerSearchRow } from "./popover-host";
+import { filterPickerRows, getGridNavigationTarget, moveCreateOptionsFirst, type PickerSearchRow } from "./popover-host";
 
 class MockElement {
   classes = new Set<string>();
@@ -141,5 +145,53 @@ describe("popover host — create-affordance ordering", () => {
       { value: "b", preserveValueOnSelect: false },
     ];
     expect(moveCreateOptionsFirst(options)).toBe(options);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. GEOMETRIC GRID NAVIGATION — ORACLE PARITY
+// ───────────────────────────────────────────────────────────────────
+
+/** A grid cell at a fixed screen position — enough for `getBoundingClientRect()`, nothing else. */
+function cell(x: number, y: number, size = 20): HTMLElement {
+  const rect = { left: x, top: y, right: x + size, bottom: y + size, width: size, height: size, x, y, toJSON: () => ({}) };
+  return { getBoundingClientRect: () => rect } as unknown as HTMLElement;
+}
+
+describe("popover host — geometric grid navigation", () => {
+  it("moves within a row and does not wrap at its edge, on a fixed-column grid (the colour picker's shape)", () => {
+    // A 3-column, 2-row grid with a 4px gap between rows — the swatch grid's own layout.
+    const items = [
+      cell(0, 0), cell(20, 0), cell(40, 0),
+      cell(0, 24), cell(20, 24), cell(40, 24),
+    ];
+    expect(getGridNavigationTarget(items, 0, "ArrowRight")).toBe(1);
+    expect(getGridNavigationTarget(items, 2, "ArrowRight")).toBeUndefined();
+    expect(getGridNavigationTarget(items, 0, "ArrowLeft")).toBeUndefined();
+    expect(getGridNavigationTarget(items, 1, "ArrowDown")).toBe(4);
+    expect(getGridNavigationTarget(items, 4, "ArrowUp")).toBe(1);
+  });
+
+  it("finds the nearest item by x when rows hold a different number of items (the icon picker's shape)", () => {
+    // Row 1 holds four items; row 2 holds two, starting under the row's own first column rather
+    // than under the last one — exactly what a search or a category change leaves behind.
+    const items = [
+      cell(0, 0), cell(20, 0), cell(40, 0), cell(60, 0),
+      cell(0, 24), cell(20, 24),
+    ];
+    // From the last item of the long row, the nearest item below by centre-x is the short row's
+    // second item (x 20), not its first (x 0) and not an out-of-bounds index.
+    expect(getGridNavigationTarget(items, 3, "ArrowDown")).toBe(5);
+    // And back up from there lands on whichever item sits closest by x, not on where it came from —
+    // the short row's second item sits directly under the long row's second item (x 20 both).
+    expect(getGridNavigationTarget(items, 5, "ArrowUp")).toBe(1);
+  });
+
+  it("returns undefined off the grid's edges and for a key it does not handle", () => {
+    const items = [cell(0, 0), cell(20, 0)];
+    expect(getGridNavigationTarget(items, 0, "ArrowUp")).toBeUndefined();
+    expect(getGridNavigationTarget(items, 1, "ArrowDown")).toBeUndefined();
+    expect(getGridNavigationTarget(items, 0, "Enter")).toBeUndefined();
+    expect(getGridNavigationTarget([], 0, "ArrowRight")).toBeUndefined();
   });
 });

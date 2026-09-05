@@ -4,11 +4,10 @@
 //            arrow-key grid navigation
 // ───────────────────────────────────────────────────────────────────
 //
-// activePickers (WeakMap<Document, close>) ensures only one picker is open
-// per document at a time, so opening a second field's picker auto-closes the
-// first instead of stacking overlays. getIconNavigationTarget does spatial
-// nearest-neighbor arrow navigation (by x/y center) rather than index math,
-// because the grid's row length changes with the panel and viewport width.
+// The active-picker registry, the phone sheet header and the arrow-key grid navigator are the
+// picker host's, shared with the colour and date pickers — opening this one auto-closes whichever
+// of the three was open, since only one is ever meant to be. Only the emoji/Lucide catalogue and
+// its tab/category chrome are this file's own.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -18,9 +17,17 @@ import { Notice, setIcon, setTooltip } from "obsidian";
 import { EMOJI_CATEGORIES, getLucideCategoryIds, LUCIDE_CATEGORY_DEFINITIONS } from "../data/icon-picker-catalog";
 import { RECORD_ICON_COLORS, RecordIconColor, serializeLucideIconToken } from "../data/record-icon";
 import { t } from "../i18n";
-import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
+import { positionToolbarPopover } from "./popover-position";
+import {
+  clearActivePickerIfCurrent,
+  closeActivePicker,
+  getGridNavigationTarget,
+  GRID_PICKER_POPOVER,
+  mountPickerSheetHeader,
+  setActivePicker,
+  type ActivePicker,
+} from "./popover-host";
 import { getValidRecordIconIds } from "./record-icon-renderer";
 
 // ───────────────────────────────────────────────────────────────────
@@ -47,8 +54,6 @@ const EMOJI_CATEGORY_ICONS: Record<string, string> = {
   travel: "plane", objects: "lightbulb", symbols: "badge-check", flags: "flag",
 };
 
-const activePickers = new WeakMap<Document, () => void>();
-
 // ───────────────────────────────────────────────────────────────────
 // 4. ICON PICKER POPOVER
 // ───────────────────────────────────────────────────────────────────
@@ -56,7 +61,7 @@ const activePickers = new WeakMap<Document, () => void>();
 export function openIconPickerPopover(options: IconPickerOptions): () => void {
   const doc = options.anchor.ownerDocument;
   const view = doc.defaultView || window;
-  activePickers.get(doc)?.();
+  closeActivePicker(doc);
   const panel = doc.body.createDiv({ cls: "db-icon-picker-popover" });
   panel.setAttr("role", "dialog");
   panel.setAttr("aria-label", t("recordIcon.configureField"));
@@ -70,14 +75,16 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
   let closed = false;
 
   let removeAutoClose: (() => void) | undefined;
+  let entry: ActivePicker;
   const close = () => {
     if (closed) return;
     closed = true;
     removeAutoClose?.();
     panel.remove();
     doc.removeEventListener("keydown", onKeydown, true);
-    if (activePickers.get(doc) === close) activePickers.delete(doc);
+    clearActivePickerIfCurrent(doc, entry);
   };
+  entry = { anchor: options.anchor, close };
   const commit = async (value: string | null) => {
     try {
       await options.onSelect(value);
@@ -97,12 +104,11 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
   // tear down and refocus a control the operator is not touching. Every phone sheet, this dropdown
   // included, carries the same header — the desktop popover stays exactly as small and title-less
   // as before.
-  const content = isMobileBottomSheet(doc)
-    ? (() => {
-        buildShellHeader(panel, { title: options.label || t("recordIcon.icons"), onClose: close });
-        return panel.createDiv({ cls: "db-icon-picker-body db-panel-row" });
-      })()
-    : panel;
+  const content = mountPickerSheetHeader(panel, doc, {
+    title: options.label || t("recordIcon.icons"),
+    onClose: close,
+    bodyCls: "db-icon-picker-body db-panel-row",
+  });
 
   const render = (preserveScroll = false, restoreFocus = true) => {
     const previousScrollTop = preserveScroll
@@ -241,7 +247,7 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
       const value = values[Math.floor(Math.random() * values.length)];
       if (value) void commit(tab === "emoji" || category === "recent" ? value : serializeLucideIconToken(value, color));
     };
-    positionToolbarPopover(panel, options.anchor, { preferredWidth: 318, maxWidth: 318, minWidth: 318, gap: 8 });
+    positionToolbarPopover(panel, options.anchor, { ...GRID_PICKER_POPOVER, gap: 8 });
     if (preserveScroll) scroller.scrollTop = previousScrollTop;
     if (restoreFocus) {
       view.requestAnimationFrame(() => {
@@ -265,7 +271,7 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
     const items = Array.from(panel.querySelectorAll<HTMLButtonElement>(".db-icon-picker-item"));
     if (!items.length) return;
     const current = doc.activeElement instanceof HTMLButtonElement ? items.indexOf(doc.activeElement) : -1;
-    const next = getIconNavigationTarget(items, current < 0 ? 0 : current, event.key);
+    const next = getGridNavigationTarget(items, current < 0 ? 0 : current, event.key);
     if (next == null) return;
     event.preventDefault();
     items[next]?.focus();
@@ -273,35 +279,14 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
   render();
   doc.addEventListener("keydown", onKeydown, true);
   removeAutoClose = installPopoverAutoClose({ panel, anchorEl: options.anchor, close });
-  activePickers.set(doc, close);
+  setActivePicker(doc, entry);
   return close;
 }
 
 // ───────────────────────────────────────────────────────────────────
 // 5. KEYBOARD NAVIGATION
 // ───────────────────────────────────────────────────────────────────
-
-function getIconNavigationTarget(items: HTMLButtonElement[], index: number, key: string): number | undefined {
-  const current = items[index];
-  if (!current) return undefined;
-  const rect = current.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-  const positions = items.map((item) => {
-    const itemRect = item.getBoundingClientRect();
-    return { item, rect: itemRect, x: itemRect.left + itemRect.width / 2, y: itemRect.top + itemRect.height / 2 };
-  });
-  if (key === "ArrowLeft" || key === "ArrowRight") {
-    const row = positions.filter((candidate) => Math.abs(candidate.y - centerY) <= Math.max(8, rect.height));
-    row.sort((a, b) => a.x - b.x);
-    const rowIndex = row.findIndex((candidate) => candidate.item === current);
-    const next = row[rowIndex + (key === "ArrowLeft" ? -1 : 1)];
-    return next ? items.indexOf(next.item) : undefined;
-  }
-  const direction = key === "ArrowUp" ? -1 : key === "ArrowDown" ? 1 : 0;
-  if (!direction) return undefined;
-  const candidates = positions
-    .filter((candidate) => direction < 0 ? candidate.y < centerY - 2 : candidate.y > centerY + 2)
-    .sort((a, b) => Math.abs(a.y - centerY) - Math.abs(b.y - centerY) || Math.abs(a.x - centerX) - Math.abs(b.x - centerX));
-  return candidates[0] ? items.indexOf(candidates[0].item) : undefined;
-}
+//
+// Geometric nearest-neighbour navigation (`getGridNavigationTarget`) is the picker host's — this
+// grid's row length changes with the panel and viewport width, which is exactly the case an
+// index-based navigator gets wrong and the host's measurement-based one does not.

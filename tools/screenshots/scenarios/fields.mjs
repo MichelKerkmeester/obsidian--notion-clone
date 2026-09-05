@@ -171,7 +171,7 @@ const optionRow = (value, color, checked, transient) => `
     </span>
     <span class="db-option-color-dot db-option-color-${color}"></span>
     <span class="db-option-label">${value}</span>
-    <span class="db-option-check">${checked ? "✓" : ""}</span>
+    <span class="db-option-check">${checked ? glyph(I.check) : ""}</span>
     <span class="db-option-delete" role="button" aria-label="${transient ? "Add option" : "Delete"}"
       >${glyph(transient ? I.plus : I.trash)}</span>
   </button>`;
@@ -437,13 +437,13 @@ export const FIELDS_SCENARIOS = [
     width: 156,
     fixtureOf: "constructed-option-color-picker",
     sources: ["src/views/option-color-picker.ts", "src/data/status-colors.ts"],
-    note: "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
+    note: "Sixteen swatches in the persisted order, the current colour ringed and carrying a trailing tick — the ring is never the only signal a swatch is current. Opened from the colour dot in the select editor and created on document.body.",
     captureCss: `.db-color-picker-popup { position: static !important; top: auto !important; left: auto !important; }`,
     html: () => `
       <div class="db-color-picker-popup" role="grid" aria-label="Custom">
         ${COLORS.map((c) => `
         <button type="button" role="gridcell" class="db-color-picker-swatch db-option-color-${c}${c === "blue" ? " is-selected" : ""}"
-          title="${c}" aria-label="${c}" aria-pressed="${c === "blue"}"></button>`).join("")}
+          title="${c}" aria-label="${c}" aria-pressed="${c === "blue"}">${c === "blue" ? glyph(I.check) : ""}</button>`).join("")}
       </div>`,
   },
   {
