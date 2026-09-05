@@ -220,13 +220,22 @@ const waitForStackSettle = () => new Promise((resolve) => {
 // frames after it mounts. Snapshotting the parent before that finishes measures the tail of its own
 // entrance and reports it as movement the child caused. Wait for two consecutive frames at the same
 // offset instead of a fixed delay, so the check does not encode the duration as a second copy.
+const IDENTITY_TRANSFORMS = new Set(["none", "matrix(1, 0, 0, 1, 0, 0)"]);
+
 const settleSheetGeometry = async (panel) => {
   let previous = null;
-  for (let frame = 0; frame < 90; frame += 1) {
+  let stable = 0;
+  for (let frame = 0; frame < 120; frame += 1) {
     await new Promise((resolve) => requestAnimationFrame(resolve));
+    // Geometry alone is not enough: two frames before the entrance starts read the same offset as
+    // two frames after it finishes, so a stability test on its own returns true at the moment the
+    // sheet is still off screen. The entrance rises the panel from a translate to identity, so the
+    // resolved transform is what says the animation is over; stability then says the layout is.
+    const settledTransform = IDENTITY_TRANSFORMS.has(getComputedStyle(panel).transform);
     const top = panel.getBoundingClientRect().top;
-    if (previous !== null && Math.abs(top - previous) < 0.01) return true;
+    stable = previous !== null && Math.abs(top - previous) < 0.01 ? stable + 1 : 0;
     previous = top;
+    if (settledTransform && stable >= 2) return true;
   }
   return false;
 };
@@ -452,6 +461,10 @@ const measureStackedPair = async (pair) => {
   }
 
   const child = opened.panel;
+  // The child animates in as well, and its close control is measured against a 44px floor. A rect
+  // read while it is still rising is a rect of a partly-scaled surface, which is how a conforming
+  // close target reports as too small on some runs and not others.
+  const childSettled = await settleSheetGeometry(child);
   // The sheet module keeps its own body watcher so a bare node removal still tears the stack down.
   // That watcher calls back into the code that positions the scrim, so a reposition that runs
   // unconditionally re-wakes it and the pair never stops moving. Counting body child mutations
@@ -550,6 +563,7 @@ const measureStackedPair = async (pair) => {
     overflowMeasured: { scrollHeight: scrollHost.scrollHeight, clientHeight: scrollHost.clientHeight, fade: hasFade },
     settleRecords,
     parentSettled,
+    childSettled,
   };
   document.documentElement.style.removeProperty("--keyboard-height");
   opened.close();
@@ -716,6 +730,7 @@ try {
       ["child drag leaves parent in place", report.dragParentUnchanged],
       [`stack settles (${report.settleRecords} body mutations while idle)`, report.settleRecords === 0],
       ["parent entrance settled before measurement", report.parentSettled],
+      ["child entrance settled before measurement", report.childSettled],
     ];
     if (pair.child.overflow) checks.push([
       `long list scrolls with a visible fade (${report.overflowMeasured.scrollHeight}>${report.overflowMeasured.clientHeight})`,
