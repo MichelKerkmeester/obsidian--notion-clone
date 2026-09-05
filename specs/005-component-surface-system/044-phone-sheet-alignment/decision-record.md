@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/044-phone-sheet-alignment"
-    last_updated_at: "2026-09-05T04:40:00Z"
+    last_updated_at: "2026-09-05T22:55:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Recorded the two operator decisions this closing leg implemented"
-    next_safe_action: "None — both ADRs are decided and implemented"
+    recent_action: "Recorded ADR-003 on the sheets' content-independent overflow guarantee"
+    next_safe_action: "None — all three ADRs are decided and implemented"
     blockers: []
     key_files:
       - "src/views/owned-menu.ts"
@@ -188,3 +188,75 @@ ADR-001 or ADR-002 is reopened: the shared 16px row inset and the sheet-title si
 `051`'s frame-shape and header-slot changes, and `051`'s legs assert `044` conformance after every
 one.
 <!-- /ANCHOR:parity-retarget-note -->
+
+---
+
+<!-- ANCHOR:adr-003 -->
+## ADR-003: Is the sheets' no-horizontal-overflow guarantee a property of the conformance registry, or of every sheet at any content length?
+
+**Status: DECIDED — 2026-09-05.**
+
+### Context
+
+The operator reported against 0.0.27: *"Some sheets also have horizontal overflow which should never
+happen."* The lane already carried a right-edge check, and it was green — because it only ever ran
+over the surfaces the grammar registry lists, and a surface joins that registry when it satisfies all
+eight structural columns. Overflow does not answer to that gate. A phone is 390px wide and cannot
+pan, so a surface that draws past its own right edge has put content where no thumb can reach it
+whether or not that surface has earned a header.
+
+Two things were measured on the tree at `3407dab0`, both engines, at 390×844 with
+`is-mobile is-phone is-ios`. First, the mobile inline cell editor overflowed **with the fixtures' own
+short content and no stress at all**: `.db-cell-edit-mobile-actions` ran 36.0px past its surface and
+the surface scrolled sideways at 402/366 in Chrome and 410/374 in WebKit. It is one of the surfaces
+the registry does not carry, so nothing had ever measured it. Second, ten of eleven sheet headers
+overflowed once the title was a single unbreakable word — scroll widths of 615 to 687 against a 390px
+client width. The eleventh was the record sheet, whose title has carried `min-width: 0` since it was
+written. The codebase was already holding its own negative control and nobody had read it.
+
+### Decision
+
+**The guarantee is a property of every sheet, at any content length, and the sweep that proves it is
+scoped independently of the conformance registry.** `sheet-grammar.mjs` gains a section that mounts
+every surface the sheet and stacked-surface inventories enumerate — the registry plus the Properties
+sheet, both toolbar popovers, the single-rule editor, both inline cell editors, the option list and
+the deeper filter and picker states — on **both** engines, and requires of each that its scroll width
+stay inside its client width, that nothing it drew reach past its right edge, and that the document
+and body not scroll sideways either.
+
+It runs twice. Once with the fixtures' own names, and once with **every vault-derived string replaced
+by one unbreakable word**, because a property name, an option value and the field a picker was opened
+for belong to the user: the plugin cannot bound their length, and a surface that fits only the short
+names a fixture happens to carry has not been sized, it has been lucky.
+
+**Shipped copy is deliberately not stressed.** A segmented option, a menu action and a button caption
+come from the translation table, where the longest run is bounded by a translator rather than by a
+vault. A stress that rewrote them would measure a string the plugin is never handed — and did: the
+column-width preset row reported red under an unbreakable caption it can never receive, against a
+rule whose own comment records an operator decision to break at word boundaries only.
+
+### Alternatives
+
+| Option | Why not |
+|---|---|
+| Register the offending surfaces on the grammar and let the existing right-edge check reach them | A surface joins that registry when it satisfies all eight columns. The inline cell editor is deliberately not a sheet and never will; requiring conformance it does not owe in order to measure overflow it does owe couples two unrelated guarantees |
+| Keep the check Chromium-only, as the rest of the lane is | The phone runs a WebKit web view. Flex minimum sizing and intrinsic text measurement differ enough between the engines that the two disagreed on the offending numbers here — 402/366 against 410/374 on the same surface |
+| Measure the fixtures' own content only | It is what was already happening, and it is why a header that fails on any long property name has been green since it was written |
+| Stress every text node, shipped copy included | Produces reds against inputs the plugin cannot receive, and a check that cries wolf gets its threshold relaxed rather than its finding fixed |
+
+### Consequences
+
+- The lane now measures 24 single surfaces and 31 stacked pairs, twice each, on two engines, and its runtime rises from 21.5s to roughly six minutes. That is the cost of the guarantee, paid once per gate.
+- The two producers this found are fixed at the seam rather than per surface: the cell editor's full-bleed pull now reads the gutter it is cancelling from a variable instead of repeating the figure, and the shared sheet title is allowed to break and to shrink the way the record title always could.
+- A surface added to the plugin later is measured by the sweep the moment it is added to the inventory list, without having to earn a header first.
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — the existing right-edge check was green on a tree with a 36px unconditional overflow in it, because it never looked at that surface |
+| **Is there a simpler existing thing?** | The lane's own right-edge measurement, reused verbatim; the sweep changes what it is pointed at and what content it is pointed at with, not how it measures |
+| **What does it touch?** | One lane file and two stylesheet rules. No renderer changed |
+| **What is the real caller that must not break?** | The twelve registered surfaces' own grammar rows, which run unchanged ahead of the sweep and stayed green through both fixes |
+| **What contract must not break?** | The desktop anchored panel's density and the docked cell editor's 44px close gutter — the gutter is now published as a variable and still resolves to 44px on the variant that has a close control |
+<!-- /ANCHOR:adr-003 -->
