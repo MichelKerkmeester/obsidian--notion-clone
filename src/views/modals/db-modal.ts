@@ -28,11 +28,9 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { App, Modal } from "obsidian";
-import { isTouchDevice } from "../../data/touch-environment";
 import { t } from "../../i18n";
-import { applySheetChrome, attachSheetChromeToModal } from "../mobile-bottom-sheet";
-import { keepSheetPlaced, placeSheet } from "../popover-position";
-import { overlayStack } from "../overlay-stack";
+import { applySheetChrome } from "../mobile-bottom-sheet";
+import { createSurfaceShell, type SurfaceShellHandle, type SurfaceShellPresentation } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -44,8 +42,11 @@ import { overlayStack } from "../overlay-stack";
  * `sheet` — short, form-like surfaces: confirmations, pickers, single-field editors.
  * `fullscreen` — workbenches whose desktop width is 860px or more. A sheet would crush them.
  * `dialog` — opt out; stays a centred dialog everywhere.
+ *
+ * This is the shell's own presentation type, named for this call site rather than copied: the
+ * two cannot drift apart because there is only one definition.
  */
-export type DbModalPresentation = "sheet" | "fullscreen" | "dialog";
+export type DbModalPresentation = SurfaceShellPresentation;
 
 export const DB_MODAL_HOST_CLASS = "note-database-modal";
 export const DB_MODAL_FULLSCREEN_CLASS = "db-modal-fullscreen";
@@ -55,8 +56,7 @@ export const DB_MODAL_FULLSCREEN_CLASS = "db-modal-fullscreen";
 // ───────────────────────────────────────────────────────────────────
 
 export class DbModal extends Modal {
-  private releaseSheetChrome?: () => void;
-  private releaseSheetPlacement?: () => void;
+  private shell?: SurfaceShellHandle;
 
   constructor(app: App, private readonly presentation: DbModalPresentation = "sheet") {
     super(app);
@@ -68,10 +68,8 @@ export class DbModal extends Modal {
   }
 
   onClose(): void {
-    this.releaseSheetPlacement?.();
-    this.releaseSheetPlacement = undefined;
-    this.releaseSheetChrome?.();
-    this.releaseSheetChrome = undefined;
+    this.shell?.destroy();
+    this.shell = undefined;
     // Take the chrome down whether or not a handle was held. The backdrop is a body sibling, so a
     // modal that closes by a path which never stored a teardown strands it over the whole app,
     // where it swallows every tap. `applySheetChrome` is idempotent, so asserting the off state
@@ -79,6 +77,12 @@ export class DbModal extends Modal {
     applySheetChrome(this.modalEl, false);
   }
 
+  /**
+   * Recover a title from the content when the surface declares none of its own.
+   *
+   * This is the shell's counted fallback, not its own titling mechanism: a surface that wants
+   * to be counted as declared supplies its own title to the shell instead of relying on this.
+   */
   protected getSheetTitle(): string {
     const heading = Array.from(this.contentEl.querySelectorAll<HTMLElement>("h1, h2, h3"))
       .find((candidate) => !candidate.closest(".db-sheet-modal-header"))
@@ -88,27 +92,15 @@ export class DbModal extends Modal {
 
   /** Re-apply after a layout change, such as rotation moving the surface across the touch boundary. */
   protected applyPresentation(): void {
-    const touch = isTouchDevice(this.contentEl);
-    const hasSheetParent = Boolean(overlayStack.getTopSurfaceForDocument(this.modalEl.ownerDocument, { sheetsOnly: true }));
-    const asSheet = touch && (this.presentation === "sheet" || hasSheetParent);
-    const asFullscreen = touch && this.presentation === "fullscreen" && !hasSheetParent;
-
-    this.modalEl.toggleClass(DB_MODAL_FULLSCREEN_CLASS, asFullscreen);
-    this.releaseSheetPlacement?.();
-    this.releaseSheetPlacement = undefined;
-    this.releaseSheetChrome?.();
-    this.releaseSheetChrome = undefined;
-    if (!asSheet) {
-      applySheetChrome(this.modalEl, false);
-      return;
+    if (!this.shell) {
+      this.shell = createSurfaceShell({
+        presentation: this.presentation,
+        element: this.modalEl,
+        close: () => this.close(),
+        getFallbackTitle: () => this.getSheetTitle(),
+      });
     }
-    this.releaseSheetChrome = attachSheetChromeToModal(
-      this.modalEl,
-      true,
-      () => this.close(),
-      { getTitle: () => this.getSheetTitle() },
-    );
-    placeSheet(this.modalEl);
-    this.releaseSheetPlacement = keepSheetPlaced(this.modalEl);
+    this.shell.apply();
+    this.modalEl.toggleClass(DB_MODAL_FULLSCREEN_CLASS, this.shell.isFullscreen);
   }
 }

@@ -26,6 +26,7 @@ const en: Dictionary = {
   "common.cancel": "Cancel",
   "common.clear": "Clear",
   "common.close": "Close",
+  "common.back": "Back",
   "common.delete": "Delete",
   "common.edit": "Edit",
   "common.more": "More",

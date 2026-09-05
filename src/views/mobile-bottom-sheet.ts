@@ -198,6 +198,12 @@ export interface SheetModalChromeOptions {
   getTitle?(): string | undefined;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
+  /**
+   * Build the header instead of this module's own two-slot builder, for a caller that owns a
+   * richer header shape. Omit this and nothing changes: every existing caller gets exactly
+   * the header it always did.
+   */
+  buildHeader?(panel: HTMLElement, title: string, onClose: () => void): SheetHeaderHandle;
 }
 
 /**
@@ -238,7 +244,9 @@ export function attachSheetChromeToModal(
         ?.textContent?.trim();
       return heading || options.title?.trim() || t("menu.title");
     };
-    header = createSheetHeader(modalEl, { title: resolveTitle(), onClose: close });
+    const buildHeader = options.buildHeader
+      ?? ((panel: HTMLElement, title: string, onClose: () => void) => createSheetHeader(panel, { title, onClose }));
+    header = buildHeader(modalEl, resolveTitle(), close);
     header.header.addClass("db-sheet-modal-header");
     let contentRoot = modalEl.querySelector<HTMLElement>(".note-database-modal");
     while (contentRoot?.parentElement && contentRoot.parentElement !== modalEl) {

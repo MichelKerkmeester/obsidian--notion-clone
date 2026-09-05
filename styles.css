@@ -12882,6 +12882,52 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 18px;
 }
 
+/* The shell's own header keeps a third slot ahead of the title, sized to match the close
+   button on the other end, so the title lands centred between two equal edges instead of
+   pinned to the leading one. Nothing but the shared shell builds this header today, so this
+   scope reaches no other panel or sheet. */
+.note-database-container .db-shell-header {
+  justify-content: flex-start;
+}
+
+.note-database-container .db-shell-header-leading {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+}
+
+.note-database-container .db-shell-header .db-panel-title {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.note-database-container .db-shell-back {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.note-database-container .db-shell-back:hover,
+.note-database-container .db-shell-back:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-shell-back svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* 列管理：全选/全不选 */
 .note-database-container .db-column-manager-toggle-all {
   display: inline-flex;
