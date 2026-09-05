@@ -157,8 +157,11 @@ produced it.
       requirement numbering — REQ-001 through REQ-008 consistent across all four this session
 - [x] CHK-041 [P1] The comment above the sheet module's grammar contract says why an element is
       owned centrally, not what the code does — `sheet-grammar.ts`'s module banner
-- [ ] CHK-042 [P1] `../roadmap.md` §4 rows 40, 41 and 43 carry the measured after-numbers — not done
-      this session; explicitly out of this leg's dispatched scope (tasks.md T014), left for the next
+- [x] CHK-042 [P1] `../roadmap.md` §4 rows 40, 41 and 43 carry the measured after-numbers — done in
+      the landing session (tasks.md T014): rows 40/41 append the phase-closing gate/sheet-grammar/
+      verify-placement numbers, row 43 rewritten from Open to Fixed with T008's evidence,
+      `../roadmap.md` §5.A's `044` row and its cross-referencing prose, and `../spec.md`'s two
+      Phase Documentation Map rows, all updated to Landed on main `dcff742e`
 - [ ] CHK-043 [P2] `src/views/README.md` names the sheet module as the grammar owner — not done;
       `src/views/README.md`/`CODE.md` are curated summaries that name no individual file today, and
       adding one entry for this alone would invent a convention the folder doc doesn't otherwise use
@@ -185,11 +188,10 @@ produced it.
 | Category | Total | Verified |
 |----------|-------|----------|
 | P0 Items | 13 | 13/13 |
-| P1 Items | 16 | 15/16 |
+| P1 Items | 16 | 16/16 |
 | P2 Items | 1 | 0/1 |
 
-Open: CHK-042 (roadmap.md after-numbers — explicitly out of this leg's dispatched scope, tasks.md
-T014) and CHK-043 (README naming, P2, no existing per-file convention to extend). Both left for a
+Open: CHK-043 (README naming, P2, no existing per-file convention to extend) — left for a
 later pass rather than guessed at here.
 
 **Verification Date**: 2026-09-05

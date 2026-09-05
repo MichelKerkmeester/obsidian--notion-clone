@@ -74,6 +74,8 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 **AC-005 evidence, partial:** `src/views/board-renderer-hierarchy.test.ts` "still renders a title with every stored field toggled off" proves the cover/title half. The phone half — `.is-phone` hides the drag handle and shows `db-mobile-reorder-controls` via the exact same CSS this packet did not have to rewrite (`styles.css:12822` `.db-column-manager-row`, reused verbatim by `board-card-properties-panel.ts`) — is proven by `board-card-properties-panel.test.ts`'s read-only/reorder cases and by code identity with the already-shipped column manager, not by a `sheet-grammar` lane row: that lane does not exist in this tree yet (`044-phone-sheet-alignment` has not landed it as of this session). Left `Unmet` rather than claiming a check that cannot run.
 
+**True-up, `044`'s landing (`dcff742e`):** the `sheet-grammar` lane this row's Verification cell names now exists on main (`tools/live/sheet-grammar.mjs`, registered in `tools/gate.mjs`, `npm run gate` 26/26) — the blocker is no longer "the lane does not exist" but "the lane has no row for this surface." Registering board-card-properties in `sheet-grammar.mjs`'s `REGISTERED_SURFACES` is `tasks.md` T013's own still-open scenario work, not done here. AC-005 stays `Unmet`.
+
 ### Status values
 
 | Value | Meaning |
@@ -104,8 +106,9 @@ most — AC-003 and AC-004 pull in opposite directions (nothing changes for an e
 changes for the reference card even when a list exists) and both are DOM/capture comparisons rather
 than opinions. AC-005 is partially met: the cover/title guarantee is proven, the phone row grammar is
 proven by code identity with the already-shipped column manager, but the `sheet-grammar` lane its
-Verification cell names does not exist in this tree (`044` has not landed it), so the row stays
-`Unmet` rather than claiming a check nothing could run. AC-006 is operator-only and untouched. Not
-closeable until AC-005 has a real check to point at (or the operator waives the lane requirement) and
-AC-006 is answered.
+Verification cell names carries no row for this surface — the lane itself landed with `044`
+(`dcff742e`), narrowing the gap from "the lane does not exist" to "the lane has no row here" — so the
+row stays `Unmet` rather than claiming a check nothing runs. AC-006 is operator-only and untouched.
+Not closeable until AC-005 has a real check to point at (or the operator waives the lane requirement)
+and AC-006 is answered.
 <!-- /ANCHOR:closure -->
