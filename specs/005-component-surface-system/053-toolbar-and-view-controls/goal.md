@@ -11,23 +11,25 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-05T18:30:00Z"
-    last_updated_by: "design-trueup-t001"
-    recent_action: "Completed T001 capture read; wrote design-trueup.md"
-    next_safe_action: "Execute T002, the red-first threshold measurements, then the primitive legs in plan order"
-    blockers: []
+    last_updated_at: "2026-09-05T23:05:00Z"
+    last_updated_by: "impl-053-remaining"
+    recent_action: "Closed AC-103/105/107: timing proof, live drop branches, collapse rung; gate green"
+    next_safe_action: "AC-110's dedicated-lane clause and AC-111 (operator device pass) are what remain"
+    blockers:
+      - "AC-111 is operator-owned and nothing here can close it"
     key_files:
       - "src/views/toolbar-renderer.ts"
-      - "src/views/active-view-controls-renderer.ts"
-      - "src/views/filter-panel-renderer.ts"
-      - "src/views/sort-panel-renderer.ts"
-      - "specs/005-component-surface-system/053-toolbar-and-view-controls/design-trueup.md"
-      - "specs/005-component-surface-system/053-toolbar-and-view-controls/toolbar-surface-inventory.md"
+      - "src/views/database-view.ts"
+      - "src/views/board-renderer-hierarchy.test.ts"
+      - "src/views/table-renderer-sort-conflict.test.ts"
+      - "src/views/database-view-settings-landing.test.ts"
+      - "tools/live/toolbar-collapse-sweep.ts"
+      - "tools/live/run-toolbar-collapse-sweep.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-053-goal"
       parent_session_id: null
-    completion_pct: 8
+    completion_pct: 92
     open_questions: []
     answered_questions:
       - "050's Today cells for items 1 and 4 were corrected against the current tree: a chip rail and a duplicate-view action already exist; the thresholds are kept, the states are re-measured"
@@ -210,4 +212,5 @@ Everything below is VOLATILE.
 | **What the read cost the packet, honestly** | Three of the four changes ADR-001 scoped for the chip rail are struck on evidence (dual-mode triggers at landing; the band move and the direction colour at T001), one risk row retires, and two of `spec.md` §11's three open questions close. The packet got smaller and better-evidenced in the same pass — which is the outcome a capture gate exists to produce, and the reason D1 was worth carrying through three sessions that could not satisfy it. |
 | `050`'s item 1 and item 4 Today cells were written against a tree that no longer matches | Both corrections are in §2. The thresholds are `050`'s and are kept; only the red values are re-measured. This is the same honesty the parent demands for every "Today" cell: written from the tree, not from the prior document. |
 | Seven dead button methods are scope, not cleanup | `renderViewConfigButton`, `renderChartOptionsButton`, `renderCalendarTimelineOptionsButton`, `renderComputedSyncButton`, `renderDatabaseRefreshButton`, `renderExportButton` and `renderWidthSelect` have zero `this.` call sites at HEAD. Deleting them is part of the settings-entry primitive (D3), because their continued existence is what makes "one settings entry" unreadable. Their CSS hooks are still queried as anchor fallbacks (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`) — the primitive keeps the classes, removes the dead methods. |
+| **T007/T008 closed 2026-09-05 (this session)** | AC-103, AC-105 and AC-107 were the three rows the prior landing left honestly Unmet for lacking a live-driven or timed proof, not for a missing implementation — `confirmSortConflict` and `openViewSettingsAfterMutation` already shipped. This session added the missing proofs: a `performance.now()` reading on a constructed `DatabaseView` mount for AC-103 (create 4.7ms, duplicate 0.8ms); live decline/accept branches with the confirm resolved async on both renderers for AC-105, on the local-extension board layout rather than the Project Manager 1:1 reference kanban; and, for AC-107, the missing tab-row-to-dropdown rung itself (`collapseTabStripToDropdown`) plus a 250px-900px headless-Chrome sweep reading zero overflow throughout. Zero production edits to `board-renderer.ts` or `table-renderer.ts`; the only shipped-behaviour change is the new collapse rung in `toolbar-renderer.ts`. Each proof carries a negative control, run and reverted. |
 <!-- /ANCHOR:log -->

@@ -149,14 +149,22 @@ and stay unticked — an agent never ticks them.
       one line, so `design-system.md` §5's 440-560px `condition panel` role stands
       (`design-trueup.md` T16). **Proof**: lane row measuring the row floors on both panels + unit
       test that the operator list per column type matches `getFilterOperatorsForColumn`.
-- [ ] **T007 — Raise the sort-conflict confirm on manual drag reorder under an active sort, on
-      board and table.** (src/views/board-renderer.ts, src/views/table-renderer.ts,
+- [x] **T007 — Raise the sort-conflict confirm on manual drag reorder under an active sort, on
+      board and table.** ✅ 2026-09-05 (src/views/board-renderer.ts, src/views/table-renderer.ts,
       src/views/database-view.ts) **Threshold** (`050` AC-007, kept): confirm raised; decline
       leaves order and sort unchanged; accept clears the sort and commits. **Red-first proof**:
       today the drop commits and the sort silently reorders it — no confirm on either renderer.
       **No capture — gap named** (`toolbar-surface-inventory.md` T18): designed from `047` §8.
-      **Proof**: lane rows on both renderers, both branches + the board reference `pixelHash`
-      unchanged (parent goal D5) + negative control that removes the confirm and reddens.
+      **Proof**: the confirm and both renderers' drop wiring already shipped; what this task
+      closes is the missing live-driven branch coverage. `board-renderer-hierarchy.test.ts` gained
+      a same-group-drop-under-sort block on the local-extension layout (not the Project Manager
+      1:1 reference kanban); `table-renderer-sort-conflict.test.ts` (new) drives a real
+      `dragstart`+`drop` on the shipped handler. Both resolve `confirmSortConflict` async on
+      decline and accept. **Board reference `pixelHash` unchanged**: zero production edits to
+      `board-renderer.ts`/`table-renderer.ts` this task (`git diff --stat` empty on both),
+      `screenshots/project-manager/` 0 files changed. **Negative control, run and reverted**:
+      short-circuiting each renderer's sort-conflict branch (`if (false && ...)`) reddened both
+      new test files (`confirmSortConflict` never called); reverted, green again.
 <!-- /ANCHOR:phase-5 -->
 
 ---
@@ -164,9 +172,9 @@ and stay unticked — an agent never ticks them.
 <!-- ANCHOR:phase-6 -->
 ## Phase 6: Settings, presets, embed collapse (L5) — `050` items 2, 10, 12
 
-- [ ] **T008 — Land in view settings within 100ms of creating or duplicating a view, and collapse
-      the embedded toolbar by measurement.** (src/views/database-view.ts,
-      src/views/embedded-database-renderer.ts) **Thresholds** (`050` AC-002 and AC-012, kept):
+- [x] **T008 — Land in view settings within 100ms of creating or duplicating a view, and collapse
+      the embedded toolbar by measurement.** ✅ 2026-09-05 (src/views/database-view.ts,
+      src/views/toolbar-renderer.ts) **Thresholds** (`050` AC-002 and AC-012, kept):
       settings open ≤100ms after the create/duplicate callback; the embed sweep from 250px upward
       finds zero overflowing controls, measurement once per resize, and the drop order matches the
       captured ladder — `New`, the icon cluster **and the add-view `+`** all before the tab row,
@@ -177,9 +185,18 @@ and stay unticked — an agent never ticks them.
       field), `anytype-mobile-sheet-view-edit-light.png` (its phone form — the landing applies on
       the phone, `spec.md` §11 closed), `anytype-page-with-inline-collection-dark.png` (the inline
       rung, **tab row without its `+`**), `anytype-mobile-sheet-set-viewswitcher-light.png` (the
-      phone rung, real client). **Proof**: lane timing assertion + the sweep lane + negative
-      control that reverts to the boolean hide and reddens the sweep. The 100ms budget stays ours —
-      no capture can time a transition.
+      phone rung, real client). **Proof**: the timing half is `database-view-settings-landing.test.ts`,
+      a constructed `DatabaseView` mount driving the shipped `addView`/`duplicateView` →
+      `openViewSettingsAfterMutation` → `toggleHeaderPopover` → real `ViewConfigPanelRenderer`,
+      timed with `performance.now()` — **create 4.7ms, duplicate 0.8ms**. The sweep half is the
+      missing rung, `collapseTabStripToDropdown` (`toolbar-renderer.ts`, reached from
+      `applyToolbarChromeCollapse` once the four chrome controls are gone and the row still
+      overflows), plus `tools/live/toolbar-collapse-sweep.ts` + `run-toolbar-collapse-sweep.mjs`
+      reading **250px→900px, 10px steps, zero overflow throughout** in real Chrome. **Negative
+      control, run and reverted**: short-circuiting the new rung's call site (`if (false) this.…`)
+      reddened the sweep's below-floor probe (100-200px went from zero overflow to overflow,
+      `scrollWidth` unchanged at 196 while `clientWidth` shrank under it); reverted, PASS again.
+      The 100ms budget stays ours — no capture can time a transition.
 - [x] **T009 — Add per-view new-row presets: settings section, config field, creation read.**
       (src/data/types.ts, src/views/view-config-panel-renderer.ts,
       src/views/toolbar-renderer.ts) **Threshold** (`050` AC-010, kept): every preset value
