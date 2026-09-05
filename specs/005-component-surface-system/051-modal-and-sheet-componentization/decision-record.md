@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Modal and Sheet Componentization"
-description: "ADR-001 the sheet engine stays and the shell composes it. ADR-002 a sub-page replaces in place rather than stacking, per pair, with the list of two converts out of thirty-one. ADR-003 the confirm primitive is this packet's and is the only one. ADR-004 fullscreen survives only for the formula workbench. ADR-005 the phone close survives the capture that contradicts it, on a measured 2.21:1. ADR-006 (Accepted) restates AC-006's geometry-literal count as the shell's seven raw-literal properties, so it can be observed red instead of trivially zero."
+description: "ADR-001 the sheet engine stays and the shell composes it. ADR-002 a sub-page replaces in place rather than stacking, per pair, with the list of two converts out of thirty-one. ADR-003 the confirm primitive is this packet's and is the only one. ADR-004 fullscreen survives only for the formula workbench. ADR-005 the phone close survives the capture that contradicts it, on a measured 2.21:1. ADR-006 (Accepted) restates AC-006's geometry-literal count as the shell's seven raw-literal properties, so it can be observed red instead of trivially zero. ADR-007 retargets the whole packet to Anytype parity by default, with three named accessibility exceptions and one flagged data-loss hold."
 trigger_phrases:
   - "051 decision record"
   - "shell composition decision"
@@ -8,16 +8,20 @@ trigger_phrases:
   - "confirm primitive ownership"
   - "fullscreen presentation decision"
   - "phone close contrast decision"
+  - "parity by default"
+  - "051 adr-007"
+  - "parity retarget exceptions"
 importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-05T18:20:00Z"
+    last_updated_at: "2026-09-05T18:30:00Z"
     last_updated_by: "operator-decision"
-    recent_action: "Recorded adr-006 accepted; ac-006 restated with today's red count"
-    next_safe_action: "Begin Phase 2 legs (T004+)"
-    blockers: []
+    recent_action: "Added accepted adr-007 retargeting 051 to anytype parity by default"
+    next_safe_action: "Operator ruling on ADR-007 E4 (the confirm), then begin Phase 2 legs (T004+)"
+    blockers:
+      - "ADR-007 E4: holding the destructive confirm is a data-loss deviation the parity ruling does not authorise; T013 waits on the operator"
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/modals/db-modal.ts"
@@ -34,6 +38,7 @@ _memory:
       - "ADR-004: fullscreen survives only for the formula workbench; the other three fullscreen users become modal (desktop) / sheet (phone)"
       - "ADR-002 per-pair list: properties property type picker and add view property picker convert; 29 keep 048 stacking"
       - "ADR-005: 044's 44px phone close survives every contradicting capture, because the handle it would be replaced by is 2.21:1"
+      - "ADR-007: parity by default; deviations only for WCAG 1.4.11, 1.4.3 or a 44px floor; 18 decisions flipped, 3 exceptions (E1 close, E2 grey-as-text, E3 destructive icon), 1 flagged data-loss hold (the confirm)"
       - "ADR-006 (2026-09-05 ~18:20): accepted. AC-006's Verification cell restates as a count of the shell's seven properties declared as raw literals outside surface-shell.ts's named constants, red today at ≥20 for the 360px width alone"
 ---
 # Decision Record: Modal and Sheet Componentization
@@ -416,3 +421,118 @@ shell's constants.
 | **Leave the wording as written** | No document change | A literal-minded run of the stated check passes today, before any shell code exists, which is the false-pass `evidence-and-proof.md` §3.4 warns against ("it asserted nothing") |
 | **Restate against today's scattered-literal count (accepted)** | Observable red today, same green target | One more sentence to maintain until the criterion closes |
 <!-- /ANCHOR:adr-006 -->
+
+---
+
+<!-- ANCHOR:adr-007 -->
+## ADR-007: Anytype parity is the default; a deviation must be an accessibility one with a number
+
+**Status: Accepted, 2026-09-05 (~18:30), operator: *"Yes, parity by default."***
+
+### Context
+
+T001 read the captures under the rule *"capture wins"* and applied it unevenly. Nine contradictions
+were named and only seven resolved toward the reference; across the thirty-five census rows, fifteen
+recorded a measured Anytype value in the pattern column and then kept ours in the decision column —
+sometimes for a real reason (an absent equivalent), sometimes because the change looked large
+(`053`-scale, `design-system.md` §5), and sometimes for no stated reason at all.
+
+That is the failure mode a parity target exists to prevent. A packet that measures a reference and
+then declines the measurement surface by surface converges on neither the reference nor a coherent
+design of its own — it converges on whatever each row's author found easy, which is exactly the
+drift `spec.md` §2 describes as the family's original defect.
+
+The operator resolved it in one sentence.
+
+### Decision
+
+**Every sheet and modal in the `051` census targets Anytype parity by default.** Every value the
+captures show is adopted. **A deviation is permitted only where the measured value fails WCAG
+1.4.11 (non-text contrast), WCAG 1.4.3 (text contrast) or a 44px touch floor**, and every such
+deviation is named here with its measurement.
+
+**Eighteen decisions flipped** — §6's C4, C7 and C8, and fifteen census rows (2, 3, 4, 5, 12, 15,
+19, 21, 22, 23, 26, 27, 29, 33, 35). `design-trueup.md` §8b is the row-by-row list.
+
+**Three exceptions, each with its number.**
+
+| # | The Anytype value | Its measurement | The bar it misses | What we do instead |
+|---|---|---|---|---|
+| **E1** | Dismissal by grab handle alone, with no close control on any sheet | `#555555` on `#1F1F1F` = **2.21:1** | WCAG 1.4.11, 3:1 for the only non-text element identifying a control | `044`'s **44px close** stays, and the handle stays beside it as the fast affordance. ADR-005 unchanged; this is now the packet's only presentation refusal |
+| **E2** | `#7B7B7B` for an empty property value, at 16px | `#7B7B7B` on `#1F1F1F` = **3.89:1** | WCAG 1.4.3, 4.5:1 for body text | **Anytype's own applied-value grey `#909090` = 5.16:1**, used for both the applied and the empty case. The substitution is itself a measured value. **Scoped to text**: the same hex is adopted unchanged for the header's `+` glyph, where 1.4.11's 3:1 bar applies and 3.89:1 clears it |
+| **E3** | A destructive row rendered without red and without an icon (`Empty Bin`, `anytype-menu-nav-widget-bin-dark.png`) | No non-colour signal, and no colour signal either | WCAG 1.4.1, information not carried by colour alone | **Red plus a trash icon on every destructive row** — which is also Anytype's majority answer, in `anytype-mobile-sheet-object-more-dark.png` and `anytype-mobile-sheet-view-edit-more-dark.png`. Two captures to one, and the minority carries the meaning on nothing |
+
+**No adopted value fails the 44px touch floor.** Re-measured: the primary pill **50.0pt**, the row
+pitch **50pt**, the text input **50pt**, the trailing header chip **44.0 × 44.0pt** exactly. Two
+header actions have hit areas no static capture can measure — the leading `Clear` and the trailing
+`···` — and our own 44px floor applies to them. That is a floor added above parity, not a
+divergence from a measured value.
+
+**E4 — one hold is flagged rather than taken.** `design-trueup.md` row 1: Anytype raises **no
+destructive confirm anywhere** in 118 iOS states or 600 desktop menu files, because deletion is
+reversible into a Bin. Ours is not. The confirm therefore stays, and the reason is **data loss, not
+accessibility** — which this ruling does not authorise. It is recorded here for the operator rather
+than absorbed silently. Two readings are open and only the operator can choose:
+
+1. **Keep the confirm** (what the packet does today). The precondition for Anytype's pattern is
+   absent — there is no Bin — so there is no equivalent surface to be parity with, and this is an
+   *absent equivalent* rather than a deviation.
+2. **Reach the pattern properly** by routing deletions through `TrashManagerModal` and then dropping
+   the confirm. That is a data-model change, far outside `051`, and would belong to its own packet.
+
+Reading 1 is applied until the operator says otherwise.
+
+**One value was over-generalised rather than under-adopted, and is corrected in the same pass.**
+`design-trueup.md` §6 C10: Anytype ships **two** phone frame shapes, not one. A **floating card** at
+device L 24 / R 1181 / bottom 2597 — 8.0 / 8.3 / 8.3pt with a 16pt radius, on 22 files — and a
+**flush** edge-to-edge sheet at L 0 / R 1205 / bottom 2621, on 13. Every floating sheet's top edge
+sits at ≥ 299pt of an 874pt screen and every flush one at ≤ 198pt; **nothing was captured between**,
+so the boundary is unobserved and is not invented. The shell takes the shape from the surface's
+declared height role. Writing "8pt inset on three sides" as a blanket, as REQ-006 did, would have
+been wrong on thirteen of thirty-five census surfaces.
+
+### Consequences
+
+- **`044`'s grammar yields where it differs.** Row 26's `menu` role becomes an anchored, handle-less
+  card over a dimmed parent rather than a grab-handle bottom sheet. `044`'s 44px close survives as
+  E1 and nothing else about `044` is amended; the note is recorded in
+  `../044-phone-sheet-alignment/decision-record.md`.
+- **`048` gains a default, not an exception.** Sub-page-by-capture stops being a two-pair carve-out
+  and becomes the rule for the pairs `design-trueup.md` §4 enumerates, and the depth cap — no third
+  stacked sheet — is now a shell rule rather than a question routed to `054`. The note is recorded
+  in `../048-stacked-sheets/decision-record.md`.
+- **Three flips land outside this packet's write authority and are named, not taken.** Rows 29, 33
+  and 35 retarget widths and a row shape that `design-system.md` §5 fixes at 440-560px with
+  140/140/120px column floors. This packet records the measured target; the conflict is reported at
+  `../roadmap.md` §7.11 for the owner to resolve. Row 21's bottom-anchored search is `053`'s to
+  build; `051` declares the target only.
+- **The acceptance thresholds move with the decisions.** `AC-003`, `AC-006` and the new `AC-011`
+  and `AC-012` carry the adopted values with tolerances, so a parity claim is measurable rather than
+  asserted. The reds T002 measured at `de4783bb` are untouched — they describe the tree, and the
+  tree did not change.
+- **A later reader can tell adoption from refusal at a glance, and the tally is countable.** All
+  **35** §5 decision cells open with a decision word — **16 ADOPT, 7 FLIPPED, 12 HOLD, 0 REFUSE** —
+  and all **10** §6 resolutions do too, at **9 ADOPT and 1 REFUSE**. The single `REFUSE` is C2, and
+  it names **E1**. `HOLD` never means "we declined it": it means no Anytype surface exists to be
+  parity with, which is why ten of the twelve carry `design-trueup.md`'s *design inferred from
+  source code, not seen* label.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Keep "capture wins, mostly"** | No document change; fifteen judgment calls already made | Those fifteen calls have no shared rule, so the packet converges on neither the reference nor a design of its own — the drift `spec.md` §2 names as the family's defect |
+| **Parity with no exceptions at all** | The simplest rule to state and to check | Ships a 2.21:1 dismissal affordance and a 3.89:1 body grey. Parity with an inaccessible reference is not a goal worth having |
+| **Parity by default, accessibility-only deviations, each named with its number (chosen)** | One rule; every deviation is checkable against a file; the exception list is three rows long | One hold (E4) does not fit the rule and has to be flagged rather than resolved here |
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — fifteen census rows and three contradictions were decided without a shared rule, and a later reader could not tell which were reasoned |
+| **Is there a simpler existing thing?** | ADR-002's "where the capture shows it", which is this rule for one question. This generalises it rather than adding a second rule |
+| **What does it touch?** | `design-trueup.md` §§1, 2b, 4, 6, 7, 8 and fifteen §5 cells; `spec.md` REQ-003/006/009; `acceptance-criteria.md` AC-003/006/011/012; `checklist.md` C12-C14; `tasks.md` T006/T007/T011/T013/T020 |
+| **What is the real caller that must not break?** | `044`'s twelve registered `sheet-grammar` surfaces and `048`'s thirty-one registered pairs — the frame-shape change moves every selector that measures a sheet rect, so it lands with T012's row updates |
+| **What contract must not break?** | WCAG 1.4.1, 1.4.3 and 1.4.11, which are the only grounds on which this ruling permits a deviation at all |
+<!-- /ANCHOR:adr-007 -->
+

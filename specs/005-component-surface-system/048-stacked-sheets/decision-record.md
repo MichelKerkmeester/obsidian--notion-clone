@@ -271,3 +271,42 @@ that stays stacked.
 <!-- /ANCHOR:sub-page-exception-note -->
 
 ---
+
+<!-- ANCHOR:parity-default-note -->
+## NOTE, 2026-09-05 (~18:30): sub-page-by-capture becomes the default for the pairs `051` enumerates, and a depth cap arrives with it
+
+The operator ruled *"Yes, parity by default"* over `051` (`051/decision-record.md` ADR-007,
+Accepted). Two things follow for this packet, and neither reopens ADR-001, ADR-002 or ADR-003 above.
+
+**The exception becomes a default over a closed list.** The note above describes conversion as a
+per-pair exception `051` T001 decides against a capture. It is now the **default** for the pairs
+`051/design-trueup.md` §4 enumerates — and that list is **closed**, which is the part that protects
+this packet: **two** pairs convert (`properties property type picker` at `sheet-grammar.mjs:98`,
+`add view property picker` at `:114`) and **twenty-nine keep this packet's stacking**, ten of them
+because nothing equivalent was captured. A conversion nobody enumerated is now a failure rather than
+a judgment call (`051/acceptance-criteria.md` AC-003). Twenty-nine of thirty-one is the outcome a
+per-pair read should produce, and it is the argument this model was right.
+
+**A depth cap arrives, and it does not disturb the registrations.** Anytype's phone client never
+stacks a third **sheet** in any of 118 states; where a third level is needed it replaces the second
+(`anytype-mobile-sheet-relation-new-format-dark.png`,
+`anytype-mobile-sheet-filter-condition-operators-dark.png`). `051` adopts that as a shell rule rather
+than routing it to `054`. **The two `depth: 3` registrations that remain are unaffected**:
+`record column submenu` (`:113`) is a menu over a menu, which Anytype does stack
+(`-object-more-submenu-dark.png`), and `import confirm dropdown chain` (`:117`) is a dropdown over a
+confirm. Both are menu-stacks, not sheet-stacks; both keep their rows and both satisfy the cap.
+
+**The frame moves, so the selectors move with it.** `051` REQ-006 adopts Anytype's floating phone
+frame — device L 24 / R 1181 / bottom 2597 on a 1206 × 2622 capture, an 8pt inset on three sides —
+alongside a second, flush shape for near-full-height surfaces. Every `sheet-grammar` selector that
+measures a sheet's rect moves with it. `051` T012 updates those rows **in the same commit as the
+markup move, never after**, and this packet's thirty-one registered pairs remain the regression gate
+throughout.
+
+**The scrim values this packet owns now have thresholds.** `051` measured them and records them as
+`048`'s: the page under a first sheet at **0.519** of undimmed luminance, a parent sheet under a
+stacked child at **0.710**. `051/acceptance-criteria.md` AC-011 holds both to **± 0.02**. They are
+`051`'s measurement and this packet's value to own.
+<!-- /ANCHOR:parity-default-note -->
+
+---

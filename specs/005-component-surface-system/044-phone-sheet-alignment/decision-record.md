@@ -154,3 +154,37 @@ re-audit for inset — see Consequences).
 | **What is the real caller that must not break?** | Every registered surface's own capture — re-verified by hand after the change, not assumed from the CSS diff alone |
 | **What contract must not break?** | Desktop's own anchored-popover density (8px inset, 13px title), which this decision does not touch |
 <!-- /ANCHOR:adr-002 -->
+
+---
+
+<!-- ANCHOR:parity-retarget-note -->
+## NOTE, 2026-09-05 (~18:30): `051` retargets to Anytype parity, and this packet's grammar yields where the two differ
+
+The operator ruled *"Yes, parity by default"* over `051-modal-and-sheet-componentization`
+(`051/decision-record.md` ADR-007, Accepted). Every sheet and modal in `051`'s census now targets the
+values measured off Anytype's captures, and a deviation is permitted only where the measured value
+fails WCAG 1.4.11, WCAG 1.4.3 or a 44px touch floor.
+
+**The 44px close is exactly such a deviation, and it survives.** `044` REQ-007's amendment —
+*"header everywhere"*, every phone sheet gets a title row with a 44px close — was a preference stated
+without a reference screen. It now has a number behind it: no Anytype iOS sheet carries a close
+control at all, and the affordance it substitutes is the grab handle, `#555555` on `#1F1F1F` =
+**2.21:1**, below 1.4.11's 3:1 for the only non-text element identifying the dismissal control. That
+is `051` ADR-005, unchanged, and it is now ADR-007's exception **E1** — the single presentation value
+in the whole `051` census that parity does not take. **This packet's rule is not amended; it is
+evidenced.**
+
+**Where the grammar does yield.** `051`'s row 26 flips the `menu` role's phone presentation from a
+grab-handle bottom sheet to an **anchored, handle-less card over a dimmed parent**, because that is
+what `anytype-mobile-sheet-object-more-dark.png`, `-object-more-submenu-dark.png`,
+`-set-more-dark.png` and `-kanban-column-menu-dark.png` all show — none carries a 34 × 5pt handle
+band at any y. Where a `044` grammar element and a measured `051` parity value describe the same
+thing differently, **the parity value wins and this note is the record of it**. The 44px close is the
+stated exception and is not one of them.
+
+**What does not move.** `044`'s seven grammar elements remain the contract `051` must satisfy, and
+the twelve registered `sheet-grammar` surfaces remain the regression gate. Nothing in this record's
+ADR-001 or ADR-002 is reopened: the shared 16px row inset and the sheet-title size are unaffected by
+`051`'s frame-shape and header-slot changes, and `051`'s legs assert `044` conformance after every
+one.
+<!-- /ANCHOR:parity-retarget-note -->

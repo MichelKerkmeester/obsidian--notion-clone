@@ -27,9 +27,12 @@ scraping its own headings. This phase reduces the family to one shell primitive 
 title per surface, adds the sub-page navigation Anytype's captures show, and makes the confirm a
 primitive every consumer imports.
 
-**Key Decisions**: one shell, two presentations (D1); the confirm primitive is this packet's and the
-only one (D5); `044` and `048` are consumed unchanged and may not regress (D4); the geometry and
-motion come from `050`'s measured true-up, not from per-surface literals.
+**Key Decisions**: **Anytype parity is the default for every sheet and modal, and a deviation is
+permitted only for accessibility, named with its measurement** (ADR-007, operator 2026-09-05
+~18:30); one shell, two presentations (D1); the confirm primitive is this packet's and the only one
+(D5); `044` and `048` are consumed unchanged as *contracts* and may not regress, while their
+*grammar* yields to a measured parity value where the two differ (D4, as amended by ADR-007); the
+geometry and motion come from this packet's measured true-up, not from per-surface literals.
 
 **Critical Dependencies**: `../050-anytype-adoption/design-trueup.md` (the design read of record),
 `044`'s sheet grammar, `048`'s stacking model and its thirty-one registered pairs, `003`'s portal
@@ -145,7 +148,10 @@ decisions from three modules and hoping the order is the one everything else use
 - **`044`'s seven grammar elements.** Consumed unchanged; the shell is what makes them cheap to
   satisfy, not a second definition of them.
 - **A surface's own body.** Menu rows are `052`'s, toolbar popovers `053`'s, property rows `054`'s,
-  state copy `055`'s.
+  state copy `055`'s. **ADR-007 does not move that boundary**: where parity retargets a value another
+  owner holds — `053`'s bottom-anchored search row, `design-system.md` §5's `condition panel` width
+  and its 140/140/120px column floors — this packet records the measured target and names the
+  conflict (`../roadmap.md` §7.11). It does not edit the owner's file.
 - **The formula workbench** (`modals/formula-modal.ts`, 1,664 lines) — stays ours, `fullscreen`,
   untouched. Confirmed by the operator's fullscreen-presentation ruling, §11 and
   `decision-record.md` ADR-004 (Accepted).
@@ -181,7 +187,7 @@ decisions from three modules and hoping the order is the one everything else use
 |----|-------------|
 | REQ-001 | One shell constructor produces both presentations from one definition. `DbModal.applyPresentation`'s branch, the three direct `attachSheetChromeToModal` callers and the twelve independent `createSheetHeader` sites resolve to it, or each survivor is individually dispositioned in `design-trueup.md` with a written reason. |
 | REQ-002 | Every surface declares its own sheet title and its shell role. `getSheetTitle`'s heading scrape survives only as the fallback for a surface that declares none, and the fallback's use is counted rather than assumed. |
-| REQ-003 | The shell offers **three** navigation moves, each with the affordance the captures mark it by (`design-trueup.md` §3). **Replace in place**: the frame's title and body swap, a back affordance appears in the header, one grab handle stays at an unmoved edge. **Stack a sheet**: a second sheet rises over the first, the parent stays mounted and dimmed, and the parent's own handle stays visible above the child's. **Stack a menu**: an anchored surface opens over the parent with no handle of its own, and on desktop the parent stays undimmed. The frame's **width and its anchored edge** hold to `\|Δ\| ≤ 1px` across a replace; its **cross-axis extent is content-driven on desktop and fixed on phone** — measured, `design-trueup.md` §6 C1. A stacked child registers as a stacked pair like any other; which pairs convert to a replace is `decision-record.md` ADR-002's list, resolved per pair in `design-trueup.md` §4. |
+| REQ-003 | The shell offers **three** navigation moves, each with the affordance the captures mark it by (`design-trueup.md` §3). **Replace in place**: the frame's title and body swap, a back affordance appears in the header, one grab handle stays at an unmoved edge. **Stack a sheet**: a second sheet rises over the first, the parent stays mounted and dimmed, and the parent's own handle stays visible above the child's. **Stack a menu**: an anchored surface opens over the parent with no handle of its own, and on desktop the parent stays undimmed. The frame's **width and its anchored edge** hold to `\|Δ\| ≤ 1px` across a replace; its **cross-axis extent is content-driven on desktop and fixed on phone** — measured, `design-trueup.md` §6 C1. A stacked child registers as a stacked pair like any other; which pairs convert to a replace is `decision-record.md` ADR-002's list, resolved per pair in `design-trueup.md` §4 — **two convert** (`properties property type picker`, `add view property picker`) and **twenty-nine keep `048`'s stacking**, ten of those because nothing equivalent was captured. **The depth cap is a shell rule, not an observation** (ADR-007, `design-trueup.md` §6 C4): **no third stacked sheet** — where a third level is needed, the third **replaces** the second. The two remaining `depth: 3` registrations (`record column submenu`, `import confirm dropdown chain`) are menu-stacks rather than sheet-stacks and satisfy the cap without converting. |
 | REQ-004 | `design-trueup.md` carries one row per family surface: surface → shell role → presentation → changes → Anytype pattern with capture filename or named gap → stays ours. No surface in the census is undispositioned. **Met 2026-09-05**: 35 rows — 20 `DbModal` subclasses, 3 `FuzzySuggestModal` outliers, 12 `createSheetHeader` sites — of which 25 name a capture and 10 carry **design inferred from source code, not seen**. |
 | REQ-005 | The confirm primitive is exported, carries `044`'s seven grammar elements, and is the only confirm path in `src/`. `053`'s sort-conflict confirm and `055`'s destructive-confirm state consume it; neither builds a second. |
 
@@ -189,9 +195,10 @@ decisions from three modules and hoping the order is the one everything else use
 
 | ID | Requirement |
 |----|-------------|
-| REQ-006 | The shell's geometry reads from named values, not per-surface literals. **Desktop**: **8px** radius, **16px**/**8px** padding, **8px** divider clearance, **28px** rows, **360px** `panel` width — all re-measured off a second capture set and unchanged (`design-trueup.md` §2a). **Phone**: an **8pt inset on three sides**, **≈16pt** radius, a **34 × 5pt** grab handle 6pt below the top edge, **50pt** rows, an **≈70pt** header, and `044`'s **44px** close (`design-trueup.md` §2b). Every former literal is a named value or carries a written reason in `design-trueup.md`. The phone frame's 8pt inset is the one geometry change with a regression surface — every `sheet-grammar` selector that measures a sheet's rect moves with it, so it lands in the leg that updates those rows. |
+| REQ-006 | The shell's geometry reads from named values, not per-surface literals, and every value is the one measured off the reference (ADR-007). **Desktop**: **8px** radius, **16px**/**8px** padding, **8px** divider clearance, **28px** rows, **360px** `panel` width, **288px** condition surface on `#191919`, **232px** operator dropdown — all re-measured off a second capture set (`design-trueup.md` §2a). **Phone, two frame shapes, not one** (`design-trueup.md` §6 C10): a **floating card** at an **8pt inset on three sides** (device L 24 / R 1181 / bottom 2597, i.e. 8.0 / 8.3 / 8.3pt) with a **16pt** radius, and a **flush** edge-to-edge sheet (L 0 / R 1205 / bottom 2621) with top corners only; the shell takes the shape from the surface's declared height role, because every floating capture sits at a top edge ≥ 299pt and every flush one at ≤ 198pt and **nothing was captured between**. Both shapes carry a **34 × 5pt** grab handle 6pt below the top edge, **50pt** rows, an **≈70pt** header, a **20pt symmetric divider inset** on plain rows (text-column-aligned past a leading icon, full-bleed between sections), and `044`'s **44px** close. A **primary action is a full-width pill, 341.7 × 50.0pt at ≈21pt inside each sheet edge**, disabled until valid. A **trailing header chip is 44.0 × 44.0pt**. Every former literal is a named value or carries a written reason in `design-trueup.md`. The phone frame's 8pt inset is the one geometry change with a regression surface — every `sheet-grammar` selector that measures a sheet's rect moves with it, so it lands in the leg that updates those rows. |
 | REQ-007 | The shell's motion is **enter 200ms `ease-out`, exit 150ms `ease-in`** (`design-trueup.md` §4 Motion — 150ms is the closest in-band value to `047`'s source-read 0.1s exit, which sits below the 120ms floor for direct feedback and would read as a cut). Reduced-motion coverage holds for every surface the shell produces. |
 | REQ-008 | `npm run gate` exits 0 with one permanent lane row per shell deliverable, each negative control observed red then green; `npm run replay` holds with reversed 0; the twelve registered `sheet-grammar` surfaces and the thirty-one registered stacked pairs stay green. |
+| REQ-009 | **Parity is the default and a deviation is an accessibility one with a number.** Every decision cell in `design-trueup.md` §5 and every resolution in §6 reads **ADOPT**, **FLIPPED**, **HOLD** (an absent equivalent — no Anytype surface exists to be parity with) or **REFUSE**, and every `REFUSE` names an exception in `decision-record.md` ADR-007 with the measurement that justifies it. The permitted grounds are WCAG **1.4.11** (non-text contrast), WCAG **1.4.3** (text contrast) and a **44px** touch floor, and nothing else. Three exceptions exist — **E1** the 44px close (handle 2.21:1), **E2** the empty-value grey as text (`#7B7B7B` 3.89:1, replaced by Anytype's own `#909090` at 5.16:1), **E3** red-plus-icon on every destructive row (Anytype's minority answer carries no non-colour signal) — plus **E4**, the confirm, which holds for a data-loss reason the ruling does not authorise and is **flagged for the operator** rather than absorbed. |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.
@@ -205,12 +212,17 @@ decisions from three modules and hoping the order is the one everything else use
 - **SC-001**: `design-trueup.md` dispositions every surface in the census with no "unknown" cells,
   and every cited capture resolves under `screenshots/anytype/`. **Met 2026-09-05**, 35 of 35.
 - **SC-002**: A sub-page opened from the view-settings sheet replaces in place with a back
-  affordance on desktop, on phone and by keyboard, and the parent's bounding box does not move.
+  affordance on desktop, on phone and by keyboard, and the parent's **width and anchored edge** do
+  not move (`|Δ| ≤ 1px`); the cross-axis extent is content-driven on desktop and fixed on phone,
+  which is what the capture measures (`design-trueup.md` §6 C1).
 - **SC-003**: The four chrome-deciding sites reduce to one, measured by a count against a recorded
   baseline of **4**, with the three direct `attachSheetChromeToModal` callers each resolved or
   dispositioned.
 - **SC-004**: Every threshold in `acceptance-criteria.md` was observed failing on the current tree
   before its leg ran, and the failing figure is recorded in `checklist.md`.
+- **SC-005**: Zero decision cells in `design-trueup.md` §5 and zero resolutions in §6 decline a
+  measured Anytype value without naming an ADR-007 exception. Counted, not asserted: three
+  exceptions plus one flagged hold, and no fifth.
 <!-- /ANCHOR:success-criteria -->
 
 ---
@@ -244,8 +256,8 @@ each phase's one-leg-one-file rule coordinate them.
 | The condition row | **053** | Not this phase's, not `052`'s. Named here so it is not built twice |
 | Cell inline editors, one per column type | **054** | Not this phase's. The shell they open in is |
 | Empty, loading, error, success copy and icons | **055** | Not this phase's. The surface they render inside is |
-| The stacking model | **048** | A constraint. Consumed unchanged, asserted after every leg, never re-specified |
-| The seven phone grammar elements | **044** | A constraint, same terms |
+| The stacking model | **048** | A constraint. Consumed unchanged as a *contract*, asserted after every leg, never re-specified. **Amended by ADR-007**: sub-page-by-capture is the default for the pairs `design-trueup.md` §4 enumerates rather than a two-pair carve-out, and the depth cap — no third stacked sheet — is a shell rule. `048`'s registrations and its thirty-one-pair regression gate are unchanged |
+| The seven phone grammar elements | **044** | A constraint, same terms — with one amendment. **ADR-007**: `044`'s **grammar yields to a measured parity value where the two differ**, which is row 26's `menu` role becoming an anchored, handle-less card rather than a grab-handle bottom sheet. `044`'s 44px close is the one thing parity does **not** take, and it survives as exception **E1** on a measured 2.21:1 |
 | `050`'s fourteen adoption items | **050** | None of the fourteen is a shell item. `050`'s `design-trueup.md` remains the **desktop** read of record; its REQ-002 sub-page finding is the only row this phase implements against, and it implements the *shell* half while `050` keeps the requirement. **This packet's own `design-trueup.md` extends it rather than replacing it**: `050` was written before the 118 iOS captures landed, so the phone half of every shell value is measured here for the first time, and `050` C6's desktop empty-state finding is left standing (`design-trueup.md` §6 C7) |
 <!-- /ANCHOR:overlaps -->
 
@@ -326,10 +338,16 @@ each phase's one-leg-one-file rule coordinate them.
   formula workbench (`FormulaModal`) stays `fullscreen`; the other three `fullscreen` subclasses
   (`ChartDrilldownModal`, `InvalidTimeEventsModal`, `PropertyTypeConflictModal`) become modal
   (desktop) / sheet (phone) — see `decision-record.md` ADR-004 (Accepted).
+- ~~Which of the values the captures show does this packet actually take?~~ **Resolved 2026-09-05
+  (~18:30), operator: "Yes, parity by default."** Every one, except where the measured value fails
+  WCAG 1.4.11, WCAG 1.4.3 or a 44px touch floor. Eighteen decisions flipped, three exceptions
+  named with their numbers, one hold flagged — `decision-record.md` ADR-007, `design-trueup.md` §8.
 - Do the three `FuzzySuggestModal` subclasses join the shell, or stay Obsidian-native behind a shim?
   They are not `DbModal` subclasses and they reach `attachSheetChromeToModal` directly; joining the
   shell means re-parenting them, and a shim means the count of chrome-deciding sites stops at two
-  rather than one. **Still open.**
+  rather than one. **Still open** — and unchanged by the parity retarget, which decided what these
+  surfaces should *look* like (row 21: full-screen, bottom-docked field) without deciding what they
+  should *be parented to*. Anytype has no host application to be native to.
 - ~~Does the sub-page pattern reach surfaces `048` has already registered as stacked pairs?~~
   **Resolved 2026-09-05 (~14:15), operator: "Yes, where the capture shows it."** A registered
   stacked pair converts to an in-place sub-page with a back arrow only where the Anytype capture
@@ -406,6 +424,33 @@ Anytype has no host. T010 stays blocked.
 
 ---
 
+## THE PARITY RETARGET, 2026-09-05 (~18:30): the operator raised the bar
+
+T001 read the captures under *"capture wins"* and applied it row by row. Fifteen census rows recorded
+a measured Anytype value and then kept ours, and three of the nine contradictions were deferred,
+routed or declined. The operator's ruling replaces the judgment with a rule: **parity by default, and
+a deviation must be an accessibility one with a number behind it.**
+
+**What changed here.** REQ-003 gains the depth cap and the enumerated pair list. REQ-006 gains the
+condition-surface widths, the divider rule, the pill and chip geometry, and — the one correction that
+went the other way — the fact that the phone has **two** frame shapes rather than the one "8pt inset
+on three sides" it previously claimed of every sheet. REQ-009 is new and is the rule itself. SC-002's
+tolerance is restated to what the capture measures, and SC-005 counts the exceptions so a fifth
+cannot appear unnoticed.
+
+**What did not change.** Scope: no file joins the list, and the three flips that reach another
+owner's file (`053`'s search row, `design-system.md` §5's `condition panel`) are recorded as targets
+and named as conflicts rather than taken. The reds T002 measured at `de4783bb` stand — they describe
+the tree, and the tree has not moved. `044` and `048` remain the regression gate; what yields is
+their *grammar* where a measured value differs, not their *contracts*.
+
+**What is still the operator's.** Exception **E4** — the destructive confirm. Anytype ships none,
+because its deletions are reversible into a Bin and ours are not. Holding the confirm is a data-loss
+deviation, not an accessibility one, and this ruling authorises only the latter. It is flagged in
+ADR-007 with the two readings and is not resolved here.
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Implementation Plan**: See `plan.md`
@@ -414,6 +459,6 @@ Anytype has no host. T010 stays blocked.
 - **Acceptance Criteria**: See `acceptance-criteria.md`
 - **Decision Record**: See `decision-record.md`
 - **Packet Goal**: See `goal.md`
-- **Design read of record**: See `../050-anytype-adoption/design-trueup.md`
+- **Design read of record**: See `design-trueup.md` (this packet's, §8 is the parity retarget) and `../050-anytype-adoption/design-trueup.md` (the desktop read it extends)
 - **Sheet grammar**: See `../044-phone-sheet-alignment/spec.md` §3
 - **Stacking model**: See `../048-stacked-sheets/spec.md` §4

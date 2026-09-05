@@ -1364,6 +1364,12 @@ accordingly.
 | **`054` ADR-005 — rejected: AC-002's proof stays the by-hand pixel read.** Operator: *"Keep the pixel reading."* | ADR-005 proposed restating AC-002's Today figure from the true-up's captured pixel positions (labels at x 59, values right-aligned at 273, 311, 319, 343, 349 and 362) to a DOM box/`text-align` reading, because a measurement-only leg could not open the PNG capture. The operator rejected the substitution: the proof stays the by-hand screenshot read, performed by an image-capable in-runtime leaf at the leg's close. A measurement-only leg records **"pixel read owed"** rather than substituting a DOM reading; the DOM figures (`.db-record-detail-field-label` x 42, `.db-board-card-value` box x 122-364, `text-align: right`) stand as corroboration only, not as the proof | `054-record-and-relation-surfaces/decision-record.md` ADR-005 (now Rejected), `acceptance-criteria.md` AC-002's Verification cell, `checklist.md` CHK-007, and `tasks.md` T002's done-note — all updated to the rejected form |
 | **`051` ADR-006 — accepted: AC-006's shell-geometry criterion restated as a literal count.** | The criterion as written ("a count of geometry literals in the shell path → 0") reads trivially 0 today because `src/views/surface-shell.ts` does not exist, the same number it needs when the work is done — unobservable red. The operator accepted ADR-006's restatement: a count of the shell's seven properties (radius, horizontal padding, vertical padding, divider clearance, row height, panel width, phone close) declared as raw literals outside the shell's named constants → 0, red today at **≥ 20** for the 360px width alone (`rg -c "360px" styles.css`), driven to zero as the shell is built | `051-modal-and-sheet-componentization/decision-record.md` ADR-006 (now Accepted), `acceptance-criteria.md` AC-006's Verification cell, and `checklist.md` C6 — all updated to the accepted form with today's measured red |
 
+### One more, taken 2026-09-05 (~18:30)
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **`051` — Anytype parity is the default for every sheet and modal; a deviation must be an accessibility one, named with its measurement.** Operator: *"Yes, parity by default"* | Every value `051`'s captures show is adopted. The only permitted grounds for declining one are WCAG **1.4.11** (non-text contrast), WCAG **1.4.3** (text contrast) and a **44px** touch floor. **18** previously-declined decisions flipped — 15 census rows and 3 contradictions — and every `design-trueup.md` decision now opens **ADOPT** / **FLIPPED** / **HOLD** / **REFUSE** (§5 at 16/7/12/0, §6 at 9/0/0/1). **Three exceptions**: **E1** the 44px close (Anytype's grab handle measures 2.21:1); **E2** the empty-value grey as text (`#7B7B7B` at 3.89:1, replaced by Anytype's own `#909090` at 5.16:1, while the same hex is adopted for the header `+` glyph where 1.4.11's 3:1 bar applies); **E3** red-plus-trash-icon on every destructive row (Anytype's own minority answer carries no non-colour signal). **One hold flagged, not authorised**: **E4**, the destructive confirm — Anytype raises none because deletion is reversible into a Bin and ours is not, which is a data-loss ground the ruling does not cover | `051-modal-and-sheet-componentization/decision-record.md` ADR-007 (new), **Accepted**; `051/spec.md` REQ-009 (new), REQ-003, REQ-006, SC-005; `051/acceptance-criteria.md` AC-011 and AC-012 (new); `051/checklist.md` C12 and C13; `044-phone-sheet-alignment/decision-record.md` and `048-stacked-sheets/decision-record.md` each carry a note; §7.11 below records the three conflicts it opens |
+
 ---
 
 ## 7. WHERE A PHASE'S OWN DOCUMENTS DISAGREE
@@ -1544,6 +1550,26 @@ is not a disagreement and is recorded as such.
 sheet at **0.519** of undimmed luminance (≈48% black), a parent sheet under a stacked child at
 **0.710** (≈29% black), each by dividing mean band luminance with and without the sheet present. No
 other packet produced a number to disagree with, and `051` records them as **`048`'s to own**.
+
+### 7.11 `051`'s parity retarget names three values another owner holds
+
+*2026-09-05 (~18:30):* the operator's *"parity by default"* ruling
+(`051/decision-record.md` ADR-007) flips fifteen `051` census rows to the measured Anytype value.
+Three of those values are not `051`'s to set. **Reported, not resolved** — `051` records the measured
+target in its own documents and changes nothing in the owner's file, which is the same discipline
+§7's other rows apply.
+
+| # | The value | Who owns it today | What parity measures | What `051` did |
+|---|---|---|---|---|
+| 1 | The `condition panel` role's width, fixed at **440-560px** | `design-system.md` §5 | Anytype's condition surface is **288px** on `#191919`, its operator dropdown **232px**, and the `‹ Sort` / `‹ Properties` sub-pages are **360px** — measured off `anytype-menu-set-filter-select-condition-dark.png` and `anytype-menu-set-view-settings-dark.png` (`051/design-trueup.md` §2a) | Recorded the target in rows 29, 33 and 35; did **not** edit `design-system.md`. The owner decides whether the role's width follows the reference |
+| 2 | The condition row's **140/140/120px** column floors | `design-system.md` §5 | Anytype's condition editor is **stacked, not three-column** — a rounded format tile, the property name over an operator control, a `Value` field, and a full-width `Apply` row disabled while empty (`anytype-mobile-sheet-filter-condition-text-dark.png`). Column floors are what a three-column row needs, and the stack does not have columns | Recorded in row 33 that the floors do not survive the shape change. The shape itself is `053`'s to build |
+| 3 | The file-suggest surface's **top-anchored** search field | `053-toolbar-and-view-controls` (the row shape) | `anytype-mobile-sheet-search-dark.png` is a full-screen surface with the field docked at the **bottom** above the keyboard, a horizontally scrolling chip row above it, results filling **upward**, and an `×` to clear — no header, no title | Row 21 flips from *"recorded, not taken"* to **taken as the target**, and names the boundary: `051` declares what the surface should be, `053` builds the row |
+
+**Why this is reported rather than absorbed.** `051`'s scope boundary is the shell — what makes a
+surface a modal or a sheet, and what chrome it wears. A width in `design-system.md` and a row shape
+in `053` are both outside it, and a parity ruling does not widen a packet's file list. What the
+ruling does require is that the measured value is written down where the owner can find it, rather
+than quietly declined a second time under the heading of scope.
 
 ### One owner per shared primitive, so two families cannot both define it
 

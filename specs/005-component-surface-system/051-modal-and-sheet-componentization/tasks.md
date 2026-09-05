@@ -162,22 +162,35 @@ with the owner named, never self-closed.
       `anytype-mobile-sheet-view-gallery-imagepreview-dark.png`, all three at frame top **1261** and
       handle **1278** device px. **Third move**: the shell also offers a stacked *menu* — no handle
       on the child, parent undimmed on desktop — which is neither of the two this task was drafted
-      with (`design-trueup.md` §3).
+      with (`design-trueup.md` §3). **Depth cap (ADR-007)**: the shell refuses a third stacked
+      *sheet* — where a third level is asked for, the third **replaces** the second, which is what
+      `-relation-new-format-dark.png` and `-filter-condition-operators-dark.png` both show. A menu
+      over a menu is not capped; Anytype stacks that. **Threshold**: stacked sheets at depth 3 → 0,
+      with the two remaining `depth: 3` registrations keeping their rows as menu-stacks.
 - [ ] **T007 — Give the shell its geometry and motion, read from the measured values.**
       **Desktop**: 8px radius, 16px/8px padding, 8px divider clearance, 28px rows, 360px `panel`
-      width. **Phone**: an 8pt inset on three sides, ≈16pt radius, a 34 × 5pt grab handle 6pt below
-      the top edge, 50pt rows, an ≈70pt header, and `044`'s 44px close. Motion enter 200ms
+      width, 288px condition surface on `#191919`, 232px operator dropdown. **Phone — two frame
+      shapes, not one** (ADR-007, `design-trueup.md` §6 C10): a **floating card** at an 8pt inset on
+      three sides (8px ± 1) with a 16px ± 1 radius, and a **flush** edge-to-edge sheet with top
+      corners only; the shell takes the shape from the surface's declared height role. **Both**: a
+      34 × 5pt grab handle 6pt below the top edge, 50pt rows, an ≈70pt header, a 20pt ± 1 symmetric
+      divider inset on plain rows (text-column-aligned past a leading icon, full-bleed between
+      sections), and `044`'s 44px close. **Header**: three slots, title centre within ± 1px.
+      **Primary action**: a full-width pill, ≥ 44px (target 50pt), ≈21pt inside each sheet edge,
+      disabled until valid. **Trailing header chip**: 44 × 44px ± 1. Motion enter 200ms
       `ease-out`, exit 150ms `ease-in`. **Threshold**: zero per-surface geometry literals in the
       shell's own path; every migrated literal named or reasoned in the inventory. **Red-first
       proof**: the literal count at T002. **Capture**: `design-trueup.md` §2a and §2b; motion stays
       `050` §4's reconciled band, labelled as a source read rather than a measurement, because no
-      static capture carries timing. **Five refused values, each with its number**: `050`'s
-      `#232323` row highlight (1.14:1) and its colour-only active-state signalling; the iOS
-      empty-value grey `#7B7B7B` (3.89:1, replaced by the applied-value grey at 5.16:1); the iOS
-      grab handle `#555555` (2.21:1) as a *dismissal affordance*, which is why `044`'s close
-      survives; and the reference's own divider inset, which has three different answers and so
-      supplies no rule (`design-trueup.md` §6 C8). The refusals are repeated in the inventory so
-      nobody re-adopts them.
+      static capture carries timing. **Refused values after ADR-007 — the list shortened, and each survivor has a
+      number**: `050`'s `#232323` row highlight (1.14:1) and its colour-only active-state
+      signalling; the iOS empty-value grey `#7B7B7B` (3.89:1) **as text only**, replaced by
+      Anytype's own applied-value grey `#909090` at 5.16:1 — the same hex is **adopted** for the
+      header's `+` glyph, where 1.4.11's 3:1 bar applies and 3.89:1 clears it; and the iOS grab
+      handle `#555555` (2.21:1) as the *sole dismissal affordance*, which is why `044`'s close
+      survives. **The divider inset is no longer refused**: its three answers are three row shapes,
+      all three adopted (`design-trueup.md` §6 C8). The refusals are repeated in the inventory so
+      nobody re-adopts them, and each names an ADR-007 exception.
       **The 8pt phone inset is the regression surface**: every `sheet-grammar` selector measuring a
       sheet rect moves with it, so it lands with T012's row updates, in the same commit.
 <!-- /ANCHOR:phase-2 -->
@@ -220,7 +233,12 @@ with the owner named, never self-closed.
       leading title, then `beforeClose`, then the close. Every Anytype sheet header is three slots
       with the **title centred** and a **leading action**: `Clear | Priority (Project Tracker) | +`,
       `Edit | Sorts | +`, `Filters | +`, `Edit view | ···` (`design-trueup.md` §6 C6). The shell's
-      header gains the leading slot and centres the title; `044`'s close keeps the trailing edge.
+      header gains the leading slot and centres the title to within ± 1px; `044`'s close keeps the
+      trailing edge. **Menu role, flipped by ADR-007**: a `menu` surface on the phone is an
+      **anchored, handle-less card over a dimmed parent** — not a grab-handle bottom sheet. This is
+      where `044`'s bottom-sheet grammar yields to a measured parity value, and it changes
+      `owned-menu.ts:218` and `dropdown-field.ts:199`, which are `052`'s files: this task changes
+      the header call and the presentation declaration only, and `052`'s leg carries the row change.
 - [ ] **T012 — [P] Update `tools/live/sheet-grammar.mjs` rows in the same commit as any markup
       move.** **Threshold**: the twelve registered surfaces and thirty-one registered pairs stay
       green after every leg. **Red-first proof**: the negative control each row already carries.
@@ -242,10 +260,14 @@ with the owner named, never self-closed.
       captures do show is Anytype's *posture*: `Delete`
       (`anytype-mobile-sheet-object-more-dark.png`) and `Empty Bin`
       (`anytype-menu-nav-widget-bin-dark.png`) raise **no confirm at all**, because deletion is
-      reversible into a Bin. Ours is not, so the posture is **refused, not adopted** — this row's
-      design stays **inferred from source code, not seen** (`design-trueup.md` row 1). One thing is
-      adopted: a destructive row is red **and** carries a trash icon, a second signal beside the
-      colour.
+      reversible into a Bin. Ours is not, so the posture is **held, not adopted** — this row's
+      design stays **inferred from source code, not seen** (`design-trueup.md` row 1). **This is
+      ADR-007's E4 and it is the one hold the parity ruling does not authorise**: the ground is data
+      loss, not accessibility. Do not start this task until the operator rules on E4; if they choose
+      parity, the confirm goes and deletions route to a Bin, which is a data-model change outside
+      `051`. One thing is adopted regardless: a destructive row is red **and** carries a trash icon,
+      a second signal beside the colour (ADR-007 exception **E3**, which also overrides Anytype's own
+      unmarked `Empty Bin`).
 - [ ] **T014 — [P] Register `053`'s sort-conflict confirm and `055`'s destructive-confirm as
       consumers, not as new surfaces.** **Threshold**: zero second confirm implementations across
       the three packets. **Red-first proof**: both sibling packets currently name a primitive that
@@ -262,6 +284,25 @@ with the owner named, never self-closed.
       destructive confirm on iOS and on desktop. **Threshold**: they read them as one surface
       family. **Owner**: the operator. **This row stays unticked until they say so** — an agent
       never ticks it.
+- [x] **T020 — Retarget the packet to Anytype parity by default (ADR-007).** **Done 2026-09-05
+      (~18:30)**, operator: *"Yes, parity by default."* Every `design-trueup.md` decision that had
+      recorded a measured Anytype value and then declined it was re-read against the cited capture
+      and flipped, unless the value fails WCAG 1.4.11, WCAG 1.4.3 or a 44px touch floor.
+      **Threshold**: zero declines without a named ground (AC-012). **Red-first proof**: **18**
+      undeclared declines counted at T001's state — 15 §5 decision cells and 3 §6 resolutions,
+      enumerated in `checklist.md` C13. **Result**: 18 flipped, **3** exceptions named with their
+      measurements (**E1** the 44px close at 2.21:1, **E2** the empty-value grey as text at 3.89:1
+      replaced by Anytype's own 5.16:1 grey, **E3** red-plus-icon on destructive rows), **1** hold
+      flagged for the operator (**E4**, the confirm — a data-loss ground the ruling does not
+      authorise). **One correction toward the reference**: the "8pt inset on three sides" REQ-006
+      stated of every phone sheet is a blanket over **two** measured frame shapes and would have
+      failed on 13 of the 35 census surfaces (`design-trueup.md` §6 C10). **Capture**: every flipped
+      value re-sampled per pixel off the cited file rather than quoted — the coordinate table is
+      `design-trueup.md` §8a. The scrim pair (0.519 / 0.710) is **carried from T001, labelled as
+      carried, and deliberately not re-derived**, because a re-derivation on differently chosen
+      bands would manufacture a disagreement rather than confirm one. **Conflicts named, not taken**:
+      rows 29, 33 and 35 retarget widths and a row shape `design-system.md` §5 owns, and row 21's
+      bottom-anchored search is `053`'s — recorded at `../roadmap.md` §7.11.
 - [ ] **T019 — Reconcile completion metadata and validate.**
       `validate.sh <this folder> --strict` first `RESULT:` PASSED; `checklist.md` every item marked
       with evidence; `goal.md`'s log updated; graph metadata regenerated after the last doc edit.
