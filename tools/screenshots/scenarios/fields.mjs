@@ -161,16 +161,23 @@ const relationLink = (label, resolved) => `
    a nested <button> start tag closes the outer one, which would split the row into two
    siblings. The inner controls are therefore spans here. Every rule that paints them
    (`.db-option-delete`, `.db-mobile-reorder-controls`) selects on class alone, so the
-   capture is unchanged; only the tag names differ from the live DOM. */
+   capture is unchanged; only the tag names differ from the live DOM.
+
+   The row shell is `menu-row.ts`'s: `db-menu-item` alongside the editor's own class, the
+   checkable role and state on the row rather than on the check glyph, and the label carrying
+   the builder's class as well as the editor's. That class list is not cosmetic here — the
+   icon-slot spacer keyed to `.db-menu-item` with no icon child paints in this row, so a
+   fixture that omits the class photographs a row the plugin no longer builds. */
 const optionRow = (value, color, checked, transient) => `
-  <button type="button" class="db-cell-option-item">
+  <button type="button" class="db-menu-item db-cell-option-item${checked ? " is-selected" : ""}"
+    role="menuitemcheckbox" aria-checked="${checked ? "true" : "false"}">
     <span class="db-option-drag-handle${transient ? " is-hidden" : ""}">⠿</span>
     <span class="db-mobile-reorder-controls${transient ? " is-hidden" : ""}">
       <span aria-label="Move up">${glyph(I.arrowUp)}</span>
       <span aria-label="Move down">${glyph(I.arrowDown)}</span>
     </span>
     <span class="db-option-color-dot db-option-color-${color}"></span>
-    <span class="db-option-label">${value}</span>
+    <span class="db-menu-item-label db-option-label">${value}</span>
     <span class="db-option-check">${checked ? glyph(I.check) : ""}</span>
     <span class="db-option-delete" role="button" aria-label="${transient ? "Add option" : "Delete"}"
       >${glyph(transient ? I.plus : I.trash)}</span>

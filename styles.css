@@ -7135,6 +7135,45 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   box-shadow: var(--db-elevation-2);
 }
 
+/* This row takes its shell from `menu-row.ts` for the checkable semantics it could not carry as a
+   bare button, and for nothing else: its leading slot is a drag handle, reorder controls and a
+   colour dot rather than an icon, it draws its own separator, and it sets its own metrics. Three
+   pieces of the shared grammar therefore have to be told to stand down here, or they paint over a
+   row that already answers what they exist to answer.
+
+   The specificity is deliberate and is why each selector repeats its own class. The spacer rule is
+   `.db-menu-item.db-menu-item:not(:has(…)):not(:has(…))` — four classes, since `:not()` and `:has()`
+   each contribute their argument's weight — so a two-class override loses to it silently and looks
+   exactly like a rule that was never written. */
+
+/* An empty 16px flex item ahead of the first child, to hold the icon column open for an icon-less
+   row sitting among icon-bearing siblings. There are no icon-bearing siblings here and no icon
+   column: every row leads with the drag handle, so the spacer is a blank indent in front of the
+   control the eye is meant to land on. */
+.note-database-container .db-cell-option-item.db-cell-option-item.db-cell-option-item::before,
+.db-cell-option-drag-preview.db-cell-option-item.db-cell-option-item.db-cell-option-item::before {
+  content: none;
+}
+
+/* The phone row grows to a 44px thumb target and takes a 16px inline padding, both right for a
+   sheet of plain action rows and both wrong for this one. The padding pushes three leading controls
+   inward past the label column every other row in this popover uses, and the extra height grows the
+   list far enough that its own footer falls off the popover. Restated as the row's own metrics,
+   which is what it measured before it took this shell — raising this row to a thumb floor is a real
+   question, but it is a design change with a footer-overflow cost attached, not a side effect the
+   shell gets to decide on the way past. */
+.is-phone .note-database-container .db-cell-option-item.db-cell-option-item {
+  min-height: 34px;
+  padding: 4px 6px;
+}
+
+/* The sheet hairline is drawn as an `::after` on the row because a menu row's rounded highlight
+   would clip a border. This row has no rounded highlight and already draws a `border-bottom`, so
+   the hairline is a second divider at a different inset, under the first. */
+.db-mobile-bottom-sheet .db-cell-option-item.db-cell-option-item::after {
+  content: none;
+}
+
 .note-database-container .db-option-drag-handle {
   cursor: grab;
   margin-right: 2px;
