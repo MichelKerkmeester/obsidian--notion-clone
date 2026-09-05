@@ -1,0 +1,57 @@
+---
+title: "Verification Checklist: Board Anytype Parity"
+description: "The thresholds with the failing measurement recorded first, so a pass means the board actually changed rather than a check being added."
+trigger_phrases:
+  - "056 checklist"
+  - "board anytype thresholds"
+  - "kanban parity verification"
+importance_tier: "critical"
+contextType: "planning"
+---
+# Verification Checklist: Board Anytype Parity
+
+<!-- SPECKIT_LEVEL: 3 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: checklist | v2.2 -->
+
+---
+
+<!-- ANCHOR:protocol -->
+## VERIFICATION PROTOCOL
+
+Read exit codes without a pipe — `cmd >/tmp/out.log 2>&1; echo $?`. A pipe makes `$?` the pipe's
+status. A criterion closes on a number that was read, never on a command that was merely run.
+
+### Criteria
+
+One row per acceptance criterion, numbered to match `AC-0NN`. Desktop measurements are taken on the
+real renderer at the production mount point; phone measurements on a 390x844 profile with a navbar
+present. **T002 fills every `Today` cell that carries a mechanism rather than a figure** — a "today"
+cell written after the fix is a cell nobody can check against the tree that produced it.
+
+**Priority:** C1 through C5 and C7 are P0. C6, C8 and C9 are P1. C10 is the operator's.
+
+| # | Criterion | Today | Target | Evidence |
+|---|---|---|---|---|
+| C1 | Thirteen anatomy elements trued (AC-001) | **0 of 13.** `ls specs/005-component-surface-system/056-board-anytype-parity/design-trueup.md` → No such file or directory. The capture set is on disk and unread: 20 kanban set files, 36 kanban menu files (9 menus x light/dark x clipped/full), 6 iOS kanban sheet files | 13 of 13, each with a capture filename and a measurement or a labelled inference | [ ] |
+| C2 | Migration table complete (AC-002) | **no table exists.** `spec.md` section 4 carries the row skeleton with 11 of 14 rows reading "Owed to T001" and 3 reading "retire or fold, T003" | 0 cells reading `unknown`; every `pm-*` class replaced or reasoned | [ ] |
+| C3 | PM vocabulary gone or dispositioned (AC-003) | **39 constructed, 23 styled.** Measured 2026-09-05 on `3407dab0`: `grep -o "pm-[a-z-]*" src/views/board-renderer.ts \| sort -u \| wc -l` → **39**; `grep -o "pm-kanban[a-z-]*" styles.css \| sort -u \| wc -l` → **23**. The 39 are the `pm-kanban-*` set (17), the `pm-chip` family (7), `pm-avatar` (4), `pm-progress` (4), plus `pm-dragging` and the card/board/view/col roots | **0** undispositioned survivors in each count | [ ] |
+| C4 | Sticky horizontal scrollbar (AC-004) | **absent.** `050/design-trueup.md` REQ-003, measured 2026-09-05: *"`src/views/board-renderer.ts` contains no sticky scrollbar and no `position: sticky` on a scroll rail; `styles.css` has no board-scrollbar rule. This one is a real gap."* Anytype's, on the same pass: **10px tall, 8px above the viewport bottom, full content width**, y 1199..1208 of a 1217px viewport, thumb `#B6B6B6` on track `#EBEBEB`, present on the kanban and the grid alike | Present at 10px / 8px / full width **± 1px**, colours from the theme's scrollbar tokens (the colours are declined with their reason: this is an Obsidian plugin and the reader's theme decides) | [ ] |
+| C5 | Extensions retired or folded (AC-005) | **7 default-off.** `src/views/board-renderer.ts:202-205`: `private boardExtensions = false` with the comment *"Local extensions (swimlanes, covers, WIP counts, summaries, batch order, touch menus, group controls) render only when the view opts in; the default layout is the one-to-one kanban copy, which has none of them."* The reason they are dark is the target this packet replaces | **0** shipping default-off; each of the seven carries `retire` or `fold`. Two already have captured counterparts — covers (`anytype-menu-set-layout-kanban-cover-*`) and group controls (`anytype-menu-set-layout-kanban-group-by-*`) — and are `fold` candidates; the other five are `retire` unless T001 finds one | [ ] |
+| C6 | `045`'s mechanism intact (AC-006) | **green and untouched today** — `board-card-properties-panel.test.ts` and `board-card-fields.test.ts` both exist and pass on `3407dab0`; T002 records the suite's pass count so a later green is comparable | Both green after the last leg, and `git diff --stat src/views/board-card-properties-panel.test.ts` → **0** lines changed | [ ] |
+| C7 | `044` grammar + `048` stacking hold (AC-007) | **conforming today — T002 records the figure.** The registered set is 12 surfaces and 31 stacked pairs (`051/checklist.md` C8, measured 2026-09-05); this packet must not move it | 12 and 31 still green, `node tools/live/sheet-grammar.mjs` exit 0 read from `$?`, after every leg | [ ] |
+| C8 | Page limit follows the captured value (AC-008) | **T002 records what the board applies today.** The captured Anytype value is **10** for the kanban layout (`anytype-menu-set-layout-kanban-page-limit-*`); `050`'s original flat **60** was withdrawn by `053` D4, which found the limit per-layout — Gallery 60, Kanban 10, no row at all on Grid, List, Calendar or Graph | 10, or our own number argued rather than cited | [ ] |
+| C9 | The gantt did not move (AC-009) | **T002 records the baseline before the first leg**: `grep -o "pm-gantt[a-z-]*" src/views/calendar-timeline-renderer.ts styles.css \| sort -u \| wc -l`, plus the gantt capture hashes. `037`'s in-repo parity was verified at `30c4b746` — 60 of 60 `pm-gantt-*` classes matched with zero divergence — and this packet must leave that true | Identical to the baseline, or a move explained by a named gap. Never rebaselined silently | [ ] |
+| C10 | **OPERATOR** — the board reads as Anytype on device (AC-010) | not asked; the packet was opened 2026-09-05 ~22:45 and nothing has shipped | The operator's own side-by-side, iOS and desktop | [ ] |
+<!-- /ANCHOR:protocol -->
+
+---
+
+## The check that the rest are not theatre
+
+Every row above is written so it can be observed **red today**. C3, C4 and C5 already carry a
+figure read off `3407dab0`; C1 and C2 carry the absence of a file. C6 through C9 carry a mechanism
+and are T002's to turn into numbers before the first leg.
+
+`050`'s true-up found **six** false premises in its own criteria — thresholds asserted as failing
+that could not actually be observed failing. That is the failure this section exists to prevent
+repeating, and it is why a `Today` cell filled in after the fix does not count.

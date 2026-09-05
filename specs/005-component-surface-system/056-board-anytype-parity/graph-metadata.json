@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/056-board-anytype-parity",
+  "spec_folder": "005-component-surface-system/056-board-anytype-parity",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "056 spec",
+      "board anytype parity",
+      "kanban anatomy",
+      "board element migration table",
+      "056 plan",
+      "board anytype parity plan",
+      "kanban rebuild legs",
+      "056 tasks",
+      "board anytype parity tasks",
+      "kanban true-up task",
+      "056 acceptance criteria",
+      "board anytype closure gate"
+    ],
+    "key_topics": [
+      "spec",
+      "board",
+      "anytype",
+      "parity",
+      "kanban",
+      "anatomy",
+      "element",
+      "migration",
+      "table",
+      "plan",
+      "rebuild",
+      "legs"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/views/board-renderer.ts",
+      "src/views/board-card-fields.ts",
+      "styles.css",
+      "specs/005-component-surface-system/056-board-anytype-parity/spec.md",
+      "specs/005-component-surface-system/056-board-anytype-parity/goal.md",
+      "specs/005-component-surface-system/056-board-anytype-parity/plan.md",
+      "specs/005-component-surface-system/056-board-anytype-parity/tasks.md",
+      "specs/005-component-surface-system/056-board-anytype-parity/checklist.md",
+      "specs/005-component-surface-system/056-board-anytype-parity/acceptance-criteria.md",
+      "specs/005-component-surface-system/056-board-anytype-parity/decision-record.md",
+      "screenshots/anytype/README.md",
+      "src/views/board-card-properties-panel.ts",
+      "src/views/board-renderer-parity.test.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-fields.ts",
+        "kind": "code",
+        "path": "src/views/board-card-fields.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/056-board-anytype-parity/checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/anytype/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-card-properties-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer-parity.test.ts",
+        "kind": "test",
+        "path": "src/views/board-renderer-parity.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Board Anytype Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Project Manager",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Renderer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The board renders Project Manager's kanban, not Anytype's: `src/views/board-renderer.ts` constructs",
+    "created_at": "2026-09-05T20:25:00Z",
+    "last_save_at": "2026-09-05T20:53:08.271Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:1ece98d78aac52180721f4182aabc9a9e8217f23e10a74bd55470d059596bd22",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "656543a1d0be0d2e834d57b92f9b4967870e7a08a4f294c2fa223a02af2c183a",
+      "plan.md": "56ae7e76db8b6c39f14901ffa8455c5c8fad54a3090b0e4752978d3c3fbffe08",
+      "tasks.md": "e24548e6e17d98e0585ff089b5a792741edf84acfeb79f342ed5bc24fd2b70f9",
+      "decision-record.md": "dcc75ede2c74f0ea36bb7ad13308d2efd5554ef07ed1c928c60fce854a430f96",
+      "implementation-summary.md": "63a5010de077db5ab14a261c5a4991060efbced74cb0e66559da4bc9287d4adb"
+    },
+    "last_active_at": null
+  }
+}

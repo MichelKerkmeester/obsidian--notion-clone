@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/056-board-anytype-parity",
+  "description": "Phase 1: board-anytype-parity",
+  "keywords": [
+    "phase",
+    "board-anytype-parity"
+  ],
+  "lastUpdated": "2026-09-05T20:25:00.756Z",
+  "specId": "056",
+  "folderSlug": "board-anytype-parity",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
