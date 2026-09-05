@@ -1,0 +1,432 @@
+---
+title: "Feature Specification: Record and Relation Surfaces"
+description: "The record sheet, the table record peek, the properties panel, the property modals and every cell editor reduced to one set of record-surface primitives, with the Anytype object-page and relation-panel behaviours worth taking and formulas/rollups/calculations staying ours."
+trigger_phrases:
+  - "054 spec"
+  - "record surface primitives"
+  - "property row primitive"
+  - "relation panel"
+  - "record sheet primitive"
+  - "type picker"
+importance_tier: "high"
+contextType: "planning"
+---
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+# Feature Specification: Record and Relation Surfaces
+
+<!-- SPECKIT_LEVEL: 3 -->
+---
+
+<!-- ANCHOR:metadata -->
+## 1. METADATA
+
+| Field | Value |
+|-------|-------|
+| **Level** | 3 |
+| **Priority** | P1 |
+| **Status** | Draft |
+| **Created** | 2026-09-05 |
+| **Branch** | this worktree (`083-phase-record-relation-surfaces`) |
+| **Parent Spec** | ../spec.md |
+| **Phase** | 54 of 54 |
+| **Predecessor** | 048-stacked-sheets; 050-anytype-adoption |
+| **Successor** | None |
+| **Handoff Criteria** | Every surface in §4's inventory carries its primitive row, the primitives exist as exported modules with a documented contract, one inline-editor primitive per column type is shared by table cells, the record sheet and board cards, the Anytype object-page behaviours in §5 are designed against named captures, and one lane row per primitive is green with its negative control observed red |
+<!-- /ANCHOR:metadata -->
+
+---
+
+<!-- ANCHOR:phase-context -->
+## Phase Context
+
+This is **Phase 54** of the component surface program. The operator's 2026-09-05 directive: *"research
+recommendations and how to tackle / update / improve every modal, sheet and general ui ux to take the
+best from AnyType and componentize stuff as much as possible."* `050-anytype-adoption` landed the
+fourteen view-level items; this phase is the **record/object half** of the same directive — the
+surfaces a person meets when they open one record and edit its properties.
+
+**Scope Boundary**: the record/object surfaces and property editing only. View-level surfaces stay
+`050`'s. Stacking stays `048`'s. First-sheet grammar stays `044`'s. The table, the bottom sheets'
+ownership, the Project Manager 1:1 board and gantt, and **formulas, rollups and calculations stay
+ours** — the operator's standing ruling, which this phase does not reopen.
+
+**Dependencies**:
+- `050-anytype-adoption` — the capture sweep and the research; this phase references its items by
+  number where they overlap and implements the record-side slice of item 6 and item 11.
+- `044-phone-sheet-alignment` — the seven-element grammar; every phone surface here already
+  registered or registering there keeps it.
+- `048-stacked-sheets` — the stacking model; every editor opened over the record sheet obeys it.
+  This phase owns the editor *primitives*, not the stacking claims.
+- `023-record-note-body` — owns the note body's display-vs-editable decision (accepted editable);
+  this phase consumes `note-body-region.ts` as a primitive and does not reopen the decision.
+- `045-board-card-properties` — owns the per-view card property list; this phase moves its rows onto
+  the shared property-row primitive without changing the mechanism ADR-002 froze.
+
+**Deliverables**:
+- One primitives module family (`src/views/record-surface/`): header, property row, add-property
+  row, hidden-properties group, note-body region host, type picker.
+- One inline-editor primitive per column type, shared by table cells, the record sheet and board
+  cards.
+- §6's per-surface migration table: surface → primitive → changes → Anytype pattern with capture
+  filename → what stays ours.
+- §5's Anytype object-page and relation-panel behaviours, designed against named captures.
+
+**Changelog**:
+- When this phase closes, refresh the matching file in ../changelog/ using the parent packet number plus this phase folder name.
+<!-- /ANCHOR:phase-context -->
+
+---
+
+<!-- ANCHOR:problem -->
+## 2. PROBLEM & PURPOSE
+
+### Problem Statement
+
+The same three UI ideas — a record's header, a property row, a property editor — are built three
+times each by three different files, and the result is that a property looks different on every
+surface that shows it.
+
+**Three property-row vocabularies.** `renderCardField` (`card-field-renderer.ts:102`) builds the
+row the record sheet and board cards use (`db-record-detail-field` / `db-board-card-value`);
+`renderProperty` (`table-record-peek.ts:334`) builds a second, display-only row for the peek
+(`db-record-peek-field`), whose badge rendering it documents as having been wrong until it was
+copied from the cell; `renderColumnRow` (`column-manager-renderer.ts:265`) and
+`renderBoardCardProperties` (`board-card-properties-panel.ts:48`) build a third — the checkbox +
+type-icon + name row, hand-duplicated between the two files down to the same `shouldIgnoreDrag`
+helper (column-manager-renderer.ts:378, board-card-properties-panel.ts:159). One concept, three
+vocabularies, three places to fix the next defect.
+
+**Four header builders in one family.** The record sheet hand-builds its header
+(`record-detail-panel.ts:348-386`: icon, title, open button, close button reusing the cell editor's
+`db-cell-edit-close` class); the peek hand-builds a different one (`table-record-peek.ts:233-235`,
+no close at all — it is a rail); the properties panel branches between `createSheetHeader` on phone
+and a hand-built desktop header (`column-manager-renderer.ts:180`); the `DbModal` subclasses get
+a title only through `getSheetTitle`'s heading scrape (`db-modal.ts:83-88`). `044` decided "header
+everywhere"; nothing decided "header built once".
+
+**The record sheet has no hidden-properties group.** The peek has one
+(`table-record-peek.ts:259-278`); the record sheet instead filters empty fields away wholesale on
+`config.showEmptyFields` (`record-detail-panel.ts:387-396`) — an all-or-nothing switch with no
+affordance on the surface itself, where Anytype's object page shows a hidden-relations group with a
+count.
+
+**Empty values say "Empty" instead of offering the add.** An empty multi-select renders the word
+`Empty` (`record-detail-panel.ts:636`, `getEmptyDisplayValue`); Anytype's empty relation renders
+an affordance that opens the editor — `anytype-relation-editor-tag-dark.png` is exactly that state
+captured.
+
+**The type list is written three times.** `PROPERTY_TYPES` in `create-property-modal.ts:69-74`
+(thirteen types), `getTypeOptions` in `property-type-conflict-modal.ts:364-369` (two subsets by
+source kind), and the column-menu type submenu's own list (`column-menu.ts:224`'s branch). Three
+lists to update the next time a format is added, which is how drift starts.
+
+### Purpose
+
+One property row, one record header, one type picker, one add-property affordance and one editor
+entry point per column type — built once in `src/views/record-surface/`, consumed by the record
+sheet, the peek, the properties panel, the board card properties panel, the property modals and
+every cell editor — with the Anytype object-page behaviours that the captures show are better, and
+formulas/rollups/calculations untouched.
+
+<!-- /ANCHOR:problem -->
+
+---
+
+<!-- ANCHOR:scope -->
+## 3. SCOPE
+
+### In Scope
+- The seven primitives of §4, as exported modules under `src/views/record-surface/`.
+- The per-type inline-editor primitives, extracted from `CellRenderer`'s private methods and
+  consumed back by it, so table cells, the record sheet and board cards keep one entry point
+  (`CellRenderer.startEdit`, `cell-renderer.ts:644`) over exported, individually testable editors.
+- The record-side slices of 050 items 6, 9 and 11 (§7).
+- The §6 migration table, one row per surface, each naming its capture.
+- One lane row per primitive, registered in the `sheet-grammar` lane's registry where the surface is
+  a phone sheet, or as a unit-test-plus-lane row where it is not.
+
+### Out of Scope
+- **Formulas, rollups and calculations** — the operator's standing ruling keeps them ours. The
+  formula workbench (`formula-modal.ts`, 1,664 lines) is touched only where its output-type
+  dropdowns read the shared type picker; nothing about the expression engine, the help browser, or
+  the aggregation list moves.
+- **The stacking model and stacked-pair grammar rows** — `048`'s. Editors opened over the record
+  sheet obey its model; this phase adds no stacking code.
+- **The first-sheet grammar and the `sheet-grammar` lane's element predicates** — `044`'s. This
+  phase adds *rows* to the lane's registry, never columns.
+- **The record-open target** — `006-record-open-target`'s resolver (`recordOpenTarget`,
+  `database-view.ts:8332`) is consumed unchanged.
+- **The note body's display-vs-editable decision** — `023`'s, accepted editable by the operator.
+- **The table view itself, the PM 1:1 board and gantt** — outside this family.
+- **Anytype's data model** — Objects, Types, Queries versus our file-backed records; `050` D6's
+  non-adoptions carry over whole.
+
+### Files to Change
+
+| File Path | Change Type | Description |
+|-----------|-------------|-------------|
+| `src/views/record-surface/record-header.ts` | Create | P1: header primitive (icon + title + primary action + close) |
+| `src/views/record-surface/property-row.ts` | Create | P2: property-row primitive (type icon + label + value + edit affordance), display and interactive variants |
+| `src/views/record-surface/add-property-row.ts` | Create | P3: add-property affordance row |
+| `src/views/record-surface/hidden-properties.ts` | Create | P5: hidden-properties group with count and toggle |
+| `src/views/record-surface/type-picker.ts` | Create | P7: one property-type list with icons and per-format descriptions |
+| `src/views/record-surface/index.ts` | Create | The documented primitive contract, one table per export |
+| `src/views/cell-renderer.ts` | Modify | Private editor methods become thin wrappers over the extracted per-type editor primitives |
+| `src/views/cell-editor-*.ts` (per type) | Create | P4: one editor primitive per column type under `src/views/record-surface/` |
+| `src/views/record-detail-panel.ts` | Modify | Consume P1, P2, P3, P5, P6-host |
+| `src/views/table-record-peek.ts` | Modify | Consume P1, P2 (display variant), P5 |
+| `src/views/column-manager-renderer.ts` | Modify | Rows consume P2's checkbox variant; add row consumes P3 |
+| `src/views/board-card-properties-panel.ts` | Modify | Same as column-manager-renderer |
+| `src/views/modals/create-property-modal.ts` | Modify | Type dropdown consumes P7 |
+| `src/views/modals/property-type-conflict-modal.ts` | Modify | Per-writer type dropdowns consume P7 |
+| `src/views/modals/formula-modal.ts` | Modify | Output-type dropdowns consume P7; nothing else |
+| `src/views/modals/relation-rollup-config-modal.ts` | Modify | Relation/target/aggregation dropdowns consume P7 |
+| `src/views/column-menu.ts` | Modify | Type submenu consumes P7 |
+| `styles.css` | Modify | Primitive-scoped rules; per-surface duplicates retired, serialized by the parent's CSS lane |
+| `tools/live/sheet-grammar.mjs` | Modify | Registry rows for the record-sheet and peek surfaces this phase changes |
+| `specs/.../054-record-and-relation-surfaces/migration-table.md` | Create | §6 as a tracked deliverable |
+
+<!-- /ANCHOR:scope -->
+
+---
+
+<!-- ANCHOR:requirements -->
+## 4. REQUIREMENTS
+
+### P0 - Blockers (MUST complete)
+
+| ID | Requirement |
+|----|-------------|
+| REQ-001 | The record sheet's header, the peek's header and the properties panel's phone header are built by one header primitive; the census of distinct header builders in this family reads **1** (the primitive), down from **4** today |
+| REQ-002 | One property-row primitive with display and interactive variants replaces the three vocabularies; the record sheet, board cards, the peek, the properties panel and the board-card properties panel all consume it |
+| REQ-003 | The record sheet renders a hidden-properties group with a count, replacing the all-or-nothing `showEmptyFields` filter as the way a hidden property is reachable |
+| REQ-004 | Empty relation, select and multi-select property rows render an add affordance that opens the same editor an occupied row opens, on the record sheet and on board cards |
+| REQ-005 | One type picker primitive is the single source of the property-type list, consumed by the create-property modal, the type-conflict modal's per-writer dropdowns, the relation/rollup config modal, the formula modal's output-type dropdowns and the column-menu type submenu |
+| REQ-006 | One inline-editor primitive per column type exists as an exported module with a documented contract, and `CellRenderer.startEdit` dispatches to it; table cells, the record sheet and board cards keep that one entry point |
+
+### P1 - Required (complete OR user-approved deferral)
+
+| ID | Requirement |
+|----|-------------|
+| REQ-007 | The properties panel's add row and the board-card properties rows consume the add-property and property-row primitives without changing their mechanisms (drag reorder, range select, per-view list) |
+| REQ-008 | The migration table exists as a tracked deliverable with one row per surface, each naming its Anytype capture or recording the gap, and marking what stays ours |
+| REQ-009 | The note-body region is formalized as the record sheet's body primitive — mounted after the property rows, draft-preserving across refreshes — with its existing regression test kept green |
+
+> Acceptance criteria for these requirements live in `acceptance-criteria.md`,
+> which is the document that decides whether this packet may close.
+<!-- /ANCHOR:requirements -->
+
+---
+
+<!-- ANCHOR:success-criteria -->
+## 5. SUCCESS CRITERIA
+
+- **SC-001**: A property reads identically — type icon, label, value form, empty affordance — on the
+  record sheet, a board card, the peek and the properties panel, verified by one lane row rendering
+  the same column through all four consumers.
+- **SC-002**: The operator opens a record on iOS and reads the sheet as one object page: header,
+  properties, add-property affordance, hidden group, note body — and reports it as close to
+  Anytype's object page as the table it belongs to.
+- **SC-003**: Every threshold in `acceptance-criteria.md` was observed failing on the current tree
+  before its primitive landed, and the failing figure is recorded in `checklist.md`.
+<!-- /ANCHOR:success-criteria -->
+
+---
+
+<!-- ANCHOR:surface-inventory -->
+## 5A. SURFACE INVENTORY — every surface this family owns, from source
+
+Read from the working tree; each row cites the constructor and the header it builds today.
+
+| # | Surface | Source | Header today | Rows today | Editor entry |
+|---|---------|--------|--------------|------------|--------------|
+| S1 | **Record sheet** (phone bottom sheet / desktop anchored panel) | `record-detail-panel.ts`, opened at `database-view.ts:11674` via `006`'s resolver (`:8352` panel, `:8348` peek) | Hand-built `:348-386`: record icon + title (`db-record-detail-title`) + open-note (`db-board-card-open`) + close (`db-cell-edit-close`) | `renderCardField` `:455` under `db-record-detail-fields` `:390`; empties filtered by `showEmptyFields` `:387-396`; no hidden group | `actions.editCell` → `CellRenderer.startEdit` (`database-view.ts:11678`) |
+| S2 | **Table record peek** (desktop display-only rail) | `table-record-peek.ts:150`; touch delegates to S1 `:169-173` | Hand-built `:233-235`, no close (a rail, not a sheet) | `renderProperty` `:334-360`, badge-rendering copied from the cell; hidden group `:259-278` | None — display-only by design |
+| S3 | **Properties panel** (column manager; phone sheet + desktop popover) | `column-manager-renderer.ts:148` | Branches at `:180`: `createSheetHeader` on phone, hand-built `db-panel-header` on desktop | `renderColumnRow` `:196` onward: drag + arrows + checkbox + type icon + name + wrap/edit/delete; add row `:164-198` | `actions.editColumn` → `ColumnRenameModal` |
+| S4 | **Create property modal** | `create-property-modal.ts:64`, `sheet` presentation | `getSheetTitle` heading scrape (`db-modal.ts:83-88`) | Label + key + type rows; type from `PROPERTY_TYPES` `:69-74`, rollup gated on an existing relation `:139-150` | Its own form |
+| S5 | **Property type conflict modal** | `property-type-conflict-modal.ts:78`, `fullscreen` | Obsidian's own (fullscreen path) | Conflict cards; writer table; per-writer type dropdown from `getTypeOptions` `:364-369` | `createDropdownField` per writer row |
+| S6 | **Relation / rollup config modal** | `relation-rollup-config-modal.ts:32`, `sheet` | `getSheetTitle` scrape | Target-database dropdown + impact preview `:69-97`; rollup: relation, target (aggregation-filtered), aggregation (12 options) `:118-200` | `createDropdownField` ×3 |
+| S7 | **Formula modal** (stays ours) | `formula-modal.ts:176`, `fullscreen` workbench, 1,664 lines | Obsidian's own (fullscreen path) | Editor, preview, help browser; output-type dropdowns `:274`, `:443`, `:454` | Textarea workbench — untouched |
+| S8 | **Board card properties panel** (settings-sheet section) | `board-card-properties-panel.ts:34` | None (a section inside the settings sheet) | Fixed Cover/Title slots `:39-41` + reorderable rows duplicating S3's `renderColumnRow` shape `:48-147` | Visibility toggle only |
+| S9 | **Cell editors** (every column type, shared by table cells, S1 and board cards) | `cell-renderer.ts:644` `startEdit` dispatch | Per-editor: option popover `:1106`, relation popover `:899` (phone header via `createSheetHeader` `:941`), date popover `:1787`, text popover `:2353`, single-line `:2658`, number `:1596` | — | The dispatch itself `:687-739`; all editor builders are **private** methods of a 3,152-line class |
+| S10 | **Note body region** | `note-body-region.ts:68` `mountNoteBodyRegion`, mounted by S1 `:290-303` under the properties | None (a region) | Rendered/textarea pair, debounced commit 500ms, caret resume across refresh | Its own |
+
+**Stacking note, owned by 048 and consumed here:** every S9 editor opened over S1 is a stacked pair
+in `048`'s inventory (§3.5 R1–R7); this phase changes *which code builds the editor*, never *how it
+stacks*.
+
+<!-- /ANCHOR:surface-inventory -->
+
+---
+
+<!-- ANCHOR:anytype-behaviours -->
+## 5B. ANYTYPE OBJECT-PAGE AND RELATION-PANEL BEHAVIOURS WORTH TAKING
+
+Designed against the capture index (`screenshots/anytype/README.md`) and the research's §7 object
+model. Each row names the capture that shows it.
+
+**Updated at landing 2026-09-05.** This table was drafted from the index's written descriptions
+because the authoring pass could not open image files. `050`'s `design-trueup.md` has since read the
+sweep pixel by pixel and is now the **read of record** (`050` ADR-003: where a capture and `047`'s
+research disagree, the capture is the fact and the research is a source reading). Two things follow.
+**All four named capture filenames were verified to resolve** under `screenshots/anytype/` at
+landing. And **A5 is corrected**: what the true-up read on the shipped 0.56.5 build is a filter
+panel whose *entire body is one `+ New filter` row*, and a property picker whose rows carry
+**per-format leading icons** — not a search-first picker with create-new entries. That description
+comes from `047` §9's source read, so A5 is now marked **design inferred from source code, not
+seen**. T001 still opens every named image by hand before the primitive that adopts it is written
+(goal D1) — the true-up covered the view surfaces, not the object-page and relation-panel captures
+this table leans on.
+
+| # | Behaviour | Anytype evidence | What we take | What we keep |
+|---|-----------|------------------|--------------|--------------|
+| A1 | **Object-page header block**: icon, title, then featured relations laid out under the title | `anytype-object-page-empty-dark.png` (a record opened as its own object page); research §7 "featured block" | S1's header becomes P1 with the property list reading as the page under the header, not as a form | The open-note button and our title-field resolution (`resolveTitleFieldDisplay`) |
+| A2 | **Relation row layout**: type icon + name on the left, value on the right, one row per relation, in-place editing | `anytype-relation-editor-tag-dark.png`; `anytype-properties-official.jpg`; research §7 | P2's anatomy is exactly this; the label never wraps under the value | Option badge colours, conditional formatting, rating/progress/ring displays |
+| A3 | **Empty value affordance**: an empty relation shows an add affordance, and clicking it opens the same editor an occupied row opens | `anytype-relation-editor-tag-dark.png` (an *empty* Tag relation clicked open) | REQ-004: empty rows render the affordance instead of the word "Empty" | `showEmptyFields` stays as the show/hide switch for *whether* empties render at all |
+| A4 | **Hidden relations group**: properties hidden from the page collapse into a labelled group with a count | `anytype-properties-official.jpg`; research §7 | REQ-003: P5 on the record sheet, fed by the columns the view hides | The peek's existing group, which becomes the same primitive rather than a second one |
+| A5 | **Add-relation search-first**: the add control opens a search-first picker offering existing properties and "create new" **[trued 2026-09-05 — code-derived]** | `047` §9's source read (three picker surfaces share one component, each adding create-new entries). **Not confirmed by any capture**: `design-trueup.md` REQ-013 read `anytype-filter-property-picker-dark.png` and found per-format leading icons per property row — `Aa` for text, a page glyph for object type, a calendar for dates, a list glyph for Tag, an `ⓘ` for Description — which is the **format vocabulary**, not a search-first picker; and REQ-002 read the Filter panel as a 360px frame whose entire body is one `+ New filter` row. `anytype-filter-tag-value-picker-dark.png`'s "Filter or create options…" placeholder is the one captured create affordance | P3 opens a search-first picker for adding a property on the record sheet, with create-new falling through to S4 — **built from the source read with the gap named**, not from a screen. The **format-icon vocabulary is adopted** and is the part the captures actually support | Our `QUICK_ADD_FILE_FIELDS` quick-add row in S3 |
+| A6 | **Type change flow**: a property's type is changed from its row's menu, with the picker offering every format | `anytype-newobject-type-picker-dark.png`; research §7 | P7 is the one list behind the column-menu type submenu and every modal's type dropdown | Our type-migration semantics in `ColumnRenameModal` (untouched) |
+| A7 | **No equivalent — stays ours**: formulas, rollups, aggregations | `screenshots/anytype/README.md`: "formula and rollup carry no values, and cannot. Anytype has neither" | Nothing | The formula workbench (S7), the 12 aggregations, the output-number-format editor |
+
+**The operator's keep-list, restated as constraints:** the table, the bottom sheets' ownership
+(`003`/`016`/`031`), formulas/rollups/calculations, and the Project Manager 1:1 board and gantt.
+Everything else in this family may take the Anytype pattern when the captures show it is better, and
+must come out as a shared primitive — one component, many callers.
+
+<!-- /ANCHOR:anytype-behaviours -->
+
+---
+
+<!-- ANCHOR:risks -->
+## 6. RISKS & DEPENDENCIES
+
+| Type | Item | Impact | Mitigation |
+|------|------|--------|------------|
+| Risk | `renderCardField` has four callers beyond this family (board renderer, gallery remnants, bulk paths) | Moving its anatomy breaks surfaces this phase does not own | P2 is extracted beside it; `card-field-renderer.ts` becomes a re-export shim; its callers are re-run through the lane before close, and the board's `038` parity captures are re-read (goal D5 posture) |
+| Risk | The per-type editor extraction touches the largest file in the family (3,152 lines) | A behavioural regression in editing, the plugin's core loop | Extraction is mechanical — the private method bodies move; `startEdit`'s dispatch contract is pinned by a unit test first (red: no exported editors) |
+| Risk | The properties panel's desktop header is hand-built today and operator-verified there | Switching it to the primitive changes desktop chrome | P1 has a desktop variant pinned to the current desktop geometry; the lane asserts the desktop panel's rect is unchanged |
+| Risk | `styles.css` is shared by the whole program | Merge collisions and silent overrides | The parent's serialized CSS lane; one leg at a time, retired per-surface duplicates named in each leg |
+| Risk | Six capture files describe states the model behind this document could not open | A design adopted from a prose summary rather than the image | Goal D1: T001 opens every named image by hand before the adopting primitive lands; a capture that cannot be opened is recorded as a gap in `migration-table.md`, never silently consumed |
+| Dependency | `048`'s stacked-pair grammar rows | The editors this phase extracts are the children in those pairs | This phase registers no stacking rows; the lane rows it adds assert primitive identity, not stacking |
+
+<!-- /ANCHOR:risks -->
+
+---
+
+<!-- ANCHOR:050-overlap -->
+## 5C. OVERLAP WITH 050-ANYTYPE-ADOPTION
+
+Referenced by item number, not duplicated. `050` owns each item whole; this phase implements only
+the record-surface slice named here and `050`'s own files stay the item's home.
+
+| 050 item | What it owns | What this phase takes from it |
+|----------|--------------|-------------------------------|
+| **Item 6** (REQ-006: cell-editor anti-clip flip within 92px of the right edge) | The `popover-position.ts` flip branch, all cell editors | S9's extracted editor primitives call the shared placement, which carries the flip; no editor primitive reimplements an edge check |
+| **Item 9** (REQ-009: two-flavour empty state + deleted-relation state) | `empty-state-renderer.ts`, view-level | The record sheet's empty-property affordance (REQ-004) uses the flavour vocabulary — "no value" is a value-level state, not a view-level one — and must not grow a third empty-state grammar |
+| **Item 11** (REQ-011: `positionLock` while a name is typed in a sorted view) | `table-renderer.ts` (and view-level stores) | S1's title rename goes through `editFileName` (`cell-renderer.ts:2992`) into the same commit path; when `050` lands the lock, the record sheet's rename inherits it — nothing here duplicates the lock |
+
+**050's capture-alignment gate (D1) binds this phase by reference**: where this phase adopts an
+Anytype pattern, its design is trued against the same sweep. The named captures in §5B are the
+record-surface slice of that obligation.
+
+<!-- /ANCHOR:050-overlap -->
+
+---
+
+<!-- ANCHOR:nfr -->
+## L2: NON-FUNCTIONAL REQUIREMENTS
+
+### Performance
+- **NFR-P01**: The editor extraction adds no render cost: `startEdit`'s dispatch becomes one module
+  lookup per type, not a per-keystroke cost, and the relation list's virtualization window
+  (`rowHeight 34`, `windowSize 80`, `cell-renderer.ts:963-965`) is carried into the relation editor
+  primitive unchanged.
+- **NFR-P02**: The record sheet's property rows keep their current DOM depth per row; P2 replaces
+  class names and builders, not the row's node count.
+
+### Security
+- **NFR-S01**: No new network call, credential, or read outside the vault. Every primitive renders
+  and edits values the data layer already exposes.
+
+### Reliability
+- **NFR-R01**: A primitive that cannot resolve its column — a deleted property still referenced by
+  a saved view — renders its muted/empty variant rather than throwing, the way `renderProperty`
+  already degrades.
+- **NFR-R02**: The note-body region's draft survives a refresh mid-edit, as today
+  (`record-detail-panel.ts:309-319`); the formalization may not regress `note-body-region.test.ts`.
+
+<!-- /ANCHOR:nfr -->
+
+---
+
+<!-- ANCHOR:edge-cases -->
+## L2: EDGE CASES
+
+### Data Boundaries
+- Empty input: a record with zero non-title columns renders the header, the add-property affordance
+  and the body region — never a blank sheet.
+- Maximum length: a property label longer than the row's label track truncates with ellipsis; the
+  value keeps its full width.
+- Invalid format: a column whose type was removed from the plugin renders through P2's muted
+  variant with its raw stringified value, the way the peek degrades today.
+
+### Error Scenarios
+- A relation column whose target database was deleted: the relation editor primitive renders
+  `relation.targetDatabaseRequired`'s state (today a `Notice`, `cell-renderer.ts:912-915`) inside
+  the editor rather than leaving the row inert.
+- A type-picker consumer whose list was filtered (rollup without a relation, `create-property-modal.ts:139-150`):
+  the picker renders the gated format disabled with its reason, as today.
+
+### State Transitions
+- Partial completion: a hidden-properties group toggled open stays open across a field-commit
+  refresh (`renderContent` re-runs on every commit, `record-detail-panel.ts:332-341`) — the group's
+  expanded state is carried across the rebuild, the way the body draft is.
+- Rotation across the touch boundary while the sheet is open: `DbModal.applyPresentation` re-reads
+  (`db-modal.ts:97`); the record sheet's own re-place behaviour is `010`'s and is not reopened.
+
+<!-- /ANCHOR:edge-cases -->
+
+---
+
+<!-- ANCHOR:complexity -->
+## L2: COMPLEXITY ASSESSMENT
+
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Scope | 16/25 | 19 files touched, ~1,800 LOC estimated, but most of it is extraction into new modules rather than new behaviour; `recommend-level.sh --loc 1800 --files 14` → 50/100, Level 2, confidence 90% |
+| Risk | 12/25 | No auth, no API, no data. The risk is editing — the core loop — which the pinned dispatch test bounds |
+| Research | 4/20 | The research is `047`'s and the captures exist; what remains is the image true-up |
+| **Total** | **32/70** | **Level 3** — the script returns Level 2 at **50/100, confidence 90%** (`recommend-level.sh --loc 1800 --files 14`); **raised on judgment at landing 2026-09-05**, the same call `050`, `051`, `052`, `053` and `055` made at comparable numbers. The tie-breaker is ADR-002's extraction: no other packet in the family moves method bodies out of a 3,152-line class that no check can mount today. Phase score **10/50** against a 25 threshold, so a standard child, not a phase parent |
+
+<!-- /ANCHOR:complexity -->
+
+---
+
+<!-- ANCHOR:questions -->
+## 10. OPEN QUESTIONS
+
+- Does the record sheet's desktop anchored panel keep its own close button (today
+  `db-cell-edit-close`, CSS-hidden on desktop) or does P1 give the desktop panel the peek's
+  no-chrome header? The record sheet is operator-verified on desktop; the primitive must not
+  silently change what was verified. Proposed: desktop keeps today's DOM, asserted by the lane.
+- Does P3's search-first picker replace S3's quick-add file-field row or sit beside it? Proposed:
+  beside — the quick-add row is a documented, working affordance and A5's picker is for the record
+  sheet.
+- Should the board card gain the add-property affordance (A3), or is a card summary the wrong place
+  to add a property? Proposed: record sheet only, at T001's discretion after reading the captures.
+
+<!-- /ANCHOR:questions -->
+
+---
+
+## RELATED DOCUMENTS
+
+- **Implementation Plan**: See `plan.md`
+- **Task Breakdown**: See `tasks.md`
+- **Verification Checklist**: See `checklist.md`
+- **Acceptance Criteria**: See `acceptance-criteria.md`
+- **Decision Record**: See `decision-record.md`
+- **Migration Table**: See `migration-table.md` (created by T003, the §6 deliverable)
+- **Packet Goal**: See `goal.md`
+- **Research Source**: See `../047-competitor-references-and-pm-alignment/research/research.md` §7, §9
+- **Capture Index**: See `screenshots/anytype/README.md`

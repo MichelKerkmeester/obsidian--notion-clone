@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/054-record-and-relation-surfaces",
+  "spec_folder": "005-component-surface-system/054-record-and-relation-surfaces",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "054 spec",
+      "record surface primitives",
+      "property row primitive",
+      "relation panel",
+      "record sheet primitive",
+      "type picker",
+      "054 plan",
+      "record surface legs",
+      "editor extraction plan",
+      "primitive migration",
+      "054 tasks",
+      "record surface tasks"
+    ],
+    "key_topics": [
+      "spec",
+      "record",
+      "surface",
+      "primitives",
+      "property",
+      "row",
+      "primitive",
+      "relation",
+      "panel",
+      "sheet",
+      "type",
+      "picker"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "src/views/cell-renderer.ts",
+      "src/views/record-detail-panel.ts",
+      "src/views/table-record-peek.ts",
+      "src/views/column-manager-renderer.ts",
+      "src/views/board-card-properties-panel.ts",
+      "src/views/modals/create-property-modal.ts",
+      "src/views/modals/property-type-conflict-modal.ts",
+      "src/views/modals/formula-modal.ts",
+      "src/views/modals/relation-rollup-config-modal.ts",
+      "src/views/column-menu.ts",
+      "tools/live/sheet-grammar.mjs",
+      "screenshots/anytype/README.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "cell-renderer.ts",
+        "kind": "code",
+        "path": "src/views/cell-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.ts",
+        "kind": "code",
+        "path": "src/views/column-manager-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-card-properties-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "create-property-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/create-property-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-type-conflict-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/property-type-conflict-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "formula-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/formula-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "relation-rollup-config-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/relation-rollup-config-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-menu.ts",
+        "kind": "code",
+        "path": "src/views/column-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/anytype/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Relation Surfaces",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Scope Boundary",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
+    "created_at": "2026-09-05T11:19:44.951Z",
+    "last_save_at": "2026-09-05T12:16:32.322Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:bfd980bca1dbdab02fba96d66751f5080fc50b305b21e718d19ce787ccc72677",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "1ada9a55dd76f88a639183bd40c7ec81c4118b70f62d26e02783bd124c2ae3b1",
+      "plan.md": "f1160499d711022550908d997f40e670aa80427c6e95cb620efab4abb24a9bd8",
+      "tasks.md": "ba623f1a54b0860ccf65e809b4186aa9ff23f16db60fc9496e79c8781afed47a",
+      "decision-record.md": "b0b4cdffaabfcc3a3cfcfda3a04ee3dc7a336a0c7bafd5160d523e3421deff3e"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

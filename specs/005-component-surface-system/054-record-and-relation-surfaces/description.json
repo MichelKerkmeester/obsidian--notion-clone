@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/054-record-and-relation-surfaces",
+  "description": "The record/object surfaces and property editing as shared primitives: one record header, one property row, one add-property affordance, one hidden-properties group, one type picker and one exported inline-editor primitive per column type \u2014 consumed by the record sheet, the table record peek, the properties panel, the board-card properties panel, the property modals and every cell editor, with the Anytype object-page and relation-panel behaviours designed against the capture sweep and formulas/rollups/calculations staying ours",
+  "keywords": [
+    "phase",
+    "record-surfaces",
+    "record-sheet",
+    "property-row",
+    "relation-editor",
+    "type-picker",
+    "cell-editors",
+    "componentization",
+    "anytype-adoption"
+  ],
+  "lastUpdated": "2026-09-05T14:00:00.000Z",
+  "specId": "054",
+  "folderSlug": "record-and-relation-surfaces",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
