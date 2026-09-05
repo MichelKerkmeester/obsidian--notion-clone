@@ -12,12 +12,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened phase from operator report 42 and its two follow-ons"
-    next_safe_action: "Settle the read-only decision for codeblock embeds (decision-record.md ADR-001)"
+    last_updated_at: "2026-09-05T04:20:00Z"
+    last_updated_by: "implementation-verifier"
+    recent_action: "Landed the behaviour legs and recorded the stylesheet leg that did not land"
+    next_safe_action: "Answer the host-layout question (tasks.md T002), then take the styles.css lane for T015"
     blockers:
-      - "Codeblock embeds are read-only by design today; parity needs that decision revisited"
+      - "The embed's card border is a styles.css rule; no stylesheet edit was made"
     key_files:
       - "src/views/embedded-database-renderer.ts"
       - "src/main.ts"
@@ -26,11 +26,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-046-spec"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 60
     open_questions:
       - "Does a full-bleed embed break reading-view layout for non-database content around it?"
-      - "Does moving a linked view rewrite the codeblock in both files, or cut and paste one block?"
-    answered_questions: []
+      - "Should the write capability ship behind a settings flag?"
+    answered_questions:
+      - "Does moving a linked view rewrite the codeblock in both files, or cut and paste one block? — It writes the destination, then removes the source, so an interruption duplicates rather than loses."
+      - "Should an embed be editable at all? — Yes; ADR-001 Accepted 2026-09-05."
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify + level3-arch | v2.2 -->
 # Feature Specification: Linked Views Notion Parity
@@ -68,9 +70,9 @@ create flow and the move action; `043-constructed-capture`'s harness for photogr
 |-------|-------|
 | **Level** | 3 (`recommend-level.sh --loc 800 --files 14 --architectural --db` → 74/100, phase score 10/50, phases NO) |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | In progress — behaviour landed, stylesheet leg open |
 | **Created** | 2026-09-04 |
-| **Branch** | Not yet dispatched |
+| **Branch** | `worktrees/054-linked-views` |
 | **Parent Spec** | ../spec.md |
 | **Phase** | 46 of 46 |
 | **Predecessor** | 045-board-card-properties |

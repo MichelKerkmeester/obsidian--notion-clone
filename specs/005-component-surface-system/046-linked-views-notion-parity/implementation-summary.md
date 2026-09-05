@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Linked Views Notion Parity"
-description: "Nothing is built yet. This records the opening state — the three mechanisms that produce the reported shape, and the two questions that must be answered before any of them is touched."
+description: "What landed: an embed that writes to its source database, moves between pages and is created from a picker — and the stylesheet leg that did not, which is why the card border is still there."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -10,12 +10,13 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Recorded the opening state; no code has changed"
-    next_safe_action: "Answer the host-layout question (tasks.md T002)"
+    last_updated_at: "2026-09-05T04:20:00Z"
+    last_updated_by: "implementation-verifier"
+    recent_action: "Verified the implementation pass in-runtime, fixed what it got wrong, and landed it"
+    next_safe_action: "Answer the host-layout question (tasks.md T002), then take the styles.css lane for T015"
     blockers:
-      - "Nothing implemented; this document is the pre-work baseline"
+      - "The card border and the embed padding are styles.css rules; no stylesheet edit was made"
+      - "T002 is unanswered, so nothing has measured the released width against a real reading view"
     key_files:
       - "src/views/embedded-database-renderer.ts"
       - "src/main.ts"
@@ -24,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-046-summary"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 60
     open_questions: []
     answered_questions: []
 ---
@@ -42,7 +43,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 046-linked-views-notion-parity |
-| **Completed** | Not complete — opened 2026-09-04 |
+| **Completed** | Partial — behaviour landed 2026-09-05 (`c2e0cb5`); the stylesheet leg is open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -51,34 +52,75 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** This records the state the packet opened against, read from the tree at `c6b5f11`.
+An embedded linked view now behaves like the database it points at, and can be placed and moved
+without the clipboard. What it still looks like is a card, because the border is a stylesheet rule
+and no stylesheet was edited.
 
-### Opening measurements
+### Capability: one seam instead of four gates
 
-- `src/main.ts:387` and `:401` register two code-block processors, `note-database` and
-  `database-view`, both constructing `EmbeddedDatabaseRenderer` with `persistMode: "codeblock"`.
-- `src/views/embedded-database-renderer.ts:153` — the renderer is a `MarkdownRenderChild`, 4,173
-  lines, and it is the same renderer stack the standalone view uses.
-- `:600-611` `markEmbedCodeBlockHost` walks up to eight ancestors adding
-  `note-database-embed-codeblock-host` until it hits `markdown-rendered` or
-  `markdown-preview-view`. That chain is the width and border mechanism.
-- `:1409` `renderToolbar` builds the real toolbar with real view tabs — which is why the operator's
-  capture shows "All" and "2026" tabs inside the block. The gap is chrome and capability, not a
-  second renderer.
-- `:1724-1745` `renderHeaderChromeToggle` adds a `db-embed-header-toggle` chevron whose only job is
-  to hide the `db-header` the toolbar built, persisted as `hideHeader: true` in the fence.
-- Read-only is decided in four places on one string: `createEntry` no-ops when `isCodeBlock`
-  (`:421`, `:433`, `:463`), `isReadOnly` (`:1592`), `showChartOptions` (`:1593`),
-  `syncComputedFields` (`:1575`). None carries a recorded intent.
-- `:3555` `serializeCodeBlockReference` and `src/views/database-view.ts:3912` `copyCurrentViewCode`
-  both write the same fence — `dbId` or `dbPath`, optional `viewId`, optional `hideHeader` — to the
-  clipboard. That is the only path to placing a linked view today.
+ADR-001 was decided first — an embed writes to its source database — and then all four gates moved
+together. `createEntry`, `isReadOnly`, `showChartOptions` and `syncComputedFields` now resolve
+through `isViewReadOnly()`, which is true only when the source database cannot be resolved. Cell
+edits, new rows, board column moves, row deletion and view-config edits all persist to the source
+and record the same `undo.*` labels the standalone view records, plus `undo.moveLinkedView` for a
+move. The global undo command routes to the embed the caret is inside, and only that one.
+
+The producer count AC-003 asks for: `rg -c 'persistMode === "codeblock"' src/views/embedded-database-renderer.ts`
+returned **10** before and returns **3** after. All three survivors are presentation — the
+linked-embed class, `hideDatabaseTitle`, and whether the move action exists. `isViewReadOnly()` is
+read from 24 sites.
+
+### Chrome: the DOM half
+
+The duplicate database title and the collapse chevron both hung off the toolbar's title row, so the
+embed now asks for `hideDatabaseTitle` and the row is not built. The chevron builder is deleted
+outright rather than left as a no-op, and the open-full-view button the title row used to carry
+moves into the utilities menu for that surface only, so no other surface gains a second copy of a
+button it already draws.
+
+### Width: the ancestor walk is gone
+
+`markEmbedCodeBlockHost`'s eight-ancestor class walk is replaced by `releaseEmbedWidthToHost`, which
+walks up to the reading-view sizer clearing `max-width` and `overflow-x` in percentages — never a
+measured pixel — and restores every element it touched on unload. Whether that reaches the content
+width in a real preview is unmeasured; T002 is still open.
+
+### Move and create
+
+`applyLinkedViewMove` writes the destination before removing the source, so an interruption between
+the two leaves a duplicate rather than a loss — asserted, not just intended. The move is reachable
+by dragging the embed's header on desktop and by a **Move to page…** row in its menu, and it is
+undoable. The create flow picks a source database, a view type and a name, then inserts the fence at
+the cursor, appending to the active file when no editor holds the caret. Its view-type picker is the
+same list Add view uses rather than a second copy of it.
+
+The block format did not change, which is what keeps this small: the create and move flows write the
+fence `copyCurrentViewCode` already wrote.
+
+### What did not land
+
+The card border, the corner radius and the 12px horizontal padding are `styles.css:15652` on
+`.note-database-embed`, and this packet never took the serialized lane. `note-database-embed-linked`
+is on the container waiting for that rule. Three stylesheet blocks now match nothing —
+`.note-database-embed-codeblock-host` (`:15857`) and the two header-toggle blocks (`:15879`,
+`:15908`) — along with the `toggleHeaderChrome` action and `renderHeaderChromeButton` that no longer
+have a reachable caller. Retiring them together is T015, and it waits on T002 rather than being done
+blind.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| (none) | — | No source file has changed. The documents in this folder are the only artifacts so far. |
+| `src/views/embedded-database-renderer.ts` | Modify | The capability seam, the chrome withdrawal, the width release, the move, and the embed's own undo history |
+| `src/views/modals/linked-view-block.ts` | Create | Fence parse/serialise, the two-file move and its undo, the width release, and the vault adapter |
+| `src/views/modals/create-linked-view-modal.ts` | Create | Source database, view type and name, then insert |
+| `src/views/toolbar-renderer.ts` | Modify | `hideDatabaseTitle`, the move and create rows, and one shared view-type option list |
+| `src/views/database-view.ts` | Modify | The create action from the standalone toolbar |
+| `src/main.ts` | Modify | The create command, and undo routing to a focused embed |
+| `src/i18n.ts` | Modify | Labels and notices in three locales |
+| `src/views/embedded-database-renderer.test.ts` | Modify | Chrome, width, capability, move, create and round-trip coverage |
+| `src/views/add-view-popover-layout.test.ts` | Modify | Follows the view-type list to module scope |
+| `styles.css` | **Unchanged** | The stylesheet leg is T015 |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -86,14 +128,28 @@ _memory:
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Two questions come first and neither is a coding question: whether a full-bleed embed
-survives Obsidian's reading-view layout (T002), and whether an embed may write to the vault
-(ADR-001). The chrome and width legs proceed on the first; the capability leg does not start until
-the second has a status. After that the three legs — chrome, move, create — barely touch, because
-the block format does not change.
+An external implementation pass built it after the operator's ADR-001 ruling; this session verified
+that pass in-runtime rather than trusting it, and the difference is most of what this document
+records. Two of its task ticks were false — T004 and T005 claimed the card border removed and the
+width fixed, when the stylesheet was never opened — and both are back to unticked with the exact
+rule that still draws the border.
 
-ADR-001 was decided 2026-09-05 — Accepted, full parity — and the capability leg (T006) is now
-running on `worktrees/054-linked-views` (external lane: devin first, Grok fallback).
+Five defects were found by reading the diff against the requirements rather than by a failing check.
+The global undo command would have been answered by any embed on screen, not the focused one, so a
+file view could silently lose its own undo. The view-type option list was copied rather than shared,
+leaving two lists that must agree. An open-full-view row was added to every surface with that action
+rather than the one that lost the button. The create command carried both an `editorCallback` and a
+`callback`, one of which can never run. And the picker announced "Open a note to insert the linked
+view" when the real problem was that the vault has no database to link.
+
+Two pieces of code existed only to be tested: a no-op method that removed an element nothing creates
+any more, and a copy of the old ancestor walk kept so a tripwire could assert on it. Both are gone,
+and the tests that pointed at them now drive the real render path instead — the chrome test captures
+the actions bag the embed hands the toolbar. Two tests were added for things the packet asked for and
+the pass had not proven: an interrupted move, and the create flow's fence read back by
+`parseEmbeddedReference`, the parser the rendering path actually uses. The round trip on its own only
+proved the new writer agrees with itself.
+
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -117,11 +173,18 @@ running on `worktrees/054-linked-views` (external lane: devin first, Grok fallba
 
 | Check | Result |
 |-------|--------|
-| `validate.sh 046-linked-views-notion-parity --strict` | Run at authoring time; see the packet commit |
-| `npm run gate` | Not run — no source change to gate |
-| 16-row block round trip | Does not exist yet (tasks.md T010) |
-| Constructed embed scenario | Does not exist yet (tasks.md T011) |
-| Operator device confirmation | Not sought; nothing is built |
+| `npm run gate` | **PASS — 25 green, 0 red.** One lane (`screenshots-fresh`) went red on the first run because the changed sources aged 56 captures; recaptured, and the 23 PNGs git reported were all pixel- and layout-hash identical to HEAD, so they were restored to HEAD bytes and only the manifest's source hashes carried forward |
+| `npm test` | 1142 passed, 108 files |
+| `npx tsc --noEmit` | exit 0 |
+| `validate.sh 046-linked-views-notion-parity --strict` | `RESULT: PASSED` |
+| 16-row block round trip + 3 adversarial | Green (`embedded-database-renderer.test.ts:653`) |
+| Create flow's fence read by the rendering path's parser | Green (`:630`) |
+| Interrupted move leaves a duplicate, never a loss | Green (`:592`) |
+| Capability gate count | `persistMode === "codeblock"` 10 → 3, all presentation |
+| Constructed embed scenario | Still absent (T011) — nothing in the capture set can show this change |
+| Host-layout measurement against real Obsidian | Not taken (T002) |
+| Operator device confirmation | Not sought |
+
 <!-- /ANCHOR:verification -->
 
 ---
@@ -129,18 +192,33 @@ running on `worktrees/054-linked-views` (external lane: devin first, Grok fallba
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **The chrome census is a read of a screenshot, not a measurement.** Three block-furniture
-   elements were counted from the operator's PNG. T001 writes the census; until then the number is
-   an observation, and `checklist.md` says so rather than dressing it up.
-2. **ADR-001 is resolved.** The operator ruled 2026-09-05 ~05:30 CEST, verbatim: "Allow db writing
-   from linked views" — Accepted, full parity, the capability leg now running on
-   `worktrees/054-linked-views` (external lane: devin first, Grok fallback).
-3. **The phone flows wait on `044`.** The move action and the create flow are sheets, and inventing
-   a third sheet language while `044` is defining the first would be the exact mistake `044` exists
-   to stop.
-4. **`hideHeader` probably becomes vacuous.** Once the default header is gone, the option has little
-   left to do. A no-op option left in a format is a trap for the next reader, and its fate is
-   recorded as an open question rather than settled by omission.
+1. **The embed is still a card.** The border, the radius and the horizontal padding are stylesheet
+   rules this packet did not touch, so the operator's first complaint is two thirds addressed. The
+   fix is three declarations; what it needs is T002's measurement and a free lane, and writing it
+   blind is the mistake the plan opened by naming.
+
+2. **Nothing here has been seen.** No capture in this repository renders an embed, so the chrome
+   change moved zero pixels in the capture set, and every visual claim rests on reading code.
+
+3. **The drag handle is the whole header.** Dragging a linked view starts anywhere on its header,
+   including over toolbar controls. That reads as a plausible affordance and may read as a trap;
+   only a device answers it.
+
+4. **Writes shipped without a flag.** `checklist.md` CHK-121 asks for one and ADR-001's rollback
+   assumes it. A plugin ships as one bundle with no in-flight server edits, so reverting the release
+   may be the whole rollback — but that is a call, not an oversight to leave unstated (T016).
+
+5. **`npm run lint` does not pass, and did not before.** 175 errors repository-wide, none of them a
+   gate lane. Six of them are new: the inline width release assigns styles directly, which the
+   stylesheet leg would remove.
+
+6. **The phone flows were not measured against `044`.** The create sheet reuses that packet's header
+   and dropdown rows in code; nobody has seen the result on a phone.
+
+7. **`hideHeader` is now nearly vacuous.** It still hides the whole header chrome, which also
+   removes the move affordance and the full-view row with it. Its fate stays an open question rather
+   than being settled by omission.
+
 <!-- /ANCHOR:limitations -->
 
 ---

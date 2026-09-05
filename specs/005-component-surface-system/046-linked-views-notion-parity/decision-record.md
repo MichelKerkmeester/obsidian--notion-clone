@@ -11,18 +11,19 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-05T03:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Accepted ADR-001: linked views write to source db like standalone views"
-    next_safe_action: "Track the external T006 pass on worktrees/054-linked-views"
-    blockers: []
+    last_updated_at: "2026-09-05T04:20:00Z"
+    last_updated_by: "implementation-verifier"
+    recent_action: "Accepted ADR-002 after the capability seam landed; ADR-001 was accepted before the gates moved"
+    next_safe_action: "Decide whether the write capability ships behind a settings flag (tasks.md T016)"
+    blockers:
+      - "ADR-001's rollback assumes a feature flag that was not built; T016 asks whether one is needed"
     key_files:
       - "src/views/embedded-database-renderer.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-046-adr"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -94,6 +95,12 @@ Operator, verbatim, 2026-09-05 ~05:30 CEST: *"Allow db writing from linked views
 because it changes presentation only. The capability leg (T006) is now unblocked: the four
 read-only gates come out together, in one commit, keyed on whether the source resolves rather than
 on `persistMode === "codeblock"`.
+
+**What landed**: one `isViewReadOnly()` seam, read from 24 sites, standing where `createEntry`,
+`isReadOnly`, `showChartOptions` and `syncComputedFields` each had their own string comparison. It
+is true only when the source database is missing or its path does not resolve to a file. Cell edits,
+new rows, deletions, board column moves and view-config edits persist to the source and record the
+same `undo.*` labels the standalone view records, plus `undo.moveLinkedView`.
 <!-- /ANCHOR:adr-001-decision -->
 
 ---
@@ -110,7 +117,8 @@ on `persistMode === "codeblock"`.
 
 **Why this one**: the operator chose Option A directly — *"Allow db writing from linked views"* —
 over the per-block opt-in of C. The ruling is unconditional: every existing embed gets the same
-capability the standalone view has, not a fence flag an author must opt into.
+capability the standalone view has, not a fence flag an author must opt into. The fence format is
+therefore unchanged: `{dbId|dbPath, viewId, hideHeader}`.
 <!-- /ANCHOR:adr-001-alternatives -->
 
 ---
@@ -177,8 +185,8 @@ implying the revert undoes them.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-04 |
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
 | **Deciders** | Phase author |
 
 ---
@@ -209,6 +217,14 @@ capability question ("what may it do?"), so ADR-001 has somewhere to land.
 **How it works**: presentation stops being inferred from `persistMode` and becomes explicit;
 capability becomes one resolved value rather than four conditionals. `persistMode` keeps its
 original meaning — where writes go — and stops standing in for the other two.
+
+**What landed**: capability is `isViewReadOnly()`, read from 24 sites. Presentation is three
+explicit statements the embed makes to the toolbar and the container — `hideDatabaseTitle`,
+`moveLinkedView` and the linked-embed class — and they are the only `persistMode === "codeblock"`
+reads left in the file, down from ten. What the ADR asked for and did not get is the separate
+commit: the split shipped inside the capability change, so its no-behaviour-change half was never
+independently provable. That is recorded as a missed control in `checklist.md` CHK-013 rather than
+waved through.
 <!-- /ANCHOR:adr-002-decision -->
 
 ---

@@ -39,7 +39,7 @@
       "embed"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -51,11 +51,14 @@
       "src/views/embedded-database-renderer.ts",
       "src/main.ts",
       "styles.css",
+      "src/views/modals/linked-view-block.ts",
+      "src/views/modals/create-linked-view-modal.ts",
       "src/views/toolbar-renderer.ts",
       "src/views/database-view.ts",
       "src/i18n.ts",
-      "tools/screenshots/constructed-scenarios.mjs",
-      "src/views/embedded-database-renderer.test.ts"
+      "src/views/embedded-database-renderer.test.ts",
+      "src/views/add-view-popover-layout.test.ts",
+      "tools/screenshots/constructed-scenarios.mjs"
     ],
     "entities": [
       {
@@ -119,6 +122,18 @@
         "source": "derived"
       },
       {
+        "name": "linked-view-block.ts",
+        "kind": "code",
+        "path": "src/views/modals/linked-view-block.ts",
+        "source": "derived"
+      },
+      {
+        "name": "create-linked-view-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/create-linked-view-modal.ts",
+        "source": "derived"
+      },
+      {
         "name": "toolbar-renderer.ts",
         "kind": "code",
         "path": "src/views/toolbar-renderer.ts",
@@ -137,15 +152,21 @@
         "source": "derived"
       },
       {
-        "name": "constructed-scenarios.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/constructed-scenarios.mjs",
-        "source": "derived"
-      },
-      {
         "name": "embedded-database-renderer.test.ts",
         "kind": "test",
         "path": "src/views/embedded-database-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "add-view-popover-layout.test.ts",
+        "kind": "test",
+        "path": "src/views/add-view-popover-layout.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
         "source": "derived"
       },
       {
@@ -183,29 +204,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Overview Two",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator, verbatim, 2026-09-04 ~20:41 CEST: \"on overview the nested views shouldn't be clipped",
     "created_at": "2026-09-04T19:14:35Z",
-    "last_save_at": "2026-09-05T03:10:13.218Z",
+    "last_save_at": "2026-09-05T04:14:14.177Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,14 +220,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e176e9a39fda01ea3852eef33c6728d6155177e927d97b4316ee5c2e2194b4b4",
+    "source_fingerprint": "sha256:732a10407b58446e79254f7b8cf41cc13ec4f53ec2853f2953f3facece4e94c0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9d2da798d3ce20885e6a5c3ac455b88da41273849117535db2dcf8e836bb0233",
+      "spec.md": "7c21e61f53d5db26a6a1eca3973738a58964ccbd3d79d8fbae254470d156c728",
       "plan.md": "9b543f43af633623a5c5c1497530b2b5aade7b2fc136236f4b0d560e7278cad5",
-      "tasks.md": "ecaed037d51ab1dcb92388eb8d93b7fa1b26e48e30440eec9036c12da2dc6a21",
-      "decision-record.md": "f3f37961e04c5f7b29108b3caa4c8ef1e98856cb9ffdb65794b477181726c2e2",
-      "implementation-summary.md": "f0a943efbed05dc7046e020d9205f6809d4bd24083abe8a59f21d8c34803d47b"
+      "tasks.md": "d6527e9e8764a62f35244e8bdaf5ab9e03938ee0f0a7838e37a313aef98cc740",
+      "decision-record.md": "1e80b73fab3e076cd6cea58dbfe23bd36310c4b662513c488b2ff98d1e0f05bd",
+      "implementation-summary.md": "20e12724dea64957324796420e3a7d15b51261f8f89c67e5b0257751a65915c4"
     },
     "last_active_child_id": null,
     "last_active_at": null
