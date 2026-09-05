@@ -58,6 +58,10 @@ const PRE_FIX_FAILURES = new Map([
   ["Chrome: a tap inside the filter sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
   ["WebKit: a tap inside the sort sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
   ["WebKit: a tap inside the filter sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
+  ["Chrome: a press inside the sort sheet keeps the cell selection", "the shipped shape still drops it — a phone user loses a selection desktop keeps"],
+  ["Chrome: a press inside the filter sheet keeps the cell selection", "the shipped shape still drops it — a phone user loses a selection desktop keeps"],
+  ["WebKit: a press inside the sort sheet keeps the cell selection", "the shipped shape still drops it — a phone user loses a selection desktop keeps"],
+  ["WebKit: a press inside the filter sheet keeps the cell selection", "the shipped shape still drops it — a phone user loses a selection desktop keeps"],
 ]);
 
 // ───────────────────────────────────────────────────────────────────
@@ -78,7 +82,7 @@ const entry = join(work, "entry.ts");
 
 writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack, openSettingsSheetForReach, measureSettingsSheetReach, installViewOutsideDismissal, removeViewOutsideDismissal, hitTestAt } from "${resolve(HERE, "sheet-rebuild-harness")}";
+import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack, openSettingsSheetForReach, measureSettingsSheetReach, installViewOutsideDismissal, removeViewOutsideDismissal, hitTestAt, armSelectionPressProbe, readSelectionPressProbe, measureWheelReachFromSheet } from "${resolve(HERE, "sheet-rebuild-harness")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
@@ -95,6 +99,9 @@ window.__measureSettingsSheetReach = () => measureSettingsSheetReach(document);
 window.__installViewOutsideDismissal = (containerOnly) => installViewOutsideDismissal(document, containerOnly);
 window.__removeViewOutsideDismissal = () => removeViewOutsideDismissal();
 window.__hitTestAt = (x, y) => hitTestAt(document, x, y);
+window.__armSelectionPressProbe = () => armSelectionPressProbe(document);
+window.__readSelectionPressProbe = () => readSelectionPressProbe();
+window.__measureWheelReachFromSheet = () => measureWheelReachFromSheet(document);
 // The speed rule, exported so this lane can ask it rather than race to produce it.
 window.__sheet = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 `);
@@ -136,6 +143,8 @@ if (missing.length > 0) {
 const OUTSIDE_PRESS_CALL_SITES = [
   ["src/views/database-view.ts", "this.containerEl_?.contains(target) || isInsideOpenSheet(target)"],
   ["src/views/embedded-database-renderer.ts", "!this.containerEl.contains(target) && !isInsideOpenSheet(target)"],
+  ["src/views/database-view.ts", "if (!this.containerEl_?.contains(target) && !isInsideOpenSheet(target)) return !target.closest(\".modal, .menu\");"],
+  ["src/views/embedded-database-renderer.ts", "if (!this.containerEl.contains(target) && !isInsideOpenSheet(target)) return !target.closest(\".modal\");"],
 ];
 const unguarded = OUTSIDE_PRESS_CALL_SITES.filter(
   ([file, expected]) => !readFileSync(join(REPO, file), "utf8").includes(expected),
@@ -365,6 +374,48 @@ async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName)
             : `the point resolves to ${fixed.hit} — something is stacked over the control`,
       });
     }
+
+    // --- the two sibling call sites that fork on the same containment test ---
+    for (const kind of ["sort", "filter"]) {
+      const setup = await phonePage.evaluate((k) => window.__openAddRowSheet(k), kind);
+      if (!setup.ready) {
+        checks.push({ name: `${engineName}: a press inside the ${kind} sheet keeps the cell selection`, pass: false, detail: `could not stage: ${setup.detail}` });
+        continue;
+      }
+      const armed = await phonePage.evaluate(() => window.__armSelectionPressProbe());
+      const opened = await settledAddButton(phonePage);
+      if (!armed || !opened.addButton || !opened.onBody) {
+        checks.push({ name: `${engineName}: a press inside the ${kind} sheet keeps the cell selection`, pass: false, detail: "could not stage: no portalled sheet with an add control on screen" });
+        continue;
+      }
+      await phonePage.touchscreen.tap(opened.addButton.x, opened.addButton.y);
+      await phonePage.waitForTimeout(200);
+      const press = await phonePage.evaluate(() => window.__readSelectionPressProbe());
+      const measured = press.pressed !== null;
+      checks.push({
+        name: `${engineName}: a press inside the ${kind} sheet keeps the cell selection`,
+        pass: measured && press.containerOnly === true && press.sheetAware === false,
+        detail: !measured ? "the press was never seen, so this run proves nothing"
+          : press.containerOnly !== true
+            ? `containment alone already keeps it (${press.pressed}) — the control is dead and the row below proves nothing`
+            : press.sheetAware === false
+              ? `containment alone drops it and the shipped shape keeps it, on the same press (${press.pressed})`
+              : `the shipped shape still drops it (${press.pressed}) — a phone user loses a selection desktop keeps`,
+      });
+    }
+
+    // The third site that reads the same way and is NOT reachable, pinned as a binding invariant.
+    const wheel = await phonePage.evaluate(() => window.__measureWheelReachFromSheet());
+    checks.push({
+      name: `${engineName}: a wheel inside a sheet cannot reach the container's wheel handler`,
+      pass: wheel.nested && !wheel.reached,
+      detail: !wheel.nested ? "could not stage: the container was never nested the way the view nests it"
+        : wheel.reached
+          ? "it reached — the wheel listener now sees sheet events, so its bare containment test has"
+            + " become wrong the same way the dismissal and selection tests were"
+          : "it does not propagate, so the bare containment test there is answering only about nodes"
+            + " it can actually see",
+    });
 
     await phonePage.close();
     for (const error of engineErrors) {

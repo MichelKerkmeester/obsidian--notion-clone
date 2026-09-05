@@ -982,6 +982,110 @@ export function hitTestAt(doc: Document, x: number, y: number): string {
   return el.classList.contains("db-panel-button") ? "add-control" : `in-sheet:${el.tagName.toLowerCase()}`;
 }
 
+/**
+ * What a press on the sheet's own control answers for the cell-selection question, in both shapes.
+ *
+ * `shouldClearCellSelectionFromPointer` in both views forks on the same containment test the
+ * dismissal above did, and it fails the same way: a sheet is portalled off the container, so a
+ * press on its own control takes the OUTSIDE branch — which clears the selection unless the target
+ * is a modal or a menu, and a sheet is neither. Desktop keeps the selection, because its panel
+ * never moves and the inside branch names every control that must not clear it. So the phone
+ * silently drops a selection the user never left.
+ *
+ * Both shapes are evaluated from ONE press rather than from two runs. The control cannot drift
+ * from the case it is controlling for when they are answering about the same node.
+ */
+export interface SelectionPressResult {
+  pressed: string | null;
+  /** What the shape without the predicate answers: true means the selection is cleared. */
+  containerOnly: boolean | null;
+  /** What the shipped shape answers. */
+  sheetAware: boolean | null;
+}
+
+const INSIDE_CONTAINER_KEEPS = "td[data-note-database-row-path][data-note-database-column-key],"
+  + " .db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a,"
+  + " .db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel,"
+  + " .db-dropdown-popover, .db-date-value-popover, .db-group-order-popover, .menu";
+
+let selectionPress: SelectionPressResult = { pressed: null, containerOnly: null, sheetAware: null };
+let removeSelectionProbe: (() => void) | null = null;
+
+export function armSelectionPressProbe(doc: Document): boolean {
+  removeSelectionProbe?.();
+  removeSelectionProbe = null;
+  const scenario = activeAddRow;
+  if (!scenario) return false;
+  selectionPress = { pressed: null, containerOnly: null, sheetAware: null };
+  const decide = (target: HTMLElement, sheetAware: boolean): boolean => {
+    if (!scenario.root.contains(target) && !(sheetAware && isInsideOpenSheet(target))) {
+      return !target.closest(".modal, .menu");
+    }
+    return !target.closest(INSIDE_CONTAINER_KEEPS);
+  };
+  const handler = (event: Event): void => {
+    const target = event.target;
+    if (!isHTMLElement(target)) return;
+    selectionPress = {
+      pressed: `${target.tagName.toLowerCase()}.${target.className}`,
+      containerOnly: decide(target, false),
+      sheetAware: decide(target, true),
+    };
+  };
+  doc.addEventListener("mousedown", handler, true);
+  removeSelectionProbe = () => doc.removeEventListener("mousedown", handler, true);
+  return true;
+}
+
+export function readSelectionPressProbe(): SelectionPressResult {
+  removeSelectionProbe?.();
+  removeSelectionProbe = null;
+  return selectionPress;
+}
+
+/**
+ * Can a wheel raised inside a sheet reach the handler the view binds to its container's PARENT?
+ *
+ * It cannot, and pinning that is worth more than a guard would be. `forwardOuterWheelScroll` uses
+ * the same bare containment test as the two call sites above, which reads like the same defect —
+ * but the listener is bound to `containerEl_.parentElement`, and a sheet portalled onto the body is
+ * not a descendant of it, so no event from a sheet ever propagates through. Routing it through the
+ * predicate would be a guard on an impossible path, and the row proving that would never be able to
+ * go red.
+ *
+ * This measures the binding instead. If anyone ever moves that listener to the document — where the
+ * dismissal listeners already are — the sheet becomes reachable, the test becomes wrong the way the
+ * others were, and this goes red and says so. That is the guard, and it costs no shipped code.
+ *
+ * The nesting is the whole measurement. The harness mounts its root directly on the body, where a
+ * sheet IS a descendant of the root's parent and a wheel does reach; the view mounts its content
+ * inside the workspace leaf. Measuring the harness's own ancestry rather than the view's would
+ * report the opposite answer with equal confidence.
+ */
+export function measureWheelReachFromSheet(doc: Document): { nested: boolean; reached: boolean } {
+  const scenario = activeAddRow;
+  const sheet = doc.body.querySelector<HTMLElement>(".db-mobile-bottom-sheet");
+  const button = sheet?.querySelector<HTMLElement>(".db-panel-button");
+  if (!scenario || !sheet || !button) return { nested: false, reached: false };
+
+  const leaf = doc.createElement("div");
+  leaf.className = "workspace-leaf";
+  doc.body.appendChild(leaf);
+  leaf.appendChild(scenario.root);
+
+  const parent = scenario.root.parentElement;
+  const nested = parent === leaf && !leaf.contains(sheet);
+  let reached = false;
+  const onWheel = (): void => { reached = true; };
+  parent?.addEventListener("wheel", onWheel);
+  button.dispatchEvent(new WheelEvent("wheel", { bubbles: true, deltaY: 40 }));
+  parent?.removeEventListener("wheel", onWheel);
+
+  doc.body.appendChild(scenario.root);
+  leaf.remove();
+  return { nested, reached };
+}
+
 export interface AddRowProbe {
   /** Centre of the "+ Add" control, in viewport coordinates. */
   addButton: { x: number; y: number } | null;

@@ -3033,7 +3033,11 @@ export class DatabaseView extends FileView {
     // 重建 DOM，焦点恢复由菜单 onHide → restoreCellFocusAfterKeyboardMenu 负责。
     // 若此处清选区，菜单关闭后 restoreCellFocusAfterKeyboardMenu 因 cellSelection 已
     // 清空而直接 return，导致排序后方向键导航失效。
-    if (!this.containerEl_?.contains(target)) return !target.closest(".modal, .menu");
+    // Inside an open sheet is inside this view. The sheet is portalled off the container, so
+    // containment alone sends a press on the sheet's own control down the outside branch and
+    // silently drops a cell selection the phone user never left — where desktop, whose panel never
+    // moves, keeps it. The branch below already names every control that must not clear it.
+    if (!this.containerEl_?.contains(target) && !isInsideOpenSheet(target)) return !target.closest(".modal, .menu");
     return !target.closest(
       "td[data-note-database-row-path][data-note-database-column-key], " +
       ".db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a, " +

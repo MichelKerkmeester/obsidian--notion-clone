@@ -1073,7 +1073,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private shouldClearCellSelectionFromPointer(target: HTMLElement): boolean {
-    if (!this.containerEl.contains(target)) return !target.closest(".modal");
+    // Inside an open sheet is inside this surface. The sheet is portalled off the container, so
+    // containment alone sends a press on the sheet's own control down the outside branch and
+    // silently drops a cell selection the phone user never left — where desktop, whose panel never
+    // moves, keeps it. The branch below already names every control that must not clear it.
+    if (!this.containerEl.contains(target) && !isInsideOpenSheet(target)) return !target.closest(".modal");
     return !target.closest(
       "td[data-note-database-row-path][data-note-database-column-key], " +
       ".db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a, " +
