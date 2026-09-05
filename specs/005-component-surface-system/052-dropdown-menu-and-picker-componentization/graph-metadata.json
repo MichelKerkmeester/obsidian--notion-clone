@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/052-dropdown-menu-and-picker-componentization",
+  "spec_folder": "005-component-surface-system/052-dropdown-menu-and-picker-componentization",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "052 spec",
+      "menu primitive spec",
+      "picker primitive family",
+      "dropdown componentization",
+      "menu migration table",
+      "052 plan",
+      "menu componentization plan",
+      "picker host plan",
+      "migration legs",
+      "052 tasks",
+      "menu componentization tasks",
+      "picker host tasks"
+    ],
+    "key_topics": [
+      "spec",
+      "menu",
+      "primitive",
+      "picker",
+      "family",
+      "dropdown",
+      "componentization",
+      "migration",
+      "table",
+      "plan",
+      "host",
+      "legs"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "src/views/owned-menu.ts",
+      "src/views/menu-row.ts",
+      "src/views/dropdown-field.ts",
+      "src/views/date-value-picker.ts",
+      "src/views/icon-picker-popover.ts",
+      "src/views/option-color-picker.ts",
+      "src/views/cell-renderer.ts",
+      "src/views/column-menu.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/bulk-edit-field-menu.ts",
+      "src/views/row-menu.ts",
+      "tools/live/sheet-grammar.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "menu-row.ts",
+        "kind": "code",
+        "path": "src/views/menu-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "dropdown-field.ts",
+        "kind": "code",
+        "path": "src/views/dropdown-field.ts",
+        "source": "derived"
+      },
+      {
+        "name": "date-value-picker.ts",
+        "kind": "code",
+        "path": "src/views/date-value-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "icon-picker-popover.ts",
+        "kind": "code",
+        "path": "src/views/icon-picker-popover.ts",
+        "source": "derived"
+      },
+      {
+        "name": "option-color-picker.ts",
+        "kind": "code",
+        "path": "src/views/option-color-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-renderer.ts",
+        "kind": "code",
+        "path": "src/views/cell-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-menu.ts",
+        "kind": "code",
+        "path": "src/views/column-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "bulk-edit-field-menu.ts",
+        "kind": "code",
+        "path": "src/views/bulk-edit-field-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "row-menu.ts",
+        "kind": "code",
+        "path": "src/views/row-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Picker Componentization",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Project Manager",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The family works surface by surface and drifts as a family",
+    "created_at": "2026-09-05T11:32:58.144Z",
+    "last_save_at": "2026-09-05T12:10:19.200Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:cd27bcb7e4d4afc910701b8e88c72b4ed7867e7964563656ab0ac142ee03cc27",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "bcc43113caf7205ca9492a9744614b981eba5c52fb499fc8e183cb889270b56c",
+      "plan.md": "422b358934205a24c8d3632043ff1c6ff3996c363b5b7ca9924314a4cab075fa",
+      "tasks.md": "929c3fd256c63a51125bc4f558e85d666cd5abb6ec5178f69c1d618098a6a3be",
+      "decision-record.md": "ab767223fdaf7af0960d9d6ed7a967732aee6931e1526e9283691f5d7752dee1"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

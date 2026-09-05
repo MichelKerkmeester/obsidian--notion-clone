@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/052-dropdown-menu-and-picker-componentization",
+  "description": "One menu primitive (owned-menu + menu-row with real submenus, sections, checkmarks, destructive tone, keyboard nav, desktop popover to phone sheet from one definition) and one picker primitive family (select/multi-select with search and create, date with time and presets, relation, colour, icon) for every dropdown, menu, popover and picker in src/views, with a per-surface migration table and the Anytype menu grammar each migration takes or declines",
+  "keywords": [
+    "phase",
+    "menu-componentization",
+    "menu-primitive",
+    "picker-family",
+    "dropdown",
+    "submenu",
+    "anytype-menu-grammar",
+    "migration-table",
+    "popover-host"
+  ],
+  "lastUpdated": "2026-09-05T12:00:00.000Z",
+  "specId": "052",
+  "folderSlug": "dropdown-menu-and-picker-componentization",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
