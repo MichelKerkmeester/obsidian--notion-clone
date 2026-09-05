@@ -60,7 +60,7 @@
       "src/views/board-card-fields.test.ts",
       "src/views/board-card-properties-panel.stories.ts",
       "tools/lane/css-lane.json",
-      "tools/screenshots/constructed-capture.test.mjs"
+      "screenshots/manifest.json"
     ],
     "entities": [
       {
@@ -172,9 +172,9 @@
         "source": "derived"
       },
       {
-        "name": "constructed-capture.test.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/constructed-capture.test.mjs",
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The operator asked, verbatim: \"Also make it possible to adjust visible properties in board card",
     "created_at": "2026-09-04T19:01:24Z",
-    "last_save_at": "2026-09-05T01:45:20.943Z",
+    "last_save_at": "2026-09-05T02:37:33.060Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f4b89960310e445a13fc0a5e30cd2c5d62f57ca851ccd308b0fefb5e3c5e62f5",
+    "source_fingerprint": "sha256:6879fd4e981dab22e4bddcca73378a0e93f66a36c98899f6014a26c7aecc088f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "7218f27f59835fd41295fffb2ff6afab25f8126fb0959e94aa08be3028df5479",
       "plan.md": "aaf4ae6fbf8a21541c940331be940256a0ed77330bac44ae78e276ad1bfda386",
       "tasks.md": "336d3ebe7509d7d405977b7021ec0476b959a67412f2ec1c3a90a2c9be84f965",
-      "implementation-summary.md": "8ee4bbc2a3f76a91e1381ce2929327fc563ebc3dee302721a984d2da046080cc"
+      "implementation-summary.md": "d8e7b6f1576dfde67f15dfb2f45ff8f53c616854ba0169b50424efab3decce0b"
     },
     "last_active_child_id": null,
     "last_active_at": null

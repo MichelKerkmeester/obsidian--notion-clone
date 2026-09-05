@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/044-phone-sheet-alignment"
-    last_updated_at: "2026-09-05T04:30:00Z"
+    last_updated_at: "2026-09-05T04:50:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Reconciled worktrees/050 onto main and re-verified the gate"
-    next_safe_action: "Seek the operator's device report for AC-006"
+    recent_action: "Fixed the constructed-record-peek assertion red, then landed 052's own reconciliation atop worktrees/050's"
+    next_safe_action: "Seek the operator's device report for AC-006; see Known Limitations #5 for a separate follow-up"
     blockers:
       - "AC-006 is operator-only; nothing in this repository can close it"
     key_files:
@@ -24,9 +24,11 @@ _memory:
       - "src/views/toolbar-renderer.ts"
       - "src/views/view-config-panel-renderer.ts"
       - "styles.css"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/live/constructed-state-assertions.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-044-summary"
+      session_id: "surface-system-052-record-peek-assertion-fix"
       parent_session_id: null
     completion_pct: 90
     open_questions: []
@@ -210,6 +212,9 @@ plus this phase's three `044-phone-sheet-alignment` entries, `baselineHash` reco
 this phase owns changed: the full recapture (534 entries) found nothing beyond byte-only re-encode
 noise outside this phase's own settings-sheet captures, confirmed by decoded-pixel hash and restored
 to committed bytes.
+
+| Constructed-record-peek assertion fix (052-card-properties-capture landing) | `tools/live/constructed-state-assertions.mjs`'s `constructed-record-peek` case went red the moment this phase wired `openTableRecordPeek`'s touch hand-off into `render-assertion-harness.ts`'s `record-peek` branch: the harness's own 1px positioning anchor makes `isTouchDevice` read every mount as touch regardless of the page's real viewport, so the case's old `recordPeekPanel`-true assertion could never pass again. Not caught at this phase's own landing because `constructed-state-assertions.mjs` is not a `npm run gate` lane. Fixed by adding a `recordPeekTouch?: boolean` scenario field (`render-assertion-harness.ts`): default (every existing caller, unchanged) keeps the hand-off; explicit `false` omits the `openRecordDetail` callback, exercising `openTableRecordPeek`'s own documented fallback for an absent callback (the docked rail). The case became a paired off/on scenario asserting the record sheet (`.db-record-detail-panel` + `.db-record-detail-header`) on the default side and the docked rail (`.db-record-peek-panel`) on the `recordPeekTouch: false` side. Proved red first, then green: `node tools/live/constructed-state-assertions.mjs` exit 0; `node tools/live/sheet-grammar.mjs` unaffected (its own `record-peek` row already mounts on a real phone viewport with `hasTouch: true`, so it never depended on the anchor's incidental width). Landed on top of `worktrees/050`'s own reconciliation above (052 rebased onto `07be64fe`, which already carries 050's landing); final numbers re-measured on that combined tree are recorded in the row below. |
+| 052-card-properties-capture landing (final numbers on the combined tree) | Rebased 045-board-card-properties's T013 capture work and this fix onto `origin/main` at `07be64fe` (050's settings-body landing on top of the list retirement and frozen clock). `npx tsc --noEmit` exit 0; `npx vitest run` — see the count below, re-run fresh on this tree; `npm run lint` — see the count below; `node tools/live/touch-targets.mjs` re-measured three consecutive runs on this tree; `npm run screenshots` full recapture; `npm run gate` — see the count below. Exact figures recorded in 045-board-card-properties's own implementation-summary.md landing row, which owns the capture content this reconciliation is about; this row exists so a reader of 044 is not left on 050's now-superseded numbers. |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -231,6 +236,18 @@ to committed bytes.
 4. **CHK-043 (README naming the grammar module) is open.** `src/views/README.md`/`CODE.md` name no
    individual file today; adding one entry for `sheet-grammar.ts` alone would invent a convention the
    folder doc doesn't otherwise use.
+5. **`tools/screenshots/constructed-scenarios.mjs`'s `record-peek` capture shows the wrong surface,
+   discovered while fixing the `constructed-state-assertions.mjs` red above, not fixed here (out of
+   that fix's dispatched scope).** Its own `note` field describes "`openTableRecordPeek`'s own entry
+   docked beside the real table it opens from" — the desktop rail — but the capture
+   (`screenshots/notion-clone/panels/constructed-record-peek-*.png`) is pixel-identical to
+   `constructed-record-detail-*.png`: read side by side, both show the same top-left `row-0` card
+   with the expand icon, not a docked rail. Same root cause as the assertion fix: the scenario's
+   harness branch always wires `openRecordDetail`, and the harness's 1px positioning anchor always
+   reads as touch, so the capture has shown the record-detail hand-off instead of the peek panel
+   since this phase landed. A follow-up giving that one capture scenario
+   `recordPeekTouch: false` (the same field this fix added) would restore the caption's truth
+   without touching any other capture.
 <!-- /ANCHOR:limitations -->
 
 ---
