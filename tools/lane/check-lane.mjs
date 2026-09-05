@@ -4,10 +4,12 @@
 //            and a lane release that leaves a changed capture unnamed
 // ───────────────────────────────────────────────────────────────────
 //
-// `styles.css` is nineteen thousand lines, deliberately never split, and every
-// screenshot in this repository fingerprints it. Two phases editing it at once
-// produce a stylesheet neither of them measured and a capture set matching
-// neither.
+// `styles.css` is nineteen thousand lines, deliberately never split, and every screenshot this
+// repository's own capture pipeline renders fingerprints it. Two phases editing it at once
+// produce a stylesheet neither of them measured and a capture set matching neither. Not every
+// PNG under `screenshots/` is one of those renders, though — a competitor's app photographed
+// through its own window cannot move because our stylesheet moved, so the lane's config names
+// the roots it actually governs and leaves anything else alone (see `inScopeCaptures`).
 //
 // The phase order permits exactly that. Two phases unblock on the same edge, so
 // nothing but convention keeps them apart — and the program these phases belong
@@ -161,6 +163,26 @@ export function contentChangedCaptures(porcelain, currentManifest, previousManif
     .sort();
 }
 
+/**
+ * Narrows a changed-capture set to the roots this lane actually governs.
+ *
+ * Not every PNG under `screenshots/` is a render of ours: a competitor's app photographed
+ * through its own window, or an official image pulled from its marketing site, cannot move
+ * because `styles.css` moved — nothing in this repository ever produces that picture. Folding
+ * those in with a stylesheet edit's own captures asks a release to "review" a file it has no
+ * way to have caused, which teaches reviewers to rubber-stamp the list rather than read it.
+ *
+ * The allowlist names roots this repo's own capture pipeline renders (a stylesheet edit CAN
+ * move these), not the ones it does not — adding a new vendor's reference photographs needs no
+ * code change here, only the absence of a new entry. With no roots configured, everything
+ * passes through unfiltered: narrowing the review obligation is something the config opts into,
+ * never a silent default that could wave through a real regression.
+ */
+export function inScopeCaptures(paths, roots) {
+  if (!Array.isArray(roots) || roots.length === 0) return paths;
+  return paths.filter((path) => roots.some((root) => path.startsWith(root)));
+}
+
 /** Reads and parses a manifest.json from the working tree; null if missing or unparsable. */
 function readManifestFile(path) {
   if (!existsSync(path)) return null;
@@ -260,7 +282,12 @@ function main() {
   if (byteOnly > 0) {
     console.log(`check-lane: ${byteOnly} capture(s) moved bytes but not pixelHash/layoutHash — not a review a release owes`);
   }
-  const review = reviewVerdict(lane, changed);
+  const inScope = inScopeCaptures(changed, lane.inScopeCaptureRoots);
+  const outOfScope = changed.length - inScope.length;
+  if (outOfScope > 0) {
+    console.log(`check-lane: ${outOfScope} capture(s) moved outside this lane's own render roots — not a review a release owes`);
+  }
+  const review = reviewVerdict(lane, inScope);
   const emit = () => {
     for (const line of review.out) console.log(line);
     for (const line of review.err) console.error(line);

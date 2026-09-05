@@ -3,6 +3,10 @@
   "acquiredAt": "2026-09-05T09:05:00Z",
   "baselineHash": "e2e6314a036a",
   "baselineCommit": "de675d52abdd",
+  "inScopeCaptureRoots": [
+    "screenshots/notion-clone/",
+    "screenshots/project-manager/"
+  ],
   "history": [
     {
       "event": "acquire",

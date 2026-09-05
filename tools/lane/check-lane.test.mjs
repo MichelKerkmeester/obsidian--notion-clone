@@ -20,10 +20,18 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it } from "vitest";
-import { changedCaptures, contentChangedCaptures, isContentChange, reviewVerdict } from "./check-lane.mjs";
+import {
+  changedCaptures,
+  contentChangedCaptures,
+  inScopeCaptures,
+  isContentChange,
+  reviewVerdict,
+} from "./check-lane.mjs";
 
 const BOARD = "screenshots/views/board-view-desktop-light.png";
 const TIMELINE = "screenshots/views/timeline-view-desktop-dark.png";
+const ANYTYPE = "screenshots/anytype/anytype-travel-itinerary-graph-light.png";
+const IN_SCOPE_ROOTS = ["screenshots/notion-clone/", "screenshots/project-manager/"];
 
 /** A release sitting on the stylesheet in the tree — the only entry whose review is still owed. */
 function laneReleasing(reviewed) {
@@ -184,5 +192,60 @@ describe("only the newest release, and only on the current stylesheet", () => {
     const lane = laneReleasing(null);
     lane.baselineHash = "ffff11112222";
     expect(reviewVerdict(lane, [BOARD]).exit).toBe(0);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 6. A REFERENCE PHOTOGRAPH IS NOT A CAPTURE OF OUR STYLESHEET
+// ───────────────────────────────────────────────────────────────────
+
+describe("inScopeCaptures narrows the changed set to our own renders", () => {
+  it("drops a competitor reference photograph the allowlist does not name", () => {
+    expect(inScopeCaptures([ANYTYPE], IN_SCOPE_ROOTS)).toEqual([]);
+  });
+
+  it("keeps a capture under an allowlisted root", () => {
+    const notionClone = "screenshots/notion-clone/views/board-view-desktop-light.png";
+    const projectManager = "screenshots/project-manager/reference-kanban-desktop-dark.png";
+    expect(inScopeCaptures([notionClone, projectManager], IN_SCOPE_ROOTS)).toEqual([
+      notionClone,
+      projectManager,
+    ]);
+  });
+
+  it("keeps everything when the config carries no allowlist — narrowing scope is opt-in, not silent", () => {
+    expect(inScopeCaptures([ANYTYPE, BOARD], undefined)).toEqual([ANYTYPE, BOARD]);
+    expect(inScopeCaptures([ANYTYPE, BOARD], [])).toEqual([ANYTYPE, BOARD]);
+  });
+
+  it("sorts nothing and drops nothing that already matches — order and duplicates pass through", () => {
+    const notionClone = "screenshots/notion-clone/views/board-view-desktop-light.png";
+    expect(inScopeCaptures([ANYTYPE, notionClone, ANYTYPE], IN_SCOPE_ROOTS)).toEqual([notionClone]);
+  });
+});
+
+describe("a competitor reference photograph never forces a release to name it", () => {
+  it("before scoping, an unreviewed anytype capture fails the release the same as any other", () => {
+    // Demonstrates the bug this scope fix closes: with no root filter applied, the review
+    // gate cannot tell a photograph of a different application from a capture of our own —
+    // it refuses on the unnamed file exactly as it would for a real regression.
+    const verdict = reviewVerdict(laneReleasing(null), [ANYTYPE]);
+    expect(verdict.exit).toBe(1);
+    expect(verdict.err.join("\n")).toContain(ANYTYPE);
+  });
+
+  it("after scoping, the same anytype capture never reaches the review gate at all", () => {
+    const scoped = inScopeCaptures([ANYTYPE], IN_SCOPE_ROOTS);
+    const verdict = reviewVerdict(laneReleasing(null), scoped);
+    expect(verdict.exit).toBe(0);
+  });
+
+  it("scoping never hides a real regression: an unreviewed notion-clone capture still fails", () => {
+    const notionClone = "screenshots/notion-clone/views/board-view-desktop-light.png";
+    const scoped = inScopeCaptures([ANYTYPE, notionClone], IN_SCOPE_ROOTS);
+    const verdict = reviewVerdict(laneReleasing(null), scoped);
+    expect(verdict.exit).toBe(1);
+    expect(verdict.err.join("\n")).toContain(notionClone);
+    expect(verdict.err.join("\n")).not.toContain(ANYTYPE);
   });
 });
