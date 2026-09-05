@@ -47,7 +47,7 @@ _memory:
 | **Spec Folder** | 048-stacked-sheets |
 | **Completed** | Code complete 2026-09-05; AC-009 open, and it is the operator's |
 | **Level** | 2 |
-| **Fix commits** | `85b1fc12` the depth model · `f538f19e` the per-child migrations · `6ba02e83` the lane |
+| **Fix commits** | `265f736f` the depth model · `915591c2` the per-child migrations · `f1fffff2` the lane |
 | **Ships in** | 0.0.24 |
 <!-- /ANCHOR:metadata -->
 

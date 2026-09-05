@@ -159,7 +159,7 @@ record.
 **How to roll back**: revert the presentation-flag commit per subclass; `DbModal`'s per-subclass
 declaration means a single subclass can be reverted independently of the others.
 
-**Landed 2026-09-05, `f538f19e`.** Implemented one level above the per-subclass flag rather than by
+**Landed 2026-09-05, `915591c2`.** Implemented one level above the per-subclass flag rather than by
 editing twenty flags: `applyPresentation` routes every touch-mounted modal through the shared sheet
 chrome, so all 19 `DbModal` subclasses take the header at once and the twenty-subclass review this
 record costed is not owed. Two consequences follow and are recorded rather than assumed — a modal

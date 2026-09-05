@@ -185,7 +185,7 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
 - [x] CHK-FIX-004 [P0] N/A — no security, path, parser or redaction surface. Recorded rather than silently skipped
 - [x] CHK-FIX-005 [P1] Matrix axes listed: depth × opener kind × keyboard × parent kind, per `plan.md`
 - [x] CHK-FIX-006 [P1] Hostile variant: a second document (popped-out window) with its own stack and its own scrim
-- [x] CHK-FIX-007 [P1] Evidence pinned to a fix SHA, not a branch-relative range — `85b1fc12` model, `f538f19e` migrations, `6ba02e83` lane
+- [x] CHK-FIX-007 [P1] Evidence pinned to a fix SHA, not a branch-relative range — `265f736f` model, `915591c2` migrations, `f1fffff2` lane
 <!-- /ANCHOR:fix-completeness -->
 
 ---
