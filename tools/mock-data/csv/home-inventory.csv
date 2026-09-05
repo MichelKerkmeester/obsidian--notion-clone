@@ -1,0 +1,80 @@
+Title,In one line,Service history,Note,Product page,Retailer,Support line,Warranty (months),Condition score,Warranty used,Depreciation,Purchase price,Room,Owner,Categories,Floor,Condition,Insured,Purchased,Warranty from,Warranty to,Last serviced,Cost / month held,Part of set,Set size,Receipts,Created,Modified
+Washing machine,Replaced under warranty after fourteen months.,"Second hand and undocumented. Value here is an estimate, not a receipt.",~~Faulty~~ repaired,,hanna.virtanen@retail.example.com,+31 20 298 2519,86,3,31,,1075.58,Outside,Oscar Lindgren,"serviceable, tools, high-value","loft, garage",New,false,2026-05-02,2026-04-13,2026-05-02,2026-04-10T19:45,,"22 — Bed frame, 04 — Oven",,,,
+Dishwasher,"Bought second hand, no receipt.",The extended cover is worth more than the item at this point. Not renewing.,==Insured separately==,,michel.kerkmeester@retail.example.com,,72,5,78,52,2771.62,Bedroom,Hanna Virtanen,"appliance, furniture, electronics",ground,Worn,false,2026-03-29,2026-03-21,2026-03-29,2026-03-17T12:15,,,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Fridge freezer,"Bought second hand, no receipt.",The extended cover is worth more than the item at this point. Not renewing.,"*Second hand*, no receipt",,oscar.lindgren@retail.example.com,,89,2,,99,1618.29,Bedroom,Michel Kerkmeester,"appliance, electronics, high-value, tools, furniture, serviceable","first, ground",Disposed,false,2026-05-01,2026-04-13,2026-05-01,2026-04-07T12:30,,"01 — Washing machine, 19 — Sofa",,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Oven,"Serviced annually, next one due in spring.",The extended cover is worth more than the item at this point. Not renewing.,**Out of warranty**,,,+31 20 498 8973,91,1,,13,1646.65,Study,Michel Kerkmeester,"tools, furniture, electronics, serviceable",,Good,false,2026-04-10,2026-03-29,2026-04-10,2026-03-26T10:45,,,,,,
+Induction hob,Replaced under warranty after fourteen months.,"Second hand and undocumented. Value here is an estimate, not a receipt.","*Second hand*, no receipt",products.example.com/induction-hob,michel.kerkmeester@retail.example.com,+31 20 858 1737,81,4,43,,3266.27,Bedroom,Oscar Lindgren,"serviceable, appliance",ground,Faulty,true,2026-02-19,2026-02-18,2026-02-19,2026-02-08T15:30,,,,,,
+Extractor fan,"Bought second hand, no receipt.","Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",**Out of warranty**,products.example.com/extractor-fan,,+31 20 200 4496,80,2,,,1319.95,,,"serviceable, tools, furniture",ground,Disposed,false,2026-06-01,2026-05-19,2026-06-01,2026-05-07T19:30,,,,,,
+Boiler,"Bought second hand, no receipt.",The extended cover is worth more than the item at this point. Not renewing.,"*Second hand*, no receipt",products.example.com/boiler,michel.kerkmeester@retail.example.com,+31 20 562 5620,60,5,55,79,,Bedroom,Michel Kerkmeester,"serviceable, high-value, tools",loft,Good,false,2026-05-25,2026-05-11,2026-05-25,2026-05-03T10:00,,"23 — Mattress, 01 — Washing machine",,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Thermostat,"Serviced annually, next one due in spring.","Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",~~Faulty~~ repaired,products.example.com/thermostat,hanna.virtanen@retail.example.com,,113,4,3,0,3232.43,Outside,Michel Kerkmeester,"furniture, high-value, appliance, serviceable, tools, electronics","garage, first",Worn,false,2026-02-17,2026-02-02,2026-02-17,2026-01-25T07:15,,,,Database Testbed/Attachments/audit-checklist.md,,
+Smoke alarms,"Serviced annually, next one due in spring.",,==Insured separately==,products.example.com/smoke-alarms,,+31 20 362 4895,48,4,2,52,1272.46,Study,Oscar Lindgren,"appliance, furniture, high-value, serviceable",,Faulty,false,2026-05-28,2026-05-17,2026-05-28,,,,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Router,"Bought second hand, no receipt.",The extended cover is worth more than the item at this point. Not renewing.,Model on the `inside` of the door,products.example.com/router,michel.kerkmeester@retail.example.com,+31 20 724 2154,90,4,81,13,,Living room,Hanna Virtanen,,"loft, garage",Good,false,2026-04-26,2026-04-13,2026-04-26,,,"04 — Oven, 20 — Dining table",,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Network switch,Out of warranty and still working.,"Second hand and undocumented. Value here is an estimate, not a receipt.",==Insured separately==,products.example.com/network-switch,oscar.lindgren@retail.example.com,,79,3,99,58,47.7,,Oscar Lindgren,"appliance, furniture, tools",,Worn,false,2026-03-25,2026-03-04,2026-03-25,2026-03-01T15:15,,"12 — Desktop workstation, 09 — Smoke alarms",,Database Testbed/Attachments/release-notes.txt,,
+Desktop workstation,"Serviced annually, next one due in spring.","Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",**Out of warranty**,products.example.com/desktop-workstation,michel.kerkmeester@retail.example.com,+31 20 142 7695,109,5,96,91,1949.49,Bedroom,Hanna Virtanen,"tools, furniture, serviceable, high-value",,Worn,false,2026-04-13,2026-03-28,2026-04-13,2026-03-20T14:45,,05 — Induction hob,,,,
+Laptop,"Serviced annually, next one due in spring.","Second hand and undocumented. Value here is an estimate, not a receipt.",==Insured separately==,products.example.com/laptop,oscar.lindgren@retail.example.com,+31 20 783 6098,46,5,8,19,1826.9,Study,,"tools, furniture, high-value","ground, first",Disposed,false,,2026-04-01,2026-04-02,,,01 — Washing machine,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+External display,Replaced under warranty after fourteen months.,"Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",~~Faulty~~ repaired,products.example.com/external-display,hanna.virtanen@retail.example.com,+31 20 322 4428,57,1,95,26,2726.49,Living room,Oscar Lindgren,appliance,"first, ground",Disposed,false,2026-04-13,2026-03-31,2026-04-13,,,21 — Dining chairs,,,,
+Mechanical keyboard,Replaced under warranty after fourteen months.,"Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",~~Faulty~~ repaired,products.example.com/mechanical-keyboard,hanna.virtanen@retail.example.com,,98,4,5,49,110.73,Outside,Hanna Virtanen,"furniture, electronics, high-value","loft, ground",Faulty,false,2026-04-12,2026-03-23,2026-04-12,2026-03-18T19:30,,"29 — Coffee grinder, 22 — Bed frame",,,,
+Desk chair,"Bought second hand, no receipt.","Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",**Out of warranty**,products.example.com/desk-chair,michel.kerkmeester@retail.example.com,,71,1,83,,1153.88,Outside,Hanna Virtanen,"high-value, furniture, tools","garage, first",New,false,2026-04-10,2026-04-07,2026-04-10,2026-04-07T10:00,,,,,,
+Standing desk,Extended cover taken at purchase.,,Model on the `inside` of the door,products.example.com/standing-desk,hanna.virtanen@retail.example.com,+31 20 888 7081,86,5,81,,,Utility,Hanna Virtanen,"appliance, serviceable","garage, ground",Worn,true,2026-04-16,2026-04-01,2026-04-16,2026-03-20T08:30,,,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Bookshelves,Out of warranty and still working.,,~~Faulty~~ repaired,products.example.com/bookshelves,,,95,3,25,44,2262.8,Study,Hanna Virtanen,"electronics, furniture, tools, appliance, serviceable, high-value","ground, first",Good,false,,2026-03-26,2026-03-31,,,,,,,
+Sofa,Replaced under warranty after fourteen months.,"Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number","*Second hand*, no receipt",products.example.com/sofa,oscar.lindgren@retail.example.com,,112,4,94,51,,,Oscar Lindgren,serviceable,"first, ground",Worn,false,2026-02-23,2026-02-03,2026-02-23,2026-01-31T13:45,,,,,,
+Dining table,Extended cover taken at purchase.,"Second hand and undocumented. Value here is an estimate, not a receipt.",~~Faulty~~ repaired,,hanna.virtanen@retail.example.com,,60,3,63,79,443.48,Kitchen,Michel Kerkmeester,"furniture, appliance, high-value",,Good,false,2026-03-13,2026-03-05,2026-03-13,,,,,Database Testbed/Attachments/audit-checklist.md,,
+Dining chairs,"Serviced annually, next one due in spring.",,**Out of warranty**,products.example.com/dining-chairs,,+31 20 574 4584,61,5,75,50,1607.98,Kitchen,Oscar Lindgren,"tools, high-value, serviceable, appliance, electronics, furniture",garage,Disposed,true,2026-03-19,2026-03-11,2026-03-19,2026-03-08T16:45,,29 — Coffee grinder,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Bed frame,"Bought second hand, no receipt.","Second hand and undocumented. Value here is an estimate, not a receipt.",Model on the `inside` of the door,,,+31 20 130 4331,25,2,33,,577.85,Living room,Hanna Virtanen,"high-value, appliance, electronics","loft, first",Faulty,true,2026-06-02,2026-05-19,2026-06-02,,,33 — Power drill,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Mattress,"Bought second hand, no receipt.",The extended cover is worth more than the item at this point. Not renewing.,"*Second hand*, no receipt",products.example.com/mattress,,+31 20 496 5016,4,3,17,100,2478.1,Living room,,"tools, high-value, furniture, electronics",loft,Faulty,true,2026-03-25,2026-03-18,2026-03-25,2026-03-14T16:00,,09 — Smoke alarms,,,,
+Wardrobe,Replaced under warranty after fourteen months.,The extended cover is worth more than the item at this point. Not renewing.,Model on the `inside` of the door,,,+31 20 468 4033,30,4,76,88,1612.67,Living room,Hanna Virtanen,"electronics, serviceable, appliance, furniture, tools, high-value",ground,New,true,2026-02-09,2026-01-30,2026-02-09,,,,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Vacuum cleaner,Extended cover taken at purchase.,The extended cover is worth more than the item at this point. Not renewing.,==Insured separately==,,,+31 20 433 1885,107,3,,69,,Outside,Oscar Lindgren,"electronics, tools, furniture, appliance, high-value","garage, loft",Worn,true,2026-03-06,2026-02-20,2026-03-06,,,,,,,
+Iron,Out of warranty and still working.,,~~Faulty~~ repaired,products.example.com/iron,hanna.virtanen@retail.example.com,+31 20 343 2859,61,4,8,77,1688.65,Living room,,"furniture, high-value, appliance",,New,false,2026-05-16,2026-05-14,2026-05-16,2026-05-05T08:15,,33 — Power drill,,,,
+Toaster,Replaced under warranty after fourteen months.,"Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",,,oscar.lindgren@retail.example.com,,13,3,7,88,1073.05,Kitchen,,"appliance, electronics, furniture, high-value, serviceable, tools",,Disposed,false,2026-03-09,2026-02-26,2026-03-09,2026-02-15T13:00,,"08 — Thermostat, 06 — Extractor fan",,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Kettle,"Serviced annually, next one due in spring.","Serviced once, which is when the pump was replaced. The noise it makes on the spin cycle predates that and is apparently normal for the model.
+
+Worth keeping:
+- The receipt, for the extended cover
+- The model number, which is inside the door
+- The service company's number",**Out of warranty**,products.example.com/kettle,oscar.lindgren@retail.example.com,+31 20 872 2135,6,4,52,30,1156.02,Living room,Michel Kerkmeester,"furniture, tools, electronics, high-value",,Worn,false,2026-04-08,2026-03-30,2026-04-08,2026-03-29T11:45,,,,Database Testbed/Attachments/audit-checklist.md,,
+Coffee grinder,Replaced under warranty after fourteen months.,The extended cover is worth more than the item at this point. Not renewing.,,products.example.com/coffee-grinder,hanna.virtanen@retail.example.com,,104,4,80,,358.74,Living room,Michel Kerkmeester,"furniture, appliance, electronics",,New,true,2026-04-21,2026-04-18,2026-04-21,2026-04-08T11:45,,26 — Iron,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Espresso machine,"Bought second hand, no receipt.","Second hand and undocumented. Value here is an estimate, not a receipt.",,products.example.com/espresso-machine,hanna.virtanen@retail.example.com,,52,3,93,,2923.78,Utility,Michel Kerkmeester,"electronics, appliance, serviceable, tools, high-value",,Good,false,2026-03-24,2026-03-08,2026-03-24,2026-03-03T08:45,,"10 — Router, 06 — Extractor fan",,Database Testbed/Attachments/release-notes.txt,,
+Bicycle,Replaced under warranty after fourteen months.,,**Out of warranty**,products.example.com/bicycle,oscar.lindgren@retail.example.com,+31 20 265 2104,3,4,63,81,2458.16,Living room,Hanna Virtanen,"furniture, serviceable, appliance, high-value, electronics","ground, first",Good,false,2026-05-04,2026-04-17,2026-05-04,2026-04-09T14:00,,30 — Espresso machine,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Bicycle lock,"Bought second hand, no receipt.","Second hand and undocumented. Value here is an estimate, not a receipt.",~~Faulty~~ repaired,,,+31 20 459 5688,13,,91,95,2333.11,Utility,Michel Kerkmeester,"furniture, appliance",,New,false,2026-04-14,2026-04-05,2026-04-14,2026-04-03T10:00,,"06 — Extractor fan, 25 — Vacuum cleaner",,Database Testbed/Attachments/audit-checklist.md,,
+Power drill,Extended cover taken at purchase.,,Model on the `inside` of the door,products.example.com/power-drill,michel.kerkmeester@retail.example.com,+31 20 852 3993,68,,1,83,2988.16,Utility,,"high-value, serviceable, furniture",,New,false,2026-04-21,2026-04-06,2026-04-21,2026-03-27T18:15,,"08 — Thermostat, 14 — External display",,Database Testbed/Attachments/audit-checklist.md,,
+Ladder,,,,,,,,,,,,,,,,,,,,,,,,,,,

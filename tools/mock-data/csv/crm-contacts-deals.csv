@@ -1,0 +1,80 @@
+Title,One-liner,Call notes,Signal,Website,Primary contact,Switchboard,Headcount,Fit,Stage progress,Forecast confidence,Deal value,Stage,Account owner,Segments,Territory,Health,Renewal risk,Next touch,Contract from,Contract to,Last contacted,Value / seat,Related accounts,Related count,Documents,Created,Modified
+Northwind Logistics,Procurement asked for a security questionnaire.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",~~Cold~~ reopened by inbound,accounts.example.com/northwind-logistics,tomas.ferreira@clients.example.com,,17335,4,46,57,55268.21,Proposal,Kwame Mensah,"enterprise, expansion, smb, public-sector, mid-market",,Healthy,true,,2026-03-14,2026-04-02,2026-03-02T15:45,,28 — Brightwater Farms,,,,
+Aurora Health Group,Renewal conversation opens next quarter.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",~~Cold~~ reopened by inbound,accounts.example.com/aurora-health-group,ingrid.solberg@clients.example.com,+31 20 604 4894,5840,1,70,17,51632.79,Qualified,Kwame Mensah,"public-sector, regulated, mid-market, smb, expansion, enterprise",amer,Churned,true,2026-05-15,2026-04-28,2026-05-15,,,"19 — Redstone Mining, 07 — Fairline Media",,Database Testbed/Attachments/audit-checklist.md,,
+Bellwether Capital,Pilot converted after a two-week extension.,Expansion signal: three new seats added without being asked for.,,accounts.example.com/bellwether-capital,tomas.ferreira@clients.example.com,,20176,2,40,18,107547.03,Qualified,Tomás Ferreira,"public-sector, regulated, smb",,At Risk,false,2026-03-23,2026-03-14,2026-03-23,2026-03-08T07:15,,24 — Westbrook Textiles,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Cedar Ridge Schools,Procurement asked for a security questionnaire.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",==Top forecast== for the quarter,accounts.example.com/cedar-ridge-schools,tomas.ferreira@clients.example.com,,16200,3,1,53,43789.08,Negotiation,Sofia Ruiz,"enterprise, smb, expansion, public-sector, regulated, mid-market","emea, apac",Watch,true,2026-04-22,2026-04-11,2026-04-22,2026-04-01T07:00,,,,,,
+Delta Freight,Procurement asked for a security questionnaire.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",Blocked on `security-review`,,ingrid.solberg@clients.example.com,+31 20 694 2230,6326,5,15,,470405.06,Qualified,Ingrid Solberg,smb,"nordics, benelux",Dormant,false,2026-02-08,2026-01-29,2026-02-08,2026-01-18T16:30,,18 — Quarry Hill Foods,,Database Testbed/Attachments/audit-checklist.md,,
+Evergreen Robotics,Champion moved to a different division.,,==Top forecast== for the quarter,accounts.example.com/evergreen-robotics,anneke.de.vries@clients.example.com,+31 20 217 4422,7345,4,49,93,276113.57,Closed Lost,Tomás Ferreira,"regulated, enterprise, smb, mid-market, public-sector, expansion",,Healthy,false,,2026-04-14,2026-04-20,2026-04-11T15:15,,,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Fairline Media,Renewal conversation opens next quarter.,,Blocked on `security-review`,accounts.example.com/fairline-media,anneke.de.vries@clients.example.com,+31 20 979 5176,1189,4,85,79,470518.66,Proposal,Sofia Ruiz,"enterprise, smb, expansion, public-sector, regulated",nordics,Churned,false,2026-05-15,2026-04-27,2026-05-15,,,11 — Juniper Analytics,,,,
+Granite Insurance,Pilot converted after a two-week extension.,,==Top forecast== for the quarter,accounts.example.com/granite-insurance,kwame.mensah@clients.example.com,+31 20 109 4450,13972,3,87,80,102118.19,,Tomás Ferreira,"regulated, expansion",,Watch,false,2026-04-09,2026-04-02,2026-04-09,2026-03-27T17:30,,,,,,
+Harbourview Hotels,Renewal conversation opens next quarter.,,==Top forecast== for the quarter,accounts.example.com/harbourview-hotels,anneke.de.vries@clients.example.com,+31 20 320 6698,7695,2,97,46,395038.56,Prospect,Kwame Mensah,"enterprise, smb, regulated, public-sector, mid-market, expansion",,Dormant,true,2026-04-24,2026-04-12,2026-04-24,2026-03-31T11:15,,23 — Vantage Point Realty,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Ironwood Manufacturing,Renewal conversation opens next quarter.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",,accounts.example.com/ironwood-manufacturing,tomas.ferreira@clients.example.com,+31 20 944 2102,36,1,66,26,417638.01,Negotiation,Ingrid Solberg,"enterprise, smb",,Watch,false,2026-05-01,2026-04-17,2026-05-01,2026-04-14T08:45,,08 — Granite Insurance,,Database Testbed/Attachments/audit-checklist.md,,
+Juniper Analytics,Legal redlines returned with three changes.,Expansion signal: three new seats added without being asked for.,,accounts.example.com/juniper-analytics,,,16371,1,91,7,25002.17,Proposal,Tomás Ferreira,smb,"apac, amer",At Risk,false,2026-05-15,2026-05-12,2026-05-15,2026-05-08T19:00,,"07 — Fairline Media, 16 — Oakfield Utilities",,Database Testbed/Attachments/audit-checklist.md,,
+Kestrel Airways,Procurement asked for a security questionnaire.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",Blocked on `security-review`,accounts.example.com/kestrel-airways,tomas.ferreira@clients.example.com,,7594,5,30,71,389498.89,Proposal,Sofia Ruiz,mid-market,"nordics, emea",Churned,true,2026-05-10,2026-05-07,2026-05-10,,,,,,,
+Lakeshore Retail,Renewal conversation opens next quarter.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",**Expansion** signal this month,,anneke.de.vries@clients.example.com,+31 20 276 7160,23097,3,33,100,272531.14,Negotiation,Kwame Mensah,"public-sector, enterprise, expansion, mid-market","nordics, amer",Watch,true,2026-02-19,2026-02-06,2026-02-19,2026-01-30T13:30,,22 — Umbra Security,,Database Testbed/Attachments/audit-checklist.md,,
+Meridian Bank,Procurement asked for a security questionnaire.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",==Top forecast== for the quarter,accounts.example.com/meridian-bank,sofia.ruiz@clients.example.com,+31 20 166 8507,3657,5,17,,194579.01,Qualified,Sofia Ruiz,"public-sector, mid-market, enterprise","emea, benelux",Dormant,false,2026-03-21,2026-03-05,2026-03-21,2026-02-25T07:15,,"29 — Coastline Ferries, 01 — Northwind Logistics",,Database Testbed/Attachments/audit-checklist.md,,
+Northgate Pharma,Pilot converted after a two-week extension.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",==Top forecast== for the quarter,accounts.example.com/northgate-pharma,,+31 20 634 2322,2626,5,32,30,6240.71,Closed Lost,Tomás Ferreira,public-sector,"emea, benelux",Watch,false,2026-03-11,2026-03-04,2026-03-11,2026-02-27T09:00,,"13 — Lakeshore Retail, 03 — Bellwether Capital",,,,
+Oakfield Utilities,Legal redlines returned with three changes.,,==Top forecast== for the quarter,accounts.example.com/oakfield-utilities,,+31 20 856 2429,4025,5,54,59,337132.66,Qualified,Tomás Ferreira,,emea,Healthy,true,,2026-03-08,2026-03-18,2026-02-28T09:45,,"20 — Silverbirch Legal, 01 — Northwind Logistics",,Database Testbed/Attachments/release-notes.txt,,
+Pinnacle Studios,Legal redlines returned with three changes.,Expansion signal: three new seats added without being asked for.,*Champion change* mid-cycle,,,,15823,4,49,11,213050.08,Qualified,Anneke de Vries,"smb, enterprise, expansion, public-sector, mid-market, regulated","benelux, apac",At Risk,false,2026-05-10,2026-05-06,2026-05-10,,,"29 — Coastline Ferries, 15 — Northgate Pharma",,Database Testbed/Attachments/release-notes.txt,,
+Quarry Hill Foods,Legal redlines returned with three changes.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",**Expansion** signal this month,accounts.example.com/quarry-hill-foods,,,17818,2,20,41,349240.38,Qualified,Sofia Ruiz,"regulated, public-sector, mid-market, enterprise",,Watch,false,2026-05-06,2026-04-15,2026-05-06,,,"33 — Glenhaven Trust, 06 — Evergreen Robotics",,,,
+Redstone Mining,Procurement asked for a security questionnaire.,Expansion signal: three new seats added without being asked for.,Blocked on `security-review`,accounts.example.com/redstone-mining,anneke.de.vries@clients.example.com,+31 20 842 8269,23318,2,,57,470944.27,Negotiation,Anneke de Vries,"regulated, mid-market, enterprise",,At Risk,false,2026-04-19,2026-04-03,2026-04-19,2026-03-28T07:00,,14 — Meridian Bank,,,,
+Silverbirch Legal,Pilot converted after a two-week extension.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",Blocked on `security-review`,accounts.example.com/silverbirch-legal,tomas.ferreira@clients.example.com,,6447,2,68,96,111887.2,Proposal,Tomás Ferreira,"enterprise, expansion, regulated, public-sector, smb, mid-market",,Watch,false,2026-05-27,2026-05-21,2026-05-27,2026-05-18T14:30,,,,,,
+Tidewater Marine,Champion moved to a different division.,Expansion signal: three new seats added without being asked for.,*Champion change* mid-cycle,accounts.example.com/tidewater-marine,anneke.de.vries@clients.example.com,,17357,1,55,34,51076.77,Closed Won,Tomás Ferreira,"smb, public-sector, mid-market, expansion, regulated, enterprise",emea,Dormant,true,2026-04-20,2026-04-04,2026-04-20,2026-03-29T08:30,,,,,,
+Umbra Security,Procurement asked for a security questionnaire.,Expansion signal: three new seats added without being asked for.,,accounts.example.com/umbra-security,sofia.ruiz@clients.example.com,,1849,2,66,33,424783.53,Negotiation,Ingrid Solberg,"mid-market, smb, regulated","nordics, amer",Watch,false,2026-05-30,2026-05-13,2026-05-30,2026-05-11T18:00,,18 — Quarry Hill Foods,,,,
+Vantage Point Realty,Champion moved to a different division.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",*Champion change* mid-cycle,accounts.example.com/vantage-point-realty,anneke.de.vries@clients.example.com,,23631,4,53,91,17593.28,Prospect,Tomás Ferreira,"enterprise, regulated, expansion, mid-market, public-sector, smb",benelux,Churned,true,2026-03-14,2026-02-22,2026-03-14,2026-02-17T15:15,,,,,,
+Westbrook Textiles,Champion moved to a different division.,,*Champion change* mid-cycle,accounts.example.com/westbrook-textiles,sofia.ruiz@clients.example.com,,551,1,40,94,,Negotiation,Sofia Ruiz,"public-sector, enterprise, smb, expansion, regulated, mid-market",,Watch,false,2026-05-21,2026-05-20,2026-05-21,2026-05-15T15:30,,16 — Oakfield Utilities,,Database Testbed/Attachments/release-notes.txt,,
+Yellowstone Outfitters,Renewal conversation opens next quarter.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",**Expansion** signal this month,accounts.example.com/yellowstone-outfitters,tomas.ferreira@clients.example.com,,11149,1,78,,202346.48,Closed Lost,Tomás Ferreira,"regulated, smb",amer,Churned,false,2026-03-13,2026-02-21,2026-03-13,2026-02-18T17:45,,28 — Brightwater Farms,,Database Testbed/Attachments/audit-checklist.md,,
+Zephyr Cloud,Legal redlines returned with three changes.,,Blocked on `security-review`,accounts.example.com/zephyr-cloud,,+31 20 822 1023,304,3,0,18,57022.06,Prospect,Tomás Ferreira,"mid-market, smb","benelux, amer",At Risk,false,2026-04-28,2026-04-12,2026-04-28,2026-04-11T15:00,,"13 — Lakeshore Retail, 08 — Granite Insurance",,Database Testbed/Attachments/release-notes.txt,,
+Alderman Councils,Pilot converted after a two-week extension.,"Lost on price, not on fit. Worth revisiting once the usage-based tier ships.",Blocked on `security-review`,accounts.example.com/alderman-councils,,+31 20 155 9698,19375,1,17,,49320.66,Proposal,Sofia Ruiz,,apac,Dormant,false,2026-05-17,2026-05-08,2026-05-17,2026-05-05T17:15,,21 — Tidewater Marine,,,,
+Brightwater Farms,Pilot converted after a two-week extension.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",**Expansion** signal this month,accounts.example.com/brightwater-farms,kwame.mensah@clients.example.com,,163,2,21,86,366474.04,Qualified,Sofia Ruiz,"smb, expansion, public-sector, regulated, enterprise, mid-market",,Churned,false,2026-03-17,2026-03-03,2026-03-17,2026-02-24T09:30,,01 — Northwind Logistics,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Coastline Ferries,Legal redlines returned with three changes.,,~~Cold~~ reopened by inbound,accounts.example.com/coastline-ferries,kwame.mensah@clients.example.com,+31 20 278 4642,19151,5,7,54,22122.98,Negotiation,Sofia Ruiz,"smb, public-sector, mid-market","apac, benelux",Watch,false,2026-03-27,2026-03-13,2026-03-27,2026-03-05T15:30,,,,Database Testbed/Attachments/audit-checklist.md,,
+Dunmore Whisky,Legal redlines returned with three changes.,Expansion signal: three new seats added without being asked for.,~~Cold~~ reopened by inbound,accounts.example.com/dunmore-whisky,tomas.ferreira@clients.example.com,+31 20 910 5798,14638,5,25,69,291193.55,Prospect,Kwame Mensah,"public-sector, mid-market, regulated, expansion, enterprise","amer, benelux",Dormant,false,2026-05-22,2026-05-18,2026-05-22,,,,,,,
+Eastvale Clinics,Procurement asked for a security questionnaire.,Expansion signal: three new seats added without being asked for.,~~Cold~~ reopened by inbound,accounts.example.com/eastvale-clinics,,+31 20 106 6183,21428,,68,93,133178.96,Prospect,Sofia Ruiz,,"emea, nordics",Watch,true,2026-03-13,2026-02-25,2026-03-13,2026-02-15T15:15,,,,,,
+Foxglove Cosmetics,Renewal conversation opens next quarter.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",==Top forecast== for the quarter,accounts.example.com/foxglove-cosmetics,anneke.de.vries@clients.example.com,+31 20 240 7906,7495,2,17,59,93806.57,Proposal,Tomás Ferreira,,emea,Churned,false,2026-03-25,2026-03-18,2026-03-25,,,,,Database Testbed/Attachments/release-notes.txt,,
+Glenhaven Trust,Renewal conversation opens next quarter.,"Two stakeholders, one of whom is new. The security questionnaire is the gate; everything else is agreed in principle.
+
+Next steps:
+- Return the completed questionnaire
+- Confirm the start date with procurement
+- Book the technical walkthrough",*Champion change* mid-cycle,accounts.example.com/glenhaven-trust,kwame.mensah@clients.example.com,,11631,5,40,23,94675.42,Closed Won,,"expansion, regulated, smb, enterprise, mid-market, public-sector","apac, amer",Watch,false,2026-02-11,2026-02-05,2026-02-11,,,,,Database Testbed/Attachments/release-notes.txt,,
+Highfield Sports,,,,,,,,,,,,,,,,,,,,,,,,,,,

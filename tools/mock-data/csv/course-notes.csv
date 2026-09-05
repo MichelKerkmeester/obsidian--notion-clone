@@ -1,0 +1,81 @@
+Title,In one line,Notes,Cue,Course page,Tutor,Department,Study minutes,Confidence,Revision done,Mark,Materials cost,Module,Lecturer,Skills,Term,Revision state,Examinable,Session,Covered from,Covered to,Last revised,Cost / study hour,Prerequisites,Prerequisite count,Handouts,Created,Modified
+Linear algebra: vector spaces,Third pass and it finally clicked.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",,courses.example.com/linear-algebra-vector-spaces,dr.halima.said@university.example.com,,116,1,36,65,35.1,Theory,Prof. Anders Holm,"analysis, proof, implementation, coursework, exam-heavy","resit, spring",Unread,true,2026-03-30,2026-03-25,2026-03-30,2026-03-13T12:45,,"07 — Algorithms sorting, 09 — Algorithms dynamic programming",,,,
+Linear algebra: eigenvalues,Third pass and it finally clicked.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",Rework example `two`,courses.example.com/linear-algebra-eigenvalues,dr.halima.said@university.example.com,,364,5,59,61,30.14,Mathematics,Prof. Anders Holm,"recall, exam-heavy, implementation",,Practised,false,2026-04-29,2026-04-27,2026-04-29,2026-04-21T14:00,,25 — Machine learning linear models,,,,
+Probability: distributions,The reading matters more than the lecture here.,"Not examinable, and interesting anyway. Reading it after the exams.",**Examinable**,courses.example.com/probability-distributions,prof.anders.holm@university.example.com,,397,5,28,79,18.56,Theory,Dr Halima Saïd,,,Read Once,true,2026-02-23,2026-02-11,2026-02-23,2026-01-31T17:30,,"05 — Statistics hypothesis testing, 19 — Compilers parsing",,,,
+Probability: Bayes,Third pass and it finally clicked.,,**Examinable**,courses.example.com/probability-bayes,,+31 20 264 6851,181,1,15,20,53.45,Applied,Dr Halima Saïd,"coursework, analysis, proof, implementation, recall, exam-heavy",spring,Practised,true,2026-04-27,2026-04-13,2026-04-27,2026-04-09T13:30,,"13 — Operating systems memory, 16 — Databases relational model",,Database Testbed/Attachments/audit-checklist.md,,
+Statistics: hypothesis testing,Third pass and it finally clicked.,"Not examinable, and interesting anyway. Reading it after the exams.",~~Skipped~~ covered later,courses.example.com/statistics-hypothesis-testing,prof.anders.holm@university.example.com,+31 20 530 3110,433,2,62,84,90.12,Systems,Dr Halima Saïd,"coursework, implementation, analysis, recall, exam-heavy, proof",,Needs Revisit,false,2026-02-06,2026-01-28,2026-02-06,2026-01-27T07:00,,04 — Probability Bayes,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Statistics: regression,Covered twice because the first lecture was cancelled.,,==Clicked at last==,courses.example.com/statistics-regression,,+31 20 412 1181,214,2,6,49,7.64,Theory,Dr Wei Zhang,"recall, exam-heavy",,Practised,true,2026-02-20,2026-02-11,2026-02-20,2026-02-06T09:45,,"23 — Security cryptography basics, 18 — Databases transactions",,,,
+Algorithms: sorting,"Examinable and badly understood, which is the worst combination.",,==Clicked at last==,courses.example.com/algorithms-sorting,dr.wei.zhang@university.example.com,+31 20 405 5317,456,3,1,80,21.36,Theory,Dr Fiona Gallagher,"proof, analysis","spring, resit",Unread,true,2026-04-14,2026-03-24,2026-04-14,,,"11 — Data structures hash maps, 08 — Algorithms graphs",,,,
+Algorithms: graphs,Covered twice because the first lecture was cancelled.,,~~Skipped~~ covered later,courses.example.com/algorithms-graphs,,,361,2,,35,79.16,,,"analysis, recall, implementation, coursework, exam-heavy","resit, autumn",Read Once,false,2026-04-27,2026-04-24,2026-04-27,2026-04-14T08:15,,25 — Machine learning linear models,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Algorithms: dynamic programming,"Fine until the worked example, then it fell apart.",,*Third pass* needed,courses.example.com/algorithms-dynamic-programming,dr.fiona.gallagher@university.example.com,+31 20 968 9201,298,4,,39,71.37,Theory,Dr Wei Zhang,analysis,"spring, summer",Unread,false,2026-05-13,2026-04-25,2026-05-13,2026-04-17T08:00,,18 — Databases transactions,,,,
+Data structures: trees,The reading matters more than the lecture here.,,Rework example `two`,courses.example.com/data-structures-trees,dr.wei.zhang@university.example.com,,46,2,67,,68.67,Mathematics,Dr Fiona Gallagher,"exam-heavy, recall, proof, analysis, implementation, coursework",,Needs Revisit,false,2026-02-18,2026-02-01,2026-02-18,2026-01-23T14:15,,"25 — Machine learning linear models, 23 — Security cryptography basics",,Database Testbed/Attachments/release-notes.txt,,
+Data structures: hash maps,Covered twice because the first lecture was cancelled.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",==Clicked at last==,courses.example.com/data-structures-hash-maps,,+31 20 443 3030,164,1,21,26,71.44,Mathematics,Dr Wei Zhang,"analysis, exam-heavy",autumn,Unread,false,2026-03-06,2026-02-20,2026-03-06,2026-02-10T19:30,,"12 — Operating systems scheduling, 26 — Machine learning evaluation",,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Operating systems: scheduling,The reading matters more than the lecture here.,"Not examinable, and interesting anyway. Reading it after the exams.",Rework example `two`,courses.example.com/operating-systems-scheduling,prof.anders.holm@university.example.com,+31 20 107 9387,344,,33,30,68.23,Society,Dr Halima Saïd,"coursework, proof","summer, spring",Practised,false,2026-02-16,2026-01-29,2026-02-16,2026-01-19T15:30,,17 — Databases indexing,,Database Testbed/Attachments/audit-checklist.md,,
+Operating systems: memory,The reading matters more than the lecture here.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",Rework example `two`,courses.example.com/operating-systems-memory,dr.fiona.gallagher@university.example.com,,410,1,8,50,56.42,Mathematics,Dr Halima Saïd,"coursework, exam-heavy, recall, analysis, implementation, proof",spring,Needs Revisit,false,2026-03-06,2026-02-16,2026-03-06,2026-02-06T09:30,,,,,,
+Networks: TCP,Covered twice because the first lecture was cancelled.,"Not examinable, and interesting anyway. Reading it after the exams.",,courses.example.com/networks-tcp,dr.wei.zhang@university.example.com,,270,4,96,77,92.84,Theory,Dr Fiona Gallagher,"proof, implementation, analysis, recall",resit,Read Once,true,2026-03-13,2026-03-10,2026-03-13,2026-03-06T12:45,,07 — Algorithms sorting,,,,
+Networks: routing,Third pass and it finally clicked.,"Confident on the theory, weak on the arithmetic. That is a practice problem, not a reading problem.",,,,+31 20 121 4661,229,4,45,,61.71,Society,Dr Fiona Gallagher,"analysis, proof, recall, implementation",summer,Confident,true,2026-03-27,2026-03-19,2026-03-27,2026-03-12T15:15,,,,,,
+Databases: relational model,Covered twice because the first lecture was cancelled.,"Confident on the theory, weak on the arithmetic. That is a practice problem, not a reading problem.",==Clicked at last==,courses.example.com/databases-relational-model,prof.anders.holm@university.example.com,+31 20 600 7815,397,4,98,72,6.93,Applied,Dr Halima Saïd,,autumn,Needs Revisit,false,2026-02-12,2026-01-27,2026-02-12,2026-01-17T17:45,,,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Databases: indexing,"Fine until the worked example, then it fell apart.","The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",~~Skipped~~ covered later,courses.example.com/databases-indexing,,+31 20 778 7302,408,2,47,7,54.8,Theory,Dr Fiona Gallagher,,,Practised,false,2026-05-16,2026-05-15,2026-05-16,2026-05-12T08:45,,,,Database Testbed/Attachments/release-notes.txt,,
+Databases: transactions,The reading matters more than the lecture here.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",Rework example `two`,,prof.anders.holm@university.example.com,+31 20 288 9773,44,5,,,76.93,Mathematics,Prof. Anders Holm,proof,"resit, autumn",Confident,true,2026-02-06,2026-01-29,2026-02-06,2026-01-25T08:15,,14 — Networks TCP,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Compilers: parsing,Covered twice because the first lecture was cancelled.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",==Clicked at last==,courses.example.com/compilers-parsing,dr.wei.zhang@university.example.com,+31 20 672 6946,224,1,2,,26.35,Theory,Dr Fiona Gallagher,"recall, implementation","resit, spring",Confident,false,2026-04-21,2026-04-10,2026-04-21,2026-04-07T11:15,,,,Database Testbed/Attachments/release-notes.txt,,
+Compilers: code generation,Third pass and it finally clicked.,,~~Skipped~~ covered later,courses.example.com/compilers-code-generation,prof.anders.holm@university.example.com,,473,5,22,8,52.66,Systems,,"implementation, proof, exam-heavy, analysis",,Practised,true,2026-03-05,2026-02-22,2026-03-05,2026-02-19T17:30,,11 — Data structures hash maps,,Database Testbed/Attachments/audit-checklist.md,,
+Distributed systems: consensus,Covered twice because the first lecture was cancelled.,,Rework example `two`,,prof.anders.holm@university.example.com,,351,1,,37,76.58,,Dr Wei Zhang,"implementation, proof, analysis, exam-heavy, recall","spring, autumn",Practised,true,2026-05-22,2026-05-21,2026-05-22,2026-05-18T17:15,,08 — Algorithms graphs,,,,
+Distributed systems: replication,"Fine until the worked example, then it fell apart.","The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",~~Skipped~~ covered later,courses.example.com/distributed-systems-replication,prof.anders.holm@university.example.com,+31 20 999 6045,315,3,70,83,27.19,Mathematics,,"coursework, proof, recall",summer,Unread,false,2026-04-14,2026-04-02,2026-04-14,,,,,,,
+Security: cryptography basics,"Fine until the worked example, then it fell apart.","The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",Rework example `two`,courses.example.com/security-cryptography-basics,dr.halima.said@university.example.com,,413,5,61,56,56.81,Applied,,implementation,,Unread,true,2026-03-21,2026-03-04,2026-03-21,2026-02-21T08:00,,09 — Algorithms dynamic programming,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Security: threat modelling,"Examinable and badly understood, which is the worst combination.",,*Third pass* needed,courses.example.com/security-threat-modelling,prof.anders.holm@university.example.com,+31 20 229 9672,158,1,0,29,36.83,Theory,,"coursework, analysis, implementation, proof, exam-heavy, recall",,Read Once,false,2026-05-09,2026-04-30,2026-05-09,2026-04-22T19:15,,"28 — Human factors interaction, 04 — Probability Bayes",,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Machine learning: linear models,"Examinable and badly understood, which is the worst combination.",,==Clicked at last==,courses.example.com/machine-learning-linear-models,dr.wei.zhang@university.example.com,,359,5,68,,51.04,Systems,Prof. Anders Holm,"proof, implementation",,Read Once,true,2026-02-13,2026-01-30,2026-02-13,2026-01-29T10:00,,"23 — Security cryptography basics, 05 — Statistics hypothesis testing",,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Machine learning: evaluation,"Examinable and badly understood, which is the worst combination.","Confident on the theory, weak on the arithmetic. That is a practice problem, not a reading problem.",Rework example `two`,,,+31 20 873 9585,312,1,81,,73.49,Systems,Dr Halima Saïd,proof,"autumn, resit",Read Once,true,2026-03-10,2026-03-08,2026-03-10,2026-03-04T11:15,,16 — Databases relational model,,Database Testbed/Attachments/release-notes.txt,,
+Human factors: perception,The reading matters more than the lecture here.,,**Examinable**,courses.example.com/human-factors-perception,prof.anders.holm@university.example.com,+31 20 423 8320,29,3,49,22,20.7,Systems,Dr Halima Saïd,analysis,"summer, resit",Unread,false,2026-03-15,2026-03-12,2026-03-15,2026-03-01T16:30,,"01 — Linear algebra vector spaces, 29 — Ethics accountability",,,,
+Human factors: interaction,"Examinable and badly understood, which is the worst combination.",,==Clicked at last==,courses.example.com/human-factors-interaction,,,349,3,5,55,,Mathematics,Dr Fiona Gallagher,"exam-heavy, implementation, recall, analysis, proof","spring, autumn",Confident,false,2026-02-12,2026-02-07,2026-02-12,2026-02-04T15:15,,"23 — Security cryptography basics, 02 — Linear algebra eigenvalues",,,,
+Ethics: accountability,Covered twice because the first lecture was cancelled.,"The definition is not the difficulty. The difficulty is that two of the three worked examples in the notes skip a step, and the skipped step is the one that is not obvious.
+
+To do:
+- Rework example two from scratch
+- Find a second source for the proof
+- Practise the recall questions cold",~~Skipped~~ covered later,courses.example.com/ethics-accountability,prof.anders.holm@university.example.com,+31 20 686 9297,394,5,21,5,35.17,Theory,Prof. Anders Holm,"proof, exam-heavy, recall, analysis, coursework","autumn, summer",Confident,false,2026-03-11,2026-03-03,2026-03-11,2026-02-25T19:15,,,,,,
+Ethics: consent,,,,,,,,,,,,,,,,,,,,,,,,,,,

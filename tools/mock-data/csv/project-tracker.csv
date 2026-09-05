@@ -1,0 +1,97 @@
+Title,Summary,Working notes,Headline,Ticket,Owner email,Escalation line,Estimate (pts),Confidence,Complete,Risk burn,Budget,Priority,Assignee,Labels,Team,Status,Blocked,Due,Starts,Ends,Last reviewed,Cost / point,Depends on,Dependencies,Attachments,Created,Modified
+Onboarding flow redesign,Rolled out to ten percent of accounts.,"Two attempts, one rollback. The second attempt changed the retry window rather than the payload, which is the difference that mattered.",~~Deferred~~ then reinstated,tracker.example.com/onboarding-flow-redesign,ada.lovelace@example.com,+31 20 263 8279,4,3,36,43,,High,Renée Dubois,,design-systems,In Progress,false,2026-04-07,2026-03-28,2026-04-07,,,15 — Performance budget,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Search relevance tuning,Scope confirmed with the steering group.,,*Waiting* on the vendor,,jean.bartik@example.com,+31 20 684 7602,7,5,40,,14326.1,Low,,docs,"mobile, infra",In Review,false,2026-02-21,2026-02-09,2026-02-21,,,,,,,
+Billing webhook retries,Blocked on a vendor contract renewal.,,==Highest confidence== item this cycle,tracker.example.com/billing-webhook-retries,renee.dubois@example.com,,17,4,7,14,68635.95,Critical,,"design, infra, mobile, research, backend",design-systems,In Progress,false,2026-03-04,2026-03-03,2026-03-04,,,"12 — Docs information architecture, 29 — Bulk export tooling",,,,
+Design token migration,Blocked on a vendor contract renewal.,"Two attempts, one rollback. The second attempt changed the retry window rather than the payload, which is the difference that mattered.",Needs `feature-flag` cleanup first,tracker.example.com/design-token-migration,ada.lovelace@example.com,+31 20 565 9338,16,5,39,39,,High,,"docs, backend, design, urgent, mobile","growth, design-systems",Backlog,true,2026-06-01,2026-05-13,2026-06-01,2026-05-03T12:00,,,,Database Testbed/Attachments/release-notes.txt,,
+Mobile navigation sweep,Waiting on a decision about the phone build.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",,tracker.example.com/mobile-navigation-sweep,,+31 20 909 3102,16,4,32,46,32319.74,Medium,Renée Dubois,"mobile, backend, urgent, infra, docs",design-systems,Archived,false,2026-03-31,2026-03-24,2026-03-31,,,,,,,
+Data warehouse cutover,Handed to the platform team for the data leg.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",==Highest confidence== item this cycle,tracker.example.com/data-warehouse-cutover,renee.dubois@example.com,+31 20 227 3817,20,4,15,90,8693.4,,Ada Lovelace,"design, backend, research, infra, mobile",,Archived,false,2026-06-11,2026-05-21,2026-06-11,,,"02 — Search relevance tuning, 10 — Notification centre",,Database Testbed/Attachments/audit-checklist.md,,
+Rate limiter rollout,Second attempt after the first rollback.,,,,renee.dubois@example.com,+31 20 188 2649,9,3,56,21,56985.47,,Grace Hopper,"design, docs, backend, infra",design-systems,Archived,false,2026-05-11,2026-04-27,2026-05-11,2026-04-16T09:30,,"11 — Pricing experiment, 03 — Billing webhook retries",,,,
+Localisation sprint,Second attempt after the first rollback.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",,,grace.hopper@example.com,,2,5,13,,54311.47,High,Jean Bartik,"research, infra, urgent, design",mobile,In Review,false,2026-05-08,2026-04-22,2026-05-08,2026-04-20T13:45,,,,,,
+Accessibility audit,Rolled out to ten percent of accounts.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,~~Deferred~~ then reinstated,tracker.example.com/accessibility-audit,mehmet.ozturk@example.com,+31 20 855 5060,20,,37,,,,Jean Bartik,"mobile, design, backend, docs, urgent",,Done,true,2026-06-02,2026-05-22,2026-06-02,2026-05-14T07:45,,,,Database Testbed/Attachments/release-notes.txt,,
+Notification centre,Rolled out to ten percent of accounts.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,**Critical path** for the quarter,tracker.example.com/notification-centre,jean.bartik@example.com,,8,,53,57,58746.21,Medium,Renée Dubois,,"growth, design-systems",In Progress,false,2026-04-28,2026-04-26,2026-04-28,2026-04-22T17:00,,21 — This is a deliberately very long project title that should overflow and force truncation on narrow phone columns,,Database Testbed/Attachments/release-notes.txt,,
+Pricing experiment,Scope confirmed with the steering group.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,Needs `feature-flag` cleanup first,,jean.bartik@example.com,+31 20 515 4918,18,1,69,36,63479.2,Medium,Ada Lovelace,"backend, design, research",design-systems,Blocked,true,,2026-05-18,2026-05-27,2026-05-06T10:00,,,,Database Testbed/Attachments/audit-checklist.md,,
+Docs information architecture,Second attempt after the first rollback.,,~~Deferred~~ then reinstated,tracker.example.com/docs-information-architecture,grace.hopper@example.com,+31 20 616 8921,1,,3,71,28601.93,Medium,Ada Lovelace,mobile,,In Review,false,2026-03-31,2026-03-15,2026-03-31,2026-03-06T17:30,,"24 — Payment retry backoff, 08 — Localisation sprint",,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+SSO for enterprise tenants,Handed to the platform team for the data leg.,"Two attempts, one rollback. The second attempt changed the retry window rather than the payload, which is the difference that mattered.",*Waiting* on the vendor,tracker.example.com/sso-for-enterprise-tenants,mehmet.ozturk@example.com,+31 20 791 2363,6,3,85,4,9024.99,Medium,Renée Dubois,,infra,Blocked,false,2026-05-07,2026-04-23,2026-05-07,2026-04-11T19:30,,,,Database Testbed/Attachments/audit-checklist.md,,
+Incident retrospective actions,Second attempt after the first rollback.,,*Waiting* on the vendor,tracker.example.com/incident-retrospective-actions,renee.dubois@example.com,+31 20 682 2795,8,5,74,7,58867.03,Critical,Grace Hopper,"infra, mobile",design-systems,Archived,true,2026-04-16,2026-03-31,2026-04-16,2026-03-30T16:30,,01 — Onboarding flow redesign,,,,
+Performance budget,Rolled out to ten percent of accounts.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,~~Deferred~~ then reinstated,tracker.example.com/performance-budget,mehmet.ozturk@example.com,+31 20 650 9693,6,3,96,,82142.38,Low,Jean Bartik,"research, infra, backend, urgent, docs, design",infra,Backlog,false,2026-04-09,2026-03-19,2026-04-09,2026-03-08T13:30,,24 — Payment retry backoff,,,,
+Legacy importer retirement,Second attempt after the first rollback.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",~~Deferred~~ then reinstated,tracker.example.com/legacy-importer-retirement,,+31 20 588 2134,14,1,22,73,53577.48,Low,,"urgent, research, mobile, docs, infra, design",infra,In Review,false,2026-05-14,2026-04-24,2026-05-14,2026-04-12T16:30,,,,Database Testbed/Attachments/audit-checklist.md,,
+Deal desk workflow,Waiting on a decision about the phone build.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",,tracker.example.com/deal-desk-workflow,renee.dubois@example.com,+31 20 359 8633,18,1,65,33,44260.91,Critical,Renée Dubois,"mobile, design, research",,In Review,false,2026-02-07,2026-01-30,2026-02-07,2026-01-30T08:00,,32 — Schema registry rollout,,Database Testbed/Attachments/audit-checklist.md,,
+Security review follow-ups,Second attempt after the first rollback.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",~~Deferred~~ then reinstated,tracker.example.com/security-review-follow-ups,,+31 20 965 7448,19,4,43,,24690.36,Medium,Ada Lovelace,"infra, backend, docs, mobile, design",growth,Blocked,false,,2026-02-18,2026-03-02,2026-02-09T08:15,,14 — Incident retrospective actions,,,,
+Roadmap planning cycle,Second attempt after the first rollback.,,Needs `feature-flag` cleanup first,tracker.example.com/roadmap-planning-cycle,,+31 20 327 5337,13,5,10,75,46467.34,Critical,Mehmet Öztürk,"infra, urgent",,Done,true,2026-03-01,2026-02-20,2026-03-01,,,"18 — Security review follow-ups, 31 — Push token hygiene",,Database Testbed/Attachments/release-notes.txt,,
+Customer interview round two,Waiting on a decision about the phone build.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,Needs `feature-flag` cleanup first,tracker.example.com/customer-interview-round-two,renee.dubois@example.com,,14,,72,44,5186.41,Low,Grace Hopper,"design, infra, docs, urgent","platform, mobile",Archived,false,2026-03-27,2026-03-15,2026-03-27,2026-03-06T15:45,,,,Database Testbed/Attachments/audit-checklist.md,,
+This is a deliberately very long project title that should overflow and force truncation on narrow phone columns,Rolled out to ten percent of accounts.,,==Highest confidence== item this cycle,tracker.example.com/this-is-a-deliberately-very-long-project-title-that-should-overflow-and-,mehmet.ozturk@example.com,+31 20 546 4816,20,5,0,64,59000.37,Low,Jean Bartik,design,,In Review,false,2026-02-27,2026-02-11,2026-02-27,2026-02-03T16:30,,"05 — Mobile navigation sweep, 17 — Deal desk workflow",,,,
+Zero-cost cleanup,Rolled out to ten percent of accounts.,,~~Deferred~~ then reinstated,,ada.lovelace@example.com,,2,3,64,4,20731.08,,Ada Lovelace,infra,design-systems,Blocked,false,2026-05-09,2026-05-01,2026-05-09,2026-05-01T13:15,,29 — Bulk export tooling,,,,
+Offline draft sync,Second attempt after the first rollback.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",,tracker.example.com/offline-draft-sync,,+31 20 790 2030,8,2,4,11,62709,High,Renée Dubois,,,In Review,true,2026-03-18,2026-03-17,2026-03-18,,,19 — Roadmap planning cycle,,"Database Testbed/Attachments/release-notes.txt, Database Testbed/Attachments/audit-checklist.md",,
+Payment retry backoff,Handed to the platform team for the data leg.,"Two attempts, one rollback. The second attempt changed the retry window rather than the payload, which is the difference that mattered.",**Critical path** for the quarter,,,+31 20 454 5037,21,2,73,3,12487.22,Critical,Grace Hopper,"research, mobile",infra,In Progress,false,2026-03-07,2026-02-26,2026-03-07,2026-02-23T18:45,,28 — Session replay pilot,,,,
+Audit log retention,Blocked on a vendor contract renewal.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",==Highest confidence== item this cycle,tracker.example.com/audit-log-retention,,+31 20 221 2394,16,3,9,67,15703.28,High,Mehmet Öztürk,infra,"mobile, growth",In Review,false,2026-05-23,2026-05-20,2026-05-23,2026-05-08T10:45,,,,Database Testbed/Attachments/audit-checklist.md,,
+Empty shell,Handed to the platform team for the data leg.,,,tracker.example.com/empty-shell,ada.lovelace@example.com,,2,2,,86,5797.74,Critical,Jean Bartik,"infra, urgent","mobile, growth",Backlog,false,2026-03-14,2026-02-26,2026-03-14,,,"01 — Onboarding flow redesign, 10 — Notification centre",,,,
+Feature flag consolidation,Handed to the platform team for the data leg.,"Two attempts, one rollback. The second attempt changed the retry window rather than the payload, which is the difference that mattered.",**Critical path** for the quarter,tracker.example.com/feature-flag-consolidation,ada.lovelace@example.com,+31 20 295 2047,20,1,7,,29307.65,High,Ada Lovelace,"backend, design, mobile, docs, research, infra","mobile, design-systems",Blocked,false,2026-02-19,2026-02-11,2026-02-19,2026-02-04T19:45,,23 — Offline draft sync,,,,
+Session replay pilot,Second attempt after the first rollback.,,~~Deferred~~ then reinstated,tracker.example.com/session-replay-pilot,ada.lovelace@example.com,,15,5,63,58,38885.67,High,Grace Hopper,"mobile, design, research, backend, docs, urgent","infra, growth",In Review,false,2026-04-21,2026-04-11,2026-04-21,2026-04-03T15:30,,06 — Data warehouse cutover,,,,
+Bulk export tooling,Waiting on a decision about the phone build.,,~~Deferred~~ then reinstated,tracker.example.com/bulk-export-tooling,,,15,2,15,25,45552.29,Critical,Renée Dubois,mobile,"infra, design-systems",Archived,false,2026-03-19,2026-03-11,2026-03-19,,,"05 — Mobile navigation sweep, 30 — Region failover drill",,,,
+Region failover drill,Scope confirmed with the steering group.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",==Highest confidence== item this cycle,tracker.example.com/region-failover-drill,grace.hopper@example.com,+31 20 576 5244,3,2,45,4,26542.61,High,Mehmet Öztürk,"backend, docs, infra",,Blocked,false,2026-04-14,2026-04-08,2026-04-14,2026-04-02T12:45,,,,"Database Testbed/Attachments/audit-checklist.md, Database Testbed/Attachments/release-notes.txt",,
+Push token hygiene,Blocked on a vendor contract renewal.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,~~Deferred~~ then reinstated,tracker.example.com/push-token-hygiene,jean.bartik@example.com,,11,3,65,54,,Critical,Grace Hopper,"docs, design, backend, infra",infra,Archived,false,2026-04-29,2026-04-15,2026-04-29,2026-04-06T18:00,,"02 — Search relevance tuning, 21 — This is a deliberately very long project title that should overflow and force truncation on narrow phone columns",,,,
+Schema registry rollout,Waiting on a decision about the phone build.,,~~Deferred~~ then reinstated,tracker.example.com/schema-registry-rollout,renee.dubois@example.com,+31 20 810 5563,9,4,,,68568.61,Medium,Grace Hopper,design,growth,In Review,true,2026-04-04,2026-04-01,2026-04-04,2026-03-24T13:15,,,,Database Testbed/Attachments/audit-checklist.md,,
+Support macro rewrite,Rolled out to ten percent of accounts.,Nothing here is blocked on engineering. The remaining work is a contract and a date.,==Highest confidence== item this cycle,,ada.lovelace@example.com,,2,,49,26,13523.88,Critical,Mehmet Öztürk,"docs, infra, backend, urgent",infra,Done,false,2026-04-23,2026-04-14,2026-04-23,,,,,,,
+Trial conversion funnel,Blocked on a vendor contract renewal.,"Two attempts, one rollback. The second attempt changed the retry window rather than the payload, which is the difference that mattered.",Needs `feature-flag` cleanup first,tracker.example.com/trial-conversion-funnel,grace.hopper@example.com,,11,3,63,39,3873.44,High,Renée Dubois,"research, backend, urgent","infra, mobile",Backlog,true,2026-02-18,2026-02-04,2026-02-18,2026-01-26T15:30,,"28 — Session replay pilot, 30 — Region failover drill",,,,
+Webhook signing rotation,Blocked on a vendor contract renewal.,"Kickoff scope confirmed with the steering group.
+
+Open questions:
+- Which surfaces are in scope for the phone build?
+- Do we reuse last cycle's evidence bundle?
+
+Decision: proceed with the reduced set and revisit at the mid-cycle review. This paragraph is intentionally long so that wrapping, the record detail panel and the card frames all get a real multi-line value to render on a narrow screen.",,tracker.example.com/webhook-signing-rotation,grace.hopper@example.com,,18,3,63,,38187.76,Medium,Mehmet Öztürk,"urgent, research, mobile, design",mobile,Done,false,2026-03-01,2026-02-21,2026-03-01,2026-02-21T19:00,,,,,,
+Sandbox parity fixes,,,,,,,,,,,,,,,,,,,,,,,,,,,
