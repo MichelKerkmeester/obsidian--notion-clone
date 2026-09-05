@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-09-05T05:36:41.619Z",
+  "measuredAt": "2026-09-05T05:58:17.894Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "9b8cd68af575",
-    "tools/live/sheet-rebuild-harness.ts": "cb014e452dc0",
-    "src/views/toolbar-renderer.ts": "7e889160cec1",
+    "tools/live/sheet-rebuild.mjs": "c0bf923ce8b9",
+    "tools/live/sheet-rebuild-harness.ts": "d36bd65f96f3",
+    "src/views/toolbar-renderer.ts": "ce0af34c3d8a",
     "src/views/popover-position.ts": "9523ac9d8791",
-    "src/views/mobile-bottom-sheet.ts": "f3fbecda1acc",
+    "src/views/mobile-bottom-sheet.ts": "ebe9707e6db8",
     "src/views/sort-panel-renderer.ts": "3b916d60a109",
     "src/views/filter-panel-renderer.ts": "0a5c86a1f6e4",
     "src/views/view-config-panel-renderer.ts": "1558c276197d",
     "src/views/overlay-stack.ts": "4f35a9904a53",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
-  "cases": 35,
+  "cases": 53,
   "barsLost": 0,
   "gesturesMeasured": 4,
   "enginesMeasured": [
@@ -183,6 +183,60 @@
       "preFixFailure": null
     },
     {
+      "name": "Chrome: the sort sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a tap inside the sort sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "Chrome: the sort sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: the filter sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a tap inside the filter sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "Chrome: the filter sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a press inside the sort sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "Chrome: a press inside the filter sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "Chrome: a wheel inside a sheet cannot reach the container's wheel handler",
+      "pass": true,
+      "detail": "it does not propagate, so the bare containment test there is answering only about nodes it can actually see",
+      "preFixFailure": null
+    },
+    {
       "name": "Chrome: an anchored popover still goes when its anchor does",
       "pass": true,
       "detail": "hidden, as a surface with no anchor left to sit beside should be",
@@ -222,6 +276,60 @@
       "name": "WebKit: the filter sheet keeps its own node across the rebuild",
       "pass": true,
       "detail": "the panel the press began in is the panel that is still there afterwards",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: the sort sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a tap inside the sort sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "WebKit: the sort sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: the filter sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a tap inside the filter sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "WebKit: the filter sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a press inside the sort sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "WebKit: a press inside the filter sheet keeps the cell selection",
+      "pass": true,
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
+    },
+    {
+      "name": "WebKit: a wheel inside a sheet cannot reach the container's wheel handler",
+      "pass": true,
+      "detail": "it does not propagate, so the bare containment test there is answering only about nodes it can actually see",
       "preFixFailure": null
     },
     {

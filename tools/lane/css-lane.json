@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "8ed9f0c8f1c5",
+  "baselineHash": "21c50c44393a",
   "baselineCommit": "07be64fed44b13d0f70bfbaac1aefb2db39eb0fd",
   "history": [
     {
@@ -3164,6 +3164,25 @@
         "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
       ],
       "note": "Superseding release for the two fixes above (the prior release note in this file, at a40befd29807, is now stale — check-lane.mjs only reads the newest entry, this one carries the full current diff against HEAD). 52 content-changed captures against HEAD, all read: the same 50 the prior release named (the shared title/inset rules, the four new dropdown families, the settings overflow fix, the add-view toggle reorder) plus 2 more this specific pass surfaced — constructed-record-detail-mobile-{dark,light}.png and constructed-record-peek-mobile-{dark,light}.png, both just the shared 16px title landing on .db-record-detail-title, confirmed clean. 26 further captures moved bytes only (styles.css's own sourceHashes fingerprint touches every manifest entry) and were restored to HEAD bytes. npm run screenshots:verify: 0 stale."
+    },
+    {
+      "event": "edit",
+      "phase": "044-phone-sheet-alignment",
+      "at": "2026-09-05T05:50:00Z",
+      "hash": "21c50c44393a",
+      "note": "Rebased this leg's two landing commits onto origin/main (345192f2, carrying the 0.0.23 release cut and a concurrent sheet-press-containment fix) to publish without touching the primary checkout. styles.css moved again in the merge, textually, from main's own concurrent edits; this leg's own predicate/registry/CSS work carries forward unchanged — tsc, vitest (1143/1143, +14 from main's own sheet-rebuild additions) and this leg's own sheet-grammar/verify-placement runs all re-verified green on the merged tree. Screenshot conflicts (5 PNGs plus manifest.json, all in surfaces neither side's source diff touches) and 7 evidence-artifact JSON conflicts were resolved by taking a placeholder side and regenerating every one of the 15 evidence artifacts plus a full recapture fresh against the merged source, rather than by hand-merging generated content."
+    },
+    {
+      "event": "release",
+      "phase": "044-phone-sheet-alignment",
+      "at": "2026-09-05T05:55:00Z",
+      "hash": "21c50c44393a",
+      "reviewed": [
+        "screenshots/notion-clone/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/notion-clone/fields/field-icon-picker-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-column-manager-mobile-dark.png"
+      ],
+      "note": "Post-rebase recapture found only 3 content-changed captures against the new HEAD, all from main's own concurrent work rather than this leg's: field-icon-picker-desktop-{dark,light}.png (the small anchored popover's own search-field truncation, unrelated to this leg's phone-sheet fix, which is scoped to .db-mobile-bottom-sheet) and panel-column-manager-mobile-dark.png (unrelated data/layout difference). All three read by hand: no title/close appears on either, matching that neither is a registered phone sheet; both render cleanly. The 50-plus-2 captures this leg's own work moved were confirmed unchanged again on this tree (byte-identical after the rebase's textual merge) and are not re-listed. 21 further captures moved bytes only and were restored to HEAD bytes. npm run screenshots:verify: 0 stale."
     }
   ],
   "outstanding": [

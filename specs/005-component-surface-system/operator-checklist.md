@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **48 phases**, **6 with nothing left**, **109 rows** waiting on a device.
+Derived 2026-09-05: **49 phases**, **6 with nothing left**, **116 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -254,6 +254,16 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] A capture with no in-repo source has a deterministic class in `verify.mjs`. Today: `vendor-unavailable` exists for an *unavailable* source, which is a different thing from no source at all.
 - [ ] The board and the gantt are compared against Project Manager with named elements and measured values, and every gap is closed with a before/after number or dispositioned with a reason.
 - [ ] The operator reads the board and the timeline on a released build and no longer says "align closer". Only the operator closes this row.
+
+## 048-stacked-sheets — 0/7
+
+- [ ] The inventory exists and is code-derived. Every surface that can open while another sheet is open, grouped parent → child → opener kind → current → target, each row citing a `file:line` opener. Today: no such document exists; `../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md` censuses surfaces one at a time and never asks which opens over which.
+- [ ] A parent sheet's bounding box does not move when a child opens, measured on both edges.
+- [ ] Exactly one scrim while two sheets are open, and it sits between them. Today: 1 scrim behind both — `setScrim` (`mobile-bottom-sheet.ts:478`) reuses a single `.db-mobile-sheet-scrim` node for however many sheets are open, by design.
+- [ ] Every stacked child carries a header with a 44px close. Today: 5 surfaces call `createSheetHeader` or its equivalent (`filter-panel-renderer.ts:259`, `sort-panel-renderer.ts:113`, `toolbar-renderer.ts:1386`, `create-linked-view-modal.ts:59`, `view-config-panel-renderer.ts:388`) and not one of them is a stacked child.
+- [ ] The topmost sheet holds the keyboard inset and the sheet beneath it holds zero, proven by a negative control. Today: each sheet writes its own `--db-mobile-sheet-bottom` at its own placement time (`popover-position.ts:406`), which is why the operator's filter sheet sits at the top of the screen while its own dropdown sits at the bottom.
+- [ ] `npm run gate` exits 0 with a permanent lane row per stacked pair, each observed red before green. Today: `sheet-grammar`'s registry holds 8 surfaces and every one of them is a first sheet (`tools/live/sheet-grammar.mjs:46-68`); no stacked pair is registered.
+- [ ] The operator opens the Properties sheet, the filter sheet's operator dropdown and its property picker on iOS and reports each as one stack rather than two sheets. Only the operator closes this row; nothing in this repository can.
 
 ## Nothing left to check
 
