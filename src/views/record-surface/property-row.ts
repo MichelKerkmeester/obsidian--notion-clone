@@ -208,9 +208,9 @@ export interface PropertyRowHandle {
 }
 
 /**
- * Label, then value, value left-aligned — the anatomy the captures show rather than the type
- * icon + right-aligned value the packet's own draft assumed. No format icon is drawn: neither
- * platform puts one on a value row, only on a picker or the type's own property editor.
+ * Label, then value, value left-aligned. No format icon is drawn: neither platform puts one on a
+ * value row, only on a picker or on the type's own property editor, so a row that grows a third
+ * child has drifted.
  */
 export function buildPropertyRow(options: PropertyRowOptions): PropertyRowHandle {
   const row = options.parent.createDiv({ cls: options.rowClass });
@@ -234,9 +234,9 @@ export interface OptionValueRenderOptions {
 
 /**
  * Single-select renders as coloured text with no chip; multi-select stays a filled chip. Today
- * both render through the same badge, which is the one anatomy point this packet's own draft
- * got wrong on both platforms (a value row never draws a format icon, and only multi-select
- * ever draws a fill). The colours are ours; only the split is adopted.
+ * both still render through the same filled badge everywhere a value is drawn, which is what
+ * makes the two formats unreadable from each other at a glance. The colours stay ours, and every
+ * option pair owes 4.5:1 against its own background; only the fill-versus-text split is adopted.
  */
 export function renderOptionValue(
   valueEl: HTMLElement,

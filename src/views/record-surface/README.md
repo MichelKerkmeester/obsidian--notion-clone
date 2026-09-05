@@ -33,7 +33,7 @@ consumer versus built beside one and not yet consumed.
 
 | File | Primitive |
 |---|---|
-| `index.ts` | Barrel and the contract table naming every primitive below |
+| `index.ts` | Barrel over every file below, plus the contract table naming the four built primitives. The cell-editor dispatch is a contract rather than a primitive, so it has no table row |
 | `record-header.ts` | Header block: icon, title, open, close — desktop and phone variants |
 | `property-row.ts` | Property row: the display value renderer every card calls today, plus the corrected row shell and option-value split |
 | `add-property-row.ts` | The search-first "add a property" affordance |
