@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Remove the Gallery Renderer and Its Harness"
-description: "The gallery renderer and every measurement surface named against it left the tree together. gallery stays on DatabaseViewType, migrated permanently, the same shape 006 chose for list. The one board-shared capture whose crop target moved is explained by name rather than silently rebaselined; the gate stays 25/25 with the same lane names, because gallery never owned a dedicated lane the way list owned list-window."
+description: "The gallery renderer and every measurement surface named against it left the tree together. gallery stays on DatabaseViewType, migrated permanently, the same shape 006 chose for list. The one board-shared capture whose crop target moved is explained by name rather than silently rebaselined; the gate stays green — 26/26 after the landing rebase — with the same lane names, because gallery never owned a dedicated lane the way list owned list-window."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "007-gallery-view-deprecation/003-remove-renderer-and-harness"
-    last_updated_at: "2026-09-05T23:30:00Z"
-    last_updated_by: "remove-renderer-and-harness-run"
-    recent_action: "Deleted the gallery renderer and its whole measurement surface; ADR-001 accepted"
+    last_updated_at: "2026-09-06T00:55:00Z"
+    last_updated_by: "landing-verification"
+    recent_action: "Landed the gallery removal on main after a rebase; gate 26/26 green"
     next_safe_action: "Hand off to 004-docs-and-release; the removal is landed and gate-green"
     blockers: []
     key_files:
@@ -172,7 +172,7 @@ markup, confirmed by reading each edited scenario; `constructed-group-selection-
 reason found only by comparing the before/after PNGs by eye, not predicted in advance — its harness
 branch built `galleryHost` *before* `boardHost`, so the capture's element crop previously targeted
 gallery's own grouped rendering, and removing gallery's construction correctly exposes the board
-extensions selection box the scenario's own title always named. All 12 moved captures were opened and
+extensions selection box the scenario's own title always named. All 13 moved captures were opened and
 read by hand, in both themes and both devices, before being named in the css-lane release entry;
 16 further captures the full `npm run screenshots` run re-encoded without a pixel or layout change
 were restored to their `HEAD`-committed bytes rather than carried as unrelated diffs, with the
@@ -180,7 +180,7 @@ manifest's `bytes` field corrected to match.
 
 `npm run gate` ran to completion twice: once before the css-lane handover and the capture/evidence
 re-stamp (three lanes red — `css-lane`, `screenshots-fresh`, `evidence`, all for the reason this
-phase's own edits caused and none for an unrelated one), and once after, 25/25 green.
+phase's own edits caused and none for an unrelated one), and once after, green — 26/26 on the landing rebase's re-verification.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -204,15 +204,15 @@ phase's own edits caused and none for an unrelated one), and once after, 25/25 g
 
 | Check | Result |
 |-------|--------|
-| Red before green | Observed directly: after deleting `gallery-renderer.ts` and its bench, `npx vitest run` failed 3 files — `checkbox-family-coverage.test.ts` (the `gallery-view` and `chrome-group-selection-controls` fixtures' `.db-gallery-card-checkbox`/`.db-gallery-group-checkbox` matched no `createCheckbox` call), `screenshot-fixtures.test.ts` (the invented class `db-gallery-group-new`, once `galleryGroupHeader`'s only producer was gone), and `gallery-hide-and-migrate.test.ts` (a describe block asserting the render-dispatch branch this phase deletes). All three went green after the corresponding scenario/harness edit and full suite re-run: 1244/1244 |
+| Red before green | Observed directly: after deleting `gallery-renderer.ts` and its bench, `npx vitest run` failed 3 files — `checkbox-family-coverage.test.ts` (the `gallery-view` and `chrome-group-selection-controls` fixtures' `.db-gallery-card-checkbox`/`.db-gallery-group-checkbox` matched no `createCheckbox` call), `screenshot-fixtures.test.ts` (the invented class `db-gallery-group-new`, once `galleryGroupHeader`'s only producer was gone), and `gallery-hide-and-migrate.test.ts` (a describe block asserting the render-dispatch branch this phase deletes). All three went green after the corresponding scenario/harness edit and full suite re-run: 1334/1334 on re-verification |
 | `npx tsc --noEmit` | Exit 0 |
-| `npx vitest run` | 1244/1244 passing across 114 files |
+| `npx vitest run` | 1334/1334 passing across 127 files |
 | `npm run lint:tools` | Exit 0 |
 | `npm run build` | Exit 0, no tracked `main.js` diff beyond this change's own source delta |
-| `npm run screenshots` (full) | 546 entries (was 554 — the 8 gallery-only entries) |
-| `npm run screenshots:verify` | 546/546 current, 0 stale |
+| `npm run screenshots` (full) | 550 entries (was 558 — the 8 gallery-only entries) |
+| `npm run screenshots:verify` | 550/550 current, 0 stale |
 | `node tools/live/replay.mjs` | PASS, 28/28 results held, none referencing a removed file |
-| `npm run gate` | **25/25 green**, `$?` read directly, lane list unchanged BY NAME |
+| `npm run gate` | **26/26 green**, `$?` read directly, lane list unchanged BY NAME |
 | `renderer-coverage.json` | `constructed: 5, total: 20`, `note: "was 6/21; gallery renderer retired"` |
 | `rg -c 'db-gallery' styles.css` | 0 |
 | ADR-001 (`DatabaseViewType`) | Accepted — `gallery` stays, migrated permanently |
@@ -223,8 +223,8 @@ phase's own edits caused and none for an unrelated one), and once after, 25/25 g
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **The gate's lane list did not shrink**, unlike `006`'s `007` (25 lanes before and after, not
-   24 → 25 by reconciliation). This is a real finding, not an oversight: gallery never owned a
+1. **The gate's lane list did not shrink**, unlike `006`'s `007` (26 lanes before and after, not
+   25 → 26 by reconciliation). This is a real finding, not an oversight: gallery never owned a
    dedicated lane the way list owned `list-window`, so its removal shows up as smaller lanes
    (`render-assertions`, `evidence`) rather than as a lane deleted from the list. AC-003 records
    this explicitly rather than forcing a false "lane removed" claim.

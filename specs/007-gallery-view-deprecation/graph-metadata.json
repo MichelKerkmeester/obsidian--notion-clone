@@ -47,13 +47,10 @@
       "goal.md",
       "roadmap.md",
       "tools/live/renderer-coverage.json",
-      "src/views/gallery-renderer.ts",
-      "tools/bench/gallery-render-bench.ts",
       "src/views/card-field-renderer.ts",
       "src/main.ts",
       "src/data/gallery-migration.ts",
       "src/views/embedded-database-renderer.ts",
-      "tools/bench/run-gallery.mjs",
       "tools/screenshots/constructed-scenarios.mjs",
       "screenshots/manifest.json",
       "src/data/types.ts",
@@ -62,7 +59,10 @@
       "src/views/database-view.ts",
       "src/views/view-config-panel-renderer.ts",
       "src/data/data-source.ts",
-      "src/views/toolbar-renderer.ts"
+      "src/views/toolbar-renderer.ts",
+      "tools/live/render-assertion-harness.ts",
+      "tools/live/checkbox-appearance.json",
+      "tools/screenshots/scenarios/core.mjs"
     ],
     "entities": [
       {
@@ -90,18 +90,6 @@
         "source": "derived"
       },
       {
-        "name": "gallery-renderer.ts",
-        "kind": "code",
-        "path": "src/views/gallery-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "gallery-render-bench.ts",
-        "kind": "code",
-        "path": "tools/bench/gallery-render-bench.ts",
-        "source": "derived"
-      },
-      {
         "name": "card-field-renderer.ts",
         "kind": "code",
         "path": "src/views/card-field-renderer.ts",
@@ -123,12 +111,6 @@
         "name": "embedded-database-renderer.ts",
         "kind": "code",
         "path": "src/views/embedded-database-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "run-gallery.mjs",
-        "kind": "file",
-        "path": "tools/bench/run-gallery.mjs",
         "source": "derived"
       },
       {
@@ -186,6 +168,24 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox-appearance.json",
+        "kind": "config",
+        "path": "tools/live/checkbox-appearance.json",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -212,7 +212,7 @@
     ],
     "causal_summary": "The gallery view is withdrawn but not removed, and has been since `030-gallery-view-deprecation`",
     "created_at": "2026-09-05T03:46:36Z",
-    "last_save_at": "2026-09-05T06:44:05.130Z",
+    "last_save_at": "2026-09-05T23:41:45.687Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [

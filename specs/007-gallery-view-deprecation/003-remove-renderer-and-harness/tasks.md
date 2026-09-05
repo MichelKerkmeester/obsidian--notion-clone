@@ -59,10 +59,10 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [x] T013 `npm run gate`: 25/25 green, `$?` = 0 read directly. Lane list BY NAME unchanged (25 names, same names) — the delta is explained in `acceptance-criteria.md` AC-003: gallery never owned a dedicated lane, unlike list's `list-window`
+- [x] T013 `npm run gate`: 26/26 green, `$?` = 0 read directly. Lane list BY NAME unchanged (26 names, same names; 25 pre-rebase, `main` gained one) — the delta is explained in `acceptance-criteria.md` AC-003: gallery never owned a dedicated lane, unlike list's `list-window`
 - [x] T014 Ran the FULL capture: `npm run screenshots` (546 entries, down from 554 — the 8 gallery-only entries), then `npm run screenshots:verify` (546/546 current, 0 stale)
 - [x] T015 Compared board capture hashes against the `HEAD` baseline: `constructed-card-covers` identical in all 4 arms; the other 3 board-shared ids moved for reasons named in AC-004, not silently rebaselined — the 16 unrelated re-encode-only captures the full run also touched were restored to their `HEAD` bytes rather than committed as unrelated diffs
-- [x] T016 Read all 12 changed captures by hand, both themes and both devices sampled — not just two — because a hash match is not a look
+- [x] T016 Read all 13 changed captures by hand, both themes and both devices sampled — not just two — because a hash match is not a look
 - [x] T017 `node tools/live/replay.mjs`: PASS, 28/28 results held, none referencing a removed file
 <!-- /ANCHOR:phase-3 -->
 
@@ -134,7 +134,7 @@ status.
 - [x] CHK-020 [P0] All acceptance criteria met
 - [x] CHK-021 [P0] The FULL capture run passed (546/546 fresh), not only the gate's `render-assertions` lane
 - [x] CHK-022 [P1] Board capture hashes compared against the pre-change baseline (`HEAD`'s manifest), not merely re-run
-- [x] CHK-023 [P1] The gate's lane list compared BY NAME before and after, not by count — unchanged, 25 names both sides
+- [x] CHK-023 [P1] The gate's lane list compared BY NAME before and after, not by count — unchanged, 26 names both sides
 <!-- /ANCHOR:testing -->
 
 ---

@@ -25,7 +25,7 @@ contextType: "general"
 | **Language/Stack** | TypeScript, Node tooling under `tools/` |
 | **Framework** | None — esbuild bundle; headless Chrome for the live lanes |
 | **Storage** | `viewType` and six `gallery*` fields are persisted vault data |
-| **Testing** | Vitest, `npm run gate` (25 lanes), `npm run screenshots`, `npm run replay` |
+| **Testing** | Vitest, `npm run gate` (26 lanes), `npm run screenshots`, `npm run replay` |
 
 ### Overview
 

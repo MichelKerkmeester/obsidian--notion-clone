@@ -11,9 +11,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "007-gallery-view-deprecation/003-remove-renderer-and-harness"
-    last_updated_at: "2026-09-05T07:20:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Deleted the gallery renderer and its whole measurement surface; gate 25/25 green"
+    last_updated_at: "2026-09-06T00:55:00Z"
+    last_updated_by: "landing-verification"
+    recent_action: "Deleted the gallery renderer and its measurement surface; gate 26/26 green"
     next_safe_action: "Hand off to 004-docs-and-release; nothing further is 003's to do"
     blockers: []
     key_files:
@@ -137,6 +137,6 @@ into the objective, and it is expected to grow.
 | `006`'s equivalent phase caused its own regression | Re-pointing shared column and row builders from the deleted list bench to the table bench exposed that the two benches build differently-shaped `ViewConfig`s, blanking every constructed filter/sort/summary scenario's field selector. `npm run gate`'s `render-assertions` lane never exercised those branches — **only the full screenshot capture caught it.** That is why T014 runs the full capture. |
 | The persisted surface is bigger than the list's | `gallery` in the union plus six `gallery*` `ViewConfig` fields, against `list` plus `listCompactFields`. ADR-001 has more to decide than its counterpart did. |
 | `gallery-migration.ts` survives this phase deliberately | It is the thing that lets a vault which skipped the `002` release land somewhere chosen. Deleting it here would recreate the exact hazard the phase order exists to avoid. |
-| Gallery owned no dedicated gate lane | Unlike `list`'s `list-window`, no `tools/gate.mjs` entry named gallery. The 25 lanes are unchanged BY NAME before and after; the removal is measured inside `render-assertions`' coverage ratchet, `evidence`'s re-stamped artefacts, `css-lane`'s stylesheet sweep and `placement`'s `SELECT_FIXTURE`, not as a lane deletion. D4's "compare by name" still applies — it just has no lane-count delta to compare. |
+| Gallery owned no dedicated gate lane | Unlike `list`'s `list-window`, no `tools/gate.mjs` entry named gallery. The 26 lanes are unchanged BY NAME before and after; the removal is measured inside `render-assertions`' coverage ratchet, `evidence`'s re-stamped artefacts, `css-lane`'s stylesheet sweep and `placement`'s `SELECT_FIXTURE`, not as a lane deletion. D4's "compare by name" still applies — it just has no lane-count delta to compare. |
 | `constructed-group-selection-controls`'s capture moved for a reason the plan did not predict | Its harness branch built `galleryHost` before `boardHost`; the element-mode capture crop had been showing gallery's own grouped rendering all along, not board's. Removing gallery's construction corrects the capture to show the board extensions selection box the scenario's own title always named. Found by comparing the before/after PNGs, not by reading the code alone — `constructed-card-covers`, built with board first, stayed pixel-identical as the plan expected. |
 <!-- /ANCHOR:log -->

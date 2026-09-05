@@ -11,10 +11,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "007-gallery-view-deprecation/003-remove-renderer-and-harness"
-    last_updated_at: "2026-09-05T07:16:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Authored the removal phase"
-    next_safe_action: "Blocked until 002 ships in a release; do not start on a merge"
+    last_updated_at: "2026-09-06T00:55:00Z"
+    last_updated_by: "landing-verification"
+    recent_action: "Removal implemented and landed; the renderer and its harness are gone"
+    next_safe_action: "Hand off to 004-docs-and-release; nothing further is 003 own"
     blockers:
       - "002 must be SHIPPED in a release, not merely merged (parent D8)"
     key_files:
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "gallery-007-003-spec"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions:
       - "Does gallery leave DatabaseViewType, or stay accepted-but-redirected as list did?"
       - "Do the six gallery* ViewConfig fields go, or stay for the same reason the union value does?"

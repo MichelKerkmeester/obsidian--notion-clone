@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The renderer and its measurements are one unit, and taking them apart in two changes is how a gate",
     "created_at": "2026-09-05T03:46:38Z",
-    "last_save_at": "2026-09-05T21:34:12.211Z",
+    "last_save_at": "2026-09-05T23:41:44.909Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0c5af1d3db11bfe945b58aa8dfc7236cdef0d9b8ae48845c9fdaf9b6ee34472e",
+    "source_fingerprint": "sha256:1149616ecf2f31188f16ae53cfea324dc92d24971fe6426f46aefc46037076f2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e2f002a54c3ce5750dfa8dc34545bb34c183e4d4d0f678c1aad7473cd6f02786",
-      "plan.md": "2ba2b8d0e4cffa16553bba008a45857ec26204a2d2eecec03cd544e8117bdec7",
-      "tasks.md": "c736af3b2281fc869e88b7c4d377aecafff39101f0546e788d9e8ba26946d129",
-      "implementation-summary.md": "d97459d08d490b40b8774737b162d24a3248994ace366ca95f93b30d51c7f6aa"
+      "spec.md": "4a8516f3ed81e6e7897ae7ce1990e762fc2fba74e1754ce43153cbdc0635854a",
+      "plan.md": "278f703a3de53d24bd6e1a5a019d91ca47a764e9c3dac50e04d0416086765fbe",
+      "tasks.md": "9b664ae5ee6510b13698a9245d2fc5cbbf01c2d7d64b9208adffd9e0e695a7cf",
+      "implementation-summary.md": "6fe3f4c73f850022c759f40450e0c3d1aec9846b70b226c0acfb4760c2f2b182"
     },
     "last_active_child_id": null,
     "last_active_at": null
