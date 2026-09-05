@@ -1107,7 +1107,18 @@ itself caught:** the `chore(release): cut 0.0.25` commit (`2334046b`) carried th
 time" rule) reddened the tagged push; `f2518f5e` rebuilds the bundle, the tag was moved to it, and
 both Release and Gates went green on the retag. `manifest.json`, `package.json` and `versions.json`
 on main read **0.0.25**, and the tag is on `origin`.
-None of 0.0.7 through 0.0.25 is operator-confirmed yet. The cadence continues at **0.0.26** onward —
+**0.0.26 is cut** (`8c7b65aa`), carrying `006-record-open-target`'s fix landed underneath it
+(`ae46da94`): every affordance that opens a record with no anchor element — the row context menu's
+open item, the board card's own open button, and the gallery and timeline fallbacks — now docks the
+record panel against the pane's visible bounds at full height, instead of taking the anchored
+arithmetic's no-room fallback and pinning a 72px sliver to the top of a 900px viewport.
+`resolveRecordOpenTarget` decides placement where it decides the target, and `placeContainerDock`
+writes the docked height rather than capping it. Anchored opens and the phone sheet are untouched.
+Rebuilding `main.js` from `ae46da94`'s tree twice in a row produced a byte-identical bundle
+(`628bf722...`), already matching the bundle `ae46da94` itself committed, so the version-bump commit
+carried it forward with no drift and no separate rebuild leg was needed. `manifest.json`,
+`package.json` and `versions.json` on main read **0.0.26**, and the tag is on `origin`.
+None of 0.0.7 through 0.0.26 is operator-confirmed yet. The cadence continues at **0.0.27** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
@@ -1140,12 +1151,15 @@ capability landing (`ec893e67`), cut in `d3979cf5`; **0.0.24** —
 `048-stacked-sheets`' phone stacking model (`265f736f`/`915591c2`, reconciled `012f7769`/`b363d1b5`),
 `044`'s phone-sheet-grammar closing leg (`55253df8`/`28b505f3`), `046`'s desktop linked-view chrome
 (`e955f8ee`/`fb7bd820`), and `047`'s gallery-to-board migration on open (`e85fc31a`/`ceaa49ee`), cut
-in `cabf595c`; and **0.0.25**, the current cut — the board card's configured-property list, cleared
+in `cabf595c`; **0.0.25** — the board card's configured-property list, cleared
 teardown and anchored record panel (`8f5205b2`, recorded `f7405a6b`/`d15c9fc2`/`9d47b50e`), and the
 New split button's toolbar-matched chrome plus the widened filter/sort popover (`91a0a426`, recorded
 `f5a69e9f`), version-bumped in `2334046b` and rebuilt in `f2518f5e` after the tagged push's own drift
-check caught a stale bundle. The `0.0.16` through `0.0.25` tags are all present on `origin`. None of
-0.0.7 through 0.0.25 is operator-confirmed yet.
+check caught a stale bundle; and **0.0.26**, the current cut — `006-record-open-target`'s anchorless-
+open docking fix (`ae46da94`), which docks the record panel to the pane's right edge at full height
+for every no-anchor caller instead of the top-pinned sliver the container-anchor fallback produced,
+cut in `8c7b65aa`. The `0.0.16` through `0.0.26` tags are all present on `origin`. None of
+0.0.7 through 0.0.26 is operator-confirmed yet.
 
 **Release-mechanics gotcha, surfaced during the rename:** `.github/workflows/release.yml`
 auto-creates a GitHub release on any `*.*.*` tag push, and it raced the manual tag-recreation pass —
