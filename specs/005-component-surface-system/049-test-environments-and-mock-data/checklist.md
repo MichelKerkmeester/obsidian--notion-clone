@@ -38,7 +38,7 @@ Each row records the measurement from before the work, then the measurement afte
 | C9 | Databases rendering at their record count in the shipped renderer | **unmeasured** for anything but the one hand-written database | 10 of 10 | **10 of 10** | `capture.mjs`, ten `rows N/N … ok` lines, ten PNGs opened |
 | C10 | Relation links resolving to a real note | **unmeasured** | all | **265 of 265** | every `[[link]]` resolved against the filenames written to disk |
 | C11 | `npm run gate` exit status | green on the tree this branched from | 0 | **0** | read from `$?` |
-| C12 | Anytype demo space holding the same set | **0 of 10** — Anytype holds its own shipped demo | 10 of 10, 0 records missing | **0 of 10** | blocked on the CDP session |
+| C12 | Anytype demo space holding the same set | **0 of 10** — Anytype holds its own shipped demo | 10 of 10, 0 records missing | **10 of 10** | `--verify` re-read 326/326 records and 5990/5990 settable cells from the live space, 0 misses |
 | C13 | AppFlowy workspace holding the same set | **0 of 10** — AppFlowy holds its own shipped demo | 10 of 10, 0 records missing | **0 of 10** | blocked on an operator window |
 
 **C4 and C6 are the two rows that could have passed on a constant.** Both carry a negative control

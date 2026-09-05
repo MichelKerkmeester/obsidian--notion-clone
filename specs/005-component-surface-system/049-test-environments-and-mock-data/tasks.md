@@ -93,7 +93,7 @@ from the parser.
       constructed mount cannot show
 - [x] T019 `npx tsc --noEmit`, `npx vitest run` and `npm run gate`, each read by exit status
 - [x] T020 `validate.sh --strict` on this packet and on the parent, taking the first `RESULT:` line
-- [ ] T021 [B] Load `catalogue.json` into the Anytype demo space over the captures leg's CDP session
+- [x] T021 Load `catalogue.json` into the Anytype demo space. **Done, 2026-09-05, over Anytype's own local HTTP API rather than the CDP session this task assumed — the app serves one on `localhost:31009` and it creates types, properties, tag options, objects with values and collection membership in bulk, so the whole data load needs no UI driving at all. Ten sets, 326/326 records, every one of the 24 neutral column types created as one of Anytype's eleven relation formats. `--verify` re-read every object back and matched 5990/5990 settable cells with 0 misses. Views are the one thing the API cannot make (`POST .../views` is 404), so `views.mjs` drives those over CDP: 60 views across the ten sets, 269/270 catalogue columns on the grids, a sort on each Grid view and a filter on each List view. 120 captures in both themes. Scripts and their contract: `tools/mock-data/anytype/README.md`**
 - [ ] T022 Import the ten CSVs into the AppFlowy demo workspace, in an operator window. **Skipped by operator decision, 2026-09-05** (`decision-record.md` ADR-001) — AppFlowy is Flutter with no DOM or accessibility tree, so the import needs real mouse clicks the operator chose not to spend. The ten CSVs stay in `tools/mock-data/csv/` and the import steps stay written down in `screenshots/appflowy/README.md` for a future operator window
 - [ ] T023 [B] Operator opens the upgraded vault on a device and reads the ten databases
 <!-- /ANCHOR:phase-3 -->
@@ -103,8 +103,10 @@ from the parser.
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-T001 to T020 are done. T021 and T023 stay blocked on something this packet cannot supply: a CDP
-session and a device. T022 is not blocked — it is skipped by operator decision, 2026-09-05
+T001 to T021 are done. T023 stays blocked on something this packet cannot supply: a device in the
+operator's hands. **T021 turned out not to need the CDP session it was written against** — Anytype
+serves a local HTTP API that does the whole data load in bulk, and only the views leg needed the
+renderer. T022 is not blocked — it is skipped by operator decision, 2026-09-05
 (`decision-record.md` ADR-001); the CSVs and import steps are retained for a future operator window
 rather than being pursued now.
 <!-- /ANCHOR:completion -->
@@ -164,7 +166,7 @@ children, so the **first** `RESULT:` line is the folder's own verdict.
 
 - [x] All ten use cases, not a representative subset.
 - [x] All three outputs, not the vault alone.
-- [x] The two competitor legs named as blocked or skipped rather than quietly dropped: Anytype (T021) stays blocked on the CDP session, AppFlowy (T022) is skipped by operator decision (`decision-record.md` ADR-001).
+- [x] The two competitor legs named as blocked or skipped rather than quietly dropped: Anytype (T021) is **done**, loaded over the app's local HTTP API rather than the CDP session it was blocked on; AppFlowy (T022) is skipped by operator decision (`decision-record.md` ADR-001).
 <!-- /ANCHOR:fix-completeness -->
 
 <!-- ANCHOR:security -->

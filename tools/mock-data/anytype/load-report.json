@@ -1,0 +1,2556 @@
+{
+  "space": "bafyreihvtvxiy7aai6f3y4pzs3tp2h5i5vxoq3njyx55rfg2nnijpowiri.21ytko0pzprcx",
+  "spaceName": "notion-clone-reference-demo",
+  "sets": [
+    {
+      "id": "project-tracker",
+      "name": "Project Tracker",
+      "typeKey": "project_tracker",
+      "collectionId": "bafyreigimuibparwzcovxsv2f4fsligsvybraq4z22cox5uz4mslqnydt4",
+      "expected": 36,
+      "readBack": 36,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "Summary",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "summary_(project_tracker)",
+          "options": 0,
+          "propertyName": "Summary (Project Tracker)"
+        },
+        {
+          "column": "notes",
+          "label": "Working notes",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "working_notes",
+          "options": 0,
+          "propertyName": "Working notes"
+        },
+        {
+          "column": "headline",
+          "label": "Headline",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "headline",
+          "options": 0,
+          "propertyName": "Headline"
+        },
+        {
+          "column": "link",
+          "label": "Ticket",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "ticket",
+          "options": 0,
+          "propertyName": "Ticket"
+        },
+        {
+          "column": "contact_email",
+          "label": "Owner email",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "owner_email",
+          "options": 0,
+          "propertyName": "Owner email"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Escalation line",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "escalation_line",
+          "options": 0,
+          "propertyName": "Escalation line"
+        },
+        {
+          "column": "amount",
+          "label": "Estimate (pts)",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "estimate_(pts)",
+          "options": 0,
+          "propertyName": "Estimate (pts)"
+        },
+        {
+          "column": "rating",
+          "label": "Confidence",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "confidence_(project_tracker)",
+          "options": 0,
+          "propertyName": "Confidence (Project Tracker)"
+        },
+        {
+          "column": "progress",
+          "label": "Complete",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "complete",
+          "options": 0,
+          "propertyName": "Complete"
+        },
+        {
+          "column": "attainment",
+          "label": "Risk burn",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "risk_burn",
+          "options": 0,
+          "propertyName": "Risk burn"
+        },
+        {
+          "column": "budget",
+          "label": "Budget",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "budget_(project_tracker)",
+          "options": 0,
+          "propertyName": "Budget (Project Tracker)"
+        },
+        {
+          "column": "priority",
+          "label": "Priority",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "priority_(project_tracker)",
+          "options": 4,
+          "propertyName": "Priority (Project Tracker)"
+        },
+        {
+          "column": "owner",
+          "label": "Assignee",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "assignee",
+          "options": 0,
+          "propertyName": "Assignee"
+        },
+        {
+          "column": "labels",
+          "label": "Labels",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "labels_(project_tracker)",
+          "options": 7,
+          "propertyName": "Labels (Project Tracker)"
+        },
+        {
+          "column": "tags",
+          "label": "Team",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "team",
+          "options": 5,
+          "propertyName": "Team"
+        },
+        {
+          "column": "status",
+          "label": "Status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "status_(project_tracker)",
+          "options": 6,
+          "propertyName": "Status (Project Tracker)"
+        },
+        {
+          "column": "pinned",
+          "label": "Blocked",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "blocked",
+          "options": 0,
+          "propertyName": "Blocked"
+        },
+        {
+          "column": "due",
+          "label": "Due",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "due_(project_tracker)",
+          "options": 0,
+          "propertyName": "Due (Project Tracker)"
+        },
+        {
+          "column": "starts",
+          "label": "Starts",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "starts",
+          "options": 0,
+          "propertyName": "Starts"
+        },
+        {
+          "column": "ends",
+          "label": "Ends",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "ends",
+          "options": 0,
+          "propertyName": "Ends"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last reviewed",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_reviewed",
+          "options": 0,
+          "propertyName": "Last reviewed"
+        },
+        {
+          "column": "cost_per_point",
+          "label": "Cost / point",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_point",
+          "options": 0,
+          "propertyName": "Cost / point"
+        },
+        {
+          "column": "related",
+          "label": "Depends on",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "depends_on",
+          "options": 0,
+          "propertyName": "Depends on"
+        },
+        {
+          "column": "related_count",
+          "label": "Dependencies",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "dependencies",
+          "options": 0,
+          "propertyName": "Dependencies"
+        },
+        {
+          "column": "attachments",
+          "label": "Attachments",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "attachments",
+          "options": 0,
+          "propertyName": "Attachments"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(project_tracker)",
+          "options": 0,
+          "propertyName": "Created (Project Tracker)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(project_tracker)",
+          "options": 0,
+          "propertyName": "Modified (Project Tracker)"
+        }
+      ],
+      "statusColumn": "Status",
+      "dateColumn": "Due"
+    },
+    {
+      "id": "crm-contacts-deals",
+      "name": "CRM Contacts and Deals",
+      "typeKey": "crm_contacts_and_deals",
+      "collectionId": "bafyreianx4tdngqlpuchb4qkbtnxpgcgemutu5l6tsqcla4xotewi672wa",
+      "expected": 34,
+      "readBack": 34,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "One-liner",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "one_liner",
+          "options": 0,
+          "propertyName": "One-liner"
+        },
+        {
+          "column": "notes",
+          "label": "Call notes",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "call_notes",
+          "options": 0,
+          "propertyName": "Call notes"
+        },
+        {
+          "column": "headline",
+          "label": "Signal",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "signal",
+          "options": 0,
+          "propertyName": "Signal"
+        },
+        {
+          "column": "link",
+          "label": "Website",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "website",
+          "options": 0,
+          "propertyName": "Website"
+        },
+        {
+          "column": "contact_email",
+          "label": "Primary contact",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "primary_contact",
+          "options": 0,
+          "propertyName": "Primary contact"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Switchboard",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "switchboard",
+          "options": 0,
+          "propertyName": "Switchboard"
+        },
+        {
+          "column": "amount",
+          "label": "Headcount",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "headcount",
+          "options": 0,
+          "propertyName": "Headcount"
+        },
+        {
+          "column": "rating",
+          "label": "Fit",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "fit",
+          "options": 0,
+          "propertyName": "Fit"
+        },
+        {
+          "column": "progress",
+          "label": "Stage progress",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "stage_progress",
+          "options": 0,
+          "propertyName": "Stage progress"
+        },
+        {
+          "column": "attainment",
+          "label": "Forecast confidence",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "forecast_confidence",
+          "options": 0,
+          "propertyName": "Forecast confidence"
+        },
+        {
+          "column": "budget",
+          "label": "Deal value",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "deal_value",
+          "options": 0,
+          "propertyName": "Deal value"
+        },
+        {
+          "column": "priority",
+          "label": "Stage",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "stage",
+          "options": 6,
+          "propertyName": "Stage"
+        },
+        {
+          "column": "owner",
+          "label": "Account owner",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "account_owner",
+          "options": 0,
+          "propertyName": "Account owner"
+        },
+        {
+          "column": "labels",
+          "label": "Segments",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "segments",
+          "options": 6,
+          "propertyName": "Segments"
+        },
+        {
+          "column": "tags",
+          "label": "Territory",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "territory",
+          "options": 5,
+          "propertyName": "Territory"
+        },
+        {
+          "column": "status",
+          "label": "Health",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "health",
+          "options": 5,
+          "propertyName": "Health"
+        },
+        {
+          "column": "pinned",
+          "label": "Renewal risk",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "renewal_risk",
+          "options": 0,
+          "propertyName": "Renewal risk"
+        },
+        {
+          "column": "due",
+          "label": "Next touch",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "next_touch",
+          "options": 0,
+          "propertyName": "Next touch"
+        },
+        {
+          "column": "starts",
+          "label": "Contract from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "contract_from",
+          "options": 0,
+          "propertyName": "Contract from"
+        },
+        {
+          "column": "ends",
+          "label": "Contract to",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "contract_to",
+          "options": 0,
+          "propertyName": "Contract to"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last contacted",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_contacted",
+          "options": 0,
+          "propertyName": "Last contacted"
+        },
+        {
+          "column": "value_per_seat",
+          "label": "Value / seat",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "value_/_seat",
+          "options": 0,
+          "propertyName": "Value / seat"
+        },
+        {
+          "column": "related",
+          "label": "Related accounts",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "related_accounts",
+          "options": 0,
+          "propertyName": "Related accounts"
+        },
+        {
+          "column": "related_count",
+          "label": "Related count",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "related_count_(crm_contacts_and_deals)",
+          "options": 0,
+          "propertyName": "Related count (CRM Contacts and Deals)"
+        },
+        {
+          "column": "attachments",
+          "label": "Documents",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "documents",
+          "options": 0,
+          "propertyName": "Documents"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(crm_contacts_and_deals)",
+          "options": 0,
+          "propertyName": "Created (CRM Contacts and Deals)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(crm_contacts_and_deals)",
+          "options": 0,
+          "propertyName": "Modified (CRM Contacts and Deals)"
+        }
+      ],
+      "statusColumn": "Health",
+      "dateColumn": "Next touch"
+    },
+    {
+      "id": "reading-list",
+      "name": "Reading List",
+      "typeKey": "reading_list",
+      "collectionId": "bafyreiczrq2rkv2d6eoghdfr6qvs3shxkca3bzzvdn76ltxrt7zs5crfqa",
+      "expected": 32,
+      "readBack": 32,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "In one line",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "in_one_line_(reading_list)",
+          "options": 0,
+          "propertyName": "In one line (Reading List)"
+        },
+        {
+          "column": "notes",
+          "label": "Notes",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "notes_(reading_list)",
+          "options": 0,
+          "propertyName": "Notes (Reading List)"
+        },
+        {
+          "column": "headline",
+          "label": "Pull quote",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "pull_quote",
+          "options": 0,
+          "propertyName": "Pull quote"
+        },
+        {
+          "column": "link",
+          "label": "Publisher page",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "publisher_page",
+          "options": 0,
+          "propertyName": "Publisher page"
+        },
+        {
+          "column": "contact_email",
+          "label": "Lender",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "lender",
+          "options": 0,
+          "propertyName": "Lender"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Bookshop",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "bookshop",
+          "options": 0,
+          "propertyName": "Bookshop"
+        },
+        {
+          "column": "amount",
+          "label": "Pages",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "pages",
+          "options": 0,
+          "propertyName": "Pages"
+        },
+        {
+          "column": "rating",
+          "label": "Rating",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "rating",
+          "options": 0,
+          "propertyName": "Rating"
+        },
+        {
+          "column": "progress",
+          "label": "Progress",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "progress",
+          "options": 0,
+          "propertyName": "Progress"
+        },
+        {
+          "column": "attainment",
+          "label": "Retention",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "retention",
+          "options": 0,
+          "propertyName": "Retention"
+        },
+        {
+          "column": "budget",
+          "label": "Price paid",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "price_paid",
+          "options": 0,
+          "propertyName": "Price paid"
+        },
+        {
+          "column": "priority",
+          "label": "Format",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "format",
+          "options": 4,
+          "propertyName": "Format"
+        },
+        {
+          "column": "owner",
+          "label": "Recommended by",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "recommended_by",
+          "options": 0,
+          "propertyName": "Recommended by"
+        },
+        {
+          "column": "labels",
+          "label": "Themes",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "themes",
+          "options": 6,
+          "propertyName": "Themes"
+        },
+        {
+          "column": "tags",
+          "label": "Shelf",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "shelf",
+          "options": 4,
+          "propertyName": "Shelf"
+        },
+        {
+          "column": "status",
+          "label": "Reading status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "reading_status",
+          "options": 5,
+          "propertyName": "Reading status"
+        },
+        {
+          "column": "pinned",
+          "label": "Owned",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "owned",
+          "options": 0,
+          "propertyName": "Owned"
+        },
+        {
+          "column": "due",
+          "label": "Finished",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "finished",
+          "options": 0,
+          "propertyName": "Finished"
+        },
+        {
+          "column": "starts",
+          "label": "Started",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "started",
+          "options": 0,
+          "propertyName": "Started"
+        },
+        {
+          "column": "ends",
+          "label": "Target finish",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "target_finish",
+          "options": 0,
+          "propertyName": "Target finish"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last opened",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_opened",
+          "options": 0,
+          "propertyName": "Last opened"
+        },
+        {
+          "column": "cost_per_page",
+          "label": "Cost / page",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_page",
+          "options": 0,
+          "propertyName": "Cost / page"
+        },
+        {
+          "column": "related",
+          "label": "Related reads",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "related_reads",
+          "options": 0,
+          "propertyName": "Related reads"
+        },
+        {
+          "column": "related_count",
+          "label": "Related count",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "related_count_(reading_list)",
+          "options": 0,
+          "propertyName": "Related count (Reading List)"
+        },
+        {
+          "column": "attachments",
+          "label": "Highlights",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "highlights",
+          "options": 0,
+          "propertyName": "Highlights"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(reading_list)",
+          "options": 0,
+          "propertyName": "Created (Reading List)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(reading_list)",
+          "options": 0,
+          "propertyName": "Modified (Reading List)"
+        }
+      ],
+      "statusColumn": "Reading status",
+      "dateColumn": "Finished"
+    },
+    {
+      "id": "recipes-meal-plan",
+      "name": "Recipes and Meal Plan",
+      "typeKey": "recipes_and_meal_plan",
+      "collectionId": "bafyreic7xivnnlmir6j3enpgmznoppmpnf2qagm67ldeybl6t3weltoxbq",
+      "expected": 30,
+      "readBack": 30,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "In one line",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "in_one_line_(recipes_and_meal_plan)",
+          "options": 0,
+          "propertyName": "In one line (Recipes and Meal Plan)"
+        },
+        {
+          "column": "notes",
+          "label": "Method notes",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "method_notes",
+          "options": 0,
+          "propertyName": "Method notes"
+        },
+        {
+          "column": "headline",
+          "label": "Tip",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "tip",
+          "options": 0,
+          "propertyName": "Tip"
+        },
+        {
+          "column": "link",
+          "label": "Source recipe",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "source_recipe",
+          "options": 0,
+          "propertyName": "Source recipe"
+        },
+        {
+          "column": "contact_email",
+          "label": "Recipe from",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "recipe_from",
+          "options": 0,
+          "propertyName": "Recipe from"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Butcher",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "butcher",
+          "options": 0,
+          "propertyName": "Butcher"
+        },
+        {
+          "column": "amount",
+          "label": "Active minutes",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "active_minutes",
+          "options": 0,
+          "propertyName": "Active minutes"
+        },
+        {
+          "column": "rating",
+          "label": "House rating",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "house_rating",
+          "options": 0,
+          "propertyName": "House rating"
+        },
+        {
+          "column": "progress",
+          "label": "Prep done",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "prep_done",
+          "options": 0,
+          "propertyName": "Prep done"
+        },
+        {
+          "column": "attainment",
+          "label": "Freezer stock",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "freezer_stock",
+          "options": 0,
+          "propertyName": "Freezer stock"
+        },
+        {
+          "column": "budget",
+          "label": "Cost per head",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "cost_per_head",
+          "options": 0,
+          "propertyName": "Cost per head"
+        },
+        {
+          "column": "priority",
+          "label": "Course",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "course",
+          "options": 5,
+          "propertyName": "Course"
+        },
+        {
+          "column": "owner",
+          "label": "Cooked by",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "cooked_by",
+          "options": 0,
+          "propertyName": "Cooked by"
+        },
+        {
+          "column": "labels",
+          "label": "Diet",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "diet",
+          "options": 6,
+          "propertyName": "Diet"
+        },
+        {
+          "column": "tags",
+          "label": "Cuisine",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "cuisine",
+          "options": 6,
+          "propertyName": "Cuisine"
+        },
+        {
+          "column": "status",
+          "label": "Kitchen status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "kitchen_status",
+          "options": 5,
+          "propertyName": "Kitchen status"
+        },
+        {
+          "column": "pinned",
+          "label": "Batch cooks",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "batch_cooks",
+          "options": 0,
+          "propertyName": "Batch cooks"
+        },
+        {
+          "column": "due",
+          "label": "Planned for",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "planned_for",
+          "options": 0,
+          "propertyName": "Planned for"
+        },
+        {
+          "column": "starts",
+          "label": "Prep from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "prep_from",
+          "options": 0,
+          "propertyName": "Prep from"
+        },
+        {
+          "column": "ends",
+          "label": "On the table",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "on_the_table",
+          "options": 0,
+          "propertyName": "On the table"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last cooked",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_cooked",
+          "options": 0,
+          "propertyName": "Last cooked"
+        },
+        {
+          "column": "cost_per_minute",
+          "label": "Cost / minute",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_minute",
+          "options": 0,
+          "propertyName": "Cost / minute"
+        },
+        {
+          "column": "related",
+          "label": "Goes with",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "goes_with",
+          "options": 0,
+          "propertyName": "Goes with"
+        },
+        {
+          "column": "related_count",
+          "label": "Pairings",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "pairings",
+          "options": 0,
+          "propertyName": "Pairings"
+        },
+        {
+          "column": "attachments",
+          "label": "Method",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "method",
+          "options": 0,
+          "propertyName": "Method"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(recipes_and_meal_plan)",
+          "options": 0,
+          "propertyName": "Created (Recipes and Meal Plan)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(recipes_and_meal_plan)",
+          "options": 0,
+          "propertyName": "Modified (Recipes and Meal Plan)"
+        }
+      ],
+      "statusColumn": "Kitchen status",
+      "dateColumn": "Planned for"
+    },
+    {
+      "id": "habit-health-log",
+      "name": "Habit and Health Log",
+      "typeKey": "habit_and_health_log",
+      "collectionId": "bafyreifb2molgingxfmz72awjk2olptasofw3b34xr4nvnuga7dxu6cswu",
+      "expected": 40,
+      "readBack": 40,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "In one line",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "in_one_line_(habit_and_health_log)",
+          "options": 0,
+          "propertyName": "In one line (Habit and Health Log)"
+        },
+        {
+          "column": "notes",
+          "label": "Journal",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "journal",
+          "options": 0,
+          "propertyName": "Journal"
+        },
+        {
+          "column": "headline",
+          "label": "Flag",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "flag_(habit_and_health_log)",
+          "options": 0,
+          "propertyName": "Flag (Habit and Health Log)"
+        },
+        {
+          "column": "link",
+          "label": "Workout link",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "workout_link",
+          "options": 0,
+          "propertyName": "Workout link"
+        },
+        {
+          "column": "contact_email",
+          "label": "Coach",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "coach",
+          "options": 0,
+          "propertyName": "Coach"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Clinic",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "clinic",
+          "options": 0,
+          "propertyName": "Clinic"
+        },
+        {
+          "column": "amount",
+          "label": "Resting HR",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "resting_hr",
+          "options": 0,
+          "propertyName": "Resting HR"
+        },
+        {
+          "column": "rating",
+          "label": "Mood",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "mood",
+          "options": 0,
+          "propertyName": "Mood"
+        },
+        {
+          "column": "progress",
+          "label": "Steps to goal",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "steps_to_goal",
+          "options": 0,
+          "propertyName": "Steps to goal"
+        },
+        {
+          "column": "attainment",
+          "label": "Recovery",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "recovery",
+          "options": 0,
+          "propertyName": "Recovery"
+        },
+        {
+          "column": "budget",
+          "label": "Supplement spend",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "supplement_spend",
+          "options": 0,
+          "propertyName": "Supplement spend"
+        },
+        {
+          "column": "priority",
+          "label": "Energy",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "energy",
+          "options": 4,
+          "propertyName": "Energy"
+        },
+        {
+          "column": "owner",
+          "label": "Trained with",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "trained_with",
+          "options": 0,
+          "propertyName": "Trained with"
+        },
+        {
+          "column": "labels",
+          "label": "Habits kept",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "habits_kept",
+          "options": 6,
+          "propertyName": "Habits kept"
+        },
+        {
+          "column": "tags",
+          "label": "Context",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "context",
+          "options": 4,
+          "propertyName": "Context"
+        },
+        {
+          "column": "status",
+          "label": "Day status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "day_status",
+          "options": 5,
+          "propertyName": "Day status"
+        },
+        {
+          "column": "pinned",
+          "label": "Rest day",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "rest_day",
+          "options": 0,
+          "propertyName": "Rest day"
+        },
+        {
+          "column": "due",
+          "label": "Date",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "date_(habit_and_health_log)",
+          "options": 0,
+          "propertyName": "Date (Habit and Health Log)"
+        },
+        {
+          "column": "starts",
+          "label": "Sleep from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "sleep_from",
+          "options": 0,
+          "propertyName": "Sleep from"
+        },
+        {
+          "column": "ends",
+          "label": "Sleep to",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "sleep_to",
+          "options": 0,
+          "propertyName": "Sleep to"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Logged at",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "logged_at",
+          "options": 0,
+          "propertyName": "Logged at"
+        },
+        {
+          "column": "spend_per_bpm",
+          "label": "Spend / bpm",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "spend_/_bpm",
+          "options": 0,
+          "propertyName": "Spend / bpm"
+        },
+        {
+          "column": "related",
+          "label": "Compare with",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "compare_with",
+          "options": 0,
+          "propertyName": "Compare with"
+        },
+        {
+          "column": "related_count",
+          "label": "Comparisons",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "comparisons",
+          "options": 0,
+          "propertyName": "Comparisons"
+        },
+        {
+          "column": "attachments",
+          "label": "Exports",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "exports",
+          "options": 0,
+          "propertyName": "Exports"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(habit_and_health_log)",
+          "options": 0,
+          "propertyName": "Created (Habit and Health Log)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(habit_and_health_log)",
+          "options": 0,
+          "propertyName": "Modified (Habit and Health Log)"
+        }
+      ],
+      "statusColumn": "Day status",
+      "dateColumn": "Date"
+    },
+    {
+      "id": "travel-itinerary",
+      "name": "Travel Itinerary",
+      "typeKey": "travel_itinerary",
+      "collectionId": "bafyreif6ro7mlbw5giceaq466mxqoysx2nbd3kmqclrlttrr6js6pdtqpi",
+      "expected": 28,
+      "readBack": 28,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "In one line",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "in_one_line_(travel_itinerary)",
+          "options": 0,
+          "propertyName": "In one line (Travel Itinerary)"
+        },
+        {
+          "column": "notes",
+          "label": "Detail",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "detail",
+          "options": 0,
+          "propertyName": "Detail"
+        },
+        {
+          "column": "headline",
+          "label": "Warning",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "warning",
+          "options": 0,
+          "propertyName": "Warning"
+        },
+        {
+          "column": "link",
+          "label": "Booking link",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "booking_link",
+          "options": 0,
+          "propertyName": "Booking link"
+        },
+        {
+          "column": "contact_email",
+          "label": "Provider",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "provider",
+          "options": 0,
+          "propertyName": "Provider"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Provider phone",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "provider_phone",
+          "options": 0,
+          "propertyName": "Provider phone"
+        },
+        {
+          "column": "amount",
+          "label": "Duration (min)",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "duration_(min)",
+          "options": 0,
+          "propertyName": "Duration (min)"
+        },
+        {
+          "column": "rating",
+          "label": "Priority",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "priority_(travel_itinerary)",
+          "options": 0,
+          "propertyName": "Priority (Travel Itinerary)"
+        },
+        {
+          "column": "progress",
+          "label": "Planning done",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "planning_done",
+          "options": 0,
+          "propertyName": "Planning done"
+        },
+        {
+          "column": "attainment",
+          "label": "Budget used",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "budget_used_(travel_itinerary)",
+          "options": 0,
+          "propertyName": "Budget used (Travel Itinerary)"
+        },
+        {
+          "column": "budget",
+          "label": "Cost",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "cost",
+          "options": 0,
+          "propertyName": "Cost"
+        },
+        {
+          "column": "priority",
+          "label": "Leg type",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "leg_type",
+          "options": 5,
+          "propertyName": "Leg type"
+        },
+        {
+          "column": "owner",
+          "label": "Booked by",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "booked_by",
+          "options": 0,
+          "propertyName": "Booked by"
+        },
+        {
+          "column": "labels",
+          "label": "Needs",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "needs",
+          "options": 6,
+          "propertyName": "Needs"
+        },
+        {
+          "column": "tags",
+          "label": "Country",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "country",
+          "options": 4,
+          "propertyName": "Country"
+        },
+        {
+          "column": "status",
+          "label": "Booking status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "booking_status",
+          "options": 5,
+          "propertyName": "Booking status"
+        },
+        {
+          "column": "pinned",
+          "label": "Refundable",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "refundable",
+          "options": 0,
+          "propertyName": "Refundable"
+        },
+        {
+          "column": "due",
+          "label": "Date",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "date_(travel_itinerary)",
+          "options": 0,
+          "propertyName": "Date (Travel Itinerary)"
+        },
+        {
+          "column": "starts",
+          "label": "Departs",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "departs",
+          "options": 0,
+          "propertyName": "Departs"
+        },
+        {
+          "column": "ends",
+          "label": "Arrives",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "arrives",
+          "options": 0,
+          "propertyName": "Arrives"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Confirmed at",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "confirmed_at",
+          "options": 0,
+          "propertyName": "Confirmed at"
+        },
+        {
+          "column": "cost_per_hour",
+          "label": "Cost / hour",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_hour",
+          "options": 0,
+          "propertyName": "Cost / hour"
+        },
+        {
+          "column": "related",
+          "label": "Connects to",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "connects_to",
+          "options": 0,
+          "propertyName": "Connects to"
+        },
+        {
+          "column": "related_count",
+          "label": "Connections",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "connections",
+          "options": 0,
+          "propertyName": "Connections"
+        },
+        {
+          "column": "attachments",
+          "label": "Tickets",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "tickets",
+          "options": 0,
+          "propertyName": "Tickets"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(travel_itinerary)",
+          "options": 0,
+          "propertyName": "Created (Travel Itinerary)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(travel_itinerary)",
+          "options": 0,
+          "propertyName": "Modified (Travel Itinerary)"
+        }
+      ],
+      "statusColumn": "Booking status",
+      "dateColumn": "Date"
+    },
+    {
+      "id": "home-inventory",
+      "name": "Home Inventory",
+      "typeKey": "home_inventory",
+      "collectionId": "bafyreihrmppi2t7uhe4vumecjhnqvcg45qesp34lnqt3cqrbs3zyrhoazi",
+      "expected": 34,
+      "readBack": 34,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "In one line",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "in_one_line_(home_inventory)",
+          "options": 0,
+          "propertyName": "In one line (Home Inventory)"
+        },
+        {
+          "column": "notes",
+          "label": "Service history",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "service_history",
+          "options": 0,
+          "propertyName": "Service history"
+        },
+        {
+          "column": "headline",
+          "label": "Note",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "note",
+          "options": 0,
+          "propertyName": "Note"
+        },
+        {
+          "column": "link",
+          "label": "Product page",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "product_page",
+          "options": 0,
+          "propertyName": "Product page"
+        },
+        {
+          "column": "contact_email",
+          "label": "Retailer",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "retailer",
+          "options": 0,
+          "propertyName": "Retailer"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Support line",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "support_line",
+          "options": 0,
+          "propertyName": "Support line"
+        },
+        {
+          "column": "amount",
+          "label": "Warranty (months)",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "warranty_(months)",
+          "options": 0,
+          "propertyName": "Warranty (months)"
+        },
+        {
+          "column": "rating",
+          "label": "Condition score",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "condition_score",
+          "options": 0,
+          "propertyName": "Condition score"
+        },
+        {
+          "column": "progress",
+          "label": "Warranty used",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "warranty_used",
+          "options": 0,
+          "propertyName": "Warranty used"
+        },
+        {
+          "column": "attainment",
+          "label": "Depreciation",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "depreciation",
+          "options": 0,
+          "propertyName": "Depreciation"
+        },
+        {
+          "column": "budget",
+          "label": "Purchase price",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "purchase_price",
+          "options": 0,
+          "propertyName": "Purchase price"
+        },
+        {
+          "column": "priority",
+          "label": "Room",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "room",
+          "options": 6,
+          "propertyName": "Room"
+        },
+        {
+          "column": "owner",
+          "label": "Owner",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "owner",
+          "options": 0,
+          "propertyName": "Owner"
+        },
+        {
+          "column": "labels",
+          "label": "Categories",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "categories",
+          "options": 6,
+          "propertyName": "Categories"
+        },
+        {
+          "column": "tags",
+          "label": "Floor",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "floor",
+          "options": 4,
+          "propertyName": "Floor"
+        },
+        {
+          "column": "status",
+          "label": "Condition",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "condition",
+          "options": 5,
+          "propertyName": "Condition"
+        },
+        {
+          "column": "pinned",
+          "label": "Insured",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "insured",
+          "options": 0,
+          "propertyName": "Insured"
+        },
+        {
+          "column": "due",
+          "label": "Purchased",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "purchased",
+          "options": 0,
+          "propertyName": "Purchased"
+        },
+        {
+          "column": "starts",
+          "label": "Warranty from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "warranty_from",
+          "options": 0,
+          "propertyName": "Warranty from"
+        },
+        {
+          "column": "ends",
+          "label": "Warranty to",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "warranty_to",
+          "options": 0,
+          "propertyName": "Warranty to"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last serviced",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_serviced",
+          "options": 0,
+          "propertyName": "Last serviced"
+        },
+        {
+          "column": "monthly_cost",
+          "label": "Cost / month held",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_month_held",
+          "options": 0,
+          "propertyName": "Cost / month held"
+        },
+        {
+          "column": "related",
+          "label": "Part of set",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "part_of_set",
+          "options": 0,
+          "propertyName": "Part of set"
+        },
+        {
+          "column": "related_count",
+          "label": "Set size",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "set_size",
+          "options": 0,
+          "propertyName": "Set size"
+        },
+        {
+          "column": "attachments",
+          "label": "Receipts",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "receipts",
+          "options": 0,
+          "propertyName": "Receipts"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(home_inventory)",
+          "options": 0,
+          "propertyName": "Created (Home Inventory)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(home_inventory)",
+          "options": 0,
+          "propertyName": "Modified (Home Inventory)"
+        }
+      ],
+      "statusColumn": "Condition",
+      "dateColumn": "Purchased"
+    },
+    {
+      "id": "content-calendar",
+      "name": "Content Calendar",
+      "typeKey": "content_calendar",
+      "collectionId": "bafyreibcrcnt4wh2xmpjpg6pwmk5l42sbkuifuyo4j5ede6dbzgmseyfeu",
+      "expected": 32,
+      "readBack": 32,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "Standfirst",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "standfirst",
+          "options": 0,
+          "propertyName": "Standfirst"
+        },
+        {
+          "column": "notes",
+          "label": "Brief",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "brief",
+          "options": 0,
+          "propertyName": "Brief"
+        },
+        {
+          "column": "headline",
+          "label": "Hook",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "hook",
+          "options": 0,
+          "propertyName": "Hook"
+        },
+        {
+          "column": "link",
+          "label": "Live URL",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "live_url",
+          "options": 0,
+          "propertyName": "Live URL"
+        },
+        {
+          "column": "contact_email",
+          "label": "Editor",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "editor",
+          "options": 0,
+          "propertyName": "Editor"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Studio",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "studio",
+          "options": 0,
+          "propertyName": "Studio"
+        },
+        {
+          "column": "amount",
+          "label": "Word count",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "word_count",
+          "options": 0,
+          "propertyName": "Word count"
+        },
+        {
+          "column": "rating",
+          "label": "Editor rating",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "editor_rating",
+          "options": 0,
+          "propertyName": "Editor rating"
+        },
+        {
+          "column": "progress",
+          "label": "Draft progress",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "draft_progress",
+          "options": 0,
+          "propertyName": "Draft progress"
+        },
+        {
+          "column": "attainment",
+          "label": "Goal attainment",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "goal_attainment",
+          "options": 0,
+          "propertyName": "Goal attainment"
+        },
+        {
+          "column": "budget",
+          "label": "Production cost",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "production_cost",
+          "options": 0,
+          "propertyName": "Production cost"
+        },
+        {
+          "column": "priority",
+          "label": "Channel",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "channel",
+          "options": 5,
+          "propertyName": "Channel"
+        },
+        {
+          "column": "owner",
+          "label": "Author",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "author",
+          "options": 0,
+          "propertyName": "Author"
+        },
+        {
+          "column": "labels",
+          "label": "Topics",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "topics",
+          "options": 6,
+          "propertyName": "Topics"
+        },
+        {
+          "column": "tags",
+          "label": "Series",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "series",
+          "options": 4,
+          "propertyName": "Series"
+        },
+        {
+          "column": "status",
+          "label": "Editorial status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "editorial_status",
+          "options": 6,
+          "propertyName": "Editorial status"
+        },
+        {
+          "column": "pinned",
+          "label": "Evergreen",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "evergreen",
+          "options": 0,
+          "propertyName": "Evergreen"
+        },
+        {
+          "column": "due",
+          "label": "Publish on",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "publish_on",
+          "options": 0,
+          "propertyName": "Publish on"
+        },
+        {
+          "column": "starts",
+          "label": "Draft from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "draft_from",
+          "options": 0,
+          "propertyName": "Draft from"
+        },
+        {
+          "column": "ends",
+          "label": "Publish by",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "publish_by",
+          "options": 0,
+          "propertyName": "Publish by"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last edited",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_edited",
+          "options": 0,
+          "propertyName": "Last edited"
+        },
+        {
+          "column": "cost_per_word",
+          "label": "Cost / word",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_word",
+          "options": 0,
+          "propertyName": "Cost / word"
+        },
+        {
+          "column": "related",
+          "label": "Follows on from",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "follows_on_from",
+          "options": 0,
+          "propertyName": "Follows on from"
+        },
+        {
+          "column": "related_count",
+          "label": "Follow-ups",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "follow_ups",
+          "options": 0,
+          "propertyName": "Follow-ups"
+        },
+        {
+          "column": "attachments",
+          "label": "Assets",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "assets",
+          "options": 0,
+          "propertyName": "Assets"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(content_calendar)",
+          "options": 0,
+          "propertyName": "Created (Content Calendar)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(content_calendar)",
+          "options": 0,
+          "propertyName": "Modified (Content Calendar)"
+        }
+      ],
+      "statusColumn": "Editorial status",
+      "dateColumn": "Publish on"
+    },
+    {
+      "id": "course-notes",
+      "name": "Course Notes and Study",
+      "typeKey": "course_notes_and_study",
+      "collectionId": "bafyreicukwb3vbjabsjqazkfsjz5uv2qp4l5u3zc3y3a5rzx4ki23jjfd4",
+      "expected": 30,
+      "readBack": 30,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "In one line",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "in_one_line_(course_notes_and_study)",
+          "options": 0,
+          "propertyName": "In one line (Course Notes and Study)"
+        },
+        {
+          "column": "notes",
+          "label": "Notes",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "notes_(course_notes_and_study)",
+          "options": 0,
+          "propertyName": "Notes (Course Notes and Study)"
+        },
+        {
+          "column": "headline",
+          "label": "Cue",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "cue",
+          "options": 0,
+          "propertyName": "Cue"
+        },
+        {
+          "column": "link",
+          "label": "Course page",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "course_page",
+          "options": 0,
+          "propertyName": "Course page"
+        },
+        {
+          "column": "contact_email",
+          "label": "Tutor",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "tutor",
+          "options": 0,
+          "propertyName": "Tutor"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Department",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "department",
+          "options": 0,
+          "propertyName": "Department"
+        },
+        {
+          "column": "amount",
+          "label": "Study minutes",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "study_minutes",
+          "options": 0,
+          "propertyName": "Study minutes"
+        },
+        {
+          "column": "rating",
+          "label": "Confidence",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "confidence_(course_notes_and_study)",
+          "options": 0,
+          "propertyName": "Confidence (Course Notes and Study)"
+        },
+        {
+          "column": "progress",
+          "label": "Revision done",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "revision_done",
+          "options": 0,
+          "propertyName": "Revision done"
+        },
+        {
+          "column": "attainment",
+          "label": "Mark",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "mark",
+          "options": 0,
+          "propertyName": "Mark"
+        },
+        {
+          "column": "budget",
+          "label": "Materials cost",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "materials_cost",
+          "options": 0,
+          "propertyName": "Materials cost"
+        },
+        {
+          "column": "priority",
+          "label": "Module",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "module",
+          "options": 5,
+          "propertyName": "Module"
+        },
+        {
+          "column": "owner",
+          "label": "Lecturer",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "lecturer",
+          "options": 0,
+          "propertyName": "Lecturer"
+        },
+        {
+          "column": "labels",
+          "label": "Skills",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "skills",
+          "options": 6,
+          "propertyName": "Skills"
+        },
+        {
+          "column": "tags",
+          "label": "Term",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "term",
+          "options": 4,
+          "propertyName": "Term"
+        },
+        {
+          "column": "status",
+          "label": "Revision state",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "revision_state",
+          "options": 5,
+          "propertyName": "Revision state"
+        },
+        {
+          "column": "pinned",
+          "label": "Examinable",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "examinable",
+          "options": 0,
+          "propertyName": "Examinable"
+        },
+        {
+          "column": "due",
+          "label": "Session",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "session",
+          "options": 0,
+          "propertyName": "Session"
+        },
+        {
+          "column": "starts",
+          "label": "Covered from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "covered_from",
+          "options": 0,
+          "propertyName": "Covered from"
+        },
+        {
+          "column": "ends",
+          "label": "Covered to",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "covered_to",
+          "options": 0,
+          "propertyName": "Covered to"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Last revised",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "last_revised",
+          "options": 0,
+          "propertyName": "Last revised"
+        },
+        {
+          "column": "cost_per_hour",
+          "label": "Cost / study hour",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "cost_/_study_hour",
+          "options": 0,
+          "propertyName": "Cost / study hour"
+        },
+        {
+          "column": "related",
+          "label": "Prerequisites",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "prerequisites",
+          "options": 0,
+          "propertyName": "Prerequisites"
+        },
+        {
+          "column": "related_count",
+          "label": "Prerequisite count",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "prerequisite_count",
+          "options": 0,
+          "propertyName": "Prerequisite count"
+        },
+        {
+          "column": "attachments",
+          "label": "Handouts",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "handouts",
+          "options": 0,
+          "propertyName": "Handouts"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(course_notes_and_study)",
+          "options": 0,
+          "propertyName": "Created (Course Notes and Study)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(course_notes_and_study)",
+          "options": 0,
+          "propertyName": "Modified (Course Notes and Study)"
+        }
+      ],
+      "statusColumn": "Revision state",
+      "dateColumn": "Session"
+    },
+    {
+      "id": "finance-reports",
+      "name": "Finance Reports",
+      "typeKey": "finance_reports",
+      "collectionId": "bafyreigwofmmldczebmy4u3ydb3ygkp2qhyk6hdotns5lwbxtaosf2zpoy",
+      "expected": 30,
+      "readBack": 30,
+      "properties": [
+        {
+          "column": "summary",
+          "label": "Summary",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "summary_(finance_reports)",
+          "options": 0,
+          "propertyName": "Summary (Finance Reports)"
+        },
+        {
+          "column": "notes",
+          "label": "Notes",
+          "neutralType": "text",
+          "anytypeFormat": "text",
+          "propertyKey": "notes_(finance_reports)",
+          "options": 0,
+          "propertyName": "Notes (Finance Reports)"
+        },
+        {
+          "column": "headline",
+          "label": "Flag",
+          "neutralType": "richText",
+          "anytypeFormat": "text",
+          "propertyKey": "flag_(finance_reports)",
+          "options": 0,
+          "propertyName": "Flag (Finance Reports)"
+        },
+        {
+          "column": "link",
+          "label": "Report link",
+          "neutralType": "url",
+          "anytypeFormat": "url",
+          "propertyKey": "report_link",
+          "options": 0,
+          "propertyName": "Report link"
+        },
+        {
+          "column": "contact_email",
+          "label": "Finance contact",
+          "neutralType": "email",
+          "anytypeFormat": "email",
+          "propertyKey": "finance_contact",
+          "options": 0,
+          "propertyName": "Finance contact"
+        },
+        {
+          "column": "contact_phone",
+          "label": "Finance desk",
+          "neutralType": "phone",
+          "anytypeFormat": "phone",
+          "propertyKey": "finance_desk",
+          "options": 0,
+          "propertyName": "Finance desk"
+        },
+        {
+          "column": "amount",
+          "label": "Actual",
+          "neutralType": "number",
+          "anytypeFormat": "number",
+          "propertyKey": "actual",
+          "options": 0,
+          "propertyName": "Actual"
+        },
+        {
+          "column": "rating",
+          "label": "Assurance",
+          "neutralType": "rating",
+          "anytypeFormat": "number",
+          "propertyKey": "assurance",
+          "options": 0,
+          "propertyName": "Assurance"
+        },
+        {
+          "column": "progress",
+          "label": "Budget used",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "budget_used_(finance_reports)",
+          "options": 0,
+          "propertyName": "Budget used (Finance Reports)"
+        },
+        {
+          "column": "attainment",
+          "label": "Variance",
+          "neutralType": "percent",
+          "anytypeFormat": "number",
+          "propertyKey": "variance",
+          "options": 0,
+          "propertyName": "Variance"
+        },
+        {
+          "column": "budget",
+          "label": "Budget",
+          "neutralType": "money",
+          "anytypeFormat": "number",
+          "propertyKey": "budget_(finance_reports)",
+          "options": 0,
+          "propertyName": "Budget (Finance Reports)"
+        },
+        {
+          "column": "priority",
+          "label": "Priority",
+          "neutralType": "select",
+          "anytypeFormat": "select",
+          "propertyKey": "priority_(finance_reports)",
+          "options": 4,
+          "propertyName": "Priority (Finance Reports)"
+        },
+        {
+          "column": "owner",
+          "label": "Budget holder",
+          "neutralType": "person",
+          "anytypeFormat": "objects",
+          "propertyKey": "budget_holder",
+          "options": 0,
+          "propertyName": "Budget holder"
+        },
+        {
+          "column": "labels",
+          "label": "Labels",
+          "neutralType": "multiSelect",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "labels_(finance_reports)",
+          "options": 7,
+          "propertyName": "Labels (Finance Reports)"
+        },
+        {
+          "column": "tags",
+          "label": "Cost centre",
+          "neutralType": "tag",
+          "anytypeFormat": "multi_select",
+          "propertyKey": "cost_centre",
+          "options": 4,
+          "propertyName": "Cost centre"
+        },
+        {
+          "column": "status",
+          "label": "Status",
+          "neutralType": "status",
+          "anytypeFormat": "select",
+          "propertyKey": "status_(finance_reports)",
+          "options": 6,
+          "propertyName": "Status (Finance Reports)"
+        },
+        {
+          "column": "pinned",
+          "label": "Pinned",
+          "neutralType": "checkbox",
+          "anytypeFormat": "checkbox",
+          "propertyKey": "pinned",
+          "options": 0,
+          "propertyName": "Pinned"
+        },
+        {
+          "column": "due",
+          "label": "Due",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "due_(finance_reports)",
+          "options": 0,
+          "propertyName": "Due (Finance Reports)"
+        },
+        {
+          "column": "starts",
+          "label": "Period from",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "period_from",
+          "options": 0,
+          "propertyName": "Period from"
+        },
+        {
+          "column": "ends",
+          "label": "Period to",
+          "neutralType": "date",
+          "anytypeFormat": "date",
+          "propertyKey": "period_to",
+          "options": 0,
+          "propertyName": "Period to"
+        },
+        {
+          "column": "reviewed_at",
+          "label": "Reviewed",
+          "neutralType": "dateTime",
+          "anytypeFormat": "date",
+          "propertyKey": "reviewed",
+          "options": 0,
+          "propertyName": "Reviewed"
+        },
+        {
+          "column": "margin",
+          "label": "Margin %",
+          "neutralType": "formula",
+          "anytypeFormat": "text",
+          "propertyKey": "margin_%",
+          "options": 0,
+          "propertyName": "Margin %"
+        },
+        {
+          "column": "related",
+          "label": "Related",
+          "neutralType": "relation",
+          "anytypeFormat": "objects",
+          "propertyKey": "related",
+          "options": 0,
+          "propertyName": "Related"
+        },
+        {
+          "column": "related_count",
+          "label": "Related count",
+          "neutralType": "rollup",
+          "anytypeFormat": "text",
+          "propertyKey": "related_count_(finance_reports)",
+          "options": 0,
+          "propertyName": "Related count (Finance Reports)"
+        },
+        {
+          "column": "attachments",
+          "label": "Evidence",
+          "neutralType": "file",
+          "anytypeFormat": "files",
+          "propertyKey": "evidence",
+          "options": 0,
+          "propertyName": "Evidence"
+        },
+        {
+          "column": "file.ctime",
+          "label": "Created",
+          "neutralType": "createdTime",
+          "anytypeFormat": "date",
+          "propertyKey": "created_(finance_reports)",
+          "options": 0,
+          "propertyName": "Created (Finance Reports)"
+        },
+        {
+          "column": "file.mtime",
+          "label": "Modified",
+          "neutralType": "modifiedTime",
+          "anytypeFormat": "date",
+          "propertyKey": "modified_(finance_reports)",
+          "options": 0,
+          "propertyName": "Modified (Finance Reports)"
+        }
+      ],
+      "statusColumn": "Status",
+      "dateColumn": "Due"
+    }
+  ]
+}

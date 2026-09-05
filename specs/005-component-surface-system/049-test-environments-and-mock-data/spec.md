@@ -210,8 +210,12 @@ Measured, with the number that would have failed recorded first. The full table 
 <!-- ANCHOR:questions -->
 ## 10. OPEN QUESTIONS
 
-- **Q1** Does the Anytype loader map a rollup to a native relation aggregate, or leave it unset? The
-  neutral type says `rollup`; what Anytype does with it is the loader's call.
+- **Q1** ~~Does the Anytype loader map a rollup to a native relation aggregate, or leave it unset?~~
+  **Answered, 2026-09-05.** Anytype has no rollup and no formula: its eleven property formats are
+  `text`, `number`, `select`, `multi_select`, `date`, `files`, `checkbox`, `url`, `email`, `phone`
+  and `objects`, confirmed by probing `POST /v1/spaces/{id}/properties` with every candidate name.
+  Both are created as `text` relations carrying no per-record value, which is also what the
+  catalogue holds for them. The full mapping is in `tools/mock-data/anytype/mapping.mjs`.
 - **Q2** Does AppFlowy's CSV import infer a select column from repeated values, or does every option
   need declaring in the UI first? This decides whether the CSV alone is enough.
 - **Q3** Operator-owned: is 326 records across ten databases the right size for a phone device check,

@@ -16,9 +16,8 @@ _memory:
     last_updated_at: "2026-09-05T09:55:00Z"
     last_updated_by: "phase-author"
     recent_action: "Built the catalogue, wrote the vault, captured every generated database in the shipped renderer"
-    next_safe_action: "Load catalogue.json into the Anytype demo space over the captures leg's CDP session"
+    next_safe_action: "Import the ten CSVs into the AppFlowy demo workspace in an operator window"
     blockers:
-      - "The Anytype leg needs the CDP session the captures leg owns"
       - "The AppFlowy leg needs a window from the operator, since it exposes no DOM"
       - "Operator device confirmation is the only row this packet cannot close itself"
     key_files:
@@ -32,7 +31,7 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does the Anytype loader map a rollup to a native relation aggregate, or leave it unset"
+      - "Answered: Anytype has no rollup equivalent, so a rollup is a text relation with no per-record value"
       - "Does AppFlowy's CSV import infer a select column, or does every option need declaring first"
     answered_questions:
       - "Which view types the generated databases declare: table, board, calendar, timeline, chart"
@@ -138,8 +137,11 @@ capture leg established, which is a reuse of an instrument, not a dependency on 
       way** — nothing but the one hand-written database had ever been mounted — and the first pass
       **reported red** at exactly double the record count for all ten before the row selector was
       corrected to the attribute `renderRow` sets; now 10 of 10 match.
-- [ ] The Anytype demo space holds the same ten use cases at the same record counts, loaded from
-      `catalogue.json`.
+- [x] The Anytype demo space holds the same ten use cases at the same record counts, loaded from
+      `catalogue.json`. **The space was 0 of 10 use cases and 0 records before this pass — Anytype
+      held only its own shipped demo. Now 326/326 records across ten sets, and 5990/5990 settable
+      cells, both read back from the live space by `load.mjs --verify` rather than counted as
+      written.**
 - [ ] The AppFlowy demo workspace holds the same ten, imported from the per-use-case CSVs.
 - [ ] The operator opens the upgraded vault on a device and reads the ten databases as usable test
       environments rather than as a wall of noise.

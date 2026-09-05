@@ -14,9 +14,8 @@ _memory:
     last_updated_at: "2026-09-05T09:55:00Z"
     last_updated_by: "phase-author"
     recent_action: "Landed the catalogue, emitters, tests, vault write and captures"
-    next_safe_action: "Load catalogue.json into the Anytype demo space over the captures leg's CDP session"
+    next_safe_action: "Import the ten CSVs into the AppFlowy demo workspace in an operator window"
     blockers:
-      - "The Anytype leg needs the CDP session the captures leg owns"
       - "The AppFlowy leg needs an operator window, since it exposes no DOM"
       - "The operator's device read is the only thing that shows computed and rollup cells resolving"
     key_files:
@@ -144,12 +143,17 @@ file under `tools/`.
 <!-- ANCHOR:open -->
 ## 5. WHAT IS NOT DONE
 
-Three acceptance rows, each blocked on something outside this session.
+One acceptance row, and only the operator can close it.
 
-- **AC-007, Anytype.** `catalogue.json` is the input. It needs the CDP session the captures leg
-  established.
-- **AC-008, AppFlowy.** The ten CSVs are the input. AppFlowy exposes no DOM, so the import needs an
-  operator at the machine.
+**AC-007 closed on 2026-09-05**, and the prediction in this document was wrong in a way worth
+keeping: it did not need the CDP session the captures leg owned. Anytype serves a local HTTP API on
+`localhost:31009` that creates types, properties, options, objects and collection membership in
+bulk, so the data load needed no UI driving at all — only the views leg did, because
+`POST .../views` is the one route the API does not have. 326/326 records and
+5990/5990 settable cells, both re-read from the live space rather than counted as written.
+
+- **AC-008, AppFlowy.** Waived by operator decision, `decision-record.md` ADR-001. The ten CSVs and
+  the import steps are retained for a future operator window.
 - **AC-009, the device read.** The operator's own words, which under the parent's D3 is the only
   thing that closes a defect.
 <!-- /ANCHOR:open -->

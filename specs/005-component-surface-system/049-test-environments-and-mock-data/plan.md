@@ -186,7 +186,7 @@ because the 31 pre-existing files were never opened.
 | Catalogue, emitters, tests | 2442 lines across 8 source files | Done |
 | Vault write and its guards | inside `generate.ts` | Done, 336 files |
 | Capture evidence | 10 PNGs at desktop width | Done, all read |
-| Anytype load | one agent session over CDP | Open |
+| Anytype load | one agent session, local HTTP API for the data and CDP for the views | Done, 326 records, 60 views, 120 captures |
 | AppFlowy import | ten CSV imports in an operator window | Open |
 <!-- /ANCHOR:effort -->
 

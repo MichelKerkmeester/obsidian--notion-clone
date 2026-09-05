@@ -1,0 +1,467 @@
+[
+  {
+    "id": "project-tracker",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Due"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Due"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 26,
+      "failed": [
+        {
+          "label": "Assignee",
+          "reason": "NOITEM:[\"Create Property Assignee\"]"
+        }
+      ],
+      "onGrid": 26
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "crm-contacts-deals",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Next touch"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Health"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Health"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Next touch"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "reading-list",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Finished"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Reading status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Reading status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Finished"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "recipes-meal-plan",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Planned for"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Kitchen status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Kitchen status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Planned for"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "habit-health-log",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Date"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Day status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Day status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Date"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "travel-itinerary",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Date"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Booking status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Booking status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Date"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "home-inventory",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Purchased"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Condition"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Condition"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Purchased"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "content-calendar",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Publish on"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Editorial status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Editorial status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Publish on"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "course-notes",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Session"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Revision state"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Revision state"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Session"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  },
+  {
+    "id": "finance-reports",
+    "views": [
+      {
+        "name": "Grid",
+        "layout": "Grid",
+        "sort": "Due"
+      },
+      {
+        "name": "Gallery",
+        "layout": "Gallery"
+      },
+      {
+        "name": "List",
+        "layout": "List",
+        "filter": "Status"
+      },
+      {
+        "name": "Kanban",
+        "layout": "Kanban",
+        "groupedBy": "Status"
+      },
+      {
+        "name": "Calendar",
+        "layout": "Calendar",
+        "dateProperty": "Due"
+      },
+      {
+        "name": "Graph",
+        "layout": "Graph"
+      }
+    ],
+    "properties": {
+      "added": 27,
+      "failed": [],
+      "onGrid": 27
+    },
+    "viewNames": [
+      "Grid",
+      "Gallery",
+      "List",
+      "Kanban",
+      "Calendar",
+      "Graph"
+    ]
+  }
+]
