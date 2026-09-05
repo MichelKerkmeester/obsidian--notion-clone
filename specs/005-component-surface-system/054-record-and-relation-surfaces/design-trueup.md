@@ -723,4 +723,12 @@ here.
 - **Phone grammar**: `../044-phone-sheet-alignment/spec.md` §3
 - **Stacking model**: `../048-stacked-sheets/spec.md` §4
 - **Confirm primitive owner**: `../051-modal-and-sheet-componentization/decision-record.md` ADR-003
+- **Inline editors: this packet owns them.** One exported editor primitive per column type, extracted
+  from behind `CellRenderer.startEdit` into `src/views/record-surface/` under ADR-001/ADR-002 —
+  bodies moved unchanged, one editor per leg. `052`'s pickers host their popovers and `051`'s sheets
+  host them on the phone; neither re-specifies them. *Written down 2026-09-05 during the cross-family
+  reconciliation (`../roadmap.md` §7.10)*
+- **Condition row owner**: `../053-toolbar-and-view-controls/design-trueup.md` §5
+- **Menu primitive owner**: `../052-dropdown-menu-and-picker-componentization/spec.md` §5
+- **Cross-family reconciliation**: `../roadmap.md` §7.10
 <!-- /ANCHOR:cross-refs -->
