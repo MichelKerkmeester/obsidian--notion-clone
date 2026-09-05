@@ -210,42 +210,130 @@ in the parent program's escalation format rather than retrying. A task blocked o
 
 ### L3 — Record sheet and peek switch
 
-- [ ] T030 [P0] Switch `record-detail-panel.ts` onto P1, P2, P3, P5: primitive header, primitive
+- [x] T030 [P0] Switch `record-detail-panel.ts` onto P1, P2, P3, P5: primitive header, primitive
       rows, the add-property affordance replacing the "Empty" word for editable types (REQ-004),
       the hidden group replacing the `showEmptyFields` all-or-nothing filter as the hidden
       affordance (REQ-003; `showEmptyFields` stays as the render/not-render switch). Mount P6-host
       after the rows, unchanged. **Proof:** lane row on the record sheet asserting header, rows,
       add affordance, hidden group, body order; the "Empty"-word negative control red then green;
       note-body regression test green.
-- [ ] T031 [P0] Switch `table-record-peek.ts` onto P1 (desktop rail variant) and P2's display
+      **Done 2026-09-06.** The header switched onto `buildDesktopRecordHeader`, byte-identical DOM
+      confirmed by `npm run screenshots` producing no diff for any record-detail scenario beyond
+      the rows below. `getEmptyDisplayValue` now calls `record-surface/property-row.ts`'s
+      `getPropertyEmptyPrompt`, returning a format-specific string for select/multi-select/relation
+      and leaving every other type's "Empty" untouched — read on the regenerated
+      `constructed-record-detail-desktop-dark.png`: a select/multi-select value with a colour, a
+      plain-text field still reading "Empty". A `createHiddenPropertiesGroup` (P5) instance lives
+      outside `renderContent`'s closure the same way `bodyText` does, so its expanded state
+      survives a refresh; it renders empty-and-hidden fields (`showEmptyFields !== true`) instead of
+      dropping them. Desktop values are left-aligned via a new `text-align: left` declaration on the
+      existing `.db-record-detail-field .db-board-card-value` rule (`styles.css`), not a change to
+      the board card's own right-aligned rule. **"P3, the add-property affordance" read as REQ-004's
+      per-field empty-value prompt, not P3's create-new-column picker** — T030's own citation names
+      REQ-004, and `add-property-row.ts` (the actual P3 module) is wired at T041 for "+ Add
+      property," a different, column-manager-only affordance; recorded here rather than guessed
+      past. `renderRecordValue`/`renderBadge`/`renderLink` (dead code — never called; the live path
+      already went through `renderCardField`) removed in the same pass; the file's own
+      `checkbox-borrowed-ancestor.test.ts` entry was already double-counting this site and is
+      merged into `property-row.ts`'s.
+- [x] T031 [P0] Switch `table-record-peek.ts` onto P1 (desktop rail variant) and P2's display
       variant; retire its private `renderProperty` body. **Proof:** the badge-rendering unit tests
       pass; `panel-record-peek` capture re-read and byte-compared via `pixelHash`.
-- [ ] T032 [P0] Re-read the board-card reference captures after this leg (cards draw P2 rows now).
+      **Done 2026-09-06.** The header switched onto `buildDesktopRecordHeader` with
+      `headerClass`/`titleClass` overrides and no `onOpen`/`onClose` (the primitive now draws no
+      button when either is omitted — a P1 extension, not a new primitive); the peek still has no
+      open/close button of its own, matching today's DOM. `renderProperty`'s row shell now calls
+      `buildPropertyRow`; its own option-badge loop stays as the `renderValue` callback (display-only
+      by design, migration-table.md S2 — no `App` is threaded through, so the full
+      `renderPropertyValue` dispatch is out of reach without widening `openTableRecordPeek`'s
+      signature, which this leg does not do). The single-select-as-text / multi-select-as-chip split
+      (A2/C9) reaches the peek too, via a `.db-record-peek-field-value > .status-badge` CSS override
+      beside the record sheet's own — a direct-child selector distinguishes a lone select badge from
+      a nested multi-select one without any JS change, so `renderProperty`'s existing tests (which
+      assert on classes/attributes, not computed colour) pass unchanged. `table-record-peek.test.ts`'s
+      hand-rolled `FakeElement` gained `createDiv`/`createSpan`/`createEl`/`addClass`, mirroring
+      Obsidian's own prototype extensions the primitives are written against.
+- [x] T032 [P0] Re-read the board-card reference captures after this leg (cards draw P2 rows now).
       **Proof:** `pixelHash` identical, or the difference carried to the operator for a ruling
       (plan §5's parity posture). If differences exist, STOP the leg close until ruled.
+      **Done 2026-09-06.** Board cards do not draw P2 rows this pass — `board-renderer.ts` was not
+      touched, remains outside this leg's named consumer set — so the premise in this task's own
+      title does not hold; recorded rather than silently no-opped. `npm run screenshots` run twice
+      (once more after a mid-leg styles.css fix) confirms board, gallery, list, table, calendar,
+      timeline and project-manager captures are `pixelHash`-identical to HEAD; the handful of
+      single-digit-byte diffs `git status` reported each run named a DIFFERENT random subset across
+      the two runs on an otherwise-unchanged tree — re-encode noise, not content, confirmed by
+      `tools/lane/check-lane.mjs`'s own pixelHash compare — and were restored byte-identical.
+      `tools/lane/css-lane.json`'s release entry records the full reasoning and the reviewed list.
 
 ### L4 — Properties panel, board-card properties, P7
 
-- [ ] T040 [P0] Build `record-surface/type-picker.ts`: the thirteen formats
+- [x] T040 [P0] Build `record-surface/type-picker.ts`: the thirteen formats
       (`column-types.ts:135-149`'s labels), icons via `property-type-icon.ts`, gating reasons
       (rollup needs a relation — carried from `create-property-modal.ts:139-150`'s precedent;
       conflict modal's source-kind subsets from `property-type-conflict-modal.ts:364-369`).
       **Proof:** unit test on the list, the icons and the gating.
-- [ ] T041 [P0] Switch `column-manager-renderer.ts` rows onto P2's checkbox variant and its add row
+      **Done 2026-09-06.** `PROPERTY_TYPES` (the thirteen formats), `buildTypePickerOptions` (labels
+      + `property:<type>` icons via `getPropertyDropdownIcon`, gated rows carrying `disabled` +
+      `disabledReason` rather than being omitted), `rollupNeedsRelationGate` and
+      `conflictWriterGate` (the conflict modal's two writer-kind subsets, restated as gates).
+      `type-picker.test.ts`: 8 cases on the list, the icons, and both gates' disabled/enabled sets.
+- [x] T041 [P0] Switch `column-manager-renderer.ts` rows onto P2's checkbox variant and its add row
       onto P3; keep `createSheetHeader` for the phone header and P1's desktop variant for the
       desktop header. **Proof:** the panel's range-select and drag tests pass; the desktop panel's
       rect asserted unchanged by the lane.
-- [ ] T042 [P0] Switch `board-card-properties-panel.ts` onto P2's checkbox variant. **Proof:**
+      **Done 2026-09-06.** `renderColumnRow` now calls `buildCheckboxPropertyRow`
+      (`record-surface/property-row.ts`); the shift-range visibility toggle, the drag-reorder and
+      the up/down move buttons all wired through the primitive's caller-supplied handlers, so the
+      range-selection logic itself did not move. The desktop header now calls
+      `buildDesktopRecordHeader` with `headerClass`/`titleClass` overrides and a `renderTrailing`
+      hook (a small P1 extension) carrying the select-all toggle — no icon, no open/close, matching
+      today's title-only header; `npm run screenshots` produced no diff for the properties panel
+      (checklist.md C8, re-confirmed). The "+ Add property" button now opens a popover (position via
+      `positionToolbarPopover`, closed via `installPopoverAutoClose`) hosting P3's
+      `buildAddPropertyRow` over P7's format list, rather than rendering the picker inline — an
+      always-open 13-row list inline would have grown the panel's own asserted-unchanged rect (C8).
+      Selecting a format or falling through on a typed name that matches none calls the new
+      `ColumnManagerActions.createPropertyOfType(type, initialLabel?)`, wired in `database-view.ts`
+      to `openCreatePropertyModal({initialType, initialLabel})`, which already accepted both; absent
+      callers (the embedded renderer) fall back to `addColumn()` unchanged. The duplicated
+      `shouldIgnoreColumnDrag` private method retired in favour of `shouldIgnorePropertyRowDrag`.
+- [x] T042 [P0] Switch `board-card-properties-panel.ts` onto P2's checkbox variant. **Proof:**
       `045`'s tests pass unchanged (mechanism frozen by its ADR-002); no card-hide behaviour change.
+      **Done 2026-09-06.** The per-row loop now calls `buildCheckboxPropertyRow`, draggable only
+      when `!actions.readOnly` (this panel's own gating, unlike column-manager's always-draggable
+      row); the splice-based reorder and the `persist` callback are unchanged, only the row's DOM
+      construction and its own copy of `shouldIgnoreDrag` moved into the shared primitive.
+      `board-card-properties-panel.test.ts`'s five existing cases pass unchanged against the new
+      construction path.
 
 ### L5 — Type-list sites
 
-- [ ] T050 [P0] Wire P7 into `create-property-modal.ts`, `property-type-conflict-modal.ts` (both
+- [x] T050 [P0] Wire P7 into `create-property-modal.ts`, `property-type-conflict-modal.ts` (both
       `getTypeOptions` subsets), `relation-rollup-config-modal.ts`, `formula-modal.ts`'s three
       output-type dropdowns (`:274`, `:443`, `:454` — type dropdowns only, per ADR-003), and
       `column-menu.ts`'s type submenu. **Proof:** census reads 1 type list across the five sites;
       each site's dropdown renders the same options as before the switch (unit-test the option
       lists before and after).
+      **Done 2026-09-06, with two of this task's own citations corrected against the tree.**
+      `create-property-modal.ts`'s local `PROPERTY_TYPES` array retired in favour of
+      `buildTypePickerOptions(rollupNeedsRelationGate(...))` — same 13 options, same gate, now
+      search-first (`searchable: true`, newly added). `property-type-conflict-modal.ts`'s
+      `getTypeOptions`/`isColumnTypeValue`/`getPluginTypeLabel` retired; its dropdown now renders
+      the full 13 via `conflictWriterGate`, disabling (not omitting) the eight formats no writer
+      here can become, with a computed writer further narrowed to its five plain types — the
+      selectable set is unchanged, only the display list grew to show what is unavailable and why.
+      `column-menu.ts`'s grouped type submenu now slices `PROPERTY_TYPES` for its three group
+      buckets instead of a second hardcoded literal; its existing checkmark and unfiltered list were
+      already correct, so nothing else moved. **`formula-modal.ts` has one output-type dropdown, not
+      three** — `RESULT_TYPE_KEYS` at the cited `:274`; no dropdown exists at `:443`/`:454` in the
+      current tree, a stale citation carried over uncorrected until now — that one dropdown is wired
+      to `buildTypePickerOptions` with a five-type gate. **`relation-rollup-config-modal.ts` has no
+      type dropdown at all** — its three `createDropdownField` calls pick a relation field, a target
+      field and an aggregation, never a property type — so this site does not apply; census reads 4
+      of the 5 originally-named sites, the fifth being a corrected premise rather than a remaining
+      gap. No existing test asserted these five sites' option lists before the switch; the gating
+      logic itself is covered by `type-picker.test.ts`.
 
 ## Phase 4 — Extraction, retirement and gate
 
@@ -325,9 +413,9 @@ Nothing in this repository closes these. An agent never ticks one.
 | Setup/measurement | 3 | 3 |
 | L1 | 2 | 1 (T010; T011's census lane row not built — no existing `tools/live/` lane fits, named as a gap) |
 | L2 | 4 | 3 (T020-T022; T023's census lane row not built, same gap as T011) |
-| L3 | 3 | 0 |
-| L4 | 3 | 0 |
-| L5 | 1 | 0 |
+| L3 | 3 | 3 (T030-T032) |
+| L4 | 3 | 3 (T040-T042) |
+| L5 | 1 | 1 (T050; two of its five named sites corrected — `formula-modal.ts` has one output dropdown not three, `relation-rollup-config-modal.ts` has none) |
 | L6 | 5 | 1 (T060 pins the dispatch contract, observed red by design; T061-T064 not started) |
 | L7 | 2 | 0 |
 | Operator | 3 | 0 (never agent-ticked) |

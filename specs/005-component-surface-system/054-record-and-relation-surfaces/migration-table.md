@@ -61,12 +61,26 @@ Each disposition and capture citation is `design-trueup.md`'s (§3, §4), not re
 <!-- ANCHOR:status -->
 ## 3. STATUS AT THIS LEG'S CLOSE
 
-Built beside their consumers, switching none of them: `record-surface/record-header.ts` (P1),
-`property-row.ts` (P2, with `card-field-renderer.ts` now a re-export shim over its display
-value renderer), `add-property-row.ts` (P3), `hidden-properties.ts` (P5), and
-`cell-editor-contract.ts` (the pinned `startEdit` dispatch, ahead of P4's extraction). No
-existing capture moved — the corrected P2 anatomy and the new P3/P5 shapes are unstyled and
-unconsumed until a later leg switches a real surface onto them.
+**2026-09-05, primitives built beside their consumers, switching none of them:**
+`record-surface/record-header.ts` (P1), `property-row.ts` (P2, with `card-field-renderer.ts` a
+re-export shim over its display value renderer), `add-property-row.ts` (P3),
+`hidden-properties.ts` (P5), and `cell-editor-contract.ts` (the pinned `startEdit` dispatch, ahead
+of P4's extraction). No existing capture moved.
+
+**2026-09-06, L3/L4/L5 switched (T030-T032, T040-T042, T050):** S1 (`record-detail-panel.ts`) and
+S2 (`table-record-peek.ts`) now build through P1/P2, S1 additionally through P3's empty-value
+prompt and P5's hidden group; S3 (`column-manager-renderer.ts`) and S8
+(`board-card-properties-panel.ts`) now build through P2's checkbox variant, S3 additionally
+through P3's add-property popover; `type-picker.ts` (P7) was built and wired into S4
+(`create-property-modal.ts`), S5 (`property-type-conflict-modal.ts`), S7 (`formula-modal.ts`,
+one output dropdown, not the three the row named) and the column-menu type submenu (not its own
+numbered surface). **S6's row is corrected**: `relation-rollup-config-modal.ts` has no type
+dropdown to wire — its three `createDropdownField` calls pick a relation field, a target field
+and an aggregation — so P7 does not reach it. Every changed capture (28, all under
+`screenshots/notion-clone/panels/`) was regenerated and read; board, gallery, list, table,
+calendar, timeline and project-manager reference captures are confirmed `pixelHash`-identical
+(`tools/lane/css-lane.json`'s 2026-09-06 release entry). S9 (`cell-renderer.ts`'s editors, P4) and
+S10 (the note body, already extracted) are untouched — L6/L7 remain.
 
 <!-- /ANCHOR:status -->
 

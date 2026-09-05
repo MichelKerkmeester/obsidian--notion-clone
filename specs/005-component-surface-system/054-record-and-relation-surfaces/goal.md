@@ -12,28 +12,29 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
-    last_updated_at: "2026-09-05T20:30:00Z"
-    last_updated_by: "verifier-leg"
-    recent_action: "Ticked the migration-table criterion; the primitives are built beside their consumers"
-    next_safe_action: "Switch record-detail-panel.ts onto the primitives at T030, then re-measure AC-001 to AC-007"
+    last_updated_at: "2026-09-06T00:00:00Z"
+    last_updated_by: "implementer-leg"
+    recent_action: "Switched the record sheet, the peek and the two properties panels onto the primitives"
+    next_safe_action: "Implement T061-T064 per ADR-002"
     blockers:
-      - "T001's image true-up gates every design row (D1)"
+      - "T061-T071 remain: editor extraction, retirement sweep, phone-surface registry, full negative-control gate"
       - "OPS-001..003 are the operator's; nothing here can close them"
     key_files:
       - "src/views/record-detail-panel.ts"
       - "src/views/cell-renderer.ts"
       - "src/views/table-record-peek.ts"
-      - "screenshots/anytype/README.md"
+      - "src/views/record-surface/type-picker.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-054-goal"
       parent_session_id: null
-    completion_pct: 14
+    completion_pct: 55
     open_questions:
       - "Does the record sheet's desktop anchored panel keep its current DOM under the P1 primitive?"
       - "Does P3's search-first picker sit beside or replace S3's quick-add file-field row?"
       - "Does a board card gain the add-property affordance, or is a card summary the wrong place?"
     answered_questions:
+      - "The three questions above were answered at T001 (design-trueup.md §5, migration-table.md §4): yes with 006 owning placement; beside; the prompt not a button — this frontmatter's own open_questions list was not updated when T001 closed, left as found rather than silently corrected"
       - "The operator's 2026-09-05 directive names componentization and Anytype adoption together"
       - "Formulas, rollups and calculations stay ours (ADR-003); the PM 1:1 board and gantt stay ours"
 ---

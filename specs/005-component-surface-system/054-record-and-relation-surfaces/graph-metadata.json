@@ -52,6 +52,7 @@
       "src/views/record-surface/property-row.ts",
       "src/views/record-surface/add-property-row.ts",
       "src/views/record-surface/hidden-properties.ts",
+      "src/views/record-surface/type-picker.ts",
       "src/views/record-surface/index.ts",
       "src/views/cell-renderer.ts",
       "src/views/record-detail-panel.ts",
@@ -59,8 +60,7 @@
       "src/views/column-manager-renderer.ts",
       "src/views/board-card-properties-panel.ts",
       "src/views/modals/create-property-modal.ts",
-      "src/views/modals/property-type-conflict-modal.ts",
-      "src/views/modals/formula-modal.ts"
+      "src/views/modals/property-type-conflict-modal.ts"
     ],
     "entities": [
       {
@@ -130,6 +130,12 @@
         "source": "derived"
       },
       {
+        "name": "type-picker.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/type-picker.ts",
+        "source": "derived"
+      },
+      {
         "name": "index.ts",
         "kind": "code",
         "path": "src/views/record-surface/index.ts",
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "formula-modal.ts",
-        "kind": "code",
-        "path": "src/views/modals/formula-modal.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-05T20:33:23.389Z",
+    "last_save_at": "2026-09-05T22:13:24.040Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d37c80fbe916b1b8d4a11c050de44aaf159d801958154f370a6bd141781e575c",
+    "source_fingerprint": "sha256:45ff39e1df4483a68695ebc5c0cdd2675ccd8caad56e7ef4c3ca98e781e4ac35",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "50f470cd7cf2edb7cfab0196a5a42b5011c8dc5988af4515becbdc766c1f925f",
       "plan.md": "24cd0245479ee276caf3a5df6b566b61596ad981890334df69650a845e19ca6c",
-      "tasks.md": "663779c5d65471082f00afe3fdf0c4b6125f9c6f25a825269d4c92c94c1d6ac9",
-      "decision-record.md": "4d9fc07f951c9fb6a086a00bdd33ec1491114d77c5f9e60c75b5654184453b1e",
+      "tasks.md": "44723af3c890b6f19b84252960a87435831de0381272509025328558b8ecec76",
+      "decision-record.md": "a1bc9f2c4db2758097bedac1071bd7915bd8ead02eb00c79d4defcc228c5026d",
       "implementation-summary.md": "eb60fa5fe0d8b3b1ae9416c321a8adafc6ab5d8232e70829a942b3b99c1de139"
     },
     "last_active_child_id": null,
