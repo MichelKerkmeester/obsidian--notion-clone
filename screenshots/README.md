@@ -713,7 +713,7 @@ Sources: `src/views/number-display-renderer.ts`, `src/data/number-display.ts`
 
 ### Option colour picker
 
-Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.
+Sixteen swatches in the persisted order, the current colour ringed and carrying a trailing tick — the ring is never the only signal a swatch is current. Opened from the colour dot in the select editor and created on document.body.
 
 | dark | light |
 |---|---|
