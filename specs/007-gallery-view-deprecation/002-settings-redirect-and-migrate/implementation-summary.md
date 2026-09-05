@@ -51,23 +51,24 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the state the phase opens against, read from the working tree at
-`2a7db8cf`.
+`464cd7e3`.
 
 ### Opening measurements
 
-- `src/main.ts:144` — `if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "chart") v.viewType = "table"`, and the same clause again at `:180`. A loaded gallery is re-blessed
+- `src/main.ts:146` — `if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "chart") v.viewType = "table"`, and the same clause again at `:182`. A loaded gallery is re-blessed
   by both.
-- `src/main.ts:1548-1616` — the `.base` importer. `:1551`'s own comment observes that board is "the
-  same landing the gallery migration makes"; `:1555-1557` reads `bv.image` and guards it against the
-  schema's column keys before assigning it as `galleryImageField`; `:1616`'s comment records that
-  the gallery-shaped settings beside it are dropped for want of a board equivalent.
+- `src/main.ts:1571-1641` — the `.base` importer, and it **already lands on board**: `:1577` reads
+  `const viewType = bv.type === "cards" ? "board" : "table"`, with the comment at `:1571-1576`
+  recording why. `:1578-1580` reads `bv.image` and guards it against the schema's column keys, and
+  `:1641` assigns it to `view.boardImageField`; `:1639`'s comment records that the gallery-shaped
+  settings beside it are dropped for want of a board equivalent. **Nothing here mints a gallery.**
 - `src/data/gallery-migration.ts` — 74 lines, pure, targets board, reads `galleryImageField`.
-- `applyGalleryMigration` call sites: **1**, at `src/views/database-view.ts:11663`, declared at
-  `:2711` as `migrateGalleryViewOnOpen`.
+- `applyGalleryMigration` call sites: **1**, at `src/views/database-view.ts:11669`, declared at
+  `:2717` as `migrateGalleryViewOnOpen`.
 - `src/views/embedded-database-renderer.ts` — 29 gallery mentions, **0** migration calls.
-- `src/i18n.ts:1445` `notice.galleryMigrated` and `:382` `undo.galleryMigration`, both present in
+- `src/i18n.ts:1456` `notice.galleryMigrated` and `:392` `undo.galleryMigration`, both present in
   `en`, `zh-CN` and `zh-TW`.
-- The pickers are already filtered: `toolbar-renderer.ts:1311` and
+- The pickers are already filtered: `toolbar-renderer.ts:97` and
   `view-config-panel-renderer.ts:515`, both keeping a `current === "gallery"` escape hatch.
 
 ### Files Changed
@@ -95,6 +96,7 @@ release version number appears here — because `003` reads this document to kno
 |----------|-----|
 | Board, not table | The board is the only other surface that draws a cover, through the same `resolveCoverImage` call. A gallery becoming a table is a card grid becoming a spreadsheet |
 | The sanitizer is closed even though the migration exists | Two independent mechanisms. The migration handles views that open; the coercion handles anything the migration has not reached |
+| The importer is pinned rather than changed | It already lands on board, and a behaviour with no test is one edit from regressing. This packet's own first draft is the evidence: it recorded the importer as a live minting surface from a sibling packet's finding rather than from the file |
 | The embedded-host question is answered in this phase | Deferring it to `003` means answering it after the window to migrate has closed |
 <!-- /ANCHOR:decisions -->
 

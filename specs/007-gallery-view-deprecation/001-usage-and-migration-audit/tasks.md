@@ -44,12 +44,12 @@ contextType: "general"
 ## Phase 2: Implementation
 
 - [ ] T004 Enumerate every site that accepts, mints or coerces `viewType: "gallery"` — grep the literal FIRST, then sweep every `viewType` assignment and every `DatabaseViewType` narrowing, because the literal alone is what `030` stopped at (`scratch/surface-list.md`)
-- [ ] T005 Record the two known survivors with their guards: the settings sanitizer (`src/main.ts:144`, `:180`) and the `.base` importer (`src/main.ts:1548-1616`, including the `:1557` schema guard)
+- [ ] T005 Record the one known survivor with its guard — the settings sanitizer (`src/main.ts:146`, `:182`) — and confirm the `.base` importer still lands `cards` on `board` (`src/main.ts:1577`, schema guard at `:1580`) rather than assuming either way
 - [ ] T006 [P] Classify all 24 gallery-touching `screenshots/manifest.json` entries as gallery-only or board-shared, naming the board contribution of every shared one (`scratch/capture-classification.md`)
 - [ ] T007 [P] List every measurement of the gallery: `renderer-coverage.json` pins, the bench and its driver, `constructed-scenarios.mjs:237`, the `core.mjs`/`shared.mjs` scenarios, `render-assertion-harness.ts`, `verify-placement.mjs`, and the unit specs (`scratch/measurement-inventory.md`)
 - [ ] T008 Derive the declared-loss list: what each of the six `gallery*` `ViewConfig` fields expresses, and whether the board has an equivalent. Name each loss individually (`scratch/declared-losses.md`)
 - [ ] T009 Report actual vault usage — how many gallery-configured views exist — or state that the vault is unreadable from this session rather than reporting zero
-- [ ] T010 Record the embedded-codeblock asymmetry as a finding with its evidence: `applyGalleryMigration` has exactly one call site (`src/views/database-view.ts:11663`) and `embedded-database-renderer.ts` has none
+- [ ] T010 Record the embedded-codeblock asymmetry as a finding with its evidence: `applyGalleryMigration` has exactly one call site (`src/views/database-view.ts:11669`) and `embedded-database-renderer.ts` has none
 <!-- /ANCHOR:phase-2 -->
 
 ---

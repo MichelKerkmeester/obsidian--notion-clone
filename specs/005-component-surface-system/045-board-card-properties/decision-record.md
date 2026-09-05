@@ -142,7 +142,7 @@ that would consume it.
 | 2 | **Beyond Local Maxima?** | PASS | Three options weighed above; the cheap one was rejected on lifetime, not on effort |
 | 3 | **Sufficient?** | PASS | It answers the question and creates no code |
 | 4 | **Fits Goal?** | PASS | It closes `045`'s scope and hands the surface to a packet that owns it |
-| 5 | **Open Horizons?** | PASS | Retiring a surface removes a renderer, a bench, a coverage pin and 84 CSS declarations rather than adding a second consumer |
+| 5 | **Open Horizons?** | PASS | Retiring a surface removes a renderer, a bench, a coverage pin and 85 CSS declarations rather than adding a second consumer |
 
 **Checks Summary**: 5/5 PASS
 <!-- /ANCHOR:adr-001-five-checks -->

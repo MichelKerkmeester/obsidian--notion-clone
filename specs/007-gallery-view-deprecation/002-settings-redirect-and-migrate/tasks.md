@@ -43,8 +43,8 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 Remove the `gallery` exemption from the settings-load sanitizer, observed red first (`src/main.ts:144`, `:180`)
-- [ ] T005 Land an imported `.base` `cards` view on `board` directly, carrying the `:1557` schema guard with it (`src/main.ts:1548-1616`)
+- [ ] T004 Remove the `gallery` exemption from the settings-load sanitizer, observed red first (`src/main.ts:146`, `:182`)
+- [ ] T005 Verify the `.base` importer still lands a `cards` view on `board` (`src/main.ts:1577`) and pin it with a regression test, so a later edit cannot silently reintroduce the gallery landing
 - [ ] T006 [P] Add the closed-surface tests: a loaded gallery coerces, an imported `cards` view is a board (`src/views/gallery-hide-and-migrate.test.ts`)
 - [ ] T007 Apply whatever `001`'s loss list says the migration is missing (`src/data/gallery-migration.ts`)
 - [ ] T008 Take ADR-001: does the embedded codeblock host migrate? Add the call, or record the decision not to (`src/views/embedded-database-renderer.ts`, `decision-record.md`)

@@ -72,10 +72,10 @@ _memory:
 ### Problem Statement
 
 The gallery view is **withdrawn but not removed**, and has been since `030-gallery-view-deprecation`
-shipped. Nothing new can be made a gallery — `toolbar-renderer.ts:1311` and
+shipped. Nothing new can be made a gallery — `toolbar-renderer.ts:97` and
 `view-config-panel-renderer.ts:515` both filter the value out of their pickers unless the view
 already is one — and the 787-line renderer, its bench, its coverage pin, its constructed screenshot
-scenario and 84 `styles.css` declarations all still ship. On 2026-09-05 the operator settled what
+scenario and 85 `styles.css` declarations all still ship. On 2026-09-05 the operator settled what
 should happen to that half-state, verbatim: **"should have been deprecated"**, and asked for the
 gallery to be retired completely, the same way the list view is being retired in
 `../006-list-view-deprecation/`.
@@ -132,7 +132,7 @@ Per-phase detail lives in each child's `plan.md`. This is the audit-trail summar
 
 | File Path | Change Type | Phase | Description |
 |-----------|-------------|-------|-------------|
-| `src/main.ts` | Modify | `002` | Settings-load sanitizer (`:144`, `:180`) and `.base` importer (`:1548-1616`) stop accepting or minting `gallery` |
+| `src/main.ts` | Modify | `002` | The settings-load sanitizer (`:146`, `:182`) stops exempting `gallery` from the unknown-type coercion. The `.base` importer already lands a `cards` view on `board` (`:1577`); only its gallery-named locals remain |
 | `src/data/gallery-migration.ts` | Modify | `002` | Already returns board; gains whatever the audit says it is missing |
 | `src/views/embedded-database-renderer.ts` | Modify | `002` | Gains the migration call it has never had — see §6 |
 | `src/views/gallery-renderer.ts` | Delete | `003` | 787 lines |
@@ -140,7 +140,7 @@ Per-phase detail lives in each child's `plan.md`. This is the audit-trail summar
 | `tools/live/renderer-coverage.json` | Modify | `003` | Two `inputs` pins removed; `constructed`/`total` lowered with the reason beside the number |
 | `tools/screenshots/constructed-scenarios.mjs`, `tools/screenshots/scenarios/*.mjs` | Modify | `003` | Gallery scenarios removed, not skipped |
 | `screenshots/manifest.json` | Modify | `003` | 24 gallery-touching entries |
-| `styles.css` | Modify | `003` | 84 gallery references |
+| `styles.css` | Modify | `003` | 85 gallery references |
 | `src/data/types.ts` | Modify | `003` | The union at `:317` and six `gallery*` `ViewConfig` fields at `:562-574`, subject to the §6 union question |
 | `src/i18n.ts` | Modify | `003` | 21 gallery keys across three locales |
 | `README.md`, `CHANGELOG.md` | Modify | `004` | The user-facing account of the retirement |
@@ -151,7 +151,7 @@ Per-phase detail lives in each child's `plan.md`. This is the audit-trail summar
 <!-- ANCHOR:inventory -->
 ## 4. THE GALLERY INVENTORY, MEASURED
 
-Counted on 2026-09-05 against the working tree at `2a7db8cf`, by `grep -ril gallery` per root and
+Counted on 2026-09-05 against the working tree at `464cd7e3`, by `grep -ril gallery` per root and
 `grep -ic gallery` per file. It is a starting map, not the audit — child `001` owns the audit, and
 `006`'s equivalent found surfaces its own spec had missed, which is the reason this list is written
 down rather than assumed.
@@ -166,7 +166,7 @@ down rather than assumed.
 | `tools/bench/gallery-render-bench.ts` | 16 | 225 | The bench the constructed scenario renders through |
 | `tools/bench/run-gallery.mjs` | 8 | 30 | Its driver |
 
-### 4.2 `src/` — 41 files mention the gallery
+### 4.2 `src/` — 42 files mention the gallery
 
 The ones that decide behaviour rather than merely name the string:
 
@@ -176,10 +176,10 @@ The ones that decide behaviour rather than merely name the string:
 | `src/views/view-config-panel-renderer.ts` | 37 | The picker filter (`:510`, `:515`), the gallery-only config section (`:470`), and the shared cover-settings renderer (`:1843-1845`, `:1910-1914`) |
 | `src/views/embedded-database-renderer.ts` | 29 | Renders the gallery **and never calls the migration** — see §6 |
 | `src/data/data-source.ts` | 28 | Parses the six `gallery*` fields in two places (`:798-803`, `:978-983`) |
-| `src/i18n.ts` | 21 | 21 keys across `en`, `zh-CN` and `zh-TW`, including `notice.galleryMigrated` at `:1445` |
+| `src/i18n.ts` | 21 | 21 keys across `en`, `zh-CN` and `zh-TW`, including `notice.galleryMigrated` at `:1456` |
 | `src/data/types.ts` | 15 | `DatabaseViewType` at `:317`; `galleryImageField`, `galleryImageAspectRatio`, `galleryCardSize`, `galleryCardSizePreset`, `galleryImageAspectRatioPreset`, `galleryImageFit` at `:562-574` |
-| `src/main.ts` | 9 | The settings sanitizer at `:144`/`:180` and the `.base` importer at `:1548-1616`, both of which still accept `gallery` |
-| `src/views/toolbar-renderer.ts` | 6 | `getViewTypeOptions` withdrawal (`:1305`, `:1311`) and the type icon (`:1457`) |
+| `src/main.ts` | 9 | The settings sanitizer at `:146`/`:182`, which still exempts `gallery` from the unknown-type coercion. The `.base` importer at `:1571-1641` **already lands on `board`** (`:1577`) and keeps gallery-named locals (`:1578`, `:1580`, `:1583`, `:1641`) |
+| `src/views/toolbar-renderer.ts` | 6 | `getViewTypeOptions` withdrawal (`:91`, `:97`) and the type icon (`:102`) |
 | `src/views/card-field-renderer.ts` | 1 | **Shared with the board. Out of scope** |
 
 The remaining 32 files carry one or two mentions each — mostly a `viewType === "gallery"` branch, a
@@ -204,7 +204,7 @@ decision.
 
 | Surface | Count | Note |
 |---|---|---|
-| `styles.css` | **84** lines mention gallery, **81** of them a `db-gallery-*` selector | The dead-CSS sweep `006`'s `007` deferred as its T010. This packet does not defer it |
+| `styles.css` | **85** lines mention gallery, **81** of them a `db-gallery-*` selector | The dead-CSS sweep `006`'s `007` deferred as its T010. This packet does not defer it |
 | `screenshots/manifest.json` | **24** of 546 scenario entries touch the gallery | Six ids × 4 theme/device combinations: `gallery-view`, `constructed-gallery`, `card-cover-states`, `constructed-card-covers`, `chrome-group-selection-controls`, `constructed-group-selection-controls`. **Only two of the six are gallery-only** — the other four mount the gallery *and* the board, so they are edited, not deleted |
 | `README.md` | 7 | "Six database views" at `:22`, the screenshot table at `:43-45`, page-preview and cover-settings prose at `:87`, `:120-123` |
 | `package.json` | 1 | The plugin `description` names the gallery |
@@ -219,10 +219,18 @@ would remove board coverage. That is the single most likely way this packet brea
 `030` and left the decision to its `006-hide-and-migrate` child; it is inherited here too, and §6
 asks it as a question rather than assuming the answer.
 
-**Two minting surfaces survived the withdrawal.** `main.ts:144` and `:180` re-accept `gallery` when
-sanitizing loaded settings, and the `.base` importer at `:1548` maps an imported `cards` view onto
-it. `006`'s audit found exactly this class for the list and called it out as a gap in that packet's
-own REQ-002. It is named here in advance rather than discovered again.
+**One minting surface survived the withdrawal, and it is one rather than two.** `main.ts:146` and
+`:182` still exempt `gallery` from the coercion that sends every unrecognised `viewType` to `table`,
+so a settings load re-blesses the value. The `.base` importer was the other candidate and **it has
+already been fixed**: `main.ts:1577` reads `const viewType = bv.type === "cards" ? "board" : "table"`,
+and its own comment at `:1571-1576` records why — withdrawing a type from the pickers did nothing
+about an importer that kept minting it. What remains there is cosmetic: the locals are still called
+`galleryImageField` (`:1578`, `:1580`, `:1583`) and land on `view.boardImageField` (`:1641`).
+
+**That correction is itself the argument for `001`.** This packet's first draft named the importer as
+a live minting surface on the strength of `006`'s parallel finding, and it was wrong — the fix landed
+upstream between the draft and the rebase. An audit that reads the tree is the difference between
+that error being caught in a spec and being carried into a requirement.
 <!-- /ANCHOR:inventory -->
 
 ---
@@ -295,7 +303,7 @@ own REQ-002. It is named here in advance rather than discovered again.
   reached. The same argument applies here and the same answer is the likely one, but it is `003`'s
   ADR to take, not this parent's to assume.
 - **Does the embedded codeblock host migrate too?** `applyGalleryMigration` is called only from
-  `database-view.ts:11663`. `embedded-database-renderer.ts` renders the gallery and has no
+  `database-view.ts:11669`. `embedded-database-renderer.ts` renders the gallery and has no
   equivalent call, so a gallery-configured codeblock renders unmigrated today. `006` inherited this
   gap and recorded it; this packet can either close it for the gallery or ship the same partial
   state knowingly. It cannot ship it unknowingly.

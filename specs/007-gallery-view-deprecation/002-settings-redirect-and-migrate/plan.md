@@ -29,9 +29,11 @@ contextType: "general"
 
 ### Overview
 
-Two small edits close the minting surfaces: the sanitizer stops exempting `gallery`, and the `.base`
-importer lands a `cards` view on `board` directly. One larger question decides the rest — whether the
-embedded codeblock host gains the migration call it has never had. The migration function itself
+One small edit closes the remaining minting surface: the sanitizer stops exempting `gallery`. The
+`.base` importer was the other candidate and already lands a `cards` view on `board`
+(`main.ts:1577`), so this phase pins it with a regression test rather than changing it. One larger
+question decides the rest — whether the embedded codeblock host gains the migration call it has
+never had. The migration function itself
 already exists and already targets board; it changes only if `001`'s declared-loss list says it drops
 something it should carry.
 <!-- /ANCHOR:summary -->
@@ -65,14 +67,15 @@ the part that closes the remaining doors and makes the migration reach both host
 
 ### Key Components
 
-- **`main.ts` sanitizer** (`:144`, `:180`): today `if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "chart") v.viewType = "table"`. Removing the gallery clause makes a loaded
+- **`main.ts` sanitizer** (`:146`, `:182`): today `if (v.viewType !== "board" && v.viewType !== "gallery" && v.viewType !== "chart") v.viewType = "table"`. Removing the gallery clause makes a loaded
   gallery coerce, which is a second safety net under the migration rather than a replacement for it.
-- **`main.ts` `.base` importer** (`:1548-1616`): maps `cards` to `gallery` and carries
-  `galleryImageField` through a schema guard at `:1557`. It lands on `board` instead, and the guard
-  moves with it.
+- **`main.ts` `.base` importer** (`:1571-1641`): **already lands `cards` on `board`** at `:1577`,
+  carrying an image field through a schema guard at `:1580` onto `view.boardImageField` at `:1641`.
+  Verified and pinned here, not changed. Its locals are still gallery-named, which is legibility
+  rather than behaviour.
 - **`gallery-migration.ts`**: pure, takes a view and returns what to write. Unchanged unless `001`
   says it drops something.
-- **`database-view.ts:2711`/`:11663`**: the one existing call site.
+- **`database-view.ts:2717`/`:11669`**: the one existing call site.
 - **`embedded-database-renderer.ts`**: the host with no call site. REQ-004's subject.
 
 ### Data Flow
@@ -88,13 +91,13 @@ The `.base` import path enters the same flow one step earlier, at creation.
 
 | Surface | Current Role | Action | Verification |
 |---------|--------------|--------|--------------|
-| `main.ts:144`, `:180` | Re-blesses `gallery` on settings load | update | A unit asserting a loaded gallery coerces |
-| `main.ts:1548-1616` | Mints `gallery` from an imported `cards` view | update | A unit importing a `.base` `cards` view and asserting `board` |
+| `main.ts:146`, `:182` | Re-blesses `gallery` on settings load | update | A unit asserting a loaded gallery coerces |
+| `main.ts:1571-1641` | **Already lands a `cards` view on `board`** (`:1577`) | unchanged — verified and pinned | A regression unit importing a `.base` `cards` view and asserting `board`, so a later edit cannot silently reintroduce the gallery landing |
 | `gallery-migration.ts` | Decides what a gallery becomes | update only if `001` says so | Its existing spec plus any new loss case |
-| `database-view.ts:11663` | The one migration call site | unchanged | `rg -n applyGalleryMigration src` still finds it |
+| `database-view.ts:11669` | The one migration call site | unchanged | `rg -n applyGalleryMigration src` still finds it |
 | `embedded-database-renderer.ts` | Renders a gallery, never migrates it | update, or a recorded decision against | REQ-004's ADR |
-| `toolbar-renderer.ts:1311`, `view-config-panel-renderer.ts:515` | Already filter gallery from the pickers | unchanged | Verified, not re-implemented |
-| `i18n.ts:1445`, `:382` | `notice.galleryMigrated`, `undo.galleryMigration` in three locales | unchanged | Reused rather than rewritten |
+| `toolbar-renderer.ts:97`, `view-config-panel-renderer.ts:515` | Already filter gallery from the pickers | unchanged | Verified, not re-implemented |
+| `i18n.ts:1456`, `:392` | `notice.galleryMigrated`, `undo.galleryMigration` in three locales | unchanged | Reused rather than rewritten |
 
 Required inventories:
 - Same-class producers: `rg -n 'viewType.*=.*"gallery"|viewType !== "gallery"' src`.
@@ -201,7 +204,7 @@ Follow the ordered tasks in `tasks.md`. It owns the Setup, Implementation and Ve
 
 ### Data Reversal
 - **Has data migrations?** Yes — `viewType` and the cover field are rewritten.
-- **Reversal procedure**: per view, the in-app undo (`undo.galleryMigration`, `i18n.ts:382`).
+- **Reversal procedure**: per view, the in-app undo (`undo.galleryMigration`, `i18n.ts:392`).
   There is no bulk reversal, and `004`'s CHANGELOG must say so.
 <!-- /ANCHOR:enhanced-rollback -->
 

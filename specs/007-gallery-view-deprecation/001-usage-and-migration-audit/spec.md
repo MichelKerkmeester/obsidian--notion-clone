@@ -88,7 +88,9 @@ packet number plus this phase folder name.
 
 `030-gallery-view-deprecation` withdrew the gallery from two pickers and stopped. It did not
 enumerate what else accepts the value, and two surfaces survived it: the settings-load sanitizer at
-`main.ts:144`/`:180` and the `.base` importer at `main.ts:1548-1616`. `006-list-view-deprecation`
+`main.ts:146`/`:182`. A second candidate this packet's first draft also named — the `.base` importer
+— turned out to have been fixed upstream already (`main.ts:1577` lands `cards` on `board`), which is
+itself the argument for this phase: an inherited list is not an audit. `006-list-view-deprecation`
 hit exactly this class — its own `005-usage-and-migration-audit` found two list-minting surfaces its
 parent spec had never named, and recorded that its REQ-002 needed to account for all three rather
 than just the picker.
@@ -204,8 +206,8 @@ this packet's own prose.
 
 ### Data Boundaries
 - A view with `viewType: "gallery"` and no `galleryImageField`: the migration has no cover to carry.
-- A `.base` import whose `cards` view names an image field absent from the schema — `main.ts:1557`
-  already guards this and the guard is part of the surface list.
+- A `.base` import whose `cards` view names an image field absent from the schema — `main.ts:1580`
+  already guards this against the schema's column keys, and the guard is part of the surface list.
 
 ### Error Scenarios
 - The operator's vault is unavailable: report unavailable, do not infer.

@@ -51,7 +51,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet, and nothing may be.** Parent D8 blocks this phase until `002` has shipped in a
-release. What follows is the state it opens against, read from the working tree at `2a7db8cf`.
+release. What follows is the state it opens against, read from the working tree at `464cd7e3`.
 
 ### Opening measurements
 

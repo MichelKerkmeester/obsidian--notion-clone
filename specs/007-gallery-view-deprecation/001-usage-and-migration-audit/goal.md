@@ -87,8 +87,9 @@ has a value to move from.
 
 - [ ] Every surface that accepts, mints or coerces `viewType: "gallery"` is enumerated with file and
       line. **Today: `030` recorded two picker filters and nothing else; two minting surfaces
-      (`main.ts:144`/`:180`, `main.ts:1548-1616`) are known to have survived it and the sweep may
-      find more.**
+      (`main.ts:146`/`:182`) is known to have survived it, a second candidate this packet's draft
+      named — the `.base` importer — turned out to be already fixed at `main.ts:1577`, and the
+      sweep may find more.**
 - [ ] Every measurement of the gallery is enumerated: the coverage pins, the bench and its driver,
       the constructed scenario, the capture scenarios, the render-assertion harness, the placement
       checks and the unit specs. **Today: 31 `tools/` files carry the string and nothing separates

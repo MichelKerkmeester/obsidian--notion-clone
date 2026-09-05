@@ -65,13 +65,15 @@ Read-only audit. No production code path is added, changed or removed by this ph
 
 ### Key Components
 
-- **The minting surfaces**: `main.ts:144`/`:180` (settings-load sanitizer), `main.ts:1548-1616`
-  (`.base` importer), plus whatever the `viewType`-assignment sweep adds.
-- **The withdrawal surfaces**: `toolbar-renderer.ts:1305`/`:1311` and
+- **The minting surfaces**: `main.ts:146`/`:182` (settings-load sanitizer), plus whatever the
+  `viewType`-assignment sweep adds. The `.base` importer at `:1571-1641` is **not** one — `:1577`
+  already lands `cards` on `board` — and confirming that is part of the sweep rather than an
+  assumption.
+- **The withdrawal surfaces**: `toolbar-renderer.ts:91`/`:1311` and
   `view-config-panel-renderer.ts:510`/`:515` — already filtered by `030`, verified rather than
   changed.
 - **The migration**: `src/data/gallery-migration.ts` and its single call site,
-  `database-view.ts:2711` declared, `:11663` called.
+  `database-view.ts:2717` declared, `:11663` called.
 - **The measurement surface**: `tools/live/renderer-coverage.json`, `tools/bench/gallery-render-bench.ts`,
   `tools/screenshots/constructed-scenarios.mjs:237`, `tools/screenshots/scenarios/core.mjs`,
   `tools/screenshots/scenarios/shared.mjs`, `tools/live/render-assertion-harness.ts`,

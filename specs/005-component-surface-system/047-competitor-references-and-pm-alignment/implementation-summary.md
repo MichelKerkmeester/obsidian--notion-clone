@@ -51,7 +51,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the state the packet opens against, read from the working tree at
-`2a7db8cf` and from `brew` on 2026-09-05.
+`464cd7e3` and from `brew` on 2026-09-05.
 
 ### Opening measurements
 
@@ -63,7 +63,7 @@ _memory:
   names `specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts` and a dozen more real files,
   which is what `verify.mjs` hashes for freshness.
 - **`tools/screenshots/manifest-schema.mjs:118` rejects any reference entry whose `group` is not
-  `"project-manager"`**, and `:51` limits `REFERENCE_RENDERERS` to `pm-kanban` and `pm-gantt`. A
+  `"project-manager"`**, and `:52` limits `REFERENCE_RENDERERS` to `pm-kanban` and `pm-gantt`. A
   capture under `screenshots/anytype/` cannot enter the manifest today.
 - `:108-126` also requires a `referenceOf` naming the constructed scenario the entry mirrors. An
   Anytype capture has no constructed counterpart.

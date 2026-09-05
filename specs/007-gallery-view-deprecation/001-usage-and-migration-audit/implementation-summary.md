@@ -50,14 +50,14 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the state the phase opens against, read from the working tree at
-`2a7db8cf`, so the audit's findings later have a measured baseline rather than an impression.
+`464cd7e3`, so the audit's findings later have a measured baseline rather than an impression.
 
 ### Opening measurements
 
 - `src/views/gallery-renderer.ts` is **787 lines**. It is the deletion target and it is untouched by
   `030`'s withdrawal.
-- `grep -ril gallery` returns **41 files under `src/`** and **31 under `tools/`**.
-- `styles.css` carries **84** gallery lines, **81** of them a `db-gallery-*` selector.
+- `grep -ril gallery` returns **42 files under `src/`** and **31 under `tools/`**.
+- `styles.css` carries **85** gallery lines, **81** of them a `db-gallery-*` selector.
 - `screenshots/manifest.json` carries **546** scenario entries; **24** of them touch the gallery,
   across six ids — `gallery-view`, `constructed-gallery`, `card-cover-states`,
   `constructed-card-covers`, `chrome-group-selection-controls`,
@@ -66,10 +66,12 @@ _memory:
   `src/views/gallery-renderer.ts` and `tools/bench/gallery-render-bench.ts` in its `inputs`.
 - `src/data/types.ts:317` declares `DatabaseViewType` with `"gallery"` in the union;
   `:562-574` declare six `gallery*` `ViewConfig` fields.
-- `applyGalleryMigration` has exactly **one** call site: `src/views/database-view.ts:11663`.
+- `applyGalleryMigration` has exactly **one** call site: `src/views/database-view.ts:11669`.
   `src/views/embedded-database-renderer.ts` renders the gallery and has none.
-- `src/main.ts:144` and `:180` re-accept `gallery` when sanitizing loaded settings;
-  `:1548-1616` mints one from an imported `.base` `cards` view.
+- `src/main.ts:146` and `:182` re-accept `gallery` when sanitizing loaded settings. The `.base`
+  importer at `:1571-1641` **does not**: `:1577` already lands a `cards` view on `board`, fixed
+  upstream. That correction is why this phase exists — the packet's first draft named two minting
+  surfaces from a sibling packet's finding and one of them was already gone.
 
 ### Files Changed
 

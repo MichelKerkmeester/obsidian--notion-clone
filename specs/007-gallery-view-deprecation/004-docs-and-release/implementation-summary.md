@@ -51,7 +51,7 @@ _memory:
 ## What Was Built
 
 **Nothing yet.** This records the user-facing state the phase opens against, read from the working
-tree at `2a7db8cf`.
+tree at `464cd7e3`.
 
 ### Opening measurements
 
@@ -65,7 +65,7 @@ tree at `2a7db8cf`.
   reading `0.0.22`.
 - `030-gallery-view-deprecation` is **4/6** on its own `goal.md` and its `spec.md` Status reads
   "In progress — withdrawn, not deleted".
-- The migration's user-facing string already exists: `src/i18n.ts:1445`
+- The migration's user-facing string already exists: `src/i18n.ts:1456`
   `notice.galleryMigrated`, in three locales, and it already tells the reader the gallery is being
   retired and that undo keeps it a gallery.
 

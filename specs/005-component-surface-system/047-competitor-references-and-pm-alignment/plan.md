@@ -30,7 +30,7 @@ contextType: "general"
 ### Overview
 
 Contract first, captures second, measurement third. `manifest-schema.mjs:118` currently rejects any
-reference entry not grouped `project-manager`, and `:51` allows only `pm-kanban` and `pm-gantt` as
+reference entry not grouped `project-manager`, and `:52` allows only `pm-kanban` and `pm-gantt` as
 reference renderers — so nothing from Anytype or AppFlowy can enter the manifest until that widens.
 Widen it with a negative control observed red, then land the captures, then run the board and gantt
 comparison the way `037`'s AC-007 and `038`'s T12 ran theirs: named elements, measured values, and a
@@ -70,7 +70,7 @@ more roots join it on the same terms.
 ### Key Components
 
 - **`tools/screenshots/manifest-schema.mjs`**: `CAPTURE_ROOT`, `captureRootFor()`,
-  `REFERENCE_RENDERERS` at `:51`, and the reference validation at `:108-126` which hard-codes
+  `REFERENCE_RENDERERS` at `:52`, and the reference validation at `:108-126` which hard-codes
   `group === "project-manager"` and requires a `referenceOf` naming the constructed scenario the
   entry mirrors.
 - **`tools/screenshots/verify.mjs`**: the freshness lane. It hashes each entry's `sources` and
@@ -96,7 +96,7 @@ every entry against what it claims to depict.
 | Surface | Current Role | Action | Verification |
 |---------|--------------|--------|--------------|
 | `manifest-schema.mjs:118` | Rejects a reference entry not grouped `project-manager` | update — widen to a named allowlist | The negative control still goes red on a malformed entry |
-| `manifest-schema.mjs:51` | `REFERENCE_RENDERERS` = `pm-kanban`, `pm-gantt` | update — add the new products' surfaces | A capture with an unlisted renderer is still rejected |
+| `manifest-schema.mjs:52` | `REFERENCE_RENDERERS` = `pm-kanban`, `pm-gantt` | update — add the new products' surfaces | A capture with an unlisted renderer is still rejected |
 | `manifest-schema.mjs:108-126` | Requires `referenceOf` on a reference entry | update — decide what it means with no constructed counterpart | An entry missing required provenance is still rejected |
 | `verify.mjs` | Classifies a missing source as vendor-unavailable or MISSING | update — a third class for "no in-repo source by design" | The classification is deterministic; the same entry never flips |
 | `screenshots/manifest.json` | 546 entries | update — new reference entries | `screenshots:verify` accounts for each |

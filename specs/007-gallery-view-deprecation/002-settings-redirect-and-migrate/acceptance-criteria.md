@@ -56,9 +56,9 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | **Given** a settings file declaring `viewType: "gallery"`, **When** settings load, **Then** the value coerces like any other unrecognised type. **Failing value today: it does not** — `main.ts:144` and `:180` exempt `gallery` explicitly | A unit observed red before green on the loaded-gallery case | Unmet | - |
-| AC-002 | REQ-001 | **Given** a `.base` file carrying a `cards` view, **When** it is imported, **Then** the resulting view is a **board**, and the image field still passes the schema guard. **Failing value today: it becomes a gallery** — `main.ts:1548-1616` | A unit importing a `.base` `cards` view and asserting `viewType === "board"` plus the guarded image field | Unmet | - |
-| AC-003 | REQ-002 | **Given** a vault view configured as a gallery, **When** it is opened in the standalone host, **Then** it renders as a board with the same cover, and the notice appears once. **Today: this already works** via `database-view.ts:11663`; the criterion exists so a regression here is caught, not because it is new | The existing migration path re-asserted, plus a two-open test proving the notice fires once | Unmet | - |
+| AC-001 | REQ-001 | **Given** a settings file declaring `viewType: "gallery"`, **When** settings load, **Then** the value coerces like any other unrecognised type. **Failing value today: it does not** — `main.ts:146` and `:182` exempt `gallery` explicitly | A unit observed red before green on the loaded-gallery case | Unmet | - |
+| AC-002 | REQ-001 | **Given** a `.base` file carrying a `cards` view, **When** it is imported, **Then** the resulting view is a **board**, and the image field still passes the schema guard. **This already holds** — `main.ts:1577` lands `cards` on `board`, `:1580` guards the field. **Failing value today: 0 tests assert it**, so a later edit could reintroduce the gallery landing in silence | A regression unit importing a `.base` `cards` view and asserting `viewType === "board"` plus the guarded image field | Unmet | - |
+| AC-003 | REQ-002 | **Given** a vault view configured as a gallery, **When** it is opened in the standalone host, **Then** it renders as a board with the same cover, and the notice appears once. **Today: this already works** via `database-view.ts:11669`; the criterion exists so a regression here is caught, not because it is new | The existing migration path re-asserted, plus a two-open test proving the notice fires once | Unmet | - |
 | AC-004 | REQ-004 | **Given** a gallery-configured **codeblock** embed, **When** it renders, **Then** it is migrated — or `decision-record.md` carries an ADR saying why it is not. **Failing value today: 1 call site, 0 in the embedded host** | `rg -n applyGalleryMigration src/views/embedded-database-renderer.ts`, plus the ADR if the answer is no | Unmet | - |
 | AC-005 | REQ-005 | **Given** a view migrated on its first open, **When** it is opened again, **Then** the migration is a no-op and no second notice appears | A two-open unit; the notice count asserted, not observed by eye | Unmet | - |
 | AC-006 | REQ-003, REQ-006 | **Given** the finished phase, **When** `npm run gate` runs, **Then** it exits 0 read from `$?`, and every closed surface has a test that was seen failing first | Gate output and exit status; the red-first record for each surface | Unmet | - |
@@ -89,8 +89,9 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Nothing has run. Every row is `Unmet` with its failing value named today rather than left blank —
-AC-001 and AC-002 name the two surfaces `030` left open, AC-004 names the asymmetry that has now
-been inherited twice. AC-007 is the row that most wants to be waived and must not be: it is the
+Nothing has run. Every row is `Unmet` with its state today named rather than left blank. AC-001 is
+the one live minting surface `030` left open; **AC-002 is not a defect** — the `.base` importer was
+fixed upstream and already lands on `board`, so that row exists to pin behaviour no test currently
+guards. AC-004 names the asymmetry that has now been inherited twice. AC-007 is the row that most wants to be waived and must not be: it is the
 only thing standing between an unmigrated vault and a deleted renderer.
 <!-- /ANCHOR:closure -->

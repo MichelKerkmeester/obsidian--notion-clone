@@ -87,14 +87,20 @@ packet number plus this phase folder name.
 
 ### Problem Statement
 
-`030` withdrew the gallery from two pickers, and two surfaces kept minting it. `src/main.ts:144` and
-`:180` coerce an unrecognised `viewType` to `table` but explicitly exempt `gallery`, so a settings
-load re-blesses the value. The `.base` importer at `:1548-1616` maps an imported `cards` view onto
-`gallery` outright — its own comment at `:1551` even notes that board is "the same landing the
-gallery migration makes", which is the argument for importing straight to board instead.
+`030` withdrew the gallery from two pickers and stopped. `src/main.ts:146` and `:182` coerce an
+unrecognised `viewType` to `table` but explicitly exempt `gallery`, so a settings load re-blesses the
+value.
+
+**The `.base` importer was the second candidate and it has already been fixed upstream.**
+`main.ts:1577` reads `const viewType = bv.type === "cards" ? "board" : "table"`, and the comment
+above it at `:1571-1576` states the reasoning this packet would otherwise have had to make:
+withdrawing a type from the pickers did nothing about a path that kept minting it, and board is the
+landing the gallery migration makes anyway. What is left there is naming — the locals are still
+`galleryImageField` (`:1578`, `:1580`, `:1583`) and they land on `view.boardImageField` (`:1641`).
+So this phase has **one** live minting surface to close, not two.
 
 The migration itself is asymmetric. `applyGalleryMigration` is called from
-`database-view.ts:11663` and nowhere else, so a gallery-configured **codeblock** embed renders
+`database-view.ts:11669` and nowhere else, so a gallery-configured **codeblock** embed renders
 through `EmbeddedDatabaseRenderer` unmigrated. `006-list-view-deprecation` recorded this exact gap
 as inherited from `030` and left the decision to a child; the decision is now this phase's.
 
@@ -111,11 +117,11 @@ build that proves it has shipped.
 
 ### In Scope
 - `src/main.ts` settings-load sanitizer: `gallery` stops being exempt from the coercion.
-- `src/main.ts` `.base` importer: an imported `cards` view lands on `board` directly.
+- `src/main.ts` `.base` importer: verify it still lands a `cards` view on `board` (it does, `:1577`), and decide whether the gallery-named locals are renamed or left.
 - `src/data/gallery-migration.ts`: whatever `001`'s declared-loss list says it is missing.
 - `src/views/embedded-database-renderer.ts`: the migration call it has never had, or a recorded
   decision not to add it.
-- The notice: `notice.galleryMigrated` already exists at `i18n.ts:1445` in three locales and is
+- The notice: `notice.galleryMigrated` already exists at `i18n.ts:1456` in three locales and is
   reused rather than rewritten.
 - Tests: one per closed surface, each observed red before green.
 
@@ -130,7 +136,7 @@ build that proves it has shipped.
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `src/main.ts` | Modify | Sanitizer (`:144`, `:180`) and `.base` importer (`:1548-1616`) |
+| `src/main.ts` | Modify | The settings-load sanitizer at `:146`, `:182`. The `.base` importer at `:1571-1641` already lands on `board`; only its gallery-named locals remain, and renaming them is optional |
 | `src/data/gallery-migration.ts` | Modify | Whatever `001`'s loss list requires |
 | `src/views/embedded-database-renderer.ts` | Modify | The migration call, or a recorded decision against |
 | `src/data/gallery-migration.test.ts` | Modify | Cases for each closed surface |
@@ -146,7 +152,7 @@ build that proves it has shipped.
 
 | ID | Requirement |
 |----|-------------|
-| REQ-001 | Every surface `001` enumerated refuses to accept or mint `viewType: "gallery"` — the sanitizer and the importer at minimum |
+| REQ-001 | Every surface `001` enumerated refuses to accept or mint `viewType: "gallery"` — the settings-load sanitizer at minimum, plus anything the audit finds that this spec did not |
 | REQ-002 | A gallery-configured view opens as a **board with the same cover image**, once, with a notice, in the standalone host |
 | REQ-003 | Each closed surface has a test that was observed **red before green** |
 
@@ -204,7 +210,7 @@ build that proves it has shipped.
 ### Reliability
 - **NFR-R01**: migrating twice is a no-op. The second call sees a board and does nothing.
 - **NFR-R02**: an undo restores the gallery `viewType`, and `undo.galleryMigration` already exists at
-  `i18n.ts:382` in three locales.
+  `i18n.ts:392` in three locales.
 <!-- /ANCHOR:nfr -->
 
 ---
@@ -214,8 +220,8 @@ build that proves it has shipped.
 
 ### Data Boundaries
 - A gallery view with no `galleryImageField`: migrates, carries no cover, and that is not a loss.
-- A `.base` `cards` view naming an image field the schema does not have: `main.ts:1557` already
-  guards it; the guard moves to the board path rather than being dropped.
+- A `.base` `cards` view naming an image field the schema does not have: `main.ts:1580` already
+  guards it against the schema's column keys, and it already feeds the board path.
 - A view carrying both `galleryImageField` and `boardImageField`: the migration must decide which
   wins, and record it.
 
@@ -254,6 +260,8 @@ build that proves it has shipped.
   `046-linked-views-notion-parity`'s ADR-001 answered for linked views (the operator allowed the
   write). That precedent is worth reading before deciding.
 - Should the `.base` importer's gallery-shaped settings be carried onto the board's equivalents, or
-  dropped? `main.ts:1616`'s own comment says the gallery-shaped settings beside the image field have
+  dropped? `main.ts:1639`'s own comment says the gallery-shaped settings beside the image field have
   no board equivalent and are dropped today. Whether that stays true is `001`'s loss list to answer.
+- Are the importer's gallery-named locals renamed? They already land on `boardImageField`, so this
+  is legibility rather than behaviour — worth doing in this phase's commit, not worth a requirement.
 <!-- /ANCHOR:questions -->

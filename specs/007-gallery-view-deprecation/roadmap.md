@@ -96,7 +96,7 @@ scenario's board contribution before `003` touches any of them.
 `045-board-card-properties` builds its card field list on it.
 
 **The migration is asymmetric and always has been.** `applyGalleryMigration` is called from
-`database-view.ts:11663` and from nowhere else. `embedded-database-renderer.ts` renders the gallery
+`database-view.ts:11669` and from nowhere else. `embedded-database-renderer.ts` renders the gallery
 with no equivalent call, so a gallery-configured codeblock renders unmigrated today. `002` either
 closes it or ships the same partial state **knowingly**. Shipping it unknowingly is what `030` did.
 

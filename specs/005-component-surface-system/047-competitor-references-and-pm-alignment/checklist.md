@@ -30,7 +30,7 @@ with an empty "today" cell is not accepted.
 |---|---|---|---|---|
 | C1 | Competitor products with reference captures in the repository | 1 — Project Manager, 16 PNGs under `screenshots/project-manager/` | 3 — plus Anytype and AppFlowy | [ ] |
 | C2 | Reference groups the manifest schema accepts | 1 — `manifest-schema.mjs:118` rejects anything that is not `project-manager` | a named allowlist, still closed | [ ] |
-| C3 | Reference renderers the schema accepts | 2 — `pm-kanban`, `pm-gantt` (`manifest-schema.mjs:51`) | the new products' surfaces added, unlisted ones still rejected | [ ] |
+| C3 | Reference renderers the schema accepts | 2 — `pm-kanban`, `pm-gantt` (`manifest-schema.mjs:52`) | the new products' surfaces added, unlisted ones still rejected | [ ] |
 | C4 | Capture rows taken, of product × surface × source | 0 of 16 | 16, or fewer with each absence recorded as uncaptured WITH its reason | [ ] |
 | C5 | Deterministic classes for a capture with no in-repo source | 0 — `verify.mjs` has `vendor-unavailable` for an *unavailable* source, not for *no* source | 1, and the same entry never flips class | [ ] |
 | C6 | Board fidelity gaps against Project Manager, measured | unknown — `038`'s T12 measured 14 carried-forward elements at `c563f08`, then the operator said "align closer" against 0.0.22 | every gap numbered, then closed with a before/after or dispositioned with a reason | [ ] |

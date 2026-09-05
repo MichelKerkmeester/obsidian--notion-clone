@@ -86,15 +86,15 @@ Each row is checkable without opening another file, and each records what is tru
 has a value to move from.
 
 - [ ] The settings-load sanitizer coerces a gallery like any other unrecognised type. **Today it
-      does not**: `main.ts:144` and `:180` exempt `gallery` explicitly.
-- [ ] An imported `.base` `cards` view lands on **board**, with the `:1557` schema guard intact.
-      **Today it lands on gallery** (`main.ts:1548-1616`), and that file's own comment at `:1551`
-      already observes that board is where the gallery migration lands anyway.
+      does not**: `main.ts:146` and `:182` exempt `gallery` explicitly.
+- [ ] An imported `.base` `cards` view lands on **board**, with the `:1580` schema guard intact,
+      **and a test says so**. **Today the behaviour already holds** (`main.ts:1577`, fixed upstream)
+      **and nothing asserts it**, so a later edit could reintroduce the gallery landing in silence.
 - [ ] A gallery-configured view opens as a board with the same cover, once, with a notice, in the
       standalone host. **Today this works** — the criterion exists to catch a regression, not
       because it is new.
 - [ ] The embedded codeblock host either migrates too or carries an ADR saying why not. **Today:
-      one call site (`database-view.ts:11663`), none in `embedded-database-renderer.ts`.**
+      one call site (`database-view.ts:11669`), none in `embedded-database-renderer.ts`.**
 - [ ] Every closed surface has a test that was observed red before green, with the failing value
       recorded.
 - [ ] `npm run gate` exits 0 read from `$?`, never through a pipe.
@@ -126,6 +126,6 @@ into the objective, and it is expected to grow.
 | Item | Note |
 |------|------|
 | This phase is a *redirect*, not a *hide* | `006`'s equivalent child is `006-hide-and-migrate`, because it had to withdraw the list itself. `030` already withdrew the gallery in August, so what is left here is the surfaces the withdrawal did not reach. |
-| The importer already knows the answer | `main.ts:1551`'s own comment says board is "the same landing the gallery migration makes". The import has been taking a detour through a deprecated type to reach a destination it already knew. |
+| The importer was already fixed, and this packet's first draft said otherwise | `main.ts:1577` lands a `cards` view on `board`, with the comment at `:1571-1576` recording why: withdrawing a type from the pickers did nothing about a path that kept minting it. The draft named the importer as a live minting surface on the strength of `006`'s parallel finding, and the fix had landed upstream in between. One live surface remains, not two — which is the clearest possible argument for `001` reading the tree rather than inheriting a sibling's list. |
 | The embed-write objection has weakened | The strongest argument against migrating from the embedded host was that a reading-view render should not write vault data. On 2026-09-05 the operator allowed exactly that class of write for linked views (`046/decision-record.md` ADR-001). Worth reading before deciding, and not the same question — but the objection is no longer categorical. |
 <!-- /ANCHOR:log -->

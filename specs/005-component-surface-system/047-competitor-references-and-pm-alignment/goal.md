@@ -59,7 +59,7 @@ Frozen choices. Changing one is an amendment.
 |----|----------|
 | D1 | **Both sources, per the operator's words:** official product images **and** the apps installed locally through Homebrew casks. Not one or the other. |
 | D2 | Captures live at `screenshots/anytype/` and `screenshots/appflowy/`, **flat**, the way `screenshots/project-manager/` does. Our own captures stay under `screenshots/notion-clone/`. |
-| D3 | **The manifest contract is widened, not loosened.** `manifest-schema.mjs:118` rejects any reference group but `project-manager` and `:51` allows only `pm-kanban` and `pm-gantt`. A negative control proves the widened version still rejects. |
+| D3 | **The manifest contract is widened, not loosened.** `manifest-schema.mjs:118` rejects any reference group but `project-manager` and `:52` allows only `pm-kanban` and `pm-gantt`. A negative control proves the widened version still rejects. |
 | D4 | **No fidelity fix without a measured gap behind it.** `037`'s AC-007 and `038`'s T12 are the style: named elements, measured values, a numbered gap or a zero. |
 | D5 | **A capture that could not be taken is recorded as uncaptured, with its reason.** An absent capture reported as zero gaps is the exact failure this program was rewritten around. |
 | D6 | **Rows 37 and 38 do not close here.** They close on the operator's own vault comparison. An agent never ticks an operator row. |
@@ -95,7 +95,7 @@ has a value to move from.
       Project Manager.**
 - [ ] The reference contract accepts the new groups and renderers **and still rejects a malformed
       entry**, proven by a negative control observed red. **Today: `manifest-schema.mjs:118`
-      rejects any group but `project-manager`; `:51` allows two renderers; no negative control
+      rejects any group but `project-manager`; `:52` allows two renderers; no negative control
       exists.**
 - [ ] A capture with no in-repo source has a deterministic class in `verify.mjs`. **Today:
       `vendor-unavailable` exists for an *unavailable* source, which is a different thing from
@@ -124,7 +124,7 @@ into the objective, and it is expected to grow.
 | Phase opened | Done | Operator 2026-09-05 on 0.0.22: *"align closer"*, plus capture Anytype and AppFlowy — official images and installed apps both. Recorded at `../roadmap.md` §4 rows 37/38 and §6A |
 | Level and shape decided | Done | `recommend-level.sh --loc 500 --files 18 --api` → **Level 2, 53/100, confidence 92%**; phase score **10/50** against a threshold of 25. Neither `phase-definitions.md` §2 condition is met, so a standard child |
 | Cask availability checked | Done | `brew info --cask anytype` → 0.56.5, auto_updates, **Not installed**. `brew info --cask appflowy` → 0.14.1, **Not installed** |
-| Contract blocker found | Done | `tools/screenshots/manifest-schema.mjs:118` rejects any reference `group` but `project-manager`; `:51` limits `REFERENCE_RENDERERS` to `pm-kanban` and `pm-gantt` |
+| Contract blocker found | Done | `tools/screenshots/manifest-schema.mjs:118` rejects any reference `group` but `project-manager`; `:52` limits `REFERENCE_RENDERERS` to `pm-kanban` and `pm-gantt` |
 | Contract widened | Not started | `tasks.md` T005, T006 |
 | Captures | Not started | `tasks.md` T008, T009 |
 | Fidelity comparison | Not started | `tasks.md` T012, T013 |

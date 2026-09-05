@@ -107,7 +107,7 @@ carry is not the same as looking like it, and that one reference is a narrow bas
 about how a database plugin should look.
 
 **There is a contract problem in the way.** `tools/screenshots/manifest-schema.mjs:118` rejects any
-reference entry whose `group` is not `"project-manager"`, and `:51` restricts `REFERENCE_RENDERERS`
+reference entry whose `group` is not `"project-manager"`, and `:52` restricts `REFERENCE_RENDERERS`
 to `pm-kanban` and `pm-gantt`. A capture under `screenshots/anytype/` cannot enter the manifest at
 all today. That is the first thing this phase touches, and widening it carelessly would turn a
 strict contract into a permissive one.

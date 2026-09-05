@@ -162,7 +162,7 @@
         "source": "derived"
       },
       {
-        "name": "Overview Two",
+        "name": "Overview One",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
@@ -198,9 +198,9 @@
         "source": "derived"
       }
     ],
-    "causal_summary": "`030` withdrew the gallery from two pickers, and two surfaces kept minting it",
+    "causal_summary": "`030` withdrew the gallery from two pickers and stopped",
     "created_at": "2026-09-05T03:46:37Z",
-    "last_save_at": "2026-09-05T04:15:40.817Z",
+    "last_save_at": "2026-09-05T04:32:08.814Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:75bbdd712683b06d86b8bb5e971de51901d4306991d565bf37f513113d477f40",
+    "source_fingerprint": "sha256:a5d0691b72c7b66933cce475cec6a01ef42062733c4b713b6d561f36bc9471bf",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a366f92548ee76e0e92215859dc9add4200607f08fbc55207707a38c05a1d4af",
-      "plan.md": "e3dfc2844a394e450f6fb423dcea30d4b53f99127d73594e781341f3a83648cb",
-      "tasks.md": "85f8364f2cae19f98d6353cbdbddf583f4a12d21528ee29ecbca9c8dbac98714",
-      "implementation-summary.md": "bb8cdcca062a68b2ed266a1079dd29bbd93d3cca8b10a3023181c6ccae041833"
+      "spec.md": "0b8f0955cf14f1b9219cb3f46310a6432a1d67fa8ebb00596e4808fd2ef55800",
+      "plan.md": "7f2854601ed3755aa9957e03bfa70bc6c0ad57737073d763bbb877e1ce32d734",
+      "tasks.md": "791dce00685e2c0c6d290286dfeb87cc25b49cc69b9f1b7983c2bd7183e62311",
+      "implementation-summary.md": "ccea4a87432eb6891bcb725db3f3f2468b119f0726ad5c510405746d579c144e"
     },
     "last_active_child_id": null,
     "last_active_at": null
