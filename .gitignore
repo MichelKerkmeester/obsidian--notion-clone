@@ -7,7 +7,8 @@
 /specs/000-personal/
 # The pre-move path, kept so a stale checkout or a partial revert cannot re-expose it.
 /specs/public/000-personal/
-specs/**/context/
+specs/**/context
+specs/context
 specs/**/scratch/
 specs/**/research/**/lineages/
 .DS_Store

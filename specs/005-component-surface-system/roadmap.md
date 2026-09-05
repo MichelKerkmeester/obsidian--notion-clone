@@ -1349,6 +1349,17 @@ surfaces". `016` measured **nine** sheet-capable surfaces, all at the identical 
 added since the count was written or two were never counted. Low stakes — every surface measured
 matches — but the census number is quoted in three documents and only one of them counted.
 
+### 7.8 `specs/context` was tracked as a self-referencing symlink
+
+*2026-09-05:* Commit `c492cf66` staged `specs/context` as a `120000` symlink pointing at its own
+path, because `.gitignore` line 10 read `specs/**/context/` — the trailing slash matches only a
+directory, so a convenience symlink slipped past it untracked-but-not-ignored and got `git add`ed.
+Pulling that commit into the primary checkout replaced the gitignored vendored directory
+`specs/context/obsidian-pm-main/` (and its siblings) with the symlink; `tools/live/reference-mount.ts`
+imports from that vendored tree, so `npm run screenshots` could no longer bundle. Fixed by untracking
+the symlink (`git rm --cached`) and tightening the ignore to `specs/**/context` (no trailing slash)
+plus a bare `specs/context` line, so both the directory and a same-named symlink are caught.
+
 ---
 
 ## 8. EXECUTION ORDER — DECLARED, AND AS RUN
