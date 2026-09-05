@@ -88,7 +88,8 @@
     "005-component-surface-system/046-linked-views-notion-parity",
     "005-component-surface-system/047-competitor-references-and-pm-alignment",
     "005-component-surface-system/048-stacked-sheets",
-    "005-component-surface-system/049-test-environments-and-mock-data"
+    "005-component-surface-system/049-test-environments-and-mock-data",
+    "005-component-surface-system/050-anytype-adoption"
   ],
   "manual": {
     "depends_on": [],
@@ -296,7 +297,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-05T08:06:39.463Z",
+    "last_save_at": "2026-09-05T08:19:37.153Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -304,10 +305,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:9d37f13e660d52f8227f04040c7404afa12daf97a5e559a17e0f478c6032c563",
+    "source_fingerprint": "sha256:1d1223d6e434aee3a17ceb92a5de5e5f526fa64b71c741de61fb1c8a6bdb4bcf",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "390347e6c61813c553a222640f4a09ccb0354dba1a80141923e02ce5ce167461",
+      "spec.md": "5e3e3eb6be17ff2397e863a5013c2293e9fb2d958f8d4a0d878310bef8752662",
       "handover.md": "5a27215f881b4deb39ebc85b8a62034401636296af477316845c0e42a9adcbde"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",

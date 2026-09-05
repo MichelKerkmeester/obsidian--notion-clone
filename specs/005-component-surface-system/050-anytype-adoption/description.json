@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/050-anytype-adoption",
+  "description": "The fourteen Anytype adoption items 047's research ranked against src/views: a filter/sort chip row with state-dependent trigger icons, landing in view settings after a view is made, a sticky board scrollbar, duplicate view, per-view scroll restore, cell-editor edge flip, sort-conflict confirmation, capability-gated menus, two-flavour empty states, per-view new-row presets, positionLock, measured toolbar collapse, per-format phone filter rows, and an inline Load more row — each designed against a real capture before it is written",
+  "keywords": [
+    "phase",
+    "anytype-adoption",
+    "anytype",
+    "chip-row",
+    "view-settings",
+    "board-scrollbar",
+    "empty-states",
+    "context-menus",
+    "competitor-reference"
+  ],
+  "lastUpdated": "2026-09-05T08:10:00.000Z",
+  "specId": "050",
+  "folderSlug": "anytype-adoption",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

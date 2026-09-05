@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/050-anytype-adoption",
+  "spec_folder": "005-component-surface-system/050-anytype-adoption",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "anytype adoption spec",
+      "050 spec",
+      "adoption items",
+      "chip row",
+      "anytype ui ux",
+      "implementation plan",
+      "050 plan",
+      "adoption legs",
+      "anytype adoption plan",
+      "task breakdown",
+      "050 tasks",
+      "adoption tasks"
+    ],
+    "key_topics": [
+      "anytype",
+      "adoption",
+      "spec",
+      "items",
+      "chip",
+      "row",
+      "implementation",
+      "plan",
+      "legs",
+      "task",
+      "breakdown",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/toolbar-renderer.ts",
+      "src/views/bulk-edit-field-menu.ts",
+      "screenshots/anytype/README.md",
+      "specs/005-component-surface-system/spec.md",
+      "specs/005-component-surface-system/roadmap.md",
+      "specs/005-component-surface-system/goal.md",
+      "specs/005-component-surface-system/goal-prompt.md",
+      "src/views/filter-panel-renderer.ts",
+      "src/views/sort-panel-renderer.ts",
+      "src/views/database-view.ts",
+      "src/views/view-config-panel-renderer.ts",
+      "src/views/board-renderer.ts",
+      "src/views/table-renderer.ts",
+      "src/views/active-view-controls-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "bulk-edit-field-menu.ts",
+        "kind": "code",
+        "path": "src/views/bulk-edit-field-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/anytype/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/roadmap.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal-prompt.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/goal-prompt.md",
+        "source": "derived"
+      },
+      {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "active-view-controls-renderer.ts",
+        "kind": "code",
+        "path": "src/views/active-view-controls-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Anytype Adoption",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Project Manager",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Our view surfaces work but do not cohere",
+    "created_at": "2026-09-05T08:01:32Z",
+    "last_save_at": "2026-09-05T08:14:42.698Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:fbef46a86440a9042af8e49b68458b3fc40b6f7eeabb0a2897634d22d82cd7c5",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "8da9f63b3078109b0e15ca81051ae605d57fb584fa7ed3ad5a085f898bbea16c",
+      "plan.md": "6e932bc6cccb099a0d5cb581d8029d00f590a921e7f85452b51f272a74abd79d",
+      "tasks.md": "15b6da341c433e325de973a0a857d83f4d5d4ebc8f97610621848906ad79ca6c",
+      "implementation-summary.md": "c791cd6a7bb858ddae686ccd12e2e5810195e45c688d194728e20ccc41afb0b3"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}
