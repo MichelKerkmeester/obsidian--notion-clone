@@ -74,7 +74,8 @@ literal, and everything visual is derived from it.
 | Role | What it is | Dismisses on | Focus | Typical width |
 |---|---|---|---|---|
 | `menu` | A short list of actions or options. The user picks one and it closes | outside click, Escape, selection | roving, returns to trigger | 292px (see §5) |
-| `panel` | A working surface with several controls the user adjusts before closing — Filter, Sort, Column Manager, view config | outside click, Escape | trapped | 292-360px |
+| `panel` | A working surface with several controls the user adjusts before closing — view config, and any other non-condition panel | outside click, Escape | trapped | 292-360px |
+| `condition panel` | A `panel` whose rows carry conditions — property, operator, value, plus a group, NOT and remove button — Filter, Sort, Column Manager | outside click, Escape | trapped | 440-560px (see §5) |
 | `dialog` | A decision that must be answered before continuing | explicit action only | trapped, mandatory | role-declared |
 | `sheet` | A phone presentation: docked to the bottom edge, full width, over the host chrome | scrim tap, Escape, back, drag-to-dismiss | trapped | 100% |
 | `submenu` | A `menu` opened *from* a row of another surface, in the same LIFO group | Escape closes innermost only | returns to the parent row | 292px |
@@ -120,7 +121,8 @@ Find your sentence in the left column. Everything else follows.
 | A dropdown from a table column header | `menu` | `bodyPortal` | 292px | Portals out of the scroll container so it is not clipped |
 | A dropdown from a cell being edited | `menu` | `bodyPortal` | 292px | Same reason; the cell may re-render underneath it |
 | A nested menu from a menu row | `submenu` | same as parent | 292px | Same LIFO group as its parent (§6) |
-| A panel the user adjusts then closes — filters, sorting, column list | `panel` | `local` | 292-360px, declared | Filter, Sort and Column Manager are this |
+| A panel whose rows carry conditions — filters, sorting, column list | `condition panel` | `local` | 440-560px, declared | Filter, Sort and Column Manager are this (§5) |
+| A panel the user adjusts then closes, with no condition-shaped rows — view config | `panel` | `local` | 292-360px, declared | Everything else in the `panel` role |
 | A panel that must survive a container scroll | `panel` | `bodyPortal` | declared | Portal, then re-anchor on commit (§8) |
 | A colour, icon or date picker | `menu` | `bodyPortal` | declared, content-driven | Fixed-width by nature; declare it on the role, not at the call site |
 | A relation picker or anything with a search field and a long list | `panel` | `bodyPortal` | wider role | If you want room, **declare a wider role** — do not type a number |
@@ -229,10 +231,9 @@ three lines if given the same floors).
 a replacement — a panel that is not one of the three named callers above still sizes from 292-360px as
 before.
 
-**Known gap, not silently absorbed.** §3's role vocabulary table and §4's decision table still list
-Filter, Sort and Column Manager at the `panel` role's 292-360px range; both predate this ruling and are
-out of scope for this edit, whose write authority is §5. They need the same amendment this section
-just made, as a follow-up.
+**Carried through the design tables.** §3's role vocabulary table and §4's decision table both cite
+`condition panel` for Filter, Sort and Column Manager at this 440-560px range, and keep every other
+`panel`-role row at 292-360px — the same amendment this section makes, not a separate one left open.
 
 ### One trap in the harness, before you trust the geometry gate
 

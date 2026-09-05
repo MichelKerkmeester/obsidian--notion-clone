@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-09-05T11:40:00Z"
     last_updated_by: "markdown-agent"
-    recent_action: "Recorded the operator's ruling on the panel-width doc gap row 50 flagged"
-    next_safe_action: "Amend §3/§4 role tables to match §5"
+    recent_action: "Carried the condition panel role through §3/§4, closing the doc gap row 50 flagged"
+    next_safe_action: "None — the ADR and all three amended sections agree"
     blockers: []
     key_files:
       - "specs/005-component-surface-system/design-system.md"
@@ -44,11 +44,12 @@ _memory:
 | **Date** | 2026-09-05 |
 | **Deciders** | Operator |
 
-**Acceptance evidence**: `design-system.md` §5 now documents the `condition panel` role (440-560px)
-and its row-floor rule; `roadmap.md` §6A carries the ruling as a dated decision row citing §4 rows 47
-and 50. `PANEL_POPOVER` in `src/views/popover-position.ts:90-94` — already `{ minWidth: 292,
-preferredWidth: 552, maxWidth: 552 }` since `f5a69e9f` — needed no code change to fit inside the new
-range.
+**Acceptance evidence**: `design-system.md` §5 documents the `condition panel` role (440-560px) and its
+row-floor rule; §3's role vocabulary table and §4's decision table both cite `condition panel` for
+Filter, Sort and Column Manager at the same range, with every other `panel`-role row unchanged at
+292-360px. `roadmap.md` §6A carries the ruling as a dated decision row citing §4 rows 47 and 50.
+`PANEL_POPOVER` in `src/views/popover-position.ts:90-94` — already `{ minWidth: 292, preferredWidth:
+552, maxWidth: 552 }` since `f5a69e9f` — needed no code change to fit inside the new range.
 
 ---
 
@@ -99,7 +100,7 @@ new range.
 
 | Option | Pros | Cons | Score |
 |--------|------|------|-------|
-| **A named `condition panel` role, 440-560px (chosen)** | Matches §5's own existing policy ("declare a wider role, not a bespoke number"); scoped to the three callers that actually need it; keeps `panel`'s narrow range meaningful for every other surface | Two ranges to track instead of one; §3's role vocabulary table and §4's decision table need the same follow-up amendment this ADR does not make | 8/10 |
+| **A named `condition panel` role, 440-560px (chosen)** | Matches §5's own existing policy ("declare a wider role, not a bespoke number"); scoped to the three callers that actually need it; keeps `panel`'s narrow range meaningful for every other surface | Two ranges to track instead of one across §3, §4 and §5 | 8/10 |
 | Widen the existing `panel` role's own range (e.g. 292-560px) | One range, smaller diff | Gives every `panel`-role surface — view config, any future one — headroom none of them asked for, and erases the reason a condition row is wider: it carries different content, not a looser rule | 4/10 |
 | Leave the doc as-is; treat 552px as an undocumented exception | No doc change | Leaves the design system's own stated policy (item 2) unfollowed by its own designers, and row 50's flagged defect stays open indefinitely | 1/10 |
 
@@ -115,23 +116,22 @@ in row 50 answers that: only the three condition-shaped panels needed it.
 ### Consequences
 
 **What improves**:
-- `design-system.md` §5 now describes the shipped 552px width instead of contradicting it; a future
-  reader sizing a fourth condition-shaped panel has a named role and a row-floor rule to reuse instead
-  of picking a tenth bespoke number.
-- The measurement chain (row 47/50 → §5 → §6A → this ADR) is traceable in one direction without a
+- `design-system.md` §3, §4 and §5 all describe the shipped 552px width instead of contradicting it; a
+  future reader sizing a fourth condition-shaped panel has a named role and a row-floor rule to reuse
+  instead of picking a tenth bespoke number, wherever in the doc they land first.
+- The measurement chain (row 47/50 → §3/§4/§5 → §6A → this ADR) is traceable in one direction without a
   reviewer having to reconcile a doc against a diff by hand.
 
 **What it costs**:
-- `design-system.md` §3's role vocabulary table and §4's decision table still list Filter, Sort and
-  Column Manager at the `panel` role's 292-360px range. Mitigation: named explicitly in §5's new
-  subsection and in this ADR's `next_safe_action` as a follow-up amendment, not silently left
-  inconsistent.
+- Two width ranges to track under the `panel` family instead of one. Mitigation: each range is named to
+  a role (`panel` vs. `condition panel`), not left as an unlabelled number, so the split is explicit
+  rather than implicit.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| A reader consults §3 or §4 first and gets the pre-amendment number | M | §5's subsection states the gap explicitly; the follow-up amendment closes it once actioned |
+| A future panel needs Filter/Sort/Column-Manager-shaped rows but is not one of the three named callers | L | §5 states the role applies to exactly the three `PANEL_POPOVER` callers; a fourth caller adopts `condition panel` by using the same preset, not by inventing a fourth range |
 <!-- /ANCHOR:adr-001-consequences -->
 
 ---
@@ -157,14 +157,16 @@ in row 50 answers that: only the three condition-shaped panels needed it.
 
 **What changes**:
 - `specs/005-component-surface-system/design-system.md` — §5 gains the `condition panel` role
-  subsection.
+  subsection; §3's role vocabulary table and §4's decision table are amended so Filter, Sort and
+  Column Manager cite `condition panel` at 440-560px, and every other row stays at `panel`'s
+  292-360px.
 - `specs/005-component-surface-system/roadmap.md` — §6A gains a dated decision row citing §4 rows 47
   and 50; the section's own decision count and table count are updated to match.
 - No source code change — `src/views/popover-position.ts`'s `PANEL_POPOVER` (552px, shipped in
   `f5a69e9f`) already conforms to the range this ADR sets.
 
-**How to roll back**: revert the §5 subsection addition in `design-system.md`, revert the §6A decision
-row (and its intro count) in `roadmap.md`, and delete this file.
+**How to roll back**: revert the §3/§4/§5 amendments in `design-system.md`, revert the §6A decision row
+(and its intro count) in `roadmap.md`, and delete this file.
 <!-- /ANCHOR:adr-001-impl -->
 <!-- /ANCHOR:adr-001 -->
 
