@@ -86,16 +86,19 @@ ticked from a passing test alone.
 <!-- ANCHOR:testing -->
 ## TESTING
 
-- [ ] CHK-020 [P0] Every `acceptance-criteria.md` row that is not operator-only is `Met` with
-      observed evidence — AC-001 through AC-004 are `Met`; AC-005 stays `Unmet`. The lane its
-      Verification cell names now exists AND measures this surface directly (5 of 7 elements
-      green), but `rows`/`segmented` are red for the pre-existing settings-body reason, not a
-      registered all-green row for this surface, so the named check still does not exist. Not
-      fully satisfied; see `acceptance-criteria.md` §3.
+- [x] CHK-020 [P0] Every `acceptance-criteria.md` row that is not operator-only is `Met` with
+      observed evidence — AC-001 through AC-005 are `Met`. AC-005 closed once `050`'s
+      settings-body grammar landing resolved the shared-body blocker: `board-card-properties` is
+      now registered, all-green (7/7, up from 5/7 at `7b976e28`) in `tools/live/sheet-grammar.mjs`.
+      AC-006 is operator-only and untouched; see `acceptance-criteria.md` §3.
 - [x] CHK-021 [P0] `npm run gate` exits 0, read without a pipe — `npm run gate >/tmp/gate045.log
       2>&1; echo $?` → `0`; 25 green, 0 red. Re-run at T013's landing (`npm run gate` piped to a log,
       exit read separately): 26 green, 0 red — the extra lane is `sheet-grammar`, registered between
-      the two passes by `044`'s own landing, not something this task added.
+      the two passes by `044`'s own landing, not something this task added. Re-run again this
+      session after registering `board-card-properties` in that lane's `REGISTERED_SURFACES`: 25
+      green, 0 red (the `list-window` lane retired in the interim, unrelated to this change) —
+      `node tools/live/sheet-grammar.mjs` standalone: 8 registered surfaces, all 7 elements green
+      for each, negative control unaffected.
 - [x] CHK-022 [P1] Empty list, deleted key, and a schema whose only field is the title, all covered
       — `board-card-fields.test.ts`: "keeps an empty array...", "drops unknown keys...", and the
       new "the title field is the only column in the schema" shape in `SCHEMA_SHAPES`
@@ -191,12 +194,12 @@ ticked from a passing test alone.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 13 | 12/13 — CHK-020 open (AC-005 unmet) |
-| P1 Items | 15 | 14/15 — CHK-024 open |
+| P0 Items | 13 | 13/13 — CHK-020 closed (AC-005 now Met) |
+| P1 Items | 15 | 15/15 |
 | P2 Items | 1 | 0/1 — CHK-043 not done, reason recorded |
 
 The original totals recorded here (11/14/1) undercounted the checklist's own items; corrected to
 the actual per-section counts above rather than left inconsistent with the checked boxes.
 
-**Verification Date**: 2026-09-05 (verification pass)
+**Verification Date**: 2026-09-05 (sheet-grammar registration pass)
 <!-- /ANCHOR:summary -->
