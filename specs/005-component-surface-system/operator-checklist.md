@@ -266,7 +266,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 ## 050-anytype-adoption — 0/8
 
-- [ ] The capture sweep has been read and every one of the fourteen items carries a design trued against a real screen or a named gap. Today: no such document exists, and `screenshots/anytype/README.md` records that the first pass reached no view switcher, no filter or sort panel with a condition open, no property editor, no context menu and no hover state — every mouse-driven surface was unreachable in that environment.
+- [ ] The capture sweep has been read and every one of the fourteen items carries a design trued against a real screen or a named gap. Today: the document exists — `design-trueup.md`, T001's output, one section per item (AC-015 `Met`) — and 4 of the 14 items still carry a named gap rather than a screen (REQ-005, REQ-006, REQ-007, REQ-011), down from five.
 - [ ] The filter/sort chip row exists and its trigger icons are state-dependent. Today: 0 chips and one fixed icon state — `filter-panel-renderer.ts` and `sort-panel-renderer.ts` render panels with no chip surface, and the toolbar's filter and sort icons do the same thing whether or not a filter is active.
 - [ ] Creating or duplicating a view lands in that view's settings within 100ms. Today: it lands nowhere — `database-view.ts` creates the view and returns to the board.
 - [ ] The board's horizontal scrollbar is sticky at the viewport bottom while the board is taller than the viewport. Today: it sits at the bottom of the board, which on a tall board is off-screen until you scroll to it.

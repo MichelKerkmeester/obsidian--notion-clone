@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: main carries 0.0.25 (2334046b, bundle f2518f5e) with the five desktop fixes from the operator's 0.0.23 desktop pass. This pass landed five new family phases 051-055 — the operator's componentization instruction — four drafted externally by GLM 5.3 flash and one written in-runtime after its leaf died at the scaffold. All five were corrected against 050's design-trueup.md, which landed while they were drafting and overturned twenty-five claims across them. All five pass validate.sh --strict with Errors 0. No T001 has run in any of them. The five operator questions this pass opened (053's three ADRs, 051's two) were all answered 2026-09-05 (~14:15) and are now Accepted."
+description: "Resume point: main carries 0.0.26 (8c7b65aa), which ships 006's record-open docking for every anchorless caller (ae46da94) on top of 0.0.25's five desktop fixes. All six capture true-ups are done — 050's plus 051-055's, landed 2026-09-05 in worktrees 087-092 — and this pass reconciled them against each other. 053's true-up overturned four of 050's own claims and 052's overturned a fifth; three of the four are the same error, an absence asserted from a surface never examined. Four cross-family number conflicts are settled in roadmap.md §7.10, which also names one owner per shared primitive. 053's implementation leg is running on codex in worktree 094; 052, 054, 051 and 055 follow by inventory rank. No criterion was ticked: a true-up designs, T002 measures."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,20 +10,21 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-05T14:50:00Z"
-    last_updated_by: "adr-answers-051-053"
-    recent_action: "Recorded the operator's 2026-09-05 (~14:15) answers to all five open questions"
-    next_safe_action: "Run 051-055 T001 against the now-Accepted decisions"
+    last_updated_at: "2026-09-05T16:40:00Z"
+    last_updated_by: "reconcile-trueups"
+    recent_action: "Reconciled the six true-ups against each other and corrected 050"
+    next_safe_action: "Run 052 T002 while codex holds 053; both measure their reds before code"
     blockers:
-      - "Rows 47-51 shipped in 0.0.25; operator confirmation owed"
-      - "Rows 29-33, 39-41, 43 re-asked against 0.0.25, unanswered"
-      - "051-055: none past T001"
+      - "Rows 47-52 shipped in 0.0.25 and 0.0.26; operator confirmation owed on all six"
+      - "Rows 29-33, 39-41, 43 re-asked against 0.0.26, unanswered"
+      - "050-055: all past T001, none past T002; no implementation has landed"
       - "046 T002/T016 and 044/045 AC-006 stay open"
+      - "worktrees/096-screenshots-regroup is rewriting capture paths; rebase onto its path form"
     key_files:
-      - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
-      - "specs/005-component-surface-system/053-toolbar-and-view-controls/decision-record.md"
-      - "specs/005-component-surface-system/051-modal-and-sheet-componentization/decision-record.md"
+      - "specs/005-component-surface-system/goal.md"
+      - "specs/005-component-surface-system/050-anytype-adoption/design-trueup.md"
+      - "specs/005-component-surface-system/053-toolbar-and-view-controls/design-trueup.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
@@ -31,6 +32,12 @@ _memory:
     completion_pct: 76
     open_questions: []
     answered_questions:
+      - "All six T001 true-ups are done; 050's own read was wrong in five places"
+      - "Chip rail: captured eleven times and conditional; 050 C2 withdrawn"
+      - "Per-view default: in the New menu, not the settings panel; 050 C7 narrowed"
+      - "Page limit is per-layout (Gallery 60, Kanban 10), not a flat 60"
+      - "Hover was captured 37 times; the README caveat five documents inherited was false"
+      - "Secondary text is 7.11:1 and the #232323 fill 1.14:1, across every packet"
       - "The confirm primitive is 051's; 053 and 055 consume it"
       - "Anytype dual-mode trigger icons rejected: 120 captures, WCAG 1.4.11"
       - "Selection caps not adopted: no multi-select referent"
@@ -49,11 +56,44 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
-**Main carries `0.0.25`** (cut `2334046b`, bundle `f2518f5e`, cadence row `9e0abab4`). It ships the
-five desktop fixes from the operator's 0.0.23 desktop pass — `roadmap.md` §4 rows **47-51**, all
-five now reading *shipped in 0.0.25, awaiting operator*. `0.0.24` before it carried `048`'s stacked
-sheets, `044`'s sheet grammar, `046`'s linked-view chrome and `007`'s gallery migration. **Nothing
-in either release is operator-confirmed**, which is D3 working as written, not a gap.
+**Main carries `0.0.26`** (cut `8c7b65aa`). It ships `006-record-open-target`'s docking fix
+(`ae46da94`) — the generalisation of §4 row 48 to **every** caller that opens a record with no
+element to point at, which is §4 **row 52**, now reading *shipped in 0.0.26, awaiting operator*.
+`0.0.25` under it carries the five desktop fixes (rows **47-51**) and `0.0.24` the stacked sheets,
+sheet grammar, linked-view chrome and gallery migration. **Nothing in any of the three is
+operator-confirmed**, which is D3 working as written, not a gap.
+
+**All six capture true-ups are done, and the reconciliation pass that read them together is this
+one.** `050`'s T001 landed earlier; `051`-`055`'s landed 2026-09-05 in worktrees `087`-`092` as
+`8e0149af`, `a58bbcd5`, `fbbddc13`, `621de37f` and `ffcf434b`+`cd8030a8`. Running five reads of one
+product in parallel is what made the next paragraph possible, and it is the argument for having done
+it that way.
+
+**`050`'s own read — the program's read of record — was wrong in five places, and its siblings found
+them.** `053`'s T001 opened the catalogue List views, the `New ⌄` menu and the per-layout settings
+blocks that `050` never opened:
+
+| `050` said | The captures show | Now at |
+|---|---|---|
+| C2: no chip row on any capture | The chip rail on **eleven** captures, and **conditional** — present on 5 of 5 List views carrying a filter, absent on Grid, Gallery, Kanban, Calendar and Graph | C2 withdrawn; the rail's geometry adopted, its contrast refused |
+| C7: no per-view default in the product | `Default Type for this View` and `Template for this View`, in the `New ⌄` menu's `Settings` section | C7 narrowed to the settings panel; our row belongs beside the create affordance |
+| REQ-013: the filter panel is one `+ New filter` row | That is the **empty state**. The populated panel is captured across **twelve** relation formats | REQ-013 leaves the "no reference screen" list, which falls from five items to four |
+| The page limit is 60, Anytype's captured default | **Per-layout**: Gallery 60, Kanban 10, and no limit row on Grid, List, Calendar or Graph | AC-014's 60 becomes **our** number for an embedded table, argued rather than quoted |
+| §2: hover states were never captured (from the capture index) | **37** of the 150 menus were reached by hovering a parent row, each photographing that row hovered: `#232323`, 28px, 1.14:1 | Corrected in `050` §2, in `screenshots/anytype/README.md`, and in `roadmap.md` §6A |
+
+**Three of the four are one error**, and it is worth carrying forward: **an absence asserted from a
+surface that was never examined.** C2 scanned the four toolbar icons and never the band beneath them.
+C7 searched the settings panel and concluded "absent from the product". The page limit was read off
+one layout's panel and quoted as a product default. `050` ADR-003 gains a second corollary —
+*absence in one captured surface is evidence about that surface only*.
+
+**Four numbers disagreed across the five reads, and `roadmap.md` §7.10 settles them**: secondary text
+is **7.11:1** not 7.95:1 (the read that stated its method wins), the `#232323` fill is **1.14:1** not
+1.20:1 (three packets and a re-derivation against one), Anytype's motion exit is **0.2s** not 0.1s
+(`055` read the source file `047` paraphrased), and the iOS sheet row pitch is **not** a disagreement
+— five packets measured five different sheets and there is no single product figure. The same section
+names **one owner per shared primitive**; two of the six were owned only in this document's family
+table and are now written into their own packets.
 
 **This pass landed five new phases: `051`-`055`.** They come from one operator instruction on
 2026-09-05 — *"research recommendations and how to tackle / update / improve every modal, sheet and
@@ -104,17 +144,29 @@ kinds of disagreement followed — tabulated with their resolutions in `roadmap.
    `120ms` transition count of **78** that recounts to **42**.
 
 **All five packets pass** `validate.sh --strict` with `Errors: 0` on the first `RESULT:` line, and
-each carries a binding `goal.md`. **None has run its T001**, so no design in any of them has been
-checked against the captures its own rows name. That is why every one reads `0/N` in the parent's
-DONE table and *open, drafted 2026-09-05, awaiting T001 true-up* in `roadmap.md` §5.A.
+each carries a binding `goal.md`. **All five have now run their T001**, and every one still reads
+`0/N` in the parent's DONE table — which is correct, not a lag. A true-up designs against the
+captures; **T002 is what measures a red**, and no packet has run one. `roadmap.md` §5.A reads *T001
+true-up done 2026-09-05, implementation pending* for all six, with `053`'s cell naming the codex leg.
 <!-- /ANCHOR:handover-summary -->
 
 ---
 
 <!-- ANCHOR:context-transfer -->
-## 2. NEXT SAFE ACTION: ALL FIVE QUESTIONS ANSWERED — RUN 051-055 T001
+## 2. NEXT SAFE ACTION: THE TRUE-UPS ARE DONE — RUN T002, NOT CODE
 
-### The five operator questions this pass opened, now answered 2026-09-05 (~14:15)
+**Every packet's next step is its own T002**, the red-first measurement of the thresholds its true-up
+restated. `053`'s implementation leg is already running on codex and is the exception, not the
+pattern: it starts first because it carries `050` items 1, 2, 4, 7, 10 and 12 and because all three
+of its ADRs are Accepted. **`052` is the next to open** (its `checklist.md` C7 is now reconciled and
+its migration table, T003, is the leg after), then `054`, `051`, `055` by inventory rank.
+
+**Do not read a true-up as permission to write code.** Six documents now describe what each surface
+should be; not one of them has observed a failing value on the current tree. D2 is unsatisfied in all
+six until T002 runs, and the whole reason `050`'s thresholds had to be restated was a packet that
+asserted a red without measuring it.
+
+### The five operator questions, answered 2026-09-05 (~14:15) and unchanged since
 
 **`053`'s three ADRs were PROPOSED at landing.** Each was tested against one question — *does it
 sit inside a decision the operator has already taken in `roadmap.md` §6A?* — and **none of the
@@ -152,7 +204,10 @@ the five draft trees, which were read in full.**
 |---|---|---|
 | `.worktrees/074-anytype-ios-sim` | `964a0b2a` — **now on `origin/main`** | **Landed during this pass.** The open-source Anytype iOS client built from source and run on a simulator: **59 states in light and dark, 118 files** under `screenshots/anytype/mobile/`, against the same 326-record demo space the desktop captures used. It closes `050` item 13's capture gap — `design-trueup.md` REQ-013 recorded that no filter or sort sheet appears in any of the 151 desktop files, and four now do — and gives `051`-`055` the phone reference every one of them was designed without. Each of the five gained a dated reconciliation block; **the pixels are unread in all of them** |
 | `.worktrees/079-anytype-menus` | `396e1532`, **220 files dirty** | Every Anytype dropdown and mobile sheet screenshotted, per the operator's decision. This is the capture set `052`'s `anytype-menu-grammar.md` §4 lists as still missing and `054`'s §5B rows still need. **Uncommitted and unread** |
-| `.worktrees/085-record-open-dock` | `9e0abab4`, clean | "Fix record open for all callers" — generalising row 48's fix from the one board card the report named to every caller of the record-open path. Running on GLM |
+| `.worktrees/094-impl-053-toolbar` | `ae46da94` at dispatch | **In flight, on codex.** `053`'s implementation leg — the first of the five families to start. It holds the toolbar's five composed primitives and `050` items 1, 2, 4, 7, 10, 12. Do not open the same files from another leaf |
+| `.worktrees/096-screenshots-regroup` | `a58bbcd5` at branch | **In flight.** Regrouping `screenshots/` into platform/subject subfolders and rewriting every path citation across the spec tree. **On a rebase conflict over a capture path, keep THEIR path form and YOUR content** — the true-ups already cite the `menus/` and `mobile/` forms |
+| `.worktrees/087-trueup-051` … `092-trueup-054` | `8e0149af`, `a58bbcd5`, `fbbddc13`, `621de37f`, `cd8030a8`, `7b516cba` | **Landed. Removable.** All six are ancestors of `origin/main`; removing a worktree is not removing its branch |
+| `.worktrees/085-record-open-dock` | `ae46da94`, landed | **Landed and shipped in 0.0.26.** "Fix record open for all callers" — row 48's fix generalised to every caller of the record-open path. Removable |
 | `.worktrees/080-phase-modal-componentization` | `4a5b339b` | **Superseded.** Its `051` draft was scaffold only; the packet was written in-runtime |
 | `.worktrees/081-phase-menu-componentization` | `4a5b339b` | **Superseded** by the landed `052` |
 | `.worktrees/082-phase-toolbar-view-controls` | `4a5b339b` | **Superseded** by the landed `053` |
@@ -195,9 +250,10 @@ a translation of it.
 
 ### Still owed from the operator
 
-A fresh device check against **`0.0.25`** for rows 29-33, 39-41 and 43, and a first look at rows
-47-51; the vault side-by-side for rows 37/38; `044`'s and `045`'s AC-006; `046`'s AC-007 and its
-`T016` settings-flag call; and `006`'s two operator rows. The five questions above are answered as
+A fresh device check against **`0.0.26`** for rows 29-33, 39-41 and 43, and a first look at rows
+**47-52** — row 52 being the record-open docking this release carries; the vault side-by-side for
+rows 37/38; `044`'s and `045`'s AC-006; `046`'s AC-007 and its `T016` settings-flag call; and
+`006`'s two operator rows. The five questions above are answered as
 of 2026-09-05 (~14:15). Each confirmation closes its `roadmap.md` §4 row or its phase's own AC row;
 a "still broken" answer reopens the row with the device fact given, never argued with. **No agent
 ticks an operator row.**
@@ -209,27 +265,58 @@ ticks an operator row.**
 ## 3. RESUME ORDER
 
 1. Read this handover in full, then `goal-prompt.md`, before touching anything. The prompt was
-   rewritten this pass and is under the 4,000-character cap at **3,912**.
-2. Run `npm run gate` from a clean `main` checkout and confirm it green before assuming the tree is
-   as described here. If the parent's phase count moved, regenerate `operator-checklist.md` with
-   `node tools/naming/build-operator-checklist.mjs` — the `operator-list` lane reads it.
-3. The five operator questions in §2 are answered — three of them (`053`'s ADRs) unblock that
-   phase's first implementation leg, and the other two unblock `051`'s (`051/tasks.md` T009 is
-   specifically unblocked by ADR-004).
-4. **Run `051`-`055`'s T001 before any implementation in them.** Each phase's T001 is its capture
-   read or its surface inventory, and each is a gate rather than a step — which is precisely the
-   lesson this pass paid for.
-5. Read `screenshots/anytype/README.md`'s mobile section before **any** of the five T001s — the iOS
-   simulator set landed on main during this pass and every one of the five was designed without it.
-   Then read `.worktrees/079-anytype-menus`, which is still uncommitted and holds the desktop
-   dropdown captures the mobile set does not cover.
-6. Work `050` T002 onward against the **restated** thresholds (ADR-004), never the originals.
+   rewritten this pass and sits at the 4,000-character cap exactly.
+2. **Read `roadmap.md` §7.10 before quoting any measured Anytype number.** Four of them disagreed
+   across the five reads and the section says which value won and why. Quoting the loser is how a
+   corrected number gets re-introduced.
+3. Run `npm run gate` from a clean `main` checkout, `</dev/null`, and confirm it green before
+   assuming the tree is as described here. If the parent's phase count moved, regenerate
+   `operator-checklist.md` with `node tools/naming/build-operator-checklist.mjs` — the
+   `operator-list` lane reads it.
+4. **Run each packet's T002 before any implementation in it.** All six T001s are done; not one
+   threshold has been observed red. `053` is the exception already in flight on codex — check
+   `worktrees/094-impl-053-toolbar` before opening any toolbar file.
+5. Work `050` T002 onward against the **restated** thresholds (ADR-004 **as amended 2026-09-05**),
+   never the originals — and note that AC-014's `60` is now ours to argue, not Anytype's to quote.
+6. Before citing a capture path, check `worktrees/096-screenshots-regroup`: the regrouping into
+   platform/subject subfolders is in flight and it rewrites path citations across the spec tree. On a
+   conflict, **their path form, your content**.
+7. `.worktrees/079-anytype-menus` is still uncommitted and holds desktop dropdown captures; the
+   `menus/` set the true-ups cite is on main.
 <!-- /ANCHOR:session-notes -->
 
 ---
 
 <!-- ANCHOR:next-session -->
 ## 4. GOTCHAS LEARNED THIS SESSION
+
+### The day's traps, in the order they cost time
+
+- **GLM cannot read images, and it loops on exploration when asked to.** The true-up legs are capture
+  reads. A GLM leaf given one will explore the tree indefinitely rather than report that it cannot
+  open a PNG. Route a capture read to a model that can see, and treat "still working" on an image
+  task as a failure signal, not progress.
+- **OpenRouter has an idle timeout**, and a long reasoning leg hits it without producing an error the
+  caller recognises as a timeout. DevPass is the fallback per §6A, and its own failure is a mid-run
+  stop that reads as a completed dispatch. Both need the landing pass that reads each leaf's output.
+- **codex has a cap window, not a per-run limit.** A wave that fits at noon may not fit at four.
+  Check before dispatching, not after the third leaf returns empty.
+- **`npm run gate` needs `</dev/null`.** Without it the gate can block on a prompt and read as a
+  hang, which then gets killed and reported as a failure it was not.
+- **The validator is flaky inside a worktree** — see the item below. Validate from the primary
+  checkout's cwd, through `realpath`, and require an explicit `RESULT: PASSED`; a stale compiled
+  orchestrator exits 3 with **no rule output at all**, which a grep for `FAILED` reads as clean.
+- **The spec-kit relocated to `runtime/cli`.** Scripts that used to be under `scripts/` are not.
+- **The `specs/context` symlink incident.** Never stage it; symlink it into a worktree and leave it
+  out of every commit.
+- **A release commit must carry `main.js`.** `0.0.25` needed a second commit for the bundle. A tag
+  on a cut without its bundle installs as the previous version and reads as "the fix did not ship".
+- **The Anytype captures moved.** `d486eab9` regrouped them into
+  `screenshots/anytype/{official, desktop/{sets/<use-case>, app, menus}, mobile/{official, sheets, app}}`
+  with filenames unchanged. Cite the new form; the old flat and `mobile-official/` paths are gone.
+- **`screenshots/README.md` is generated** by `tools/screenshots/capture.mjs`, and it does **not** yet
+  list the `anytype/` and `project-manager/` roots. That is a harness follow-up, not a document edit
+  — editing the file by hand would be overwritten by the next capture run.
 
 - **The spec-kit relocated to `runtime/cli`, and the validator is flaky inside a worktree.** Scripts
   now live under `.opencode/skills/system-spec-kit/runtime/cli/` (was `scripts/`), and the compiled
@@ -261,12 +348,49 @@ ticks an operator row.**
   mistake.** Six of `050`'s fourteen thresholds asserted a failing value the tree does not have, and
   a threshold whose failing value is wrong cannot be observed red — so the criterion is
   unfalsifiable while looking rigorous. Every red in the five landed packets was re-measured.
+- **And the same mistake has a second half, learned today: a value read off one surface and quoted
+  as the product's.** `050` did it three times — no chip row (from a region never scanned), no
+  per-view default (from one panel), a 60-row page limit (from one layout). A capture read is only
+  evidence about what it photographed, and "I looked and it is not there" needs the *where* attached
+  to be worth anything.
+- **A quoted contrast ratio is not a measured one.** Two of the four cross-family conflicts were
+  arithmetic: 7.95 versus 7.11, 1.20 versus 1.14. Recompute from the sampled hex and say that you
+  did; a ratio carried between documents drifts and nothing catches it.
+- **An ownership written in the handover and not in the packet is invisible.** The condition row and
+  the inline editors each had one owner in this document's family table and nothing in `053`'s or
+  `054`'s own files. An implementation leg opens the packet, not the handover.
 <!-- /ANCHOR:next-session -->
 
 ---
 
 ## 5. CONTINUITY LOG
 
+- **2026-09-05, `orchestrate-handover-20`: all six true-ups reconciled, and `050` corrected.**
+  `051`-`055` each ran T001 in its own worktree (`087`-`092`) and landed as `8e0149af`, `a58bbcd5`,
+  `fbbddc13`, `621de37f` and `ffcf434b`+`cd8030a8`; `006`'s record-open docking landed at `ae46da94`
+  and shipped as **0.0.26** (`8c7b65aa`), closing the in-repo half of §4 row 52. This pass read the
+  five together, which is a different job from running any one of them, and it found the program's
+  own read of record wrong in five places. **`053`'s T001 overturned four `050` claims** — C2's "no
+  chip row" (the rail is on eleven captures and is conditional), C7's "no per-view default in the
+  product" (it is in the `New ⌄` menu), REQ-013's "one `+ New filter` row" (that is the empty state;
+  twelve formats are captured), and the flat 60-row page limit (it is per-layout, Gallery 60 and
+  Kanban 10). **`052`'s overturned a fifth**: the "no hover state was captured" caveat five documents
+  had inherited from the capture index — 37 menus show it. All five corrected at their sites in
+  `050`'s `design-trueup.md`, `spec.md`, `acceptance-criteria.md`, `decision-record.md` and
+  `checklist.md`, and in `screenshots/anytype/README.md`. **Three of the four are one error**, now
+  ADR-003's second corollary: an absence asserted from a surface that was never examined.
+  **Four cross-family numbers disagreed** and `roadmap.md` §7.10 settles each with its winner and the
+  reason — 7.11:1 over 7.95:1, 1.14:1 over 1.20:1, a 0.2s Anytype exit over 0.1s, and the iOS row
+  pitch recorded as *not* a conflict because five packets measured five different sheets. §7.10 also
+  fixes **one owner per shared primitive**, writing the condition row into `053` and the inline
+  editors into `054`, where they had existed only in this document's family table. Residues cleared:
+  `052`'s `checklist.md` C7 (8 width literals at 14 sites, the only 240 a story) and its `goal.md`
+  D3; `054`'s `checklist.md` C3 Today cell (one list, one filtered subset, one submenu, not three
+  lists); `055`'s vocabulary census, already closed at `cd8030a8` and now marked closed in its
+  summary. **Nothing was ticked and no operator row was touched.** All six packets stay `0/N`: every
+  T001 is done and no T002 has run, so not one threshold has been observed red. `053`'s
+  implementation leg is running on codex in `worktrees/094-impl-053-toolbar`; `096-screenshots-regroup`
+  is rewriting capture paths in parallel and its path form wins on a conflict.
 - **2026-09-05, `orchestrate-handover-19`: five family phases landed.** `051`-`055` opened from the
   operator's componentization instruction, four drafted by GLM 5.3 flash through cli-pi in parallel
   worktrees `080`-`084` and one (`051`) written in-runtime after its leaf died at the scaffold. All
