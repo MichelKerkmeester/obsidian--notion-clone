@@ -124,10 +124,15 @@ with the owner named, never self-closed.
       built) and `decision-record.md` ADR-006 (Proposed) restates it against today's scattered
       per-property literal count. A stray `tools/live/replay.json` timestamp written by running the
       lane was reverted before commit — out of this task's write authority.
-- [ ] **T003 — [P] Capture the board and gantt parity baseline before any `styles.css` or shared
+- [x] **T003 — [P] Capture the board and gantt parity baseline before any `styles.css` or shared
       chrome commit.** **Threshold**: a recorded `pixelHash` per reference capture. **Red-first
       proof**: n/a — this is the baseline the later comparison is meaningful against. **Proof**: the
-      hashes recorded in `checklist.md` C9.
+      hashes recorded in `checklist.md` C9. **Done 2026-09-05** — the 8 reference-pair scenarios (32
+      device/theme captures: `constructed-board`, `constructed-board-subtask`, `constructed-timeline`,
+      `constructed-timeline-subtask`, `reference-kanban`, `reference-kanban-subtask`, `reference-gantt`,
+      `reference-gantt-subtask`) were read from `screenshots/manifest.json` before this leg's first
+      line of code, then re-read after every leg below landed: all 32 `pixelHash` values hold
+      unchanged both times, which is what "the baseline is meaningful" means in practice.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -135,20 +140,41 @@ with the owner named, never self-closed.
 <!-- ANCHOR:phase-2 -->
 ## Phase 2 — The shell (plan §8 leg 2)
 
-- [ ] **T004 — Build `src/views/surface-shell.ts` with `createSurfaceShell` and unit tests.**
+- [x] **T004 — Build `src/views/surface-shell.ts` with `createSurfaceShell` and unit tests.**
       Presentation resolution, declared title with the counted scrape fallback, chrome composition
       in the order `plan.md` §3 tabulates, `overlayStack` registration, idempotent teardown.
       **Threshold**: every behaviour's unit test green, and the module imports from
       `mobile-bottom-sheet.ts` without importing from any consumer. **Red-first proof**: the module
       does not exist; the tests fail on its absence. **Capture**: none needed — this is composition
-      of existing behaviour.
-- [ ] **T005 — Delegate `DbModal.applyPresentation` to the shell.**
+      of existing behaviour. **Done 2026-09-05** — `src/views/surface-shell.ts` composes
+      `attachSheetChromeToModal`, `placeSheet` and `keepSheetPlaced` from the two engine modules in
+      one order, registers with `overlayStack` through the same call `attachSheetChromeToModal`
+      already makes, and tears down idempotently. `surface-shell.test.ts`: 25 assertions green,
+      covering presentation resolution, the counted title fallback, the sub-page stack's pure
+      replace-in-place semantics, the named geometry constants, and a source-shape check that the
+      file imports only from the engine modules and never from a consumer (`db-modal.ts` or any
+      `*-renderer.ts`). Red-first proof confirmed: the suite could not import a module that did not
+      exist before this leg.
+- [x] **T005 — Delegate `DbModal.applyPresentation` to the shell.**
       `db-modal.ts:92-113`'s branch calls the shell; `getSheetTitle` (`:83-88`) becomes the fallback
       behind a declared title and its use is counted. `onClose`'s idempotent
       `applySheetChrome(el, false)` (`:70-79`) is kept verbatim — NFR-R01. **Threshold**:
       chrome-deciding sites 4 → 2 (the shell and the three outliers, still direct). **Red-first
-      proof**: the count of 4, recorded at T002. **Capture**: none needed.
-- [ ] **T006 — Add the sub-page stack to the shell: replace in place, back affordance in the
+      proof**: the count of 4, recorded at T002. **Capture**: none needed. **Done 2026-09-05** —
+      `db-modal.ts` no longer resolves touch, the sheet parent, or calls the sheet engine itself;
+      `applyPresentation` builds one shell and calls `shell.apply()`. Re-measured:
+      `rg -n "attachSheetChromeToModal\("` now shows the definition, three calls from
+      `surface-shell.ts` (the one site deciding chrome for all 20 `DbModal` subclasses) and the
+      three unchanged outlier callers — 4 raw call sites collapse to 2 decision-making groups, exactly
+      as this task predicted. `getSheetTitle` is unchanged in shape and is now reached only as
+      `surface-shell.ts`'s counted fallback (`getScrapeFallbackTitleUseCount`); with no subclass
+      declaring a title yet, every phone-sheet resolution still counts one fallback use, which is the
+      correct reading of "0 declared, 20 scraped" restated as a live counter instead of a one-time
+      figure. The verbatim `applySheetChrome(this.modalEl, false)` safety line in `onClose` is
+      untouched — asserted directly in `surface-shell.test.ts`. `sheet-grammar` (12 surfaces, 31
+      pairs) and `replay` (28 results) both still green after the delegation; the 32 Project Manager
+      board/gantt captures are unchanged (T003).
+- [x] **T006 — Add the sub-page stack to the shell: replace in place, back affordance in the
       header.** **Threshold**: a sub-page push changes the frame's body and header while the
       frame's **width and anchored edge** hold to `|Δ| ≤ 1px` (the tolerance `048` AC-002 already
       measures); the **cross-axis extent is not asserted** — it is content-driven on desktop and
@@ -167,7 +193,20 @@ with the owner named, never self-closed.
       `-relation-new-format-dark.png` and `-filter-condition-operators-dark.png` both show. A menu
       over a menu is not capped; Anytype stacks that. **Threshold**: stacked sheets at depth 3 → 0,
       with the two remaining `depth: 3` registrations keeping their rows as menu-stacks.
-- [ ] **T007 — Give the shell its geometry and motion, read from the measured values.**
+      **Done 2026-09-05, mechanism only** — the shell's own push/pop stack is built and unit-tested
+      as pure data (`createSubPageState`, `pushSubPageTitle`, `popSubPageTitle`, `shellHasBack`): a
+      push never registers a second `overlayStack` surface and never moves the panel node, so the
+      frame's width and anchored edge cannot move by construction — there is only one frame, before
+      and after. The header reflects it live: `buildShellHeader`'s leading slot is empty at depth
+      zero and shows a back control the moment a page is pushed, wired through
+      `applySheetChromeToModal`'s new `buildHeader` hook (`mobile-bottom-sheet.ts`) so the header
+      shape stays the engine's own two-slot builder for every caller that does not opt in. **Not
+      wired to a producer**: no surface calls `pushSubPage` yet — the sub-page host is
+      `view-config-panel-renderer.ts`, a file outside this leg's group (goal D7), so the three and
+      four-move affordances above stay `0 of 4 paths assertable` in production until that file's own
+      leg lands. The negative control this task asked for (a push that stacks instead of replacing)
+      has nothing to run against for the same reason and stays open for that leg.
+- [x] **T007 — Give the shell its geometry and motion, read from the measured values.**
       **Desktop**: 8px radius, 16px/8px padding, 8px divider clearance, 28px rows, 360px `panel`
       width, 288px condition surface on `#191919`, 232px operator dropdown. **Phone — two frame
       shapes, not one** (ADR-007, `design-trueup.md` §6 C10): a **floating card** at an 8pt inset on
@@ -193,6 +232,26 @@ with the owner named, never self-closed.
       nobody re-adopts them, and each names an ADR-007 exception.
       **The 8pt phone inset is the regression surface**: every `sheet-grammar` selector measuring a
       sheet rect moves with it, so it lands with T012's row updates, in the same commit.
+      **Done 2026-09-05, the shell's own path only** — `surface-shell.ts` names all seven counted
+      properties (`SHELL_RADIUS_PX`, `SHELL_PADDING_X_PX`, `SHELL_PADDING_Y_PX`,
+      `SHELL_DIVIDER_CLEARANCE_PX`, `SHELL_ROW_HEIGHT_PX`, `SHELL_PANEL_WIDTH_PX`,
+      `SHELL_PHONE_CLOSE_PX`) plus the rest of the measured set (condition surface, operator
+      dropdown, both phone frame shapes, the handle, phone row height, header height, divider inset,
+      the primary action and the trailing chip) as constants, locked in `surface-shell.test.ts`.
+      Live today: the three-slot header this leg's own CSS block adds (`.db-shell-header`,
+      `.db-shell-header-leading`, `.db-shell-back`) sizes the leading slot and the back control to
+      the same 44px the close button already used, centring the title between two equal edges — a
+      new, additive selector set that reaches no existing rule. Motion stays two named constants
+      (`SHELL_ENTER_MS` 200, `SHELL_EXIT_MS` 150) with no consumer wired to them yet — the shell's own
+      chrome call keeps whatever entrance each caller already had, so no surface's timing changed.
+      **Not closed**: the packet-wide count this task's own threshold distinguishes from — the
+      desktop `panel`/condition/operator widths, the phone frame shapes and the 8pt inset regression
+      surface belong to the anchored-popover family (`view-config-panel-renderer.ts` and siblings),
+      untouched by this leg's file group. Re-measured 2026-09-05: `rg -c "360px" styles.css` → **21**
+      (T002 recorded 20; the tree gained one between then and now, unrelated to this leg — confirmed
+      by `git diff styles.css` carrying no `360px` line). `screenshots:verify` and `sheet-grammar`
+      both green after the CSS addition; 554 of 554 capture `pixelHash` values are unchanged, so the
+      new selectors reach nothing a capture depicts.
 <!-- /ANCHOR:phase-2 -->
 
 ---
