@@ -893,6 +893,7 @@ export class ViewConfigPanelRenderer {
             placeholder: t("filter.value"),
             disabled: Boolean(readOnly),
             includeTime: currentColumn?.type === "datetime",
+            fieldLabel: currentColumn?.label,
             displayText: rule.valueSource === "today" ? t("conditionalFormat.dynamicToday") : undefined,
             className: "db-conditional-format-value db-conditional-format-date-field",
             onChange: (next) => {
@@ -1045,6 +1046,7 @@ export class ViewConfigPanelRenderer {
           openIconPickerPopover({
             anchor: icon,
             current: currentIcon,
+            label: t("conditionalFormat.icon"),
             onSelect: (value) => {
               if (value !== null && !parseRecordIconToken(value, validIconIds)) return;
               rule.icon = value || undefined;

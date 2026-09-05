@@ -23,7 +23,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { createMenuRow, createMenuSection, createMenuSeparator, MenuRowOptions } from "./menu-row";
-import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, createSheetHeader, playSheetEntrance } from "./mobile-bottom-sheet";
 import {
   clamp,
   getVisiblePopoverBounds,
@@ -32,6 +32,7 @@ import {
   placeSheet,
   setPosition,
 } from "./popover-position";
+import { t } from "../i18n";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -69,14 +70,35 @@ export interface OwnedMenuHandle {
 // ───────────────────────────────────────────────────────────────────
 
 /**
+ * Read the active leaf's tab title out of Obsidian's own workspace chrome.
+ *
+ * Every menu mounts on `doc.body`, in the same document the workspace tab bar renders into — so
+ * this needs no `App` reference, only the document the menu already carries. A popout window with
+ * no tab bar, or a harness with no Obsidian shell at all, simply finds nothing and the caller falls
+ * back further; this never throws on a document that does not look like Obsidian's.
+ */
+function resolveActiveViewName(doc: Document): string | undefined {
+  const title = doc
+    .querySelector(".workspace-tab-header.is-active .workspace-tab-header-inner-title")
+    ?.textContent?.trim();
+  return title || undefined;
+}
+
+/**
  * Create a menu that the plugin owns end to end.
  *
  * `returnFocus` is not optional in practice: dismissing a menu without restoring focus strands
  * keyboard users on `document.body`, and the native menu did this for us.
+ *
+ * `title` is the sheet header's title once the menu presents as a phone sheet — every phone sheet
+ * carries a header, this one included, rather than a title-less variant. It should name the row,
+ * column or field the menu was opened for; a caller with nothing specific to say may omit it, and
+ * `showAt` falls back to the active view's own name, then to a generic label rather than shipping a
+ * sheet with an empty title slot.
  */
 export function createOwnedMenu(
   doc: Document,
-  options: { returnFocus?: HTMLElement | null; onClose?: () => void } = {},
+  options: { returnFocus?: HTMLElement | null; onClose?: () => void; title?: string } = {},
 ): OwnedMenuHandle {
   // `db-surface` is what carries the design tokens to a surface mounted outside the plugin's
   // container. Without it a menu on the body inherits none of the scale and silently falls back to
@@ -181,6 +203,18 @@ export function createOwnedMenu(
         releasePlacement = keepSheetPlaced(el);
         playSheetEntrance(el);
         releaseDrag = attachSheetDragToDismiss(el, close);
+        // Every phone sheet gets a title row, the owned menu included, rather than a title-less
+        // menu variant. The rows were already appended by the caller's own `addRow`/`addSection`
+        // calls above, so the header — built last, after the drag handle exists — is moved to sit
+        // right under the handle rather than left where `createSheetHeader` appends it, which would
+        // put it after every row instead of before all of them.
+        const resolvedTitle = options.title
+          || ("anchor" in target ? target.anchor.getAttribute("aria-label")?.trim() || undefined : undefined)
+          || resolveActiveViewName(doc)
+          || t("menu.title");
+        const header = createSheetHeader(el, { title: resolvedTitle, onClose: close });
+        const handleEl = el.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+        el.insertBefore(header.header, handleEl ? handleEl.nextSibling : el.firstChild);
       } else {
         const bounds = getVisiblePopoverBounds(null);
         const margin = 4;
@@ -248,7 +282,7 @@ export function createOwnedMenu(
  */
 export function createOwnedMenuForEvent(
   event: MouseEvent,
-  options: { returnFocus?: HTMLElement | null; onClose?: () => void } = {},
+  options: { returnFocus?: HTMLElement | null; onClose?: () => void; title?: string } = {},
 ): OwnedMenuHandle {
   const fromView = event.view?.document ?? null;
   const fromTarget = event.target instanceof Node ? event.target.ownerDocument : null;

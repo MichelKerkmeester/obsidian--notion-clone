@@ -6,8 +6,10 @@
 // The settings sheet already wore shared chrome. Its body still drew the
 // desktop two-column grid, a native radio group, and a switch that is not
 // the shared checkbox. This suite mounts the real renderer on a hand-built
-// tree (no jsdom) and asks describeSheetGrammar the same three questions
-// the live lane asks, plus the desktop path that must stay the grid.
+// tree (no jsdom) and asks describeSheetGrammar the structural questions it
+// can still answer without a CSS engine (dropdown, segmented), plus the
+// desktop path that must stay the grid. `rows` reads computed padding now
+// (sheet-grammar.ts) and is proven by the real browser lane instead.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -306,7 +308,11 @@ describe("settings sheet body grammar", () => {
   it("on phone, describeSheetGrammar accepts the body elements", () => {
     const { panel } = mount(true);
     const report = describeSheetGrammar(panel as unknown as HTMLElement);
-    expect(report.rows).toBe(true);
+    // `rows` now reads getComputedStyle padding (sheet-grammar.ts), which this hand-built tree has
+    // no CSS engine to answer — the real browser lane (tools/live/sheet-grammar.mjs, "settings" row)
+    // is what proves the measurement; this suite keeps the structural half that this tree can still
+    // answer honestly.
+    expect(panel.querySelector(".db-panel-row")).not.toBeNull();
     expect(report.dropdown).toBe(true);
     expect(report.segmented).toBe(true);
     expect(panel.querySelector(".db-view-config-row")).toBeNull();
@@ -326,8 +332,9 @@ describe("settings sheet body grammar", () => {
     expect(panel.querySelector("input[type='radio']")).not.toBeNull();
     expect(panel.querySelector(".db-toggle-switch")).not.toBeNull();
     expect(panel.querySelector(".db-new-placement")).toBeNull();
+    // `rows` is not asked here for the same reason noted above; `.db-panel-row`'s absence is
+    // already asserted two lines up, which is the structural half this tree can answer.
     const report = describeSheetGrammar(panel as unknown as HTMLElement);
-    expect(report.rows).toBe(false);
     expect(report.segmented).toBe(false);
   });
 

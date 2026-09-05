@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-05T02:52:24.516Z",
+  "measuredAt": "2026-09-05T04:54:52.906Z",
   "inputs": {
-    "styles.css": "bf0e11a3d7bf",
+    "styles.css": "8ed9f0c8f1c5",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
     "rendered": 83,
-    "buildable": 215,
+    "buildable": 219,
     "declared": 5,
     "renderedOnly": 0,
-    "buildableNotRendered": 132,
+    "buildableNotRendered": 136,
     "untokened": 0,
     "unroled": 83
   },
@@ -100,6 +100,7 @@
         "panel-sort-calendar-empty",
         "panel-view-config",
         "panel-view-config-sheet",
+        "panel-board-card-properties",
         "panel-column-manager",
         "panel-column-width-sheet",
         "chrome-utilities-popover",
@@ -122,6 +123,7 @@
         "panel-sort-calendar-empty",
         "panel-view-config",
         "panel-view-config-sheet",
+        "panel-board-card-properties",
         "panel-column-manager",
         "panel-column-width-sheet",
         "chrome-utilities-popover",
@@ -917,7 +919,8 @@
       "rect": "458x527",
       "scenarios": [
         "panel-view-config",
-        "panel-view-config-sheet"
+        "panel-view-config-sheet",
+        "panel-board-card-properties"
       ]
     },
     "db-mobile-bottom-sheet-handle": {
@@ -976,7 +979,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "1440x225",
+      "rect": "1440x333",
       "scenarios": [
         "panel-column-width-sheet"
       ]
@@ -1515,6 +1518,7 @@
     "db-group-order-popover",
     "db-calendar-search-results-popover",
     "db-date-value-popover",
+    "db-date-picker-body",
     "db-dropdown-field-disabled-reason",
     "db-dropdown-search",
     "db-dropdown-options",
@@ -1529,6 +1533,7 @@
     "db-filter-operator-dropdown",
     "db-panel-date-value",
     "db-filter-value-dropdown",
+    "db-icon-picker-body",
     "db-icon-picker-empty",
     "db-mobile-sheet-scrim",
     "db-modal-dropdown",
@@ -1550,8 +1555,10 @@
     "db-relation-rollup-config-modal",
     "db-relation-rollup-config-dropdown",
     "db-status-preset-default-dropdown",
+    "db-color-picker-body",
     "db-owned-menu",
     "db-database-dropdown-icon",
+    "db-dropdown",
     "db-sort-field-dropdown",
     "db-sort-direction-dropdown",
     "db-summary-dropdown-popover",

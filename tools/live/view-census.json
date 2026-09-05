@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T02:51:56.404Z",
+  "measuredAt": "2026-09-05T04:55:02.360Z",
   "inputs": {
-    "styles.css": "bf0e11a3d7bf",
+    "styles.css": "8ed9f0c8f1c5",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 70,
+    "fixtures": 71,
     "escaping": 625,
-    "growing": 302,
-    "scrolling": 323,
+    "growing": 305,
+    "scrolling": 320,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 40
@@ -2114,7 +2114,7 @@
       "cls": "db-new-placement",
       "parentCls": "db-view-config-field.db-view-config-field-stack",
       "by": 12,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -4851,7 +4851,7 @@
       "cls": "db-new-placement",
       "parentCls": "db-view-config-field.db-view-config-field-stack",
       "by": 12,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -6246,7 +6246,7 @@
       "cls": "db-new-placement",
       "parentCls": "db-view-config-field.db-view-config-field-stack",
       "by": 12,
-      "scrolls": true,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -7483,6 +7483,11 @@
     },
     {
       "width": 320,
+      "fixture": "panel-board-card-properties",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -7833,6 +7838,11 @@
     },
     {
       "width": 402,
+      "fixture": "panel-board-card-properties",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -8183,6 +8193,11 @@
     },
     {
       "width": 768,
+      "fixture": "panel-board-card-properties",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -8529,6 +8544,11 @@
     {
       "width": 1440,
       "fixture": "panel-view-config-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-board-card-properties",
       "probe": "4px"
     },
     {

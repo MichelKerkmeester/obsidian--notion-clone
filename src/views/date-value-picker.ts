@@ -33,8 +33,9 @@ import {
   normalizeDatePickerValue,
   shiftDatePickerMonth,
 } from "./date-picker-model";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { isHTMLElement } from "./dom-guards";
 
 // ───────────────────────────────────────────────────────────────────
@@ -53,6 +54,8 @@ export interface DateValuePickerOptions {
     onSelect(): void;
   };
   className?: string;
+  /** Sheet-header title on a phone — the column this date field belongs to. */
+  fieldLabel?: string;
   onChange(value: string): void;
 }
 
@@ -144,7 +147,12 @@ function openDateValuePicker(
   popover.setAttr("id", popoverId);
   trigger.setAttr("aria-controls", popoverId);
   if (includeTime) popover.addClass("is-datetime");
-  const presets = popover.createDiv({ cls: "db-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
+  // The padded-row grammar needs somewhere structural to measure on a phone sheet; the desktop
+  // popover keeps building presets/segments/calendar as direct children exactly as before.
+  const content = isMobileBottomSheet(doc)
+    ? popover.createDiv({ cls: "db-date-picker-body db-panel-row" })
+    : popover;
+  const presets = content.createDiv({ cls: "db-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
   const createPreset = (label: string, onSelect: () => void) => {
     const button = presets.createEl("button", { cls: "db-date-preset", text: label, attr: { type: "button" } });
     button.onclick = (event) => {
@@ -160,7 +168,7 @@ function openDateValuePicker(
     setInputs("");
     close(true);
   });
-  const segments = popover.createDiv({ cls: "db-date-segments" });
+  const segments = content.createDiv({ cls: "db-date-segments" });
   const yearInput = segments.createEl("input", {
     cls: "db-date-seg",
     attr: { maxlength: "4", inputmode: "numeric", placeholder: "YYYY", "aria-label": "YYYY" },
@@ -203,7 +211,7 @@ function openDateValuePicker(
     monthKeys: new Set(),
     yearKeys: new Set(),
   };
-  const calendar = popover.createDiv({ cls: "db-calendar-mini-popover db-cell-date-picker" });
+  const calendar = content.createDiv({ cls: "db-calendar-mini-popover db-cell-date-picker" });
   calendar.addEventListener("mousedown", (event) => event.preventDefault());
 
   const readDraftDateKey = (): string | null => {
@@ -395,6 +403,16 @@ function openDateValuePicker(
       }
     };
   });
+
+  // Built once `close` exists, since the close button reads it by reference; `createSheetHeader`
+  // appends, so it is moved to the front rather than left sitting after the content it introduces.
+  if (isMobileBottomSheet(doc)) {
+    const header = createSheetHeader(popover, {
+      title: options.fieldLabel || t("filter.value"),
+      onClose: () => close(true),
+    });
+    popover.prepend(header.header);
+  }
 
   renderPicker();
   positionToolbarPopover(popover, trigger, {

@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-05T05:18:49.707Z",
+  "measuredAt": "2026-09-05T05:36:26.438Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "08311f3c3ea3",
-    "tools/live/render-assertion-harness.ts": "cbea76bb73b3",
+    "tools/live/render-assertion-harness.ts": "5f8141938f3a",
     "src/views/table-renderer.ts": "2044cea151d8",
-    "src/views/board-renderer.ts": "8c3c27d12957",
+    "src/views/board-renderer.ts": "1ce2964345c9",
     "src/views/gallery-renderer.ts": "c7d6e9216f39",
     "src/views/calendar-renderer.ts": "1f9ee67dd6b0",
     "src/views/calendar-timeline-renderer.ts": "f0037380353b",
@@ -14,8 +14,8 @@
     "tools/bench/gallery-render-bench.ts": "97b52377f347",
     "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
     "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-    "src/views/database-view.ts": "360757035880",
-    "src/views/embedded-database-renderer.ts": "976c71b77190"
+    "src/views/database-view.ts": "be54a1397771",
+    "src/views/embedded-database-renderer.ts": "ff19ece301c8"
   },
   "constructed": 6,
   "total": 21,

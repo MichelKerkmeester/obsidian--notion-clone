@@ -290,7 +290,22 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // and nothing to remember. It still needs the backdrop, which is why that is settled above
     // rather than inside the move: an owned menu mounts itself on the body, and returning here
     // before the backdrop existed left it dimming nothing and leaked the node on the next open.
+    //
+    // It still needs the container-scoped rules the move branch below carries for exactly the
+    // reason documented there — most of this plugin's rules read `.note-database-container .db-
+    // thing`, and a self-mounted surface that skips this class never matches them. The owned menu
+    // measured its own close button at 30x23 instead of the 44px `.note-database-container .db-
+    // sheet-close` declares until this was added: the early return meant the header this phase
+    // gave it never had the container ancestor that rule needs.
+    //
+    // `db-surface` is not added here: the owned menu already carries it from its own creation
+    // call, and a placement check caught the duplicate the moment this class started adding
+    // `note-database-container` beside it — both names sit in the same shared selector list, so
+    // adding a class the surface already has changes nothing but reads, to that check, as a class
+    // whose own removal changes nothing either. A future self-mounted consumer with no `db-surface`
+    // of its own would need it re-added here; none exists today.
     if (panel.parentElement === doc.body) {
+      panel.addClass("note-database-container");
       panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
       return;
     }

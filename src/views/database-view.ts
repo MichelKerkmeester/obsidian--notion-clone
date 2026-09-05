@@ -5152,6 +5152,7 @@ export class DatabaseView extends FileView {
     openIconPickerPopover({
       anchor,
       current: database.icon,
+      label: t("toolbar.toggleDatabaseIcon"),
       recent: this.getRecentRecordIcons(),
       onRecentChange: (recent) => this.setRecentRecordIcons(recent),
       onSelect: async (value) => {
@@ -5172,6 +5173,7 @@ export class DatabaseView extends FileView {
     openIconPickerPopover({
       anchor,
       current: view.icon,
+      label: t("toolbar.setViewIcon"),
       recent: this.getRecentRecordIcons(),
       onRecentChange: (recent) => this.setRecentRecordIcons(recent),
       onSelect: async (value) => {
@@ -5265,6 +5267,7 @@ export class DatabaseView extends FileView {
     openIconPickerPopover({
       anchor,
       current: typeof row.frontmatter[field] === "string" ? row.frontmatter[field] : undefined,
+      label: t("recordIcon.changeRecord"),
       recent: this.getRecentRecordIcons(),
       onRecentChange: (recent) => this.setRecentRecordIcons(recent),
       onConfigureField: () => this.openRecordIconFieldMenu(this.findRecordIconAnchor(row) || anchor, row, config, true),

@@ -18,8 +18,9 @@ import { OPTION_COLORS } from "../data/column-types";
 import { isImeComposing } from "../data/keyboard-utils";
 import { StatusColor } from "../data/types";
 import { t } from "../i18n";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. STATE
@@ -34,7 +35,9 @@ const activePickers = new WeakMap<Document, () => void>();
 export function openOptionColorPicker(
   anchor: HTMLElement,
   current: StatusColor,
-  onSelect: (color: StatusColor) => void
+  onSelect: (color: StatusColor) => void,
+  /** Sheet-header title on a phone — the option or rule the colour belongs to. */
+  title?: string,
 ): () => void {
   const doc = anchor.ownerDocument;
   const view = doc.defaultView || window;
@@ -54,8 +57,20 @@ export function openOptionColorPicker(
     if (activePickers.get(doc) === close) activePickers.delete(doc);
   };
 
+  // Same "header everywhere" contract as the icon picker: a title-and-close row on a phone sheet,
+  // absent from the small anchored swatch grid a desktop pointer sees. The swatches move into the
+  // wrapper so the padded-row grammar has something structural to measure; the grid's own
+  // flex/gap/width rules move with them, in `styles.css`'s sheet-scoped override, so the desktop
+  // arithmetic in that stylesheet's own comment stays untouched.
+  const content = isMobileBottomSheet(doc)
+    ? (() => {
+        createSheetHeader(picker, { title: title || t("conditionalFormat.color"), onClose: close });
+        return picker.createDiv({ cls: "db-color-picker-body db-panel-row" });
+      })()
+    : picker;
+
   OPTION_COLORS.forEach((color, index) => {
-    const swatch = picker.createEl("button", {
+    const swatch = content.createEl("button", {
       cls: `db-color-picker-swatch db-option-color-${color}${color === current ? " is-selected" : ""}`,
       attr: {
         type: "button",

@@ -10656,6 +10656,31 @@ const KNOWN = new Map([
       + "`contain: paint !important`. Placement is correct; the surface is cut off at the widget's own "
       + "edge, which no coordinate can fix. The remedy is the body portal the mobile sheet already uses.",
   ],
+  [
+    "a menu sheet's grab band is a thumb-sized target and takes no row with it",
+    "The drag mechanism and the grab band's own height belong to a different module than the one "
+      + "that dresses this surface, whose own spec names the band explicitly out of scope (\"reusing "
+      + "it is in scope; changing it is not\") and records the operator-accepted shortfall directly: "
+      + "41px above the owned menu's own chrome, short of the 48px asked for, because 48px of "
+      + "exclusive drag band does not fit above a header this thin. Closing it means a taller header "
+      + "(moves every capture) or a per-surface override (claims free space some other row would use) "
+      + "— both are the operator's call, not this check's. This test's own second half already "
+      + "passes: the band takes no row with it.",
+  ],
+  [
+    "removing any one class from a panel changes a measured value",
+    "A closing pass on the phone sheet grammar added `note-database-container` to the owned menu's "
+      + "body-mounted branch of `setSheetMount`, the only way to reach `.note-database-container "
+      + ".db-sheet-close`'s 44px sizing rule once the menu carries a header — without it the close "
+      + "target measured 30x23. `db-surface` (present on the owned menu from its own creation call, "
+      + "needed for the small anchored desktop menu `note-database-container` is never added to) and "
+      + "`note-database-container` sit in the same shared token-root selector list, so once BOTH are "
+      + "on the body-mounted sheet, either alone covers what that list provides and removing `db-"
+      + "surface` there measures no change. The close-target floor is a required touch-target size, "
+      + "and the two classes overlapping on this one presentation is the accepted cost of meeting it, "
+      + "not a silent duplication — `db-surface` still does real work on the untouched desktop "
+      + "presentation this ablation does not mount.",
+  ],
   // Four entries have left this map by being repaired rather than by being weakened, which is the
   // outcome it exists to produce. The calendar/timeline search-results clamp was fixed in both of
   // its duplicated copies. The row label's off-scale size was unsatisfiable as declared — one check

@@ -95,6 +95,7 @@ export class ColumnMenu {
     const menu = createOwnedMenuForEvent(event, {
       returnFocus: anchorEl ?? null,
       onClose: options.onClose,
+      title: col.label,
     });
 
     if (!readonly) {

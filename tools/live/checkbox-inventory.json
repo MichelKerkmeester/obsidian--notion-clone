@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T02:50:54.338Z",
+  "measuredAt": "2026-09-05T04:53:59.499Z",
   "inputs": {
-    "styles.css": "bf0e11a3d7bf",
+    "styles.css": "8ed9f0c8f1c5",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -83,7 +83,7 @@
     },
     {
       "file": "src/views/column-menu.ts",
-      "line": 461,
+      "line": 462,
       "chain": [
         "db-displayopt-row db-displayopt-colors"
       ],
@@ -95,7 +95,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1869,
+      "line": 1874,
       "chain": [
         "db-view-tab-popover db-new-template-popover",
         "db-new-template-row db-menu-item"
@@ -108,7 +108,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1889,
+      "line": 1894,
       "chain": [
         "db-view-tab-popover db-new-template-popover",
         "db-new-template-row db-menu-item"
@@ -121,7 +121,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1961,
+      "line": 1966,
       "chain": [
         "db-view-tab-popover db-new-template-popover",
         "db-new-template-row db-menu-item"
@@ -134,7 +134,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2218,
+      "line": 2220,
       "chain": [
         "db-view-config-panel",
         "db-view-config-field"

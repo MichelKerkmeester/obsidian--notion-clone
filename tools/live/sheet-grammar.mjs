@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    sheet-grammar
-// COMPONENT: gate check that every registered phone sheet surface satisfies all seven grammar elements
+// COMPONENT: gate check that every registered phone sheet surface satisfies all eight grammar columns
 // ───────────────────────────────────────────────────────────────────
 //
 // The phone's sheets used to be aligned by hand and verified by eye, and the
@@ -11,6 +11,13 @@
 // other renderer lanes use, on a phone page so the surfaces present as the
 // sheets the operator sees — and reports one row per surface per element.
 // A surface that loses an element fails here instead of on a device.
+//
+// Two facts no structural predicate can see are measured here instead: the
+// close control's own hit box against the 44px floor, and whether anything
+// the surface drew reaches past its own right edge — report 41's overflowing
+// "Formula result storage" group, found by a fresh review at 07be64fe, is
+// exactly a surface that could pass every structural predicate while still
+// running 2px past its own edge.
 //
 // A check that has never been observed red is not evidence, so the lane also
 // runs its own negative control: it removes one element from one conforming
@@ -63,7 +70,25 @@ const REGISTERED_SURFACES = [
   // rows (`asSheet`) and the shared body onto the grammar, so this row now measures the same
   // shared markup this section always depended on.
   { name: "board-card-properties", spec: { renderer: "view-config", bag: "file-view", captureData: true, viewConfigVariant: "board" } },
+  // The four dropdown families that present as sheets on the phone, registered as a fresh review
+  // found missing: none of the four owned a header, so all four measured 5/7 by this lane's own
+  // predicates before the "header everywhere" decision. The owned menu's title names the row,
+  // column or field it opened for, and falls back to the active view's name; the other three take
+  // the field they edit. Same constructed specs `render-assertion-harness.ts` builds for the
+  // field/chrome captures.
+  { name: "owned-menu", spec: { renderer: "owned-menu", bag: "file-view" } },
+  { name: "date-picker", spec: { renderer: "date-picker", bag: "file-view" } },
+  { name: "icon-picker", spec: { renderer: "icon-picker", bag: "file-view" } },
+  { name: "option-color-picker", spec: { renderer: "color-picker", bag: "file-view" } },
 ];
+
+// Two geometry facts the DOM predicates cannot see: the close control's own hit box, and whether
+// anything the surface drew reaches past its own right edge. `hasSheetHeader` proves a `.db-sheet-
+// close` node exists; it says nothing about whether that node clears the 44px floor `touch-
+// targets.mjs` ratchets everywhere else, and no structural predicate can see a `.db-new-placement`
+// group's long option text overflowing the surface — a settings sheet an operator screenshot once
+// showed with the same option text mid-word-broken to stay inside its own button, still overflowing.
+const CLOSE_TARGET_FLOOR_PX = 44;
 
 // The element removed by the negative control: the grab handle, whose loss is exactly the
 // "drag handler doesnt work" shape the operator reported.
@@ -82,15 +107,40 @@ setLocale("en");
 const mountedSheet = () => document.body.querySelector(".db-mobile-bottom-sheet");
 
 window.__sheetGrammar = (scenario) => {
-  let report = { mounted: false, sheetFound: false, grammar: null, listViewRow: null };
+  let report = { mounted: false, sheetFound: false, grammar: null, listViewRow: null, closeBox: null, rightOverflow: null };
   runRenderAssertions(document.body, scenario, "", () => {
     const sheet = mountedSheet();
+    let closeBox = null;
+    let rightOverflow = null;
+    if (sheet) {
+      // The 44px floor: hasSheetHeader only proves a close node exists, never that it clears the
+      // touch-target size every other close control on the phone is held to.
+      const close = sheet.querySelector(".db-sheet-close, .db-cell-edit-close");
+      if (close) {
+        const rect = close.getBoundingClientRect();
+        closeBox = { width: rect.width, height: rect.height };
+      }
+      // No structural predicate can see a group's content running past the surface's own edge —
+      // that is a measured fact, and it is exactly report 41's "Automati/cally" mid-word break.
+      const surfaceRight = sheet.getBoundingClientRect().right;
+      const offenders = [];
+      for (const el of sheet.querySelectorAll("*")) {
+        const style = window.getComputedStyle(el);
+        if (style.display === "none" || style.visibility === "hidden") continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.width === 0 && rect.height === 0) continue;
+        if (rect.right > surfaceRight + 0.5) offenders.push(el.className || el.tagName);
+      }
+      rightOverflow = offenders;
+    }
     report = {
       mounted: true,
       sheetFound: Boolean(sheet),
       grammar: sheet ? describeSheetGrammar(sheet) : null,
       listViewRow: sheet ? Array.from(sheet.querySelectorAll(".db-menu-item-label"))
         .some((el) => el.textContent?.trim() === t("common.listView")) : null,
+      closeBox,
+      rightOverflow,
     };
   });
   return report;
@@ -175,6 +225,22 @@ try {
       if (!ok) failures.push(`add-view: offered a List view row, wanted none`);
       console.log(`  ${ok ? "PASS" : "FAIL"}  add-view — no List view row: ${report.listViewRow === false}`);
     }
+    // Geometry the structural predicates cannot see: the close control's own hit box, and whether
+    // anything the surface drew reaches past its own right edge.
+    if (report.closeBox) {
+      const { width, height } = report.closeBox;
+      const ok = width >= CLOSE_TARGET_FLOOR_PX && height >= CLOSE_TARGET_FLOOR_PX;
+      if (!ok) failures.push(`${name}: close target ${width.toFixed(1)}x${height.toFixed(1)}, wanted >= ${CLOSE_TARGET_FLOOR_PX}x${CLOSE_TARGET_FLOOR_PX}`);
+      console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — close target: ${width.toFixed(1)}x${height.toFixed(1)}`);
+    } else {
+      failures.push(`${name}: no close control to measure`);
+      console.log(`  FAIL  ${name} — no close control to measure`);
+    }
+    if (Array.isArray(report.rightOverflow)) {
+      const ok = report.rightOverflow.length === 0;
+      if (!ok) failures.push(`${name}: ${report.rightOverflow.length} descendant(s) overflow the surface's right edge (${report.rightOverflow.slice(0, 3).join(", ")})`);
+      console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — no descendant overflows the right edge${ok ? "" : `: ${report.rightOverflow.slice(0, 3).join(", ")}`}`);
+    }
     console.log("");
   }
 
@@ -229,7 +295,8 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("\nsheet-grammar: PASS — every registered surface satisfies all seven grammar elements,");
+console.log("\nsheet-grammar: PASS — every registered surface satisfies all eight grammar columns,");
+console.log("  every close target clears 44x44 with no descendant past the surface's right edge,");
 console.log("  the Add view picker carries no List view row, and the negative control went red on");
 console.log("  the removed element alone and green again on re-mount.");
 process.exit(0);

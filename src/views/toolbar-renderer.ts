@@ -1427,9 +1427,14 @@ export class ToolbarRenderer {
     // Named for what it does rather than for the action it resembles. It seeds the new view from
     // the current one's filters, sorts and column order; the row below makes a same-type copy. Two
     // behaviours that shared one name read as the same control offered twice.
+    // Label first, control last — the settings sheet's own toggle order (`.db-view-config-label`
+    // then `.db-view-config-field`). A fresh review found the two mirrored: this row read the
+    // checkbox before its own caption while every other toggle on the phone reads caption then
+    // control, which is exactly the kind of per-surface drift the shared sheet grammar exists to
+    // catch.
     const duplicate = form.createEl("label", { cls: "db-add-view-duplicate db-panel-row" });
-    const duplicateInput = createCheckbox(duplicate, { role: "field" });
     duplicate.createSpan({ text: t("toolbar.copyCurrentViewSettings") });
+    const duplicateInput = createCheckbox(duplicate, { role: "field" });
 
     createMenuSeparator(panel);
     createMenuSection(panel, t("toolbar.addViewCreate"));

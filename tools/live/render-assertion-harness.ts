@@ -3113,7 +3113,7 @@ export function runRenderAssertions(
     // addRow the way ColumnMenu builds them. The menu mounts on document.body by design (the
     // module creates it there), so the marker rides the menu element itself and the assertions
     // query the body. On a phone device the showAt placement applies the bottom-sheet chrome.
-    const menu = createOwnedMenu(container.ownerDocument, { onClose: () => undefined });
+    const menu = createOwnedMenu(container.ownerDocument, { onClose: () => undefined, title: "Status" });
     menu.addSection("Column");
     menu.addRow({ icon: "arrow-up-down", label: "Sort ascending", selected: true });
     menu.addRow({ icon: "list-filter", label: "Filter on this column", selected: true });
@@ -3173,6 +3173,7 @@ export function runRenderAssertions(
       parent: container,
       value: "2026-08-21T09:30",
       includeTime: Boolean(scenario.includeTime),
+      fieldLabel: "Due date",
       onChange: () => undefined,
     });
     trigger.click();
@@ -3190,6 +3191,7 @@ export function runRenderAssertions(
     leftoverIconPickerClose = openIconPickerPopover({
       anchor,
       current: "lucide:x@blue",
+      label: "Icon",
       onSelect: async () => undefined,
       onConfigureField: () => undefined,
     });

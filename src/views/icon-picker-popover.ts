@@ -18,8 +18,9 @@ import { Notice, setIcon, setTooltip } from "obsidian";
 import { EMOJI_CATEGORIES, getLucideCategoryIds, LUCIDE_CATEGORY_DEFINITIONS } from "../data/icon-picker-catalog";
 import { RECORD_ICON_COLORS, RecordIconColor, serializeLucideIconToken } from "../data/record-icon";
 import { t } from "../i18n";
+import { createSheetHeader } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { getValidRecordIconIds } from "./record-icon-renderer";
 
 // ───────────────────────────────────────────────────────────────────
@@ -30,6 +31,8 @@ export interface IconPickerOptions {
   anchor: HTMLElement;
   current?: string;
   recent?: string[];
+  /** Sheet-header title on a phone — the field this icon belongs to. Falls back to a generic label. */
+  label?: string;
   onRecentChange?(recent: string[]): void | Promise<void>;
   onConfigureField?(): void;
   onSelect(value: string | null): void | Promise<void>;
@@ -89,16 +92,28 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
     }
   };
 
+  // The sheet header (title + 44px close) is built once, ahead of every re-render: its title never
+  // changes while the picker is open, and rebuilding it on each keystroke in the search field would
+  // tear down and refocus a control the operator is not touching. Every phone sheet, this dropdown
+  // included, carries the same header — the desktop popover stays exactly as small and title-less
+  // as before.
+  const content = isMobileBottomSheet(doc)
+    ? (() => {
+        createSheetHeader(panel, { title: options.label || t("recordIcon.icons"), onClose: close });
+        return panel.createDiv({ cls: "db-icon-picker-body db-panel-row" });
+      })()
+    : panel;
+
   const render = (preserveScroll = false, restoreFocus = true) => {
     const previousScrollTop = preserveScroll
-      ? panel.querySelector<HTMLElement>(".db-icon-picker-scroll")?.scrollTop || 0
+      ? content.querySelector<HTMLElement>(".db-icon-picker-scroll")?.scrollTop || 0
       : 0;
     const previousIcon = restoreFocus && doc.activeElement instanceof HTMLElement
       ? doc.activeElement.getAttribute("data-icon-value")
       : null;
     const searchWasFocused = restoreFocus && doc.activeElement?.classList.contains("db-icon-picker-search");
-    panel.empty();
-    const header = panel.createDiv({ cls: "db-icon-picker-header" });
+    content.empty();
+    const header = content.createDiv({ cls: "db-icon-picker-header" });
     const tabs = header.createDiv({ cls: "db-icon-picker-tabs" });
     tabs.setAttr("role", "tablist");
     tabs.setAttr("aria-label", t("recordIcon.configureField"));

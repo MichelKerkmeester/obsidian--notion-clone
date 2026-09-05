@@ -556,6 +556,7 @@ export class FilterPanelRenderer {
         value: rule.value || "",
         placeholder: t("panel.value"),
         includeTime: col?.type === "datetime",
+        fieldLabel: col?.label,
         className: "db-panel-date-value db-filter-value-control",
         onChange: (value) => {
           rule.value = value;

@@ -80,6 +80,7 @@ export class RowMenu {
     const menu = createOwnedMenu(this.actions.app.workspace.containerEl.ownerDocument, {
       returnFocus: anchorEl ?? null,
       onClose,
+      title: displayName,
     });
 
     menu.addRow({

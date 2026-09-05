@@ -50,6 +50,13 @@
   --db-space-6: 16px;
   --db-space-7: 20px;
   --db-space-8: 24px;
+  /* Operator decision, 2026-09-05: one row inset for every phone sheet, 16px — see the sheet-grammar
+     comment beside `.db-panel-header`/`.db-panel-row` (§21 PANEL ROWS) for where it is applied.
+     Declared in the same scope as the `--db-space-*` tokens it reads, not `:root`: `:root` is an
+     ancestor of `.note-database-container`, so a `:root` declaration cannot see a token this block
+     defines below it, and a `var()` with no visible reference resolves the whole property invalid
+     rather than falling through to a default. */
+  --db-sheet-inset: var(--db-space-6);
   --db-font-xs: 11px;
   --db-font-xs-line-height: 1.3;
   --db-font-xs-weight: 500;
@@ -245,9 +252,18 @@
 
 /* The portalled sheet wears the container class so its rules keep matching, but it must not also
    inherit the container's full-height sizing — a sheet is as tall as its content, capped. Without
-   this the marker that preserves the styling stretches the sheet over the whole screen. */
+   this the marker that preserves the styling stretches the sheet over the whole screen.
+
+   Nor should it inherit the container's `scrollbar-gutter: stable` — a reservation for a
+   persistent desktop scrollbar that a phone's overlay scrollbar never draws, and one a sheet's own
+   row content does not know to subtract. A fresh review's placement check caught this at 386px of
+   content in a 381px box the moment `setSheetMount`'s self-mounted branch (below) started adding
+   this class to reach `.db-sheet-close`'s sizing rule: the same 8px the gutter reserved on every
+   other portalled sheet too, silently, because none of their content sat close enough to the edge
+   to overflow measurably. */
 .db-mobile-bottom-sheet.note-database-container {
   height: auto !important;
+  scrollbar-gutter: auto !important;
 }
 
 /* The grab bar, and the reason dragging the sheet did nothing on a phone.
@@ -11578,11 +11594,23 @@ body.is-phone .note-database-container .db-record-detail-panel {
   min-height: 0;
 }
 
+/* Operator decision, 2026-09-05: the shared `--db-sheet-inset` (16px) on every row, not the 2px
+   `.db-panel-row` declares for the anchored panels it was written for — report 41's "row labels sit
+   ~4px from the edge" was this surface's rows carrying only that 2px with no container-level inset
+   to add to it, since the sheet itself is zeroed left/right above so its dividers can run edge to
+   edge. */
+.db-view-config-panel.db-mobile-bottom-sheet .db-panel-row {
+  padding-inline: var(--db-sheet-inset);
+}
+
 .db-view-config-panel.db-mobile-bottom-sheet > .db-panel-header {
   flex: 0 0 auto;
   gap: var(--db-space-3);
   margin-bottom: 0;
-  padding: 0 var(--db-space-2) var(--db-space-3) var(--db-space-5);
+  /* Operator decision, 2026-09-05: the shared `--db-sheet-inset` (16px), not this surface's own
+     12px/4px — report 41's "row labels sit ~4px from the edge" was this asymmetry, and the header
+     sat inside it too. */
+  padding: 0 var(--db-sheet-inset) var(--db-space-3) var(--db-sheet-inset);
   border-bottom: 1px solid var(--db-border-subtle);
 }
 
@@ -12427,6 +12455,30 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin-bottom: 8px;
 }
 
+/* Operator decision, 2026-09-05: 16px on the header of the owned menu and the three field pickers —
+   the four surfaces this leg gave a header for the first time, whose containers declare no inset of
+   their own (`.db-owned-menu`, `.db-icon-picker-popover`, `.db-color-picker-popup`,
+   `.db-date-value-popover`'s `db-cell-edit-popover` family all carry `padding: 0` today). Named
+   explicitly rather than as a blanket `.db-mobile-bottom-sheet > .db-panel-header` rule: sort,
+   filter, add-view and the settings/toolbar-utilities surfaces below already carry an inset at their
+   own container or their own more specific header rule, and a second 16px stacked on any of those
+   would widen an already-correct, already-captured surface rather than fix an unpadded one. */
+.db-owned-menu.db-mobile-bottom-sheet > .db-panel-header,
+.db-icon-picker-popover.db-mobile-bottom-sheet > .db-panel-header,
+.db-color-picker-popup.db-mobile-bottom-sheet > .db-panel-header,
+.db-date-value-popover.db-mobile-bottom-sheet > .db-panel-header {
+  padding-inline: var(--db-sheet-inset);
+}
+
+/* Operator decision, 2026-09-05: sort and filter share `.db-filter-panel`'s own 8px container
+   padding (`.note-database-container .db-filter-panel, ...`, § FLOATING PANELS) — correct for the
+   small anchored popover the same rule sizes, and 8px short of the shared inset once that surface
+   presents as a sheet. Only the inline pair moves; the block pair stays the container's own 8px,
+   and the header above takes it from here rather than adding its own second inset. */
+.db-filter-panel.db-mobile-bottom-sheet {
+  padding-inline: var(--db-sheet-inset);
+}
+
 /* createSheetHeader's own family — sort, filter, add-view and view-config — sits close enough
    behind the grab handle on a phone (25px of chrome measured, against the owned menu's 40px the
    shared drag band was tuned against) that the band reached into it and answered a press on the
@@ -12811,6 +12863,86 @@ body.is-phone .note-database-container .db-record-detail-panel {
   font-size: 11px;
   line-height: 1.45;
   text-align: left;
+}
+
+/* Operator decision, 2026-09-05: the sheet header's title is 16px, not the 13px anchored-popover
+   label size — a sheet's title names the surface, read at arm's length on a phone, not a caption
+   above a form read at a desktop monitor. Applied once, here, rather than per surface; the
+   view-config sheet's own former override (`--db-font-lg` at the same value) is retired below in
+   favour of this shared rule. */
+.db-mobile-bottom-sheet .db-panel-title,
+.db-mobile-bottom-sheet .db-record-detail-title {
+  font-size: var(--db-font-lg);
+  font-weight: var(--db-font-lg-weight);
+}
+
+/* The owned menu, icon picker, colour picker and date picker each mount their own body div — a
+   swatch grid, a segmented set of tabs/colours/grid/nav, or a stack of presets/segments/calendar —
+   built for a small anchored popover's own flex/grid math. Giving every phone sheet a header,
+   this dropdown family included, gives each one a `.db-panel-row` wrapper purely so the padded-row
+   grammar element has something structural and correctly-padded to measure; on the anchored
+   desktop presentation `display: contents` removes the wrapper from the box tree entirely;
+   `.db-panel-row`'s own `display: flex` default is reset to whatever layout that picker's
+   un-wrapped children already relied on. */
+.db-icon-picker-body,
+.db-color-picker-body,
+.db-date-picker-body {
+  display: contents;
+}
+
+.db-mobile-bottom-sheet .db-icon-picker-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 0;
+  padding: 2px;
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+/* `.db-panel-row input` (§21, above) gives every input inside a panel row a 28px bordered box for
+   the filter/sort dropdowns it was written for, and it outranks the narrow-viewport media query's
+   `.db-icon-picker-popover .db-icon-picker-search` on specificity (a type selector added to two
+   classes beats two classes alone only when the class count ties, and two-classes-plus-input is
+   still two classes) — every icon picker search field measured a fixed 0-basis 50px instead of the
+   full-width wrapped row the media query gives it, truncating "Search icons and emoji" to "Searc".
+   Three classes beats that regardless of the type selector, so the search field is restored here
+   rather than by trying to out-rank `input` with a selector that still has to name the field. */
+.db-mobile-bottom-sheet .db-icon-picker-body .db-icon-picker-search {
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+/* `.db-color-picker-popup`'s own base rule is `display: flex` with no `flex-direction` — a row,
+   correct for the small anchored grid it was written for, where the swatches were its only child.
+   The handle and header this phase adds are two more flex items on that same row, and the handle's
+   own `margin: 8px auto 4px` (§ handle, above) — an axis-agnostic centering trick that reads as
+   "centre me in my column" on every other sheet's `flex-direction: column` — read as "claim the
+   row's free space on both sides of me" here instead, pushing the header some 247px off the left
+   edge with the swatches still stacked correctly beneath the wrap. Column, matching every other
+   sheet's own stacking, is the fix; the swatch grid keeps its own row-wrap one level down. */
+.db-mobile-bottom-sheet.db-color-picker-popup {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.db-mobile-bottom-sheet .db-color-picker-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px;
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+.db-mobile-bottom-sheet .db-date-picker-body {
+  display: block;
+  padding: 2px;
+  margin-bottom: 0;
+  border-radius: 0;
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -22096,6 +22228,8 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .note-database-container .db-add-view-duplicate {
   display: flex;
   align-items: center;
+  /* Caption on the left, control on the right — the settings sheet's own toggle order. */
+  justify-content: space-between;
   gap: var(--db-space-2);
   color: var(--text-muted);
   font-size: var(--db-font-sm);
@@ -22126,19 +22260,31 @@ body.is-tablet .note-database-container .db-record-open-btn {
   padding: var(--db-space-2) var(--db-space-3);
 }
 
-/* `min-width: 0` lets an option shrink below its own longest word instead of forcing the group
-   wider than its row — the settings sheet's computed-sync choice is the first consumer of this
-   control whose option text is a full sentence rather than one or two short words, and the
-   group's row-filling `min-width: 0` (above, this file) does not reach a word inside a flex item
-   two levels down. `overflow-wrap: anywhere` is paired with it rather than `break-word`, because
-   only `anywhere` counts toward the item's own automatic minimum size — `break-word` wraps the
-   rendered line but leaves the pre-wrap floor as the whole word, which is what let "(recommended)"
-   and "Automatically" bleed past their own button into the next one instead of breaking. */
+/* A fresh review at 07be64fe found `overflow-wrap: anywhere` doing exactly what it says: breaking
+   "Automatically" and "(recommended)" mid-word rather than at a word boundary, and the group still
+   ran 2px past the settings sheet's own right edge at 390/402px regardless — the mid-word break
+   bought illegibility without buying safety. `min-width: 0` still lets an option shrink below its
+   own longest word rather than forcing the group wider than its row; the phone/sheet rule below is
+   what actually keeps the group inside its surface, by giving a full sentence the sheet's own full
+   width instead of a third of it. */
 .note-database-container .db-new-placement-option {
   flex: 1 1 0;
   min-width: 0;
   min-height: 32px;
-  overflow-wrap: anywhere;
+}
+
+/* Phone/sheet only: a segmented control sized for one or two words has no such row to spare for a
+   full sentence, so the group stacks vertically instead of forcing three sentence-length options
+   across one row. Each option keeps its own left-aligned text and wraps at word boundaries only —
+   the geometry lane's "no descendant past the surface's right edge" check is what proves this,
+   not a visual read alone. */
+.db-mobile-bottom-sheet .db-new-placement {
+  flex-direction: column;
+}
+
+.db-mobile-bottom-sheet .db-new-placement-option {
+  width: 100%;
+  text-align: left;
 }
 
 .note-database-container .db-new-placement-option.is-active {

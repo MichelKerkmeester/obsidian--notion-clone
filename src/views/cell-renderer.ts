@@ -1498,7 +1498,7 @@ export class CellRenderer {
             }
           });
         }
-      });
+      }, opt.value);
     };
 
     // New option input

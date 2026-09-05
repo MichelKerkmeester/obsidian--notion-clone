@@ -923,7 +923,7 @@ export class BoardRenderer {
           colorPreview.removeClass(`db-option-color-${selectedColor}`);
           selectedColor = color;
           colorPreview.addClass(`db-option-color-${selectedColor}`);
-        });
+        }, t("board.groupColor"));
       };
       colorPreview.onclick = (event) => {
         event.stopPropagation();

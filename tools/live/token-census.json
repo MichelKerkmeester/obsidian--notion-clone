@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T02:52:25.160Z",
+  "measuredAt": "2026-09-05T04:54:53.566Z",
   "inputs": {
-    "styles.css": "bf0e11a3d7bf",
+    "styles.css": "8ed9f0c8f1c5",
     "tools/live/token-census.mjs": "f20e5a646c11"
   },
   "tokenRoots": [
@@ -9,9 +9,9 @@
     ".db-surface"
   ],
   "totals": {
-    "classes": 75,
-    "differOnBody": 75,
-    "tokenlessOnBody": 72
+    "classes": 76,
+    "differOnBody": 76,
+    "tokenlessOnBody": 73
   },
   "rows": [
     {
@@ -669,6 +669,30 @@
       "differing": [
         "fontSize",
         "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "tokensWhenMarked": true,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      },
+      "marked": {
+        "radius": "0px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "db-date-picker",
+      "differing": [
+        "fontSize"
       ],
       "tokensInside": true,
       "tokensOnBody": false,
