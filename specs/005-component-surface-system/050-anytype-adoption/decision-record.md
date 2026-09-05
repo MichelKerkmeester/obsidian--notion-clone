@@ -12,9 +12,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/050-anytype-adoption"
-    last_updated_at: "2026-09-05T13:20:00Z"
-    last_updated_by: "design-agent"
-    recent_action: "Read the capture sweep and recorded the three rulings T001 forced"
+    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "recorded adr-006, the boundary with the new 056 and 057 whole-view packets"
     next_safe_action: "Execute T002 against the restated thresholds"
     blockers: []
     key_files:
@@ -307,3 +307,92 @@ would read as a cut. Enter **200ms `ease-out`**, exit **150ms `ease-in`**.
   be doing all the work while a near-invisible background pretended to. Raise the background instead.
 <!-- /ANCHOR:adr-005-consequences -->
 <!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: This packet's adoption programme now has two whole-view consumers, and does not absorb them
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator (the ruling), orchestrator (the boundary) |
+
+---
+
+<!-- ANCHOR:adr-006-context -->
+### Context
+
+This packet adopts **fourteen ranked items** from Anytype — a chip row, land-in-view-settings, the
+sticky board scrollbar, duplicate view, per-view scroll restore, the cell-editor edge flip, the
+sort-conflict confirm, capability-gated menus, the two-flavour empty state, per-view new-row
+presets, `positionLock`, measured toolbar collapse, per-format phone filter rows, and a "Load more"
+row. It is an **item-wise** adoption: each is a named affordance borrowed into a view that stays
+ours, and `design-trueup.md` is the design read of record for all of them (ADR-003).
+
+On 2026-09-05 ~22:45 the operator went further for two views. Verbatim: *"Board UI/UX should almost
+be 1:1 Anytype"*, *"Same for calendar etc."*, clarified as *"Board + calendar to Anytype; gantt
+stays PM"*. Two phases were opened: `../056-board-anytype-parity/` and
+`../057-calendar-anytype-parity/`.
+<!-- /ANCHOR:adr-006-context -->
+
+<!-- ANCHOR:adr-006-decision -->
+### Decision
+
+**`056` and `057` are consumers of this packet's design read, not extensions of its scope.** This
+packet stays item-wise and keeps its fourteen items; it does not absorb two whole-view rebuilds, and
+it does not hand them its items either.
+
+The boundary, stated so neither side re-litigates it:
+
+- **`design-trueup.md` is the read of record for both new packets**, exactly as it is for
+  `051`-`055`. ADR-003 binds them: where a capture and code-derived research disagree, the capture
+  wins and the contradiction is named.
+- **Where the true-up is silent on a kanban or calendar element, the new packet reads the capture
+  first-hand** and records it in its own `design-trueup.md`. It does not infer from the grid, and it
+  does not amend this document.
+- **Item 3, the sticky board scrollbar, is the one direct overlap.** Its measurement here — 10px
+  tall, 8px above the viewport bottom, full content width, y 1199..1208 of a 1217px viewport, thumb
+  `#B6B6B6` on track `#EBEBEB`, present on kanban and grid alike, with the colours declined because
+  an Obsidian plugin lets the reader's theme own scrollbar chrome — is **cited by `056` REQ-004 and
+  implemented there**, not implemented twice. This packet's REQ-003 is satisfied for the board when
+  `056` lands it.
+<!-- /ANCHOR:adr-006-decision -->
+
+<!-- ANCHOR:adr-006-consequences -->
+### Consequences
+
+- Nothing in this packet's fourteen items changes, and its own completion criteria are untouched.
+- Item 3's board half is delivered by `056` and recorded as such rather than counted twice.
+- The **table** is where this packet's item-wise model still governs outright: it stays ours, with
+  Anytype grid patterns adopted where the captures show them better, which this packet, `053` and
+  `054` already carry. The operator's ruling did not move it.
+- **This packet's own corrections carry into the new packets.** `053` D4's per-layout page limit —
+  Gallery 60, **Kanban 10**, and no limit row on Grid, List, Calendar or Graph — is `056`'s AC-008
+  rather than the flat 60 this document originally read. That correction is now load-bearing outside
+  this packet.
+- ADR-003's second corollary applies to both new packets and is worth restating where they will
+  read it: **absence in one captured surface is evidence about that surface only.** `057` acts on it
+  directly — its T001 must establish two absences (the unscheduled area, the scale switch) across
+  all twenty calendar captures rather than from one.
+<!-- /ANCHOR:adr-006-consequences -->
+
+<!-- ANCHOR:adr-006-alternatives -->
+### Alternatives rejected
+
+- **Fold the board and calendar rebuilds into this packet as items 15 and 16.** Rejected: they are
+  not affordances, they are whole views with their own capture true-ups, thresholds and operator
+  rows. Fourteen items with two of them being entire renderers is a list that has stopped meaning
+  anything.
+- **Let `056` and `057` re-read the whole sweep independently.** Rejected: it would produce a third
+  and fourth reading of the same screens, and `050`'s true-up already found five places where a
+  second reading of one panel contradicted the first. One read of record, extended per packet where
+  it is silent, is the arrangement ADR-003 established and it holds here.
+- **Move item 3 to `056` outright.** Rejected: it is measured here, it applies to the grid as well
+  as the kanban, and this packet's REQ-003 is where that measurement lives. `056` cites and
+  implements; it does not inherit the requirement.
+<!-- /ANCHOR:adr-006-alternatives -->
+<!-- /ANCHOR:adr-006 -->

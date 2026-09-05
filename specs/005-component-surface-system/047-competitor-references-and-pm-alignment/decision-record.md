@@ -16,9 +16,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T16:50:00Z"
-    last_updated_by: "code-agent"
-    recent_action: "ADR-006: generated README names both reference roots and lane scope"
+    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "recorded adr-007, the board half of this packet withdrawn"
     next_safe_action: "Reconcile 049's mirror decision and the roadmap §6A entry"
     blockers: []
     key_files:
@@ -829,3 +829,101 @@ after); `node tools/screenshots/verify.mjs` (554/554 current); `npm run gate` (2
 then run `npm run screenshots` to regenerate `screenshots/README.md` without the section.
 <!-- /ANCHOR:adr-006-impl -->
 <!-- /ANCHOR:adr-006 -->
+
+---
+
+<!-- ANCHOR:adr-007 -->
+## ADR-007: The board half of this packet is withdrawn; the alignment pass is the gantt's alone
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator |
+
+---
+
+<!-- ANCHOR:adr-007-context -->
+### Context
+
+This packet was opened on the operator's *"align closer"* ruling of 2026-09-05, against §4 rows 37
+and 38 — the board and the gantt, both compared against Project Manager, in the styles `038`'s T12
+and `037`'s AC-007 used. T012 was the board comparison, T013 the gantt's, T014 the gap closure over
+both. AC-005 was the board's row, AC-006 the gantt's, AC-007 the operator's over both.
+
+At ~22:45 on the same day the operator changed the board's reference product. Verbatim:
+
+> *"Board UI/UX should almost be 1:1 Anytype"*
+
+> *"Same for calendar etc."*
+
+and, asked how far *"etc."* reached:
+
+> *"Board + calendar to Anytype; gantt stays PM"*
+
+> *"Make sure we have phases for that"*
+<!-- /ANCHOR:adr-007-context -->
+
+<!-- ANCHOR:adr-007-decision -->
+### Decision
+
+**The board's alignment leg is withdrawn from this packet, and the gantt's is unchanged.**
+
+- **T012 is superseded and must not be run.** Comparing the board against Project Manager now
+  measures its divergence from a reference it is no longer meant to match: a zero on that
+  comparison would be the *wrong* answer, not a good one. `scratch/board-comparison.md` is not
+  written.
+- **AC-005 is `Superseded`, naming this ADR** — not `Unmet`, because nothing here will ever satisfy
+  it and leaving it open would misreport the packet as incomplete rather than rescoped.
+- **T013, T014 and AC-006 are unchanged and are now this packet's only alignment work**, with
+  `src/views/board-renderer.ts` removed from T014's file list so a gantt fix cannot collide with
+  `056`'s rebuild.
+- **AC-007 narrows to §4 row 38**, the timeline. Row 37 stays an operator row but is now a
+  different question against a different product, and belongs to `056` as its AC-010.
+
+**The capture legs are untouched, and matter more than they did this morning.**
+`screenshots/anytype/` — 120 catalogue captures, 600 menu files, 118 iOS shots, their manifest,
+`sources.md` and the recorded licence positions — is the primary input to both new packets. This
+packet's output became load-bearing tonight rather than obsolete.
+<!-- /ANCHOR:adr-007-decision -->
+
+<!-- ANCHOR:adr-007-consequences -->
+### Consequences
+
+- Two new phases carry the withdrawn work: `../056-board-anytype-parity/` and
+  `../057-calendar-anytype-parity/`, both opened 2026-09-05 ~22:45, both Level 3.
+- The board's Project Manager alignment leg had already started and was **stopped the same night**:
+  two uncommitted files in worktree `impl-047-align`, disposable. Nothing of it is landed and
+  nothing is lost that this packet needed.
+- `../roadmap.md` §7.12 records the underlying conflict — the board ruled on twice in opposite
+  directions — as a conflict resolved by the newer instruction rather than a silent edit. §4 rows
+  37 and 38 are each amended with the half that changed.
+- `038-board-kanban-port`'s shipped 1:1 board is **not** rolled back. It stays on main and is the
+  baseline `056` replaces.
+- This packet's closure gate shrinks by one row and its remaining alignment scope is a single
+  renderer, which makes AC-003's contract-widening row the larger open question here.
+
+**Why the split holds up rather than being an inconsistency to tidy.** Anytype ships six set
+layouts — Grid, Gallery, List, Kanban, Calendar and Graph — and **no timeline among them**. There
+is no Anytype gantt to retarget to, so the gantt keeps the only 1:1 reference that exists for it.
+The operator's line is the only available answer, not an oversight.
+<!-- /ANCHOR:adr-007-consequences -->
+
+<!-- ANCHOR:adr-007-alternatives -->
+### Alternatives rejected
+
+- **Keep T012 and run it anyway, "for the record".** Rejected: it would spend a measurement leg
+  producing a number nobody can act on, and a future reader would find a board comparison against
+  Project Manager in a packet whose own spec says the board targets Anytype.
+- **Mark AC-005 `Waived`.** Rejected: a waiver says the work was deliberately not pursued. This row
+  was replaced by a different criterion in a different packet, which is what `Superseded` means.
+- **Delete T012, AC-005 and the board wording outright.** Rejected: the packet would then read as
+  though it had always been gantt-only, and the next session would have no way to see that a ruling
+  changed under it. Struck-through text with a dated reason costs a few lines and preserves that.
+- **Fold the board rebuild into this packet.** Rejected: this is a fidelity pass over a shipped
+  port, and the board now needs a rebuild against a different product with its own capture true-up,
+  its own thresholds and its own operator row. The operator also asked for phases explicitly.
+<!-- /ANCHOR:adr-007-alternatives -->
+<!-- /ANCHOR:adr-007 -->

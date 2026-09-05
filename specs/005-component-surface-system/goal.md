@@ -10,16 +10,15 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-05T07:20:00Z"
-    last_updated_by: "stacked-sheets-phase-pass"
-    recent_action: "0.0.23 check: closed rows 34-36, re-anchored nine deferrals, opened 048"
-    next_safe_action: "Answer 048 D1, then run 048 T002/T003 and re-ask the nine deferred rows"
+    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "opened 056 and 057 on the operator anytype ruling for board and calendar"
+    next_safe_action: "Run 056 and 057 T001 capture true-ups, and put 057 ADR-002 to the operator"
     blockers:
-      - "0.0.23: rows 34-36 CLOSED; 29-33/39-41/43 deferred, blocker discharged"
-      - "Rows 44-46 NEW: stacked sheets, owned by 048; its D1 is operator-owned"
-      - "Rows 37/38 need 047: the fidelity pass and the Anytype captures (AppFlowy was removed 2026-09-05)"
+      - "Rows 44-46: stacked sheets, owned by 048; its D1 is operator-owned"
+      - "056/057 open: row 37 is Anytype's, row 38 stays PM; both gated on T001"
+      - "057 ADR-002 is the operator's: do the calendar week and day scales survive"
       - "007-gallery-view-deprecation and 047 opened, nothing landed"
-      - "006-list-view-deprecation owes only its 0.0.23 release cut"
       - "Earlier blockers are in the LOG and roadmap.md rather than here"
     key_files:
       - "roadmap.md"
@@ -34,7 +33,8 @@ _memory:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
-      - "Every phase 000-048 carries its own goal.md; the DONE table cites each open one"
+      - "Every phase 000-057 carries its own goal.md; the DONE table cites each open one"
+      - "Board half of the 2026-09-04 PM 1:1 ruling superseded; gantt half stands, no Anytype timeline"
       - "Gallery does not share 045's mechanism: retired by specs/007"
       - "Hiding a board card field is cards only, not the table (045 ADR-002)"
       - "The timeline froze on a per-event touch probe; the calendar does not scale with rows"
@@ -797,6 +797,8 @@ and this row is a defect.**
 | `053-toolbar-and-view-controls` | [`053-toolbar-and-view-controls/goal.md`](053-toolbar-and-view-controls/goal.md) | The toolbar rebuilt from five composed primitives with the replaced vocabularies deleted — today **17** repeated close runs, two dual-classed row sites and **seven** dead settings-entry methods with zero call sites — plus `050` items 1, 2, 4, 7, 10 and 12 at the thresholds ADR-004 restated, and the operator reading the rebuilt toolbar as the improvement they asked for. **Opened 2026-09-05. T001 done 2026-09-05 (`fbbddc13`): four findings that overturned four of `050`'s claims — the chip rail, the per-view default, the twelve filter formats and the per-layout page limit. All three ADRs are Accepted (§6A), and the implementation leg is running on codex in `worktrees/094-impl-053-toolbar` — the first of the five to start. It owns the condition-row primitive.** | 0/8 |
 | `054-record-and-relation-surfaces` | [`054-record-and-relation-surfaces/goal.md`](054-record-and-relation-surfaces/goal.md) | The record and property surfaces on one set of primitives — the census reading **1** header builder, **1** property-row vocabulary and **1** type list against today's **4 / 3 / 3** — a hidden-properties group whose expanded state survives a refresh, empty rows carrying an add affordance instead of the word "Empty", **one exported editor primitive per column type** extracted from a 3,152-line class no check can mount, and the operator reading a record as one object page with formulas and rollups behaving exactly as before. **Opened 2026-09-05, raised to Level 3 at landing. T001 done 2026-09-05 (`621de37f`); `checklist.md` C3's Today cell reconciled from "3 type lists" to one list, one filtered subset and one submenu. Implementation pending. It owns the inline editors.** | 0/7 |
 | `055-states-feedback-and-motion` | [`055-states-feedback-and-motion/goal.md`](055-states-feedback-and-motion/goal.md) | One state and feedback vocabulary — empty, loading, error, success, destructive confirm, undo — reduced to shared components, with `050` items 5, 8, 9 and 14 implemented at ADR-004's restated thresholds: today **247** notice call sites carry no action affordance, one migration notice promises an Undo it cannot carry, a ninth renderer keeps a private empty-state vocabulary, a deleted board group relation renders no state at all, and **42** transitions hand-type `120ms` outside any token. Then the operator reads the states as debugged, refined, perfected. **Opened 2026-09-05, renamed from `051-*` at landing. This packet carried the most true-up correction of the five: all four of its `050` items were among the six thresholds that could not be observed red as written. T001 done 2026-09-05 (`ffcf434b`), its motion census reconciled at `cd8030a8`, and its source read corrected `047`'s reported 0.1s exit to 0.2s. Implementation pending. It owns empty state, notice/toast and the motion tokens.** | 0/8 |
+| `056-board-anytype-parity` | [`056-board-anytype-parity/goal.md`](056-board-anytype-parity/goal.md) | The board rebuilt to read as Anytype's kanban rather than Project Manager's, each of thirteen elements trued against a named capture before it is written — column header with title, count and menu; card shape and padding; cover; property rows; the `+ New` affordance; column add; drag affordances; group-by and the ungrouped column; option colours; the sticky horizontal scrollbar at the captured 10px/8px/full-width geometry with our own theme colours; the empty column and the deleted-group-relation state; the card menu and its three sub-menus; and the kanban layout's captured page limit of 10 — with the seven affordances gated behind `boardExtensions = false` each retired or folded and none left default-off, `045`'s card-property mechanism kept and retargeted rather than rebuilt, `044`'s grammar and `048`'s stacking held green throughout, and the gantt provably unmoved — then the operator reading the rebuilt board on iOS and on desktop. **Opened 2026-09-05 ~22:45 from the operator's ruling, *"Board UI/UX should almost be 1:1 Anytype"*. It supersedes the board half of the 2026-09-04 Project Manager 1:1 instruction (`roadmap.md` §7.12), not the gantt half. Three reds are already measured on `3407dab0` — 39 constructed `pm-*` classes, 23 `pm-kanban-*` stylesheet rules, 7 default-off affordances — so its first leg has a figure to be checked against rather than one asserted afterwards. T001, the capture true-up over 62 files, is owed to an image-capable leaf and gates everything else.** | 0/8 |
+| `057-calendar-anytype-parity` | [`057-calendar-anytype-parity/goal.md`](057-calendar-anytype-parity/goal.md) | The calendar rebuilt to Anytype's calendar layout, each of nine elements trued against a named capture — month grid, day cells, event chips, the unscheduled area, navigation as the captures show it (month and year selects, arrows, a Today button, the today-scroll), the scale switch as Anytype has it or does not, the today marker, the date-property picker and the day menu — with `044`'s grammar and `048`'s stacking held green, the gantt provably unmoved, and both keyboard-navigation and search-placement tests green at zero lines changed; then the operator reading it on iOS and on desktop, knowing the phone half was inferred. **Opened 2026-09-05 ~22:45 from the same ruling, *"Same for calendar etc."* Two findings shape what it can promise. The calendar carries zero `pm-*` classes — `039` ported behaviour, not markup — so `056`'s headline class-count threshold has no analogue here and would have read green on an untouched tree; ADR-003 records the absence deliberately. And iOS Anytype ships no calendar layout at all, so the phone half has no reference and every phone value carries the label "design inferred from desktop", counted by AC-007 rather than left as a caveat. One row is operator-owned and open: ADR-002, whether the week and day scales survive parity with a product that ships one calendar layout.** | 0/10 |
 
 
 | **`006-list-view-deprecation`** — a **sibling packet**, not a phase here | [`../006-list-view-deprecation/goal.md`](../006-list-view-deprecation/goal.md) | No surface offering list, a list-configured vault opening as a table with the same columns once with a notice, `list-renderer.ts` gone, the `list-window` lane **removed not skipped** with `npm run gate` at 0, the coverage floor lowered with its reason beside the number, `033-list-virtualisation` and `024-list-view-freeze` closed against the retirement, and the operator reporting a migrated vault. Its four live children each carry their own goal; see [`../006-list-view-deprecation/roadmap.md`](../006-list-view-deprecation/roadmap.md). **Children `005` through `007` are done; `008`'s release row is satisfied by 0.0.23 (`d3979cf5`), leaving only its and `006`'s own operator rows open.** | 7/9 |
@@ -2008,6 +2010,8 @@ surface family so that one owner holds each surface:
 | `053-toolbar-and-view-controls` | The toolbar | Five composed primitives; **the condition row**; `050` items 1, 2, 4, 7, 10, 12 |
 | `054-record-and-relation-surfaces` | Records and relations | Record primitives; **one inline editor per column type** |
 | `055-states-feedback-and-motion` | States, feedback, motion | Empty/toast/motion components; `050` items 5, 8, 9, 14 |
+| `056-board-anytype-parity` | The board | Anytype kanban parity; **the PM board port superseded**; `050` REQ-003's sticky scrollbar |
+| `057-calendar-anytype-parity` | The calendar | Anytype calendar parity; **the phone half has no reference**; ADR-002 open |
 
 `048`'s stacking model is a **constraint** to all five and is re-specified by none of them.
 
@@ -2099,5 +2103,59 @@ inline editors (`054`) — had no written owner until this pass.
 ticked and no operator row was touched. The five packets stay `0/N`: a true-up designs, and D2's
 red-first measurement is still T002's in every one of them. `053`'s implementation leg is the only
 one running, on codex in `worktrees/094-impl-053-toolbar`.
+
+
+### Two phases opened, 2026-09-05 ~22:45: the board and the calendar move to Anytype
+
+The operator, on 0.0.27: *"Board UI/UX should almost be 1:1 Anytype"*, then *"Same for calendar
+etc."*, then — asked how far *"etc."* reached — *"Board + calendar to Anytype; gantt stays PM"*, and
+*"Make sure we have phases for that."* Two phases were opened the same minute:
+`056-board-anytype-parity` and `057-calendar-anytype-parity`, both Level 3, both standard children.
+
+**This reverses a ruling this program shipped against, and the reversal is partial.** On 2026-09-04
+the operator said *"copy their board view 1:1 from Project Manager"*; `038-board-kanban-port` did
+exactly that and shipped it in 0.0.16, 0.0.18, 0.0.19 and 0.0.20, with T12's in-repo half verified
+at `c563f08`. Only the **board** half of that sentence is superseded. The gantt's is not, and the
+reason is a fact rather than a preference: Anytype ships six set layouts — Grid, Gallery, List,
+Kanban, Calendar and Graph — and **no timeline among them**, so there is no Anytype gantt to
+retarget to. `roadmap.md` §7.12 records it as a conflict resolved by the newer instruction, named
+rather than silently overwritten; §4 rows 37 and 38 are each amended with the half that changed, and
+row 38 now owns `047`'s T012-T014 align-closer pass alone.
+
+**Three things were measured at authoring time rather than deferred**, because each costs one
+command and each makes a later green checkable. `056`: **39** constructed `pm-*` classes in
+`board-renderer.ts`, **23** `pm-kanban-*` rules in `styles.css`, and **7** affordances gated behind
+`boardExtensions = false` whose own comment says *"the default layout is the one-to-one kanban copy,
+which has none of them"* — the reason they are dark is the target that just changed.
+
+**Two findings changed what `057` could honestly promise, and both are recorded rather than worked
+around.** First, the calendar carries **zero** `pm-*` classes: `039-calendar-parity-port` ported
+behaviour, not markup. Mirroring `056`'s headline threshold would have produced a criterion that
+reads **green on an untouched tree** — the seventh false premise of the kind `050`'s true-up found
+six of, caught before it was written rather than after it was believed. `057` ADR-003 records why
+that criterion is absent, because a threshold missing for a good reason and one that was forgotten
+look identical six weeks later. Second, **iOS Anytype ships no calendar layout**: there is no
+calendar capture anywhere under `screenshots/anytype/mobile/`, and the iOS view-layout sheets are
+picker, gallery and kanban only. The phone half of that retarget has no reference and will not get
+one, so AC-007 counts phone values missing the label *"design inferred from desktop"* and requires
+zero. Labelling is weaker than measurement — it makes an inference visible without making it right
+— and saying so is the point.
+
+**One decision is deliberately not taken here.** `057` ADR-002 is **Proposed** and operator-owned:
+our calendar ships three scales (`calendar-renderer.ts:82`) with seven switch classes, a 22-class
+week body and its own keyboard suite, against a product showing one calendar layout and no scale
+switch. Parity says remove two; the operator has never asked for a working feature to be deleted.
+It is asked at `057`'s T003 with the capture finding attached.
+
+**Both packets record `recommend-level.sh`'s own answer alongside the judgment that overrode it** —
+68/100 and 63/100, both Level 2 on the script's thresholds, both raised to Level 3 on the go-higher
+rule and for consistency with `050`-`055`. Hiding the script's figure would have made the level look
+derived when it was chosen.
+
+**What this entry does not claim.** No product code was written. No criterion was ticked and no
+operator row was touched. Both packets stand at `0/N` and both are gated on a capture true-up that
+has not run. The board that ships today is off-target and stays shipped;
+`056/implementation-summary.md` says so plainly so a later session does not read it as current
+intent.
 
 <!-- /ANCHOR:log -->

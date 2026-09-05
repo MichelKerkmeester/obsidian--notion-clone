@@ -11,9 +11,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T07:35:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Opened the phase from the rows 37/38 align-closer ruling"
+    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "narrowed req-003 and the scope to the gantt per adr-007"
     next_safe_action: "Widen the reference contract in manifest-schema.mjs before any capture lands"
     blockers:
       - "manifest-schema.mjs hard-codes group project-manager for reference entries"
@@ -149,12 +149,22 @@ of measured gaps rather than an impression.
 - Manifest entries in the project-manager style, with the provenance a downloaded image or an app
   screenshot needs and a rendered capture does not.
 - Widening `manifest-schema.mjs`'s reference contract without loosening it.
-- The board and gantt fidelity pass against Project Manager: every difference measured, then either
-  closed or dispositioned.
+- ~~The board and gantt fidelity pass against Project Manager~~ — **narrowed to the gantt alone,
+  2026-09-05 ~22:45.** The operator retargeted the board: *"Board UI/UX should almost be 1:1
+  Anytype"*, clarified as *"Board + calendar to Anytype; gantt stays PM."* Comparing the board
+  against Project Manager now measures divergence from a reference it is no longer meant to match.
+  **The gantt fidelity pass against Project Manager: every difference measured, then either closed
+  or dispositioned** — unchanged, and now this packet's only alignment leg. See `decision-record.md`
+  ADR-007 and `../roadmap.md` §7.12.
 
 ### Out of Scope
 - Re-porting the board or the gantt. `037` and `038` landed; this is a fidelity pass over what
   shipped.
+- **The board's alignment, in any direction — added 2026-09-05 ~22:45.** Its Project Manager pass
+  was stopped tonight (two uncommitted files in worktree `impl-047-align`, disposable), and its
+  Anytype rebuild is `056-board-anytype-parity`'s, not a fidelity pass at all. This packet keeps the
+  board **captures** it took; it no longer measures the board against anything.
+- The calendar, likewise. `057-calendar-anytype-parity` owns it.
 - Rows 37 and 38 themselves. They close on the operator's own vault comparison and nothing here
   substitutes for that.
 - Anytype's source code. There is no vendored copy and this phase does not create one.
@@ -190,7 +200,7 @@ of measured gaps rather than an impression.
 |----|-------------|
 | REQ-001 | `screenshots/anytype/` exists and carries board, table, calendar and timeline captures from **both** sources the operator named: official product images and the locally installed app. AppFlowy was removed from this requirement's scope, 2026-09-05 — `decision-record.md` ADR-003 |
 | REQ-002 | Every new capture has a manifest entry carrying its provenance — which source it came from, which app version, and when — in the shape `screenshots/project-manager/`'s entries use |
-| REQ-003 | The board and gantt are compared against Project Manager with **in-repo comparison criteria**, in the style `037`'s AC-007 and `038`'s T12 used: named elements, measured values, zero-divergence or a numbered gap |
+| REQ-003 | ~~The board and gantt are compared~~ **The gantt is compared** against Project Manager with **in-repo comparison criteria**, in the style `037`'s AC-007 used: named elements, measured values, zero-divergence or a numbered gap. **Narrowed 2026-09-05 ~22:45** (ADR-007): the board's reference product changed to Anytype and its rebuild is `056-board-anytype-parity`'s, so a Project Manager comparison of the board would measure divergence from a target it is no longer meant to match. `038`'s T12 style is cited here only as the shape the gantt pass borrows |
 
 ### P1 - Required (complete OR user-approved deferral)
 

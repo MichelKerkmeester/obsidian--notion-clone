@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **56 phases**, **6 with nothing left**, **156 rows** waiting on a device.
+Derived 2026-09-05: **58 phases**, **6 with nothing left**, **175 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -306,11 +306,12 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` exits 0 with one permanent lane row per criterion, each observed red before green, and `npm run replay` holds with reversed 0. `050` item thresholds ride the same lane rows.
 - [ ] The operator reads the rebuilt toolbar on device and names it the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
-## 054-record-and-relation-surfaces — 1/7
+## 054-record-and-relation-surfaces — 0/7
 
 - [ ] The census reads 1 header builder, 1 property-row vocabulary and 1 property-type list across the family, read by the census lane — one page rendering the same column through every consumer — never by grep. Red first: the counts today are 4 / 3 / 3, measured by T002 and recorded in `checklist.md` C1-C3. The lane's negative controls (bypass the primitive in one consumer; reintroduce a second builder) were observed red before the counts closed.
 - [ ] The record sheet renders a hidden-properties group with a count whose expanded state survives a field-commit refresh, and empty relation/select/multi-select rows render an add affordance opening the occupied row's editor — on the record sheet and board cards, with the word "Empty" gone where an editor exists. Red first: no group exists today (`record-detail-panel.ts:387-396` filters empties wholesale) and `getEmptyDisplayValue` (`record-detail-panel.ts:636`) renders the placeholder word. The negative control (restore the word, remove the group) was observed red.
 - [ ] One exported editor primitive per column type exists behind `CellRenderer.startEdit`, the pinned dispatch test is green, and the option and relation editors mount standalone in a lane — the first check in this family that can hold an editor without constructing the 3,152-line class. Red first: 0 exported primitives exist today; the pinned test fails on their absence before the extraction starts (ADR-002's designed red).
+- [ ] `migration-table.md` exists with one row per §5A surface (10) and one per §5B behaviour (7), every named capture filename resolving under `screenshots/anytype/`, every behaviour row carrying T001's image-true-up disposition (adopted / adapted / rejected-with-reason), and every surface row marking what stays ours. Red first: the file does not exist.
 - [ ] `npx tsc --noEmit`, `npm run build` and `npx vitest run` all pass with exit statuses read (the repo's three verification gates); `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0 with one permanent lane row per primitive, each negative control observed red then green; `npm run replay` holds with reversed 0; `npm run screenshots:verify` exits 0 with every changed capture opened and read by a person.
 - [ ] The board-card reference captures are `pixelHash`-identical to their pre-L3 baseline, or the difference carries an operator ruling — read before any L3 close (D7).
 - [ ] The operator opens a record on iOS and desktop and reads it as one object page against the Anytype object page; reports no surface where a property looks or edits differently from the same property elsewhere; and confirms formulas, rollups and aggregations behave exactly as before. Only the operator closes this. Nothing in this repository can.
@@ -325,6 +326,30 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Motion durations and easings are tokenized at the measured values, and reduced-motion coverage holds for every surface the phase touches. The surface pair is enter 200ms `ease-out`, exit 150ms `ease-in` (`design-trueup.md` §4). Today: 42 transition declarations hand-type `120ms` outside any token — recounted at landing 2026-09-05; the draft's 78 was measured against a different tree and does not reproduce (`grep -o "transition:[^;]*" styles.css | grep -c 120ms` → 42). One shared `--db-transition-fast` (`styles.css:113`, `120ms ease`) exists, and the reduced-motion reset covers container descendants and `.db-surface` (`styles.css:918`, proven by `owned-menu-reduced-motion.test.ts`).
 - [ ] `npm run gate` exits 0 read from `$?`, with one permanent lane row per deliverable, each negative control observed red before green, and the board and gantt reference captures `pixelHash`-identical to their baseline or the difference operator-ruled.
 - [ ] The operator opens a filtered view, deletes a row, deletes a board group field and drags a card under a sort, and reads the states as debugged, refined, perfected. Only the operator closes this row; nothing in this repository can.
+
+## 056-board-anytype-parity — 0/8
+
+- [ ] The board's element vocabulary is Anytype's, and the Project Manager one is gone or dispositioned. Today: 39 distinct `pm-*` classes constructed by `src/views/board-renderer.ts` (`grep -o "pm-[a-z-]*" src/views/board-renderer.ts | sort -u | wc -l`), of which 23 `pm-kanban-*` rules in `styles.css`. Done is 0 undispositioned survivors: each class either replaced by its Anytype-shaped equivalent or named in the migration table with a written reason for staying.
+- [ ] Every element in `spec.md` section 4's anatomy is trued against a named capture file, measured, and matched. Today: no such table exists. Done is the per-element migration table complete — PM element, Anytype element, capture filename, our file — with no cell reading `unknown` and every geometry value carrying either a measurement or the design inferred label with its reason.
+- [ ] The sticky horizontal scrollbar exists on the board. Today: absent — `src/views/board-renderer.ts` contains no sticky scrollbar and `styles.css` has no board-scrollbar rule (`050/design-trueup.md` REQ-003). Anytype's is 10px tall, 8px above the viewport bottom, full content width, measured at y 1199..1208 of a 1217px viewport on both the kanban and the grid. Colours stay ours, from the theme's scrollbar tokens.
+- [ ] `045`'s card properties survive the retarget. Done is the property-row presentation changed and `board-card-properties-panel.test.ts` plus `board-card-fields.test.ts` still green, with the mechanism's public surface unchanged.
+- [ ] `044`'s grammar and `048`'s stacking still hold. Done is `node tools/live/sheet-grammar.mjs` exit 0 with 12 surfaces and 31 stacked pairs green after the last leg, read from `$?`.
+- [ ] Every local extension with no Anytype counterpart is retired or folded, none left default-off. Done is a count of board affordances shipped behind a default-off flag → 0, each row in the migration table carrying `retire` or `fold`.
+- [ ] The gantt did not move. Done is the `pm-gantt-*` class count and the gantt capture hashes unchanged against their pre-leg baseline, or any move explained by a named gap.
+- [ ] OPERATOR: the operator reads the rebuilt board on iOS and on desktop and reports it as Anytype-shaped. Nothing in this repository can close this row.
+
+## 057-calendar-anytype-parity — 0/10
+
+- [ ] Every element in `spec.md` section 4's anatomy is trued against a named capture, measured, and matched. Today: no such record exists. Done is `design-trueup.md` written with a capture filename per element and either a measurement or the design inferred label with its reason.
+- [ ] The month grid, the day cell and the event chip match the captures. Today: ours. `src/views/calendar-renderer.ts` constructs 91 distinct `db-calendar-*` classes and `styles.css` carries 133 `db-calendar` rules, none of them trued against an Anytype screen. Done is each of the three matched to a measured value or carrying a named accessibility deviation.
+- [ ] Navigation matches the captured toolbar. `047` section 5 records Anytype's as month and year selects spanning years 0-3000, arrows, and a Today button; plus a "today scroll" that positions the current week at the bottom of the viewport. Done is our navigation matching that or declining a part of it with a reason.
+- [ ] The date-property picker matches the captured calendar settings menu. `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` is the reference.
+- [ ] The scale switch question is answered by the operator, not inferred. Today: three scales — `updateCalendarScale?(scale: "month" | "week" | "day", ...)` (`calendar-renderer.ts:82`) with a scale control, menu, popover and segment class family.
+- [ ] The unscheduled area is dispositioned. Today: ours — a collapsible backlog drawer (`db-calendar-backlog*`, `calendar-renderer.ts:160-163`). Done is either a captured Anytype counterpart it is matched to, or a written argument for keeping it as ours.
+- [ ] The phone calendar's every value is labelled "design inferred from desktop". Today: no phone reference exists and none is coming — iOS Anytype has no calendar layout. Done is zero phone values presented as measured.
+- [ ] `044`'s grammar and `048`'s stacking still hold. Done is `node tools/live/sheet-grammar.mjs` exit 0 with 12 surfaces and 31 pairs green, read from `$?`.
+- [ ] The gantt did not move. Done is the `pm-gantt-*` class count and the gantt capture hashes unchanged against their pre-leg baseline, or any move explained by a named gap.
+- [ ] OPERATOR: the operator reads the rebuilt calendar on iOS and on desktop and reports it as Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
 
 ## Nothing left to check
 

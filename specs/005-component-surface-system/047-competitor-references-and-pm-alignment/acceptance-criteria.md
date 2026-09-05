@@ -10,9 +10,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T12:10:00Z"
-    last_updated_by: "code-agent"
-    recent_action: "Rewrote AC-001/AC-008 to Anytype-only scope per ADR-003 (AppFlowy removed)"
+    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "superseded ac-005 and narrowed ac-006/007 to the gantt per adr-007"
     next_safe_action: "Write the negative control red-first, then widen the reference contract"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
@@ -61,9 +61,9 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-002 | REQ-002 | **Given** each new capture, **When** its manifest entry is read, **Then** it names its source, the app version and the capture date. **Failing value today: 546 entries, 16 references, all Project Manager, and none of them needs a version because they are rendered from vendored source. 2026-09-05: still 0 Anytype manifest entries, deliberately — `manifest-schema.mjs:52,118` accepts only `group: "project-manager"` and `pm-kanban`/`pm-gantt`, confirmed by reading the schema. Adding an entry today would either fail validation or require loosening the contract outside this leg's scope (T006, a separate task). Provenance (source URL/licence for official images, app version/capture date for installed ones) is instead recorded in each folder's `sources.md` and `README.md`** | The entries, and `screenshots:verify` accounting for each | Unmet | - |
 | AC-003 | REQ-004 | **Given** the widened reference contract, **When** a malformed entry is validated, **Then** it is still rejected. **Failing value today: no negative control exists**, and `manifest-schema.mjs:118` rejects everything that is not `project-manager` — which is strict but also why nothing new can land | A negative control observed red against BOTH the old and the widened schema, covering an unknown group, an unknown renderer, a missing `referenceOf` and a path escaping its root | Unmet | - |
 | AC-004 | REQ-006 | **Given** a capture with no in-repo source, **When** `verify.mjs` classifies it, **Then** the class is deterministic and distinct from `vendor-unavailable`, which means an *unavailable* source rather than *no* source. **Failing value today: no such class** | The classification, run twice, producing the same answer | Unmet | - |
-| AC-005 | REQ-003 | **Given** the board, **When** it is compared against Project Manager in `038`'s T12 style, **Then** every difference is a named element with a measured value. **Failing value today: unknown** — T12 matched 14 carried-forward elements at `c563f08` and the operator still says "align closer" | The comparison table, element by element | Unmet | - |
-| AC-006 | REQ-003, REQ-005 | **Given** the gantt, **When** it is compared in `037`'s AC-007 style, **Then** the same holds, and every gap closed carries a before and an after number. **Failing value today: unknown** — AC-007 matched 60 of 60 `pm-gantt-*` classes with zero divergence at `30c4b746`, and the verdict is still "align closer" | The comparison table, plus a before/after per closed gap | Unmet | - |
-| AC-007 | REQ-003 | **Given** a released build, **When** the operator reads the board and the timeline, **Then** they no longer say "align closer". **Only the operator closes this row** | An operator report against a named release, recorded on `../roadmap.md` §4 rows 37 and 38 | Unmet | - |
+| AC-005 | REQ-003 | ~~**Given** the board, **When** it is compared against Project Manager in `038`'s T12 style, **Then** every difference is a named element with a measured value~~ **SUPERSEDED 2026-09-05 ~22:45 by ADR-007.** The operator retargeted the board to Anytype — *"Board UI/UX should almost be 1:1 Anytype"*, clarified *"Board + calendar to Anytype; gantt stays PM"* — so this row would now measure the board's divergence from a reference it is no longer meant to match, and a zero here would be the wrong answer rather than a good one. The board's parity work is `../056-board-anytype-parity/`, whose AC-001 through AC-009 replace this row. Prior state, kept for history: *Failing value today: unknown — T12 matched 14 carried-forward elements at `c563f08` and the operator still says "align closer"* | Superseded by `056`'s own criteria; no comparison table is written here. `../roadmap.md` §7.12 records the conflict | Superseded | ADR-007 |
+| AC-006 | REQ-003, REQ-005 | **Given** the gantt, **When** it is compared in `037`'s AC-007 style, **Then** the same holds, and every gap closed carries a before and an after number. **Failing value today: unknown** — AC-007 matched 60 of 60 `pm-gantt-*` classes with zero divergence at `30c4b746`, and the verdict is still "align closer". **Unchanged 2026-09-05 ~22:45, and now this packet's only alignment row** (ADR-007): the operator's clarification keeps the gantt on Project Manager, and there is no Anytype timeline layout to move it to — the capture sweep holds six set layouts and no gantt among them | The comparison table, plus a before/after per closed gap | Unmet | - |
+| AC-007 | REQ-003 | **Given** a released build, **When** the operator reads ~~the board and~~ the timeline, **Then** they no longer say "align closer". **Only the operator closes this row.** **Narrowed 2026-09-05 ~22:45 (ADR-007) to the timeline alone** — §4 row 38, which keeps its Project Manager reference. Row 37, the board's half, moved to Anytype the same minute and is now `056`'s AC-010; it is still an operator row, just a different question against a different product | An operator report against a named release, recorded on `../roadmap.md` §4 row 38 | Unmet | - |
 | AC-008 | REQ-007 | **Given** each competitor image, **When** it is committed, **Then** a licence and attribution position for its source is already recorded. **Failing value today: 0 positions recorded. 2026-09-05: all 5 official Anytype images have a recorded position in `screenshots/anytype/sources.md`, written before this commit — each cites its source URL and states the position is "terms unclear, cited by URL, used for internal comparison" since the product does not publish an editorial-use licence for these images. (AppFlowy's 4 official images and their `sources.md` entry were removed with the rest of `screenshots/appflowy/` — `decision-record.md` ADR-003.)** | The committed licence record, dated before the image commit — `screenshots/anytype/sources.md` | Met | - |
 
 ### Status values
@@ -106,4 +106,19 @@ and AC-006 read "unknown" today rather than carrying a number, which is honest: 
 comparisons measured zero divergence on what they carried, so the number this phase needs does not
 exist yet and inventing one would be worse than saying so. AC-007 is the operator's and an agent
 never ticks it.
+
+**2026-09-05 ~22:45: this packet is rescoped to the gantt, and one row is superseded rather than
+failed.** The operator retargeted the board — *"Board UI/UX should almost be 1:1 Anytype"*, then
+*"Same for calendar etc."*, clarified as *"Board + calendar to Anytype; gantt stays PM"*. AC-005,
+the board's Project Manager comparison, is now **Superseded** under **ADR-007**: it would measure
+the board's divergence from a reference it is no longer meant to match, so a zero on that row would
+be the wrong answer rather than a good one. Its replacement is a whole packet,
+`../056-board-anytype-parity/`, whose AC-001 through AC-009 do the work. AC-006 and AC-007 are
+**unchanged and narrowed to the gantt**, which keeps its Project Manager reference because Anytype
+ships no timeline layout to move it to — six set layouts in the capture sweep, no gantt among them.
+
+**What this does not change.** The capture legs stand: `screenshots/anytype/` and its manifest,
+sources and licence positions are `056` and `057`'s primary input, so this packet's output became
+more load-bearing tonight, not less. AC-003's contract-widening row is untouched. And the board
+**captures** taken here stay; only the board *comparison* is withdrawn.
 <!-- /ANCHOR:closure -->
