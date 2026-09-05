@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **51 phases**, **6 with nothing left**, **121 rows** waiting on a device.
+Derived 2026-09-05: **51 phases**, **6 with nothing left**, **122 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -86,8 +86,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator opens the table on desktop and sees a whole checkbox.
 
-## 015-desktop-dropdown-placement — 7/8
+## 015-desktop-dropdown-placement — 9/11
 
+- [ ] The operator opens the desktop toolbar and a filter popover and says both read correctly.
 - [ ] The operator opens any desktop dropdown and it is where they expected it.
 
 ## 016-sheet-drag-and-audit — 9/10
