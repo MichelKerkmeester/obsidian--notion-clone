@@ -3013,6 +3013,17 @@
       "hash": "8c168bae706d",
       "reviewed": [],
       "note": "No capture in the current suite has any content-changed dependency on the removed dead CSS: `npm run screenshots` after this edit moved 20 files by bytes only (constructed-active-rule-filter/-sort, constructed-owned-menu-mobile-dark, constructed-summary, constructed-date-picker(-datetime), constructed-record-detail-desktop-dark, board-subtask-tree-mobile-light) -- every one confirmed pixelHash/layoutHash-identical to HEAD via check-lane.mjs's content compare and restored to HEAD-committed bytes, manifest bytes field corrected on those 20 entries to match; `reviewed` is empty because there is nothing that moved for a real reason to open and read. Every other manifest entry's sourceHashes.styles.css fingerprint moved to this release's hash (8c168bae706d), which is the only genuine manifest change: a pure text substitution of the old hash for the new one, verified against the diff to touch no other byte. `npm run screenshots:verify`: 532/532 current, 0 stale, none blank or theme-identical. RECONCILED (2026-09-05, rebasing onto 044-phone-sheet-alignment's own settings-body-grammar landing): both legs branched from the same 0785e72944dd baseline and edited disjoint regions of styles.css -- 044's settings-sheet label-wrap and computed-sync fixes, this leg's db-list removals -- so the rebase auto-merged styles.css textually with no conflict; the merged tree hashes to bf0e11a3d7bf, now the tracked baselineHash. Re-verified after the merge: `rg -c \"db-list\" styles.css` still 24 (unchanged by 044's unrelated edit), the new shared.test.mjs describe block still green, and view-census.json's rowMatrix/rail/rows/probes/totals still byte-identical to the pre-removal tree. `npm run gate` re-run on the fully merged tree; see this leg's own follow-up commit for the number."
+    },
+    {
+      "event": "release",
+      "phase": "052-card-properties-capture",
+      "at": "2026-09-05T05:05:00.000Z",
+      "hash": "bf0e11a3d7bf",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png"
+      ],
+      "note": "2 changed captures, read by hand: the board Properties section (045-board-card-properties) mounts inside the same shared .db-view-config-body 044-phone-sheet-alignment's settings-body-grammar landing converted, so its mobile sheet variant only now picks up that conversion -- the grab handle and the shared db-panel-header/db-sheet-close chrome this fixture never carried before, in both themes. First recorded against 044's own hash (ad1dea7437ad, the change's real origin, superseded above by 007-remove-renderer-and-harness's unrelated db-list stylesheet cleanup); re-recorded here at the current baselineHash after rebasing onto that cleanup, since check-lane.mjs only reads the newest history entry and these 2 captures are otherwise unmentioned in 007's own release note (its dead-CSS removal touched neither this fixture's markup nor the two classes it draws). Re-verified against the fully merged tree: pixelHash/layoutHash for both captures unchanged from the prior record, confirming 007's edit did not touch them a second way. Desktop variants and every other capture this recapture touched were pixelHash/layoutHash-identical to HEAD or unrelated re-encode noise, restored. npm run screenshots:verify: 0 stale."
     }
   ],
   "outstanding": [
