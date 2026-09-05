@@ -52,12 +52,12 @@
       "tools/screenshots/manifest-schema.mjs",
       "screenshots/manifest.json",
       "src/views/board-renderer.ts",
-      "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts",
       "screenshots/README.md",
       "tools/screenshots/verify.mjs",
       "src/views/calendar-timeline-renderer.ts",
       "screenshots/anytype/sources.md",
       "screenshots/appflowy/sources.md",
+      "tools/mock-data/catalogue.json",
       "screenshots/anytype/README.md",
       "screenshots/appflowy/README.md",
       "src/views/filter-panel-renderer.ts"
@@ -130,12 +130,6 @@
         "source": "derived"
       },
       {
-        "name": "GanttView.ts",
-        "kind": "code",
-        "path": "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts",
-        "source": "derived"
-      },
-      {
         "name": "README.md",
         "kind": "doc",
         "path": "screenshots/README.md",
@@ -157,6 +151,12 @@
         "name": "sources.md",
         "kind": "doc",
         "path": "screenshots/anytype/sources.md",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.json",
+        "kind": "config",
+        "path": "tools/mock-data/catalogue.json",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Rows 37 and 38 have been open since 2026-09-04 waiting for one thing no in-repo session can do: the",
     "created_at": "2026-09-05T03:47:54Z",
-    "last_save_at": "2026-09-05T07:41:18.654Z",
+    "last_save_at": "2026-09-05T08:26:33.798Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,12 +223,12 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:2c38462be12091e80b6f789be09f16e317cb7e0afa3cfa5e85002192ca11d9cc",
+    "source_fingerprint": "sha256:1bd0287fd8f8a3f979a05e7802c74a9984e517bfa9cbb39579a92db5d96ede21",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "3224862228c108799164d7abbee846f799ddf091b6a8fe994839a37a11071721",
       "plan.md": "09a3e40515d5b94978ae526e8d386ce75199f12a6818e46796c65570a17cf56c",
-      "tasks.md": "7ca4075619a2c49dafca07567af7b80374295341028e02dd91066b25a96be701",
+      "tasks.md": "0f72514ef86333bfc5effe91e7c5f1d115fc7f5891934075ec38a67b4a6ca7d4",
       "decision-record.md": "26ee68c7926ab32c9eb269e030c8ba3425f49f70c77a72bfb7855e6c30719a49",
       "implementation-summary.md": "7603ff4c994af94e14d3701558d2987b12435b453a535d87583031f06e3de44a",
       "research/research.md": "6b98388e4ad4135334b8285709b760ee5c6429ea6464e4c4b66db9827fe3d4ae"

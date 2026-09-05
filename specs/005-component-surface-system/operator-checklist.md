@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **50 phases**, **6 with nothing left**, **113 rows** waiting on a device.
+Derived 2026-09-05: **51 phases**, **6 with nothing left**, **121 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -264,6 +264,17 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The Anytype demo space holds the same ten use cases at the same record counts, loaded from `catalogue.json`.
 - [ ] The AppFlowy demo workspace holds the same ten, imported from the per-use-case CSVs.
 - [ ] The operator opens the upgraded vault on a device and reads the ten databases as usable test environments rather than as a wall of noise.
+
+## 050-anytype-adoption — 0/8
+
+- [ ] The capture sweep has been read and every one of the fourteen items carries a design trued against a real screen or a named gap. Today: no such document exists, and `screenshots/anytype/README.md` records that the first pass reached no view switcher, no filter or sort panel with a condition open, no property editor, no context menu and no hover state — every mouse-driven surface was unreachable in that environment.
+- [ ] The filter/sort chip row exists and its trigger icons are state-dependent. Today: 0 chips and one fixed icon state — `filter-panel-renderer.ts` and `sort-panel-renderer.ts` render panels with no chip surface, and the toolbar's filter and sort icons do the same thing whether or not a filter is active.
+- [ ] Creating or duplicating a view lands in that view's settings within 100ms. Today: it lands nowhere — `database-view.ts` creates the view and returns to the board.
+- [ ] The board's horizontal scrollbar is sticky at the viewport bottom while the board is taller than the viewport. Today: it sits at the bottom of the board, which on a tall board is off-screen until you scroll to it.
+- [ ] A view can be duplicated and the duplicate is config-identical with a new id, and the view tab carries a context menu. Today: neither exists in `active-view-controls-renderer.ts`.
+- [ ] Scroll position is restored per view within ±2px, a cell editor near the right edge flips instead of clipping at 92px, a drag reorder under an active sort asks first, no context menu is ever empty, the empty state has its two flavours, and a per-view new-row preset is applied at creation. Today: every one of these six is absent, and each carries its own failing number in `checklist.md`.
+- [ ] `npm run gate` exits 0 with one permanent lane row per item, each observed red before green, and `npm run replay` holds with reversed 0.
+- [ ] The operator opens the board and a table on iOS and on desktop and reads the adopted surfaces as the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
 ## Nothing left to check
 
