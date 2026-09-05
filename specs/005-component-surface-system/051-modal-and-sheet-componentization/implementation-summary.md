@@ -12,23 +12,25 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-05T15:45:00Z"
-    last_updated_by: "design-agent"
-    recent_action: "Landed T001 and trued the packet rows against it"
-    next_safe_action: "Execute T002, the red measurement, against design-trueup.md"
+    last_updated_at: "2026-09-05T22:00:00Z"
+    last_updated_by: "landing-verifier"
+    recent_action: "Verified and landed T003-T007: the shell primitive on main"
+    next_safe_action: "Begin T008 — declare a title and a shell role on the 13 sheet subclasses"
     blockers:
-      - "No code has changed; every criterion except AC-004 is Unmet"
+      - "Every criterion except AC-004 is still Unmet; the shell exists and no producer consumes it"
       - "T010 stays blocked on spec.md §11's second open question, which no capture can answer"
+      - "AC-012's E4 row needs the operator's ruling before the parity rule can read Met"
     key_files:
-      - "specs/005-component-surface-system/051-modal-and-sheet-componentization/design-trueup.md"
-      - "screenshots/anytype/README.md"
-      - "src/views/mobile-bottom-sheet.ts"
+      - "src/views/surface-shell.ts"
+      - "src/views/surface-shell.test.ts"
       - "src/views/modals/db-modal.ts"
+      - "src/views/mobile-bottom-sheet.ts"
+      - "specs/005-component-surface-system/051-modal-and-sheet-componentization/design-trueup.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-impl"
       parent_session_id: null
-    completion_pct: 5
+    completion_pct: 35
     open_questions:
       - "Do the three FuzzySuggestModal subclasses join the shell or stay Obsidian-native behind a shim?"
     answered_questions:
@@ -49,7 +51,7 @@ _memory:
 |-------|-------|
 | **Spec Folder** | 051-modal-and-sheet-componentization |
 | **Status** | Draft |
-| **Completed** | Not complete — opened 2026-09-05, T001 landed the same day |
+| **Completed** | Not complete — opened 2026-09-05; T001-T007 landed the same day, T008 onward unstarted |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -58,7 +60,29 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**No product code has changed.** One task has landed, T001, and it is the packet's evidence task:
+**The shell primitive exists and nothing consumes it yet.** Seven tasks have landed: T001 and T002
+are the evidence pair, T003 the parity baseline, and T004-T007 the shell itself.
+
+`src/views/surface-shell.ts` is the one definition. It resolves the presentation, resolves the title
+behind a **counted** scrape fallback, composes `attachSheetChromeToModal`, `placeSheet` and
+`keepSheetPlaced` from the two engine modules in one order, tears down idempotently, carries the
+measured geometry and the motion band as named constants, and owns a pure replace-in-place sub-page
+stack with a three-slot header. It reimplements none of the engine: the chrome, the drag-to-dismiss,
+the placement and the keyboard-aware reposition loop stay where they were and this module calls them.
+`DbModal.applyPresentation` no longer resolves touch, the sheet parent, or the engine — it builds one
+shell and re-applies it, which is why four raw `attachSheetChromeToModal` call sites now read as two
+decision-making groups: the shell, and three outlier `FuzzySuggestModal` callers T010 has not reached.
+`surface-shell.test.ts` carries 21 tests and 51 assertions.
+
+**What is deliberately not wired.** No surface declares a title, so the fallback counter is exercised
+on every phone-sheet resolution rather than driven down. No producer calls `pushSubPage`, because the
+sub-page host is `view-config-panel-renderer.ts` and that file belongs to a later leg. No transition
+reads `SHELL_ENTER_MS` or `SHELL_EXIT_MS`, so every surface's motion is unchanged. The result is a
+primitive with one consumer for its presentation switch and none for anything else, which is why
+**every criterion except AC-004 is still Unmet** — the shell is built, and the family has not moved
+onto it.
+
+T001, the packet's evidence task, produced:
 `design-trueup.md`, the surface inventory the packet drafted as `modal-surface-inventory.md` and
 which changed its filename and nothing else.
 
@@ -121,7 +145,14 @@ division is wrong by 3× and the row heights read as 150.
 | `validate.sh <this folder> --strict` | first `RESULT:` PASSED |
 | Every cited capture resolves under `screenshots/anytype/` | 35 of 35 rows, and all 31 pair rows |
 | Census row set diffed against `goal.md` §3 | 20 + 3 + 12 = 35, no surface absent |
-| Gate, replay, captures | **Not run — no code has changed.** They are leg boundaries and there have been no legs |
+| `npm run gate` | **exit 0**, `PASS — 26 green, 0 red for a declared reason` — run at the landing, after the rebase onto `d00cf59c`, with an isolated log |
+| `npx tsc --noEmit` · `npm run build` | 0 and 0; the build leaves no tracked diff |
+| `npx vitest run` | 0 — **1329 passing across 125 files** |
+| `node tools/screenshots/verify.mjs` | 0 — 558 entries current |
+| Red-first proofs, re-observed rather than quoted | Deleting `surface-shell.ts` fails the suite on the missing import; mutating `SHELL_ROW_HEIGHT_PX` to 32 and dropping the `!hasSheetParent` guard turns exactly 2 of 21 tests red, then green again on restore |
+| Project Manager parity (parent D5) | **0 of 558** capture `pixelHash` values differ from the base commit's, the 32 board and gantt entries included. An intermediate rebase showed one mover; it was proven to be the capturing environment rather than this block, and the base's own recapture has absorbed it |
+| Cascade audit, as the independent read of the CSS block | `sheetLines` 23126 → 23172, `rules` 3034 → 3040, `duplicatedSelectors` **261 unchanged**, `conflicts` **126 unchanged** |
+| Engine parity, re-derived in the same pass | **Not deterministic**, which is the finding rather than the number: 66 differences on one invocation and 50 on each of the three that followed, on an unchanged tree, with the checkbox fixture caught mid-transition changing identity each run. No improvement is claimed from it |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -129,9 +160,21 @@ division is wrong by 3× and the row heights read as 150.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-- **All of the code remains unwritten.** `surface-shell.ts` does not exist; four sites still decide
-  chrome; twenty of twenty surfaces still have their titles scraped; no confirm primitive is
-  exported, which is why `053` and `055` both name one that is not there.
+- **The shell is built and unconsumed.** Twenty of twenty surfaces still have their titles scraped,
+  no producer pushes a sub-page, no transition reads the motion constants, and no confirm primitive
+  is exported — which is why `053` and `055` both still name one that is not there. Three outlier
+  `FuzzySuggestModal` callers still reach the engine directly.
+- **The shell's DOM half has no unit coverage.** `buildShellHeader`, its back control and the header
+  refresh are the only markup this leg ships, and they are proven by two Storybook stories and by
+  nothing that runs in the gate. The suite says a live document would be needed;
+  `overlay-stack.test.ts` shows the hand-built stand-in this repository already uses for exactly
+  that, so the gap is a choice rather than a constraint. Six of the 21 tests are source-text
+  assertions, which pin the module's shape and assert nothing about its behaviour.
+- **The three-slot header centres the title unconditionally.** That is the phone reference
+  (`anytype-mobile-sheet-view-edit-dark.png`); the desktop reference
+  (`anytype-menu-set-view-layout-dark.png`) puts `‹ Layout` on the leading edge instead. Nothing is
+  wrong today, because the header is built only on the sheet path — but the CSS is not scoped to the
+  phone, so the first desktop producer inherits a centring the reference does not show.
 - **Ten of the thirty-five rows have no reference at all**, including row 1, the confirm — the
   subject of AC-005. No destructive confirm appears in the 118 iOS states or the 600 menu files, and
   the desktop crawler refuses destructive actions by name. Their designs stay inferred from source.

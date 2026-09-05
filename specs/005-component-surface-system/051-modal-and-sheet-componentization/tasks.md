@@ -149,7 +149,7 @@ with the owner named, never self-closed.
       of existing behaviour. **Done 2026-09-05** — `src/views/surface-shell.ts` composes
       `attachSheetChromeToModal`, `placeSheet` and `keepSheetPlaced` from the two engine modules in
       one order, registers with `overlayStack` through the same call `attachSheetChromeToModal`
-      already makes, and tears down idempotently. `surface-shell.test.ts`: 25 assertions green,
+      already makes, and tears down idempotently. `surface-shell.test.ts`: **21 tests carrying 51 assertions** green (re-counted at the landing verification — T004 first wrote "25 assertions", which matches neither figure),
       covering presentation resolution, the counted title fallback, the sub-page stack's pure
       replace-in-place semantics, the named geometry constants, and a source-shape check that the
       file imports only from the engine modules and never from a consumer (`db-modal.ts` or any
@@ -171,7 +171,16 @@ with the owner named, never self-closed.
       declaring a title yet, every phone-sheet resolution still counts one fallback use, which is the
       correct reading of "0 declared, 20 scraped" restated as a live counter instead of a one-time
       figure. The verbatim `applySheetChrome(this.modalEl, false)` safety line in `onClose` is
-      untouched — asserted directly in `surface-shell.test.ts`. `sheet-grammar` (12 surfaces, 31
+      untouched — asserted directly in `surface-shell.test.ts`. **One behaviour did change and the
+      delegation wording hid it, found at the landing verification**: the touch read moved from
+      `contentEl` to `modalEl`. `isTouchDevice` combines the platform flags and the coarse-pointer
+      query with the *container's own width* against a 760px floor, and a modal's outer box is wider
+      than its content box — so a desktop modal sized between those two widths resolved to a sheet
+      before and resolves to a dialog now. The band is narrow and the new reading is arguably the
+      truer one, since the chrome, the placement and the header all apply to `modalEl` and nothing
+      applies to `contentEl`; it is recorded rather than reverted because reverting it would mean
+      giving the shell a second element parameter to serve a forty-pixel band. Nothing in the tree
+      measures it either way, which is why no check caught it. `sheet-grammar` (12 surfaces, 31
       pairs) and `replay` (28 results) both still green after the delegation; the 32 Project Manager
       board/gantt captures are unchanged (T003).
 - [x] **T006 — Add the sub-page stack to the shell: replace in place, back affordance in the
