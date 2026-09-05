@@ -328,6 +328,44 @@ each phase's one-leg-one-file rule coordinate them.
 
 ---
 
+
+
+---
+
+## RECONCILIATION, 2026-09-05 (later the same day): the iOS simulator captures landed
+
+`964a0b2a` landed **118 files — 59 states in light and dark — of Anytype's official open-source iOS
+client, built from source and run on a simulator**, under `screenshots/anytype/mobile/`, against the
+same 326-record demo space the desktop captures used. They are real iOS chrome: sheets sliding from
+the bottom, iOS pickers, the SpringBoard status bar — not the desktop app at a narrow width. They
+are indexed with a per-file written description in `screenshots/anytype/README.md`.
+
+**This closes the evidence gap this packet's phone rows were written against**, and it supersedes
+one caveat that appears throughout the 050 true-up: `design-trueup.md` was written before these
+existed, so wherever it says a phone surface has no capture, or takes its phone reading from the
+twenty **App Store and Google Play marketing images** in `mobile-official/`, that gap is now closed
+by a real screen. The marketing images stay what they were — good evidence of intent, weak evidence
+of pixels — and no number is taken from them.
+
+**What this document claims, and what it does not.** The rows below name the capture each phone
+design should now be read against. **The pixels are unread here** — this landing pass could not open
+image files, exactly as the original drafting pass could not. Naming the file is not reading it.
+T001 opens each one and trues the design; that obligation is unchanged and is now answerable.
+
+| This packet's phone concern | Now readable in |
+|---|---|
+| The shell's phone presentation — what a sheet's chrome, header and close look like on a real phone | Every one of the 59 states; `anytype-mobile-sheet-object-more` and `anytype-mobile-sheet-space-settings` are the plainest |
+| REQ-003's **sub-page replaces in place** pattern, on a phone rather than in a desktop popover | `anytype-mobile-sheet-view-edit` → `anytype-mobile-sheet-view-layout-picker` → `anytype-mobile-sheet-view-gallery-cardsize` is a three-level chain, and the index reaches each by tapping a row of the one before |
+| Whether a phone child **stacks** or **replaces** — the `048`-versus-sub-page boundary in §11's third open question | `anytype-mobile-sheet-object-more` → `anytype-mobile-sheet-object-more-submenu`, the same question on someone else's product |
+| The confirm primitive's phone presentation | Not captured. No destructive confirm appears in the 59 states; this stays **design inferred from source code, not seen** |
+
+**One row of §11 is now answerable and one is not.** The sub-page-versus-stack question has a
+reference screen for the first time. The `fullscreen` presentation question does not — iOS has no
+equivalent, and the index records that the iOS client ships **no Calendar and no Graph layout at
+all**, so its surface set is narrower than the desktop's rather than a translation of it.
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Implementation Plan**: See `plan.md`

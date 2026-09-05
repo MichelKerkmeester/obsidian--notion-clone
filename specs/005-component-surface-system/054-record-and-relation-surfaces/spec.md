@@ -297,6 +297,51 @@ must come out as a shared primitive — one component, many callers.
 
 ---
 
+
+
+---
+
+<!-- ANCHOR:mobile-reconciliation -->
+## 5D. RECONCILIATION, 2026-09-05 (later): the iOS simulator captures landed
+
+`964a0b2a` landed **118 files — 59 states in light and dark — of Anytype's official open-source iOS
+client**, built from source and run on a simulator, under `screenshots/anytype/mobile/`, against the
+same 326-record demo space the desktop captures used. Real iOS chrome, not the desktop app narrowed.
+Each carries a written description in `screenshots/anytype/README.md`.
+
+**This is the packet whose §5B gains the most**, because seven of its rows were designed against a
+capture index and two stood on `047`'s source read alone. The pixels are unread here — this landing
+pass could not open images — so what follows names the file each row should now be trued against.
+T001 opens them.
+
+| §5B row | Was | Now readable in |
+|---|---|---|
+| **A1 object-page header block** | `anytype-object-page-empty-dark.png`, desktop, empty | `anytype-mobile-object-page` — "Record page: title, type, backlink count, empty body", on the form factor the record sheet actually ships on |
+| **A2 relation row layout** | `anytype-relation-editor-tag-dark.png` plus a marketing image | `anytype-mobile-sheet-object-properties` — "the record's relations panel, every catalogue column with its value". This is S1's exact analogue |
+| **A3 empty value affordance** | An *empty* Tag relation clicked open | `anytype-mobile-sheet-cell-multiselect-empty` — **"No options — create first option to start"**, and `anytype-mobile-sheet-cell-email-empty` and `anytype-mobile-sheet-grid-cell-objecttype-empty`. Three empty-value screens where the packet had one, and the multi-select one names the create action rather than the absence — which is a better model than the word "Empty" *and* better than a bare affordance |
+| **A4 hidden relations group** | `anytype-properties-official.jpg`, a marketing image | `anytype-mobile-sheet-object-properties-settings` — "the **type's** property editor — Header vs Properties panel, drag handles, `+`". Note what that says: Anytype's split is **Header versus Properties panel**, not visible-versus-hidden. That is a different model from REQ-003's and T001 should decide which one this packet wants before P5 is written |
+| **A5 add-relation search-first** | **Corrected at landing to code-derived** — the desktop filter panel's whole body is one `+ New filter` row | `anytype-mobile-sheet-relation-add` — "Add property: **all eleven formats** — Relation object, Text, Number, Select, Multi-select, Date, File & Media, Checkbox, URL, Email, Phone number" — then `anytype-mobile-sheet-relation-new` ("Name, Format, Create") and `anytype-mobile-sheet-relation-new-format`. **A5 moves from code-derived back to captured**, on the phone |
+| **A6 type change flow** | `anytype-newobject-type-picker-dark.png` | `anytype-mobile-sheet-relation-new-format` — "Select property format, current one ticked" |
+| **A7 formulas/rollups stay ours** | The README's mapping table | Unchanged and confirmed by omission: none of the 59 mobile states shows a formula, a rollup or an aggregation |
+
+**And the row this packet did not have at all.** §5A's **S9, the cell editors** — the ten surfaces
+this phase exists to extract — now have **one captured Anytype counterpart per format**:
+`anytype-mobile-sheet-cell-text-longtext` (inline editor with Clear), `-number`, `-select-priority`
+(search, options in their colours, tick on the current one), `-multiselect-team` (**ordered selection
+badges 1, 2** and coloured chips), `-multiselect-empty`, `-date` (month calendar, selected day,
+Today / Tomorrow / Open selected date), `-date-monthpicker` (the month/year wheel),
+`-object-assignee` (searchable object list with radio selection), `-backlinks` (read-only),
+`-url`, `-phone`, `-email-empty`. **Twelve editor screens against ADR-002's ten extractions.** This
+is the reference the extraction legs should be read against — not to copy, since ADR-002 forbids a
+behavioural edit inside a move, but to know what the target grammar looks like before the move.
+
+**One caveat that survives.** The iOS client ships **no Calendar and no Graph layout at all**, so
+its surface set is narrower than the desktop's rather than a translation of it. A phone screen is
+not the desktop screen's authority.
+<!-- /ANCHOR:mobile-reconciliation -->
+
+---
+
 <!-- ANCHOR:risks -->
 ## 6. RISKS & DEPENDENCIES
 

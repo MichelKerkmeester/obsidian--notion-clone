@@ -208,7 +208,7 @@
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-05T12:16:32.322Z",
+    "last_save_at": "2026-09-05T12:32:19.572Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,10 +219,10 @@
       "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:bfd980bca1dbdab02fba96d66751f5080fc50b305b21e718d19ce787ccc72677",
+    "source_fingerprint": "sha256:23cfd2a8de3791258c3b73274721f95feec772a09fd5a174ff7b4f534b92e423",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1ada9a55dd76f88a639183bd40c7ec81c4118b70f62d26e02783bd124c2ae3b1",
+      "spec.md": "e4fa19214f815693f00d6346611138127d77445c7c1fea82da987bdfacb35165",
       "plan.md": "f1160499d711022550908d997f40e670aa80427c6e95cb620efab4abb24a9bd8",
       "tasks.md": "ba623f1a54b0860ccf65e809b4186aa9ff23f16db60fc9496e79c8781afed47a",
       "decision-record.md": "b0b4cdffaabfcc3a3cfcfda3a04ee3dc7a336a0c7bafd5160d523e3421deff3e"

@@ -146,7 +146,7 @@ the five draft trees, which were read in full.**
 
 | Worktree | Tip | State |
 |---|---|---|
-| `.worktrees/074-anytype-ios-sim` | `964a0b2a`, clean | The simulator route for mobile screens — the operator's decision that Anytype's mobile clients get captured in a simulator rather than scraped again from the stores. The twenty mobile images in `screenshots/anytype/` are **App Store / Google Play marketing creative**, and `design-trueup.md` REQ-012 refuses to take a number from them |
+| `.worktrees/074-anytype-ios-sim` | `964a0b2a` — **now on `origin/main`** | **Landed during this pass.** The open-source Anytype iOS client built from source and run on a simulator: **59 states in light and dark, 118 files** under `screenshots/anytype/mobile/`, against the same 326-record demo space the desktop captures used. It closes `050` item 13's capture gap — `design-trueup.md` REQ-013 recorded that no filter or sort sheet appears in any of the 151 desktop files, and four now do — and gives `051`-`055` the phone reference every one of them was designed without. Each of the five gained a dated reconciliation block; **the pixels are unread in all of them** |
 | `.worktrees/079-anytype-menus` | `396e1532`, **220 files dirty** | Every Anytype dropdown and mobile sheet screenshotted, per the operator's decision. This is the capture set `052`'s `anytype-menu-grammar.md` §4 lists as still missing and `054`'s §5B rows still need. **Uncommitted and unread** |
 | `.worktrees/085-record-open-dock` | `9e0abab4`, clean | "Fix record open for all callers" — generalising row 48's fix from the one board card the report named to every caller of the record-open path. Running on GLM |
 | `.worktrees/080-phase-modal-componentization` | `4a5b339b` | **Superseded.** Its `051` draft was scaffold only; the packet was written in-runtime |
@@ -158,6 +158,36 @@ the five draft trees, which were read in full.**
 
 The five draft worktrees are the operator's to remove through `sk-git` once they confirm the landed
 packets supersede them. Removing a worktree is not removing its branch.
+
+### The evidence moved again while this pass was committing
+
+`964a0b2a` landed on `origin/main` between this pass's last packet commit and its rebase. It is the
+iOS simulator capture set, and it supersedes `design-trueup.md` wherever that document reports a
+phone surface as uncaptured — which is often, because its only phone evidence was twenty App Store
+and Google Play marketing images. **This is the second time in one day that a landing had to
+reconcile against evidence that arrived mid-flight**, and it is the same lesson both times: the
+capture read is a gate, not a step.
+
+Rather than land five packets asserting a gap that had just closed, each gained a dated
+reconciliation block naming the captures its phone rows should now be trued against. **No block
+claims a reading** — this pass could not open image files any more than the drafting pass could.
+Four specific changes a later reader should not have to rediscover:
+
+- **`053` T1/T2**: `design-trueup.md` C4 said no view-tab context menu was ever captured, so its
+  design stayed source-derived. On iOS it is captured twice —
+  `anytype-mobile-sheet-set-viewswitcher-edit` (delete handles, reorder grips, a pencil per view)
+  and `anytype-mobile-sheet-view-edit-more` (the view's own action menu). The desktop finding is
+  unchanged; the phone half is no longer a guess.
+- **`053` T16/T17 and `050` item 13**: four filter and sort sheets now exist where the desktop
+  sweep had none.
+- **`054` A5**: corrected to *code-derived* earlier in this same pass, and now back to captured on
+  the phone — `anytype-mobile-sheet-relation-add` shows all eleven formats.
+- **`054` S9**: twelve captured cell editors, one per format, against ADR-002's ten extractions.
+
+**Read `screenshots/anytype/README.md`'s mobile section before any of the five T001s.** It carries a
+written description per file and records what the set cannot answer: the iOS client ships **no
+Calendar and no Graph layout at all**, so its surface set is narrower than the desktop's rather than
+a translation of it.
 
 ### Still owed from the operator
 
@@ -183,8 +213,10 @@ reopens the row with the device fact given, never argued with. **No agent ticks 
 4. **Run `051`-`055`'s T001 before any implementation in them.** Each phase's T001 is its capture
    read or its surface inventory, and each is a gate rather than a step — which is precisely the
    lesson this pass paid for.
-5. Read `.worktrees/079-anytype-menus` before `052`'s or `054`'s T001: it holds the dropdown and
-   mobile-sheet captures both of them are missing.
+5. Read `screenshots/anytype/README.md`'s mobile section before **any** of the five T001s — the iOS
+   simulator set landed on main during this pass and every one of the five was designed without it.
+   Then read `.worktrees/079-anytype-menus`, which is still uncommitted and holds the desktop
+   dropdown captures the mobile set does not cover.
 6. Work `050` T002 onward against the **restated** thresholds (ADR-004), never the originals.
 <!-- /ANCHOR:session-notes -->
 

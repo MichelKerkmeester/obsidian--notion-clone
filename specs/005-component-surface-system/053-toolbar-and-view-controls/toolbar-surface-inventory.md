@@ -164,3 +164,37 @@ the strongest in-repo evidence this program accepts.
 highlight at **1.14:1** against its own panel (WCAG 1.4.11 asks 3:1 of a non-text element that is
 the only thing identifying state), and colour-only active-state signalling. Our hover and selection
 tokens stay ours.
+
+---
+
+## 7. RECONCILIATION, 2026-09-05 (later): the iOS simulator captures landed
+
+`964a0b2a` landed **118 files — 59 states in light and dark — of Anytype's official open-source iOS
+client**, built from source and run on a simulator, under `screenshots/anytype/mobile/`, against the
+same 326-record demo space the desktop captures used. Real iOS chrome, not the desktop app narrowed.
+Each file carries a written description in `screenshots/anytype/README.md`.
+
+**This lands after `050`'s `design-trueup.md`, so it supersedes that document wherever it reports a
+phone surface as uncaptured** — which it does often, because the only phone evidence it had was the
+twenty App Store and Google Play marketing images in `mobile-official/`. Those stay what they were:
+good evidence of intent, weak evidence of pixels, no number taken from them.
+
+**The pixels are unread here.** This landing pass could not open image files, exactly as the drafting
+pass could not. Naming a file is not reading it. T001 opens each one; that obligation is unchanged
+and is now answerable.
+
+**Six inventory rows gain a phone reference, and one true-up finding is narrowed.**
+
+| Row | What the mobile set adds |
+|---|---|
+| **T1 / T2 view tabs and their context menu** | **The most consequential.** `design-trueup.md` C4 recorded that no right-click on a view tab was ever captured and that a tab context menu therefore stayed *design inferred from source code, not seen*. On iOS it is captured, twice: `anytype-mobile-sheet-set-viewswitcher-edit` is the view list in an edit mode with **delete handles, reorder grips and a pencil per view**, and `anytype-mobile-sheet-view-edit-more` is indexed as "the view's own action menu". So a per-view action surface **does** exist in the product — on the phone, as a sheet, reached by an explicit Edit affordance rather than by a long-press. **C4's desktop finding is unchanged** (duplicate and remove live in the desktop settings panel); what changes is that "may not design one from a screen nobody saw" no longer applies to the phone half |
+| **T11 / T12 the triggers** | `anytype-mobile-sheet-view-settings-gallery` is indexed as "Edit view opened straight from the toolbar" — a sliders icon, one control, no filter/sort icon pair at all. The phone toolbar is a **different control set**, not a narrowed one, which is a second reason the dual-mode rejection holds |
+| **T16 / T17 the filter and sort panels** | `design-trueup.md` REQ-013 recorded that **no filter or sort sheet appears in any of the 151 desktop files**. Now four do: `anytype-mobile-sheet-view-filters-empty` (empty state and the `+`), `anytype-mobile-sheet-filter-relation-picker`, `anytype-mobile-sheet-filter-condition-text` (relation, operator, Value, Apply), and `anytype-mobile-sheet-filter-condition-operators` (All / Is / Is not / Contains / Doesn't contain / Is empty / Is not empty). Plus `anytype-mobile-sheet-view-sorts` and `anytype-mobile-sheet-sort-direction` (Ascending / Descending **plus empty-value placement**). **This is the reference `050` item 13 never had** |
+| **T19 the view-settings panel** | `anytype-mobile-sheet-view-edit` — "Edit view: Name, Layout, Properties, Filters, Sorts" — is the phone form of the 360px desktop panel, and `anytype-mobile-sheet-view-layout-picker` / `-gallery` / `-kanban` are its layout sub-pages. The desktop panel's **layout-adaptive** behaviour is confirmed on a second form factor: the Kanban layout sheet carries **Group by and Color columns**, the Gallery one **Card size, Image preview, Fit image** |
+| **T24 the embed's phone rung** | The three-rung ladder's phone rung was read from marketing creative. `anytype-mobile-set-grid`/`-gallery`/`-list`/`-kanban` are the real thing. **Note the caveat that survives**: these are *full-page* mobile sets, not an inline embed — the inline collapse rung still has no phone capture |
+| **T8 group-by** | `anytype-mobile-sheet-kanban-groupby` ("every groupable relation, current one ticked") and `anytype-mobile-sheet-kanban-column-menu` ("Hide column, Column color, Apply") |
+
+**One thing the mobile set says that no desktop capture could**: the iOS client ships **no Calendar
+and no Graph layout at all**. Its surface set is narrower than the desktop's rather than a
+translation of it, which is worth knowing before treating any phone screen as the desktop screen's
+authority.

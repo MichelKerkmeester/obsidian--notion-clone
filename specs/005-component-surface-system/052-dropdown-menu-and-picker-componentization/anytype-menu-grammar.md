@@ -110,3 +110,38 @@ does signal state it signals with hue alone. Our hover and selection tokens stay
 README records that no hover state was ever captured. Submenu nesting deeper than depth 2. And the
 "No available actions" state (G3). All three stay **code-derived**, and absence of a capture is not
 evidence of absence.
+
+---
+
+## RECONCILIATION, 2026-09-05 (later the same day): the iOS simulator captures landed
+
+`964a0b2a` landed **118 files — 59 states in light and dark — of Anytype's official open-source iOS
+client, built from source and run on a simulator**, under `screenshots/anytype/mobile/`, against the
+same 326-record demo space the desktop captures used. They are real iOS chrome: sheets sliding from
+the bottom, iOS pickers, the SpringBoard status bar — not the desktop app at a narrow width. They
+are indexed with a per-file written description in `screenshots/anytype/README.md`.
+
+**This closes the evidence gap this packet's phone rows were written against**, and it supersedes
+one caveat that appears throughout the 050 true-up: `design-trueup.md` was written before these
+existed, so wherever it says a phone surface has no capture, or takes its phone reading from the
+twenty **App Store and Google Play marketing images** in `mobile-official/`, that gap is now closed
+by a real screen. The marketing images stay what they were — good evidence of intent, weak evidence
+of pixels — and no number is taken from them.
+
+**What this document claims, and what it does not.** The rows below name the capture each phone
+design should now be read against. **The pixels are unread here** — this landing pass could not open
+image files, exactly as the original drafting pass could not. Naming the file is not reading it.
+T001 opens each one and trues the design; that obligation is unchanged and is now answerable.
+
+**Four of this document's gaps close on the phone side.**
+
+| Row | Was | The capture that now answers it |
+|---|---|---|
+| **G8 submenu** | "Real submenus through the factory are REQ-001; hover-open is desktop-only ergonomics the captures cannot show" | `anytype-mobile-sheet-object-more` → `anytype-mobile-sheet-object-more-submenu`. On iOS the submenu is **a second sheet**, reached by tapping a `More` row — which is the phone expression this document proposed on reasoning alone. **The hover question stays desktop-only and stays code-derived**; a phone has no hover |
+| **G3 never-empty fallback** | "The 'No available actions' state appears on no capture; the row wording is code-derived" | Still true for *that* state. But `anytype-mobile-sheet-cell-multiselect-empty` shows a picker's empty state reading **"No options — create first option to start"** — a fallback row that names the create action rather than the absence, which is a better model than "No available actions" and is now a real screen rather than a proposal |
+| **G10/G11 search-first pickers and the create-option row** | Rested on `anytype-filter-tag-value-picker-dark.png`'s placeholder alone | `anytype-mobile-sheet-filter-relation-picker` (every filterable relation with typed icons), `anytype-mobile-sheet-search-typefilter` (a searchable type picker), `anytype-mobile-sheet-relation-add` (**all eleven formats**) and `anytype-mobile-sheet-cell-select-priority` (search, options in their colours, tick on the current one). The search-first pattern is now captured four ways |
+| **G12 section headers in pickers** | Narrowed to "a per-format leading icon per row; typed group headers are code-derived" | `anytype-mobile-sheet-filter-relation-picker` is indexed as "every filterable relation, **typed icons**" — which corroborates the icon vocabulary and still does not evidence group headers. **G12's narrowing stands** |
+
+**And one product-string bug the index records, worth knowing before copying a placeholder.** The
+mobile filter-relation picker's placeholder reads **"Choose a property to sort"** inside the *filter*
+flow. Anytype ships it; we should not copy it.

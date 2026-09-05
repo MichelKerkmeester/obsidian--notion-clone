@@ -53,7 +53,8 @@
       "src/main.ts",
       "src/views/image-file-suggest-modal.ts",
       "src/views/markdown-file-suggest-modal.ts",
-      "tools/live/sheet-grammar.mjs"
+      "tools/live/sheet-grammar.mjs",
+      "screenshots/anytype/README.md"
     ],
     "entities": [
       {
@@ -135,6 +136,12 @@
         "source": "derived"
       },
       {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/anytype/README.md",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -193,17 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "a",
-        "kind": "key_phrase",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The family works surface by surface and drifts as a family",
     "created_at": "2026-09-05T14:00:00Z",
-    "last_save_at": "2026-09-05T12:07:35.593Z",
+    "last_save_at": "2026-09-05T12:32:19.277Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,10 +215,10 @@
       "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:00387176ff681159fa7d06c91a27ab4eb695aa60a7c619384ed8752245e12189",
+    "source_fingerprint": "sha256:e6943eaa02e8a5a7f592c919b084aa8517cb8549dc235f005d72f910de056ec9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a98e5d92eb2da5b7f5f5ebfac874c2624f82a5b67c687ad3c3eb0176d1e932e7",
+      "spec.md": "afafa0e7b7be665a9f818f3923ef6614a1705d2c7f1ffb04f673cf5298b2143c",
       "plan.md": "6229f7a41dcf5e929f6b32d769d0140a8d79a4a936b80b50e89643733aec301a",
       "tasks.md": "4441e334388efef828bfafc7c119094ddd3319beb71814cbcf4f0ff0a221327f",
       "decision-record.md": "bfc8d64d2a6bb703749566ff9266159f9d27eaf4d08dada3c8c430ffe8dcccd7"

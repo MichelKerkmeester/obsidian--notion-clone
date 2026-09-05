@@ -2037,6 +2037,18 @@ for `055`; all five sit at **Level 3** on judgment, and none qualifies for phase
 each was tested against `roadmap.md` §6A and none sits inside a decision the operator has already
 taken — and all three are operator questions in `handover.md`.
 
+**And the evidence moved again while this was committing.** `964a0b2a` landed the iOS simulator
+capture set on `origin/main` — the open-source Anytype iOS client built from source, **59 states in
+light and dark, 118 files**, against the same 326-record demo space the desktop captures used. It
+supersedes `design-trueup.md` wherever that document reports a phone surface as uncaptured, which is
+often, because its only phone evidence was twenty App Store and Google Play marketing images. Rather
+than land five packets asserting a gap that had just closed, each gained a dated reconciliation
+block naming the captures its phone rows should now be trued against. **No block claims a reading**;
+this pass could not open image files. The sharpest single change: `design-trueup.md` REQ-013
+recorded that **no filter or sort sheet appears in any of the 151 desktop files**, and there are now
+four. `roadmap.md` §7.9 records it as the fifth kind of drift, and it is the same lesson as the
+other four — the capture read is a gate, not a step.
+
 **What this entry does not claim.** No product code was written. No T001 has run in any of the five,
 so no design in any of them has been checked against the captures its own rows name — which is why
 every one reads `0/N` in the DONE table above and why their `roadmap.md` §5.A state cell reads
