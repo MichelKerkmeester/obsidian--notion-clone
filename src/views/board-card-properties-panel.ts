@@ -23,6 +23,10 @@ import {
 export interface BoardCardPropertiesActions {
   onChange(label?: string): void;
   readOnly?: boolean;
+  /** Set by the settings sheet on phone so the fixed Cover/Title rows carry the shared row
+   *  grammar instead of the desktop two-column row. Omitted callers (desktop, stories, existing
+   *  tests) keep the desktop row untouched. */
+  asSheet?: boolean;
 }
 
 export function renderBoardCardProperties(
@@ -36,8 +40,8 @@ export function renderBoardCardProperties(
     text: t("viewConfig.cardProperties"),
     attr: { "data-scope": "view" },
   });
-  renderFixedSlot(panel, t("viewConfig.cover"), coverLabel(config));
-  renderFixedSlot(panel, t("viewConfig.titleField"), titleLabel(config));
+  renderFixedSlot(panel, t("viewConfig.cover"), coverLabel(config), actions.asSheet);
+  renderFixedSlot(panel, t("viewConfig.titleField"), titleLabel(config), actions.asSheet);
 
   const entries = listBoardCardFields(config, getColumnsInOrder(config), context);
   let draggedKey: string | null = null;
@@ -148,8 +152,8 @@ function persist(
   actions.onChange(t("undo.boardCardFieldsConfig"));
 }
 
-function renderFixedSlot(panel: HTMLElement, label: string, value: string): void {
-  const row = panel.createDiv({ cls: "db-view-config-row" });
+function renderFixedSlot(panel: HTMLElement, label: string, value: string, asSheet?: boolean): void {
+  const row = panel.createDiv({ cls: asSheet ? "db-panel-row" : "db-view-config-row" });
   row.createDiv({ cls: "db-view-config-label", text: label });
   row.createDiv({ cls: "db-view-config-field" }).createDiv({
     cls: "db-view-config-readonly-value",

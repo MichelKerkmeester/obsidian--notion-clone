@@ -943,6 +943,16 @@ The top of the panel for a table view: database-scoped rows above the section di
 
 Sources: `src/views/view-config-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
+### Settings — mobile bottom sheet
+
+The phone form of the settings panel: a grab handle, a header with a permanent db-sheet-close button (the drag band alone was reported as an unusable sole dismissal on a form this long), and a body that scrolls under the fixed header. Every row is `.db-panel-row` and every hint `.db-panel-hint` — the same wrapper classes the sort, filter and column-width sheets already draw — and the computed-sync choice is the shared `.db-new-placement` segmented group rather than the desktop's card-radio pair. The two switches are the shared checkbox, not the desktop's `.db-toggle-switch`. Conditional formatting and status presets sit further down and are not in frame.
+
+| dark | light |
+|---|---|
+| ![panel-view-config-sheet dark](notion-clone/panels/panel-view-config-sheet-mobile-dark.png) | ![panel-view-config-sheet light](notion-clone/panels/panel-view-config-sheet-mobile-light.png) |
+
+Sources: `src/views/view-config-panel-renderer.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/checkbox.ts`, `src/views/dropdown-field.ts`
+
 ## project-manager
 
 ### Project Manager gantt (reference)

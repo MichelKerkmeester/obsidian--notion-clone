@@ -283,6 +283,10 @@ export class ViewConfigPanelRenderer {
   // sequence on desktop was clean, because there the panel never leaves the container. That is the
   // shape of a defect no desktop pass can see.
   private panelEl: HTMLElement | null = null;
+  // Phone sheets use the shared row, hint and exclusive-choice grammar. The
+  // anchored desktop panel keeps the two-column setting grid. Captured at
+  // render so a rebuild cannot mix the two presentations.
+  private asSheet = false;
 
   /** The live panel, wherever it currently is. Callers must not go looking for it by selector. */
   getPanel(): HTMLElement | null {
@@ -301,6 +305,16 @@ export class ViewConfigPanelRenderer {
     if (!panel) return null;
     const body = panel.querySelector<HTMLElement>(".db-view-config-body");
     return body && body.scrollHeight > body.clientHeight ? body : panel;
+  }
+
+  private rowClass(extra?: string): string {
+    const base = this.asSheet ? "db-panel-row" : "db-view-config-row";
+    return extra ? `${base} ${extra}` : base;
+  }
+
+  private hintClass(extra?: string): string {
+    const base = this.asSheet ? "db-panel-hint" : "db-view-config-help";
+    return extra ? `${base} ${extra}` : base;
   }
 
   /** Put the scroll position back on whichever element took over the scrolling. */
@@ -368,10 +382,10 @@ export class ViewConfigPanelRenderer {
     // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
     // is what keeps the sheet from replaying its rise and moving out from under the thumb.
     if (wasOpen) carrySheetEntrance(panel);
-    const asSheet = isMobileBottomSheet(panel.ownerDocument);
+    this.asSheet = isMobileBottomSheet(panel.ownerDocument);
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
-    if (asSheet) this.renderSheetClose(header, panel);
+    if (this.asSheet) this.renderSheetClose(header, panel);
 
     // Everything below the header scrolls; the header and the grab bar above it do not.
     //
@@ -523,7 +537,7 @@ export class ViewConfigPanelRenderer {
       actions.onChange(t("undo.viewSourceRulesConfig"));
     });
     if (enabled) {
-      panel.createDiv({ cls: "db-view-config-help", text: t("viewConfig.viewSourceRulesHint") });
+      panel.createDiv({ cls: this.hintClass(), text: t("viewConfig.viewSourceRulesHint") });
       this.renderSourceRules(panel, config as unknown as DatabaseConfig, actions, actions.isDatabaseReadOnly);
     }
   }
@@ -570,7 +584,7 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean,
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: t("template.label") });
     const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
     const controls = field.createDiv({ cls: "db-template-setting-controls" });
@@ -625,7 +639,7 @@ export class ViewConfigPanelRenderer {
         actions.onDatabaseChange?.(t("undo.newRecordTemplateConfig"));
       };
     }
-    field.createDiv({ cls: "db-view-config-help", text: t("template.help") });
+    field.createDiv({ cls: this.hintClass(), text: t("template.help") });
   }
 
   private renderDatabaseCoverSetting(
@@ -634,7 +648,7 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean,
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: t("databaseCover.label") });
     const field = row.createDiv({ cls: "db-view-config-field db-database-cover-setting" });
     field.createDiv({
@@ -736,7 +750,7 @@ export class ViewConfigPanelRenderer {
       }
       const rules = config.conditionalFormats || [];
       if (rules.length === 0) {
-        section.createDiv({ cls: "db-view-config-help", text: t("conditionalFormat.empty") });
+        section.createDiv({ cls: this.hintClass(), text: t("conditionalFormat.empty") });
         return;
       }
 
@@ -1142,10 +1156,10 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row db-source-rules-setting" });
+    const row = panel.createDiv({ cls: this.rowClass("db-source-rules-setting") });
     row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.sourceRules") });
     const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
-    field.createDiv({ cls: "db-view-config-help db-source-rules-help", text: t("viewConfig.sourceRules.help") });
+    field.createDiv({ cls: this.hintClass("db-source-rules-help"), text: t("viewConfig.sourceRules.help") });
     const editor = field.createDiv({ cls: "db-source-rules-editor" });
     const tree = createEditableSourceRuleRoot(getSourceRuleTree(database.sourceRuleTree, database.sourceRules, database.sourceLogic));
     if (tree && (!database.sourceRuleTree || database.sourceRuleTree !== tree) && !readOnly) {
@@ -1632,7 +1646,7 @@ export class ViewConfigPanelRenderer {
         desc: t("viewConfig.computedSync.automaticDesc"),
       },
     ];
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.computedSyncMode") });
     const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
     if (readOnly) {
@@ -1640,19 +1654,13 @@ export class ViewConfigPanelRenderer {
         cls: "db-view-config-readonly-value",
         text: options.find((option) => option.value === mode)?.title || t("viewConfig.computedSync.displayOnly"),
       });
-      field.createDiv({ cls: "db-view-config-help", text: t("viewConfig.computedSync.help") });
+      field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedSync.help") });
       return;
     }
 
-    const cards = field.createDiv({ cls: "db-computed-sync-cards" });
-    const syncActiveCard = () => {
-      const activeMode = normalizeComputedSyncMode(database.computedSyncMode);
-      for (const card of cards.querySelectorAll<HTMLElement>(".db-computed-sync-card")) {
-        const input = card.querySelector<HTMLInputElement>("input");
-        const active = input?.value === activeMode;
-        if (input) input.checked = active;
-        card.toggleClass("is-active", active);
-      }
+    const reflectors: Array<() => void> = [];
+    const reflect = () => {
+      for (const sync of reflectors) sync();
     };
     const changeMode = async (rawNextMode: ComputedSyncMode): Promise<boolean> => {
       const nextMode = normalizeComputedSyncMode(rawNextMode);
@@ -1674,26 +1682,70 @@ export class ViewConfigPanelRenderer {
       } else if (nextMode === "display-only" && previousMode !== "display-only") {
         new Notice(t("viewConfig.computedSync.displayOnlyHint"));
       }
-      syncActiveCard();
+      reflect();
       return true;
     };
-    for (const option of options) {
-      const card = cards.createEl("label", {
-        cls: `db-computed-sync-card${option.value === mode ? " is-active" : ""}`,
+    if (this.asSheet) {
+      // Exclusive choice as the shared segmented group, not a native radio
+      // set: the OS radio is a second choice grammar on a sheet that already
+      // uses one segmented control everywhere else.
+      const group = field.createDiv({
+        cls: "db-new-placement",
+        attr: { role: "group", "aria-label": t("viewConfig.computedSyncMode") },
       });
-      const radio = card.createEl("input", {
-        attr: { type: "radio", name: "computed-sync-mode", value: option.value },
+      const buttons: Array<{ button: HTMLButtonElement; value: ComputedSyncMode }> = [];
+      reflectors.push(() => {
+        const activeMode = normalizeComputedSyncMode(database.computedSyncMode);
+        for (const { button, value } of buttons) {
+          const selected = value === activeMode;
+          button.setAttribute("aria-checked", String(selected));
+          button.toggleClass("is-active", selected);
+        }
       });
-      radio.checked = option.value === mode;
-      radio.onchange = async () => {
-        if (!radio.checked) return;
-        if (!await changeMode(option.value)) syncActiveCard();
-      };
-      const body = card.createDiv({ cls: "db-computed-sync-card-body" });
-      body.createDiv({ cls: "db-computed-sync-card-title", text: option.title });
-      body.createDiv({ cls: "db-computed-sync-card-desc", text: option.desc });
+      for (const option of options) {
+        const button = group.createEl("button", {
+          cls: `db-new-placement-option${option.value === mode ? " is-active" : ""}`,
+          text: option.title,
+          attr: {
+            type: "button",
+            role: "radio",
+            "aria-checked": option.value === mode ? "true" : "false",
+          },
+        });
+        buttons.push({ button, value: option.value });
+        button.onclick = async () => {
+          if (!await changeMode(option.value)) reflect();
+        };
+      }
+    } else {
+      const cards = field.createDiv({ cls: "db-computed-sync-cards" });
+      reflectors.push(() => {
+        const activeMode = normalizeComputedSyncMode(database.computedSyncMode);
+        for (const card of cards.querySelectorAll<HTMLElement>(".db-computed-sync-card")) {
+          const input = card.querySelector<HTMLInputElement>("input");
+          const active = input?.value === activeMode;
+          if (input) input.checked = active;
+          card.toggleClass("is-active", active);
+        }
+      });
+      for (const option of options) {
+        const card = cards.createEl("label", {
+          cls: `db-computed-sync-card${option.value === mode ? " is-active" : ""}`,
+        });
+        const radio = card.createEl("input", {
+          attr: { type: "radio", name: "computed-sync-mode", value: option.value },
+        });
+        radio.checked = option.value === mode;
+        radio.onchange = async () => {
+          if (!radio.checked) return;
+          if (!await changeMode(option.value)) reflect();
+        };
+        const body = card.createDiv({ cls: "db-computed-sync-card-body" });
+        body.createDiv({ cls: "db-computed-sync-card-title", text: option.title });
+        body.createDiv({ cls: "db-computed-sync-card-desc", text: option.desc });
+      }
     }
-    field.createDiv({ cls: "db-view-config-help", text: t("viewConfig.computedSync.help") });
+    field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedSync.help") });
     if ((database.schema?.columns || []).some((col) => col.type === "computed")) {
       const cleanup = field.createEl("button", {
         cls: "db-computed-cleanup-button",
@@ -1701,7 +1753,7 @@ export class ViewConfigPanelRenderer {
         attr: { type: "button" },
       });
       cleanup.onclick = () => actions.onComputedFrontmatterCleanup?.();
-      field.createDiv({ cls: "db-view-config-help", text: t("viewConfig.computedCleanup.help") });
+      field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedCleanup.help") });
     }
   }
 
@@ -1719,13 +1771,13 @@ export class ViewConfigPanelRenderer {
   ): void {
     const presets = options.presets || [];
     if (presets.length === 0 && !options.onManagePresets) return;
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.statusPreset") });
     const field = row.createDiv({ cls: "db-view-config-field db-view-config-inline-controls" });
     if (readOnly) {
       const current = presets.find((preset) => preset.id === options.defaultPresetId) || presets[0];
       field.createDiv({ cls: "db-view-config-readonly-value", text: current?.name || t("common.notSet") });
-      if (options.helpText) field.createDiv({ cls: "db-view-config-help", text: options.helpText });
+      if (options.helpText) field.createDiv({ cls: this.hintClass(), text: options.helpText });
       return;
     }
     if (presets.length > 0) {
@@ -1749,7 +1801,7 @@ export class ViewConfigPanelRenderer {
       },
     });
     button.onclick = () => options.onManagePresets?.();
-    if (options.helpText) field.createDiv({ cls: "db-view-config-help", text: options.helpText });
+    if (options.helpText) field.createDiv({ cls: this.hintClass(), text: options.helpText });
   }
 
   private renderNewRecordFolderSetting(
@@ -1758,7 +1810,7 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.newRecordFolder") });
     const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
 
@@ -1781,7 +1833,7 @@ export class ViewConfigPanelRenderer {
       database.newRecordFolder = input.value.trim() || undefined;
       actions.onDatabaseChange?.(t("undo.newRecordFolderConfig"));
     };
-    field.createDiv({ cls: "db-view-config-help", text: t("viewConfig.newRecordFolderLocked") });
+    field.createDiv({ cls: this.hintClass(), text: t("viewConfig.newRecordFolderLocked") });
   }
 
   private renderCoverSettings(
@@ -1979,11 +2031,12 @@ export class ViewConfigPanelRenderer {
     renderBoardCardProperties(panel, config, {
       onChange: (label) => actions.onChange(label),
       readOnly: actions.isViewReadOnly,
+      asSheet: this.asSheet,
     }, boardCardPropertiesContext(config));
   }
 
   private renderReadonlyField(panel: HTMLElement, label: string, value: string): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     row.createDiv({ cls: "db-view-config-field" }).createDiv({
       cls: "db-view-config-readonly-value",
@@ -2034,7 +2087,7 @@ export class ViewConfigPanelRenderer {
     searchable = false,
     disabled = false
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const field = row.createDiv({ cls: "db-view-config-field" });
     const hasPropertyIcons = options.some((option) => isPropertyDropdownIcon(option.icon));
@@ -2074,12 +2127,12 @@ export class ViewConfigPanelRenderer {
     helpText?: string,
     onInput?: (value: string) => void
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
     if (disabled) {
       field.createDiv({ cls: "db-view-config-readonly-value", text: value || t("common.notSet") });
-      if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
+      if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
       return;
     }
     const input = field.createEl("input", {
@@ -2090,7 +2143,7 @@ export class ViewConfigPanelRenderer {
     input.value = value;
     input.oninput = () => onInput?.(input.value.trim());
     input.onchange = () => onChange(input.value.trim());
-    if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
+    if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
   }
 
   private renderTextarea(
@@ -2102,7 +2155,7 @@ export class ViewConfigPanelRenderer {
     disabled = false,
     onInput?: (value: string) => void
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     if (disabled) {
       row.createDiv({ cls: "db-view-config-readonly-value db-view-config-readonly-multiline", text: value || t("common.notSet") });
@@ -2125,18 +2178,18 @@ export class ViewConfigPanelRenderer {
     disabled = false,
     helpText?: string
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const field = row.createDiv({ cls: "db-view-config-field" });
     if (disabled) {
       field.createDiv({ cls: "db-view-config-readonly-value", text: value ? t("common.true") : t("common.false") });
-      if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
+      if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
       return;
     }
     const input = createCheckbox(field, { role: "field" });
     input.checked = value;
     input.onchange = () => onChange(input.checked);
-    if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
+    if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
   }
 
   private renderSwitch(
@@ -2147,21 +2200,25 @@ export class ViewConfigPanelRenderer {
     disabled = false,
     helpText?: string
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const field = row.createDiv({ cls: "db-view-config-field" });
     if (disabled) {
       field.createDiv({ cls: "db-view-config-readonly-value", text: value ? t("common.true") : t("common.false") });
-      if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
+      if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
       return;
     }
+    // Phone: the shared checkbox is the toggle grammar. Desktop keeps the
+    // switch, whose class is not that grammar and must not appear on a sheet.
     // The visible text is a div beside the control, not a label element, so it names nothing to a
     // screen reader. Carried explicitly rather than restructured: the class sets no display, so
     // turning that div into a label would flip it from block to inline and move the row.
-    const input = field.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
+    const input = this.asSheet
+      ? createCheckbox(field, { role: "field", attr: { role: "switch", "aria-label": label } })
+      : field.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
     input.checked = value;
     input.onchange = () => onChange(input.checked);
-    if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
+    if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
   }
 
   private renderRange(
@@ -2174,7 +2231,7 @@ export class ViewConfigPanelRenderer {
     onChange: (value: number) => void,
     onInput?: (value: number) => void
   ): void {
-    const row = panel.createDiv({ cls: "db-view-config-row" });
+    const row = panel.createDiv({ cls: this.rowClass() });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const controls = row.createDiv({ cls: "db-view-config-range" });
     // Named from the row's own label. The visible text is a div beside them, so without this a

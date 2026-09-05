@@ -1,34 +1,34 @@
 {
-  "measuredAt": "2026-09-05T00:42:02.537Z",
+  "measuredAt": "2026-09-05T01:50:35.749Z",
   "inputs": {
-    "styles.css": "0785e72944dd",
+    "styles.css": "ad1dea7437ad",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "checkboxes": 205,
-    "fixtures": 72,
-    "owned": 205,
+    "checkboxes": 207,
+    "fixtures": 73,
+    "owned": 207,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 205,
-    "tokenDependent": 194,
+    "appearanceSelfOwned": 207,
+    "tokenDependent": 196,
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
     "stateFailures": 0,
     "roleGroups": 4,
     "roleShapeSplits": 0,
-    "mountGroups": 7,
+    "mountGroups": 8,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 205,
+    "boxesUnderHostProfiles": 207,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0
   },
   "shapes": {
     "16x16 r=4px": 150,
-    "18x18 r=4px": 20,
+    "18x18 r=4px": 22,
     "28x28 r=4px": 24,
     "34x18 r=9999px": 11
   },
@@ -2485,6 +2485,52 @@
       },
       "appearanceOwnedBy": null,
       "tokensFrom": null
+    },
+    {
+      "scenario": "panel-view-config-sheet",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-view-config-panel db-mobile-bottom-sheet is-visible",
+        "db-view-config-body",
+        "db-panel-row",
+        "db-view-config-field"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "db-panel-row"
+    },
+    {
+      "scenario": "panel-view-config-sheet",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-view-config-panel db-mobile-bottom-sheet is-visible",
+        "db-view-config-body",
+        "db-panel-row",
+        "db-view-config-field"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "db-panel-row"
     },
     {
       "scenario": "panel-column-manager",

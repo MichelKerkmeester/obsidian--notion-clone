@@ -228,6 +228,7 @@ describe("fixture declarations", () => {
       "panel-sort-calendar-empty -> constructed-sort-panel-calendar",
       "panel-sort-rules -> constructed-sort-panel",
       "panel-view-config -> constructed-view-config",
+      "panel-view-config-sheet -> constructed-view-config",
       "table-column-header -> constructed-column-header",
       "table-mobile -> constructed-table",
       "table-view -> constructed-table",

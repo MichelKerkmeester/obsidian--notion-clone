@@ -11861,28 +11861,20 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-muted);
 }
 
-/* One control per row, its label above it, and the row spanning the sheet.
-
-   The anchored panel is a 116px label column beside a value column, which is a working shape on a
-   520px panel and an unusable one at 390px: the label wraps, the control is squeezed into whatever
-   is left, and the helper text under it wraps to three lines. Stacking is the same grammar the
-   record sheet's fields and the sort and filter rows already use on a phone. */
-.db-view-config-panel.db-mobile-bottom-sheet .db-view-config-row {
-  grid-template-columns: minmax(0, 1fr);
-  align-items: stretch;
-  gap: var(--db-space-2);
-  padding: var(--db-space-4) var(--db-space-5);
-  min-height: var(--db-sheet-row-min-height, 44px);
-}
-
-/* A hairline between rows, and none above the first — the section header already draws that line.
-   At the faintest step because it separates content rather than identifying a control, so it owes
-   no contrast minimum and reads as rhythm instead of as a table rule. */
-.db-view-config-panel.db-mobile-bottom-sheet .db-view-config-row + .db-view-config-row {
-  border-top: 1px solid var(--db-border-subtle);
-}
-
+/* The row wrapper itself is the shared `.db-panel-row` grammar now, styled by the unscoped rules
+   every other phone sheet's rows already read (§21 PANEL ROWS). Nothing here draws
+   `.db-view-config-row` on a sheet any more; the phone-only stacking and divider this class pair
+   once carried are retired rather than duplicated onto the new class. What stays scoped below is
+   the settings-specific label/field/control sizing that `.db-panel-row` does not know about. */
+/* `flex-shrink: 0` is the record sheet's own fix for the same shape (`.db-record-detail-field-label`,
+   §10 above): a stacked field's `width: 100%` control pulls the row's flex-basis math toward
+   itself, and a label with no floor of its own gives up the difference. Measured on the retired
+   stacking rule's removal: "Source folder", "Source rules" and "New note folder" wrapped to two
+   or three lines apiece while single-word labels on the same row shape stayed put by accident of
+   length alone — a defect only a stacked field exposes, non-stack rows have no `width: 100%`
+   child pulling against them. */
 .db-view-config-panel.db-mobile-bottom-sheet .db-view-config-label {
+  flex-shrink: 0;
   font-size: var(--db-font-base);
   color: var(--text-muted);
 }
@@ -11950,14 +11942,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-normal);
 }
 
-/* Helper text as the sheet's hint row: under the control it explains, at the shared hint size
-   rather than at 11px, which is below every other body size on this surface. */
-.db-view-config-panel.db-mobile-bottom-sheet .db-view-config-help {
-  margin-top: 0;
-  color: var(--text-muted);
-  font-size: var(--db-font-sm);
-  line-height: var(--db-font-sm-line-height);
-}
+/* The hint wrapper is `.db-panel-hint` now, styled by the same unscoped rule every other phone
+   sheet's hint text already reads (§21 PANEL ROWS). `.db-view-config-help` is no longer drawn on a
+   sheet; the sheet-only size bump this class once carried is retired rather than duplicated onto
+   the new class. */
 
 /* Section headers sit on the sheet's inset and carry the divider that opens each group. */
 .db-view-config-panel.db-mobile-bottom-sheet .db-view-config-section-title {
@@ -22432,9 +22420,19 @@ body.is-tablet .note-database-container .db-record-open-btn {
   padding: var(--db-space-2) var(--db-space-3);
 }
 
+/* `min-width: 0` lets an option shrink below its own longest word instead of forcing the group
+   wider than its row — the settings sheet's computed-sync choice is the first consumer of this
+   control whose option text is a full sentence rather than one or two short words, and the
+   group's row-filling `min-width: 0` (above, this file) does not reach a word inside a flex item
+   two levels down. `overflow-wrap: anywhere` is paired with it rather than `break-word`, because
+   only `anywhere` counts toward the item's own automatic minimum size — `break-word` wraps the
+   rendered line but leaves the pre-wrap floor as the whole word, which is what let "(recommended)"
+   and "Automatically" bleed past their own button into the next one instead of breaking. */
 .note-database-container .db-new-placement-option {
   flex: 1 1 0;
+  min-width: 0;
   min-height: 32px;
+  overflow-wrap: anywhere;
 }
 
 .note-database-container .db-new-placement-option.is-active {

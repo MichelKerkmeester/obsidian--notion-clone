@@ -54,12 +54,7 @@ const REGISTERED_SURFACES = [
   // The column-width leg landed on main with its own header/close and conforms outright: all
   // seven elements measured green against the real `openColumnWidthAdjuster` module entry.
   { name: "column-width", spec: { renderer: "column-width-adjuster", bag: "file-view", captureData: true } },
-  // The settings sheet's header and close conform (measured green), but its body does not: it draws
-  // rows through its own long-standing `.db-view-config-row` class rather than the shared
-  // `.db-panel-row`, and its computed-field sync control is a native `input[type="radio"]` group
-  // rather than a segmented control or the shared checkbox — both pre-date this contract and
-  // neither is a one-line fix here. Measured red on `rows` and `segmented`; not registered until a
-  // later change carries the settings body onto the shared row grammar.
+  { name: "settings", spec: { renderer: "view-config", bag: "file-view", captureData: true } },
 ];
 
 // The element removed by the negative control: the grab handle, whose loss is exactly the

@@ -393,6 +393,97 @@ export const PANEL_SCENARIOS = [
       </div>`,
   },
   {
+    id: "panel-view-config-sheet",
+    title: "Settings — mobile bottom sheet",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    // Photographed on the phone only, for the reason every other bottom-sheet fixture in this file
+    // carries the same restriction: the desktop pass would stretch a phone sheet across a window
+    // the plugin never presents it in. Rows here are the shared `.db-panel-row`/`.db-panel-hint`
+    // grammar and the `.db-new-placement` segmented group; label/field/text/dropdown markup is
+    // unchanged from the anchored panel above, since only the row wrapper, the hint wrapper, the
+    // exclusive-choice control and the switch differ between the two presentations.
+    devices: ["mobile"],
+    fixtureOf: "constructed-view-config",
+    sources: [
+      "src/views/view-config-panel-renderer.ts",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/popover-position.ts",
+      "src/views/checkbox.ts",
+      "src/views/dropdown-field.ts",
+    ],
+    note: "The phone form of the settings panel: a grab handle, a header with a permanent db-sheet-close button (the drag band alone was reported as an unusable sole dismissal on a form this long), and a body that scrolls under the fixed header. Every row is `.db-panel-row` and every hint `.db-panel-hint` — the same wrapper classes the sort, filter and column-width sheets already draw — and the computed-sync choice is the shared `.db-new-placement` segmented group rather than the desktop's card-radio pair. The two switches are the shared checkbox, not the desktop's `.db-toggle-switch`. Conditional formatting and status presets sit further down and are not in frame.",
+    html: () => {
+      const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-view-config-panel db-mobile-bottom-sheet is-visible" id="db-view-config-panel">
+          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="db-panel-header">
+            <div class="db-panel-title">Settings</div>
+            <div class="db-panel-header-actions">
+              <button type="button" class="db-icon-only-button db-view-config-close db-sheet-close" aria-label="Close">${closeGlyph}</button>
+            </div>
+          </div>
+          <div class="db-view-config-body">
+          <div class="db-view-config-section-title" data-scope="database">Current database</div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">Name</div>
+            <div class="db-view-config-field db-view-config-field-stack">
+              <input class="db-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
+            </div>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">Source folder</div>
+            <div class="db-view-config-field db-view-config-field-stack">
+              <input class="db-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
+              <div class="db-panel-hint">Vault path to scan for notes. Leave empty to scan the vault root.</div>
+            </div>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">Formula result storage</div>
+            <div class="db-view-config-field db-view-config-field-stack">
+              <div class="db-new-placement" role="group" aria-label="Formula result storage">
+                <button type="button" class="db-new-placement-option is-active" role="radio" aria-checked="true">Show only in this database (recommended)</button>
+                <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Automatically save to note properties</button>
+                <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Save to note properties manually</button>
+              </div>
+              <div class="db-panel-hint">Formula values are always calculated for display. This setting only controls whether results are also saved into note properties.</div>
+            </div>
+          </div>
+
+          <div class="db-view-config-section-title" data-scope="view">Current view</div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">View type</div>
+            <div class="db-view-config-field">
+              ${dropdownField("db-view-config-dropdown", "Table", I.table)}
+            </div>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">Enable this view's source rules</div>
+            <div class="db-view-config-field">
+              <input class="db-checkbox db-checkbox-field" type="checkbox" role="switch" aria-label="Enable this view's source rules">
+            </div>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">Show icon</div>
+            <div class="db-view-config-field">
+              <input class="db-checkbox db-checkbox-field" type="checkbox" role="switch" aria-label="Show icon" checked>
+            </div>
+          </div>
+          <div class="db-panel-row">
+            <div class="db-view-config-label">Row density</div>
+            <div class="db-view-config-field">
+              ${dropdownField("db-view-config-dropdown", "Default")}
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>`;
+    },
+  },
+  {
     id: "panel-column-manager",
     title: "Column manager",
     group: "panels",

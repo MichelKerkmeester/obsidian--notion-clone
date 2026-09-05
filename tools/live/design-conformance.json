@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T00:42:53.182Z",
+  "measuredAt": "2026-09-05T01:51:39.682Z",
   "inputs": {
-    "styles.css": "0785e72944dd",
+    "styles.css": "ad1dea7437ad",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "9523ac9d8791"
   },
@@ -18,7 +18,7 @@
     {
       "name": "registry equality — rendered surfaces with no declared role",
       "enforced": false,
-      "value": 82,
+      "value": 83,
       "target": 0,
       "note": "the registry holds five producers; the rest are unmigrated",
       "gated": false,
@@ -90,9 +90,9 @@
     {
       "name": "reachability — source modules no entry point and no test reaches",
       "enforced": false,
-      "value": 2,
+      "value": 1,
       "target": 0,
-      "note": "src/views/modals/create-record-icon-field-modal.ts, src/views/sheet-grammar.ts",
+      "note": "src/views/modals/create-record-icon-field-modal.ts",
       "gated": false,
       "conforms": false
     }
@@ -288,12 +288,12 @@
     "src/views/toolbar-renderer.ts:2448  .db-menu-item",
     "src/views/toolbar-renderer.ts:2457  .db-menu-item",
     "src/views/toolbar-renderer.ts:2468  .db-menu-item",
-    "src/views/view-config-panel-renderer.ts:336  .db-panel-header-actions",
-    "src/views/view-config-panel-renderer.ts:337  .db-sheet-close",
-    "src/views/view-config-panel-renderer.ts:366  .db-view-config-panel",
-    "src/views/view-config-panel-renderer.ts:372  .db-panel-header",
-    "src/views/view-config-panel-renderer.ts:373  .db-panel-title",
-    "src/views/view-config-panel-renderer.ts:401  .db-panel-button",
-    "src/views/view-config-panel-renderer.ts:1491  .db-dropdown-field"
+    "src/views/view-config-panel-renderer.ts:350  .db-panel-header-actions",
+    "src/views/view-config-panel-renderer.ts:351  .db-sheet-close",
+    "src/views/view-config-panel-renderer.ts:380  .db-view-config-panel",
+    "src/views/view-config-panel-renderer.ts:386  .db-panel-header",
+    "src/views/view-config-panel-renderer.ts:387  .db-panel-title",
+    "src/views/view-config-panel-renderer.ts:415  .db-panel-button",
+    "src/views/view-config-panel-renderer.ts:1505  .db-dropdown-field"
   ]
 }

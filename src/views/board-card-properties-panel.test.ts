@@ -191,6 +191,32 @@ describe("renderBoardCardProperties", () => {
     checkbox?.onchange?.();
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it("keeps the Cover and Title rows on the desktop grid by default", () => {
+    const panel = new MockElement("div", "db-view-config-panel");
+    renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
+      onChange: vi.fn(),
+      readOnly: false,
+    });
+
+    expect(panel.querySelectorAll(".db-view-config-row")).toHaveLength(2);
+    expect(panel.querySelectorAll(".db-panel-row").length).toBe(0);
+  });
+
+  it("moves the Cover and Title rows onto the shared sheet grammar when asSheet is set", () => {
+    const panel = new MockElement("div", "db-view-config-panel");
+    renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
+      onChange: vi.fn(),
+      readOnly: false,
+      asSheet: true,
+    });
+
+    expect(panel.querySelectorAll(".db-panel-row")).toHaveLength(2);
+    expect(panel.querySelectorAll(".db-view-config-row").length).toBe(0);
+    const text = panel.allText();
+    expect(text).toContain(t("viewConfig.cover"));
+    expect(text).toContain(t("viewConfig.titleField"));
+  });
 });
 
 describe("card property labels", () => {
