@@ -1351,6 +1351,12 @@ These are the five operator questions `handover.md` §2 opened and, until now, l
 stays Proposed, and neither of `051`'s two open questions is open. `handover.md` is updated
 accordingly.
 
+### One more, taken 2026-09-05 (~16:45)
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **Cursor usage is gone; GLM 5.3 flash max through OpenRouter or DevPass via `cli-pi` carries implementation and planning legs, with Sonnet agents verifying.** Operator: *"Cursor usage is gone, use GLM 5.3 flash max through OpenRouter or DevPass cli-pi alongside Sonnet agents for verification"* | Implementation legs run on GLM via `cli-pi` with bounded briefs; Sonnet in-runtime verifiers land them; Cursor is not dispatched until the operator says otherwise | Parent `goal.md` D14's delegation ladder and `goal-prompt.md`'s DELEGATION line (both updated); every future `cli-pi` / `cli-opencode` GLM dispatch |
+
 ---
 
 ## 7. WHERE A PHASE'S OWN DOCUMENTS DISAGREE
