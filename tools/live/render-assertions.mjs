@@ -60,6 +60,46 @@ import { countConstructed, scenarioLabel } from "./render-scenario-utils.mjs";
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
 
+// ───────────────────────────────────────────────────────────────────
+// 2a. ROW RHYTHM
+// ───────────────────────────────────────────────────────────────────
+//
+// A table row's height belongs to the table, not to whichever cell happens to
+// hold the most. The generated fixtures cannot show the difference — they give
+// every row the same field count and the same value lengths — so this measures
+// the mock-data catalogue instead, whose records vary the way real ones do.
+//
+// WHAT WENT WRONG WHEN NOTHING MEASURED THIS. `.db-multi-select-values` is a
+// wrapping flex container, and a table cell's `height` is a minimum, so six
+// option chips in a narrow column stacked six deep and took the row with them:
+// one Home Inventory row measured 141px beside neighbours at 45px, and the
+// column that did it sits far off the right edge of a phone. The operator saw a
+// row three times too tall with nothing in it, because the cause was never on
+// screen.
+//
+// THE BOUND IS UNIFORMITY, NOT A PIXEL COUNT. Rows are held to a single height
+// across the table rather than to a number: a magic threshold passes a table
+// that is uniformly wrong and needs re-picking whenever the density tokens move,
+// while "every data row is the same height" is the rhythm itself, and it fails
+// the moment one cell starts setting the height for everybody. The ceiling is
+// kept alongside it so a table that is uniformly too tall cannot pass either.
+//
+// THE VIEWPORT IS NOT THE VARIABLE, AND MOVING THIS TO A PHONE LANE WOULD PROVE
+// NOTHING NEW. The table carries its own inline width, so the chips wrap against
+// their column and not against the window: the same 141px row was measured at
+// 390x844 and at this check's 1100x900, identically. It is measured here because
+// this is where renderer-built DOM is asserted, not because the width is right.
+const RHYTHM_SCENARIOS = [
+  { name: "table-catalogue-home-inventory/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory" },
+  { name: "table-catalogue-project-tracker/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "project-tracker" },
+];
+
+// The comfortable density (40px) plus one border, plus the 8px a coarse-pointer
+// control is allowed to add to the row it sits in. A row at the shipped default
+// density measures 36px, so this leaves headroom for a density change and none
+// for a second line of anything.
+const ROW_HEIGHT_CEILING = 49;
+
 // SCENARIOS and RENDERER_SOURCES are shared with touch-targets.mjs and unstyled-links.mjs via
 // render-assertion-bundle.mjs, so "every scenario the harness knows" means the same list in all
 // three checks rather than three lists that could silently diverge.
@@ -163,6 +203,66 @@ const READ_CONTROL = process.env.RENDER_READ_CONTROL || "";
 
 const { work, missingSources } = await buildRenderAssertionBundle(`
 window.__renderAssertions = (scenario) => runRenderAssertions(document.body, scenario, ${JSON.stringify(READ_CONTROL)});
+window.__rowRhythm = (scenario) => {
+  let out = null;
+  runRenderAssertions(document.body, scenario, "", (container) => {
+    // Data rows only. The insert line between rows and the create-entry row at the bottom are
+    // chrome, sized by their own affordance rather than by a record, and holding them to the
+    // record rhythm would fail a table that is correct.
+    const rows = [...container.querySelectorAll("table.db-table tbody tr")].filter((tr) =>
+      !tr.classList.contains("db-row-insert-line")
+      && !tr.classList.contains("db-new-row")
+      && !tr.classList.contains("db-group-expand-row"));
+    // The tallest child of the tallest row, named. A bare number says a row is wrong; the class
+    // says which cell made it wrong, which is the difference between a failure and a diagnosis.
+    //
+    // The utility columns are excluded from the attribution, not from the measurement. Their
+    // contents stretch to whatever height the row already has, so they tie with the real cause on
+    // every tall row and win the comparison by document order — the first version of this named
+    // the select column's inner box on both catalogues, which is the checkbox reporting a symptom
+    // it was handed. The cause is always a cell that grew on its own.
+    const UTILITY = ["db-select-col", "db-record-icon-col", "db-add-column-cell"];
+    // A cell's own content height, measured by a range over its contents rather than by its box.
+    // The box is the row's height once the row has grown, so every cell reports the symptom; the
+    // range reports what that cell alone asked for. It also reaches a cell holding nothing but
+    // text, which has no element child to measure and is exactly what a wrapping text column is —
+    // an earlier version looked only at element children and blamed the chips for a row the notes
+    // column had grown.
+    const contentHeight = (td) => {
+      const range = td.ownerDocument.createRange();
+      range.selectNodeContents(td);
+      const box = range.getBoundingClientRect();
+      range.detach();
+      return box.height;
+    };
+    const describe = (td) => {
+      const child = [...td.children].sort((a, b) =>
+        b.getBoundingClientRect().height - a.getBoundingClientRect().height)[0];
+      return child ? "<" + child.className + ">" : "its own text";
+    };
+    let worst = { height: 0, cell: "", child: "", width: 0 };
+    for (const tr of rows) {
+      const height = tr.getBoundingClientRect().height;
+      if (height <= worst.height) continue;
+      let cell = "", child = "", width = 0, tallest = 0;
+      for (const td of tr.children) {
+        if (UTILITY.some((name) => td.classList.contains(name))) continue;
+        const asked = contentHeight(td);
+        if (asked <= tallest) continue;
+        tallest = asked; cell = td.className; child = describe(td); width = td.getBoundingClientRect().width;
+      }
+      worst = { height: Math.round(height), cell, child, width: Math.round(width) };
+    }
+    out = {
+      count: rows.length,
+      heights: rows.map((tr) => Math.round(tr.getBoundingClientRect().height)),
+      worst,
+      provenance: !!container.querySelector("table.db-table[data-render-assertion-source]")
+        || !!container.querySelector("table.db-table"),
+    };
+  });
+  return out;
+};
 `);
 
 if (missingSources.length > 0) {
@@ -196,6 +296,7 @@ function findChrome() {
 const failures = [];
 let browser;
 let outcomes = null;
+let rhythmOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
@@ -215,6 +316,48 @@ try {
     rulesScenarios,
   );
   await page.close();
+
+  // The rhythm pass gets its own page, with the theme and runtime token sheets attached beside
+  // the plugin's own.
+  //
+  // The structural assertions above read counts and classes, which survive a missing token; a
+  // height does not. Measured without `theme.css` and `runtime-vars.css` the same table reports
+  // rows at 261px that measure 36px once the tokens resolve — the font sizes fall back and every
+  // badge grows. A geometry check run against that document reports numbers for a product nobody
+  // ships, which is the failure the sizing census was written to stop repeating.
+  const rhythmPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const rhythmErrors = [];
+  rhythmPage.on("pageerror", (error) => rhythmErrors.push(error.message));
+  await rhythmPage.goto(`file://${join(work, "index.html")}`);
+  for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+    await rhythmPage.addStyleTag({ content: readFileSync(join(REPO, sheet), "utf8") });
+  }
+  // The surface this measures is the phone table the row heights were reported against, so the
+  // page declares itself one. The class is not cosmetic here: the host's phone rules decide how
+  // the table spends its width, and with them off the same table resolves its columns differently
+  // and measures a layout no device produces.
+  await rhythmPage.evaluate(() => document.body.classList.add("is-phone"));
+  // The premise, asserted rather than assumed: a run whose tokens did not attach measures the
+  // fallback document and must say so instead of publishing its heights.
+  const tokensResolved = await rhythmPage.evaluate(() => {
+    const probe = document.createElement("div");
+    probe.className = "note-database-container";
+    document.body.appendChild(probe);
+    const value = getComputedStyle(probe).getPropertyValue("--db-row-height-default").trim();
+    probe.remove();
+    return value;
+  });
+  if (tokensResolved !== "34px") {
+    failures.push(`row rhythm: the token sheets did not attach (--db-row-height-default is `
+      + `"${tokensResolved}", expected "34px"); heights measured here would describe a fallback document`);
+  } else {
+    rhythmOutcomes = await rhythmPage.evaluate(
+      (scenarios) => scenarios.map((scenario) => window.__rowRhythm(scenario)),
+      RHYTHM_SCENARIOS,
+    );
+  }
+  await rhythmPage.close();
+  for (const error of rhythmErrors) failures.push(`row rhythm page error: ${error}`);
   for (const error of pageErrors) {
     failures.push(`page error: ${error}`);
   }
@@ -274,6 +417,35 @@ if (!outcomes) {
   console.error(`\nrender-assertions: FAIL — ${failures.length} failure(s)`);
   for (const failure of failures) console.error(`  - ${failure}`);
   process.exit(1);
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4a. ROW RHYTHM
+// ───────────────────────────────────────────────────────────────────
+
+console.log("\nrender-assertions: row rhythm over the mock-data catalogue");
+for (let i = 0; i < RHYTHM_SCENARIOS.length; i += 1) {
+  const scenario = RHYTHM_SCENARIOS[i];
+  const measured = rhythmOutcomes ? rhythmOutcomes[i] : null;
+  if (!measured || measured.count === 0) {
+    failures.push(`${scenario.name}: row rhythm measured no rows`);
+    console.log(`  FAIL  ${scenario.name} — no rows measured`);
+    continue;
+  }
+  const heights = [...new Set(measured.heights)].sort((a, b) => a - b);
+  const tallest = heights[heights.length - 1];
+  const uniform = heights.length === 1;
+  const withinCeiling = tallest <= ROW_HEIGHT_CEILING;
+  const ok = uniform && withinCeiling;
+  console.log(`  ${ok ? "PASS" : "FAIL"}  ${scenario.name.padEnd(46)} `
+    + `${measured.count} rows, ${heights.length} distinct height(s) ${heights.join("/")}, ceiling ${ROW_HEIGHT_CEILING}px`);
+  if (!ok) {
+    console.log(`       tallest row ${measured.worst.height}px — set by ${measured.worst.child} `
+      + `inside ${measured.worst.cell} at ${measured.worst.width}px wide`);
+    failures.push(`${scenario.name}: a table row's height is not the table's — `
+      + `${heights.length} distinct height(s) ${heights.join("/")}, tallest ${measured.worst.height}px `
+      + `set by ${measured.worst.child} in ${measured.worst.cell} at ${measured.worst.width}px`);
+  }
 }
 
 // ───────────────────────────────────────────────────────────────────

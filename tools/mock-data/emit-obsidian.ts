@@ -125,7 +125,7 @@ function recordFolder(useCase: CatalogueUseCase): string {
 
 // The display variants that are not column types. Each is one property on the
 // ColumnDef the renderer branches on, and each is the reason its facet exists.
-function columnDisplay(column: CatalogueColumn): Record<string, YamlValue> {
+export function columnDisplay(column: CatalogueColumn): Record<string, YamlValue> {
   switch (column.facet) {
     case "notes":
       return { wrap: true };
@@ -287,7 +287,7 @@ function databaseNote(useCase: CatalogueUseCase): VaultFile {
 // 7. RECORD NOTES
 // ───────────────────────────────────────────────────────────────────
 
-function frontmatterValue(useCase: CatalogueUseCase, column: CatalogueColumn, value: unknown): YamlValue {
+export function frontmatterValue(useCase: CatalogueUseCase, column: CatalogueColumn, value: unknown): YamlValue {
   if (column.facet === "relation") {
     return (value as string[]).map((id) => `[[${id}]]`);
   }

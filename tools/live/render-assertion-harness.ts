@@ -70,6 +70,7 @@ import {
 import type { App } from "obsidian";
 import type { DataSource } from "../../src/data/data-source";
 import type { ColumnDef, RowData, StatusOptionDef, TimelineScale, ViewConfig } from "../../src/data/types";
+import { catalogueTableData } from "./catalogue-scenario";
 import {
   makeColumns as makeTableColumns,
   makeRows as makeTableRows,
@@ -447,6 +448,13 @@ export interface ScenarioSpec {
    * `.db-list-row` absent) rather than constructing a retired renderer.
    */
   migratedFromList?: boolean;
+  /**
+   * Opt-in, renderer "table" only: mounts a `tools/mock-data` use case's own columns and records
+   * instead of the generated bench fixture. The fixture gives every row the same field count and
+   * the same value lengths, so no fixture scenario can show a row that grew past its neighbours;
+   * the catalogue varies per record, which is the population a row-rhythm measurement needs.
+   */
+  catalogueUseCase?: string;
 }
 
 export interface AssertionResult {
@@ -3660,7 +3668,11 @@ export function runRenderAssertions(
     // which repeats one under-floor control thousands of times in the touch-target lane without
     // saying anything the first row did not. The structural-cost shape stays the lanes' own
     // no-captureData scenarios, which still mount 2000 rows here.
-    const columns = makeTableColumns(
+    // The catalogue path replaces both the columns and the rows, because its point is that the
+    // two disagree with the fixture together: real labels against real values, at the per-record
+    // variation the generated set flattens away.
+    const catalogueData = scenario.catalogueUseCase ? catalogueTableData(scenario.catalogueUseCase) : null;
+    const columns = catalogueData ? catalogueData.columns : makeTableColumns(
       scenario.tableColumnCount ?? TABLE_COLUMNS,
       scenario.captureData ? "mixed" : "text",
     );
@@ -3668,8 +3680,10 @@ export function runRenderAssertions(
     // at the capture row count the row the scenario exists to show falls below the fold, so the
     // footer variant takes the shorter set that fits both devices.
     const captureRowCount = scenario.tableFooter ? FOOTER_CAPTURE_ROWS : CAPTURE_ROWS;
-    const rows = makeTableRows(scenario.captureData ? captureRowCount : TABLE_ROWS, columns);
-    if (scenario.captureData) applyCaptureOptions(columns, rows);
+    const rows = catalogueData
+      ? catalogueData.rows
+      : makeTableRows(scenario.captureData ? captureRowCount : TABLE_ROWS, columns);
+    if (scenario.captureData && !catalogueData) applyCaptureOptions(columns, rows);
     const currencyCol = columnOfType(columns, "currency") ?? columnOfType(columns, "number");
     const dateCol = columnOfType(columns, "date");
     const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
@@ -3703,7 +3717,7 @@ export function runRenderAssertions(
       }
     }
     const config = {
-      ...makeTableConfig(columns),
+      ...(catalogueData ? catalogueData.config : makeTableConfig(columns)),
       // The bench's config shape puts columns at the top level, but the footer, the group
       // divider rows and the peek read the real ViewConfig schema. Supplying it is inert for
       // every renderer path that reads the bench shape instead.
@@ -3724,9 +3738,13 @@ export function runRenderAssertions(
         recordIconField: textCol?.key,
       } : {}),
     } as ViewConfig;
+    // The catalogue path always takes the production CellRenderer, never the text stub: a row
+    // height measured against `td.setText` is the height of a string, not of the cell the plugin
+    // builds, and the whole reason to mount real records is that their cells differ in shape.
+    const realCells = scenario.captureData || !!catalogueData;
     const bag = scenario.bag === "file-view"
-      ? fileViewTableBag(columns, scenario.captureData)
-      : embedTableBag(columns, scenario.captureData);
+      ? fileViewTableBag(columns, realCells)
+      : embedTableBag(columns, realCells);
     if (scenario.columnHeaderController) {
       const controller = new ColumnHeaderController({
         getConfig: () => config,

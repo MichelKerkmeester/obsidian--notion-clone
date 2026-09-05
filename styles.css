@@ -5702,6 +5702,32 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   white-space: normal;
 }
 
+/* A table row's height is the table's, not the tallest cell's.
+
+   A cell's `height` is a minimum, so any cell whose contents are taller than the rhythm takes the
+   whole row up with it. Every text cell already refuses to do that — the rule above them sets
+   `white-space: nowrap` with `overflow: hidden` — but the four value containers below are flex
+   boxes, and `flex-wrap: wrap` opts them straight back out of it: their items break onto new lines
+   against the column width, and each new line is another row height for every cell in the row.
+
+   Measured on the Home Inventory catalogue: six option chips in a 150px column stacked six deep and
+   made that row 261px against neighbours at 44px. The column was the fifteenth of twenty-eight, far
+   off the right edge of a phone, so the operator saw a row six times too tall whose visible cells
+   held one line each and nothing that could explain it. That is the shape of this defect — the
+   cause is never the cell you are looking at.
+
+   Wrapping stays correct where these same containers sit on a card, in the record panel or in the
+   peek, so this is scoped to the table cell rather than fixed on the containers themselves.
+
+   `:not(.db-cell-wrap)` leaves the opt-in alone. A column with wrapping switched on is asking for
+   more than one line, and how many it may take is the wrap control's question, not this rule's. */
+.note-database-container .db-table td:not(.db-cell-wrap) .db-multi-select-values,
+.note-database-container .db-table td:not(.db-cell-wrap) .db-relation-values,
+.note-database-container .db-table td:not(.db-cell-wrap) .db-file-link-list,
+.note-database-container .db-table td:not(.db-cell-wrap) .db-file-tags {
+  flex-wrap: nowrap;
+}
+
 /* number 字段：评分（实心主题色星级）/ 进度条显示样式 */
 .note-database-container .db-cell-rating {
   display: inline-flex;
