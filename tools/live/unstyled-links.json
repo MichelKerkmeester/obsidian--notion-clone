@@ -1,19 +1,19 @@
 {
-  "measuredAt": "2026-09-05T01:27:22.173Z",
+  "measuredAt": "2026-09-05T01:52:07.332Z",
   "inputs": {
     "styles.css": "0785e72944dd",
     "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/live/unstyled-links.mjs": "0cbd300159c2",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
-    "tools/live/render-assertion-bundle.mjs": "beaba9dd6fe5",
-    "tools/live/render-assertion-harness.ts": "e16b297d79b5"
+    "tools/live/render-assertion-bundle.mjs": "c2a315daad54",
+    "tools/live/render-assertion-harness.ts": "3f81bd33229e"
   },
   "fixture": {
     "links": 112,
-    "scenarios": 72
+    "scenarios": 69
   },
   "constructed": {
-    "links": 1480,
-    "scenarios": 73
+    "links": 1336,
+    "scenarios": 70
   }
 }

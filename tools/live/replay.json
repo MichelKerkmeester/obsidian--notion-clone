@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-05T01:25:52.075Z",
+  "measuredAt": "2026-09-05T01:50:39.911Z",
   "inputs": {
     "styles.css": "0785e72944dd",
     "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/screenshots/runtime-vars.css": "cd2145aaf626",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "a452daf81652"
+    "tools/live/replay.mjs": "b7b29df46982"
   },
   "claims": [
     {
@@ -38,7 +38,8 @@
       "was": 26,
       "recorded": 0,
       "actual": 0,
-      "held": true
+      "held": true,
+      "retired": true
     },
     {
       "phase": "005-content-row-rhythm",
@@ -46,7 +47,8 @@
       "was": 3,
       "recorded": 0,
       "actual": 0,
-      "held": true
+      "held": true,
+      "retired": true
     },
     {
       "phase": "002-properties-panel",
