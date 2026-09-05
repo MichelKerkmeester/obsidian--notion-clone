@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T07:24:04.885Z",
+  "measuredAt": "2026-09-05T08:36:48.697Z",
   "inputs": {
-    "styles.css": "2652bdf59059",
+    "styles.css": "e2e6314a036a",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -862,7 +862,7 @@
       "mountParent": "db-panel-row",
       "tokens": true,
       "role": null,
-      "rect": "132x19",
+      "rect": "11x19",
       "scenarios": [
         "panel-filter-conditions"
       ]

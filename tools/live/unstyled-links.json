@@ -1,10 +1,11 @@
 {
-  "measuredAt": "2026-09-05T07:51:12.593Z",
+  "measuredAt": "2026-09-05T08:40:07.821Z",
   "inputs": {
-    "styles.css": "2652bdf59059",
+    "styles.css": "e2e6314a036a",
     "tools/screenshots/theme.css": "f30f295f9cf0",
-    "tools/live/unstyled-links.mjs": "0cbd300159c2",
+    "tools/live/unstyled-links.mjs": "58df95837546",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
+    "tools/live/chrome-geometry-measure.mjs": "ec99632a30d6",
     "tools/live/render-assertion-bundle.mjs": "c2a315daad54",
     "tools/live/render-assertion-harness.ts": "46997630a3d9"
   },
@@ -15,5 +16,8 @@
   "constructed": {
     "links": 1336,
     "scenarios": 70
+  },
+  "chrome": {
+    "surfaces": 7
   }
 }

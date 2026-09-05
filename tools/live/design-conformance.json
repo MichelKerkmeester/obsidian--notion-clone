@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-05T07:23:54.571Z",
+  "measuredAt": "2026-09-05T08:36:45.952Z",
   "inputs": {
-    "styles.css": "2652bdf59059",
+    "styles.css": "e2e6314a036a",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
-    "src/views/popover-position.ts": "c3b87e1ab211"
+    "src/views/popover-position.ts": "eb4701280a66"
   },
   "checks": [
     {
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 136,
+      "value": 139,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
@@ -81,7 +81,7 @@
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 127,
+      "value": 125,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "gated": false,
@@ -98,16 +98,16 @@
     }
   ],
   "rawSites": [
-    "src/main.ts:2900  .db-panel-empty",
-    "src/main.ts:2902  .db-panel-row",
-    "src/main.ts:2906  .db-file-picker",
-    "src/main.ts:2923  .db-panel-row",
-    "src/main.ts:2927  .db-file-picker",
-    "src/main.ts:2938  .db-panel-row",
-    "src/main.ts:2942  .db-file-picker",
-    "src/main.ts:2951  .db-panel-row",
-    "src/main.ts:2960  .db-panel-row",
-    "src/main.ts:2968  .db-modal-actions",
+    "src/main.ts:2918  .db-panel-empty",
+    "src/main.ts:2920  .db-panel-row",
+    "src/main.ts:2924  .db-file-picker",
+    "src/main.ts:2941  .db-panel-row",
+    "src/main.ts:2945  .db-file-picker",
+    "src/main.ts:2956  .db-panel-row",
+    "src/main.ts:2960  .db-file-picker",
+    "src/main.ts:2969  .db-panel-row",
+    "src/main.ts:2978  .db-panel-row",
+    "src/main.ts:2986  .db-modal-actions",
     "src/settings.ts:265  .db-panel-empty",
     "src/settings.ts:596  .db-delete-modal-info",
     "src/settings.ts:600  .db-panel-empty",
@@ -165,9 +165,9 @@
     "src/views/column-width.ts:363  .db-panel-title",
     "src/views/column-width.ts:373  .db-panel-row",
     "src/views/column-width.ts:397  .db-panel-row",
-    "src/views/database-view.ts:3148  .db-group-order-popover",
-    "src/views/database-view.ts:3262  .db-panel-button",
-    "src/views/database-view.ts:7007  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:3169  .db-group-order-popover",
+    "src/views/database-view.ts:3283  .db-panel-button",
+    "src/views/database-view.ts:7028  .db-calendar-search-results-popover",
     "src/views/date-value-picker.ts:142  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:153  .db-date-picker-body",
     "src/views/date-value-picker.ts:214  .db-calendar-mini-popover",
@@ -176,9 +176,9 @@
     "src/views/dropdown-field.ts:215  .db-dropdown-options",
     "src/views/dropdown-field.ts:219  .db-dropdown-empty",
     "src/views/dropdown-field.ts:261  .db-dropdown-section-title",
-    "src/views/embedded-database-renderer.ts:1313  .db-calendar-search-results-popover",
-    "src/views/embedded-database-renderer.ts:2913  .db-group-order-popover",
-    "src/views/embedded-database-renderer.ts:3029  .db-panel-button",
+    "src/views/embedded-database-renderer.ts:1363  .db-calendar-search-results-popover",
+    "src/views/embedded-database-renderer.ts:2963  .db-group-order-popover",
+    "src/views/embedded-database-renderer.ts:3079  .db-panel-button",
     "src/views/filter-panel-renderer.ts:175  .db-filter-panel",
     "src/views/filter-panel-renderer.ts:197  .db-panel-empty",
     "src/views/filter-panel-renderer.ts:217  .db-panel-button",
