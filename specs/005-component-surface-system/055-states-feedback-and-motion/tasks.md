@@ -71,9 +71,19 @@ A task missing any of the three is not ready to start.
       migration notice (`database-view.ts`, `embedded-database-renderer.ts`) is the owned site this
       leg migrates off bare `new Notice`; the row-deletion notices T003 also names are not touched
       here. Producer-registry registration (`surface-contract.ts`'s closed `SurfaceProducerId`
-      list) is a named gap — extending it and its Playwright opener in
-      `tools/storybook/verify-placement.mjs` was outside this leg's write scope. Red
-      confirmed by deleting `toast.ts` and re-running `toast.test.ts` (import failure); green: 9/9.
+      list) is **escalated, not deferred** — see ADR-007. Every one of the five `SurfaceRole`
+      values is contradicted by the shipped component: `menu` declares outside-pointerdown/escape
+      dismissal, roving focus and a 320px cap against a surface that dismisses on explicit action
+      or its own timer, takes no focus, and measures 384px. Writing the entry needs a sixth role or
+      a ruling that transient feedback sits outside the registry, and both are the operator's.
+      Red confirmed by deleting `toast.ts` and re-running `toast.test.ts` (import failure);
+      green: 9/9. **Landed at verification, 2026-09-05:** the constructed-mount lane row AC-001
+      names is now in `tools/storybook/verify-placement.mjs` — seven checks over severity glyphs,
+      the live-region wiring, the auto-hidden action row, the action's label and callback, the
+      dismissal, the measured geometry and the reduced-motion behaviour. Each was observed red
+      first, in three control runs that broke the severity pairing, the `.db-surface` mount, the
+      callback, the `:empty` rule, the close-on-action and the reset weight in turn; every other
+      check in the lane stayed green through all three.
       **Threshold:** every notice this phase owns renders through the component with its action
       clickable, and zero owned sites call `new Notice` directly.
       **Red first:** 0 of 247 call sites carry an action affordance today; the migration notice
@@ -90,6 +100,15 @@ A task missing any of the three is not ready to start.
       `notice.galleryMigrated` through the toast with its Undo action wired to
       `undoLastEdit`; same for the row-deletion notices at `database-view.ts:8314` and
       `embedded-database-renderer.ts:3208`.
+      **Half closed, 2026-09-05, and the half is named rather than rounded up.** Both
+      `notice.galleryMigrated` sites now raise the toast with an Undo wired to
+      `this.undoLastEdit()` — `database-view.ts:2748-2755` (standalone) and
+      `embedded-database-renderer.ts:768-774` (embed) — reusing the existing
+      `notice.nothingToUndo` empty-stack report rather than rebuilding it. The **two row-deletion
+      notices are untouched**, so this task stays `[ ]`. What is still unobserved on the half that
+      landed: no run drives a real gallery→board migration end to end, because that path needs an
+      Obsidian `App`, a vault and a metadata cache. The component's action and callback are
+      lane-proven; the two call sites are proven by reading the final files and by `tsc`.
       **Threshold:** the Undo button appears with the notice and performs the undo — or reports
       `notice.nothingToUndo` (`src/i18n.ts:1484`) when the stack is empty, never a silent no-op.
       **Red first:** the notice renders with no button at all today.
@@ -164,6 +183,15 @@ A task missing any of the three is not ready to start.
       (not only the `--db-*` block itself), because the dispatch that carried this leg named the
       full census as its target. The 4 `120ms ease-out` declarations and the wider seconds-notation
       census are untouched — see checklist.md C7. Red/green in `src/views/motion-tokens.test.ts`.
+      **Corrected at verification, 2026-09-05 (ADR-006).** This row claimed the reduced-motion
+      reset needed no new selector because the toast carries `.db-surface`. Read as source that is
+      true; measured in a browser it was false. `.db-surface *` is (0,1,0) and **ties** with
+      `.db-toast`, and the reset sits at `styles.css:934` while `.db-toast` sits at `:2757`, so the
+      later rule won the tie and the toast kept its full **0.2s** entrance under
+      `prefers-reduced-motion: reduce`. The clause now carries `!important` on
+      `animation-duration`, `animation-iteration-count` and `transition-duration`; measured after,
+      the entrance computes `1e-05s` under reduce against `0.2s` with no preference, and a lane row
+      reads both so the escape cannot return quietly.
       **Threshold:** the tokens resolve on all nine token selectors, and
       `owned-menu-reduced-motion.test.ts`'s coverage mechanism holds for the toast and confirm.
       **Red first:** the tokens do not exist; **42 `transition:` declarations** hand-type `120ms`
@@ -173,8 +201,15 @@ A task missing any of the three is not ready to start.
       (`styles.css`)
 - [ ] T010 [B] [P1] **REQ-055-8 — migrate the legs' own durations.** The files L1-L3 touched read
       tokens; no new literal duration lands in this phase's files.
-      **Threshold:** zero untokenized durations in the files this phase changed; the wider census is
-      recorded, not swept. **Corrected count:** the `ms` strays (4x150, 3x180, 1x160, 1x100, 1x80)
+      **Restraint amended by ADR-006, 2026-09-05.** "The wider census is recorded, not swept" was
+      written before T001 measured the full 42-declaration census as the target, and L4 swept 38 of
+      those 42 across the whole stylesheet rather than only this phase's own files. The sweep
+      stands and is recorded here rather than absorbed silently. What T010 still owns is unchanged:
+      the `ms` strays and the 16 seconds-notation durations below stay recorded and unswept, and so
+      do the 4 `120ms ease-out` declarations, whose directional curve `--db-motion-fast` does not
+      carry.
+      **Threshold:** zero untokenized durations in the files this phase changed; the residual census
+      below is recorded, not swept. **Corrected count:** the `ms` strays (4x150, 3x180, 1x160, 1x100, 1x80)
       plus **16 written in seconds** (10x`0.15s`, 3x`0.2s`, 2x`0.1s`, 1x`0.3s`) that
       `state-feedback-vocabulary.md` §4's census omits — see `design-trueup.md` C8.
       **Red first:** every touched file hand-types durations today.

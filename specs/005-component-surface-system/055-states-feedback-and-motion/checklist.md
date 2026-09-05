@@ -31,19 +31,19 @@ written after the fix is a cell nobody can check against the tree that produced 
 
 | # | Criterion | Today | Target | Evidence |
 |---|-----------|-------|--------|----------|
-| C1 | Notice call sites carrying an action affordance | **0 of 247** — `grep -rn "new Notice(" src --include="*.ts"`, tests excluded; every one is bare | every owned site renders the toast with a clickable action where one is owed | [x] Green: `src/views/toast.ts` built (`showToast`, severity + action + close), 9/9 in `toast.test.ts`, red confirmed by deleting the module first. The migration notice — this leg's owned site — now renders through it (see C2); `npx tsc --noEmit`, `npm test` (1246/1246) and `npm run build` all clean |
-| C2 | The migration notice's Undo | **no button** — `notice.galleryMigrated` (`src/i18n.ts:1455`) says "Undo to keep it a gallery" and renders through bare `new Notice` (`database-view.ts:2744`, `embedded-database-renderer.ts:764`) | Undo present and performing, `nothingToUndo` on an empty stack | [x] Green: both call sites route through `showToast()` with Undo wired to `this.undoLastEdit()`, which already carries the `nothingToUndo` branch (`replayHistory`/`undoLastConfigEdit`) — reused, not rebuilt. Row-deletion notices at the other two call sites this task also names are unmigrated; still bare `new Notice` |
+| C1 | Notice call sites carrying an action affordance | **0 of 247** — `grep -rn "new Notice(" src --include="*.ts"`, tests excluded; every one is bare | every owned site renders the toast with a clickable action where one is owed | [x] Green: `src/views/toast.ts` built (`showToast`, severity + action + close), 9/9 in `toast.test.ts`, red confirmed by deleting the module first. The migration notice — this leg's owned site — now renders through it (see C2). **Landed at verification:** the constructed-mount lane row AC-001 asks for is in `tools/storybook/verify-placement.mjs` — seven checks on a card built by `showToast` in headless Chrome, each observed red first across three control runs while the other 373 rows in the lane stayed green. Producer registration is escalated, not done (ADR-007): all five `SurfaceRole` values are contradicted by the shipped component. `npx tsc --noEmit` (0), `npm test` (1262/1262), `npm run build` (0) and `npm run gate` (25 green, exit 0) all clean |
+| C2 | The migration notice's Undo | **no button** — `notice.galleryMigrated` (`src/i18n.ts:1455`) says "Undo to keep it a gallery" and renders through bare `new Notice` (`database-view.ts:2744`, `embedded-database-renderer.ts:764`) | Undo present and performing, `nothingToUndo` on an empty stack | [ ] Half green, and the half is named. Both call sites route through `showToast()` with Undo wired to `this.undoLastEdit()` (`database-view.ts:2748-2755`, `embedded-database-renderer.ts:768-774`), read in the final files and clean under `tsc`; the action-and-callback half is lane-proven in C1's row. **Unticked because this row's own threshold includes `nothingToUndo` on an empty stack, and nothing asserts it** — the branch is pre-existing at `database-view.ts:10312` and `embedded-database-renderer.ts:3687`, both bare `Notice`, both uncovered. No run drives a real gallery→board migration either: that path needs an Obsidian `App`, vault and metadata cache. Row-deletion notices at the other two call sites this task also names are unmigrated; still bare `new Notice` |
 | C3 | Confirm sheet's `044` grammar elements | **0 of 7 asserted** — `sheet` declared at `modals/confirm-modal.ts:42`, chrome inherited from `DbModal`, no exported primitive and no grammar row | **7 of 7** on the registered lane row, through **`051`'s** exported confirm primitive (its ADR-003) | [ ] |
 | C4 | Confirm's stacked-pair treatment | **unregistered** — `048` inventory M-4 names the pair; no dim, no scale-back, shared scrim | parent |Δ| ≤ 1px, one scrim between, per registered pair | [ ] |
 | C5 | Distinct empty states | **12 reasons ship** (`empty-state-renderer.ts:24-36`); **0 of 12 is the deleted-relation state** — deleted group field → silent re-group (`database-view.ts:2678`, `:2890`, `:3378`). `050`'s "all conditions render the same state" was false (`design-trueup.md` REQ-009) | the existing 12-to-3 mapping **asserted**, plus the deleted-relation state **built** and pointing at view settings | [ ] |
 | C6 | Chart's empty-state component | **private** — `renderEmptyState` (`chart-renderer.ts:601-604`), `db-chart-empty`, six reasons (`chart-aggregation.ts:64`) | rendered through `EmptyStateRenderer`; `db-chart-empty` markup 0 | [ ] |
 | C7 | Untokenized `120ms` transitions in `styles.css` | **42 `transition:` declarations** (`grep -o "transition:[^;]*" styles.css | grep -c 120ms`), holding **78** `120ms` occurrences between them — one population, two units; the shared token reaches **7** uses, not 8 (`styles.css:113`). The wider census also missed **16** durations written in seconds (10×`0.15s`, 3×`0.2s`, 2×`0.1s`, 1×`0.3s`), so the real 150ms population is 14 (`state-feedback-vocabulary.md` §4, `design-trueup.md` C6/C8) | 0 in this phase's files; census recorded for the rest, at both spellings | [x] Green, wider than "this phase's files": 38 of 42 declarations (69 of 78 occurrences) now read `var(--db-motion-fast)`; the remaining 4 (9 occurrences, `120ms ease-out`) stay literal on purpose: `--db-motion-fast` resolves to plain `ease`, and these carry a directional entrance/hover curve the alias does not. Both `180ms` declarations (3 occurrences) now read `var(--db-motion-surface)` at the ADR-005 200ms value. `var(--db-transition-fast)`'s own 7 call sites are untouched. Red/green in `src/views/motion-tokens.test.ts` (5 of 7 red against `git show HEAD:styles.css`, 7/7 green here). The 16-duration seconds census is unchanged — out of this leg's scope, still recorded only |
-| C8 | Reduced-motion coverage of new surfaces | reset covers container descendants + `.db-surface` (`styles.css:918-947`), proven by `owned-menu-reduced-motion.test.ts`; toast and confirm do not exist yet. **Nothing is being adopted here** — `prefers-reduced-motion` occurs **0 times** in `anytype-ts/src` (`design-trueup.md` C5) | every touched surface named in the reset, the shimmer's `infinite` included; coverage test extended | [x] Green for the toast, partial for the phase: the toast mounts `.db-surface db-toast-stack`, so the existing generic `.db-surface`/`.db-surface *` reset already zeroes its animation and transitions — no CSS change needed, and `owned-menu-reduced-motion.test.ts` still passes unmodified. The shimmer's `infinite` loop now names its duration via `--db-motion-emphatic` rather than a literal. The confirm sheet's own coverage is a separate, unstarted leg |
+| C8 | Reduced-motion coverage of new surfaces | reset covers container descendants + `.db-surface` (`styles.css:918-947`), proven by `owned-menu-reduced-motion.test.ts`; toast and confirm do not exist yet. **Nothing is being adopted here** — `prefers-reduced-motion` occurs **0 times** in `anytype-ts/src` (`design-trueup.md` C5) | every touched surface named in the reset, the shimmer's `infinite` included; coverage test extended | [x] Green for the toast **after a repair this row originally claimed was unnecessary** (ADR-006). The first pass read the reset's selector list as source, saw `.db-surface` in it and the marker on the toast, and concluded no CSS change was needed. Measured in a browser that was false: `.db-surface *` is specificity (0,1,0), **ties** with `.db-toast`, and loses the tie on source order — the reset is at `styles.css:934`, `.db-toast` at `:2757` — so the toast kept its full **0.2s** entrance under `prefers-reduced-motion: reduce`, and so would every `.db-surface` rule written below line 934. The clause now carries `!important` on `animation-duration`, `animation-iteration-count` and `transition-duration`; measured after, the entrance computes **1e-05s** under reduce against **0.2s** with no preference. Red first is the shipped tree itself, re-run and read. A lane row in `verify-placement.mjs` now reads both preferences, which is stronger than extending `owned-menu-reduced-motion.test.ts` — that suite greps source text, which is exactly what got this wrong; it still passes unmodified. The shimmer's `infinite` loop now names its duration via `--db-motion-emphatic` rather than a literal. The confirm sheet's own coverage is a separate, unstarted leg |
 | C9 | Menu item count, fully-restricted selection; caps | **1 file can violate it, not two** (ADR-004). `row-menu.ts` **cannot** render empty — `menu.openNote` at `:88` is unconditional — so its guarantee is asserted, not built. The violator is `bulk-edit-field-menu.ts`, mapping `options` straight from `getBulkEditableColumns` at `:30`/`:38` with no floor. **Caps not adopted**: a single-row menu has no referent for >1 or >10 | **≥ 1** in every capability state; `row-menu`'s guarantee asserted, `bulk-edit`'s fallback row built | [ ] |
 | C10 | Per-view scroll restore | **0 views restore**, but the machinery exists — `database-viewport.ts` has four request kinds (`:37`), captures `scrollTop` (`:67`) and restores raw (`:76`) or anchor-relative (`:84`); view switching asks `reset-top` | restored within **±2px**, per view, by **wiring the existing snapshot** — a second mechanism is the failure mode | [ ] |
 | C11 | Embedded view paging path | **not virtualization — there is none** (ADR-004). No `virtualis*` match exists anywhere in `src/views`, so the drafted premise could not be observed red. The real red is **0 embedded views honour a page limit and 0 render the row** | a page at the **60**-row limit plus a "Load more" row, inline rows **~40px** against **48px** full-page; the virtualization clause becomes a future-regression guard | [ ] |
-| C12 | `npm run gate` exit status with every negative control observed red | not yet run for this phase | exit **0**, each control red then green | [ ] |
-| C13 | `screenshots/project-manager/` board and gantt `pixelHash` | baseline to be captured before the first leg that could move the board | identical, or operator-ruled | [ ] |
+| C12 | `npm run gate` exit status with every negative control observed red | not yet run for this phase | exit **0**, each control red then green | [x] Green: `SURFACE_PHASE=055-states-feedback-and-motion npm run gate </dev/null`, exit read from `$?` = **0**, all **25** checks green, 0 red for a declared reason. The seven new toast rows were each observed red first in three control runs before this one. Two lanes went red on the first pass and were re-derived rather than edited: `screenshots-fresh` (recaptured, 554 entries) and `evidence` (eight stamps re-run through their own writers) |
+| C13 | `screenshots/project-manager/` board and gantt `pixelHash` | baseline to be captured before the first leg that could move the board | identical, or operator-ruled | [x] Green: all 554 captures re-taken after the stylesheet edit and compared entry-by-entry against the previous commit's `screenshots/manifest.json`. **0 captures moved `pixelHash`**, the 16 `project-manager/` board and gantt references among them; 8 moved bytes only, which is the encoder jitter `pixel-hash.mjs` exists to absorb. Computed independently of `check-lane`, which reported the same 8 as byte-only. Three of the eight opened and read — `constructed-toolbar-desktop-dark`, `board-view-desktop-dark`, `reference-kanban-desktop-dark` — all intact. **A still capture cannot show a duration**, so this proves the token aliases resolved to the same painted values, not that motion timing is right; that is what C1's lane row measures instead |
 
 **C1, C2 and C5 are what the operator notices first. C12 is the check that C1-C11 are not
 theatre; C13 is the check that the state work did not cost Project Manager.**
@@ -124,16 +124,44 @@ and never the pass/fail.
 
 - [ ] CHK-020 [P0] Every AC in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded`, and
       each waiver names an ADR that exists
-- [ ] CHK-021 [P0] `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, status read from `$?`
+- [x] CHK-021 [P0] `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, status read from `$?`
+      — `SURFACE_PHASE=055-states-feedback-and-motion npm run gate </dev/null`, exit **0**, **25**
+      green, 0 red for a declared reason. Two lanes were red on the first pass and were re-derived
+      by their own writers rather than edited: `screenshots-fresh` and `evidence`
 - [ ] CHK-022 [P0] Every deliverable's negative control was observed **red** before green, with
       every other row staying green while it was red
-- [ ] CHK-023 [P1] `npm run replay` holds with reversed 0
-- [ ] CHK-024 [P0] The board and gantt reference captures are `pixelHash`-identical to their
-      pre-phase baseline, or the difference carries an operator ruling (goal D4)
-- [ ] CHK-025 [P1] Changed captures recaptured and read by a person across both themes
-      (`repo-rules/screenshot-currency.md`)
+- [x] CHK-023 [P1] `npm run replay` holds with reversed 0 — green inside the passing gate run
+      above, where `replay` is its own check
+- [x] CHK-024 [P0] The board and gantt reference captures are `pixelHash`-identical to their
+      pre-phase baseline, or the difference carries an operator ruling (goal D4) — all 16
+      `screenshots/project-manager/` entries compared against the previous commit's
+      `screenshots/manifest.json`: **0 moved `pixelHash`**. Across all 554 captures the figure is
+      also 0; 8 moved bytes only. Computed independently of `check-lane`, which agreed
+- [x] CHK-025 [P1] Changed captures recaptured and read by a person across both themes
+      (`repo-rules/screenshot-currency.md`) — 554 recaptured, `npm run screenshots:verify` exit 0
+      reading "554 entries match their sources, and none is blank or identical across themes". No
+      capture changed content, so the review a release owes is empty; three of the eight
+      byte-moved files were opened and read anyway to check that claim rather than trust it —
+      `constructed-toolbar-desktop-dark` (dark), `board-view-desktop-dark` (dark),
+      `reference-kanban-desktop-dark` (dark) — all intact. **One capture is not deterministic under
+      `pixelHash` and the next phase should know:**
+      `notion-clone/views/timeline-subtask-tree-desktop-light.png` moved its `pixelHash` on one
+      recapture and moved it again on a second recapture of an unchanged tree, landing back on the
+      value `HEAD` carries. Both images were opened, then decoded and differenced: **0.0969%** of
+      channel samples differ, max delta **12 of 255**, clustered on the row separator hairlines at a
+      regular 88px pitch. That is antialiasing on a low-contrast line sitting on one of the hash's
+      own quantisation boundaries — the jitter `pixel-hash.mjs` absorbs everywhere except here. Not
+      a paint change, and not caused by this phase
 - [ ] CHK-026 [P0] Every new or changed rendered state got its scenario registration in the same
       change, and each scenario's `sources` list names the files the capture depicts
+      — **open, and named rather than absorbed.** The toast is a new rendered component and
+      `repo-rules/screenshot-currency.md` §2 wants its scenario in `tools/screenshots/scenarios.mjs`
+      in the same change. That file is not in `spec.md`'s frozen Files to Change, and SCOPE LOCK
+      outranks a rule file, so this landing names the obligation instead of taking it. It is not
+      silent: the verifier does not go red for an unregistered surface, which is exactly why the
+      row stays here. Whoever registers it should check `surface-census` first — `.db-toast`'s
+      severity class comes from a template literal (`db-toast is-${severity}`), so a fixture drawing
+      `is-success` may read as fixture-only markup until the scanner can build it
 <!-- /ANCHOR:verification -->
 
 ---
@@ -160,8 +188,8 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 17 | 4/17 |
-| P1 Items | 4 | 0/4 |
+| P0 Items | 19 | 6/19 |
+| P1 Items | 4 | 2/4 |
 | P2 Items | 0 | 0/0 |
 
 **Verification Date**: 2026-09-05

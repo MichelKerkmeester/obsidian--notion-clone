@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-05T13:20:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Recorded the two architecture decisions the plan's legs implement"
-    next_safe_action: "Execute T001, the red-first threshold measurements"
+    last_updated_at: "2026-09-05T20:45:00Z"
+    last_updated_by: "landing-verification"
+    recent_action: "Added ADR-006 (sweep plus reduced-motion repair) and ADR-007 (registry escalated)"
+    next_safe_action: "Operator rules ADR-007: a sixth SurfaceRole, or toast outside the registry"
     blockers: []
     key_files:
       - "src/views/toast.ts"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-055-adr"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 8
     open_questions: []
     answered_questions: []
 ---
@@ -427,3 +427,227 @@ corrected values and census.
 **How to roll back**: revert L4's commit; token and literals move together, so no half-migrated
 state exists.
 <!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: The stylesheet sweep is wider than "recorded, not swept", and the reduced-motion reset is repaired at its weight
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-05 |
+| **Deciders** | Operator (sweep scope), landing verification (reset repair) |
+
+---
+
+### Context
+
+Two things happened to `styles.css` in the L4 leg that its own task did not authorise, and both
+need a record rather than a silence.
+
+**The sweep.** T010 wrote the restraint as "zero untokenized durations in the files this phase
+changed; the wider census is recorded, not swept", which scopes the migration to `styles.css`'s own
+token block plus whatever L1-L3 touched. What landed migrated **38 of the 42** plain-`ease` `120ms`
+transition declarations across the whole 22,000-line stylesheet, and both `180ms` surface
+declarations. The 4 remaining are `120ms ease-out` — a directional curve `--db-motion-fast`'s
+`120ms ease` does not carry, so aliasing them would silently change what they do.
+
+**The reset.** ADR-005's implementation note says the reduced-motion reset "names every new
+consumer", and the L4 leg concluded no reset change was needed: the toast mounts `.db-surface`, and
+`.db-surface` is already in the reset's selector list. Read as source that is true. Measured in a
+browser it is false. `.db-surface *` is one class plus a universal — specificity (0,1,0) — which
+**ties** with `.db-toast`, and the reset sits at line 934 while `.db-toast` sits at 2757. A tie is
+broken by order, so the later rule wins. Under `prefers-reduced-motion: reduce` the toast's
+`animation-duration` computed **0.2s**, its full entrance, on the tree as the leg shipped it.
+Everything the reset appears to cover that is written **below** it escapes the same way.
+
+### Constraints
+
+- The scope in `spec.md` is frozen; a wider edit is amended in the open or it is drift.
+- `AGENTS.md` root-cause: a fix that works only where the bug surfaced treated the symptom.
+- The reset's own comment already argues for a hard stop — "a spec-true `0` suppresses the
+  transition outright instead of racing it" — so the weight is the conclusion of an argument the
+  file has already made, not a new opinion.
+
+### Decision
+
+**We chose**: record the sweep as adopted, and repair the reset with `!important` on its
+`.db-surface` clause.
+
+- **The sweep stands.** The operator's `design-trueup.md` measured the full 42-declaration census
+  as the target, and a token that reaches 38 declarations is the deliverable REQ-055-5 describes.
+  T010's restraint is amended by this ADR rather than by the leg quietly outgrowing it. What T010
+  still owns is unchanged: the `ms` strays and the 16 seconds-notation durations stay recorded and
+  unswept.
+- **The reset gains `!important`** on `animation-duration`, `animation-iteration-count` and
+  `transition-duration`, in the `.db-surface` clause only. The container clause is untouched.
+
+**How it works**: `!important` outranks order and specificity together, so the reset stops
+depending on where in the file a surface's rules happen to sit. Measured after the change, the
+toast's entrance computes `1e-05s` under reduce and `0.2s` with no preference.
+
+This is not a new idiom in this stylesheet. A second `prefers-reduced-motion` block already sits
+near the bottom of the file and already writes `!important` on all four of its properties, for the
+same reason arrived at from the same direction — it just does not name `.db-surface`, which is why
+it never covered the toast. Two reduced-motion blocks disagreeing about whether a reset is
+enforceable was the state before this ADR; now they agree.
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **`!important` on the `.db-surface` clause (chosen)** | Fixes the producer; every future body-mounted surface is covered without remembering to be | A shared reset gains three `!important`s | 9/10 |
+| Add `.db-surface .db-toast` to the reset's selector list | Smallest blast radius | Per-surface patch at the call site of a general defect; the next surface rediscovers it | 3/10 |
+| Move the whole reduced-motion block to the end of the file | No `!important` | Reorders a 22,000-line cascade to fix a three-property reset | 2/10 |
+| Leave it and record the escape | No stylesheet change | Ships a surface that ignores an accessibility preference the packet's own spec requires | 1/10 |
+
+**Why this one**: it is the only option where the next body-mounted surface is covered by default
+rather than by somebody remembering this page.
+
+### Consequences
+
+**What improves**: `prefers-reduced-motion: reduce` now actually reaches every `.db-surface`
+descendant, whatever order its rules are written in. The motion tokens reach 38 declarations rather
+than the handful in this phase's own files.
+
+**What it costs**: a theme or a later rule can no longer opt a `.db-surface` descendant back into
+motion under `reduce`. That is the intended reading of a reduced-motion reset, so it is a cost only
+in the sense that it is now enforced.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A check measured a non-zero duration on a `.db-surface` under reduce and now reads zero | L | The whole gate was re-run after the change: 25 green, including `placement`, `sheet-grammar`, `sheet-teardown` and `sheet-rebuild`, which are the lanes that drive those surfaces |
+| The 38-declaration sweep moves a capture | M | 554 captures recaptured; **0** moved `pixelHash`, Project Manager board and gantt references included |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | The escape was measured at 0.2s under `reduce`, not argued |
+| 2 | **Beyond Local Maxima?** | PASS | Four options scored, including the per-surface patch and doing nothing |
+| 3 | **Sufficient?** | PASS | Covers every `.db-surface` descendant regardless of source order, which is the whole failure class |
+| 4 | **Fits Goal?** | PASS | REQ-055-5 requires reduced-motion coverage for every touched surface |
+| 5 | **Open Horizons?** | PASS | A later per-surface exception is still expressible; it just has to say `!important` and mean it |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changes**: the `.db-surface` clause of the `prefers-reduced-motion` block in `styles.css`;
+`tasks.md` T010's restraint; a lane row in `tools/storybook/verify-placement.mjs` that reads the
+computed duration under both preferences so the escape cannot return silently.
+
+**How to roll back**: remove the three `!important` keywords. The lane row goes red immediately,
+which is how the defect was found in the first place.
+<!-- /ANCHOR:adr-006 -->
+
+---
+
+<!-- ANCHOR:adr-007 -->
+## ADR-007: The toast is not registered in `SURFACE_REGISTRY` until the role vocabulary has a member it fits
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted — escalated, awaiting the operator |
+| **Date** | 2026-09-05 |
+| **Deciders** | Landing verification |
+
+---
+
+### Context
+
+`spec.md` §4's token map carries the row "Every new surface registers a `producer` id so the census
+and CI find it", pointing at `design-system.md` §3, and adds "Toast is a `menu`-role surface for
+dismissal and focus; severity is styling, not role". The L1 leg left the registration undone and
+named it a gap. Taking it up means writing a `SurfaceProducerDefinition`, and that record's `role`
+field is a literal from a closed five-member union whose semantics `design-system.md` §3 and
+`SURFACE_ROLE_DEFAULTS` both define.
+
+Measured against the component that shipped, the suggested role is wrong on all three of its
+defaults. `menu` declares `dismissal: ["outside-pointerdown", "escape", "selection"]`,
+`focusMode: "roving"` and a `fixed` width capped at **320px**. `showToast` installs no
+outside-pointerdown handler and no Escape handler, takes no focus at all — it is `aria-live="polite"`
+precisely so it does not interrupt — and the card measures **384px**, proven by the lane row added
+in this landing. `dialog` is closer on dismissal and on `role-declared` width and still requires
+`focusMode: "trapped"`, which a toast that trapped focus would be a defect for.
+
+`surface-contract.ts`'s own registry comment settles what to do with that: "An entry that says
+`bodyPortal` while the producer mounts into the container is worse than no entry: every check that
+trusts the registry is then reasoning about a program that does not exist."
+
+### Constraints
+
+- `SurfaceRole` is consumed by `044`, `048`, `051`, `052` and `053`; adding a sixth member is a
+  change to the shared vocabulary, not a local one.
+- `design-system.md` §3 is the parent packet's contract, which this phase declares **through**.
+- `verify-placement.mjs` iterates the registry, so a sixth producer arrives red until it is driven —
+  by design, and correctly.
+
+### Decision
+
+**We chose**: do not register the toast, and escalate the vocabulary gap.
+
+Registering it under `menu` would put three false claims into the one table whose value is that it
+is true. The two honest ways forward are both the operator's:
+
+1. Add a sixth `SurfaceRole` — `status`, or similar — with its own defaults: dismissal by explicit
+   action or timeout, no focus, `role-declared` width. Then register the toast and give it an
+   opener in `verify-placement.mjs`.
+2. Rule that a transient, non-focusable feedback surface is outside this registry, and correct
+   `spec.md` §4's token map, which currently asserts a role the shipped component contradicts.
+
+**How it works**: until one is taken, the toast's placement, geometry, severity, action wiring and
+reduced-motion behaviour are covered by the seven lane rows this landing added — so the surface is
+not unmeasured, it is only unregistered.
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Escalate, cover by lane rows (chosen)** | Nothing false enters the registry; the surface is still measured | The registry stays incomplete and `spec.md` §4 stays unsatisfied | 8/10 |
+| Register as `menu` per `spec.md` §4 | Closes the token-map row today | Three measurably false claims — dismissal, focus and a 384px surface under a 320px cap | 2/10 |
+| Register as `dialog` | Right on dismissal and width | Still claims `focusMode: "trapped"`, which would be a defect if any consumer acted on it | 3/10 |
+| Add a sixth role here | Closes it properly | Changes a vocabulary five phases consume, inside a landing, without the operator | 4/10 |
+
+**Why this one**: a registry is a claim about the running program, and this landing has no mandate
+to change the vocabulary five other phases read.
+
+### Consequences
+
+**What improves**: the registry keeps meaning what it says.
+
+**What it costs**: `spec.md` §4's registration row is unsatisfied and stays visible as such. The
+census reports five declared producers while six surfaces exist.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| The gap is forgotten because nothing goes red for it | M | Recorded here, in `tasks.md` T002's residual and in `checklist.md`; the toast's own lane rows name the registry in their detail text |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | The registration cannot be written without choosing a role, and every available role is contradicted by the shipped component |
+| 2 | **Beyond Local Maxima?** | PASS | Four options scored, including both ways of writing the entry today |
+| 3 | **Sufficient?** | PASS | The surface is covered by seven lane rows while the vocabulary question is open |
+| 4 | **Fits Goal?** | PASS | Goal: name conflicts rather than resolve them silently |
+| 5 | **Open Horizons?** | PASS | Both dispositions remain fully open; nothing here forecloses either |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changes**: nothing in `src/views/surface-contract.ts`. `tasks.md` and `checklist.md` carry
+the open gap.
+
+**How to roll back**: not applicable — this ADR records a decision not to write code.
+<!-- /ANCHOR:adr-007 -->
