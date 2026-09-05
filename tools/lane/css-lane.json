@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": null,
-  "baselineHash": "21c50c44393a",
+  "baselineHash": "b5d5122d5b5b",
   "baselineCommit": "07be64fed44b13d0f70bfbaac1aefb2db39eb0fd",
   "history": [
     {
@@ -3183,6 +3183,33 @@
         "screenshots/notion-clone/panels/panel-column-manager-mobile-dark.png"
       ],
       "note": "Post-rebase recapture found only 3 content-changed captures against the new HEAD, all from main's own concurrent work rather than this leg's: field-icon-picker-desktop-{dark,light}.png (the small anchored popover's own search-field truncation, unrelated to this leg's phone-sheet fix, which is scoped to .db-mobile-bottom-sheet) and panel-column-manager-mobile-dark.png (unrelated data/layout difference). All three read by hand: no title/close appears on either, matching that neither is a registered phone sheet; both render cleanly. The 50-plus-2 captures this leg's own work moved were confirmed unchanged again on this tree (byte-identical after the rebase's textual merge) and are not re-listed. 21 further captures moved bytes only and were restored to HEAD bytes. npm run screenshots:verify: 0 stale."
+    },
+    {
+      "event": "acquire",
+      "phase": "046-linked-views-notion-parity",
+      "at": "2026-09-05T06:05:00Z",
+      "hash": "21c50c44393a"
+    },
+    {
+      "event": "edit",
+      "phase": "046-linked-views-notion-parity",
+      "at": "2026-09-05T06:20:00Z",
+      "hash": "b5d5122d5b5b",
+      "note": "The linked-view surface owns its width and its no-card presentation in the stylesheet instead of in JavaScript: the renderer no longer walks ancestors writing inline widths, and the move listener is scoped to a dedicated grab handle rather than the whole header. Three rules that matched nothing were retired with the code that fed them."
+    },
+    {
+      "event": "release",
+      "phase": "046-linked-views-notion-parity",
+      "at": "2026-09-05T06:40:00Z",
+      "hash": "b5d5122d5b5b",
+      "reviewed": [
+        "screenshots/notion-clone/panels/panel-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-mobile-light.png"
+      ],
+      "note": "5 content-changed captures, each opened and read. Four are the new linked-view host pair at both device widths and themes: measured against the constructed reading host, the embed's content box matches the prose content box exactly (900/900 desktop, 402/402 phone, delta 0px) where the same fixture with the linked rule neutralised measures 874/900 and 376/402, a 26px deficit that is the 1px border plus 12px padding on each side; card furniture measures 0 for border, radius and padding against 34 combined in that red control. The fifth, panel-column-manager-mobile-dark.png, is NOT this phase's: recapturing it against origin/main's own stylesheet produces a byte-identical file, so the committed image predates main's phone checkbox sizing and this full recapture is what surfaced the drift. Its layoutHash is unchanged; only pixelHash moved. Every other capture the recapture touched was pixelHash-identical to HEAD and was restored. npm run screenshots:verify: 550 current, 0 stale."
     }
   ],
   "outstanding": [

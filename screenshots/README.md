@@ -1235,6 +1235,16 @@ The shipped gallery renderer at the bench shape: 1600 cards in a responsive grid
 
 Sources: `src/views/gallery-renderer.ts`, `tools/bench/gallery-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Linked view in a reading host (constructed)
+
+The shipped table renderer paints the same capture-sized data once as a standalone view and once as a linked view inside a readable-line-width host, with prose before and after it.
+
+| dark | light |
+|---|---|
+| ![constructed-linked-view-host dark](notion-clone/views/constructed-linked-view-host-mobile-dark.png) | ![constructed-linked-view-host light](notion-clone/views/constructed-linked-view-host-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
 ### Table view (constructed)
 
 The shipped table renderer at the bench's sixteen-column shape, over the capture-sized row set captureData selects.

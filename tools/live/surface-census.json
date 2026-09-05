@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T05:52:12.680Z",
+  "measuredAt": "2026-09-05T06:22:33.610Z",
   "inputs": {
-    "styles.css": "21c50c44393a",
+    "styles.css": "b5d5122d5b5b",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
