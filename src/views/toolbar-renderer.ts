@@ -214,7 +214,10 @@ export class ToolbarRenderer {
   private groupRowLimitEditingCustom = false;
   private groupRowLimitFocusCustomInput = false;
   private viewTabPopover?: HTMLElement;
-  private viewTabShell?: PopoverShellHandle;
+  // `showAllViewsHub` still opens this through the shared popover shell; `showViewTabMenu` now
+  // opens it through the owned-menu primitive. `closeViewTabPopover` only ever calls `.close()`, so
+  // the field only needs to promise that much, not either producer's full handle shape.
+  private viewTabShell?: { close(): void };
   private removeViewTabPopoverListener?: () => void;
   private exportPopover?: HTMLElement;
   private exportShell?: PopoverShellHandle;
@@ -1230,6 +1233,15 @@ export class ToolbarRenderer {
     };
   }
 
+  /**
+   * A view tab's own right-click menu: rename, duplicate, change type, the touch-only reorder
+   * rows, delete.
+   *
+   * The type-change row is the one row here that does not lead to a `db-menu-item` result — it
+   * opens the shared select picker instead, the way `showAllViewsHub`'s own "change layout" action
+   * already does (closing this menu first, then anchoring the picker on the tab, which survives
+   * the close unlike a row inside the menu that is about to be removed).
+   */
   private showViewTabMenu(
     event: MouseEvent,
     viewIndex: number,
@@ -1245,10 +1257,9 @@ export class ToolbarRenderer {
     actions.closeToolbarPopovers?.();
     this.dismissSiblingToolbarSurfaces(tab);
 
-    const shell = createPopoverShell(tab, {
+    const menu = createOwnedMenu(tab.ownerDocument, {
+      returnFocus: tab,
       title: t("viewConfig.viewSection"),
-      role: "menu",
-      className: "db-view-tab-popover",
       onClose: () => {
         this.viewTabShell = undefined;
         this.viewTabPopover = undefined;
@@ -1256,53 +1267,38 @@ export class ToolbarRenderer {
         this.setPopoverTriggerState(tab, false);
       },
     });
-    this.viewTabShell = shell;
-    this.viewTabPopover = shell.panel;
-    const panel = shell.panel;
+    this.viewTabShell = menu;
+    this.viewTabPopover = menu.el;
 
-    this.renderViewTabPopoverRow(panel, t("toolbar.rename"), "pencil", () => {
-      this.startRenameView(tab, viewIndex, actions);
-    });
+    menu.addRow({ icon: "pencil", label: t("toolbar.rename"), onClick: () => this.startRenameView(tab, viewIndex, actions) });
     if (actions.copyCurrentView) {
-      this.renderViewTabPopoverRow(panel, t("toolbar.copyCurrentView"), "copy", () => actions.copyCurrentView?.(viewIndex));
+      menu.addRow({ icon: "copy", label: t("toolbar.copyCurrentView"), onClick: () => actions.copyCurrentView?.(viewIndex) });
     }
     if (actions.copyViewCode) {
-      this.renderViewTabPopoverRow(panel, t("toolbar.copyViewCode"), "code-xml", () => actions.copyViewCode?.(viewIndex));
+      menu.addRow({ icon: "code-xml", label: t("toolbar.copyViewCode"), onClick: () => actions.copyViewCode?.(viewIndex) });
     }
-    this.renderViewTypeChangeRow(panel, viewIndex, viewType, actions);
+    menu.addRow({
+      icon: "replace",
+      label: t("toolbar.changeViewType"),
+      chevron: true,
+      onClick: () => this.showViewTypeChangeMenu(tab, viewIndex, viewType, actions),
+    });
     if (isTouchDevice(this.toolbarRoot) && actions.moveView && totalViews > 1) {
       if (viewIndex > 0) {
-        this.renderViewTabPopoverRow(panel, t("toolbar.moveViewFirst"), "chevrons-left", () => actions.moveView?.(viewIndex, 0));
-        this.renderViewTabPopoverRow(panel, t("menu.moveUp"), "arrow-left", () => actions.moveView?.(viewIndex, viewIndex - 1));
+        menu.addRow({ icon: "chevrons-left", label: t("toolbar.moveViewFirst"), onClick: () => actions.moveView?.(viewIndex, 0) });
+        menu.addRow({ icon: "arrow-left", label: t("menu.moveUp"), onClick: () => actions.moveView?.(viewIndex, viewIndex - 1) });
       }
       if (viewIndex < totalViews - 1) {
-        this.renderViewTabPopoverRow(panel, t("menu.moveDown"), "arrow-right", () => actions.moveView?.(viewIndex, viewIndex + 1));
-        this.renderViewTabPopoverRow(panel, t("toolbar.moveViewLast"), "chevrons-right", () => actions.moveView?.(viewIndex, totalViews - 1));
+        menu.addRow({ icon: "arrow-right", label: t("menu.moveDown"), onClick: () => actions.moveView?.(viewIndex, viewIndex + 1) });
+        menu.addRow({ icon: "chevrons-right", label: t("toolbar.moveViewLast"), onClick: () => actions.moveView?.(viewIndex, totalViews - 1) });
       }
     }
     if (totalViews > 1) {
-      this.renderViewTabPopoverRow(panel, t("toolbar.deleteView"), "trash", () => {
-        actions.deleteView(viewIndex);
-      }, "is-danger");
+      menu.addRow({ icon: "trash", label: t("toolbar.deleteView"), warning: true, onClick: () => actions.deleteView(viewIndex) });
     }
 
     this.setPopoverTriggerState(tab, true);
-    this.installMenuKeyboardNavigation(panel);
-  }
-
-  private renderViewTypeChangeRow(panel: HTMLElement, viewIndex: number, viewType: DatabaseViewType, actions: ToolbarActions): void {
-    const row = panel.createEl("button", {
-      cls: "db-view-tab-popover-row",
-      attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.changeViewType") },
-    });
-    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), "replace");
-    row.createSpan({ cls: "db-view-tab-popover-label db-menu-item-label", text: t("toolbar.changeViewType") });
-    setIcon(row.createSpan({ cls: "db-view-tab-popover-chevron" }), "chevron-right");
-    row.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.showViewTypeChangeMenu(row, viewIndex, viewType, actions);
-    };
+    menu.showAt({ anchor: tab });
   }
 
   private showViewTypeChangeMenu(anchor: HTMLElement, viewIndex: number, viewType: DatabaseViewType, actions: ToolbarActions): void {
@@ -1343,25 +1339,6 @@ export class ToolbarRenderer {
 
   private getViewTypeOptions(current?: DatabaseViewType): Array<{ value: DatabaseViewType; text: string; icon: string }> {
     return getViewTypeOptions(current);
-  }
-
-  private renderViewTabPopoverRow(
-    panel: HTMLElement,
-    label: string,
-    icon: string,
-    onClick: () => void,
-    extraClass = ""
-  ): void {
-    const row = panel.createEl("button", {
-      cls: `db-view-tab-popover-row ${extraClass}`.trim(),
-      attr: { type: "button", role: "menuitem", "aria-label": label },
-    });
-    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker" }), icon);
-    row.createSpan({ cls: "db-view-tab-popover-label", text: label });
-    row.onclick = () => {
-      this.closeViewTabPopover();
-      onClick();
-    };
   }
 
   private showAddViewMenu(

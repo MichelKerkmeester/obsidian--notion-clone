@@ -57,7 +57,7 @@ function countHandBuiltRows(fileName: string): number {
  * kept at a floor of zero, which would just be a second way to write "not in this list".
  */
 const BASELINE: Record<string, number> = {
-  "toolbar-renderer.ts": 39,
+  "toolbar-renderer.ts": 37,
   "column-menu.ts": 19,
   "dropdown-field.ts": 4,
   "cell-renderer.ts": 3,

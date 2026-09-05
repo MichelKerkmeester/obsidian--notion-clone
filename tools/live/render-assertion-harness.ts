@@ -273,8 +273,8 @@ export interface ScenarioSpec {
    * buttons to open the surface it owns — "utilities" clicks the More-tools button
    * (`renderUtilitiesOverflowButton`'s own onclick), "add-view" clicks the view-tab plus button
    * (`showAddViewMenu`'s own onclick), "tab-menu" right-clicks the first view tab
-   * (`showViewTabMenu`'s own oncontextmenu, reading rename/duplicate/remove through the shared
-   * shell). The same anchors a device tap or a right-click reaches; nothing is
+   * (`showViewTabMenu`'s own oncontextmenu, reading rename/duplicate/remove through the owned-menu
+   * primitive). The same anchors a device tap or a right-click reaches; nothing is
    * hand-applied. Undefined leaves the toolbar closed, which is what the plain toolbar
    * scenarios photograph.
    */
@@ -1839,25 +1839,33 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
     results.push(toolbarPopoverAssertion(container, ".db-add-view-popover"));
   }
   if (scenario.toolbarPopover === "tab-menu") {
-    // The view tab's context menu offers rename, duplicate and remove through the shared shell.
-    // No dedicated class marks this popover — showViewTabMenu builds it with only
-    // "db-view-tab-popover" — so a bare ".db-toolbar-popover" is the shell's own marker, and
-    // only one surface is open in this scenario.
-    const panel = container.querySelector(".db-toolbar-popover");
+    // The view tab's context menu is `showViewTabMenu`'s own owned menu, not the hand-built
+    // "db-view-tab-popover" shell every other toolbar surface still opens — the componentization
+    // leg that moved this one surface onto the shared primitive. Every `createOwnedMenu` mounts on
+    // `doc.body`, a sibling of `container` rather than a descendant of it, so this reads the
+    // document the same way every other owned-menu assertion here does.
+    const panel = container.ownerDocument.querySelector(".db-owned-menu");
     results.push({
-      name: "right-clicking a view tab opens its context menu through the shared shell",
-      pass: Boolean(panel?.classList.contains("db-view-tab-popover")),
-      detail: panel ? `classes=${panel.className}` : "no popover opened on contextmenu",
+      name: "right-clicking a view tab opens its context menu through the owned-menu primitive",
+      pass: Boolean(panel),
+      detail: panel ? `classes=${panel.className}` : "no owned menu mounted on contextmenu",
     });
-    const rowLabels = Array.from(panel?.querySelectorAll(".db-view-tab-popover-row") ?? [])
+    const rowLabels = Array.from(panel?.querySelectorAll(".db-menu-item-label") ?? [])
       .map((row) => row.textContent?.trim() ?? "");
     const hasRename = rowLabels.some((label) => label.includes("Rename"));
     const hasDuplicate = rowLabels.some((label) => /duplicate|copy/i.test(label));
     const hasRemove = rowLabels.some((label) => /delete|remove/i.test(label));
     results.push({
-      name: "the tab context menu offers rename, duplicate and remove",
+      name: "the tab context menu offers rename, duplicate and remove through the shared row builder",
       pass: hasRename && hasDuplicate && hasRemove,
       detail: `rows: ${rowLabels.join(" | ") || "none"}`,
+    });
+    const deleteRow = Array.from(panel?.querySelectorAll<HTMLElement>(".db-menu-item") ?? [])
+      .find((row) => /delete|remove/i.test(row.querySelector(".db-menu-item-label")?.textContent ?? ""));
+    results.push({
+      name: "the destructive row carries the primitive's warning tone, not a bespoke danger class",
+      pass: Boolean(deleteRow?.classList.contains("is-warning")),
+      detail: deleteRow ? `classes=${deleteRow.className}` : "no delete row found",
     });
   }
   if (scenario.searchText) {
