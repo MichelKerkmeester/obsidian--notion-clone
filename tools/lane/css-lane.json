@@ -3514,12 +3514,14 @@
       "phase": "052-dropdown-menu-and-picker-componentization",
       "at": "2026-09-05T20:45:00Z",
       "hash": "2b51f568ad68",
-      "note": "npm run screenshots regenerated all 558 captures after the stylesheet edit. git reported 14 changed captures; check-lane reads 10 of them as byte-only re-encode noise on pictures whose pixelHash is unchanged, and 4 as real content. The 4 are the new chrome-owned-menu-submenu-open scenario, registered in this same change because the two rules above draw a state no existing fixture carries, and an unphotographed state is one a theme can drop silently. All 4 were opened and read: the row holds its fill without :hover and the chevron points down rather than right, in both themes and at both widths. The child menu itself is deliberately not in the fixture. Where it lands is JavaScript arithmetic against a live viewport rather than anything this stylesheet decides, so a fixture that placed it would photograph a guess at that arithmetic. GATE at handover: npx tsc --noEmit 0, npx vitest run 1266/1266, npm run build 0, npm run gate 25 green 0 red exit 0.",
+      "note": "npm run screenshots regenerated all 558 captures after the stylesheet edit. git reported 14 changed captures; check-lane reads 10 of them as byte-only re-encode noise on pictures whose pixelHash is unchanged, and 4 as real content. The 4 are the new chrome-owned-menu-submenu-open scenario, registered in this same change because the two rules above draw a state no existing fixture carries, and an unphotographed state is one a theme can drop silently. All 4 were opened and read: the row holds its fill without :hover and the chevron points down rather than right, in both themes and at both widths. The child menu itself is deliberately not in the fixture. Where it lands is JavaScript arithmetic against a live viewport rather than anything this stylesheet decides, so a fixture that placed it would photograph a guess at that arithmetic. GATE at handover: npx tsc --noEmit 0, npx vitest run 1266/1266, npm run build 0, npm run gate 25 green 0 red exit 0. Re-verified 2026-09-05 after T007 (view-tab menu onto createOwnedMenu): editing render-assertion-harness.ts invalidated the whole capture corpus's freshness manifest, a shared input for every scenario, so npm run screenshots regenerated all 558 entries with the stylesheet unchanged. check-lane read 3 of the resulting diffs as byte-only re-encode noise; the other 2 were opened and read here and show no content change — neither surface is touched by the view-tab menu migration.",
       "reviewed": [
         "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-desktop-dark.png",
         "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-desktop-light.png",
         "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-dark.png",
-        "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-light.png"
+        "screenshots/notion-clone/components/chrome-owned-menu-submenu-open-mobile-light.png",
+        "screenshots/notion-clone/fields/field-relation-values-mobile-light.png",
+        "screenshots/notion-clone/views/calendar-month-view-mobile-light.png"
       ]
     },
     {
