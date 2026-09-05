@@ -220,12 +220,44 @@ oracle-tested; `sheet-grammar` pairs unchanged.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3 — Consumer legs (plan §8 legs 2-3)
 
-- [ ] T007 View-tab context menu onto the primitive (`src/views/toolbar-renderer.ts:1229`): the
+- [x] T007 View-tab context menu onto the primitive (`src/views/toolbar-renderer.ts:1229`): the
       hand-built `db-view-tab-popover` panel becomes `createOwnedMenu`; its rows via `addRow`;
       touch move-rows preserved; `danger` tone maps to `warning`. `050` item 4 lands its
       duplicate/rename/remove here. **Proof**: lane row asserting the menu mounts
       `db-owned-menu` with a sheet header on the phone profile; `add view property picker` /
       `all views overflow menu` pairs stay green; screenshot of the migrated menu opened and read.
+      **Proof (observed 2026-09-05, landed)**: `showViewTabMenu` now builds `createOwnedMenu` and
+      every row through `addRow` — rename, duplicate, copy-code, the four touch-only move rows and
+      delete (`warning: true`, not a bespoke `is-danger` class); `renderViewTabPopoverRow` and
+      `renderViewTypeChangeRow` are deleted, their only callers. The type-change row keeps its
+      mechanism (the select picker, unchanged, per plan M8) but now closes the parent first and
+      anchors on the tab rather than the row — matching the pattern `showAllViewsHub`'s own
+      "change layout" action already uses in this file, and avoiding a real bug the naive port
+      would have shipped: the primitive's own outside-pointerdown listener has no notion of a
+      foreign popover opened from one of its rows, so leaving the parent open behind the picker
+      would have closed it the instant the picker was touched, not when a value was chosen.
+      `tools/live/render-assertion-harness.ts`'s `chrome-toolbar-tab-menu` scenario is retargeted
+      from the old shell's markup (`.db-toolbar-popover.db-view-tab-popover`,
+      `.db-view-tab-popover-row`) to the primitive's (`.db-owned-menu`, `.db-menu-item-label`) and
+      gains a third assertion for the warning tone; stashing the source change and re-running
+      `node tools/live/render-assertions.mjs` reproduces the three failures (red — "no owned menu
+      mounted on contextmenu", "rows: none", "no delete row found"), restoring it returns to green
+      (`$?` → 0). `node tools/live/sheet-grammar.mjs` stays green (`$?` → 0) with both named pairs
+      passing all fourteen columns. The hand-built `db-menu-item` row count in
+      `toolbar-renderer.ts` drops from **39 to 37** (`grep -n "db-menu-item" src/views/toolbar-renderer.ts
+      \| grep "cls" \| wc -l`) — only 2, not 9, because the census counts hand-built-row *definition*
+      lines and `renderViewTabPopoverRow`/`renderViewTypeChangeRow` were one shared `cls` line each
+      serving all nine of this menu's rows; `menu-row-vocabulary-census.test.ts`'s baseline is
+      re-pinned to 37,
+      the family total to 63 outside `menu-row.ts` (69 including its own 6), and
+      `npx vitest run` stays green (1266/1266). No capture is registered for this menu — `design-
+      trueup.md` already records the desktop view-tab context menu as undriven — so none is added
+      to the corpus; it was instead read through the same constructed-scenario bundle the capture
+      pipeline itself uses (`prepareConstructedBundle`/`mountConstructed` against the real
+      `toolbarPopover: "tab-menu"` spec, real `styles.css`), screenshotted once to a scratch path
+      and viewed: rename/duplicate/copy-embed/change-type/delete render at the primitive's 28px row
+      pitch with the first row focused and delete in the warning colour, matching every other
+      migrated menu in this family. `npx tsc --noEmit` and `npm run build` both exit 0.
 - [ ] T008 Toolbar action panels onto the primitive (`src/views/toolbar-renderer.ts` M14 —
       utilities, title actions, database switcher, export, new-template): menus-of-actions become
       `createOwnedMenu`; control surfaces keep panel shape with primitive rows for menu-like rows.
