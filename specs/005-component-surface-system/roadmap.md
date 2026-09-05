@@ -1076,7 +1076,23 @@ dedicated grab handle (`e955f8ee`, captured `8a58c0b8`, recorded `fb7bd820`); an
 view migrating to board on open (`e85fc31a`, recorded `01014484`, re-measured `ceaa49ee`). The
 0.0.23 sheet-inside-tap fix carries forward unchanged. `manifest.json`, `package.json` and
 `versions.json` on main read **0.0.24**, and the tag is on `origin`.
-None of 0.0.7 through 0.0.24 is operator-confirmed yet. The cadence continues at **0.0.25** onward —
+**0.0.25 is cut** (version bump `2334046b`, bundle fix `f2518f5e`), carrying two desktop fixes the
+operator reported on 2026-09-05: the board card now shows every property enabled in the Properties
+panel, in panel order, instead of five fixed slots resolved off the reference board's unreachable
+branch; switching from board to another view no longer leaves `.pm-kanban-board`/`pm-kanban-view`
+painted above it, since the pre-render teardown now names both; and clicking a board card anchors
+the record panel to the card instead of falling back to the scrolling container and clipping at the
+top (`8f5205b2`, recorded `f7405a6b`/`d15c9fc2`, re-measured `9d47b50e`) — plus the New split button
+matching the toolbar's own icon-button height and radius instead of a bare button's Obsidian-supplied
+height, and the filter/sort popover widened from a 360px cap to 552px with 140/140/120px floors so
+property, operator and value never truncate (`91a0a426`, re-measured `f5a69e9f`). **A gate the tag
+itself caught:** the `chore(release): cut 0.0.25` commit (`2334046b`) carried the same `main.js`
+`b363d1b5` had committed before either fix — fresh `npm run build` differed by 108 lines — so
+`.github/workflows/gates.yml`'s release-commit drift check (`4ab702ee`'s "committed only at release
+time" rule) reddened the tagged push; `f2518f5e` rebuilds the bundle, the tag was moved to it, and
+both Release and Gates went green on the retag. `manifest.json`, `package.json` and `versions.json`
+on main read **0.0.25**, and the tag is on `origin`.
+None of 0.0.7 through 0.0.25 is operator-confirmed yet. The cadence continues at **0.0.26** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
@@ -1105,12 +1121,16 @@ remaining phone-sheet-grammar legs registering `sheet-grammar` as a gate lane (`
 list renderer's full retirement and stylesheet cleanup (`6f2aef3f`/`44e08bfb`), the frozen bench
 clock (`6bac9ce9`), the settings-body grammar (`4f090d2e`), the card-properties capture and grammar
 proof (`c0abb6ff`/`ba2b37f7`/`f240e8fa`), and `046`'s ADR-001/ADR-002 acceptance plus its partial
-capability landing (`ec893e67`), cut in `d3979cf5`; and **0.0.24**, the current cut —
+capability landing (`ec893e67`), cut in `d3979cf5`; **0.0.24** —
 `048-stacked-sheets`' phone stacking model (`265f736f`/`915591c2`, reconciled `012f7769`/`b363d1b5`),
 `044`'s phone-sheet-grammar closing leg (`55253df8`/`28b505f3`), `046`'s desktop linked-view chrome
 (`e955f8ee`/`fb7bd820`), and `047`'s gallery-to-board migration on open (`e85fc31a`/`ceaa49ee`), cut
-in `cabf595c`. The `0.0.16` through `0.0.24` tags are all present on `origin`. None of 0.0.7 through
-0.0.24 is operator-confirmed yet.
+in `cabf595c`; and **0.0.25**, the current cut — the board card's configured-property list, cleared
+teardown and anchored record panel (`8f5205b2`, recorded `f7405a6b`/`d15c9fc2`/`9d47b50e`), and the
+New split button's toolbar-matched chrome plus the widened filter/sort popover (`91a0a426`, recorded
+`f5a69e9f`), version-bumped in `2334046b` and rebuilt in `f2518f5e` after the tagged push's own drift
+check caught a stale bundle. The `0.0.16` through `0.0.25` tags are all present on `origin`. None of
+0.0.7 through 0.0.25 is operator-confirmed yet.
 
 **Release-mechanics gotcha, surfaced during the rename:** `.github/workflows/release.yml`
 auto-creates a GitHub release on any `*.*.*` tag push, and it raced the manual tag-recreation pass —
