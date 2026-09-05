@@ -48,6 +48,11 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "src/views/record-surface/record-header.ts",
+      "src/views/record-surface/property-row.ts",
+      "src/views/record-surface/add-property-row.ts",
+      "src/views/record-surface/hidden-properties.ts",
+      "src/views/record-surface/index.ts",
       "src/views/cell-renderer.ts",
       "src/views/record-detail-panel.ts",
       "src/views/table-record-peek.ts",
@@ -55,12 +60,7 @@
       "src/views/board-card-properties-panel.ts",
       "src/views/modals/create-property-modal.ts",
       "src/views/modals/property-type-conflict-modal.ts",
-      "src/views/modals/formula-modal.ts",
-      "src/views/modals/relation-rollup-config-modal.ts",
-      "src/views/column-menu.ts",
-      "tools/live/sheet-grammar.mjs",
-      "screenshots/anytype/README.md",
-      "tools/live/render-assertion-bundle.mjs"
+      "src/views/modals/formula-modal.ts"
     ],
     "entities": [
       {
@@ -103,6 +103,36 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "record-header.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/record-header.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "add-property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/add-property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "hidden-properties.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/hidden-properties.ts",
+        "source": "derived"
+      },
+      {
+        "name": "index.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/index.ts",
         "source": "derived"
       },
       {
@@ -154,36 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "relation-rollup-config-modal.ts",
-        "kind": "code",
-        "path": "src/views/modals/relation-rollup-config-modal.ts",
-        "source": "derived"
-      },
-      {
-        "name": "column-menu.ts",
-        "kind": "code",
-        "path": "src/views/column-menu.ts",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "README.md",
-        "kind": "doc",
-        "path": "screenshots/anytype/README.md",
-        "source": "derived"
-      },
-      {
-        "name": "render-assertion-bundle.mjs",
-        "kind": "file",
-        "path": "tools/live/render-assertion-bundle.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-05T16:25:28.535Z",
+    "last_save_at": "2026-09-05T17:02:43.111Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e5a2e3da958961c44a716f7bc0004360398959d80e510c7325edc039f5bd24f4",
+    "source_fingerprint": "sha256:1a1e83c54450dcb171365e608061b9c7bcfb98704f0aa4acf8c9bfd6062168eb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "50f470cd7cf2edb7cfab0196a5a42b5011c8dc5988af4515becbdc766c1f925f",
       "plan.md": "24cd0245479ee276caf3a5df6b566b61596ad981890334df69650a845e19ca6c",
-      "tasks.md": "ab84d7878aa229d5078a0d0328fe5d893be5e00c6d6cf7f437fc1f2a6c863549",
-      "decision-record.md": "fb165390bcc42311cdcb2138506d5f0fbee9d466cd45dfb3165e57dc3aa36cc9",
+      "tasks.md": "027e4131a7e036f3ca70afe8677fda533da7c26314f8cb9a877c22ae94a3205c",
+      "decision-record.md": "77cae2750137c23eae164e1e1d68498b43e480ee8e1ac26e365562f131f49f19",
       "implementation-summary.md": "4d4b08a1d740cdfb0fb66bee4c8d15305afcf695771e73e6283eee925201b878"
     },
     "last_active_child_id": null,

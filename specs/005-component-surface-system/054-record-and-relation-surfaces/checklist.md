@@ -41,7 +41,7 @@ against the tree that produced it.
 | C7 | `renderCardField`'s four external callers after the shim | all working today through the private copy | same tests green through the P2 shim | [ ] |
 | C8 | Properties panel desktop rect after the P1 desktop variant | **x 28.52, y 25.17, w 540.96, h 604.51 at a 1100×900 desktop viewport (table bench, 16 columns, 1 hidden), re-measured 2026-09-05** — throwaway `t002-geometry-measure.mjs` mounts `panel-column-manager/file-view` through `tools/live/render-assertion-bundle.mjs`'s `buildRenderAssertionBundle` and reads `.db-column-manager`'s `getBoundingClientRect()`. Upgrades the row from operator-verified to lane-measured | unchanged, asserted by the lane | [ ] |
 | C9 | Board-card reference captures after L3 | **current `pixelHash` baseline, re-read 2026-09-05** — `node -e '...'` over `screenshots/manifest.json` (generated at HEAD `cf5c7e95`, stylesheet fingerprint `styles.css@e2e6314a036a`): `board-view`/`constructed-board` carry 8 hashes across both themes and devices, e.g. `board-view` dark desktop `7d78d926dfe9`; `node tools/screenshots/verify.mjs` → exit 0, "554 entries match their sources", confirming the baseline is current rather than stale. Also read the docked record panel (`panel-record-detail-docked/file-view`, the surface 006's docking changed at `ae46da94`) with the same throwaway script: panel height 876px against a 924px pane (94.8%, above `RECORD_DOCK_MIN_PANE_FRACTION` 0.6), right edge 12px from the pane's right edge (within `RECORD_DOCK_EDGE_TOLERANCE` 13px) — currently green, not a pre-existing red this leg needs to fix | identical, or operator-ruled | [ ] |
-| C10 | `migration-table.md` rows | **does not exist** | 10 surface rows + 7 behaviour rows, every capture filename resolved; behaviour rows carrying T001's image-true-up disposition | [ ] |
+| C10 | `migration-table.md` rows | **exists, 2026-09-05** — 10 surface rows (S1-S10) + 7 behaviour rows (A1-A7), every cited capture's basename resolved under `screenshots/anytype/`; behaviour rows carry `design-trueup.md`'s adopted/adapted/rejected-with-reason disposition | 10 surface rows + 7 behaviour rows, every capture filename resolved; behaviour rows carrying T001's image-true-up disposition | [x] |
 | C11 | `npm run gate` exit status with every negative control observed red | not yet run for this phase | exit **0**, each control red then green | [ ] |
 | C12 | `npm run replay` | not yet run for this phase | holds with reversed **0** | [ ] |
 | C13 | `npm run screenshots:verify` after the retirement sweep | green at HEAD | exit **0**; every changed capture opened and read by a person | [ ] |
@@ -81,7 +81,7 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
       (Rejected, 2026-09-05 ~18:20), the operator kept the pixel reading as the proof, so the row
       records **pixel read owed**, to be closed by an image-capable in-runtime leaf at the leg's
       close rather than by this measurement-only leg
-- [ ] CHK-008 [P0] T003 complete: `migration-table.md` exists and passes AC-008's file check
+- [x] CHK-008 [P0] T003 complete: `migration-table.md` exists and passes AC-008's file check
 <!-- /ANCHOR:pre-impl -->
 
 ---
@@ -89,19 +89,28 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
 <!-- ANCHOR:implementation -->
 ## IMPLEMENTATION
 
-- [ ] CHK-010 [P0] The primitives module family exists under `src/views/record-surface/` with
+- [x] CHK-010 [P0] The primitives module family exists under `src/views/record-surface/` with
       `index.ts`'s contract table (ADR-001), and no consumer hosts a primitive another consumer
-      imports
+      imports — `record-header.ts`, `property-row.ts`, `add-property-row.ts`,
+      `hidden-properties.ts` and `cell-editor-contract.ts` exist, `index.ts` lists all five in
+      `RECORD_SURFACE_PRIMITIVES`, and `card-field-renderer.ts`'s own value-rendering body was
+      removed in favour of calling `property-row.ts`'s `renderPropertyValue`
 - [ ] CHK-011 [P0] The editor extraction is mechanical per ADR-002: one editor per leg, the dispatch
-      test green before and after each, no behavioural edit inside a moved body
+      test green before and after each, no behavioural edit inside a moved body — **not started**;
+      `cell-editor-contract.ts` pins the dispatch and is observed red (no extracted module exists
+      for any of the ten module-backed types), which is the designed starting state, not this
+      row's close
 - [ ] CHK-012 [P0] Every phone surface added or changed carries `044`'s seven grammar elements, and
-      every editor opened over the record sheet obeys `048`'s stacking model (goal D4 posture)
-- [ ] CHK-013 [P1] The three spec open questions are resolved at T001 and recorded in
+      every editor opened over the record sheet obeys `048`'s stacking model (goal D4 posture) —
+      not applicable yet; no phone surface has switched onto a primitive this pass
+- [x] CHK-013 [P1] The three spec open questions are resolved at T001 and recorded in
       `migration-table.md` §4 (desktop header DOM, quick-add placement, board-card add affordance)
-- [ ] CHK-014 [P0] ADR-003 held: the formula workbench, rollup aggregation list and computed engine
-      untouched except their type dropdowns' wiring
-- [ ] CHK-015 [P0] No new architecture layer: the primitives are DOM builders and moved method
-      bodies, not a rendering framework
+- [x] CHK-014 [P0] ADR-003 held: the formula workbench, rollup aggregation list and computed engine
+      untouched except their type dropdowns' wiring — none of `formula-modal.ts`,
+      `relation-rollup-config-modal.ts` or the computed engine were touched this pass
+- [x] CHK-015 [P0] No new architecture layer: the primitives are DOM builders and moved method
+      bodies, not a rendering framework — every export in `record-surface/` is a plain function or
+      a small closure-based factory, no class and no persisted state beyond a caller's closure
 <!-- /ANCHOR:implementation -->
 
 ---
@@ -142,8 +151,8 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 22 | 6/22 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closes with T002's 2026-09-05 re-measurement) |
-| P1 Items | 2 | 0/2 |
+| P0 Items | 18 | 10/18 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closed with T002's re-measurement; CHK-008/CHK-010/CHK-014/CHK-015 close with this pass's primitives family) |
+| P1 Items | 2 | 1/2 (CHK-013 closes with `migration-table.md`'s open-questions section) |
 | Operator rows | 3 | 0/3 (never agent-ticked) |
 
 **Verification Date**: 2026-09-05

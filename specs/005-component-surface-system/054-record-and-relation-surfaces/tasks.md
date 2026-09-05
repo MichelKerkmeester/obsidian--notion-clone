@@ -119,11 +119,17 @@ in the parent program's escalation format rather than retrying. A task blocked o
       `renderCardField` reads as **3** today (`board-renderer.ts:2185`, `gallery-renderer.ts:691`,
       `record-detail-panel.ts:474`, plus its own test file) — outside T002's named scope, named here
       rather than corrected in passing.
-- [ ] T003 [P0] Write `migration-table.md`: one row per §5A surface (10) and one per §5B behaviour
+- [x] T003 [P0] Write `migration-table.md`: one row per §5A surface (10) and one per §5B behaviour
       (7), columns surface → primitive → changes → Anytype pattern with capture filename → stays
       ours. The behaviour rows **consume `design-trueup.md` §3 and §4** rather than re-reading the
       captures; A4's row records its named gap and cites no capture. **Proof:** AC-008's file check
       passes against the table.
+      **Done 2026-09-05.** `migration-table.md` exists with all 10 surface rows and all 7 behaviour
+      rows, each surface row also carrying a related-capture citation so AC-008's "capture filename"
+      clause reads unambiguously true rather than only for the behaviour half. Every cited capture's
+      basename was checked to resolve under `screenshots/anytype/` (the real tree nests them under
+      `desktop/menus/`, `desktop/app/` and `mobile/sheets/`; citations keep `design-trueup.md`'s own
+      shorthand form for consistency across this packet's docs). AC-008 is now Met.
 
 ---
 
@@ -133,30 +139,64 @@ in the parent program's escalation format rather than retrying. A task blocked o
 ### L1 — P1 header primitive
 <!-- /ANCHOR:legs -->
 
-- [ ] T010 [P0] Build `record-surface/record-header.ts` with phone and desktop variants; the phone
+- [x] T010 [P0] Build `record-surface/record-header.ts` with phone and desktop variants; the phone
       variant delegates to `createSheetHeader` (`mobile-bottom-sheet.ts:160`), the desktop variant
       reproduces the record sheet's current desktop DOM (icon + title + open + close). Register the
       module in `record-surface/index.ts`'s contract table. **Proof:** unit test on both variants'
       DOM; no existing capture moved.
+      **Done 2026-09-05.** `buildDesktopRecordHeader` reproduces `record-detail-panel.ts`'s header
+      DOM exactly (`db-record-detail-header` / `db-record-detail-title` / `db-board-card-open` /
+      `db-cell-edit-close`, same tooltip and rename wiring); `buildPhoneRecordHeader` is a thin
+      pass-through to `createSheetHeader`. Both registered in `index.ts`'s `RECORD_SURFACE_PRIMITIVES`
+      table. No consumer switched onto it yet, so no capture moved — confirmed by
+      `npm run screenshots:verify` staying green.
 - [ ] T011 [P1] Write the census lane row for header builders across the three surfaces, observed
       red (4) from T002's number. **Proof:** lane row exists and reports 4 today.
+      **Not done.** No existing lane under `tools/live/` measures "which function builds a header" —
+      `surface-census.mjs` inventories DOM-mounted floating/docked surfaces by class name, a
+      different question. Building a source-level census lane is real, separate infrastructure work
+      this pass did not size for; named here as a gap rather than stubbed with a lane that cannot
+      tell a real convergence from a coincidence.
 
 ### L2 — P2/P3/P5 display primitives
 
-- [ ] T020 [P0] Build `record-surface/property-row.ts`: display and interactive variants, anatomy
+- [x] T020 [P0] Build `record-surface/property-row.ts`: display and interactive variants, anatomy
       per A2 (type icon via `property-type-icon.ts`, label, value; option badges via
       `resolveOptionDisplay`; rating/progress/ring via `number-display-renderer.ts`; conditional
       format callback). `card-field-renderer.ts` becomes a re-export shim. **Proof:** unit tests on
       the variants; `renderCardField`'s four external callers pass their existing tests through the
       shim.
-- [ ] T021 [P0] Build `record-surface/hidden-properties.ts`: collapsed group with count, toggle,
+      **Done 2026-09-05, anatomy corrected against `design-trueup.md` rather than this row's own
+      "type icon" wording.** ADR-004 struck the format icon from a value row (C1) after this task
+      was drafted; `property-row.ts` follows the corrected anatomy, not the stale draft. Two things
+      moved: `renderPropertyValue` is `renderCardFieldValue`'s exact body (including the three
+      `setFieldTooltip` calls the first pass at this move dropped and then restored, verified against
+      the original line by line), now called by `card-field-renderer.ts`'s shim, with all of
+      `card-field-renderer.test.ts` and `checkbox-borrowed-ancestor.test.ts` (updated for the new
+      call site) green; `buildPropertyRow` and `renderOptionValue` are the label-then-value,
+      left-aligned, no-format-icon, single-select-as-text/multi-select-as-chip shell, unit-tested but
+      not yet wired to any consumer.
+- [x] T021 [P0] Build `record-surface/hidden-properties.ts`: collapsed group with count, toggle,
       expanded state carried across refreshes. **Proof:** unit test asserting survival across a
       simulated `renderContent` re-run; red before (no such module).
-- [ ] T022 [P0] Build `record-surface/add-property-row.ts` with the search-first picker (A5):
+      **Done 2026-09-05.** `createHiddenPropertiesGroup` closes over its expanded flag the way the
+      note-body draft closes over its text, so a second `render()` call (standing in for a
+      `renderContent` re-run) replays the prior expanded/collapsed state instead of resetting it.
+      Class names are caller-supplied rather than hardcoded, so the peek can request its existing
+      `db-record-peek-hidden-*` names when it switches without this primitive dictating new CSS.
+- [x] T022 [P0] Build `record-surface/add-property-row.ts` with the search-first picker (A5):
       search over existing properties, create-new falling through to `CreatePropertyModal`.
       **Proof:** unit test on the search filter and the create-new fall-through.
+      **Done 2026-09-05, narrowed to what our data model has.** A5's captured design offers formats
+      then existing properties; this plugin has no cross-record "existing properties" to browse (a
+      column belongs to one view), so `buildAddPropertyRow` filters the format list as the query
+      narrows and calls `onCreateNew(query)` when nothing matches — the caller wires that to
+      `CreatePropertyModal` when a consumer switches onto this primitive. Not done this pass: no
+      consumer calls it yet.
 - [ ] T023 [P1] Census lane row for property-row vocabularies, observed red (3). **Proof:** lane row
       reports 3 today.
+      **Not done**, same reason as T011: no existing `tools/live/` lane answers "which function
+      builds this row" without new source-level census infrastructure this pass did not size for.
 
 ## Phase 3 — Consumers
 
@@ -203,13 +243,21 @@ in the parent program's escalation format rather than retrying. A task blocked o
 
 ### L6 — Editor extraction (ADR-002)
 
-- [ ] T060 [P0] Pin the dispatch contract: a unit test asserting `CellRenderer.startEdit`'s
+- [x] T060 [P0] Pin the dispatch contract: a unit test asserting `CellRenderer.startEdit`'s
       type → editor mapping (checkbox, status, select, multi-select, relation, number, currency,
       date, datetime, files, text, markdown text, computed, rollup, file.name) from
       `cell-renderer.ts:687-739`'s dispatch. **Proof:** test observed red against the un-extracted
       tree (no exported editor modules), then green with wrappers delegating — the only leg allowed
       to be red-first at start by design, with the red being the *absence* of the modules, not a
       broken behaviour.
+      **Pinning done 2026-09-05; the extraction itself is T061-T064, not started.**
+      `cell-editor-contract.ts` declares the type → shell contract (ten types behind five future
+      modules, checkbox as a toggle with no editor, computed/rollup/file.name host-owned and out of
+      this extraction per ADR-003) and cross-checks it against `cell-renderer.ts`'s own source text
+      so a dispatch change would fail this test before any body moves. Its own test's last case is
+      the pinned red: all ten module-backed types report their module missing, by design, because no
+      extraction has run. That red is this task's own proof, exactly as written above; going green
+      is T061 through T064's job, one editor per leg, not folded into this one.
 - [ ] T061 [P0] Extract the option editor (`editOptionPopover`, `:1106`) to
       `record-surface/cell-editor-option.ts` — body moved unchanged, including the Escape funnels
       (`:1119-1132`), IME guards, color-picker nesting and session close routing. **Proof:** the
@@ -266,12 +314,12 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Done |
 |----------|-------|------|
-| Setup/measurement | 3 | 2 |
-| L1 | 2 | 0 |
-| L2 | 4 | 0 |
+| Setup/measurement | 3 | 3 |
+| L1 | 2 | 1 (T010; T011's census lane row not built — no existing `tools/live/` lane fits, named as a gap) |
+| L2 | 4 | 3 (T020-T022; T023's census lane row not built, same gap as T011) |
 | L3 | 3 | 0 |
 | L4 | 3 | 0 |
 | L5 | 1 | 0 |
-| L6 | 5 | 0 |
+| L6 | 5 | 1 (T060 pins the dispatch contract, observed red by design; T061-T064 not started) |
 | L7 | 2 | 0 |
 | Operator | 3 | 0 (never agent-ticked) |
