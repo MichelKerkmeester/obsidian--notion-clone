@@ -50,14 +50,17 @@
       "src/main.ts",
       "src/data/gallery-migration.ts",
       "screenshots/manifest.json",
-      "src/views/gallery-renderer.ts",
+      "scratch/surface-list.md",
+      "scratch/capture-classification.md",
+      "scratch/measurement-inventory.md",
+      "tools/gate.mjs",
+      "scratch/declared-losses.md",
+      "scratch/02-viewtype-assignment-sweep.txt",
       "tools/live/renderer-coverage.json",
       "tools/bench/gallery-render-bench.ts",
-      "src/views/embedded-database-renderer.ts",
       "tools/screenshots/scenarios/core.mjs",
       "tools/screenshots/scenarios/shared.mjs",
-      "tools/live/render-assertion-harness.ts",
-      "tools/storybook/verify-placement.mjs"
+      "tools/live/render-assertion-harness.ts"
     ],
     "entities": [
       {
@@ -115,9 +118,39 @@
         "source": "derived"
       },
       {
-        "name": "gallery-renderer.ts",
-        "kind": "code",
-        "path": "src/views/gallery-renderer.ts",
+        "name": "surface-list.md",
+        "kind": "doc",
+        "path": "scratch/surface-list.md",
+        "source": "derived"
+      },
+      {
+        "name": "capture-classification.md",
+        "kind": "doc",
+        "path": "scratch/capture-classification.md",
+        "source": "derived"
+      },
+      {
+        "name": "measurement-inventory.md",
+        "kind": "doc",
+        "path": "scratch/measurement-inventory.md",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "declared-losses.md",
+        "kind": "doc",
+        "path": "scratch/declared-losses.md",
+        "source": "derived"
+      },
+      {
+        "name": "02-viewtype-assignment-sweep.txt",
+        "kind": "file",
+        "path": "scratch/02-viewtype-assignment-sweep.txt",
         "source": "derived"
       },
       {
@@ -130,12 +163,6 @@
         "name": "gallery-render-bench.ts",
         "kind": "code",
         "path": "tools/bench/gallery-render-bench.ts",
-        "source": "derived"
-      },
-      {
-        "name": "embedded-database-renderer.ts",
-        "kind": "code",
-        "path": "src/views/embedded-database-renderer.ts",
         "source": "derived"
       },
       {
@@ -154,12 +181,6 @@
         "name": "render-assertion-harness.ts",
         "kind": "code",
         "path": "tools/live/render-assertion-harness.ts",
-        "source": "derived"
-      },
-      {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -185,29 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`030-gallery-view-deprecation` withdrew the gallery from two pickers and stopped",
     "created_at": "2026-09-05T03:46:37Z",
-    "last_save_at": "2026-09-05T04:35:19.655Z",
+    "last_save_at": "2026-09-05T05:04:01.682Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0f25d31a26b8536e177d0973d00ddc203229855d41752c76077e9ed29e5fe26d",
+    "source_fingerprint": "sha256:35266318707e913a4235bc845fc890745965b77f4056c248f9bd75f317c8d706",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "fd68b0fca7417f62df6361e7ed7cb86ee14a42c176605593d7ff55f5b05e6849",
       "plan.md": "099ff9e80e8b0b8e693321ba27bbc620d84c78e468eb3e3dffe3bab92d8276b3",
-      "tasks.md": "af7958c9e1440f75403ac646b42f7f0ceb438682bea25450e9ac810f2550c2f5",
-      "implementation-summary.md": "ccc3af801a69d70ca836f6ec6940fd79c2e037623b2bfa0509fd73b2350da381"
+      "tasks.md": "89cf797751087d068593482fe619ef89e49df10f421914e1a5e3d11d049732e9",
+      "implementation-summary.md": "42ab266ce6f8becdbac4f579e8eb131f2fbbbf0d95c9a6d56dabf77d5baccc1b"
     },
     "last_active_child_id": null,
     "last_active_at": null

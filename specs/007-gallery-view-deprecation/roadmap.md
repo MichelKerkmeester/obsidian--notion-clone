@@ -56,7 +56,7 @@ completely, the way the list view is being retired in `../006-list-view-deprecat
 
 | # | Child | Owns | State |
 |---|---|---|---|
-| 1 | `001-usage-and-migration-audit` | What a live vault actually holds; every surface that accepts or mints `viewType: "gallery"`; what a board migration loses, named loss by loss; and what measures the gallery today, entry by entry | Not started |
+| 1 | `001-usage-and-migration-audit` | What a live vault actually holds; every surface that accepts or mints `viewType: "gallery"`; what a board migration loses, named loss by loss; and what measures the gallery today, entry by entry | Done — `001/implementation-summary.md`. 0 gallery views in the operator's vault; a second accepting surface found beyond the one this packet named (`data-source.ts:1527` `parseViewType`); the embedded-host migration gap confirmed with a working shape to copy from `006`'s shipped list equivalent; 4 of 6 capture ids confirmed board-shared by reading their scenario definitions |
 | 2 | `002-settings-redirect-and-migrate` | The settings-load sanitizer and the `.base` importer stop accepting `gallery`; the migration runs on open in **both** hosts, once, with a notice | Not started |
 | 3 | `003-remove-renderer-and-harness` | `gallery-renderer.ts` and its whole measurement surface deleted together — bench, driver, coverage pins, constructed scenario, capture entries, placement checks, unit specs and 81 `db-gallery-*` selectors | Not started |
 | 4 | `004-docs-and-release` | README, CHANGELOG, closing `030`'s open rows against this retirement, and the release that carries the removal | Not started |
