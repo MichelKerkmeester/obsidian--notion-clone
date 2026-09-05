@@ -36,12 +36,13 @@
 
 import { ToolbarRenderer } from "../../src/views/toolbar-renderer";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "../../src/views/popover-position";
-import { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag } from "../../src/views/mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag, isInsideOpenSheet } from "../../src/views/mobile-bottom-sheet";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
 import { SortPanelRenderer } from "../../src/views/sort-panel-renderer";
 import { FilterPanelRenderer } from "../../src/views/filter-panel-renderer";
 import { ViewConfigPanelRenderer } from "../../src/views/view-config-panel-renderer";
 import { overlayStack } from "../../src/views/overlay-stack";
+import { isHTMLElement } from "../../src/views/dom-guards";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SHAPES
@@ -796,6 +797,8 @@ interface AddRowScenario {
   panel(): HTMLElement | null;
   /** Rebuild the toolbar and nothing else, the way a background view refresh does. */
   rebuildToolbar(): void;
+  /** Take the surface down, the way the view's own outside-press dismissal does. */
+  dismiss(): void;
   open: boolean;
 }
 
@@ -849,6 +852,7 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
     kind,
     open: true,
     rebuildToolbar: () => buildToolbar(),
+    dismiss: () => { scenario.open = false; renderPanel(); },
     rules: () => {
       const held = state as unknown as { sortRules: unknown[]; filters: unknown[] };
       return kind === "sort" ? held.sortRules.length : held.filters.length;
@@ -900,6 +904,82 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
   panel.setAttribute("data-probe-panel", PANEL_IDENTITY);
   activeAddRow = scenario;
   return { ready: true, detail: `${kind} sheet open` };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 6b. THE VIEW'S OWN OUTSIDE-PRESS DISMISSAL
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * The surfaces a press may land in without counting as a press outside the view.
+ *
+ * Mirrored from `handleOutsideClick` in database-view.ts and embedded-database-renderer.ts, which
+ * is the whole point: the list is not what was wrong, so copying it keeps this focused on the part
+ * that was.
+ */
+const HEADER_SURFACE_SELECTOR = ".db-filter-panel, .db-sort-panel, .db-column-manager,"
+  + " .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header";
+
+let removeViewDismissal: (() => void) | null = null;
+
+/**
+ * Install the SECOND dismissal path the real view carries, which no case above models.
+ *
+ * The overlay stack is not the only thing that can close these panels. Both views also hold a
+ * document-level capture listener on `mousedown` that decides for itself whether a press was
+ * outside — and every case in this file registers only the stack, so the whole of that second path
+ * has been invisible to phone emulation. It is invisible in the other direction too: it is a
+ * `mousedown`, and every check here that drives an event drives a click or a pointerdown.
+ *
+ * The two shapes are the before and after of the same decision, and both must run. `containerOnly`
+ * is what the views asked before a surface could leave the container: does my container hold the
+ * pressed node. A sheet is portalled onto the body precisely so it can cover the host's navigation
+ * bar, so the answer for a thumb on the sheet's own button is no — and the surface is torn down on
+ * the `mousedown` a tap produces, which is before the `click` it produces can reach the control.
+ * Keeping that shape as a control is what stops this case going quietly vacuous: if a future change
+ * makes the tap survive it too, the case is no longer measuring anything and says so.
+ *
+ * The sheet-aware shape asks the sheet module instead, through the real exported predicate rather
+ * than a local reimplementation of it, so the decision under test is the shipped one.
+ */
+export function installViewOutsideDismissal(doc: Document, containerOnly: boolean): boolean {
+  removeViewDismissal?.();
+  removeViewDismissal = null;
+  const scenario = activeAddRow;
+  if (!scenario) return false;
+  const handler = (event: Event): void => {
+    const target = event.target;
+    if (!isHTMLElement(target)) return;
+    if (scenario.root.contains(target) || (!containerOnly && isInsideOpenSheet(target))) {
+      if (target.closest(HEADER_SURFACE_SELECTOR)) return;
+    }
+    scenario.dismiss();
+  };
+  doc.addEventListener("mousedown", handler, true);
+  removeViewDismissal = () => doc.removeEventListener("mousedown", handler, true);
+  return true;
+}
+
+export function removeViewOutsideDismissal(): void {
+  removeViewDismissal?.();
+  removeViewDismissal = null;
+}
+
+/**
+ * What wins the hit test at the add control's centre, named structurally.
+ *
+ * The backdrop is a body sibling of the sheet and one z-index tier below it, so a press at this
+ * point should reach the button. Asserting it directly retires the theory that WebKit stacks the
+ * two the other way round and hands the press to the backdrop — a theory that is otherwise
+ * indistinguishable from the real cause, because both end with the sheet closing on a tap aimed at
+ * a control inside it.
+ */
+export function hitTestAt(doc: Document, x: number, y: number): string {
+  const el = doc.elementFromPoint(x, y);
+  if (!el) return "nothing";
+  if (el.classList.contains("db-mobile-sheet-scrim")) return "backdrop";
+  if (!el.closest(".db-mobile-bottom-sheet")) return `outside-sheet:${el.tagName.toLowerCase()}`;
+  return el.classList.contains("db-panel-button") ? "add-control" : `in-sheet:${el.tagName.toLowerCase()}`;
 }
 
 export interface AddRowProbe {

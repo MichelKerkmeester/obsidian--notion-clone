@@ -169,6 +169,7 @@ import { createStoredZip, ZipEntry } from "../data/zip-export";
 import { saveZipWithPicker } from "../data/export-save-target";
 import { getEffectiveFilterRules } from "../data/filter-rules";
 import { appendLeaf, buildViewFilterTree, getRequiredViewFilterLeaves } from "../data/view-filter-tree";
+import { isInsideOpenSheet } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { estimateAutoColumnWidth, openColumnWidthAdjuster } from "./column-width";
 import { createRenderedTextWidthMeasurer } from "./inline-markdown-renderer";
@@ -3015,7 +3016,11 @@ export class DatabaseView extends FileView {
       this.clearCellSelection();
     }
     if (!this.showFilterPanel && !this.showSortPanel && !this.showColumnManager && !this.showViewConfigPanel) return;
-    if (this.containerEl_?.contains(target)) {
+    // A press inside an open sheet is inside this view, whatever the DOM says. The panels these
+    // flags describe are portalled out of the container on a phone, so containment alone reads a
+    // thumb on the sheet's own control as a press somewhere else and takes the surface down on the
+    // `mousedown` a tap produces — before its `click` can reach the control.
+    if (this.containerEl_?.contains(target) || isInsideOpenSheet(target)) {
       if (target.closest(".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header")) {
         return;
       }

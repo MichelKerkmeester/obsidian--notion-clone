@@ -18,6 +18,7 @@
 
 import { setIcon, setTooltip } from "obsidian";
 import { t } from "../i18n";
+import { isElement } from "./dom-guards";
 import { overlayStack } from "./overlay-stack";
 import { beginSheetGeneration, isSheetTraceEnabled, traceSheet } from "./sheet-trace";
 
@@ -337,6 +338,33 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     return;
   }
   remembered.parent.insertBefore(panel, remembered.before);
+}
+
+/**
+ * Did this press land inside a surface that is currently mounted as a phone sheet?
+ *
+ * Exists because the portal above breaks the one test every "was that press outside me?" check in
+ * this plugin is written as. A view asks whether its own container contains the pressed node — and
+ * a sheet is deliberately moved OUT of that container, onto the body, so the answer is no for a
+ * thumb sitting on the sheet's own button. The owner then reads its own surface as somewhere else
+ * entirely and dismisses.
+ *
+ * That single wrong answer presents as two separate complaints, which is why it survived three
+ * fixes aimed at one of them: the dismissal runs on the `mousedown` a tap produces, so the surface
+ * is already gone when the `click` arrives — the control does nothing AND the sheet closes, from
+ * one cause. It is invisible on desktop for the only reason that matters here: a desktop panel is
+ * never portalled, so containment still answers correctly there.
+ *
+ * The live registry, not the class, is what makes this an answer rather than a selector guess. A
+ * node matches only while the sheet module is actually holding it as a mounted sheet, so chrome
+ * left on a detached or demoted node cannot turn a genuine outside press into an inside one.
+ */
+export function isInsideOpenSheet(target: Node | null | undefined): boolean {
+  if (!target) return false;
+  const element = isElement(target) ? target : target.parentElement;
+  const sheet = element?.closest<HTMLElement>(".db-mobile-bottom-sheet");
+  if (!sheet) return false;
+  return sheetsFor(sheet.ownerDocument).has(sheet);
 }
 
 /**

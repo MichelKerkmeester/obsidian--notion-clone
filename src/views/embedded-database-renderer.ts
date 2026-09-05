@@ -96,6 +96,7 @@ import { DATABASE_VIEW_TYPE, DatabaseView, getNoteDatabasePlugin } from "./datab
 import { applyListMigration, planListMigration } from "../data/list-migration";
 import { resolveViewIndex } from "../data/view-selection";
 
+import { isInsideOpenSheet } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { estimateAutoColumnWidth } from "./column-width";
 import { createRenderedTextWidthMeasurer } from "./inline-markdown-renderer";
@@ -1056,7 +1057,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.clearEmbedCellSelection();
     }
     if (!this.showFilterPanel && !this.showSortPanel && !this.showColumnManager && !this.showViewConfigPanel) return;
-    if (!this.containerEl.contains(target)) {
+    // A press inside an open sheet is inside this surface, whatever the DOM says. These panels are
+    // portalled out of the container on a phone, so containment alone reads a thumb on the sheet's
+    // own control as a press somewhere else and takes the surface down on the `mousedown` a tap
+    // produces — before its `click` can reach the control.
+    if (!this.containerEl.contains(target) && !isInsideOpenSheet(target)) {
       this.closePopovers();
       return;
     }

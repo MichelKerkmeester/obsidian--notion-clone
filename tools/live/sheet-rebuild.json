@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-09-05T04:20:22.576Z",
+  "measuredAt": "2026-09-05T04:03:55.137Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "9b8cd68af575",
-    "tools/live/sheet-rebuild-harness.ts": "cb014e452dc0",
-    "src/views/toolbar-renderer.ts": "390a30ea3ef6",
+    "tools/live/sheet-rebuild.mjs": "d81a303f70a8",
+    "tools/live/sheet-rebuild-harness.ts": "93627b8c0cee",
+    "src/views/toolbar-renderer.ts": "dca7a1d16d74",
     "src/views/popover-position.ts": "9523ac9d8791",
-    "src/views/mobile-bottom-sheet.ts": "f53fe31e722f",
+    "src/views/mobile-bottom-sheet.ts": "804765323cbc",
     "src/views/sort-panel-renderer.ts": "3b916d60a109",
     "src/views/filter-panel-renderer.ts": "542cfa8c02a5",
     "src/views/view-config-panel-renderer.ts": "b229f08008d4",
     "src/views/overlay-stack.ts": "4f35a9904a53",
     "src/views/popover-auto-close.ts": "b1043a6cfdae"
   },
-  "cases": 35,
+  "cases": 47,
   "barsLost": 0,
   "gesturesMeasured": 4,
   "enginesMeasured": [
@@ -183,6 +183,42 @@
       "preFixFailure": null
     },
     {
+      "name": "Chrome: the sort sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a tap inside the sort sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "Chrome: the sort sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: the filter sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "Chrome: a tap inside the filter sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "Chrome: the filter sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
       "name": "Chrome: an anchored popover still goes when its anchor does",
       "pass": true,
       "detail": "hidden, as a surface with no anchor left to sit beside should be",
@@ -222,6 +258,42 @@
       "name": "WebKit: the filter sheet keeps its own node across the rebuild",
       "pass": true,
       "detail": "the panel the press began in is the panel that is still there afterwards",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: the sort sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a tap inside the sort sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "WebKit: the sort sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: the filter sheet judged by container containment alone",
+      "pass": true,
+      "detail": "the tap closes the sheet and adds nothing — the defect this case exists to see",
+      "preFixFailure": null
+    },
+    {
+      "name": "WebKit: a tap inside the filter sheet is not a press outside the view",
+      "pass": true,
+      "detail": "the tap reached it: 1 rule(s), sheet still open and still a sheet",
+      "preFixFailure": "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"
+    },
+    {
+      "name": "WebKit: the filter sheet's add control wins the hit test at its own centre",
+      "pass": true,
+      "detail": "the point resolves to the control, so the backdrop is not taking the press",
       "preFixFailure": null
     },
     {

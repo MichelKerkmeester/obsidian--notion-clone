@@ -54,6 +54,10 @@ const PRE_FIX_FAILURES = new Map([
   ["WebKit: the sort sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
   ["WebKit: the filter sheet's add control after a toolbar rebuild", "0 rule(s) after the tap (open: false, sheet: false) — the control does nothing"],
   ["settings sheet chrome survives its own scroll", "the grab band went from 48px to ZERO after a 200px scroll — the bar and the header scrolled off the top with the content"],
+  ["Chrome: a tap inside the sort sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
+  ["Chrome: a tap inside the filter sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
+  ["WebKit: a tap inside the sort sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
+  ["WebKit: a tap inside the filter sheet is not a press outside the view", "0 rule(s) after the tap (open: false, sheet: false) — the view read a press on the sheet's own control as a press outside itself"],
 ]);
 
 // ───────────────────────────────────────────────────────────────────
@@ -74,7 +78,7 @@ const entry = join(work, "entry.ts");
 
 writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack, openSettingsSheetForReach, measureSettingsSheetReach } from "${resolve(HERE, "sheet-rebuild-harness")}";
+import { runSheetRebuildParity, openGroupSheetForDrag, openHeaderSheetForAddRow, openHeaderSheetTracked, readAddRowProbe, rebuildToolbarBehindSheet, trackSheetTop, readSheetTrack, openSettingsSheetForReach, measureSettingsSheetReach, installViewOutsideDismissal, removeViewOutsideDismissal, hitTestAt } from "${resolve(HERE, "sheet-rebuild-harness")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
@@ -88,6 +92,9 @@ window.__trackSheetTop = (ms) => trackSheetTop(document, ms);
 window.__sheetTrack = () => readSheetTrack();
 window.__openSettingsSheetForReach = () => openSettingsSheetForReach(document);
 window.__measureSettingsSheetReach = () => measureSettingsSheetReach(document);
+window.__installViewOutsideDismissal = (containerOnly) => installViewOutsideDismissal(document, containerOnly);
+window.__removeViewOutsideDismissal = () => removeViewOutsideDismissal();
+window.__hitTestAt = (x, y) => hitTestAt(document, x, y);
 // The speed rule, exported so this lane can ask it rather than race to produce it.
 window.__sheet = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 `);
@@ -119,6 +126,24 @@ const bundled = Object.keys(built.metafile.inputs);
 const missing = REQUIRED.filter((source) => !bundled.includes(source));
 if (missing.length > 0) {
   console.error(`sheet-rebuild: FAIL — the bundle no longer imports ${missing.join(", ")}`);
+  process.exit(1);
+}
+
+// The call sites, because the inside-tap case models them rather than constructing them. A view is
+// an Obsidian ItemView and cannot be built in this page, so the case proves the shipped predicate
+// answers correctly — not that the views still ask it. Both halves are needed: a predicate nobody
+// consults is as dead as a wrong one, and the failure looks identical from the device.
+const OUTSIDE_PRESS_CALL_SITES = [
+  ["src/views/database-view.ts", "this.containerEl_?.contains(target) || isInsideOpenSheet(target)"],
+  ["src/views/embedded-database-renderer.ts", "!this.containerEl.contains(target) && !isInsideOpenSheet(target)"],
+];
+const unguarded = OUTSIDE_PRESS_CALL_SITES.filter(
+  ([file, expected]) => !readFileSync(join(REPO, file), "utf8").includes(expected),
+);
+if (unguarded.length > 0) {
+  console.error("sheet-rebuild: FAIL — an outside-press test no longer asks the sheet module whether"
+    + " the press was inside an open sheet, so a portalled surface reads as outside again:");
+  for (const [file] of unguarded) console.error(`  - ${file}`);
   process.exit(1);
 }
 
@@ -273,6 +298,74 @@ async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName)
             + " into no longer exists, so a press that began inside the sheet can arrive outside it",
       });
     }
+    // --- a tap INSIDE the sheet, judged by the view's own outside-press dismissal ---
+    //
+    // Everything above measures the overlay stack, because that is what every case in this file
+    // registers. The views carry a SECOND dismissal path the stack knows nothing about: a
+    // document-level capture listener on `mousedown` that decides for itself whether a press was
+    // outside, by asking whether the view's container holds the pressed node. A sheet is portalled
+    // onto the body so it can cover the host's navigation bar, so that question answers "outside"
+    // for a thumb resting on the sheet's own button — and it answers it on `mousedown`, before the
+    // `click` a tap produces can reach the control. One wrong answer, two complaints: the control
+    // does nothing AND the surface closes under it.
+    //
+    // The control row runs first and must FAIL to keep the sheet, which is what stops this case
+    // going vacuous: it proves the tap is genuinely being judged, rather than passing because
+    // nothing was listening.
+    for (const kind of ["sort", "filter"]) {
+      const runInsideTap = async (containerOnly) => {
+        const setup = await phonePage.evaluate((k) => window.__openAddRowSheet(k), kind);
+        if (!setup.ready) return { staged: false, detail: setup.detail };
+        const armed = await phonePage.evaluate((only) => window.__installViewOutsideDismissal(only), containerOnly);
+        if (!armed) return { staged: false, detail: "no open sheet to arm the view's dismissal against" };
+        const before = await settledAddButton(phonePage);
+        if (!before.addButton || !before.isSheet || !before.onBody) {
+          await phonePage.evaluate(() => window.__removeViewOutsideDismissal());
+          return { staged: false, detail: "the sheet never opened as a portalled sheet with an add control on screen" };
+        }
+        const hit = await phonePage.evaluate(({ x, y }) => window.__hitTestAt(x, y), before.addButton);
+        await phonePage.touchscreen.tap(before.addButton.x, before.addButton.y);
+        await phonePage.waitForTimeout(300);
+        const after = await phonePage.evaluate(() => window.__addRowProbe());
+        await phonePage.evaluate(() => window.__removeViewOutsideDismissal());
+        return { staged: true, hit, before, after };
+      };
+
+      const control = await runInsideTap(true);
+      const controlReproduced = control.staged && !control.after.open && control.after.rules === control.before.rules;
+      checks.push({
+        name: `${engineName}: the ${kind} sheet judged by container containment alone`,
+        pass: controlReproduced,
+        detail: !control.staged ? `could not stage: ${control.detail}`
+          : controlReproduced
+            ? "the tap closes the sheet and adds nothing — the defect this case exists to see"
+            : `the tap survived it (open: ${control.after.open}, rules: ${control.before.rules} -> ${control.after.rules})`
+              + " — containment alone no longer reproduces the defect, so the row below proves nothing",
+      });
+
+      const fixed = await runInsideTap(false);
+      const landed = fixed.staged && fixed.after.open && fixed.after.isSheet
+        && fixed.after.rules === fixed.before.rules + 1;
+      checks.push({
+        name: `${engineName}: a tap inside the ${kind} sheet is not a press outside the view`,
+        pass: landed,
+        detail: !fixed.staged ? `could not stage: ${fixed.detail}`
+          : landed
+            ? `the tap reached it: ${fixed.after.rules} rule(s), sheet still open and still a sheet`
+            : `${fixed.after.rules} rule(s) after the tap (open: ${fixed.after.open}, sheet: ${fixed.after.isSheet})`
+              + " — the view read a press on the sheet's own control as a press outside itself",
+      });
+
+      checks.push({
+        name: `${engineName}: the ${kind} sheet's add control wins the hit test at its own centre`,
+        pass: fixed.staged && fixed.hit === "add-control",
+        detail: !fixed.staged ? `could not stage: ${fixed.detail}`
+          : fixed.hit === "add-control"
+            ? "the point resolves to the control, so the backdrop is not taking the press"
+            : `the point resolves to ${fixed.hit} — something is stacked over the control`,
+      });
+    }
+
     await phonePage.close();
     for (const error of engineErrors) {
       checks.push({ name: `${engineName}: the phone page raised no error`, pass: false, detail: `page error: ${error}` });
