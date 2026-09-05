@@ -42,7 +42,7 @@ import {
   CalendarTimelineRenderer,
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
-import { addDateKeyDays, getLocalDateKey } from "../../src/data/calendar-date-time";
+import { addDateKeyDays, getLocalDateKey, renderNow } from "../../src/data/calendar-date-time";
 import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
 
 // ───────────────────────────────────────────────────────────────────
@@ -64,11 +64,18 @@ const EVENT_DATE_FIELD = "event_date";
 /** The first day of the drawn span, and how many days the events spread over. The span is
  *  kept short so every event sits inside the viewport-sized window at 390px as well as
  *  1100px — a wider spread would measure the narrow surface drawing fewer events than the
- *  wide one, and report that difference as a speed-up. The span is anchored around the
- *  current date (the render harness does not freeze a "today"): the default render scrolls
- *  to today on first paint, so a fixed past span would photograph an empty chart. Four days
- *  back keeps the ten-day window covering today at every offset. */
-const EVENT_START = addDateKeyDays(getLocalDateKey(new Date()), -4);
+ *  wide one, and report that difference as a speed-up. The span is anchored around "today"
+ *  (renderNow(), the same clock the gantt's own today-line and range read): the default render
+ *  scrolls to today on first paint, so a fixed past span would photograph an empty chart. Four
+ *  days back keeps the ten-day window covering today at every offset.
+ *
+ *  A function rather than a cached constant: the render-assertion harness freezes renderNow()
+ *  for capture and gate runs, and that freeze reaches this fixture only if the anchor is read
+ *  fresh at each call — a value cached once at module load would have already read whatever the
+ *  real clock said before the harness ever got to freeze it. */
+function eventStart(): string {
+  return addDateKeyDays(getLocalDateKey(renderNow()), -4);
+}
 export const EVENT_WINDOW_DAYS = 10;
 
 /**
@@ -125,22 +132,17 @@ function valueForType(col: ColumnDef, i: number): unknown {
 }
 
 /**
- * The pure day-arithmetic behind `eventDate`, exported so a test can probe month/year
- * rollover with an explicit worst-case start date rather than depending on whatever "today"
- * happens to be when the suite runs. `addDateKeyDays` carries real calendar rollover (August
- * 31 + 1 day is September 1); the day-of-month string arithmetic this replaced did not, and
- * silently produced out-of-range dates like "2026-08-32" whenever EVENT_START's day-of-month
+ * The pure day-arithmetic behind the fixture's event dates, exported so a test can probe
+ * month/year rollover with an explicit worst-case start date rather than depending on whatever
+ * "today" happens to be when the suite runs. `addDateKeyDays` carries real calendar rollover
+ * (August 31 + 1 day is September 1); the day-of-month string arithmetic this replaced did not,
+ * and silently produced out-of-range dates like "2026-08-32" whenever the anchor's day-of-month
  * plus an offset from `i % EVENT_WINDOW_DAYS` crossed the end of its month. An out-of-range
  * date fails to parse, so `buildCalendarTimelineEvents` drops that row's event — the bar,
  * milestone diamond or dependency arrow the constructed captures exist to prove never draws.
  */
 export function eventDateFrom(start: string, i: number): string {
   return addDateKeyDays(start, i % EVENT_WINDOW_DAYS);
-}
-
-/** A date inside the drawn span, spread across its days rather than piled on one. */
-function eventDate(i: number): string {
-  return eventDateFrom(EVENT_START, i);
 }
 
 /**
@@ -152,8 +154,9 @@ function eventDate(i: number): string {
  * told apart from a smaller one.
  */
 export function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
+  const start = eventStart();
   return Array.from({ length: count }, (_unused, i) => {
-    const frontmatter: Record<string, unknown> = { [EVENT_DATE_FIELD]: eventDate(i) };
+    const frontmatter: Record<string, unknown> = { [EVENT_DATE_FIELD]: eventDateFrom(start, i) };
     // A sparse, deterministic spread of the affordances the constructed captures must show:
     // progress fill on every fourth row, a milestone diamond on the first row, and a
     // dependency arrow from row 0 into row 2 (both near the top of the scrolled-to-today view).
@@ -185,7 +188,7 @@ export function makeConfig(columns: ColumnDef[], scale: TimelineBenchOptions["sc
     // today-relative span above keeps bars on screen. The anchor is inert on the default
     // path but keeps the local-extension path's window deterministic if a bench ever
     // enables that gated renderer.
-    timelineAnchor: EVENT_START,
+    timelineAnchor: eventStart(),
     schema: { columns, computedFields: [] },
   } as unknown as ViewConfig;
 }

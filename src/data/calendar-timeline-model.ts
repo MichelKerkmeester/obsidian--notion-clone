@@ -39,6 +39,7 @@ import {
   makeUtcDate,
   minuteOfDay,
   parseDateKeyToUtc as parseDateKey,
+  renderNow,
 } from "./calendar-date-time";
 
 // ───────────────────────────────────────────────────────────────────
@@ -597,7 +598,7 @@ function clampHour(value: unknown, fallback: number): number {
 }
 
 function startOfTodayUtc(): Date {
-  const now = new Date();
+  const now = renderNow();
   return makeUtcDate(now.getFullYear(), now.getMonth(), now.getDate());
 }
 

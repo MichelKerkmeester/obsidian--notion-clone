@@ -87,6 +87,24 @@ export function getLocalDateKey(date = new Date()): string {
   ].join("-");
 }
 
+// The constructed timeline capture mounts the real CalendarTimelineRenderer against the real
+// bench fixture (tools/bench/timeline-render-bench.ts), and both anchor their dates on "today"
+// so the bars, the gantt's today line and the bench's own event window land inside the same
+// drawn range. Two independent `new Date()` reads a browser tick apart already drifted that
+// picture once a day — a recapture after midnight moved every timeline/gantt PNG with no code
+// change. `renderNow()` is the one clock both sides read; `setFrozenRenderNow` lets the render-
+// assertion harness pin it to one instant for capture and gate runs. Production never calls the
+// setter, so the shipped views keep reading the real clock exactly as before.
+let frozenRenderNow: Date | null = null;
+
+export function renderNow(): Date {
+  return frozenRenderNow ? new Date(frozenRenderNow.getTime()) : new Date();
+}
+
+export function setFrozenRenderNow(instant: Date | null): void {
+  frozenRenderNow = instant;
+}
+
 export function monthKeyFromLocalDate(date: Date): string {
   return `${String(date.getFullYear()).padStart(4, "0")}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }

@@ -93,8 +93,16 @@ export async function buildReferenceBundle(entryBody) {
   writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
 import { mountReferenceView } from "${resolve(HERE, "reference-mount")}";
+import { setFrozenRenderNow } from "${resolve(HERE, "../../src/data/calendar-date-time")}";
 
 installObsidianDomShim(window);
+// The reference gantt's task dates come from the same timeline bench (reference-fixture.ts
+// imports its makeRows), which anchors "today" through renderNow() — the seam
+// render-assertion-harness.ts freezes for the constructed-timeline capture's own bundle. This
+// is a separate bundle that never imports that file, so without its own freeze call the
+// reference gantt's bars would keep the constructed twin's frozen dates while its own range
+// still read the real clock, drawing two pictures that no longer agree on what "today" means.
+setFrozenRenderNow(new Date(2026, 2, 25, 13, 45, 0, 0));
 ${entryBody}
 `);
 

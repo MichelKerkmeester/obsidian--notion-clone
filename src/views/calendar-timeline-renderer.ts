@@ -34,6 +34,7 @@ import {
   makeUtcDate,
   minuteOfDay,
   parseDateKeyToUtc,
+  renderNow,
   snapMinutes,
 } from "../data/calendar-date-time";
 import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveDayMoveChange, resolveDayRangeResize, resolveTimelineLinkChange, resolveTimedDragRange, TimelineDependencyGraph, TimelineLinkClick, TimelineLinkResolution } from "../data/calendar-interaction-model";
@@ -4290,7 +4291,7 @@ export class CalendarTimelineRenderer {
     return model.scale !== "day" && tick.dateKey === this.getTodayDateKey(now);
   }
 
-  private getTodayDateKey(date = new Date()): string {
+  private getTodayDateKey(date = renderNow()): string {
     return getLocalDateKey(date);
   }
 

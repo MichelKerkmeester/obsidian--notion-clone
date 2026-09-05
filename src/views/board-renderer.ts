@@ -43,6 +43,7 @@ import { isSameBoardGroup, resolveBoardCardDropIntent, resolveBoardColumnByPoint
 import { resolveBoardCardFields } from "./board-card-fields";
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
+import { renderNow } from "../data/calendar-date-time";
 import { openOptionColorPicker } from "./option-color-picker";
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
 import { renderCardField, renderCardFieldValue } from "./card-field-renderer";
@@ -688,13 +689,18 @@ export class BoardRenderer {
    *  (KanbanView.ts:126 `overdue: dueUrgency(...) === 'overdue'`, then KanbanCard.ts:97
    *  `props.overdue ? 'overdue' : 'normal'`) — so the board only ever distinguishes overdue
    *  from everything else. A terminal row is always plain (utils.ts:80-83: "Terminal tasks
-   *  are never urgent"). */
+   *  are never urgent"). "Today" reads renderNow() rather than `new Date()` directly: a fixed
+   *  bench due date sits still while the real clock walks past it, so the same row's
+   *  classification (and the constructed card's solid-red chip) flipped as the wall clock
+   *  advanced, with no code or data change — renderNow() is the seam the render-assertion
+   *  harness freezes for capture and gate runs so that stops happening; production never
+   *  freezes it, so the shipped board keeps reading the real clock. */
   private getReferenceDueUrgency(due: string, row: RowData, config: ViewConfig): "normal" | "overdue" {
     if (this.isReferenceRowCompleted(row, config)) return "normal";
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(due);
     if (!match) return "normal";
     const dueDate = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-    const now = new Date();
+    const now = renderNow();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const days = Math.round((dueDate.getTime() - today.getTime()) / 86_400_000);
     return days < 0 ? "overdue" : "normal";

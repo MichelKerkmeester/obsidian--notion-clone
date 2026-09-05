@@ -11,6 +11,13 @@
 // producing a wrong date, so a future reference version reaching past it fails loudly
 // instead of rendering a shifted timeline.
 //
+// `Now.plainDateISO` reads renderNow() rather than `new Date()` directly: the reference
+// gantt's task bars come from the same timeline bench our own gantt does (both anchor
+// "today" through renderNow()), and the vendored view's own today-line/diamond call this
+// function for its own idea of "today" — without this seam the two would draw the bars at
+// the frozen capture instant and the today-marker at the real one, agreeing on nothing.
+//
+
 // The subset, traced from the reference's render-path call sites (dates.ts, TimelineConfig,
 // GanttHeaderRenderer, GanttRenderer, TaskFilter): `Now.plainDateISO`, `PlainDate.from`
 // (string and object forms), `compare`, `add`/`subtract` with day/month/year amounts,
@@ -22,6 +29,8 @@
 // ───────────────────────────────────────────────────────────────────
 // 1. DATE MATH
 // ───────────────────────────────────────────────────────────────────
+
+import { renderNow } from "../../src/data/calendar-date-time.ts";
 
 const DAY_MS = 86400000;
 
@@ -152,7 +161,7 @@ export const Temporal = {
   PlainDate,
   Now: {
     plainDateISO() {
-      const now = new Date();
+      const now = renderNow();
       return new PlainDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
     },
   },

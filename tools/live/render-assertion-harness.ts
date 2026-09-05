@@ -60,6 +60,8 @@ import {
   CalendarTimelineRenderer,
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
+import { buildTimelineRangeGeometry } from "../../src/data/calendar-timeline-model";
+import { dateKeyDaysBetween, getLocalDateKey, renderNow, setFrozenRenderNow } from "../../src/data/calendar-date-time";
 import { ChartToolbarRenderer, type ChartToolbarActions } from "../../src/views/chart-toolbar-renderer";
 import { CalendarToolbarRenderer, type CalendarToolbarActions } from "../../src/views/calendar-toolbar-renderer";
 import {
@@ -68,7 +70,7 @@ import {
 } from "../../src/views/calendar-timeline-toolbar-renderer";
 import type { App } from "obsidian";
 import type { DataSource } from "../../src/data/data-source";
-import type { ColumnDef, RowData, StatusOptionDef, ViewConfig } from "../../src/data/types";
+import type { ColumnDef, RowData, StatusOptionDef, TimelineScale, ViewConfig } from "../../src/data/types";
 import {
   makeColumns as makeListColumns,
   makeRows as makeListRows,
@@ -137,6 +139,15 @@ import type { BoardGroup } from "../../src/views/board-renderer";
 import type { TableGroup } from "../../src/views/table-renderer";
 import type { ListGroup } from "../../src/views/list-renderer";
 import type { GalleryGroup } from "../../src/views/gallery-renderer";
+
+// The constructed timeline capture mounts the real CalendarTimelineRenderer against the real
+// bench fixture, and both anchor their dates on "today" (the bars, the gantt's today line and
+// the drawn range all read renderNow()). Freezing it once here — the only place this harness
+// bundle ever calls the setter — means every render-assertions/touch-targets/unstyled-links/
+// screenshot run this bundle drives sees the same "today" regardless of which real calendar day
+// it runs on. Production never imports this file, so the shipped views keep reading the real
+// clock unaffected.
+setFrozenRenderNow(new Date(2026, 2, 25, 13, 45, 0, 0));
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SHAPES UNDER TEST
@@ -2348,6 +2359,33 @@ function timelineAssertions(container: HTMLElement): AssertionResult[] {
   return results;
 }
 
+/** Recomputes the gantt's date range through the same exported pure function
+ *  renderTimelineGantt calls (both read renderNow() for their notion of "today"), and checks the
+ *  drawn today-line's x against it. A today-line built from a clock this harness never froze —
+ *  or a range built from a different one — shows up here as a mismatch rather than passing by
+ *  the two happening to agree on whatever day the run happened to execute. */
+function timelineTodayLineAssertion(
+  container: HTMLElement,
+  rows: RowData[],
+  config: ViewConfig,
+  scale: TimelineScale,
+): AssertionResult {
+  const line = container.querySelector<SVGLineElement>(".pm-gantt-today-line");
+  if (!line) {
+    return { name: "the today line sits at the frozen date's x", pass: false, detail: "no .pm-gantt-today-line was drawn" };
+  }
+  const range = buildTimelineRangeGeometry(rows, config, scale);
+  const todayKey = getLocalDateKey(renderNow());
+  const expectedX = (dateKeyDaysBetween(range.startDateKey, todayKey) ?? 0) * range.dayWidth;
+  const actualX = Number(line.getAttribute("x1"));
+  return {
+    name: "the today line sits at the frozen date's x",
+    pass: Math.abs(actualX - expectedX) < 0.5,
+    detail: `x1=${actualX}, expected ${expectedX} for ${todayKey} in range ${range.startDateKey}..${range.endDateKey} `
+      + `(dayWidth ${range.dayWidth})`,
+  };
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 7. SCENARIO RUNNER
 // ───────────────────────────────────────────────────────────────────
@@ -2794,6 +2832,10 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "timeline-renderer"));
     if (results[0].pass) {
       results.push(...timelineAssertions(container));
+      // Only the plain scenario: the subtask-tree scenario collapses some rows before the
+      // renderer's own visibleRows filter runs, and this assertion recomputes the range from
+      // the unfiltered fixture rows, which would not match the collapsed set.
+      if (!scenario.subtaskTree) results.push(timelineTodayLineAssertion(container, rows, config, timelineScale));
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "timeline"));
       results.push({
         name: "no forced layout inside the event loop",

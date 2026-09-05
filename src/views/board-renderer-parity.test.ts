@@ -27,9 +27,10 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { describe, expect, it, vi, beforeAll } from "vitest";
+import { afterEach, describe, expect, it, vi, beforeAll } from "vitest";
 import { BoardGroup, BoardRenderer, BoardRendererActions } from "./board-renderer";
 import { ColumnDef, RowData, StatusColor, ViewConfig } from "../data/types";
+import { setFrozenRenderNow } from "../data/calendar-date-time";
 import { TFile, setIcon, setTooltip } from "obsidian";
 import type { App } from "obsidian";
 // @ts-expect-error -- a tools-side .mjs fixture with no type declarations; imported so the parity
@@ -916,6 +917,33 @@ describe("pm-kanban reference fidelity pass", () => {
     const overdueOpenChip = firstCardOf(container, "Tasks/OverdueOpen.md").querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
     expect(overdueOpenChip.className).toContain("pm-chip--solid");
     expect(overdueOpenChip.className).toContain("pm-chip--strong");
+  });
+
+  // The bench's due dates are fixed literals (tools/bench/board-render-bench.ts's date-typed
+  // column), not relative to "today" — so a row's overdue/normal classification depended
+  // entirely on which real day the check happened to run on, and flipped as the wall clock
+  // walked past the fixed date, moving the constructed board capture's due chip with no code
+  // or data change. Freezing renderNow() to two different instants around the SAME fixed due
+  // date proves the classification now follows the frozen clock rather than the real one.
+  describe("due urgency under a frozen render clock", () => {
+    afterEach(() => setFrozenRenderNow(null));
+
+    it("classifies a fixed due date by the frozen render clock, not the real one", () => {
+      const due = "2026-06-15";
+      const rows = [rowInTodo("Tasks/Frozen.md", "Frozen", { status: "To Do", due })];
+
+      setFrozenRenderNow(new Date(2026, 6, 1, 9, 0, 0)); // frozen "today" after the due date
+      const afterContainer = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
+      const afterChip = firstCardOf(afterContainer, "Tasks/Frozen.md")
+        .querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
+      expect(afterChip.className).toContain("pm-chip--solid");
+
+      setFrozenRenderNow(new Date(2026, 4, 1, 9, 0, 0)); // frozen "today" before the due date
+      const beforeContainer = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
+      const beforeChip = firstCardOf(beforeContainer, "Tasks/Frozen.md")
+        .querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
+      expect(beforeChip.className).not.toContain("pm-chip--solid");
+    });
   });
 });
 
