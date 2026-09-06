@@ -1,24 +1,29 @@
 ---
 title: "Decision Record: Toolbar and View Controls"
-description: "ADR-001 the existing chip rail is extended rather than rebuilt. ADR-002 dead settings-entry methods are deleted with their classes kept. ADR-003 the sort-conflict confirm fires at commit, not at gesture start."
+description: "ADR-001 the existing chip rail is extended rather than rebuilt. ADR-002 dead settings-entry methods are deleted with their classes kept. ADR-003 the sort-conflict confirm fires at commit, not at gesture start. ADR-004 the wrap control is a per-view default with a per-column override, column wins."
 trigger_phrases:
   - "053 decision record"
   - "chip rail decision"
   - "dead methods decision"
   - "sort conflict decision"
+  - "wrap toggle decision"
+  - "wrap text default"
 importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-05T18:30:00Z"
-    last_updated_by: "design-trueup-t001"
-    recent_action: "Amended ADR-001 on the T001 measurements"
-    next_safe_action: "Execute T002 (red-first measurements); the legs gated on ADR-001/002/003 may proceed"
+    last_updated_at: "2026-09-06T05:40:00Z"
+    last_updated_by: "impl-053-wrap-toggle"
+    recent_action: "Added ADR-004: view wrapText default, column wrap wins"
+    next_safe_action: "Operator device pass on the wrap toggle; nothing else here is blocked"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
       - "src/views/toolbar-renderer.ts"
+      - "src/views/cell-renderer.ts"
+      - "src/views/column-menu.ts"
+      - "src/views/view-config-panel-renderer.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-053-adr"
@@ -31,6 +36,7 @@ _memory:
       - "ADR-003: the confirm fires on drop, not on gesture start"
       - "ADR-001 amendment 2 (T001): the rail's in-toolbar band move is withdrawn — the capture puts Anytype's rail where ours already renders"
       - "ADR-001 amendment 2 (T001): the direction colour is demoted to a redundant third signal at 3.14:1 accent-on-tint and 1.19:1 fill-on-bar; direction rides the arrow glyph and the direction word"
+      - "ADR-004: the view carries a wrapText default (table view settings only); a column's own wrap always overrides it; undefined follows the view"
 ---
 
 # Decision Record: Toolbar and View Controls
@@ -292,3 +298,85 @@ will immediately move it."
 | **What is the real caller that must not break?** | The drag-reorder path without an active sort — byte-for-byte the same code path, the confirm sitting entirely behind the sort-active branch |
 | **What contract must not break?** | The PM 1:1 board parity: no reference pixel moves; the recapture comparison is the proof |
 <!-- /ANCHOR:adr-003 -->
+
+---
+
+<!-- ANCHOR:adr-004 -->
+## ADR-004: The wrap control is a per-view default with a per-column override; the column always wins
+
+**Status: Accepted, 2026-09-06.**
+
+### Context
+
+Roadmap row 53, the operator's 2026-09-05 22:35 report: *"Also make it easier to set wrap or no
+wrapping table rows etc."* `005-content-row-rhythm` ADR-001 fixed the row-height defect the same
+evening by taking wrap out of four value containers inside a `td` that has not opted into
+wrapping; its own ADR-002 scoped what the coming control must own without building it — the field
+already exists (`ColumnDef.wrap`, `column-manager-renderer.ts`'s quick toggle), it is already on
+by default for one catalogue column, and `db-cell-wrap` carries no cap, so turning wrap on for
+every column would reopen the same defect through a different door.
+
+Two surfaces were named for the two halves: a per-view setting on `053`'s own view settings
+panel/sheet, and a per-column override on `052`'s column menu. Neither existed as a *view-level*
+default before this; the column-level field did.
+
+### Decision
+
+**A boolean view default, a tri-state column override, column wins.**
+
+- `ViewConfig.wrapText` (new) is a table-view-only switch in the view settings panel, placed next
+  to `rowDensity` using the same `renderSwitch` row grammar `showEmptyFields` and
+  `recordIcon.show` already use — no new row shape. **Default off**, so an upgraded vault's tables
+  render exactly as they do today; the operator opts in per view.
+- `ColumnDef.wrap` (already shipped) carries three states instead of two: `true` forces wrap,
+  `false` forces clip, `undefined` follows the view. The column menu (`column-menu.ts`) exposes
+  all three as **Wrap / Clip / Follow view** in one submenu row, built with `owned-menu.ts`'s real
+  `buildSubmenu` — the primitive `design-system.md` §6 recorded as unable to open a nested menu on
+  2026-08-29, landed at `fc730ed9` (2026-09-05 22:26), a day before this ADR and a week after that
+  section was written. §6 is stale on this one point; noted here rather than silently perpetuated
+  or corrected out of this phase's scope.
+- Precedence is a single expression, computed once: `col.wrap ?? config.wrapText`, in
+  `CellRenderer.renderCell`. A column's own choice always overrides the view; `undefined` is the
+  only state that reads the view at all.
+- The column manager's own quick icon toggle (`column-manager-renderer.ts`) is left as its
+  pre-existing two-state cycle (wrap / follow-view) rather than widened to three — it is a
+  shortcut, not the authoritative control the column menu's submenu is, and the task named the
+  column menu specifically for the three-state ask.
+
+**One data-integrity fix rides with this, not a new decision.** `column-operations.ts`'s
+rename/retype path normalized the property-edit modal's wrap checkbox with `result.wrap ||
+undefined`, which was inert while `wrap` was two-state (`false` and `undefined` meant the same
+thing) and would have silently turned an explicit "clip" into "follow view" once `false` became a
+real, distinct state. Changed to a direct assignment.
+
+### Consequences
+
+- No vault changes appearance on upgrade: `wrapText` is absent everywhere until an operator opens
+  a view's settings and turns it on.
+- The row-height floor stays provable in the same lane `005`'s ADR-001 added to:
+  `render-assertions.mjs` gained a `WRAP TOGGLE` pass on the same catalogue mount, asserting a
+  clipped row stays at the floor and a view with `wrapText` forced on grows past it — the second
+  half is a negative control, run red (wiring temporarily reverted) then green before landing.
+- Three surfaces write the same field (view settings switch, column menu submenu, column manager
+  quick toggle, rename modal checkbox) and one place resolves it (`cell-renderer.ts`). A future
+  fourth writer only has to produce a `boolean | undefined` on the right field; the read side does
+  not change.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Column-level only, no view default** | Smaller change; the field already existed | Does not answer the operator's ask, which named a per-view setting explicitly, and leaves every column to be set one at a time |
+| **View-level only, no column override** | One setting, nothing to explain | Discards the shipped per-column field and the catalogue's own wrap:true column would have no way to force wrap independent of the view |
+| **Both, column wins (chosen)** | Matches the operator's own two-surface framing; reuses the shipped field; one resolution rule | A column's `false` and the view's off both read as "clipped," so a reader inspecting only the column menu cannot tell which one is holding it there without opening the view settings too — accepted, because the submenu's "Follow view" row is the visible tell |
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — row 53 is an open operator ask, and `005` ADR-002 named this exact gap without closing it |
+| **Is there a simpler existing thing?** | `ColumnDef.wrap` itself — this widens its range from two states to three and adds one new view field; no new class of control |
+| **What does it touch?** | `types.ts` (both fields), `data-source.ts` (parse/serialize `wrapText`), `cell-renderer.ts` (the one resolution), `column-menu.ts` and `embedded-database-renderer.ts` (the submenu), `view-config-panel-renderer.ts` (the switch) |
+| **What is the real caller that must not break?** | Every existing `renderCell` call site — the new fourth parameter is optional and every scenario that never sets it keeps its exact prior output, proved by pixelHash-identical screenshots after a full recapture |
+| **What contract must not break?** | `005` ADR-001's `td:not(.db-cell-wrap)` rule for the four value containers — the wrap control reaches it only by adding `.db-cell-wrap` through the same class, never by touching the containers directly |
+<!-- /ANCHOR:adr-004 -->
