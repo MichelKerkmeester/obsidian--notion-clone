@@ -1172,7 +1172,33 @@ settings landing, a sort-conflict confirm on drop, and the measured collapse run
 `bcd64c1f`). The gallery view renderer is removed; existing gallery views open as boards behind a
 one-time notice (`fb27ba5b`, closed `adce7c0d`). `manifest.json`, `package.json` and `versions.json`
 on main read **0.0.28**, and the tag is on `origin`.
-None of 0.0.7 through 0.0.28 is operator-confirmed yet. The cadence continues at **0.0.29** onward —
+**0.0.29 is cut** (`03aa151d`), carrying: the board's rebuild to Anytype's kanban — 246px columns with
+no panel chrome, bordered header chips, values-only card rows at a 25px pitch, tag chips, circle
+checkboxes, a "No value" ungrouped column and a sticky horizontal scrollbar, plus phone geometry with
+a permanent count and a "···" per-column overflow control, retiring the Project Manager board
+vocabulary (`c9de1e6a`, geometry pinned `0fe620fd`, dead-flag branch removed `eebbb29f`, extensions
+retirement finished `e97524fb`); the calendar's month grid retargeted to Anytype's measured layout —
+136px rows, #EBEBEB/#292929 rules, flat 20px chips with a leading icon, a today marker, month+year
+title controls and a weekday band, with a 44px phone grid and the week/day timed blocks flattened to
+the month chip's ink (`d2fe6bea`, date-property submenu geometry fixed `f3422f2d`, week/day flattened
+`9f30fc31`); phone sheets' titles centred and every hand-built header routed onto the shared shell,
+short sheets floating and tall ones flush (`c62a7e81`, `e4a442b1`), and the confirm sheet exported as
+a shared primitive the shell and its callers both consume (`1a72ed9e`, reconciled `e2e2416e`); the
+table view's per-view Wrap text switch and per-column Wrap/Clip/Follow override (`3e22afdb`,
+`793d3b95`, `d647e5cd`), with the summary footer hidden at zero rows and sized to 44px on phone; the
+embedded-tables Load more row's phone height and empty-card overflow fix (`6331a133`); row deletion
+undo bound to the toast that reported it, redo re-trashing, and a toast that outlives its entry saying
+so instead of acting on the wrong row (`3e6e695e`, `7663423b`); a dedicated empty state with a Choose
+database action for a view whose source database is missing (`3e9b5322`, disambiguated from a
+merely-empty source `3724bb79`); the board card checkbox no longer forced unchecked by a
+native-disabled read-only field (`dcb01dc0`); the option, relation, date, text and number cell editors
+extracted into shared modules the table, board and record surfaces all consume (`3665985c`,
+`d869aa6d`, `dec3062c`); and the community-plugin description no longer naming the removed gallery
+view (`fea6f241`). The gantt was re-verified pixel-identical to the Project Manager reference — its
+two visible differences are host chrome (the 24px container inset, the antialiased font smoothing),
+which the operator ruled to keep plugin-wide rather than match per-view. `manifest.json`,
+`package.json` and `versions.json` on main read **0.0.29**, and the tag is on `origin`.
+None of 0.0.7 through 0.0.29 is operator-confirmed yet. The cadence continues at **0.0.30** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
