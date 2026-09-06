@@ -8541,6 +8541,19 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   opacity: 0.72;
 }
 
+/* A thumb needs the same 44px floor `.is-phone .db-menu-item` already raises every phone sheet row
+   to, and the load-more row's own `.is-phone` rule already carries for the same reason: a
+   standalone tappable control, not a value living inside an already-sized cell. Operator ruling,
+   2026-09-06: 44px on phone, unchanged (26px) on desktop. Zero rows hides the footer entirely
+   (table-renderer.ts), so this floor only ever applies to a trigger a reader can actually tap. */
+.is-phone .note-database-container .db-table tfoot.db-table-footer td {
+  height: 44px;
+}
+
+.is-phone .note-database-container .db-table-footer-trigger {
+  min-height: 44px;
+}
+
 .note-database-container .db-table-footer-calculate-hint {
   opacity: 0;
   transition: opacity var(--db-motion-fast);
