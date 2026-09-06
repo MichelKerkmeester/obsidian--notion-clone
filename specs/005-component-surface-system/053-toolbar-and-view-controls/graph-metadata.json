@@ -210,7 +210,7 @@
     ],
     "causal_summary": "A person using the toolbar cannot see which rules are active without opening panels (the triggers",
     "created_at": "2026-09-05T11:46:15.524Z",
-    "last_save_at": "2026-09-06T08:52:52.483Z",
+    "last_save_at": "2026-09-06T09:00:23.201Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:981fa5afee332c229f5144f4f0fe6d6dc54f4f3531d694b7ea7ca03ce66361f5",
+    "source_fingerprint": "sha256:c057727707526eea562725bce857bae6662f14996575e9e2d56efaeb43be0589",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "5f1204624fde24b51930fb952739884f6f418dee99b06a1a199c823ea37861f1",
       "plan.md": "2a078f818e3ae5f2ae0e557e7b7e51b4cc3d51807b8d0cbc3c4125c11a7f01ca",
-      "tasks.md": "550435049daf5d18356df0fb1c3aa36e3fd62d40d6cdae9d18bc90c8eed2cc5f",
-      "decision-record.md": "2243aa234b291813e7e62f596aff16fce33281ea9c2017c564ef3d7a39f4a37f",
+      "tasks.md": "7a3b7047ea8d7fec11b23eeb44960ec14309f32c43fcadb768f4defbe8579fec",
+      "decision-record.md": "dd6a0af120cc9fbabb23cb73b588869a43f9d6cdb034cf4f2716215e6dd3c6dd",
       "implementation-summary.md": "0598a4814490d2613ddbc793174d2f794e6fe1079dc109d3eee37fca521e7ca1"
     },
     "last_active_child_id": null,

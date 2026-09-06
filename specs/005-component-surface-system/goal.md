@@ -10,12 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T10:50:00Z"
+    last_updated_at: "2026-09-06T11:05:00Z"
     last_updated_by: "markdown-leaf"
     recent_action: "recorded §4 rows 59-63; 057 reopened on gestalt; stagger at 45px supersedes 80px"
-    next_safe_action: "Land 153/156/159/160/161, then read the 057 calendar review and plan the rebuild"
+    next_safe_action: "Land 156/159/160/161; 057 T019 rebuilds to G1-G15 with the 45px stagger"
     blockers:
-      - "057 is REOPENED on the operator's gestalt read; AC-013's threshold waits on the review"
+      - "057 is REOPENED; its threshold is G1-G15, 0 of 15 green, and G7 waits on a ruling"
       - "Row 59: the sheet family's deep-research loop starts only after 044/048/051 verify"
       - "Row 60's producer is unnamed; the wrap-off leg must measure before it fixes"
       - "057 ADR-002 is the operator's: do the calendar week and day scales survive"

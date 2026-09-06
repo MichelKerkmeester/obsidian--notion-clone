@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T10:50:00Z"
+    last_updated_at: "2026-09-06T11:05:00Z"
     last_updated_by: "orchestrate-handover-22"
     recent_action: "Recorded §4 rows 59-63; 057 reopened on gestalt; 45px stagger supersedes the 80px landing"
-    next_safe_action: "Land 153/156/159/160/161, then read the 057 review and plan the calendar rebuild"
+    next_safe_action: "Land 156/159/160/161; 057 T019 rebuilds to G1-G15 carrying the 45px stagger"
     blockers:
       - "058 T003 onward pending: the format-routing and Title-slot-affordance code has not landed"
       - "047's four Mobbin harvests (Notion, Evernote, Fibery, ClickUp) are queued, none dispatched"
@@ -496,15 +496,26 @@ ticks an operator row.**
   **In flight at handover:** `148`-`151` (047's Mobbin harvests — Notion running since ~10:00 by
   the **scripted-loop** method, one Code Mode execution per batch, two platform lanes, 40 req/min,
   1,679 `.webp` counted in its worktree at 10:50 against the leg's reported 1,510+ at 10:27;
-  Evernote, Fibery and ClickUp queued and idle), `153` (051 side sheet), `156` (056 palette), `159`
-  (048 stacked-sheet fix), `160` (053 wrap-off rows), `161` (057 unscheduled), `162` (057 calendar
-  review).
+  Evernote, Fibery and ClickUp queued and idle), `156` (056 palette), `159` (048 stacked-sheet fix),
+  `160` (053 wrap-off rows), `161` (057 unscheduled).
 
-  **§5.A was re-derived from each `goal.md` rather than carried forward, and two figures were
+  **Two of them landed while this leg was writing, and the rebase reconciled by truth rather than
+  by ours-versus-theirs.** `153`'s side sheet landed (`74f4db4b` and below): 051's criterion keeps
+  main's measured text — three of four clauses green, *interactive* still open — and this leg's
+  deep-research criterion is appended after it rather than replacing it. `162`'s calendar review
+  landed too, which **superseded this leg's own 057 wording an hour after it was written**: the
+  gestalt criterion no longer says "threshold TO BE FILLED", it takes the review's **G1-G15**, and
+  the chip-alignment criterion and task written here were **dropped** because G3 and G5 already own
+  them, measured on the same corpus. The stagger task renumbered T019 → **T020** behind main's
+  T019 rebuild. §5.A was re-derived a second time after the rebase: 051 is 1/9, 053 is 2/11, 056 is
+  0/10, 057 is 7/12.
+
+  **§5.A was re-derived from each `goal.md` rather than carried forward, and three figures were
   wrong.** `055` read 25% — 2/8; its `goal.md` has never held a ticked criterion, so the honest
   figure is 0% — 0/9. `056` read 91% — 10/11 and `057` read 80% — 8/10; both were the
-  acceptance-criteria scale rather than §3.2's `goal.md` rule, and re-derive to 0% — 0/8 and
-  70% — 7/10. The AC counts are kept alongside, named as the other scale, rather than deleted.
+  acceptance-criteria scale rather than §3.2's `goal.md` rule. After the rebase they re-derive to
+  0% — 0/10 and 58% — 7/12. The AC counts are kept alongside, named as the other scale, rather
+  than deleted, and `057`'s cell now also carries **0 of 15** on the review's G rows.
 
   **A trap worth carrying:** a gate run started without `</dev/null` hangs at 0% CPU inside
   `verify.mjs` waiting on stdin. It looks like a slow capture sweep and is not one. Redirect stdin
