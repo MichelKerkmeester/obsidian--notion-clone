@@ -155,10 +155,37 @@ _memory:
       itself per cell at the tighter pitch, so `touch-targets-constructed-baseline.json`'s ratchet
       was raised 1213 -> 1320 with its own per-class verification, matching this repository's own
       convention for a measured, cited raise rather than a silent one. `npm run gate`: 26 green.
-- [ ] T008 **Leg D — the phone calendar, every value labelled.** There is no iOS Anytype calendar
+- [x] T008 **Leg D — the phone calendar, every value labelled.** There is no iOS Anytype calendar
       reference and there will not be one. Each phone value carries **"design inferred from
       desktop"** and names the desktop capture it came from. `044`'s seven-element grammar binds
       every sheet this leg opens. (`src/views/calendar-renderer.ts`, `styles.css`)
+      **Done 2026-09-06.** The 44px nav-button floor (`.is-phone .db-calendar-nav-button`) was
+      already landed by the earlier stylesheet leg and is confirmed unchanged. What remained,
+      **design inferred from the desktop chip row measured in `design-trueup.md` §2c/§A3**: the
+      flat 20px-pitch chip's mobile override was still the pre-retarget `height: 18px; padding: 0
+      4px; font-size: 11px` (`styles.css`), below the 44px touch floor — the same class of
+      deviation `design-trueup.md` §8 names for this exact row, and named again here rather than
+      inferred silently. `.is-phone .db-calendar-month-segment` now sets `height: 44px` only,
+      keeping the desktop's 12px label and 8px icon gap (the pre-existing `padding`/`font-size`
+      shrink is removed rather than kept alongside the new height). Scoped to `.is-phone` rather
+      than `body.is-mobile` — a real phone carries both classes together (`capture.mjs`'s own
+      mobile profile does too), but a tablet (`.is-mobile` without `.is-phone`) keeps the desktop
+      pitch on both the CSS and the JS side, which is the reason this needed a JS-side fix too:
+      `calendar-renderer.ts` hardcoded the 20px lane pitch as a literal in three places (the month
+      grid's `gridTemplateRows`, its `neededHeight` sum, and `getMonthVisibleLaneLimit`'s
+      by-row-height division) and a fourth for the week/day all-day row's own lane pitch, none of
+      which read the CSS value — a 44px-tall phone chip inside a CSS-grid track still sized to
+      20px would have overlapped the next lane. Added `isPhoneLayout()`/`getMonthChipPitch()`
+      (mirroring `calendar-timeline-renderer.ts`'s own `isGanttPhone()` idiom independently, not
+      shared with it) and read the same 20/44 value at all four sites. The day/chip context menu
+      (`showDayEntryMenu`) is built on `createOwnedMenuForEvent`, the same shared primitive
+      `tools/live/sheet-grammar.mjs` already registers as `owned-menu` — it does **not** register
+      as a new, twelfth surface, closing `design-trueup.md` §8's open row the other way: nothing to
+      add. `node tools/live/sheet-grammar.mjs` still reports 12 surfaces and 31 pairs at exit 0.
+      Recaptured every calendar mobile scenario; desktop captures confirmed pixel-identical
+      (untouched — the `.is-phone` scoping and the `isPhoneLayout()` check both leave a desktop
+      render's code path unchanged). `npm test` 1419/1419, `npx tsc --noEmit` exit 0, gantt
+      confirmed unmoved by MD5 and a zero-line diff.
 - [ ] T009 **The date-property picker** against
       `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` (A8). If it changes
       which date property a calendar reads by default, that is a data-visible change and the leg

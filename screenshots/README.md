@@ -1227,7 +1227,7 @@ Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts
 
 ### Calendar month view (constructed)
 
-The shipped month grid anchored on the bench's event dates, with its unscheduled backlog.
+The shipped month grid anchored on the bench's event dates, one chip carrying a real leading icon; the unscheduled drawer is absent because every bench row has an event date.
 
 | dark | light |
 |---|---|

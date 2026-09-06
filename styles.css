@@ -18072,10 +18072,17 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   pointer-events: none;
 }
 
-body.is-mobile .note-database-container .db-calendar-month-segment {
-  height: 18px;
-  padding: 0 4px;
-  font-size: 11px;
+/* Phone: the chip keeps the desktop's appearance (no fill, no bar, no
+   radius, the same 12px label and 8px icon gap) and takes its height from
+   the 44px touch floor instead of the measured 20px desktop pitch — a
+   named accessibility deviation, not an inferred value, exactly like the
+   nav button's 44px floor above. Fewer events show per cell as a result;
+   the rest already fold into the existing "+N more" overflow. Scoped to
+   is-phone rather than is-mobile so it matches the grid-row pitch
+   calendar-renderer.ts computes in JS for the same breakpoint — a tablet
+   (is-mobile without is-phone) keeps the desktop pitch on both sides. */
+.is-phone .note-database-container .db-calendar-month-segment {
+  height: 44px;
 }
 
 body.is-mobile .note-database-container .db-calendar-month-time {

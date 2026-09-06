@@ -335,11 +335,13 @@ export class CalendarRenderer {
 
 		// Single grid: heading row + fixed-height event lanes + a filler row. The heading
 		// row (32px) and the lane pitch (20px, no row-gap — the week grid's own row-gap
-		// is 0) are the measured Anytype offsets; the filler absorbs spare height so
+		// is 0) are the measured Anytype offsets on desktop; phone takes the 44px touch
+		// floor instead (styles.css's chip override). The filler absorbs spare height so
 		// sparse weeks do not stretch event spacing.
-		weekEl.style.gridTemplateRows = `32px repeat(${totalLaneRows}, 20px) minmax(0, 1fr)`;
+		const chipPitch = this.getMonthChipPitch();
+		weekEl.style.gridTemplateRows = `32px repeat(${totalLaneRows}, ${chipPitch}px) minmax(0, 1fr)`;
 
-		const neededHeight = 32 + totalLaneRows * 20 + 10;
+		const neededHeight = 32 + totalLaneRows * chipPitch + 10;
 		weekEl.style.setProperty("--db-calendar-month-week-min-height", `${Math.max(rowHeight || 0, neededHeight, this.getCellMinHeight(config))}px`);
 
 		const dayCells: HTMLElement[] = [];
@@ -745,9 +747,9 @@ export class CalendarRenderer {
 		const stage = section.createDiv({ cls: "db-calendar-week-allday-cols" });
 		stage.dataset.calendarVisibleLanes = String(visibleLanes);
 		stage.style.setProperty("--db-calendar-time-day-count", String(days.length));
-		// Lane pitch matches the month grid's flat chip; the detached day-number
-		// row above it keeps its own 28px.
-		stage.style.gridTemplateRows = `28px repeat(${visibleLanes + (hasOverflow ? 1 : 0)}, 20px)`;
+		// Lane pitch matches the month grid's flat chip, phone floor included; the
+		// detached day-number row above it keeps its own 28px.
+		stage.style.gridTemplateRows = `28px repeat(${visibleLanes + (hasOverflow ? 1 : 0)}, ${this.getMonthChipPitch()}px)`;
 		const todayKey = this.getTodayDateKey();
 		let firstAllDayCol: HTMLElement | null = null;
 
@@ -2296,6 +2298,20 @@ export class CalendarRenderer {
 		});
 	}
 
+	/** Obsidian's own phone body class — the same one styles.css scopes the chip's
+	 *  44px touch-floor override to, so the JS-computed grid-row pitch and the
+	 *  CSS chip height never disagree about which layout they are sizing for. */
+	private isPhoneLayout(): boolean {
+		return typeof window !== "undefined"
+			&& window.activeDocument?.body?.classList?.contains("is-phone") === true;
+	}
+
+	/** The flat chip's own row pitch: the measured 20px desktop value, or the 44px
+	 *  touch floor on phone (styles.css's `.is-phone .db-calendar-month-segment`). */
+	private getMonthChipPitch(): number {
+		return this.isPhoneLayout() ? 44 : 20;
+	}
+
 	private applyMonthSizingVars(wrap: HTMLElement, config: ViewConfig): void {
 		if (config.calendarColumnSizeMode === "custom") wrap.style.setProperty("--db-calendar-col-width", `${this.getColumnWidth(config)}px`);
 		wrap.style.setProperty("--db-calendar-day-min-height", `${this.getCellMinHeight(config)}px`);
@@ -2340,10 +2356,12 @@ export class CalendarRenderer {
 		// row grows to fit, so the explicit setting is honored up to the hard cap —
 		// that is the point of adaptive (otherwise a tall setting would be silently
 		// capped by the default height and never take effect).
-		// 32/20 mirror the heading offset and lane pitch set in renderMonthWeek — at
-		// the 136px default this floors to 5, matching the busiest captured cell.
+		// 32/chipPitch mirror the heading offset and lane pitch set in renderMonthWeek —
+		// at the 136px default this floors to 5 on desktop, matching the busiest
+		// captured cell; phone's taller 44px floor fits fewer.
+		const chipPitch = this.getMonthChipPitch();
 		if (config.calendarRowSizeMode === "custom") {
-			const byRowHeight = Math.max(1, Math.floor((this.getCellMinHeight(config) - 32) / 20));
+			const byRowHeight = Math.max(1, Math.floor((this.getCellMinHeight(config) - 32) / chipPitch));
 			const cap = Math.min(hardMax, byRowHeight);
 			if (config.calendarMonthVisibleLanes != null) {
 				return Math.max(1, Math.min(cap, Math.floor(config.calendarMonthVisibleLanes)));
@@ -2354,7 +2372,7 @@ export class CalendarRenderer {
 			return Math.max(1, Math.min(hardMax, Math.floor(config.calendarMonthVisibleLanes)));
 		}
 		// Adaptive, no explicit setting: fall back to what the default height fits.
-		return Math.max(1, Math.min(hardMax, Math.floor((this.getCellMinHeight(config) - 32) / 20)));
+		return Math.max(1, Math.min(hardMax, Math.floor((this.getCellMinHeight(config) - 32) / chipPitch)));
 	}
 
 	private getDefaultColumnWidth(config: ViewConfig): number {
