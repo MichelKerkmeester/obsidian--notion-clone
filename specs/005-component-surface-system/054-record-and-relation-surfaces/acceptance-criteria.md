@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "Extracted 5 editor modules (T061-T063); gate 26 green; T070/T071 gaps named"
+    recent_action: "T071 predicate amendment landed (ADR-006); T011/T023 source census closed (ADR-007)"
     next_safe_action: "Build the census lane (T011/T023) or close the column-manager row-class gap (T071)"
     blockers:
       - "AC-006's standalone-mount clause and T070's census-lane proof both need infrastructure T011/T023 did not build"
