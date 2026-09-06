@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "fibery-reclassification"
-    recent_action: "Reclassified the 702 non-flow Fibery captures by content (T035 Fibery half); ClickUp half stays open"
+    recent_action: "Reclassified 702 non-flow Fibery captures by content (T035 Fibery half)"
     next_safe_action: "Write the negative control red-first against the current schema"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
