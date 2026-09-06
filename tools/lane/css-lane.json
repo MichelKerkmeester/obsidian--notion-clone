@@ -3958,7 +3958,7 @@
         "screenshots/notion-clone/states/empty-state-source-missing-mobile-dark.png",
         "screenshots/notion-clone/states/empty-state-source-missing-mobile-light.png"
       ],
-      "addendum": "No stylesheet edit lands in this leg. The fourteenth EmptyStateReason (\"source-missing\") is a new hand fixture over existing .db-empty/.db-empty-card/.db-empty-action classes, none of them changed, so the four captures above are additions this release names rather than a moved capture this release owns. Recorded before the leg rebased onto 057-calendar-anytype-parity's release: the stylesheet the lane now sits at is a849b979b394, this entry's own 0cec9cd820fb is the state it released at, and the difference is 057's calendar retarget, not an edit this leg made -- git diff --stat -- styles.css against the rebase base is empty."
+      "addendum": "No stylesheet edit lands in this leg. The fourteenth EmptyStateReason (\"source-missing\") is a new hand fixture over existing .db-empty/.db-empty-card/.db-empty-action classes, none of them changed, so the four captures above are additions this release names rather than a moved capture this release owns. Added after the fact, so the hash on this entry is the stylesheet state it released at and not the tree's current one -- the lane has changed hands since, and git diff -- styles.css against this leg's own rebase base is empty."
     },
     {
       "event": "acquire",

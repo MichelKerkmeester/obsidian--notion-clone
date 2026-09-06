@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-06T18:00:00Z"
-    last_updated_by: "loadmore-lanes"
-    recent_action: "ADR-009 Accepted: a deleted source gets its own state with a Choose database action"
-    next_safe_action: "Build the source-missing empty state ADR-009 records (T005)"
+    last_updated_at: "2026-09-06T20:00:00Z"
+    last_updated_by: "source-missing-predicate"
+    recent_action: "ADR-009 built: the new state keys on an unresolved source, not sourceCount"
+    next_safe_action: "T003's nothingToUndo gap, T015's isolated gate, T017's operator pass"
     blockers: []
     key_files:
       - "src/views/toast.ts"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-055-adr"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 62
     open_questions: []
     answered_questions: []
 ---
@@ -977,30 +977,50 @@ ADR exists to keep closed.
 
 `EmptyStateReason` gains `"source-missing"` as its fourteenth member, with its own copy
 (`emptyState.sourceMissingTitle`/`sourceMissingMessage`, all three locales) and a `database` icon.
-`getEmptyStateReason` routes `diagnostics.sourceCount === 0` there instead of to
-`"no-matching-data"` — the one line the predicate changes, ahead of every other branch, so an
-active search or filter over a vanished source still reads as source-missing rather than as a
-query result. Both renderer classes push a primary `"Choose database"` action
-(`emptyState.chooseDatabase`, all three locales) wired to the same view-settings popover
-`group-relation-deleted`'s own action already opens — `database-view.ts`'s
-`openViewSettingsAfterMutation` and `embedded-database-renderer.ts`'s inline
-`toggleHeaderPopover(config, "view", anchor)` — the real source-rules editor
+Both renderer classes push a primary `"Choose database"` action (`emptyState.chooseDatabase`, all
+three locales) wired to the same view-settings popover `group-relation-deleted`'s own action
+already opens — `database-view.ts`'s `openViewSettingsAfterMutation` and
+`embedded-database-renderer.ts`'s inline `toggleHeaderPopover(config, "view", anchor)`, both
+reaching `viewConfigPanelRenderer.render` and the real source-rules editor
 (`view-config-panel-renderer.ts`'s `renderSourceRules`), not a new flow built for this state alone.
 
-Distinctness from the other two conditions this ADR names is proven three ways: a unit test
-asserting both predicate outcomes and that all three titles differ
-(`empty-state-renderer.test.ts`); two permanent lane rows
+**The predicate is not the one the Threshold below writes, and the difference is this ADR's own
+decision table.** The Threshold's shorthand — route `sourceCount === 0` to the new reason — was
+built first and refuted before it shipped. `sourceCount` is the row pipeline's tally of the records
+it was handed (`row-pipeline.ts`, `const sourceCount = rows.length`); it never sees the vault, so a
+folder that was deleted and a folder that exists and holds no notes yet are the same number. Under
+that rule a brand-new empty database read *"This view's source is missing"* with a **Choose
+database** action, which is the decision table's third row — a source that resolves and matched
+nothing — wearing the first row's copy. `getEmptyStateReason` therefore takes a second argument:
+the caller says whether the configured source still resolves, and the predicate returns
+`"source-missing"` only then, keeping `"no-matching-data"` for every zero-row source that is still
+there. Both classes answer it from their own effective source folder
+(`isSourceFolderMissing`, database-level folder over view-level, normalised, then
+`dataSource.fileExists`); a whole-vault view has no folder to lose and can never report the state.
+When the source is gone it still wins the whole precedence chain: a search over a vanished folder
+names the folder, not the query.
+
+Distinctness is proven three ways: unit tests asserting all three zero-row cases and that the three
+titles differ (`empty-state-renderer.test.ts`), red on all three when the predicate is collapsed
+back to reading the row count alone; two permanent lane rows
 (`table-empty-source-missing/file-view`, `table-empty-no-matching-data/file-view` in
 `tools/live/render-assertions.mjs`) mounting the real `TableRenderer` over the mock-data catalogue
-at zero rows and asserting the rendered `data-empty-reason` against the real predicate's own
-output; and a negative control — reverting the predicate's one line turned exactly the
-source-missing scenario's assertion red while its sibling and every other row in the lane (17
-scenarios) stayed green, restored to green again. A new hand fixture
-(`empty-state-source-missing`, `tools/screenshots/scenarios/core.mjs`) was captured with `--only`
-across both devices and themes and all four PNGs opened. The two new lane scenarios also draw the
-table's summary footer at zero rows, adding more instances of the already-tracked
-`db-table-footer-trigger` shortfall to the touch-targets constructed baseline (re-pinned 1304 →
-1360, named rather than resized). `npm run gate`: 26 green, 0 red, exit 0.
+at zero rows, one variable apart, asserting the rendered `data-empty-reason` against the real
+predicate's own output; and a negative control — the same collapse turned exactly the
+`no-matching-data` row red (`data-empty-reason="source-missing" (want "no-matching-data")`) while
+every other row in the lane stayed green, green again on restore. A new hand fixture
+(`empty-state-source-missing`, `tools/screenshots/scenarios/core.mjs`) is captured across both
+devices and themes and all four PNGs were opened: card, copy and the primary action in each.
+
+The two lane scenarios also draw the table's summary footer at zero rows, 56 more instances of the
+already-tracked `db-table-footer-trigger` shortfall. The constructed touch-target ratchet is **not**
+raised for them: `touch-targets.mjs` reads the two probes past instead, because a ratchet that rises
+whenever a scenario is added stops meaning what it says. The control keeps its 173 recorded
+instances against the scenarios that own it. The baseline moves the other way — re-pinned down from
+1304 to 974, because the rebase retired `db-calendar-month-segment` from the constructed corpus
+(330 to 0, no other class moving) and a stale higher number allows headroom that no longer exists.
+Measured both ways on the landed tree: 1030 with the probes, 974 without
+(`tools/live/touch-targets-constructed-baseline.json`).
 
 ### Operator ruling (2026-09-06)
 
