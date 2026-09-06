@@ -13,9 +13,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-06T05:40:00Z"
-    last_updated_by: "impl-053-wrap-toggle"
-    recent_action: "Added ADR-004: view wrapText default, column wrap wins"
+    last_updated_at: "2026-09-06T06:40:00Z"
+    last_updated_by: "verify-053-wrap-toggle"
+    recent_action: "Verified ADR-004 red-first; added the Anytype parity read"
     next_safe_action: "Operator device pass on the wrap toggle; nothing else here is blocked"
     blockers: []
     key_files:
@@ -355,12 +355,43 @@ real, distinct state. Changed to a direct assignment.
   a view's settings and turns it on.
 - The row-height floor stays provable in the same lane `005`'s ADR-001 added to:
   `render-assertions.mjs` gained a `WRAP TOGGLE` pass on the same catalogue mount, asserting a
-  clipped row stays at the floor and a view with `wrapText` forced on grows past it — the second
-  half is a negative control, run red (wiring temporarily reverted) then green before landing.
+  clipped row stays at the floor and a view with `wrapText` forced on grows past it. Measured on
+  the harness's phone page (390x844, `is-phone`) — the device the defect was reported on —
+  **36px clipped against a 36px floor, 133px wrapped**. Both halves were seen red before landing:
+  forcing the clipped scenario to wrap reports 133px and fails, and the wrapped scenario is itself
+  the control for the wiring reaching the renderer at all.
+- Two `vitest` pins carry what a browser lane cannot see. `data-source.test.ts` round-trips
+  `wrapText` through the reader and the writer with an unnamed sibling key as the negative control,
+  and asserts a view written before this release reads back clipped; removing either half of the
+  wiring turns it red. `cell-renderer-wrap.test.ts` drives the real `renderCell` over the 3x2
+  matrix of column override against view default; `??` → `||`, or dropping the view default,
+  turns it red.
 - Three surfaces write the same field (view settings switch, column menu submenu, column manager
   quick toggle, rename modal checkbox) and one place resolves it (`cell-renderer.ts`). A future
   fourth writer only has to produce a `boolean | undefined` on the right field; the read side does
   not change.
+
+### Anytype parity
+
+Read on `screenshots/anytype/desktop/menus/anytype-menu-set-view-settings-dark.png`,
+`anytype-menu-set-column-header-light-full.png` and `anytype-menu-set-column-header-align-dark.png`.
+
+**Anytype has no wrap control at all, on either surface.** Its view settings menu carries View name,
+Layout, Properties, Filter, Sort, Duplicate view and Remove view; its column-header menu carries the
+property name and type, Open as Object, Duplicate, Remove from Collection, Add filter, the two sorts,
+Insert left/right, Hide Property, Align and Calculate. Neither offers wrapping, and the grid behind
+the open menu in the full-page capture clips every long value to one line with an ellipsis at a
+uniform row height. So there is no Anytype behaviour to match here — the ask is ours, and the
+comparison is only about the *shape* of the control.
+
+**On shape we match it.** Anytype's own per-column three-state choice is `Align` (Left / Center /
+Right): an icon-plus-label parent row with a trailing chevron, opening a child menu flush beside it
+with a check on the current value. That is the row this ADR adopts. **Where we differ:** our parent
+row also carries the current value as trailing text (`db-menu-item-current`), which Anytype's `Align`
+row omits — but which its *view settings* rows do use (`Layout → Grid`, `Properties → Name, Object
+type,…`). We take the value-carrying form in both places rather than splitting the vocabulary by
+depth, because a wrap state that is invisible until the submenu opens is the state a reader most
+needs to see: the whole point of `Follow view` is that it is not self-evident from the cell.
 
 ### Alternatives
 

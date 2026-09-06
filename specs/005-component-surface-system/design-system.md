@@ -285,14 +285,14 @@ in parallel there are fourteen other ways to build the same thing.
 
 ### `submenu: true` — what it does and does not do
 
-`menu-row.ts:102-111` draws a chevron and sets ARIA. `owned-menu.ts:113` reads the flag exactly once,
-to suppress auto-close: `if (!rowOptions.submenu) close();`. **The handle has no way to open a nested
-menu.** The only production surface with real submenus builds them by hand as a separate body-mounted
-popover (`src/views/column-menu.ts:577`, `:598`).
+`menu-row.ts:102-111` draws a chevron and sets ARIA. **Corrected 2026-09-06: this section's original
+claim — that the handle has no way to open a nested menu — stopped being true at `fc730ed9`, which
+gave `addRow` a `buildSubmenu` callback that opens the child from the same factory as its parent
+(`owned-menu.ts:265-275`).**
 
-So: a chevron that opens nothing is worse than no chevron, because it promises. Until
-`OwnedMenuHandle` can open a nested menu through the same factory that produced its parent, do not add
-`submenu: true` to a new row expecting behaviour.
+So: a chevron that opens nothing is worse than no chevron, because it promises. `submenu: true`
+*without* `buildSubmenu` is still exactly that — `owned-menu.ts` then reads the flag only to suppress
+auto-close — so pair the two, or draw no chevron.
 
 ---
 
