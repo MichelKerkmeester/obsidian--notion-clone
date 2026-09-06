@@ -15,6 +15,7 @@ import { App, Notice } from "obsidian";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -26,6 +27,14 @@ export class CreateRecordIconFieldModal extends DbModal {
     private columns: ColumnDef[],
     private onCreate: (key: string, label: string) => Promise<boolean>,
   ) { super(app, "sheet"); }
+
+  protected getDeclaredTitle(): string {
+    return t("recordIcon.createField");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
+  }
 
   onOpen(): void {
     super.onOpen();

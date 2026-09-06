@@ -17,6 +17,7 @@ import { applyRangeSelection } from "../../data/range-selection";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
 import { createCheckbox } from "../checkbox";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -33,6 +34,14 @@ export class ComputedFrontmatterCleanupModal extends DbModal {
   ) {
     super(app, "sheet");
     this.selectedKeys = new Set(options.map((option) => option.key));
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("viewConfig.computedCleanup.title");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "dialog";
   }
 
   onOpen(): void {

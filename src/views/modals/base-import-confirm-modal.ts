@@ -21,6 +21,7 @@ import { createDropdownField } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { createCheckbox } from "../checkbox";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -69,6 +70,14 @@ export class BaseImportConfirmModal extends DbModal {
     this.titleText = options?.titleText ?? t("baseImport.title");
     this.descText = options?.descText ?? t("baseImport.desc");
     this.defaultUnchecked = options?.defaultUnchecked ?? false;
+  }
+
+  protected getDeclaredTitle(): string {
+    return this.titleText;
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "dialog";
   }
 
   openAndWait(): Promise<BaseImportColumn[] | null> {

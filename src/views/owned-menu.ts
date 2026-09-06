@@ -23,7 +23,8 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { createMenuRow, createMenuSection, createMenuSeparator, MenuRowOptions } from "./menu-row";
-import { applySheetChrome, attachSheetDragToDismiss, createSheetHeader, playSheetEntrance } from "./mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import {
   clamp,
   getVisiblePopoverBounds,
@@ -334,7 +335,7 @@ export function createOwnedMenu(
           || ("submenuAnchor" in target ? target.submenuAnchor.querySelector(".db-menu-item-label")?.textContent?.trim() || undefined : undefined)
           || resolveActiveViewName(doc)
           || t("menu.title");
-        const header = createSheetHeader(el, { title: resolvedTitle, onClose: close });
+        const header = buildShellHeader(el, { title: resolvedTitle, onClose: close });
         const handleEl = el.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
         el.insertBefore(header.header, handleEl ? handleEl.nextSibling : el.firstChild);
       } else {

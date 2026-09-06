@@ -18,7 +18,7 @@ import { SortRule, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { createDropdownField } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
@@ -111,7 +111,7 @@ export class SortPanelRenderer {
     });
     panel.focus?.({ preventScroll: true });
 
-    createSheetHeader(panel, {
+    buildShellHeader(panel, {
       title: t("toolbar.sort"),
       onClose: () => {
         actions.close();

@@ -33,6 +33,7 @@ import { safeString } from "../../data/safe-string";
 import { isDateLikeColumnType } from "../../data/date-time-format";
 import { scanFormulaSegments, type FormulaSegment } from "../../data/formula-tokenizer";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -214,7 +215,17 @@ export class FormulaModal extends DbModal {
     private initialPreviewRowPath?: string,
     private onClosed?: () => void
   ) {
+    // Stays fullscreen: the workbench is 1,664 lines wide with a two-pane editor and help
+    // browser that a bottom sheet would crush.
     super(app, "fullscreen");
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("formula.title", { name: this.col.label });
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "workbench";
   }
 
   onOpen(): void {

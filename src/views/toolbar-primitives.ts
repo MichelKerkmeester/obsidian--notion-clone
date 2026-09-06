@@ -4,7 +4,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { setIcon, setTooltip } from "obsidian";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import {
   COMPACT_MENU_POPOVER,
@@ -110,7 +110,7 @@ export function createPopoverShell(anchor: HTMLElement, options: PopoverShellOpt
 
   const header = options.omitHeader
     ? panel
-    : createSheetHeader(panel, { title: options.title, onClose: close, beforeClose: options.beforeClose }).header;
+    : buildShellHeader(panel, { title: options.title, onClose: close, beforeClose: options.beforeClose }).header;
   positionToolbarPopover(panel, anchor, getPopoverPosition(options.role, options.width));
   removeAutoClose = installPopoverAutoClose({ panel, anchorEl: anchor, close });
 

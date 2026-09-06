@@ -23,6 +23,7 @@ import { applyRangeSelection, clearSelection, selectAll } from "../../data/range
 import { RowData } from "../../data/types";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 import { createCheckbox } from "../checkbox";
 
 // ───────────────────────────────────────────────────────────────────
@@ -75,7 +76,17 @@ export class InvalidTimeEventsModal extends DbModal {
     private options: InvalidTimeEventOption[],
     private onConfirm: (edits: InvalidTimeEventEdit[]) => Promise<void>
   ) {
-    super(app, "fullscreen");
+    // This grid is an ordinary dialog-sized surface with no reason to keep a third
+    // presentation the way the formula workbench does.
+    super(app, "sheet");
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("timeline.invalidEventsTitleWithCount", { count: this.options.length });
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   onOpen(): void {

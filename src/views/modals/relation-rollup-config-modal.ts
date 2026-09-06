@@ -24,6 +24,7 @@ import { createDropdownField, DropdownOption } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { getDatabaseDropdownIcon, renderDatabaseDropdownIcon } from "../record-icon-renderer";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -41,6 +42,14 @@ export class RelationRollupConfigModal extends DbModal {
     private onClosed?: () => void,
   ) {
     super(app, "sheet");
+  }
+
+  protected getDeclaredTitle(): string {
+    return this.column.type === "relation" ? t("relation.configure") : t("rollup.configure");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   onOpen(): void {

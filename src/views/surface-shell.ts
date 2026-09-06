@@ -69,6 +69,23 @@ export function resolveShellPresentationForElement(
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 2b. SHELL ROLE
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * What kind of surface this is, independent of how it presents.
+ *
+ * `design-trueup.md` §5 names five, measured against the census: `dialog` (a confirm or a
+ * single-question prompt), `panel` (a form-like editor), `workbench` (the formula editor,
+ * the one surface that keeps `fullscreen`), `menu` (an anchored, handle-less popover) and
+ * `condition panel` (a filter/sort/column configuration surface). A surface declares its
+ * own rather than the shell inferring one from its presentation — the same reasoning
+ * already applied to the title: an undeclared role is a fact worth carrying, not a
+ * default worth guessing.
+ */
+export type SurfaceShellRole = "dialog" | "panel" | "workbench" | "menu" | "condition panel";
+
+// ───────────────────────────────────────────────────────────────────
 // 3. THE DECLARED TITLE, AND THE COUNTED SCRAPE FALLBACK
 // ───────────────────────────────────────────────────────────────────
 
@@ -210,12 +227,25 @@ export interface SurfaceShellHeaderHandle extends SheetHeaderHandle {
 /** Build the shell's own three-slot header: a leading slot, the centred title, and the close. */
 export function buildShellHeader(
   panel: HTMLElement,
-  options: { title: string; onClose: () => void; onBack?: () => void },
+  options: {
+    title: string;
+    onClose: () => void;
+    onBack?: () => void;
+    /** Trailing controls built before the close, the same contract `createSheetHeader` carries. */
+    beforeClose?(header: HTMLElement): void;
+  },
 ): SurfaceShellHeaderHandle {
-  const built = createSheetHeader(panel, { title: options.title, onClose: options.onClose });
+  const built = createSheetHeader(panel, {
+    title: options.title,
+    onClose: options.onClose,
+    beforeClose: options.beforeClose,
+  });
   built.header.addClass(SHELL_HEADER_CLASS);
   const leadingEl = built.header.createDiv({ cls: SHELL_HEADER_LEADING_CLASS });
-  built.header.prepend(leadingEl);
+  // `insertBefore` rather than `prepend`: the harnesses that mount this header on a hand-built
+  // element (no jsdom) implement the DOM subset `createDiv`/`insertBefore` draws on, not the
+  // newer `ParentNode` methods.
+  built.header.insertBefore(leadingEl, built.header.children[0] ?? null);
   if (options.onBack) attachBackControl(leadingEl, options.onBack);
   return { ...built, leadingEl };
 }
@@ -259,6 +289,8 @@ export interface SurfaceShellOptions {
   title?: string;
   /** The pre-shell scrape fallback (e.g. a heading scrape). Its use is counted. */
   getFallbackTitle?(): string | undefined;
+  /** What kind of surface this is. Omit while a surface has not declared one yet. */
+  role?: SurfaceShellRole;
   close(): void;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
@@ -273,6 +305,8 @@ export interface SurfaceShellHandle {
   readonly isSheet: boolean;
   /** Whether the shell currently presents the element fullscreen. */
   readonly isFullscreen: boolean;
+  /** The declared role, or `undefined` when the surface has not adopted one yet. */
+  readonly role: SurfaceShellRole | undefined;
   /** Push a sub-page: the header shows its title and a back control that pops it. */
   pushSubPage(title: string): void;
   /** Pop the current sub-page, returning to the one beneath it or to the root. */
@@ -317,6 +351,9 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
     },
     get isFullscreen() {
       return fullscreen;
+    },
+    get role() {
+      return options.role;
     },
     get subPageDepth() {
       return subPageState.stack.length;

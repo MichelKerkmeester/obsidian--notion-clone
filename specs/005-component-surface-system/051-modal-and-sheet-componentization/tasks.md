@@ -268,11 +268,22 @@ with the owner named, never self-closed.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3 — Consumers (plan §8 leg 3)
 
-- [ ] **T008 — Declare a title and a shell role on the 13 `sheet` subclasses.**
+- [x] **T008 — Declare a title and a shell role on the 13 `sheet` subclasses.**
       **Threshold**: 13 of 13 declare; the scraped fallback's use drops by 13. **Red-first proof**:
       20 of 20 undeclared today. **Capture**: none needed. **Assert** the declared title against the
       previously scraped one in the same leg; any intentional difference is recorded, not absorbed.
-- [ ] **T009 — Disposition the 4 `fullscreen` subclasses.**
+      **Done 2026-09-06**: all 13 (`ConfirmModal`, `AddDatabaseModal`, `CreatePropertyModal`,
+      `ColumnRenameModal`, `StatusOptionsModal`, `StatusPresetManagerModal`, `DeleteDatabaseModal`,
+      `BaseImportConfirmModal`, `RelationRollupConfigModal`, `CreateRecordIconFieldModal`,
+      `CreateLinkedViewModal`, `ComputedFrontmatterCleanupModal`, `TrashManagerModal`) override the
+      new `DbModal.getDeclaredTitle()`/`getShellRole()` pair, each returning the exact expression its
+      own `h3` already rendered — no intentional difference from the scraped text. `CreateLinkedViewModal`'s
+      prior `getSheetTitle()` override (the scrape-family method) is replaced rather than kept
+      alongside. `db-modal.ts` wires both into `createSurfaceShell({ title, role, ... })`, so a
+      declaring subclass no longer increments `getScrapeFallbackTitleUseCount()`. Asserted by
+      `surface-shell.test.ts`'s new source-text suite (`it.each` over the 13 files plus the negative
+      check that the old scrape override is gone) — `npx vitest run` 1370 passing (was 1329).
+- [x] **T009 — Disposition the 4 `fullscreen` subclasses.**
       `ChartDrilldownModal` (`chart-renderer.ts:972`), `InvalidTimeEventsModal`
       (`modals/invalid-time-events-modal.ts:78`), `FormulaModal` (`modals/formula-modal.ts:217`),
       `PropertyTypeConflictModal` (`modals/property-type-conflict-modal.ts:90`). **Threshold**: each
@@ -282,12 +293,27 @@ with the owner named, never self-closed.
       the written reason and stays `fullscreen`; `ChartDrilldownModal`, `InvalidTimeEventsModal` and
       `PropertyTypeConflictModal` take the shell's modal (desktop) / sheet (phone) role. No longer
       blocked.
-- [ ] **T010 — Route or disposition the 3 non-`DbModal` outliers.**
+      **Done 2026-09-06**: the three convert their `super(app, "fullscreen")` to `super(app, "sheet")`
+      with an inline comment naming ADR-004 (not the ADR id — the durable reason: an ordinary
+      dialog-sized surface with no scoped reason to keep a third presentation), and all four now
+      override `getDeclaredTitle()`/`getShellRole()` (`panel`/`panel`/`dialog`/`workbench`) — the
+      seventeenth, eighteenth, nineteenth and twentieth declaring subclasses alongside T008's
+      thirteen. `FormulaModal`'s `fullscreen` call is unchanged; a source-text check asserts it stays
+      and that the other three no longer contain the literal.
+- [B] **T010 — Route or disposition the 3 non-`DbModal` outliers.**
       `src/main.ts:3047`, `image-file-suggest-modal.ts:40`,
       `markdown-file-suggest-modal.ts:34`. **Threshold**: chrome-deciding sites 2 → 1, or a written
       reason per survivor. **Red-first proof**: 3 direct callers today. **Blocked on** `spec.md`
       §11's second open question.
-- [ ] **T011 — Route the 12 independent `createSheetHeader` sites through the shell where the
+      **Still blocked 2026-09-06 — owner: operator, unstarted, no code touched.** `spec.md`'s own
+      reconciliation log (`RECONCILIATION`/`T001` sections) states this plainly twice: the iOS
+      captures answered the sub-page-versus-stack question but "did not answer §11's second
+      question, and could not: whether the three `FuzzySuggestModal` subclasses join the shell or
+      stay Obsidian-native behind a shim is a question about our host, and Anytype has no host. T010
+      stays blocked." No capture can resolve a question about which host API surface this plugin's
+      own suggest modals target, so nothing here decides it in the operator's place; `AC-001` and
+      `checklist.md` C1 stay exactly as T005 left them (4 raw call sites, 2 decision-making groups).
+- [x] **T011 — Route the 12 independent `createSheetHeader` sites through the shell where the
       surface is a shell consumer.** `cell-renderer.ts:952`, `toolbar-renderer.ts:1384`,
       `owned-menu.ts:218`, `date-value-picker.ts:410`, `mobile-bottom-sheet.ts:241` (the engine's
       own, which stays), `sort-panel-renderer.ts:113`, `icon-picker-popover.ts:102`,
@@ -307,9 +333,49 @@ with the owner named, never self-closed.
       where `044`'s bottom-sheet grammar yields to a measured parity value, and it changes
       `owned-menu.ts:218` and `dropdown-field.ts:199`, which are `052`'s files: this task changes
       the header call and the presentation declaration only, and `052`'s leg carries the row change.
-- [ ] **T012 — [P] Update `tools/live/sheet-grammar.mjs` rows in the same commit as any markup
+      **Done 2026-09-06, the header call only.** All eleven independent sites now call
+      `buildShellHeader` (`surface-shell.ts`) instead of the engine's own `createSheetHeader`
+      directly — `cell-renderer.ts`, `toolbar-primitives.ts` (the file `toolbar-renderer.ts:1384`
+      moved to in an unrelated prior refactor; same call site), `owned-menu.ts`,
+      `date-value-picker.ts`, `sort-panel-renderer.ts`, `icon-picker-popover.ts`,
+      `dropdown-field.ts`, `option-color-picker.ts`, `filter-panel-renderer.ts`,
+      `view-config-panel-renderer.ts`, `column-manager-renderer.ts`. `mobile-bottom-sheet.ts`'s own
+      default `buildHeader` fallback is the twelfth and unchanged, exactly as expected — it is what
+      `buildShellHeader` itself calls. `buildShellHeader` gained a `beforeClose` passthrough so the
+      three sites that build trailing header controls (`toolbar-primitives.ts`,
+      `filter-panel-renderer.ts`, `column-manager-renderer.ts`) keep them. Title text at every site
+      is byte-identical to what `createSheetHeader` rendered before (same `options.title`
+      expression), so no registered pair's title-matching assertion moves. **The menu-role
+      presentation flip is not this leg's** — `owned-menu.ts` and `dropdown-field.ts` still mount a
+      grab-handle bottom sheet on the phone; becoming an anchored, handle-less card over a dimmed
+      parent is `052`'s leg, named here rather than attempted, because it touches the sheet-mount
+      decision in two files this leg does not own and would move several of `048`'s registered pairs
+      at once (goal D7: one leg, one file group). **One out-of-scope finding, recorded rather than
+      fixed**: `record-surface/record-header.ts:106` calls `createSheetHeader` directly and is not
+      one of the twelve registered sites — `sheet-grammar.mjs`'s own comment already names the record
+      sheet's header as a "legacy synonym" this phase did not re-dress, so it is left alone here too.
+      Asserted by `surface-shell.test.ts`'s new `it.each` suite over all eleven files plus the
+      engine's-own-builder check.
+      **The three fresh 44px literals the landing verification flagged are corrected in the same
+      commit.** `.db-shell-header-leading`'s `min-width` and `.db-shell-back`'s `width`/`height` now
+      read `--db-shell-edge-control-size`, a token declared once beside the other shared tokens and
+      also adopted by `.db-sheet-close` itself — one declared value for all three, in place of four
+      independent `44px` literals. The title-centring rule and `.db-shell-header`'s `justify-content:
+      flex-start` are scoped under `body.is-phone`, so a hypothetical desktop consumer of this same
+      header keeps the leading-edge title the desktop captures show (`anytype-menu-set-view-layout-
+      dark.png`'s `‹ Layout`) instead of inheriting a centring no desktop reference carries.
+- [x] **T012 — [P] Update `tools/live/sheet-grammar.mjs` rows in the same commit as any markup
       move.** **Threshold**: the twelve registered surfaces and thirty-one registered pairs stay
       green after every leg. **Red-first proof**: the negative control each row already carries.
+      **Done 2026-09-06 — no row edit needed, verified rather than assumed.** `sheet-grammar.ts`'s
+      `hasSheetHeader` predicate reads `.db-panel-header > .db-panel-title` (non-empty text) and
+      `.db-sheet-close`; `buildShellHeader` still produces both unchanged; it only adds a leading
+      `.db-shell-header-leading` sibling and the `db-shell-header` class, neither of which any
+      registered predicate or pair spec inspects. Every stacked-pair `child: { title: "…" }` value
+      T011 could touch (`Create property`, `Confirm`, `Import`) is the same string the modal already
+      rendered, so no pair's title match moves either. Confirmed by running the live lane itself —
+      `node tools/live/sheet-grammar.mjs` and the full isolated `npm run gate` — rather than by
+      inspection alone; see the closing verification block for the read exit codes and counts.
 <!-- /ANCHOR:phase-3 -->
 
 ---

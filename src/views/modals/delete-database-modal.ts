@@ -15,6 +15,7 @@
 import { App, Setting } from "obsidian";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -40,6 +41,14 @@ export class DeleteDatabaseModal extends DbModal {
     private fileCount: number
   ) {
     super(app, "sheet");
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("deleteDatabase.title", { name: this.dbName });
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "dialog";
   }
 
   openAndWait(): Promise<DeleteDatabaseModalResult | null> {

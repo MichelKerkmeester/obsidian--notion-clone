@@ -22,7 +22,8 @@ import { ColumnDef, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { getFileFieldFixedType, QUICK_ADD_FILE_FIELDS } from "../data/file-fields";
 import { isMobileBottomSheet, PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
-import { carrySheetEntrance, createSheetHeader } from "./mobile-bottom-sheet";
+import { carrySheetEntrance } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { getPropertyDropdownIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { isHTMLElement } from "./dom-guards";
@@ -177,7 +178,7 @@ export class ColumnManagerRenderer {
       toggleLabel.createSpan({ text: t("panel.all") });
     };
     if (isMobileBottomSheet(panel.ownerDocument)) {
-      createSheetHeader(panel, {
+      buildShellHeader(panel, {
         title: t("toolbar.properties"),
         onClose: () => actions.close(),
         beforeClose: addToggle,

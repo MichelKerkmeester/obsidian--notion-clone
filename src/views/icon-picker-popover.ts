@@ -18,7 +18,7 @@ import { Notice, setIcon, setTooltip } from "obsidian";
 import { EMOJI_CATEGORIES, getLucideCategoryIds, LUCIDE_CATEGORY_DEFINITIONS } from "../data/icon-picker-catalog";
 import { RECORD_ICON_COLORS, RecordIconColor, serializeLucideIconToken } from "../data/record-icon";
 import { t } from "../i18n";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { getValidRecordIconIds } from "./record-icon-renderer";
@@ -99,7 +99,7 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
   // as before.
   const content = isMobileBottomSheet(doc)
     ? (() => {
-        createSheetHeader(panel, { title: options.label || t("recordIcon.icons"), onClose: close });
+        buildShellHeader(panel, { title: options.label || t("recordIcon.icons"), onClose: close });
         return panel.createDiv({ cls: "db-icon-picker-body db-panel-row" });
       })()
     : panel;

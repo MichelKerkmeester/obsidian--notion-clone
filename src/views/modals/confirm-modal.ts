@@ -14,6 +14,7 @@
 import { App } from "obsidian";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -40,6 +41,14 @@ class ConfirmModal extends DbModal {
     private options: ConfirmModalOptions
   ) {
     super(app, "sheet");
+  }
+
+  protected getDeclaredTitle(): string {
+    return this.options.title;
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "dialog";
   }
 
   openAndWait(): Promise<boolean | string> {

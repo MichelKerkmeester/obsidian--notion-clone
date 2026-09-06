@@ -49,7 +49,7 @@ import { getEffectiveLocale, t } from "../i18n";
 import { clamp, getVisiblePopoverBounds, isMobileBottomSheet, resolveAnchoredPopoverTop, resolvePopoverHorizontalLeft, setPosition } from "./popover-position";
 import { positionToolbarPopover } from "./popover-position";
 import { claimBottomDock } from "./mobile-bottom-sheet";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { openDropdownMenu } from "./dropdown-field";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { setFieldTooltip } from "./field-tooltip";
@@ -949,7 +949,7 @@ export class CellRenderer {
       session?.onClose?.();
     };
     const phoneSheet = isMobileBottomSheet(host.ownerDocument);
-    if (phoneSheet) createSheetHeader(popover, { title: col.label || col.key, onClose: close });
+    if (phoneSheet) buildShellHeader(popover, { title: col.label || col.key, onClose: close });
     const header = popover.createDiv({ cls: "db-relation-popover-header" });
     if (!phoneSheet) header.createDiv({ cls: "db-relation-popover-title", text: col.label || col.key });
     const search = header.createEl("input", {

@@ -20,6 +20,7 @@ import { createUniqueColumnKey } from "../../data/column-config";
 import { createDropdownField } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -80,6 +81,14 @@ export class CreatePropertyModal extends DbModal {
     this.labelValue = options.initialLabel ?? "";
     this.keyValue = options.initialKey ?? "";
     this.keyTouched = Boolean(options.initialKey);
+  }
+
+  protected getDeclaredTitle(): string {
+    return this.options.title ?? t("modal.createProperty");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   openAndWait(): Promise<CreatePropertyResult | null> {

@@ -18,7 +18,7 @@ import { OPTION_COLORS } from "../data/column-types";
 import { isImeComposing } from "../data/keyboard-utils";
 import { StatusColor } from "../data/types";
 import { t } from "../i18n";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 
@@ -64,7 +64,7 @@ export function openOptionColorPicker(
   // arithmetic in that stylesheet's own comment stays untouched.
   const content = isMobileBottomSheet(doc)
     ? (() => {
-        createSheetHeader(picker, { title: title || t("conditionalFormat.color"), onClose: close });
+        buildShellHeader(picker, { title: title || t("conditionalFormat.color"), onClose: close });
         return picker.createDiv({ cls: "db-color-picker-body db-panel-row" });
       })()
     : picker;

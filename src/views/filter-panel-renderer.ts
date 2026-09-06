@@ -23,7 +23,7 @@ import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "..
 import { t } from "../i18n";
 import { createDropdownField } from "./dropdown-field";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
@@ -257,7 +257,7 @@ export class FilterPanelRenderer {
     actions: FilterPanelActions,
     tree: SourceRuleNode | undefined
   ): void {
-    createSheetHeader(panel, {
+    buildShellHeader(panel, {
       title: t("toolbar.filter"),
       onClose: () => {
         actions.close();

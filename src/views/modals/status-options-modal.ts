@@ -19,6 +19,7 @@ import { t } from "../../i18n";
 import { confirmWithModal } from "./confirm-modal";
 import { isHTMLElement } from "../dom-guards";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -127,6 +128,14 @@ export class StatusOptionsModal extends DbModal {
     this.options = cloneStatusOptionDraft(col.statusOptions?.length ? col.statusOptions : defaults);
     this.customOptions = cloneStatusOptionDraft(this.options);
     this.activePresetId = getValidStatusPresetId(col.statusPresetId, this.presets);
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("modal.statusOptions", { type: COLUMN_TYPE_LABELS()[this.col.type], label: this.col.label });
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   onOpen(): void {

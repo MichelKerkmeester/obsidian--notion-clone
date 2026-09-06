@@ -28,7 +28,8 @@ import { getVaultProperties, VaultProperty } from "../data/vault-properties";
 import { createConditionalFormatLeaf, getConditionalFormatCondition, isConditionalFormatOperator } from "../data/conditional-format-editor";
 import { t } from "../i18n";
 import { COMPACT_MENU_POPOVER, isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
-import { carrySheetEntrance, createSheetHeader } from "./mobile-bottom-sheet";
+import { carrySheetEntrance } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
 import { createCheckbox } from "./checkbox";
@@ -349,7 +350,7 @@ export class ViewConfigPanelRenderer {
     if (wasOpen) carrySheetEntrance(panel);
     this.asSheet = isMobileBottomSheet(panel.ownerDocument);
     if (this.asSheet) {
-      createSheetHeader(panel, {
+      buildShellHeader(panel, {
         title: t("toolbar.settings"),
         onClose: () => panel.remove(),
       });

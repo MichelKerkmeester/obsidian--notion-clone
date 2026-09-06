@@ -26,6 +26,7 @@ import {
   vaultFilesAdapter,
 } from "./linked-view-block";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -52,8 +53,12 @@ export class CreateLinkedViewModal extends DbModal {
     this.renderForm();
   }
 
-  protected getSheetTitle(): string {
+  protected getDeclaredTitle(): string {
     return t("linkedView.title");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   private renderForm(): void {

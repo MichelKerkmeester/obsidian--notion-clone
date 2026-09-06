@@ -31,6 +31,7 @@ import {
   SHELL_RADIUS_PX,
   SHELL_ROW_HEIGHT_PX,
   createSubPageState,
+  createSurfaceShell,
   getScrapeFallbackTitleUseCount,
   popSubPageTitle,
   pushSubPageTitle,
@@ -100,6 +101,22 @@ describe("resolveShellTitle", () => {
 
   it("returns an empty string rather than throwing when no fallback exists either", () => {
     expect(resolveShellTitle(undefined, undefined)).toBe("");
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 3b. THE DECLARED ROLE
+// ───────────────────────────────────────────────────────────────────
+
+describe("the shell's declared role", () => {
+  it("carries whatever role a surface declares, undeclared by default", () => {
+    // The handle is pure bookkeeping until `.apply()` touches the DOM, so a fake element that
+    // is never dereferenced is enough to exercise the getter directly.
+    const element = {} as HTMLElement;
+    const undeclared = createSurfaceShell({ presentation: "dialog", element, close: () => {} });
+    expect(undeclared.role).toBeUndefined();
+    const declared = createSurfaceShell({ presentation: "dialog", element, close: () => {}, role: "panel" });
+    expect(declared.role).toBe("panel");
   });
 });
 
@@ -207,5 +224,108 @@ describe("DbModal delegates its presentation switch to the shell", () => {
 
   it("keeps the idempotent chrome-off call in onClose exactly as it always ran", () => {
     expect(dbModalSource).toContain("applySheetChrome(this.modalEl, false);");
+  });
+
+  it("passes a declared title and role into the shell rather than leaving them unset", () => {
+    expect(dbModalSource).toContain("title: this.getDeclaredTitle(),");
+    expect(dbModalSource).toContain("role: this.getShellRole(),");
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 7. THE SEVENTEEN SUBCLASSES THAT DECLARE, RATHER THAN LEAVE TO THE SCRAPE
+// ───────────────────────────────────────────────────────────────────
+//
+// Thirteen `sheet` subclasses plus the four `fullscreen` ones now declare their own title
+// and role, checked the same way the composition above is: reading the shipped source
+// rather than mounting a live Obsidian `Modal`, which none of this suite's fakes can
+// construct.
+
+const DECLARING_SUBCLASS_FILES = [
+  "modals/confirm-modal.ts",
+  "modals/add-database-modal.ts",
+  "modals/create-property-modal.ts",
+  "modals/column-rename-modal.ts",
+  "modals/status-options-modal.ts",
+  "modals/status-preset-manager-modal.ts",
+  "modals/delete-database-modal.ts",
+  "modals/base-import-confirm-modal.ts",
+  "modals/relation-rollup-config-modal.ts",
+  "modals/create-record-icon-field-modal.ts",
+  "modals/create-linked-view-modal.ts",
+  "modals/computed-frontmatter-cleanup-modal.ts",
+  "modals/formula-modal.ts",
+  "chart-renderer.ts",
+  "modals/invalid-time-events-modal.ts",
+  "modals/property-type-conflict-modal.ts",
+];
+
+describe("the thirteen sheet subclasses and the four fullscreen ones declare a title and a role", () => {
+  it.each(DECLARING_SUBCLASS_FILES)("%s overrides getDeclaredTitle and getShellRole", (relativePath) => {
+    const source = readFileSync(resolve(__dirname, relativePath), "utf8");
+    expect(source).toContain("getDeclaredTitle(): string {");
+    expect(source).toContain("getShellRole(): SurfaceShellRole {");
+  });
+
+  it("settings.ts's TrashManagerModal declares its own title and role the same way", () => {
+    const settingsSource = readFileSync(resolve(__dirname, "../settings.ts"), "utf8");
+    expect(settingsSource).toContain("getDeclaredTitle(): string {");
+    expect(settingsSource).toContain("getShellRole(): SurfaceShellRole {");
+  });
+
+  it("no longer scrapes CreateLinkedViewModal's heading now that its title is declared", () => {
+    // This subclass used to override the scrape (`getSheetTitle`) rather than declare a
+    // title; the scrape method name should not reappear now that it declares one instead.
+    const source = readFileSync(resolve(__dirname, "modals/create-linked-view-modal.ts"), "utf8");
+    expect(source).not.toContain("getSheetTitle(): string {");
+  });
+
+  it("keeps the formula workbench on fullscreen while still declaring its own title and role", () => {
+    // Only the workbench keeps a third presentation. Declaring a title and a role does not
+    // change that — the assertion is that `fullscreen` survives beside them, not instead.
+    const source = readFileSync(resolve(__dirname, "modals/formula-modal.ts"), "utf8");
+    expect(source).toContain('super(app, "fullscreen");');
+  });
+
+  it("moves the other three fullscreen subclasses onto the shell's ordinary sheet resolution", () => {
+    for (const relativePath of ["chart-renderer.ts", "modals/invalid-time-events-modal.ts", "modals/property-type-conflict-modal.ts"]) {
+      const source = readFileSync(resolve(__dirname, relativePath), "utf8");
+      expect(source).not.toContain('super(app, "fullscreen");');
+    }
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 8. THE TWELVE createSheetHeader SITES ROUTE THROUGH THE SHELL'S OWN HEADER
+// ───────────────────────────────────────────────────────────────────
+//
+// Eleven independent call sites migrate onto `buildShellHeader`; the engine's own default
+// builder inside `mobile-bottom-sheet.ts` is the twelfth and the expected survivor — it is
+// what `buildShellHeader` itself calls, so it must keep calling `createSheetHeader` directly.
+
+const SHELL_HEADER_CONSUMER_FILES = [
+  "cell-renderer.ts",
+  "toolbar-primitives.ts",
+  "owned-menu.ts",
+  "date-value-picker.ts",
+  "sort-panel-renderer.ts",
+  "icon-picker-popover.ts",
+  "dropdown-field.ts",
+  "option-color-picker.ts",
+  "filter-panel-renderer.ts",
+  "view-config-panel-renderer.ts",
+  "column-manager-renderer.ts",
+];
+
+describe("the independent createSheetHeader sites route through the shell's three-slot header", () => {
+  it.each(SHELL_HEADER_CONSUMER_FILES)("%s calls buildShellHeader rather than the engine's two-slot builder directly", (relativePath) => {
+    const source = readFileSync(resolve(__dirname, relativePath), "utf8");
+    expect(source).toContain("buildShellHeader(");
+    expect(source).not.toContain("createSheetHeader(");
+  });
+
+  it("leaves the engine's own default header builder calling createSheetHeader directly", () => {
+    const engineSource = readFileSync(resolve(__dirname, "mobile-bottom-sheet.ts"), "utf8");
+    expect(engineSource).toContain("createSheetHeader(panel, { title, onClose })");
   });
 });

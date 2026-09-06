@@ -29,6 +29,7 @@ import { t } from "../../i18n";
 import { createDropdownField, DropdownOption } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -87,13 +88,23 @@ export class PropertyTypeConflictModal extends DbModal {
     private options: PropertyTypeConflictModalOptions,
     private callbacks: PropertyTypeConflictModalCallbacks = {}
   ) {
-    super(app, "fullscreen");
+    // A conflict resolution list is an ordinary dialog-sized surface with no reason to
+    // keep a third presentation the way the formula workbench does.
+    super(app, "sheet");
     for (const conflict of options.conflicts) {
       for (const writer of conflict.writers) {
         if (this.writerStates.some((state) => sameWriter(state.writer, writer))) continue;
         this.writerStates.push({ writer, type: writer.pluginType });
       }
     }
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("propertyConflict.title");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "dialog";
   }
 
   openAndWait(): Promise<PropertyTypeConflictModalResult> {

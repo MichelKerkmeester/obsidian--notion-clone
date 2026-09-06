@@ -40,6 +40,7 @@ import { STATUS_COLORS } from "../data/status-colors";
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
 import { DbModal } from "./modals/db-modal";
+import type { SurfaceShellRole } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -969,7 +970,17 @@ interface ChartDrilldownOptions {
 
 class ChartDrilldownModal extends DbModal {
   constructor(app: App, private readonly options: ChartDrilldownOptions) {
-    super(app, "fullscreen");
+    // A drilldown table is an ordinary dialog-sized surface with no reason to keep a
+    // third presentation the way the formula workbench does.
+    super(app, "sheet");
+  }
+
+  protected getDeclaredTitle(): string {
+    return this.options.title;
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   onOpen(): void {

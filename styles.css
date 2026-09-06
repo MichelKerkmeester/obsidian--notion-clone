@@ -82,6 +82,9 @@
   --db-radius-md: 6px;
   --db-radius-lg: 8px;
   --db-radius-full: 9999px;
+  /* The sheet header's close button and the shell's own back control, so a second edge slot
+     added later reads the size the first one already declared instead of repeating "44px". */
+  --db-shell-edge-control-size: 44px;
   --db-border-subtle: color-mix(in srgb, var(--background-modifier-border) 40%, transparent);
   --db-border-regular: color-mix(in srgb, var(--background-modifier-border) 70%, transparent);
   --db-border-emphasis: var(--background-modifier-border);
@@ -12488,17 +12491,20 @@ body.is-phone .note-database-container .db-record-detail-panel {
   font-weight: 600;
 }
 
-/* The header's close button, shared by every sheet `createSheetHeader` builds. 44x44 is the touch
-   target floor this stylesheet already enforces elsewhere (the record-detail sheet's own close,
-   the cell-editor popover's) — sized here rather than left to `.clickable-icon` defaults so a
-   sheet with no other affordance still has a target a thumb can hit. */
-.note-database-container .db-sheet-close {
+/* The header's close button, shared by every sheet `createSheetHeader` builds, and the shell's
+   own back control in the leading slot — the same button at the opposite edge, so it shares
+   this rule rather than repeating the size. 44x44 is the touch target floor this stylesheet
+   already enforces elsewhere (the record-detail sheet's own close, the cell-editor popover's)
+   — sized here rather than left to `.clickable-icon` defaults so a sheet with no other
+   affordance still has a target a thumb can hit. */
+.note-database-container .db-sheet-close,
+.note-database-container .db-shell-back {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: var(--db-shell-edge-control-size);
+  height: var(--db-shell-edge-control-size);
   padding: 0;
   border: 0;
   border-radius: var(--db-radius-md);
@@ -12507,60 +12513,57 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-container .db-sheet-close:hover,
-.note-database-container .db-sheet-close:focus-visible {
-  background: var(--background-modifier-hover);
-  color: var(--text-normal);
-}
-
-.note-database-container .db-sheet-close svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* The shell's own header keeps a third slot ahead of the title, sized to match the close
-   button on the other end, so the title lands centred between two equal edges instead of
-   pinned to the leading one. Nothing but the shared shell builds this header today, so this
-   scope reaches no other panel or sheet. */
-.note-database-container .db-shell-header {
-  justify-content: flex-start;
-}
-
-.note-database-container .db-shell-header-leading {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-}
-
-.note-database-container .db-shell-header .db-panel-title {
-  flex: 1 1 auto;
-  text-align: center;
-}
-
-.note-database-container .db-shell-back {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--db-radius-md);
-  background: transparent;
-  color: var(--text-muted);
-}
-
+.note-database-container .db-sheet-close:focus-visible,
 .note-database-container .db-shell-back:hover,
 .note-database-container .db-shell-back:focus-visible {
   background: var(--background-modifier-hover);
   color: var(--text-normal);
 }
 
+.note-database-container .db-sheet-close svg,
 .note-database-container .db-shell-back svg {
   width: 18px;
   height: 18px;
+}
+
+/* The shell's own header keeps a third slot ahead of the title, sized to match the close
+   button on the other end via the size that button already declares, so the title lands
+   centred between two equal edges instead of pinned to the leading one. Nothing but the
+   shared shell builds this header today, so this scope reaches no other panel or sheet.
+   Centring is a phone-sheet shape (`anytype-mobile-sheet-view-edit-dark.png`'s centred
+   `Edit view`) — the desktop popover puts a sub-page's title on the leading edge instead
+   (`‹ Layout`, `anytype-menu-set-view-layout-dark.png`), so both rules are scoped to
+   `is-phone` rather than reaching a future desktop consumer of this same header. The
+   leading slot is scoped the same way, and out of flow entirely rather than merely narrow:
+   several of this header's callers (the filter, sort and toolbar popovers) build it on the
+   desktop popover too, not only the phone sheet, and `.db-panel-header`'s own `gap: 8px`
+   still opens a gap beside a zero-width flex child — a first, narrower fix left every one
+   of those desktop titles shifted right by that gap, which the desktop reference does not
+   show. `display: none` removes it from the flex row altogether on desktop, caught by the
+   capture set this edit moved on the desktop passes of `constructed-filter-panel`,
+   `constructed-sort-panel` and `constructed-toolbar-*`. A desktop back affordance is a
+   different shape regardless (`‹ Layout` inline with the title itself,
+   `anytype-menu-set-view-layout-dark.png`), not this leading button, so hiding it there
+   loses nothing the desktop reference shows. */
+body.is-phone .note-database-container .db-shell-header {
+  justify-content: flex-start;
+}
+
+.note-database-container .db-shell-header-leading {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+body.is-phone .note-database-container .db-shell-header-leading {
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-width: var(--db-shell-edge-control-size);
+}
+
+body.is-phone .note-database-container .db-shell-header .db-panel-title {
+  flex: 1 1 auto;
+  text-align: center;
 }
 
 /* 列管理：全选/全不选 */

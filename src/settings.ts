@@ -27,6 +27,7 @@ import { confirmWithModal } from "./views/modals/confirm-modal";
 import { createDropdownField, DropdownOption } from "./views/dropdown-field";
 import { isHTMLElement } from "./views/dom-guards";
 import { DbModal } from "./views/modals/db-modal";
+import type { SurfaceShellRole } from "./views/surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. DEFAULTS
@@ -585,6 +586,14 @@ class TrashManagerModal extends DbModal {
     private onRefresh: () => void,
   ) {
     super(app, "sheet");
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("settings.trash.manageTitle");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   onOpen(): void {

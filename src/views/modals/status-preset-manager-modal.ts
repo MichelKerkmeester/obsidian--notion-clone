@@ -24,6 +24,7 @@ import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { StatusOptionsModal } from "./status-options-modal";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -44,6 +45,14 @@ export class StatusPresetManagerModal extends DbModal {
     super(app, "sheet");
     this.presets = normalizeStatusPresets(presets, getBuiltinStatusPresets()).map((preset) => cloneStatusPreset(preset));
     this.defaultPresetId = resolveDefaultStatusPresetId(this.presets, defaultPresetId);
+  }
+
+  protected getDeclaredTitle(): string {
+    return this.title;
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   onOpen(): void {

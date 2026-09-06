@@ -30,7 +30,12 @@
 import { App, Modal } from "obsidian";
 import { t } from "../../i18n";
 import { applySheetChrome } from "../mobile-bottom-sheet";
-import { createSurfaceShell, type SurfaceShellHandle, type SurfaceShellPresentation } from "../surface-shell";
+import {
+  createSurfaceShell,
+  type SurfaceShellHandle,
+  type SurfaceShellPresentation,
+  type SurfaceShellRole,
+} from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -90,6 +95,27 @@ export class DbModal extends Modal {
     return heading || t("menu.title");
   }
 
+  /**
+   * A surface's own title, declared rather than scraped.
+   *
+   * The default answers with nothing, which routes every undeclared surface through the
+   * counted scrape fallback above. A subclass that knows its own title overrides this
+   * instead of `getSheetTitle`, so the shell never has to ask the DOM for it.
+   */
+  protected getDeclaredTitle(): string | undefined {
+    return undefined;
+  }
+
+  /**
+   * What kind of surface this is, declared rather than left unset.
+   *
+   * The default answers with nothing: an undeclared role is a fact the shell carries, not a
+   * guess it makes from the presentation.
+   */
+  protected getShellRole(): SurfaceShellRole | undefined {
+    return undefined;
+  }
+
   /** Re-apply after a layout change, such as rotation moving the surface across the touch boundary. */
   protected applyPresentation(): void {
     if (!this.shell) {
@@ -97,6 +123,8 @@ export class DbModal extends Modal {
         presentation: this.presentation,
         element: this.modalEl,
         close: () => this.close(),
+        title: this.getDeclaredTitle(),
+        role: this.getShellRole(),
         getFallbackTitle: () => this.getSheetTitle(),
       });
     }

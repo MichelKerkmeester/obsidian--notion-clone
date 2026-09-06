@@ -33,7 +33,7 @@ import {
   normalizeDatePickerValue,
   shiftDatePickerMonth,
 } from "./date-picker-model";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { isHTMLElement } from "./dom-guards";
@@ -407,7 +407,7 @@ function openDateValuePicker(
   // Built once `close` exists, since the close button reads it by reference; `createSheetHeader`
   // appends, so it is moved to the front rather than left sitting after the content it introduces.
   if (isMobileBottomSheet(doc)) {
-    const header = createSheetHeader(popover, {
+    const header = buildShellHeader(popover, {
       title: options.fieldLabel || t("filter.value"),
       onClose: () => close(true),
     });

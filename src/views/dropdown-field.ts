@@ -16,7 +16,7 @@
 import { setIcon } from "obsidian";
 import { isImeComposing } from "../data/keyboard-utils";
 import { t } from "../i18n";
-import { createSheetHeader } from "./mobile-bottom-sheet";
+import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { filterPickerRows, moveCreateOptionsFirst } from "./popover-host";
@@ -197,7 +197,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   panel.setAttr("role", "listbox");
   panel.setAttr("aria-label", options.label);
   anchor.setAttr("aria-controls", popupId);
-  if (phoneSheet) createSheetHeader(panel, { title: options.label, onClose: close });
+  if (phoneSheet) buildShellHeader(panel, { title: options.label, onClose: close });
   let searchInput: HTMLInputElement | undefined;
   if (searchable) {
     const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });

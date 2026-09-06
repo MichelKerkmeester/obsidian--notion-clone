@@ -21,6 +21,7 @@ import { AddDatabaseModalResult } from "../../data/add-database-result";
 import { ViewConfigPanelActions, ViewConfigPanelRenderer } from "../view-config-panel-renderer";
 import { StatusPresetManagerModal } from "./status-preset-manager-modal";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -42,6 +43,14 @@ export class AddDatabaseModal extends DbModal {
     this.globalStatusPresets = normalizeStatusPresets(globalStatusPresets);
     this.globalDefaultStatusPresetId = globalDefaultStatusPresetId;
     this.tempDb = this.createTempDatabase();
+  }
+
+  protected getDeclaredTitle(): string {
+    return t("addDatabase.title");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
   }
 
   /** Build the in-memory config the modal edits. Source-rule / status-preset fields start
