@@ -274,4 +274,69 @@ describe("DataSource view filter tree persistence", () => {
     }).toViewPayload(view);
     expect(payload.boardExtensionsEnabled).toBeUndefined();
   });
+  // The view's wrap default has to survive a reload, and both halves of that are easy to get
+  // wrong in opposite directions: the reader is a per-key allowlist, so an unnamed key is dropped
+  // on load, and the writer is a per-key literal, so an unnamed key never reaches disk at all.
+  // The unknown sibling is the negative control — without it a green assertion would only prove
+  // that some key survived, not that the allowlist is what let this one through.
+  it("round-trips the view wrap default and drops a key the allowlist does not name", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "table",
+          sourceFolder: "",
+          wrapText: true,
+          wrapTextDefault: true,
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+
+    expect(view.wrapText).toBe(true);
+    expect((view as unknown as Record<string, unknown>).wrapTextDefault).toBeUndefined();
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.wrapText).toBe(true);
+    expect(payload.wrapTextDefault).toBeUndefined();
+
+    // Second pass: a view written by this release reads back the same way, which is the reload
+    // the operator actually performs.
+    const reparsed = dataSource.parseDatabaseConfig({ database: { id: "database", views: [payload] } });
+    expect(reparsed!.views[0].wrapText).toBe(true);
+
+    // A vault written before this release carries no key at all, and must come back clipped —
+    // the whole point of defaulting off is that no existing table changes on upgrade.
+    const legacy = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [{ id: "view", name: "View", viewType: "table", sourceFolder: "" }] },
+    });
+    expect(legacy!.views[0].wrapText).toBe(false);
+  });
+
+  // A column's wrap is tri-state now, and `false` is a real state rather than a synonym for
+  // absent. Columns pass through the schema uncast, so the risk is not a per-key allowlist but a
+  // normalizer that folds falsy to undefined somewhere on the way back out.
+  it("keeps an explicit per-column clip through a config round-trip", () => {
+    const dataSource = source();
+    const columns = [
+      { key: "Clipped", label: "Clipped", type: "text", wrap: false },
+      { key: "Wrapped", label: "Wrapped", type: "text", wrap: true },
+      { key: "Follows", label: "Follows", type: "text" },
+    ];
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        columns,
+        views: [{ id: "view", name: "View", viewType: "table", sourceFolder: "" }],
+      },
+    });
+    const schemaColumns = parsed!.views[0].schema.columns;
+
+    expect(schemaColumns.map((col) => col.wrap)).toEqual([false, true, undefined]);
+  });
 });
