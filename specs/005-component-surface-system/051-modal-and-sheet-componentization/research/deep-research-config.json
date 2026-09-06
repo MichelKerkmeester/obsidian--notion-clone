@@ -1,0 +1,110 @@
+{
+  "topic": "Research the phone-sheet family of the note-database Obsidian plugin (specs/005-component-surface-system children 044-phone-sheet-alignment, 048-stacked-sheets, 051-modal-and-sheet-componentization) for the remaining defects and parity gaps against Anytype's mobile sheets, to feed an Opus synthesis that will update or add phases. Bounded scope, explicit file list -- read these and nothing beyond them unless a finding requires one more file: src/views/mobile-bottom-sheet.ts, src/views/overlay-stack.ts, src/views/surface-shell.ts, src/views/popover-host.ts, src/views/sheet-grammar.ts, src/views/modals/confirm-modal.ts, src/views/confirm-sheet.ts, src/views/column-manager-renderer.ts, src/views/view-config-panel-renderer.ts, src/views/record-surface/record-header.ts, the sheet blocks of styles.css (grep for db-mobile-bottom-sheet, db-shell-, db-sheet-), tools/live/sheet-grammar.mjs and tools/live/host-modal-stand-in.ts, tools/live/sheet-rebuild.mjs, tools/storybook/verify-placement.mjs, specs/005-component-surface-system/044-phone-sheet-alignment/{goal.md,design-trueup.md,decision-record.md,tasks.md}, 048-stacked-sheets/{goal.md,decision-record.md,tasks.md,acceptance-criteria.md}, 051-modal-and-sheet-componentization/{goal.md,design-trueup.md,decision-record.md,tasks.md,acceptance-criteria.md,implementation-summary.md}, specs/005-component-surface-system/design-system.md and roadmap.md section 4 rows 40, 41, 43, 59 and section 6A, and the Anytype README index screenshots/anytype/README.md plus the measured values already recorded in 051/design-trueup.md (DO NOT open image files -- you cannot read PNGs; use the recorded measurements and README descriptions only). Operator reports to explain and close: 2026-09-06 10:04 iOS 'this sheet is really bad bugged' (duplicate close control, split header/body backgrounds, blank space above the title, parent bleed -- fixed at be578988/e632a1e1, device confirmation pending); earlier reports that sheets still looked like the old ones, that some sheets overflowed horizontally, and that stacked sheets did not look or work right. Questions to answer with file:line evidence: which grammar elements still diverge from Anytype's measured sheet (frame, handle, header, rows, actions, safe area, motion, scrim, stacking depth rules); which DbModal subclasses and FuzzySuggestModal outliers still bypass the shell (051 T010); where the lane coverage has holes (which shell deliverables have no permanent row); which iOS/WebKit-specific behaviours the Chromium harness cannot see (keyboard avoidance, safe-area insets, rubber-band scrolling, sheet drag-to-dismiss, focus/scroll restoration) and how each could be verified; what a ranked remediation plan looks like as concrete phase tasks with thresholds and red-first checks. Rank findings by user impact; cite every claim by file:line or a recorded measurement; mark inferences as inferences.",
+  "maxIterations": 10,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "minIterations": 3,
+    "convergenceMode": "default",
+    "stopPolicy": "fail-closed",
+    "divergent": {}
+  },
+  "stuckThreshold": 3,
+  "maxDurationMinutes": 120,
+  "maxToolCallsPerIteration": 12,
+  "maxMinutesPerIteration": 10,
+  "progressiveSynthesis": true,
+  "specFolder": "specs/005-component-surface-system/051-modal-and-sheet-componentization",
+  "createdAt": "2026-09-06T13:55:31.863Z",
+  "status": "initialized",
+  "executionMode": "auto",
+  "lineage": {
+    "sessionId": "dr-mtpvjjbr-wt3481",
+    "parentSessionId": null,
+    "lineageMode": "new",
+    "allowedModes": [
+      "new",
+      "resume",
+      "restart"
+    ],
+    "deferredModes": [
+      "fork",
+      "completed-continue"
+    ],
+    "generation": 1,
+    "continuedFromRun": null
+  },
+  "reducer": {
+    "enabled": true,
+    "version": "1.0",
+    "registryFile": "research/findings-registry.json",
+    "dashboardFile": "research/deep-research-dashboard.md",
+    "strategyFile": "research/deep-research-strategy.md",
+    "machineOwnedSections": [
+      "key-questions",
+      "answered-questions",
+      "what-worked",
+      "what-failed",
+      "exhausted-approaches",
+      "ruled-out-directions",
+      "divergence-frontier",
+      "next-focus"
+    ]
+  },
+  "capabilityMatrixPath": ".opencode/skills/system-deep-loop/deep-research/assets/runtime-capabilities.json",
+  "capabilityMatrixDocPath": ".opencode/skills/system-deep-loop/deep-research/references/guides/capability-matrix.md",
+  "runtimeCapabilityResolver": ".opencode/skills/system-deep-loop/deep-research/scripts/runtime-capabilities.cjs",
+  "reducerScriptPath": ".opencode/skills/system-deep-loop/deep-research/scripts/reduce-state.cjs",
+  "pauseSentinelPath": "research/.deep-research-pause",
+  "archiveRoot": "research_archive",
+  "migrationWindowDays": 28,
+  "fileProtection": {
+    "deep-research-config.json": "immutable",
+    "deep-research-state.jsonl": "append-only",
+    "deep-research-strategy.md": "mutable",
+    "deep-research-dashboard.md": "auto-generated",
+    "findings-registry.json": "auto-generated",
+    "iteration-*.md": "write-once",
+    "research/research.md": "mutable"
+  },
+  "_optimizerManaged": {
+    "description": "Fields managed by the offline loop optimizer (042.004). See optimizer-manifest.json for the canonical tunable/locked field registry.",
+    "manifestPath": ".opencode/skills/system-spec-kit/runtime/cli/optimizer/optimizer-manifest.json",
+    "tunableFields": [
+      "convergenceThreshold",
+      "stuckThreshold",
+      "maxIterations"
+    ],
+    "lockedFields": [
+      "lineage",
+      "reducer",
+      "fileProtection",
+      "sessionId",
+      "status",
+      "antiConvergence.convergenceMode",
+      "antiConvergence.stopPolicy"
+    ],
+    "promotionMode": "advisory-only"
+  },
+  "researchTopic": "Research the phone-sheet family of the note-database Obsidian plugin (specs/005-component-surface-system children 044-phone-sheet-alignment, 048-stacked-sheets, 051-modal-and-sheet-componentization) for the remaining defects and parity gaps against Anytype's mobile sheets, to feed an Opus synthesis that will update or add phases. Bounded scope, explicit file list -- read these and nothing beyond them unless a finding requires one more file: src/views/mobile-bottom-sheet.ts, src/views/overlay-stack.ts, src/views/surface-shell.ts, src/views/popover-host.ts, src/views/sheet-grammar.ts, src/views/modals/confirm-modal.ts, src/views/confirm-sheet.ts, src/views/column-manager-renderer.ts, src/views/view-config-panel-renderer.ts, src/views/record-surface/record-header.ts, the sheet blocks of styles.css (grep for db-mobile-bottom-sheet, db-shell-, db-sheet-), tools/live/sheet-grammar.mjs and tools/live/host-modal-stand-in.ts, tools/live/sheet-rebuild.mjs, tools/storybook/verify-placement.mjs, specs/005-component-surface-system/044-phone-sheet-alignment/{goal.md,design-trueup.md,decision-record.md,tasks.md}, 048-stacked-sheets/{goal.md,decision-record.md,tasks.md,acceptance-criteria.md}, 051-modal-and-sheet-componentization/{goal.md,design-trueup.md,decision-record.md,tasks.md,acceptance-criteria.md,implementation-summary.md}, specs/005-component-surface-system/design-system.md and roadmap.md section 4 rows 40, 41, 43, 59 and section 6A, and the Anytype README index screenshots/anytype/README.md plus the measured values already recorded in 051/design-trueup.md (DO NOT open image files -- you cannot read PNGs; use the recorded measurements and README descriptions only). Operator reports to explain and close: 2026-09-06 10:04 iOS 'this sheet is really bad bugged' (duplicate close control, split header/body backgrounds, blank space above the title, parent bleed -- fixed at be578988/e632a1e1, device confirmation pending); earlier reports that sheets still looked like the old ones, that some sheets overflowed horizontally, and that stacked sheets did not look or work right. Questions to answer with file:line evidence: which grammar elements still diverge from Anytype's measured sheet (frame, handle, header, rows, actions, safe area, motion, scrim, stacking depth rules); which DbModal subclasses and FuzzySuggestModal outliers still bypass the shell (051 T010); where the lane coverage has holes (which shell deliverables have no permanent row); which iOS/WebKit-specific behaviours the Chromium harness cannot see (keyboard avoidance, safe-area insets, rubber-band scrolling, sheet drag-to-dismiss, focus/scroll restoration) and how each could be verified; what a ranked remediation plan looks like as concrete phase tasks with thresholds and red-first checks. Rank findings by user impact; cite every claim by file:line or a recorded measurement; mark inferences as inferences.",
+  "minIterations": 3,
+  "stopPolicy": "max-iterations",
+  "resource_map_present": false,
+  "resource_map": {
+    "emit": true
+  },
+  "nextRunAt": null,
+  "remainingDelayMs": null,
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-opencode",
+        "model": "llmgateway/glm-5.3-flash",
+        "reasoningEffort": "max",
+        "iterations": 10,
+        "label": "glm-devpass",
+        "count": 1
+      }
+    ],
+    "concurrency": 1
+  }
+}

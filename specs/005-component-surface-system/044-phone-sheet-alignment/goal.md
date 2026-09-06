@@ -14,7 +14,7 @@ _memory:
     last_updated_at: "2026-09-06T14:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Ticked six goal criteria and T001/T002 against what landed at 5aeb7087"
-    next_safe_action: "Await the operator device read on the three reported sheets"
+    next_safe_action: "Await the operator device read; 067 AC-011 reads it with 048 and 051"
     blockers:
       - "Operator device confirmation is the only row that closes this phase"
     key_files:
@@ -189,4 +189,43 @@ would make each half unverifiable. This entry exists so a later reader looking f
 grammar failed on device finds the pointer instead of nothing. The shell both defects render
 through is `051`'s `surface-shell.ts`, which is why the leg is sequenced after `051`'s side-sheet
 work.
+
+### 2026-09-06 amendment: what the family's deep-research loop found in this packet's grammar
+
+The sheet family's 10-iteration loop ran on the operator's ~15:50 instruction, *"Run it now on the
+current state"* (`../roadmap.md` §6A), and its synthesis opened
+**`../067-sheet-family-remediation`**. Four findings sit in this packet's grammar. **None reopens a
+ticked criterion** — every one is a value this packet's predicates were never written to see, which
+is the point worth carrying: *the lane can be green on a divergence it cannot see.*
+
+**Row pitch has no floor.** `.db-panel-row` declares `padding: 2px` and **no min-height**
+(`styles.css:12366-12373`); `.db-menu-item` carries 30px (`:469`). The measured Anytype phone row is
+**50pt**, and `ROW_PADDING_FLOOR_PX = 2` (`sheet-grammar.ts:52`) is the family's only row assertion
+— it is about padding, not pitch. `067` T013 and AC-005 carry a 44px floor against the 50pt target.
+
+**The handle is 36 × 4px at an 8px drop against a measured 34 × 5pt at 6pt** (`styles.css:349-359`),
+and `hasSheetHandle` checks existence and drag only (`sheet-grammar.ts:80-86`), so the lane cannot
+see either number. Its rendered contrast is **unmeasured anywhere** — `--text-faint` at 0.65 opacity
+is theme-supplied and its hex is not in `styles.css` — so ADR-007 exception **E1**, which is the
+justification for keeping the 44px close where Anytype ships none, currently rests on *Anytype's*
+2.21:1 rather than on ours. `067` T003 measures it once and records it; `067` T014 and AC-008 carry
+the geometry.
+
+**One threshold admits the very defect it was created for.** `HANDLE_TO_TITLE_GAP_MAX_PX = 80`
+(`sheet-grammar.mjs:228`) was added by the row-59 leg, and the defect state it was written against
+measured **74.4px** in the harness. 74.4 < 80, so a regression restoring the empty native title's
+dead band **passes the numeric column today**. Mitigating, and the reason this ranks below the
+value rows rather than above them: the permanent `constructed-modal-sheet-*` pixelHash scenarios do
+still catch the harness-scale regression, and the on-device ~200px band would be caught either way.
+`067` T017 re-derives the cap between the healthy 34.4px and the defective 74.4px.
+
+**`hasSheetHeader` accepts either header shape** (`sheet-grammar.ts:88-95`) — the centred three-slot
+grid and the legacy two-slot builder both pass — so the three `FuzzySuggestModal` surfaces, which
+ship the two-slot header, would satisfy this packet's grammar if they were registered. They are not
+registered at all; `067` T009 and AC-004 close that.
+
+**What this amendment does not do.** It does not un-tick a criterion. Every measurement this packet
+made is still true; what these four rows record is that four other values were never measured. The
+one open row here remains AC-006, the operator's, and `067` AC-011 is written to close it in the
+same sitting as `048` AC-009 and `051` AC-010 — one build, one read, rather than three.
 <!-- /ANCHOR:log -->

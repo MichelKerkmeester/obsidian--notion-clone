@@ -281,11 +281,22 @@ as the family's original defect.
 a stacked child at **0.710** (three bands, all 0.710). `051` AC-011 carries both figures with their
 tolerances and their provenance.
 
-The tree ships `rgba(0, 0, 0, 0.25)` (`styles.css:319`) — roughly half the measured strength for the
-first case. The stacked-parent case lands numerically close, ~34% effective, but through **three**
-compounding declarations where the measurement shows one dim: the scrim, `.is-stack-parent` at
-opacity 0.88, and a `scale(0.96) translateY(4px)` pull-back on the parent's children
-(`styles.css:295-305`).
+The tree ships `rgba(0, 0, 0, 0.25)` (`styles.css:319`), which puts the page under a first sheet at
+**0.75** of undimmed — roughly half the measured strength.
+
+**The stacked-parent case is already at parity, and this ADR does not reopen it.** `93205d4d`
+measured it off decoded PNGs rather than describing it, against
+`constructed-column-manager-mobile-*` as the undimmed control: dark **46 → 33**, light
+**242 → 183**, which is **0.717** against the measured 0.710 ± 0.02. It is produced by **two steps,
+not two scrims** — `.is-stack-parent` at `opacity: 0.88` composited over the page, then the single
+scrim over the result, that scrim hoisted to z-index 1003 between the levels. Two scrims would have
+read 26 and 137, and they do not. So the loop's *"~34% effective through three compounding
+declarations"* was arithmetic on the declarations rather than a measurement of the result, and it is
+corrected here rather than carried.
+
+**What that leaves undecided is narrower and still real**: the `scale(0.96) translateY(4px)`
+pull-back on the parent's children (`styles.css:295-305`), which the two-step measurement does not
+cover because it is a transform rather than a dim.
 
 The pull-back is the part with no paper trail. Its comment calls it *"the compact depth cue used by
 iOS and Notion"*; no capture can show a transform, and **no packet document records it as adopted or
@@ -309,15 +320,16 @@ corrected in place rather than rewritten, and AC-003 here supersedes it.
 <!-- ANCHOR:adr-003-decision -->
 ### Decision
 
-**We chose**: raise the scrim to the measured band and reduce the parent dim to one mechanism,
-**or** keep the pull-back and record it as a deliberate extra cue with the operator's ruling behind
-it. What is not acceptable is the current state: a value at half strength and a transform nobody
-decided.
+**We chose**: raise the page-under-sheet dim to the measured band **while holding the
+parent-under-child figure at the 0.717 it already measures**, and disposition the pull-back either
+way. What is not acceptable is the current state: a page at half the measured dim, and a transform
+nobody decided.
 
-**How it works**: the scrim alpha becomes the measured value; the parent-under-child figure is
-produced by the scrim alone and re-measured on the same three bands the true-up used. If the
-operator wants the pull-back kept, it is recorded here as adopted with its reason, and the
-compounding is subtracted from the scrim so the composite still lands at 0.710 ± 0.02.
+**How it works**: the scrim alpha moves toward the measured value and the `.is-stack-parent` opacity
+step moves with it, because the two compose — raising the scrim alone would push the parent past
+0.710. Both figures are re-measured by the same decoded-PNG method `93205d4d` used, on the same
+control, so the after-numbers are comparable to the before-numbers rather than to an assertion. The
+pull-back is then either recorded here as adopted, with its reason, or removed.
 <!-- /ANCHOR:adr-003-decision -->
 
 ---

@@ -1,0 +1,616 @@
+{
+  "mergedFrom": [
+    "glm-devpass"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "F7.1-F7.8",
+      "rank": "P2-6",
+      "title": "Blind-spot verification designs; keyboard already emulated",
+      "anchors": [
+        "044/goal.md:96-107"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F3.2",
+      "rank": "P0-4",
+      "title": "Bypass cost itemised (header, role, stack rule, row-21 flip)",
+      "anchors": [
+        "mobile-bottom-sheet.ts:276-278"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F3.1",
+      "rank": "P0-4",
+      "title": "Bypass set = three FuzzySuggestModal subclasses",
+      "anchors": [
+        "main.ts:3047",
+        "image-file-suggest-modal.ts:40",
+        "markdown-file-suggest-modal.ts:34"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F6.2",
+      "rank": "P2-6",
+      "title": "Commit-id discrepancy flagged",
+      "anchors": [
+        "roadmap row 59"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F3.5",
+      "rank": "hold",
+      "title": "Confirm primitive verified end to end",
+      "anchors": [
+        "confirm-sheet.ts:46-72",
+        "confirm-modal.ts:37-119"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.1",
+      "rank": "context",
+      "title": "createSurfaceShell single production consumer",
+      "anchors": [
+        "db-modal.ts:122",
+        "surface-shell.ts:363-434"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F3.4",
+      "rank": "P1-5",
+      "title": "Declared titles 17/20; two scrape chains",
+      "anchors": [
+        "db-modal.ts:91-96"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F5.1",
+      "rank": "P0-1",
+      "title": "Depth cap adopted but unimplemented",
+      "anchors": [
+        "overlay-stack.ts:94-96,194-209"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F5.5",
+      "rank": "hold",
+      "title": "Depth-to-z monotone, verified",
+      "anchors": [
+        "mobile-bottom-sheet.ts:811,785-787"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.3",
+      "rank": "P2-6",
+      "title": "Device passes all open; rows 40/41/43 unread",
+      "anchors": [
+        "044/acceptance-criteria.md:65"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.3",
+      "rank": "inference",
+      "title": "Document-wide hasSheetParent; desktop false-stack risk",
+      "anchors": [
+        "surface-shell.ts:51-68",
+        "overlay-stack.ts:96"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.11",
+      "rank": "hold",
+      "title": "Drag thresholds measured; band calibration intra-file",
+      "anchors": [
+        "mobile-bottom-sheet.ts:881-913",
+        "styles.css:361-426"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F6.5",
+      "rank": "map",
+      "title": "Earlier report families mapped",
+      "anchors": [
+        "044/acceptance-criteria.md:68"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.2",
+      "rank": "P1-3/P2-5",
+      "title": "Five new lane-row candidates",
+      "anchors": [
+        "roadmap row 59",
+        "048/tasks.md:159-176"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.2",
+      "rank": "P2-3",
+      "title": "Frame classifier vs C10 declared height role",
+      "anchors": [
+        "mobile-bottom-sheet.ts:321-341"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.1",
+      "rank": "hold",
+      "title": "Frame geometry parity held",
+      "anchors": [
+        "styles.css:86",
+        "styles.css:90",
+        "styles.css:224-283"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F3.6",
+      "rank": "hold",
+      "title": "Fullscreen survives; decision operator's",
+      "anchors": [
+        "db-modal.ts:54",
+        "styles.css:212-222"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F8.2",
+      "rank": "P2-1",
+      "title": "Gap cap 80 admits the 74.4px defect",
+      "anchors": [
+        "sheet-grammar.mjs:222-228"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.3",
+      "rank": "P1-4",
+      "title": "Handle geometry deltas; contrast unmeasured",
+      "anchors": [
+        "styles.css:349-359",
+        "trueup §2b"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.5",
+      "rank": "P1-3",
+      "title": "Header-block height unmeasured, no row",
+      "anchors": [
+        "styles.css:12213-12222"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.6",
+      "rank": "P0-2",
+      "title": "Menu-role surfaces as handle+close sheets vs adopted handle-less cards",
+      "anchors": [
+        "popover-host.ts:168-176",
+        "styles.css:3156-3213"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F8.4",
+      "rank": "P1-3",
+      "title": "Missing lane columns consolidated",
+      "anchors": [
+        "sheet-grammar.mjs"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.8",
+      "rank": "P1-2",
+      "title": "Motion 260ms/no exit vs 200/150 band",
+      "anchors": [
+        "styles.css:130",
+        "styles.css:440-456",
+        "surface-shell.ts:169-170"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.6",
+      "rank": "P0-3/P1-1",
+      "title": "Old-looking residue: scrim + row pitch live",
+      "anchors": [
+        "styles.css:319",
+        "styles.css:12366-12373"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.5",
+      "rank": "closed",
+      "title": "Overflow closed by AC-009 sweep",
+      "anchors": [
+        "styles.css:12790-12795"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.7",
+      "rank": "context",
+      "title": "Phase completion arithmetic",
+      "anchors": [
+        "roadmap 051 row"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.7",
+      "rank": "P2",
+      "title": "Picker width roles independent of measured widths",
+      "anchors": [
+        "popover-host.ts:229-257"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F8.6",
+      "rank": "P1-3/P2-7",
+      "title": "Pill unshipped; dividers unaudited; segmented clean",
+      "anchors": [
+        "confirm-sheet.ts:54-72"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.12",
+      "rank": "hold",
+      "title": "Portal stand-in class is the unstyled-render risk",
+      "anchors": [
+        "mobile-bottom-sheet.ts:514-588"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F5.2",
+      "rank": "inference",
+      "title": "Registry-level document-wide parent derivation",
+      "anchors": [
+        "overlay-stack.ts:96"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F6.4",
+      "rank": "P2-5",
+      "title": "Residue: device read, depth-3 captures, dim composition",
+      "anchors": [
+        "048/tasks.md:159-176"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.9",
+      "rank": "P1-1",
+      "title": "Row pitch vs 50pt measured",
+      "anchors": [
+        "styles.css:12366-12373",
+        "sheet-grammar.ts:52"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F8.3",
+      "rank": "model",
+      "title": "Row-59 columns + injection controls verified",
+      "anchors": [
+        "sheet-grammar.mjs:1416-1421,1639-1641"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.4",
+      "rank": "model",
+      "title": "Row-59 fix pattern generalised",
+      "anchors": [
+        "roadmap row 59"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F6.1",
+      "rank": "closed-pending-device",
+      "title": "Row-59 symptoms mechanised; fixes verified",
+      "anchors": [
+        "mobile-bottom-sheet.ts:246-263",
+        "styles.css:21663-21669"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.10",
+      "rank": "device-only",
+      "title": "Safe-area floor correct; env() headless-zero",
+      "anchors": [
+        "styles.css:254",
+        "sheet-grammar.ts:54-59"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.8",
+      "rank": "P1-5",
+      "title": "Scrape-fallback counter exists; count unrecorded",
+      "anchors": [
+        "surface-shell.ts:101-126"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.7",
+      "rank": "P0-3",
+      "title": "Scrim 25% vs 48% measured; two-mechanism parent dim",
+      "anchors": [
+        "styles.css:315-322",
+        "styles.css:295-305",
+        "trueup §2b"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F5.4",
+      "rank": "P2-4",
+      "title": "Sheet focus restoration no-op",
+      "anchors": [
+        "overlay-stack.ts:307-311",
+        "mobile-bottom-sheet.ts:525-536"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.2",
+      "rank": "P1-2/P2-2",
+      "title": "Shell constants unreferenced by CSS",
+      "anchors": [
+        "surface-shell.ts:139-170"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.5",
+      "rank": "hold",
+      "title": "Side sheet scoped; lane row declined by ruling",
+      "anchors": [
+        "surface-shell.ts:180-194"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F5.3",
+      "rank": "hold",
+      "title": "Stacked affordance matches captures; dim composition diverges",
+      "anchors": [
+        "styles.css:295-305"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F6.3",
+      "rank": "hold",
+      "title": "Stand-in approximates host CSS",
+      "anchors": [
+        "host-modal-stand-in.ts:44-48"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F2.4",
+      "rank": "P0-1",
+      "title": "Sub-page affordance title-only; no body producer",
+      "anchors": [
+        "surface-shell.ts:200-231,428-432"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F8.1",
+      "rank": "P0-4",
+      "title": "Suggest surfaces unregistered; fuzzy children stand-ins",
+      "anchors": [
+        "sheet-grammar.mjs:65-107,193-194"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F3.3",
+      "rank": "decision",
+      "title": "T010 sharpened to join-or-shim",
+      "anchors": [
+        "db-modal.ts:120-133"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F4.1",
+      "rank": "P1-3",
+      "title": "T015's three rows still missing",
+      "anchors": [
+        "goal.md:172-173"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F5.6",
+      "rank": "matrix",
+      "title": "Three moves + cap scoreboard",
+      "anchors": [
+        "surface-shell.ts",
+        "overlay-stack.ts"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.6",
+      "rank": "hold",
+      "title": "Title 16px vs ~17pt; scraping persists",
+      "anchors": [
+        "mobile-bottom-sheet.ts:268-275",
+        "styles.css:12777-12795"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F1.4",
+      "rank": "resolved-by-T011",
+      "title": "Two header builders; shell grid landed",
+      "anchors": [
+        "mobile-bottom-sheet.ts:161-175",
+        "styles.css:12295-12344"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    },
+    {
+      "id": "F8.5",
+      "rank": "hold",
+      "title": "verify-placement permanent 1-red documented",
+      "anchors": [
+        "roadmap rows 40-43"
+      ],
+      "_lineages": [
+        "glm-devpass"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 51,
+    "sourceFindings": 51,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  },
+  "schema_mismatch": [
+    {
+      "type": "schema_mismatch",
+      "severity": "warn",
+      "lineage": "glm-devpass",
+      "message": "Registry uses non-canonical key \"findings\" instead of \"keyFindings\"; coerced 51 entries.",
+      "aliasKey": "findings",
+      "canonicalKey": "keyFindings",
+      "coercedCount": 51
+    }
+  ]
+}

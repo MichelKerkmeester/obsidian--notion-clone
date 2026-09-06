@@ -61,11 +61,24 @@ the whole family on one device build with the blind spots named.
 A ten-iteration deep-research loop (`051/research/research.md`, 51 findings) then measured what is
 left, and it splits three ways. **Unshipped decisions**: the depth cap, the replace-in-place move
 and the handle-less menu card are all ADOPT rows in `051/design-trueup.md` with no runtime mechanism
-at all. **Live numeric divergences**: a scrim at 25% against a measured 48%, rows with no min-height
-against a measured 50pt, entrance motion at 260ms with no exit against a reconciled 200/150ms band,
-a handle at 36 × 4px/8px against a measured 34 × 5pt/6pt. **Coverage holes**: three shipping phone
-sheets registered nowhere, eight deliverables with no permanent lane row, and one threshold loose
-enough to pass the very defect it was written for.
+at all. **Live numeric divergences**: the page under a first sheet at 0.75 of undimmed against a measured
+0.519, rows with no min-height against a measured 50pt, entrance motion at 260ms with no exit at all
+against a reconciled 200/150ms band, a handle at 36 × 4px/8px against a measured 34 × 5pt/6pt.
+**Coverage holes**: three shipping phone sheets registered nowhere, several deliverables with no
+permanent lane row, and **two thresholds loose enough to pass the state they were written against** —
+`HANDLE_TO_TITLE_GAP_MAX_PX = 80` against a 74.4px defect, and the motion band's 180-260ms against
+the 260ms it was landed on.
+
+**Corrected against what landed on `main` while this packet was being written**, because a synthesis
+that reports a fixed defect is worse than one that reports nothing. `ae4fff81` registered the three
+depth-3 stacked capture scenarios, closing `048` T025 and the loop's P2-5. `311f957a` landed the
+motion timing band lane row, so the loop's *"the motion band has no lane row"* is false — what is
+true, and sharper, is that the row pins the **current** 260ms (`MOTION_BAND_TOKEN_DEFAULT_MS`,
+`sheet-grammar.mjs:182`) inside a 180-260ms band, so **correcting the value to 200ms takes that row
+red** and the two must move in one commit. And `93205d4d` measured the stacked-parent dim off
+decoded PNGs — dark 46 → 33, light 242 → 183 against an undimmed control — which puts the
+parent-under-child figure at **0.717**, inside the true-up's 0.710 ± 0.02. That clause is **already
+at parity**; what remains red is the page under a *first* sheet.
 
 ### Decisions
 
@@ -126,15 +139,18 @@ never resolve them silently.
       affordance set from `design-trueup.md` row 26. Done is: no grab handle on a `menu`-role phone
       surface, the **44px close retained** (E1), and the parent treatment settled against the
       captures rather than chosen.
-- [ ] **The dim is at the measured level and produced by one mechanism.** **Today: 25% against a
-      measured ~48%.** `.db-mobile-sheet-scrim` is `rgba(0,0,0,0.25)` (`styles.css:319`) against
-      `0.519 / 0.520 / 0.505` luminance across three bands (`design-trueup.md` §2b, C3). The
-      stacked-parent dim lands numerically close (~34% effective against 29% measured) but through
-      two mechanisms where the measurement shows one — scrim, plus `.is-stack-parent` opacity
-      0.88, plus `scale(0.96) translateY(4px)` (`styles.css:295-305`). And **no lane row asserts
-      scrim opacity at all.** Done is: 0.519 ± 0.02 and 0.710 ± 0.02 through one mechanism, or the
-      second dispositioned in `decision-record.md` as a deliberate cue, with a lane row on the
-      computed alpha either way.
+- [ ] **The page under a first sheet is dimmed to the measured level, and no lane row is missing
+      for it.** **Today: 0.75 of undimmed against a measured 0.519.** `.db-mobile-sheet-scrim` is
+      `rgba(0,0,0,0.25)` (`styles.css:319`) against `0.519 / 0.520 / 0.505` luminance across three
+      bands (`design-trueup.md` §2b, C3) — roughly half the measured strength. **The stacked-parent
+      half of C3 is already at parity and is not reopened**: measured off decoded PNGs at
+      `93205d4d`, dark 46 → 33 and light 242 → 183 against an undimmed control, which is **0.717**
+      against the measured 0.710 ± 0.02, produced by two steps rather than two scrims —
+      `.is-stack-parent` at opacity 0.88 composited under the single scrim. **No lane row asserts
+      scrim opacity at all**; the motion row reads the scrim's `animation-duration`, not its colour.
+      Done is: 0.519 ± 0.02 on the page under a first sheet, 0.710 ± 0.02 held on the parent, a lane
+      row on the computed alpha, and the `scale(0.96) translateY(4px)` cue dispositioned in
+      `decision-record.md` rather than left design-inferred.
 - [ ] **Zero surfaces bypass the shell, and every shipping phone sheet is registered.** **Today:
       three bypasses and three unregistered surfaces, and they are the same three.**
       `attachSheetChromeToModal` is called outside `surface-shell.ts` at `main.ts:3047`,
@@ -150,10 +166,13 @@ never resolve them silently.
       260ms with **no exit transition at all** (`styles.css:130`, `:440-456`) and `.db-panel-row`
       with **no min-height** (`:12366-12373`). The section comment asks consumers to "point at one of
       these instead of repeating the number" and a CSS custom property cannot read a TS constant.
-      Done is: the bridge exists, and a deliberate disagreement takes a check red.
+      The lane now pins the stylesheet's side of that disagreement rather than the constant's:
+      `MOTION_BAND_TOKEN_DEFAULT_MS = 260` (`sheet-grammar.mjs:182`) asserts the **current** value,
+      so the bridge and the row move in one commit or the row goes red on the fix. Done is: the
+      bridge exists, and a deliberate disagreement takes a check red.
 - [ ] **`npm run gate` exits 0 read from `$?`, with one permanent lane row per remaining deliverable
-      — the pill, the chip, the header block, the scrim level, the handle geometry, the three
-      suggest surfaces, the depth-3 chains — each negative control observed red before green**, and
+      — the pill, the chip, the header block, the scrim level, the handle geometry and the three
+      suggest surfaces — each negative control observed red before green**, and
       the registered counts hold at or above 14 surfaces / 32 pairs. **Today: none of those rows
       exists**, and `HANDLE_TO_TITLE_GAP_MAX_PX = 80` (`sheet-grammar.mjs:228`) passes the 74.4px
       state it was created for.
@@ -189,4 +208,6 @@ Everything below is VOLATILE.
 | **Three of the loop's own claims were corrected against the tree** | A finding is a hypothesis. P0-2's threshold as written asked for "no grab handle **and no close button**" — that contradicts `design-trueup.md` row 26, which says the close **stays** under ADR-007 E1; the threshold here is handle-less with the close retained. The commit-id "discrepancy" the loop flagged is not one: `be578988`, `772b24d2` and `e632a1e1` are three real commits with three roles, and `048` T024 already named all three. And AC-011's *"Today: no scrim exists"* is stale — one has existed since `048`, at the wrong level. |
 | **Two capture rows disagree about the same move** | `design-trueup.md` row 26 resolves the menu card over a **dimmed** parent; row 31 resolves the popover shape over an **undimmed** one. Both are ADOPT, both are about §3's third move. They were measured off different surface classes and one of them is wrong for the other's case. Named rather than resolved — `decision-record.md` ADR-002 carries it and stays Proposed on that clause. |
 | **`design-system.md` §7 is stale on the scrim** | It states *"There is no sheet scrim … A scrim is new construction"*. One has shipped since `048`. Named, not fixed: the design system is the parent's document and this packet does not own it. |
+| **Three findings were overtaken by landings on `main` while this packet was written** | Rebasing found them; each is corrected above rather than shipped stale. **P2-5 (depth-3 captures) is closed** — `ae4fff81` registered three `constructed-depth3-*` scenarios and `048` T025 is ticked, so `067` T020 keeps only the replace-pair capture. **P1-2's "no lane row" is false** — `311f957a` landed the motion timing band row, and the real finding is worse than the reported one: the row pins the **current** 260ms (`MOTION_BAND_TOKEN_DEFAULT_MS`, `sheet-grammar.mjs:182`) inside a 180-260ms band, so it is the second threshold in this family that passes the state it was written against, and correcting the value takes the row red. **P0-3's stacked-parent half is at parity** — `93205d4d` measured dark 46 → 33 and light 242 → 183 off decoded PNGs, which is 0.717 against the measured 0.710 ± 0.02, and the dim is two steps rather than two scrims. What stays red is the page under a **first** sheet. |
+| **The depth-3 captures produced a finding this packet consumes** | `93205d4d` records it: in all three depth-3 chains the **first-level child is fully buried** — the top child's rect contains the middle panel's entirely, same x, same width, same bottom edge — so nothing of the middle level survives in any of the six images and the header a reader sees over the option list is the dropdown's own. That is a photographed argument for REQ-001's replace move, not a capture defect, and it is stronger evidence than anything the loop found for the same requirement. |
 <!-- /ANCHOR:log -->

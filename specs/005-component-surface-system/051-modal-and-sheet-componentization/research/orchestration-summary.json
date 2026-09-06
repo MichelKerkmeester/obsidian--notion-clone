@@ -1,0 +1,77 @@
+{
+  "run_id": "1788705755868-euxgmf",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/051-modal-and-sheet-componentization",
+  "base_artifact_dir": "specs/005-component-surface-system/051-modal-and-sheet-componentization/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [
+    {
+      "label": "glm-devpass",
+      "index": 0,
+      "started_at_iso": "2026-09-06T14:35:18.792Z"
+    }
+  ],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "glm-devpass",
+      "state_log": "specs/005-component-surface-system/051-modal-and-sheet-componentization/research/lineages/glm-devpass/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-09-06T14:42:35.875Z",
+        "end_at_iso": "2026-09-06T14:47:27.040Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 12,
+        "untimestamped": 0,
+        "unparseable": 0,
+        "total": 13
+      },
+      "sample": [
+        {
+          "index": 0,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T16:00:00Z",
+          "deltaMs": 4232960
+        },
+        {
+          "index": 1,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T16:20:00Z",
+          "deltaMs": 5432960
+        },
+        {
+          "index": 2,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T16:45:00Z",
+          "deltaMs": 6932960
+        },
+        {
+          "index": 3,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:05:00Z",
+          "deltaMs": 8132960
+        },
+        {
+          "index": 4,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:25:00Z",
+          "deltaMs": 9332960
+        }
+      ]
+    }
+  ]
+}

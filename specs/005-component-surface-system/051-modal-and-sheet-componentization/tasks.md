@@ -769,7 +769,7 @@ excluded on its own recorded terms.
       (`color(srgb 0.179412 0.179412 0.179412)`), 34.4px, with four injection controls each red then
       green. `048/tasks.md` T024 and `048/decision-record.md`'s 2026-09-06 ~10:44 note carry the
       full account; this row records only that the leg landed on the files this packet owns.
-- [ ] **T025 (2026-09-06 amendment) — Run the sheet family's deep-research loop**, to the executor
+- [x] **T025 (2026-09-06 amendment) — Run the sheet family's deep-research loop**, to the executor
       spec in `goal.md` §4's amendment: `/deep:research:auto`, 10 iterations,
       `--stop-policy=max-iterations`, `cli-pi` on GLM 5.3 flash max (OpenRouter, DevPass fallback),
       bounded prompts with an explicit file list and no image reads, a fresh worktree, then an Opus
@@ -827,6 +827,70 @@ excluded on its own recorded terms.
       So the loop does not start yet. `044` is the closest: it needs only the operator's read.
       `048` now needs only the operator's read. `051` is the packet that actually gates the
       family, and its own shell criteria are the work, not the waiting.
+
+      **Done 2026-09-06 — the precondition was waived, not met, and the loop ran on the operator's
+      instruction.** At ~15:50 the operator ruled, verbatim: *"Run it now on the current state"*.
+      That waives the *done and verified as planned* precondition this row spent four paragraphs
+      measuring as NOT MET; the verdict above is left standing as the record of what was true when
+      the loop started, because a precondition deleted after it is overridden leaves no trace that
+      anything was overridden. Recorded in `../roadmap.md` §6A.
+
+      **The run.** `/deep:research:auto`, fan-out, **1 lineage × 10 iterations**, `stopPolicy:
+      max-iterations`, stop reason `maxIterationsReached` (10 of 10). Executor: **`cli-opencode` on
+      `llmgateway/glm-5.3-flash` at `reasoningEffort: max`**, lineage label `glm-devpass` — the
+      DevPass transport, which this row named as the fallback and which is what ran; `cli-pi` on
+      OpenRouter was not the transport used. **51 findings merged**, no cross-lineage conflicts,
+      `newInfoRatio` averaging 0.73 and never falling below the 0.05 threshold, which is the
+      expected shape under a fixed-count instruction rather than a convergence claim. **5 of 5**
+      dispatch questions answered; **4 of 4** operator reports mapped to a landed producer or an
+      open divergence. Zero image reads, as the prompt discipline required.
+
+      **Artefacts, at `research/`**: `research.md` (1,057 lines, 17 sections — the synthesis of
+      record), `resource-map.md` (emitted by `reduce-state.cjs` from the ten delta files),
+      `convergence-report.md`, `findings-registry.json`, `deep-research-findings-registry.json`,
+      `fanout-attribution.md`, `orchestration-summary.json`, `deep-research-state.jsonl` and the
+      observability log.
+
+      **Three runtime quirks, recorded because each one cost the run time and the next run will hit
+      the same three.**
+      1. **Report-path mismatch.** The fan-out pool's completion check expects a lineage's report at
+         `lineages/<label>/research.md`; the lineage wrote it to
+         `lineages/<label>/research/research.md`. The pool therefore failed its completion check
+         with the work already on disk. Placing the report at the contract path completed the pool
+         clean (`salvage_miss: 0`, no new iterations).
+      2. **`reduce-state.cjs` refuses a worktree root.** It resolves its state relative to a
+         checkout it recognises, so pointed at a worktree it emits nothing rather than erroring
+         usefully.
+      3. **The runtime refused the `synthesis_complete` state event, and the config's `status` is
+         immutable.** `deep-research-config.json` therefore still reads `"status": "initialized"`
+         and `"stopPolicy": "fail-closed"` although the run completed under `max-iterations`.
+         **Both are left exactly as the loop left them** — a hand-edited state file is a state file
+         that no longer records what the runtime did.
+
+      **`lineages/` is gitignored** (`.gitignore:13`, `specs/**/research/**/lineages/`), so the ten
+      iteration files, the ten delta files, the lineage's own report and its ledgers are **on disk
+      and not in the commit**. `research.md`'s citations into `lineages/glm-devpass/iterations/`
+      will not resolve in a fresh clone. The convergence report was copied up to
+      `research/convergence-report.md`, verbatim and unedited, so the loop's stop reason and its
+      per-iteration table survive in the repository; nothing else was copied, and the ignore rule
+      was not touched.
+
+      **The synthesis landed as `067-sheet-family-remediation`**, one coordinated child under the
+      parent rather than rows scattered across three packets: `recommend-level.sh --loc 1100
+      --files 20 --architectural` reads **72/100, Level 3**, phase score **30/50** against the 25
+      bar, so both `phase-definitions.md` §2 thresholds are met independently. Dated amendments in
+      this packet, in `044` and in `048` point at it. **Three of the loop's own claims did not
+      survive verification against the tree and were corrected rather than carried** — they are in
+      `067/goal.md` §4. **Three more were overtaken by landings on `main`
+      between the run and the synthesis's first commit, and are corrected rather than shipped
+      stale**: `ae4fff81` closed `048` T025's depth-3 captures, so the loop's P2-5 is done;
+      `311f957a` landed the motion timing band row, so *"the motion band has no lane row"* is false
+      and the real defect is sharper — the row pins the current **260ms**
+      (`MOTION_BAND_TOKEN_DEFAULT_MS`, `sheet-grammar.mjs:182`), so correcting the value takes it
+      red; and `93205d4d` measured the stacked-parent dim at **0.717**, inside the true-up's
+      0.710 ± 0.02, so only the page under a *first* sheet is still red. **A ten-iteration report
+      goes stale in hours on a moving tree** — these were caught by rebasing and reading, not by the
+      loop.
 <!-- /ANCHOR:phase-4 -->
 
 ---

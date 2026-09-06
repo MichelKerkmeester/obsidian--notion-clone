@@ -127,7 +127,7 @@ device pass reads one build with the blind spots named.
 - Phone row pitch, motion band, pill and chip producers, handle geometry, declared titles
   (REQ-005 to REQ-009).
 - The harness and hygiene set: the gap cap, the declared height role, focus restoration, the
-  depth-3 capture scenarios, the divider audit (REQ-010).
+  replace-pair capture scenarios, the divider audit (REQ-010).
 - One device pass against one build with the blind-spot checklist (REQ-011).
 
 ### Out of Scope
@@ -156,7 +156,7 @@ device pass reads one build with the blind spots named.
 | `src/views/confirm-sheet.ts` | Modify | The primary-action pill producer, if the pill lands here |
 | `styles.css` | Modify | Scrim level, row pitch floor, motion band, handle geometry, pill and chip |
 | `tools/live/sheet-grammar.mjs` | Modify | The new computed-value rows, the three suggest surfaces, the re-derived gap cap |
-| `tools/screenshots/constructed-scenarios.mjs` | Modify | The depth-3 capture scenarios (`048` T025) and the replace-in-place capture |
+| `tools/screenshots/constructed-scenarios.mjs` | Modify | The replace-in-place capture; the three `constructed-depth3-*` scenarios re-read for the chains the cap changes |
 <!-- /ANCHOR:scope -->
 
 ---
@@ -170,7 +170,7 @@ device pass reads one build with the blind spots named.
 |----|-------------|
 | REQ-001 | A third stacked **sheet** cannot be registered. Registering one presents as a **replacement** of the second, and the shell carries a body producer for it, so `properties property type picker` and `add view property picker` express the replace move rather than a stack. `record column submenu` and `import confirm dropdown chain` keep `depth: 3` — both are menu-stacks, which the cap does not govern (`design-trueup.md` §6 C4) |
 | REQ-002 | A surface whose declared `role` is `menu` presents on the phone as an **anchored, handle-less card**, and the presentation path reads the role rather than ignoring it. The 44px close **stays** — that is ADR-007 exception **E1**, an accessibility deviation with a measurement behind it, and REQ-002 does not reopen it |
-| REQ-003 | The page under a first sheet renders at **0.519 ± 0.02** of its undimmed luminance and a parent sheet under a stacked child at **0.710 ± 0.02**, produced by **one** mechanism, or with the second mechanism dispositioned in `decision-record.md` as a deliberate extra cue rather than left design-inferred |
+| REQ-003 | The page under a first sheet renders at **0.519 ± 0.02** of its undimmed luminance, and a parent sheet under a stacked child **holds** at **0.710 ± 0.02** — measured at 0.717 today and not to be regressed by raising the page dim — with the `scale(0.96) translateY(4px)` cue dispositioned in `decision-record.md` rather than left design-inferred |
 | REQ-004 | **Zero** direct `attachSheetChromeToModal` call sites outside `surface-shell.ts`, or a written disposition per survivor; and all three `FuzzySuggestModal` surfaces appear in `tools/live/sheet-grammar.mjs`'s registered set |
 
 ### P1 - Required (complete OR user-approved deferral)
@@ -182,7 +182,7 @@ device pass reads one build with the blind spots named.
 | REQ-007 | The primary action pill and the trailing header chip have **producers**, at **341.7 × 50.0pt** with ~21pt insets and **44.0 × 44.0pt** respectively, and the pill, the chip and the header block each carry a permanent lane row asserting the computed value |
 | REQ-008 | The grab handle measures **34 × 5pt** at a **6pt** drop, and its rendered contrast is **measured once and recorded** — if it falls below 3:1, E1's justification is restated with our number instead of Anytype's 2.21:1 |
 | REQ-009 | **20 of 20** `DbModal` subclasses declare a title, the scrape-fallback counter reads **0** for the registered set, and exactly **one** scrape chain survives |
-| REQ-010 | The harness set: `HANDLE_TO_TITLE_GAP_MAX_PX` re-derived between the healthy 34.4px and the defective 74.4px; `SheetChromeOptions` carries a declared `heightRole` with the classifier as the fallback; sheet focus restoration is no longer a no-op; the three registered depth-3 chains and the replace pairs are photographed; the divider inset audited against C8's three contexts |
+| REQ-010 | The harness set: `HANDLE_TO_TITLE_GAP_MAX_PX` re-derived between the healthy 34.4px and the defective 74.4px; `SheetChromeOptions` carries a declared `heightRole` with the classifier as the fallback; sheet focus restoration is no longer a no-op; the replace pairs are photographed; the divider inset audited against C8's three contexts |
 | REQ-011 | One device pass against **one** build closes `044` AC-006, `048` AC-009 and `051` AC-010 together, with keyboard, safe area, rubber-band scrolling and drag-to-dismiss bound to that read |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
@@ -199,10 +199,13 @@ device pass reads one build with the blind spots named.
   `tasks.md`; none needs a failure state manufactured for it.
 - **SC-002**: `npm run gate` exits 0 read from `$?`, `npx tsc --noEmit` 0, `npx vitest run` 0, and
   the registered surface and pair counts are at or above the 14 / 32 this packet opened against.
-- **SC-003**: Every new lane row asserts a **computed value**, not the presence of a class. The
-  family's standing harness failure is a green lane over a divergence it cannot see —
-  `hasSheetHeader` accepts either header shape, `hasSheetHandle` sees existence only, and the gap
-  cap passes its own defect.
+- **SC-003**: Every new lane row asserts a **computed value against the measured target**, not the
+  presence of a class and not the value the tree happens to ship. The family has failed this twice:
+  `hasSheetHeader` accepts either header shape and `hasSheetHandle` sees existence only, so the lane
+  is green over divergences it cannot see; and two thresholds are written around the state they were
+  landed on — `HANDLE_TO_TITLE_GAP_MAX_PX = 80` passes the 74.4px defect it was created for, and the
+  motion band's `MOTION_BAND_TOKEN_DEFAULT_MS = 260` pins the value this packet is here to correct.
+  A row that cannot go red for the reason it exists has not been written yet.
 - **SC-004**: No adopted Anytype move in `design-trueup.md` §3 or §6 is left without a producer, and
   anything still unbuilt is named in `decision-record.md` with the reason.
 <!-- /ANCHOR:success-criteria -->

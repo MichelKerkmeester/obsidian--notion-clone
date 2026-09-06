@@ -436,4 +436,56 @@ rows are all open with no reply since the 0.0.23 check, through 0.0.24 to 0.0.29
 rows remain beside them, `048`'s T025 (no depth-3 stacked capture scenario exists) and this packet's
 T010 / T015 / T023. The exact dispatch to run once the precondition clears is written out in
 `tasks.md` T025 rather than left to be reconstructed.
+
+### 2026-09-06 — T025 ran, on a waived precondition, and its remediation opened as `067`
+
+**The precondition never cleared. It was overridden.** The operator, ~15:50, verbatim: *"Run it now
+on the current state"* (`../roadmap.md` §6A). The measurement above stays as written — a precondition
+deleted once it is overridden leaves no record that anything was overridden — and the consequence is
+carried forward rather than smoothed over: **the loop read an unverified family, so nothing it
+produced is device-confirmed.**
+
+**The run.** `/deep:research:auto`, fan-out, one lineage × **10 iterations**, `stopPolicy:
+max-iterations`, stop reason `maxIterationsReached`. Executor **`cli-opencode` on
+`llmgateway/glm-5.3-flash` at `reasoningEffort: max`**, label `glm-devpass` — the DevPass transport
+this packet named as the fallback, which is what actually ran; `cli-pi` on OpenRouter did not. 51
+findings merged, no cross-lineage conflicts; `newInfoRatio` averaged 0.73 and never crossed the 0.05
+threshold, which is the expected shape under a fixed-count instruction and **not** a convergence
+claim. 5 of 5 dispatch questions answered, 4 of 4 operator reports mapped, zero image reads.
+
+**Artefacts** at `research/`: `research.md` (1,057 lines, 17 sections), `resource-map.md`,
+`convergence-report.md`, `findings-registry.json`, `deep-research-findings-registry.json`,
+`fanout-attribution.md`, `orchestration-summary.json`, `deep-research-state.jsonl`,
+`observability-events.jsonl`. **`lineages/` is gitignored** (`.gitignore:13`,
+`specs/**/research/**/lineages/`), so the ten iteration files, the ten delta files and the lineage's
+own report are on disk and outside the commit; `research.md`'s citations into
+`lineages/glm-devpass/iterations/` will not resolve in a fresh clone. The convergence report was
+copied up verbatim so the stop reason and the per-iteration table survive. The ignore rule was not
+touched.
+
+**Three runtime quirks, recorded so the next run does not rediscover them**: the fan-out pool
+expects a lineage report at `lineages/<label>/research.md` and the lineage wrote
+`lineages/<label>/research/research.md`, which failed the pool's completion check with the work
+already on disk; `reduce-state.cjs` refuses a worktree root and emits nothing rather than erroring
+usefully; and the runtime **refused the `synthesis_complete` state event** while
+`deep-research-config.json`'s `status` is immutable, so that file still reads
+`"status": "initialized"` and `"stopPolicy": "fail-closed"`. Both are left exactly as the loop left
+them.
+
+**The synthesis landed as `../067-sheet-family-remediation`** — one coordinated child under the
+parent, not rows scattered across three packets. `recommend-level.sh --loc 1100 --files 20
+--architectural` reads **72/100, Level 3**, phase score **30/50** against the 25 bar, so both
+`phase-definitions.md` §2 thresholds are met independently; `044` and `048` are at 86% and 88% and
+reopening either to carry another packet's work would have cost more than it bought. Four ADRs, one
+per P0. **Three of the loop's own claims did not survive verification against the tree** and were
+corrected rather than carried: its menu-role threshold asked for no close button, contradicting the
+same `design-trueup.md` row 26 it cited (the 44px close stays under ADR-007 **E1**); the commit-id
+"discrepancy" it flagged is not one, `be578988`, `772b24d2` and `e632a1e1` being three real commits
+with three roles, which `048` T024 already recorded; and AC-011's *"no scrim exists"* was stale.
+**Three more were overtaken by landings on `main` between the run and the synthesis's first
+commit**, caught by rebasing rather than by the loop: `ae4fff81` closed `048` T025's depth-3
+captures; `311f957a` landed the motion timing band row, which pins the current 260ms and so goes red
+on the fix — a sharper defect than the *"no row exists"* the loop reported; and `93205d4d` measured
+the stacked-parent dim at 0.717, inside the true-up's band, leaving only the page under a first
+sheet red. A ten-iteration report goes stale in hours on a moving tree.
 <!-- /ANCHOR:final-state -->

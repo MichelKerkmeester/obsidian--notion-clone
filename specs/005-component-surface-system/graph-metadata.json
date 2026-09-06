@@ -62,7 +62,8 @@
     "005-component-surface-system/055-states-feedback-and-motion",
     "005-component-surface-system/056-board-anytype-parity",
     "005-component-surface-system/057-calendar-anytype-parity",
-    "005-component-surface-system/058-card-title-and-title-formats"
+    "005-component-surface-system/058-card-title-and-title-formats",
+    "005-component-surface-system/067-sheet-family-remediation"
   ],
   "manual": {
     "depends_on": [],
@@ -270,7 +271,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-06T14:46:57.323Z",
+    "last_save_at": "2026-09-06T15:29:46.710Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -278,10 +279,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:06b12e919a065116ee108fd278fd12b5cf0d91d97da65fe8dc2cf892ff25d375",
+    "source_fingerprint": "sha256:824bccbfdd364500e1860d37f1a48b9f4286b7fe9bb07910bfb5d79654cfec65",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c175db8dda9bd168eb594bbd9d995d23f459c482d648c4615ed9c13b9d870ff2",
+      "spec.md": "fe85c5044c7b54c5ac7329ea6a2874194879914cf13d477c3b434b5990b84efe",
       "handover.md": "230fa68fd184e5190d21f4e9c3987a2ea68999bb7746a8e7e0336f2b41452a7e"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",

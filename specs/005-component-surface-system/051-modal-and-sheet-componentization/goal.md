@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
     last_updated_at: "2026-09-06T14:00:00Z"
     last_updated_by: "implementer-session-fourth-landing"
-    recent_action: "Closed AC-013 by the Keep-the-overlay ruling and ticked T024 against 5aeb7087"
-    next_safe_action: "Take T015's three missing lane rows, then T010's operator question"
+    recent_action: "Ticked T025: the deep-research loop ran and its synthesis opened 067"
+    next_safe_action: "Take T015 three lane rows; 067 owns the pill and chip producers they need"
     blockers:
       - "styles.css edits are serialized by the parent's CSS lane"
       - "T010 stays blocked on the operator (spec.md §11's second open question, unanswerable from any capture)"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-goal"
       parent_session_id: null
-    completion_pct: 22
+    completion_pct: 33
     open_questions:
       - "Do the three FuzzySuggestModal subclasses join the shell, or stay Obsidian-native with a shim"
       - "Does the fullscreen presentation survive as a third mode, or collapse into the sheet with a height role"
@@ -193,7 +193,7 @@ never resolve them silently.
       outside-pointerdown contract, and no surface becomes exempt from it. Recorded in ADR-008's
       amendment and on AC-013, which is now `Met`. **What this row does not close:** T023, the
       lane row for the shape, deliberately not taken while one surface uses it.
-- [ ] **The sheet family's device pass runs an extra deep-research loop before this family is
+- [x] **The sheet family's device pass runs an extra deep-research loop before this family is
       called done.** **Added 2026-09-06** from the operator's 10:04 standing instruction
       (`../roadmap.md` §4 row 59, §6A). It is not a code criterion and it is not a substitute for
       any row above: it starts only once `044`, `048` and `051` are each done **and verified as
@@ -206,6 +206,19 @@ never resolve them silently.
       check. Two non-operator rows also remain: `048`'s T025 (no depth-3 stacked capture scenario
       exists) and this packet's own T010, T015 and T023. The full row-by-row table is in `tasks.md`
       T025.
+
+      **Ticked 2026-09-06 — the precondition was waived, and the criterion closes on its own
+      wording.** The operator ruled at ~15:50, verbatim: *"Run it now on the current state"*, which
+      overrides the *done and verified* precondition this criterion sets for itself. The verdict
+      above stays as written, because a precondition deleted once it is overridden leaves no record
+      that anything was overridden. This row's own closing condition is *"when the Opus synthesis
+      has landed its phase updates"*, and it has: the loop ran 10 of 10 iterations on
+      `llmgateway/glm-5.3-flash` at `reasoningEffort: max` (lineage `glm-devpass`, 51 findings,
+      stop reason `maxIterationsReached`), its artefacts are at `research/`, and the synthesis
+      landed as **`../067-sheet-family-remediation`** plus dated amendments here, in `044` and in
+      `048`. `tasks.md` T025 carries the run record and the three runtime quirks; `research/` is
+      cited from it. **What this does not close**: AC-010, the operator's own device read, which is
+      the criterion two rows above and which nothing in this repository can close.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -310,4 +323,41 @@ to further refine based on notion ui screenshots. But do 5 iters of deep researc
 max on those screens per relevant phase."* This packet's surface is **the sheet family**, and its reserved
 child is **`061-notion-sheet-refinement`** — reserved, not created. This packet holds the shell that produces every modal and sheet, so the child is the sheet family's and reaches `044-phone-sheet-alignment`'s grammar and `048-stacked-sheets`'s stacking with it. **Wave 1: the research has been running since 16:14 in `worktrees/176`.** It is a separate run from the 10-iteration sheet-family loop the operator started at ~15:50 in `worktrees/172` — that one reads our own current state, this one reads Notion's screens; neither replaces the other. The pipeline is three stages and the first exists for one reason: a **Sonnet digest** of the relevant Notion captures is written to ``051-modal-and-sheet-componentization/notion-screens-digest.md``, because **GLM 5.3 flash cannot read images** and a capture reaches the loop as measured prose or not at all. Then `/deep:research:auto`, **5 iterations**, `--stop-policy=max-iterations`, on **GLM 5.3 flash max** — `openrouter/z-ai/glm-5.3-flash` first and `llmgateway` (DevPass) as the fallback, on the operator's ~16:25 ruling *"use openrouter untill usage is 0 then devpass"*. Then an **Opus synthesis** opens the child; a fresh Opus verifier lands it (D4). **Do not create the child by hand** — a folder without the loop behind it claims evidence it does not have. **The refinement is additive.** The child may add a criterion, a task, an ADR or a measurement. It may not un-tick a measured row here, rewrite a landed ruling, or change this packet's parity target. Where a Notion finding contradicts a landed Anytype ruling, the child writes a **Proposed** ADR carrying both readings and stops; only the operator moves it to Accepted. Parent `goal.md` **D15** and `../roadmap.md` **§7.15** carry the rule, §5.A the reservation, §6A the instruction verbatim.
 
+
+### 2026-09-06 amendment: the loop ran, and its remediation lives in `067`
+
+**Operator, ~15:50, verbatim: *"Run it now on the current state"*.** That waives the precondition
+this packet set for its own deep-research criterion. The loop ran on the tree as it stood —
+unverified on device, `044` at 86%, `048` at 88%, this packet at 22% — and everything the synthesis
+produced inherits that: **nothing in `067` is device-confirmed.**
+
+**Where the findings went.** Four P0, five P1 and seven P2 items, ~1100 LOC across ~20 files, went
+into **one coordinated child**, `../067-sheet-family-remediation`, rather than into rows scattered
+across three packets. `recommend-level.sh --loc 1100 --files 20 --architectural` reads **72/100,
+Level 3**, phase score **30/50** against the 25 threshold — both `phase-definitions.md` §2
+thresholds met independently. Two of the three packets are one operator read from closing (86% and
+88%), and reopening them to carry another packet's work would have cost more than it bought.
+
+**What stays this packet's, and what moved.** Four of the loop's findings land on rows this packet
+already owns and are **not** duplicated in `067`: **T010 / AC-001** (the FuzzySuggest disposition —
+`067` ADR-004 restates the question with the cost of each option and does not answer it), **T015**
+(the pill and the chip still have no lane row *because they have no producer*; `067` T015 builds the
+producers, which is what a lane row cannot be written without), **AC-002** (17 of 20 declared
+titles; `067` T016 continues it to 20 and retires one of the two scrape chains), and **T023** (the
+side-sheet lane row, still deliberately untaken). **AC-003** and **AC-011** are this packet's
+thresholds and `067` builds the mechanisms they need — the depth cap with the replace producer, and
+the page-under-sheet dim at the measured band.
+
+**Corrected against what landed while `067` was being written.** T015's motion timing band row
+landed at `311f957a`, so the loop's *"the motion band has no lane row"* is false. The true finding is
+sharper: the row asserts the scrim's computed `animation-duration` inside a 180-260ms band **and
+equal to `MOTION_BAND_TOKEN_DEFAULT_MS = 260`** (`sheet-grammar.mjs:180-183`), so it pins the
+current value and **correcting the stylesheet to the reconciled 200ms takes that row red**. `067`
+T012 moves both in one commit and re-points the constant at `SHELL_ENTER_MS` rather than at a fresh
+literal. The row also measures the *entrance* only; there is still no exit transition to measure.
+
+**One correction to this packet's own record.** AC-011's *"Today: no scrim exists"* was true when it
+was written and is not now: one has shipped since `048`, at `rgba(0,0,0,0.25)` (`styles.css:319`),
+which is roughly half the measured ~48%. The cell is corrected in place and dated rather than
+rewritten. `067` AC-003 supersedes it with the current red.
 <!-- /ANCHOR:log -->

@@ -91,12 +91,18 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       `menu` surfaces mount `mountPickerSheetHeader` (`popover-host.ts:168-176`) and ship handle,
       scrim and close (`styles.css:3156-3213`). **Do not delete the close** — E1 is an accessibility
       deviation with a number and this row does not reopen it. Depends on T001. Decision: ADR-002.
-- [ ] **T007 Take the scrim to the measured band** (`styles.css`, `tools/live/sheet-grammar.mjs`).
-      **Threshold**: page under a first sheet at **0.519 ± 0.02**, parent under a child at
-      **0.710 ± 0.02**, through one mechanism — or the pull-back dispositioned in ADR-003 as a
-      deliberate cue. **Red-first anchor**: computed scrim alpha **0.25** (`styles.css:319`) against
-      a 0.48 threshold, and **no lane row asserts scrim opacity at all**. Recapture in this leg; the
-      32 protected Project Manager entries stay `pixelHash`-identical (parent D5). Depends on T002.
+- [ ] **T007 Take the page-under-sheet dim to the measured band, and hold the parent at parity**
+      (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**: page under a first sheet at
+      **0.519 ± 0.02**; parent under a child **stays** at **0.710 ± 0.02**; the `scale(0.96)`
+      pull-back dispositioned in ADR-003. **Red-first anchor**: computed scrim alpha **0.25**
+      (`styles.css:319`) puts the page at 0.75 against a 0.519 threshold, and **no lane row asserts
+      scrim opacity at all** — the row landed at `311f957a` reads the scrim's `animation-duration`,
+      not its colour. **The parent half is green and must not regress**: measured off decoded PNGs
+      at `93205d4d`, dark 46 → 33 and light 242 → 183, which is 0.717, produced by two steps rather
+      than two scrims. Raising the scrim alone moves both figures, so this row's harder half is
+      holding 0.710 while the page reaches 0.519 — expect the parent's opacity step to change with
+      it. Recapture in this leg; the 32 protected Project Manager entries stay `pixelHash`-identical
+      (parent D5). Depends on T002.
 - [ ] **T008 [B] Land the FuzzySuggest disposition.** `src/main.ts:3047`,
       `src/views/image-file-suggest-modal.ts:40`, `src/views/markdown-file-suggest-modal.ts:34`.
       **Threshold**: **0** direct `attachSheetChromeToModal` call sites outside `surface-shell.ts`,
@@ -129,11 +135,19 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       (`surface-shell.ts:139-170`) against a stylesheet shipping 260ms (`styles.css:130`) and no
       exit token at all. **The check is the deliverable, not the bridge**: a bridge that lands
       without a failing check has closed nothing (goal D5).
-- [ ] **T012 Motion band** (`styles.css`). **Threshold**: `--db-sheet-enter` computes to **200ms**
+- [ ] **T012 Motion band, and re-pin the row that guards it** (`styles.css`,
+      `tools/live/sheet-grammar.mjs`). **Threshold**: `--db-sheet-enter` computes to **200ms**
       `ease-out`, an exit transition exists at **150ms** `ease-in`, `prefers-reduced-motion` honoured.
       **Red-first anchor**: 260ms at `styles.css:130`, used at `:453-456`; **no exit transition
       anywhere in the sheet block** and no `--db-sheet-exit` token — removal is an unmount
-      (`mobile-bottom-sheet.ts:591-618`), so the exit is absent rather than mistimed. Depends on T011.
+      (`mobile-bottom-sheet.ts:591-618`), so the exit is absent rather than mistimed. **The motion
+      timing band row landed at `311f957a` and pins the current value**:
+      `MOTION_BAND_TOKEN_DEFAULT_MS = 260` inside a 180-260ms band (`sheet-grammar.mjs:180-183`),
+      asserted with `atToken`, so correcting the stylesheet takes that row **red**. Move both in one
+      commit and re-point the constant at `SHELL_ENTER_MS` rather than at a fresh literal — a row
+      re-pinned by hand is the third instance of the defect this packet exists to stop. The row also
+      measures the **scrim's entrance** and nothing measures the exit; add that half here. Depends
+      on T011.
 - [ ] **T013 Phone row pitch floor** (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**:
       `.db-panel-row` and `.db-menu-item` on `body.is-phone` at a **44px** computed min-height floor
       against the measured **50pt** target. **Red-first anchor**: `.db-panel-row` declares
@@ -187,11 +201,17 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       unit-asserted. **Red-first anchor**: `restoreFocus` requires a registered anchor
       (`overlay-stack.ts:307-311`) and sheet registration passes none (`mobile-bottom-sheet.ts:525-536`),
       so it is a **no-op for every sheet**.
-- [ ] **T020 Depth-3 and replace capture scenarios** (`tools/screenshots/constructed-scenarios.mjs`).
-      **Threshold**: the three registered depth-3 chains are photographed, plus the capture the two
-      converted pairs need after T004/T005. **Red-first anchor**: no depth-3 capture scenario exists
-      — this is `048` T025, the one non-operator row that packet still carries, absorbed here rather
-      than left orphaned. Depends on T005.
+- [ ] **T020 Replace-pair capture scenarios** (`tools/screenshots/constructed-scenarios.mjs`).
+      **Threshold**: the two converted pairs are photographed in their replaced state after
+      T004/T005, and the three `constructed-depth3-*` scenarios are re-read for the two chains whose
+      behaviour the cap changes. **Red-first anchor**: no capture of a replaced sub-page exists,
+      because the move has no producer. **The depth-3 half of this row is already closed** —
+      `ae4fff81` registered `constructed-depth3-property-type-picker`,
+      `constructed-depth3-column-submenu` and `constructed-depth3-import-confirm-dropdown`, 6 PNGs,
+      both themes, and `048` T025 ticked with them. Those captures produced the strongest evidence
+      this packet has for T005: **the first-level child is fully buried** in all three chains, its
+      rect contained entirely inside the top child's, so nothing of the middle level survives in any
+      of the six images. Depends on T005.
 - [ ] **T021 [P] Divider-inset audit** (`styles.css`). **Threshold**: C8's three contexts each
       verified — plain rows symmetric **20pt ± 1**, rows with a leading icon aligned to the text
       column, between-section dividers full-bleed. **Red-first anchor**: the research **explicitly

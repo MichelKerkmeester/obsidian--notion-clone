@@ -291,6 +291,7 @@ Leg 1 (settle) ──► Leg 2 (the moves) ──► Leg 4 (harness) ──► T
 | Component | Depends On | Produces | Blocks |
 |-----------|------------|----------|--------|
 | Depth cap (T004) | None | A sheet cap in `register` | T005, T020 |
+| Motion band (T012) | T011 | 200/150ms behind one constant | The lane row at `sheet-grammar.mjs:182`, which pins 260ms and goes red on the fix |
 | Replace producer (T005) | T004 | The two converting pairs become expressible | T020 |
 | Menu card (T006) | T001 | A role-driven phone presentation | — |
 | Scrim (T007) | T002 | One dim at the measured band | The mobile recapture |
@@ -307,7 +308,9 @@ Leg 1 (settle) ──► Leg 2 (the moves) ──► Leg 4 (harness) ──► T
 1. **T001** settle the parent-dim reading — CRITICAL, blocks the menu card
 2. **T004 → T005** the cap, then the replace producer — CRITICAL, the only adopted move with no
    producer at all
-3. **T020** photograph the depth-3 chains and the replace pairs — CRITICAL, `048` T025 absorbed
+3. **T020** photograph the replace pairs — CRITICAL. The depth-3 half closed on `main` at
+   `ae4fff81`, and those captures are this packet's strongest evidence for T005: the middle child is
+   fully buried in all three chains
 4. **T022 → T023** the gate, then the device read — CRITICAL, and the second is the operator's
 
 **Total Critical Path**: Leg 1 → Leg 2 → Leg 4 → the operator's sitting.

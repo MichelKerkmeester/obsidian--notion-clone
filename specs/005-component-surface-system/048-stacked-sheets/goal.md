@@ -206,4 +206,47 @@ and lands after `051`'s side-sheet leg frees `surface-shell.ts` and `mobile-bott
 **What this does not do.** It does not reopen T005-T009's stacking model or any of the six ticked
 criteria above — those were measured on a depth-2 pair in the harness and their numbers stand. The
 device shows a shape the harness does not construct, which is the gap, not a withdrawal.
+
+### 2026-09-06 amendment: what the family's deep-research loop found in this packet's scope
+
+The sheet family's 10-iteration loop ran on the operator's ~15:50 instruction, *"Run it now on the
+current state"* (`../roadmap.md` §6A), and its synthesis opened
+**`../067-sheet-family-remediation`**. Three of its findings sit in this packet's scope and are
+named here rather than folded silently into the child.
+
+**The depth cap does not exist.** `design-trueup.md` §6 **C4** adopts it in full as a shell rule —
+*"no third stacked sheet; the third level replaces the second"* — and nothing enforces it:
+`overlayStack.register` derives `parentId` from the current top sheet with no depth check
+(`overlay-stack.ts:94-96`), `getDepth` walks the chain unbounded (`:194-209`), and the only
+depth-related guard is the cycle-protected parent walk (`:199-207`). This packet's model is not
+wrong; it is unbounded. `067` T004 caps it in `register`, scoped to **sheets**, with a negative
+control that registers a menu-stack at depth 3 and requires it to survive — because
+`record column submenu` and `import confirm dropdown chain` are menu-stacks, which Anytype does
+stack, and a cap that fires on them is a regression rather than the feature.
+
+**The page under a first sheet is dimmed to half the measured strength; the parent under a child is
+already at parity.** This packet owns the scrim per C3. It ships `rgba(0, 0, 0, 0.25)`
+(`styles.css:319`), which puts the page at **0.75** of undimmed against a measured **0.519**
+(`design-trueup.md` §2b). **The stacked-parent half needs no work and is not reopened** — T025's own
+decoded-PNG measurement settles it: dark 46 → 33 and light 242 → 183 against an undimmed control is
+**0.717**, inside the measured 0.710 ± 0.02, produced by two steps rather than two scrims. The
+loop's *"~34% effective through three compounding declarations"* was arithmetic on the declarations
+rather than a measurement of the result, and this packet's own row corrected it before the synthesis
+landed. What is left undecided is narrower: the `scale(0.96) translateY(4px)` cue on the parent's
+children (`styles.css:295-305`), design-inferred — its comment calls it *"the compact depth cue used
+by iOS and Notion"*, no capture can show a transform, and **no packet document records it as adopted
+or declined**. `067` ADR-003 dispositions it; `067` AC-003 raises the page dim and requires the
+parent's 0.710 to hold. **No lane row asserts scrim opacity at all** — the motion row added at
+`311f957a` reads the scrim's `animation-duration`, not its colour — which is why the divergence
+survived three phases.
+
+**T025 closed here, and its captures are `067`'s best evidence.** The three depth-3 scenarios showed
+the middle child **fully buried** under the top one in every chain. That is a photographed argument
+for `051`'s in-place sub-page conversion and for `067`'s replace producer, stronger than anything
+the loop derived for the same requirement.
+
+**What this amendment does not do.** It does not reopen AC-010 or any measured clause. The stacking
+model was **observed red nowhere** under row 59 and that finding stands: the child registers,
+derives depth 2, and one scrim sits between parent and child on both engines. What `067` changes is
+the *ceiling* and the *level*, not the mechanism.
 <!-- /ANCHOR:log -->
