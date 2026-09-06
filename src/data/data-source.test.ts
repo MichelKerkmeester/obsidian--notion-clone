@@ -239,4 +239,39 @@ describe("DataSource view filter tree persistence", () => {
     }).toViewPayload({ ...view, subtaskCollapsed: {} });
     expect(emptyPayload.subtaskCollapsed).toBeUndefined();
   });
+
+  // A vault written by an older release can still carry the board-extension keys. The reader is
+  // an explicit per-key allowlist, so a key it does not name is dropped rather than surfaced —
+  // which is what keeps the retired extensions layout unreachable from stored config, not just
+  // from the settings UI. A reader that started passing unknown keys through would hand the
+  // board renderer back its retired branch with no other symptom.
+  it("drops the retired board-extension flag from a stored view and parses the rest without error", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "board",
+          sourceFolder: "",
+          boardExtensionsEnabled: true,
+          boardSubgroupEnabled: true,
+          boardSubgroupField: "Owner",
+          summaryRules: [],
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+
+    // The sibling keys prove the drop is selective rather than a parse that returned nothing.
+    expect(view.boardSubgroupField).toBe("Owner");
+    expect(view.boardSubgroupEnabled).toBe(true);
+    expect((view as unknown as Record<string, unknown>).boardExtensionsEnabled).toBeUndefined();
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.boardExtensionsEnabled).toBeUndefined();
+  });
 });
