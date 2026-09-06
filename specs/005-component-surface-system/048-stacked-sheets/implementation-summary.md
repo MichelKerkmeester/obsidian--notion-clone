@@ -231,12 +231,18 @@ sheets. Nothing here closes it, and 0.0.24 through 0.0.29 have shipped with no r
 and measures — `properties property type picker`, `record column submenu`, `import confirm dropdown
 chain` — each built through the same production openers (`openDropdownMenu`, `createOwnedMenu`,
 `attachSheetChromeToModal` over the host-modal stand-in) the lane's own `openPairChild` uses. Six
-PNGs, phone only, both themes, all opened and read: each shows the parent dimmed under two stacked
-scrims and the top (second) child floating over it per C10, with the first-level child structurally
-mounted but visually occluded by the third layer sitting at the same frame — production behaviour,
-not a capture defect, and the same reason `051/design-trueup.md` §4 argues for converting the
-sheet-shaped chains to an in-place sub-page. That row's registry threshold (13 surfaces, 31 pairs) is
-still stale against the observed 14 and 32 and is left as written rather than transcribed forward.
+PNGs, phone only, both themes, all opened and read, and the dimming measured rather than described:
+each shows the parent dimmed by **two steps under one scrim** — `is-stack-parent` at `opacity: 0.88`
+and the single `.db-mobile-sheet-scrim` at `rgba(0, 0, 0, 0.25)`, hoisted to z-index 1003 between the
+first-level child's 1002 and the dropdown's 1004 — and the top (second) child floating over it per
+C10 at an 8pt inset, radius 16px, with exactly one visible 44 × 44 close control. The first-level
+child is structurally mounted but **fully** occluded by the third layer sitting at the same frame —
+its rect is contained entirely inside the dropdown's — which is production behaviour, not a capture
+defect, and the concrete argument for `051/design-trueup.md` §4's in-place sub-page conversion; it
+is recorded as its own note in `decision-record.md`. An earlier write-up of this row said "two
+stacked scrims"; that contradicted this packet's own single-scrim model and is corrected here. That
+row's registry threshold (13 surfaces, 31 pairs) is still stale against the observed 14 and 32 and is
+left as written rather than transcribed forward.
 
 **Two counts in the sections above are dated, not wrong.** "31 stacked pairs" and "253 failing
 assertions against the pre-fix tree" were read when 31 pairs were registered. `3ae2818e` added the

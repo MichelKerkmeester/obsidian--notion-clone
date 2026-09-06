@@ -173,9 +173,9 @@ const EDGE_CONTROL_TOKEN_OVERRIDE_PX = 60;
 // Every phone sheet the shell mounts arrives with a scrim (`applySheetChrome`, `mobile-bottom-
 // sheet.ts`), and its entrance plays `var(--db-sheet-enter)` — the same token `--db-motion-sheet`
 // aliases (styles.css, § tokens). `styles.css`'s own comment for the token states the band this
-// checks: "260ms is the top of the state-change band", the 180-260ms range `050/design-trueup.md`
-// §"Motion" reconciles for a small state change. Reusing `sort-panel` costs no new fixture, for
-// the same reason the edge-control-token row above reuses it.
+// checks: "260ms is the top of the state-change band". 180ms is the bottom of that band, below
+// which a state change reads as a cut rather than a transition. Reusing `sort-panel` costs no new
+// fixture, for the same reason the edge-control-token row above reuses it.
 const MOTION_BAND_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
 const MOTION_BAND_MIN_MS = 180;
 const MOTION_BAND_MAX_MS = 260;

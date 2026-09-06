@@ -204,29 +204,62 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
       **Captured with `--only`**, one scenario per invocation, then a full `npm run screenshots` to
       write the manifest (`--only` runs leave it unchanged by design) — 582 entries, exit 0.
       `node tools/screenshots/verify.mjs` → exit 0, `582 entries match their sources, and none is
-      blank or identical across themes`.
+      blank or identical across themes`. Re-captured on the rebased tree and **byte-identical**, so
+      the six are reproducible rather than a one-run artefact — `constructed-depth3-property-type-
+      picker` `63d3dc4da77f` (dark, 67437 B) / `b91b8cf6073c` (light, 73218 B),
+      `constructed-depth3-column-submenu` `27faba0be41a` (60532 B) / `3f4569c06a1c` (64677 B),
+      `constructed-depth3-import-confirm-dropdown` `59eb3447d3f8` (33881 B) / `42853997814a`
+      (39307 B), all `pixelHash` values as the manifest records them.
 
-      **All six opened and read.** Each shows the same structural shape: the parent sheet dimmed
-      underneath (two scrim steps stacking, per `051/design-trueup.md` §2b's measured 0.519 then
-      0.710), and the top (second) child — the real dropdown, which on phone presents as its own
-      bottom sheet — floating over it per C10's floating frame shape, with its own single close
-      control top-right. The first-level child (the host-modal stand-in or the owned menu) is
-      structurally mounted beneath the dropdown but visually fully occluded by it: opening a real
-      dropdown over a same-height phone sheet buries the sheet under it rather than revealing both,
-      which is production behaviour, not a capture defect — the same reason
-      `051/design-trueup.md` §4 argues for converting the sheet-shaped chains to an in-place
-      sub-page rather than stacking a third sheet at all. `property-type-picker` and
-      `column-submenu` show the parent's own rows peeking above the child stack (`column-manager`'s
-      property list; `record-detail`'s `row-0` fields); `import-confirm-dropdown`'s parent
-      (`filter-panel` with no configured rules) renders no visible content of its own, so the two
-      scrims read as a plain dimmed field behind the child, not as a defect — checked against
-      `filter-panel`'s own empty-state fixture before being read as correct.
+      **All six opened and read, and the dimming re-measured rather than described.** An earlier
+      pass wrote these captures up as "the parent dimmed under two stacked scrims". That is wrong,
+      and the correction is this packet's own model, already stated in `decision-record.md`'s
+      2026-09-06 host-modal note: **one** scrim exists at any depth, hoisted to sit directly beneath
+      the topmost child. Measured on all six mounts —
+      `document.querySelectorAll(".db-mobile-sheet-scrim")` returns exactly **1**, `rgba(0, 0, 0,
+      0.25)`, full viewport, at **z-index 1003**, between the first-level child's 1002 and the
+      dropdown's 1004, with the parent at 1000. The parent's dimming is **two steps, not two
+      scrims**: `.db-mobile-bottom-sheet.is-stack-parent.is-stack-parent` at `opacity: 0.88`
+      (`styles.css`) composited over the page, and then that single scrim over the result.
 
-      **`css-lane` untouched**, per this leg's own instruction: `styles.css` did not change, so no
-      release entry was added or edited. `node tools/lane/check-lane.mjs` reads its ordinary,
-      unrelated exit (a stylesheet-driven review obligation the current holder, `056-board-anytype-
-      parity`, owes, not this leg) plus this leg's own six new captures, which is the expected state
-      of a lane this leg has no standing to sign off — not a claim that command exited 0.
+      **The step sizes, read off the decoded PNGs in device px** (804 × 1748 at DPR 2), against
+      `constructed-column-manager-mobile-*` as the undimmed control: dark, the sheet fill reads
+      **46,46,46** undimmed and **33,33,33** as the stack parent; light, **242,242,242** undimmed and
+      **183,183,183**. Both match the two-step model to the unit and neither matches a second scrim —
+      dark 45.75 × 0.88 + 29.3 × 0.12 = 43.8, × 0.75 = **32.8**; light 242 × 0.88 + 255 × 0.12 =
+      243.6, × 0.75 = **182.7**. Two scrims would read **26** and **137**. The depth-2 captures
+      (`constructed-modal-sheet-property-editor-stacked-mobile-dark`) read the same **33**, which is
+      the same one-scrim result at one less level.
+
+      **The top child floats per C10, measured on the mounted tree**, identically in all six: rect
+      `x 8, w 386` in a 402pt viewport — an 8pt inset on both sides — `border-radius 16px`,
+      `.db-sheet-floating` set, and **exactly one visible close control at 44.0 × 44.0**. The
+      parent's own header is not offset: `column-manager`'s spans `x 16.7 w 369.6`, centre 201.5
+      against a viewport centre of 201 (**0.5pt**); `filter-panel`'s spans `x 32.1 w 338.9`, centre
+      201.55 (**0.55pt**).
+
+      **The first-level child is fully buried, and that is the finding worth carrying.** The
+      dropdown's rect (`8, 470, 386 × 396`) contains the first-level panel's rect entirely
+      (`8, 742.6, 386 × 123.4` for the two host-modal chains, `8, 607.6, 386 × 258.4` for the menu
+      chain) — same x, same width, same bottom edge. Nothing of the middle level survives in any of
+      the six images; the header a reader sees over the option list is the **dropdown's own label**,
+      not the modal's. Production behaviour, not a capture defect, and recorded as its own note in
+      `decision-record.md` because it is the concrete argument for `051`'s sub-page conversion.
+      `property-type-picker` and `column-submenu` show the parent's own rows above the child stack
+      (`column-manager`'s property list; `record-detail`'s `row-0` fields).
+      `import-confirm-dropdown` is the weak capture of the three: its parent (`filter-panel`, no
+      configured rules) is itself a floating sheet at `8, 460, 386 × 406`, so the dropdown covers all
+      but a 10pt sliver of its top edge and the image shows one sheet on an empty dimmed field.
+      Registered and read as correct against `filter-panel`'s own empty-state fixture, but it
+      photographs almost none of the chain it names.
+
+      **`css-lane` untouched, and green.** `styles.css` did not change, so no release entry was
+      added or edited — and none is owed: `check-lane.mjs` builds its changed-capture set from
+      `git status --porcelain -- screenshots`, so once these six PNGs are committed they are not
+      pending review and the lane has nothing to name. Observed on the landed tree: `node
+      tools/lane/check-lane.mjs` → `stylesheet unchanged since the lane was taken (cdc3ea497d56)`,
+      `held by 056-board-anytype-parity`, `release names all 0 changed capture(s)`, **exit 0**. An
+      earlier pass reported this lane as red; it was red only against an uncommitted working tree.
 - [x] T026 The permanent regress-test for the gap `048`'s landing named: no screenshot scenario
       modelled a `DbModal` presented as a phone sheet, so the corpus could not regress-test row 59's
       fix. Four `constructed-modal-sheet-*` scenarios (`tools/screenshots/constructed-scenarios.mjs`)

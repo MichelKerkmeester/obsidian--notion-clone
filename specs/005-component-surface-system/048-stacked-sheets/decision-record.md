@@ -400,3 +400,58 @@ report reads through the child is the child's own missing surface.
 <!-- /ANCHOR:host-modal-chrome-note -->
 
 ---
+
+<!-- ANCHOR:depth3-burial-note -->
+## NOTE, 2026-09-06 (~17:10): at depth 3 the middle child is not merely obscured, it is entirely gone
+
+The three `constructed-depth3-*` capture scenarios (T025) photograph the three chains
+`sheet-grammar.mjs` registers at `depth: 3`. They were added to picture what the lane already
+asserts against. What they picture is an argument, and it belongs here rather than only in a task
+row.
+
+**The measurement.** Mounted through the capture harness's own openers at 402 × 874, DPR 2, both
+themes, all three chains agree:
+
+| Level | z-index | rect (pt) | radius |
+|---|---|---|---|
+| parent sheet | 1000 | flush `0, 193, 402 × 681` (`column-manager`) / floating `8, 460, 386 × 406` (`filter-panel`) | 8px top / 16px |
+| first-level child | 1002 | `8, 742.6, 386 × 123.4` (host-modal) / `8, 607.6, 386 × 258.4` (owned menu) | 16px |
+| **the one scrim** | **1003** | `0, 0, 402 × 874`, `rgba(0, 0, 0, 0.25)` | — |
+| top child (dropdown) | 1004 | `8, 470, 386 × 396` | 16px |
+
+The top child's rect **contains the first-level child's outright** — same x, same width, same bottom
+edge, and a top edge 137pt to 272pt higher. Not overlapping, not partly obscured: there is no pixel
+of the middle level in any of the six images. The header a reader sees above the option list is the
+dropdown's own label, not the modal's title.
+
+**Why this is not a capture defect.** Every phone sheet in this shell is bottom-anchored and sized
+to its content, capped. Two sheets of similar height opened one over the other therefore land on the
+same frame by construction, and the taller one wins the whole of it. Nothing about the capture makes
+this happen; the harness reproduced it because production does it.
+
+**What it argues.** ADR-001 above settles that a modal opened from a sheet becomes a sheet, and the
+2026-09-05 (~18:30) note above adopts Anytype's depth cap: no third *sheet*, replace the second
+instead. This note supplies the missing evidence for that cap's *phone* half. A third sheet does not
+degrade the middle level's legibility — it deletes it — so the middle level's own header, close
+control and content are unreachable without dismissing the top one. That is exactly the failure the
+in-place sub-page conversion (`051/design-trueup.md` §4, `051` REQ-006's sub-page shape) removes,
+and it is why the two `properties property type picker` / `add view property picker` pairs convert
+rather than keeping the stack.
+
+**What it does not disturb.** The two `depth: 3` registrations the ~18:30 note protects
+(`record column submenu`, `import confirm dropdown chain`) remain menu-stacks, and the cap still
+permits them. The burial described here is the reason the *third* one converts, not a case against
+the other two — though `import-confirm-dropdown`'s own capture is the weakest of the three, since
+its `filter-panel` parent is itself a floating sheet that the dropdown covers to within a 10pt
+sliver, leaving an image of one sheet on an empty dimmed field.
+
+**One scrim, two dimming steps.** Recorded here because a pass over these captures described them as
+showing "two stacked scrims". They do not, and this packet never shipped two: at every depth exactly
+one `.db-mobile-sheet-scrim` exists and it is hoisted to sit directly beneath the topmost child —
+z-index 1001 at depth 2 (the host-modal note above), 1003 at depth 3. The parent reads dimmer than a
+lone sheet because of two *steps*, not two scrims: `.is-stack-parent` at `opacity: 0.88`, then the
+single scrim at 0.25. Decoded-PNG check against `constructed-column-manager-mobile-*` as the
+undimmed control — dark 46 → 33, light 242 → 183, where a second scrim would read 26 and 137.
+<!-- /ANCHOR:depth3-burial-note -->
+
+---

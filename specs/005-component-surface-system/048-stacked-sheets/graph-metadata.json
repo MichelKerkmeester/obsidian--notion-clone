@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Nothing in the plugin models a stack",
     "created_at": "2026-09-05T05:13:09Z",
-    "last_save_at": "2026-09-06T14:23:34.044Z",
+    "last_save_at": "2026-09-06T14:51:44.693Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:903c8c790b65a6cf1b0e7997010c6cf756d7aac49a179758806166ec7165d697",
+    "source_fingerprint": "sha256:c57da4c09b60ba1367c81cd7707fd43813c7754ccafa93dcb413472ec188279b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d10f0b6548f96de6de23c73bff8f46105d1245ca45754ea41a0c4cd07d5c8bb6",
       "plan.md": "86bb732265bb7113d8a9d86ad709f5cb4ea0ee2f76410487abab4364c2291578",
-      "tasks.md": "4c323584371555f9829edaba96c5bf14a1533da850348af957767970f941fe1b",
-      "decision-record.md": "615cf3d5375af9fa8e082517f3b33e8087b99c55bf6854ce37319f218d2ff0f3",
-      "implementation-summary.md": "048ba49532358cdb475628f04d79ae91d1d10e05f3fbaf99fd137e994684ab28"
+      "tasks.md": "f1d69a7b3a33f808165013cff1054fcecc8bd523ef25a3ef4eb9a48f97745e5b",
+      "decision-record.md": "c96e4743424628ee5582aac2ddab07de261f756629896eb4ea0349dd8b465f39",
+      "implementation-summary.md": "d8580925408be5113e70afc47318e8b727abad67f5ab42e3dfbb228b03ce9589"
     },
     "last_active_child_id": null,
     "last_active_at": null
