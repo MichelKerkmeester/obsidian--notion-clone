@@ -1355,9 +1355,9 @@ function boardAssertions(container: HTMLElement, rows: RowData[], groups: BoardG
   const cards = container.querySelectorAll<HTMLElement>(".db-kanban-card").length;
   const columns = container.querySelectorAll<HTMLElement>(".db-kanban-col").length;
 
-  // The captured kanban page limit is 10 per column (`053` D4, adopted at
-  // board-renderer.ts's own render call — AC-008), applied locally to the board rather than
-  // through the shared config field every other view's own default still reads as unlimited.
+  // The kanban page limit is 10 per column, applied at board-renderer.ts's own render call
+  // rather than through the shared config field every other view's own default still reads
+  // as unlimited.
   // A group under the limit shows every row; one at or over it shows exactly 10.
   const expectedCards = groups.reduce((sum, group) => sum + Math.min(group.rows.length, 10), 0);
   results.push({
