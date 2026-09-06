@@ -28,6 +28,17 @@ export function findDeclaredExcuse(classes, declared) {
   return declared.find((entry) => classes.includes(entry.match)) || null;
 }
 
+/**
+ * The first raised-floor entry whose class fragment appears in the element's class list, if any.
+ * `DECLARED` lowers the bar for a control this project accepts under 28px; this is the opposite
+ * shape — a control a sibling document (055 AC-011) reads as a fixed phone number rather than
+ * "clears the floor", so the generic 28px sweep would let a regression back to 29px pass silently.
+ */
+export function findRaisedFloor(classes, raised) {
+  const hit = raised.find((entry) => classes.includes(entry.match));
+  return hit ? hit.floor : null;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 2. DOM WALK (browser-only)
 // ───────────────────────────────────────────────────────────────────
@@ -37,7 +48,7 @@ export function findDeclaredExcuse(classes, declared) {
  * row so a caller mixing fixture and constructed-renderer measurements in one report can tell them
  * apart without re-deriving it from context.
  */
-export function measureInteractiveBoxes({ selector, floor, enhanced, declared, id, source }) {
+export function measureInteractiveBoxes({ selector, floor, enhanced, declared, raised = [], id, source }) {
   const rows = [];
   let seen = 0;
   for (const el of document.querySelectorAll(selector)) {
@@ -45,9 +56,10 @@ export function measureInteractiveBoxes({ selector, floor, enhanced, declared, i
     // A control with no box is not rendered on this surface; it is not a small target.
     if (rect.width === 0 || rect.height === 0) continue;
     seen += 1;
-    const box = classifyBox(rect.width, rect.height, floor, enhanced);
-    if (!box) continue;
     const classes = el.className && typeof el.className === "string" ? el.className : "";
+    const raisedFloor = findRaisedFloor(classes, raised);
+    const box = classifyBox(rect.width, rect.height, raisedFloor ?? floor, enhanced);
+    if (!box) continue;
     const excuse = findDeclaredExcuse(classes, declared);
     rows.push({
       scenario: id,
@@ -58,6 +70,11 @@ export function measureInteractiveBoxes({ selector, floor, enhanced, declared, i
       height: Math.round(rect.height),
       declared: excuse ? excuse.reason : null,
       belowFloor: box.belowFloor,
+      // Set only when a RAISED entry matched. A raised-floor miss is never baseline-tolerated —
+      // the ratchet exists for the 28px shortfall this project accepts and triages deliberately,
+      // and folding a named 44px control into that same count would let it hide in headroom the
+      // ratchet happens to have that day, the exact way a first pass of this check did.
+      raisedFloor,
     });
   }
   return { rows, seen };

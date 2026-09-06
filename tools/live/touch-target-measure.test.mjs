@@ -13,7 +13,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it } from "vitest";
-import { classifyBox, findDeclaredExcuse } from "./touch-target-measure.mjs";
+import { classifyBox, findDeclaredExcuse, findRaisedFloor } from "./touch-target-measure.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. classifyBox
@@ -67,5 +67,25 @@ describe("findDeclaredExcuse", () => {
 
   it("returns null for an empty class list", () => {
     expect(findDeclaredExcuse("", declared)).toBeNull();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. findRaisedFloor
+// ───────────────────────────────────────────────────────────────────
+
+describe("findRaisedFloor", () => {
+  const raised = [{ match: "db-table-load-more-button", floor: 44 }];
+
+  it("returns the raised floor for a class the list names", () => {
+    expect(findRaisedFloor("db-table-load-more-button", raised)).toBe(44);
+  });
+
+  it("returns null when nothing in the list matches", () => {
+    expect(findRaisedFloor("db-new-row-button", raised)).toBeNull();
+  });
+
+  it("returns null for an empty class list", () => {
+    expect(findRaisedFloor("", raised)).toBeNull();
   });
 });

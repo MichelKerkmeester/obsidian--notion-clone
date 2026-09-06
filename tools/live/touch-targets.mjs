@@ -123,6 +123,21 @@ const DECLARED = [
   },
 ];
 
+/**
+ * Controls a sibling document holds to the WCAG 44px floor outright rather than this file's
+ * default 28px — the 28-44px band is informational everywhere else, but 055 AC-011 reads this
+ * control's phone height as a fixed number, so a regression back into that band has to fail here
+ * rather than only show up as a bigger "between floors" count nobody gates on.
+ */
+const RAISED = [
+  {
+    match: "db-table-load-more-button",
+    floor: ENHANCED,
+    reason: "the embedded table's Load more row, operator-ruled 2026-09-06 at 44px on phone"
+      + " (30px desktop, out of this floor's reach since the fixture only renders on a phone body)",
+  },
+];
+
 // ───────────────────────────────────────────────────────────────────
 // 3. MEASURE
 // ───────────────────────────────────────────────────────────────────
@@ -235,7 +250,7 @@ for (const scenario of SCENARIOS) {
   const result = await page.evaluate(
     (opts) => window.measureInteractiveBoxes(opts),
     {
-      selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED,
+      selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED, raised: RAISED,
       id: scenario.id, source: "fixture",
     },
   );
@@ -297,7 +312,7 @@ for (const scenario of RENDERER_SCENARIOS) {
     {
       scenario,
       opts: {
-        selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED,
+        selector: INTERACTIVE, floor: FLOOR, enhanced: ENHANCED, declared: DECLARED, raised: RAISED,
         id: label, source: "constructed",
       },
     },
@@ -325,24 +340,38 @@ if (provenanceFailures.length > 0) {
 // 4. VERDICT
 // ───────────────────────────────────────────────────────────────────
 
-const undeclared = findings.filter((f) => !f.declared && f.belowFloor);
-const declaredHits = findings.filter((f) => f.declared);
-// Between this project's 28px floor and WCAG 2.5.5's 44px. Counted, not enforced.
-const betweenFloors = findings.filter((f) => !f.declared && !f.belowFloor);
+// A RAISED-floor miss is a different check from the ratcheted 28px sweep below: it names one
+// control at a fixed number rather than "clears the floor", so it is pulled out before the
+// baseline classification and enforced unconditionally in §5 — folding it into the ratchet would
+// let it hide in whatever headroom the ratchet happens to have that day.
+const raisedMisses = findings.filter((f) => f.raisedFloor && f.belowFloor);
+const generalFindings = findings.filter((f) => !f.raisedFloor);
+const constructedRaisedMisses = constructedFindings.filter((f) => f.raisedFloor && f.belowFloor);
+const generalConstructedFindings = constructedFindings.filter((f) => !f.raisedFloor);
 
-const constructedUndeclared = constructedFindings.filter((f) => !f.declared && f.belowFloor);
-const constructedDeclaredHits = constructedFindings.filter((f) => f.declared);
-const constructedBetweenFloors = constructedFindings.filter((f) => !f.declared && !f.belowFloor);
+const undeclared = generalFindings.filter((f) => !f.declared && f.belowFloor);
+const declaredHits = generalFindings.filter((f) => f.declared);
+// Between this project's 28px floor and WCAG 2.5.5's 44px. Counted, not enforced.
+const betweenFloors = generalFindings.filter((f) => !f.declared && !f.belowFloor);
+
+const constructedUndeclared = generalConstructedFindings.filter((f) => !f.declared && f.belowFloor);
+const constructedDeclaredHits = generalConstructedFindings.filter((f) => f.declared);
+const constructedBetweenFloors = generalConstructedFindings.filter((f) => !f.declared && !f.belowFloor);
 
 if (process.argv.includes("--json")) {
   console.log(JSON.stringify({
-    fixture: { measured, scenariosRendered, undeclared, declaredHits },
+    fixture: { measured, scenariosRendered, undeclared, declaredHits, raisedMisses },
     constructed: {
       measured: constructedMeasured, scenariosRendered: constructedScenariosRendered,
       undeclared: constructedUndeclared, declaredHits: constructedDeclaredHits,
+      raisedMisses: constructedRaisedMisses,
     },
   }, null, 2));
-  process.exit(undeclared.length === 0 && constructedUndeclared.length === 0 ? 0 : 1);
+  process.exit(
+    undeclared.length === 0 && constructedUndeclared.length === 0
+      && raisedMisses.length === 0 && constructedRaisedMisses.length === 0
+      ? 0 : 1,
+  );
 }
 
 // A RATCHET, NOT A CLIFF. 331 controls sit below this project's own 28px floor today — a real
@@ -410,14 +439,21 @@ if (constructedClasses.length > 12) console.log(`    ...and ${constructedClasses
 
 const fixtureFailed = undeclared.length > allowed;
 const constructedFailed = constructedUndeclared.length > constructedAllowed;
+const raisedFailed = raisedMisses.length > 0 || constructedRaisedMisses.length > 0;
 
-if (fixtureFailed || constructedFailed) {
+if (fixtureFailed || constructedFailed || raisedFailed) {
   if (fixtureFailed) {
     console.error(`\ntouch-targets: FAIL [fixture] — ${undeclared.length - allowed} control(s) newly under ${FLOOR}px`);
   }
   if (constructedFailed) {
     console.error(`\ntouch-targets: FAIL [constructed] — ${constructedUndeclared.length - constructedAllowed} `
       + `control(s) newly under ${FLOOR}px`);
+  }
+  if (raisedFailed) {
+    for (const hit of [...raisedMisses, ...constructedRaisedMisses]) {
+      console.error(`\ntouch-targets: FAIL [${hit.source}] — ${hit.scenario} ${hit.tag}.${hit.classes.split(" ")[0]} `
+        + `measured ${hit.width}x${hit.height}, under its named ${hit.raisedFloor}px floor (RAISED, not the ${FLOOR}px default)`);
+    }
   }
   console.error("  Each recorded baseline is awaiting triage; this is about the ones that just arrived.");
   process.exit(1);

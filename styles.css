@@ -7807,6 +7807,17 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   opacity: 1;
 }
 
+/* A thumb needs the same 44px floor `.is-phone .db-menu-item` already raises every phone sheet row
+   to; the 30px cell / 29px button pair above stays a mouse-scaled default. Operator ruling,
+   2026-09-06: 44px on phone, 30px desktop. */
+.is-phone .note-database-container .db-table-load-more-row td {
+  height: 44px;
+}
+
+.is-phone .note-database-container .db-table-load-more-button {
+  height: 44px;
+}
+
 .note-database-container .db-board-new-card.is-disabled,
 .note-database-container .db-new-row-button.is-disabled { opacity: 0.5; cursor: not-allowed; }
 .note-database-changelog {
@@ -7951,6 +7962,11 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   align-items: flex-start;
   justify-content: center;
   gap: var(--db-space-6);
+  /* The declared width is content-box by default, so the 20px padding and 1px border land
+     outside it and overflow any host narrower than 620px — 34px past the chart body at both
+     phone widths, first measured there. border-box pulls both back inside the declared width
+     for every host, not only the one narrow enough to have shown it. */
+  box-sizing: border-box;
   width: min(100%, 620px);
   margin: 0 auto;
   border: 1px solid color-mix(in srgb, var(--interactive-accent) 18%, var(--background-modifier-border));
@@ -18205,10 +18221,11 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   background: #6E9EFC;
 }
 
-/* Keep empty calendar cards compact without changing the shared empty-state component. */
+/* Keep empty calendar cards compact without changing the shared empty-state component. The
+   box-sizing this rule used to carry moved to .db-empty-card itself — every host needs the same
+   correction, not only this one. */
 .note-database-container > .db-empty-card[data-empty-reason="no-date-field"],
 .note-database-container > .db-empty-card[data-empty-reason="no-events"] {
-  box-sizing: border-box;
   min-height: var(--db-calendar-empty-min-height);
   align-items: center;
   padding: 16px 20px;
@@ -20130,15 +20147,6 @@ body.pm-resize-active * {
   width: 100%;
   min-height: 200px;
   height: clamp(200px, 45vh, 400px);
-}
-
-/* The shared card declares width: min(100%, 620px) with its padding and border outside that
-   width, so on any host narrower than 620 it overflows by exactly that padding — 34px past this
-   one at both phone widths, measured. The chart body is the first narrow host it has had; the
-   box is corrected here rather than on the component, whose other hosts are wide enough that
-   changing it would move their captures for a defect they do not have. */
-.note-database-container .db-chart-empty .db-empty-card {
-  box-sizing: border-box;
 }
 
 .note-database-container .db-chart-number {

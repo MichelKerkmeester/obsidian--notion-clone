@@ -1451,6 +1451,12 @@ earned its Undo by pushing a config entry first; the deletion sites copied the a
 the entry, and the copy type-checked, passed every lane, and rendered correctly in both themes.
 No gate in this repository asks whether a button can do what it says.
 
+### One more, taken 2026-09-06 (~04:45)
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **The embedded table's Load more row is 44px on phone, 30px desktop.** Operator, verbatim: *"44px on phone, 30px desktop"* | AC-011's own row had landed the page limit and the row but named its height clause the one thing left unmeasured, since the row shipped at a flat 30px cell / 29px button on every width. `.db-table-load-more-row td` and `.db-table-load-more-button` now carry an `is-phone` override raising both to 44px, the same thumb floor `.is-phone .db-menu-item` already holds every other phone sheet row to; the desktop pair is unchanged | `050-anytype-adoption` REQ-014 and `055-states-feedback-and-motion` AC-011, both closed on this figure; `styles.css`'s `.db-table-load-more-row`/`.db-table-load-more-button` rules; `055/decision-record.md` ADR-004's addendum |
+
 ---
 
 ---

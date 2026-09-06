@@ -484,9 +484,10 @@ A task missing any of the three is not ready to start.
       and offers Load more only when rows remain"* (`:66`), *"the Load more row reads its colspan
       off the real header rather than a second column count"* (`:77`), plus the never-mutates and
       fits-inside cases at `:33` and `:54`. The never-virtualizes guard holds by construction, no
-      virtualization having arrived. **What this does not close is AC-011's other half:** nothing
-      measures the ≈40px inline row against the 48px full-page row, and no capture shows the state,
-      so that row stays `Unmet` on the height clause alone.
+      virtualization having arrived. **AC-011's other half closed 2026-09-06** on the operator's
+      own figure (*"44px on phone, 30px desktop"*, `decision-record.md` ADR-004's addendum) rather
+      than the drafted ≈40px/48px split — see T014's Load more row for the lane proof and the newly
+      registered `chrome-table-load-more` fixture for the capture.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -494,13 +495,31 @@ A task missing any of the three is not ready to start.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T014 [P0] One permanent lane row per deliverable under `tools/live/`, each negative control
-      observed **red** before green, every other row staying green while it was red
+- [x] T014 [P0] One permanent lane row per deliverable under `tools/live/`, each negative control
+      observed **red** before green, every other row staying green while it was red. Done
+      2026-09-06: **toast role** — `verify-placement.mjs`'s registry-iteration and geometry rows,
+      landed with T002/T006 (AC-001). **Confirm grammar** — the `confirm` row in
+      `tools/live/sheet-grammar.mjs`'s `REGISTERED_SURFACES`, landed with T007 (AC-003). **Chart
+      absorption** — new: `chartEmptyAbsorptionAssertion` (`render-assertion-harness.ts`), wired
+      into `render-assertions.mjs`'s existing rules-scenario pass, asserting the shared card, its
+      action, and zero retired `db-chart-empty-icon`/`-text`/`-action` elements; observed red by
+      reintroducing one such element, green on reverting (AC-006). **Load more** — new: a `RAISED`
+      entry in `tools/live/touch-targets.mjs` holding `.db-table-load-more-button` to 44px outright
+      on phone; observed red at a forced 29px, green at 44px (AC-011). **Deletion undo's superseded
+      path — no lane can reach it.** `undoDeletion`'s `historyStack[0] === entry` identity check
+      needs a real multi-entry history stack driven through `deleteRow`/`undoLastEdit`'s own
+      timing, which every `tools/live/` lane's mount (a bare renderer or fixture, no `DataSource`)
+      cannot construct; `deletion-undo.test.ts` (vitest, a vault double) is the existing and
+      correct coverage, already asserting `notice.undoSuperseded` in both classes
 - [ ] T015 [P0] `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, read from `$?` and never through
       a pipe; `npm run replay` holds with reversed 0
-- [ ] T016 [P0] Recapture the `screenshots/project-manager/` board and gantt references and prove
+- [x] T016 [P0] Recapture the `screenshots/project-manager/` board and gantt references and prove
       `pixelHash` unchanged against the pre-phase baseline, or take the difference to the operator
-      (goal D4)
+      (goal D4). Done 2026-09-06: two full `npm run screenshots` runs (562 entries each, the growth
+      being this leg's own `chrome-table-load-more` fixture) against this leg's edits — the
+      Load-more phone/desktop heights and the `.db-empty-card` box-sizing move. `git status
+      --porcelain screenshots/project-manager/` reports empty after both, so all 16 board and
+      gantt references are byte-identical to `HEAD`, not merely `pixelHash`-identical
 - [ ] T017 [P0] **The operator exercises the states on device** — filtered view, row deletion,
       board group-field deletion, drag under sort — and reads them as debugged, refined, perfected
       (the §6A bar). Not tickable by an agent (goal D8)

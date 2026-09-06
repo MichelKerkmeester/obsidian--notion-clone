@@ -24,7 +24,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, glyph,
-  optionPill, rowCheckbox, tableGroupTitle } from "./shared.mjs";
+  optionPill, rowCheckbox, tableGroupTitle, tableHeader } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -955,5 +955,36 @@ export const CHROME_SCENARIOS = [
           <div class="db-toast-actions"></div>
         </div>
       </div>`,
+  },
+  {
+    id: "chrome-table-load-more",
+    title: "Embedded table — Load more row",
+    group: "components",
+    width: 900,
+    sources: ["src/views/embedded-database-renderer.ts", "styles.css"],
+    note: "The row `renderTableLoadMoreRow` appends once an embedded table's page limit is reached, colspan read off the real header rather than a second column count. 30px cell / 29px button on desktop; the phone (`is-phone`) capture holds the same 44px thumb floor this stylesheet's other phone rows use.",
+    html: () => {
+      const rows = ROWS.slice(0, 4).map((r) => `
+        <tr>
+          <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
+          <td>${r.name}</td>
+          <td>${r.cost}</td>
+          <td>${optionPill(r.cycle)}</td>
+          <td>${optionPill(r.payment)}</td>
+          <td>${r.renew}</td>
+          <td>${optionPill(r.category)}</td>
+        </tr>`).join("");
+      return `
+      <div class="note-database-container">
+        <div class="db-table-wrap">
+          <table class="db-table"><thead><tr>${tableHeader()}</tr></thead><tbody>
+            ${rows}
+            <tr class="db-table-load-more-row"><td colspan="7">
+              <button type="button" class="db-table-load-more-button">Load 20 more</button>
+            </td></tr>
+          </tbody></table>
+        </div>
+      </div>`;
+    },
   },
 ];

@@ -1558,6 +1558,25 @@ function chartVariantAssertion(container: HTMLElement, variant: "number" | "empt
   };
 }
 
+/** The chart's empty state renders through the shared EmptyStateRenderer card with its action
+ *  preserved, and none of the retired private db-chart-empty-icon/-text/-action vocabulary
+ *  remains — the outer .db-chart-empty structural wrapper is unaffected and asserted separately
+ *  by chartVariantAssertion. */
+function chartEmptyAbsorptionAssertion(container: HTMLElement): AssertionResult {
+  const card = container.querySelector(".db-chart-empty .db-empty-card");
+  const action = container.querySelector(".db-chart-empty .db-empty-action");
+  const retired = container.querySelectorAll(
+    ".db-chart-empty-icon, .db-chart-empty-text, .db-chart-empty-action"
+  ).length;
+  const pass = Boolean(card) && Boolean(action) && retired === 0;
+  return {
+    name: "the chart's empty state renders the shared card with its action, and no retired chart-empty markup",
+    pass,
+    detail: `.db-empty-card present: ${Boolean(card)}, .db-empty-action present: ${Boolean(action)}, `
+      + `retired db-chart-empty-icon/-text/-action element(s): ${retired} (want 0)`,
+  };
+}
+
 function miniCalendarAssertion(container: HTMLElement): AssertionResult {
   const popover = container.querySelector(".db-calendar-mini-popover");
   const grid = popover?.querySelector(".db-calendar-mini-grid");
@@ -2533,7 +2552,10 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "chart-renderer"));
     if (results[0].pass) {
       results.push(...(scenario.chartVariant
-        ? [chartVariantAssertion(container, scenario.chartVariant)]
+        ? [
+          chartVariantAssertion(container, scenario.chartVariant),
+          ...(scenario.chartVariant === "empty" ? [chartEmptyAbsorptionAssertion(container)] : []),
+        ]
         : chartAssertions(container, config)));
       results.push({
         name: "no forced layout inside the chart build",

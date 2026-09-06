@@ -293,9 +293,11 @@ try {
   // carry no action bag to compare and are not part of the coverage ratchet below, so they are
   // asserted here rather than folded into `outcomes` — the four rules combinations
   // (none/filter/sort/both) plus the tab-menu row each get their own scenario in STATE_SCENARIOS
-  // and their own red-first pass/fail line.
+  // and their own red-first pass/fail line. The chart's empty state joins them for the same
+  // reason: chartEmptyAbsorptionAssertion (render-assertion-harness.ts) is the permanent lane row
+  // for AC-006, asserting the shared card, its action, and the retired private markup's absence.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
-    scenario.rules != null || scenario.toolbarPopover === "tab-menu");
+    scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty");
   const rulesOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     rulesScenarios,

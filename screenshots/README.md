@@ -199,6 +199,16 @@ A column with summary rules stacks each kind over its result; a column without o
 
 Sources: `src/views/table-footer-renderer.ts`, `src/views/table-renderer.ts`
 
+### Embedded table — Load more row
+
+The row `renderTableLoadMoreRow` appends once an embedded table's page limit is reached, colspan read off the real header rather than a second column count. 30px cell / 29px button on desktop; the phone (`is-phone`) capture holds the same 44px thumb floor this stylesheet's other phone rows use.
+
+| dark | light |
+|---|---|
+| ![chrome-table-load-more dark](notion-clone/components/chrome-table-load-more-mobile-dark.png) | ![chrome-table-load-more light](notion-clone/components/chrome-table-load-more-mobile-light.png) |
+
+Sources: `src/views/embedded-database-renderer.ts`, `styles.css`
+
 ### Toast — error, sticky until dismissed
 
 An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.

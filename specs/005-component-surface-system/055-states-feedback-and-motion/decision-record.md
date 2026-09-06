@@ -377,6 +377,32 @@ that exists. No code.
 
 **How to roll back**: delete this ADR and the citations revert to dangling — which is the state
 this fixes, so there is nothing to preserve.
+
+---
+
+### Addendum, 2026-09-06: the row-height clause closes
+
+**Operator ruling (2026-09-06 ~04:45, verbatim):** *"44px on phone, 30px desktop."*
+
+AC-011's page limit and `Load more` row had already landed; the one clause still `Unmet` was the
+≈40px inline row against the 48px full-page row this ADR's own restatement asked for, and nothing
+had measured it because the row shipped at one flat height — 30px cell, 29px button — on every
+width. The operator's figure replaces the drafted ≈40px/48px split with an exact pair: 44px on
+phone, unchanged 30px/29px on desktop.
+
+`.is-phone .note-database-container .db-table-load-more-row td` and `.is-phone
+.note-database-container .db-table-load-more-button` now carry that 44px, the same thumb floor
+`.is-phone .db-menu-item` already raises every other phone sheet row to; the desktop pair is
+untouched. A registered fixture (`chrome-table-load-more`, `tools/screenshots/scenarios/chrome.mjs`)
+captures the row in both themes and both devices for the first time — previously **no capture
+showed the state at all**. A `RAISED` entry in `tools/live/touch-targets.mjs` holds
+`.db-table-load-more-button` to 44px outright rather than this lane's usual 28px floor, since this
+control is read as a fixed phone number rather than "clears the floor"; forcing the button back to
+29px on phone was observed **red** (`FAIL [fixture] — chrome-table-load-more
+button.db-table-load-more-button measured 795x29, under its named 44px floor`), with every other
+row in the lane staying green, and reverting to 44px turned it green again.
+
+AC-011 and `050` REQ-014 both close on this figure; `roadmap.md` §6A records the operator's words.
 <!-- /ANCHOR:adr-004 -->
 
 ---
