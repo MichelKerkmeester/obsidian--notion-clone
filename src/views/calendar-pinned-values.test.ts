@@ -75,9 +75,9 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(body).toContain("background: none");
   });
 
-  it("pins the phone chip's 44px touch-floor override", () => {
+  it("pins the phone chip's 44px touch-floor override, plus overflow: hidden so an oversized title clips at the column rather than crossing it", () => {
     const body = ruleBody(".is-phone .note-database-container .db-calendar-month-segment");
-    expect(body.replace(/\s+/g, " ").trim()).toBe("height: 44px;");
+    expect(body.replace(/\s+/g, " ").trim()).toBe("height: 44px; overflow: hidden;");
   });
 
   it("pins the today marker's 26x24px size and #216DFA fill", () => {
@@ -187,5 +187,69 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // Negative control: the old equal-split formula must not survive — it is
     // exactly what made a two-way overlap unreadable at a narrow column width.
     expect(source).not.toContain("(layout.columnIndex / layout.columnCount) * 100");
+  });
+
+  it("pins the calendar's own scale switcher as plain tabs, not the timeline's bordered segmented pill", () => {
+    const button = ruleBody(".note-database-container .db-calendar-scale-button");
+    expect(button).toContain("border: 0");
+    expect(button).toContain("background: none");
+    expect(button).toContain("font-size: 14px");
+    const active = ruleBody(".note-database-container .db-calendar-scale-button.is-active");
+    expect(active.replace(/\s+/g, " ").trim()).toBe("background: none; color: var(--text-normal); box-shadow: none;");
+    // The timeline/gantt keeps its own bordered pill — a separate class family,
+    // untouched by the calendar's restyle (the gantt is Project Manager 1:1).
+    const timelineButton = ruleBody(".note-database-container .db-timeline-scale-button");
+    expect(timelineButton).toContain("border: 0");
+    const timelineActive = ruleBody(".note-database-container .db-timeline-scale-button.is-active");
+    expect(timelineActive).toContain("box-shadow: 0 0 0 1px");
+  });
+
+  it("pins the mini-calendar button's removal from the calendar's own header", () => {
+    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    expect(source).not.toContain("renderMiniCalendarButton");
+    expect(source).not.toContain("toggleMiniCalendar");
+  });
+
+  it("pins the title's 12px gap and 500 weight, not the shared base's 8px gap and 700 weight", () => {
+    // `.db-calendar-title` (and `-main`) is declared twice — the shared base the
+    // gantt's own title also reads, then the calendar-only override below it — so
+    // this greps the raw text for the override's own declaration rather than
+    // `ruleBody`, which would return the first (shared) block.
+    expect(STYLES).toContain(".note-database-container .db-calendar-title {\n  gap: 12px;\n}");
+    // `-title-main` and `-title-year` are each declared twice too (shared base, then this
+    // override), so these read the raw override text rather than `ruleBody`'s first match.
+    expect(STYLES).toContain(".note-database-container .db-calendar-title-main {\n  font-size: 16px;\n  font-weight: 500;\n  letter-spacing: normal;\n}");
+    expect(STYLES).toContain("font-weight: 500;\n  letter-spacing: normal;\n}\n\n.note-database-container .db-calendar-title-select");
+    // The shared base (also read by the gantt's own title) still carries the
+    // heavier weight this override replaces, unmoved.
+    const sharedMain = ruleBody(".note-database-container .db-timeline-title-main,\n.note-database-container .db-calendar-title-main");
+    expect(sharedMain).toContain("font-weight: 700");
+  });
+
+  it("pins one rule colour across the week grid: the day-column divider and the grid's own bottom edge both read --db-calendar-rule, not --background-modifier-border", () => {
+    const col = ruleBody(".note-database-container .db-calendar-time-columns .db-calendar-week-day-col");
+    expect(col).toContain("border-right: 1px solid var(--db-calendar-rule)");
+    // `.db-calendar-week-body` is declared twice (sizing, then this border); the
+    // border declaration is the second block, so this reads the raw text rather
+    // than `ruleBody`, which would return the first (sizing-only) block.
+    expect(STYLES).toContain(".note-database-container .db-calendar-week-body {\n  position: relative;\n  height: auto;\n  overflow: hidden;\n  border-bottom: 1px solid var(--db-calendar-rule);\n}");
+    // Negative control: the removed rule read the theme's own border token at 90%, a different
+    // rule colour from the month grid and slot lines above it.
+    expect(STYLES).not.toContain("border-bottom: 1px solid color-mix(in srgb, var(--background-modifier-border) 90%, transparent);");
+  });
+
+  it("pins the week/day today marker to the disc alone: no accent underline, no recoloured hour label", () => {
+    expect(STYLES).not.toContain(".db-calendar-week-allday-col.is-today::before");
+    expect(STYLES).not.toContain(".db-calendar-time-header-day.is-today");
+    expect(STYLES).not.toContain(".db-calendar-week-hour-label.is-current-time-tick");
+  });
+
+  it("pins the phone add button hidden: the day sheet/long-press is the add path, not a per-day glyph", () => {
+    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const marker = "  .note-database-container .db-calendar-add-button {\n    display: none;\n  }";
+    expect(STYLES).toContain(marker);
+    // Negative control: the old rule forced it visible on every coarse-pointer/narrow view.
+    expect(STYLES).not.toContain(".db-calendar-add-button {\n    opacity: 1;\n  }");
+    expect(source).toContain("db-calendar-add-button");
   });
 });

@@ -547,4 +547,55 @@ Defaulting Monday only for new views and leaving existing ones on their old loca
 rejected as an inconsistency an operator would have to re-discover per view, and nothing in the
 ruling's wording ("setting stays as override") asks for that carve-out — an existing view with no
 explicit override was never reading a value the operator had chosen, only one `Intl` supplied.
+
+### 2026-09-06 landing note: T019's P1 rows, on top of the P0/T020 leg
+
+**The mini-calendar button is removed from the calendar's own header, not restyled.**
+`review-ui-calendar-2026-09-06.md`'s P1-1 names it explicitly ("Remove the mini-calendar button:
+`design-trueup.md` A5 already names it redundant once the month and year selects exist, and they
+exist"), and G13's own four-control ceiling (switcher, `‹`, `Today`, `›`) has no room for a fifth
+button once the switcher stops being a bordered pill. The removal is scoped to
+`calendar-renderer.ts`'s three call sites and the private state/methods that existed only to serve
+them; `calendar-mini-calendar-renderer.ts` itself is untouched, because two other call sites still
+need it — `calendar-timeline-renderer.ts`'s own mini-calendar button (a separate feature on the
+gantt/timeline, `db-timeline-mini-popover` alongside the shared `db-calendar-mini-popover` class)
+and `date-value-picker.ts`'s field editor — confirmed by grep before either was touched, not
+assumed safe because the class names looked similar. The harness's only reachability path to the
+calendar's own button, `constructed-scenarios.mjs`'s `calendar-mini` scenario (and its
+`miniCalendar` opt-in flag in `render-assertion-harness.ts`, its assertion function, and its
+`constructed-state-assertions.mjs` paired case), is removed along with the four
+`constructed-calendar-mini-*.png` files it produced; `temporal.mjs`'s own hand-built
+`calendar-mini-calendar` fixture stays, with its `fixtureOf` declaration dropped (there is no more
+`constructed-calendar-mini` for it to supersede) and its note re-scoped to name the
+date-value-picker as the surface that still opens this popover.
+
+**The scale switcher's restyle is a new class family, not an edit to the shared one.** Before this
+landing, `.db-calendar-scale-*` and `.db-timeline-scale-*` were declared together as one
+comma-separated selector list — visually identical because nothing had needed them to differ yet.
+Splitting them into two separate rule sets (the calendar's own now plain 14px words, no border, no
+fill even active; the timeline's kept exactly as it was, the bordered segmented pill) is what let
+G13's fix land without moving one gantt pixel — verified by `calendar-timeline-renderer.ts`'s own
+class names staying `db-timeline-scale-*` throughout, never read by the calendar's new rules.
+
+**P1-6's flex fix is scoped to the week/day timed-event chip, deliberately not the month grid's.**
+Both `.db-calendar-week-timed-event` and `.db-calendar-month-segment` (phone) render the same
+shared `.db-calendar-month-title` class, and both carry the identical-looking `flex: 1 0 min(8ch,
+100%)` floor the review's P1-6 names as this defect's cause. But the month grid's own phone
+override (`.db-calendar-month-week > .db-calendar-month-segment`, added by an earlier leg) carries
+its own comment recording that relaxing this exact floor was tried and measured worse there — 6 of
+11 single-day titles truncated instead of 5. P1-6's fix (`flex: 1 1 0`) is applied only inside
+`.db-calendar-week-timed-event .db-calendar-month-title`, leaving the month grid's floor exactly as
+that earlier, swept measurement left it.
+
+**Not landed in this pass, named rather than silently dropped.** P1-3's own slot-line/day-column
+width alignment (the review's "slot lines run one column in, stop one column short, no vertical
+rule at all") — this leg added the missing vertical rule and unified the one remaining rogue rule
+colour (`.db-calendar-week-body`'s bottom edge), but the width-alignment half of P1-3 sits under CSS
+this tree already carries (`--db-calendar-col-width`-scoped centering rules) that appears
+purpose-built to solve exactly this class of mismatch; a static read cannot confirm whether it
+already does, only a live capture can, and that capture has not been taken yet. P1-5 (the
+unscheduled drawer's own chip grammar) is not touched: ADR-006 already moved that surface once, from
+a band to a header chip, and it is unclear from this document alone whether the drawer's chip-level
+polish the review names is still live after that move or was superseded by it. Both stay open
+alongside P1-8's corpus recapture and every G-row's live re-measurement.
 <!-- /ANCHOR:decisions -->

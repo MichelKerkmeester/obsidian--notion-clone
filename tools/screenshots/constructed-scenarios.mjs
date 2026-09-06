@@ -412,7 +412,7 @@ function constructedSources(rendererFile, benchFile) {
 // scenario that declares an option a branch does not know about would be caught by the state
 // assertions rather than silently ignored.
 const SPEC_OPTIONS = [
-  "subtaskTree", "sparseFields", "emptyState", "chartVariant", "miniCalendar",
+  "subtaskTree", "sparseFields", "emptyState", "chartVariant",
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
   "recordBodyVariant", "editorKind", "includeTime", "boardImageField",
   "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
@@ -603,15 +603,6 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"]),
     note: "The shipped week-scale timeline with the first capture-sized row wired into the same "
       + "parent/two-children relation the board's constructed subtask tree uses.",
-  }),
-  constructedScenario("calendar-mini", {
-    renderer: "calendar",
-    miniCalendar: true,
-    title: "Calendar view — mini date-picker popover (constructed)",
-    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts")
-      .concat(["src/views/calendar-mini-calendar-renderer.ts"]),
-    note: "The shipped month calendar with its own mini date-picker trigger clicked, opening "
-      + "renderMiniCalendar's real popover rather than a hand-applied class.",
   }),
   constructedScenario("calendar-empty", {
     renderer: "calendar",

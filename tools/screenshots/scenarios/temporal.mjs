@@ -1479,9 +1479,11 @@ export const TEMPORAL_SCENARIOS = [
     title: "Mini calendar date picker",
     group: "views",
     width: 340,
-    sources: ["src/views/calendar-mini-calendar-renderer.ts", "src/views/calendar-renderer.ts"],
-    fixtureOf: "constructed-calendar-mini",
-    note: "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
+    sources: ["src/views/calendar-mini-calendar-renderer.ts", "src/views/date-value-picker.ts"],
+    note: "Days with events carry a short accent underline; the visible week reads as the selected pill run. "
+      + "The calendar view's own header trigger for this popover is gone (P1-1); the date-value-picker field "
+      + "editor is the shipped surface that still opens it, so this hand-built fixture documents the popover's "
+      + "own markup rather than a constructed capture of a button that no longer exists.",
     // Anchored absolutely under the calendar header, so with no header to hang from it leaves
     // the flow and the capture box collapses. Put back in flow to photograph it.
     captureCss: `.note-database-container .db-calendar-mini-popover {

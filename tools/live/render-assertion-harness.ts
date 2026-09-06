@@ -284,14 +284,6 @@ export interface ScenarioSpec {
    */
   chartVariant?: "number" | "empty";
   /**
-   * Opt-in, calendar, month scale only: after the month grid mounts, clicks the real mini
-   * date-picker trigger `renderMiniCalendarButton` builds in the header — the same
-   * `data-icon="calendar-days"` button a device tap reaches — so `renderMiniCalendar`'s own
-   * popover opens through its real production path rather than a hand-applied class. Off by
-   * default; every existing consumer is unaffected.
-   */
-  miniCalendar?: boolean;
-  /**
    * Opt-in, renderer "toolbar" only: after the toolbar mounts, clicks one of its own trigger
    * buttons to open the surface it owns — "utilities" clicks the More-tools button
    * (`renderUtilitiesOverflowButton`'s own onclick), "add-view" clicks the view-tab plus button
@@ -1745,19 +1737,6 @@ function chartEmptyAbsorptionAssertion(container: HTMLElement): AssertionResult 
   };
 }
 
-function miniCalendarAssertion(container: HTMLElement): AssertionResult {
-  const popover = container.querySelector(".db-calendar-mini-popover");
-  const grid = popover?.querySelector(".db-calendar-mini-grid");
-  const pass = Boolean(popover) && Boolean(grid);
-  return {
-    name: "the calendar opened its mini date-picker popover",
-    pass,
-    detail: pass
-      ? ".db-calendar-mini-popover and its grid both present"
-      : "the mini-calendar trigger click never opened the popover",
-  };
-}
-
 function toolbarPopoverAssertion(container: HTMLElement, selector: string): AssertionResult {
   const panel = container.querySelector(selector);
   return {
@@ -2684,23 +2663,13 @@ export function runRenderAssertions(
     renderer.render(container, config, rows);
     const layoutReads = stopCounting();
 
-    // The same button a device tap reaches: renderMiniCalendarButton tags its icon span
-    // data-icon="calendar-days", and .click() fires the real onclick handler that calls the
-    // renderer's own (private) toggleMiniCalendar — no hand-applied class.
-    if (scenario.miniCalendar) {
-      const trigger = container.querySelector('[data-icon="calendar-days"]')?.closest("button");
-      (trigger as HTMLButtonElement | null)?.click();
-    }
-
     results.push(provenanceResult(container, "calendar-renderer"));
     if (results[0].pass) {
       results.push(...(scenario.emptyState
         ? [calendarEmptyStateAssertion(container)]
-        : scenario.miniCalendar
-          ? [miniCalendarAssertion(container)]
-          : scale === "month"
-            ? calendarAssertions(container, scenario)
-            : weekAssertions(container, scale)));
+        : scale === "month"
+          ? calendarAssertions(container, scenario)
+          : weekAssertions(container, scale)));
       results.push({
         name: "no forced layout inside the segment loop",
         pass: layoutReads <= MAX_LAYOUT_READS,

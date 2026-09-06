@@ -11,8 +11,8 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-057-rebuild-leg"
-    recent_action: "T020 landed; T019's P0 rows and the icon/dot/token pieces code-landed"
+    last_updated_by: "land-057-rebuild-leg-p1"
+    recent_action: "P1-1, P1-2, P1-3, P1-4, P1-6, P1-7 code-landed on top of the P0/T020 leg"
     next_safe_action: "Recapture calendar screenshots on HEAD, re-measure G1-G15 against them"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
@@ -25,11 +25,13 @@ _memory:
       - "src/views/calendar-timeline-toolbar-renderer.ts"
       - "src/data/calendar-date-time.ts"
       - "styles.css"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/screenshots/constructed-scenarios.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 78
+    completion_pct: 84
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
@@ -43,6 +45,8 @@ _memory:
       - "T018 landed: ADR-005 records the 80px minimum and why the month cell was not enough"
       - "The operator read 0.0.29 beside Anytype and reopened the phase on a gestalt judgement"
       - "T021 landed: the unscheduled band is a header chip (ADR-006); a multi-day title's flex-grow is bounded as an interim, superseded by T019's per-day span rebuild"
+      - "P1-1 removes the mini-calendar button entirely (redundant beside the month/year selects) rather than only restyling it, so the header holds four controls, not five; the switcher itself is restyled as plain tabs, split into its own class family so the timeline/gantt's bordered pill is untouched"
+      - "P1-6's flex-basis fix is scoped to the week/day timed-event chip, not the month grid's own chip: the month grid's 8ch floor with shrink disabled is a swept, measured fix (T018-adjacent) that a blanket relax would have regressed"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -686,6 +690,55 @@ title and 44x44 close on phone.
       row exactly as wide as the original bug needed. Verified by reading the rule's `>` combinator
       against both remaining call sites rather than assumed. G3 and G5 stay Unmet on the row until
       the corpus recapture confirms the per-day chips read as intended.
+
+      **Code-landed 2026-09-06, the P1 rows the review's §6 orders after P0 (L3-L5 of its own leg
+      plan).** **P1-1**: the mini-calendar button is removed outright from the calendar's own header
+      (month, week and day), not merely restyled — `design-trueup.md` A5 already named it redundant
+      once the month/year title selects exist, and G13's own four-control ceiling has no room for a
+      fifth once the header is otherwise plain. The removal is scoped to `calendar-renderer.ts`'s own
+      call sites and now-dead private state/methods; the shared `calendar-mini-calendar-renderer.ts`
+      component is untouched because `calendar-timeline-renderer.ts`'s own mini-calendar button and
+      `date-value-picker.ts`'s field editor both still call it — grepped, not assumed, before either
+      was touched. The `constructed-calendar-mini` scenario (the harness's only reachability path to
+      the calendar's own button) is removed along with its four PNGs and its state-assertion pair;
+      the hand-built `calendar-mini-calendar` fixture in `temporal.mjs` stays, re-scoped to document
+      the popover's own markup (still reachable through the date-value-picker) rather than a button
+      that no longer exists. The scale switcher itself is restyled as plain tabs — no border, no
+      fill even on the active tab, 14px words — split into its own `.db-calendar-scale-*` class
+      family so `.db-timeline-scale-*`'s bordered segmented pill (the gantt, Project Manager 1:1) is
+      never touched; confirmed by grepping calendar-timeline-renderer.ts's own class names before the
+      split, not by assuming the shared selector was safe to edit in place. **P1-2**: the title's
+      `gap` moves from the shared 8px to a calendar-only 12px override (the pattern this file's own
+      comment already established for font-size), both selects' `font-weight` drops from 700 to 500,
+      and `padding: 0` on `.db-calendar-title-select` removes the native `<button>` padding that was
+      most of the measured 34px gap. **P1-3**: the week/day grid's one remaining rogue rule
+      (`.db-calendar-week-body`'s own bottom edge, `--background-modifier-border` at 90%) now reads
+      `--db-calendar-rule` like every other rule in the view; a vertical `border-right` in the same
+      token is added to the time columns, the header day cells and the all-day columns — none of the
+      three carried one before (the header/all-day rules were commented out, unused). **P1-4**: the
+      all-day column's 2px accent-underline `::before` and the header day name's accent recolour are
+      both removed outright; so is the current-hour label's `#216DFA`/700-weight recolour — the disc
+      and the now-line, both already ours, are what's left. **P1-6**: the shared chip title's 8ch
+      flex-basis floor (128px at 16px) is wider than a phone week/day column (measured 87px) with
+      shrink disabled, so the title's own box crossed the next column's rule; a phone-scoped override
+      drops the basis to 0 with shrink enabled, scoped to `.db-calendar-week-timed-event` specifically
+      — **not** the month grid's own chip, whose identical-looking 8ch/shrink-disabled rule is a
+      different, already-swept fix (T018-adjacent: relaxing it there previously regressed more titles
+      to truncation than it fixed, per this file's own in-CSS comment, which is why this leg leaves it
+      alone). `.db-calendar-month-segment` (phone) gains `overflow: hidden` so any future overflow
+      clips at the column instead of crossing it — the timed-event's own segment already had it.
+      **P1-7**: the phone add-button's coarse-pointer override changes from forcing it always-visible
+      to `display: none` — `044`'s long-press/day-sheet is the add path on a touch device, and no
+      reference capture shows a per-day glyph. `calendar-pinned-values.test.ts` gains one pin per row
+      above, each with a negative control against the prior rule; `npx tsc --noEmit`, `npm test`
+      (1465/1465) and `npm run build` are all green on the landing (`main.js` reverted after, per this
+      leg's own rule). **Not landed in this pass, named rather than silently dropped**: P1-3's own
+      slot-line/day-column width alignment (the review's "one column in, one column short" reading) —
+      the custom-column-width CSS this leg found already in the tree appears purpose-built to solve
+      exactly that alignment, and a static read cannot tell whether it already does; P1-5 (the
+      unscheduled drawer's own chip grammar — already superseded once by ADR-006's header-chip move,
+      unclear whether anything remains); P1-8's corpus recapture and every G-row's live
+      re-measurement, which needs the same recapture this row has needed since the P0 landing.
 - [x] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
       column back to 45px.** Operator ruling, verbatim *"Stagger overlaps at 45px"* — this
       **supersedes T018's landed 80px minimum**. Each later overlapping block is inset

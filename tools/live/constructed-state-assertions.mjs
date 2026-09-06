@@ -68,7 +68,6 @@ window.__stateMarkers = (scenario) => {
     chartNumber: !!container.querySelector(".db-chart-number"),
     chartEmpty: !!container.querySelector(".db-chart-empty"),
     chartCanvas: !!container.querySelector(".db-chart-canvas"),
-    miniCalendarPopover: !!container.querySelector(".db-calendar-mini-popover .db-calendar-mini-grid"),
     calendarOptionsPopover: !!container.querySelector(".db-calendar-options-popover"),
     timelineOptionsPopover: !!container.querySelector(".db-calendar-timeline-options-popover"),
     chartOptionsPopover: !!container.querySelector(".db-chart-options-popover"),
@@ -239,11 +238,6 @@ const PAIRED_CASES = [
 // mounts — which is exactly the run that established this file's own red, before these branches
 // existed.
 const SINGLE_CASES = [
-  {
-    id: "constructed-calendar-mini",
-    spec: { renderer: "calendar", bag: "file-view", captureData: true, miniCalendar: true },
-    marker: "miniCalendarPopover",
-  },
   {
     id: "constructed-calendar-toolbar-options",
     spec: { renderer: "calendar-toolbar", bag: "file-view" },

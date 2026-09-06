@@ -16129,20 +16129,26 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
 /* The calendar's own title sizing overrides the shared base above, kept as
    separate rules rather than edits to the shared block, so the gantt's
    title — which reads the same declarations — never moves. */
+.note-database-container .db-calendar-title {
+  gap: 12px;
+}
+
 .note-database-container .db-calendar-title-main {
   font-size: 16px;
+  font-weight: 500;
   letter-spacing: normal;
 }
 
 .note-database-container .db-calendar-title-year {
   color: var(--text-normal);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: normal;
 }
 
 .note-database-container .db-calendar-title-select {
   border: 0;
+  padding: 0;
   background: transparent;
   cursor: pointer;
   box-shadow: none;
@@ -16250,15 +16256,13 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   display: none;
 }
 
-/* Compact scale switcher in the navigation cluster. */
-.note-database-container .db-calendar-scale-control,
+/* Compact scale switcher, timeline/gantt (Project Manager 1:1, untouched). */
 .note-database-container .db-timeline-scale-control {
   display: inline-flex;
   align-items: center;
   margin-right: 4px;
 }
 
-.note-database-container .db-calendar-scale-segment,
 .note-database-container .db-timeline-scale-segment {
   display: inline-flex;
   align-items: center;
@@ -16270,7 +16274,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   gap: 1px;
 }
 
-.note-database-container .db-calendar-scale-button,
 .note-database-container .db-timeline-scale-button {
   display: inline-flex;
   align-items: center;
@@ -16290,20 +16293,17 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   white-space: nowrap;
 }
 
-.note-database-container .db-calendar-scale-button.is-active,
 .note-database-container .db-timeline-scale-button.is-active {
   background: var(--background-primary);
   color: var(--text-normal);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--background-modifier-border) 70%, transparent);
 }
 
-.note-database-container .db-calendar-scale-button:hover:not(.is-active),
 .note-database-container .db-timeline-scale-button:hover:not(.is-active) {
   background: var(--background-modifier-hover);
   color: var(--text-normal);
 }
 
-.note-database-container .db-calendar-scale-menu,
 .note-database-container .db-timeline-scale-menu {
   display: none;
   gap: 4px;
@@ -16311,30 +16311,97 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   padding: 0 6px;
 }
 
-.note-database-container .db-calendar-scale-menu-label,
 .note-database-container .db-timeline-scale-menu-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.note-database-container .db-calendar-scale-menu-chevron,
 .note-database-container .db-timeline-scale-menu-chevron {
   width: 12px;
   height: 12px;
 }
 
-body.is-mobile .note-database-container .db-calendar-scale-segment,
 body.is-mobile .note-database-container .db-timeline-scale-segment,
-.is-phone .note-database-container .db-calendar-scale-segment,
 .is-phone .note-database-container .db-timeline-scale-segment {
   display: none;
 }
 
-body.is-mobile .note-database-container .db-calendar-scale-menu,
 body.is-mobile .note-database-container .db-timeline-scale-menu,
-.is-phone .note-database-container .db-calendar-scale-menu,
 .is-phone .note-database-container .db-timeline-scale-menu {
+  display: inline-flex;
+}
+
+/* Calendar scale switcher (P1-1): Anytype's own tab grammar — plain words, no
+   track, no border, no fill even on the active tab. The timeline/gantt above
+   keeps its bordered segmented pill; this is a separate class family so the
+   restyle never touches it. */
+.note-database-container .db-calendar-scale-control {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.note-database-container .db-calendar-scale-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.note-database-container .db-calendar-scale-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.note-database-container .db-calendar-scale-button.is-active {
+  background: none;
+  color: var(--text-normal);
+  box-shadow: none;
+}
+
+.note-database-container .db-calendar-scale-button:hover:not(.is-active) {
+  background: none;
+  color: var(--text-normal);
+}
+
+.note-database-container .db-calendar-scale-menu {
+  display: none;
+  gap: 4px;
+  min-width: 48px;
+  padding: 0 6px;
+}
+
+.note-database-container .db-calendar-scale-menu-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-database-container .db-calendar-scale-menu-chevron {
+  width: 12px;
+  height: 12px;
+}
+
+body.is-mobile .note-database-container .db-calendar-scale-segment,
+.is-phone .note-database-container .db-calendar-scale-segment {
+  display: none;
+}
+
+body.is-mobile .note-database-container .db-calendar-scale-menu,
+.is-phone .note-database-container .db-calendar-scale-menu {
   display: inline-flex;
 }
 
@@ -17367,6 +17434,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   gap: 2px;
   padding: 0 var(--db-space-5);
   border: 0;
+  border-right: 1px solid var(--db-calendar-rule);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -17377,11 +17445,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 .note-database-container .db-calendar-day-view .db-calendar-time-header-day {
   justify-content: flex-start;
   text-align: left;
-}
-
-.note-database-container .db-calendar-time-header-day.is-today {
-  background: transparent;
-  color: var(--interactive-accent);
 }
 
 .note-database-container .db-calendar-week-allday {
@@ -17408,26 +17471,9 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   left: auto;
   width: auto;
   min-width: 0;
-  /* border-left: 1px solid var(--background-modifier-border); */
+  border-right: 1px solid var(--db-calendar-rule);
   background: transparent;
 }
-
-.note-database-container .db-calendar-week-allday-col.is-today::before {
-  content: "";
-  position: absolute;
-  top: -4px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--interactive-accent);
-  pointer-events: none;
-}
-
-/* The last column needs an explicit marker: :last-of-type matches by tag, so a
-   later "more events" div (or all-day segment) would steal it. */
-/* .note-database-container .db-calendar-week-allday-col.is-last-col {
-  border-right: 1px solid var(--background-modifier-border);
-} */
 
 .note-database-container .db-calendar-week-allday-date {
   grid-row: 1;
@@ -17521,7 +17567,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   position: relative;
   height: auto;
   overflow: hidden;
-  border-bottom: 1px solid color-mix(in srgb, var(--background-modifier-border) 90%, transparent);
+  border-bottom: 1px solid var(--db-calendar-rule);
 }
 
 .note-database-container .db-calendar-time-columns {
@@ -17539,6 +17585,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   width: auto;
   min-width: 0;
   background: transparent;
+  border-right: 1px solid var(--db-calendar-rule);
 }
 
 /* Flattened to the month chip's own flat ink: no per-event fill, no accent
@@ -17663,6 +17710,21 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
    (is-mobile without is-phone) keeps the desktop pitch on both sides. */
 .is-phone .note-database-container .db-calendar-month-segment {
   height: 44px;
+  overflow: hidden;
+}
+
+/* Phone week/day (P1-6): the shared title's 8ch flex-basis floor (128px at
+   16px) is wider than a phone day column (measured 87px), and shrink is
+   disabled, so the title's own box — not just its text — overflowed the
+   column and crossed the next one's rule. Scoped to the timed-event chip
+   only: the month grid's own phone override two rules below keeps that
+   floor deliberately (a swept, measured fix — shrinking it there regressed
+   more titles to truncation than it fixed), and this is a different chip. */
+.is-phone .note-database-container .db-calendar-week-timed-event .db-calendar-month-title {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 body.is-mobile .note-database-container .db-calendar-month-time {
@@ -18763,15 +18825,6 @@ body.pm-resize-active * {
 
 .note-database-container .db-timeline-tick.is-current-time-tick .db-timeline-tick-date {
   color: var(--db-current-time-color);
-  font-weight: 700;
-}
-
-/* The calendar's own current-time tick takes the month grid's measured
-   #216DFA rather than --db-current-time-color, which stays --db-timeline-*'s
-   and the gantt's own — the gantt is a Project Manager port and its colours
-   are not this view's to change. */
-.note-database-container .db-calendar-week-hour-label.is-current-time-tick {
-  color: #216DFA;
   font-weight: 700;
 }
 
@@ -20622,8 +20675,10 @@ img.db-text-md-image {
     min-height: 28px;
   }
 
+  /* P1-7: no reference chip carries a per-day add affordance; the phone add
+     path is long-press / the day sheet (044), not this glyph. */
   .note-database-container .db-calendar-add-button {
-    opacity: 1;
+    display: none;
   }
 
   .note-database-container .db-calendar-day-heading {

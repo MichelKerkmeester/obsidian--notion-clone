@@ -5,8 +5,8 @@
 //
 // Month, week and day scales share one class because they share almost
 // every interaction (drag-to-create, drag-to-move, resize handles, the
-// mini-calendar jump, the unscheduled backlog drawer) — splitting by scale
-// would either triplicate that wiring or need its own shared base anyway.
+// unscheduled backlog drawer) — splitting by scale would either triplicate
+// that wiring or need its own shared base anyway.
 // Event date writes go through `safeUpdateEventDates` so an optimistic
 // drag/resize can be rolled back on write failure instead of leaving the
 // grid showing a date that was never actually saved.
@@ -53,7 +53,6 @@ import { formatDateTimeRangeDisplay, formatDateValueDisplay, parseDateTimeParts 
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
 import { openDropdownMenu } from "./dropdown-field";
-import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./calendar-mini-calendar-renderer";
 import { markNoteHoverLink } from "./hover-link-preview";
 import { EmptyStateReason, EmptyStateRenderer } from "./empty-state-renderer";
 import { isTouchDevice } from "../data/touch-environment";
@@ -118,12 +117,8 @@ export class CalendarRenderer {
 	private rowByPath = new Map<string, RowData>();
 	private currentTimeTimer: number | null = null;
 	private currentRows: RowData[] = [];
-	private miniCalendarEl: HTMLElement | null = null;
 	/** 最近一次 invalid 事件计数（cache miss 时沿用，避免 ⚠️ 按钮闪现）。 */
 	private calendarInvalidWarningCount: number | null = null;
-	private miniCalendarMonth: string | null = null;
-	private miniCalendarMode: MiniCalendarMode = "day";
-	private miniCalendarCleanup: (() => void) | null = null;
 	private calendarScaleMenuCleanup: (() => void) | null = null;
 	private pendingFlashDateKey: string | null = null;
 	private pendingBottomScrollDateKey: string | null = null;
@@ -135,7 +130,6 @@ export class CalendarRenderer {
 
 	render(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
 		this.cleanupCurrentTimeTimer();
-		this.closeMiniCalendar();
 		this.closeCalendarScaleMenu();
 		this.calendarRoot = null;
 		this.calendarRoot = container;
@@ -150,7 +144,7 @@ export class CalendarRenderer {
 		} else {
 			this.renderMonth(container, config, rows);
 		}
-		// After a mini-calendar jump, briefly highlight the target day column.
+		// After a day/week jump, briefly highlight the target day column.
 		if (this.pendingFlashDateKey) {
 			const key = this.pendingFlashDateKey;
 			this.pendingFlashDateKey = null;
@@ -1821,7 +1815,6 @@ export class CalendarRenderer {
 		this.renderNavButton(controls, "calendar.prevWeek", () => this.shiftWeek(config, weekDays, -1), "chevron-left");
 		this.renderNavButton(controls, "calendar.today", () => this.goToTodayWeek(config));
 		this.renderNavButton(controls, "calendar.nextWeek", () => this.shiftWeek(config, weekDays, 1), "chevron-right");
-		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
 		return title;
 	}
@@ -1838,22 +1831,8 @@ export class CalendarRenderer {
 		this.renderNavButton(controls, "calendar.prevDay", () => this.shiftDay(config, dateKey, -1), "chevron-left");
 		this.renderNavButton(controls, "calendar.today", () => this.goToTodayDay(config));
 		this.renderNavButton(controls, "calendar.nextDay", () => this.shiftDay(config, dateKey, 1), "chevron-right");
-		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
 		return title;
-	}
-
-	private renderMiniCalendarButton(controls: HTMLElement, header: HTMLElement, config: ViewConfig): void {
-		const btn = controls.createEl("button", {
-			cls: "db-calendar-nav-button is-icon",
-			attr: { type: "button", title: t("calendar.datePicker"), "aria-label": t("calendar.datePicker") },
-		});
-		setIcon(btn.createSpan({ cls: "db-calendar-nav-icon" }), "calendar-days");
-		btn.onclick = (event) => {
-			event.preventDefault();
-			event.stopPropagation();
-			this.toggleMiniCalendar(header, config, btn);
-		};
 	}
 
 	/** 导航栏 invalid 事件图标按钮（A2）：异步统计后，仅在 count > 0 时显示 ⚠️，点击打开修复弹窗。
@@ -1903,137 +1882,6 @@ export class CalendarRenderer {
 			});
 	}
 
-	/** Mini month calendar that doubles as a "jump to date" picker. Days with
-	 *  events show the day number inside a filled accent circle. */
-	private toggleMiniCalendar(header: HTMLElement, config: ViewConfig, trigger: HTMLElement): void {
-		if (this.miniCalendarEl?.isConnected) {
-			this.closeMiniCalendar();
-			return;
-		}
-		this.closeMiniCalendar();
-		const popover = header.createDiv({ cls: "db-calendar-mini-popover" });
-		this.miniCalendarEl = popover;
-		this.miniCalendarMonth = this.resolveMiniMonthKey(config);
-		this.miniCalendarMode = "day";
-		this.renderMiniMonth(popover, config);
-
-		const onOutside = (event: MouseEvent) => {
-			const target = event.target as Node | null;
-			// Exempt the toolbar header (incl. the trigger button) so re-clicking
-			// the toggle closes via the click handler, not mousedown-then-reopen.
-			if (target && (popover.contains(target) || trigger.contains(target))) return;
-			this.closeMiniCalendar();
-		};
-		const onKey = (event: KeyboardEvent) => {
-			if (event.key !== "Escape") return;
-			event.preventDefault();
-			this.closeMiniCalendar();
-		};
-		const openTimer = window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
-		window.activeDocument.addEventListener("keydown", onKey, true);
-		this.miniCalendarCleanup = () => {
-			window.clearTimeout(openTimer);
-			window.activeDocument.removeEventListener("mousedown", onOutside, true);
-			window.activeDocument.removeEventListener("keydown", onKey, true);
-			popover.remove();
-			this.miniCalendarEl = null;
-			this.miniCalendarMonth = null;
-			this.miniCalendarMode = "day";
-			this.miniCalendarCleanup = null;
-		};
-	}
-
-	private closeMiniCalendar(): void {
-		this.miniCalendarCleanup?.();
-		this.miniCalendarCleanup = null;
-	}
-
-	private renderMiniMonth(popover: HTMLElement, config: ViewConfig): void {
-		const monthKey = this.miniCalendarMonth ?? this.resolveMiniMonthKey(config);
-		const [ys, ms] = monthKey.split("-");
-		const year = Number(ys);
-		const monthIndex = Number(ms) - 1;
-
-		const weekStartsOn = this.getLocaleWeekStartsOn(config);
-		// Reuse the month model so event markers reflect the same source/filter as
-		// the main grid (events come from the currently displayed rows).
-		const startField = config.calendarStartDateField || getDefaultEventDateField(config) || "";
-		const model = buildCalendarMonthModel(
-			this.currentRows,
-			{ ...config, calendarStartDateField: startField, calendarMonth: monthKey },
-			{ year, monthIndex },
-			{ weekStartsOn },
-		);
-		const todayKey = this.getTodayDateKey();
-		const selectedKeys = this.resolveSelectedKeys(config);
-		const eventIndex = buildMiniCalendarEventIndex({
-			rows: this.currentRows,
-			config,
-			startField,
-			endField: config.calendarEndDateField,
-		});
-		renderMiniCalendar({
-			popover,
-			mode: this.miniCalendarMode,
-			monthKey,
-			monthTitle: this.formatMonthTitle(year, monthIndex),
-			visibleYear: year,
-			yearRangeStart: this.getMiniCalendarYearRangeStart(year),
-			weeks: model.weeks,
-			weekdays: this.getWeekdayLabels(weekStartsOn),
-			todayKey,
-			selectedKeys,
-			eventIndex,
-			onPrevious: () => this.shiftMiniCalendarWindow(popover, config, -1),
-			onNext: () => this.shiftMiniCalendarWindow(popover, config, 1),
-			onTitleClick: () => this.drillMiniCalendarUp(popover, config),
-			onSelectMonth: (selectedMonthKey) => {
-				this.miniCalendarMonth = selectedMonthKey;
-				this.miniCalendarMode = "day";
-				this.renderMiniMonth(popover, config);
-			},
-			onSelectYear: (selectedYear) => {
-				this.miniCalendarMonth = `${String(selectedYear).padStart(4, "0")}-01`;
-				this.miniCalendarMode = "month";
-				this.renderMiniMonth(popover, config);
-			},
-			onSelectDate: (dateKey) => this.navigateViaMini(config, dateKey),
-			onSelectToday: (dateKey) => this.jumpMiniCalendarToToday(popover, config, dateKey),
-		});
-	}
-
-	private shiftMiniCalendarWindow(popover: HTMLElement, config: ViewConfig, direction: 1 | -1): void {
-		const monthKey = this.miniCalendarMonth ?? this.resolveMiniMonthKey(config);
-		const delta = this.miniCalendarMode === "day" ? direction : this.miniCalendarMode === "month" ? direction * 12 : direction * 144;
-		this.miniCalendarMonth = shiftCalendarMonth(monthKey, delta);
-		this.renderMiniMonth(popover, config);
-	}
-
-	private drillMiniCalendarUp(popover: HTMLElement, config: ViewConfig): void {
-		if (this.miniCalendarMode === "day") {
-			this.miniCalendarMode = "month";
-		} else if (this.miniCalendarMode === "month") {
-			this.miniCalendarMode = "year";
-		}
-		this.renderMiniMonth(popover, config);
-	}
-
-	private jumpMiniCalendarToToday(popover: HTMLElement, config: ViewConfig, dateKey: string): void {
-		this.miniCalendarMonth = dateKey.slice(0, 7);
-		this.miniCalendarMode = "day";
-		this.renderMiniMonth(popover, config);
-	}
-
-	private navigateViaMini(config: ViewConfig, dateKey: string): void {
-		// Mirror shiftDay: set all three anchors so month/week/day each jump to it.
-		config.calendarDay = dateKey;
-		config.calendarWeekStart = dateKey;
-		config.calendarMonth = dateKey.slice(0, 7);
-		this.requestCalendarDateFlash(dateKey);
-		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
-		this.closeMiniCalendar();
-	}
-
 	private requestCalendarDateFlash(dateKey: string): void {
 		this.pendingFlashDateKey = dateKey;
 	}
@@ -2050,28 +1898,6 @@ export class CalendarRenderer {
 		const cell = root.querySelector<HTMLElement>(`.db-calendar-day[data-date-key="${dateKey}"]`);
 		const week = cell?.closest<HTMLElement>(".db-calendar-month-week");
 		week?.scrollIntoView({ block: "end" });
-	}
-
-	/** Date keys that make up the active selection in the main view (the current
-	 *  week for week view, the current day for day view; empty for month). */
-	private resolveSelectedKeys(config: ViewConfig): Set<string> {
-		const keys = new Set<string>();
-		const scale = config.calendarScale || "month";
-		if (scale === "day") {
-			if (config.calendarDay) keys.add(config.calendarDay);
-		} else if (scale === "week") {
-			const weekStartsOn = this.getLocaleWeekStartsOn(config);
-			const start = parseDateKeyToUtc(config.calendarWeekStart || config.calendarDay || "");
-			if (start) {
-				start.setUTCDate(start.getUTCDate() - ((start.getUTCDay() - weekStartsOn + 7) % 7));
-				for (let i = 0; i < 7; i++) {
-					const d = new Date(start);
-					d.setUTCDate(start.getUTCDate() + i);
-					keys.add(this.dateKeyFromDate(d));
-				}
-			}
-		}
-		return keys;
 	}
 
 	private flashDayColumn(dateKey: string): void {
@@ -2100,12 +1926,6 @@ export class CalendarRenderer {
 			cols.forEach((col) => col.removeClass("is-flash"));
 			overlays.forEach((overlay) => overlay.remove());
 		}, 1300);
-	}
-
-	private resolveMiniMonthKey(config: ViewConfig): string {
-		const key = config.calendarMonth || config.calendarDay || config.calendarWeekStart;
-		if (key && /^\d{4}-\d{2}/.test(key)) return key.slice(0, 7);
-		return this.monthKeyFromDate(new Date());
 	}
 
 	private resolveWeekIndex(config: ViewConfig, model: { weeks: { dateKey: string }[][] }): number {
@@ -2175,7 +1995,6 @@ export class CalendarRenderer {
 		this.renderNavButton(controls, "calendar.prevMonth", () => this.shiftMonth(config, model, -1), "chevron-left");
 		this.renderNavButton(controls, "calendar.today", () => this.goToTodayMonth(config));
 		this.renderNavButton(controls, "calendar.nextMonth", () => this.shiftMonth(config, model, 1), "chevron-right");
-		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
 		return title;
 	}
@@ -2555,8 +2374,8 @@ export class CalendarRenderer {
 
 	private renderNavButton(parent: HTMLElement, labelKey: string, onClick: () => void, icon?: string): void {
 		// Every icon this renderer passes here is a prev/next chevron — the modifier
-		// class scopes their contrast fix to those two buttons, not the mini-calendar
-		// or invalid-warning icons built separately below.
+		// class scopes their contrast fix to those two buttons, not the
+		// invalid-warning icon built separately below.
 		const button = parent.createEl("button", {
 			cls: `db-calendar-nav-button${icon ? " is-icon db-calendar-nav-chevron" : " is-text"}`,
 			attr: { type: "button", title: t(labelKey), "aria-label": t(labelKey) },
@@ -2695,10 +2514,6 @@ export class CalendarRenderer {
 
 	private formatMonthTitle(year: number, monthIndex: number): string {
 		return new Intl.DateTimeFormat(getEffectiveLocale(),{ month: "long", year: "numeric" }).format(new Date(year, monthIndex, 1));
-	}
-
-	private getMiniCalendarYearRangeStart(year: number): number {
-		return Math.floor(year / 12) * 12;
 	}
 
 	private formatWeekDayName(dateKey: string): string {
