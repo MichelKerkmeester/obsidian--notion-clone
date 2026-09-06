@@ -63,7 +63,8 @@
     "005-component-surface-system/056-board-anytype-parity",
     "005-component-surface-system/057-calendar-anytype-parity",
     "005-component-surface-system/058-card-title-and-title-formats",
-    "005-component-surface-system/067-sheet-family-remediation"
+    "005-component-surface-system/067-sheet-family-remediation",
+    "005-component-surface-system/062-notion-table-refinement"
   ],
   "manual": {
     "depends_on": [],
@@ -271,7 +272,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-06T15:29:46.710Z",
+    "last_save_at": "2026-09-06T16:17:39.119Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -279,7 +280,7 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:824bccbfdd364500e1860d37f1a48b9f4286b7fe9bb07910bfb5d79654cfec65",
+    "source_fingerprint": "sha256:b2f07b46414de9f5b3bf88b6c3098f136823d8b4377a56dacae3ca2126022758",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "fe85c5044c7b54c5ac7329ea6a2874194879914cf13d477c3b434b5990b84efe",

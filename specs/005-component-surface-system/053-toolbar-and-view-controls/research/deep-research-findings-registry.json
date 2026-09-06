@@ -1,0 +1,415 @@
+{
+  "mergedFrom": [
+    "glm-devpass-table"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "F12",
+      "iteration": 2,
+      "topic": "cells/editing",
+      "kind": "observation",
+      "summary": ".db-numeric-value stamped with no CSS rule — parity-by-accident with Notion's left-aligned numbers (a9f53856); needs a deliberate rule or a documented hook.",
+      "citations": [
+        "src/views/cell-renderer.ts:318-321",
+        "styles.css grep (no match)",
+        "design-system.md §10"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F15",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "improvement",
+      "rank": "low-medium",
+      "summary": "Add-row label follows source noun in Notion (19745d87 vs e33466b4); ours fixed t(toolbar.new) at table-renderer.ts:982; noun-source is a product decision.",
+      "citations": [
+        "table-renderer.ts:982",
+        "notion-screens-digest.md P4, P12"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F1-5",
+      "iteration": 1,
+      "topic": "header/menu/types",
+      "kind": "improvement",
+      "rank": "medium",
+      "summary": "Column-type set missing Person/URL/Email/Phone + audit types vs Notion's 16 (af7a18b0); additive union + glyph extension; audit types ride row.computed.",
+      "citations": [
+        "notion-screens-digest.md P2, §4 P2",
+        "src/views/property-type-icon.ts:32-46 (per digest)",
+        "src/data/types.ts:82 (per digest)"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F13",
+      "iteration": 2,
+      "topic": "cells/editing",
+      "kind": "verification-debt",
+      "summary": "Create-on-type inside the table option editor unverified (cell-editor-option.ts beyond bounded list); 050 ADR-007's no-oninput facts stand as guards.",
+      "citations": [
+        "src/views/cell-renderer.ts:916-927",
+        "050 decision-record.md ADR-007"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F8",
+      "iteration": 2,
+      "topic": "cells/editing",
+      "kind": "already-have",
+      "summary": "Digest open question #1 closed: multi-select chips inline (21d71e5f parity) with per-chip remove; measurer sizes for badges+4px gaps cap 560.",
+      "citations": [
+        "src/views/cell-renderer.ts:470-498",
+        "src/views/column-width.ts:118-123",
+        "notion-screens-digest.md §6 Q1"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F24",
+      "iteration": 4,
+      "topic": "structure",
+      "kind": "scoping",
+      "summary": "Freeze is per-column-action shape (not always-on sticky title) and desktop-only by construction (phone auto layout, styles.css:20914-20921); iOS sticky visual stays device-only.",
+      "citations": [
+        "notion-screens-digest.md §4 P7",
+        "styles.css:20914-20921"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F1-1/2/3/7",
+      "iteration": 1,
+      "topic": "header/menu/types",
+      "kind": "already-have",
+      "summary": "Header row w/ type icon+label+menu target, in-header sort ordinal, add-column +, grouped type submenu — at parity or ahead; convert to regression guards.",
+      "citations": [
+        "table-renderer.ts:632-647",
+        "table-renderer.ts:649-663",
+        "column-menu.ts:261-265"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F20",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "capture-limitation",
+      "summary": "Hover unobservable in the digest (§6 Q5); no Notion-derived change; ours judged on its own contrast bar.",
+      "citations": [
+        "notion-screens-digest.md §6 Q5",
+        "styles.css:5534-5537"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F10",
+      "iteration": 2,
+      "topic": "cells/editing",
+      "kind": "improvement",
+      "rank": "medium",
+      "summary": "Notion date picker carries End date (bd482935); ours has none (cell-editor-date.ts read). Optional end-date value + picker row + range display; Timezone/Remind rejected as non-portable.",
+      "citations": [
+        "notion-screens-digest.md P3",
+        "src/views/record-surface/cell-editor-date.ts:71-120",
+        "src/views/cell-renderer.ts:537-553"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F1-4",
+      "iteration": 1,
+      "topic": "header/menu/types",
+      "kind": "improvement",
+      "rank": "high",
+      "summary": "Notion per-column Freeze action (74fe28d3, 039351aa) absent here; ViewConfig.frozenColumnKeys + ColumnMenuActions.freezeColumn + sticky th/td CSS; red-first: 0 freeze matches today (digest §4 P7).",
+      "citations": [
+        "notion-screens-digest.md §4 P7",
+        "src/views/column-menu.ts:38-63",
+        "column-menu.ts:194-213"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F11",
+      "iteration": 2,
+      "topic": "cells/editing",
+      "kind": "improvement",
+      "rank": "low",
+      "summary": "Notion's muted literal Empty (050083af) is page-view-only; our table cells already blank-match; adopt the word placeholder in the docked peek only.",
+      "citations": [
+        "notion-screens-digest.md P3",
+        "src/views/table-record-peek.ts:358-360",
+        "styles.css:6766-6771"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F26",
+      "iteration": 4,
+      "topic": "structure",
+      "kind": "improvement",
+      "rank": "low",
+      "summary": "P10 view toggles: 4 of 6 have analogues (record icon, wrapText, load limit, open-target); Show-vertical-lines is a small additive (drop td border-right via container class); data-source-title unverified, deferred.",
+      "citations": [
+        "table-renderer.ts:575-577",
+        "styles.css:5417-5418",
+        "notion-screens-digest.md §6 Q2"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F25",
+      "iteration": 4,
+      "topic": "structure",
+      "kind": "digest-correction",
+      "summary": "P9 conditional row colour ALREADY SHIPS: applyConditionalFormat sets --db-conditional-format-bg on tr (conditional-formatting.ts:168-206; table-renderer.ts:85/866/911) and tr.db-conditional-format>td paints it (styles.css:1317-1319). Digest §4 P9 'no match' was a grep miss. Residue: naming/discoverability only.",
+      "citations": [
+        "src/data/conditional-formatting.ts:168-206",
+        "styles.css:1317-1319",
+        "notion-screens-digest.md §4 P9"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F14",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "already-have",
+      "summary": "Per-column Calculate footer at parity (6055725d, 101392c7); zero-row guard + 44px phone floor are ADR-005 landed; pin as guards.",
+      "citations": [
+        "table-renderer.ts:801-812",
+        "styles.css:8482-8486",
+        "notion-screens-digest.md §4 P4"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F16",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "already-have",
+      "summary": "Phone pickers as bottom sheets / inline docks match P12 grammar; column-width adjuster rides the shared sheet host.",
+      "citations": [
+        "column-width.ts:347-353, 511-525",
+        "cell-editor-date.ts:108-120"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F22",
+      "iteration": 4,
+      "topic": "structure",
+      "kind": "already-have",
+      "summary": "Property visibility panel at parity (9867cb76) incl. disabled-title-eye convention; title-eye state itself is verification debt.",
+      "citations": [
+        "notion-screens-digest.md P5, §4 P5",
+        "column-manager-renderer.ts:1-12 (per digest)"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F27",
+      "iteration": 5,
+      "topic": "adjudication",
+      "kind": "framework",
+      "summary": "Q4: no candidate conflicts with a landed ruling; table is governed by item-wise adoption (050 ADR-006, §6A ~22:45), not whole-view parity. Four tensions named (title-menu convention, wrap, conditional-colour naming, contrast guardrail).",
+      "citations": [
+        "050 decision-record.md ADR-006",
+        "roadmap.md §6A 2026-09-05 ~22:45",
+        "iteration-005.md"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F28",
+      "iteration": 5,
+      "topic": "adjudication",
+      "kind": "device-only-list",
+      "summary": "Q5: freeze sticky visual on iOS; 390px title-affordance composition; dark theme for every new colour (0 dark captures in harvest, digest §6 Q6); hover carries no Notion claim.",
+      "citations": [
+        "notion-screens-digest.md P7, §6 Q3/Q5/Q6",
+        "iteration-005.md"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F29",
+      "iteration": 5,
+      "topic": "plan",
+      "kind": "remediation-plan",
+      "summary": "Q6: five phases — A guards on already-haves (A1-A5, negative-control red-first), B the committed wrap defect (T016), C freeze (top adoption, desktop-only), D quality batch (D1 end-range, D2 type scaffolding, D3 handle visibility, D4 vertical-lines, D5 peek Empty, D6 noun label), E verification debts + operator questions.",
+      "citations": [
+        "iterations/iteration-001..005.md",
+        "goal.md T016",
+        "050 decision-record.md ADR-004"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F23",
+      "iteration": 4,
+      "topic": "structure",
+      "kind": "improvement",
+      "rank": "low",
+      "summary": "Resize handle discoverability: visible 2px accent line on th:hover at styles.css:5656-5664; precision panel/auto-fit already exceed captures.",
+      "citations": [
+        "styles.css:5656-5664",
+        "styles.css:5469-5471",
+        "column-width.ts:347-529"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F18",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "no-change",
+      "summary": "Row expand triangle (90277769) deliberately not adopted — record-open affordance + peek/sheet already own the need.",
+      "citations": [
+        "table-record-peek.ts:161-306"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F21",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "already-have",
+      "summary": "Selection column + range select + group indeterminate ahead of Notion's captures; keep and guard.",
+      "citations": [
+        "table-renderer.ts:611-619, 724-736, 875-895"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F9",
+      "iteration": 2,
+      "topic": "cells/editing",
+      "kind": "already-have",
+      "summary": "Status pill recolours per option (8d6dcf3b, 6673816d) — renderStatus stamps per-option color class.",
+      "citations": [
+        "src/views/cell-renderer.ts:453-468"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F17",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "device-only-check",
+      "summary": "Title-cell open affordance vs Notion's overlapping OPEN pill (19745d87, 35c64a84): 390px composition unmeasured; phase task defines threshold + red-first.",
+      "citations": [
+        "table-record-peek.ts:86-114",
+        "styles.css:20922-20928",
+        "notion-screens-digest.md §6 Q5"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F1-6",
+      "iteration": 1,
+      "topic": "header/menu/types",
+      "kind": "no-change",
+      "summary": "Title-menu Hide/Delete: Notion omits, we disable — recorded convention equivalence, keep ours.",
+      "citations": [
+        "notion-screens-digest.md §4 P1",
+        "src/views/column-menu.ts:193",
+        "column-menu.ts:241"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    },
+    {
+      "id": "F19",
+      "iteration": 3,
+      "topic": "row chrome",
+      "kind": "already-have",
+      "summary": "Wrap two-level control shape confirmed by Notion P8; the wrap-off tall-row defect is ours (T016 leg) and lands at the escaping element.",
+      "citations": [
+        "cell-renderer.ts:208-211",
+        "goal.md completion criterion",
+        "styles.css:20941-20944"
+      ],
+      "_lineages": [
+        "glm-devpass-table"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 26,
+    "sourceFindings": 26,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  },
+  "schema_mismatch": [
+    {
+      "type": "schema_mismatch",
+      "severity": "warn",
+      "lineage": "glm-devpass-table",
+      "message": "Registry uses non-canonical key \"findings\" instead of \"keyFindings\"; coerced 26 entries.",
+      "aliasKey": "findings",
+      "canonicalKey": "keyFindings",
+      "coercedCount": 26
+    }
+  ]
+}

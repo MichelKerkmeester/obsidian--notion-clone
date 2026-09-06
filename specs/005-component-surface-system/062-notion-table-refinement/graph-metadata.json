@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/062-notion-table-refinement",
+  "spec_folder": "005-component-surface-system/062-notion-table-refinement",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "notion table refinement",
+      "062 spec",
+      "column freeze",
+      "frozen column",
+      "show vertical lines",
+      "date end range",
+      "table type set",
+      "062 plan",
+      "notion table refinement plan",
+      "freeze leg",
+      "table guard leg",
+      "062 tasks"
+    ],
+    "key_topics": [
+      "notion",
+      "table",
+      "refinement",
+      "spec",
+      "column",
+      "freeze",
+      "frozen",
+      "show",
+      "vertical",
+      "lines",
+      "date",
+      "end"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/data/types.ts",
+      "src/data/column-types.ts",
+      "src/views/column-menu.ts",
+      "src/views/table-renderer.ts",
+      "src/views/cell-renderer.ts",
+      "src/views/record-surface/cell-editor-date.ts",
+      "src/views/record-surface/type-picker.ts",
+      "src/views/property-type-icon.ts",
+      "src/views/table-record-peek.ts",
+      "tools/live/render-assertions.mjs",
+      "tools/screenshots/scenarios/core.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-types.ts",
+        "kind": "code",
+        "path": "src/data/column-types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-menu.ts",
+        "kind": "code",
+        "path": "src/views/column-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-renderer.ts",
+        "kind": "code",
+        "path": "src/views/cell-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-editor-date.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/cell-editor-date.ts",
+        "source": "derived"
+      },
+      {
+        "name": "type-picker.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/type-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-type-icon.ts",
+        "kind": "code",
+        "path": "src/views/property-type-icon.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion Table Refinement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Our table view has never been read side by side against the product it is most often compared to",
+    "created_at": "2026-09-06T16:15:18.332Z",
+    "last_save_at": "2026-09-06T16:17:37.398Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:fa8c6131c3410825ab5846876387b161dec986265b01be91184348a974e09133",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "ab40dffe867549df96d8310135637e9ed95c4c2ede2f62f97e6761027dd938b6",
+      "plan.md": "4d3ceb5f4bccea3d5a6fe7af8be6564164cc42d84ebf20f39f34e26f56d76bd1",
+      "tasks.md": "845c34d36854f106e37880638e550cfeee09251ec2df162a58aa5818e3cf199b",
+      "decision-record.md": "6df6ebd073a46dd4db0cf7b685be7beab7fdb3a52d92628b010d6a9bf53a7f6a",
+      "implementation-summary.md": "3bcd0c4de996e95ffb427315c745a854706230cd747261222e3739ac3d8975e5"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -311,4 +311,20 @@ and stay unticked — an agent never ticks them.
       Green is every row equal to `--db-row-height` for its density with the long-text column
       ellipsised, plus a negative control that goes red when the clip is removed. Leg
       `worktrees/160-fix-053-wrap-off-rows`
+- [ ] **T017 (2026-09-06) — The table view's Notion refinement lives in
+      [`../062-notion-table-refinement/`](../062-notion-table-refinement/), not here.** This packet
+      co-owns `062` with `052`, and the child was opened by the Opus synthesis of the surface's
+      5-iteration research loop (`research/research.md`, 26 findings, against
+      `notion-screens-digest.md`). Nine criteria, eighteen rows, seven ADRs. What it takes off this
+      packet's plate: per-column freeze (absent from `column-menu.ts:38-63` and from `styles.css`
+      entirely), permanent guards under the footer rule ADR-005 records and four other behaviours
+      already at parity, a date end value, the four type registries, the resize handle, a
+      vertical-lines view switch, the peek's empty placeholder and the add-row noun. What it does
+      **not** touch: this packet's rows, its rulings and its parity target, per parent D15 — the
+      child is additive and writes a **Proposed** ADR where a Notion finding meets a landed ruling.
+      Its ADR-002 carries the one correction that concerns this packet directly: the resolution rule
+      is `Boolean(viewWrapText) && colWrap !== false` (`column-types.ts:425-427`), the view switch
+      gating every column, not the `col.wrap ?? config.wrapText` precedence ADR-004 originally
+      recorded. `064-notion-toolbar-refinement` — this packet's *own* Notion child, for the toolbar
+      and view controls — is wave 2 and still reserved
 <!-- /ANCHOR:phase-7 -->

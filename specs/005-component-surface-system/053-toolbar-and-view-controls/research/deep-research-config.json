@@ -1,0 +1,105 @@
+{
+  "maxIterations": 5,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "minIterations": 3,
+    "convergenceMode": "default",
+    "stopPolicy": "fail-closed"
+  },
+  "stuckThreshold": 3,
+  "maxDurationMinutes": 120,
+  "maxToolCallsPerIteration": 12,
+  "maxMinutesPerIteration": 10,
+  "progressiveSynthesis": true,
+  "specFolder": "specs/005-component-surface-system/053-toolbar-and-view-controls",
+  "createdAt": "2026-09-06T14:31:10.719Z",
+  "status": "complete",
+  "executionMode": "auto",
+  "lineage": {
+    "sessionId": "research-053-notion-table-1788705070721",
+    "parentSessionId": null,
+    "lineageMode": "new",
+    "allowedModes": [
+      "new",
+      "resume",
+      "restart"
+    ],
+    "deferredModes": [
+      "fork",
+      "completed-continue"
+    ],
+    "generation": 1,
+    "continuedFromRun": null
+  },
+  "reducer": {
+    "enabled": true,
+    "version": "1.0",
+    "registryFile": "research/findings-registry.json",
+    "dashboardFile": "research/deep-research-dashboard.md",
+    "strategyFile": "research/deep-research-strategy.md",
+    "machineOwnedSections": [
+      "key-questions",
+      "answered-questions",
+      "what-worked",
+      "what-failed",
+      "exhausted-approaches",
+      "ruled-out-directions",
+      "divergence-frontier",
+      "next-focus"
+    ]
+  },
+  "capabilityMatrixPath": ".opencode/skills/system-deep-loop/deep-research/assets/runtime-capabilities.json",
+  "capabilityMatrixDocPath": ".opencode/skills/system-deep-loop/deep-research/references/guides/capability-matrix.md",
+  "runtimeCapabilityResolver": ".opencode/skills/system-deep-loop/deep-research/scripts/runtime-capabilities.cjs",
+  "reducerScriptPath": ".opencode/skills/system-deep-loop/deep-research/scripts/reduce-state.cjs",
+  "pauseSentinelPath": "research/.deep-research-pause",
+  "archiveRoot": "research_archive",
+  "migrationWindowDays": 28,
+  "fileProtection": {
+    "deep-research-config.json": "immutable",
+    "deep-research-state.jsonl": "append-only",
+    "deep-research-strategy.md": "mutable",
+    "deep-research-dashboard.md": "auto-generated",
+    "findings-registry.json": "auto-generated",
+    "iteration-*.md": "write-once",
+    "research/research.md": "mutable"
+  },
+  "_optimizerManaged": {
+    "description": "Fields managed by the offline loop optimizer (042.004). See optimizer-manifest.json for the canonical tunable/locked field registry.",
+    "manifestPath": ".opencode/skills/system-spec-kit/runtime/cli/optimizer/optimizer-manifest.json",
+    "tunableFields": [
+      "convergenceThreshold",
+      "stuckThreshold",
+      "maxIterations"
+    ],
+    "lockedFields": [
+      "lineage",
+      "reducer",
+      "fileProtection",
+      "sessionId",
+      "status",
+      "antiConvergence.convergenceMode",
+      "antiConvergence.stopPolicy"
+    ],
+    "promotionMode": "advisory-only"
+  },
+  "minIterations": 3,
+  "stopPolicy": "max-iterations",
+  "resource_map_present": false,
+  "resource_map": {
+    "emit": true
+  },
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-opencode",
+        "model": "llmgateway/glm-5.3-flash",
+        "reasoningEffort": "max",
+        "iterations": 5,
+        "label": "glm-devpass-table"
+      }
+    ],
+    "concurrency": 1
+  },
+  "topic": "Research how Notion's UI for the table view (header row, column types and icons, cell rendering per property type, row hover and selection, inline editing, wrap, row height, footer calculations, add row, column resize and reorder, frozen title column, phone table) should refine the note-database Obsidian plugin's surface, using the Notion screen digest at specs/005-component-surface-system/053-toolbar-and-view-controls/notion-screens-digest.md as the ONLY source of Notion facts (it was written by an image-capable analyst from the Mobbin captures; you cannot read PNG files -- never open image files), against our implementation and design record: src/views/table-renderer.ts, src/views/cell-renderer.ts, src/views/column-menu.ts, src/views/column-width.ts, src/views/table-record-peek.ts, the .db-table blocks of styles.css, specs/005-component-surface-system/053-toolbar-and-view-controls/{goal.md,decision-record.md,tasks.md}, specs/005-component-surface-system/050-anytype-adoption/{goal.md,decision-record.md}, specs/005-component-surface-system/design-system.md, and roadmap.md section 6A rulings. BOUNDED SCOPE: read those files and nothing beyond them unless a finding requires one more source file. NEVER edit src/, styles.css or tools/ -- this is a research loop, findings only. OPERATOR CONTEXT: Anytype parity is the default ruling for these surfaces (051 ADR-007, 056, 057); Notion refinements are additive -- where Notion and Anytype disagree, name the conflict and propose which to adopt with the reason, never override a landed operator ruling. QUESTIONS to answer with file:line and screen-id evidence: (1) which Notion patterns from the digest would improve this surface for a user, ranked by user impact; (2) for each, the concrete change to our code and CSS (file, rule/function, value) and its measurable threshold; (3) which Notion behaviours we already have; (4) which conflict with an Anytype ruling; (5) which need a device-only check; (6) a ranked remediation plan as concrete phase tasks with thresholds and red-first checks suitable for a new child phase. Cite every claim with file:line and screen-id; mark inferences explicitly as inferences."
+}

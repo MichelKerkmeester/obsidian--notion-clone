@@ -1,0 +1,28 @@
+{
+  "run_id": "1788705512340-6pj9lf",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/053-toolbar-and-view-controls",
+  "base_artifact_dir": "specs/005-component-surface-system/053-toolbar-and-view-controls/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [
+    {
+      "label": "glm-devpass-table",
+      "index": 0,
+      "started_at_iso": "2026-09-06T14:31:48.653Z"
+    }
+  ],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  }
+}
