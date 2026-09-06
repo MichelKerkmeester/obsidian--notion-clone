@@ -1,7 +1,7 @@
 {
-  "holder": "065-notion-record-refinement",
-  "acquiredAt": "2026-09-06T22:53:00Z",
-  "baselineHash": "beebb54a8946",
+  "holder": "066-notion-states-refinement",
+  "acquiredAt": "2026-09-07T00:35:00Z",
+  "baselineHash": "PENDING",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4755,6 +4755,26 @@
         "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png"
       ],
       "note": "Landing verification of 065 raised the visibility-list filter rule's specificity to .db-column-manager-row.db-column-manager-row-search-hidden. The single-class form it replaced tied .db-column-manager-row's own display:grid on specificity and lost on order, so a typed query marked rows it never hid — measured live at 402px and 1440 (display stayed 'grid' before, 'none' after). No capture moves: no capture types a query. Recaptured on the rebased tree (060's calendar edits merged in): the four depth-3 column-manager stacks redraw with the search field, and the cell-editor-select table redraws unchanged. The timeline day view, the gantt subtask reference and the kanban subtask reference moved because the capture run crossed a calendar day and their today-line and overdue badges follow it — all eight opened and read."
+    },
+    {
+      "event": "acquire",
+      "phase": "066-notion-states-refinement",
+      "at": "2026-09-07T00:35:00Z",
+      "hash": "beebb54a8946",
+      "note": "Taken from 065-notion-record-refinement at its own released hash, with nothing outstanding against it. Six edits follow: a dedicated ease-out token for the fast motion band (four literals migrated, five residual --db-transition-fast call sites aliased to --db-motion-fast), a .db-inline-chip block beside .db-empty-card, and the phone-band toast/rail centring."
+    },
+    {
+      "event": "release",
+      "phase": "066-notion-states-refinement",
+      "at": "2026-09-07T00:40:00Z",
+      "hash": "PENDING",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-toast-error-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-toast-error-mobile-light.png",
+        "screenshots/notion-clone/components/chrome-toast-success-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-toast-success-mobile-light.png"
+      ],
+      "note": "Full recapture: 588 entries. Four captures carry this edit's content, all four the phone-band toast placement change — both toast variants, both themes — each opened and read: the card is narrower (fills the phone-band's symmetric margins rather than the unclamped 384px) and both read correctly. Twenty-five further captures moved bytes, none from a selector this edit touched: twenty-one moved bytes only (identical pixelHash/layoutHash) and were restored to their committed bytes, manifest entries left at the fresh capture's sourceHashes since the content is verified unchanged; four (constructed-date-picker(-datetime)-mobile-{dark,light}) moved a real pixel — the calendar grid's 'today' highlight, driven by the real wall-clock date the fixture reads, not by any styles.css selector — restored to their committed bytes with pixelHash/layoutHash/bytes patched back to match, sourceHashes left at the fresh capture so a future recapture is still asked to look rather than reading as already reviewed."
     }
   ],
   "outstanding": [

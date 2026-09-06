@@ -33,8 +33,9 @@ const transitionDeclarationLines = (): string[] =>
 // ───────────────────────────────────────────────────────────────────
 
 describe("motion tokens", () => {
-  it("declares all five named tokens beside the established --db-transition-fast", () => {
+  it("declares all six named tokens beside the established --db-transition-fast", () => {
     expect(stylesContent).toContain("--db-motion-fast: var(--db-transition-fast);");
+    expect(stylesContent).toContain("--db-motion-fast-out: 120ms ease-out;");
     expect(stylesContent).toContain("--db-motion-surface: 200ms ease-out;");
     expect(stylesContent).toContain("--db-motion-sheet: var(--db-sheet-enter) ease-out;");
     expect(stylesContent).toContain("--db-motion-emphatic: 1.1s ease-in-out infinite;");
@@ -46,12 +47,15 @@ describe("motion tokens", () => {
     expect(plainEase).toEqual([]);
   });
 
-  it("keeps exactly the four 120ms ease-out declarations untouched — a directional entrance curve the fast token does not carry", () => {
-    // db-overlay-enter's popover entrance and three ease-out hover transitions predate this
-    // change and stay literal on purpose: --db-motion-fast resolves to plain `ease`, and
-    // substituting it here would silently swap their curve rather than only naming it.
+  it("moves the four 120ms ease-out declarations onto their own token, leaving no raw declaration behind", () => {
+    // db-overlay-enter's popover entrance and three ease-out hover transitions kept their curve
+    // rather than adopting --db-motion-fast's plain `ease`: --db-motion-fast-out names the
+    // decelerating curve they always rendered, so the migration is mechanical rather than a
+    // silent curve change on four live surfaces.
     const easeOut = transitionDeclarationLines().filter((line) => /\b120ms ease-out\b/.test(line));
-    expect(easeOut).toHaveLength(4);
+    expect(easeOut).toEqual([]);
+    const tokenized = transitionDeclarationLines().filter((line) => line.includes("var(--db-motion-fast-out)"));
+    expect(tokenized).toHaveLength(4);
   });
 
   it("retires every 180ms surface literal in favour of the measured 200ms token", () => {
@@ -66,13 +70,12 @@ describe("motion tokens", () => {
     expect(stylesContent).toContain("scale(var(--db-motion-scale-from))");
   });
 
-  it("leaves the five existing --db-transition-fast call sites unchanged, at their own declaration lines", () => {
-    // Counted by declaration line, not by substring occurrence: several of the five lines name
-    // the token more than once (one property per comma-separated transition), so a raw substring
-    // count reads far higher than the number of call sites the true-up measured. Two of the
-    // original seven lived on the board's retired extensions-mode column and card hover-lift
-    // rules and were removed with that dead markup, not edited in place.
+  it("moves every --db-transition-fast call site onto --db-motion-fast, leaving no direct call site behind", () => {
+    // Counted by declaration line, not by substring occurrence: several lines name the token
+    // more than once (one property per comma-separated transition), so a raw substring count
+    // reads far higher than the number of call sites. `--db-motion-fast` is the one name the
+    // fast band now reads through; `--db-transition-fast` stays only as the value it aliases.
     const callSites = transitionDeclarationLines().filter((line) => line.includes("var(--db-transition-fast)"));
-    expect(callSites).toHaveLength(5);
+    expect(callSites).toEqual([]);
   });
 });

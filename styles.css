@@ -138,8 +138,12 @@
      same way, for the same reason. `--db-motion-emphatic` is the shimmer's own duration, now
      named instead of hand-typed at its one call site. `--db-motion-scale-from` is the entrance
      scale a popover and a toast both need — a scale written twice is a scale that drifts, same
-     argument as the aliases above. */
+     argument as the aliases above. `--db-motion-fast-out` names the decelerating curve four
+     surfaces already used before either fast-band token existed — a popover entrance and three
+     hover/state transitions — so migrating them off their hand-typed duration does not also
+     migrate them onto a curve they never had. */
   --db-motion-fast: var(--db-transition-fast);
+  --db-motion-fast-out: 120ms ease-out;
   --db-motion-surface: 200ms ease-out;
   --db-motion-sheet: var(--db-sheet-enter) ease-out;
   --db-motion-emphatic: 1.1s ease-in-out infinite;
@@ -197,7 +201,7 @@
   opacity: 0;
   transform: translate3d(0, -4px, 0) scale(var(--db-motion-scale-from));
   will-change: opacity, transform;
-  transition: opacity 120ms ease-out, transform 120ms ease-out;
+  transition: opacity var(--db-motion-fast-out), transform var(--db-motion-fast-out);
 }
 
 .db-overlay-enter.is-visible {
@@ -470,7 +474,7 @@
   border: 0;
   border-radius: var(--db-radius-sm);
   cursor: pointer;
-  transition: background-color 120ms ease-out, color 120ms ease-out;
+  transition: background-color var(--db-motion-fast-out), color var(--db-motion-fast-out);
 }
 
 /* A disabled row was distinguishable only by its cursor, which is invisible until the pointer is
@@ -2056,7 +2060,7 @@
   font-size: var(--db-font-sm);
   line-height: 28px;
   padding: 0 var(--db-space-4);
-  transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast), color var(--db-transition-fast);
+  transition: background-color var(--db-motion-fast), box-shadow var(--db-motion-fast), color var(--db-motion-fast);
   white-space: nowrap;
 }
 .note-database-container .db-view-tab:hover {
@@ -5480,7 +5484,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   cursor: pointer;
   font-weight: 500;
   text-align: left;
-  transition: background-color var(--db-transition-fast), color var(--db-transition-fast);
+  transition: background-color var(--db-motion-fast), color var(--db-motion-fast);
   user-select: none;
   white-space: nowrap;
 }
@@ -5697,7 +5701,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   color: var(--text-normal);
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast);
+  transition: background-color var(--db-motion-fast), box-shadow var(--db-motion-fast);
 }
 
 /* 开启换行的单元格：允许多行显示 */
@@ -7486,7 +7490,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   border-radius: var(--db-radius-sm);
   background: var(--background-primary);
   cursor: pointer;
-  transition: background-color 120ms ease-out, border-color 120ms ease-out;
+  transition: background-color var(--db-motion-fast-out), border-color var(--db-motion-fast-out);
 }
 
 .note-database-container .db-checkbox-cell input[type="checkbox"]:not(.db-checkbox):checked {
@@ -8035,6 +8039,67 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-empty-card.is-compact {
   gap: var(--db-space-4);
   padding: var(--db-space-6);
+}
+
+/* The permanent, compact-context shape for a stale reference: a warning icon, a label and a
+   chevron into the settings that caused it. A reason renders this or the card, never both, so
+   this never nests inside `.db-empty-card` — and it never carries a dismiss control, because
+   nothing about it is meant to go away on its own. The action's tap target matches the row-menu
+   floor rather than the 44px table-row rule, since this sits in a header or a narrow column,
+   never a row. */
+.note-database-container .db-inline-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-4);
+  padding: 6px var(--db-space-6);
+  border-radius: var(--db-radius-md);
+  background: color-mix(in srgb, var(--text-error) 10%, var(--background-primary));
+  color: var(--text-normal);
+}
+
+.note-database-container .db-inline-chip-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--text-error);
+}
+
+.note-database-container .db-inline-chip-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.note-database-container .db-inline-chip-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-normal);
+  font-size: var(--db-font-sm);
+}
+
+.note-database-container .db-inline-chip-action {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  min-height: 30px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--db-text-secondary);
+  cursor: pointer;
+}
+
+.note-database-container .db-inline-chip-action:hover,
+.note-database-container .db-inline-chip-action:focus-visible {
+  color: var(--text-normal);
+}
+
+.note-database-container .db-inline-chip-action svg {
+  width: 15px;
+  height: 15px;
 }
 
 .note-database-container .db-empty-card-icon,
@@ -20531,7 +20596,7 @@ body.pm-resize-active * {
   border-radius: var(--db-radius-md);
   color: var(--db-text-secondary, var(--text-muted));
   background: transparent;
-  transition: background-color var(--db-transition-fast), color var(--db-transition-fast);
+  transition: background-color var(--db-motion-fast), color var(--db-motion-fast);
 }
 
 .is-phone .note-database-container .db-card-mobile-move-btn:active {
@@ -21267,6 +21332,24 @@ img.db-text-md-image {
   .note-database-container .db-table td[data-note-database-column-key],
   .note-database-container .db-table th {
     min-height: 44px;
+  }
+
+  /* The toast stack and the operation-result rail share one placement, so centring one without
+     the other would leave a reader who deletes from the rail's own view looking at a card still
+     hugging the right edge. Both anchors move together here; neither moves outside this band. */
+  .db-toast-stack {
+    right: var(--db-space-6);
+    left: var(--db-space-6);
+    width: auto;
+  }
+
+  .note-database-container .db-operation-result-rail {
+    right: var(--db-space-6);
+    left: var(--db-space-6);
+  }
+
+  .db-toast.is-inline {
+    width: 100%;
   }
 }
 
@@ -22171,7 +22254,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .note-database-container :is(button, input, select, textarea):hover:not(:disabled),
 .note-database-modal :is(button, input, select, textarea):hover:not(:disabled),
 .note-database-settings :is(button, input, select, textarea):hover:not(:disabled) {
-  transition: background-color var(--db-transition-fast), color var(--db-transition-fast), border-color var(--db-transition-fast);
+  transition: background-color var(--db-motion-fast), color var(--db-motion-fast), border-color var(--db-motion-fast);
 }
 
 .note-database-container :is(button, input, select, textarea):active:not(:disabled),
@@ -23062,7 +23145,7 @@ input[type="checkbox"].db-checkbox {
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
-  transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+  transition: background-color var(--db-motion-fast-out), border-color var(--db-motion-fast-out), box-shadow var(--db-motion-fast-out);
 }
 
 input[type="checkbox"].db-checkbox.db-checkbox-row {
