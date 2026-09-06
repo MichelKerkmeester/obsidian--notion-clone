@@ -18191,24 +18191,11 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   text-decoration-thickness: 1px;
 }
 
-/* The calendar's own "Show icon" toggle, sized to the reference 26x16px
-   control — scoped off the shared .db-toggle-switch base so no other toggle
-   in the app resizes or recolours with it. */
-.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle {
-  flex: 0 0 26px;
-  width: 26px;
-  min-width: 26px;
-  height: 16px;
-}
-
-.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle::before {
-  width: 12px;
-  height: 12px;
-}
-
-.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle:checked::before {
-  transform: translateX(10px);
-}
+/* The calendar's own "Show icon" toggle keeps the shared switch's shape — the
+   design system enforces one box for every switch in the app, so the
+   reference control's smaller 26x16px size is declined here even though its
+   colour is adopted below; a resize would make this the only switch in the
+   app with a second shape. */
 
 /* The reference #6E9EFC on white is 2.64:1, under WCAG 1.4.11's 3:1 for the
    only cue distinguishing on from off. #5A92FC clears it (3.02:1); dark
@@ -21084,7 +21071,8 @@ img.db-text-md-image {
     .db-board-subgroup-toggle,
     .db-timeline-window-jump,
     .db-calendar-nav-button,
-    .db-calendar-add-button
+    .db-calendar-add-button,
+    .db-calendar-title-select
   ) {
     min-width: 28px;
     min-height: 28px;
