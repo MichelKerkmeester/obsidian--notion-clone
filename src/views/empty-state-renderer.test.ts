@@ -219,6 +219,43 @@ describe("EmptyStateRenderer", () => {
     const actionButton = elementWithClass(row as unknown as FakeElement, "db-empty-action");
     expect(actionButton).toBeUndefined();
   });
+
+  it.each([
+    ["source-missing"],
+    ["group-relation-deleted"],
+  ] as const)("renders the %s reason as a permanent inline chip with a warning icon", (reason) => {
+    const root = new FakeElement("div");
+    const chip = new EmptyStateRenderer().renderInlineChip(root as unknown as HTMLElement, {
+      reason,
+      actions: [{ label: "Open view settings", icon: "settings", onClick: () => {} }],
+    }) as unknown as FakeElement;
+    expect(chip.classes.has("db-inline-chip")).toBe(true);
+    expect(chip.getAttribute("data-empty-reason")).toBe(reason);
+    expect(chip.getAttribute("aria-live")).toBe("polite");
+    expect((chip.children[0] as FakeElement | undefined)?.icon).toBe("alert-triangle");
+  });
+
+  it("wires the chevron action and carries no dismiss control", () => {
+    const root = new FakeElement("div");
+    let calls = 0;
+    const chip = new EmptyStateRenderer().renderInlineChip(root as unknown as HTMLElement, {
+      reason: "group-relation-deleted",
+      actions: [{ label: "Open view settings", onClick: () => { calls += 1; } }],
+    }) as unknown as FakeElement;
+    const buttons = chip.children.filter((child) => child.tagName === "button");
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0].icon).toBe("chevron-right");
+    buttons[0].onclick?.();
+    expect(calls).toBe(1);
+  });
+
+  it("renders no action button and no dismiss control when the reason carries no action", () => {
+    const root = new FakeElement("div");
+    const chip = new EmptyStateRenderer().renderInlineChip(root as unknown as HTMLElement, {
+      reason: "source-missing",
+    }) as unknown as FakeElement;
+    expect(chip.children.some((child) => child.tagName === "button")).toBe(false);
+  });
 });
 
 // ───────────────────────────────────────────────────────────────────

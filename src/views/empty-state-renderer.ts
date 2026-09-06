@@ -330,6 +330,37 @@ export class EmptyStateRenderer {
     return card;
   }
 
+  /**
+   * The permanent, compact-context shape for a stale reference: a warning icon, a label and a
+   * chevron into the settings that caused it — never a dismiss control, never the full card.
+   * Renders the same fourteen-member reason vocabulary `renderCard` does; only the presentation
+   * differs, for a context too narrow for a card to fit.
+   */
+  renderInlineChip(container: HTMLElement, options: EmptyStateOptions): HTMLElement {
+    const copy = EMPTY_STATE_COPY[options.reason];
+    const chip = container.createDiv({
+      cls: ["db-inline-chip", options.className || ""].filter(Boolean).join(" "),
+      attr: {
+        "data-empty-reason": options.reason,
+        role: "status",
+        "aria-live": "polite",
+      },
+    });
+    const icon = chip.createDiv({ cls: "db-inline-chip-icon", attr: { "aria-hidden": "true" } });
+    setIcon(icon, "alert-triangle");
+    chip.createSpan({ cls: "db-inline-chip-label", text: options.title || t(copy.title) });
+    const action = options.actions?.[0];
+    if (action) {
+      const button = chip.createEl("button", {
+        cls: "db-inline-chip-action",
+        attr: { type: "button", "aria-label": action.label },
+      });
+      setIcon(button, "chevron-right");
+      button.onclick = () => { void action.onClick(); };
+    }
+    return chip;
+  }
+
   renderHero(container: HTMLElement, options: EmptyStateHeroOptions): HTMLElement {
     const hero = container.createDiv({ cls: "db-empty-hero", attr: { "data-empty-reason": "no-database" } });
     const icon = hero.createDiv({ cls: "db-empty-hero-icon", attr: { "aria-hidden": "true" } });
