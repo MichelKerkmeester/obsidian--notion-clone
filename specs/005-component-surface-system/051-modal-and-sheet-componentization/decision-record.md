@@ -556,79 +556,143 @@ been wrong on thirteen of thirty-five census surfaces.
 
 ---
 
-## ADR-008: The desktop database Settings surface is a new shell shape — a right side sheet
+<!-- ANCHOR:adr-008 -->
+## ADR-008: A fourth desktop shape — the full-height side sheet, for one surface
 
-**Status: Accepted, 2026-09-06, operator: *"Right side sheet."***
+**Status: Accepted, 2026-09-06 (~08:15), operator: *"this dropdown on desktop is horrible … should
+probably become a sheet, on desktop at least, and get dedicated button."***
 
 ### Context
 
-Operator report, desktop, ~08:15 (screenshots supplied with the report; the operator's own captures, not committed to this repository): *"btw this dropdown on desktop is
-horrible … should probably become a sheet, on desktop at least, and get dedicated button."* The
-database Settings panel opens today as a tall anchored dropdown through
-`positionToolbarPopover`'s general preset (`view-config-panel-renderer.ts`), sized by
-`design-system.md` §3's `panel` role (292-360px, anchored to its trigger). None of §3's existing
-roles fit what the operator asked for: `panel` is anchored and bounded, not full-height; `sheet` is
-the phone presentation, docked to the bottom; `condition panel` is a wider `panel`, still anchored.
+The database Settings panel (`ViewConfigPanelRenderer`) is the one surface in the census whose
+content always overflows its own chrome — 1461px of it inside a 360×560px anchored dropdown,
+scrolling the panel itself, header included, so a long enough scroll carried the title off the top
+with it (the same defect `view-config-panel-renderer.ts`'s own header comment already names). The
+operator's report names this exact surface — the screenshot attached is
+`anytype-menu-object-properties-panel-dark-full.png`'s shape held up against ours — and gives two
+rulings in one sentence: **"Right side sheet"**, a full-height panel docked to the right edge like
+Anytype's own object panel, database staying visible and scrolling independently; and **"Gear icon
+in the toolbar rail, before ···"**, a permanent control beside filter, sort, group and columns.
+
+The planning entry this replaces surveyed the role table and reached the same place from the
+other side: the panel opens through `positionToolbarPopover`'s general preset, sized by
+`design-system.md` §3's `panel` role (292-360px, anchored to its trigger), and none of §3's roles
+is the asked-for shape — `panel` is anchored and bounded rather than full-height, `sheet` is the
+phone presentation docked to the bottom, and `condition panel` is a wider `panel`, still anchored.
+
+Neither the modal/sheet shell (`surface-shell.ts`'s `sheet`/`fullscreen`/`dialog` presentations,
+built for the `DbModal` family) nor the desktop anchored popover (`positionToolbarPopover`, built
+for a compact dropdown capped at a few hundred pixels tall) is this shape. Forcing it into either
+would mean stretching one of `044`'s phone-only sheet mechanics onto the desktop (wrong: the
+operator ruled *"on desktop at least"*, and `044`'s own grammar — grab handle, bottom dock — has no
+desktop equivalent) or fighting `positionToolbarPopover`'s own inline `top`/`left` math with
+`!important` for a surface that needs none of its anchor-relative placement.
 
 ### Decision
 
-**We chose**: a new role, `side sheet` — desktop-only, full-height, docked to the right edge of the
-viewport. The database stays visible and interactive to its left; the side sheet scrolls
-independently. It is a shell presentation the same `surface-shell.ts` composes, not a fourth
-independent implementation — `053`'s toolbar owns the dedicated gear button that opens it (this
-packet's own amendment above names the split).
+**A fourth desktop presentation, `db-shell-side-sheet` (`surface-shell.ts`'s
+`SHELL_SIDE_SHEET_CLASS`), for the one surface that needs it.** Full height, docked to the right
+edge, `position: absolute` against `.note-database-container` — not `position: fixed` against the
+viewport, so a database open in one pane of a split workspace docks against that pane's edge and
+not the whole window's, the risk a `fixed` approach would have carried silently. Header through
+`buildShellHeader` (title, trailing close), independently-scrolling body below it, the same
+fixed-header/scrolling-body split `record-detail-panel.ts` already uses for its own overlong form.
+Width **420px**, `SHELL_SIDE_SHEET_WIDTH_PX` — measured off Anytype's own right-hand object panel
+(`anytype-menu-object-properties-panel-dark-full.png`, border column at device x 1832 of a 2168px
+window, **336px** to the edge) and then widened rather than copied: this body carries a multi-line
+description field and a template picker the reference's plain label/value list does not, the same
+reasoning the sort/filter condition panel's own width already carries against its measured 288px
+(`roadmap.md` §7.11). Focus trapped inside the sheet while open (`interaction-scope.ts`'s
+`trapFocus`, the same primitive `filter-panel-renderer.ts` and `sort-panel-renderer.ts` already
+use), Escape closes and returns focus to the anchor, resize-safe by construction (an absolutely
+positioned, container-relative box needs no resize listener the way an anchor-tracking popover
+does). A picker opened from inside it (the icon picker, the template file picker, the record-icon
+dropdown) registers with `overlayStack` exactly as it already does from the anchored dropdown, so
+`048`'s stacking model docks it over the side sheet unchanged — this ADR does not touch that
+registration.
 
-**How it works**: `openSurface({ role: "side sheet", mount: "bodyPortal", ... })` docks to
-`right: 0`, full viewport height, with its own scroll region; the database's own scroll and
-interaction are untouched because the side sheet does not overlay it. Dismissal: outside click (on
-the database side), Escape, and the gear button toggling it closed — no scrim, because the database
-stays interactive, unlike a `sheet` or `dialog`.
+**Phone is untouched.** `this.asSheet` (`isMobileBottomSheet`) still selects `044`'s bottom sheet
+for the identical content; the side-sheet class and its CSS block apply only on the `!asSheet`
+branch, and `positionToolbarPopover` — with its own sheet-vs-anchored fork — still runs for phone
+exactly as before. The desktop branch stops calling it at all, rather than fighting its inline
+`position`/`top`/`left` writes with `!important`.
 
-### Alternatives Considered
+**The gear is a permanent rail control, not a menu row.** `renderSettingsButton`
+(`toolbar-renderer.ts`) draws it in the utilities cluster before "···", wired to the same
+`actions.toggleViewConfig` the removed "···" row called. `···`'s own `toolbar.viewSettings` row is
+deleted outright — one path to the panel, not two — and the fallback classes
+`createSettingsEntry` stamps (`db-view-config-btn` et al., which `openViewSettingsAfterMutation`
+still looks up by selector) move from the utilities button to the gear with it. Recorded fully in
+`053-toolbar-and-view-controls/decision-record.md` ADR-006, since the rail's own grammar and
+collapse order are that packet's, not this one's.
 
-| Option | Pros | Cons | Score |
-|--------|------|------|-------|
-| **Chosen: new `side sheet` role, desktop-only** | Matches the operator's own words exactly; the database staying visible is the one property no anchored-popover role can give | A fifth role to maintain in `design-system.md` §3 | 9/10 |
-| Widen `panel` to a taller, anchored popover | Smaller change to the role table | Still anchored to a trigger and still dismisses on outside click over the database — cannot deliver "database stays visible and interactive" the way a docked, non-overlaying panel can | 3/10 |
-| Reuse the phone `sheet` role on desktop | One less role | `sheet` docks to the bottom and scrims the host; the operator's ask is a right-docked, non-scrimmed panel — a different shape, not a width variant | 2/10 |
+### Planned shape versus the shape that shipped
 
-**Why this one**: The operator's own words describe a shape none of the five existing roles produce;
-inventing a sixth bespoke width inside `panel` would repeat exactly the anti-pattern
-`design-system.md` §5 was written to end.
+The planning form of this entry named a mechanism the implementation did not take, and the
+divergences are recorded rather than quietly dropped:
+
+| Planned | Shipped | Why |
+|---|---|---|
+| A fifth `design-system.md` §3 role, `side sheet`, with its own role row in §3/§4 | No role row; a marker class plus two named constants in `surface-shell.ts` | One surface uses this shape. A role row is the right record once a second consumer exists; until then it would describe a taxonomy entry with one member |
+| `openSurface({ role, mount: "bodyPortal" })` through the shell | `panel.addClass(SHELL_SIDE_SHEET_CLASS)` on the renderer's own panel, `position: absolute` inside `.note-database-container` | A body portal docks to the window; the pane is what the operator sees. Container-relative docking is also what makes it resize-safe with no listener |
+| "The side sheet does not overlay [the database]" | It does overlay: it covers the rightmost 420px of the pane rather than reflowing the table into a narrower column | Reflowing the database is a table-layout change with its own blast radius, and none of it was asked for. The database stays visible to the left and keeps its own scroll |
+| "The database stays interactive" | The database stays visible and scrolls, but a pointer-down on it dismisses the sheet, the same `overlayStack` outside-pointerdown contract every other toolbar panel carries | Left deliberately unchanged: making one surface exempt from the shared dismissal contract is a change to `048`'s model, not to this surface |
+
+**How to roll back**: drop `SHELL_SIDE_SHEET_CLASS` from `presentPanel` so the desktop branch calls
+`positionToolbarPopover` again, and delete the `.db-shell-side-sheet` CSS block. No stored data
+changes, no migration.
 
 ### Consequences
 
-**What improves**:
-- The Settings surface no longer competes with the database for the same anchored-popover space,
-  and a taller settings body no longer needs `PANEL_POPOVER`'s derived-width workaround
+- **A fourth shape exists, and it is named as one rather than folded into the popover or the
+  sheet.** `SurfaceShellRole`/`SurfaceShellPresentation` are unchanged — this surface does not go
+  through `createSurfaceShell` at all, the same way it did not before — but a later reader looking
+  for "where does the side-sheet shape live" finds `SHELL_SIDE_SHEET_CLASS`/
+  `SHELL_SIDE_SHEET_WIDTH_PX` beside the shell's other named geometry rather than a class invented
+  in a stylesheet with nothing pointing at it.
+- **The census of hand-built side panels stays at the figure `053`'s own file-list closes.** No
+  second implementation of "a full-height docked panel" exists; the board variant of the same
+  settings surface (`renderBoardSettings`, reached when `config.viewType === "board"`) takes the
+  same shape for free, because it shares the one `ViewConfigPanelRenderer.render()` call this ADR
+  changes.
+- **The screenshot lane moves accordingly.** `constructed-view-config`'s desktop capture is the
+  side sheet now; `panel-view-config`, the hand-built anchored-dropdown fixture, is kept rather
+  than deleted, since it still documents the row content and the shape it used to be wrong — a new
+  hand-built fixture, `panel-settings-side-sheet`, documents the shape it is now. `css-lane.json`
+  carries the acquire/release pair and the reviewed capture list.
+- **The reference measurement was re-taken at the landing, not carried on trust.** Decoding
+  `anytype-menu-object-properties-panel-dark-full.png` and scanning rows y=300/600/900/1100: a 1px
+  `rgb(41,41,41)` divider at x=1832 against `rgb(23,23,23)` content to its left, panel body
+  `rgb(30,30,30)` from 1845 to 2136 inside 12px gutters, image width 2168 — **336px** from the
+  divider to the edge, exactly as recorded. The capture's pixels are CSS pixels rather than DPR-2
+  device pixels, cross-checked on the panel's own rhythm in the same decode: single-line property
+  cards 42-44px tall on 10px gaps, values a DPR-2 reading would halve to 21-22px cards, which no
+  44px-row product draws.
+- **A pointer-down on the database closes the sheet.** Inherited, not chosen: the panel registers
+  with `overlayStack` through `installHeaderPopoverAutoClose` exactly as it did as a dropdown, and
+  that registration closes on outside pointer-down. Wheel-scrolling the table does not dismiss it,
+  so "stays visible and scrolls independently" holds; clicking a row does. Left as-is here because
+  exempting one surface from the shared dismissal contract is a change to that contract.
+- **One value this ADR does not re-litigate:** the desktop `panel`/condition-surface width conflict
+  `roadmap.md` §7.11 already names for rows 29/33/35 is untouched; 420px is this surface's own
+  width, not a resolution of that conflict.
 
-**What it costs**:
-- A new role in `design-system.md` §3/§4, and a new grammar row in whatever lane checks role widths
-  and dismissal (`tools/live/sheet-grammar.mjs` or its desktop counterpart, T011's to wire)
+### Alternatives
 
-**Risks**:
+| Option | For | Against |
+|---|---|---|
+| **Stretch `044`'s phone sheet onto desktop** | One presentation shape instead of four | The operator ruled *"on desktop at least"* — a bottom-docked, grab-handle sheet has no desktop equivalent, and `044`'s own grammar (drag-to-dismiss, bottom-edge dock) is phone-specific by design |
+| **Widen the anchored popover instead of docking it** | Smaller diff — one `positionToolbarPopover` option | Does not answer the report: a taller, wider dropdown is still a dropdown, floating near the toolbar rather than "docked to the right edge, database stays visible and scrolls independently" |
+| **A fourth desktop shape, container-relative, for the one surface that needs it (chosen)** | Answers both operator rulings exactly; resize-safe and pane-scoped by construction; reuses `buildShellHeader`, `trapFocus` and `overlayStack` rather than inventing new versions of any of them | One more named presentation shape to keep straight, though it is a CSS class and two constants, not a second engine |
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| A side sheet full-height on a short viewport could clip its own content | Low | Independent internal scroll, per the decision, not a fixed content height |
+### Five checks
 
-### Five Checks Evaluation
-
-| # | Check | Result | Evidence |
-|---|-------|--------|----------|
-| 1 | **Necessary?** | PASS | No existing role in `design-system.md` §3 produces a full-height, edge-docked, non-scrimming panel |
-| 2 | **Beyond Local Maxima?** | PASS | Two narrower alternatives (widen `panel`, reuse `sheet`) considered and rejected with reasons |
-| 3 | **Sufficient?** | PASS | One new role, composed by the existing shell, not a new component family |
-| 4 | **Fits Goal?** | PASS | Directly grounds the new completion criterion this amendment adds to `goal.md` §3 |
-| 5 | **Open Horizons?** | PASS | `053`'s gear-button amendment is the only other packet this touches, and it is named rather than silently assumed |
-
-**Checks Summary**: 5/5 PASS
-
-### Implementation
-
-**What changes**: `design-system.md` §3/§4 (new role row), `surface-shell.ts` (new presentation),
-`view-config-panel-renderer.ts` (desktop mount switches from `positionToolbarPopover` to the new
-role when opened from `053`'s gear button).
-
-**How to roll back**: Revert to the anchored-popover mount; no stored data changes.
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — the operator's own report, plus the panel's own code comment already naming the overflow the anchored dropdown could not solve |
+| **Is there a simpler existing thing?** | Checked and refused twice: `044`'s phone sheet has no desktop expression, and `positionToolbarPopover`'s anchored math would need fighting with `!important` for a surface that needs none of it |
+| **What does it touch?** | `surface-shell.ts` (two constants), `view-config-panel-renderer.ts` (`presentPanel`, focus trap), `styles.css` (`.db-shell-side-sheet` and its sub-rules), `toolbar-renderer.ts` (the gear, the removed "···" row) — recorded jointly with `053` ADR-006 |
+| **What is the real caller that must not break?** | `048`'s stacking model (a picker opened from the side sheet must still dock over it) and `044`'s twelve registered `sheet-grammar` surfaces (phone's `settings` row, unchanged) |
+| **What contract must not break?** | Focus return on close (WCAG 2.4.3) and Escape-dismissal, both already provided by `overlayStack`/`trapFocus` and asserted unchanged here rather than reimplemented |
+<!-- /ANCHOR:adr-008 -->
 

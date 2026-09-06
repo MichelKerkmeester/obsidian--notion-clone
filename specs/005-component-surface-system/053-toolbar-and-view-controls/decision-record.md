@@ -500,3 +500,82 @@ on phone, so a regression back under it fails the lane rather than only widening
 | **What is the real caller that must not break?** | The three `renderFooter` call sites in `table-renderer.ts` (flat, windowed, grouped) — all three still call through the one private method, and `config.summaryRules` is read exactly as before once a row exists |
 | **What contract must not break?** | `TableFooterRenderer.renderFooter`'s own contract (columns, options, calculation values) is unchanged; the guard sits entirely outside it |
 <!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: The gear joins the permanent rail; "···" loses its one settings row
+
+**Status: Accepted, 2026-09-06 (~08:15), operator: *"Gear icon in the toolbar rail, before ···."***
+
+### Context
+
+The database Settings panel was reachable exactly one way: `renderUtilitiesOverflowButton`'s "···"
+menu carried a `toolbar.viewSettings` row (`settings-2` icon) that called `actions.toggleViewConfig`.
+ADR-002 above already named this the surface's "live trigger" and the classes `createSettingsEntry`
+stamps on it (`db-view-config-btn` and its siblings) as what `openViewSettingsAfterMutation`'s
+anchor-fallback queries resolve against. The operator's report — the same one that opened `051`
+ADR-008 — names the panel a candidate for its own dedicated control: *"Gear icon in the toolbar
+rail, before ···: a permanent gear button beside filter, sort, group and columns; ··· keeps only
+the rarer actions."*
+
+### Decision
+
+**A permanent `db-toolbar-settings-btn` control, in the utilities cluster before "···", never
+collapsing.** `renderSettingsButton` (`toolbar-renderer.ts`) draws it with `createIconButton`
+(icon `settings`, the plain gear — distinct from `settings-2`, which nothing else in the rail uses)
+and wires `createSettingsEntry`'s `open` callback to the same `actions.toggleViewConfig` the
+deleted "···" row called. **The live trigger ADR-002 named moves with the settings-entry stamp**:
+`createSettingsEntry`'s fallback classes now land on the gear, not on "···", so
+`openViewSettingsAfterMutation`'s two anchor-fallback queries (`database-view.ts`,
+`embedded-database-renderer.ts`) keep resolving against a live button without changing either query.
+
+**"···" loses the row, not the icon.** `renderUtilitiesOverflowButton` no longer builds the
+`toolbar.viewSettings` menu row at all — one path to the panel, not two — and the now-unreferenced
+`toolbar.viewSettings` i18n key is deleted in all three locales (en, zh-CN, zh-TW), the same
+"delete the dead thing, keep what a fallback still reads" split ADR-002 already applied to the
+seven dead render methods.
+
+**Placement, not a new collapse rung.** The gear sits in `db-toolbar-utilities-cluster`, the same
+cluster "···" already occupies and the one cluster `applyToolbarChromeCollapse` never hides at any
+width — the collapse ladder's four rungs (`db-toolbar-creation-cluster`, `-query-cluster`,
+`-properties-cluster`, the add-view tab) are unchanged, in the same order, and the utilities
+cluster stays the width-independent floor it already was. `tools/live/toolbar-collapse-sweep.ts`
+gained a fifth reading (`settingsButtonVisible`) asserting exactly that: the gear holds at every
+width in the sweep, the same way "···" beside it already does — red-first, observed failing when
+the button did not yet exist, green once it did.
+
+### Consequences
+
+- **The census of hand-built settings-entry paths goes from two to one.** "···"'s menu row and the
+  gear were never both live at once — the row is deleted in the same commit the gear lands — so
+  `053`'s own "one settings entry" claim (ADR-002's context) is what this ADR keeps true rather
+  than what it introduces a second path against.
+- **`051`'s side sheet gets its dedicated control.** ADR-008 in `051-modal-and-sheet-
+  componentization/decision-record.md` records the panel's own desktop shape; this ADR is the
+  rail-side half of the same operator report, and the two are cross-referenced rather than either
+  repeating the other's content.
+- **The icon changes meaning.** `settings-2` (a slider glyph) stays retired from the toolbar rail's
+  own vocabulary — it was never a literal gear — and `settings` (the classic cog) is now the rail's
+  one settings glyph. The screenshot/story icon stub (`tools/storybook/obsidian-stub.mjs`) gained a
+  `settings` entry to match, alongside its existing `settings-2` one, so a capture of the rail shows
+  a real gear rather than the unrecognised-icon placeholder.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Keep the row in "···", add the gear as a second path** | No deletion; smaller diff | Two ways to open one panel is exactly the "settings-entry tangle" ADR-002 closed one packet ago; the operator's ruling reads "gear … ··· keeps only the rarer actions", not "gear in addition to" |
+| **Replace "···" with the gear entirely** | One fewer control | Loses "···"'s other rows (wide display, refresh, export, open database file), which the operator did not ask to move and which have no other home |
+| **Permanent gear beside "···", row deleted from "···" (chosen)** | Matches the operator's own words exactly; one settings path, unchanged for every other utilities row | One more permanent control in the rail, measured against the collapse sweep rather than assumed harmless |
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — the operator's own verbatim ruling, naming the rail, the position (before "···") and the effect on "···" itself |
+| **Is there a simpler existing thing?** | `createSettingsEntry`/`createIconButton`, the exact primitives "···" already used for the same job — this moves their call site, it does not add a new primitive |
+| **What does it touch?** | `toolbar-renderer.ts` (`renderSettingsButton`, the deleted menu row), `src/i18n.ts` (one dead key, three locales), `tools/live/toolbar-collapse-sweep.ts` and `run-toolbar-collapse-sweep.mjs` (the new permanent-control assertion), `tools/screenshots/scenarios/chrome.mjs` and `tools/storybook/obsidian-stub.mjs` (the capture-side mirror and its icon stub) |
+| **What is the real caller that must not break?** | `openViewSettingsAfterMutation`'s two `.db-view-config-btn` anchor-fallback queries — verified resolving against the gear after the move, unit-tested and capture-verified |
+| **What contract must not break?** | The collapse ladder's four-rung order and the utilities cluster's always-visible floor — the sweep's overflow assertion holds unchanged, and its new permanent-control assertion is the red-first proof that the gear does not quietly become a fifth rung |
+<!-- /ANCHOR:adr-006 -->
