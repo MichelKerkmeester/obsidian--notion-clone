@@ -33,6 +33,7 @@ import {
   EmptyStateRenderer,
   formatEmptyStateDiagnostics,
   getEmptyStateReason,
+  isBoardGroupFieldMissing,
   StarterPreset,
 } from "./empty-state-renderer";
 import { resolveViewIndex, resolveViewSelection } from "../data/view-selection";
@@ -3367,12 +3368,20 @@ export class DatabaseView extends FileView {
   private switchView(viewIndex: number, viewId?: string): void {
     const descriptionScroll = this.saveDescriptionScrollPosition();
     this.closeHeaderPopovers();
+    // Capture the outgoing view's own scroll position before it is replaced. One view's place
+    // should not answer for another's, so this is keyed the same way the rest of its session
+    // state already is rather than building a second per-view mechanism.
+    if (this.containerEl_) {
+      this.viewStateStore.setViewport(this.currentDbIndex, this.currentViewIndex, captureDatabaseViewport(this.containerEl_));
+    }
     const db = this.getActiveDb();
     this.currentViewIndex = db ? resolveViewIndex(db.views.map((view) => view.id), viewId, viewIndex) : viewIndex;
     this.clearSelection();
     this.clearCellSelection();
     this.rerenderToolbar();
     this.refresh({ viewport: "reset-top" });
+    const restoreViewport = this.viewStateStore.getViewport(this.currentDbIndex, this.currentViewIndex);
+    if (restoreViewport && this.containerEl_) restoreDatabaseViewport(this.containerEl_, restoreViewport);
     this.restoreDescriptionScrollPosition(descriptionScroll);
   }
 
@@ -10554,6 +10563,20 @@ export class DatabaseView extends FileView {
     this.renderedRowOrder = null;
     if (!this.containerEl_) return;
     const groupField = config.boardGroupField || this.vs().groupByField || this.getDefaultBoardField(config);
+    // The group field is stored on the view, so it outlives the property it named once that
+    // property is deleted from the schema. Grouping by a key nothing carries any more would
+    // either throw or silently produce one meaningless bucket; this renders the view's own
+    // state instead, pointing at the settings that let the reader pick a field that still exists.
+    if (isBoardGroupFieldMissing(config.schema.columns, groupField)) {
+      this.boardRenderer.render(
+        this.containerEl_,
+        this.getStatefulConfig(config),
+        [],
+        groupField,
+        this.getGroupRelationDeletedEmptyState(),
+      );
+      return;
+    }
     const groups = this.getBoardGroups(config, groupField);
     this.boardRenderer.render(
       this.containerEl_,
@@ -10562,6 +10585,18 @@ export class DatabaseView extends FileView {
       groupField,
       this.getEmptyStateOptions(config),
     );
+  }
+
+  private getGroupRelationDeletedEmptyState(): EmptyStateOptions {
+    return {
+      reason: "group-relation-deleted",
+      actions: [{
+        label: t("emptyState.openViewSettings"),
+        icon: "settings",
+        primary: true,
+        onClick: () => this.openViewSettingsAfterMutation(),
+      }],
+    };
   }
 
   private getStatefulConfig(config: ViewConfig): ViewConfig {

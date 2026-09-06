@@ -7797,6 +7797,40 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   text-align: left;
 }
 
+/* An embedded table's page limit, reached: one row offering the rest rather than a silent cut. */
+.note-database-container .db-table-load-more-row td {
+  height: 30px;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.note-database-container .db-table-load-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 29px;
+  padding: 0 var(--db-space-5);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.7;
+  text-align: left;
+}
+
+.note-database-container .db-table-load-more-button:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  opacity: 1;
+}
+
 .note-database-container .db-board-new-card.is-disabled,
 .note-database-container .db-new-row-button.is-disabled { opacity: 0.5; cursor: not-allowed; }
 .note-database-changelog {

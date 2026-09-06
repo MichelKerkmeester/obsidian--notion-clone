@@ -11,9 +11,11 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   createStarterViewConfig,
+  EMPTY_STATE_COPY,
   EmptyStateRenderer,
   formatEmptyStateDiagnostics,
   getEmptyStateReason,
+  isBoardGroupFieldMissing,
   STARTER_PRESETS,
 } from "./empty-state-renderer";
 import { getRowPipelineDiagnostics, RowPipeline } from "../data/row-pipeline";
@@ -271,5 +273,48 @@ describe("empty state diagnosis", () => {
     const output = new RowPipeline().buildWithDiagnostics(records, config, state);
     expect(output.rows).toHaveLength(0);
     expect(output.diagnostics).toMatchObject({ sourceCount: 1, postLimitCount: 1, visibleCount: 0, hasActiveLimit: true });
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 3. THIRTEEN DISTINCT REASONS
+// ───────────────────────────────────────────────────────────────────
+
+describe("empty state reason catalog", () => {
+  it("gives every reason its own title and body, including the deleted-group-relation state", () => {
+    const entries = Object.entries(EMPTY_STATE_COPY);
+    expect(entries).toHaveLength(13);
+    const seen = new Set<string>();
+    for (const [reason, copy] of entries) {
+      const signature = `${copy.title}::${copy.body}`;
+      expect(seen.has(signature), `${reason} shares its copy with an earlier reason`).toBe(false);
+      seen.add(signature);
+    }
+    expect(EMPTY_STATE_COPY["group-relation-deleted"].title).toBe("emptyState.groupRelationDeletedTitle");
+    expect(EMPTY_STATE_COPY["empty-group"].title).not.toBe(EMPTY_STATE_COPY["group-relation-deleted"].title);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. THE BOARD'S GROUP FIELD OUTLIVING ITS PROPERTY
+// ───────────────────────────────────────────────────────────────────
+
+describe("isBoardGroupFieldMissing", () => {
+  const columns = [
+    { key: "file.name", label: "Name", type: "text" },
+    { key: "status", label: "Status", type: "status" },
+  ] as const;
+
+  it("is false when the group field still names a column", () => {
+    expect(isBoardGroupFieldMissing(columns, "status")).toBe(false);
+  });
+
+  it("is false when there is no group field to check", () => {
+    expect(isBoardGroupFieldMissing(columns, undefined)).toBe(false);
+    expect(isBoardGroupFieldMissing(columns, "")).toBe(false);
+  });
+
+  it("is true once the property the board grouped by is gone from the schema", () => {
+    expect(isBoardGroupFieldMissing(columns, "priority")).toBe(true);
   });
 });

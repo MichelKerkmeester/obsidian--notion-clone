@@ -21,6 +21,7 @@
 
 import { buildViewFilterTree, normalizeViewFilterTree, pruneViewFilterTree } from "../data/view-filter-tree";
 import type { FilterRule, SortRule, SourceRuleNode, ViewConfig } from "../data/types";
+import type { DatabaseViewportSnapshot } from "./database-viewport";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -62,6 +63,9 @@ export interface DatabaseViewState {
 
 export class ViewStateStore {
   private states = new Map<string, DatabaseViewState>();
+  // In-session only, deliberately: a scroll offset answers for a screen, not a saved view
+  // definition, so it lives beside searchText rather than going through persist()/toPersistedState().
+  private viewports = new Map<string, DatabaseViewportSnapshot>();
 
   /** Get or create state for a specific view within a database */
   get(dbIndex: number, viewIndex: number, viewConfig?: ViewConfig): DatabaseViewState {
@@ -95,11 +99,23 @@ export class ViewStateStore {
   /** Remove all cached states */
   clear(): void {
     this.states.clear();
+    this.viewports.clear();
   }
 
   /** Remove cached state for a specific database+view */
   delete(dbIndex: number, viewIndex: number): void {
     this.states.delete(this.getKey(dbIndex, viewIndex));
+    this.viewports.delete(this.getKey(dbIndex, viewIndex));
+  }
+
+  /** The scroll position a view was left at, if it has been visited this session. */
+  getViewport(dbIndex: number, viewIndex: number): DatabaseViewportSnapshot | undefined {
+    return this.viewports.get(this.getKey(dbIndex, viewIndex));
+  }
+
+  /** Remember a view's scroll position so switching back to it can restore rather than reset. */
+  setViewport(dbIndex: number, viewIndex: number, snapshot: DatabaseViewportSnapshot): void {
+    this.viewports.set(this.getKey(dbIndex, viewIndex), snapshot);
   }
 
   persist(viewConfig: ViewConfig, state: DatabaseViewState): void {

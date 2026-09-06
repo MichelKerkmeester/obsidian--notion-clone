@@ -15,6 +15,7 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 import { describe, expect, it } from "vitest";
 import {
+  clamp,
   resolveAnchoredPopoverBox,
   resolveContainerDockPlacement,
   resolvePopoverHorizontalLeft,
@@ -154,5 +155,60 @@ describe("a pane that has not laid out", () => {
     // the resolver stays honest about the degenerate input it was handed.
     const fallback = resolveContainerDockPlacement(BOUNDS, BOUNDS, 360, MARGIN);
     expect(fallback.height).toBeGreaterThanOrEqual(VIEWPORT_HEIGHT * 0.6);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 5. A CELL EDITOR NEAR THE VIEWPORT'S RIGHT EDGE
+// ───────────────────────────────────────────────────────────────────
+
+// cell-renderer.ts positions its text, number and date popovers with the identical
+// `clamp(anchorLeft, bounds.left + margin, bounds.right - width - margin)` call this
+// suite exercises directly, and its status/select/relation popover through
+// `resolvePopoverHorizontalLeft`, already covered above. Both share one guarantee:
+// the returned left plus the popover's own width never exceeds the bounds' right edge.
+// The source check below pins that the three private placement methods still make
+// that exact call, so a change removing it fails here rather than only on a screen.
+describe("a cell editor's popover near the viewport's right edge", () => {
+  const source = readFileSync(resolve(__dirname, "./cell-renderer.ts"), "utf-8");
+  const CLAMP_CALL = "clamp(rect.left, bounds.left + margin, bounds.right - width - margin)";
+
+  it("clamps the left edge in the date, single-line and option positioning methods", () => {
+    const methodStarts = ["private positionDateEditPopover(", "private positionTextEditPopover(", "private positionOptionPopover("];
+    for (const methodStart of methodStarts) {
+      const start = source.indexOf(methodStart);
+      expect(start).toBeGreaterThan(-1);
+      const body = source.slice(start, start + 1200);
+      const usesLineClamp = body.includes(CLAMP_CALL);
+      const usesHorizontalResolver = body.includes("resolvePopoverHorizontalLeft(");
+      expect(usesLineClamp || usesHorizontalResolver).toBe(true);
+    }
+  });
+
+  // A 1440px pane, matching the fixture above. The popover is 220px, the floor
+  // `positionTextEditPopover` itself sets for a single-line editor.
+  const editorBounds = { left: 0, right: 1440 };
+  const editorMargin = 8;
+  const editorWidth = 220;
+
+  it("never lets the popover's right edge pass the viewport's, at any anchor position swept across the boundary", () => {
+    // Anchors from the far left to one that starts past the right edge entirely, stepping through
+    // the region within 92px of the edge the source-derived trigger boundary names.
+    for (let anchorLeft = 0; anchorLeft <= 1500; anchorLeft += 4) {
+      const left = clamp(anchorLeft, editorBounds.left + editorMargin, editorBounds.right - editorWidth - editorMargin);
+      expect(left + editorWidth).toBeLessThanOrEqual(editorBounds.right - editorMargin + 0.001);
+    }
+  });
+
+  it("would clip past the viewport at the same anchors without the clamp — the clamp is load-bearing", () => {
+    // The negative control: an anchor inside the last (width + margin) of the viewport overflows
+    // once the clamp is removed and the raw anchor position is used instead, reproducing the
+    // clipped editor the clamp exists to prevent.
+    const nearEdgeAnchor = editorBounds.right - editorWidth + 40;
+    const unclamped = nearEdgeAnchor;
+    expect(unclamped + editorWidth).toBeGreaterThan(editorBounds.right);
+
+    const clamped = clamp(nearEdgeAnchor, editorBounds.left + editorMargin, editorBounds.right - editorWidth - editorMargin);
+    expect(clamped + editorWidth).toBeLessThanOrEqual(editorBounds.right - editorMargin + 0.001);
   });
 });

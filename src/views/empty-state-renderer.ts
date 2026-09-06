@@ -34,7 +34,8 @@ export type EmptyStateReason =
   | "no-events"
   | "no-events-in-range"
   | "read-failed"
-  | "empty-group";
+  | "empty-group"
+  | "group-relation-deleted";
 
 export interface EmptyStateAction {
   label: string;
@@ -140,7 +141,7 @@ export const STARTER_PRESETS: ReadonlyArray<StarterPreset> = [
 // 4. COPY CATALOG
 // ───────────────────────────────────────────────────────────────────
 
-const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: string; icon: string }> = {
+export const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: string; icon: string }> = {
   "no-database": {
     title: "emptyState.noDatabaseTitle",
     body: "emptyState.noDatabaseMessage",
@@ -201,6 +202,11 @@ const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: string; 
     body: "emptyState.emptyGroupMessage",
     icon: "folder-open",
   },
+  "group-relation-deleted": {
+    title: "emptyState.groupRelationDeletedTitle",
+    body: "emptyState.groupRelationDeletedMessage",
+    icon: "folder-x",
+  },
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -214,6 +220,17 @@ export function getEmptyStateReason(diagnostics: RowPipelineDiagnostics): EmptyS
   if (diagnostics.hasActiveFilters) return "filter-empty";
   if (diagnostics.hasActiveLimit && diagnostics.visibleCount === 0) return "limit-empty";
   return "no-matching-data";
+}
+
+/**
+ * A board's group field is stored on the view rather than derived, so it survives the property
+ * it once named being deleted from the schema. This is the check that tells the two apart: a
+ * group field that still resolves to a column groups normally, one that does not names a relation
+ * the schema no longer has.
+ */
+export function isBoardGroupFieldMissing(columns: ReadonlyArray<ColumnDef>, groupField: string | undefined): boolean {
+  if (!groupField) return false;
+  return !columns.some((column) => column.key === groupField);
 }
 
 export function formatEmptyStateDiagnostics(diagnostics: RowPipelineDiagnostics): string | undefined {

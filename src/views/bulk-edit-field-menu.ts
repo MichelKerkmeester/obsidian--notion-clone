@@ -28,18 +28,24 @@ export function openBulkEditFieldMenu(options: {
   onSelect(column: ColumnDef): void;
 }): () => void {
   const editable = getBulkEditableColumns(options.columns);
+  // A column set with nothing bulk-editable maps straight to an empty menu without this floor —
+  // the same never-empty guarantee row-menu.ts's unconditional first row already gives every
+  // single-row menu, restated here for the one menu that had no floor of its own.
+  const rows = editable.length > 0
+    ? editable.map((column) => ({
+        value: column.key,
+        text: column.label || column.key,
+        icon: getPropertyDropdownIcon(getColumnDisplayType(column, options.computedFields)),
+      }))
+    : [{ value: "", text: t("menu.noActions"), disabled: true }];
   return openDropdownMenu({
     anchor: options.anchor,
     label: t("bulkEdit.field"),
     value: "",
-    searchable: true,
+    searchable: editable.length > 0,
     searchPlaceholder: t("bulkEdit.searchField"),
     popoverClassName: "db-bulk-edit-field-menu",
-    options: editable.map((column) => ({
-      value: column.key,
-      text: column.label || column.key,
-      icon: getPropertyDropdownIcon(getColumnDisplayType(column, options.computedFields)),
-    })),
+    options: rows,
     renderIcon: renderDropdownPropertyTypeIcon,
     onChange: (key) => {
       const column = editable.find((candidate) => candidate.key === key);

@@ -521,3 +521,29 @@ describe("view settings landing", () => {
     console.log(`view settings landing (duplicate): ${elapsedMs.toFixed(3)}ms, budget ${LANDING_BUDGET_MS}ms`);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. DUPLICATE CONFIG EQUALITY
+// ───────────────────────────────────────────────────────────────────
+
+describe("view duplication", () => {
+  it("copies every field except id and name, and never reuses the source id", () => {
+    const harness = makeHarness();
+    const source = harness.db.views[0];
+
+    routing(harness.view).duplicateView(0);
+
+    expect(harness.db.views).toHaveLength(2);
+    const duplicate = harness.db.views[1];
+
+    expect(duplicate.id).not.toBe(source.id);
+    expect(duplicate.name).not.toBe(source.name);
+    expect(duplicate.sourceFolder).toBe(source.sourceFolder);
+    expect(duplicate.viewType).toBe(source.viewType);
+    expect(duplicate.schema).toEqual(source.schema);
+
+    const { id: _sourceId, name: _sourceName, ...sourceRest } = source;
+    const { id: _duplicateId, name: _duplicateName, ...duplicateRest } = duplicate;
+    expect(duplicateRest).toEqual(sourceRest);
+  });
+});

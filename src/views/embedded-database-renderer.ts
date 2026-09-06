@@ -126,6 +126,7 @@ import {
   EmptyStateRenderer,
   formatEmptyStateDiagnostics,
   getEmptyStateReason,
+  isBoardGroupFieldMissing,
 } from "./empty-state-renderer";
 import { MarkdownFileSuggestModal } from "./markdown-file-suggest-modal";
 import {
@@ -152,6 +153,31 @@ type EmbedHistoryEntry =
   | { type: "moved"; label: string; sourcePath: string; destPath: string; snapshot: LinkedViewMoveResult };
 
 const liveLinkedViewEmbeds = new Set<EmbeddedDatabaseRenderer>();
+
+// Our own number, argued rather than quoted: Anytype's limit is per-layout (Gallery 60, Kanban
+// 10, none on Grid/List/Calendar/Graph), so there is no single figure to borrow for an embedded
+// table. 60 sits beside Gallery's, is generous enough that most embeds never see it, and is one
+// page's worth of the "Load more" affordance rather than a hard cap.
+const EMBEDDED_TABLE_PAGE_LIMIT = 60;
+
+/**
+ * The pure half of the embedded table's paging: given the full row set and how many rows have
+ * been revealed this session, which rows paint and whether a "Load more" row is owed. Kept apart
+ * from the DOM half (finding the rendered header, appending the row) so the arithmetic has a
+ * seam a test can drive without a browser.
+ */
+export function resolveEmbeddedTablePage<T>(rows: readonly T[], revealCount: number): {
+  visibleRows: T[];
+  hasMore: boolean;
+  remaining: number;
+} {
+  const hasMore = rows.length > revealCount;
+  return {
+    visibleRows: hasMore ? rows.slice(0, revealCount) : rows.slice(),
+    hasMore,
+    remaining: hasMore ? rows.length - revealCount : 0,
+  };
+}
 
 export function registerLiveLinkedViewEmbed(embed: EmbeddedDatabaseRenderer): void {
   liveLinkedViewEmbeds.add(embed);
@@ -219,6 +245,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private stateStore = new ViewStateStore();
   private state?: DatabaseViewState;
   private pendingShowColumns = new Set<string>();
+  // Session-only, per view within this embed: how many rows an embedded table has revealed past
+  // its page. Never persisted — reopening the note starts back at one page, same as a fresh view.
+  private tableRevealCounts = new Map<number, number>();
   private rowMenu: RowMenu;
   private cellRenderer: CellRenderer;
   private columnHeaderController: ColumnHeaderController;
@@ -1236,13 +1265,19 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const renderConfig = this.getStatefulConfig(config);
     if (config.viewType === "board") {
       const field = config.boardGroupField || this.vs(config).groupByField || this.getDefaultBoardField(config);
-      this.boardRenderer.render(
-        target,
-        renderConfig,
-        this.getBoardGroups(config, field),
-        field,
-        this.getEmptyStateOptions(config),
-      );
+      // Same gap as the full view: the group field outlives the property it named. See the
+      // matching comment on DatabaseView.renderBoard for why an existing-column check gates this.
+      if (isBoardGroupFieldMissing(config.schema.columns, field)) {
+        this.boardRenderer.render(target, renderConfig, [], field, this.getGroupRelationDeletedEmptyState(config));
+      } else {
+        this.boardRenderer.render(
+          target,
+          renderConfig,
+          this.getBoardGroups(config, field),
+          field,
+          this.getEmptyStateOptions(config),
+        );
+      }
     } else if (config.viewType === "chart") {
       this.chartRenderer.render(target, renderConfig, this.rows, config.schema.columns, {
         onFilter: (rules) => this.applyChartFilters(config, rules),
@@ -1268,7 +1303,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     } else {
       const fields = getDisplayGroupFields(config, this.vs(config));
       if (fields.length === 0) {
-        this.tableRenderer.renderTable(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
+        const page = resolveEmbeddedTablePage(this.rows, this.getTableRevealCount());
+        this.tableRenderer.renderTable(target, renderConfig, page.visibleRows, this.getEmptyStateOptions(config));
+        if (page.hasMore) this.renderTableLoadMoreRow(target, config, page.remaining);
       } else {
         const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
           const groups = withEmptyOptionGroups(
@@ -1950,6 +1987,49 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       sortColumn: state.sortColumn,
       sortDirection: state.sortDirection,
       sortRules: state.sortRules,
+    };
+  }
+
+  /** How many rows an embedded table has revealed this session; a fresh view starts at one page. */
+  private getTableRevealCount(): number {
+    return this.tableRevealCounts.get(this.currentViewIndex) ?? EMBEDDED_TABLE_PAGE_LIMIT;
+  }
+
+  /** One more page, revealed in place — never a second render mode, never a persisted setting. */
+  private revealMoreTableRows(config: ViewConfig): void {
+    this.tableRevealCounts.set(this.currentViewIndex, this.getTableRevealCount() + EMBEDDED_TABLE_PAGE_LIMIT);
+    this.renderResults(config);
+  }
+
+  /** Appended after the page's last row rather than built into TableRenderer, which the full view
+   *  also uses and which knows nothing about a page it did not render past. Reads the header row
+   *  TableRenderer just built for its own column count rather than re-deriving one. */
+  private renderTableLoadMoreRow(target: HTMLElement, config: ViewConfig, remaining: number): void {
+    const tbody = target.querySelector<HTMLElement>(".db-table-wrap table.db-table tbody");
+    const headerRow = target.querySelector<HTMLElement>(".db-table-wrap table.db-table thead tr");
+    if (!tbody || !headerRow) return;
+    const row = tbody.createEl("tr", { cls: "db-table-load-more-row" });
+    const cell = row.createEl("td", { attr: { colspan: String(headerRow.children.length) } });
+    const button = cell.createEl("button", {
+      cls: "db-table-load-more-button",
+      text: t("embeddedTable.loadMore", { count: remaining }),
+      attr: { type: "button" },
+    });
+    button.onclick = () => this.revealMoreTableRows(config);
+  }
+
+  private getGroupRelationDeletedEmptyState(config: ViewConfig): EmptyStateOptions {
+    return {
+      reason: "group-relation-deleted",
+      actions: [{
+        label: t("emptyState.openViewSettings"),
+        icon: "settings",
+        primary: true,
+        onClick: () => {
+          const anchor = this.containerEl.querySelector<HTMLElement>(".db-view-config-btn");
+          if (anchor) this.toggleHeaderPopover(config, "view", anchor);
+        },
+      }],
     };
   }
 
