@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/067-sheet-family-remediation",
+  "spec_folder": "005-component-surface-system/067-sheet-family-remediation",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "sheet family remediation",
+      "067 spec",
+      "depth cap",
+      "menu role card",
+      "scrim level",
+      "fuzzy suggest disposition",
+      "067 plan",
+      "sheet family remediation plan",
+      "leg sequencing",
+      "constants bridge",
+      "067 tasks",
+      "sheet family remediation tasks"
+    ],
+    "key_topics": [
+      "sheet",
+      "family",
+      "remediation",
+      "spec",
+      "depth",
+      "cap",
+      "menu",
+      "role",
+      "card",
+      "scrim",
+      "level",
+      "fuzzy"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/views/overlay-stack.ts",
+      "src/views/surface-shell.ts",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/popover-host.ts",
+      "src/views/modals/db-modal.ts",
+      "src/main.ts",
+      "src/views/image-file-suggest-modal.ts",
+      "src/views/markdown-file-suggest-modal.ts",
+      "src/views/confirm-sheet.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "overlay-stack.ts",
+        "kind": "code",
+        "path": "src/views/overlay-stack.ts",
+        "source": "derived"
+      },
+      {
+        "name": "surface-shell.ts",
+        "kind": "code",
+        "path": "src/views/surface-shell.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-host.ts",
+        "kind": "code",
+        "path": "src/views/popover-host.ts",
+        "source": "derived"
+      },
+      {
+        "name": "db-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/db-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "image-file-suggest-modal.ts",
+        "kind": "code",
+        "path": "src/views/image-file-suggest-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "markdown-file-suggest-modal.ts",
+        "kind": "code",
+        "path": "src/views/markdown-file-suggest-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-sheet.ts",
+        "kind": "code",
+        "path": "src/views/confirm-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Family Remediation",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The family reads as one surface set until you measure it",
+    "created_at": "2026-09-06T15:02:09Z",
+    "last_save_at": "2026-09-06T15:21:08.028Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:67ff2af7aeb50d8c5febdaa3d8194561fca87a9b1684f66d73d8a2cd8fb21e07",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "28fdf726890a2e3f6da7d54b767d26c7cbef5bf04c882b16217b7c59a6d92e54",
+      "plan.md": "0750fb7cdd65190330cedfd2dc0ec9388f9aedc73a7c0a45aeee5264b1358413",
+      "tasks.md": "17508ca7268461ba4be70d3022e868e3d14a295b944c1402790079f96e0b70b6",
+      "decision-record.md": "8f8f9cba5c3522aaae5e5725f9837592aa708bac8dc76edfcf42fd57b11156f9",
+      "implementation-summary.md": "b1f167d9a29a073cee795b34a587a37b18d6bf4294767d8367689252a55e8aa2"
+    },
+    "last_active_at": null
+  }
+}
