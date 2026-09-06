@@ -10,12 +10,13 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "verify-and-land"
-    recent_action: "T018 landed: phone week pans at an 80px column minimum, measured on a split block"
-    next_safe_action: "AC-010, the operator's own device read; AC-004 stays partial"
+    last_updated_at: "2026-09-06T20:30:00Z"
+    last_updated_by: "land-calendar-ui-review"
+    recent_action: "T019 opened: rebuild to the UI review's P0/P1 rows, G1-G15 carried as acceptance rows"
+    next_safe_action: "T019 leg L1 (one sheet, one rule); P0-2's Monday default waits on the operator"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
+      - "P0-2's Monday-start default is Proposed: the operator rules it, and G12 needs a second theme"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
       - "AC-004's layout-tile panel has no measured value in design-trueup.md and is named out of scope"
     key_files:
@@ -27,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 96
+    completion_pct: 70
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
@@ -40,6 +41,7 @@ _memory:
       - "T017 landed: 0 device px of the former per-event fills and accent bar across the four recaptured files"
       - "T017's flatten costs the phone an overlap-column block: carried as T018, the remedy is the operator's"
       - "T018 landed: ADR-005 records the 80px minimum and why the month cell was not enough"
+      - "The operator read 0.0.29 beside Anytype and reopened the phase on a gestalt judgement"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -620,6 +622,46 @@ title and 44x44 close on phone.
       a readable title at 45px and cost no extra panning at all. It changes the renderer's
       overlap layout rather than a width, a different mechanism from the one the ruling named,
       so it is recorded for the operator rather than folded into this landing.
+
+- [ ] T019 **Rebuild to the review's P0/P1 rows, and add G1-G15 as acceptance rows.**
+      The operator read 0.0.29 on desktop beside Anytype on 2026-09-06 ~10:40 and said,
+      verbatim, *"in general our calendar looks nothing like anytype yet"* — after eight of
+      ten `acceptance-criteria.md` rows had closed. `review-ui-calendar-2026-09-06.md`
+      measures why both are true at once: parity was read per element, on the harness's
+      default theme, and never as a whole surface on the operator's. **That review is this
+      task's specification.** Its §4 table carries every visible difference with the
+      `file:line` that produces it and the fix it takes; its §6 orders the work L1-L6 by
+      visual weight; its §7 is the G1-G15 row set, now carried in `acceptance-criteria.md`.
+      (`styles.css`, `src/views/calendar-renderer.ts`, `src/views/calendar-toolbar-renderer.ts`)
+
+      **Observed red today, 2026-09-06**, measured per pixel on the operator's 2000x967 dark
+      capture (`≈0.82` CSS px per screen px, deleted after the review) and on the committed
+      corpus at DPR 2 — six P0 rows, each red before any of this lands:
+      **P0-1** the operator's page is `#262626` against a `#282828` rule (**+2 levels,
+      invisible**) and a `#1E1E1E` weekend tint that is *darker* than the page, where
+      Anytype's is lighter; on the harness's own dark page the tint **equals** the page and
+      does not exist. **P0-2** the week starts Sunday and the tint splits to columns 1 and 7,
+      against Monday and one `Sa Su` block in **all twenty** Anytype captures. **P0-3** a
+      spanning event reserves a lane in every cell it crosses, so row 1's first single-day
+      chip sits at **≈98 CSS px** below the cell top against Anytype's **32px** in every cell.
+      **P0-4** `+N more` renders as a **288 x 26** filled band with centred text, against one
+      line of `#848484` text at the chip inset. **P0-5** the grid measures **2031px** in a
+      2000px screen, so the seventh column's rule, labels and numbers are off-screen.
+      **P0-6** **0 of 40** chips on the operator's screen carry an icon, where every Anytype
+      chip carries a 12x14 document glyph and nothing else.
+
+      **Green when** every one of `acceptance-criteria.md`'s G1-G15 passes, each re-measured
+      per pixel on a corpus recaptured on HEAD **and** on a second-theme capture whose
+      `--background-primary` is neither `#1E1E1E` nor `#FFFFFF` (G12) — the operator's is
+      `#262626`. **No row closes on the theme it was written against.** P1-8 recaptures the
+      corpus at every leg, because the committed captures already drifted: they show
+      three-letter weekday labels where the build ships two.
+
+      **Blocked in part on the operator.** P0-2's Monday-start default is **Proposed**, not
+      taken — `decision-record.md`'s 2026-09-06 note carries it, and it overturns AC-002's
+      *"which day starts the week stays locale-driven and is not a measured value"*, which
+      is why it is the operator's and not this task's. AC-010 stays the operator's throughout:
+      a leg that ticks G1-G15 has earned a second look, never the row.
 <!-- /ANCHOR:phase-3 -->
 
 ---

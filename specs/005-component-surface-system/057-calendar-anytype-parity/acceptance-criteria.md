@@ -10,13 +10,14 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "verify-and-land"
-    recent_action: "landed t017; eight met, ac-004 and ac-010 open"
-    next_safe_action: "The operator AC-010 device read; AC-004's layout-tile panel stays a named gap"
+    last_updated_at: "2026-09-06T20:30:00Z"
+    last_updated_by: "land-calendar-ui-review"
+    recent_action: "G1-G15 opened by the operator's gestalt read; eight AC rows Met, seventeen open"
+    next_safe_action: "Run tasks.md T019 leg L1; G7 waits on the operator's Monday-start ruling"
     blockers:
       - "AC-010 is operator-owned and nothing in this repository can close it"
       - "AC-004 needs the layout-tile panel, which design-trueup.md names out of scope rather than owed"
+      - "G1-G15 are Unmet with an observed red each; G7 waits on the operator's Monday-start ruling"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -25,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-ac"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 70
     open_questions: []
     answered_questions:
       - "T001 established A4 and A6 as absences across all twenty set captures"
@@ -52,7 +53,7 @@ _memory:
 
 **Packet:** 005-component-surface-system/057-calendar-anytype-parity
 **Level:** 3
-**Status:** In progress — eight of ten rows Met; AC-004's layout-tile panel and AC-010's operator read stay open
+**Status:** In progress, and reopened 2026-09-06 by the operator's gestalt read — eight of ten AC rows Met, AC-004 and AC-010 open, and fifteen new gestalt rows (G1-G15) Unmet
 **Date:** 2026-09-06 (T017 landing)
 <!-- /ANCHOR:metadata -->
 
@@ -99,6 +100,42 @@ HEAD before the fix (goal D2), recorded in `checklist.md`. Exit statuses are rea
 
   A future calendar leg diffing against this row diffs against these values, quoting the 119 command above with the figure, never a bare number.
 
+### G1-G15: the gestalt rows the 2026-09-06 UI review opened
+
+*Opened 2026-09-06 ~10:40 by the operator's read of 0.0.29 on desktop beside Anytype, verbatim:
+**"in general our calendar looks nothing like anytype yet"** — said with eight of the ten rows
+above already Met. `review-ui-calendar-2026-09-06.md` measures why both are true: AC-001 through
+AC-009 read parity per element, on the harness's default theme, and never as a whole surface on
+the operator's. These rows read relationships rather than elements, and none of them may be ticked
+on the theme it was written against. `tasks.md` **T019** is the leg that closes them; the review's
+§6 orders the work L1-L6 by visual weight. Every red below is **observed red** on 2026-09-06,
+per pixel: the operator's 2000x967 dark capture at ≈0.82 CSS px per screen px (deleted after the
+review) for rows marked `operator`, the committed corpus at DPR 2 for the rest.*
+
+| ID | Threshold | Observed red today | Status |
+|----|-----------|--------------------|--------|
+| G1 | No cell background differs from the page surface except the two right-most columns' weekend tint, which is lighter than the page in dark and darker in light, by 2-4% | `operator`: the tint is 8 levels **darker** than the page and sits on columns 1 and 7; harness dark: tint `#1E1E1E` **equals** the page `#1E1E1E`, so it does not exist | Unmet |
+| G2 | Exactly one rule colour across the month grid, the week grid, the day grid and the drawer — a line crossing every rule yields one distinct non-surface, non-ink colour — and its luminance delta from the page is >= 6% | Four rule colours (`#3A3A3A`, `#292929`, `#282828`, `#222222`); `operator` delta **0.8%**, invisible at arm's length | Unmet |
+| G3 | Chip left ink at 10 +/- 1px inside the left rule, in every column of every row, single-day and spanning alike | A span puts its title at 10px in the first cell and right-aligns a muted date string in the last, with nothing in between | Unmet |
+| G4 | Every cell's first chip ink at 32 +/- 1px below the cell top, including cells inside a spanning event's range | `operator` row 1: five spans reserve the first five lanes, so the first single-day chip lands at **≈98 CSS px** | Unmet |
+| G5 | No centred text inside a cell or the drawer: every ink run other than the day number starts within 12px of the left rule | `+1 more` centred in **20** cells; the unscheduled drawer's item centred in the 2000px pane | Unmet |
+| G6 | The seventh column's right rule is inside the pane at every pane width from 900px up, on a view whose config carries a custom column width | `operator`: grid measures **2031px** in a 2000px screen; the `Sa` label, the seventh column's rule and its day numbers are off-screen | Unmet |
+| G7 | The week starts Monday by default and the tinted pair is columns 6 and 7 | Sunday start; tint split to columns 1 and 7. Monday in **all twenty** Anytype captures. **Blocked on the operator** — see `decision-record.md`'s 2026-09-06 note; P0-2 is Proposed | Unmet |
+| G8 | `+N more` has zero non-surface pixels outside its glyphs and sits at the chip inset at a 20px pitch | A **288 x 26** `#323232` band with `#535353` text centred (`operator`); `#2A2A2A` / `#F2F3F5` 260px bands in the corpus | Unmet |
+| G9 | Every chip carries an icon glyph 10px from the rule when `Show icon` is on, whether or not the note has an icon of its own, and no chip carries a coloured dot | **0 of 40** chips on the operator's screen carry one; harness timed chips carry a `#BBF7D0` dot and a time prefix, three inks in one 12px line | Unmet |
+| G10 | Phone: no chip ink crosses a column rule | `Adobe CC audit` ink runs 180 -> 355 in an 87px column ending at 260, crossing **two** rules | Unmet |
+| G11 | The calendar block of `styles.css` carries no literal surface, rule or tint hex; the `#216DFA` disc, the `#767676`/`#808080` numerals and the chip ink pair are the only literals permitted, each with its ADR-004 or R-number comment | **10** literal rule/tint declarations (`styles.css:17709`-`17734`, `:18347`-`18354`, `:18400`, `:18411`, `:17431`-`17446`) | Unmet |
+| G12 | A second-theme capture is in the corpus (`--background-primary` neither `#1E1E1E` nor `#FFFFFF`) and G1 and G2 hold on it | None exists. The operator's is `#262626`, and it is the theme every P0 red above was measured on | Unmet |
+| G13 | The header carries no bordered or filled control — switcher words, `‹`, `Today`, `›` — at four controls at most, with a 12 +/- 1px month-to-year ink gap | A bordered, filled segmented pill plus five controls; gap **34 CSS px**; on the operator's screen the `›` is off-screen with the seventh column | Unmet |
+| G14 | Week and day slot lines span from the first day column's left rule to the last's right rule, with a vertical rule on every day column | Slot lines run 278 -> 1205 CSS px against day columns at 105 -> 1392: one column in, one column short; no vertical rule at all | Unmet |
+| G15 | Done chips carry no colour other than the chip ink, and a checkbox record shows the checked glyph in the icon slot | Green `--text-success` strikethrough on **14 of 40** chips on the operator's screen | Unmet |
+
+**These rows do not supersede AC-001 through AC-009 and do not reopen them as rows.** What the
+review reopens is what those rows *measured*: three of them (AC-002, AC-003, AC-007) are answered
+in substance by §5 of the review, and each keeps its own status because each is true of the
+element it read. AC-010 stays the operator's, and a leg that ticks G1-G15 has earned a second
+look, never the row.
+
 ### Status values
 
 | Value | Meaning |
@@ -120,7 +157,9 @@ treated as an unmet criterion rather than as a pass.
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Not closeable, and for one reason rather than six.** Ten rows: **eight Met, two Unmet**.
+**Not closeable, and no longer for one reason.** Twenty-five rows: the original ten at
+**eight Met, two Unmet**, and the fifteen gestalt rows the 2026-09-06 review opened, all
+**Unmet**.
 
 **AC-002 is Met, closed at the landing on 2026-09-06 by a verification pass that measured rather
 than read the implementing pass's report.** It had been reopened the same day on two sub-rows; all
@@ -141,7 +180,7 @@ the fix. Reopening it in the first place, rather than leaving it Met on a ruling
 implemented yet, was the same call this packet made on AC-002 that morning — closing it now on a
 measurement is the other half of that same discipline.
 
-**Two rows stay open.**
+**Seventeen rows stay open: two of the ten, and all fifteen of the gestalt rows.**
 
 - **AC-004** is a recorded partial and stays **Unmet**: the layout-tile panel is the one item still
   unbuilt, and `design-trueup.md` §A8 carries no measured value for it — it is named out of scope
@@ -149,5 +188,10 @@ measurement is the other half of that same discipline.
   this row's gap: `tasks.md` T009 closed its measured geometry. `+ Add Property` stays declined on
   product grounds.
 - **AC-010** is the operator's own device read. Nothing here closes it and an agent never ticks it.
+- **G1-G15** were opened on 2026-09-06 by the operator's read of 0.0.29 beside Anytype, *"in
+  general our calendar looks nothing like anytype yet"*, and all fifteen are **Unmet** with an
+  observed red recorded above. They are the rows that read the surface as a whole rather than
+  element by element, which is the gap the first nine rows left; `tasks.md` **T019** is the leg
+  that closes them, and G7 additionally waits on the operator (`decision-record.md`, 2026-09-06).
 
 <!-- /ANCHOR:closure -->

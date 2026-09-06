@@ -10,11 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "verify-and-land"
-    recent_action: "landed t017: the week/day timed blocks flatten to chip ink, measured at 0 fill/bar px"
-    next_safe_action: "The operator's own device read (AC-010); nothing else in this packet is unlanded"
-    blockers: []
+    last_updated_at: "2026-09-06T20:30:00Z"
+    last_updated_by: "land-calendar-ui-review"
+    recent_action: "The operator's gestalt read reopened the phase; P0-2's Monday default is Proposed"
+    next_safe_action: "Ask the operator to rule P0-2, the Monday-start default with the setting as override"
+    blockers:
+      - "P0-2 needs the operator: a Monday-start default overturns AC-002's locale-driven call"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "specs/005-component-surface-system/039-calendar-parity-port/decision-record.md"
@@ -22,8 +23,9 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 100
-    open_questions: []
+    completion_pct: 70
+    open_questions:
+      - "Does the calendar default to Monday regardless of locale, keeping the setting as an override?"
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
@@ -31,6 +33,7 @@ _memory:
       - "ADR-002's implementation half is partly landed: the weekend tint and nav cluster carried to week and day, the rule colour and today marker did not"
       - "ADR-002's colour question is answered: the timed blocks flatten to chip ink, carried as T017"
       - "T017 landed: the week/day timed block reads the month chip's flat ink, no separator rule needed since the slot lines show through"
+      - "The 2026-09-06 gestalt read changes no ADR: ADR-001 through ADR-005 stand unaltered"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -368,4 +371,27 @@ blocks, and a separator does not widen anything.
 under the same reasoning ADR-002 gave its own open question — the geometry a fixed value spends is
 one this packet already closed once (T015's chip pitch, the phone touch floor), and re-closing it
 silently is the class of decision goal D6 exists to route to the operator instead.
+
+---
+
+## Note, 2026-09-06 ~10:40: the operator's gestalt read reopens the phase, and P0-2 is proposed
+
+**Not an ADR, and deliberately so — nothing is decided here.** With eight of ten
+`acceptance-criteria.md` rows Met, the operator opened 0.0.29 on desktop beside Anytype and said,
+verbatim, *"in general our calendar looks nothing like anytype yet"*. That judgement outranks the
+met rows and reopens the phase, and `review-ui-calendar-2026-09-06.md` measures why both are true
+at once: every met row is true of one element on one theme, and parity was never read as a whole
+surface on the operator's `#262626` page, where our `#282828` rule is two levels off the page and
+the `#1E1E1E` weekend tint falls *darker* than the page that Anytype's falls lighter than. The
+review's fifteen gestalt rows are now carried as `acceptance-criteria.md` G1-G15 with an observed
+red each, and `tasks.md` T019 is the leg that closes them; none of ADR-001 through ADR-005 is
+changed by any of it. One item in the review needs a ruling rather than a rebuild, and is
+**Proposed pending the operator**: the review's **P0-2**, to default the calendar's week start to
+**Monday** regardless of locale while keeping the existing setting as an override, which puts the
+weekend tint on columns 6 and 7 by itself. It is proposed rather than taken because it overturns
+AC-002's written call that *"which day starts the week stays locale-driven and is not a measured
+value"* — twenty of twenty Anytype captures start on Monday, so it is measured, and reversing a
+closed row's reasoning is the operator's call under goal D6, not an in-repo one. G7 stays Unmet
+until that ruling lands.
+
 <!-- /ANCHOR:decisions -->
