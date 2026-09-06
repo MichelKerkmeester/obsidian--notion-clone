@@ -703,13 +703,13 @@ Sources: `src/views/number-display-renderer.ts`, `src/data/number-display.ts`
 
 ### Option colour picker
 
-Sixteen swatches in the persisted order, the current colour ringed and carrying a trailing tick — the ring is never the only signal a swatch is current. Opened from the colour dot in the select editor and created on document.body.
+A one-column labelled list (ADR-004) — sixteen rows in the persisted order, each a leading dot and its visible name, the current colour carrying the trailing tick every row in the family uses. Opened from the colour dot in the select editor and created on document.body. On a phone this is the family's own sheet, not the anchored popover: a header names the picker, and the same sixteen rows grow to the 44px floor.
 
 | dark | light |
 |---|---|
 | ![field-option-color-picker dark](notion-clone/fields/field-option-color-picker-mobile-dark.png) | ![field-option-color-picker light](notion-clone/fields/field-option-color-picker-mobile-light.png) |
 
-Sources: `src/views/option-color-picker.ts`, `src/data/status-colors.ts`
+Sources: `src/views/option-color-picker.ts`, `src/views/popover-host.ts`, `styles.css`
 
 ### Record icon
 
