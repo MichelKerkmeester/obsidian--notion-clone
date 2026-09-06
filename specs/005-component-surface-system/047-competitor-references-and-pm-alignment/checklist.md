@@ -34,7 +34,7 @@ with an empty "today" cell is not accepted.
 | C4 | Capture rows taken, of product × surface × source | 0 of 16 | 16, or fewer with each absence recorded as uncaptured WITH its reason | [ ] |
 | C5 | Deterministic classes for a capture with no in-repo source | 0 — `verify.mjs` has `vendor-unavailable` for an *unavailable* source, not for *no* source | 1, and the same entry never flips class | [ ] |
 | C6 | Board fidelity gaps against Project Manager, measured | unknown — `038`'s T12 measured 14 carried-forward elements at `c563f08`, then the operator said "align closer" against 0.0.22 | every gap numbered, then closed with a before/after or dispositioned with a reason | [ ] |
-| C7 | Gantt fidelity gaps against Project Manager, measured | unknown — `037`'s AC-007 measured 60 of 60 `pm-gantt-*` classes with zero divergence at `30c4b746`, and the operator still said "align closer" | same | [ ] |
+| C7 | Gantt fidelity gaps against Project Manager, measured | unknown — `037`'s AC-007 measured 60 of 60 `pm-gantt-*` classes with zero divergence at `30c4b746`, and the operator still said "align closer" | same | [x] **2026-09-06: zero code/CSS divergence (source read line by line); two visible differences measured in device pixels (bar/label-dot colour `rgb(138,148,160)` vs `rgb(90,103,215)`; phone label column 280px vs 160px) and both dispositioned with a reason, not closed — `scratch/gantt-comparison.md`, `tasks.md` T013/T014** |
 | C8 | Negative control proving the widened schema still rejects | 0 — no such test exists | 1, observed red on a malformed entry both before and after the widening | [ ] |
 | C9 | Image sources with a recorded licence position | 0 | one per source, written before the image is committed | [ ] |
 | C10 | Our own board/gantt captures moved without a named gap behind the move | 0 today, and it must stay 0 | 0 | [ ] |
@@ -127,8 +127,8 @@ a fidelity fix.
 <!-- ANCHOR:file-org -->
 ## FILE ORGANIZATION
 
-- [ ] CHK-050 [P1] Comparison working files in `scratch/` only
-- [ ] CHK-051 [P1] `scratch/` cleaned of throwaway files before completion
+- [x] CHK-050 [P1] Comparison working files in `scratch/` only. **Done**: `baseline.md`, `gantt-comparison.md`, `notion-clone-board-gantt-hashes-baseline.txt`
+- [x] CHK-051 [P1] `scratch/` cleaned of throwaway files before completion. **Done**: two inspection crop PNGs used only to read a measurement were removed once their numbers were written into `gantt-comparison.md`
 <!-- /ANCHOR:file-org -->
 
 ---
