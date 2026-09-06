@@ -17,8 +17,8 @@ _memory:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
     last_updated_at: "2026-09-07T00:40:00Z"
     last_updated_by: "fix-053-wrap-off-rows"
-    recent_action: "Amended ADR-004 to the operator's switch-gates-column ruling and honoured the switch on the phone; kept the markdown line-break collapse as the narrower producer"
-    next_safe_action: "Operator device pass on the wrap switch (desktop and phone), the gear and the footer; nothing here is blocked"
+    recent_action: "Amended ADR-004: the wrap switch gates the column mode, and it reaches the phone"
+    next_safe_action: "Operator device pass on the wrap switch, the gear and the footer"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
@@ -42,9 +42,9 @@ _memory:
       - "ADR-003: the confirm fires on drop, not on gesture start"
       - "ADR-001 amendment 2 (T001): the rail's in-toolbar band move is withdrawn — the capture puts Anytype's rail where ours already renders"
       - "ADR-001 amendment 2 (T001): the direction colour is demoted to a redundant third signal at 3.14:1 accent-on-tint and 1.19:1 fill-on-bar; direction rides the arrow glyph and the direction word"
-      - "ADR-004: the view carries a wrapText switch (table view settings only); it gates the column mode rather than losing to it — off clips every column, on lets a column's Clip mode opt back out"
+      - "ADR-004: the view's wrapText switch gates the column mode; off clips every column, on lets Clip opt back out"
       - "ADR-005: the summary footer is hidden entirely at zero rows; its phone trigger is raised to the shared 44px floor, desktop unchanged at 26px"
-      - "ADR-004 amendment (operator ruling 2026-09-06): the view switch off clips every column whatever mode it carries, and the switch is honoured on the phone; a clipped cell's markdown line breaks collapse to a space instead of a <br>"
+      - "ADR-004 amendment: the switch is honoured on the phone, and a clipped cell's markdown line breaks collapse to a space"
 ---
 
 # Decision Record: Toolbar and View Controls
