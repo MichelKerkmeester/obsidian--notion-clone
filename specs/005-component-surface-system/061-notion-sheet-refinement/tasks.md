@@ -13,9 +13,10 @@ _memory:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
     last_updated_at: "2026-09-06T19:30:00Z"
     last_updated_by: "design-research-session"
-    recent_action: "Closed T001 and re-cut T005-T007; added T011 for the overflow sheet"
-    next_safe_action: "T002 baseline, then T004; the ADR gate is closed"
-    blockers: []
+    recent_action: "Leg A and Leg B implemented and verified; gate green at 26/26"
+    next_safe_action: "T010 in 067's own folder; AC-005 in the operator's device sitting"
+    blockers:
+      - "T010 cannot be closed from here: the write authority for this implementation pass was scoped to 061's own folder, and 067's acceptance-criteria.md is a different packet's file"
     key_files:
       - "src/views/database-view.ts"
       - "src/views/record-surface/cell-editor-text.ts"
@@ -72,20 +73,35 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       **ADR-001 to ADR-004 are Accepted**, and **ADR-006** stays parked behind the Anytype
       multi-section re-read that is its own stated precondition (AC-007 accepts a recorded park).
 
-- [ ] **T002** [P] Record the baseline before the first edit: the bar's child count, rendered row
+- [x] **T002** [P] Record the baseline before the first edit: the bar's child count, rendered row
       count and rect at 390px; the confirm's inset, radius and computed action `flex-direction`; and
       the hash of the 32 Project Manager reference captures (`specs/.../061-notion-sheet-refinement/scratch/`).
       **Threshold:** every figure in `acceptance-criteria.md`'s Verification column re-read on the
       commit the leg branches from. **Red-first proof:** this task *is* the red-first proof.
-      **Source:** goal D3, parent D5.
+      **Source:** goal D3, parent D5. **Closed:** the `file:line` reds already recorded in
+      `acceptance-criteria.md`'s Verification column were re-read against the branch commit before
+      the first edit — the eight-child bar at `database-view.ts:7643-7712`, the flush confirm at
+      `styles.css:230-232`/`:265`, the side-by-side actions at `:8592-8595`. The 32 Project Manager
+      captures' `pixelHash` was carried through every recapture in this leg unchanged (parent D5).
 
-- [ ] **T003** [P0] Inventory the cross-consumer surfaces before touching one:
+- [x] **T003** [P0] Inventory the cross-consumer surfaces before touching one:
       `rg -n "resolveCellTapAction" src/`, `rg -n "db-selection-status-bar" src/`,
       `rg -n "claimBottomDock" src/`, `rg -n "selection\.copy(Tsv|Markdown|Csv)" src/ tools/`.
       **Threshold:** every producer named in `plan.md`'s affected-surfaces table, or a written
       not-a-consumer line. **Red-first proof:** the table already names two renderers holding their
       own copy of the same grammar; the inventory confirms there is no third. **Source:** the
-      cell menu is a cross-consumer finding, not an instance-only one.
+      cell menu is a cross-consumer finding, not an instance-only one. **Closed:** confirmed exactly
+      two `resolveCellTapAction` call sites (`database-view.ts`, `embedded-database-renderer.ts`) and
+      two `db-selection-status-bar` builders (same two files) — no third. `claimBottomDock` already
+      had five call sites (`mobile-bottom-sheet.ts` internal, `cell-editor-text.ts` ×2 pairs); the
+      picker family (date/option/relation editors) is a **not-a-consumer** for a direct claim — they
+      inherit it automatically through `setSheetMount`'s own `claimBottomDock(doc, "sheet", true)`
+      whenever they mount as a sheet (ADR-003's own context section states this). The embedded
+      renderer's own selection-bar builder (`renderEmbedSelectionStatusBar`) is a genuine third
+      producer of the same bottom-docked shape, but with its paste/fill/clear actions already
+      hidden for the embed context (`.db-embed-hide`) and no operator report against it — left
+      unchanged rather than silently folded into Leg A's scope, and recorded as an open item in the
+      implementation summary's Known Limitations.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -95,7 +111,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 
 ### Leg A — the cell action menu (the operator's report)
 
-- [ ] **T004** [P0] A phone tap on an editable, non-title cell edits and does not select
+- [x] **T004** [P0] A phone tap on an editable, non-title cell edits and does not select
       (`src/views/database-view.ts:4786-4803`, `src/views/embedded-database-renderer.ts:4384-4401`).
       **Threshold:** `.db-selection-status-bar` count reads **0** after a touch tap; the desktop
       mouse grammar is byte-unchanged. **Red-first proof:** the caller returns early only on
@@ -105,8 +121,9 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       **Source:** ADR-002; the operator's second capture. **Lane:** the existing
       `verify-placement.mjs` selection legs (`:884`, `:894`, `:10622`) gain a bar-absence assertion,
       with a negative control that restores the fall-through and requires the count to go to 1.
+      **Closed:** the caller now returns on `open-record` OR `gesture === "touch"` — a phone tap never reaches `nextCellRange`/`renderSelectionStatusBar` regardless of what `resolveCellTapAction` answers, so `edit-cell` and the touch half of `select-cell` both defer to the cell renderer's own click handler. Desktop's mouse branch is unchanged (same `nextCellRange`/`isSelectingCells` calls, gesture guaranteed `"mouse"` past the early return). Mirrored in `embedded-database-renderer.ts`'s `handleMouseDown`. `verify-placement.mjs`'s pill section (added under T006) asserts `.db-selection-status-bar` renders 0 times for a touch cell selection — PASS.
 
-- [ ] **T005** [P0] Selection becomes an explicit mode entered by a **long press on a cell**
+- [x] **T005** [P0] Selection becomes an explicit mode entered by a **long press on a cell**
       (`src/views/table-cell-gesture.ts`, `src/views/database-view.ts`).
       **Threshold:** a long press on a cell enters selection mode and renders the pill; **no other
       phone path** reaches selection; the gesture is `attachLongPress` (`table-cell-gesture.ts:243-249`),
@@ -116,8 +133,9 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       red. **Source:** ADR-004 §1; the 2026-08-30 row-range ruling, which put the row's own range
       select behind the same object. **Lane:** the same selection legs assert the long press reaches
       the pill and that a plain tap does not, each with its own control.
+      **Closed:** implemented as `attachLongPress` directly on each `td` — first long press sets the anchor, a second extends it to the new cell — with the row's own long-press-for-menu gesture updated to ignore a press inside any table cell (`isTableCellTarget`, added to `table-cell-gesture.ts`) so the two holds cannot both fire on one press. Verified live: `verify-placement.mjs`'s new pill section (below) renders the pill from a long press and never from a plain mousedown/tap path.
 
-- [ ] **T006** [P0] The phone grows **no bottom-docked selection bar**; the selection wears a
+- [x] **T006** [P0] The phone grows **no bottom-docked selection bar**; the selection wears a
       three-control anchored pill instead
       (`src/views/database-view.ts:7607-7712`, `src/views/embedded-database-renderer.ts:4569-4579`,
       `styles.css:2590-2665`).
@@ -137,8 +155,9 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       (`screenshots/notion/ios/flows/reordering-a-table/notion-ios-flow-reordering-a-table-02-026940b3-e0de-443d-a948-6eb1e53e4ea1.webp`).
       **Lane:** pill-shape, child-count and bar-absence assertions on the existing selection legs,
       control = restore the phone bar rule and require the bar count to go to 1.
+      **Closed:** `renderSelectionStatusBar` now branches on `cellCount > 0 && isTouchDevice` before building anything — that branch renders `.db-cell-selection-pill` and returns, never touching `.db-selection-status-bar`. `verify-placement.mjs` gained a dedicated pill section: bar-absence, exactly one pill, exactly three children, `flex-wrap: nowrap`, 44px height, every child's hit box ≥44×44 — all measured live, all PASS. Row selection (the `else` branch) is byte-identical to before. Desktop cell selection (not touch) collapses to 5 children — count, Copy, Paste, Clear, `···` — folded into T011 below since both read the one collapsed builder.
 
-- [ ] **T007** [P0] The pill is anchored to the selection and clamped clear of Obsidian's phone
+- [x] **T007** [P0] The pill is anchored to the selection and clamped clear of Obsidian's phone
       navigation bar, and the navigation height is published whether or not the FAB renders
       (`src/views/database-view.ts`, `styles.css`, `src/views/toolbar-renderer.ts:2362`, `:2410-2419`).
       **Threshold:** the pill sits **8px** above the selection range's top edge, or 8px below it when
@@ -156,8 +175,9 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       the navbar term and require overlap, and widen the range past the viewport and require the
       clamp to hold. **Trap:** a `var()` that misses does not fail — the same silence
       `styles.css:2639-2644` already documents for `--db-keyboard-inset`.
+      **Closed:** the pill is positioned in script (`positionCellSelectionPill`), not CSS — anchored 8px above the union rect of the selected cells, clamped inside the grid viewport with an 8px margin, and clamped so its bottom edge never crosses `max(safe-area-inset-bottom, --db-mobile-navbar-height) + 8px`. `toolbar-renderer.ts`'s `reserveMobileFabInset` now runs unconditionally on a phone (moved out of `renderNewButton`, into `render()` before the `hideHeaderChrome` early return) so the variable exists whether or not the New button renders. `verify-placement.mjs` measures the 8px anchor and the viewport margin directly, and a self-contained negative control (a range near the viewport floor, where the clamp is the binding constraint) proves the navbar term is load-bearing: gap 552.0px→(dropped)→96.0px→(restored)→552.0px style deltas, all PASS.
 
-- [ ] **T008** [P0] Every cell editor claims the bottom dock while it is open
+- [x] **T008** [P0] Every cell editor claims the bottom dock while it is open
       (`src/views/record-surface/cell-editor-text.ts:331` and its close path; the other editors per
       T003's inventory).
       **Threshold:** `body.db-bottom-dock-taken` is present for the whole life of every cell editor
@@ -167,8 +187,9 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       (`styles.css:2635-2637`) does not fire for a multi-line text cell, which is exactly the
       operator's second capture. **Source:** ADR-003. **Lane:** the class asserted while the editor
       is open, control = remove the claim and require the bar to reappear.
+      **Closed:** `openTextPopoverEditor` now calls `claimBottomDock(td.ownerDocument, "cell-editor", true)` right after `td.addClass("db-cell-editing")`, and releases it in its one `close()` alongside `openSingleLineEditor`'s identical pair — commit, cancel and outside-press all route through that same `close()`, so the release is unconditional on how the editor ends. `npx vitest run` green (1523/1523); no existing test exercised this path directly, so no vitest coverage was added for a change verified live instead.
 
-- [ ] **T011** [P0] `···` opens a titled sheet on the phone and an anchored menu on desktop, and
+- [x] **T011** [P0] `···` opens a titled sheet on the phone and an anchored menu on desktop, and
       the desktop bar collapses to five children
       (`src/views/database-view.ts:7607-7712`, `src/i18n.ts:369-371`, `styles.css:925`).
       **Threshold:** the phone sheet is the shell's own bottom sheet — `044`'s grammar, header
@@ -190,10 +211,11 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       **Lane:** a reachability assertion enumerating the sheet's rows and the menu's items, control =
       drop a row and require the count to fall. **Constraint:** nothing is deleted — all three copy
       strings stay (`i18n.ts:369-371`).
+      **Closed:** one method, `openCellSelectionActionsMenu`, opens `createOwnedMenu` — which already presents as the shell's titled bottom sheet on a phone and an anchored menu on desktop with no per-platform code of its own — carrying Copy TSV/Markdown/CSV, a separator, Paste then Fill (a submenu form) or Bulk edit `<Column>` (context-dependent, matching the group's own either/or), a separator, then Clear last with `warning: true` (the only red row). Both the pill's `···` and the desktop bar's `···` call the same method. `verify-placement.mjs` opens the menu against a mixed-column selection and asserts all six of the mixed-column-reachable actions (TSV/MD/CSV/Paste/Fill/Clear) are present, with a negative control that removes one row and requires the count to fall — PASS. The single-editable-column "Bulk edit `<Column>`" branch is implemented and used by `openBulkEditForSelectedCells` but is not separately exercised by this fixture (recorded as an open item).
 
 ### Leg B — the confirm card
 
-- [ ] **T009** [P0] The destructive confirm presents as a margined card with stacked full-width
+- [x] **T009** [P0] The destructive confirm presents as a margined card with stacked full-width
       actions, on both platforms (`src/views/surface-shell.ts:156-170`,
       `src/views/mobile-bottom-sheet.ts:29-45` and `:364`, `src/views/modals/confirm-modal.ts`,
       `src/views/confirm-sheet.ts:46-71`, `styles.css:230-282` and `:8592-8598`).
@@ -209,6 +231,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       action-layout columns measured off the shipped `buildConfirmSheetBody`; control = strip the
       card class and require red. **Constraint:** `super(app, "sheet")` (`confirm-modal.ts:44`) is
       unchanged — `048` D1 forbids the `dialog` route on a phone.
+      **Closed:** `SheetChromeOptions`/`SheetModalChromeOptions`/`SurfaceShellOptions` gained a `frameRole?: "card"` field threaded through `attachSheetChromeToModal` → `applySheetChrome` → `setSheetMount`, which toggles `.db-sheet-card` and is read back by `classifySheetFrameShape` as an early bail-out (declared, never inferred, per the ADR). `DbModal` gained a `getFrameRole()` hook (default `undefined`); `ConfirmModal` overrides it to `"card"`. `buildConfirmSheetBody` gained `stackedActions`, applying `.db-confirm-stacked` to the actions row; `ConfirmModal` passes `stackedActions: true`. Two real bugs surfaced and were fixed before this closed: (1) `inset:16px; margin:auto` sizes correctly on paper but this engine stretched the box to fill the inset rather than sizing to content — replaced with fixed-position translate-centring at a fixed 320px width; (2) the shell header's `1fr auto 1fr` title-centring grid needs a definite container width to divide leftover space against, and a shrink-to-fit ancestor resolves each `1fr` track by content instead — the empty leading slot and the 44px trailing close button pulled the title 22px off-centre. Fixed with a `min-width: var(--db-shell-edge-control-size)` on the leading slot, additive and a no-op for every definite-width sheet. `tools/live/sheet-grammar.mjs` gained the `confirm` row's inset/radius/action-layout measurement plus a negative control (strip both classes, require flush+row); PASS: inset 35/279px (both ≥16), radius 16px all four corners, `flex-direction: column`, actions 44/50px. Four screenshots opened and read in both themes, standalone and stacked over the Properties sheet.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -216,7 +239,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] **T010** [P0] Append two questions to `067` AC-011's device checklist, and add no fourth device
+- [B] **T010** [P0] Append two questions to `067` AC-011's device checklist, and add no fourth device
       owner: does the selection bar clear the navigation pill on the real device, and does a tap on a
       cell open the editor without a bar flashing first
       (`../067-sheet-family-remediation/acceptance-criteria.md`).
@@ -224,6 +247,10 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       created in this packet. **Red-first proof:** neither question exists in any checklist today.
       **Source:** goal D5, parent D3. **Never ticked from here** — the operator answers it, and
       `044` AC-006, `048` AC-009, `051` AC-010 and `067` AC-011 are read against one build.
+      **Blocked:** this implementation pass's write authority was scoped to this packet's own
+      folder; `067-sheet-family-remediation/acceptance-criteria.md` is a different packet's file.
+      The two questions to add are named above verbatim — a two-line addition for whoever holds
+      write authority over `067` next.
 <!-- /ANCHOR:phase-3 -->
 
 ---

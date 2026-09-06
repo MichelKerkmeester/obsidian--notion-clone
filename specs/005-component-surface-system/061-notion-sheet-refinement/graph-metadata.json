@@ -50,17 +50,17 @@
       "implementation-summary.md",
       "research/research.md",
       "src/views/database-view.ts",
-      "src/views/record-surface/cell-editor-text.ts",
-      "src/views/table-cell-gesture.ts",
       "src/views/embedded-database-renderer.ts",
-      "src/views/confirm-sheet.ts",
-      "src/views/modals/confirm-modal.ts",
+      "src/views/table-cell-gesture.ts",
+      "src/views/record-surface/cell-editor-text.ts",
+      "src/views/toolbar-renderer.ts",
       "src/views/mobile-bottom-sheet.ts",
       "src/views/surface-shell.ts",
-      "src/views/toolbar-renderer.ts",
+      "src/views/modals/db-modal.ts",
+      "src/views/modals/confirm-modal.ts",
+      "src/views/confirm-sheet.ts",
       "src/i18n.ts",
-      "tools/live/sheet-grammar.mjs",
-      "tools/storybook/verify-placement.mjs"
+      "tools/live/sheet-grammar.mjs"
     ],
     "entities": [
       {
@@ -118,9 +118,9 @@
         "source": "derived"
       },
       {
-        "name": "cell-editor-text.ts",
+        "name": "embedded-database-renderer.ts",
         "kind": "code",
-        "path": "src/views/record-surface/cell-editor-text.ts",
+        "path": "src/views/embedded-database-renderer.ts",
         "source": "derived"
       },
       {
@@ -130,21 +130,15 @@
         "source": "derived"
       },
       {
-        "name": "embedded-database-renderer.ts",
+        "name": "cell-editor-text.ts",
         "kind": "code",
-        "path": "src/views/embedded-database-renderer.ts",
+        "path": "src/views/record-surface/cell-editor-text.ts",
         "source": "derived"
       },
       {
-        "name": "confirm-sheet.ts",
+        "name": "toolbar-renderer.ts",
         "kind": "code",
-        "path": "src/views/confirm-sheet.ts",
-        "source": "derived"
-      },
-      {
-        "name": "confirm-modal.ts",
-        "kind": "code",
-        "path": "src/views/modals/confirm-modal.ts",
+        "path": "src/views/toolbar-renderer.ts",
         "source": "derived"
       },
       {
@@ -160,9 +154,21 @@
         "source": "derived"
       },
       {
-        "name": "toolbar-renderer.ts",
+        "name": "db-modal.ts",
         "kind": "code",
-        "path": "src/views/toolbar-renderer.ts",
+        "path": "src/views/modals/db-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/confirm-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-sheet.ts",
+        "kind": "code",
+        "path": "src/views/confirm-sheet.ts",
         "source": "derived"
       },
       {
@@ -175,12 +181,6 @@
         "name": "sheet-grammar.mjs",
         "kind": "file",
         "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Tapping a cell on a phone does two things at once and shows the worse one",
     "created_at": "2026-09-06T16:03:53Z",
-    "last_save_at": "2026-09-06T18:03:19.923Z",
+    "last_save_at": "2026-09-06T23:05:30.318Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,14 +223,14 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:f7482404a45af1676e39c10df49b819821cbd961aa33bbe1204372fdb9ce58a3",
+    "source_fingerprint": "sha256:56c01df2779941784d21f980577385293cbdd56b25d840d0d8df5a6b27fe3d0d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ca28555087f3b82e63feb7ffb9b2dd027bb6e80eced4d7dd22152e5b625fcdfa",
       "plan.md": "65e57c73fccfdca2c9ba7b34a52c4c7b7626976ae5b9f7f361f0bc361d1bdb96",
-      "tasks.md": "fd4a9e55d803e5def5eb0d4e1bc3e910c6c886f77790b281c93dc6ea37002b40",
+      "tasks.md": "8b23a53b1e9e671018f641d0a020e027c38cbca0aba7f8ba2599613fcc9a291b",
       "decision-record.md": "9ea12681150a71efa545152feed51ba98b430f114b14d91c739ffc4a1ea1a290",
-      "implementation-summary.md": "926bb576ace767a26c4dd518a19e5d7d6609bc0ff23020d865ee1f284c33f95f",
+      "implementation-summary.md": "45b9693c71e49ea223bb2ddd2d25db434513cbf8ab50f93007fa19bb581d9517",
       "research/research.md": "40717726b482000cf2fb1645c3e057649717c6747ace587f6b048840873a5a74"
     },
     "last_active_at": null
