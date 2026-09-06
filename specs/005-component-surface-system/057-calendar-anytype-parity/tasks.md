@@ -10,14 +10,14 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T16:30:00Z"
+    last_updated_at: "2026-09-06T19:00:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "landed T015 R1-R7, T016, T008, T009 and T009's missed 224x28; T017 opened"
-    next_safe_action: "land T017, the timed blocks' flat chip ink, then the AC-010 device read"
+    recent_action: "landed T017: the week/day timed blocks flatten to the month chip's ink"
+    next_safe_action: "The AC-010 device read; AC-004's layout-tile panel stays a named out-of-scope gap"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
-      - "The timed-block per-event colour question (decision-record.md ADR-002) is unanswered and deliberately untouched"
+      - "AC-004's layout-tile panel has no measured value in design-trueup.md and is named out of scope"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -27,9 +27,8 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 95
-    open_questions:
-      - "None. ADR-002's colour question was answered 2026-09-06 ~04:45; T017 carries the unlanded implementation"
+    completion_pct: 98
+    open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
@@ -37,7 +36,8 @@ _memory:
       - "T004-T007 landed: the month grid retargeted, AC-003 Met, the gantt confirmed unmoved"
       - "AC-002 was claimed Met and is reopened: seven measured residuals are carried as T015 and T016"
       - "T015 R1-R7, T016, T008, T009 all landed: gate 26 green, gantt confirmed unmoved throughout"
-      - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink (T017, not yet landed)"
+      - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink"
+      - "T017 landed: 0 device px of the former per-event fills and accent bar across the four recaptured files"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -444,7 +444,7 @@ title and 44x44 close on phone.
       unshipped, operator-unconfirmed work would overstate status, so this row is recorded as a
       named gap against a path that is not this repository's convention, not filled with an
       invented entry.
-- [ ] T017 **The week and day timed blocks take the month chip's flat ink.** The operator answered
+- [x] T017 **The week and day timed blocks take the month chip's flat ink.** The operator answered
       ADR-002's open colour question on 2026-09-06 ~04:45, verbatim *"Flatten to chip ink"*, after
       this packet's stylesheet legs had already landed and been captured. Repainting every timed
       block is a visible change to a shipped surface and owes its own recapture and read-back, so it
@@ -467,6 +467,48 @@ title and 44x44 close on phone.
       `#EBEBEB` pair T015 R3 already landed. The gantt's own `db-timeline-*` colours are not this
       row's to touch: `git diff --stat -- src/views/calendar-timeline-renderer.ts` must stay empty
       and all eight `reference-gantt-*.png` MD5s identical, the same guard every leg here held.
+      **Done 2026-09-06.** `.db-calendar-week-timed-event` (`styles.css`) dropped its
+      `border-left`, `background-color`/`background-image` and `box-shadow`, taking
+      `background: none`, `border: 0`, `border-radius: 0` and the literal `#292929` /
+      `#DDDDDD` ink pair `.db-calendar-month-segment` already carries; `.db-calendar-
+      week-event-title`'s own explicit colour is removed so it inherits that ink the same
+      way `.db-calendar-month-title` does from its own parent. A duplicate, fully-subsumed
+      declaration of the same selector eleven rules above (position/z-index/padding, all
+      three already repeated in the rule this leg rewrote) is deleted rather than edited
+      twice, a zero-behaviour-change cleanup that also makes the selector unique for the
+      pinned-values test below. No separator rule was added between adjacent blocks: with
+      the fill gone, the week grid's own slot lines (`.db-calendar-week-slot-line`, T015
+      R3's `#EBEBEB`/`#292929` pair) show through in its place, the same "cell surface
+      shows through" reasoning the month chip already reads under — recorded as the
+      chosen disposition rather than left silent. **Green, recaptured and read at DPR 2**:
+      `calendar-week-time-grid-{desktop,mobile}-{light,dark}.png` (4 files, the hand-mock
+      fixture the red value was measured on) each return **0** device px of `#DEEAF1`,
+      `#E6EFEA`, `#F9E9D8` and `#1E3A8A` inside the time-grid body — a full per-pixel scan
+      of every file, not a sampled region. `constructed-calendar-week-*` and `constructed-
+      calendar-day-*` (real renderer, both scales, both themes, both devices — 8 more
+      files) return the same **0** and stayed pixelHash-identical to their pre-leg
+      manifest entries, because the bench data behind those two scenarios carries no
+      timed event inside the captured viewport; a full `node tools/screenshots/capture.mjs`
+      run confirms the constructed pair moved no pixel while `calendar-week-time-grid-*`
+      did. `src/views/calendar-pinned-values.test.ts` gained a sixth pin asserting
+      `background: none`, no `border-left`, `border-radius: 0` and the light/dark ink pair
+      on this exact selector; the negative control (reintroducing the old `border-left` +
+      `background-color` declarations) turned it red, then the restore turned it green
+      again. `npx tsc --noEmit` exit 0; `npm test` 1437/1437 (net +1); `npm run build`
+      exit 0 with `main.js` unmoved (a stylesheet-only and test-only change bundles
+      nothing). `git diff --stat -- src/views/calendar-timeline-renderer.ts` stays empty
+      and all eight `reference-gantt-*.png` MD5s are byte-identical to T002/T012's
+      recorded values; `pm-gantt-*` stays **119**. `screenshots/project-manager/` carries
+      no diff at all. The css-lane (`tools/lane/css-lane.json`) gained a new release entry
+      naming the four captures this leg actually moved, `baselineHash` advanced to the new
+      `sha256(styles.css)` slice, and `node tools/lane/check-lane.mjs` under
+      `SURFACE_PHASE=057-calendar-anytype-parity` reads exit 0. `node
+      tools/screenshots/verify.mjs` exit 0, 562 fresh (three unrelated captures the same
+      full run re-encoded byte-for-byte with no pixelHash change —
+      `constructed-option-color-picker-desktop-{dark,light}` and `board-view-desktop-dark`
+      — were restored to their committed bytes rather than carried as unreviewed noise,
+      with the manifest's own `bytes` and `sourceHashes.styles.css` fields reconciled to
+      match).
 <!-- /ANCHOR:phase-3 -->
 
 ---

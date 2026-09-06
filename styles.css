@@ -17404,7 +17404,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   font-size: 11px;
   font-weight: 500;
   line-height: 1.2;
-  color: var(--text-normal);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -17461,13 +17460,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   justify-content: center;
 }
 
-
-/* Timed event in week view */
-.note-database-container .db-calendar-week-timed-event {
-  position: absolute;
-  z-index: 3;
-  padding: 1px;
-}
 
 /* Calendar options popover (reuse existing chart options styles) */
 .note-database-container .db-calendar-options-popover {
@@ -18053,22 +18045,31 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 
+/* Flattened to the month chip's own flat ink: no per-event fill, no accent
+   bar, no radius — the same background: none / border: 0 / border-radius: 0
+   .db-calendar-month-segment carries, with the per-event distinction left to
+   the title text exactly as the month chip already carries it. Height stays
+   duration-proportional; only the ink treatment changed here. No separator
+   rule is added between adjacent blocks: dropping the solid fill lets the
+   slot lines above show through instead, the same "cell surface shows
+   through" reasoning the month chip already reads under. */
 .note-database-container .db-calendar-week-timed-event {
   position: absolute;
   z-index: 3;
   overflow: hidden;
   border: 0;
-  border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
-  border-radius: var(--db-radius-md);
-  /* Solid base first (so hour lines never show through), then the tint on top. */
-  background-color: var(--background-primary);
-  background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)));
+  border-radius: 0;
+  background: none;
   cursor: pointer;
-  box-shadow: var(--db-elevation-1);
+  box-shadow: none;
   text-align: left;
-  color: var(--text-normal);
+  color: #292929;
   font: inherit;
   padding: 1px;
+}
+
+.theme-dark .note-database-container .db-calendar-week-timed-event {
+  color: #DDDDDD;
 }
 
 .note-database-container .db-calendar-week-timed-event.is-dragging {
@@ -18198,9 +18199,9 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   color: var(--text-muted);
 }
 
-/* Completion dims the row rather than repainting it: the base rule already fills border-left
-   and background from --db-calendar-event-accent/-bg, so leaving those alone here keeps a
-   completed event in its own colour instead of a flat "done" tint. */
+/* Completion dims the row rather than repainting it: both blocks are already
+   flat ink at rest, so there is no fill or accent bar left to preserve —
+   this just fades the whole element and marks the title done. */
 .note-database-container .db-calendar-month-segment.is-completed,
 .note-database-container .db-calendar-week-timed-event.is-completed {
   opacity: 0.82;

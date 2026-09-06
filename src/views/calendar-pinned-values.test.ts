@@ -82,4 +82,15 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(body).toContain("height: 24px");
     expect(body).toContain("background: #216DFA");
   });
+
+  it("pins the week/day timed block to the month chip's flat ink: no fill, no accent bar, no radius", () => {
+    const body = ruleBody(".note-database-container .db-calendar-week-timed-event");
+    expect(body).toContain("background: none");
+    expect(body).not.toContain("border-left");
+    expect(body).toContain("border-radius: 0");
+    expect(body).toContain("color: #292929");
+
+    const dark = ruleBody(".theme-dark .note-database-container .db-calendar-week-timed-event");
+    expect(dark.replace(/\s+/g, " ").trim()).toBe("color: #DDDDDD;");
+  });
 });

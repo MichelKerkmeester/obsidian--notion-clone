@@ -1,8 +1,8 @@
 {
-  "holder": "051-modal-and-sheet-componentization",
-  "acquiredAt": "2026-09-06T20:00:00Z",
-  "baselineHash": "c6c1ce7e15f4",
-  "baselineCommit": "fe2d3be7",
+  "holder": "057-calendar-anytype-parity",
+  "acquiredAt": "2026-09-06T21:00:00Z",
+  "baselineHash": "a908655be7ef",
+  "baselineCommit": "3b3ac633",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4074,6 +4074,25 @@
         "screenshots/notion-clone/panels/panel-column-width-sheet-mobile-light.png"
       ],
       "note": "The phone sheet takes two frame shapes rather than one: a short sheet floats clear of all three free edges at an 8pt inset with a 16pt radius all round, a tall one runs flush with only its top corners rounded, classified live off the sheet's own rendered height with a hysteresis band so a height the class itself produces cannot flip it back. The shell header becomes a phone-only three-column grid so its title is centred in the frame itself rather than mirrored between two slots that only happened to match, and nine hand-built headers moved onto the shared builder — which is why seven desktop popovers gain the close control that builder already draws on the filter, sort and add-view popovers. Every capture was regenerated against a settled frame shape: the shutter now waits for the classifier instead of racing its 80ms debounce, which is what had one scenario coming back with two different shapes on two runs of the identical page. 44 captures moved pixelHash and are listed here; 0 of the 16 Project Manager references moved. The floating and flush pairs were opened and measured in device pixels at DPR 2 — 16 device px off left, right and bottom with the scrim visible around them and a 32 device-px radius on four corners for the floating shape; 0 inset and a 16 device-px radius on the top corners only for the flush one — and the title's ink centre measured within 2 device px of the frame centre on column-manager, filter, sort and the option colour picker, against 52.5 device px off centre on column-manager before the fix."
+    },
+    {
+      "event": "acquire",
+      "phase": "057-calendar-anytype-parity",
+      "at": "2026-09-06T21:00:00Z",
+      "hash": "c6c1ce7e15f4"
+    },
+    {
+      "event": "release",
+      "phase": "057-calendar-anytype-parity",
+      "at": "2026-09-06T21:30:00Z",
+      "hash": "a908655be7ef",
+      "reviewed": [
+        "screenshots/notion-clone/views/calendar-week-time-grid-desktop-dark.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-mobile-light.png"
+      ],
+      "note": "The week/day timed-event block (.db-calendar-week-timed-event) flattened to the month chip's own ink: background: none, border-radius: 0, no accent bar, colour #292929/#DDDDDD inherited by the title exactly as the month chip's own title does. Height stays duration-proportional; the fixture's per-event fills and accent bar are gone from the capture, read pixel-by-pixel (0 device px of #DEEAF1/#E6EFEA/#F9E9D8 and 0 of the #1E3A8A accent bar), with the slot lines showing through in their place rather than a new separator rule. Only the hand-mock calendar-week-time-grid fixture moved content in this release; constructed-calendar-week and constructed-calendar-day stayed pixelHash-identical because their bench data carries no timed event inside the captured viewport. Reference-gantt-*.png MD5s and calendar-timeline-renderer.ts stayed untouched."
     }
   ],
   "outstanding": [

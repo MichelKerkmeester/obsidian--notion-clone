@@ -10,12 +10,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T11:55:00Z"
+    last_updated_at: "2026-09-06T19:00:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "closed adr-002's colour question with the operator's ruling; t017 carries it"
-    next_safe_action: "Land T017, the timed blocks' flat chip ink, the last thing ADR-002 still owes"
-    blockers:
-      - "T017 owes the flatten-to-chip-ink repaint of the week and day timed blocks"
+    recent_action: "landed t017: the week/day timed blocks flatten to chip ink, measured at 0 fill/bar px"
+    next_safe_action: "The operator's own device read (AC-010); nothing else in this packet is unlanded"
+    blockers: []
     key_files:
       - "src/views/calendar-renderer.ts"
       - "specs/005-component-surface-system/039-calendar-parity-port/decision-record.md"
@@ -23,15 +22,15 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 90
-    open_questions:
-      - "None. The colour question was answered 2026-09-06 ~04:45: flatten to chip ink. tasks.md T017 carries the unlanded implementation"
+    completion_pct: 100
+    open_questions: []
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
       - "ADR-002's implementation half is partly landed: the weekend tint and nav cluster carried to week and day, the rule colour and today marker did not"
       - "ADR-002's colour question is answered: the timed blocks flatten to chip ink, carried as T017"
+      - "T017 landed: the week/day timed block reads the month chip's flat ink, no separator rule needed since the slot lines show through"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -191,6 +190,24 @@ T017 with the threshold it has to meet and the value that is red today, rather t
 unmeasured — the same treatment T015's own residuals got. Until T017 lands, the blocks still carry
 their colour, and `screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png` is
 the record of what that looks like.
+
+**Landed 2026-09-06 (T017).** `.db-calendar-week-timed-event` took the exact declarations
+`.db-calendar-month-segment` carries — `background: none`, `border: 0`, `border-radius: 0`, and
+the literal `#292929` / `#DDDDDD` ink pair, inherited by the title the same way the month title
+inherits it from its own parent. Recaptured and read pixel-by-pixel: **0** device px of the three
+former per-event fills and **0** of the former accent bar, against the 138,411 / 9,873 / 8,336 red
+value.
+
+**The one design question the ruling did not answer — whether a flattened block still needs
+something to separate it from its neighbour — is settled here rather than left implicit.** Twenty
+Anytype captures show no time-grid view at all, so there is no reference to read a separator off
+either way. No separator rule was added. Dropping the block's own fill means the week grid's
+already-landed slot lines (`.db-calendar-week-slot-line`, the `#EBEBEB`/`#292929` pair T015 R3
+took from the month grid) now show through where the block used to paint over them, which is the
+same "the cell surface shows through" reasoning the month chip's own flat background reads under —
+so the existing grid, not a new rule, is what separates one block from the next. If a future
+capture ever shows a genuine gap between back-to-back blocks, that is a geometry question (padding
+between blocks), not a colour one, and does not reopen this ADR.
 
 ---
 

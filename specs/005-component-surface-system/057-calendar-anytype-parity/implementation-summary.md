@@ -10,14 +10,14 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T16:30:00Z"
+    last_updated_at: "2026-09-06T19:00:00Z"
     last_updated_by: "code-implementer"
-    recent_action: "verified every claim at the landing; repaired t009 and the replay damage"
-    next_safe_action: "land T017, then the operator AC-010 device read"
+    recent_action: "landed T017, the flatten-to-chip-ink repaint; AC-005 closes"
+    next_safe_action: "the operator's AC-010 device read; AC-004's layout-tile panel stays a named gap"
     blockers:
       - "AC-010 is the operator's device read, unclosable here"
       - "Five AC-002 sub-rows stay pixel read owed"
-      - "T017 owes the flatten-to-chip-ink repaint; AC-005's implementation half is reopened on it"
+      - "AC-004's layout-tile panel has no measured value in design-trueup.md and is named out of scope"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -27,15 +27,15 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-impl"
       parent_session_id: null
-    completion_pct: 90
-    open_questions:
-      - "None. Answered 2026-09-06 ~04:45: flatten to chip ink. T017 carries the unlanded implementation"
+    completion_pct: 98
+    open_questions: []
     answered_questions:
       - "ADR-002 ruled: keep week and day, styled to the month grid"
       - "T015 R1-R7 closed: inset, pitch, rule colour, marker, header, offset, label, drawer"
       - "T016: chip icon confirmed rendering, not just wired"
       - "T008: phone chip takes the 44px touch floor, CSS and JS pitch alike"
       - "T009: submenu geometry scoped to date-field dropdowns only"
+      - "T017: the week/day timed block flattens to the month chip's ink, measured at 0 fill/bar px"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -51,7 +51,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 057-calendar-anytype-parity |
-| **Completed** | Code landed and gated. AC-010 (the operator's device read) is the only row left open, by design — an agent never ticks it |
+| **Completed** | Code landed and gated. Two rows stay open: AC-004's out-of-scope layout-tile panel, and AC-010 (the operator's device read), which an agent never ticks |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -137,6 +137,25 @@ the row's block padding until the floor binds. Re-measured live: **224 x 28** on
 rows, **280 x 30** on every other dropdown in the same popover, which is the scoping assertion and
 its own negative control in one read.
 
+### T017 — the week/day timed block flattens to the month chip's ink
+
+The operator's last open question, answered 2026-09-06 ~04:45 verbatim *"Flatten to chip ink"*,
+after this packet's stylesheet legs had already landed and been captured. `.db-calendar-week-
+timed-event` dropped its `border-left` accent bar, its `background-color`/`background-image` fill
+and its `box-shadow`, taking `background: none`, `border: 0`, `border-radius: 0` and the literal
+`#292929`/`#DDDDDD` ink pair `.db-calendar-month-segment` already carries; `.db-calendar-week-
+event-title`'s own explicit colour is removed so it inherits that ink exactly the way the month
+title inherits from its own parent. Block height stays duration-proportional — the geometry half
+of ADR-002 was already settled and this ruling does not touch it. A duplicate, fully-subsumed
+declaration of the same selector eleven rules above the one this leg rewrote (three properties, all
+three already repeated in the surviving rule) is deleted as a zero-behaviour-change cleanup, which
+also makes the selector unique for the pinned-values test. No separator rule was added between
+adjacent blocks: dropping the fill lets the week grid's own slot lines show through in its place,
+the same "cell surface shows through" reasoning the month chip's own flat background already reads
+under (`decision-record.md` ADR-002's landing note). Recaptured and read pixel-by-pixel: **0**
+device px of the three former per-event fills and the former accent bar, against a red value of
+138,411 / 9,873 / 8,336 device px plus a bar at every block.
+
 ### Ancillary — the two toolbar headers `051` could not reach
 
 `calendar-toolbar-renderer.ts:89` and `calendar-timeline-toolbar-renderer.ts:69`'s hand-built
@@ -146,11 +165,12 @@ file from its own toolbar — is untouched. Recorded with file:line in `051`'s o
 
 ### A pinned-values test
 
-`calendar-pinned-values.test.ts` reads styles.css directly and asserts five measured values by
+`calendar-pinned-values.test.ts` reads styles.css directly and asserts six measured values by
 literal text: the month row's 136px height, the day-cell rule colour pair, the chip's 20px desktop
-pitch and square corners, the phone chip's 44px override, and the today marker's 26x24px size and
-`#216DFA` fill — so a future edit that quietly moves one of these fails at `npm test` speed, before
-a lane merely reports that styles.css moved.
+pitch and square corners, the phone chip's 44px override, the today marker's 26x24px size and
+`#216DFA` fill, and (T017) the week/day timed block's flat background/border-left/radius/colour —
+so a future edit that quietly moves one of these fails at `npm test` speed, before a lane merely
+reports that styles.css moved.
 
 ### Files Changed
 
@@ -163,15 +183,17 @@ a lane merely reports that styles.css moved.
 | `src/views/calendar-toolbar-renderer.test.ts` | Created | Pins the date-field submenu class scoping |
 | `src/views/calendar-timeline-toolbar-renderer.ts` | Edited | The `buildShellHeader` migration (gantt's own renderer untouched) |
 | `src/views/calendar-pinned-values.test.ts` | Created | Five pinned calendar values, read-first from styles.css |
-| `styles.css` | Edited | R1/R2 (`box-sizing`), R3 (rule colour/today marker), R5 (day-number padding/align), R7 (dead rule removed), T008 (phone chip height), T009 (submenu geometry) |
+| `styles.css` | Edited | R1/R2 (`box-sizing`), R3 (rule colour/today marker), R5 (day-number padding/align), R7 (dead rule removed), T008 (phone chip height), T009 (submenu geometry), T017 (timed block flattened to chip ink, one duplicate rule removed) |
 | `tools/live/render-assertion-harness.ts` | Edited | T016's `calendarRecordIcon` option |
 | `tools/screenshots/constructed-scenarios.mjs` | Edited | T016's option wired to `constructed-calendar-month`; its note corrected |
 | `tools/screenshots/scenarios/temporal.mjs` | Edited | R7's fixture notes corrected; `calendarBacklogEmptyMarkup` removed |
 | `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Edited | Dropped assertions against the removed helper |
 | `tools/live/replay.mjs` | Edited | `039`'s calm-empty-marker claim superseded in place, recorded as such |
-| `tools/lane/css-lane.json` | Edited | Nine held edits, then released at `4f88f8ebfee6` naming 37 reviewed captures |
+| `tools/lane/css-lane.json` | Edited | Nine held edits, then released at `4f88f8ebfee6` naming 37 reviewed captures; T017 released again at a new `baselineHash` naming 4 more |
 | `specs/005-component-surface-system/051-modal-and-sheet-componentization/tasks.md` | Edited | Addendum recording the two migrated files, file:line |
+| `src/views/calendar-pinned-values.test.ts` | Edited | T017's sixth pin: the timed block's flat background/border-left/radius/colour, with a negative-control check |
 | 37 `screenshots/notion-clone/**/*.png` | Recaptured | Every content-changed capture this leg's fixes moved |
+| 4 `screenshots/notion-clone/views/calendar-week-time-grid-*.png` | Recaptured | T017's flattened timed block |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -196,7 +218,8 @@ across the whole leg).
 
 | Decision | Why |
 |----------|-----|
-| R3's colour fix stops at rule/marker geometry, not the timed block's own colour | ADR-002's open question (does "styled to the month grid" strip the per-event colour too) is the operator's, not inferable from a reference that ships no time grid |
+| R3's colour fix stopped at rule/marker geometry, leaving the timed block's own colour for the operator to rule on | ADR-002's open question (does "styled to the month grid" strip the per-event colour too) was not inferable from a reference that ships no time grid; the operator answered it and T017 landed the answer |
+| No separator rule was added between adjacent flattened timed blocks | Twenty Anytype captures show no time-grid view to read a separator off either way; dropping the fill lets the already-landed slot lines show through in its place, so the existing grid does the separating rather than a new rule |
 | The date-property submenu's 224px/28px geometry is scoped to a new class, not applied to the shared dropdown-menu component | The same boundary `design-trueup.md` already draws for the layout-tile panel: `053` owns the view switcher, and the shared dropdown is a cross-cutting component this packet does not own either |
 | The layout-tile panel and `+ Add Property` stay declined/out of scope | Recorded, not silently dropped: frontmatter keys are not a property registry, and the tile panel is a different packet's surface |
 | Five byte-only capture re-encodes are left at their freshly-captured bytes rather than restored to origin bytes | Restoring them would reintroduce stale manifest `sourceHashes` against the tree's actual final file hashes and fail the `screenshots-fresh` gate lane — the gate's mechanical pass is weighted over a marginally smaller diff |
@@ -211,14 +234,14 @@ across the whole leg).
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0, read at every landing commit |
-| `npx vitest run` | **1436/1436** in 137 files, from the final landed state (this leg started at 1418/1418; the rest of the delta is upstream's) |
-| `npm run build` | Exit 0; `main.js` is tracked here and the rebuilt bundle is committed |
+| `npx vitest run` | **1437/1437** in 137 files, from the T017 landing (the pinned-values test's sixth pin added net +1) |
+| `npm run build` | Exit 0; `main.js` unmoved — T017 is a stylesheet-only and test-only change |
 | `npm run gate` (foreground, exit read from a file, no pipe) | **26 green, 0 red** |
 | `node tools/live/sheet-grammar.mjs` | Exit 0, **13** surfaces and **31** stacked pairs. The thirteenth is `055`'s `confirm`, registered while this packet was open; 057 registered none |
 | `node tools/screenshots/verify.mjs` | Exit 0, **562** current |
 | Gantt unmoved | All eight `reference-gantt-*.png` MD5-identical to `T002`'s recorded values; `git diff --stat origin/main -- src/views/calendar-timeline-renderer.ts` empty; `pm-gantt-*` still **119** |
 | Guard tests unedited | `git diff --stat origin/main -- calendar-keyboard-navigation.test.ts calendar-search-placement.test.ts` empty; with `calendar-renderer.test.ts`, 32/32 |
-| Acceptance criteria | **Seven Met** — AC-001, AC-002, AC-003, AC-006, AC-007, AC-008, AC-009, each re-measured at the landing rather than accepted on this leg's own report. **Three open** — AC-004's two unbuilt surfaces, AC-005's *implementation* half (reopened at ~04:45 on the flatten-to-chip-ink ruling, carried as T017), and AC-010, the operator's |
+| Acceptance criteria | **Eight Met** — AC-001, AC-002, AC-003, AC-005, AC-006, AC-007, AC-008, AC-009, each re-measured at a landing rather than accepted on the implementing leg's own report. **Two open** — AC-004's one remaining out-of-scope surface, and AC-010, the operator's |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -229,24 +252,16 @@ across the whole leg).
 1. **Five `AC-002` sub-rows stay pixel read owed.** Hover, focus, press, drag, the overflow
    affordance, chip truncation, multi-day spans, a two-digit today, and a six-week month's row
    height cannot be answered from a static capture. Unchanged by this leg.
-2. **The timed-block per-event colour is answered and not yet implemented.** The operator ruled at
-   2026-09-06 ~04:45, verbatim *"Flatten to chip ink"* — after this leg's stylesheet edits had
-   landed and been captured. `tasks.md` **T017** carries it with its threshold and its red value
-   (138,411 device px of `#DEEAF1`, 9,873 of `#E6EFEA`, 8,336 of `#F9E9D8`, plus a `#1E3A8A` accent
-   bar per block, measured on `calendar-week-time-grid-desktop-light.png`). **AC-005 is reopened on
-   its implementation half because of it**, which is the same call this packet made on AC-002 that
-   morning: repainting a shipped surface owes its own recapture and read-back, and ticking a row on
-   a ruling nobody has implemented is the shape of claim the verification pass exists to catch.
-3. **`AC-004`'s layout-tile panel and `+ Add Property` stay unbuilt.** Named as out of scope
+2. **`AC-004`'s layout-tile panel and `+ Add Property` stay unbuilt.** Named as out of scope
    (`053` owns the view switcher) and declined on product grounds (frontmatter keys are not a
    property registry), respectively — recorded, not silently missing.
-4. **The phone calendar's every value carries "design inferred from desktop."** `T013` counted
+3. **The phone calendar's every value carries "design inferred from desktop."** `T013` counted
    zero unlabelled ones; the two phone-specific calendar values this packet owns (the nav-button
    and chip 44px floors) are both labelled with their measured desktop source and their
    accessibility ground.
-5. **`AC-010` is the operator's own device read**, on iOS and desktop, knowing the phone half was
+4. **`AC-010` is the operator's own device read**, on iOS and desktop, knowing the phone half was
    inferred. Nothing in this repository closes this row, and it is not ticked here.
-6. **The weekday labels take the reference's two-letter form, but not its Monday start.** The
+5. **The weekday labels take the reference's two-letter form, but not its Monday start.** The
    capture corpus renders `Su Mo Tu We Th Fr Sa` against the reference's `Mo Tu We Th Fr Sa Su`,
    because which day starts the week is locale- and `calendarFirstDayOfWeek`-driven and the harness
    runs `en-US`. T015 R6 moved the label's character count deliberately and left the week start
