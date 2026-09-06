@@ -93,7 +93,7 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       anatomy. **No chip row appears on any capture.** See `design-trueup.md` REQ-001, C1, C2
       (`src/views/toolbar-renderer.ts`, `src/views/filter-panel-renderer.ts`,
       `src/views/sort-panel-renderer.ts`, `styles.css`)
-- [ ] T004 [P0] **REQ-013 — per-format filter and sort condition rows on phone sheets.** One
+- [x] T004 [P0] **REQ-013 — per-format filter and sort condition rows on phone sheets.** One
       condition row shape per property format we support, rendered inside a sheet that carries
       `044`'s grammar.
       **Trued up at T001 — the premise was false and the red-first instruction unexecutable.** The
@@ -115,6 +115,11 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       See `design-trueup.md` REQ-013
       (`src/views/filter-panel-renderer.ts`, `src/views/sort-panel-renderer.ts`,
       `src/views/sheet-grammar.ts`)
+      **Closed 2026-09-06.** `sheet-grammar.ts` declares all seven canonical elements plus dropdown
+      as an eighth column; `sheet-grammar.mjs` measures `sort-panel` and `filter-panel` against
+      real `getComputedStyle` reads. `node tools/live/sheet-grammar.mjs`, `$?` read directly: `0` —
+      both surfaces read 8 of 8 true, all eight registered stacked pairs conform, and the lane's own
+      negative controls (a removed element, an injected 600px child) are observed red then green
 
 ### L2 — database-view, view-config-panel-renderer
 
@@ -132,7 +137,7 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       role, so no new role. Anytype's ~50ms remains source-derived and unphotographed; our 100ms
       budget is unchanged. See `design-trueup.md` REQ-002
       (`src/views/database-view.ts`, `src/views/view-config-panel-renderer.ts`)
-- [ ] T006 [P1] **REQ-010 — per-view new-row default presets.** The adopted slice of templates
+- [x] T006 [P1] **REQ-010 — per-view new-row default presets.** The adopted slice of templates
       and only that slice (ADR-002, goal D6).
       **Trued up at T001 — the slice narrows again.** A per-view **status** preset already ships
       (`view-config-panel-renderer.ts:259, :265, :403-407`) and a per-database template with a path
@@ -150,6 +155,12 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       any kind is `Page limit  60 ›` in the gallery layout block, which is where a new default row
       belongs
       (`src/views/view-config-panel-renderer.ts`)
+      **Closed 2026-09-06.** `src/data/view-row-presets.ts` applies every stored field default at
+      creation and skips keys the schema no longer has; `toolbar-renderer.ts:2352, :2453` wire it
+      into both create-entry call sites, and the editor renders **beside the create affordance** —
+      the `New ⌄` menu's `Settings` section, `:2494-2513` — matching the corrected surface (`053`
+      D2). `ViewConfig.newRowPresets` round-trips through `data-source.ts`. `npx vitest run
+      src/data/view-row-presets.test.ts`, `$?` read directly: `0`
 
 ### L3 — board-renderer, table-renderer, styles.css
 
@@ -172,7 +183,7 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       **Constraint:** goal D5 — recapture `screenshots/project-manager/` board reference and prove
       `pixelHash` unchanged before this task closes
       (`src/views/board-renderer.ts`, `styles.css`)
-- [ ] T008 [P0] **REQ-007 — sort-conflict confirmation on manual drag reorder.**
+- [x] T008 [P0] **REQ-007 — sort-conflict confirmation on manual drag reorder.**
       **Threshold:** a drag reorder while a sort is active raises a confirmation; declining leaves
       the order and the sort untouched; accepting clears the sort and commits the drop.
       **Red first:** drag under an active sort on the current tree and record that the drop is
@@ -187,7 +198,13 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       refusing it silently reads as a broken drag, where a menu row can carry a disabled state
       legibly
       (`src/views/board-renderer.ts`, `src/views/table-renderer.ts`)
-- [ ] T009 [P1] **REQ-011 — `positionLock` while a name is being typed in a sorted view.**
+      **Closed 2026-09-06.** Both renderers gate the drop on `isExplicitlySorted(config)` and await
+      a shared `confirmSortConflict(config)`: `table-renderer.ts:1087-1105, :1149-1152` and
+      `board-renderer.ts:2060-2066`. `table-renderer-sort-conflict.test.ts` drives a real drag/drop
+      through a mock DOM proving both branches; `board-renderer-hierarchy.test.ts:836-867` proves
+      the same two branches on the board. `npx vitest run src/views/table-renderer-sort-conflict.test.ts
+      src/views/board-renderer-hierarchy.test.ts`, `$?` read directly: `0`
+- [x] T009 [P1] **REQ-011 — `positionLock` while a name is being typed in a sorted view.**
       **Threshold:** the edited row's index does not change while typing, and repositions exactly
       once on commit or blur.
       **Red first:** type into a sorted view on the current tree and record the row index changing
@@ -196,6 +213,16 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       show it, which closes the second of `spec.md` §12's open questions. `047` §8 names the mechanism
       and the release point, both source-derived: **design inferred from source code, not seen**
       (`src/views/table-renderer.ts`)
+      **Restated and closed 2026-09-06 — the premise does not hold on this tree.**
+      `cell-renderer.ts`'s `editFileName` delegates to `editSingleLinePopover`, which never writes
+      into the cell's own DOM and whose keystroke handler reacts only to Enter/Tab/Escape; the
+      rename commits only through `save()`, reachable only those three ways or a blur. Since
+      `TableRenderer` carries no sort of its own and only repaints on a fresh `rows` array from
+      `refresh()`, a row cannot move before its own edit has committed — the threshold restates to
+      a regression guard rather than a build. `table-renderer-position-lock.test.ts` pins the
+      three facts as a source contract, observed red by adding a live `input.oninput` handler that
+      would have violated it, green with it removed
+      (`src/views/cell-renderer.ts`, `src/views/table-renderer.ts`)
 
 ### L4 — active-view-controls-renderer
 
@@ -218,10 +245,19 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       **Placement note:** a right-click has no phone equivalent, so the settings-panel row works on
       both viewports without a second interaction vocabulary
       (`src/views/active-view-controls-renderer.ts`)
+      **Reconciled 2026-09-06, not closed — half landed outside this leg's scope.**
+      `duplicateView` (`database-view.ts:3890-3910`) now exists and its config equality is proven
+      by a new unit test in `database-view-settings-landing.test.ts` §5 (observed red first by
+      locally reusing `source.id`, green restored). `Duplicate view` and `Copy view code` also ship
+      — as the view-tab context menu (`toolbar-renderer.ts:1144, :1280`) — landed by a different,
+      out-of-scope leg and left untouched here. The settings-panel's own `Duplicate view` / `Remove
+      view` last-section rows are not built; `view-config-panel-renderer.ts` carries neither. That
+      placement is not assigned to this leg and stays open
+      (`src/views/database-view.ts`, `src/views/database-view-settings-landing.test.ts`)
 
 ### L5 — view-state-store
 
-- [ ] T011 [P1] **REQ-005 — per-view scroll-position restore.** Off the critical path; may start
+- [x] T011 [P1] **REQ-005 — per-view scroll-position restore.** Off the critical path; may start
       before T001 completes, since no capture is expected.
       **Threshold:** leaving a view at a known offset and returning restores it within **±2px**, per
       view and independently per view.
@@ -235,10 +271,17 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       **Capture:** none needed, **confirmed at T001** — behaviour, not appearance, which closes the
       second of `spec.md` §12's open questions
       (`src/views/view-state-store.ts`)
+      **Closed 2026-09-06.** `ViewStateStore` gained `getViewport`/`setViewport`, an in-session
+      map keyed like its existing per-view state. `DatabaseView.switchView` captures the outgoing
+      view through `captureDatabaseViewport(this.containerEl_)` and restores the incoming one
+      through `restoreDatabaseViewport(...)` after `refresh()` — the two functions the packet
+      named, nothing new. `npx vitest run src/views/view-state-store.test.ts`, `$?` read
+      directly: `0`
+      (`src/views/view-state-store.ts`, `src/views/database-view.ts`)
 
 ### L6 — popover-position and the cell editors
 
-- [ ] T012 [P0] **REQ-006 — cell-editor anti-clip flip near the right edge.**
+- [x] T012 [P0] **REQ-006 — cell-editor anti-clip flip near the right edge.**
       **Threshold:** an editor whose anchor is within **92px** of the viewport's right edge renders
       right-aligned, and no open editor's right edge exceeds the viewport's.
       **Red first:** open an editor in the rightmost column on the current tree and record the
@@ -256,10 +299,21 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       **Phone:** an editor presents as a sheet, where "flip" has no meaning — the phone expression is
       `048`'s stacking model, joining the seven pickers already registered as stacked pairs
       (`src/views/popover-position.ts`, the cell editors)
+      **Closed 2026-09-06 — the decisive criterion, not the 92px trigger.** `cell-renderer.ts`'s
+      three desktop popover placement methods — `positionTextEditPopover:2804`,
+      `positionDateEditPopover:2263`, `positionOptionPopover:3095` — each clamp the popover's left
+      edge to `bounds.right - width - margin`, so no open editor's right edge can exceed the
+      viewport's, for text, number, date, status/select, multi-select and relation editors alike.
+      The clamp is unconditional rather than a 92px-gated flip, which is stronger than the
+      threshold asked for; no fixed boundary exists and none is claimed as measured. Proven by a
+      new suite in `popover-position.test.ts` §5: a source-contract pin on the three call sites, an
+      anchor sweep asserting no overflow at any position, and a negative control showing the same
+      anchor overflows without the clamp. `npx vitest run src/views/popover-position.test.ts`,
+      `$?` read directly: `0`
 
 ### L7 — row-menu, bulk-edit-field-menu
 
-- [ ] T013 [P0] **REQ-008 — capability-gated menus with a never-empty fallback and selection
+- [x] T013 [P0] **REQ-008 — capability-gated menus with a never-empty fallback and selection
       caps.**
       **Trued up at T001 — the premise is true for one file of the two, and the caps have no
       referent.**
@@ -279,10 +333,15 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       (`design-trueup.md` C5). The "No available actions" fallback and any multi-selection were
       **not captured**
       (`src/views/row-menu.ts`, `src/views/bulk-edit-field-menu.ts`)
+      **Closed 2026-09-06.** `bulk-edit-field-menu.ts` now renders `[{ value: "", text:
+      t("menu.noActions"), disabled: true }]` when `getBulkEditableColumns(...)` is empty, reusing
+      the string `owned-menu.ts` already shows for an equivalent case. `row-menu.ts`'s
+      unconditional first row is pinned by a source-contract negative control. `npx vitest run
+      src/views/bulk-edit-field-menu.test.ts src/views/row-menu.test.ts`, `$?` read directly: `0`
 
 ### L8 — empty-state-renderer
 
-- [ ] T014 [P0] **REQ-009 — two empty-state flavours plus the deleted-relation state.**
+- [x] T014 [P0] **REQ-009 — two empty-state flavours plus the deleted-relation state.**
       **Trued up at T001 — the premise was false by a wide margin.** `empty-state-renderer.ts:24-36`
       declares **twelve** reasons with a copy catalogue at `:143-203` and a diagnosis function at
       `:209-216`. `no-database` is the "target" flavour; `no-matching-data`, `filter-empty`,
@@ -300,6 +359,14 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       "target" flavour and the deleted-relation state were not captured. **Anytype's empty-state
       design is not adopted — there is none, and ours is better**
       (`src/views/empty-state-renderer.ts`)
+      **Closed 2026-09-06.** A thirteenth reason, `"group-relation-deleted"`, and its copy entry
+      were added. A pure `isBoardGroupFieldMissing(columns, groupField)` decides when it applies;
+      `DatabaseView.renderBoard` and the embedded board branch both check it before grouping and
+      render the whole-board state with an `Open view settings` action instead. `npx vitest run
+      src/views/empty-state-renderer.test.ts`, `$?` read directly: `0`, all thirteen reasons
+      proven distinct
+      (`src/views/empty-state-renderer.ts`, `src/views/database-view.ts`,
+      `src/views/embedded-database-renderer.ts`, `src/i18n.ts`)
 
 ### L9 — embedded-database-renderer
 
@@ -325,7 +392,7 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       `src/views` is `chart-renderer.ts:876`, which resolves the constructor off the owner window
       (`:98`) because a portalled surface may live in another document — that is the pattern to copy
       (`src/views/embedded-database-renderer.ts`)
-- [ ] T016 [P2] **REQ-014 — inline "Load more" row instead of virtualization for embedded
+- [x] T016 [P2] **REQ-014 — inline "Load more" row instead of virtualization for embedded
       views.**
       **Trued up at T001 — the premise was false in the other direction: there is no virtualization
       to avoid.** No `virtualis*` match exists anywhere in `src/views`; the only one in `src` is
@@ -342,6 +409,16 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       `+ New Object` 384), matching `047` §5's source-derived split. **A "Load more" row itself was
       not captured** — every collection in the sweep holds fewer rows than the page limit
       (`src/views/embedded-database-renderer.ts`)
+      **Closed 2026-09-06.** `EMBEDDED_TABLE_PAGE_LIMIT = 60` — ours, argued rather than quoted,
+      per `053` D4's correction that Anytype's own limit is per-layout (Gallery 60, Kanban 10, none
+      elsewhere). A session-only `tableRevealCounts` map (per view, never persisted) and a pure
+      `resolveEmbeddedTablePage(rows, revealCount)` decide the page; the ungrouped table branch
+      slices to it and appends a `db-table-load-more-row` reading its colspan off the real header,
+      revealing one more page per click. No virtualization was added. `npx vitest run
+      src/views/embedded-table-page-limit.test.ts`, `$?` read directly: `0`. `styles.css` gained
+      the row's own additive rule pair; the CSS lane recaptured all 550 entries twice (0
+      pixelHash/layoutHash changes either time) and was handed to this phase
+      (`src/views/embedded-database-renderer.ts`, `styles.css`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -499,9 +576,11 @@ read, never on a command that was merely run.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 19 | 4/19 |
-| P1 Items | 15 | 0/15 |
-| P2 Items | 1 | 0/1 |
+| P0 Items | 19 | 9/19 |
+| P1 Items | 15 | 3/15 |
+| P2 Items | 1 | 1/1 |
 
-**Verification Date**: 2026-09-05 (T001 read, four P0 rows closed)
+**Verification Date**: 2026-09-06 (T001 read, four P0 rows closed; T004/T008/T012 reconciled P0
+and T006 reconciled P1 against `main`; T009/T013/T014 (P0/P1) and T011 (P1) and T016 (P2)
+implemented this session, each with red-then-green proof)
 <!-- /ANCHOR:summary -->

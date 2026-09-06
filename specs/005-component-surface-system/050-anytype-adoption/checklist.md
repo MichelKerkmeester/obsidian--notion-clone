@@ -37,17 +37,17 @@ not close until T002 has put a number in them and the fix has moved it.
 | C1 | Chip row present when a filter or sort is active; trigger icons state-dependent | **0 chips, 1 icon state** — neither `filter-panel-renderer.ts` nor `sort-panel-renderer.ts` renders a chip surface, and the toolbar's filter and sort icons behave identically whether or not anything is active | row present iff active; icon state tracks it | [ ] |
 | C2 | Delay from view create/duplicate to view settings being open | **never — nothing opens**; `database-view.ts` returns to the board | ≤ **100ms** | [ ] |
 | C3 | Board horizontal scrollbar position while the board is taller than the viewport | **at the board's own bottom**, off-screen until the page is scrolled to the board's end | sticky at the **viewport** bottom, with edge bleed | [ ] |
-| C4 | Duplicate a view; config equality and id | **the action does not exist** in `active-view-controls-renderer.ts`, and neither does a view-tab context menu | config equal except `id` and name suffix; **new** id | [ ] |
-| C5 | Per-view scroll offset after switching away and back | **0 — every switch returns to the top**; `view-state-store.ts` stores no offset | restored within **±2px**, per view | [ ] |
-| C6 | Cell editor near the viewport's right edge | **clips**. T002 records the clipped width at the rightmost column | flips right-aligned within **92px** of the edge; 0 clipped editors | [ ] |
-| C7 | Drag reorder under an active sort | **accepted, then silently undone by the sort** — no confirmation exists on either renderer | confirm raised; decline is a no-op; accept clears the sort | [ ] |
-| C8 | Menu item count in the fully-restricted case, and the selection caps | **0 — an empty menu renders**; no capability gate and no caps exist in `row-menu.ts` or `bulk-edit-field-menu.ts` | **≥ 1** always, with a "No available actions" fallback; caps at >1 and >10 | [ ] |
-| C9 | Distinct empty states | **1 — every condition renders the same state** in `empty-state-renderer.ts` | **3**: missing source, no matches, deleted group relation | [ ] |
-| C10 | New-row values in a view carrying presets | **none applied — no preset can be stored** | every preset value applied; no-preset rows byte-identical to today | [ ] |
-| C11 | Row index while a name is typed in a sorted view | **jumps mid-keystroke**. T002 records the keystroke count before the first jump | index held until commit or blur, then **1** reposition | [ ] |
+| C4 | Duplicate a view; config equality and id | **Reconciled 2026-09-06:** `duplicateView` (`database-view.ts:3890`) exists; config equal except `id`/name, new id, proven by `database-view-settings-landing.test.ts` §5. The settings-panel `Duplicate view`/`Remove view` placement is still absent — that half stays the failing value | config equal except `id` and name suffix; **new** id | [ ] |
+| C5 | Per-view scroll offset after switching away and back | **Closed 2026-09-06.** `ViewStateStore.getViewport`/`setViewport` (in-session map) plus `DatabaseView.switchView` capturing the outgoing view and restoring the incoming one through `database-viewport.ts`'s existing functions | restored within **±2px**, per view | [x] |
+| C6 | Cell editor near the viewport's right edge | **Reconciled 2026-09-06: does not clip.** `cell-renderer.ts`'s three desktop popover placement methods (`:2263`, `:2804`, `:3095`) each clamp the left edge so the right edge never exceeds the viewport, proven by a sweep in `popover-position.test.ts` §5 | flips right-aligned within **92px** of the edge; 0 clipped editors | [x] |
+| C7 | Drag reorder under an active sort | **Reconciled 2026-09-06: confirm already raised** on both renderers, `table-renderer.ts:1087` and `board-renderer.ts:2060`, proven by `table-renderer-sort-conflict.test.ts` and `board-renderer-hierarchy.test.ts:836-867` | confirm raised; decline is a no-op; accept clears the sort | [x] |
+| C8 | Menu item count in the fully-restricted case, and the selection caps | **Closed 2026-09-06.** `bulk-edit-field-menu.ts` renders the shared `menu.noActions` disabled row when nothing is bulk-editable; `row-menu.ts`'s unconditional first row is pinned by a source-contract negative control | **≥ 1** always, with a "No available actions" fallback; caps at >1 and >10 | [x] |
+| C9 | Distinct empty states | **Closed 2026-09-06.** Twelve reasons asserted as already distinct; a thirteenth, `group-relation-deleted`, added for a board whose grouping property was deleted, decided by `isBoardGroupFieldMissing` | **3**: missing source, no matches, deleted group relation | [x] |
+| C10 | New-row values in a view carrying presets | **Reconciled 2026-09-06: applied.** `view-row-presets.ts` + `toolbar-renderer.ts:2352, :2453` apply every stored default at creation; the per-view editor sits beside the create affordance (`toolbar-renderer.ts:2494-2513`); no-preset rows stay byte-identical (`view-row-presets.test.ts`) | every preset value applied; no-preset rows byte-identical to today | [x] |
+| C11 | Row index while a name is typed in a sorted view | **Restated and closed 2026-09-06 — the premise does not hold.** The name editor never writes into the cell DOM or triggers a refresh before commit, and the table has no sort of its own; the row cannot move before its own edit commits. `table-renderer-position-lock.test.ts` guards the finding as a source contract | index held until commit or blur, then **1** reposition | [x] |
 | C12 | First embedded-view width at which a toolbar control overflows | T002 sweeps from **250px** upward and records the first overflow | **no** overflow at any width in the sweep, collapse driven by measured width | [ ] |
-| C13 | Phone filter/sort surfaces rendering per-format condition rows, with `044`'s grammar | **0 of them** — the phone filter surfaces render one generic row shape | every supported format; **7 of 7** grammar elements | [ ] |
-| C14 | Embedded view paging path | **virtualization path entered** | a page plus a "Load more" row; virtualization not entered | [ ] |
+| C13 | Phone filter/sort surfaces rendering per-format condition rows, with `044`'s grammar | **Reconciled 2026-09-06: 7 of 7 (plus an eighth), measured.** `node tools/live/sheet-grammar.mjs` reads `sort-panel` and `filter-panel` both `true` on all eight `SHEET_GRAMMAR_ELEMENTS` columns, with the lane's own negative controls red then green | every supported format; **7 of 7** grammar elements | [x] |
+| C14 | Embedded view paging path | **Closed 2026-09-06.** A session-only per-view reveal count defaulting to 60 (ours, argued not quoted); the ungrouped table branch pages to it and appends a "Load more" row past it; no virtualization exists or was added | a page plus a "Load more" row; virtualization not entered | [x] |
 | C15 | Items carrying a design trued against a real Anytype screen or a named gap | **14 of 14 covered, five gaps named** — `design-trueup.md` §3 carries one section per item and §4's roll-up names the five with no capture: REQ-005, REQ-006, REQ-007, REQ-011, REQ-013 | **14 of 14** | [x] |
 | C16 | `npm run gate` exit status with every negative control observed red | not yet run for this phase | exit **0**, each control red then green | [ ] |
 | C17 | `screenshots/project-manager/` board and gantt reference `pixelHash` | baseline to be captured before the first leg that touches `board-renderer.ts` | identical, or operator-ruled | [ ] |
@@ -163,9 +163,11 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 21 | 5/21 |
-| P1 Items | 4 | 0/4 |
-| P2 Items | 0 | 0/0 |
+| P0 Items | 21 | 10/21 |
+| P1 Items | 4 | 3/4 |
+| P2 Items | 1 | 1/1 |
 
-**Verification Date**: 2026-09-05
+**Verification Date**: 2026-09-06 — C6, C7 and C13 (P0) and C10 (P1) reconciled against `main` and
+proven; C8 and C9 (P0), C5 and C11 (P1), and C14 (P2) implemented this session, each with
+red-then-green proof; see the per-row notes above.
 <!-- /ANCHOR:summary -->
