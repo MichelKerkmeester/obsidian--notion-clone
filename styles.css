@@ -9610,6 +9610,14 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   font-size: 13px;
 }
 
+/* A column holding more than the board's ten-record page limit ends in the shared group-expand
+   control. Its own text height is 15px, which is under this project's 28px coarse-pointer floor,
+   and unlike the table's copy it is a standalone tappable row here rather than a cell inside an
+   already-sized one — so the floor applies to the board's instances directly. */
+.note-database-container .db-kanban-cards .db-group-expand-btn {
+  min-height: 28px;
+}
+
 /* The ten-colour option palette, tint plus a same-hue darkened/lightened text pair that clears
    4.5:1 against both the tint and the page background in both themes. This plugin's own
    sixteen-name colour vocabulary buckets into Anytype's ten hues; only amber's card-chip pair
