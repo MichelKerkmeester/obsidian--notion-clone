@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-06T03:12:55.231Z",
+  "measuredAt": "2026-09-06T04:31:45.428Z",
   "inputs": {
-    "styles.css": "009892516d8e",
+    "styles.css": "0cec9cd820fb",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "fixtures": 73,
-    "differences": 43
+    "fixtures": 74,
+    "differences": 44
   },
   "differences": [
     {
@@ -296,6 +296,14 @@
       "index": 9,
       "notes": [
         "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-table-load-more",
+      "selector": "button",
+      "index": 6,
+      "notes": [
+        "width 1112 vs 1120"
       ]
     },
     {

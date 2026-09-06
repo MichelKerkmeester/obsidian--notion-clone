@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-06T03:31:56.432Z",
+  "measuredAt": "2026-09-06T04:34:55.504Z",
   "inputs": {
-    "styles.css": "009892516d8e",
+    "styles.css": "0cec9cd820fb",
     "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/live/unstyled-links.mjs": "ab2e6ac25fc1",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
     "tools/live/chrome-geometry-measure.mjs": "38d07f77ad63",
     "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
-    "tools/live/render-assertion-harness.ts": "d20f62e3d4bb"
+    "tools/live/render-assertion-harness.ts": "34a282145ee5"
   },
   "fixture": {
     "links": 112,
-    "scenarios": 73
+    "scenarios": 74
   },
   "constructed": {
     "links": 1268,

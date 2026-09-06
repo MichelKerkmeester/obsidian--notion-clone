@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T03:13:10.327Z",
+  "measuredAt": "2026-09-06T04:32:01.680Z",
   "inputs": {
-    "styles.css": "009892516d8e",
+    "styles.css": "0cec9cd820fb",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 73,
-    "escaping": 621,
+    "fixtures": 74,
+    "escaping": 633,
     "growing": 247,
-    "scrolling": 374,
+    "scrolling": 386,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 24
@@ -2768,6 +2768,72 @@
     },
     {
       "width": 320,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 33.2,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 33.2,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 33.2,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 33.2,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 33.2,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32.1,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
       "fixture": "field-icon-picker",
       "kind": "escaping",
       "tag": "button",
@@ -5138,6 +5204,72 @@
       "parentCls": "note-database-container",
       "by": 15.9,
       "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 19.5,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 19.5,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 19.5,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 19.5,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 19.5,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-table-load-more",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.5,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7594,6 +7726,11 @@
     },
     {
       "width": 320,
+      "fixture": "chrome-table-load-more",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "field-cell-edit-text",
       "probe": "4px"
     },
@@ -7959,6 +8096,11 @@
     },
     {
       "width": 402,
+      "fixture": "chrome-table-load-more",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "field-cell-edit-text",
       "probe": "4px"
     },
@@ -8324,6 +8466,11 @@
     },
     {
       "width": 768,
+      "fixture": "chrome-table-load-more",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "field-cell-edit-text",
       "probe": "4px"
     },
@@ -8685,6 +8832,11 @@
     {
       "width": 1440,
       "fixture": "chrome-toast-error",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-table-load-more",
       "probe": "4px"
     },
     {
