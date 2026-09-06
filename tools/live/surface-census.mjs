@@ -255,14 +255,14 @@ if (untokened.length) {
 // 6b. RECORD-SURFACE BUILDER CENSUS — source-level, not DOM
 // ───────────────────────────────────────────────────────────────────
 //
-// The header/property-row census `054-record-and-relation-surfaces` goal D3 asks for reads "one
-// page rendering the same column through every consumer" — a DOM census. `buildPropertyRow`
-// (`src/views/record-surface/property-row.ts`) takes its row and label classes from its caller by
-// design, so a switching consumer keeps its own stylesheet rules and moves no capture; the side
-// effect is that four consumers render four different class names off the one builder, and
-// counting classes in the rendered DOM reads 4 for a convergence that already happened. This
-// section counts the thing that actually converged instead: which function built the header or
-// the row, read from each consumer's own source text, never from what class the result carries.
+// The census the componentization goal asks for reads "one page rendering the same column through
+// every consumer" — a DOM census. `buildPropertyRow` (`src/views/record-surface/property-row.ts`)
+// takes its row and label classes from its caller by design, so a switching consumer keeps its own
+// stylesheet rules and moves no capture; the side effect is that four consumers render four
+// different class names off the one builder, and counting classes in the rendered DOM reads 4 for a
+// convergence that already happened. This section counts the thing that actually converged instead:
+// which function built the header or the row, read from each consumer's own source text, never from
+// what class the result carries.
 const RECORD_SURFACE_CONSUMERS = [
   "src/views/record-detail-panel.ts",
   "src/views/table-record-peek.ts",
@@ -270,39 +270,68 @@ const RECORD_SURFACE_CONSUMERS = [
 ];
 const HEADER_BUILDER_NAMES = new Set(["buildDesktopRecordHeader", "buildPhoneRecordHeader"]);
 const ROW_BUILDER_NAMES = new Set(["buildPropertyRow", "buildCheckboxPropertyRow", "renderCardField"]);
-// The class name a primitive assigns its own header or row root when a caller does not override
-// it. That string belongs in the primitive's own file; a consumer that writes it onto its own
-// `createDiv`/`createSpan`/`createEl` call has built that header or row by hand instead of calling
-// the function above for it.
+const BUILDER_NAMES = new Set([...HEADER_BUILDER_NAMES, ...ROW_BUILDER_NAMES]);
+// The class name a primitive assigns its own header or row root when a caller does not override it.
+// That string belongs in the primitive's own file or in a builder call's own class option; anywhere
+// else in a consumer it names an element the consumer put that class on itself.
 const HAND_BUILT_HEADER_CLASSES = new Set(["db-record-detail-header", "db-record-peek-header", "db-panel-header"]);
 const HAND_BUILT_ROW_CLASSES = new Set(["db-record-detail-field", "db-record-peek-field", "db-column-manager-row"]);
-const DOM_CREATE_METHODS = new Set(["createDiv", "createSpan", "createEl"]);
+// Reading only `createDiv({ cls })` was the earlier shape of this check and it could not see the
+// bypasses these files have actually carried: the peek built its header and every field through a
+// local `createChild(parent, tag, className)` helper that assigns `element.className`, and the board
+// panel's rows were `createDiv` calls — one form visible, the other not. So the check no longer asks
+// HOW an element got its class. Every string literal in the file is read, and a literal naming one
+// of the classes above is a hand-built header or row unless it is one of the two shapes that legitimately
+// carry it: a CSS selector (leading `.`, passed to a query/`closest`/`matches`), or a class option
+// inside a call to one of the shared builders, which is exactly the caller-supplied-class design.
+// That covers `cls:`, `createEl("div", { cls })`, a `className` assignment, `classList.add`,
+// `addClass`, `setAttribute("class", …)` and any helper that forwards a class string, because it
+// reads the literal rather than the call around it.
+const SELECTOR_METHODS = new Set(["querySelector", "querySelectorAll", "closest", "matches", "getElementsByClassName"]);
+// One documented reuse that is not a row: the peek's "no properties" notice borrows the field class
+// for its styling and carries the empty marker beside it. It is a message, not a property row, so it
+// is reported on its own line rather than counted against the zero threshold — and any OTHER literal
+// carrying a row class still goes red, including a second notice that dropped the marker.
+const NON_ROW_REUSE_MARKERS = new Set(["db-record-peek-empty"]);
 
-function clsLiteralOf(node, source) {
-  if (!node || !ts.isObjectLiteralExpression(node)) return undefined;
-  for (const prop of node.properties) {
-    if (!ts.isPropertyAssignment(prop) || !ts.isStringLiteral(prop.initializer)) continue;
-    if (prop.name.getText(source) === "cls") return prop.initializer.text;
+/** True when this literal is a CSS selector rather than a class being assigned. */
+function isSelectorLiteral(node, text) {
+  if (text.trim().startsWith(".")) return true;
+  const call = node.parent;
+  return Boolean(call && ts.isCallExpression(call) && ts.isPropertyAccessExpression(call.expression)
+    && SELECTOR_METHODS.has(call.expression.name.text));
+}
+
+/** True when this literal is a class option handed to one of the shared builders by its caller. */
+function isBuilderClassOption(node) {
+  const prop = node.parent;
+  if (!prop || !ts.isPropertyAssignment(prop)) return false;
+  for (let n = prop.parent; n; n = n.parent) {
+    if (ts.isCallExpression(n)) {
+      return ts.isIdentifier(n.expression) && BUILDER_NAMES.has(n.expression.text);
+    }
   }
-  return undefined;
+  return false;
 }
 
 function censusRecordSurfaceFile(file) {
   const text = readFileSync(join(REPO, file), "utf8");
   const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
-  const result = { file, headerBuilderCalls: 0, rowBuilderCalls: 0, handBuiltHeaders: [], handBuiltRows: [] };
+  const result = { file, headerBuilderCalls: 0, rowBuilderCalls: 0, handBuiltHeaders: [], handBuiltRows: [], nonRowReuse: [] };
   const visit = (node) => {
-    if (ts.isCallExpression(node)) {
-      const callee = node.expression;
-      if (ts.isIdentifier(callee)) {
-        if (HEADER_BUILDER_NAMES.has(callee.text)) result.headerBuilderCalls += 1;
-        if (ROW_BUILDER_NAMES.has(callee.text)) result.rowBuilderCalls += 1;
-      } else if (ts.isPropertyAccessExpression(callee) && DOM_CREATE_METHODS.has(callee.name.text)) {
-        const cls = clsLiteralOf(node.arguments[0], source);
-        for (const token of (cls || "").split(/\s+/)) {
-          if (HAND_BUILT_HEADER_CLASSES.has(token)) result.handBuiltHeaders.push(token);
-          if (HAND_BUILT_ROW_CLASSES.has(token)) result.handBuiltRows.push(token);
-        }
+    if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)) {
+      if (HEADER_BUILDER_NAMES.has(node.expression.text)) result.headerBuilderCalls += 1;
+      if (ROW_BUILDER_NAMES.has(node.expression.text)) result.rowBuilderCalls += 1;
+    }
+    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+      const tokens = node.text.split(/\s+/).filter(Boolean);
+      const line = source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1;
+      const named = tokens.filter((t) => HAND_BUILT_HEADER_CLASSES.has(t) || HAND_BUILT_ROW_CLASSES.has(t));
+      if (named.length && !isSelectorLiteral(node, node.text) && !isBuilderClassOption(node)) {
+        const where = `${named.join("+")} (:${line})`;
+        if (tokens.some((t) => NON_ROW_REUSE_MARKERS.has(t))) result.nonRowReuse.push(where);
+        else if (named.some((t) => HAND_BUILT_HEADER_CLASSES.has(t))) result.handBuiltHeaders.push(where);
+        else result.handBuiltRows.push(where);
       }
     }
     ts.forEachChild(node, visit);
@@ -315,16 +344,19 @@ const recordSurfaceCensus = RECORD_SURFACE_CONSUMERS.map(censusRecordSurfaceFile
 const handBuiltTotal = recordSurfaceCensus.reduce(
   (sum, r) => sum + r.handBuiltHeaders.length + r.handBuiltRows.length, 0,
 );
+const nonRowReuseTotal = recordSurfaceCensus.reduce((sum, r) => sum + r.nonRowReuse.length, 0);
 
 console.log("record-surface builder census: source-level, not DOM\n");
 for (const r of recordSurfaceCensus) {
   console.log(`  ${r.file}`);
   console.log(`    header builder calls   ${r.headerBuilderCalls}`);
   console.log(`    row builder calls      ${r.rowBuilderCalls}`);
+  if (r.nonRowReuse.length) console.log(`    row class, not a row    ${r.nonRowReuse.join(", ")}`);
   if (r.handBuiltHeaders.length) console.log(`    HAND-BUILT HEADER       ${r.handBuiltHeaders.join(", ")}`);
   if (r.handBuiltRows.length) console.log(`    HAND-BUILT ROW          ${r.handBuiltRows.join(", ")}`);
 }
-console.log(`\n  hand-built headers/rows across the three surfaces: ${handBuiltTotal} (threshold: 0)\n`);
+console.log(`\n  hand-built headers/rows across the three surfaces: ${handBuiltTotal} (threshold: 0)`);
+console.log(`  row classes reused by something that is not a row: ${nonRowReuseTotal} (documented, not counted)\n`);
 
 stamp("tools/live/surface-census.json", {
   totals: {
