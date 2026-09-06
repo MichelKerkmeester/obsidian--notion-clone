@@ -17,8 +17,8 @@ _memory:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
     last_updated_at: "2026-09-06T22:45:00Z"
     last_updated_by: "verify-053-table-footer"
-    recent_action: "Verified ADR-005 red-first and landed it on main; gate 26 green"
-    next_safe_action: "Operator device pass on the footer; nothing else here is blocked"
+    recent_action: "Added ADR-006 for the rail gear; the deleted overflow row leaves one settings path"
+    next_safe_action: "Operator device pass on the gear and the footer; nothing here is blocked"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"

@@ -18,8 +18,8 @@ _memory:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
     last_updated_at: "2026-09-06T07:50:00Z"
     last_updated_by: "operator-decision"
-    recent_action: "Closed ADR-007 E4: no confirm for single delete, undo toast instead"
-    next_safe_action: "Implement the E4 ruling in its own leg; 051 keeps the primitive the bulk confirm uses"
+    recent_action: "ADR-008 merged with its planning entry and records planned versus shipped"
+    next_safe_action: "Revisit T023 only when a second surface takes the side-sheet shape"
     blockers: []
     key_files:
       - "src/views/mobile-bottom-sheet.ts"

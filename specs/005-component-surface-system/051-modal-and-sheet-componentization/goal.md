@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
     last_updated_at: "2026-09-06T08:15:00Z"
     last_updated_by: "implementer-session-fourth-landing"
-    recent_action: "Landed T013/T014/T019; E4 closed by the operator; census receipt corrected"
-    next_safe_action: "Build ADR-008's side sheet role (T021-T023), then T015's remaining lane rows"
+    recent_action: "Landed T021/T022: the desktop Settings panel docks as a 420px right side sheet"
+    next_safe_action: "Settle AC-013: the sheet still dismisses on a pointer-down over the database"
     blockers:
       - "styles.css edits are serialized by the parent's CSS lane"
       - "T010 stays blocked on the operator (spec.md §11's second open question, unanswerable from any capture)"
