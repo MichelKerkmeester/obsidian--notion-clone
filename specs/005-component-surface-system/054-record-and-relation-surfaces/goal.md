@@ -14,10 +14,10 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "Extracted all ten cell editors behind CellRenderer.startEdit (T061-T063); gate 26 green"
-    next_safe_action: "Build the census lane (T011/T023); resolve the column-manager row-class gap named at T071"
+    recent_action: "Landed the editor extraction: dispatch pin strengthened, editor captures now fingerprinted"
+    next_safe_action: "Operator call on D3's census observable; hand T071's one-line predicate fix to 044's owner"
     blockers:
-      - "T070/T071 remain: T070 needs the census lane T011/T023 didn't build; T071 needs a styles.css fix outside this leg's file group"
+      - "T070/T071 remain: T070 waits on a D3 observable ruling; T071 needs one line in 044's sheet-grammar predicate, measured green and reverted as out of scope"
       - "OPS-001..003 are the operator's; nothing here can close them"
     key_files:
       - "src/views/cell-renderer.ts"
@@ -168,12 +168,35 @@ conflicts; never resolve them silently.
 
 Volatile. Not part of the directive.
 
+- **2026-09-06 — L6 landed on `main` after an independent verification pass.** The extraction was
+  re-proved rather than accepted: a normalised multiset diff of the pre- and post-extraction sources
+  leaves only `private x(` → `function x(` and `this.activeX = y` → `ctx.setActiveX(y)` plumbing, the
+  `db-` class vocabulary is identical at 91 tokens in and out, and `styles.css` is untouched — so no
+  capture should have moved, and after a full 558-capture recapture none did. All three surfaces were
+  traced to one entry point: the table (`database-view.ts:805`, `:1907`, `:7414`), the board card
+  (`board-renderer.ts:1718`, `:1729`, `:2207`) and the record sheet (`record-detail-panel.ts:465` →
+  `database-view.ts:11653`) every one reach `CellRenderer.startEdit` and thence the extracted module;
+  the record sheet keeps no editor path of its own, and the read-only embedded panel's `editCell` is
+  a documented no-op. **Three things the leg's report claimed that did not hold, each fixed or
+  corrected:** the pinned dispatch test stayed green when the whole select/status branch was deleted
+  from `startEdit` (it matched the needle anywhere in the file) and now slices `startEdit`'s own body,
+  checks the module's declared export and checks the class reaches it, with three negative controls
+  seen red; the four cell-editor capture scenarios still fingerprinted only `cell-renderer.ts`, so the
+  new modules were untracked and `screenshots:verify` would have stayed quiet on a change to them —
+  the scenarios now name the modules and the regenerated manifest carries their hashes; and T071's
+  "needs a `styles.css` change" is wrong — `.db-column-manager-row` already carries `padding: 2px 4px`
+  and one line in `sheet-grammar.ts:99` takes the surface to 8/8 with the whole lane at exit 0,
+  measured then reverted because `spec.md` §3 freezes that predicate as `044`'s. `cell-renderer.ts` is
+  **1,217** lines, not the 1,212 the leg reported. `npx tsc --noEmit`, `npx vitest run` (1437/1437
+  across 134 files), `npm run build`, `node tools/screenshots/verify.mjs`, `node tools/lane/check-lane.mjs`
+  and `npm run gate` (26 green, 0 red) all exit 0 on the rebased tree.
+
 - **2026-09-06 — L6 editor extraction landed (T060-T064); L7 attempted, two gaps named rather than
   fixed blind.** All ten module-backed column types now resolve to an exported module under
   `src/views/record-surface/` (`cell-editor-option.ts`, `cell-editor-relation.ts`,
   `cell-editor-date.ts`, `cell-editor-text.ts`, `cell-editor-number.ts`, plus the shared
   `cell-editor-shared.ts`), each moved unchanged from its `CellRenderer` private method per ADR-002
-  — `cell-renderer.ts` fell from 3,152 to 1,212 lines. `cell-editor-contract.test.ts`'s pinned
+  — `cell-renderer.ts` fell from 3,152 to 1,217 lines. `cell-editor-contract.test.ts`'s pinned
   dispatch test, red by design before this leg, is green with an empty `missing` list.
   **T064 verified rather than newly coded**: the `record select value menu`/`record relation
   editor` stacked-pair rows `tools/live/sheet-grammar.mjs` already carried stay green after the

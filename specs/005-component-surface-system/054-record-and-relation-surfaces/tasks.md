@@ -157,6 +157,23 @@ in the parent program's escalation format rather than retrying. A task blocked o
       different question. Building a source-level census lane is real, separate infrastructure work
       this pass did not size for; named here as a gap rather than stubbed with a lane that cannot
       tell a real convergence from a coincidence.
+      **Re-read 2026-09-06 by the landing verifier; the gap is confirmed and now stated precisely,
+      with three facts the earlier note did not carry.** First, `surface-census.mjs` cannot be
+      extended into this: its unit of inventory is a class token matched against a fixed vocabulary
+      (`SURFACE_WORDS`, `tools/live/surface-census.mjs:60` — menu/popover/panel/sheet/modal/dropdown/
+      picker/peek/tooltip), so a header *builder* and a property *row* are both outside what it can
+      name, and adding them is a second scanner rather than a row. Second, and the harder one: the
+      goal's own census shape — "one page rendering the same column through every consumer" — cannot
+      read a converged property row off the DOM at all, because `buildPropertyRow`
+      (`src/views/record-surface/property-row.ts:229`) takes `rowClass` and `labelClass` from its
+      caller by design (T021's choice, so a switching consumer keeps its existing CSS and moves no
+      capture). Four consumers therefore emit four class vocabularies from the one builder, and a DOM
+      census would read 4 while the convergence is real. Measuring "one builder" is a source-level
+      question the goal's D3 explicitly forbids answering by grep, so closing this needs either a new
+      source-level lane or an amendment to D3's chosen observable — an operator decision, not a leg's.
+      Third: the red-first window is closed regardless. T030-T042 already switched the consumers, so a
+      lane built now observes the converged count, and the 4/3/3 red this row asks to see could only
+      be re-observed by running the lane against a pre-switch commit.
 
 ### L2 — P2/P3/P5 display primitives
 
@@ -205,6 +222,11 @@ in the parent program's escalation format rather than retrying. A task blocked o
       reports 3 today.
       **Not done**, same reason as T011: no existing `tools/live/` lane answers "which function
       builds this row" without new source-level census infrastructure this pass did not size for.
+      **Re-read 2026-09-06 by the landing verifier**: this row is where T011's caller-supplied-class
+      finding bites hardest. A DOM census over row classes reads the four vocabularies the consumers
+      still name (`db-record-detail-field`, `db-record-peek-field`, `db-column-manager-row` and the
+      board card's), all four produced by the single `buildPropertyRow`. The count and the
+      convergence disagree because the observable is wrong, not because the convergence is absent.
 
 ## Phase 3 — Consumers
 
@@ -354,6 +376,23 @@ in the parent program's escalation format rather than retrying. A task blocked o
       the pinned red: all ten module-backed types report their module missing, by design, because no
       extraction has run. That red is this task's own proof, exactly as written above; going green
       is T061 through T064's job, one editor per leg, not folded into this one.
+      **Corrected 2026-09-06 by the landing verifier — the pin as first written did not hold.**
+      Deleting the whole `col.type === "status" || col.type === "select"` branch out of `startEdit`
+      left this suite **green**: it searched the entire `cell-renderer.ts` text for the needle, and
+      `startEditSession`'s bulk branch plus `shouldUsePopoverEditor`'s guard carry the same string,
+      so a deleted dispatch branch was invisible. `text` was worse — no `col.type === "text"` needle
+      exists inside `startEdit` at all, and the case passed on the one in a different method. The
+      module half was equally loose: it asserted only that a file existed on disk, never that the
+      file exported the name the contract declares or that the class reaches it, so a module could
+      sit beside a dispatch still running its own private copy. Both halves are now scoped: the
+      dispatch check slices `startEdit`'s own body out of the source and requires the branch's own
+      `this.<method>(` call within it; `text`'s unguarded fall-through is pinned as the closing
+      statement rather than a needle; the module check reads each module for `export function
+      <name>` and requires `cell-renderer.ts` to call it. **Three negative controls, each observed
+      red then restored:** deleting the select/status branch fails the dispatch case; replacing
+      `getVisiblePopoverBounds(container)` with `(null)` in `cell-editor-option.ts` fails
+      `cell-popover-coordinate-space.test.ts`; and cutting the wrapper's `openOptionEditor(` call
+      reports `status (unreached)`, `select (unreached)`, `multi-select (unreached)`.
 - [x] T061 [P0] Extract the option editor (`editOptionPopover`, `:1106`) to
       `record-surface/cell-editor-option.ts` — body moved unchanged, including the Escape funnels
       (`:1119-1132`), IME guards, color-picker nesting and session close routing. **Proof:** the
@@ -424,6 +463,39 @@ in the parent program's escalation format rather than retrying. A task blocked o
       `pixelHash`-identical to HEAD on a full unscoped `capture.mjs` run; confirmed via
       `tools/screenshots/pixel-hash.mjs` and restored to their committed bytes rather than
       re-committed as noise.
+      **Completed 2026-09-06 by the landing verifier — the extraction had left the new modules
+      unfingerprinted, which is the failure mode the screenshot rule exists to prevent.** The four
+      scenarios that depict a cell editor (`field-cell-edit-text` and `field-cell-edit-select` in
+      `tools/screenshots/scenarios/fields.mjs`, and their constructed twins
+      `constructed-cell-editor-text` / `constructed-cell-editor-select` in
+      `tools/screenshots/constructed-scenarios.mjs`) still listed `src/views/cell-renderer.ts` alone
+      as the source they depict. That file no longer holds a single line of the editor DOM those
+      captures photograph, so a future change to `cell-editor-option.ts` or `cell-editor-text.ts`
+      would have staled nothing and `screenshots:verify` would have stayed quiet exactly where it
+      should have spoken — `verify.mjs` walks the manifest's recorded `sourceHashes`, so a source a
+      scenario never declared is not merely unhashed, it is invisible. The four scenarios now also
+      name `record-surface/cell-editor-text.ts` and `cell-editor-number.ts` (the text fixture draws
+      the markdown toolbar, the textarea and the single-line number popover) and
+      `record-surface/cell-editor-option.ts` (the select fixture draws the option list). Verified by
+      reading the regenerated manifest: all sixteen editor entries now carry the module hashes.
+      **Behaviour-preservation re-proved independently of the byte comparison.** A normalised
+      multiset diff of the pre-extraction `cell-renderer.ts` against the post-extraction
+      `cell-renderer.ts` plus the six modules (comments stripped, `this.`/`ctx.` folded, the moved
+      functions' names mapped) leaves nothing behind but `private x(` → `function x(` declarations
+      and the `this.activeX = y` → `ctx.setActiveX(y)` accessor plumbing; the class-name vocabulary
+      is identical at **91 tokens in and 91 out, with no token added or dropped**, and `styles.css`
+      is untouched by the whole diff. That is why no capture should have moved, and none did: the
+      full 558-capture recapture after the rebase left every editor capture byte-identical, with
+      five unrelated PNGs byte-different and `pixelHash`-identical (encoder jitter) restored to their
+      committed bytes. One cosmetic deviation from "byte-for-byte" is recorded rather than hidden:
+      one of the eight `db-cell-editing` clears became `td.removeClass("db-cell-editing")` where it
+      had been `clearTransientClass(td, "db-cell-editing")` — the same call, since that helper's
+      whole body is `el.removeClass(className)`.
+      **Two suites that landed on main during this leg had to be retargeted at the rebase**, the same
+      way three were during the extraction: `table-renderer-position-lock.test.ts` (new on main) read
+      `cell-renderer.ts` for `editSingleLinePopover`'s keystroke shape, and `popover-position.test.ts`
+      read it for the three positioners' left-edge clamp. Both now read the modules the functions
+      live in; both were red on the rebased tree before the retarget and green after.
 - [x] T064 [P1] The lane mounts the option and relation editors over a record sheet instance,
       registering the stacked pair per `048`'s lane — row added, not a new stacking mechanism.
       **Proof:** `sheet-grammar` registry carries the pair and reports it green with `048`'s
@@ -468,6 +540,12 @@ in the parent program's escalation format rather than retrying. A task blocked o
       lane reads 1/1/1 on headers/rows/type-lists" names a lane that does not exist (see T011/T023's
       own entries) — the four retirements can be confirmed by reading the source, which is not the
       same as this task's own named proof passing.
+      **Re-read 2026-09-06 by the landing verifier: unchanged, and now with a named exit.** The four
+      retirements re-confirmed against the rebased tree. The blocking clause depends on T011/T023,
+      whose re-read (see those rows) establishes that the lane D3 specifies cannot read a converged
+      property row off the DOM while `buildPropertyRow` takes its classes from the caller. So this
+      row closes on one of two operator decisions, not on more implementation: amend D3's observable
+      to a source-level census, or accept the source read as the proof. Neither is a leg's to take.
 - [ ] T071 [P0] Register the phone surfaces this phase changed in `sheet-grammar.mjs`'s registry
       where not already registered; run the whole gate.
       **Proof:** `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, every negative control observed
@@ -490,6 +568,27 @@ in the parent program's escalation format rather than retrying. A task blocked o
       group. The registry addition was reverted (`git diff tools/live/sheet-grammar.mjs` is empty)
       to keep the gate green; the gap is named here for whichever leg next owns
       `column-manager-renderer.ts`'s row class or `sheet-grammar.ts` itself.
+      **Reproduced and re-diagnosed 2026-09-06 by the landing verifier — the red is real, the cause
+      named above is half right, and the stated remedy is wrong.** Registering the surface reproduces
+      the failure exactly: `column-manager — rows: false`, with the other seven grammar elements
+      (surface, handle, header, segmented, keyboard, safeArea, dropdown), the 44.0x44.0 close target
+      and the overflow sweep all green. The selector at `src/views/sheet-grammar.ts:99` is the whole
+      cause. **No `styles.css` change is needed and no recapture is owed**:
+      `.note-database-container .db-column-manager-row` already declares `padding: 2px 4px`
+      (`styles.css:13321-13329`), which clears `ROW_PADDING_FLOOR_PX = 2` on all four sides, so the
+      row would pass the measurement the moment the predicate looked at it. The one-line fix is
+      adding `.db-column-manager-row` to that selector. It was applied as an experiment and reverted:
+      with it, `column-manager` reads **8/8 green and the whole lane exits 0** — no other registered
+      surface regressed, including `settings` and `board-card-properties`, which contain
+      column-manager rows and now have them measured rather than skipped. **Not landed, and the
+      reason is this packet's own frozen scope**: `spec.md` §3 excludes "the `sheet-grammar` lane's
+      element predicates — `044`'s. This phase adds *rows* to the lane's registry, never columns."
+      The exact change owed to whoever owns `044`'s predicates, verbatim:
+      `src/views/sheet-grammar.ts:99`, from
+      `".db-panel-row, .db-record-detail-field, .db-menu-item"` to
+      `".db-panel-row, .db-record-detail-field, .db-menu-item, .db-column-manager-row"`, then add
+      `{ name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } }`
+      to `REGISTERED_SURFACES` in `tools/live/sheet-grammar.mjs`. Both halves measured, both reverted.
 
 ---
 
