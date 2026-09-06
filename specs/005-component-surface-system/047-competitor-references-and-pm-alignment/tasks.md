@@ -184,6 +184,26 @@ status.
 
 ---
 
+<!-- ANCHOR:phase-mobbin -->
+## Phase 5: Mobbin reference harvests (2026-09-06 amendment)
+
+One app landed and verified before the next opens. Never a parallel fan-out across apps.
+
+- [ ] T030 [B] Harvest Notion (iOS + web) via Mobbin, Fable 5.1 medium through the second login,
+      into `screenshots/notion/{ios,web}/<group>/` with a `README.md` index; landed by a fresh
+      verifier before T031 opens
+- [ ] T031 [B] Harvest Evernote (iOS + web) via Mobbin, same orchestration, into
+      `screenshots/evernote/{ios,web}/<group>/`; landed by a fresh verifier before T032 opens
+- [ ] T032 [B] Harvest Fibery (web only) via Mobbin, same orchestration, into
+      `screenshots/fibery/web/<group>/`; landed by a fresh verifier before T033 opens
+- [ ] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
+      `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier
+- [ ] T034 Confirm none of the four apps' captures entered `screenshots/manifest.json` — a Mobbin
+      screenshot has no in-repo source to hash, matching D5's rule for an Anytype capture
+<!-- /ANCHOR:phase-mobbin -->
+
+---
+
 <!-- ANCHOR:security -->
 ## Security
 

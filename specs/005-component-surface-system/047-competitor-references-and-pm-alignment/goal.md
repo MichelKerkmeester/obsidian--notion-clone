@@ -143,4 +143,38 @@ into the objective, and it is expected to grow.
 | No simulated mouse click works in this environment | Confirmed three ways: `CGEvent` posts (Quartz, from Python) return no error and have no visible effect; `System Events`'s `click at {x,y}` is refused outright — `osascript is not allowed assistive access` (-25211); and both apps' content areas expose no accessibility tree to click through instead (their whole window body is one opaque `AXGroup` — only native window-chrome buttons and the native macOS menu bar are real accessibility elements). What does work: `keystroke`/`key code` sent to whatever is frontmost, and clicking a native menu-bar item via the accessibility API's menu action. Every installed-app capture was reached through some combination of `Cmd+K`/`Cmd+P`, `Cmd+N`, `/`, arrows + Return, Escape, and native-menu clicks — never a coordinate click. This caps what could be captured: view-switcher tabs, toolbar icons, table cells, and context menus were all unreachable. |
 | The Anytype demo page needed a click to delete — solved by driving Anytype over CDP instead | Anytype's own deletion docs (`docs.anytype.io/anytype/organize/deletion`) describe a click/checkbox-driven Bin flow with no keyboard shortcut. Once the operator asked for a fully click-free method (quit Anytype, relaunch with `--remote-debugging-port=9222`, drive it over raw CDP WebSocket JSON-RPC), `el.click()` executed inside the page's own renderer reached the object header's `···` → Move to Bin — a real DOM click that never touches the OS pointer or focus. `notion-clone-reference-demo` and every object created inside it were deleted this way before the commit; confirmed by a post-cleanup screenshot showing only the two objects Anytype ships by default. |
 | AppFlowy has no CDP equivalent, and was later removed from scope entirely | AppFlowy is Flutter, rendered to a single GPU-backed surface with no DOM and no `--remote-debugging-port` — the CDP escape hatch that worked for Anytype (Electron/Chromium) does not exist for it. Its remaining installed views (Grid/Calendar of the `To-dos` database) stayed behind a real click. Rather than leave that pending an operator window, the operator later chose to drop AppFlowy from the reference set entirely — `decision-record.md` ADR-003, superseding the earlier skip decision (ADR-002) |
+
+### 2026-09-06 amendment: the Mobbin reference harvests
+
+**The reference set widens past Anytype, one app at a time.** Four more products' captures are now
+in scope, sourced from Mobbin rather than a locally installed app: **Notion** (iOS + web),
+**Evernote** (iOS + web), **Fibery** (web), and **ClickUp** (iOS + web). Each app is harvested
+separately — one dispatched, landed and verified before the next opens — so a stalled or malformed
+harvest never blocks the other three, the same discipline `047`'s own Anytype/AppFlowy split
+already established.
+
+**Orchestration.** Fable 5.1 at `medium` effort and Opus at `xhigh` effort, both dispatched through
+the second login (per `goal-prompt.md`'s DELEGATION block), one app at a time — never a parallel
+fan-out across apps, since a Mobbin harvest is a browsing-and-saving task with no independent unit
+of work to split further.
+
+**Storage.** Captures land at `screenshots/<app>/<platform>/<group>/` — e.g.
+`screenshots/notion/ios/dashboard/`, `screenshots/notion/web/database-views/` — mirroring the
+`desktop/sets/<use-case>/` shape `screenshots/anytype/` already uses, with a `README.md` index per
+app naming provenance (source, date, what each group depicts) the way
+`screenshots/anytype/README.md` does. **Untracked by `screenshots/manifest.json`** — the same reason
+an Anytype capture carries no `sources` array (D5, this document's Deviations table): a Mobbin
+screenshot has no in-repo source to hash, and forcing an entry into the freshness-tracked manifest
+would be the "capture with no in-repo source" problem AC-003/AC-004 already name, multiplied by four
+apps.
+
+**Verification.** Each app's harvest is landed by a fresh verifier before the next app opens —
+matching D4/D5 above: no fidelity or design claim from an unverified harvest, and an image that
+could not be captured is recorded as such rather than silently absent.
+
+**What this does not change.** The board/gantt alignment scope (D1-D7, AC-001 through AC-009) is
+untouched; these four apps are references for `058`'s own-property-as-title question (D6 in
+`058/goal.md`) and for future design work across the program, not a new fidelity-comparison target
+of this packet's own. See `roadmap.md` §4 for the dated row and §6A for the operator's ruling this
+amendment executes.
 <!-- /ANCHOR:log -->
