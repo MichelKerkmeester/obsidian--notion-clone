@@ -409,12 +409,40 @@ export class ToolbarRenderer {
     if (showColumnButton) this.renderColumnButton(propertiesCluster, currentView, state, actions);
 
     const utilitiesCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-utilities-cluster", attr: { "aria-label": t("toolbar.utilities") } });
+    // `toggleViewConfig` is not optional on `ToolbarActions` — every caller wires it — so the
+    // gear is unconditional, the same way the "···" button beside it is.
+    this.renderSettingsButton(utilitiesCluster, actions);
     this.renderUtilitiesOverflowButton(utilitiesCluster, currentEntry, currentView, actions);
 
     const creationCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-creation-cluster" });
     if (!phoneLayout && !isChartView) this.renderSearch(utilitiesCluster, state, actions);
     if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb, currentView);
     if (actions.hideDatabaseTitle && !actions.hideHeaderChrome) this.installMeasuredToolbarCollapse(header, currentDb, currentViewIndex, actions);
+  }
+
+  /**
+   * The gear: a permanent rail control, beside filter, sort, group and columns rather than
+   * behind "···" — the operator's ruling, 2026-09-06: *"Gear icon in the toolbar rail, before
+   * ···"*. It carries the settings-trigger fallback classes `createSettingsEntry` stamps, which
+   * used to sit on the utilities button while this control's job lived inside that menu; moving
+   * the row here moves the stamp with it; `openViewSettingsAfterMutation`'s `.db-view-config-btn`
+   * lookup (`database-view.ts`, `embedded-database-renderer.ts`) still resolves to a live button.
+   */
+  private renderSettingsButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    // `createIconButton` already drew the icon and the tooltip; `createSettingsEntry` is asked
+    // for neither, the same division the utilities button next to it already keeps — asking
+    // both would draw the icon twice.
+    const button = this.createIconButton(toolbar, "settings", t("toolbar.settings"), "db-toolbar-settings-btn");
+    button.setAttribute("aria-controls", "db-view-config-panel");
+    createSettingsEntry(button, {
+      label: t("toolbar.settings"),
+      ariaHaspopup: "dialog",
+      open: (anchor) => {
+        this.dismissSiblingToolbarSurfaces(anchor);
+        this.setPopoverTriggerState(anchor, anchor.getAttribute("aria-expanded") !== "true");
+        actions.toggleViewConfig?.(anchor);
+      },
+    });
   }
 
   private renderUtilitiesOverflowButton(
@@ -424,7 +452,7 @@ export class ToolbarRenderer {
     actions: ToolbarActions,
   ): void {
     const button = this.createIconButton(toolbar, "more-horizontal", t("toolbar.utilities"), "db-toolbar-more-btn");
-    createSettingsEntry(button, { label: t("toolbar.utilities"), ariaHaspopup: "menu" });
+    button.setAttribute("aria-haspopup", "menu");
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-controls", "db-toolbar-utilities");
     button.onclick = (event) => {
@@ -483,13 +511,9 @@ export class ToolbarRenderer {
       if (actions.showDatabaseChrome && !actions.hideDatabaseActions && actions.openDatabaseFile) {
         this.renderToolbarMenuRow(panel, t("toolbar.openDatabaseFile"), "file-output", () => actions.openDatabaseFile?.());
       }
-      if (actions.toggleViewConfig) {
-        this.renderToolbarMenuRow(panel, t("toolbar.viewSettings"), "settings-2", () => {
-          this.closeUtilitiesPopover();
-          actions.toggleViewConfig?.(button);
-          button.setAttribute("aria-expanded", "true");
-        });
-      }
+      // Settings moved to its own permanent rail control (`renderSettingsButton`), beside filter,
+      // sort, group and columns — the operator's ruling, 2026-09-06. No second path to the same
+      // panel survives here.
       // A linked embed has no title row, so this menu is the only place its
       // open-full-view button can live; every other surface already draws one.
       if (actions.openFullView && actions.hideDatabaseTitle) {

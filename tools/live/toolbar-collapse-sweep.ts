@@ -39,6 +39,10 @@ export interface SweepReading {
   propertiesClusterVisible: boolean;
   addTabVisible: boolean;
   tabRowIsDropdown: boolean;
+  /** The gear: a permanent rail control, one more than this sweep counted before it existed.
+   *  Never hidden by `applyToolbarChromeCollapse` — it sits in the utilities cluster beside
+   *  "···", which the same collapse ladder already leaves alone at every width. */
+  settingsButtonVisible: boolean;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -115,6 +119,7 @@ export async function runToolbarCollapseSweep(host: HTMLElement, widths: number[
       propertiesClusterVisible: isVisible(toolbar.querySelector(".db-toolbar-properties-cluster")),
       addTabVisible: isVisible(toolbar.querySelector(".db-view-tab-add")),
       tabRowIsDropdown: Boolean(toolbar.querySelector(".db-view-tab-collapsed-trigger")),
+      settingsButtonVisible: isVisible(toolbar.querySelector(".db-toolbar-settings-btn")),
     });
   }
   return readings;

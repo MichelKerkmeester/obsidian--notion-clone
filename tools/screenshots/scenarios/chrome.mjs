@@ -143,6 +143,7 @@ const toolbarRight = () => `
       ${iconButton(I.columns3, "Properties", "db-col-manager-btn db-toolbar-badge-button", neutralBadge("2 hidden"))}
     </div>
     <div class="db-toolbar-cluster db-toolbar-utilities-cluster" aria-label="More tools">
+      ${iconButton(I.settings, "Settings", "db-toolbar-settings-btn")}
       ${iconButton(I.moreHorizontal, "More tools", "db-toolbar-more-btn")}
       ${searchControl(false)}
     </div>
@@ -487,7 +488,6 @@ export const CHROME_SCENARIOS = [
           ${utilitiesRow("Refresh database", I.refresh)}
           ${utilitiesRow("Copy formatting", I.copy)}
           ${utilitiesRow("Open database file", I.fileOutput)}
-          ${utilitiesRow("View settings", I.settings)}
         </div>
       </div>`,
   },

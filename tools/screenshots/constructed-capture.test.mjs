@@ -226,6 +226,7 @@ describe("fixture declarations", () => {
       "panel-record-detail-sheet-body-editing -> constructed-record-detail-body-editing",
       "panel-record-detail-sheet-body-empty -> constructed-record-detail-body-empty",
       "panel-record-peek -> constructed-record-peek",
+      "panel-settings-side-sheet -> constructed-view-config",
       "panel-sort-calendar-empty -> constructed-sort-panel-calendar",
       "panel-sort-rules -> constructed-sort-panel",
       "panel-view-config -> constructed-view-config",

@@ -177,4 +177,18 @@ if (overflowing.length > 0) {
   }
   process.exit(1);
 }
-console.log("\ntoolbar-collapse-sweep: PASS — zero overflow across the sweep");
+
+// The gear is a permanent rail control, the operator's ruling — it must hold at every width in
+// the sweep, the same way "···" beside it already does. A control that quietly dropped out at a
+// narrow width would still read PASS on the overflow check alone, which is exactly the gap this
+// closes.
+const settingsMissing = readings.filter((r) => !r.settingsButtonVisible);
+if (settingsMissing.length > 0) {
+  console.error(`\ntoolbar-collapse-sweep: FAIL — the settings control is not permanent, missing at ${settingsMissing.length} width(s):`);
+  for (const r of settingsMissing.slice(0, 10)) {
+    console.error(`  - ${r.width}px`);
+  }
+  process.exit(1);
+}
+
+console.log("\ntoolbar-collapse-sweep: PASS — zero overflow across the sweep, settings control permanent throughout");

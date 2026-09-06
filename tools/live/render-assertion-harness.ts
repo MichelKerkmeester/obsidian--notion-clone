@@ -1899,13 +1899,16 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
     detail: `filter=${filterState ?? "missing"}, sort=${sortState ?? "missing"}, want `
       + `${wantFilterActive ? "active" : "add"}/${wantSortActive ? "active" : "add"} on rules=${rules}`,
   });
-  const more = container.querySelector(".db-toolbar-more-btn");
+  // The stamp moved with the live trigger: the settings entry is the permanent gear button now,
+  // not "···". `openViewSettingsAfterMutation`'s two `.db-view-config-btn` anchor-fallback
+  // queries still need to resolve to something live, which is what this asserts.
+  const settingsBtn = container.querySelector(".db-toolbar-settings-btn");
   const fallbacks = ["db-view-config-btn", "db-chart-options-toolbar-btn", "db-calendar-timeline-options-toolbar-btn"]
-    .filter((cls) => more?.classList.contains(cls));
+    .filter((cls) => settingsBtn?.classList.contains(cls));
   results.push({
-    name: "the live utilities trigger still resolves the older settings-anchor queries",
+    name: "the live settings trigger still resolves the older settings-anchor queries",
     pass: fallbacks.length === 3,
-    detail: more ? `fallback classes present: ${fallbacks.join(", ") || "none"}` : "no utilities trigger",
+    detail: settingsBtn ? `fallback classes present: ${fallbacks.join(", ") || "none"}` : "no settings trigger",
   });
   if (scenario.toolbarPopover === "utilities" || scenario.toolbarPopover === "add-view") {
     const panel = container.querySelector(".db-toolbar-utilities-popover, .db-add-view-popover");
