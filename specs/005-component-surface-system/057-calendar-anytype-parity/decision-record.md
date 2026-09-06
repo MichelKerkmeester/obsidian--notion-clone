@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T02:45:00Z"
-    last_updated_by: "code-leaf"
-    recent_action: "landed ADR-002's implementation half: month retargeted, week/day tokens shared"
-    next_safe_action: "T008, the phone calendar leg"
+    last_updated_at: "2026-09-06T11:55:00Z"
+    last_updated_by: "verify-and-land"
+    recent_action: "corrected the adr-002 landing note and raised the timed-block colour question"
+    next_safe_action: "Close T015 R1 and R2, then put the ADR-002 colour question to the operator"
     blockers:
       - "T008 onward still owe the phone retarget and the date-property submenu"
     key_files:
@@ -24,12 +24,13 @@ _memory:
       session_id: "surface-system-057-adr"
       parent_session_id: null
     completion_pct: 55
-    open_questions: []
+    open_questions:
+      - "Does styled to the month grid strip the week/day timed blocks per-event colour, or does a duration block keep it"
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
-      - "ADR-002's implementation half is landed: the week/day timed-event blocks keep their own presentation, named rather than silently retargeted"
+      - "ADR-002's implementation half is partly landed: the weekend tint and nav cluster carried to week and day, the rule colour and today marker did not"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -133,18 +134,47 @@ ground.
   three (`design-trueup.md` §A5, §7). That deviation is created by this ruling, sits inside its
   scope, and is not presented as a measured value.
 - `plan.md` section 7's "deletion lands as its own last leg" contingency is moot and does not run.
-- **Landed 2026-09-06 (T005/T007).** The shared tokens (rule colour, weekend tint, today marker,
-  header grammar) now apply to week and day. One further scope line was drawn implementing it: the
-  week/day time grid's own timed-event blocks (`db-calendar-week-timed-event`) are duration-
-  proportional cards, not fixed-pitch rows, and Anytype ships no time-grid view to measure a flat
-  chip treatment against — they keep their existing coloured presentation rather than being
-  flattened to the month chip's grammar. Named here rather than left for a later reader to wonder
-  whether it was missed.
+- **Landed 2026-09-06 (T005/T007), and the landing note is corrected here 2026-09-06 after a
+  measured read-back.** The note originally said *"the shared tokens (rule colour, weekend tint,
+  today marker, header grammar) now apply to week and day."* Two of those four do not, measured on
+  `screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png`: the week body's slot
+  lines are `#F1F1F1`/`#E1E1E1` (`styles.css:16922`, `:16931`, untouched by the leg), not the
+  month grid's `#EBEBEB`/`#292929`; and the today marker is `#5E33EB` off `--db-current-time-color`
+  (`styles.css:18879`, `:18892`, `:18905`) — the capture holds **zero** `#216DFA` pixels. The
+  weekend tint did carry over, and so did the nav cluster; the header *title* did not, because
+  week and day still build the one-string form (`calendar-renderer.ts:1731`, `:1748`) while only
+  the month header takes the two selects. `tasks.md` T015 R3-R4 carry the gap. It is unfinished
+  work, not a reversal of the ruling.
+- One further scope line was drawn implementing it: the week/day time grid's own timed-event blocks
+  (`db-calendar-week-timed-event`) are duration-proportional cards, not fixed-pitch rows, and
+  Anytype ships no time-grid view to measure a flat chip treatment against — they keep their
+  existing coloured presentation rather than being flattened to the month chip's grammar. The
+  **geometry** half of that reasoning holds: a block whose height encodes a duration cannot take a
+  fixed 20px pitch, and nothing in twenty captures shows what it should take instead. The
+  **colour** half is a separate question and is put to the operator below rather than settled here.
 
 **Alternatives rejected.**
 - *Decide it in-repo.* Rejected under goal D6. Inferring a deletion of shipped, tested,
   operator-visible functionality from a capture absence is exactly the class of silent decision the
   program's D3 and section 7 exist to prevent.
+
+**OPEN QUESTION for the operator, raised 2026-09-06, not decided here.** *"Styled to the month
+grid"* and the flat-chip grammar this ADR itself listed as one of the five shared values both point
+at the timed-event block's **colour**, and the geometry argument above does not reach it. The month
+chip lost its per-event accent bar and its 7% tint under ADR-004 because twenty captures show no
+per-event colour anywhere in the reference calendar. The week and day timed blocks keep both
+(`db-calendar-week-timed-event`, visible as the blue, green and orange cards in
+`screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png`). ADR-004 does not
+authorise that: keeping a colour is not an accessibility ground. This ADR authorises *keeping the
+scales*, which is not the same permission. So the question is narrow and it is the operator's:
+
+> **Does *"styled to the month grid"* strip the timed blocks' per-event colour too, or does the
+> time grid keep colour because a duration-proportional block has no label rail to carry the
+> distinction the month chip carries in text?**
+
+Both answers are defensible and neither is inferable from a reference that ships no time grid.
+Until it is answered, the blocks keep their colour and this row is the record of why, rather than
+drift nobody wrote down.
 
 ---
 

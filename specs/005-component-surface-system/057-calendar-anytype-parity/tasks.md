@@ -10,12 +10,13 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T02:45:00Z"
-    last_updated_by: "code-leaf"
-    recent_action: "landed legs A and C, T004-T007, the month grid retarget"
-    next_safe_action: "Run leg D, the phone calendar (T008)"
+    last_updated_at: "2026-09-06T11:55:00Z"
+    last_updated_by: "verify-and-land"
+    recent_action: "landed T004-T007 and opened T015-T016 on a measured capture read-back"
+    next_safe_action: "Close T015 R1 and R2, the grid inset and the weekday alignment"
     blockers:
       - "T008 onward still need the phone retarget and the date-property submenu closed under AC-004"
+      - "T015 R1 and R2 are P0: the grid inset lands on one edge and the weekday header is out of column"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -24,13 +25,14 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 50
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
       - "T002 landed: C3, C8 and C9 turned into figures on cc5a7ff2, 2026-09-06"
-      - "T004-T007 landed: the month grid retargeted, AC-002 and AC-003 Met, the gantt confirmed unmoved"
+      - "T004-T007 landed: the month grid retargeted, AC-003 Met, the gantt confirmed unmoved"
+      - "AC-002 was claimed Met and is reopened: seven measured residuals are carried as T015 and T016"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -164,6 +166,44 @@ _memory:
 - [ ] T010 **Follow the tests.** `calendar-renderer.test.ts` follows the retargeted shape.
       `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` must stay green
       **without modification** — REQ-010's guard. (`src/views/calendar-renderer.test.ts`)
+- [ ] T015 **Close the seven residuals a post-landing capture read measured.** Legs A and C landed
+      and were then read back against the references by an independent pass; seven differences
+      survive, each measured on a named capture rather than noticed. None is a reason to unwind the
+      retarget and none is silently accepted. **R1** and **R2** are one defect seen from two sides
+      and are P0: the month grid's border box spans device x 112..2815 on
+      `screenshots/notion-clone/views/calendar-month-view-desktop-light.png` while its container
+      spans 80..2783, so the new 16px inset lands on the **left edge only** and the grid overruns
+      its container by 16px on the right (R2); and because the weekday row did take the inset on
+      both sides, the two no longer share a column pitch — 377.3 device px against the grid's
+      386.2 — so each weekday label's inset from its own day column's right rule drifts **15.5px
+      at Monday to 43.5px at Sunday** where the reference holds a constant 11px (R1). **R3**: the
+      week and day scales did not take the month grid's rule colour or today marker, both of which
+      the scale ruling names explicitly — the week body's slot lines measure `#F1F1F1`/`#E1E1E1`
+      (`styles.css:16922`, `:16931`, untouched) and the today marker measures `#5E33EB` off
+      `--db-current-time-color` (`styles.css:18879`, `:18892`, `:18905`), with **zero** `#216DFA`
+      pixels anywhere in
+      `screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png`. The weekend
+      tint and the nav cluster did land, so this is an unfinished half rather than a reversal.
+      **R4**: the week and day headers still build the one-string static title
+      (`calendar-renderer.ts:1731`, `:1748`) while only the month header takes the two selects, so
+      "the same header grammar" is half true. **R5**: the day number's ink sits **18px** below the
+      cell top and **7-8px** inside the right rule against the reference's 12px and 5px — the
+      12px heading padding is applied above a flex row that then centres a 16px line, so the
+      padding and the ink offset are not the same number. **R6**: the weekday labels read `Sun`
+      `Mon` on a Sunday-start week against the reference's two-letter Monday-start `Mo` `Tu`; the
+      design read trued the *week start* as configurable and ours a superset, and never trued the
+      **label form**, so this is an unmeasured element rather than a declined one. **R7**: the
+      unscheduled drawer renders its header and its `Nothing unscheduled.` empty line at full
+      height above the grid even at zero items — 85 CSS px on desktop, more on the phone — above a
+      surface the reference does not have at all; the drawer was kept as ours with an argument,
+      but its **empty state and its placement** were never dispositioned. (`styles.css`,
+      `src/views/calendar-renderer.ts`)
+- [ ] T016 **Verify the chip's leading icon on a capture that carries one.** The design read adopts
+      the chip's leading icon and the `Show icon` toggle that gates it. The toggle landed and is
+      sized and coloured, but **no chip in any of the 28 recaptured calendar images renders an
+      icon**, so the icon half of that row is currently unverified rather than confirmed — the
+      fixtures and constructed scenarios may simply carry no icon data. Either give one scenario a
+      record icon or record the icon row as unverifiable from this corpus. (`tools/screenshots/scenarios/temporal.mjs`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
