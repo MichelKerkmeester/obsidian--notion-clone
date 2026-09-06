@@ -15,9 +15,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-06T21:00:00Z"
-    last_updated_by: "impl-053-table-footer"
-    recent_action: "Landed ADR-005: footer hidden at zero rows, phone trigger raised to 44px"
+    last_updated_at: "2026-09-06T22:45:00Z"
+    last_updated_by: "verify-053-table-footer"
+    recent_action: "Verified ADR-005 red-first and landed it on main; gate 26 green"
     next_safe_action: "Operator device pass on the footer; nothing else here is blocked"
     blockers: []
     key_files:
@@ -466,13 +466,21 @@ on phone, so a regression back under it fails the lane rather than only widening
   tree measures 197) drops to 196.
 - No fixture or constructed scenario in `tools/screenshots/` mounts a table at zero rows, so the
   hidden-footer half of this decision has no capture to move — it is proven by
-  `table-renderer-footer-visibility.test.ts` instead (zero rows → no `.db-table-footer` in the
-  DOM; one row → footer present). Named here rather than silently left unverified.
-- 12 mobile captures moved pixelHash/layoutHash from the 44px trigger height (a table's footer row
-  growing from a 26px-tall "+ Calculate" hint); the css lane's 2026-09-06T21:00:00Z release names
-  all twelve. A further 12 moved bytes only, on tables whose footer already carried two-line
-  calculated results (a stacked kind/value label already exceeding 44px of content), and were
-  restored to their committed bytes.
+  `table-renderer-footer-visibility.test.ts` instead (zero rows → no `.db-table-footer` and the
+  empty-state card in its place; one renderer driven from zero rows to one → the footer returns
+  carrying its COUNT). The render-assertion bundle's own two empty-table probes were also mounted
+  and read, and both come back with no `tfoot.db-table-footer`. Named here rather than silently
+  left unverified.
+- 12 mobile captures moved pixelHash from the 44px trigger height (a table's footer row growing
+  from a 26px-tall "+ Calculate" hint); the css lane's 2026-09-06T22:40:00Z release names all
+  twelve, and no desktop capture moved pixelHash, which is what the `.is-phone` scope predicts.
+  A further 14 moved bytes without moving pixelHash — 10 mobile tables whose footer sits below the
+  fold, so their layout moved and their pixels did not, and 4 unrelated encoder and rasteriser
+  noise — and all 14 are restored to their committed bytes with the manifest's `bytes` reconciled
+  to the files on disk.
+- The trigger was measured rather than assumed: 44 CSS px, 88 device px at DPR 2, in the
+  `chrome-table-footer` fixture and in both the file-view and embed constructed scenarios, with its
+  `tfoot` cell at 53 CSS px.
 
 ### Alternatives
 
