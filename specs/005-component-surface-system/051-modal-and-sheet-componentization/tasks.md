@@ -917,6 +917,14 @@ now draw the shared one; that is a real desktop change, recorded rather than des
 
 ---
 
+**Addendum, 2026-09-06 (~17:40) — the Notion refinement child is open, and it is a second child, not a second owner.** Parent **D15** reserved `059`-`066` for the Notion refinements and this packet's surface drew `061`. **`061-notion-sheet-refinement`** is now open, fed by its own five-iteration `/deep:research:auto` loop (`cli-opencode` / `llmgateway/glm-5.3-flash` at `reasoningEffort: max`, lineage `glm-devpass-sheets`, 5/5 under `maxIterationsReached`, 7 findings, 6 of 6 questions answered) over the 77-screen `notion-screens-digest.md` this packet holds. Its artefacts live at `../061-notion-sheet-refinement/research/`; this packet's own `research/` is the **ten**-iteration sheet-family lineage that produced `067`, and the two are different runs against different digests.
+
+Two things about `061` matter from here. First, it **restates none of `067`'s eleven rows** — where the Notion loop and the sheet-family loop found the same scrim, motion band, primary pill, trailing chip, row pitch or device pass, `061` cites the `067` row instead, because two owners for one number is how a figure drifts. Second, it holds this packet's file group: `surface-shell.ts`, `mobile-bottom-sheet.ts`, `confirm-sheet.ts` and `styles.css`, so **T015, T023 and any leg still in those files serialize against it** exactly as they do against `067`.
+
+What it adds that is genuinely new to this surface: Notion's **confirm card** — a margined centred card with stacked full-width actions, adopted into the one silence `design-trueup.md` row 1 records (*"Not seen"*) — and the operator's 17:07 iOS report on the **table cell action menu**, which is `061`'s P0. Its diagnosis reaches this packet's primitive once: `buildConfirmSheetBody` (`confirm-sheet.ts:46-71`) gains a `stackedActions` flag and `confirm-modal.ts:44` keeps `super(app, "sheet")`, because `048` **D1** forbids the `dialog` route on a phone. Five of `061`'s six ADRs are **Proposed** and nothing there may be implemented until the operator rules.
+
+---
+
 <!-- ANCHOR:cross-refs -->
 ## Cross-references
 

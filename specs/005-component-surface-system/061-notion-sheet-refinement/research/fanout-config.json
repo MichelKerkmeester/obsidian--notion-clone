@@ -1,0 +1,1 @@
+{"executors": [{"kind": "cli-opencode", "model": "llmgateway/glm-5.3-flash", "reasoningEffort": "max", "iterations": 5, "label": "glm-devpass-sheets", "count": 1}], "concurrency": 1}

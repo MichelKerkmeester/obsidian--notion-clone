@@ -64,10 +64,11 @@
     "005-component-surface-system/057-calendar-anytype-parity",
     "005-component-surface-system/058-card-title-and-title-formats",
     "005-component-surface-system/067-sheet-family-remediation",
+    "005-component-surface-system/061-notion-sheet-refinement",
     "005-component-surface-system/059-notion-board-refinement",
     "005-component-surface-system/062-notion-table-refinement",
-    "005-component-surface-system/066-notion-states-refinement",
     "005-component-surface-system/063-notion-dropdown-refinement",
+    "005-component-surface-system/066-notion-states-refinement",
     "005-component-surface-system/065-notion-record-refinement",
     "005-component-surface-system/068-rename-to-obnotion"
   ],
@@ -277,7 +278,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-06T16:25:15.440Z",
+    "last_save_at": "2026-09-06T16:26:55.935Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -285,10 +286,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:6d6159c46a33e6643555fedc05e3cea26e3fbcbb232fa93652118786a5cfd45a",
+    "source_fingerprint": "sha256:3bde43bb2770668da02936ba6f8e6e9a4887991f70d395e1433d1babb5fb94eb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2e12a69af95d3566774c1f530a42f4b1aae1ca5b2e5046521d74f8a9906740e2",
+      "spec.md": "b5645cbf4fe4ad2efea4254d1e28a0711d66e246bbe959d80001a0f5831459a9",
       "handover.md": "230fa68fd184e5190d21f4e9c3987a2ea68999bb7746a8e7e0336f2b41452a7e"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",

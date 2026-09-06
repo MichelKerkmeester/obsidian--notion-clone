@@ -1,0 +1,75 @@
+{
+  "mergedFrom": [
+    "glm-devpass-sheets"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "f-cd-confirm-adoption",
+      "impact": 5,
+      "summary": "C-D: adopt Notion's confirm-card into the Anytype silence without touching 048 D1 or any landed ruling",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    },
+    {
+      "id": "f-n1-confirm-card",
+      "impact": 5,
+      "summary": "Confirm-card fourth shape (digest A4/C9/G3): declared third sheet frame role + stacked full-width actions; Anytype silent; needs operator sign-off (AC-012); red-first flush 0/0/0 + side-by-side buttons (styles.css:230-232, 8592-8598)",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    },
+    {
+      "id": "f-n2-grouped-bands",
+      "impact": 3,
+      "summary": "Gutter-band grouping (C10/D2/E1) conflicts with Anytype's divider grammar; parked behind digest Q3 capture reread",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    },
+    {
+      "id": "f-n3-keyboard-probe",
+      "impact": 3,
+      "summary": "Keyboard lift (mobile-bottom-sheet.ts:190) needs a focused-input-in-viewport device assertion; none exists",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    },
+    {
+      "id": "f-plan-r1-confirm-card",
+      "summary": "Remediation plan R1-R6 for child phase 059-notion-sheet-refinements, sequenced R2 measurement-first",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    },
+    {
+      "id": "f-scrim-ac011-gap",
+      "impact": 3,
+      "summary": "Rendered scrim rgba(0,0,0,0.25) (styles.css:319) unmeasured against AC-011's 0.519/0.710 +/- 0.02 bands",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    },
+    {
+      "id": "f-n1-desktop-half",
+      "impact": 4,
+      "summary": "Stacked confirm actions apply on desktop too (G3); footer grammar splits by surface family (confirm=stacked, editor=side-by-side per H3)",
+      "_lineages": [
+        "glm-devpass-sheets"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 7,
+    "sourceFindings": 7,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  }
+}

@@ -1,0 +1,136 @@
+---
+title: "Goal: Notion Sheet Refinement"
+description: "The two shapes Notion supplies where Anytype is silent — the confirm card and the table cell action menu — landed additively over the sheet family, with every Notion-versus-Anytype conflict recorded and none overridden."
+trigger_phrases:
+  - "061 goal"
+  - "notion sheet refinement"
+  - "confirm card"
+  - "cell action menu"
+  - "selection mode bar"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
+    last_updated_at: "2026-09-06T17:40:00Z"
+    last_updated_by: "opus-synthesis-session"
+    recent_action: "Opened the child from the Notion sheets research loop and the operator cell-menu report"
+    next_safe_action: "Take AC-002 red-first: the phone bar builds eight children into a wrapping row"
+    blockers:
+      - "AC-005 is the operator's sign-off on the confirm card and nothing here can close it"
+      - "AC-007 is parked on an Anytype multi-section capture re-read the operator schedules"
+    key_files:
+      - "src/views/database-view.ts"
+      - "src/views/record-surface/cell-editor-text.ts"
+      - "src/views/table-cell-gesture.ts"
+      - "src/views/confirm-sheet.ts"
+      - "src/views/mobile-bottom-sheet.ts"
+      - "styles.css"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-061-goal"
+      parent_session_id: null
+    completion_pct: 0
+    open_questions:
+      - "Does the confirm keep its sheet mount and gain a card frame role, or move to the dialog presentation"
+      - "Do the three copy formats collapse behind one Copy control with an overflow"
+    answered_questions:
+      - "Notion contributes shape and arrangement only; the digest's thumbnails carry no sampled colour or timing"
+      - "Eight Notion-versus-Anytype conflicts exist and none overrides a landed ruling"
+---
+# Goal: Notion Sheet Refinement
+
+<!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+<!-- HVR_REFERENCE: .opencode/skills/sk-doc/sk-create-with-human-voice/references/hvr-rules.md -->
+
+> Everything above the log is DURABLE. It is the session objective and must stay
+> true for the life of the packet.
+
+---
+
+<!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** Land the two shapes Notion supplies where Anytype is silent — the destructive
+confirm as a margined centred card, and the table cell action menu as a Notion-shaped tap and an
+explicit selection mode — additively over the sheet family, without overriding a landed ruling and
+without restating a row `067-sheet-family-remediation` already owns.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment.
+
+| ID | Decision |
+|----|----------|
+| D1 | **Additive, per parent D15.** A Notion finding never silently overrides a landed Anytype ruling. Where the two disagree, the conflict is named, a side is proposed with a reason, and the ADR stays **Proposed** until the operator rules. Eight such conflicts exist and **none** is overridden here. |
+| D2 | **This packet does not restate `067`.** The Notion loop and `067`'s own loop found the same scrim, motion band, primary pill, trailing chip, row pitch and device pass. Those are `067` REQ-003, REQ-005, REQ-006, REQ-007 and REQ-011 and they stay there. Where the Notion read adds something to one of them, this packet **cites the `067` row and adds only the Notion-specific refinement**. |
+| D3 | **Red first, per criterion, on a threshold.** Every criterion carries one number or one boolean observed failing on this tree, with the `file:line` in its Verification cell. No threshold is written that cannot be made to fail. |
+| D4 | **The operator's cell-menu report is P0 and outranks the loop's own ranking.** The research ranked the confirm card first over 77 screens; the operator reported the cell menu on 2026-09-06 at 17:07 with two captures. The report wins the ordering; both ship. |
+| D5 | **Existing lanes only.** `tools/live/sheet-grammar.mjs`, `tools/storybook/verify-placement.mjs` and `tools/live/touch-targets.mjs` gain rows. No new lane is created, and the operator's device rows are never ticked from here. |
+| D6 | **`044`'s grammar, `048`'s stacking and `051`'s shell are constraints, not deliverables.** The fourteen registered surfaces and thirty-one registered stacked pairs must still pass after every leg. Nothing here re-specifies them. |
+| D7 | **Notion contributes shape and arrangement only.** Every iOS file in the harvest is a 299×678-680px thumbnail with named rather than sampled colours (`051/notion-screens-digest.md` §1). **No Notion-derived pixel, colour, scrim value or timing is adopted.** Where a number is needed it comes from `050`'s Anytype measurements or from a constant already declared in `surface-shell.ts`. |
+| D8 | **One leg, one file group** (`051` D7 carried). `styles.css` is the exception every leg may reach and is serialized by the parent's CSS lane. |
+
+### Operator copy
+
+The operator holds this directive as the session objective, and that copy judges completion, not
+this file. Whenever anything above the log changes, resend the full text of this file in chat.
+
+<!-- /ANCHOR:directive -->
+
+---
+
+<!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
+- [ ] A single tap on an editable, non-title cell on a phone opens **that column's value editor and
+      nothing else** — the selection status bar is not built, and `renderSelectionStatusBar` is not
+      reached on the `edit-cell` branch. Today the branch falls through and does both
+      (`database-view.ts:4791-4803`), which is the second of the operator's two captures.
+- [ ] Selection is an **explicit mode**, and its bar is **one row that never wraps**: at most six
+      children, `flex-wrap: nowrap`, measured at 390px CSS width with no child clipped. Today the
+      bar builds **eight** children for a one-cell selection (`database-view.ts:7643-7712`) into a
+      `flex-wrap: wrap` row (`styles.css:2650`).
+- [ ] The bar's bottom edge clears Obsidian's phone navigation bar as well as the safe area:
+      `bottom` resolves through `--db-mobile-navbar-height` the way the mobile FAB already does
+      (`styles.css:22569`). Today it does not (`styles.css:2646`), which is why the operator's first
+      capture shows the second row under the nav pill.
+- [ ] The destructive confirm presents as a **card**: inset **≥ 16px on every frame edge**, radius
+      `--db-radius-xl` on all four corners, actions **stacked full width** at **≥ 44px** each, on
+      the phone and on desktop, with `openAndWait` still resolving `false` on Escape, outside press
+      and drag. Today it is flush at 0/0/0 (`styles.css:230-232`) with a right-aligned side-by-side
+      action row (`styles.css:8592-8598`).
+- [ ] The operator reads the redesigned cell menu and the confirm card on iOS and says so. **Only
+      the operator closes this** (parent D3); it is read in the same sitting as `067` AC-011.
+- [ ] `decision-record.md` carries one row per Notion-versus-Anytype conflict the loop named, all
+      eight of them, each with its ruling citation, and the count of landed rulings **overridden**
+      reads **zero**.
+- [ ] The grouped-band question is either decided against a re-read of Anytype's own multi-section
+      sheets, or **recorded as parked with the re-read named as its precondition**. It is not built
+      from Notion alone.
+<!-- /ANCHOR:completion -->
+
+---
+
+<!-- ANCHOR:log -->
+## 4. LOG
+
+Everything below is VOLATILE.
+
+### Progress
+
+| Item | State | Evidence |
+|------|-------|----------|
+| Packet opened | Done | This synthesis, 2026-09-06, from this packet's own `research/` (the Notion lineage, moved here from `051` where it ran) plus the operator's 17:07 report |
+| Every threshold observed red | Done | Each `file:line` in `acceptance-criteria.md`'s Verification column, read on this tree |
+| Implementation | Pending | No source file has been touched |
+
+### Deviations and findings
+
+| Item | Note |
+|------|------|
+| **Four of the research loop's own citations did not survive the check** | Verified rather than taken on report, the way `067` verified its loop. (a) The loop cited `SheetChromeOptions` at `mobile-bottom-sheet.ts:64-94`; the interface is at **`:29-45`** and `:57-92` is `applySheetChrome`'s body. (b) The loop wrote *"AC-012 is the operator's row"* for the confirm's shape; `051` AC-012 is a count over `design-trueup.md`'s decision cells and has nothing to do with the confirm — **no existing acceptance row owns the confirm shape**, which is why AC-005 here is new. (c) The loop cited `.db-panel-row` at `styles.css:12366-12373`; that range is `.db-shell-header-leading` and the row rule is at **`:12408-12415`** — same content (`padding: 2px`, no `min-height`), wrong line. (d) The loop's R2, R3 and R4 (motion band, scrim measurement, device bundle) landed in `067` as REQ-006, REQ-003 and REQ-011 while the Notion lineage was still running; they are cited, not restated. |
+| **The operator's report arrived after the loop closed** | The five-iteration lineage read the sheets/menus/dialogs digest, which never covered the table view. The cell-menu requirement is therefore evidenced from the captures directly — `screenshots/notion/ios/flows/reordering-a-table/*` and `screenshots/notion/ios/views/notion-ios-views-table-11-*` — and each is cited by filename in `spec.md` §4 rather than by digest screen-id. |
+| **The mechanism the bar needs already exists** | `--db-mobile-navbar-height` is measured and published on the view container by `toolbar-renderer.ts:2410-2420`, and the mobile FAB already consumes it (`styles.css:22569`). The selection bar is a sibling under the same container and simply does not read it. One caveat is recorded rather than assumed away: the publisher runs only when the FAB is rendered (`toolbar-renderer.ts:2360`), so the leg must make the publication unconditional on a phone or the bar must fall back to its own measurement — a `var()` that misses does not fail, which is the trap `styles.css:2640-2644` already documents for `--db-keyboard-inset`. |
+| **The dock claim is inconsistent across cell editors** | `openSingleLineEditor` takes the bottom dock (`cell-editor-text.ts:212`) and releases it on close (`:233`); `openTextPopoverEditor` (`:331`) never claims it at all. That is exactly the operator's second capture: a multi-line text editor drawn over a bar that stayed docked. It is one line of a fix and it is inside REQ-001 rather than filed as a separate defect. |
+<!-- /ANCHOR:log -->

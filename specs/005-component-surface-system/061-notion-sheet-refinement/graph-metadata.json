@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "005-component-surface-system/051-modal-and-sheet-componentization",
-  "spec_folder": "005-component-surface-system/051-modal-and-sheet-componentization",
+  "packet_id": "005-component-surface-system/061-notion-sheet-refinement",
+  "spec_folder": "005-component-surface-system/061-notion-sheet-refinement",
   "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
@@ -11,32 +11,32 @@
   },
   "derived": {
     "trigger_phrases": [
-      "051 spec",
-      "shell primitive spec",
-      "modal sheet componentization",
-      "confirm primitive",
-      "sub-page navigation",
-      "051 plan",
-      "shell primitive plan",
-      "modal migration legs",
-      "051 tasks",
-      "shell primitive tasks",
-      "modal componentization tasks",
-      "051 acceptance criteria"
+      "061 spec",
+      "notion sheet refinement",
+      "confirm card",
+      "cell action menu ios",
+      "selection status bar wraps",
+      "061 plan",
+      "cell menu plan",
+      "confirm card plan",
+      "selection mode implementation",
+      "061 tasks",
+      "cell menu tasks",
+      "confirm card tasks"
     ],
     "key_topics": [
       "spec",
-      "shell",
-      "primitive",
-      "modal",
+      "notion",
       "sheet",
-      "componentization",
+      "refinement",
       "confirm",
-      "sub-page",
-      "navigation",
-      "plan",
-      "migration",
-      "legs"
+      "card",
+      "cell",
+      "action",
+      "menu",
+      "ios",
+      "selection",
+      "status"
     ],
     "importance_tier": "important",
     "status": "draft",
@@ -49,18 +49,18 @@
       "decision-record.md",
       "implementation-summary.md",
       "research/research.md",
-      "src/views/surface-shell.ts",
+      "src/views/database-view.ts",
+      "src/views/record-surface/cell-editor-text.ts",
+      "src/views/table-cell-gesture.ts",
+      "src/views/embedded-database-renderer.ts",
       "src/views/confirm-sheet.ts",
-      "tools/live/sheet-grammar.mjs",
-      "src/views/confirm-sheet.stories.ts",
-      "src/views/modals/db-modal.ts",
-      "src/views/mobile-bottom-sheet.ts",
       "src/views/modals/confirm-modal.ts",
-      "src/main.ts",
-      "src/views/image-file-suggest-modal.ts",
-      "src/views/markdown-file-suggest-modal.ts",
-      "screenshots/anytype/README.md",
-      "tools/live/replay.json"
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/surface-shell.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/i18n.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
       {
@@ -112,9 +112,27 @@
         "source": "derived"
       },
       {
-        "name": "surface-shell.ts",
+        "name": "database-view.ts",
         "kind": "code",
-        "path": "src/views/surface-shell.ts",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-editor-text.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/cell-editor-text.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-cell-gesture.ts",
+        "kind": "code",
+        "path": "src/views/table-cell-gesture.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
         "source": "derived"
       },
       {
@@ -124,21 +142,9 @@
         "source": "derived"
       },
       {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "confirm-sheet.stories.ts",
+        "name": "confirm-modal.ts",
         "kind": "code",
-        "path": "src/views/confirm-sheet.stories.ts",
-        "source": "derived"
-      },
-      {
-        "name": "db-modal.ts",
-        "kind": "code",
-        "path": "src/views/modals/db-modal.ts",
+        "path": "src/views/modals/confirm-modal.ts",
         "source": "derived"
       },
       {
@@ -148,39 +154,33 @@
         "source": "derived"
       },
       {
-        "name": "confirm-modal.ts",
+        "name": "surface-shell.ts",
         "kind": "code",
-        "path": "src/views/modals/confirm-modal.ts",
+        "path": "src/views/surface-shell.ts",
         "source": "derived"
       },
       {
-        "name": "main.ts",
+        "name": "toolbar-renderer.ts",
         "kind": "code",
-        "path": "src/main.ts",
+        "path": "src/views/toolbar-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "image-file-suggest-modal.ts",
+        "name": "i18n.ts",
         "kind": "code",
-        "path": "src/views/image-file-suggest-modal.ts",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
-        "name": "markdown-file-suggest-modal.ts",
-        "kind": "code",
-        "path": "src/views/markdown-file-suggest-modal.ts",
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
         "source": "derived"
       },
       {
-        "name": "README.md",
-        "kind": "doc",
-        "path": "screenshots/anytype/README.md",
-        "source": "derived"
-      },
-      {
-        "name": "replay.json",
-        "kind": "config",
-        "path": "tools/live/replay.json",
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -190,7 +190,7 @@
         "source": "derived"
       },
       {
-        "name": "Sheet Componentization",
+        "name": "Notion Sheet Refinement",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -208,9 +208,9 @@
         "source": "derived"
       }
     ],
-    "causal_summary": "The family works surface by surface and drifts as a family",
-    "created_at": "2026-09-05T14:00:00Z",
-    "last_save_at": "2026-09-06T16:20:10.672Z",
+    "causal_summary": "Tapping a cell on a phone does two things at once and shows the worse one",
+    "created_at": "2026-09-06T16:03:53Z",
+    "last_save_at": "2026-09-06T16:23:04.645Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,17 +223,16 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:8c4bd5f96be031f093187827fbf1e9b2cbfe4d819c792a93fba42614f36d3715",
+    "source_fingerprint": "sha256:92747da8b535569c1a9c9b86c08dc86169f5ec50c10ea6322490ac609521ac8e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "731928c700a1099da8c2faa5e38d3e8dd9d60e2fb74bb121218acc84f7cbec89",
-      "plan.md": "cf5d8fda4c067e28a2ee488195e7cc8983e4357da7b72229e70121a1340a5541",
-      "tasks.md": "2e23fcc59ee48b01a85587f601fc30acdde04f0b92635646e1327698dca3d024",
-      "decision-record.md": "5cc2525ca42e3be7e21aec5717990ee48e4706b1765f2861a0ce72ecf903dc08",
-      "implementation-summary.md": "b4c6a42cd70918d7a34e6c9628decc0eb42891f9d80d28948dc2d327c37dc061",
-      "research/research.md": "935b9bd84657115af3811ed55104a2bf9dd9bd14414b2441366356e56a53dbf8"
+      "spec.md": "0f724f2c7d25ae9b9aa6e3952d8a149db614f2b2090f41e2559b6f10cd837341",
+      "plan.md": "68b73e1b491c308e942f0202ab28bce30a387223b7df9dc1f733cbdb4c846b0b",
+      "tasks.md": "28db4f25937b50c7ead3fddeb222cc17e738c8553e41aedeaa3bcffd7181784c",
+      "decision-record.md": "d7b3ec3564ba491bd495439610f66e6ed9df7424ff55288a9065de0b69b060e5",
+      "implementation-summary.md": "baf4a32c1661d1ac19ae110fc219ae09a9ec9a6fc2dc4e2ba8759253f3f387ab",
+      "research/research.md": "40717726b482000cf2fb1645c3e057649717c6747ace587f6b048840873a5a74"
     },
-    "last_active_child_id": null,
     "last_active_at": null
   }
 }

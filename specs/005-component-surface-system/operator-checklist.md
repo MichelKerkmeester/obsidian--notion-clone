@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **66 phases**, **6 with nothing left**, **223 rows** waiting on a device.
+Derived 2026-09-06: **67 phases**, **6 with nothing left**, **230 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -360,6 +360,16 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The four device-only checks are named on `056` AC-010's operator pass rather than left in a research document. Today, observed red: AC-010's verification cell reads "the operator's own words" and enumerates 0 checks (`../056-board-anytype-parity/acceptance-criteria.md`, AC-010 row). Done is 4 enumerated: page scroll with hidden desktop chrome, the board in dark theme (no dark Notion board exists in the harvest on either platform — digest `:262-266`), desktop hover-reveal of `···`/`+` (uncaptured even on Notion's own web — digest `:269-272`), and the phone board on a real handset (`056` R5's phone capture is harness-synthetic, forced `matchMedia("(pointer: coarse)")`).
 - [ ] The new surface is captured and locked by lanes that already exist.
 - [ ] OPERATOR: the operator answers the adoption question at `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and ADR-011 — before any code leg starts, and afterwards reads the Groups panel on iOS and on desktop and reports it as an improvement rather than a fourth place to hunt for a setting. Nothing in this repository can close this row, and an agent never ticks it.
+
+## 061-notion-sheet-refinement — 0/7
+
+- [ ] A single tap on an editable, non-title cell on a phone opens that column's value editor and nothing else — the selection status bar is not built, and `renderSelectionStatusBar` is not reached on the `edit-cell` branch. Today the branch falls through and does both (`database-view.ts:4791-4803`), which is the second of the operator's two captures.
+- [ ] Selection is an explicit mode, and its bar is one row that never wraps: at most six children, `flex-wrap: nowrap`, measured at 390px CSS width with no child clipped. Today the bar builds eight children for a one-cell selection (`database-view.ts:7643-7712`) into a `flex-wrap: wrap` row (`styles.css:2650`).
+- [ ] The bar's bottom edge clears Obsidian's phone navigation bar as well as the safe area: `bottom` resolves through `--db-mobile-navbar-height` the way the mobile FAB already does (`styles.css:22569`). Today it does not (`styles.css:2646`), which is why the operator's first capture shows the second row under the nav pill.
+- [ ] The destructive confirm presents as a card: inset ≥ 16px on every frame edge, radius `--db-radius-xl` on all four corners, actions stacked full width at ≥ 44px each, on the phone and on desktop, with `openAndWait` still resolving `false` on Escape, outside press and drag. Today it is flush at 0/0/0 (`styles.css:230-232`) with a right-aligned side-by-side action row (`styles.css:8592-8598`).
+- [ ] The operator reads the redesigned cell menu and the confirm card on iOS and says so. Only the operator closes this (parent D3); it is read in the same sitting as `067` AC-011.
+- [ ] `decision-record.md` carries one row per Notion-versus-Anytype conflict the loop named, all eight of them, each with its ruling citation, and the count of landed rulings overridden reads zero.
+- [ ] The grouped-band question is either decided against a re-read of Anytype's own multi-section sheets, or recorded as parked with the re-read named as its precondition. It is not built from Notion alone.
 
 ## 062-notion-table-refinement — 0/9
 
