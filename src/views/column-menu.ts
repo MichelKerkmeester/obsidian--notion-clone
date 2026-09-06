@@ -18,7 +18,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { setIcon } from "obsidian";
-import { COLUMN_TYPE_LABELS, isOptionColumnType, OPTION_COLORS } from "../data/column-types";
+import { COLUMN_TYPE_LABELS, columnWrapModeValue, getColumnWrapMode, isOptionColumnType, OPTION_COLORS, type ColumnWrapMode } from "../data/column-types";
 import { isFileFieldKey } from "../data/file-fields";
 import { ColumnDef, ComputedFieldDef, NumberDisplayStyle, NumberDisplayConfig, StatusColor } from "../data/types";
 import { isNumberDisplayColumn } from "../data/column-display";
@@ -46,7 +46,7 @@ export interface ColumnMenuActions {
   duplicateColumn(col: ColumnDef): void;
   moveColumn(key: string, offset: -1 | 1): void;
   hideColumn(col: ColumnDef): void;
-  toggleColumnWrap(col: ColumnDef): void;
+  setColumnWrap(col: ColumnDef, wrap: boolean | undefined): void;
   setTextRenderMode(col: ColumnDef, mode: "plain" | "link" | "markdown"): void;
   setTextLinkScheme(col: ColumnDef, scheme: TextLinkSchemeChoice): void;
   setNumberDisplayStyle(col: ColumnDef, style: NumberDisplayStyle): void;
@@ -70,6 +70,14 @@ export interface ColumnMenuOptions {
   computedFields?: ComputedFieldDef[];
   onClose?: () => void;
 }
+
+/** Follow view first: the common case for a column that has never been touched. */
+const WRAP_MODES: readonly ColumnWrapMode[] = ["follow", "wrap", "clip"];
+const WRAP_MODE_LABEL_KEYS: Record<ColumnWrapMode, string> = {
+  follow: "menu.columnWrapFollow",
+  wrap: "menu.columnWrapOn",
+  clip: "menu.columnWrapOff",
+};
 
 // ───────────────────────────────────────────────────────────────────
 // 3. MAIN CONTEXT MENU
@@ -180,7 +188,25 @@ export class ColumnMenu {
     menu.addSeparator();
 
     menu.addRow({ icon: "eye-off", label: t("menu.hideProperty", { name: col.label }), onClick: () => this.actions.hideColumn(col) });
-    menu.addRow({ icon: "wrap-text", label: col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"), onClick: () => this.actions.toggleColumnWrap(col) });
+    menu.addRow({
+      icon: "wrap-text",
+      label: t("menu.columnWrap"),
+      value: t(WRAP_MODE_LABEL_KEYS[getColumnWrapMode(col.wrap)]),
+      submenu: true,
+      buildSubmenu: (child) => {
+        const current = getColumnWrapMode(col.wrap);
+        for (const mode of WRAP_MODES) {
+          child.addRow({
+            label: t(WRAP_MODE_LABEL_KEYS[mode]),
+            selected: mode === current,
+            onClick: () => {
+              this.actions.setColumnWrap(col, columnWrapModeValue(mode));
+              menu.close();
+            },
+          });
+        }
+      },
+    });
     if (this.actions.filterByColumn) {
       menu.addRow({ icon: "filter", label: t("menu.filterByValue", { name: col.label }), onClick: () => this.actions.filterByColumn?.(col) });
     }

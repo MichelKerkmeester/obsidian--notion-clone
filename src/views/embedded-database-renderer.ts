@@ -31,10 +31,13 @@ import { ComputedFieldEngine } from "../data/computed-field";
 import { setDateDisplayMode } from "../data/date-time-format";
 import { evaluateComputedFields } from "../data/computed-evaluator";
 import {
+  columnWrapModeValue,
+  getColumnWrapMode,
   isObsidianTagsKey,
   normalizeObsidianTagValue,
   toBooleanValue,
   toMultiSelectValuesForKey,
+  type ColumnWrapMode,
 } from "../data/column-types";
 import { getDefaultGroupOrder, getEffectiveGroupOrder, mergeGroupOrder } from "../data/group-order";
 import { formatGroupKeyDisplay } from "../data/group-display";
@@ -163,6 +166,15 @@ const liveLinkedViewEmbeds = new Set<EmbeddedDatabaseRenderer>();
 // table. 60 sits beside Gallery's, is generous enough that most embeds never see it, and is one
 // page's worth of the "Load more" affordance rather than a hard cap.
 const EMBEDDED_TABLE_PAGE_LIMIT = 60;
+
+// Mirrors column-menu.ts's own wrap-mode row: follow view first, since that is the state a
+// column carries until someone overrides it.
+const WRAP_MODES: readonly ColumnWrapMode[] = ["follow", "wrap", "clip"];
+const WRAP_MODE_LABEL_KEYS: Record<ColumnWrapMode, string> = {
+  follow: "menu.columnWrapFollow",
+  wrap: "menu.columnWrapOn",
+  clip: "menu.columnWrapOff",
+};
 
 /**
  * The pure half of the embedded table's paging: given the full row set and how many rows have
@@ -490,7 +502,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       },
       renderCell: (td, row, col) => {
         if (this.isViewReadOnly()) this.renderReadOnlyCell(td, row, col);
-        else this.cellRenderer.renderCell(td, row, col);
+        else this.cellRenderer.renderCell(td, row, col, this.config?.wrapText);
         td.toggleClass("db-cell-range-selected", this.isEmbedCellSelected(row.file.path, col.key));
         // The same tap the full table view gives its main-item cell. Without it an embedded table
         // looked identical and answered differently: a thumb on the note name followed the link
@@ -2532,7 +2544,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private renderReadOnlyCell(td: HTMLElement, row: RowData, col: ColumnDef): void {
-    this.cellRenderer.renderCell(td, row, col);
+    this.cellRenderer.renderCell(td, row, col, this.config?.wrapText);
     td.removeClass("db-editable-cell", "db-cell-selected", "db-cell-editing");
     td.removeAttribute("tabindex");
     const checkbox = td.querySelector<HTMLInputElement>('input[type="checkbox"]');
@@ -2554,12 +2566,28 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         this.renderResults(config);
         this.saveEmbeddedConfigInBackground();
       } });
-    menu.addRow({ icon: "wrap-text", label: col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"), onClick: () => {
-        col.wrap = !col.wrap || undefined;
-        this.persistEmbeddedConfigLocally(config);
-        this.renderResults(config);
-        this.saveEmbeddedConfigInBackground();
-      } });
+    menu.addRow({
+      icon: "wrap-text",
+      label: t("menu.columnWrap"),
+      value: t(WRAP_MODE_LABEL_KEYS[getColumnWrapMode(col.wrap)]),
+      submenu: true,
+      buildSubmenu: (child) => {
+        const current = getColumnWrapMode(col.wrap);
+        for (const mode of WRAP_MODES) {
+          child.addRow({
+            label: t(WRAP_MODE_LABEL_KEYS[mode]),
+            selected: mode === current,
+            onClick: () => {
+              col.wrap = columnWrapModeValue(mode);
+              this.persistEmbeddedConfigLocally(config);
+              this.renderResults(config);
+              this.saveEmbeddedConfigInBackground();
+              menu.close();
+            },
+          });
+        }
+      },
+    });
     if (isNumberDisplayColumn(col, config.schema.computedFields)) {
       const currentStyle = col.numberDisplayStyle ?? "plain";
       const numberStyles: { value: NumberDisplayStyle; key: string }[] = [
@@ -4118,6 +4146,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.boardSubgroupField = this.config.boardSubgroupField;
     origView.defaultColumnWidth = this.config.defaultColumnWidth;
     origView.rowDensity = this.config.rowDensity;
+    origView.wrapText = this.config.wrapText;
     origView.groupOrders = this.config.groupOrders;
     origView.showEmptyGroups = this.config.showEmptyGroups;
     origView.collapsedGroups = this.config.collapsedGroups;

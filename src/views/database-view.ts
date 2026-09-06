@@ -840,7 +840,7 @@ export class DatabaseView extends FileView {
       duplicateColumn: (col) => { void this.columnOperations.duplicateColumn(col); },
       moveColumn: (key, offset) => this.columnOperations.moveColumn(key, offset),
       hideColumn: (col) => this.columnOperations.hideColumn(col),
-      toggleColumnWrap: (col) => this.toggleColumnWrap(col),
+      setColumnWrap: (col, wrap) => this.setColumnWrap(col, wrap),
       setTextRenderMode: (col, mode) => this.setTextRenderMode(col, mode),
       setTextLinkScheme: (col, scheme) => this.setTextLinkScheme(col, scheme),
       setNumberDisplayStyle: (col, style) => this.setNumberDisplayStyle(col, style),
@@ -5736,6 +5736,16 @@ export class DatabaseView extends FileView {
     this.refresh();
   }
 
+  /** Sets the column's wrap mode directly (Wrap / Clip / Follow view), rather than cycling it —
+   *  the column menu's own submenu picks a state instead of stepping through them. */
+  private setColumnWrap(col: ColumnDef, wrap: boolean | undefined): void {
+    col.wrap = wrap;
+    this.pendingUndoLabel = t("undo.columnWrapConfig");
+    this.scheduleConfigSave();
+    this.renderColumnManager();
+    this.refresh();
+  }
+
   private setTextRenderMode(col: ColumnDef, mode: "plain" | "link" | "markdown"): void {
     col.textRenderMode = mode === "plain" ? undefined : mode;
     this.scheduleConfigSave();
@@ -8712,8 +8722,8 @@ export class DatabaseView extends FileView {
     row: RowData,
     col: ColumnDef
   ): void {
-    this.cellRenderer.renderCell(td, row, col);
     const config = this.getConfig();
+    this.cellRenderer.renderCell(td, row, col, config?.wrapText);
     if (config) {
       applyConditionalFormat(td, row, config, this.getActiveDb(), col.key);
       const container = this.containerEl_;
@@ -8990,8 +9000,8 @@ export class DatabaseView extends FileView {
     }
 
     oldTd.replaceWith(newTd);
-    this.cellRenderer.renderCell(newTd, row, col);
     const config = this.getConfig();
+    this.cellRenderer.renderCell(newTd, row, col, config?.wrapText);
     if (config) applyConditionalFormat(newTd, row, config, this.getActiveDb(), col.key);
     this.setupTableCellSelection(newTd, row, col);
     if (!isTouchDevice(this.containerEl_) && this.canFillColumn(col)) {
