@@ -209,6 +209,20 @@ so the existing grid, not a new rule, is what separates one block from the next.
 capture ever shows a genuine gap between back-to-back blocks, that is a geometry question (padding
 between blocks), not a colour one, and does not reopen this ADR.
 
+**A capture did show one, on the phone, and it is filed under that disposition rather than as a
+reopening.** The verification read of the landed captures found the separator question was never the
+binding one here: no two blocks in the corpus touch vertically, and the overlapping pair splits the
+column horizontally with an 8px gap between them, so the slot lines are enough on desktop at both
+themes. On a phone they are not enough for a different reason. Seven week columns inside ~286px
+leave each about 41px, an overlapping pair halves that, and after the block's inset and
+`.is-phone .db-calendar-week-event-content`'s padding there is no width left for a title —
+`calendar-week-time-grid-mobile-{light,dark}.png` decode the 14:00 pair as one clipped glyph and no
+ink at all, where they previously read as an orange and a blue bar. The fill was carrying *"an event
+is here"* by itself at that width. That is a width fact about the phone column, not a colour one:
+the ruling is implemented exactly as given, and the remedy — a minimum column width, a wrapped
+phone title, or the 1px hairline declined above — changes either a value this ruling settled or a
+geometry this ADR froze, so it is the operator's and is carried as `tasks.md` T018.
+
 ---
 
 ## ADR-003: The calendar's thresholds are per-element, not a class count

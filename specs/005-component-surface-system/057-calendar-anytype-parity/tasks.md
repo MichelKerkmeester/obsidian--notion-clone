@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T19:00:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "landed T017: the week/day timed blocks flatten to the month chip's ink"
-    next_safe_action: "The AC-010 device read; AC-004's layout-tile panel stays a named out-of-scope gap"
+    recent_action: "verified and landed T017; opened T018 for the phone overlap-column block"
+    next_safe_action: "Put T018's phone overlap-column remedy to the operator; then the AC-010 device read"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 98
+    completion_pct: 96
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
@@ -38,6 +38,7 @@ _memory:
       - "T015 R1-R7, T016, T008, T009 all landed: gate 26 green, gantt confirmed unmoved throughout"
       - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink"
       - "T017 landed: 0 device px of the former per-event fills and accent bar across the four recaptured files"
+      - "T017's flatten costs the phone an overlap-column block: carried as T018, the remedy is the operator's"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -509,6 +510,48 @@ title and 44x44 close on phone.
       — were restored to their committed bytes rather than carried as unreviewed noise,
       with the manifest's own `bytes` and `sourceHashes.styles.css` fields reconciled to
       match).
+
+      **Independently re-verified 2026-09-06 by a second reader that decoded the PNGs with
+      its own inflate/un-filter pass rather than reusing `pixel-hash.mjs`.** Every claim
+      above reproduced. Full-image colour histograms of the four recaptured files return
+      **0** px of `#DEEAF1`, `#E6EFEA`, `#F9E9D8` and `#1E3A8A` — and **0** of the dark
+      theme's own former tints `#253652`, `#1E3E2A`, `#53331C` and its `#BFDBFE` bar,
+      which the green value above did not name and which had never been zero either. The
+      red values are the desktop-light file's alone and are restated here with their file:
+      **138,411 / 9,873 / 8,336** with a **3,496** px bar on
+      `calendar-week-time-grid-desktop-light.png`, and **21,708 / 2,572 / 1,059** with the
+      same 3,496 px bar on `-mobile-light.png`. The pinned ink now appears at an identical
+      count in both themes — 1,611 px of `#292929` light against 1,611 of `#DDDDDD` dark on
+      desktop, 225 against 225 on phone — which is what a title that inherits one ink pair
+      looks like. The negative control was re-run from the merged tree: restoring a
+      `background` fill on the selector turns the new pin red and the other five green,
+      then the restore turns all six green. The constructed pair was checked for the
+      stronger claim rather than the byte one: `constructed-calendar-week-desktop-light.png`
+      held **0** fill px *before* this leg as well, so its byte-identity is the bench data
+      carrying no timed event in frame, not a capture that failed to refresh.
+
+- [ ] T018 **A phone-width timed block in an overlap column now renders as nothing.**
+      Found by the T017 verification read, recorded rather than fixed because the remedy is
+      a width decision the *"Flatten to chip ink"* ruling does not reach — ADR-002 puts a
+      gap between blocks outside its own colour ruling and calls it geometry.
+      (`styles.css`, `src/views/calendar-renderer.ts`)
+      **Red today, measured on `screenshots/notion-clone/views/calendar-week-time-grid-mobile-{light,dark}.png`
+      at DPR 2**: with no `--db-calendar-col-width` set (the default fit-to-width mode), a
+      phone's seven week columns are ~41px each. An overlapping pair splits that in half —
+      `left: calc(0% + 4px); width: calc(50% - 8px)` from `renderWeekTimedEvent` — leaving
+      about 12px of block and, after `.is-phone .db-calendar-week-event-content`'s own
+      padding, no room for a title at all. The two blocks at 14:00-15:30 and 14:30-15:00
+      used to read as an orange and a blue bar; they now decode as **one clipped glyph and
+      zero ink** respectively. This is a loss the flatten caused: the fill was carrying
+      "an event is here" on its own, and the title cannot.
+      **Green when**: an overlap-column block at a phone's default column width is
+      distinguishable from empty grid in the decoded capture — a non-zero ink or rule count
+      inside its own rect — without reintroducing a per-event fill. The candidate remedies
+      are a minimum column width, a wrapped rather than clipped phone title, and the 1px
+      shared hairline ADR-002 declined; **which one is the operator's call**, because each
+      changes a value the ruling settled or a geometry the ADR froze. Nothing else about
+      T017 is affected: desktop reads correctly at both themes, and the block's
+      duration-proportional height is untouched.
 <!-- /ANCHOR:phase-3 -->
 
 ---

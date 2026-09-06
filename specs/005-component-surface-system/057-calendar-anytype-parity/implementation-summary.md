@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "code-implementer"
-    recent_action: "landed T017, the flatten-to-chip-ink repaint; AC-005 closes"
-    next_safe_action: "the operator's AC-010 device read; AC-004's layout-tile panel stays a named gap"
+    last_updated_at: "2026-09-06T21:30:00Z"
+    last_updated_by: "verify-and-land"
+    recent_action: "verified T017 independently and landed it; T018 opens the phone overlap-column gap"
+    next_safe_action: "put T018's phone overlap-column remedy to the operator; then the AC-010 device read"
     blockers:
       - "AC-010 is the operator's device read, unclosable here"
       - "Five AC-002 sub-rows stay pixel read owed"
@@ -36,6 +36,7 @@ _memory:
       - "T008: phone chip takes the 44px touch floor, CSS and JS pitch alike"
       - "T009: submenu geometry scoped to date-field dropdowns only"
       - "T017: the week/day timed block flattens to the month chip's ink, measured at 0 fill/bar px"
+      - "T017 re-verified by an independent PNG decoder; T018 records the phone cost the flatten created"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -234,11 +235,11 @@ across the whole leg).
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0, read at every landing commit |
-| `npx vitest run` | **1437/1437** in 137 files, from the T017 landing (the pinned-values test's sixth pin added net +1) |
+| `npx vitest run` | **1445/1445** in 137 files, read from the merged tree at the T017 landing (1437 before the rebase onto `3b3ac633`; the pinned-values test's sixth pin is net +1 of that) |
 | `npm run build` | Exit 0; `main.js` unmoved — T017 is a stylesheet-only and test-only change |
 | `npm run gate` (foreground, exit read from a file, no pipe) | **26 green, 0 red** |
 | `node tools/live/sheet-grammar.mjs` | Exit 0, **13** surfaces and **31** stacked pairs. The thirteenth is `055`'s `confirm`, registered while this packet was open; 057 registered none |
-| `node tools/screenshots/verify.mjs` | Exit 0, **562** current |
+| `node tools/screenshots/verify.mjs` | Exit 0, **566** current, read from the merged tree |
 | Gantt unmoved | All eight `reference-gantt-*.png` MD5-identical to `T002`'s recorded values; `git diff --stat origin/main -- src/views/calendar-timeline-renderer.ts` empty; `pm-gantt-*` still **119** |
 | Guard tests unedited | `git diff --stat origin/main -- calendar-keyboard-navigation.test.ts calendar-search-placement.test.ts` empty; with `calendar-renderer.test.ts`, 32/32 |
 | Acceptance criteria | **Eight Met** — AC-001, AC-002, AC-003, AC-005, AC-006, AC-007, AC-008, AC-009, each re-measured at a landing rather than accepted on the implementing leg's own report. **Two open** — AC-004's one remaining out-of-scope surface, and AC-010, the operator's |
@@ -261,7 +262,16 @@ across the whole leg).
    accessibility ground.
 4. **`AC-010` is the operator's own device read**, on iOS and desktop, knowing the phone half was
    inferred. Nothing in this repository closes this row, and it is not ticked here.
-5. **The weekday labels take the reference's two-letter form, but not its Monday start.** The
+5. **A phone-width timed block in an overlap column now renders as nothing, and T017 caused it.**
+   The flatten is implemented exactly as the operator ruled, but the fill it removed was the only
+   thing marking a block too narrow for its own title. At a phone's default column width seven
+   week columns are ~41px, an overlapping pair halves that, and the 14:00 pair in
+   `calendar-week-time-grid-mobile-{light,dark}.png` decodes as one clipped glyph and zero ink
+   where it used to read as an orange and a blue bar. It is a width question rather than a colour
+   one — ADR-002 puts that outside its own ruling — and every candidate remedy changes a value the
+   ruling settled or a geometry the ADR froze, so it is carried as `tasks.md` T018 for the
+   operator rather than chosen here. Desktop is unaffected at both themes.
+6. **The weekday labels take the reference's two-letter form, but not its Monday start.** The
    capture corpus renders `Su Mo Tu We Th Fr Sa` against the reference's `Mo Tu We Th Fr Sa Su`,
    because which day starts the week is locale- and `calendarFirstDayOfWeek`-driven and the harness
    runs `en-US`. T015 R6 moved the label's character count deliberately and left the week start

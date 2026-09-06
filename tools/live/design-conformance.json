@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T05:33:00.080Z",
+  "measuredAt": "2026-09-06T06:16:05.560Z",
   "inputs": {
-    "styles.css": "c6c1ce7e15f4",
+    "styles.css": "a908655be7ef",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 141,
+      "value": 142,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
@@ -147,8 +147,8 @@
     "src/views/dropdown-field.ts:220  .db-dropdown-empty",
     "src/views/dropdown-field.ts:267  .db-dropdown-section-title",
     "src/views/embedded-database-renderer.ts:1387  .db-calendar-search-results-popover",
-    "src/views/embedded-database-renderer.ts:3041  .db-group-order-popover",
-    "src/views/embedded-database-renderer.ts:3157  .db-panel-button",
+    "src/views/embedded-database-renderer.ts:3064  .db-group-order-popover",
+    "src/views/embedded-database-renderer.ts:3180  .db-panel-button",
     "src/views/filter-panel-renderer.ts:176  .db-filter-panel",
     "src/views/filter-panel-renderer.ts:198  .db-panel-empty",
     "src/views/filter-panel-renderer.ts:218  .db-panel-button",

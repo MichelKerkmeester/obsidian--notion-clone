@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T05:33:13.816Z",
+  "measuredAt": "2026-09-06T06:16:31.458Z",
   "inputs": {
-    "styles.css": "c6c1ce7e15f4",
+    "styles.css": "a908655be7ef",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,7 +360,7 @@
     }
   ],
   "totals": {
-    "fixtures": 74,
+    "fixtures": 75,
     "escaping": 629,
     "growing": 276,
     "scrolling": 353,
@@ -1454,7 +1454,7 @@
       "tag": "div",
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.",
-      "by": 10.4,
+      "by": 7.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1465,7 +1465,7 @@
       "tag": "div",
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.is-compact",
-      "by": 10.4,
+      "by": 7.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4191,7 +4191,7 @@
       "tag": "div",
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.",
-      "by": 4.6,
+      "by": 1.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -4202,7 +4202,7 @@
       "tag": "div",
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.is-compact",
-      "by": 4.6,
+      "by": 1.6,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -7417,6 +7417,11 @@
     },
     {
       "width": 320,
+      "fixture": "empty-state-source-missing",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "table-mobile",
       "probe": "4px"
     },
@@ -7787,6 +7792,11 @@
     },
     {
       "width": 402,
+      "fixture": "empty-state-source-missing",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "table-mobile",
       "probe": "4px"
     },
@@ -8157,6 +8167,11 @@
     },
     {
       "width": 768,
+      "fixture": "empty-state-source-missing",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "table-mobile",
       "probe": "4px"
     },
@@ -8523,6 +8538,11 @@
     {
       "width": 1440,
       "fixture": "empty-state",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "empty-state-source-missing",
       "probe": "4px"
     },
     {
