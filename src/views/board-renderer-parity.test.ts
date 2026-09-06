@@ -861,3 +861,45 @@ describe("switching away from the default board", () => {
     expect(container.hasClass("db-kanban-view")).toBe(false);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 10. DESKTOP SCROLLBAR EDGE-HOVER REVEAL
+// ───────────────────────────────────────────────────────────────────
+//
+// A later operator ruling ("Edge only") replaced a pane-wide `:hover` scrollbar reveal with one
+// confined to the container's own edges: the pointer has to be near the bar it would use, not
+// merely anywhere over the cards. `is-edge-hover` is the class the CSS keys off; these assertions
+// pin the pointermove math and the teardown that keeps a re-render from stacking a second
+// listener on the container the way the scroll listener above it already avoids.
+
+describe("desktop scrollbar edge-hover reveal", () => {
+  it("marks the container only while the pointer sits within the edge band, and clears on leave", () => {
+    const { container } = renderBoard();
+    container.rect = { left: 0, top: 0, right: 400, bottom: 300 };
+
+    // Mid-pane: nowhere near either the right or the bottom edge.
+    container.dispatchEvent({ type: "pointermove", clientX: 200, clientY: 150 });
+    expect(container.hasClass("is-edge-hover")).toBe(false);
+
+    // Within the 16px band along the right edge (the vertical bar's own edge).
+    container.dispatchEvent({ type: "pointermove", clientX: 390, clientY: 150 });
+    expect(container.hasClass("is-edge-hover")).toBe(true);
+
+    container.dispatchEvent({ type: "pointerleave" });
+    expect(container.hasClass("is-edge-hover")).toBe(false);
+
+    // Within the 16px band along the bottom edge (the horizontal bar's own edge).
+    container.dispatchEvent({ type: "pointermove", clientX: 200, clientY: 290 });
+    expect(container.hasClass("is-edge-hover")).toBe(true);
+  });
+
+  it("tears down the previous pointer listeners on re-render instead of stacking a second pair", () => {
+    const { container, renderer } = renderBoard();
+    const removeSpy = vi.spyOn(container, "removeEventListener");
+
+    renderer.render(container as unknown as HTMLElement, CONFIG, GROUPS, "status");
+
+    expect(removeSpy).toHaveBeenCalledWith("pointermove", expect.any(Function));
+    expect(removeSpy).toHaveBeenCalledWith("pointerleave", expect.any(Function));
+  });
+});

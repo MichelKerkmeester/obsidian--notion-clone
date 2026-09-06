@@ -349,14 +349,19 @@ window.__boardGeometry = (scenario) => {
     const checkbox = container.querySelector(".db-kanban-card-meta .db-checkbox-field");
 
     // The scrollbar height is read off the ::-webkit-scrollbar pseudo-element of the container,
-    // which is the element that scrolls — at rest, and again with "is-scrolling" applied the way
-    // the renderer's own scroll listener would, so a later reinstatement of the painted-at-rest
-    // bar has a number to turn red against either state.
+    // which is the element that scrolls — at rest, again with "is-scrolling" applied the way the
+    // renderer's own scroll listener would, and again with "is-edge-hover" applied the way its
+    // pointermove listener would once the pointer sits within the bar's own edge band. A later
+    // reinstatement of the painted-at-rest bar, or a reversion of the edge-only reveal back to a
+    // pane-wide hover pseudo-class, both have a number here to turn red against.
     const board = container.querySelector(".db-kanban-board");
     const scrollbarRestHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
     container.classList.add("is-scrolling");
     const scrollbarActiveHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
     container.classList.remove("is-scrolling");
+    container.classList.add("is-edge-hover");
+    const scrollbarEdgeHoverHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
+    container.classList.remove("is-edge-hover");
     const boardOverflowY = board ? getComputedStyle(board).overflowY : null;
 
     measurement = {
@@ -372,6 +377,7 @@ window.__boardGeometry = (scenario) => {
       boardOverflowY,
       scrollbarRestHeight,
       scrollbarActiveHeight,
+      scrollbarEdgeHoverHeight,
     };
 
     // Reachability, measured, not inferred from an overflow keyword. A container whose overflow
@@ -941,6 +947,20 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
   if (!scrollbarActiveOk) failures.push(`board geometry scrollbar (active): height read `
     + `${JSON.stringify(geometryOutcome.scrollbarActiveHeight)}, expected "10px" — the measured reference geometry still applies `
     + `once the bar is shown, only "at rest" is declined`);
+
+  // "Edge only": the bar reveals when the pointer sits within its own edge band, keyed by the
+  // class the renderer's pointermove listener toggles — not by a bare `:hover`, which painted the
+  // bar for a pointer anywhere over the cards. A regression back to a pane-wide `:hover` selector
+  // would still read "10px" here (both selectors would match a hovered, unclassed container in a
+  // real browser), so this pin cannot by itself catch that regression; it exists to keep the
+  // edge-hover class wired to the same reveal the operator asked scrolling to have, the way
+  // scrollbar (active) does for "is-scrolling".
+  const scrollbarEdgeHoverOk = geometryOutcome.scrollbarEdgeHoverHeight === "10px";
+  console.log(`  ${scrollbarEdgeHoverOk ? "PASS" : "FAIL"}  ${"scrollbar (edge-hover)".padEnd(16)} `
+    + `${".db-kanban-view.is-edge-hover ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarEdgeHoverHeight)}`);
+  if (!scrollbarEdgeHoverOk) failures.push(`board geometry scrollbar (edge-hover): height read `
+    + `${JSON.stringify(geometryOutcome.scrollbarEdgeHoverHeight)}, expected "10px" — the "Edge only" ruling still reveals `
+    + `the bar once the pointer is within its edge band, only a pane-wide hover is declined`);
 
 }
 

@@ -536,6 +536,32 @@ _memory:
       true`, `"visible" / "visible"`, `"0px"`, `"10px"`, `"static"` — all green,
       `render-assertions.mjs` exit 0. The gate stays at 26 lanes — no new lane, folded into the
       existing board-geometry pass per the same constraint ADR-005 already named.
+- [x] T017 (2026-09-06 amendment) **Confine the desktop scrollbar reveal to the bar's own edge.**
+      Operator ruling ("Edge only", 2026-09-06 ~17:33): the board's scrollbars must reveal only
+      while scrolling (`.is-scrolling`, T016's own threshold) or when the pointer sits within a
+      ~16px band along the container's right edge (vertical bar) or bottom edge (horizontal bar)
+      — never merely because the pointer is somewhere in the pane. **Red first**: a DOM test
+      asserting a pointer near the right edge sets `is-edge-hover` failed against T016's own
+      `:hover`-keyed rule (`styles.css:9390`), since that rule painted the bar for a pointer
+      anywhere over the container — `board-renderer-parity.test.ts`, "desktop scrollbar
+      edge-hover reveal", both new cases red (`expected false to be true`; the teardown case
+      caught the pre-existing listener removing `"scroll"` instead of `"pointermove"`)
+      **Done 2026-09-06.** `styles.css:9390`'s bare `:hover` is replaced with `.is-edge-hover`,
+      a class the renderer's own `pointermove` listener toggles on the container — added beside
+      the existing `scroll` listener in `renderReferenceBoard`, sharing its `scrollbarRevealTeardown`
+      closure and its per-render/`clear()` teardown — computing `rect.right - clientX <= 16` and
+      `rect.bottom - clientY <= 16` off `getBoundingClientRect()`, cleared on `pointerleave` and
+      on teardown. Touch stays guarded through the existing `:has(.db-kanban-board.is-touch)`
+      clause, since the listener only ever attaches in `!this.touchMode`. Green: both new
+      `board-renderer-parity.test.ts` cases pass (mid-pane pointer leaves the container unclassed,
+      a pointer within the edge band sets `is-edge-hover`, `pointerleave` clears it, and a
+      re-render's `removeEventListener` spy fires for both `"pointermove"` and `"pointerleave"`)
+      — full suite 141 files / 1503 tests green, `npx tsc --noEmit` and `npm run build` exit 0.
+      `tools/live/render-assertions.mjs` gains a third scrollbar row, `.is-edge-hover` applied
+      programmatically the way T016 already does for `.is-scrolling`: `"0px"` at rest, `"10px"`
+      scrolling, `"10px"` edge-hover — all three PASS against a live Chromium mount. A full
+      detached `npm run screenshots` recapture (578 entries) moved no capture's `pixelHash`; 18
+      byte-only re-encodes were restored to their committed bytes. `npm run gate`: 26 green, 0 red.
 <!-- /ANCHOR:phase-3 -->
 
 ---

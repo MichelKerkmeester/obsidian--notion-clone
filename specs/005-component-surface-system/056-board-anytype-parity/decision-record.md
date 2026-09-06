@@ -467,4 +467,29 @@ recommitted as churn. Two exceptions are named rather than absorbed: the
 unmodified tree as well** — verified by rebuilding from `HEAD` sources and re-capturing, which
 reproduced the same moved hash — so they are environment drift, not this edit, and were restored
 along with their manifest `layoutHash`/`pixelHash` rather than committed.
+
+**Amendment, 2026-09-06 ~17:33 — "Edge only".** Operator ruling, verbatim: *"Edge only"* — on
+desktop the board's scrollbars must reveal only while scrolling (`.is-scrolling`, the threshold
+this ADR already landed) or when the pointer sits within a ~16px band along the container's own
+edge — the right edge for the vertical bar, the bottom edge for the horizontal one — not whenever
+the pointer is anywhere in the pane. The second take above moved the horizontal bar's reveal from
+`.db-kanban-board` to the container and kept it keyed to a bare `:hover` alongside `.is-scrolling`
+(`styles.css:9390`); a bare `:hover` on the container paints the bar for a reader looking at any
+card, which is what this ruling declines. `.is-edge-hover` replaces it: a `pointermove` listener
+added to `renderReferenceBoard` beside the existing `scroll` listener — sharing its
+`scrollbarRevealTeardown` closure, so a re-render or `clear()` tears both down together — computes
+the pointer's distance from the container's own right and bottom edges off
+`getBoundingClientRect()` and toggles the class when either distance is 16px or less, cleared on
+`pointerleave`. Landed 2026-09-06 (T017). Negative control: a `board-renderer-parity.test.ts` case
+asserting a pointer near the right edge sets `is-edge-hover` read red against the pre-amendment
+renderer (`expected false to be true`), and a teardown case read the pre-existing listener
+removing `"scroll"` where it expected `"pointermove"`; both pass against the landed renderer.
+`tools/live/render-assertions.mjs` gains a third scrollbar row reading the container's
+`::-webkit-scrollbar` height with `.is-edge-hover` applied the way it already does for
+`.is-scrolling`: `"0px"` at rest, `"10px"` scrolling, `"10px"` edge-hover, all three PASS against
+a live Chromium mount. `npx tsc --noEmit`, `npx vitest run` (141 files / 1503 tests) and
+`npm run build` all exit 0. A full detached `npm run screenshots` recapture (578 entries) moved no
+capture's `pixelHash` — the amendment only narrows when a class is set, not any rest-state
+geometry — and 18 byte-only re-encodes were restored to their committed bytes. `npm run gate`: 26
+green, 0 red.
 <!-- /ANCHOR:decisions -->

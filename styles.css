@@ -9378,16 +9378,23 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   margin-left: calc(-1 * var(--db-container-padding-inline));
   margin-right: calc(-1 * var(--db-container-padding-inline));
 }
-/* The horizontal bar is invisible until hover or an active scroll, rather than the measured 10px
-   lane painted at rest: the operator asked for it hidden, which the parity rule's own decline
-   list did not previously allow for. Once shown it is exactly the measured geometry. It hangs off
-   the container because the container is the scroller; the `:has()` guard keeps touch on the
-   platform's own overlay indicator, since touch has no hover to reveal a bar from. */
+/* The horizontal bar is invisible until an active scroll or the pointer sits over its own edge,
+   rather than the measured 10px lane painted at rest: the operator asked for it hidden, which the
+   parity rule's own decline list did not previously allow for. Once shown it is exactly the
+   measured geometry. It hangs off the container because the container is the scroller; the
+   `:has()` guard keeps touch on the platform's own overlay indicator, since touch has no hover to
+   reveal a bar from.
+
+   `.is-edge-hover` replaces a bare `:hover` here: a pane-wide `:hover` painted the bar for a
+   reader looking at any card, not only one who reached for the bar itself. The class is set by
+   the renderer's own pointermove listener, confined to a 16px band along the container's right
+   and bottom edges — CSS alone cannot ask "was the pointer near the scrollbar" the way it can ask
+   "is the pointer over the element". */
 .note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch))::-webkit-scrollbar {
   height: 0;
   transition: height 0.15s ease;
 }
-.note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch)):hover::-webkit-scrollbar,
+.note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch)).is-edge-hover::-webkit-scrollbar,
 .note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch)).is-scrolling::-webkit-scrollbar {
   height: 10px;
 }

@@ -51,6 +51,10 @@ import type { SubtaskMovePlan, SubtaskMoveRequest, SubtaskRelation } from "../da
 
 const CARD_MIME = "application/x-note-database-card";
 const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
+/** How close the pointer must sit to the container's scrollbar edge, in pixels, before the
+ *  desktop scrollbar reveals from a hover. Anywhere else in the pane leaves it hidden — a reader
+ *  scanning cards should not have a bar paint under their pointer just for being on the page. */
+const SCROLLBAR_EDGE_HOVER_PX = 16;
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TYPES
@@ -231,12 +235,16 @@ export class BoardRenderer {
     // The column header shows its "..." and "+" only on hover on desktop and permanently on
     // touch, where there is no hover to reveal them from.
     board.toggleClass("is-touch", this.touchMode);
-    // The horizontal scrollbar paints only on hover or while actively scrolling — hover is plain
-    // CSS, but "while scrolling" needs a class an event can toggle, cleared a moment after the
-    // last scroll so the bar does not linger once the reader has stopped, the way a true hover
-    // state would not either. It listens on the container rather than the board: the container is
-    // the element that scrolls, so the board never fires a scroll event to hear. Touch has no such
-    // bar to reveal; it keeps the platform's own overlay indicator.
+    // The scrollbars paint on three cues: an active scroll, or the pointer sitting over either
+    // bar's own edge — not anywhere else in the pane, which would paint a bar under a reader who
+    // is simply looking at cards. "While scrolling" needs a class an event can toggle, cleared a
+    // moment after the last scroll so the bar does not linger once the reader has stopped; the
+    // edge cue needs the same kind of class, since CSS alone cannot tell a bare `:hover` apart
+    // from one confined to a 16px band along the container's own right and bottom edges. Both
+    // listen on the container rather than the board: the container is the element that scrolls
+    // and carries the bars, so the board never fires a scroll event to hear and is never the
+    // element the pointer needs to be near. Touch has no such bar to reveal; it keeps the
+    // platform's own overlay indicator.
     this.scrollbarRevealTeardown?.();
     this.scrollbarRevealTeardown = undefined;
     if (!this.touchMode) {
@@ -247,10 +255,23 @@ export class BoardRenderer {
         hideScrollbarTimer = window.setTimeout(() => container.removeClass("is-scrolling"), 600);
       };
       container.addEventListener("scroll", onScroll, { passive: true });
+      const onPointerMove = (event: Event) => {
+        const { clientX, clientY } = event as PointerEvent;
+        const rect = container.getBoundingClientRect();
+        const nearRightEdge = rect.right - clientX <= SCROLLBAR_EDGE_HOVER_PX;
+        const nearBottomEdge = rect.bottom - clientY <= SCROLLBAR_EDGE_HOVER_PX;
+        container.toggleClass("is-edge-hover", nearRightEdge || nearBottomEdge);
+      };
+      const onPointerLeave = () => container.removeClass("is-edge-hover");
+      container.addEventListener("pointermove", onPointerMove);
+      container.addEventListener("pointerleave", onPointerLeave);
       this.scrollbarRevealTeardown = () => {
         container.removeEventListener("scroll", onScroll);
+        container.removeEventListener("pointermove", onPointerMove);
+        container.removeEventListener("pointerleave", onPointerLeave);
         window.clearTimeout(hideScrollbarTimer);
         container.removeClass("is-scrolling");
+        container.removeClass("is-edge-hover");
       };
     }
     const rows: RowData[] = [];
