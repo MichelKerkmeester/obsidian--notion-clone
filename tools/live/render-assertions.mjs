@@ -121,6 +121,31 @@ const WRAP_TOGGLE_SCENARIOS = [
 // for a second line of anything.
 const ROW_FLOOR = 36;
 
+// ───────────────────────────────────────────────────────────────────
+// 2c. BOARD GEOMETRY
+// ───────────────────────────────────────────────────────────────────
+//
+// `screenshots:verify` only proves a capture's declared sources have not changed since it was
+// taken, and `pixelHash` buckets a capture into a coarse 16x16 grid — a radius change, a border
+// width, or a two-pixel-taller chip does not necessarily move either one. A negative control
+// proved this directly: reverting the board card's radius from 8px to 2px and recapturing left
+// `pixelHash` identical. Nothing else in this gate reads the board's own geometry, so this pass
+// does, on the same bundle and the same headless Chrome the structural assertions above already
+// use, with the token sheets attached the way the row-rhythm pass attaches them.
+//
+// Each row reads the property a device-pixel diff actually found wrong, not a proxy for it —
+// `.db-kanban-col-chip`'s painted height rather than its declared one, since `height: 24px`
+// alone does not tell you whether the border sits inside it.
+const GEOMETRY_PINS = [
+  { label: "card radius", selector: ".db-kanban-card", prop: "borderRadius", expected: "8px" },
+  { label: "column width", selector: ".db-kanban-col", prop: "width", expected: "246px" },
+  { label: "column gap", selector: ".db-kanban-board", prop: "gap", expected: "24px" },
+  { label: "checkbox size", selector: ".db-kanban-card-meta .db-checkbox-field", prop: "boxWidth", expected: 14 },
+];
+
+/** The board scenario this pass mounts: the shipped renderer at its production entry. */
+const GEOMETRY_SCENARIO = SCENARIOS.find((scenario) => scenario.renderer === "board" && scenario.bag === "file-view");
+
 // SCENARIOS and RENDERER_SOURCES are shared with touch-targets.mjs and unstyled-links.mjs via
 // render-assertion-bundle.mjs, so "every scenario the harness knows" means the same list in all
 // three checks rather than three lists that could silently diverge.
@@ -209,6 +234,44 @@ const READ_CONTROL = process.env.RENDER_READ_CONTROL || "";
 
 const { work, missingSources } = await buildRenderAssertionBundle(`
 window.__renderAssertions = (scenario) => runRenderAssertions(document.body, scenario, ${JSON.stringify(READ_CONTROL)});
+window.__boardGeometry = (scenario) => {
+  // The harness removes the container as soon as this callback returns, so every read happens
+  // inside it — reading afterwards measures a node already detached, whose boxes are all 0.
+  let measurement = null;
+  let provenance = false;
+  runRenderAssertions(document.body, scenario, "", (container, results) => {
+    provenance = results.length > 0 && results[0].pass;
+    if (!provenance) return;
+
+    const read = (selector, prop) => {
+      const el = container.querySelector(selector);
+      if (!el) return { found: false };
+      if (prop === "boxWidth") return { found: true, value: Math.round(el.getBoundingClientRect().width) };
+      return { found: true, value: getComputedStyle(el)[prop] };
+    };
+
+    // The chip's painted height, not its declared one: box-sizing decides whether the border
+    // sits inside or outside it, which "height: 24px" alone cannot tell you.
+    const chip = container.querySelector(".db-kanban-col-chip");
+
+    // Row pitch, read on every property row of the first card rather than one of them, since a
+    // shared rule regressing on a single row type — a checkbox row beside a text row, say — is
+    // exactly what "uniform" is there to catch.
+    const firstCard = container.querySelector(".db-kanban-card");
+    const checkbox = container.querySelector(".db-kanban-card-meta .db-checkbox-field");
+
+    measurement = {
+      pins: ${JSON.stringify(GEOMETRY_PINS)}.map((pin) => ({ ...pin, ...read(pin.selector, pin.prop) })),
+      chipHeight: chip ? Math.round(chip.getBoundingClientRect().height) : null,
+      rowHeights: firstCard
+        ? Array.from(firstCard.querySelectorAll(".db-kanban-card-meta .db-board-card-field"))
+          .map((row) => Math.round(row.getBoundingClientRect().height))
+        : [],
+      checkboxRadius: checkbox ? getComputedStyle(checkbox).borderRadius : null,
+    };
+  });
+  return { provenance, ...measurement };
+};
 window.__rowRhythm = (scenario) => {
   let out = null;
   runRenderAssertions(document.body, scenario, "", (container) => {
@@ -303,6 +366,7 @@ const failures = [];
 let browser;
 let outcomes = null;
 let rhythmOutcomes = null;
+let geometryOutcome = null;
 let wrapToggleOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
@@ -375,6 +439,28 @@ try {
   }
   await rhythmPage.close();
   for (const error of rhythmErrors) failures.push(`row rhythm page error: ${error}`);
+
+  // The board geometry pass gets its own page too, and for the same reason the rhythm pass does:
+  // a computed length measured without the token sheets describes a fallback document. It runs at
+  // deviceScaleFactor 2 and at the desktop viewport the board's own captures are taken at, so a
+  // number read here and a number counted off a capture are the same number.
+  if (!GEOMETRY_SCENARIO) {
+    failures.push("board geometry: no board/file-view scenario in the shared scenario list");
+  } else {
+    const geometryPage = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+    const geometryErrors = [];
+    geometryPage.on("pageerror", (error) => geometryErrors.push(error.message));
+    await geometryPage.goto(`file://${join(work, "index.html")}`);
+    for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+      await geometryPage.addStyleTag({ content: readFileSync(join(REPO, sheet), "utf8") });
+    }
+    geometryOutcome = await geometryPage.evaluate(
+      (scenario) => window.__boardGeometry(scenario),
+      { ...GEOMETRY_SCENARIO, captureData: true },
+    );
+    await geometryPage.close();
+    for (const error of geometryErrors) failures.push(`board geometry page error: ${error}`);
+  }
   for (const error of pageErrors) {
     failures.push(`page error: ${error}`);
   }
@@ -502,6 +588,45 @@ console.log("\nrender-assertions: wrap toggle over the mock-data catalogue");
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 4c. BOARD GEOMETRY
+// ───────────────────────────────────────────────────────────────────
+
+console.log("\nrender-assertions: board geometry against the measured Anytype capture");
+if (!geometryOutcome || !geometryOutcome.provenance) {
+  failures.push("board geometry: the board scenario did not carry the production-render marker — "
+    + "measuring DOM without it would prove nothing about the shipped renderer");
+  console.log("  FAIL  board geometry — no production-render marker");
+} else {
+  for (const pin of geometryOutcome.pins) {
+    const ok = pin.found && pin.value === pin.expected;
+    console.log(`  ${ok ? "PASS" : "FAIL"}  ${pin.label.padEnd(16)} ${pin.selector.padEnd(42)} `
+      + `${JSON.stringify(pin.found ? pin.value : null)}`);
+    if (!pin.found) failures.push(`board geometry ${pin.label}: selector "${pin.selector}" matched nothing`);
+    else if (!ok) failures.push(`board geometry ${pin.label}: ${pin.selector} read ${JSON.stringify(pin.value)}, `
+      + `expected ${JSON.stringify(pin.expected)}`);
+  }
+
+  const chipOk = geometryOutcome.chipHeight === 24;
+  console.log(`  ${chipOk ? "PASS" : "FAIL"}  ${"chip height".padEnd(16)} `
+    + `${".db-kanban-col-chip painted".padEnd(42)} ${geometryOutcome.chipHeight}px`);
+  if (!chipOk) failures.push(`board geometry header chip: painted height ${geometryOutcome.chipHeight}px, `
+    + "expected 24px (a capture reads it at 48 device pixels; divide by the DPR before comparing)");
+
+  const heights = geometryOutcome.rowHeights;
+  const pitchOk = heights.length > 0 && heights.every((height) => height === 25);
+  console.log(`  ${pitchOk ? "PASS" : "FAIL"}  ${"row pitch".padEnd(16)} `
+    + `${".db-board-card-field on card one".padEnd(42)} [${heights.join(", ")}]`);
+  if (heights.length === 0) failures.push("board geometry row pitch: no .db-board-card-field row on the first card");
+  else if (!pitchOk) failures.push(`board geometry row pitch: ${[...new Set(heights)].join(", ")}px, expected a uniform 25px`);
+
+  const radiusOk = geometryOutcome.checkboxRadius === "50%";
+  console.log(`  ${radiusOk ? "PASS" : "FAIL"}  ${"checkbox shape".padEnd(16)} `
+    + `${".db-checkbox-field border-radius".padEnd(42)} ${JSON.stringify(geometryOutcome.checkboxRadius)}`);
+  if (!radiusOk) failures.push(`board geometry checkbox shape: border-radius ${JSON.stringify(geometryOutcome.checkboxRadius)}, `
+    + 'expected "50%" — a circle, not the app-wide rounded square');
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 5. BAG SHAPE COMPARISON
 // ───────────────────────────────────────────────────────────────────
 
@@ -563,6 +688,7 @@ stamp(
   [
     "tools/live/render-assertions.mjs",
     "tools/live/render-assertion-harness.ts",
+    "styles.css",
     ...RENDERER_SOURCES,
     "tools/bench/table-render-bench.ts",
     "tools/bench/board-render-bench.ts",

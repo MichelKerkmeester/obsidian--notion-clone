@@ -95,12 +95,6 @@ const CHECKS = [
   // every registered sheet surface on a phone page and fails on any missing element, with its own
   // negative control: a check that has never been observed red is not evidence.
   { name: "sheet-grammar", cmd: ["node", "tools/live/sheet-grammar.mjs"] },
-  // A pixelHash is a coarse 16x16 bucketed grid: a negative control reverting the board's card
-  // radius from 8px to 2px and recapturing left it identical, so a real geometry regression can
-  // pass every screenshot check. This mounts the shipped board through the same bundle the
-  // render-assertion lanes use and reads its computed styles directly — card radius, column
-  // width, column gap, header chip height, property row pitch and checkbox shape.
-  { name: "board-geometry", cmd: ["node", "tools/live/board-geometry.mjs"] },
   // Reading captures catches what a person notices; it does not catch a control four pixels short
   // of a thumb, because four pixels is invisible in a picture and decisive under a finger. This
   // measures every interactive element at phone width with a COARSE pointer — the mode that
