@@ -462,6 +462,14 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       dispositions reconciled against what landed; `checklist.md` and `acceptance-criteria.md`
       statuses updated with evidence. **Proof**: every AC row's Status cell names its evidence;
       `validate.sh --strict` passes.
+- [ ] T016 [P] Make every desktop dropdown a combobox: on open, the trigger becomes an active text
+      input (not a separate search field), typing filters the list, arrow keys roving-select,
+      Enter commits, Escape restores the trigger's prior value. Remove `dropdown-field.ts:193`'s
+      `options.length > 8` gate — the behavior applies regardless of list length
+- [ ] T017 Fix the Operator dropdown's anchoring defect (`filter-panel-renderer.ts:520`,
+      `db-filter-operator-dropdown`): popover renders at x 123-489 under a trigger at x 290-480,
+      left edge 167px left of the trigger's own left edge. Red-first: assert the popover's left
+      edge against the trigger's, observed failing before the fix
 <!-- /ANCHOR:phase-4 -->
 
 ---

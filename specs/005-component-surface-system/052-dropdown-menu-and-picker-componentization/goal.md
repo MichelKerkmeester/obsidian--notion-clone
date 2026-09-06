@@ -124,6 +124,17 @@ their own header/grid/search wiring.
       still pass. **Today: not run for this phase; the family's lane rows do not exist.**
 - [ ] **The operator opens menus, dropdowns and pickers on iOS and desktop and reads them as
       componentized and improved.** Only the operator closes this row.
+- [ ] **Every desktop dropdown behaves as a combobox: clicking it opens the list and the trigger
+      itself becomes an active text input, letting the operator type to filter.** **Added
+      2026-09-06** from the operator's report (`goal.md` §4 amendment below). **Today: `dropdown-
+      field.ts`'s search is a separate input inside the popover** (`:201-214`), shown only when
+      `searchable === true` **and** the option count exceeds 8 (`:193`) — the trigger itself never
+      becomes an input, and most dropdowns carry no search field at all.
+- [ ] **The filter/sort condition row's Operator dropdown anchors under its own trigger.** **Added
+      2026-09-06.** **Today: RED, measured on the operator's screenshot** — the popover renders at
+      x 123-489 under a trigger at x 290-480, a left-edge miscalculation, not a width one (the
+      popover is wider than the trigger, but its left edge sits 167px further left than the
+      trigger's own left edge).
 <!-- /ANCHOR:completion -->
 
 ---
@@ -148,4 +159,29 @@ their own header/grid/search wiring.
   worktree (it parsed the slug's words as three phase names, created 051/052/053 placeholders and
   injected a Phase Documentation Map into the parent `spec.md`); the parent edit was reverted and
   the structure copied from `050` per the packet brief's documented fallback.
+
+### 2026-09-06 amendment: every desktop dropdown becomes a combobox, plus an anchoring defect
+
+**Operator report, desktop, ~08:15:** *"every dropdown on desktop should support search — you click
+on it, the dropdown opens and input becomes input active state allowing you to also search for the
+item."* This is a combobox pattern, not the existing gated search box: the **trigger itself**
+becomes an editable text input on open, rather than a secondary search field appearing inside the
+popover only when the option count clears a threshold. `dropdown-field.ts:193` gates search behind
+`options.length > 8`; the operator's ask has no such gate — every desktop dropdown, however short,
+gets the same open-to-search behavior. Interaction: click opens the list and focuses the (now-input)
+trigger; typing filters the list; arrow keys move the roving selection; Enter commits; Escape
+restores the trigger's prior display value and closes.
+
+**Scope.** This is `052`'s own `owned-menu`/`dropdown-field` primitive family (D1) — the change is
+in the shared host, not per-surface, so every consumer gains it in one leg rather than one migration
+row per caller.
+
+**A second, independent defect from the same report.** The operator's screenshot also shows the
+filter/sort condition row's **Operator dropdown** (`filter-panel-renderer.ts:520`,
+`db-filter-operator-dropdown`) mis-anchored: the popover renders at x 123-489 while its trigger sits
+at x 290-480 — the popover's left edge is 167px left of the trigger's own left edge, a placement
+defect distinct from the combobox behavior above and recorded as its own criterion (P1).
+
+**Owner:** `052` for both — the combobox behavior is the shared dropdown primitive, and the
+Operator-dropdown anchoring bug is one caller of it. Recorded in `roadmap.md` §4 (new row) and §6A.
 <!-- /ANCHOR:log -->
