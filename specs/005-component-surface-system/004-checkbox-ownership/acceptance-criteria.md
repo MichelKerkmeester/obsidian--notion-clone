@@ -12,9 +12,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/004-checkbox-ownership"
-    last_updated_at: "2026-08-31T00:00:00Z"
-    last_updated_by: "harness-dependence-audit"
-    recent_action: "Classified 18 criteria for harness dependence; 16 read appearance with no app.css"
+    last_updated_at: "2026-09-06T01:45:00Z"
+    last_updated_by: "board-card-checkbox-fix"
+    recent_action: "Re-derived P1 #6 onto property-row after main moved it; closed capture sources gap"
     next_safe_action: "Load Obsidian app.css into checkbox-appearance.mjs before recording a number"
     blockers:
       - "000-surface-contract-and-truthful-harness honest harness must land first"
@@ -445,6 +445,86 @@ check drives eight rows rather than one.
 **The zero is asserted, not assumed.** `createCheckbox` is a DOM factory and subscribes to nothing
 today. A factory that started subscribing would leak once per row — the worst possible place for it —
 so the count is measured while eight rows render rather than read off the source.
+
+---
+
+## 2c. BOARD CARD DISPLAY CHECKBOX — 2026-09-05 (review finding P1 #6, packet `038`)
+
+The base appearance rule (§9 rule 1, `input[type="checkbox"].db-checkbox` at `styles.css`)
+already computes `appearance: none` and an accent-filled checked state unconditionally, for
+every family, with no ancestor in the selector — Stage 3/4 of this packet had already landed it.
+What the review caught was a **state**, not an ancestor: every board/gallery/list card field
+routes its value through the shared property-value renderer, and every one
+of those fields is read-only in place (the card's own click opens the record, never the
+control), which set `checkbox.disabled = true`. `input[type="checkbox"].db-checkbox:disabled`
+halves opacity and swaps the border to `--background-modifier-border` — a treatment the rule
+never named because a disabled checkbox usually IS meant to look inert, but this one is an
+informational value the reader still needs to read, not a control the reader can't use. The
+base appearance's own `:checked` accent fill loses that tie (`:disabled` is declared later in
+the cascade at equal specificity), so a checked, disabled checkbox painted the muted `:disabled`
+colors instead — the exact defect.
+
+**Producer:** `board-renderer.ts`'s reference card meta grid (`renderReferenceCardMeta` /
+`renderCardFieldContent`) correctly marks these fields `displayOnly`; that signal was correct.
+The defect was entirely in how the shared card value renderer turned "read-only in this shared
+card renderer" into a native `disabled` checkbox. Fixed in `renderPropertyValue` at
+`src/views/record-surface/property-row.ts`: `checkbox.disabled` is no longer
+set for a read-only checkbox field; the checkbox is instead taken out of the tab order
+(`tabIndex = -1`) and marked `aria-disabled="true"` for assistive tech, and the click handler
+`preventDefault()`s unconditionally when read-only so the toggle still can't drift the value
+with nothing wired to persist it.
+
+The fix was first written against `card-field-renderer.ts`, which owned that body at the time.
+Main moved the body verbatim into `record-surface/property-row.ts` while this leg was in flight,
+leaving `renderCardFieldValue` a one-line shim, so the fix was **re-derived onto main's side**
+rather than replayed. The producer test still drives it through `renderCardField`, which is the
+path the board actually takes, and reverting the producer makes that test fail — so the test
+binds the real producer across the move rather than a file name.
+
+**Red first**, `tools/live/checkbox-appearance.mjs`'s new board-card display-checkbox section
+(pixel-measured — the checked glyph is a `background-image`, not a colour `getComputedStyle`
+exposes), against the pre-fix `disabled` markup:
+
+| Theme | Border contrast | Glyph contrast | Checked/unchecked pixel diff |
+|---|---|---|---|
+| light | 1.16:1 | 1.04:1 | 0.3 |
+| dark | 1.19:1 | 1.39:1 | 6.3 |
+
+The light-theme numbers match the review's own reading (`1.16:1` border, `#EEEEEE`-on-`#EEEEEE`)
+exactly. `checkbox-appearance: FAIL`, exit 1.
+
+**Green**, same measurement against the fixed markup (`tabindex="-1" aria-disabled="true"`, no
+`disabled` attribute):
+
+| Theme | Border contrast | Glyph contrast | Checked/unchecked pixel diff |
+|---|---|---|---|
+| light | 3.62:1 | 3.41:1 | 93.3 |
+| dark | 4.61:1 | 5.59:1 | 105.1 |
+
+`checkbox-appearance: PASS`, exit 0. Both readings are against `tools/screenshots/theme.css`'s
+light/dark stand-ins for Obsidian's default themes, not a device reading — the same caveat every
+other measurement in that tool carries. Confirmed unaffected: `card-field-renderer.test.ts`'s new
+producer-level test (`checkbox.disabled === false`, `tabIndex === -1`, `aria-disabled="true"`,
+click `preventDefault()`s) is red against the pre-fix source and green against the fix.
+
+**The captures agree, and they are the reading that does not depend on the stand-in numbers.**
+The `constructed-*` board captures render the real renderers rather than hand-written fixture
+markup, so they photograph this producer directly. Ten moved, and each was opened in both themes
+and both device modes: pre-fix, a checked and an unchecked card checkbox are the same pale ghost
+in light theme — `row-0 done` (checked) and `row-1 done` (unchecked) are indistinguishable, which
+is precisely the operator's report; post-fix, checked is solid accent-filled with a legible white
+checkmark and unchecked carries a clearly visible border. Reverting the producer and recapturing
+reproduces the pre-fix picture, and restoring it returns the same `pixelHash`, so the captures
+are attributed to this change rather than assumed.
+
+**One currency gap was found and closed in the same change.** The three constructed board
+scenarios declared only `board-renderer.ts` among their `sources`, though the card's field values
+are drawn by the shared property renderer. A change to that producer therefore moved all ten of
+these captures **without `screenshots:verify` reporting a single one stale** — the gate went quiet
+exactly where it should have spoken. `card-field-renderer.ts` and `record-surface/property-row.ts`
+are now declared on all three, and touching the producer afterwards makes `verify` name the board
+captures, which it demonstrably did not do before. Not audited here: gallery and list captures did
+not move, so whether their scenarios carry the same omission is untested rather than clean.
 
 ---
 
