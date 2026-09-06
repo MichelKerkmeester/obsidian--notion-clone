@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-06T01:11:29.681Z",
+  "measuredAt": "2026-09-06T01:36:04.482Z",
   "inputs": {
-    "styles.css": "313238cfdae5",
+    "styles.css": "8bb4944e7163",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 73,
-    "differences": 60
+    "differences": 50
   },
   "differences": [
     {
@@ -236,46 +236,6 @@
     },
     {
       "scenarioId": "panel-base-import-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 3,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 4,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
       "selector": "input[type=\"text\"]",
       "index": 0,
       "notes": [
@@ -304,46 +264,6 @@
       "index": 3,
       "notes": [
         "width 521.03 vs 539.91"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": ".db-checkbox",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": ".db-checkbox",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": ".db-checkbox",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": ".db-checkbox",
-      "index": 3,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-base-import-modal",
-      "selector": ".db-checkbox",
-      "index": 4,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
       ]
     },
     {
@@ -439,7 +359,7 @@
       "selector": "input[type=\"text\"]",
       "index": 0,
       "notes": [
-        "width 146 vs 164.25"
+        "width 146.23 vs 164.25"
       ]
     },
     {
@@ -447,7 +367,7 @@
       "selector": "button",
       "index": 2,
       "notes": [
-        "width 170 vs 188.25"
+        "width 170.23 vs 188.25"
       ]
     },
     {
@@ -455,7 +375,7 @@
       "selector": "button",
       "index": 3,
       "notes": [
-        "width 170 vs 188.25"
+        "width 170.23 vs 188.25"
       ]
     },
     {
@@ -463,7 +383,7 @@
       "selector": "button",
       "index": 4,
       "notes": [
-        "width 170 vs 188.25"
+        "width 170.23 vs 188.25"
       ]
     },
     {
@@ -471,7 +391,7 @@
       "selector": "button",
       "index": 5,
       "notes": [
-        "width 170 vs 188.25"
+        "width 170.23 vs 188.25"
       ]
     },
     {

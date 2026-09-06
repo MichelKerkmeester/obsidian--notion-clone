@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T01:11:41.346Z",
+  "measuredAt": "2026-09-06T01:35:59.314Z",
   "inputs": {
-    "styles.css": "313238cfdae5",
+    "styles.css": "8bb4944e7163",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ca203fa23a84"
   },
@@ -558,7 +558,11 @@
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
-        "chrome-owned-menu-sheet"
+        "chrome-owned-menu-sheet",
+        "field-cell-edit-select",
+        "field-cell-edit-select",
+        "field-cell-edit-select",
+        "field-cell-edit-select"
       ]
     },
     "db-menu-item-icon": {
@@ -628,7 +632,11 @@
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
         "chrome-owned-menu-sheet",
-        "chrome-owned-menu-sheet"
+        "chrome-owned-menu-sheet",
+        "field-cell-edit-select",
+        "field-cell-edit-select",
+        "field-cell-edit-select",
+        "field-cell-edit-select"
       ]
     },
     "db-menu-item-chevron": {
