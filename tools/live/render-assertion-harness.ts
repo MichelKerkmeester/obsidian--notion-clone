@@ -439,6 +439,14 @@ export interface ScenarioSpec {
    */
   calendarRecordIcon?: boolean;
   /**
+   * Opt-in, renderer "calendar" only: mounts with a view config that already carries
+   * `calendarColumnSizeMode: "custom"` and this width. The month scale must ignore it and stay
+   * seven fluid columns; week and day must honour it. There is no other way to get a
+   * custom-width config into a real mount, and a config carried over from week/day is exactly
+   * how the seventh month column was clipped off the operator's pane.
+   */
+  calendarCustomColumnWidth?: number;
+  /**
    * Opt-in, renderer "calendar", scale "week"/"day" only: replaces the bench fixture's rows with
    * exactly two genuinely timed events overlapping the same hour on the same day — real
    * `datetime` start and end fields (the bench's own rows are `date`-typed, so they always land
@@ -2639,6 +2647,9 @@ export function runRenderAssertions(
       const fm = (rows[2] as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
       const start = fm[baseConfig.calendarStartDateField];
       if (typeof start === "string") fm[endField] = addDateKeyDays(start, 4);
+    }
+    if (scenario.calendarCustomColumnWidth) {
+      config = { ...config, calendarColumnSizeMode: "custom", calendarCustomColumnWidth: scenario.calendarCustomColumnWidth };
     }
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
     if (scenario.calendarRecordIcon) {

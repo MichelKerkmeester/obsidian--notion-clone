@@ -133,12 +133,18 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(getLocaleWeekStartsOn({ calendarFirstDayOfWeek: 6 })).toBe(6);
   });
 
-  it("pins the weekend tint token: one color-mix expression, no per-theme literal override", () => {
-    expect(STYLES).toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))");
+  it("pins the weekend tint token: one color-mix expression, mixed toward transparent so the week's slot lines survive under it", () => {
+    expect(STYLES).toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--text-normal) 3%, transparent)");
     // Negative control: the tree used to carry a literal light value and a
     // `.theme-dark` override with a DIFFERENT literal — neither survives.
     expect(STYLES).not.toContain("--db-calendar-weekend-bg: #F7F7F7");
     expect(STYLES).not.toContain("--db-calendar-weekend-bg: #1E1E1E");
+    // And it must not go back to mixing toward the page: an opaque result is
+    // painted by the week grid's own column layer, which sits above the slot
+    // lines, and erased every hour line under the weekend pair. Over the page
+    // the two expressions resolve to the same colour, so only a live read tells
+    // them apart — this is the text guard for what that read found.
+    expect(STYLES).not.toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))");
   });
 
   it("pins the month grid to seven fluid columns regardless of a custom column width", () => {
@@ -158,6 +164,24 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(body).toContain("text-align: left");
     expect(body).toContain("padding: 0 0 0 10px");
     expect(body).toContain("color: var(--db-calendar-muted-ink)");
+    // A grid item's min-width is auto, so without these the line kept its whole
+    // intrinsic width and ran past its own column's rule into the next one at
+    // phone widths — measured 13 CSS px of overrun before this landed.
+    expect(body).toContain("min-width: 0");
+    expect(body).toContain("overflow: hidden");
+    expect(body).toContain("text-overflow: ellipsis");
+  });
+
+  it("pins the month weekday header carrying no column-resize handle, so nothing can set a custom column width on the month wrap", () => {
+    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const labels = source.slice(source.indexOf("private renderWeekdayLabels("));
+    const body = labels.slice(0, labels.indexOf("\n\tprivate "));
+    expect(body).not.toContain("db-calendar-col-resize-handle");
+    expect(body).not.toContain("setupColumnResize");
+    // Negative control on the mechanism, not on the absence: the handle's drag
+    // is what sets the var, and the week/day header still carries one.
+    expect(source).toContain("wrap.style.setProperty(\"--db-calendar-col-width\"");
+    expect(source).toContain("db-calendar-col-resize-handle");
   });
 
   it("pins the timed dot's removal: no chip carries a coloured dot", () => {

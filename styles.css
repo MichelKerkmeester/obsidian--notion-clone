@@ -16332,7 +16332,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   display: inline-flex;
 }
 
-/* Calendar scale switcher (P1-1): Anytype's own tab grammar — plain words, no
+/* Calendar scale switcher: Anytype's own tab grammar — plain words, no
    track, no border, no fill even on the active tab. The timeline/gantt above
    keeps its bordered segmented pill; this is a separate class family so the
    restyle never touches it. */
@@ -16645,6 +16645,11 @@ body.is-mobile .note-database-container .db-calendar-scale-menu,
   text-align: left;
   white-space: nowrap;
   cursor: pointer;
+  /* A grid item's min-width is auto, so this line kept its whole intrinsic width
+     and ran past its own column's rule into the next one at phone widths. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .note-database-container .db-calendar-more-events:hover {
@@ -17713,7 +17718,7 @@ body.is-mobile .note-database-container .db-calendar-scale-menu,
   overflow: hidden;
 }
 
-/* Phone week/day (P1-6): the shared title's 8ch flex-basis floor (128px at
+/* Phone week/day: the shared title's 8ch flex-basis floor (128px at
    16px) is wider than a phone day column (measured 87px), and shrink is
    disabled, so the title's own box — not just its text — overflowed the
    column and crossed the next one's rule. Scoped to the timed-event chip
@@ -17746,7 +17751,11 @@ body.is-mobile .note-database-container .db-calendar-month-time {
    the same colour; that reasoning still holds, only the value's source moved. */
 .note-database-container .db-calendar {
   --db-calendar-rule: color-mix(in srgb, var(--background-primary) 92%, var(--text-normal));
-  --db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal));
+  /* Mixed toward transparent rather than toward the page: over the page the two
+     are the same colour, but the week grid paints its day columns in a layer
+     above the slot lines, so an opaque tint erased every hour line under the
+     weekend pair. A 3% wash lets them through at full geometry. */
+  --db-calendar-weekend-bg: color-mix(in srgb, var(--text-normal) 3%, transparent);
   --db-calendar-done-accent: var(--text-success, var(--interactive-accent));
   --db-calendar-done-bg: color-mix(in srgb, var(--db-calendar-done-accent) 12%, var(--background-primary));
   /* --text-faint measures under WCAG 1.4.3's 4.5:1 against the day-cell
@@ -20675,8 +20684,9 @@ img.db-text-md-image {
     min-height: 28px;
   }
 
-  /* P1-7: no reference chip carries a per-day add affordance; the phone add
-     path is long-press / the day sheet (044), not this glyph. */
+  /* No reference chip carries a per-day add affordance. The phone add path is
+     the day cell's own long-press menu (contextmenu -> "New note for date")
+     and its double-tap create, not this glyph. */
   .note-database-container .db-calendar-add-button {
     display: none;
   }

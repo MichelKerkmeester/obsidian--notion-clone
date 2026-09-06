@@ -26,6 +26,21 @@ vi.mock("obsidian", () => ({
   TFile: class {},
 }));
 
+// The day cell's create menu is the phone add path, so a test has to see the rows it
+// registers. Only that one factory is replaced; everything else in the module stays real,
+// because other modules in this graph import it too.
+const ownedMenuRows: { icon: string; label: string; onClick: () => void }[] = [];
+let ownedMenuShownAt: { x: number; y: number } | null = null;
+vi.mock("./owned-menu", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./owned-menu")>()),
+  createOwnedMenuForEvent: () => ({
+    addRow: (row: { icon: string; label: string; onClick: () => void }) => { ownedMenuRows.push(row); },
+    addSeparator: () => undefined,
+    showAt: (at: { x: number; y: number }) => { ownedMenuShownAt = at; },
+    close: () => undefined,
+  }),
+}));
+
 vi.mock("../i18n", () => ({
   t: (key: string, vars?: Record<string, string | number>) => {
     const messages: Record<string, string> = {
@@ -615,6 +630,44 @@ describe("Calendar parity behaviours", () => {
     // Beside the title, not a sibling band: the chip is a child of .db-calendar-title.
     expect(chip?.parentElement?.className.split(/\s+/)).toContain("db-calendar-title");
     expect(root.querySelector(".db-calendar-backlog")).toBeNull();
+  });
+
+  it("keeps a create path on every day cell for pointers that have no + glyph", () => {
+    // The + is hidden on coarse pointers, so the day cell itself has to carry the
+    // add path or a phone operator loses the affordance outright. Long-press
+    // arrives as contextmenu; the menu it opens is what this asserts.
+    ownedMenuRows.length = 0;
+    ownedMenuShownAt = null;
+    const createEntryForDate = vi.fn();
+    const renderer = new CalendarRenderer(createMockActions({ createEntryForDate }));
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
+
+    const root = container as unknown as MockElement;
+    const cells = root.querySelectorAll(".db-calendar-day");
+    expect(cells.length).toBeGreaterThan(0);
+    const cell = cells.find((el) => typeof el.oncontextmenu === "function");
+    expect(cell).toBeDefined();
+
+    cell?.oncontextmenu?.({ preventDefault: () => undefined, stopPropagation: () => undefined, clientX: 12, clientY: 34 });
+
+    expect(ownedMenuShownAt).toEqual({ x: 12, y: 34 });
+    const createRow = ownedMenuRows.find((row) => row.icon === "plus");
+    expect(createRow).toBeDefined();
+    createRow?.onClick();
+    expect(createEntryForDate).toHaveBeenCalledTimes(1);
+    expect(createEntryForDate.mock.calls[0][1]).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+
+    // Negative control: a read-only view offers no create path at all, so a passing
+    // assertion above is the affordance and not an always-present handler.
+    const readOnly = new CalendarRenderer(createMockActions({ createEntryForDate, isReadOnly: true }));
+    const roContainer = new MockElement("div") as unknown as HTMLElement;
+    readOnly.render(roContainer, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
+    ownedMenuRows.length = 0;
+    const roCell = (roContainer as unknown as MockElement).querySelectorAll(".db-calendar-day").find((el) => typeof el.oncontextmenu === "function");
+    roCell?.oncontextmenu?.({ preventDefault: () => undefined, stopPropagation: () => undefined, clientX: 1, clientY: 1 });
+    expect(ownedMenuRows.find((row) => row.icon === "plus")).toBeUndefined();
   });
 
   it("renders the calm empty-state title for no-events through the renderer", () => {

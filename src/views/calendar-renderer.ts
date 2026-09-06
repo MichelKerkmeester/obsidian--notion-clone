@@ -68,11 +68,13 @@ const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
 const UNSCHEDULED_MIME = "application/x-note-database-unscheduled";
 // Fixed per-lane cascade inset for overlapping week/day timed blocks (renderWeekTimedEvent),
-// chosen to match this file's other 10px chip insets — at the 45px phone minimum column
-// (--db-calendar-phone-week-col-min) a two-way overlap still leaves ~27px of title paint box
-// (45 - 10 - 8px outer gutter) on the staggered block, comfortably past the point where a
-// title reads as three glyphs and an ellipsis rather than a sliver of one letter, which is
-// what an equal N-way split of the same column left it at.
+// chosen to match this file's other 10px chip insets. At a desktop column both blocks keep a
+// readable title. At the 45px phone minimum column (--db-calendar-phone-week-col-min) the
+// staggered block keeps ~27px of BOX, not of title: its own padding and 12px leading glyph
+// take the rest, and the second title measures ~2 CSS px of ink on the phone corpus — the
+// icon identifies it and the tooltip carries the name. That is still strictly more than the
+// equal N-way split it replaces, which left neither block a title, and the 45px column is the
+// operator's own ruling; a readable second title needs a wider column, not a smaller inset.
 const CALENDAR_TIMED_STAGGER_STEP = 10;
 
 // ───────────────────────────────────────────────────────────────────
@@ -2078,10 +2080,12 @@ export class CalendarRenderer {
 		for (let index = 0; index < labels.length; index++) {
 			const wdDiv = weekdaysRow.createDiv({ cls: `db-calendar-weekday${this.isWeekendWeekday(weekStartsOn, index) ? " is-weekend" : ""}`, attr: { role: "columnheader" } });
 			wdDiv.createSpan({ text: labels[index] });
-			if (!this.actions.isReadOnly && this.actions.onConfigChange) {
-				const resizeHandle = wdDiv.createDiv({ cls: "db-calendar-col-resize-handle" });
-				this.setupColumnResize(resizeHandle, config, wrap);
-			}
+			// No column-resize handle here. The month scale ignores a custom column
+			// width outright (applyMonthSizingVars), so a drag would write a setting
+			// month can never honour — and while the drag ran it set
+			// --db-calendar-col-width on the month wrap, which the fixed-width
+			// grid-template rules pick up and widen the grid past its pane with,
+			// clipping the seventh column. Week and day keep their own handle.
 		}
 	}
 
