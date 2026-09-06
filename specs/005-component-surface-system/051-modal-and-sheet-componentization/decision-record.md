@@ -16,12 +16,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-05T18:30:00Z"
+    last_updated_at: "2026-09-06T07:50:00Z"
     last_updated_by: "operator-decision"
-    recent_action: "Added accepted adr-007 retargeting 051 to anytype parity by default"
-    next_safe_action: "Operator ruling on ADR-007 E4 (the confirm), then begin Phase 2 legs (T004+)"
-    blockers:
-      - "ADR-007 E4: holding the destructive confirm is a data-loss deviation the parity ruling does not authorise; T013 waits on the operator"
+    recent_action: "Closed ADR-007 E4: no confirm for single delete, undo toast instead"
+    next_safe_action: "Implement the E4 ruling in its own leg; 051 keeps the primitive the bulk confirm uses"
+    blockers: []
     key_files:
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/modals/db-modal.ts"

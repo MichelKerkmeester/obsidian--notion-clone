@@ -451,7 +451,7 @@ excluded on its own recorded terms.
 <!-- ANCHOR:phase-4 -->
 ## Phase 4 — Confirm, lanes and closure
 
-- [ ] **T013 — Export the confirm primitive and assert `044`'s seven grammar elements on it.**
+- [x] **T013 — Export the confirm primitive and assert `044`'s seven grammar elements on it.**
       `modals/confirm-modal.ts` — `openAndWait` (`:45`, module entry `:98`) becomes the family
       confirm; `ConfirmModal`'s `super(app, "sheet")` (`:42`) keeps its presentation. **Threshold**:
       7 of 7 grammar elements on the confirm sheet, and exactly one confirm path in `src/`.
@@ -504,6 +504,12 @@ excluded on its own recorded terms.
       three existing mocking suites and `surface-shell.test.ts`'s `getDeclaredTitle`/`getShellRole`
       literal-source check on `modals/confirm-modal.ts` all unaffected, since neither method's
       signature moved).
+      **Ticked at the landing, 2026-09-06.** The implementing leg wrote this row's evidence but left
+      the box unticked; both controls were re-run here rather than taken on its report. Unwiring the
+      stand-in's `buildHeader` → exit 1, `FAIL confirm — no .db-shell-header title to measure`.
+      Dropping `db-panel-row` from `confirm-sheet.ts` itself → exit 1, `confirm: rows was false` —
+      which is the stronger of the two, because it proves the lane reads the shipped primitive and
+      not a copy of it. Both reverted, lane back to exit 0.
 - [x] **T014 — [P] Register `053`'s sort-conflict confirm and `055`'s destructive-confirm as
       consumers, not as new surfaces.** **Threshold**: zero second confirm implementations across
       the three packets. **Red-first proof**: both sibling packets currently name a primitive that
