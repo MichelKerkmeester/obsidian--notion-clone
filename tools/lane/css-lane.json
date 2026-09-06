@@ -1,8 +1,8 @@
 {
-  "holder": "057-calendar-anytype-parity",
-  "acquiredAt": "2026-09-06T13:10:00Z",
-  "baselineHash": "74c3554251ff",
-  "baselineCommit": "b2128def",
+  "holder": "055-states-feedback-and-motion",
+  "acquiredAt": "2026-09-06T15:30:00Z",
+  "baselineHash": "41c974032f7f",
+  "baselineCommit": "793ab9b4",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3853,6 +3853,30 @@
         "screenshots/notion-clone/views/constructed-calendar-week-desktop-light.png",
         "screenshots/notion-clone/views/constructed-calendar-week-mobile-dark.png",
         "screenshots/notion-clone/views/constructed-calendar-week-mobile-light.png"
+      ]
+    },
+    {
+      "event": "acquire",
+      "phase": "055-states-feedback-and-motion",
+      "at": "2026-09-06T15:30:00Z",
+      "hash": "74c3554251ff",
+      "note": "055-states-feedback-and-motion takes the lane from 057 to land the confirm sheet header, the chart empty state's absorption into the shared card, and the operation rail's move onto the shared toast."
+    },
+    {
+      "event": "release",
+      "phase": "055-states-feedback-and-motion",
+      "at": "2026-09-06T16:00:00Z",
+      "hash": "41c974032f7f",
+      "note": "Confirm sheet header, chart empty-state absorption and the operation-result rail onto the shared toast. Stylesheet change and its whole extent, measured against origin/main at 793ab9b4, where 057 had just released the lane at 74c3554251ff. The operation-result rail keeps only its fixed placement and its former pill painting is retired: border, radius, padding, background, shadow, the is-error variant, the action button's own rules, and the db-operation-rail-in keyframe with its 160ms literal. .db-chart-empty keeps only the flex box and the height clamp while its dashed border, padding, gap, muted colour and centred text move onto .db-chart-number alone, and the three private db-chart-empty-icon/-text/-action rules are deleted. Two rules are added. .db-toast.is-inline lays the card out in normal flow at min(384px, calc(100vw - 32px)), so a caller-positioned single-slot host gets the stack's own width on a desktop and no left-edge overhang on a phone -- the first version took the stack's flat 384px, which at the host's own 16px inset needs 400px of viewport. And the shared empty card is given box-sizing: border-box inside .db-chart-empty, because the component declares width: min(100%, 620px) with its 20px padding and 1px border outside that width and so overflows any host narrower than 620 -- measured at 34px past the chart body at both phone widths, which the view census reported as two new escaping rows the moment the chart absorbed the card. Corrected at this host rather than on the component: every other host of that card is wide enough that the defect does not reach it, and changing the component would move their captures for a problem they do not have. The component's own box is a real defect and is recorded for its owner rather than fixed here. No other selector moved.\nThe view census was measured twice on this same tree and bundle, once with this stylesheet and once with origin/main's: 629 escaping / 250 growing / 379 scrolling on main's, 626 / 247 / 379 on ours. Every ratchet moves down or holds; none moves up. Two censuses rather than a comparison against the committed file, because that file was measured on a different bundle and the two are not comparable.\nCaptures re-derived by a full node tools/screenshots/capture.mjs run on this base, 558 entries, then node tools/screenshots/verify.mjs exit 0. Eight entries moved pixelHash across the leg and every one is named below and was opened: the chart body's empty state in both themes and both device profiles, on the fixture and on the constructed view. They show the shared empty-state card -- icon tile, title, the chart's own message, the recovery button -- where a dashed centred box used to be, and on a phone the card now ends inside the body instead of 34px past it. Four captures on this run moved bytes and are not this leg's: the colour-picker check and the board's scrollbar band are the churn this harness is known to produce on an unchanged tree, and calendar-week-time-grid-desktop-light moves a tall thin band that tracks wall-clock time rather than any rule here. All four were restored to their committed bytes rather than committed as churn, with the manifest's informational pixelHash and byte counts re-derived from the restored files. screenshots/project-manager/ is byte-identical on all 16 entries, so the reference parity this program keeps is untouched.",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-chart-empty-desktop-dark.png",
+        "screenshots/notion-clone/components/chrome-chart-empty-desktop-light.png",
+        "screenshots/notion-clone/components/chrome-chart-empty-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-chart-empty-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-chart-empty-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-chart-empty-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-chart-empty-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-chart-empty-mobile-light.png"
       ]
     }
   ],

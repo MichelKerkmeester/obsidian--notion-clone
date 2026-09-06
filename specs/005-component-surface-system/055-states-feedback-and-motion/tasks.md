@@ -291,14 +291,16 @@ A task missing any of the three is not ready to start.
       chart's own message, the recovery button — where the dashed centred box used to be. The phone
       pair showed the card running past the chart body's right edge, and the view census named it:
       two new `escaping` rows, `db-empty.db-empty-card` inside `db-chart-empty`, 34px at both 320
-      and 402, taking the ratchets from 656/346 to 658/348. The cause is the shared card, not
+      and 402, taking the ratchets up by two. The cause is the shared card, not
       chart: it declares `width: min(100%, 620px)` with its 20px padding and 1px border outside
       that width, so it overflows any host narrower than 620 and the chart body is the first narrow
       host it has had. Corrected with `box-sizing: border-box` scoped to `.db-chart-empty
       .db-empty-card` — the component's own box is a real defect but every other host is wide
       enough that changing it there would move their captures for a problem they do not have, so it
-      is recorded for its owner rather than fixed under this task. Census back to main's 656/346
-      exactly, and the eight captures re-taken and re-read after the fix.
+      is recorded for its owner rather than fixed under this task. Measured twice on one tree and one bundle, once with
+      main's stylesheet and once with ours: 629 escaping / 250 growing / 379 scrolling on main's, 626 /
+      247 / 379 on ours -- every ratchet down or level, none up. The eight captures were re-taken and
+      re-read after the fix.
       **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1430/1430; `npm run gate` 26 green; the
       fixture and the real render opened side by side (both desktop-light) show the same shared
       card shape with the chart's own copy intact.

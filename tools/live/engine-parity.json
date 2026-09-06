@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T02:05:44.936Z",
+  "measuredAt": "2026-09-06T02:37:18.897Z",
   "inputs": {
-    "styles.css": "74c3554251ff",
+    "styles.css": "41c974032f7f",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
