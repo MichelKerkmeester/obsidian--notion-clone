@@ -151,7 +151,7 @@ never resolve them silently.
       **0** non-background px below the grid rule in any of the twenty set captures, so there was
       no counterpart to match. Kept as ours with the argument written, and an empty drawer now
       renders nothing.
-      **Re-closed 2026-09-06 ~11:40 on the operator's follow-on report** (ADR-005): the populated
+      **Re-closed 2026-09-06 on the operator's follow-on report** (ADR-006): the populated
       drawer (N >= 1) still read as an ~80 CSS px band with one centred row. `db-calendar-backlog*`
       is retired entirely — the surface is now a `db-calendar-unscheduled-chip` beside the
       month/year title, absent at N = 0, opening the shared owned-menu popover/sheet. The
