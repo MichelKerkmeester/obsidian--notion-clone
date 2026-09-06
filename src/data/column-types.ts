@@ -407,3 +407,21 @@ export function getColumnWrapMode(wrap: boolean | undefined): ColumnWrapMode {
 export function columnWrapModeValue(mode: ColumnWrapMode): boolean | undefined {
   return mode === "wrap" ? true : mode === "clip" ? false : undefined;
 }
+
+/** The wrap state a table cell actually renders in, from the column's mode and the view's switch.
+ *
+ *  The view's switch is the gate, not a default the column can outvote: with it off every column
+ *  clips to one line, whatever mode it carries. With it on, the column's mode decides — Clip opts
+ *  a single column back out, while Wrap and Follow both wrap.
+ *
+ *  It used to be the other way round: a column's own Wrap survived the switch being off, which put
+ *  a long-text column six lines deep in a table whose every other column held one line, with no way
+ *  to flatten it from the control that claims to govern wrapping. The operator's ruling, verbatim
+ *  (2026-09-06): "View switch off clips everything". A column mode is now a refinement of a
+ *  wrapping table rather than an exemption from a clipped one.
+ *
+ *  Every surface that paints or measures a table cell resolves it here, so the cell, the row-height
+ *  floor and the auto-fit width can never disagree about which one they are looking at. */
+export function resolvesToWrappedCell(colWrap: boolean | undefined, viewWrapText: boolean | undefined): boolean {
+  return Boolean(viewWrapText) && colWrap !== false;
+}

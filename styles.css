@@ -21730,12 +21730,28 @@ img.db-text-md-image {
 .is-phone .note-database-container .db-table col[data-note-database-column-key] {
   width: auto !important;
 }
-.is-phone .note-database-container .db-table td:not(.db-select-col):not(.db-record-icon-col),
+.is-phone .note-database-container .db-table td:not(.db-select-col):not(.db-record-icon-col):not(.db-cell-wrap),
 .is-phone .note-database-container .db-table th[data-note-database-column-key] {
   max-width: 60vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* A cell the wrap switch resolved to wrapping keeps the phone's width cap and its clipping, but
+   not its single line.
+
+   The rule above out-specifies `td.db-cell-wrap` (five classes against three), so switching
+   wrapping on did nothing to text on a phone: the toggle appeared to work only because the value
+   containers are flex boxes that wrap on their own, so chips stacked while every sentence stayed
+   on one line. Two different questions had been answered by one declaration — how much width the
+   table may spend on a narrow screen, which is still this rule's, and whether a cell may take a
+   second line, which belongs to the switch. Excluding the wrapping cell from the first rule leaves
+   the second question to the switch on every device, and this restores the width cap the exclusion
+   would otherwise have taken with it. */
+.is-phone .note-database-container .db-table td.db-cell-wrap {
+  max-width: 60vw;
+  overflow: hidden;
 }
 
 /* List — full-width cards, wrapped field row, values kept inside the border. */

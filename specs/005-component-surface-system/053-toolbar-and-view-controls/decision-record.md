@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Toolbar and View Controls"
-description: "ADR-001 the existing chip rail is extended rather than rebuilt. ADR-002 dead settings-entry methods are deleted with their classes kept. ADR-003 the sort-conflict confirm fires at commit, not at gesture start. ADR-004 the wrap control is a per-view default with a per-column override, column wins. ADR-005 the summary footer is hidden at zero rows and its phone trigger meets the 44px floor."
+description: "ADR-001 the existing chip rail is extended rather than rebuilt. ADR-002 dead settings-entry methods are deleted with their classes kept. ADR-003 the sort-conflict confirm fires at commit, not at gesture start. ADR-004 the wrap control is a per-view switch that gates a per-column mode, switch wins. ADR-005 the summary footer is hidden at zero rows and its phone trigger meets the 44px floor."
 trigger_phrases:
   - "053 decision record"
   - "chip rail decision"
@@ -15,10 +15,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-06T23:59:00Z"
+    last_updated_at: "2026-09-07T00:40:00Z"
     last_updated_by: "fix-053-wrap-off-rows"
-    recent_action: "Fixed a markdown line break bypassing clip; ADR-004 addendum; gate 26 green"
-    next_safe_action: "Operator device pass on the gear, the footer and both wrap halves; nothing here is blocked"
+    recent_action: "Amended ADR-004 to the operator's switch-gates-column ruling and honoured the switch on the phone; kept the markdown line-break collapse as the narrower producer"
+    next_safe_action: "Operator device pass on the wrap switch (desktop and phone), the gear and the footer; nothing here is blocked"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
@@ -42,9 +42,9 @@ _memory:
       - "ADR-003: the confirm fires on drop, not on gesture start"
       - "ADR-001 amendment 2 (T001): the rail's in-toolbar band move is withdrawn — the capture puts Anytype's rail where ours already renders"
       - "ADR-001 amendment 2 (T001): the direction colour is demoted to a redundant third signal at 3.14:1 accent-on-tint and 1.19:1 fill-on-bar; direction rides the arrow glyph and the direction word"
-      - "ADR-004: the view carries a wrapText default (table view settings only); a column's own wrap always overrides it; undefined follows the view"
+      - "ADR-004: the view carries a wrapText switch (table view settings only); it gates the column mode rather than losing to it — off clips every column, on lets a column's Clip mode opt back out"
       - "ADR-005: the summary footer is hidden entirely at zero rows; its phone trigger is raised to the shared 44px floor, desktop unchanged at 26px"
-      - "ADR-004 addendum: a clipped cell's markdown line breaks collapse to a space instead of a <br>, so a markdown value with its own newlines clips like every other text cell"
+      - "ADR-004 amendment (operator ruling 2026-09-06): the view switch off clips every column whatever mode it carries, and the switch is honoured on the phone; a clipped cell's markdown line breaks collapse to a space instead of a <br>"
 ---
 
 # Decision Record: Toolbar and View Controls
@@ -310,7 +310,7 @@ will immediately move it."
 ---
 
 <!-- ANCHOR:adr-004 -->
-## ADR-004: The wrap control is a per-view default with a per-column override; the column always wins
+## ADR-004: The wrap control is a per-view switch that gates a per-column mode; the switch always wins
 
 **Status: Accepted, 2026-09-06.**
 
@@ -330,7 +330,13 @@ default before this; the column-level field did.
 
 ### Decision
 
-**A boolean view default, a tri-state column override, column wins.**
+**A boolean view switch, a tri-state column mode, switch wins.**
+
+> **Superseded in part by the amendment at the end of this ADR.** As first landed the precedence
+> ran the other way — a column's own choice overrode the view — and the operator's 2026-09-06
+> ruling reversed it. The bullets below record what was built and where each piece lives, which is
+> unchanged; only the one expression that resolves the two is different, and the amendment carries
+> its table.
 
 - `ViewConfig.wrapText` (new) is a table-view-only switch in the view settings panel, placed next
   to `rowDensity` using the same `renderSwitch` row grammar `showEmptyFields` and
@@ -343,9 +349,10 @@ default before this; the column-level field did.
   2026-08-29, landed at `fc730ed9` (2026-09-05 22:26), a day before this ADR and a week after that
   section was written. §6 is stale on this one point; noted here rather than silently perpetuated
   or corrected out of this phase's scope.
-- Precedence is a single expression, computed once: `col.wrap ?? config.wrapText`, in
-  `CellRenderer.renderCell`. A column's own choice always overrides the view; `undefined` is the
-  only state that reads the view at all.
+- Precedence is a single expression, computed once, in `CellRenderer.renderCell`. As landed it was
+  `col.wrap ?? config.wrapText`, a column's own choice always overriding the view. **Amended**: it
+  is now `resolvesToWrappedCell(col.wrap, config.wrapText)` in `column-types.ts`, the switch gating
+  the mode — see the amendment below for the ruling and the full matrix.
 - The column manager's own quick icon toggle (`column-manager-renderer.ts`) is left as its
   pre-existing two-state cycle (wrap / follow-view) rather than widened to three — it is a
   shortcut, not the authoritative control the column menu's submenu is, and the task named the
@@ -407,7 +414,8 @@ needs to see: the whole point of `Follow view` is that it is not self-evident fr
 |---|---|---|
 | **Column-level only, no view default** | Smaller change; the field already existed | Does not answer the operator's ask, which named a per-view setting explicitly, and leaves every column to be set one at a time |
 | **View-level only, no column override** | One setting, nothing to explain | Discards the shipped per-column field and the catalogue's own wrap:true column would have no way to force wrap independent of the view |
-| **Both, column wins (chosen)** | Matches the operator's own two-surface framing; reuses the shipped field; one resolution rule | A column's `false` and the view's off both read as "clipped," so a reader inspecting only the column menu cannot tell which one is holding it there without opening the view settings too — accepted, because the submenu's "Follow view" row is the visible tell |
+| **Both, column wins (chosen, then reversed)** | Matches the operator's own two-surface framing; reuses the shipped field; one resolution rule | A column's `false` and the view's off both read as "clipped," so a reader inspecting only the column menu cannot tell which one is holding it there without opening the view settings too. Accepted at first on the submenu's "Follow view" row being the visible tell — and reversed by the operator once a column pinned to Wrap in a generated vault proved unflattenable from the control that claims to govern wrapping |
+| **Both, switch wins (in force)** | The one control named "Wrap text" can always flatten the table, which is what a reader expects of a switch; a column mode still refines a wrapping table | A column pinned to Wrap goes flat when the switch does, so a per-column "always wrap this one" is no longer expressible — accepted by the operator's ruling |
 
 ### Five checks
 
@@ -419,15 +427,28 @@ needs to see: the whole point of `Follow view` is that it is not self-evident fr
 | **What is the real caller that must not break?** | Every existing `renderCell` call site — the new fourth parameter is optional and every scenario that never sets it keeps its exact prior output, proved by pixelHash-identical screenshots after a full recapture |
 | **What contract must not break?** | `005` ADR-001's `td:not(.db-cell-wrap)` rule for the four value containers — the wrap control reaches it only by adding `.db-cell-wrap` through the same class, never by touching the containers directly |
 
-### Addendum, 2026-09-06: a fifth thing bypassed the clip, and it was never the four containers
+### Amendment, 2026-09-06: the switch gates the column mode, and it now reaches the phone
 
 **Operator report, desktop, ~10:25:** *"with wrap disabled you still have these huge table rows with too large height in current desktop version."* Screenshot `.operator-wrap-report.png` (the operator's own capture): a Habit and Health Log table, wrap off, every column clipped to one line except *Journal*, six lines tall.
 
-**Root cause.** Nothing above was wrong — `col.wrap ?? config.wrapText` still resolved to clip, `td` still carried `white-space: nowrap`, and none of ADR-001's four containers were in play. The column the operator photographed is `textRenderMode: "markdown"`, and its source value carries its own literal line breaks. `renderInlineMarkdown` (`inline-markdown-renderer.ts`) turns each one into a real `<br>` element, and a `<br>` forces its line break under any `white-space` value, `nowrap` included — the one way a resolved-to-clip cell could still grow the row past its floor. Plain text never had this gap: a literal newline inside `textContent` is ordinary whitespace, and `nowrap` collapses it like any other.
+**What the first diagnosis got wrong, and how.** A leg read the report as a markdown defect: a markdown-render column whose source value carries literal newlines, each turned into a real `<br>` by `renderInlineMarkdown`, and a `<br>` forces its break under any `white-space` value. That producer is real and is fixed below — but it is not what the operator photographed. In the catalogue the operator's vault is generated from, the markdown-render column is *Flag*, holding one-line values; *Journal* is a plain-text column carrying **`wrap: true` of its own**, written by the fixture emitter. Measured on the desktop profile with the view's switch off, that table stood at 36/130/300px with the Journal cell setting the tallest row, `white-space: normal`, and no `<br>` anywhere in it. The original rule was the cause: a column's own choice outranked the switch, so the one control that claims to govern wrapping could not flatten the one column that was not flat.
 
-**Fix, at the render call, not the stylesheet.** `RenderInlineMarkdownOptions` gained `collapseBreaks?: boolean`; its `"br"` case appends a collapsed space instead of a `<br>` when set. `CellRenderer.renderCell` already resolves the cell's wrap state in its first two lines (`isWrapping`) — the markdown branch now passes `collapseBreaks: !isWrapping`, so a clipped cell's own line breaks read as spaces (matching how the same value already reads as plain text) and a wrapping cell's render exactly as before. No stylesheet rule changed and no class was added: the fix is entirely in what DOM the markdown renderer builds, because a clamp that stops at nowrap+ellipsis cannot out-argue an element whose whole job is to force a break.
+**Operator ruling, verbatim (2026-09-06 ~11:25): _"View switch off clips everything"_.** This reverses the precedence recorded above. The switch is the gate, not a default the column can outvote:
 
-**Evidence.** `render-assertions.mjs`'s wrap-toggle pass gained a third mount: the same catalogue, a markdown column with no wrap override of its own, a source value carrying two line breaks. Pre-fix: `tallest 58px`, floor 36px, exit 1. Post-fix: `tallest 36px`, exit 0. `cell-renderer-wrap.test.ts` gained three cases against the real `renderCell`/`renderInlineMarkdown` path: clipped collapses the break to a space with no `<br>` child; the column's own wrap and the view's default each keep it. Two screenshot scenarios, `table-wrap-off` and `table-wrap-on`, photograph a Journal-style column both ways side by side, self-contained rather than added to a shared fixture row so no other scenario's capture moves.
+| Column mode | Switch off | Switch on |
+|---|---|---|
+| Wrap (`true`) | clip | wrap |
+| Follow (`undefined`) | clip | wrap |
+| Clip (`false`) | clip | clip |
+
+A column mode is now a refinement of a wrapping table rather than an exemption from a clipped one. `resolvesToWrappedCell` (`column-types.ts`) is the single place that rule lives, and every surface that paints or measures a table cell reads it: `renderCell`, and `estimateAutoColumnWidth`, which used to size a column for wrapping in a table that clips it.
+
+**Operator ruling, verbatim (2026-09-06 ~11:25): _"Honour the switch on phone"_.** `.is-phone …​ .db-table td:not(.db-select-col):not(.db-record-icon-col)` set `white-space: nowrap` at five classes against `td.db-cell-wrap`'s three, so on a phone the switch never wrapped text at all. It looked wired only because the value containers are flex boxes that wrap on their own: turning it on stacked the chips and left every sentence on one line. The phone rule now excludes the wrapping cell from that declaration and keeps its width cap in a rule of its own — two questions that had been answered by one line, and only the first of them is the phone's.
+
+**The narrower producer, kept.** `RenderInlineMarkdownOptions` gained `collapseBreaks?: boolean`; its `"br"` case appends a collapsed space instead of a `<br>` when set, and the markdown branch of `renderCell` passes `collapseBreaks: !isWrapping`. Without it a clipped markdown cell still grows the row through an element whose whole job is to force a break, which nowrap and ellipsis cannot out-argue. Measured on the desktop profile with the switch off: a three-line bullet list 58px and a heading-plus-body 95px, both 35px once collapsed. The width measurer collapses breaks for the same reason — auto-fit only ever measures a clipped column, and measuring a `<br>`-split value returned the widest of its lines rather than the single line the cell paints.
+
+**Evidence.** `cell-renderer-wrap.test.ts` covers the full 3x2 matrix plus the absent-switch case an upgraded vault has, and four markdown line-break cases. `column-width.test.ts` pins auto-fit to the same resolver; reverting it to read the column mode alone turns three cases red. `render-assertions.mjs` gained a text-wrap assertion on the phone pass and a desktop-profile pass over the operator's own catalogue. Two negative controls observed: restoring the phone `nowrap` override leaves the rows growing at 133px while no text-only cell exceeds 16px against a 28px one-line ceiling, and restoring the column-wins precedence reproduces the report exactly at 36/130/300px. Two screenshot scenarios, `table-wrap-off` and `table-wrap-on`, photograph the switch both ways; the phone captures of the wrap-on pair are the two whose content moved.
+
 <!-- /ANCHOR:adr-004 -->
 
 ---

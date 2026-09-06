@@ -20,6 +20,7 @@
 import { App, Notice, setIcon } from "obsidian";
 import {
   resolveOptionDisplay,
+  resolvesToWrappedCell,
   toBooleanValue,
   toMultiSelectValuesForKey,
   toValidObsidianTagValues,
@@ -201,11 +202,12 @@ export class CellRenderer {
     };
   }
 
-  /** `viewWrapDefault` is the view's own `wrapText` setting, read only when the column carries no
-   *  wrap override of its own (`col.wrap === undefined`) — a column's explicit choice always wins. */
+  /** `viewWrapDefault` is the view's own `wrapText` switch, and it gates the column's mode rather
+   *  than losing to it: off clips every column, on lets a column's Clip mode opt back out.
+   *  `resolvesToWrappedCell` is the one place that rule lives. */
   renderCell(td: HTMLElement, row: RowData, col: ColumnDef, viewWrapDefault?: boolean): void {
     td.addClass("db-cell");
-    const isWrapping = Boolean(col.wrap ?? viewWrapDefault);
+    const isWrapping = resolvesToWrappedCell(col.wrap, viewWrapDefault);
     if (isWrapping) td.addClass("db-cell-wrap");
     let value: unknown;
 

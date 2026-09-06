@@ -105,7 +105,13 @@ export function createRenderedTextWidthMeasurer(): RenderedTextWidthMeasurer | n
           cache.set(cacheKey, null);
           return null;
         }
-        renderInlineMarkdown(td, nodes, { onOpenLink: () => undefined, linkClickStrategy: "table" });
+        // The hidden cell declares `white-space: nowrap` because auto-fit only ever measures a
+        // column the table clips — a wrapping one is sized from its header and returns before the
+        // measurer is built. So it collapses line breaks for the same reason the painted clipped
+        // cell does: measuring a `<br>`-split value returns the widest of its lines, which is
+        // narrower than the single line the cell actually paints, and the column arrives already
+        // too narrow for its own content.
+        renderInlineMarkdown(td, nodes, { onOpenLink: () => undefined, linkClickStrategy: "table", collapseBreaks: true });
         // renderMath falls back to raw `$...$` while MathJax is unavailable.
         // Never treat that TeX source as the rendered formula width.
         if (containsNodeType(nodes, "math")) {

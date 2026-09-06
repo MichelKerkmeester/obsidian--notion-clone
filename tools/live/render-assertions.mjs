@@ -124,6 +124,30 @@ const WRAP_TOGGLE_SCENARIOS = [
   { name: "table-catalogue-habit-health-log-markdown-newline-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log", catalogueMarkdownNewline: true },
 ];
 
+// ───────────────────────────────────────────────────────────────────
+// 2c. WRAP TOGGLE, DESKTOP PROFILE
+// ───────────────────────────────────────────────────────────────────
+//
+// The pass above measures a phone, because that is the device the first row-height report came
+// from. The second one came from the desktop, and the phone page could not have caught it: the
+// phone stylesheet used to hold every cell to one line whatever the wrap state, so the defect
+// class the desktop reported — a cell that wraps and takes the whole row with it — was invisible
+// there and a green phone lane said nothing about it.
+//
+// The catalogue is the Habit and Health Log the operator photographed, and its Journal column is
+// the one that grew: a long-text column carrying its own wrap mode, in a table whose switch was
+// off. It measured 300px against neighbours at 36px. Both directions are asserted, because a
+// check that cannot go red when the switch is on proves nothing about the switch.
+const WRAP_DESKTOP_SCENARIOS = [
+  { name: "table-catalogue-habit-health-log-wrap-off/desktop", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log" },
+  { name: "table-catalogue-habit-health-log-wrap-on/desktop", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log", wrapText: true },
+];
+
+// A single line of body text in a data cell, measured: 16px for a bare sentence, 23px for the
+// tallest one-line cell the catalogue produces. The ceiling sits above both and well below two
+// lines, so it separates "this cell took a second line" from "this cell is one tall line".
+const ONE_LINE_CEILING = 28;
+
 // The measured floor at the shipped default density, tokens attached (see RHYTHM_SCENARIOS above,
 // which holds this table to the same number). One pixel of headroom for sub-pixel rounding, not
 // for a second line of anything.
@@ -365,9 +389,23 @@ window.__rowRhythm = (scenario) => {
       }
       worst = { height: Math.round(height), cell, child, width: Math.round(width) };
     }
+    // The tallest cell holding nothing but text, reported apart from the worst-row attribution. A
+    // wrapping flex container and a wrapping sentence both grow a row, and only the second one
+    // proves the wrap switch reached the text: a lane that asserted only that the row grew would
+    // pass on the chips alone, which is how a phone where no sentence ever wrapped kept a green
+    // toggle check.
+    let tallestTextCell = 0;
+    for (const tr of rows) {
+      for (const td of tr.children) {
+        if (UTILITY.some((name) => td.classList.contains(name))) continue;
+        if (td.children.length > 0) continue;
+        tallestTextCell = Math.max(tallestTextCell, contentHeight(td));
+      }
+    }
     out = {
       count: rows.length,
       heights: rows.map((tr) => Math.round(tr.getBoundingClientRect().height)),
+      tallestTextCell: Math.round(tallestTextCell),
       worst,
       provenance: !!container.querySelector("table.db-table[data-render-assertion-source]")
         || !!container.querySelector("table.db-table"),
@@ -457,6 +495,7 @@ let rhythmOutcomes = null;
 let geometryOutcome = null;
 let wrapToggleOutcomes = null;
 let phoneOverlapInk = null;
+let wrapDesktopOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
@@ -534,6 +573,16 @@ try {
     phoneOverlapInk = await rhythmPage.evaluate(
       (scenario) => window.__phoneOverlapInk(scenario),
       PHONE_OVERLAP_SCENARIO,
+    );
+    // Same document, same token sheets, the phone profile dropped: the class the host sets and the
+    // viewport the phone rules are written against. Last of the three passes, because it is the
+    // only one that changes the profile, and measured on this page rather than one of its own so
+    // the two profiles cannot drift apart on anything but the profile itself.
+    await rhythmPage.evaluate(() => document.body.classList.remove("is-phone"));
+    await rhythmPage.setViewportSize({ width: 1100, height: 900 });
+    wrapDesktopOutcomes = await rhythmPage.evaluate(
+      (scenarios) => scenarios.map((scenario) => window.__rowRhythm(scenario)),
+      WRAP_DESKTOP_SCENARIOS,
     );
   }
   await rhythmPage.close();
@@ -683,6 +732,19 @@ console.log("\nrender-assertions: wrap toggle over the mock-data catalogue");
       failures.push(`${wrappedName}: forcing wrapText on did not grow any row past the floor `
         + `(${ROW_FLOOR}px + 1) — tallest ${wrappedTallest}px; the view-level default is not reaching the cell renderer`);
     }
+    // And it has to be the TEXT that wrapped. The phone stylesheet held every cell to one line at a
+    // specificity the wrapping class could not reach, so switching wrapping on stacked the chips
+    // and left every sentence on one line — a row that grew, a toggle that looked wired, and no
+    // wrapped text anywhere on the device. A row-height assertion alone passes that.
+    const wrappedText = wrapped.tallestTextCell ?? 0;
+    const wrappedTextOk = wrappedText > ONE_LINE_CEILING;
+    console.log(`  ${wrappedTextOk ? "PASS" : "FAIL"}  ${"wrap on wraps text, not only chips".padEnd(52)} `
+      + `tallest text-only cell ${wrappedText}px, one line ≤ ${ONE_LINE_CEILING}px`);
+    if (!wrappedTextOk) {
+      failures.push(`${wrappedName}: no text-only cell took a second line — tallest ${wrappedText}px `
+        + `against a one-line ceiling of ${ONE_LINE_CEILING}px. The rows grew, so a wrapping value `
+        + `container did it; the switch is not reaching the text`);
+    }
   }
 
   const markdownName = WRAP_TOGGLE_SCENARIOS[2].name;
@@ -699,6 +761,44 @@ console.log("\nrender-assertions: wrap toggle over the mock-data catalogue");
       failures.push(`${markdownName}: a markdown value's literal newlines did not clip — tallest `
         + `${markdownTallest}px exceeds the row floor (${ROW_FLOOR}px + 1) set by `
         + `${markdownClipped.worst.child} in ${markdownClipped.worst.cell}`);
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4c. WRAP TOGGLE, DESKTOP PROFILE
+// ───────────────────────────────────────────────────────────────────
+
+console.log("\nrender-assertions: wrap toggle on the desktop profile");
+{
+  const [offScenario, onScenario] = WRAP_DESKTOP_SCENARIOS;
+  const off = wrapDesktopOutcomes ? wrapDesktopOutcomes[0] : null;
+  const on = wrapDesktopOutcomes ? wrapDesktopOutcomes[1] : null;
+  if (!off || off.count === 0 || !on || on.count === 0) {
+    failures.push("wrap toggle (desktop): measured no rows");
+    console.log("  FAIL  wrap toggle (desktop) — no rows measured");
+  } else {
+    const offHeights = [...new Set(off.heights)].sort((a, b) => a - b);
+    const offTallest = offHeights[offHeights.length - 1];
+    // Uniformity as well as the floor: the reported symptom was one row standing several times its
+    // neighbours, which a tallest-only bound would let through if the whole table were tall.
+    const offOk = offTallest <= ROW_FLOOR + 1 && offHeights.length === 1;
+    console.log(`  ${offOk ? "PASS" : "FAIL"}  ${offScenario.name.padEnd(52)} `
+      + `${off.count} rows, height(s) ${offHeights.join("/")}, floor ${ROW_FLOOR}px`);
+    if (!offOk) {
+      failures.push(`${offScenario.name}: the switch off did not clip every column — height(s) `
+        + `${offHeights.join("/")} against the row floor (${ROW_FLOOR}px + 1), tallest set by `
+        + `${off.worst.child} in ${off.worst.cell} at ${off.worst.width}px wide`);
+    }
+
+    const onText = on.tallestTextCell ?? 0;
+    const onOk = Math.max(...on.heights) > ROW_FLOOR + 1 && onText > ONE_LINE_CEILING;
+    console.log(`  ${onOk ? "PASS" : "FAIL"}  ${onScenario.name.padEnd(52)} `
+      + `tallest ${Math.max(...on.heights)}px, tallest text-only cell ${onText}px (both must exceed)`);
+    if (!onOk) {
+      failures.push(`${onScenario.name}: the switch on did not wrap — tallest row `
+        + `${Math.max(...on.heights)}px against the floor (${ROW_FLOOR}px + 1), tallest text-only `
+        + `cell ${onText}px against a one-line ceiling of ${ONE_LINE_CEILING}px`);
     }
   }
 }

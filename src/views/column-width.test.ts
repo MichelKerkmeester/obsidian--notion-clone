@@ -18,7 +18,7 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { describe, expect, it } from "vitest";
-import { getFieldWidth } from "./column-width";
+import { estimateAutoColumnWidth, getFieldWidth } from "./column-width";
 import type { ColumnDef, ViewConfig } from "../data/types";
 
 // ───────────────────────────────────────────────────────────────────
@@ -42,7 +42,39 @@ describe("getFieldWidth", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 4. THE WIDTH ADJUSTER IS A SHARED SHEET ON A PHONE
+// 4. AUTO-FIT READS THE SAME WRAP STATE THE CELL PAINTS
+// ───────────────────────────────────────────────────────────────────
+//
+// A wrapping column is sized to its header and left to spend the height; a clipped one is sized to
+// its widest value. Reading the column's mode alone made auto-fit answer that question differently
+// from the cell renderer as soon as the view's switch was off, and a long-text column arrived
+// header-narrow in a table that clips it — the widths and the paint disagreeing about the same
+// cell. The value here is long enough that the two answers cannot be confused.
+
+const longRows = [{ file: { path: "n.md" }, frontmatter: {}, computed: {} }] as unknown as Parameters<typeof estimateAutoColumnWidth>[1];
+const longText = "A journal entry long enough that a column sized to its widest value cannot be mistaken for one sized to its header";
+
+function autoWidth(wrap: boolean | undefined, viewWrapText: boolean | undefined): number {
+  const column = { key: "notes", label: "Journal", type: "text", wrap } as ColumnDef;
+  return estimateAutoColumnWidth(column, longRows, () => longText, undefined, viewWrapText);
+}
+
+describe("estimateAutoColumnWidth resolves wrap the way the cell renderer does", () => {
+  it("sizes a Wrap column to its value while the view switch is off", () => {
+    expect(autoWidth(true, false)).toBeGreaterThan(autoWidth(true, true));
+  });
+
+  it("sizes Wrap and Follow columns alike once the switch is on", () => {
+    expect(autoWidth(true, true)).toBe(autoWidth(undefined, true));
+  });
+
+  it("keeps a Clip column sized to its value with the switch on", () => {
+    expect(autoWidth(false, true)).toBe(autoWidth(true, false));
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 5. THE WIDTH ADJUSTER IS A SHARED SHEET ON A PHONE
 // ───────────────────────────────────────────────────────────────────
 
 const columnWidthSource = readFileSync(resolve(__dirname, "./column-width.ts"), "utf8");

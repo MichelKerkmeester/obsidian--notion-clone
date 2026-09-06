@@ -2689,6 +2689,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       rows,
       (row, column) => this.getColumnDisplayText(row, column),
       createRenderedTextWidthMeasurer,
+      this.config?.wrapText,
     );
   }
 

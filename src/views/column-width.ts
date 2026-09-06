@@ -17,7 +17,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
-import { toMultiSelectValuesForKey } from "../data/column-types";
+import { resolvesToWrappedCell, toMultiSelectValuesForKey } from "../data/column-types";
 import { InlineMarkdownNode, parseInlineMarkdown, inlineMarkdownToPlainText } from "../data/inline-markdown";
 import { parseTextLink } from "../data/text-link";
 import { isTextLinkScheme } from "../data/text-link-scheme";
@@ -73,6 +73,7 @@ export function estimateAutoColumnWidth(
   rows: RowData[],
   getDisplayText: (row: RowData, col: ColumnDef) => string,
   createRenderedTextMeasurer?: () => RenderedTextWidthMeasurer | null,
+  viewWrapText?: boolean,
 ): number {
   const label = col.label || col.key;
   // Chrome the header name has to share the cell with: 8px padding either side, the 16px
@@ -80,7 +81,11 @@ export function estimateAutoColumnWidth(
   // sits in flow beside the name, so an auto-fit that ignored it would ellipsise the name.
   const headerWidth = Math.ceil(measureHeaderText(label) + 70);
   if (col.type === "checkbox") return Math.max(42, Math.min(headerWidth, 220));
-  if (col.wrap) return Math.max(36, Math.min(headerWidth, 360));
+  // A wrapping column is sized to its header and left to use the height; a clipped one is sized to
+  // its widest value. Which of the two a column is belongs to the view's switch as much as to the
+  // column's own mode, so it is resolved the same way the cell renderer resolves it — reading
+  // `col.wrap` alone sized a column for wrapping in a table that clips it.
+  if (resolvesToWrappedCell(col.wrap, viewWrapText)) return Math.max(36, Math.min(headerWidth, 360));
 
   const renderedTextMeasurer = col.textRenderMode === "markdown" || col.textRenderMode === "link" || isTextLinkScheme(col.textLinkScheme)
     ? createRenderedTextMeasurer?.() ?? null

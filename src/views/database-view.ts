@@ -11542,6 +11542,7 @@ export class DatabaseView extends FileView {
       rows,
       (row, column) => this.getColumnDisplayText(row, column),
       createRenderedTextWidthMeasurer,
+      this.getConfig()?.wrapText,
     );
   }
 

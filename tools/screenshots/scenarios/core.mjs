@@ -32,10 +32,11 @@ export const CORE_SCENARIOS = [
     title: "Table wrap off — a markdown column clips to one line",
     group: "views",
     width: 640,
-    sources: ["src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
-    note: "Every row holds the row floor with wrap off, including the markdown-render Journal "
-      + "column: its source value carries its own line breaks, and each one collapses to a space "
-      + "instead of forcing a <br> through white-space: nowrap.",
+    sources: ["src/data/column-types.ts", "src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
+    note: "The view's wrap switch off, which clips every column whatever mode it carries. Both "
+      + "ways a value used to escape that are shown holding the floor: a long sentence ellipsised "
+      + "at one line, and a value carrying its own line breaks collapsed to spaces instead of "
+      + "forcing a <br> through white-space: nowrap.",
     html: () => `
       <div class="note-database-container">
         <table class="db-table"><thead><tr>
@@ -53,9 +54,10 @@ export const CORE_SCENARIOS = [
     title: "Table wrap on — the same markdown column wraps",
     group: "views",
     width: 640,
-    sources: ["src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
-    note: "The same column and the same source values with wrap on: db-cell-wrap sets "
-      + "white-space: normal, so the value's own line breaks render as real line breaks again.",
+    sources: ["src/data/column-types.ts", "src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
+    note: "The same column and the same source values with the switch on: db-cell-wrap sets "
+      + "white-space: normal, so the long sentence takes a second line and the value's own line "
+      + "breaks render as real line breaks again. The phone renders this identically now.",
     html: () => `
       <div class="note-database-container">
         <table class="db-table"><thead><tr>
