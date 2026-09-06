@@ -116,6 +116,33 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
 - [ ] T025 (2026-09-06 amendment) Recapture the depth-2 and depth-3 stacked scenarios after T024 and
       read them by eye across both themes, then re-run `node tools/live/sheet-grammar.mjs` and
       require the registry to still read 13 surfaces and 31 pairs at exit 0 from `$?`
+- [x] T026 The permanent regress-test for the gap `048`'s landing named: no screenshot scenario
+      modelled a `DbModal` presented as a phone sheet, so the corpus could not regress-test row 59's
+      fix. Four `constructed-modal-sheet-*` scenarios (`tools/screenshots/constructed-scenarios.mjs`)
+      mount a REAL `DbModal` subclass — `ColumnRenameModal` ("Edit property — Month") and
+      `ConfirmModal` — through the real `attachSheetChromeToModal`, over the faithful host-modal
+      stand-in `tools/live/sheet-grammar.mjs` already mounts its `modal`-kind stacked pairs against,
+      shared rather than duplicated from `tools/live/host-modal-stand-in.ts`: standalone and stacked
+      over the column-manager sheet (the operator's own pair), both themes, phone only.
+      **Red first**: the by-reference hide in `attachSheetChromeToModal`
+      (`src/views/mobile-bottom-sheet.ts`) was temporarily reverted, recaptured, and the native title
+      band reappeared — handle-to-title gap **74.4px**, the same figure the decision record's own
+      `sheet-grammar.mjs` evidence already carries — against **34.4px** once restored; the native
+      close control's own box stayed present but unpainted (Obsidian's own glyph is host CSS this
+      harness does not vendor, so the box is there without a visible ×, an honest limit of the
+      stand-in, not a false pass). `constructed-modal-sheet-property-editor`'s manifest `pixelHash`
+      moved `51e0683b4efb` (red, dark) / `ed039953a5c9` (red, light) ->
+      `cf8ae04b3b21` (green, dark) / `4b5b728e1872` (green, light) — the fix restored before commit,
+      confirmed by an empty `git diff` on `mobile-bottom-sheet.ts`. Registered: `capture.mjs --only`
+      green per scenario, `npm run screenshots` full run 576 entries, `verify.mjs` exit 0,
+      `npm run gate` 26/26, `node tools/live/sheet-grammar.mjs` exit 0 on both engines with the
+      shared stand-in. The css-lane's own baseline stylesheet hash is untouched — this task touched
+      no CSS, so the lane stays where `056-board-anytype-parity` left it and this landing takes it
+      from nobody. All 8 PNGs are named in the `reviewed` array of `048`'s own release entry and were
+      opened and read; `check-lane.mjs` exits 0 here **because the captures are committed rather than
+      because that entry is consulted** — the newest lane entry is `056`'s, and only the newest is
+      checked, so the exit code is a vacuous pass and the review the array records is the real
+      evidence.
 <!-- /ANCHOR:phase-3 -->
 
 ---

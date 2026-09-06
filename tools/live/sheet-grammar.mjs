@@ -300,6 +300,7 @@ import { openIconPickerPopover } from "${fileURLToPath(new URL("../../src/views/
 import { openOptionColorPicker } from "${fileURLToPath(new URL("../../src/views/option-color-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { buildConfirmSheetBody } from "${fileURLToPath(new URL("../../src/views/confirm-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { buildShellHeader } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { createHostModalStandIn } from "${fileURLToPath(new URL("./host-modal-stand-in.ts", import.meta.url)).replace(/\\/g, "/")}";
 
 setLocale("en");
 
@@ -757,29 +758,11 @@ const openPickerChild = (parent, child) => {
 // them. The DbModal-backed rows below (\`kind: "modal"\`) build that real shape rather than a bare
 // \`modal-container\`/\`modal-content\` pair, so the native chrome \`attachSheetChromeToModal\` has to
 // neutralise is actually present to neutralise — a stand-in missing it would pass whether or not
-// that neutralising code does anything at all.
+// that neutralising code does anything at all. \`createHostModalStandIn\` (host-modal-stand-in.ts)
+// is the one place that shape is built; the constructed screenshot scenarios for a stacked
+// DbModal share it rather than each mounting their own copy.
 const openHostModalChild = (parent, child) => {
-  const container = document.createElement("div");
-  container.className = "modal-container";
-  const bg = document.createElement("div");
-  bg.className = "modal-bg";
-  container.appendChild(bg);
-  const modalEl = document.createElement("div");
-  modalEl.className = "modal";
-  container.appendChild(modalEl);
-  // Neither carries plugin or theme styling of its own — production leaves both sized and
-  // painted by Obsidian's own host CSS, which this repository does not vendor. An explicit size
-  // stands in for that, approximated rather than measured, so each element renders as the
-  // present, non-collapsing thing it is on a device instead of the zero-height, zero-width div
-  // a bare unstyled element would otherwise be — a fact about this stand-in, not the code under
-  // test. Without it every check below would read clean whether or not the neutralising code in
-  // attachSheetChromeToModal does anything at all.
-  const titleEl = document.createElement("div");
-  titleEl.className = "modal-title";
-  titleEl.style.cssText = "display: block; height: 40px;";
-  modalEl.appendChild(titleEl);
-  const content = document.createElement("div");
-  content.className = "modal-content note-database-modal";
+  const { container, modalEl, contentEl: content, closeButton } = createHostModalStandIn();
   const heading = document.createElement("h3");
   heading.textContent = child.title || "Choose file";
   content.appendChild(heading);
@@ -787,14 +770,6 @@ const openHostModalChild = (parent, child) => {
   body.className = "db-modal-help";
   body.textContent = child.kind === "fuzzy" ? "Search files" : "Confirm this change";
   content.appendChild(body);
-  modalEl.appendChild(content);
-  const closeButton = document.createElement("div");
-  closeButton.className = "modal-close-button";
-  closeButton.style.cssText = "display: block; width: 32px; height: 32px;";
-  modalEl.appendChild(closeButton);
-  // Always a direct child of the body, never of \`parent\`: that is where Obsidian's own
-  // \`Modal.open()\` puts \`containerEl\`, independent of whatever sheet was already open.
-  document.body.appendChild(container);
   let releaseChrome;
   let releasePlacement;
   let closed = false;

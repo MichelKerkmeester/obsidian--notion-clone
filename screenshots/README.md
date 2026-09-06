@@ -783,6 +783,46 @@ The same renderer over a tree that holds a NOT node and an inner OR group — th
 
 Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/data/view-filter-tree.ts`
 
+### Confirm sheet — a DbModal presented as a phone sheet (constructed)
+
+ConfirmModal's own onOpen, mounted the same way: the real buildConfirmSheetBody inside the faithful host-modal stand-in, chromed by the real attachSheetChromeToModal.
+
+| dark | light |
+|---|---|
+| ![constructed-modal-sheet-confirm dark](notion-clone/panels/constructed-modal-sheet-confirm-mobile-dark.png) | ![constructed-modal-sheet-confirm light](notion-clone/panels/constructed-modal-sheet-confirm-mobile-light.png) |
+
+Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/confirm-modal.ts`, `src/views/confirm-sheet.ts`
+
+### Confirm sheet, stacked over the Properties sheet (constructed)
+
+The same real ConfirmModal, stacked over the column-manager sheet — the operator's pair, the confirm leg.
+
+| dark | light |
+|---|---|
+| ![constructed-modal-sheet-confirm-stacked dark](notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png) | ![constructed-modal-sheet-confirm-stacked light](notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png) |
+
+Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/confirm-modal.ts`, `src/views/confirm-sheet.ts`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
+### Edit property sheet — a DbModal presented as a phone sheet (constructed)
+
+ColumnRenameModal's own onOpen ("Edit property — Month"), invoked on an instance built from its own prototype rather than through new — its constructor calls Obsidian's real Modal, which this bundle's obsidian-stub deliberately cannot fake — mounted inside the faithful host-modal stand-in attachSheetChromeToModal has to neutralise: a native empty title and a native close button beside the shipped form.
+
+| dark | light |
+|---|---|
+| ![constructed-modal-sheet-property-editor dark](notion-clone/panels/constructed-modal-sheet-property-editor-mobile-dark.png) | ![constructed-modal-sheet-property-editor light](notion-clone/panels/constructed-modal-sheet-property-editor-mobile-light.png) |
+
+Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`
+
+### Edit property sheet, stacked over the Properties sheet (constructed)
+
+The same real ColumnRenameModal, opened over a mounted column-manager sheet — the operator's own reported stacked pair — so the parent dim, the child's own fill and the single close control are all the shared production mechanism, not a hand-built approximation of it.
+
+| dark | light |
+|---|---|
+| ![constructed-modal-sheet-property-editor-stacked dark](notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-dark.png) | ![constructed-modal-sheet-property-editor-stacked light](notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-light.png) |
+
+Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
 ### Record detail panel (constructed)
 
 openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.

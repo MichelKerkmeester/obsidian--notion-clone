@@ -110,11 +110,69 @@ window.__mountConstructed = (spec) => {
 };
 `;
 
+// A DbModal subclass — the property editor ("Edit property"), the confirm sheet — cannot mount
+// through \`new\`: every one extends Obsidian's real \`Modal\`, which the obsidian-stub this bundle
+// resolves \`"obsidian"\` to deliberately cannot fake (its own module comment: out of scope for a
+// vault-less bundle). The constructor only wires plumbing this stand-in supplies by hand —
+// \`modalEl\`, \`contentEl\`, the presentation flag a subclass' constructor forwards to \`DbModal\`'s —
+// so the subclass's own \`onOpen\` (the real, shipped form or confirm body, and the real
+// \`applyPresentation\` -> \`createSurfaceShell\` -> \`attachSheetChromeToModal\` call every DbModal
+// subclass makes) is invoked directly on an instance built from the subclass's own prototype,
+// never through a constructor this bundle cannot run.
+const MODAL_SHEET_ENTRY_BODY = `
+import { createHostModalStandIn } from "${fileURLToPath(new URL("../live/host-modal-stand-in.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { ColumnRenameModal } from "${fileURLToPath(new URL("../../src/views/modals/column-rename-modal.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { ConfirmModal } from "${fileURLToPath(new URL("../../src/views/modals/confirm-modal.ts", import.meta.url)).replace(/\\/g, "/")}";
+
+const mountRealModal = (ModalClass, fields) => {
+  const standIn = createHostModalStandIn();
+  const instance = Object.create(ModalClass.prototype);
+  Object.assign(instance, fields, {
+    modalEl: standIn.modalEl,
+    contentEl: standIn.contentEl,
+    // Never exercised by a capture — nothing here clicks the close button or presses Escape —
+    // but attachSheetChromeToModal still asks every caller for one to wire its own listeners.
+    close: () => {},
+  });
+  instance.onOpen();
+  return standIn;
+};
+
+const FAKE_MONTH_COLUMN = { key: "month", label: "Month", type: "date" };
+
+window.__mountConstructedModalSheet = (spec) => {
+  if (spec.stacked) {
+    let parentSheet = null;
+    runRenderAssertions(document.body, { renderer: "column-manager", bag: "file-view", captureData: true }, "", () => {
+      parentSheet = document.body.querySelector(".db-mobile-bottom-sheet");
+    });
+    if (!parentSheet) return false;
+  }
+  const standIn = spec.modal === "confirm"
+    ? mountRealModal(ConfirmModal, {
+        presentation: "sheet",
+        options: {
+          title: "Delete this row?",
+          message: "This action cannot be undone.",
+          confirmText: "Delete",
+          danger: true,
+        },
+      })
+    : mountRealModal(ColumnRenameModal, {
+        presentation: "sheet",
+        col: FAKE_MONTH_COLUMN,
+        allColumns: [FAKE_MONTH_COLUMN],
+        onSave: async () => {},
+      });
+  return standIn.modalEl.classList.contains("db-mobile-bottom-sheet");
+};
+`;
+
 let constructedBundle = null;
 
 export async function prepareConstructedBundle() {
   if (constructedBundle) return constructedBundle;
-  const built = await buildRenderAssertionBundle(CONSTRUCTED_ENTRY_BODY);
+  const built = await buildRenderAssertionBundle(CONSTRUCTED_ENTRY_BODY + MODAL_SHEET_ENTRY_BODY);
   if (built.missingSources.length > 0) {
     throw new Error("constructed capture: the bundle no longer imports "
       + `${built.missingSources.join(", ")} — a capture that does not bundle the shipped `
@@ -287,6 +345,23 @@ export async function mountConstructed(page, device, theme, spec) {
     : page.$("#shot > .note-database-container");
 }
 
+// A stacked DbModal sheet (and its parent, when one is asked for) portals straight onto
+// `document.body`, never into `#shot` — the same reason the sheet and menu scenarios above
+// resolve their subject off `document.body` rather than the harness's own container. `#shot`
+// stays in the page only so the oversize-guard's `boundingBox()` read in capture.mjs has
+// something to measure; the picture capture.mjs takes is the whole viewport (`capture:
+// "viewport"`), which is where the portalled sheet actually paints.
+export async function mountConstructedModalSheet(page, device, theme, spec) {
+  if (!constructedBundle) {
+    throw new Error("constructed capture: no bundle prepared — build it before mounting");
+  }
+  const host = join(constructedBundle.work, `host-modal-sheet-${spec.id}-${device.id}-${theme}.html`);
+  writeFileSync(host, constructedHostHtml(device, theme));
+  await page.goto(pathToFileURL(host).href, { waitUntil: "load" });
+  const ready = await page.evaluate((s) => window.__mountConstructedModalSheet(s), spec);
+  return ready ? page.$("#shot") : null;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. THE CONSTRUCTED SCENARIO CONTRACT
 // ───────────────────────────────────────────────────────────────────
@@ -381,6 +456,50 @@ function constructedScenario(view, opts) {
     ...(opts.fixtureOf ? { fixtureOf: opts.fixtureOf } : {}),
     note: opts.note,
     mount: async (page, device, theme) => mountConstructed(page, device, theme, spec),
+  };
+}
+
+// The DbModal-as-sheet family (below) does not go through `constructedScenario()` above — that
+// helper's `mount` always dispatches through the single-renderer `runRenderAssertions` spec
+// shape, and mounting a real Modal subclass instead needs its own bundle entry
+// (`window.__mountConstructedModalSheet`, MODAL_SHEET_ENTRY_BODY) and its own mount driver
+// (`mountConstructedModalSheet`). `renderer: "modal-sheet"` and `bag: "file-view"` are set
+// directly so the manifest schema's constructed-entry check still has a view name to record.
+const MODAL_SHEET_BASE_SOURCES = [
+  "src/views/modals/db-modal.ts",
+  "src/views/surface-shell.ts",
+  "src/views/mobile-bottom-sheet.ts",
+  "src/views/popover-position.ts",
+  "tools/live/host-modal-stand-in.ts",
+].concat(SHARED_CONSTRUCTED_SOURCES);
+
+// The stacked variants' parent: the column-manager sheet, the operator's own reported pair.
+const STACKED_PARENT_SOURCES = [
+  "src/views/column-manager-renderer.ts",
+  "tools/bench/table-render-bench.ts",
+  "src/views/property-type-icon.ts",
+  "src/views/checkbox.ts",
+];
+
+function constructedModalSheetScenario(name, opts) {
+  return {
+    id: `constructed-modal-sheet-${name}`,
+    title: opts.title,
+    group: "panels",
+    capture: "viewport",
+    // A DbModal only takes the sheet presentation on a touch surface (`isTouchDevice`,
+    // `surface-shell.ts`); the desktop presentation is already covered by every other modal
+    // fixture in this registry, so this family is phone-only rather than duplicating that.
+    devices: ["mobile"],
+    renderer: "modal-sheet",
+    bag: "file-view",
+    sources: opts.sources,
+    note: opts.note,
+    mount: async (page, device, theme) => mountConstructedModalSheet(page, device, theme, {
+      id: name,
+      modal: opts.modal,
+      stacked: Boolean(opts.stacked),
+    }),
   };
 }
 
@@ -1113,6 +1232,54 @@ export const CONSTRUCTED_SCENARIOS = [
     fixtureOf: "timeline-view-year",
     sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
     note: "The shipped timeline renderer at its year scale.",
+  }),
+
+  // ── A DbModal presented as a phone sheet. Every modal fixture in this registry renders as a
+  // desktop floating card even at mobile size, so nothing in the corpus regression-tests a modal
+  // that presents as a bottom sheet on a touch surface. Each scenario here mounts a REAL DbModal
+  // subclass's own `onOpen` — never a hand-copied approximation of its form or its confirm body —
+  // through the real `attachSheetChromeToModal`, over the faithful host-modal stand-in
+  // `tools/live/sheet-grammar.mjs` also mounts its `modal`-kind stacked pairs against
+  // (`createHostModalStandIn`, `tools/live/host-modal-stand-in.ts`): a native empty title element
+  // and a native close button beside `.modal-container`/`.modal-content`. Phone-only, because a
+  // DbModal only takes the sheet presentation on a touch surface — the desktop presentation is
+  // already covered by every other modal fixture in this registry.
+  constructedModalSheetScenario("property-editor", {
+    modal: "property-editor",
+    title: "Edit property sheet — a DbModal presented as a phone sheet (constructed)",
+    sources: MODAL_SHEET_BASE_SOURCES.concat(["src/views/modals/column-rename-modal.ts"]),
+    note: "ColumnRenameModal's own onOpen (\"Edit property — Month\"), invoked on an instance built "
+      + "from its own prototype rather than through new — its constructor calls Obsidian's real "
+      + "Modal, which this bundle's obsidian-stub deliberately cannot fake — mounted inside the "
+      + "faithful host-modal stand-in attachSheetChromeToModal has to neutralise: a native empty "
+      + "title and a native close button beside the shipped form.",
+  }),
+  constructedModalSheetScenario("property-editor-stacked", {
+    modal: "property-editor",
+    stacked: true,
+    title: "Edit property sheet, stacked over the Properties sheet (constructed)",
+    sources: MODAL_SHEET_BASE_SOURCES
+      .concat(["src/views/modals/column-rename-modal.ts"], STACKED_PARENT_SOURCES),
+    note: "The same real ColumnRenameModal, opened over a mounted column-manager sheet — the "
+      + "operator's own reported stacked pair — so the parent dim, the child's own fill and the "
+      + "single close control are all the shared production mechanism, not a hand-built "
+      + "approximation of it.",
+  }),
+  constructedModalSheetScenario("confirm", {
+    modal: "confirm",
+    title: "Confirm sheet — a DbModal presented as a phone sheet (constructed)",
+    sources: MODAL_SHEET_BASE_SOURCES.concat(["src/views/modals/confirm-modal.ts", "src/views/confirm-sheet.ts"]),
+    note: "ConfirmModal's own onOpen, mounted the same way: the real buildConfirmSheetBody inside "
+      + "the faithful host-modal stand-in, chromed by the real attachSheetChromeToModal.",
+  }),
+  constructedModalSheetScenario("confirm-stacked", {
+    modal: "confirm",
+    stacked: true,
+    title: "Confirm sheet, stacked over the Properties sheet (constructed)",
+    sources: MODAL_SHEET_BASE_SOURCES
+      .concat(["src/views/modals/confirm-modal.ts", "src/views/confirm-sheet.ts"], STACKED_PARENT_SOURCES),
+    note: "The same real ConfirmModal, stacked over the column-manager sheet — the operator's pair, "
+      + "the confirm leg.",
   }),
 ];
 

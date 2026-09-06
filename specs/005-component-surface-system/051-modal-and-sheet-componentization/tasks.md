@@ -313,6 +313,15 @@ with the owner named, never self-closed.
       stays blocked." No capture can resolve a question about which host API surface this plugin's
       own suggest modals target, so nothing here decides it in the operator's place; `AC-001` and
       `checklist.md` C1 stay exactly as T005 left them (4 raw call sites, 2 decision-making groups).
+      **Found while building `048`'s modal-sheet screenshot scenario, not fixed here**: one of the
+      three outliers, `BaseFileSuggestModal` (`src/main.ts:3047`), calls
+      `this.titleEl.setText(t("baseImport.chooseBaseFile"))` before its own
+      `attachSheetChromeToModal` call. `attachSheetChromeToModal`'s by-reference hide only hides the
+      native title when it is empty (`mobile-bottom-sheet.ts`'s `!nativeTitle.textContent?.trim()`
+      guard) — this subclass's is not, so on a phone the native Obsidian title and the shell's own
+      header title both render, and the title shows twice. Distinct from row 59's defect (an empty
+      native title left a dead band, not a duplicate), and outside this task's scope: recorded as an
+      open row here rather than folded into the row-59 fix or this outlier's own disposition above.
 - [x] **T011 — Route the 12 independent `createSheetHeader` sites through the shell where the
       surface is a shell consumer.** `cell-renderer.ts:952`, `toolbar-renderer.ts:1384`,
       `owned-menu.ts:218`, `date-value-picker.ts:410`, `mobile-bottom-sheet.ts:241` (the engine's
