@@ -43,6 +43,18 @@ export const PROPERTY_TYPE_ICON_NAMES: Record<ColumnDef["type"], string> = {
   relation: "link",
   rollup: "sum",
   files: "paperclip",
+  url: "world",
+  email: "mail",
+  phone: "phone",
+  person: "user",
+  // The two "time" audit types read straight from the file's own stat, so they borrow the same
+  // glyphs the date/datetime types already use rather than drawing a near-duplicate calendar.
+  "created-time": "calendar",
+  "last-edited-time": "clock",
+  // Both "by" audit types share one glyph with Person: all three represent "a person", and the
+  // vault has no user directory to draw a distinct icon from either.
+  "created-by": "user",
+  "last-edited-by": "user",
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -160,6 +172,32 @@ export const PROPERTY_TYPE_ICON_DEFS: Record<string, PropertyTypeIconDef> = {
   paperclip: {
     paths: [
       { d: "M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" },
+    ],
+  },
+  world: {
+    paths: [
+      { d: "M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" },
+      { d: "M3.6 9h16.8" },
+      { d: "M3.6 15h16.8" },
+      { d: "M11.5 3a17 17 0 0 0 0 18" },
+      { d: "M12.5 3a17 17 0 0 0 0 18" },
+    ],
+  },
+  mail: {
+    paths: [
+      { d: "M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" },
+      { d: "M3 7l9 6l9 -6" },
+    ],
+  },
+  phone: {
+    paths: [
+      { d: "M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" },
+    ],
+  },
+  user: {
+    paths: [
+      { d: "M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" },
+      { d: "M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" },
     ],
   },
 };

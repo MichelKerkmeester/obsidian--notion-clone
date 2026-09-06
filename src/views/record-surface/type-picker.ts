@@ -24,11 +24,18 @@ import type { DropdownOption } from "../dropdown-field";
 // 2. THE ONE LIST
 // ───────────────────────────────────────────────────────────────────
 
-/** The thirteen formats, in the order every existing site already declared them. */
+/** The twenty-one formats, grouped Basic / Options / Advanced — `column-menu.ts`'s type submenu
+ *  slices this exact array at the group boundaries below, so a type's position here decides which
+ *  group it renders in. Basic: the thirteen's six primitives plus the four link-shaped text types
+ *  (URL/Email/Phone reuse the text scheme-link renderer; Person reuses the text wikilink renderer)
+ *  reach ten. Options is unchanged at three. Advanced gains the four read-only audit types
+ *  alongside the four it already had, reaching eight. 10 + 3 + 8 = 21. */
 export const PROPERTY_TYPES: readonly ColumnDef["type"][] = [
   "text", "number", "date", "datetime", "currency", "checkbox",
+  "url", "email", "phone", "person",
   "select", "multi-select", "status",
   "computed", "relation", "rollup", "files",
+  "created-time", "created-by", "last-edited-time", "last-edited-by",
 ];
 
 // ───────────────────────────────────────────────────────────────────

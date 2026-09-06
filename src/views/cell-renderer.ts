@@ -19,6 +19,8 @@
 
 import { App, Notice, setIcon } from "obsidian";
 import {
+  getDateEndFieldKey,
+  isAuditColumnType,
   resolveOptionDisplay,
   resolvesToWrappedCell,
   toBooleanValue,
@@ -34,7 +36,7 @@ import { isImeComposing } from "../data/keyboard-utils";
 import { openDropdownMenu } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
 import { DataSource } from "../data/data-source";
-import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/date-time-format";
+import { formatDateRangeDisplay, formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/date-time-format";
 import { parseTextLink } from "../data/text-link";
 import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/text-link-scheme";
 import { parseInlineMarkdown } from "../data/inline-markdown";
@@ -213,6 +215,10 @@ export class CellRenderer {
 
     if (col.type === "computed" || col.type === "rollup") {
       value = row.computed[col.type === "computed" ? col.computedKey || col.key : col.key];
+    } else if (col.type === "created-time" || col.type === "last-edited-time") {
+      // Read straight off the file's own stat rather than frontmatter: the vault already tracks
+      // this, so nothing is written back and there is no value to go stale.
+      value = col.type === "created-time" ? row.file.stat.ctime : row.file.stat.mtime;
     } else if (col.key === "file.name") {
       td.addClass("db-title-cell");
       const displayInfo = this.getFileTitleInfo(row);
@@ -274,7 +280,7 @@ export class CellRenderer {
         td.addClass("db-editable-cell");
         this.makeEditable(td, row, col, "");
         setFieldTooltip(td, t("common.empty"), this.getEditHint(col));
-      } else if (!this.isReadOnly && isReadonlyFileField(col.key)) {
+      } else if (!this.isReadOnly && (isReadonlyFileField(col.key) || isAuditColumnType(col.type))) {
         this.makeReadonlyFileFieldNotice(td, col);
       }
       if (this.isReadOnly) {
@@ -326,10 +332,32 @@ export class CellRenderer {
         break;
       }
       case "date":
+      case "created-time":
+      case "last-edited-time":
         this.renderDate(td, row, col, value, false);
         break;
       case "datetime":
         this.renderDate(td, row, col, value, true);
+        break;
+      case "url":
+      case "email":
+      case "phone": {
+        // Same scheme-link renderer text columns opt into via textLinkScheme, except the scheme
+        // is implied by the type itself rather than a column flag someone has to remember to set.
+        const scheme = displayType === "url" ? "https" : displayType === "email" ? "mailto" : "tel";
+        const target = assembleSchemeLinkTarget(scheme, value);
+        if (target !== null) {
+          renderDelayedExternalLink(td, row, { label: String(value), target, external: true });
+        } else {
+          td.textContent = String(value);
+        }
+        break;
+      }
+      case "person":
+        // A person is not a note, so there is no user directory to point at — the value is
+        // whatever the reader typed, a name or a `[[wikilink]]` to a person note, rendered the
+        // same way a link-mode text column already renders one.
+        this.renderTextLink(td, row, value);
         break;
       default: {
         const schemeTarget = !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
@@ -383,7 +411,7 @@ export class CellRenderer {
       td.addClass("db-editable-cell");
       this.makeEditable(td, row, col, value);
       setFieldTooltip(td, this.getTooltipValue(col, value), this.getEditHint(col));
-    } else if (!this.isReadOnly && isReadonlyFileField(col.key)) {
+    } else if (!this.isReadOnly && (isReadonlyFileField(col.key) || isAuditColumnType(col.type))) {
       this.makeReadonlyFileFieldNotice(td, col);
       setFieldTooltip(td, this.getTooltipValue(col, value), t("fileField.readonly", { label: col.label || col.key }));
     } else {
@@ -445,7 +473,7 @@ export class CellRenderer {
   }
 
   private isEditableCellColumn(col: ColumnDef): boolean {
-    if (col.type === "computed" || col.type === "rollup") return false;
+    if (col.type === "computed" || col.type === "rollup" || isAuditColumnType(col.type)) return false;
     if (!isFileFieldKey(col.key)) return true;
     return col.key === "file.tags" || col.key === "file.name";
   }
@@ -536,9 +564,19 @@ export class CellRenderer {
 
   private renderDate(td: HTMLElement, row: RowData, col: ColumnDef, value: unknown, includeTime: boolean): void {
     td.addClass("db-date-value");
-    td.textContent = includeTime
-      ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
-      : formatDateValueDisplay(value);
+    // Only a plain date/datetime column can carry an end value — the two audit time types have no
+    // range concept, and reading row.frontmatter for them would be reading a key nothing writes.
+    const endValue = (col.type === "date" || col.type === "datetime")
+      ? row.frontmatter[getDateEndFieldKey(col)]
+      : undefined;
+    td.textContent = endValue != null && endValue !== ""
+      // formatDateRangeDisplay renders both ends in one string and already tolerates every
+      // malformed case worth naming — an end before its start included, since it formats each
+      // side independently rather than validating their order.
+      ? formatDateRangeDisplay(value, endValue)
+      : includeTime
+        ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
+        : formatDateValueDisplay(value);
 
     if (!col.urgency?.enabled) return;
     const daysKey =
@@ -647,7 +685,7 @@ export class CellRenderer {
     session?: CellEditSession,
     checkboxFinishIntent: TableCellNavigationIntent = "down",
   ): void {
-    if (isReadonlyFileField(col.key)) {
+    if (isReadonlyFileField(col.key) || isAuditColumnType(col.type)) {
       new Notice(t("fileField.readonly", { label: col.label || col.key }));
       return;
     }
@@ -752,7 +790,7 @@ export class CellRenderer {
   }
 
   restoreDraft(target: HTMLElement, row: RowData, col: ColumnDef, draft: string): boolean {
-    if (this.isReadOnly || isReadonlyFileField(col.key)) return false;
+    if (this.isReadOnly || isReadonlyFileField(col.key) || isAuditColumnType(col.type)) return false;
     this.activeTextEditClose?.();
     const currentValue = this.getCurrentValue(row, col);
     if (col.type === "number" || col.type === "currency") {
@@ -772,7 +810,7 @@ export class CellRenderer {
   }
 
   startReplaceEdit(target: HTMLElement, row: RowData, col: ColumnDef, initialText: string): boolean {
-    if (isReadonlyFileField(col.key) || col.type === "computed" || col.type === "rollup" || col.type === "checkbox") return false;
+    if (isReadonlyFileField(col.key) || isAuditColumnType(col.type) || col.type === "computed" || col.type === "rollup" || col.type === "checkbox") return false;
     if (col.type === "relation") {
       this.editRelationPopover(target, row, col, this.getCurrentValue(row, col), undefined, initialText);
       return true;

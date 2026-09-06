@@ -434,6 +434,12 @@ export class ViewConfigPanelRenderer {
           config.wrapText = value || undefined;
           actions.onChange(t("undo.wrapTextConfig"));
         });
+        // Reader-authored text, not a translation key. Empty/whitespace-only is the unconfigured
+        // case — the button falls back to today's fixed "+ New" string.
+        this.renderText(body, t("viewConfig.addRowNoun"), config.addRowNoun || "", t("viewConfig.addRowNoun.placeholder"), (value) => {
+          config.addRowNoun = value || undefined;
+          actions.onChange(t("undo.addRowNounConfig"));
+        });
       }
       this.renderSelect(body, t("viewConfig.yearDisplayMode"), [
         { value: "always", text: t("viewConfig.yearDisplayMode.always") },

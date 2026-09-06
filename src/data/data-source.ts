@@ -811,6 +811,11 @@ export class DataSource {
           columnOrder: Array.isArray(source["columnOrder"]) ? source["columnOrder"] as string[] : undefined,
           columnWidths: this.parseNumberMap(source["columnWidths"]),
           hiddenColumns: Array.isArray(source["hiddenColumns"]) ? source["hiddenColumns"] as string[] : undefined,
+          frozenColumnKeys: Array.isArray(source["frozenColumnKeys"])
+            ? (source["frozenColumnKeys"] as unknown[]).filter((key): key is string => typeof key === "string")
+            : undefined,
+          showVerticalLines: source["showVerticalLines"] === false ? false : undefined,
+          addRowNoun: safeString(source["addRowNoun"]) || undefined,
           sortColumnOrder: safeString(source["sortColumnOrder"]) || undefined,
           statusFilter: safeString(source["statusFilter"]) || undefined,
           groupByField: safeString(source["groupByField"]) || undefined,
@@ -993,6 +998,11 @@ export class DataSource {
       columnOrder: Array.isArray(v["columnOrder"]) ? v["columnOrder"] as string[] : undefined,
       columnWidths: this.parseNumberMap(v["columnWidths"]),
       hiddenColumns: Array.isArray(v["hiddenColumns"]) ? v["hiddenColumns"] as string[] : undefined,
+      frozenColumnKeys: Array.isArray(v["frozenColumnKeys"])
+        ? (v["frozenColumnKeys"] as unknown[]).filter((key): key is string => typeof key === "string")
+        : undefined,
+      showVerticalLines: v["showVerticalLines"] === false ? false : undefined,
+      addRowNoun: safeString(v["addRowNoun"]) || undefined,
       sortColumnOrder: safeString(v["sortColumnOrder"]) || undefined,
       statusFilter: safeString(v["statusFilter"]) || undefined,
       groupByField: safeString(v["groupByField"]) || undefined,
@@ -1210,6 +1220,9 @@ export class DataSource {
       columnOrder: view.columnOrder || [],
       columnWidths: view.columnWidths || {},
       hiddenColumns: view.hiddenColumns || [],
+      frozenColumnKeys: view.frozenColumnKeys || [],
+      showVerticalLines: view.showVerticalLines === false ? false : true,
+      addRowNoun: view.addRowNoun || "",
       sortColumnOrder: view.sortColumnOrder || "",
       statusFilter: view.statusFilter || "",
       groupByField: view.groupByField || "",
@@ -1374,6 +1387,9 @@ export class DataSource {
       "columnOrder",
       "columnWidths",
       "hiddenColumns",
+      "frozenColumnKeys",
+      "showVerticalLines",
+      "addRowNoun",
       "sortColumnOrder",
       "statusFilter",
       // searchText is no longer persisted (search is transient); kept here only

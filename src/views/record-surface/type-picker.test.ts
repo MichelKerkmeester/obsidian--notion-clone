@@ -11,17 +11,21 @@ import { describe, expect, it } from "vitest";
 import {
   buildTypePickerOptions, conflictWriterGate, PROPERTY_TYPES, rollupNeedsRelationGate,
 } from "./type-picker";
+import { COLUMN_TYPE_LABELS, isColumnType } from "../../data/column-types";
+import { PROPERTY_TYPE_ICON_NAMES } from "../property-type-icon";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CASES — THE ONE LIST
 // ───────────────────────────────────────────────────────────────────
 
 describe("PROPERTY_TYPES", () => {
-  it("is the thirteen formats every site declared separately before this", () => {
+  it("is the twenty-one formats the four registries agree on, grouped Basic/Options/Advanced", () => {
     expect(PROPERTY_TYPES).toEqual([
       "text", "number", "date", "datetime", "currency", "checkbox",
+      "url", "email", "phone", "person",
       "select", "multi-select", "status",
       "computed", "relation", "rollup", "files",
+      "created-time", "created-by", "last-edited-time", "last-edited-by",
     ]);
   });
 });
@@ -30,10 +34,28 @@ describe("PROPERTY_TYPES", () => {
 // 3. CASES — OPTIONS AND ICONS
 // ───────────────────────────────────────────────────────────────────
 
+// ───────────────────────────────────────────────────────────────────
+// 2a. CASES — THE FOUR REGISTRIES AGREE
+// ───────────────────────────────────────────────────────────────────
+
+describe("the four type registries", () => {
+  it("carry the same twenty-one members as PROPERTY_TYPES, the union included", () => {
+    const wanted = [...PROPERTY_TYPES].sort();
+    expect(wanted).toHaveLength(21);
+    expect(Object.keys(PROPERTY_TYPE_ICON_NAMES).sort()).toEqual(wanted);
+    expect(Object.keys(COLUMN_TYPE_LABELS()).sort()).toEqual(wanted);
+    // isColumnType restates the ColumnDef["type"] union member-for-member, so this goes red the
+    // moment a type is added to one but not the other — a value-level guard a bare TypeScript
+    // check cannot stand in for.
+    for (const type of PROPERTY_TYPES) expect(isColumnType(type)).toBe(true);
+    expect(isColumnType("not-a-real-type")).toBe(false);
+  });
+});
+
 describe("buildTypePickerOptions", () => {
   it("returns one option per format, each carrying a property: icon and no disabled flag by default", () => {
     const options = buildTypePickerOptions();
-    expect(options).toHaveLength(13);
+    expect(options).toHaveLength(21);
     expect(options.map((option) => option.value)).toEqual(PROPERTY_TYPES);
     for (const option of options) {
       expect(option.icon).toBe(`property:${option.value}`);
@@ -43,7 +65,7 @@ describe("buildTypePickerOptions", () => {
 
   it("never omits a format — the census threshold this replaces a filtered subset with", () => {
     const options = buildTypePickerOptions(() => ({ disabled: true, reason: "unavailable" }));
-    expect(options).toHaveLength(13);
+    expect(options).toHaveLength(21);
   });
 });
 

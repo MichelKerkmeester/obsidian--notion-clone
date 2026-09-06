@@ -174,6 +174,68 @@ describe("DataSource view filter tree persistence", () => {
     expect(reparsed!.views[0].newRowPresets).toEqual(presets);
   });
 
+  it("round-trips frozenColumnKeys, showVerticalLines and addRowNoun through parseViewConfig and toViewPayload", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "table",
+          sourceFolder: "",
+          frozenColumnKeys: ["title", "status"],
+          showVerticalLines: false,
+          addRowNoun: "task",
+        }],
+      },
+    });
+    expect(parsed!.views[0].frozenColumnKeys).toEqual(["title", "status"]);
+    expect(parsed!.views[0].showVerticalLines).toBe(false);
+    expect(parsed!.views[0].addRowNoun).toBe("task");
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(parsed!.views[0]);
+    expect(payload.frozenColumnKeys).toEqual(["title", "status"]);
+    expect(payload.showVerticalLines).toBe(false);
+    expect(payload.addRowNoun).toBe("task");
+    const reparsed = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [payload] },
+    });
+    expect(reparsed!.views[0].frozenColumnKeys).toEqual(["title", "status"]);
+    expect(reparsed!.views[0].showVerticalLines).toBe(false);
+    expect(reparsed!.views[0].addRowNoun).toBe("task");
+  });
+
+  it("preserves an unknown frozenColumnKeys entry rather than dropping it, and treats unset as vertical lines on", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "table",
+          sourceFolder: "",
+          frozenColumnKeys: ["a-column-from-a-newer-version"],
+        }],
+      },
+    });
+    // A downgrade must not destroy the setting: the key survives even though nothing in this
+    // parse knows what column it names. Whether it does anything is a render-time question
+    // (table-renderer.ts only sums a frozen key that also names a visible column), not a
+    // parse-time one.
+    expect(parsed!.views[0].frozenColumnKeys).toEqual(["a-column-from-a-newer-version"]);
+    expect(parsed!.views[0].showVerticalLines).toBeUndefined();
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(parsed!.views[0]);
+    // Undefined round-trips to "true" on the wire (vertical lines on is today's unchanged
+    // behavior) rather than an absent field a future parse would have to special-case.
+    expect(payload.showVerticalLines).toBe(true);
+    expect(payload.frozenColumnKeys).toEqual(["a-column-from-a-newer-version"]);
+  });
+
   it("round-trips boardCardFields through parseViewConfig, toViewPayload, and the legacy flat path", () => {
     const dataSource = source();
     const fields = [

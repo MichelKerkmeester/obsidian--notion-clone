@@ -47,6 +47,11 @@ export interface ColumnMenuActions {
   moveColumn(key: string, offset: -1 | 1): void;
   hideColumn(col: ColumnDef): void;
   setColumnWrap(col: ColumnDef, wrap: boolean | undefined): void;
+  /** Desktop-only per-column pin (`ViewConfig.frozenColumnKeys`). Absent on a host that has no
+   *  concept of horizontal scroll — the row itself is gated on the action existing, not on a
+   *  device check, so an embed or a read-only surface can omit it cleanly. */
+  freezeColumn?(col: ColumnDef, frozen: boolean): void;
+  isColumnFrozen?(col: ColumnDef): boolean;
   setTextRenderMode(col: ColumnDef, mode: "plain" | "link" | "markdown"): void;
   setTextLinkScheme(col: ColumnDef, scheme: TextLinkSchemeChoice): void;
   setNumberDisplayStyle(col: ColumnDef, style: NumberDisplayStyle): void;
@@ -211,6 +216,15 @@ export class ColumnMenu {
         }
       },
     });
+    if (this.actions.freezeColumn) {
+      const isFrozen = this.actions.isColumnFrozen?.(col) ?? false;
+      menu.addRow({
+        icon: "pin",
+        label: t("menu.freezeColumn"),
+        selected: isFrozen,
+        onClick: () => this.actions.freezeColumn?.(col, !isFrozen),
+      });
+    }
     if (this.actions.filterByColumn) {
       menu.addRow({ icon: "filter", label: t("menu.filterByValue", { name: col.label }), onClick: () => this.actions.filterByColumn?.(col) });
     }
@@ -259,9 +273,9 @@ export class ColumnMenu {
     // Sliced from the shared property-format list rather than a second literal — the grouping is
     // this submenu's own presentation, the thirteen values underneath it are the shared ones.
     const groups: Array<{ title: string; types: readonly ColumnDef["type"][] }> = [
-      { title: t("columnType.group.basic"), types: PROPERTY_TYPES.slice(0, 6) },
-      { title: t("columnType.group.options"), types: PROPERTY_TYPES.slice(6, 9) },
-      { title: t("columnType.group.advanced"), types: PROPERTY_TYPES.slice(9) },
+      { title: t("columnType.group.basic"), types: PROPERTY_TYPES.slice(0, 10) },
+      { title: t("columnType.group.options"), types: PROPERTY_TYPES.slice(10, 13) },
+      { title: t("columnType.group.advanced"), types: PROPERTY_TYPES.slice(13) },
     ];
     groups.forEach((group) => {
       panel.createDiv({ cls: "db-dropdown-section-title", text: group.title });

@@ -846,6 +846,8 @@ export class DatabaseView extends FileView {
       moveColumn: (key, offset) => this.columnOperations.moveColumn(key, offset),
       hideColumn: (col) => this.columnOperations.hideColumn(col),
       setColumnWrap: (col, wrap) => this.setColumnWrap(col, wrap),
+      freezeColumn: (col, frozen) => this.freezeColumn(col, frozen),
+      isColumnFrozen: (col) => this.isColumnFrozen(col),
       setTextRenderMode: (col, mode) => this.setTextRenderMode(col, mode),
       setTextLinkScheme: (col, scheme) => this.setTextLinkScheme(col, scheme),
       setNumberDisplayStyle: (col, style) => this.setNumberDisplayStyle(col, style),
@@ -5757,6 +5759,24 @@ export class DatabaseView extends FileView {
     this.scheduleConfigSave();
     this.renderColumnManager();
     this.refresh();
+  }
+
+  /** `frozenColumnKeys` is a view field, not a column one (`columnWidths`'s own precedent) — a
+   *  column can be frozen in one view and not another. */
+  private freezeColumn(col: ColumnDef, frozen: boolean): void {
+    const config = this.getConfig();
+    if (!config) return;
+    const current = config.frozenColumnKeys || [];
+    const next = current.filter((key) => key !== col.key);
+    if (frozen) next.push(col.key);
+    config.frozenColumnKeys = next.length ? next : undefined;
+    this.pendingUndoLabel = t("undo.freezeColumnConfig");
+    this.scheduleConfigSave();
+    this.refresh();
+  }
+
+  private isColumnFrozen(col: ColumnDef): boolean {
+    return this.getConfig()?.frozenColumnKeys?.includes(col.key) ?? false;
   }
 
   private setTextRenderMode(col: ColumnDef, mode: "plain" | "link" | "markdown"): void {

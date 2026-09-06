@@ -356,7 +356,16 @@ function renderProperty(
     label: column.label || column.key,
     renderValue: (valueEl) => {
       if (!isOption || !text) {
-        valueEl.textContent = text;
+        // The peek is a page-view surface, not a table cell — Notion writes the word here and
+        // leaves its own table cells blank, and our table cell already matches that blank
+        // convention (cell-renderer.ts). A label beside nothing read as a rendering gap rather
+        // than "this property has no value", which the muted placeholder now says directly.
+        if (!text) {
+          valueEl.addClass("db-record-peek-field-value-empty");
+          valueEl.textContent = t("common.empty");
+        } else {
+          valueEl.textContent = text;
+        }
         return;
       }
       // Multi-select stringifies to a comma-joined list, and one badge around the whole list

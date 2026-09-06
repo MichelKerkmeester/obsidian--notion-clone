@@ -5447,6 +5447,39 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   vertical-align: middle;
 }
 
+/* Vertical grid lines are a view choice (Show vertical lines). Off removes only the right
+   border every cell already carries above; the bottom border, the row backgrounds and any
+   conditional-formatting tint are untouched — the switch governs lines, not paint. */
+.note-database-container .db-table.db-no-vertical-lines th,
+.note-database-container .db-table.db-no-vertical-lines td {
+  border-right: none;
+}
+
+/* Per-column freeze (desktop only). The phone switches to content-driven auto layout with no
+   horizontal overflow to freeze against (see the .is-phone table rules further down), so the
+   sticky/left declarations below are scoped away from it explicitly rather than relying on the
+   phone's own width overrides to happen to cancel them out. `--db-frozen-left` is computed once
+   per render in table-renderer.ts (NFR-P01) and never in CSS. */
+.note-database-container:not(.is-phone) .db-table th.db-frozen-col,
+.note-database-container:not(.is-phone) .db-table td.db-frozen-col {
+  position: sticky;
+  left: var(--db-frozen-left, 0px);
+  z-index: 1;
+}
+
+.note-database-container:not(.is-phone) .db-table thead th.db-frozen-col {
+  z-index: 2;
+}
+
+/* Nothing at rest. The last frozen column paints a soft right-edge shadow only once the table
+   has scrolled sideways, so a reader can see content passing under it rather than beside it —
+   a design that is ours, not copied from anything, since no reference capture shows a frozen
+   state. The colour is Obsidian's own component-shadow token rather than a sampled value, so it
+   already resolves per theme. */
+.note-database-container.is-scrolled-x:not(.is-phone) .db-table .db-frozen-col-last {
+  box-shadow: 4px 0 6px -4px var(--background-modifier-box-shadow, rgba(0, 0, 0, 0.25));
+}
+
 /* Sticky 表头（未分组时）：粘在工具栏下方
    top = JS测量的header高度 - 25px（补偿 header 的 padding 和间距） */
 .note-database-container .db-table thead {
@@ -5688,6 +5721,15 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   width: 4px;
   cursor: col-resize;
   z-index: 1;
+  background: transparent;
+  transition: background var(--db-motion-fast);
+}
+
+/* Visible before you need it: the handle paints a token-derived line once its header is
+   hovered, rather than nothing at any time. `--interactive-accent` is Obsidian's own accent
+   token, already contrast-checked against both shipped themes. */
+.note-database-container .db-table th:hover .db-resize-handle {
+  background: var(--interactive-accent);
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -6885,6 +6927,25 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .db-cell-edit-popover.db-date-edit-popover.is-datetime {
   min-width: 252px;
+}
+
+.db-date-end-row {
+  margin-top: var(--db-space-3);
+  padding-top: var(--db-space-3);
+  border-top: 1px solid var(--db-border-subtle);
+}
+
+.db-date-end-label {
+  display: block;
+  font-size: var(--db-font-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--db-space-2);
+}
+
+.db-date-end-hint {
+  font-size: var(--db-font-xs);
+  color: var(--text-faint);
+  margin-top: var(--db-space-2);
 }
 
 .db-cell-edit-popover.db-date-edit-popover .db-date-segments {
@@ -22172,6 +22233,12 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .note-database-container .db-record-peek-field-value {
   flex: 1;
   min-width: 0;
+}
+
+/* The peek's own empty-property placeholder. Unlike .db-empty-value (table cells, which stay
+   blank by design), this text is meant to be read. */
+.note-database-container .db-record-peek-field-value-empty {
+  color: var(--text-faint);
 }
 
 /* Elevate floating popovers/dropdowns so they read as raised above the surface

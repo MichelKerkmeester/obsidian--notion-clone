@@ -147,6 +147,14 @@ export function COLUMN_TYPE_LABELS(): Record<ColumnDef["type"], string> {
     relation: t("columnType.relation"),
     rollup: t("columnType.rollup"),
     files: t("columnType.files"),
+    url: t("columnType.url"),
+    email: t("columnType.email"),
+    phone: t("columnType.phone"),
+    person: t("columnType.person"),
+    "created-time": t("columnType.createdTime"),
+    "created-by": t("columnType.createdBy"),
+    "last-edited-time": t("columnType.lastEditedTime"),
+    "last-edited-by": t("columnType.lastEditedBy"),
   };
 }
 
@@ -163,11 +171,35 @@ export function isColumnType(value: unknown): value is ColumnDef["type"] {
     value === "computed" ||
     value === "relation" ||
     value === "rollup" ||
-    value === "files";
+    value === "files" ||
+    value === "url" ||
+    value === "email" ||
+    value === "phone" ||
+    value === "person" ||
+    value === "created-time" ||
+    value === "created-by" ||
+    value === "last-edited-time" ||
+    value === "last-edited-by";
+}
+
+/** The four read-only audit types: two resolve straight from Obsidian's own file stat (created,
+ *  last edited), and two read a frontmatter value the vault itself has no native source for
+ *  (created by, last edited by) — see the implementing packet's decision record for why those two
+ *  are a frontmatter passthrough rather than invented vault metadata. */
+export function isAuditColumnType(type: ColumnDef["type"]): boolean {
+  return type === "created-time" || type === "created-by" || type === "last-edited-time" || type === "last-edited-by";
 }
 
 export function isComputedFieldType(value: unknown): value is ComputedFieldDef["type"] {
   return value === "number" || value === "text" || value === "date" || value === "datetime" || value === "checkbox";
+}
+
+/** The frontmatter key an optional date-range end value lives under, derived from the column's own
+ *  key rather than a second per-column config field — additive, and inert on any tree that has
+ *  never set one. `::` cannot appear in a column key today (keys come from frontmatter property
+ *  names, which YAML does not allow to contain it), so this can never collide with a real property. */
+export function getDateEndFieldKey(col: ColumnDef): string {
+  return `${col.key}::end`;
 }
 
 export const OPTION_COLORS: StatusColor[] = [...STATUS_COLORS];

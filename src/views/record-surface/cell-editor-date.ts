@@ -15,6 +15,7 @@
 import { Notice, setIcon } from "obsidian";
 import { getLocaleWeekStartsOn, getLocalDateKey, getWeekdayLabels, parseDateKeyToUtc } from "../../data/calendar-date-time";
 import { shouldCommitEmptyBulkDateClear } from "../../data/bulk-edit";
+import { getDateEndFieldKey } from "../../data/column-types";
 import { parseDateTimeParts } from "../../data/date-time-format";
 import { isImeComposing } from "../../data/keyboard-utils";
 import { safeString } from "../../data/safe-string";
@@ -148,6 +149,33 @@ export function openDateEditor(
     minuteInp = segments.createEl("input", { cls: "db-date-seg db-time-seg db-minute-seg", attr: { maxlength: "2", placeholder: minutePlaceholder } });
   }
 
+  // The End date row. Bulk (session) edits keep the single-date form only — a range across a
+  // batch of mixed rows is a heavier feature than this row asks for, and the value stays exactly
+  // what a bulk edit sets today. Stored under a derived companion key (getDateEndFieldKey) rather
+  // than reshaping the column's own value, so an existing single date is untouched by upgrade.
+  const includeEndRow = !session;
+  const endKey = includeEndRow ? getDateEndFieldKey(col) : "";
+  let endYearInp: HTMLInputElement | undefined;
+  let endMonthInp: HTMLInputElement | undefined;
+  let endDayInp: HTMLInputElement | undefined;
+  if (includeEndRow) {
+    const rawEndValue = row.frontmatter[endKey];
+    const endParts = parseDateTimeParts(rawEndValue);
+    const endFallbackParts = safeString(rawEndValue).substring(0, 10).split("-");
+    const endRow = popover.createDiv({ cls: "db-date-end-row" });
+    endRow.createSpan({ cls: "db-date-end-label", text: t("date.endDate") });
+    const endSegments = endRow.createDiv({ cls: "db-date-segments" });
+    endYearInp = endSegments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
+    endSegments.createSpan({ cls: "db-date-sep", text: "-" });
+    endMonthInp = endSegments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
+    endSegments.createSpan({ cls: "db-date-sep", text: "-" });
+    endDayInp = endSegments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
+    endYearInp.value = endParts ? String(endParts.year) : (endFallbackParts[0] || "");
+    endMonthInp.value = endParts?.month || endFallbackParts[1] || "";
+    endDayInp.value = endParts?.day || endFallbackParts[2] || "";
+    endRow.createDiv({ cls: "db-date-end-hint", text: t("date.endBeforeStartHint") });
+  }
+
   const inputs = [yearInp, monthInp, dayInp, hourInp, minuteInp].filter((input): input is HTMLInputElement => Boolean(input));
   let committed = false;
 
@@ -174,6 +202,45 @@ export function openDateEditor(
   };
   ctx.setActiveTextEditClose(close);
 
+  // Written through the raw data source rather than ctx.commitEditedValue: the end value lives
+  // under its own companion key, not this column's, and the low-level frontmatter patch is exactly
+  // what a second key needs — no computed-field sync or column-specific save hook is relevant to
+  // a key no schema column names. Returns false only on a validation failure the caller must stop
+  // the whole commit for; a successful (or skipped, unchanged) write returns true.
+  const commitEndValue = async (): Promise<boolean> => {
+    if (!includeEndRow || !endYearInp || !endMonthInp || !endDayInp) return true;
+    const ey = endYearInp.value;
+    const em = endMonthInp.value;
+    const ed = endDayInp.value;
+    if (!ey && !em && !ed) {
+      if (row.frontmatter[endKey] != null) {
+        await ctx.dataSource.updateFrontmatter(row.file, { [endKey]: null });
+      }
+      return true;
+    }
+    if (!ey || !em || !ed) {
+      const focus = !ey ? endYearInp : !em ? endMonthInp : endDayInp;
+      showValidationError(focus, t("validation.invalidDate"));
+      focus.focus();
+      return false;
+    }
+    const eyN = parseInt(ey, 10);
+    const emN = parseInt(em, 10);
+    const edN = parseInt(ed, 10);
+    if (isNaN(eyN) || isNaN(emN) || isNaN(edN)) {
+      showValidationError(endYearInp, t("validation.invalidDate"));
+      endYearInp.focus();
+      return false;
+    }
+    const clampedEm = Math.min(Math.max(emN, 1), 12);
+    const clampedEd = Math.min(Math.max(edN, 1), daysInMonth(eyN, clampedEm));
+    const endDateKey = `${ey}-${pad2(String(clampedEm))}-${pad2(String(clampedEd))}`;
+    if (endDateKey !== safeString(row.frontmatter[endKey]).substring(0, 10)) {
+      await ctx.dataSource.updateFrontmatter(row.file, { [endKey]: endDateKey });
+    }
+    return true;
+  };
+
   const commit = async (intent?: TableCellNavigationIntent) => {
     if (committed) return;
     committed = true;
@@ -189,6 +256,7 @@ export function openDateEditor(
       if (shouldCommitEmptyBulkDateClear(Boolean(session?.mixed), currentValue)) {
         await ctx.commitEditedValue(row, col, null, session, "clear");
       }
+      if (!(await commitEndValue())) { committed = false; return; }
       finish();
       return;
     }
@@ -230,6 +298,7 @@ export function openDateEditor(
         return;
       }
     }
+    if (!(await commitEndValue())) { committed = false; return; }
     finish();
   };
 

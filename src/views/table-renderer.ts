@@ -182,8 +182,66 @@ export class TableRenderer {
   // are a different question: a desktop drag under an active sort still has to land so the confirm
   // can run. Set beside the container so the drawing question cannot drift from the column width.
   private renderCanReorder = false;
+  // The frozen-column offsets for the render in progress, keyed by column key. Computed once per
+  // render over the frozen subset (NFR-P01) rather than per row — `renderRow` runs once per row and
+  // must only read this, never recompute it. Empty on a phone render: auto layout has no horizontal
+  // overflow for a frozen column to hold against, so freeze is a desktop-only affordance and this
+  // map simply stays empty rather than the CSS carrying a second phone exception.
+  private activeFrozenLayout = new Map<string, { left: number; isLast: boolean }>();
+  private frozenScrollCleanup?: () => void;
 
   constructor(private actions: TableRendererActions) {}
+
+  /** Sum of the preceding frozen columns' widths, per visible column in render order. A key in
+   *  `config.frozenColumnKeys` that no longer names a visible column is simply never visited
+   *  here, which is what keeps a stale key inert rather than fatal (NFR-R01) without a separate
+   *  existence check. */
+  private computeFrozenLayout(config: ViewConfig, columns: ColumnDef[]): Map<string, { left: number; isLast: boolean }> {
+    const layout = new Map<string, { left: number; isLast: boolean }>();
+    const frozenKeys = config.frozenColumnKeys;
+    if (!frozenKeys?.length || this.isTouchRender()) return layout;
+    const frozenSet = new Set(frozenKeys);
+    let offset = 0;
+    let lastKey: string | undefined;
+    for (const col of columns) {
+      if (!frozenSet.has(col.key)) continue;
+      layout.set(col.key, { left: offset, isLast: false });
+      offset += this.getColumnWidth(config, col);
+      lastKey = col.key;
+    }
+    if (lastKey) layout.set(lastKey, { left: layout.get(lastKey)!.left, isLast: true });
+    return layout;
+  }
+
+  /** Applies the sticky offset a frozen `th`/`td` carries, or leaves a cell alone when its column
+   *  is not (or no longer) frozen — unfreezing a column collapses its offset back to nothing. */
+  private applyFrozenCellStyle(cell: HTMLElement, colKey: string): void {
+    const frozen = this.activeFrozenLayout.get(colKey);
+    // Gated entirely by the class, which is what the CSS keys its `position: sticky` rule off —
+    // a stale `--db-frozen-left` left on an unfrozen cell is inert once the class is gone, so
+    // nothing needs to clear it back out.
+    cell.toggleClass("db-frozen-col", Boolean(frozen));
+    cell.toggleClass("db-frozen-col-last", Boolean(frozen?.isLast));
+    if (frozen) cell.style.setProperty("--db-frozen-left", `${frozen.left}px`);
+  }
+
+  /** The right-edge shadow paints only once the table has scrolled sideways, nothing at rest — a
+   *  plain `scroll` listener, not a ResizeObserver/MutationObserver/rAF loop (NFR-P02). */
+  private setupFrozenScrollTracking(container: HTMLElement): void {
+    this.frozenScrollCleanup?.();
+    this.frozenScrollCleanup = undefined;
+    if (this.activeFrozenLayout.size === 0) {
+      container.removeClass("is-scrolled-x");
+      return;
+    }
+    const onScroll = () => container.toggleClass("is-scrolled-x", container.scrollLeft > 0);
+    container.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    this.frozenScrollCleanup = () => {
+      container.removeEventListener("scroll", onScroll);
+      container.removeClass("is-scrolled-x");
+    };
+  }
 
   /** Bind the container for a render, and settle the questions that are constant across it. */
   private setRenderContainer(container: HTMLElement, canReorder = false): void {
@@ -204,9 +262,12 @@ export class TableRenderer {
     this.applyDensity(container, config);
 
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
+    this.activeFrozenLayout = this.computeFrozenLayout(config, visibleColumns);
+    this.setupFrozenScrollTracking(container);
     const tableWrap = container.createDiv({ cls: "db-table-wrap" });
     const table = tableWrap.createEl("table", { cls: "db-table" });
     table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
+    table.toggleClass("db-no-vertical-lines", config.showVerticalLines === false);
     const availableWidth = this.getAvailableTableWidth(tableWrap);
     this.applyTableWidth(table, config, visibleColumns, availableWidth);
     this.renderColgroup(table, config, visibleColumns, availableWidth);
@@ -232,7 +293,7 @@ export class TableRenderer {
       );
     }
     if (!this.actions.hideCreateEntry) {
-      this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), undefined, rows);
+      this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), undefined, rows, false, config);
     }
     table.appendChild(tbody);
     this.renderFooter(table, config, visibleColumns, rows);
@@ -257,11 +318,14 @@ export class TableRenderer {
 
     const container = containerEl.createDiv({ cls: "db-grouped-table" });
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
+    this.activeFrozenLayout = this.computeFrozenLayout(config, visibleColumns);
+    this.setupFrozenScrollTracking(containerEl);
     const tableMinWidth = this.getTableMinWidth(config, visibleColumns);
     const tableWrap = container.createDiv({ cls: "db-table-wrap" });
     tableWrap.style.minWidth = `${tableMinWidth}px`;
     const table = tableWrap.createEl("table", { cls: "db-table" });
     table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
+    table.toggleClass("db-no-vertical-lines", config.showVerticalLines === false);
     const availableWidth = this.getAvailableTableWidth(tableWrap);
     this.applyTableWidth(table, config, visibleColumns, availableWidth);
     this.renderColgroup(table, config, visibleColumns, availableWidth);
@@ -321,7 +385,7 @@ export class TableRenderer {
         );
       }
       if (!this.actions.hideCreateEntry) {
-        this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), defaults, group.rows, computedGroup);
+        this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), defaults, group.rows, computedGroup, config);
       }
       if (groupField) this.renderGroupExpandRow(
         tbody,
@@ -499,6 +563,8 @@ export class TableRenderer {
     // gone.
     this.releaseTableWindow();
     this.rowDropFeedback.clear();
+    this.frozenScrollCleanup?.();
+    this.frozenScrollCleanup = undefined;
     container.querySelectorAll(".db-table-wrap, .db-grouped-table, .db-empty").forEach((el) => el.remove());
   }
 
@@ -629,6 +695,7 @@ export class TableRenderer {
       th.setAttr("aria-colindex", String(Array.from(headerRow.children).indexOf(th) + 1));
       th.setAttr("data-note-database-column-key", col.key);
       th.toggleClass("is-narrow", this.isHeaderNarrow(config, col));
+      this.applyFrozenCellStyle(th, col.key);
       const content = th.createDiv({ cls: "db-th-content" });
       renderPropertyTypeIcon(content, col);
       content.createSpan({ cls: "db-th-label", text: col.label || col.key, attr: { title: col.label || col.key } });
@@ -907,6 +974,7 @@ export class TableRenderer {
           "data-note-database-column-key": col.key,
         },
       });
+      this.applyFrozenCellStyle(td, col.key);
       this.actions.renderCell(td, row, col);
       this.actions.applyConditionalFormat?.(td, row, config, col.key);
       if (!this.actions.isReadOnly) this.actions.setupFillHandle?.(td, row, col);
@@ -972,15 +1040,23 @@ export class TableRenderer {
     menu.addRow({ icon: "chevrons-down", label: t("mobile.moveBottom"), disabled: index < 0 || index >= paths.length - 1, onClick: () => move(paths.length - 1) });
   }
 
-  private renderNewRow(tbody: HTMLElement, colspan: number, defaults?: Record<string, unknown>, rows: RowData[] = [], computedGroup = false): void {
+  private renderNewRow(tbody: HTMLElement, colspan: number, defaults: Record<string, unknown> | undefined, rows: RowData[] = [], computedGroup = false, config?: ViewConfig): void {
     const tr = tbody.createEl("tr", { cls: "db-new-row" });
     const td = tr.createEl("td", { attr: { colspan: String(Math.max(colspan, 1)) } });
     if (computedGroup) {
       td.createEl("button", { cls: "db-new-row-button is-disabled", text: t("group.computedCreateDisabled"), attr: { disabled: "true" } });
       return;
     }
-    const btn = td.createEl("button", { cls: "db-new-row-button", text: `+ ${t("toolbar.new")}` });
+    const btn = td.createEl("button", { cls: "db-new-row-button", text: `+ ${this.getAddRowLabel(config)}` });
     btn.onclick = () => this.createEntryNearEnd(defaults, rows);
+  }
+
+  /** A per-view configured noun, reader-authored text rather than a translation key — "+ New" and
+   *  its fallback ("New") are what get translated. Empty or whitespace-only is the unconfigured
+   *  case, not a button reading "+ New " with a trailing space. */
+  private getAddRowLabel(config?: ViewConfig): string {
+    const noun = config?.addRowNoun?.trim();
+    return noun ? t("toolbar.newNoun", { noun }) : t("toolbar.new");
   }
 
   private createEntryNearEnd(defaults: Record<string, unknown> | undefined, rows: RowData[]): void {

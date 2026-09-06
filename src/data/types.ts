@@ -79,7 +79,8 @@ export interface RollupConfig {
 export interface ColumnDef {
   key: string;
   label: string;
-  type: "text" | "number" | "date" | "datetime" | "currency" | "select" | "multi-select" | "status" | "checkbox" | "computed" | "relation" | "rollup" | "files";
+  type: "text" | "number" | "date" | "datetime" | "currency" | "select" | "multi-select" | "status" | "checkbox" | "computed" | "relation" | "rollup" | "files"
+    | "url" | "email" | "phone" | "person" | "created-time" | "created-by" | "last-edited-time" | "last-edited-by";
   width?: number;
   urgency?: { enabled: boolean; thresholdDays: number };
   dateFormat?: string;
@@ -531,6 +532,19 @@ export interface ViewConfig {
   columnWidths?: Record<string, number>;
   /** Persisted hidden column keys. */
   hiddenColumns?: string[];
+  /** Desktop-only: columns that stay pinned to the left edge while the rest of the table scrolls
+   *  sideways, in the order they should stick. A key naming a column that no longer exists (or is
+   *  hidden) simply drops out of the offset sum rather than throwing — an upgrade or a downgrade
+   *  never loses the rest of the setting over one stale key. The phone reads this field but never
+   *  acts on it: auto layout has no horizontal overflow to freeze against. */
+  frozenColumnKeys?: string[];
+  /** Table vertical grid lines. Undefined/true renders today's right border on every cell; false
+   *  removes it. Conditional-formatting tints are unaffected either way — only the border goes. */
+  showVerticalLines?: boolean;
+  /** Reader-authored noun for this view's add-row affordance ("+ New <noun>"). Not a translation
+   *  key: the surrounding "+ New" framing is translated, this text is typed by the reader. Empty
+   *  or whitespace-only is treated as unset, which falls back to today's fixed string. */
+  addRowNoun?: string;
   /** Legacy ordering field kept for older saved configs. */
   sortColumnOrder?: string;
   /** Persisted status filter for this view. */
