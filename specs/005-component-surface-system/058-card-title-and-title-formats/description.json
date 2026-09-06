@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/058-card-title-and-title-formats",
+  "description": "Phase 1: card-title-and-title-formats",
+  "keywords": [
+    "phase",
+    "card-title-and-title-formats"
+  ],
+  "lastUpdated": "2026-09-06T06:27:08.373Z",
+  "specId": "058",
+  "folderSlug": "card-title-and-title-formats",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

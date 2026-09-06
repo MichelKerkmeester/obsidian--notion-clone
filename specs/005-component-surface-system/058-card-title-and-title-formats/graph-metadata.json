@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/058-card-title-and-title-formats",
+  "spec_folder": "005-component-surface-system/058-card-title-and-title-formats",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "feature specification",
+      "card title formats",
+      "058 spec",
+      "implementation plan",
+      "058 plan",
+      "title field formatting plan",
+      "task breakdown",
+      "058 tasks",
+      "card title format tasks",
+      "acceptance criteria",
+      "058 acceptance criteria",
+      "closure gate"
+    ],
+    "key_topics": [
+      "feature",
+      "specification",
+      "card",
+      "title",
+      "formats",
+      "spec",
+      "implementation",
+      "plan",
+      "field",
+      "formatting",
+      "task",
+      "breakdown"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/data/title-field-display.ts",
+      "src/views/board-card-properties-panel.ts",
+      "src/views/board-card-fields.test.ts",
+      "src/data/euro-format.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "title-field-display.ts",
+        "kind": "code",
+        "path": "src/data/title-field-display.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-card-properties-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-fields.test.ts",
+        "kind": "test",
+        "path": "src/views/board-card-fields.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "euro-format.ts",
+        "kind": "code",
+        "path": "src/data/euro-format.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Card Title",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Title Formats",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Single",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A view's card and record title can already be set to any column (`ViewConfig.titleField`), but the",
+    "created_at": "2026-09-06T06:27:07Z",
+    "last_save_at": "2026-09-06T06:38:09.391Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:2db6eeb197001351ccc4c67594a161d56eece87f0295f84a6d1a627bf41ff84b",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "96f72cf84244e9af071768a1d444251219e2a396f4ce2006e3e1ba53005cb79d",
+      "plan.md": "2b114b644bc945f12ee7465c2af969119ddfe3690907644d0c0bb158b02b9063",
+      "tasks.md": "7e08473be60bbee38439bcc10be62cfdb83e3d91e00b56df7d5690f46a454334",
+      "decision-record.md": "11706a89e750bdfe7b1b1f7afb99cebd4d2df8e129dc800535e20980a8b0632e",
+      "implementation-summary.md": "bf50d69bfd20fc18967d5b1ef7283398745d4ba08f40e4ac6ea53c8183612478"
+    },
+    "last_active_at": null
+  }
+}
