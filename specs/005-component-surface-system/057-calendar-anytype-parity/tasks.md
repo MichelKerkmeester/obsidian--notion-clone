@@ -10,29 +10,33 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T11:55:00Z"
+    last_updated_at: "2026-09-06T16:30:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "landed T004-T007 and opened T015-T016 on a measured capture read-back"
-    next_safe_action: "Close T015 R1 and R2, the grid inset and the weekday alignment"
+    recent_action: "landed T015 R1-R7, T016, T008, T009, the 051 toolbar migration and a pinned-values test; gate 26 green"
+    next_safe_action: "AC-010, the operator's device read, is the only row left; nothing further to implement without new operator input"
     blockers:
-      - "T008 onward still need the phone retarget and the date-property submenu closed under AC-004"
-      - "T015 R1 and R2 are P0: the grid inset lands on one edge and the weekday header is out of column"
+      - "AC-010 is the operator's own device read and nothing in this repository can close it"
+      - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
+      - "The timed-block per-event colour question (decision-record.md ADR-002) is unanswered and deliberately untouched"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
+      - "src/views/calendar-timeline-toolbar-renderer.ts"
       - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 50
-    open_questions: []
+    completion_pct: 95
+    open_questions:
+      - "Does 'styled to the month grid' strip the week/day timed blocks' per-event colour too? (decision-record.md ADR-002, the operator's)"
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
       - "T002 landed: C3, C8 and C9 turned into figures on cc5a7ff2, 2026-09-06"
       - "T004-T007 landed: the month grid retargeted, AC-003 Met, the gantt confirmed unmoved"
       - "AC-002 was claimed Met and is reopened: seven measured residuals are carried as T015 and T016"
+      - "T015 R1-R7, T016, T008, T009 all landed: gate 26 green, gantt confirmed unmoved throughout"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -377,8 +381,16 @@ title and 44x44 close on phone.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T011 **Leg E — the gate.** `npm run gate`, exit status read from `$?` and never through a
+- [x] T011 **Leg E — the gate.** `npm run gate`, exit status read from `$?` and never through a
       pipe. Then `node tools/live/sheet-grammar.mjs`: 12 surfaces and 31 stacked pairs green.
+      **Done 2026-09-06.** Foreground, isolated: `npm run gate </dev/null > "./.gate-$$.log" 2>&1;
+      echo $? > "./.gate-exit"` → **0**, read from the file, never through a pipe. **26 green, 0
+      red** — the first attempt (before the css-lane release and the evidence refresh below)
+      surfaced three real gaps this leg then closed: `css-lane` (the held lane had never been
+      released), `screenshots-fresh` (the manifest had drifted across several capture rounds), and
+      `evidence` (8 of 15 live artefacts were measured against an earlier `styles.css` hash). All
+      three are green on the re-run. `node tools/live/sheet-grammar.mjs` separately: exit 0, 12
+      surfaces, 31 stacked pairs, unchanged throughout every leg.
 - [x] T012 **The gantt did not move.** Re-read T002's `pm-gantt-*` baseline and the gantt capture
       hashes. `037`'s in-repo parity was 60 of 60 classes with zero divergence at `30c4b746` and
       must stay so. Any move is explained by a named gap, never rebaselined silently. (REQ-009)
@@ -401,9 +413,21 @@ title and 44x44 close on phone.
       (T008 above, labelled against the measured 20px desktop pitch). `git diff 793ab9b4..HEAD --
       styles.css` shows exactly one new phone-scoped calendar selector added this session
       (`.is-phone .db-calendar-month-segment`), and it carries its label. Unlabelled count: **0**.
-- [ ] T014 **Capture and document.** Recapture the calendar, run `npm run screenshots:verify`, and
+- [x] T014 **Capture and document.** Recapture the calendar, run `npm run screenshots:verify`, and
       write `implementation-summary.md` with what was built, the numbers before and after, and every
       judgment call. Refresh `../changelog/` for this phase.
+      **Done 2026-09-06, with one row named rather than filled.** `node tools/screenshots/capture.mjs`
+      run in full twice at the close of this leg; `node tools/screenshots/verify.mjs` exit 0, 558
+      fresh. `implementation-summary.md` is rewritten in full for every leg this document covers,
+      with the before/after value for each residual and the judgment calls named in its own Key
+      Decisions table. **`../changelog/` does not exist anywhere under `specs/` in this repository**
+      — checked (`find specs -iname "changelog*"`, no match) rather than assumed. The repository's
+      actual changelog is the root `CHANGELOG.md`, gated by a version bump rather than a phase
+      landing, and this phase has not shipped in that sense (AC-010 is still open, goal D9: shipped,
+      verified and operator-confirmed are three states). Writing a root-changelog entry for
+      unshipped, operator-unconfirmed work would overstate status, so this row is recorded as a
+      named gap against a path that is not this repository's convention, not filled with an
+      invented entry.
 <!-- /ANCHOR:phase-3 -->
 
 ---
