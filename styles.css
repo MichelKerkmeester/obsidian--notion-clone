@@ -838,6 +838,9 @@
   .db-overlay-enter.is-visible,
   .db-mobile-bottom-sheet.db-overlay-enter,
   .db-mobile-bottom-sheet.db-overlay-enter.is-visible,
+  .db-view-config-panel.db-shell-side-sheet,
+  .db-view-config-panel.db-shell-side-sheet.db-shell-side-sheet-enter,
+  .db-view-config-panel.db-shell-side-sheet.db-shell-side-sheet-enter.is-visible,
   .db-menu-item {
     transition: none;
     transform: none;
@@ -11500,6 +11503,85 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-view-config-panel {
   width: min(360px, calc(100vw - 72px));
   min-height: 315px;
+}
+
+/* SETTINGS SIDE SHEET (desktop) --------------------------------------------------------------
+   Operator report, 2026-09-06: "this dropdown on desktop is horrible ... should probably become
+   a sheet". The panel above was a 360x560px anchored dropdown scrolling its own 1461px of
+   content inside that box; docked to the pane's right edge instead, full height, its own
+   independent scroll — the shape Anytype's own right-hand object panel uses
+   (`anytype-menu-object-properties-panel-dark-full.png`, 336px measured; widened here to
+   `surface-shell.ts`'s `SHELL_SIDE_SHEET_WIDTH_PX`, recorded there). `position: absolute`
+   against `.note-database-container` (not `fixed` against the viewport) so a database open in
+   one pane of a split workspace docks against that pane's own edge, not the whole window's —
+   the container is already `position: relative; height: 100%`, so this needs no positioning
+   context of its own. Same specificity as the FLOATING PANELS block above (two classes); this
+   rule wins by sitting later in the file, the same tie-break `styles.css` already uses
+   elsewhere for a scoped override of a shared rule. No `!important` anywhere in this block: the
+   desktop side sheet is never handed to `positionToolbarPopover`, so no inline style is ever
+   set for this class to fight. */
+.db-view-config-panel.db-shell-side-sheet {
+  position: absolute;
+  inset: 0 0 0 auto;
+  box-sizing: border-box;
+  /* 420px — `surface-shell.ts`'s SHELL_SIDE_SHEET_WIDTH_PX. Repeated as a literal rather than a
+     custom property because nothing else in this stylesheet reads it. */
+  width: min(420px, calc(100% - 32px));
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  min-height: 0;
+  margin: 0;
+  padding: 8px;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 1px solid var(--background-modifier-border);
+  border-radius: 0;
+  box-shadow: var(--db-elevation-2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* The shell's own reconciled enter timing (`surface-shell.ts`'s `SHELL_ENTER_MS`, 200ms
+     `ease-out`) — CSS cannot import that constant, so the value is repeated here with its
+     source named instead. */
+  transition: transform 200ms ease-out;
+}
+
+/* The record sheet's own answer to "where does a long form scroll while its header stays put" —
+   `.db-record-detail-panel.db-mobile-bottom-sheet` and its `.db-record-detail-scroll` — reused
+   here for the desktop side sheet rather than invented again: the header is a fixed-height flex
+   item and this region is the only one that scrolls. */
+.db-view-config-panel.db-shell-side-sheet > .db-panel-header {
+  flex: 0 0 auto;
+}
+
+.db-view-config-panel.db-shell-side-sheet .db-view-config-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* A slide-in from the docked edge, the same two-class dance `.db-overlay-enter`/`.is-visible`
+   above already uses: the `-enter` class holds the off-screen start state, `presentPanel`
+   (`view-config-panel-renderer.ts`) adds `is-visible` one frame later, and the more specific
+   three-class rule below overrides back to the resting position so the transition animates
+   between the two. */
+.db-view-config-panel.db-shell-side-sheet.db-shell-side-sheet-enter {
+  transform: translateX(100%);
+}
+
+.db-view-config-panel.db-shell-side-sheet.db-shell-side-sheet-enter.is-visible {
+  transform: translateX(0);
+}
+
+/* The description field is the surface's own longest-running complaint: a multi-line textarea
+   clipped to three lines inside a ~300px column. The wider side sheet already gives the value
+   column more room (`SHELL_SIDE_SHEET_WIDTH_PX` above the old 360px total); this adds the same
+   relief to the field's own height so a short paragraph does not need its scrollbar at all. */
+.db-view-config-panel.db-shell-side-sheet .db-view-config-textarea {
+  min-height: 84px;
 }
 
 .note-database-container .db-group-popover {

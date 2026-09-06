@@ -125,6 +125,12 @@ class FakeElement {
     else this.removeClass(cls);
   }
 
+  // No-ops: this tree asserts structure, not keyboard behaviour. `trapFocus`
+  // (interaction-scope.ts) only needs these two to exist to attach and, on teardown, detach
+  // without throwing — the real Tab/Escape cycling is proven by the live browser lane instead.
+  addEventListener(): void {}
+  removeEventListener(): void {}
+
   getAttribute(name: string): string | null {
     return this.attributes.get(name) ?? null;
   }
@@ -336,6 +342,20 @@ describe("settings sheet body grammar", () => {
     // already asserted two lines up, which is the structural half this tree can answer.
     const report = describeSheetGrammar(panel as unknown as HTMLElement);
     expect(report.segmented).toBe(false);
+  });
+
+  it("on desktop, presents as the side sheet rather than the anchored dropdown", () => {
+    // Red before this leg: `db-shell-side-sheet` did not exist anywhere in this file, so the
+    // desktop panel had no marker distinguishing it from every other anchored popover — it read
+    // identically to `.db-view-config-panel` alone. The operator's report, 2026-09-06: "this
+    // dropdown on desktop is horrible".
+    const { panel } = mount(false);
+    expect(panel.hasClass("db-shell-side-sheet")).toBe(true);
+  });
+
+  it("on phone, keeps the existing bottom sheet — no side-sheet marker", () => {
+    const { panel } = mount(true);
+    expect(panel.hasClass("db-shell-side-sheet")).toBe(false);
   });
 
   it("keeps computed-sync persistence when the phone segmented control is used", () => {

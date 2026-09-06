@@ -484,6 +484,78 @@ export const PANEL_SCENARIOS = [
     },
   },
   {
+    // The operator's report, 2026-09-06: "this dropdown on desktop is horrible ... should
+    // probably become a sheet, on desktop at least, and get dedicated button". `panel-view-config`
+    // above still documents the anchored dropdown this scenario replaces; kept rather than
+    // deleted, because it still stands as a record of the row content and the shape that was
+    // wrong. This is the shape that fixed it: full height, docked to the pane's right edge, its
+    // own independent scroll, no `position: static` override — unlike every other scenario in
+    // this file, the point here IS the placement, not just the rows.
+    id: "panel-settings-side-sheet",
+    title: "Settings — desktop side sheet",
+    group: "panels",
+    width: 700,
+    // Desktop-only, the same reasoning every phone-only sheet fixture in this file carries in
+    // reverse: a phone never presents this class — `asSheet` takes the `044` bottom-sheet branch
+    // instead — so a "mobile" capture of it would photograph a shape the plugin never renders.
+    devices: ["desktop"],
+    // Shares its constructed sibling with `panel-view-config` and `panel-view-config-sheet`
+    // rather than naming a new one: this is the same underlying `ViewConfigPanelRenderer` mount,
+    // photographed in the shape the real render now takes on desktop.
+    fixtureOf: "constructed-view-config",
+    sources: [
+      "src/views/surface-shell.ts",
+      "src/views/view-config-panel-renderer.ts",
+      "styles.css",
+    ],
+    note: "The database Settings panel on desktop, docked full-height to the pane's right edge "
+      + "instead of the old 360x560px anchored dropdown that scrolled its own 1461px of content "
+      + "inside that box. Width 420px, measured wider than Anytype's own right-hand object panel "
+      + "(336px) because this body carries a multi-line description field its plain label/value "
+      + "list does not. The header stays fixed; the body below it is the only region that scrolls, "
+      + "independently of the database visible at the left edge of the pane.",
+    html: () => `
+      <div class="note-database-container" style="position: relative; height: 820px; width: 100%;">
+        <div class="db-view-config-panel db-shell-side-sheet is-visible" id="db-view-config-panel">
+          <div class="db-panel-header"><div class="db-panel-title">Settings</div></div>
+          <div class="db-view-config-body">
+          <div class="db-view-config-section-title" data-scope="database">Current database</div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">Name</div>
+            <div class="db-view-config-field db-view-config-field-stack">
+              <input class="db-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
+            </div>
+          </div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">Description</div>
+            <textarea class="db-view-config-textarea" rows="3" placeholder="Add a short description...">Recurring charges, grouped by who pays for them, with renewal cadence and cancellation notes.</textarea>
+          </div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">Source folder</div>
+            <div class="db-view-config-field db-view-config-field-stack">
+              <input class="db-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
+              <div class="db-view-config-help">Vault path to scan for notes. Leave empty to scan the vault root.</div>
+            </div>
+          </div>
+
+          <div class="db-view-config-section-title" data-scope="view">Current view</div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">View type</div>
+            <div class="db-view-config-field">
+              ${dropdownField("db-view-config-dropdown", "Table", I.table)}
+            </div>
+          </div>
+          <div class="db-view-config-row">
+            <div class="db-view-config-label">Row density</div>
+            <div class="db-view-config-field">
+              ${dropdownField("db-view-config-dropdown", "Default")}
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>`,
+  },
+  {
     id: "panel-board-card-properties",
     title: "Board card properties panel",
     group: "panels",

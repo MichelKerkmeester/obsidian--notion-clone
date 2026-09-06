@@ -29,7 +29,8 @@ import { createConditionalFormatLeaf, getConditionalFormatCondition, isCondition
 import { t } from "../i18n";
 import { COMPACT_MENU_POPOVER, isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { carrySheetEntrance } from "./mobile-bottom-sheet";
-import { buildShellHeader } from "./surface-shell";
+import { buildShellHeader, SHELL_SIDE_SHEET_CLASS } from "./surface-shell";
+import { trapFocus } from "./interaction-scope";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
 import { createCheckbox } from "./checkbox";
@@ -288,6 +289,12 @@ export class ViewConfigPanelRenderer {
   // anchored desktop panel keeps the two-column setting grid. Captured at
   // render so a rebuild cannot mix the two presentations.
   private asSheet = false;
+  // Desktop only: Tab stays inside the side sheet while it is open, and Escape both closes it
+  // and hands focus back to whatever opened it — the same contract `filter-panel-renderer.ts`
+  // and `sort-panel-renderer.ts` already carry for their own anchored panels. Torn down and
+  // rebuilt on every render because the panel itself is: a stale trap left on a removed node
+  // would listen for keys nothing can act on.
+  private removeFocusTrap: (() => void) | null = null;
 
   /** The live panel, wherever it currently is. Callers must not go looking for it by selector. */
   getPanel(): HTMLElement | null {
@@ -339,6 +346,8 @@ export class ViewConfigPanelRenderer {
     const savedScroll = this.getScrollHost()?.scrollTop ?? 0;
     // Removing it is enough to take the backdrop with it: the sheet module drops the backdrop once
     // the last live sheet leaves the document, so this does not have to remember to say so.
+    this.removeFocusTrap?.();
+    this.removeFocusTrap = null;
     this.panelEl?.remove();
     this.panelEl = null;
     if (!visible || !config) return;
@@ -444,22 +453,54 @@ export class ViewConfigPanelRenderer {
     }
     if (config.viewType === "board") {
       this.renderBoardSettings(body, config, actions);
-      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
+      this.presentPanel(panel, anchorEl);
       this.restoreScroll(savedScroll);
       return;
     }
     if (config.viewType === "calendar") {
-      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
+      this.presentPanel(panel, anchorEl);
       this.restoreScroll(savedScroll);
       return;
     }
     if (config.viewType === "timeline") {
-      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
+      this.presentPanel(panel, anchorEl);
       this.restoreScroll(savedScroll);
       return;
     }
-    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
+    this.presentPanel(panel, anchorEl);
     this.restoreScroll(savedScroll);
+  }
+
+  /**
+   * Place the panel: the anchored popover on a phone (unchanged — `044`'s bottom sheet), the
+   * full-height side sheet on desktop.
+   *
+   * The desktop branch never calls `positionToolbarPopover`. That function's anchored math needs
+   * a live anchor and writes its own inline `top`/`left`, which a fixed-edge dock has no use for
+   * and would otherwise have to fight with `!important`; the side sheet is pane-relative and
+   * viewport-resize-safe by construction (`position: absolute` against `.note-database-container`,
+   * `top`/`right`/`bottom: 0`), so it needs none of that placement loop or its resize listener.
+   */
+  private presentPanel(panel: HTMLElement, anchorEl?: HTMLElement): void {
+    if (this.asSheet) {
+      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
+      return;
+    }
+    panel.addClass(SHELL_SIDE_SHEET_CLASS);
+    const view = panel.ownerDocument.defaultView;
+    if (!panel.hasClass("is-visible")) {
+      panel.addClass("db-shell-side-sheet-enter");
+      view?.requestAnimationFrame(() => {
+        if (panel.isConnected) panel.addClass("is-visible");
+      });
+    }
+    this.removeFocusTrap?.();
+    this.removeFocusTrap = trapFocus(panel, {
+      onEscape: () => {
+        panel.remove();
+        anchorEl?.focus({ preventScroll: true });
+      },
+    });
   }
 
   private renderSectionTitle(panel: HTMLElement, text: string, scope: "database" | "view"): void {
