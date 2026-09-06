@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T11:55:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "reopened ac-002 on a measured capture read and landed the retarget"
+    recent_action: "re-baselined the gantt measurement 047 left behind; 119 vs 56 unreconciled"
     next_safe_action: "Close T015 R1 and R2, the grid inset and the weekday alignment"
     blockers:
       - "AC-010 is operator-owned and nothing in this repository can close it"

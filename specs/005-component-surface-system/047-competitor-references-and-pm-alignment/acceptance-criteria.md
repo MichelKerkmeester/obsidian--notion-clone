@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
     last_updated_at: "2026-09-05T22:45:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "superseded ac-005 and narrowed ac-006/007 to the gantt per adr-007"
+    recent_action: "ran the gantt comparison: zero code/css gaps, two dispositions; ac-006 met"
     next_safe_action: "Write the negative control red-first, then widen the reference contract"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
