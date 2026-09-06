@@ -64,6 +64,7 @@ contextType: "general"
 - [x] T015 Compared board capture hashes against the `HEAD` baseline: `constructed-card-covers` identical in all 4 arms; the other 3 board-shared ids moved for reasons named in AC-004, not silently rebaselined — the 16 unrelated re-encode-only captures the full run also touched were restored to their `HEAD` bytes rather than committed as unrelated diffs
 - [x] T016 Read all 13 changed captures by hand, both themes and both devices sampled — not just two — because a hash match is not a look
 - [x] T017 `node tools/live/replay.mjs`: PASS, 28/28 results held, none referencing a removed file
+- [ ] T018 [P2] Fix the stale doc comment at `src/views/database-view.ts:2686` ("And the renderer is still shipped, so an undone view…") — false since this phase's own `fb27ba5b`, which deleted `gallery-renderer.ts` outright. Found 2026-09-06 during the 058/refresh leg; recorded here rather than edited, because that leg is documentation-only and this is a code comment. Code owner: whoever next touches `migrateGalleryView`
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -71,7 +72,7 @@ contextType: "general"
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [x] All tasks marked `[x]`
+- [x] All tasks marked `[x]` — except T018, a post-completion follow-up recorded 2026-09-06 and out of scope for the doc leg that found it
 - [x] No `[B]` blocked tasks remaining
 - [x] Every acceptance criterion in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded` (all eight `Met`)
 <!-- /ANCHOR:completion -->

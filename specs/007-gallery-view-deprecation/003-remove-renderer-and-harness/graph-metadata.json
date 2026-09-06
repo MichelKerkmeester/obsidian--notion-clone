@@ -3,6 +3,7 @@
   "packet_id": "007-gallery-view-deprecation/003-remove-renderer-and-harness",
   "spec_folder": "007-gallery-view-deprecation/003-remove-renderer-and-harness",
   "parent_id": "007-gallery-view-deprecation",
+  "status_review_required": true,
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -210,7 +211,7 @@
     ],
     "causal_summary": "The renderer and its measurements are one unit, and taking them apart in two changes is how a gate",
     "created_at": "2026-09-05T03:46:38Z",
-    "last_save_at": "2026-09-05T23:41:44.909Z",
+    "last_save_at": "2026-09-06T06:26:27.671Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,12 +222,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1149616ecf2f31188f16ae53cfea324dc92d24971fe6426f46aefc46037076f2",
+    "source_fingerprint": "sha256:a730a9080ad53db102bbc786c6a05d62ae1bef218f76143dc96fa722d837b03b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4a8516f3ed81e6e7897ae7ce1990e762fc2fba74e1754ce43153cbdc0635854a",
       "plan.md": "278f703a3de53d24bd6e1a5a019d91ca47a764e9c3dac50e04d0416086765fbe",
-      "tasks.md": "9b664ae5ee6510b13698a9245d2fc5cbbf01c2d7d64b9208adffd9e0e695a7cf",
+      "tasks.md": "c0e1e556eb21daf86b266477a2b48c49856e67f59666bb4b16b28a98f489142b",
       "implementation-summary.md": "6fe3f4c73f850022c759f40450e0c3d1aec9846b70b226c0acfb4760c2f2b182"
     },
     "last_active_child_id": null,

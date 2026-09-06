@@ -6,7 +6,7 @@ Notable changes to Note Database, most recent first.
 
 ### Removed
 
-- **The gallery view is retired.** Any database already configured as a gallery opens as a board instead, automatically, the first time it opens after this update — in both a full database file and a database embedded in a note. You will see a one-time notice the first time this happens for each affected view, with an Undo action.
+- **The gallery view is retired.** Any database already configured as a gallery opens as a board instead, automatically, the first time it opens after this update — in both a full database file and a database embedded in a note. You will see a one-time notice the first time this happens for each affected database, with an Undo action.
 
   This is permanent. Installing an older version of the plugin brings back the gallery view's code, but it does **not** turn a migrated database back into a gallery — once a view has become a board, it stays a board, even after a rollback. Immediately after a migration, the notice's own Undo action reverts that one view; it is the only reversal there is.
 

@@ -459,7 +459,7 @@ Each one is tied to the defect it actually caused here.
 | **A class in source that nothing styles** | `db-list-row-checkbox` (`list-renderer.ts:269-272`) and `db-anchored-popover` — the latter added by every `positionToolbarPopover` call and matched by no rule anywhere |
 | **Dual-classing to inherit someone else's rules** | `db-sort-panel` has zero standalone CSS and works only because it is also given `db-filter-panel`; the phone max-height clamp at `styles.css:17206-17215` omits it, so deleting the "redundant" class silently breaks Sort's mobile height |
 | **A second dismissal system** | `overlayStack` governs 25 popovers through `popover-auto-close.ts:37`; `createOwnedMenu` runs its own capture-phase listener pair (`owned-menu.ts:138-139`) for 10 menus. A menu opened over a popover is not in the same stack |
-| **An affordance without a mechanism** | `submenu: true` draws a chevron and sets ARIA and cannot open anything |
+| **An affordance without a mechanism** | `submenu: true` without a paired `buildSubmenu` callback draws a chevron and sets ARIA and still opens nothing — fixed for the paired case at `fc730ed9` (§6), not a standing defect |
 | **A gate that asserts the defect** | `verify-placement.mjs:164-171` asserts the 520px default is intended. Fixing the width policy turns CI red |
 | **A harness that pins a runtime value** | `runtime-vars.css:43` pins `--db-mobile-sheet-bottom: 0px` — the exact value the sheet defect lives in — to its correct answer |
 | **Measuring inside a helpful wrapper** | `.storybook/preview.ts:55` wraps every story in `.note-database-container`, so the catalogue cannot show the token defect at all |
