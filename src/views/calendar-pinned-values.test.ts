@@ -63,8 +63,8 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // via color-mix toward --text-normal, which is theme-adaptive by construction — no
     // per-theme override survives on this selector. `.note-database-container .db-calendar {`
     // is declared more than once (the main container block, then this state-token block), so
-    // this greps the raw text for the declaration rather than using ruleBody, which would
-    // return the first (unrelated) block's body.
+    // this greps the raw text for the declaration rather than using ruleBody, whose first
+    // match would be the unrelated shared block.
     expect(STYLES).toContain("--db-calendar-rule: color-mix(in srgb, var(--background-primary) 92%, var(--text-normal))");
   });
 
@@ -142,8 +142,8 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the month grid to seven fluid columns regardless of a custom column width", () => {
-    // The month week row and the weekday label row never read the custom-width
-    // var — only week/day's own time-grid tracks do (applyTimeGridSizingVars).
+    // The month week row and the weekday label row never read that custom-width
+    // value; only week/day's own time-grid tracks read it, via applyTimeGridSizingVars.
     const monthWeek = ruleBody(".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-month-week");
     expect(monthWeek).toContain("repeat(7, var(--db-calendar-col-width))");
     const weekdays = ruleBody(".note-database-container .db-calendar-weekdays");
