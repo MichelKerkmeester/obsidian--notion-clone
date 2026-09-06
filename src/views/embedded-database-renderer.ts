@@ -53,7 +53,7 @@ import type { SubtaskMovePlan, SubtaskMoveRequest } from "../data/types";
 import { safeString } from "../data/safe-string";
 import { createCheckbox } from "./checkbox";
 import { CsvMarkdownExportModal } from "./modals/csv-markdown-export-modal";
-import { confirmWithModal } from "./modals/confirm-modal";
+import { canUndoDeletion, confirmWithModal } from "./modals/confirm-modal";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
 import type { BoardSubtaskMove } from "./board-renderer";
 import { CellRenderer } from "./cell-renderer";
@@ -123,7 +123,7 @@ import { setupTitleCellTap } from "./table-record-peek";
 import { InteractionScopeRegistry } from "./interaction-scope";
 import { moveTableCellByRowOffset, resolveTableCellNavigation, TableKeyboardNavigationController, type TableCellNavigationIntent } from "../data/table-keyboard-navigation";
 import { createOwnedMenuForEvent } from "./owned-menu";
-import { showToast } from "./toast";
+import { showToast, ToastAction } from "./toast";
 import {
   EmptyStateOptions,
   EmptyStateRenderer,
@@ -3304,15 +3304,30 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       new Notice(t("notice.embedReadonly", { action: t("notice.deleteEntry") }));
       return;
     }
+    // Anytype parity skips the confirm only when the row's content can be snapshotted first — an
+    // unreadable file still asks, since there is nothing this delete could offer to undo.
+    const snapshot = await canUndoDeletion(this.app, row.file);
+    if (snapshot === false) {
+      const ok = await confirmWithModal(this.app, {
+        title: t("common.delete"),
+        message: t("menu.confirmDeleteRow", { name: row.file.basename }),
+        confirmText: t("common.delete"),
+        danger: true,
+      });
+      if (!ok) return;
+    }
     try {
-      const content = await this.app.vault.cachedRead(row.file);
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      const entry: EmbedHistoryEntry = { type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } };
-      this.pushHistory(entry);
+      let action: ToastAction | undefined;
+      if (snapshot !== false) {
+        const entry: EmbedHistoryEntry = { type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content: snapshot } };
+        this.pushHistory(entry);
+        action = { label: t("toolbar.undo"), onClick: () => this.undoDeletion(entry) };
+      }
       showToast(this.containerEl.ownerDocument, {
         severity: "success",
         message: t("notice.deletedRow", { name: row.file.basename }),
-        action: { label: t("toolbar.undo"), onClick: () => this.undoDeletion(entry) },
+        action,
       });
       if (this.config) this.renderResults(this.config);
     } catch (err) {

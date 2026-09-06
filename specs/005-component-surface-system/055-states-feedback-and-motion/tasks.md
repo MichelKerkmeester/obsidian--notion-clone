@@ -187,6 +187,42 @@ A task missing any of the three is not ready to start.
       **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
       `src/i18n.ts`, `src/views/deletion-undo.test.ts`)
 
+- [x] T019 [P0] **REQ-055-1 — Anytype parity for a single delete: no confirm, Undo toast.** Done
+      2026-09-06, closing ADR-010 (Accepted). Operator ruling, verbatim: *"No confirm for single
+      delete, Undo toast"* — a single row deletes immediately and offers Undo on the toast, matching
+      Anytype's own no-confirm-because-reversible model; the confirm stays for bulk delete
+      (`deleteSelectedRows`, which records no history entry either way) and for any delete whose
+      snapshot cannot be recorded.
+      **What changed:** the confirm call in `row-menu.ts`'s delete row moved out of the menu and
+      into `deleteRow` itself, in both `DatabaseView` and `EmbeddedDatabaseRenderer`. Each `deleteRow`
+      now calls a new predicate, `canUndoDeletion(app, file)` (`src/views/modals/confirm-modal.ts`),
+      which attempts `app.vault.cachedRead(file)` and returns the content on success or `false` on a
+      read failure — the one place this decision is made, used by both classes rather than
+      duplicated. A successful read skips `confirmWithModal` entirely and proceeds straight to
+      T018's existing mechanism: `trashNote`, push the `deleted` history entry with the read
+      content, raise the toast with an Undo wired to `undoDeletion(entry)` (`undoSuperseded` still
+      covers a superseded entry). A failed read still shows the confirm exactly as before, and on
+      confirmation trashes the file with a plain toast — no history entry, no Undo, since there is
+      nothing to restore.
+      **Threshold:** a single delete whose content can be read shows no confirm and offers Undo; a
+      single delete whose content cannot be read still confirms and offers no Undo; a bulk delete
+      always confirms and never offers Undo.
+      **Red first:** `deletion-undo.test.ts` gained four new cases (no-confirm-when-readable and
+      confirm-when-unreadable, for both classes) plus a `confirmCalls` assertion on the existing
+      bulk-delete case. The two confirm-when-unreadable cases were run against the pre-change tree
+      first (the confirm mock's own call log, `confirmCalls`, at length 0 against a threshold of 1 —
+      the old code aborted a read failure silently, with no confirm and no delete), then green after
+      the predicate landed; the other eleven pre-existing cases and the bulk-delete case were
+      unaffected by the move.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1449/1449 (15/15 in
+      `deletion-undo.test.ts`); `npm run build` 0, no unexpected `main.js` diff beyond this leg's
+      own source change; `npm run lint` unchanged at **266** problems (248 errors, 18 warnings) —
+      an earlier draft of this leg regressed it to 268 by hand-typing the toast action's type
+      narrower than `ToastAction` (`onClick(): void` instead of `onClick(): void | Promise<void>`),
+      caught by the lint count and fixed by importing `ToastAction` instead of inventing a shape.
+      **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
+      `src/views/row-menu.ts`, `src/views/modals/confirm-modal.ts`, `src/views/deletion-undo.test.ts`)
+
 - [x] T004 [P1] **REQ-055-1 — unify the two undo shapes.** Done 2026-09-06. `showOperationResult`
       now renders through `showToast` at the rail's own fixed placement: `ToastOptions` gained a
       `container` field (a caller-positioned single-slot host instead of the shared body stack),

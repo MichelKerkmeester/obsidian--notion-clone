@@ -11,7 +11,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App } from "obsidian";
+import { App, TFile } from "obsidian";
 import { t } from "../../i18n";
 import { buildConfirmSheetBody } from "../confirm-sheet";
 import { DbModal } from "./db-modal";
@@ -101,4 +101,19 @@ export class ConfirmModal extends DbModal {
 
 export function confirmWithModal(app: App, options: ConfirmModalOptions): Promise<boolean | string> {
   return new ConfirmModal(app, options).openAndWait();
+}
+
+/**
+ * Whether a single-row delete can skip the confirm: only when its content can be read before the
+ * file is trashed, so the toast's Undo has something to restore. Returns the snapshot itself on
+ * success (the caller needs it for the history entry anyway) and `false` when the read fails,
+ * which is the one case a single delete still asks the operator to confirm — a bulk delete or any
+ * other destructive action that cannot be undone asks regardless of this predicate.
+ */
+export async function canUndoDeletion(app: App, file: TFile): Promise<string | false> {
+  try {
+    return await app.vault.cachedRead(file);
+  } catch {
+    return false;
+  }
 }

@@ -25,7 +25,6 @@ import {
 } from "../data/template-toolbar-action";
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
-import { confirmWithModal } from "./modals/confirm-modal";
 import { createOwnedMenu } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
@@ -165,16 +164,10 @@ export class RowMenu {
         icon: "trash",
         label: t("menu.deleteRow", { name: displayName }),
         warning: true,
-        onClick: () => { void (async () => {
-          const ok = await confirmWithModal(this.actions.app, {
-            title: t("common.delete"),
-            message: t("menu.confirmDeleteRow", { name: displayName }),
-            confirmText: t("common.delete"),
-            danger: true,
-          });
-          if (!ok) return;
-          void this.actions.deleteRow(row);
-        })(); },
+        // No confirm here: Anytype parity for a single row is delete-then-Undo, and deleteRow
+        // itself is where that decision is made — it still confirms when the row can't be
+        // snapshotted for the toast's Undo to restore.
+        onClick: () => { void this.actions.deleteRow(row); },
       });
     }
 

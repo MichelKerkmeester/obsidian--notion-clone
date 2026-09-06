@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-06T20:00:00Z"
-    last_updated_by: "source-missing-predicate"
-    recent_action: "ADR-009 built: the new state keys on an unresolved source, not sourceCount"
+    last_updated_at: "2026-09-06T07:50:00Z"
+    last_updated_by: "no-confirm-delete-predicate"
+    recent_action: "ADR-010 built: no confirm for single delete, Undo toast"
     next_safe_action: "T003's nothingToUndo gap, T015's isolated gate, T017's operator pass"
     blockers: []
     key_files:
@@ -20,13 +20,13 @@ _memory:
       - "src/views/modals/confirm-modal.ts"
       - "src/views/database-view.ts"
       - "src/views/embedded-database-renderer.ts"
-      - "src/views/chart-renderer.ts"
+      - "src/views/row-menu.ts"
       - "tools/live/sheet-grammar.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-055-adr"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 65
     open_questions: []
     answered_questions: []
 ---
@@ -1102,3 +1102,145 @@ the operator's words. No code.
 **How to roll back**: delete this ADR and restore T005 and AC-005 to their contradicting readings —
 which is the state this fixes, so there is nothing to preserve.
 <!-- /ANCHOR:adr-009 -->
+
+---
+
+<!-- ANCHOR:adr-010 -->
+
+## ADR-010: Anytype parity for a single delete — no confirm, Undo toast; the confirm stays for anything not undoable
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted — built |
+| **Date** | 2026-09-06 (~07:50), built the same day |
+| **Deciders** | Operator ruling; built by T019 |
+
+### Operator ruling (2026-09-06 ~07:50, verbatim option)
+
+> No confirm for single delete, Undo toast.
+
+Anytype parity for a single row: delete immediately and offer Undo on the toast; keep the confirm
+for bulk delete and anything not undoable. This is the reading `051` ADR-007 E4 held open rather
+than authorised — E4's own hold was for the confirm as a whole, pending the operator; this ruling
+answers it for the single-row case specifically. `051`'s own ADR-007 E4 is closed by the `051`
+lander separately; this ADR does not edit `051`'s documents.
+
+---
+
+### Context
+
+T018 (this packet) already built the machinery a no-confirm single delete needs: a `deleted`
+history entry snapshotting the file's content before `trashNote` runs, and a toast Undo wired to
+`undoDeletion(entry)` that replays by entry identity or declines with `notice.undoSuperseded`. What
+T018 did not touch is *when* the confirm fires — `row-menu.ts`'s delete-row entry
+(`row-menu.ts:169-176`, pre this leg) called `confirmWithModal` unconditionally, for every single
+delete, before ever reaching `deleteRow`. Separately, `051` ADR-007 E4 recorded the same tension at
+the design-system level: Anytype raises no destructive confirm anywhere because deletion is
+reversible into a Bin; this plugin's confirm stayed because the precondition — a Bin, a recoverable
+undo — was absent, and `051` held the question for the operator rather than resolving it locally,
+since it changes a vocabulary five phases consume.
+
+This packet is the one that closed the precondition. Once `deleteRow` can genuinely undo a single
+row's deletion (T018), the "no equivalent surface to be parity with" reading `051` ADR-007 E4
+recorded as reading 1 no longer holds for the single-row case: the equivalent surface now exists.
+The operator's ruling recognises that and takes the parity reading for exactly the case where the
+precondition is met.
+
+### Constraints
+
+- `confirmWithModal`'s signature is `051`'s to own (its ADR-002) and does not change here — no
+  caller outside `row-menu.ts`'s delete row is touched.
+- Bulk delete (`deleteSelectedRows`, both classes) pushes no history entry today and this leg does
+  not add one (ADR-008's own scope note) — a bulk delete cannot yet offer Undo, so it cannot yet
+  skip the confirm either. The predicate has to say so, not assume every delete is now safe.
+- A delete whose content cannot be snapshotted is exactly as destructive as it always was — the
+  confirm is the only safety net available to it, and removing it there would be a regression
+  T018's own repair was written to prevent for a different failure mode (the toast outliving its
+  entry).
+
+### Decision
+
+**We chose**: gate the confirm on a new predicate, `canUndoDeletion(app, file)`
+(`src/views/modals/confirm-modal.ts`), written once and used by both `DatabaseView` and
+`EmbeddedDatabaseRenderer`. It attempts `app.vault.cachedRead(file)` and returns the content on
+success, or `false` on a read failure. `deleteRow` in both classes calls it first: a truthy result
+skips the confirm and proceeds straight to T018's mechanism (trash, push the entry, toast with
+Undo); `false` still shows the confirm, and on confirmation trashes the file with a plain toast —
+no entry, no Undo, since there is nothing to restore. The confirm call in `row-menu.ts`'s delete row
+is removed entirely; that decision now belongs to `deleteRow`, not its caller.
+
+`deleteSelectedRows` is untouched in both classes — it still confirms unconditionally and still
+records no history entry, which is consistent with the predicate's own answer: a selection has no
+snapshot to offer, so `canUndoDeletion`'s reasoning does not reach it, and the ruling's "bulk delete
+and anything not undoable" clause names exactly this case rather than requiring a matching
+predicate call that would always return `false` for a set.
+
+**How it works**: `canUndoDeletion` is the single place the "can this specific delete be undone"
+question is answered, so a future undoable-bulk-delete leg (ADR-008's own open note) can extend it
+rather than re-deriving the same read-or-fail logic a second time in a second file.
+
+**No `tools/live/` lane reaches this.** ADR-008 already recorded that a real row deletion needs a
+live Obsidian `App`, vault and metadata cache no harness in this repository constructs; nothing
+about gating the confirm changes that. This ADR's proof is the same as T018's: the behavioural
+suite in `deletion-undo.test.ts`, driving the shipped prototype methods against a vault double that
+holds real bytes, with the two new "cannot be read" cases watched red against the pre-change tree
+before this leg's own commit.
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Predicate in `deleteRow`, one place, both classes (chosen)** | The decision sits next to the mechanism it gates; `row-menu.ts` goes back to being a plain dispatcher | Two call sites (one per class) instead of one, since the two classes do not share a `deleteRow` implementation | 9/10 |
+| Keep the predicate call in `row-menu.ts`, before invoking `actions.deleteRow` | One call site | `row-menu.ts` would need its own file-read logic to decide, duplicating what `deleteRow` already does with the snapshot it reads for the history entry — two reads of the same file for one decision | 5/10 |
+| Remove the confirm unconditionally for every single delete | Simplest change | Contradicts the ruling's own "anything not undoable" clause — a read failure would delete silently with no recovery and no warning | 2/10 |
+
+**Why this one**: the predicate and the mechanism it gates now live in the same method, so there is
+one read of the file, not two, and the decision cannot drift out of sync with what `deleteRow`
+actually does with the result.
+
+### Consequences
+
+**What improves**: a single delete on the common path — file readable, which is the overwhelming
+majority — is one action instead of two, matching Anytype's own model for the case where this
+plugin now has the equivalent recovery surface (T018's Undo) to be parity with.
+
+**What it costs**: the rare unreadable-file path keeps asking, which is a slower path for a rarer
+case rather than a faster path for an unsafe one.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A future bulk-undo leg forgets `canUndoDeletion` exists and re-derives the read-or-fail check inline | L | The predicate is exported and named for exactly this reuse; this ADR records the intent |
+| A caller elsewhere starts relying on the confirm firing for every single delete | L | Only `row-menu.ts`'s delete row called `confirmWithModal` for a single row before this change (confirmed by grep); no other call site existed to break |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Operator ruling names the exact behaviour; `051` ADR-007 E4's hold is answered for the case its own precondition now covers |
+| 2 | **Beyond Local Maxima?** | PASS | Three options scored, including the naive unconditional removal the ruling itself does not ask for |
+| 3 | **Sufficient?** | PASS | One predicate, two call sites, closes the ruling completely for both classes |
+| 4 | **Fits Goal?** | PASS | Goal D5: one confirm primitive, consumed rather than forked; this ADR changes when it is called, not what it is |
+| 5 | **Open Horizons?** | PASS | A future undoable bulk delete extends `canUndoDeletion` rather than replacing it |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changed**:
+- `src/views/modals/confirm-modal.ts` — `canUndoDeletion(app, file)`, exported.
+- `src/views/database-view.ts` and `src/views/embedded-database-renderer.ts` — `deleteRow` in both
+  classes calls the predicate first; the confirm and its message move here from `row-menu.ts`.
+- `src/views/row-menu.ts` — the confirm call removed from the delete-row entry; it now calls
+  `actions.deleteRow(row)` unconditionally, and the now-unused `confirmWithModal` import is removed.
+- `src/views/deletion-undo.test.ts` — four new cases and one new assertion, red-first against the
+  pre-change tree for the two "cannot be read" cases.
+- `acceptance-criteria.md` AC-013 (new), `checklist.md` C15 (new), `tasks.md` T019 (new).
+
+**How to roll back**: revert this leg's commit. The confirm call returns to `row-menu.ts`
+unconditionally, `canUndoDeletion` and its two call sites are removed, and T018's mechanism is
+untouched — reverting this ADR does not touch the deletion-undo machinery it builds on.
+<!-- /ANCHOR:adr-010 -->

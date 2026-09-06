@@ -128,7 +128,7 @@ import { ColumnRenameModal, ColumnRenameResult } from "./modals/column-rename-mo
 import { RelationRollupConfigModal, RelationRollupConfigResult, RelationTargetChangeImpact } from "./modals/relation-rollup-config-modal";
 import { CreatePropertyModal } from "./modals/create-property-modal";
 import { DeleteDatabaseModal } from "./modals/delete-database-modal";
-import { confirmWithModal } from "./modals/confirm-modal";
+import { canUndoDeletion, confirmWithModal } from "./modals/confirm-modal";
 import { AddDatabaseModal } from "./modals/add-database-modal";
 import { buildDatabaseWithInferredColumns } from "./modals/add-database-flow";
 import { ComputedSyncQueue, ComputedSyncScope, normalizeComputedSyncMode } from "../data/computed-sync";
@@ -212,7 +212,7 @@ import {
 } from "../data/table-keyboard-navigation";
 import { getTablePasteValue, planTablePasteLayout, TablePasteLayout } from "../data/table-paste-plan";
 import { createOwnedMenuForEvent } from "./owned-menu";
-import { showToast, ToastHandle } from "./toast";
+import { showToast, ToastAction, ToastHandle } from "./toast";
 import {
   FileRenameChange,
   FileRenameRequest,
@@ -8356,18 +8356,33 @@ export class DatabaseView extends FileView {
 
   private async deleteRow(row: RowData): Promise<void> {
     const displayName = row.file.name.replace(/\.md$/, "");
+    // Read before trashNote, the way removeCreatedFile already does for an undone create: the
+    // snapshot has to exist before the file that would supply it stops existing. Anytype parity
+    // skips the confirm only when that snapshot succeeds — an unreadable file still asks, since
+    // there is nothing this delete could offer to undo.
+    const snapshot = await canUndoDeletion(this.app, row.file);
+    if (snapshot === false) {
+      const ok = await confirmWithModal(this.app, {
+        title: t("common.delete"),
+        message: t("menu.confirmDeleteRow", { name: displayName }),
+        confirmText: t("common.delete"),
+        danger: true,
+      });
+      if (!ok) return;
+    }
     try {
-      // Read before trashNote, the way removeCreatedFile already does for an undone create: the
-      // snapshot has to exist before the file that would supply it stops existing.
-      const content = await this.app.vault.cachedRead(row.file);
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      const entry: DeletedHistoryEntry = { type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } };
-      this.pushHistory(entry);
+      let action: ToastAction | undefined;
+      if (snapshot !== false) {
+        const entry: DeletedHistoryEntry = { type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content: snapshot } };
+        this.pushHistory(entry);
+        action = { label: t("toolbar.undo"), onClick: () => this.undoDeletion(entry) };
+      }
       if (this.containerEl_) {
         showToast(this.containerEl_.ownerDocument, {
           severity: "success",
           message: t("notice.deletedRow", { name: displayName }),
-          action: { label: t("toolbar.undo"), onClick: () => this.undoDeletion(entry) },
+          action,
         });
       }
       await this.refreshAfterSave();

@@ -115,8 +115,22 @@ vi.mock("./toast", () => ({
   },
 }));
 
+const confirmCalls = vi.hoisted(() => [] as unknown[]);
+
 vi.mock("./modals/confirm-modal", () => ({
-  confirmWithModal: vi.fn(async () => true),
+  confirmWithModal: (...args: unknown[]) => {
+    confirmCalls.push(args);
+    return Promise.resolve(true);
+  },
+  // Mirrors the real predicate exactly (read-or-fail): the fake vault's own throw-on-missing
+  // cachedRead is what a test drives to produce the unreadable-file branch.
+  canUndoDeletion: async (app: { vault: { cachedRead(file: TFile): Promise<string> } }, file: TFile) => {
+    try {
+      return await app.vault.cachedRead(file);
+    } catch {
+      return false;
+    }
+  },
 }));
 
 // ───────────────────────────────────────────────────────────────────
@@ -167,6 +181,16 @@ interface Harness {
 
 function rowFor(vault: FakeVault, path: string): RowData {
   return { file: vault.getAbstractFileByPath(path) as TFile, frontmatter: {}, computed: {} };
+}
+
+/** A row whose file was never seeded into any vault, so `cachedRead` always throws for it —
+ *  the unreadable-content case a single delete still confirms for. */
+function orphanRow(path: string): RowData {
+  const file = new TFile();
+  file.path = path;
+  file.name = path.split("/").pop() ?? path;
+  file.basename = file.name.replace(/\.md$/, "");
+  return { file, frontmatter: {}, computed: {} };
 }
 
 function makeDataSource(vault: FakeVault, trashed: string[]) {
@@ -238,6 +262,7 @@ function pressToastUndo(): Promise<void> {
 beforeEach(() => {
   notices.length = 0;
   raisedToasts.length = 0;
+  confirmCalls.length = 0;
 });
 
 // ───────────────────────────────────────────────────────────────────
@@ -257,6 +282,23 @@ describe("database-view row deletion", () => {
     await pressToastUndo();
     expect(vault.files.get("Tasks/alpha.md")).toBe("---\ntitle: alpha\n---\nbody\n");
     expect(vault.files.get("Tasks/beta.md")).toBe("beta content");
+  });
+
+  it("does not confirm a single delete when the row's content can be read", async () => {
+    const { self, vault } = makeStandalone();
+    vault.seed("Tasks/alpha.md", "alpha");
+    await invoke(self, "deleteRow", rowFor(vault, "Tasks/alpha.md"));
+    expect(confirmCalls).toHaveLength(0);
+    expect(raisedToasts[raisedToasts.length - 1]?.action?.label).toBe("toolbar.undo");
+  });
+
+  it("confirms a single delete when the row's content cannot be read, and records no Undo", async () => {
+    const { self, trashed, history } = makeStandalone();
+    await invoke(self, "deleteRow", orphanRow("Tasks/ghost.md"));
+    expect(confirmCalls).toHaveLength(1);
+    expect(trashed).toEqual(["Tasks/ghost.md"]);
+    expect(history).toHaveLength(0);
+    expect(raisedToasts[raisedToasts.length - 1]?.action).toBeUndefined();
   });
 
   it("offers Undo only alongside the entry it replays", async () => {
@@ -335,6 +377,7 @@ describe("database-view row deletion", () => {
     });
 
     await invoke(self, "deleteSelectedRows");
+    expect(confirmCalls).toHaveLength(1);
     expect(vault.files.size).toBe(0);
     expect(history).toHaveLength(0);
     expect(raisedToasts).toHaveLength(0);
@@ -355,6 +398,23 @@ describe("embedded-database-renderer row deletion", () => {
 
     await pressToastUndo();
     expect(vault.files.get("Tasks/alpha.md")).toBe("alpha body");
+  });
+
+  it("does not confirm a single delete when the row's content can be read", async () => {
+    const { self, vault } = makeEmbed();
+    vault.seed("Tasks/alpha.md", "alpha body");
+    await invoke(self, "deleteRow", rowFor(vault, "Tasks/alpha.md"));
+    expect(confirmCalls).toHaveLength(0);
+    expect(raisedToasts[raisedToasts.length - 1]?.action?.label).toBe("toolbar.undo");
+  });
+
+  it("confirms a single delete when the row's content cannot be read, and records no Undo", async () => {
+    const { self, trashed, history } = makeEmbed();
+    await invoke(self, "deleteRow", orphanRow("Tasks/ghost.md"));
+    expect(confirmCalls).toHaveLength(1);
+    expect(trashed).toEqual(["Tasks/ghost.md"]);
+    expect(history).toHaveLength(0);
+    expect(raisedToasts[raisedToasts.length - 1]?.action).toBeUndefined();
   });
 
   it("refuses to overwrite a new file that has taken the original path", async () => {
