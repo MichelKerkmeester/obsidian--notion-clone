@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-05T07:45:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Recorded the opening measurements and the schema blocker"
+    last_updated_at: "2026-09-06T14:30:00Z"
+    last_updated_by: "evernote-mobbin-harvest"
+    recent_action: "Harvested 1,557 Evernote iOS and web references from Mobbin into screenshots/evernote"
     next_safe_action: "Write the negative control red-first against the current schema"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
@@ -157,6 +157,11 @@ too. The pinned constants agree with the pixels: `ROW_HEIGHT 44`, `HEADER_HEIGHT
 3. **"~122px for the chart"** on the phone was an estimate that omitted the container padding and
    the resize handle. Measured: **86 CSS px**. The number is worse than the leg claimed, so the D5
    exception rests on firmer ground than it was given.
+
+#### Evernote captures, 2026-09-06
+
+`screenshots/evernote/` now holds the Evernote iOS and web references harvested from Mobbin's MCP search tools (T031): 105 search screens per platform, 105 iOS and 170 web flows, 1,557 files, each cited by Mobbin URL in its README; the harvest ran as scripted Code Mode loops, and a bare `Evernote` query with every known id excluded returned nothing on both platforms, so 105 per platform is the whole search index rather than a sample. Unlike the Notion harvest, the group folders are content-derived: one query returned every screen, so each file was filed and described from the image, and six group files opened at landing all sat in a folder they depict.
+
 <!-- /ANCHOR:how-delivered -->
 
 ---

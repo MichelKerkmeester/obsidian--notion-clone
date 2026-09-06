@@ -212,10 +212,30 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       README before landing: the folder groups are query-derived, not content-verified (5 of 9 web
       spot-checks sit in a group they do not depict), and the request-ledger breakdown itemizes 168
       of the 278 iOS and 136 of the 297 web requests
-- [ ] T031 [B] Harvest Evernote (iOS + web) via Mobbin, same orchestration, into
+- [x] T031 [B] Harvest Evernote (iOS + web) via Mobbin, same orchestration, into
       `screenshots/evernote/{ios,web}/<group>/`; landed by a fresh verifier before T032 opens.
-      **Queued, not dispatched** — `worktrees/149-harvest-evernote` exists and is idle. Same scripted
-      loop as T030
+      **Done and landed 2026-09-06** from `worktrees/149-harvest-evernote`, on the operator's words
+      "harvest all screenshots from Evernote that can be harvested from Mobbin". **1,557 `webp` files
+      — iOS 555 files (345 unique screens: 105 search screens in 17 group folders plus 105 flows in
+      450 files), web 1,002 files (724 unique screens: 105 search screens in 15 group folders plus
+      170 flows in 897 files across 136 flow-name folders)** — pulled by the same **scripted loop**
+      method as T030 through the Mobbin MCP: `search_screens` standard mode with an accumulating
+      `exclude_screen_ids`, plus `search_flows` paged at its maximum `limit` of 10. 135 requests
+      counted (11 screen + 44 flow calls on iOS, 11 + 51 on web, 18 orchestrator probes), no 401 and
+      no 429; one mid-run input-validation error (`search_flows` caps `limit` at 10 and returns the
+      violation as a string) was corrected before the flow sweep. Unlike Notion, the search index
+      exposed only 105 screens per platform: one query returned all of them and a bare `Evernote`
+      query with every known id excluded then returned nothing, so the groups are **content-derived,
+      not query-derived** — each file was filed and described from the image, and six group files
+      opened at landing all sat in a folder they depict. `screenshots/evernote/README.md` holds the
+      layout, provenance, query sets and a per-file `mobbin_url` row for every image. Verified before
+      landing: README index and disk agree 1:1 on all 1,557 paths with the URL id matching each
+      filename, every file is a valid RIFF/WebP (1,544 VP8, 13 VP8X) and none under 1 KB, no screen
+      id repeats inside a folder, every iOS file is 299x678 and every web file 768x521, the folder is
+      30 MB, and ten images were opened and read (iOS phone chrome, web desktop chrome, all Evernote,
+      all carrying the Mobbin footer). One claim corrected in the README before landing: the
+      provenance said a few web captures differ in size, and none does. App version unknown — neither
+      Mobbin tool returns one and the app pages 403 without a browser session
 - [ ] T032 [B] Harvest Fibery (web only) via Mobbin, same orchestration, into
       `screenshots/fibery/web/<group>/`; landed by a fresh verifier before T033 opens.
       **Queued, not dispatched** — `worktrees/150-harvest-fibery` exists and is idle
