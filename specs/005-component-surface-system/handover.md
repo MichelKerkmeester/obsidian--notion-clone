@@ -524,6 +524,13 @@ ticks an operator row.**
   append a lane release naming the two files, and move on; removing the sensitivity for real means
   either left-aligning the picker's grid (a product change, needs the operator) or pinning
   scrollbar metrics in `tools/screenshots/theme.css` (re-renders every scrollable surface).
+- **Comment hygiene's artifact-id rule is now enforced, not only stated.** `scan-comments.mjs`
+  (the `comments` gate lane) scans `src/**/*.ts`, `tools/**/*.{ts,mjs,js}`, `styles.css` and every
+  `describe`/`it`/`test` name for a task id, an ADR/REQ/CHK/AC id, a packet number used as a label,
+  or a numbered spec-folder path, with no baseline — a hard block with a ratchet is a suggestion.
+  This repo also carries its own `tools/git-hooks/pre-commit` (install:
+  `git config core.hooksPath tools/git-hooks`), because the pre-commit hook this machine actually
+  runs lives outside this repository and does not catch every shape this rule forbids.
 <!-- /ANCHOR:next-session -->
 
 ---
