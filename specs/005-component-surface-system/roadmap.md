@@ -1264,7 +1264,38 @@ view (`fea6f241`). The gantt was re-verified pixel-identical to the Project Mana
 two visible differences are host chrome (the 24px container inset, the antialiased font smoothing),
 which the operator ruled to keep plugin-wide rather than match per-view. `manifest.json`,
 `package.json` and `versions.json` on main read **0.0.29**, and the tag is on `origin`.
-None of 0.0.7 through 0.0.29 is operator-confirmed yet. The cadence continues at **0.0.30** onward —
+**0.0.30 is cut** (`e016e75c`), carrying: the calendar rebuilt to Anytype's month/week/day — Monday-first
+regardless of locale, rules and weekend tint derived from `--background-primary` instead of literal hex,
+one independent chip per day a multi-day event covers with per-day lane compaction, a de-chromed "+N more"
+line that ellipsises inside its phone column, seven fluid month columns with the custom column-width
+control and its resize handle withdrawn from month, icon-by-default chips with the coloured dot dropped
+and the time as a muted suffix, the unscheduled band retired for an "Unscheduled · N" chip beside the
+month/year title, and overlapping week/day blocks staggered a fixed 10px per lane rather than split N ways
+(`b00de6d2`, P1 rows `093751d8`, corpus rebuilt Monday-first `c7e6ae97`, unscheduled chip `feb6a400`,
+its ink `f70bd5e2`, device-pixel reds `dcf025fc`, phone week/day min column `396bcae7`); the board
+scrolling as a page on both axes with the scrollbar at 0 at rest and 10px on hover, and the inferred
+sticky column header withdrawn (`dc1d54a9`), plus the R6/R7 palette ruling on the column chips and the
+neutral ungrouped bucket (`dd71114f`); the desktop Settings panel docked to a right-edge side sheet with
+a permanent toolbar gear replacing the "···" settings row (`f62523cf`, `bb7d24f6`, `fd1590d2`); every
+desktop dropdown made a searchable combobox, trigger first, with the count gate left to the phone sheet
+(`0c3f6410`, popover alignment `537bbb61`); the single-row delete's confirm dropped for the toast's Undo,
+the confirm kept for bulk and for anything unrestorable (`f962d626`); the host-modal sheet chrome fixes —
+native title and close hidden while presented and restored on teardown, the desktop-dialog frame off
+inside a sheet, and only the host's own container hidden (`be578988`, `4878be4f`, `772b24d2`); the table's
+Wrap switch made the gate on desktop and phone with markdown line breaks clipped when off (`41513bd3`,
+`1a2c7e00`, `994229d0`), and the summary footer skipped at zero rows and raised to the 44px phone floor
+(`81f7637c`, `a45afe17`, `0814accd`). Reference and planning work landed alongside: the Notion web and iOS
+screen libraries harvested, indexed and reclassified by content, plus an Evernote harvest (`0ff89bef`,
+`b5845a30`, `bab72104`, `e6881549`, `cb81eeb5`, `1c44e240`, `f88c17c9`); the eight Notion refinement
+children 059-066 reserved and six opened (`137ae35b`, `9d9515ae`, `c49ca7f6`, `f52109c1`, `7e44e487`,
+`cf15a636`, `1b3aecf7`); `067-sheet-family-remediation` opened as one coordinated child (`0d03a065`,
+synthesis `e9cb2417`); `068` opened to rename the plugin to Obnotion — id, name and every CSS
+class prefix, censused at 3,375 `note-database` references and 1,724 `db-` tokens over 134 files
+(`b4c78e98`); and the root README rewritten for Obnotion with the early-alpha status stated (`cb27def3`,
+`9ad2fb34`). The rename itself does not ship here: 0.0.30 is still id `note-database`, name "Note
+Database". `manifest.json`, `package.json` and `versions.json` on main read **0.0.30**, and the tag is on
+`origin`.
+None of 0.0.7 through 0.0.30 is operator-confirmed yet. The cadence continues at **0.0.31** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
