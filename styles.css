@@ -17240,19 +17240,31 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   height: var(--db-week-grid-height, 1152px);
 }
 
-/* Week grid slot lines */
+/* Week grid slot lines: ADR-002 styles week/day to the month grid, so the rule
+   colour is the same measured #EBEBEB/#292929 the month grid's day-cell
+   borders use (src/views/calendar-renderer.ts's day-cell rules, above), not
+   the theme's own --background-modifier-border. The hour/sub-hour opacity
+   tiers are this view's own geometry and are unchanged by that ruling. */
 .note-database-container .db-calendar-week-slot-line {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
-  background: color-mix(in srgb, var(--background-modifier-border) 40%, transparent);
+  background: color-mix(in srgb, #EBEBEB 40%, transparent);
   pointer-events: none;
 }
 
+.theme-dark .note-database-container .db-calendar-week-slot-line {
+  background: color-mix(in srgb, #292929 40%, transparent);
+}
+
 .note-database-container .db-calendar-week-slot-line.is-hour {
-  background: color-mix(in srgb, var(--background-modifier-border) 90%, transparent);
+  background: color-mix(in srgb, #EBEBEB 90%, transparent);
   height: 1px;
+}
+
+.theme-dark .note-database-container .db-calendar-week-slot-line.is-hour {
+  background: color-mix(in srgb, #292929 90%, transparent);
 }
 
 .note-database-container .db-calendar-week-day-col.is-today {
@@ -18015,13 +18027,17 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   pointer-events: none;
 }
 
+/* ADR-002 styles week/day to the month grid, whose today marker is the
+   measured #216DFA (above) rather than the theme's --db-current-time-color —
+   the literal colour is repeated here rather than reassigning that variable,
+   because it is also `db-timeline-*`'s and the gantt does not move (goal D7). */
 .note-database-container .db-calendar-timed-current-line {
   position: absolute;
   left: 0;
   right: 0;
   z-index: 6;
   height: 1px;
-  background: var(--db-current-time-color);
+  background: #216DFA;
   pointer-events: none;
 }
 
@@ -18033,7 +18049,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--db-current-time-color);
+  background: #216DFA;
 }
 
 .note-database-container .db-calendar-timed-drag-preview {
@@ -19186,15 +19202,20 @@ body.pm-resize-active * {
   flex: 0 0 auto;
 }
 
-.note-database-container .db-timeline-tick.is-current-time-tick .db-timeline-tick-date,
-.note-database-container .db-calendar-week-hour-label.is-current-time-tick {
+.note-database-container .db-timeline-tick.is-current-time-tick .db-timeline-tick-date {
   color: var(--db-current-time-color);
   font-weight: 700;
 }
 
-.note-database-container .db-timeline-tick.is-current-date-tick .db-timeline-tick-date,
-.note-database-container .db-calendar-week-day-num.is-today,
-.note-database-container .db-calendar-week-allday-date.is-today {
+/* ADR-002: the calendar's own current-time tick takes the month grid's
+   measured #216DFA rather than --db-current-time-color, which stays
+   --db-timeline-*'s and the gantt's own (goal D7, unmoved). */
+.note-database-container .db-calendar-week-hour-label.is-current-time-tick {
+  color: #216DFA;
+  font-weight: 700;
+}
+
+.note-database-container .db-timeline-tick.is-current-date-tick .db-timeline-tick-date {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -19206,6 +19227,24 @@ body.pm-resize-active * {
   border-radius: var(--db-radius-full);
   background: var(--db-current-time-color);
   color: var(--text-on-accent);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.note-database-container .db-calendar-week-day-num.is-today,
+.note-database-container .db-calendar-week-allday-date.is-today {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: var(--db-radius-full);
+  background: #216DFA;
+  color: #FFFFFF;
   font-size: 12px;
   font-weight: 700;
   line-height: 22px;

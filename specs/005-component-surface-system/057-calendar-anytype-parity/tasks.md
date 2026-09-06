@@ -201,6 +201,23 @@ _memory:
       pixels anywhere in
       `screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png`. The weekend
       tint and the nav cluster did land, so this is an unfinished half rather than a reversal.
+      **R3 done 2026-09-06, geometry/rule colour only — the open colour question stays open.**
+      `.db-calendar-week-slot-line` (base and `.is-hour`) now mix off the literal `#EBEBEB`/
+      `#292929` the month grid's day-cell borders use, with a `.theme-dark` pair added, instead of
+      the theme's `--background-modifier-border`. The current-time line
+      (`.db-calendar-timed-current-line` and its `::before`), the week/day today-number disc
+      (`.db-calendar-week-day-num.is-today`, `.db-calendar-week-allday-date.is-today`) and the
+      current-time hour-label tick (`.db-calendar-week-hour-label.is-current-time-tick`) now read
+      the literal `#216DFA` (white on it) instead of `--db-current-time-color`. That variable is
+      untouched at `styles.css:882` and so is every `.db-timeline-*` rule that also reads it — the
+      previously-grouped selectors sharing it with `.db-timeline-tick`/`.db-timeline-today-line`
+      were split into their own rules rather than repointed, so the gantt's declarations are
+      byte-for-byte what they were. **`db-calendar-week-timed-event`'s own per-event colour is
+      deliberately untouched** — that is ADR-002's still-open question, not this residual's.
+      Recaptured `calendar-week-time-grid-{desktop,mobile}-{light,dark}.png`: **2165** `#216DFA`
+      pixels now present in the desktop-light capture (was 0); all eight `reference-gantt-*.png`
+      MD5s and a zero-line `git diff --stat -- src/views/calendar-timeline-renderer.ts` confirm
+      the gantt did not move.
       **R4**: the week and day headers still build the one-string static title
       (`calendar-renderer.ts:1731`, `:1748`) while only the month header takes the two selects, so
       "the same header grammar" is half true. **R5**: the day number's ink sits **18px** below the
