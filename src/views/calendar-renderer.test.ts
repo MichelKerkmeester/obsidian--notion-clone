@@ -16,6 +16,12 @@ import { describe, expect, it, vi, beforeAll } from "vitest";
 import { CalendarRenderer, CalendarRendererActions } from "./calendar-renderer";
 import { ViewConfig, RowData, ColumnDef } from "../data/types";
 import { TFile } from "obsidian";
+/* eslint-disable-next-line import/no-nodejs-modules --
+   Asserting the phone month-chip title's flex rule means reading the stylesheet from disk —
+   vitest runs `environment: "node"` here with no layout engine, so a rendered box's edges can't
+   be measured; the shape of the CSS declaration is the closest in-suite proof available. */
+import { readFileSync } from "fs";
+import { resolve } from "path";
 
 vi.mock("obsidian", () => ({
   setIcon: vi.fn(),
@@ -686,5 +692,77 @@ describe("Calendar parity behaviours", () => {
     expect(actual.t("emptyState.noEventsTitle")).toBe("No events");
     expect(actual.t("emptyState.noEventsMessage")).toBe("Records with a value in the selected date property will appear here.");
     expect(actual.t("calendar.unscheduledEmpty")).toBe("Nothing unscheduled.");
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 3. PHONE MONTH-CHIP TITLE: ELLIPSIS STAYS INSIDE THE CELL
+// ───────────────────────────────────────────────────────────────────
+//
+// A flat month-grid chip's title carries `flex: 1 0 min(8ch, 100%)`: shrink
+// disabled, floored at an 8-character basis. On a wide desktop column that
+// floor never binds, but on a narrow phone day cell the title's box holds
+// that basis regardless of how little room the cell actually has — its own
+// right edge lands past the cell, and the segment's `overflow: hidden` (the
+// phone-only touch-floor rule) then hard-clips the title mid-glyph instead of
+// showing the ellipsis its own `text-overflow` would otherwise paint.
+//
+// vitest runs `environment: "node"` here (see vitest.config.ts) — no jsdom,
+// no layout engine — so there is no rendered box to call getBoundingClientRect
+// on. The stylesheet declaration is what actually decides whether the title's
+// box can shrink to fit, so this suite reads it and asserts on its shape
+// instead, mirroring cell-popover-coordinate-space.test.ts's same reasoning.
+
+describe("phone month-chip title ellipsis", () => {
+  const stylesContent = readFileSync(resolve(__dirname, "../../styles.css"), "utf-8");
+
+  /** The first `{ ... }` block whose selector line matches `selectorPattern`. */
+  function ruleBody(selectorPattern: RegExp): string {
+    const match = selectorPattern.exec(stylesContent);
+    expect(match, `expected a rule for ${selectorPattern}`).not.toBeNull();
+    const braceStart = stylesContent.indexOf("{", match!.index);
+    const braceEnd = stylesContent.indexOf("}", braceStart);
+    return stylesContent.slice(braceStart + 1, braceEnd);
+  }
+
+  it("lets the phone month-grid chip title shrink to the cell's own width", () => {
+    // This is the exact chip renderMonthSegments draws (calendar-renderer.ts) — the
+    // week-all-day strip and the day-popover copy have their own title rules and are
+    // not what this selector matches.
+    const body = ruleBody(
+      /\.is-phone \.note-database-container \.db-calendar-month-week > \.db-calendar-month-segment > \.db-calendar-month-title \{/
+    );
+    // flex-shrink 1 (not 0) with a 0 basis: the title's box is bounded by whatever
+    // space the segment actually has, so its right edge can never sit past the
+    // cell's — which is what makes the ellipsis land inside the cell instead of
+    // past it once the segment clips the box.
+    expect(body).toMatch(/flex:\s*1 1 0;/);
+    expect(body).toMatch(/min-width:\s*0;/);
+    expect(body).toMatch(/overflow:\s*hidden;/);
+    expect(body).toMatch(/text-overflow:\s*ellipsis;/);
+    expect(body).toMatch(/white-space:\s*nowrap;/);
+  });
+
+  it("leaves the desktop month-chip title's shrink-disabled floor untouched", () => {
+    // Negative control: the base (unscoped) rule is what every month chip falls
+    // back to without the phone override above. It still floors the title at an
+    // 8-character basis with shrink disabled — reverting the phone rule (deleting
+    // it, or widening its selector off `.is-phone`) leaves exactly this shape in
+    // effect, which is the state that produced the overflow this suite guards.
+    const body = ruleBody(/\.note-database-container \.db-calendar-month-title \{/);
+    expect(body).toMatch(/flex:\s*1 0 min\(8ch, 100%\);/);
+  });
+
+  it("scopes the shrink relaxation to .is-phone, not a bare width breakpoint", () => {
+    // Desktop must be unaffected: the shrink override selector should appear exactly
+    // once in the whole stylesheet, and only prefixed with `.is-phone` — never as a
+    // plain `@media` width query, which would also catch a narrow desktop window
+    // that was never flagged as a phone.
+    const selector = ".db-calendar-month-week > .db-calendar-month-segment > .db-calendar-month-title {";
+    const occurrences = stylesContent.split(selector).length - 1;
+    expect(occurrences).toBe(1);
+    const selectorIndex = stylesContent.indexOf(selector);
+    const linesBefore = stylesContent.slice(0, selectorIndex).split("\n");
+    expect(linesBefore[linesBefore.length - 1]).toContain(".is-phone ");
   });
 });

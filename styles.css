@@ -17774,6 +17774,20 @@ body.is-mobile .note-database-container .db-calendar-scale-menu,
   text-overflow: ellipsis;
 }
 
+/* Phone month grid: the flat per-day chip's title carries the same 8ch
+   flex-basis floor with shrink disabled, so a title wider than the day
+   column overflows the segment's own box; the segment then clips at its
+   border edge, cutting the ellipsis off past the cell instead of showing it
+   inside. Letting the title shrink to whatever width the segment actually
+   has keeps its box — and the ellipsis it paints — inside the cell. */
+.is-phone .note-database-container .db-calendar-month-week > .db-calendar-month-segment > .db-calendar-month-title {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 body.is-mobile .note-database-container .db-calendar-month-time {
   display: none;
 }

@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "land-057-rebuild-leg-p1"
-    recent_action: "ADR-007 gains the migration trace; 13 of 15 G rows Met"
+    recent_action: "ADR-008 ruled and landed: phone month chip title shrinks, ellipsis lands inside the cell (T022)"
     next_safe_action: "Add a third theme profile for G12, then take G15"
     blockers: []
     key_files:
@@ -34,6 +34,7 @@ _memory:
       - "ADR-006 ruled: the unscheduled surface is a header chip + shared owned-menu popover/sheet, not a band; A4's disposition (kept, reachable) is unchanged, only its shape moved"
       - "ADR-007 ruled: the week defaults to Monday regardless of locale, the setting stays an override, landed alongside the rebuild leg"
       - "ADR-005's amendment (stagger overlaps, revert to a 45px minimum column) is landed, not only ruled"
+      - "ADR-008 ruled: the phone month chip title shrinks (flex: 1 1 0) so its ellipsis lands inside the cell, closing G10's month-scale trade-off"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -606,4 +607,64 @@ unscheduled drawer's own chip grammar) is not touched: ADR-006 already moved tha
 a band to a header chip, and it is unclear from this document alone whether the drawer's chip-level
 polish the review names is still live after that move or was superseded by it. Both stay open
 alongside P1-8's corpus recapture and every G-row's live re-measurement.
+
+---
+
+## ADR-008: The phone month chip's title shrinks to the cell; the ellipsis lands inside it, not past it
+
+**Status**: **Accepted** — 2026-09-06 ~17:12, operator ruling, verbatim: *"Ellipsis inside the
+cell."*
+
+**Context.** ADR-007's own landing note recorded, and left standing, an earlier leg's measured
+choice to leave the month grid's phone chip title on its `flex: 1 0 min(8ch, 100%)` floor —
+shrink disabled — while P1-6's `flex: 1 1 0` fix landed only on the sibling week/day timed-event
+title. `acceptance-criteria.md`'s G10 measured the cost of that choice rather than assuming it:
+with the record icon rendering, a live read of `calendar-month-view` at a 402px phone put the
+title's own box **18 CSS px past its cell's right edge** (`scrollWidth 136 > clientWidth 44`), so
+`.is-phone .db-calendar-month-segment { overflow: hidden }` clipped the box mid-glyph before its
+own `text-overflow: ellipsis` ever had a box narrow enough to paint into. G10 recorded both sides
+of the trade — the wider, un-shrunk box keeps ~9 CSS px more visible glyph than a shrunk one would
+— and named the choice the operator's rather than closing it in-repo, matching goal D6's routing
+for a decision that re-spends geometry an earlier leg had already set.
+
+**Decision.** Shrink the phone month chip's title to whatever width the segment actually has,
+so its own box — and the ellipsis it paints — never crosses the cell's right edge. Scoped
+precisely: `.is-phone .note-database-container .db-calendar-month-week > .db-calendar-month-segment
+> .db-calendar-month-title { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+white-space: nowrap; }` — the flat per-day month chip `renderMonthSegments` draws
+(`calendar-renderer.ts`), under real `.is-phone` only. This is the same `flex: 1 1 0` mechanism
+P1-6 already landed for the week/day timed-event title, now extended to the one sibling chip that
+earlier leg had deliberately left alone.
+
+**What this does and does not touch.** It does not reopen the `@media (pointer: coarse), (max-width:
+760px)` block's own separate finding (`styles.css`, the "Do NOT also relax the title's flex to `1 1
+auto`" comment) — that measured a *different* flex-basis (`auto`, not `0`) on a *different*
+selector context (a bare width/pointer query, not the real `.is-phone` device class), for a
+narrow-but-not-phone desktop window. That finding is untouched and still holds for the case it
+describes. This ADR's rule fires only where Obsidian itself has marked the layout a phone.
+
+**Trade taken, measured both ways.** Before: title box floored at 40px regardless of the cell,
+18px of it past the cell's right edge, no ellipsis ever computed (the box was never narrow enough
+to need one) so the reader saw a hard mid-glyph cut. After: title box shrinks to 20px, right edge
+2px *inside* the cell, `text-overflow: ellipsis` now has room to paint — every phone chip measured
+(`iCloud`, `Adobe CC audit`, `Q1 renewals sweep`) ends in a visible `…` inside its own column. The
+cost is the ~9 CSS px of glyph G10 already priced (26px of clipped text against roughly 17px of
+glyph plus an ellipsis) — the operator's ruling spends it. Desktop is unmeasured-different:
+`titleClientWidth === titleScrollWidth` on the same fixture at 1440px, before and after, so no
+desktop capture changed.
+
+**Consequences.** `acceptance-criteria.md`'s G10 is updated to record the closed trade rather than
+the open one; `tasks.md`'s T022 carries the red/green measurement and the negative control.
+`calendar-renderer.test.ts` gains a "phone month-chip title ellipsis" suite reading the shipped
+`styles.css` directly (this suite's `environment: "node"` carries no layout engine, the same
+reasoning `cell-popover-coordinate-space.test.ts` already documents), asserting the phone override's
+shape, the untouched desktop floor, and that the relaxation is `.is-phone`-scoped rather than a bare
+width query. `calendar-month-view-mobile-{dark,light}.png` and
+`constructed-calendar-month-mobile-{dark,light}.png` are recaptured; no desktop capture changed.
+
+**Alternatives rejected.** Leaving the month grid's floor as ADR-007's landing note left it: this is
+the status quo the ruling replaces, and G10 had already measured why it costs more than it saves
+once the box crosses the cell edge before the ellipsis can compute. Widening the day cell instead of
+shrinking the title: rejected as out of scope — the cell width is the month grid's own seven-equal-
+column geometry (G6), not a property this chip's title defect gives grounds to reopen.
 <!-- /ANCHOR:decisions -->

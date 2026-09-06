@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "land-057-rebuild-leg-p1"
-    recent_action: "G1-G15 re-verified: 13 Met, 2 Unmet; T020 re-measured"
+    recent_action: "T022 landed: phone chip title shrinks, ellipsis inside the cell"
     next_safe_action: "Add a third theme profile for G12, then take G15"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
@@ -39,7 +39,7 @@ _memory:
       - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink"
       - "T017 landed: 0 device px of the former per-event fills and accent bar across the four recaptured files"
       - "The operator read 0.0.29 beside Anytype and reopened the phase on a gestalt judgement"
-      - "The month chip keeps its 8ch floor: measured both ways, the wider clip beats an ellipsis by ~9 CSS px of glyph"
+      - "T022 (2026-09-06 ~17:12): operator ruled 'Ellipsis inside the cell', superseding the earlier 8ch-floor trade-off; the phone month chip title now shrinks to the segment's own width"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -836,6 +836,53 @@ title and 44x44 close on phone.
       all**, at which point `.db-calendar-month-dates` stops being emitted and this rule becomes
       dead code to delete with it. Until then the range is legible where it was not, and G3 and
       G5 — which own the span's real shape — stay Unmet
+- [x] T022 (2026-09-06 ~17:12 amendment) **Move the phone month chip's ellipsis inside the cell,
+      superseding G10's month-scale trade-off.** Operator ruling, verbatim: *"Ellipsis inside the
+      cell."* G10 (`acceptance-criteria.md`) had already measured both sides of this and left the
+      choice open — the row's own text called it "the operator's to rule on" — so this closes that
+      open clause rather than reopening the row's Met status.
+
+      **Red first**, `calendar-month-view` at a 402px phone, live-measured through the shipped
+      stylesheet against the real fixture markup (not inferred): `.db-calendar-month-title`'s
+      `flex: 1 0 min(8ch, 100%)` floors the title at a fixed 40px box with shrink disabled, while
+      the segment sits 18px narrower. `titleClientWidth 40`, `titleScrollWidth 89`-`108` depending
+      on the chip's own text, title right edge 18px past the cell's own right edge — the exact
+      number G10 already recorded. Because the box itself is too wide, no ellipsis ever computes
+      inside it; the segment's own `.is-phone` `overflow: hidden` then hard-clips the box at the
+      cell edge, cutting text with no ellipsis glyph rather than truncating it, e.g. `Adobe CC
+      audit` runs `Ado` with no trailing mark at 4x recapture DPR. Recaptured
+      `calendar-month-view-mobile-dark.png` / `-mobile-light.png` and
+      `constructed-calendar-month-mobile-dark.png` / `-mobile-light.png` (real `CalendarRenderer`
+      mount) show the same run-on ink pre-fix.
+
+      **Fix**: `.is-phone .note-database-container .db-calendar-month-week > .db-calendar-month-segment
+      > .db-calendar-month-title { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow:
+      ellipsis; white-space: nowrap; }` — scoped to the flat per-day month chip specifically
+      (`renderMonthSegments`, `calendar-renderer.ts`), not the week/day timed-event title T020's
+      sibling rule already covers and not the desktop rule, which is untouched. Letting the title
+      shrink (basis 0, not the 8ch floor) means it fills only the space actually left after the
+      icon and padding, so its own box never exceeds the segment, and its `text-overflow: ellipsis`
+      now has room to paint.
+
+      **Green, same live measurement, same fixture, after the fix**: title right edge sits 2px
+      *inside* the cell's own right edge on every phone chip measured (`iCloud`, `Adobe CC audit`,
+      `Q1 renewals sweep`), `titleClientWidth` down to 20px, `titleScrollWidth` unchanged (89-108px)
+      — the box shrank, the text still needs truncating, and the ellipsis now has a box to paint
+      into. Recaptured `calendar-month-view-mobile-{dark,light}.png` and
+      `constructed-calendar-month-mobile-{dark,light}.png` show every chip title ending in a visible
+      `…` inside its own column, none crossing a rule. **Desktop unaffected, measured, not assumed**:
+      the same fixture at 1440px keeps `titleClientWidth === titleScrollWidth` on every chip (no
+      truncation needed at that width) both before and after, and no desktop capture changed.
+
+      **Negative control**: `calendar-renderer.test.ts`'s three new cases in the "phone month-chip
+      title ellipsis" suite read the shipped `styles.css` directly (this suite's `environment:
+      "node"` carries no layout engine, matching `cell-popover-coordinate-space.test.ts`'s own
+      reasoning) — stashing the CSS change reproduces two failures (`expected null not to be null`
+      on the phone rule's absence, `expected +0 to be 1` on the selector-occurrence count), and
+      restoring it turns both green again.
+
+      G10 (`acceptance-criteria.md`) is updated to record the resolved state rather than the open
+      trade-off; `decision-record.md` carries the ruling as an ADR row
 
 <!-- /ANCHOR:phase-3 -->
 
