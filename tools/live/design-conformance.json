@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-06T18:42:11.048Z",
+  "measuredAt": "2026-09-06T22:26:21.845Z",
   "inputs": {
-    "styles.css": "f0119d333849",
+    "styles.css": "07578ed6d5e4",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
-    "src/views/popover-position.ts": "7edae5db0282"
+    "src/views/popover-position.ts": "eea3b7cb22b9"
   },
   "checks": [
     {
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 143,
+      "value": 144,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
@@ -45,7 +45,7 @@
     {
       "name": "width policy — call sites typing a width instead of naming a role",
       "enforced": false,
-      "value": 10,
+      "value": 9,
       "target": 0,
       "note": "the design system says a role owns its width",
       "gated": false,
@@ -140,13 +140,13 @@
     "src/views/database-view.ts:3147  .db-group-order-popover",
     "src/views/database-view.ts:3261  .db-panel-button",
     "src/views/database-view.ts:7054  .db-calendar-search-results-popover",
-    "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
-    "src/views/date-value-picker.ts:216  .db-calendar-mini-popover",
-    "src/views/dropdown-field.ts:127  .db-dropdown-field-text",
-    "src/views/dropdown-field.ts:241  .db-dropdown-search",
-    "src/views/dropdown-field.ts:256  .db-dropdown-options",
-    "src/views/dropdown-field.ts:260  .db-dropdown-empty",
-    "src/views/dropdown-field.ts:328  .db-dropdown-section-title",
+    "src/views/date-value-picker.ts:140  .db-cell-edit-popover",
+    "src/views/date-value-picker.ts:227  .db-calendar-mini-popover",
+    "src/views/dropdown-field.ts:164  .db-dropdown-field-text",
+    "src/views/dropdown-field.ts:291  .db-dropdown-search",
+    "src/views/dropdown-field.ts:306  .db-dropdown-options",
+    "src/views/dropdown-field.ts:310  .db-dropdown-empty",
+    "src/views/dropdown-field.ts:378  .db-dropdown-section-title",
     "src/views/embedded-database-renderer.ts:1387  .db-calendar-search-results-popover",
     "src/views/embedded-database-renderer.ts:3066  .db-group-order-popover",
     "src/views/embedded-database-renderer.ts:3182  .db-panel-button",

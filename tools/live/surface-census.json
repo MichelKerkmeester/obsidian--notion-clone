@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T18:42:21.068Z",
+  "measuredAt": "2026-09-06T22:26:30.202Z",
   "inputs": {
-    "styles.css": "f0119d333849",
+    "styles.css": "07578ed6d5e4",
     "tools/live/surface-census.mjs": "ea52a1e1e8f5",
     "src/views/surface-contract.ts": "ca203fa23a84",
     "src/views/record-detail-panel.ts": "c150d55fdd79",
@@ -10,10 +10,10 @@
   },
   "totals": {
     "rendered": 85,
-    "buildable": 228,
+    "buildable": 229,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 143,
+    "buildableNotRendered": 144,
     "untokened": 0,
     "unroled": 85,
     "recordSurfaceHandBuilt": 0
@@ -725,19 +725,23 @@
       "scenarios": [
         "dropdown-field",
         "dropdown-field",
-        "dropdown-field"
-      ]
-    },
-    "db-dropdown-option-check": {
-      "cls": "db-dropdown-option-check",
-      "mountParent": "db-dropdown-option",
-      "tokens": true,
-      "role": null,
-      "rect": "16x16",
-      "scenarios": [
         "dropdown-field",
-        "dropdown-field",
-        "dropdown-field"
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker"
       ]
     },
     "db-dropdown-option-text": {
@@ -761,7 +765,51 @@
       "scenarios": [
         "dropdown-field",
         "dropdown-field",
-        "dropdown-field"
+        "dropdown-field",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker"
+      ]
+    },
+    "db-dropdown-option-check": {
+      "cls": "db-dropdown-option-check",
+      "mountParent": "db-dropdown-option",
+      "tokens": true,
+      "role": null,
+      "rect": "16x16",
+      "scenarios": [
+        "dropdown-field",
+        "dropdown-field",
+        "dropdown-field",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker"
       ]
     },
     "db-calendar-scale-menu": {
@@ -1500,17 +1548,17 @@
       "mountParent": "(body)",
       "tokens": true,
       "role": null,
-      "rect": "110x98",
+      "rect": "122x494",
       "scenarios": [
         "field-option-color-picker"
       ]
     },
-    "db-color-picker-swatch": {
-      "cls": "db-color-picker-swatch",
-      "mountParent": "db-color-picker-popup",
+    "db-color-picker-row-dot": {
+      "cls": "db-color-picker-row-dot",
+      "mountParent": "db-dropdown-option",
       "tokens": true,
       "role": null,
-      "rect": "18x18",
+      "rect": "16x16",
       "scenarios": [
         "field-option-color-picker",
         "field-option-color-picker",
@@ -1561,8 +1609,8 @@
     "db-column-manager-file-property-dropdown",
     "db-add-property-picker",
     "db-column-type-popover",
-    "db-menu-item-check",
     "db-dropdown-option-icon",
+    "db-menu-item-check",
     "db-column-display-style-popover",
     "db-column-number-style-popover",
     "db-number-style-menu-icon",
@@ -1582,6 +1630,7 @@
     "db-date-picker-body",
     "db-cell-date-picker",
     "db-dropdown-field-disabled-reason",
+    "db-dropdown-popover-desktop-sheet",
     "db-dropdown-empty",
     "db-dropdown-option-swatches",
     "db-dropdown-option-swatch",
