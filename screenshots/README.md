@@ -1147,7 +1147,7 @@ Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/calendar-ren
 
 ### Calendar month view
 
-Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.
+Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment and an overflow week; the unscheduled backlog is omitted because nothing here is unscheduled.
 
 | dark | light |
 |---|---|
@@ -1167,7 +1167,7 @@ Sources: `src/views/calendar-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
 ### Calendar week time grid
 
-Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.
+Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment and the current-time ruler sit in frame; the unscheduled backlog is omitted because nothing here is unscheduled.
 
 | dark | light |
 |---|---|

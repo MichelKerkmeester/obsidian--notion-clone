@@ -165,6 +165,10 @@ export class CalendarRenderer {
 
 	private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
 		const unscheduled = collectUnscheduledTimelineRows(rows, config, startField);
+		// An empty pool renders nothing rather than a header and an empty line at
+		// full height: the reference has no surface here at all, and there is
+		// nothing for the drawer to hold or for a reader to toggle.
+		if (unscheduled.length === 0) return;
 		const drawer = parent.createDiv({ cls: `db-calendar-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
 		const header = drawer.createDiv({ cls: "db-calendar-backlog-header" });
 		const toggle = header.createEl("button", {
@@ -178,12 +182,6 @@ export class CalendarRenderer {
 			toggle.setAttribute("aria-expanded", this.backlogCollapsed ? "false" : "true");
 		};
 		const list = drawer.createDiv({ cls: "db-calendar-backlog-list" });
-		if (unscheduled.length === 0) {
-			// The drawer stays present so an empty unscheduled pool reads as a calm
-			// absence instead of the whole section disappearing.
-			list.createDiv({ cls: "db-calendar-backlog-empty", text: t("calendar.unscheduledEmpty") });
-			return;
-		}
 		for (const row of unscheduled) {
 			const item = list.createEl("button", {
 				cls: `db-calendar-backlog-item${this.isRowCompleted(row, config) ? " is-completed" : ""}`,

@@ -260,8 +260,26 @@ _memory:
       unscheduled drawer renders its header and its `Nothing unscheduled.` empty line at full
       height above the grid even at zero items — 85 CSS px on desktop, more on the phone — above a
       surface the reference does not have at all; the drawer was kept as ours with an argument,
-      but its **empty state and its placement** were never dispositioned. (`styles.css`,
-      `src/views/calendar-renderer.ts`)
+      but its **empty state and its placement** were never dispositioned.
+      **R7 done 2026-09-06 — the placement question closes with it: an empty drawer renders
+      nothing.** `renderUnscheduledBacklog` (`calendar-renderer.ts`) now returns before creating
+      any element when `collectUnscheduledTimelineRows` is empty, so the drawer, its header and
+      its empty line are all absent rather than present at zero items — the reference's own
+      "no surface here at all" for this case. The now-unreachable `.db-calendar-backlog-empty`
+      rule is removed from `styles.css`; `db-calendar-week-timed-event`'s gantt counterpart
+      (`calendar-timeline-renderer.ts`'s own `renderUnscheduledBacklog`, `db-timeline-backlog-*`)
+      already returned early on empty and is untouched. `calendar-renderer.test.ts`'s backlog test
+      is rewritten (the old one asserted the now-removed empty-line markup) into two: one proving
+      no `.db-calendar-backlog` renders with zero unscheduled rows, one proving it still renders
+      with one. The `calendar-month-view`/`calendar-week-time-grid` hand-mock fixtures
+      (`tools/screenshots/scenarios/temporal.mjs`) drop `calendarBacklogEmptyMarkup` and its two
+      call sites, since both fixtures carry zero unscheduled rows and depicting the drawer there
+      would now depict removed behaviour; `temporal-tick-parity.test.mjs`'s two assertions against
+      that helper are dropped with it. `tools/live/replay.mjs`'s held claim for `039` is updated
+      in place — the calm-empty marker it pinned is superseded by this fix, recorded as such rather
+      than silently broken, and its probe now checks the drawer's absence instead. `npm test`
+      1419/1419 (net +1), `npx tsc --noEmit` exit 0, gantt confirmed unmoved by MD5 and a zero-line
+      diff. (`styles.css`, `src/views/calendar-renderer.ts`)
 - [ ] T016 **Verify the chip's leading icon on a capture that carries one.** The design read adopts
       the chip's leading icon and the `Show icon` toggle that gates it. The toggle landed and is
       sized and coloured, but **no chip in any of the 28 recaptured calendar images renders an

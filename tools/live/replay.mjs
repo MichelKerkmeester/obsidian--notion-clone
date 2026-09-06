@@ -398,7 +398,7 @@ const CLAIMS = [
   },
   {
     phase: "039-calendar-parity-port",
-    claim: "the calendar parity surface carries completion, weekend and calm-empty markers",
+    claim: "the calendar parity surface carries completion and weekend markers; the calm-empty backlog marker 039 recorded is superseded by 057 (the drawer is omitted entirely, not shown empty, when nothing is unscheduled)",
     was: 4,
     recorded: 0,
     // Each probe represents a separate surface contract, and a missing fixture must count as a
@@ -410,7 +410,7 @@ const CLAIMS = [
         { id: "calendar-week-time-grid", check: () =>
           document.querySelectorAll(".db-calendar-time-header-day.is-weekend").length > 0 ? 0 : 1 },
         { id: "calendar-month-view", check: () =>
-          document.querySelectorAll(".db-calendar-backlog-empty").length > 0 ? 0 : 1 },
+          document.querySelectorAll(".db-calendar-backlog").length === 0 ? 0 : 1 },
         { id: "calendar-empty-state", check: () => {
           const title = document.querySelector(".db-empty-card-title");
           return title && title.textContent.trim() === "No date property" ? 0 : 1;

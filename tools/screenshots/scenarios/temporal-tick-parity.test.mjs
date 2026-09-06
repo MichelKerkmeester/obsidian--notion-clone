@@ -50,7 +50,6 @@ import {
   timelineTicksForDateRange,
   timelineViewportContentWidth,
   timelineViewportWindow,
-  calendarBacklogEmptyMarkup,
   calendarEmptyStateMarkup,
   calendarIsWeekendDateKey,
   calendarWeekdayMarkup,
@@ -619,15 +618,11 @@ describe("calendar fixture markup mirrors the renderer states", () => {
     expect(monthDayCell({ n: 23, key: "2026-03-23" }, 2)).not.toContain("is-weekend");
   });
 
-  it("keeps completion modifiers on calendar event and backlog markup", () => {
+  it("keeps completion modifiers on calendar event markup", () => {
     expect(monthSegment({ column: 1, span: 1, lane: 0, title: "Done", tone: "green", completed: true, start: true, end: true }))
       .toContain("is-completed");
     expect(timedEvent({ title: "Done", from: 540, to: 630, tone: "green", completed: true }))
       .toContain("is-completed");
-    const empty = calendarBacklogEmptyMarkup();
-    expect(empty).toContain("db-calendar-backlog");
-    expect(empty).toContain("db-calendar-backlog-empty");
-    expect(empty).toContain("Nothing unscheduled.");
   });
 
   it("keeps the fixture's calendar copy tied to the strings the product renders", () => {
@@ -641,9 +636,6 @@ describe("calendar fixture markup mirrors the renderer states", () => {
     const noEvents = calendarEmptyStateMarkup("no-events");
     expect(noEvents).toContain(t("emptyState.noEventsTitle"));
     expect(noEvents).toContain(t("emptyState.noEventsMessage"));
-    const backlog = calendarBacklogEmptyMarkup();
-    expect(backlog).toContain(t("calendar.unscheduled"));
-    expect(backlog).toContain(t("calendar.unscheduledEmpty"));
   });
 
   it("mirrors renderEmpty()'s empty-card markup class-for-class for both calendar reasons", () => {

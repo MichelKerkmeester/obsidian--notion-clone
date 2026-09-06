@@ -205,16 +205,6 @@ export const calendarWeekdayMarkup = (name, index) => `
   <div class="db-calendar-weekday ${index === 0 || index === 6 ? "is-weekend" : ""}" role="columnheader"><span>${name}</span>
     <div class="db-calendar-col-resize-handle"></div></div>`;
 
-export const calendarBacklogEmptyMarkup = () => `
-  <div class="db-calendar-backlog">
-    <div class="db-calendar-backlog-header">
-      <button type="button" class="db-calendar-backlog-toggle" aria-expanded="true">Unscheduled (0)</button>
-    </div>
-    <div class="db-calendar-backlog-list">
-      <div class="db-calendar-backlog-empty">Nothing unscheduled.</div>
-    </div>
-  </div>`;
-
 /* Mirrors EmptyStateRenderer.renderCard() (empty-state-renderer.ts:262-295) class-for-class, for
    the two reasons calendar-renderer.ts's renderEmpty() ever passes it (:248-268, :631-667):
    "no-date-field" (no calendarStartDateField resolved) and "no-events" (a date field exists but
@@ -1405,12 +1395,11 @@ export const TEMPORAL_SCENARIOS = [
        one variable from viewport height instead, and without the
        renderer's own write mirrored here the grid would photograph a different row height than
        the product draws. */
-    note: "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
+    note: "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment and an overflow week; the unscheduled backlog is omitted because nothing here is unscheduled.",
     html: () => `
       <div class="note-database-container">
         <div class="db-calendar db-calendar-month" style="--db-calendar-day-min-height: 136px">
           ${calendarHeader("March", "2026", "Month", "Previous month", "Next month")}
-          ${calendarBacklogEmptyMarkup()}
           <div class="db-calendar-weekdays" role="row">
             ${WEEKDAYS.map(calendarWeekdayMarkup).join("")}
           </div>
@@ -1427,12 +1416,11 @@ export const TEMPORAL_SCENARIOS = [
     width: 1100,
     sources: ["src/views/calendar-renderer.ts"],
     fixtureOf: "constructed-calendar-week",
-    note: "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
+    note: "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment and the current-time ruler sit in frame; the unscheduled backlog is omitted because nothing here is unscheduled.",
     html: () => `
       <div class="note-database-container">
         <div class="db-calendar db-calendar-week">
           ${calendarHeader("Mar 22 – 28", "2026", "Week", "Previous week", "Next week")}
-          ${calendarBacklogEmptyMarkup()}
           <div class="db-calendar-week-sticky">
             <div class="db-calendar-time-header-row" role="row">
               <div class="db-calendar-time-header-gutter"></div>

@@ -18187,16 +18187,6 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   display: none;
 }
 
-.note-database-container .db-calendar-backlog-empty {
-  display: flex;
-  min-height: 28px;
-  align-items: center;
-  padding: 2px 8px;
-  color: var(--text-faint);
-  font-size: var(--db-font-sm);
-  line-height: 1.35;
-}
-
 .note-database-container .db-calendar-backlog-item {
   display: flex;
   min-width: 0;

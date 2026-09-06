@@ -596,18 +596,27 @@ describe("Calendar parity behaviours", () => {
     }
   });
 
-  it("renders a muted empty line in the backlog when nothing is unscheduled", () => {
+  it("renders no backlog drawer at all when nothing is unscheduled", () => {
     const renderer = new CalendarRenderer(createMockActions());
     const container = new MockElement("div") as unknown as HTMLElement;
 
     renderer.render(container, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
 
     const root = container as unknown as MockElement;
+    expect(root.querySelector(".db-calendar-backlog")).toBeNull();
+  });
+
+  it("renders the backlog drawer with an empty line once an unscheduled row exists", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+
+    renderer.render(container, parityConfig, [makeRow("unscheduled.md", { done: false })]);
+
+    const root = container as unknown as MockElement;
     const drawer = root.querySelector(".db-calendar-backlog");
     expect(drawer).not.toBeNull();
-    const emptyLine = root.querySelector(".db-calendar-backlog-empty");
-    expect(emptyLine).not.toBeNull();
-    expect(emptyLine?.textContent).toBe("Nothing unscheduled.");
+    const items = root.querySelectorAll(".db-calendar-backlog-item");
+    expect(items.length).toBe(1);
   });
 
   it("renders the calm empty-state title for no-events through the renderer", () => {
