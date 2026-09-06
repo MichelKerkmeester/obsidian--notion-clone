@@ -9,6 +9,10 @@
 # planted in a comment or a test name is rejected before it lands rather
 # than caught the next time someone happens to run the gate.
 #
+# The gate's comments lane is what blocks landing. This hook blocks only
+# when installed, and installing it via core.hooksPath REPLACES the whole
+# hook chain rather than adding to it — read the README before doing that.
+#
 # Full-tree, not staged-files-only: the scan runs in well under a second
 # across roughly 500 files, so scoping it to the staged diff would add
 # complexity for no real saving, and a full-tree run also catches a
