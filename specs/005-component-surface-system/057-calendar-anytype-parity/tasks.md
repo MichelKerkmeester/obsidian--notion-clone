@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T16:30:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "landed T015 R1-R7, T016, T008, T009, the 051 toolbar migration and a pinned-values test; gate 26 green"
-    next_safe_action: "AC-010, the operator's device read, is the only row left; nothing further to implement without new operator input"
+    recent_action: "landed T015 R1-R7, T016, T008, T009; gate 26 green"
+    next_safe_action: "await operator AC-010 device read"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"

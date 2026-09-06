@@ -12,12 +12,12 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T16:30:00Z"
     last_updated_by: "code-implementer"
-    recent_action: "landed T015 R1-R7, T016, T008, T009, the 051 toolbar migration and a pinned-values test; released the css lane; gate 26 green"
-    next_safe_action: "Operator device read of AC-010; a later leg re-reads AC-002/003/004's 'pixel read owed' rows if a capture ever supplies them"
+    recent_action: "landed T015 R1-R7, T016, T008, T009; gate 26 green"
+    next_safe_action: "await operator AC-010 device read"
     blockers:
-      - "AC-010 is the operator's own device read and nothing in this repository can close it"
-      - "Five AC-002 sub-rows and CHK-FIX class-of-bug review stay 'pixel read owed' — a static capture cannot answer hover/focus/press/drag/overflow"
-      - "The timed-block per-event colour question (decision-record.md ADR-002's open question) is unanswered and deliberately untouched"
+      - "AC-010 is the operator's device read, unclosable here"
+      - "Five AC-002 sub-rows stay pixel read owed"
+      - "Timed-block per-event colour is an open operator question"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -29,13 +29,13 @@ _memory:
       parent_session_id: null
     completion_pct: 90
     open_questions:
-      - "Does 'styled to the month grid' strip the week/day timed blocks' per-event colour too? (decision-record.md ADR-002, put to the operator, not decided here)"
+      - "Does the month-grid styling strip the timed blocks' colour too?"
     answered_questions:
       - "ADR-002 ruled: keep week and day, styled to the month grid"
-      - "T015's seven residuals are closed: the grid inset, the weekday pitch, the week/day rule colour and today marker geometry, the header grammar, the day-number offset, the weekday label form, and the empty-drawer placement"
-      - "T016: the chip's leading icon is confirmed rendering, not just wired — no calendar capture ever exercised the real renderRecordIcon path before this leg"
-      - "T008: the phone chip takes the 44px touch floor, both in CSS and in the JS-computed grid-row pitch"
-      - "T009: the date-property submenu's measured 224px/28px geometry is scoped to the date-field dropdowns only, not the shared component every other dropdown in the app uses"
+      - "T015 R1-R7 closed: inset, pitch, rule colour, marker, header, offset, label, drawer"
+      - "T016: chip icon confirmed rendering, not just wired"
+      - "T008: phone chip takes the 44px touch floor, CSS and JS pitch alike"
+      - "T009: submenu geometry scoped to date-field dropdowns only"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
