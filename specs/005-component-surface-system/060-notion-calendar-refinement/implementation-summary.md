@@ -43,7 +43,7 @@ _memory:
 | **Opened** | 2026-09-06 |
 | **Completed** | Not yet |
 | **Level** | 2 |
-| **Baseline tree** | `fe6ee9de` |
+| **Baseline tree** | `3e1c3c65` |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -56,7 +56,7 @@ until T003 and T005 land; writing it before then would claim work that has not h
 
 What exists today is the record: a five-iteration research loop
 (`../057-calendar-anytype-parity/research/research.md`), a reconciliation of every one of its findings
-against `main` at `fe6ee9de`, seven ADRs, seven acceptance rows and four device checks.
+against `main` at `3e1c3c65`, seven ADRs, seven acceptance rows and four device checks.
 
 ### Files Changed
 
@@ -95,7 +95,7 @@ than counted.
 | Check | Result |
 |-------|--------|
 | Research loop completed | PASS - 5/5 iterations, `stopReason maxIterationsReached`, lineage `glm-devpass-calendar` |
-| Findings reconciled against `main` | PASS - four rows closed, one moved scale, two still red at `fe6ee9de` |
+| Findings reconciled against `main` | PASS - four rows closed, one moved scale, two still red at `3e1c3c65` |
 | Code legs | Not started |
 | Three gates | Not run - no code changed |
 <!-- /ANCHOR:verification -->

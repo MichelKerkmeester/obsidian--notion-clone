@@ -71,8 +71,8 @@ contextType: "implementation"
       the popovers still need; delete only what nothing reaches.
 - [ ] T005 **Lift the picker's day-cell touch floors** (`styles.css:15932-15945`, `:6941-6945`).
       Add profile-scoped floors following the precedents already in the file
-      (`.is-phone .db-calendar-nav-button` at `:18614-18616` for the phone profile; the coarse-pointer
-      region at `:20600-20736`): `.db-calendar-mini-day` reads **>= 44px** in the phone profile and
+      (`.is-phone .db-calendar-nav-button` at `:18628-18630` for the phone profile; the coarse-pointer
+      region at `:20733-20856`): `.db-calendar-mini-day` reads **>= 44px** in the phone profile and
       **>= 28px** under `(pointer: coarse)`, in the toolbar mini calendar and the date-edit variant alike.
       Do not touch the hover-scoped 28px desktop density at `:6942` - a touch device never enters that
       block, which is the defect, not the value.

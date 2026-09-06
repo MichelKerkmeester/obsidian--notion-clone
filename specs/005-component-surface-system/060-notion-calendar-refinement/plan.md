@@ -62,7 +62,7 @@ Renderer plus stylesheet, with pinned values as the regression seam. There is no
 ### Key Components
 
 - **`CalendarRenderer.renderWeekAllDayStrip`** (`src/views/calendar-renderer.ts`, the block at `:840-870`): the only in-grid producer of a multi-day bar left after P0-3, and therefore the only in-grid producer of `.db-calendar-month-dates`.
-- **`.db-calendar-month-dates`** (`styles.css:17361-17379`) and its `:has()` flex bound (`:17381-17383`): shared by four producers - the all-day strip, the day popover, the overflow popover and the drag ghost. Only the first is in-grid.
+- **`.db-calendar-month-dates`** (`styles.css:17361-17373`) and its `:has()` flex bound (`:17381-17383`): shared by four producers - the all-day strip, the day popover, the overflow popover and the drag ghost. Only the first is in-grid.
 - **`.db-calendar-mini-day`** (`styles.css:15932-15945`) and its date-edit override (`styles.css:6941-6945`): the picker's day cell, in two variants.
 
 ### Data Flow

@@ -60,7 +60,7 @@ The calendar reads the same way at every scale for a multi-day event, its date p
 - **The chip's fill and border** - Notion's boxed pill (`420ef2f0`) contradicts the landed flat chip; ADR-001 declines it.
 - **The week start** - ruled Monday and landed (`src/data/calendar-date-time.ts:172-180`, `057` ADR-007); ADR-002 records the loop's evidence against a settled row.
 - **Range shading in a date picker** - Notion's own three frames disagree; the surface is the record/cell editor, not this view. ADR-006, Proposed, routed by name.
-- **The picker's today treatment** - a documented today-versus-selected collision rule already solves it (`styles.css:15977-15995`); ADR-007, Proposed, deferred to the picker's own leg.
+- **The picker's today treatment** - a documented today-versus-selected collision rule already solves it (`styles.css:15977-15988`); ADR-007, Proposed, deferred to the picker's own leg.
 - **The `Relative` date format, Notion's layout tiles, the Connect-Calendar feature, Notion's dark theme** - other owners or absent from the harvest entirely.
 
 ### Files to Change

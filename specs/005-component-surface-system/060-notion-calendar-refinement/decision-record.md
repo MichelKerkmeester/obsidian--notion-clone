@@ -62,7 +62,7 @@ adoption; ADR-006 and ADR-007 are the two rows it deliberately routed elsewhere.
 `420ef2f0` shows "Creative pipeline" chips as boxed pills - "a visible light-grey fill and a rounded
 border, a small leading page-icon, left-aligned text" (`057/notion-screens-digest.md:100`; pattern P4
 at `:173-180`). Ours is flat by ruling: `border: 0; border-radius: 0; background: none`
-(`styles.css:17081-17110`). This is the harvest's most visually striking difference, which is exactly
+(`styles.css:17190-17214`). This is the harvest's most visually striking difference, which is exactly
 why it needs a written decision rather than a silence.
 
 ### Decision
@@ -137,8 +137,8 @@ reader who finds six Notion frames showing Sunday should find this row rather th
 
 `1c3f11f8` shows Notion's mid-drag drop target as "a flat, uniform fill across the whole cell - not a
 border or an outline" (`057/notion-screens-digest.md:102`). Ours paints a fill **and** a ring:
-`color-mix` event background plus a 2px inset accent ring on resize (`styles.css:17219-17222`), and a
-9-10% accent fill plus a 1px 34% accent outline on drop (`:16606-16617`).
+`color-mix` event background plus a 2px inset accent ring on resize (`styles.css:17324-17327`), and a
+9-10% accent fill plus a 1px 34% accent outline on drop (`:16729-16736`).
 
 ### Decision
 
@@ -171,7 +171,7 @@ disagreement" (`:307-311`).
 ### Decision
 
 **We chose**: keep the measured disc - 26x24px, `#216DFA`, white 16px numeral, 4.53:1
-(`styles.css:16522-16533`).
+(`styles.css:16625-16636`).
 
 **How it works**: nothing changes. P2 corroborates the *shape* we already ship and says nothing about
 the hue that our own WCAG work did not already settle.
@@ -206,7 +206,7 @@ The **week and day all-day strip** was not part of that leg and still emits the 
 (`calendar-renderer.ts:862-864`), so the same event now reads two different ways at two scales. The
 `:has()` flex band-aid that bounded the string's crowding is still in the stylesheet
 (`styles.css:17381-17383`), and no `is-mobile` rule hides the string, while its sibling time prefix is
-hidden on mobile at `styles.css:17777`.
+hidden on mobile at `styles.css:17791`.
 
 ### Decision
 
@@ -311,11 +311,11 @@ ground distinguishes Notion's three treatments from each other.
 
 ### Context
 
-Our picker marks today as an **accent numeral on no fill** (`styles.css:15977-15985`), by a written rule
+Our picker marks today as an **accent numeral on no fill** (`styles.css:15977-15979`), by a written rule
 that exists to keep today and selected distinguishable - today is an accent numeral, selected is a
-numeral on an accent fill, and the collision case has its own rule (`styles.css:15986-15995`). Notion's
+numeral on an accent fill, and the collision case has its own rule (`styles.css:15986-15988`). Notion's
 picker marks today as a **filled disc** (`812c6468`, `057/notion-screens-digest.md:107`; `4c2cbe60`, `:120`) -
-so Notion's *picker* agrees with our *month grid* (`styles.css:16522-16533`) and not with our *picker*.
+so Notion's *picker* agrees with our *month grid* (`styles.css:16625-16636`) and not with our *picker*.
 
 ### Decision
 

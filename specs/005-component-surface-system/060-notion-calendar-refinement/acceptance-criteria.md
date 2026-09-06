@@ -49,7 +49,7 @@ _memory:
 **Level:** 2
 **Status:** Draft
 **Date:** 2026-09-06
-**Baseline tree:** `fe6ee9de` - every observed red below was read on it, not carried from the research loop
+**Baseline tree:** `3e1c3c65` - every observed red below was read on `origin/main` at it after the rebase, not carried from the research loop; the first read happened pre-rebase on the tree whose digest commit was then `fe6ee9de` and is now `38db667a`, and every anchor it cited is re-derived here
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -61,9 +61,9 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given a week-scale render carrying one all-day event whose `endDateKey > startDateKey`, When the all-day strip paints its spanning bar, Then **0** `.db-calendar-month-dates` elements exist inside `.db-calendar-week-allday-cols`, on the desktop profile and the phone profile alike | Constructed render assertion plus a pin in `calendar-pinned-values.test.ts`, with the negative control that restoring the emitter turns red. **Observed red on `fe6ee9de`: 1**, emitted at `src/views/calendar-renderer.ts:862-864`; styled `styles.css:17361-17379`; no `is-mobile` rule exists against it, while the sibling `.db-calendar-month-time` is hidden on mobile at `styles.css:17777`. Notion prints no such string in any of eleven multi-day frames (`057/notion-screens-digest.md:163-171`, screens `23cdb6d5`, `1c3f11f8`, `132e14f0`) | Unmet | - |
+| AC-001 | REQ-001 | Given a week-scale render carrying one all-day event whose `endDateKey > startDateKey`, When the all-day strip paints its spanning bar, Then **0** `.db-calendar-month-dates` elements exist inside `.db-calendar-week-allday-cols`, on the desktop profile and the phone profile alike | Constructed render assertion plus a pin in `calendar-pinned-values.test.ts`, with the negative control that restoring the emitter turns red. **Observed red on `3e1c3c65`: 1**, emitted at `src/views/calendar-renderer.ts:862-864`; styled `styles.css:17361-17373`; no `is-mobile` rule exists against it, while the sibling `.db-calendar-month-time` is hidden on mobile at `styles.css:17791`. Notion prints no such string in any of eleven multi-day frames (`057/notion-screens-digest.md:163-171`, screens `23cdb6d5`, `1c3f11f8`, `132e14f0`) | Unmet | - |
 | AC-002 | REQ-001 | Given the same event, When a user reads the chip's tooltip or opens the day or overflow popover, Then the full `start-end` range is still present | Assert `getSegmentTitle`'s output still carries the range after AC-001 lands; render `calendar-renderer.ts:628` and `:930` and read the span | Unmet | - |
-| AC-003 | REQ-002 | Given the phone profile, When the toolbar mini calendar or the date-edit popover paints a day cell, Then every `.db-calendar-mini-day` hit target reads **>= 44 CSS px** | Computed-style read per profile, pinned with a negative control. **Observed red on `fe6ee9de`: 34px** (`styles.css:15938`) and **28px** in the date-edit variant (`styles.css:6942`, inside a `(hover: hover)` block a touch device never enters). No `mini-*` selector appears in any of the three touch-media regions - swept at `styles.css:20600-20736`, `:18365-18384`, `:18501-18504` | Unmet | - |
+| AC-003 | REQ-002 | Given the phone profile, When the toolbar mini calendar or the date-edit popover paints a day cell, Then every `.db-calendar-mini-day` hit target reads **>= 44 CSS px** | Computed-style read per profile, pinned with a negative control. **Observed red on `3e1c3c65`: 34px** (`styles.css:15938`) and **28px** in the date-edit variant (`styles.css:6942`, inside a `(hover: hover)` block a touch device never enters). No `mini-*` selector appears in any of the three touch-media regions - swept at `styles.css:20733-20856`, `:18492-18511`, `:18628-18630` | Unmet | - |
 | AC-004 | REQ-002 | Given `(pointer: coarse)`, When either picker variant paints a day cell, Then the hit target reads **>= 28 CSS px**, and the hover-scoped desktop density at `styles.css:6942` is unchanged | Six-row matrix: {toolbar mini, date-edit} x {phone, coarse, hover desktop}, all six read from computed style | Unmet | - |
 | AC-005 | REQ-003 | Given the four Notion-versus-Anytype conflicts the harvest named, When `decision-record.md` is read, Then each has an ADR citing the Notion screen id and our `file:line` for both readings, and none un-ticks a `Met` row in `057/acceptance-criteria.md` | ADR-001 (chip presentation), ADR-002 (week start), ADR-003 (drop target), ADR-004 (today hue); re-read `057/acceptance-criteria.md` and confirm it still reads 13 `Met` of 15 | Unmet | - |
 | AC-006 | REQ-004 | Given the four research rows the calendar rebuild closed while the loop ran, When this packet is read, Then each is recorded as verification with its `main`-side evidence rather than proposed as work | Section 3 below | Unmet | - |
@@ -94,11 +94,11 @@ packet, in the calendar rebuild (`b00de6d2`, `093751d8`, `dcf025fc`). They are r
 child does not propose work that already shipped, and so a reader can see which of the loop's numbers
 are stale rather than wrong.
 
-| Loop row | What the research measured | What `fe6ee9de` reads | Owner row |
+| Loop row | What the research measured | What `3e1c3c65` reads | Owner row |
 |---|---|---|---|
 | `+N more` band reset | A 288x26 `#323232` filled band with centred text | `.db-calendar-more-events` carries `border: 0; border-radius: 0; background: none; box-shadow: none; text-align: left`, muted ink at a 10px inset, with `min-width: 0` and an ellipsis bounding it inside its own column (`styles.css:16677-16695`) | `057` G5 and G8, both `Met` |
 | Toolbar segmented control | A bordered, filled segmented pill and a 34 CSS px title gap | `.db-calendar-scale-button` is `border: 0; border-radius: 0; background: none; box-shadow: none`, active and hover included (`styles.css:16393-16420`); four controls; `.db-calendar-title { gap: 12px }` | `057` G13, `Met` |
-| Unscheduled chip touch floor | No 44px rule reached the chip | The chip is now `.db-calendar-nav-button.is-text.db-calendar-unscheduled-chip` (`styles.css:17866`) and inherits `.is-phone .db-calendar-nav-button { min-width: 44px; min-height: 44px }` (`styles.css:18614-18616`) | `044`'s phone floor |
+| Unscheduled chip touch floor | No 44px rule reached the chip | The chip is now `.db-calendar-nav-button.is-text.db-calendar-unscheduled-chip` (`styles.css:17880`) and inherits `.is-phone .db-calendar-nav-button { min-width: 44px; min-height: 44px }` (`styles.css:18628-18630`) | `044`'s phone floor |
 | Week start | Sunday by default, against Anytype's 20-of-20 Monday | `getLocaleWeekStartsOn` returns `1` for any unset config, with the locale fallback removed and the operator's ruling in the comment (`src/data/calendar-date-time.ts:172-180`) | `057` G7, `Met`, under `057` ADR-007 |
 
 One further row moved rather than closed. The loop ranked the multi-day range string as its highest-impact
@@ -113,7 +113,7 @@ survives, the week and day all-day strip. The evidence is unchanged; the target 
 
 Consolidated from the research loop's D-register. **No agent ticks a row here.**
 
-| # | Check | Red-first on `fe6ee9de` | What the operator confirms |
+| # | Check | Red-first on `3e1c3c65` | What the operator confirms |
 |---|---|---|---|
 | D1 | Does a phone date-edit present as a popover, or as an `044` bottom sheet? | `styles.css:6941-6945` is the only date-edit-scoped block and it sits under `(hover: hover)` | Which chrome the phone actually takes, so AC-003's lift is scoped to the selector that carries it |
 | D2 | Is the picker's day cell comfortably tappable after the lift? | 34px today | The target is reachable by thumb, not merely >= 44px on paper |
