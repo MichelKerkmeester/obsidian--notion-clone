@@ -43,7 +43,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 030-gallery-view-deprecation |
 | **Level** | 3 |
-| **Status** | In progress — withdrawn from every picker, no longer minted by the importer, and migrated on open with an undo; the renderer is deliberately kept |
+| **Status** | **Superseded.** The withdrawal and migration described below shipped as this phase intended, but the renderer it deliberately kept is deleted and the deprecation is closed by `specs/007-gallery-view-deprecation` (child `003`, `fb27ba5b`); the removal shipped in release 0.0.28 (`d3433d81`) |
 | **State** | Gate 19 green, exit 0; tsc, build and vitest exit 0 |
 <!-- /ANCHOR:metadata -->
 
