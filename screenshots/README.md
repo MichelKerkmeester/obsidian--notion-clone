@@ -91,7 +91,7 @@ Sources: `src/views/board-renderer.ts`
 
 ### Chart view — empty state
 
-Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.
+Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .db-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired db-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.
 
 | dark | light |
 |---|---|
