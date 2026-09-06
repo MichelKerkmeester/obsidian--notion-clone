@@ -28,6 +28,13 @@ vi.mock("obsidian", () => ({
 
 const stylesContent = readFileSync(resolve(__dirname, "../../styles.css"), "utf-8");
 const cellRendererSource = readFileSync(resolve(__dirname, "./cell-renderer.ts"), "utf-8");
+// The mobile inline-overlay editors that carry this z-index moved to their own modules under
+// `record-surface/` — `editDatePopover`'s and `editTextPopover`'s bodies, not `cell-renderer.ts`
+// itself, are where the token now lives.
+const extractedEditorSource = [
+  readFileSync(resolve(__dirname, "./record-surface/cell-editor-date.ts"), "utf-8"),
+  readFileSync(resolve(__dirname, "./record-surface/cell-editor-text.ts"), "utf-8"),
+].join("\n");
 
 // ───────────────────────────────────────────────────────────────────
 // 2. LAYER SCALE TESTS
@@ -58,7 +65,8 @@ describe("stacking order between the record detail panel and its editors", () =>
 
   it("routes the inline mobile editors through the shared token instead of a raw number", () => {
     expect(cellRendererSource).not.toContain('zIndex: "1000"');
-    expect(cellRendererSource).toContain('"z-index": "var(--db-layer-popover, 100)"');
+    expect(extractedEditorSource).not.toContain('zIndex: "1000"');
+    expect(extractedEditorSource).toContain('"z-index": "var(--db-layer-popover, 100)"');
   });
 });
 

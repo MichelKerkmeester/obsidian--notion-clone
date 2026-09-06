@@ -310,7 +310,8 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
 // unchanged, that no surface builds the engine's two-slot header for itself.
 
 const SHELL_HEADER_CONSUMER_FILES = [
-  "cell-renderer.ts",
+  // The relation editor's phone header — editRelationPopover's body moved here from CellRenderer.
+  "record-surface/cell-editor-relation.ts",
   "toolbar-primitives.ts",
   "owned-menu.ts",
   "sort-panel-renderer.ts",

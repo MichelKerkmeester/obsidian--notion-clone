@@ -36,15 +36,24 @@ import { describe, expect, it } from "vitest";
 // 2. SETUP / FIXTURES
 // ───────────────────────────────────────────────────────────────────
 
-const cellSource = readFileSync(resolve(__dirname, "./cell-renderer.ts"), "utf-8");
 const stylesContent = readFileSync(resolve(__dirname, "../../styles.css"), "utf-8");
 
-/** The body of one positioner, from its signature to the closing brace of the method. */
+// Each positioner moved from a `CellRenderer` private method to a plain function in its editor's
+// own module — the coordinate-space contract this suite guards travelled with the body, so the
+// suite now reads the module the function actually lives in.
+const POSITIONER_SOURCE: Record<string, string> = {
+  positionOptionPopover: readFileSync(resolve(__dirname, "./record-surface/cell-editor-option.ts"), "utf-8"),
+  positionDateEditPopover: readFileSync(resolve(__dirname, "./record-surface/cell-editor-date.ts"), "utf-8"),
+  positionTextEditPopover: readFileSync(resolve(__dirname, "./record-surface/cell-editor-text.ts"), "utf-8"),
+};
+
+/** The body of one positioner, from its signature to the closing brace of the function. */
 function positionerBody(name: string): string {
-  const start = cellSource.indexOf(`private ${name}(`);
+  const source = POSITIONER_SOURCE[name];
+  const start = source.indexOf(`function ${name}(`);
   expect(start, `${name} should exist`).toBeGreaterThan(-1);
-  const next = cellSource.indexOf("\n  private ", start + 1);
-  return cellSource.slice(start, next === -1 ? cellSource.length : next);
+  const next = source.indexOf("\nfunction ", start + 1);
+  return source.slice(start, next === -1 ? source.length : next);
 }
 
 const POSITIONERS = [
@@ -93,6 +102,8 @@ describe("cell popover coordinate space", () => {
   it("keeps a positioner name out of the ignored-parameter convention", () => {
     // A leading underscore marks a parameter as deliberately unused. On a positioner that takes a
     // container, it marks the exact defect this suite guards: the container handed in and dropped.
-    expect(cellSource).not.toMatch(/private position\w*Popover\([^)]*_container/s);
+    for (const source of Object.values(POSITIONER_SOURCE)) {
+      expect(source).not.toMatch(/function position\w*Popover\([^)]*_container/s);
+    }
   });
 });

@@ -89,18 +89,16 @@ describe("CELL_EDITOR_DISPATCH_CONTRACT", () => {
     expect(CELL_EDITOR_DISPATCH_CONTRACT["file.name"]).toBeUndefined();
   });
 
-  it("red before extraction: no named editor module exists on disk yet", () => {
+  it("green after extraction: every named editor module now exists on disk", () => {
     const missing: string[] = [];
     for (const [type, shell] of Object.entries(CELL_EDITOR_DISPATCH_CONTRACT)) {
       if (shell.kind !== "extracted-module") continue;
       const modulePath = resolve(__dirname, `${shell.module}.ts`);
       if (!existsSync(modulePath)) missing.push(type);
     }
-    // Every module-backed type is missing today. This line is the leg's own gate: once a module
-    // lands, its type(s) disappear from `missing`, and this assertion is the one that must be
-    // updated to expect the smaller list — never widened to hide a regression.
-    expect(missing.sort()).toEqual(
-      ["currency", "date", "datetime", "files", "multi-select", "number", "relation", "select", "status", "text"].sort(),
-    );
+    // Was every module-backed type before the extraction landed — the designed red this contract
+    // pins ahead of any body moving. Every type now resolves to its extracted module, so `missing`
+    // is empty — never widened back to hide a regression if a future edit deletes one.
+    expect(missing.sort()).toEqual([]);
   });
 });

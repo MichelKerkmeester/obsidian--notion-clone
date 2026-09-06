@@ -37,6 +37,11 @@ export const RECORD_SURFACE_PRIMITIVES: readonly RecordSurfacePrimitiveEntry[] =
     summary: "Add-property affordance: a search field that filters the format list and falls through to create when nothing matches.",
   },
   {
+    name: "P4",
+    module: "./cell-editor-contract",
+    summary: "Per-column-type inline editors behind CellRenderer.startEdit's pinned dispatch: cell-editor-option (status/select/multi-select), cell-editor-relation, cell-editor-date (date/datetime), cell-editor-text (text/files, plus the shared single-line-popover primitive) and cell-editor-number (number/currency). Checkbox toggles in place; computed and rollup stay host-owned.",
+  },
+  {
     name: "P5",
     module: "./hidden-properties",
     summary: "Hidden-properties group: collapsed with a count, expanded state survives a rebuild.",
@@ -58,3 +63,9 @@ export * from "./hidden-properties";
 export * from "./add-property-row";
 export * from "./type-picker";
 export * from "./cell-editor-contract";
+export * from "./cell-editor-shared";
+export * from "./cell-editor-option";
+export * from "./cell-editor-relation";
+export * from "./cell-editor-date";
+export * from "./cell-editor-text";
+export * from "./cell-editor-number";

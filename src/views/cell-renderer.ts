@@ -17,12 +17,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Notice, setIcon, setTooltip } from "obsidian";
+import { App, Notice, setIcon } from "obsidian";
 import {
-  getColumnOptions,
-  getInvalidObsidianTagValues,
-  normalizeValidObsidianTagValue,
-  normalizeOptionValueForKey,
   resolveOptionDisplay,
   toBooleanValue,
   toMultiSelectValuesForKey,
@@ -32,88 +28,50 @@ import { getColumnDisplayType, getNumberDisplayStyle, isEmptyValue } from "../da
 import { formatEuroCurrency } from "../data/euro-format";
 import * as FilesColumn from "../data/files-column";
 import { formatReportsNumber, isReportsComputedColumn } from "../data/reports-display";
-import { parseRelationValues } from "../data/relation-links";
 import { renderRelationValue } from "./relation-value-renderer";
-import { renderRecordIcon } from "./record-icon-renderer";
-import { DataSource } from "../data/data-source";
-import { formatDateTimeValueDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/date-time-format";
 import { isImeComposing } from "../data/keyboard-utils";
-import { closeActiveOptionColorPicker, openOptionColorPicker } from "./option-color-picker";
-import { normalizeExternalUrlTarget, parseTextLink } from "../data/text-link";
+import { openDropdownMenu } from "./dropdown-field";
+import { isHTMLElement } from "./dom-guards";
+import { DataSource } from "../data/data-source";
+import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/date-time-format";
+import { parseTextLink } from "../data/text-link";
 import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/text-link-scheme";
 import { parseInlineMarkdown } from "../data/inline-markdown";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
 import { getRenamedMarkdownPath } from "../data/file-rename-plan";
-import { ColumnDef, ComputedFieldDef, RowData, StatusOptionDef } from "../data/types";
-import { getEffectiveLocale, t } from "../i18n";
-import { clamp, getVisiblePopoverBounds, isMobileBottomSheet, resolveAnchoredPopoverTop, resolvePopoverHorizontalLeft, setPosition } from "./popover-position";
-import { positionToolbarPopover } from "./popover-position";
-import { claimBottomDock } from "./mobile-bottom-sheet";
-import { buildShellHeader } from "./surface-shell";
-import { openDropdownMenu } from "./dropdown-field";
-import { createMenuRow } from "./menu-row";
-import { RELATION_PICKER_POPOVER } from "./popover-host";
-import { installPopoverAutoClose } from "./popover-auto-close";
+import { ColumnDef, ComputedFieldDef, RowData } from "../data/types";
+import { t } from "../i18n";
 import { setFieldTooltip } from "./field-tooltip";
 import { FileTitleDisplay, getFileTitleDisplay, renderInlineFileTitle } from "./file-title-display";
-import { isHTMLElement } from "./dom-guards";
 import { safeString } from "../data/safe-string";
-import { confirmWithModal } from "./modals/confirm-modal";
 import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./file-field-renderer";
 import { createCheckbox } from "./checkbox";
 import { renderRating, renderProgress, renderProgressRing } from "./number-display-renderer";
 import { renderInlineMarkdown, resolveInlineImageSrc } from "./inline-markdown-renderer";
-import { getLocaleWeekStartsOn, getLocalDateKey, getWeekdayLabels, parseDateKeyToUtc } from "../data/calendar-date-time";
-import { MiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./calendar-mini-calendar-renderer";
-import { buildDatePickerWeeks, formatDatePickerMonthTitle, getDatePickerYearRangeStart, shiftDatePickerMonth } from "./date-picker-model";
-import { OPTION_REGISTRATION_COLORS as OPTION_COLORS } from "../data/option-registration";
-import { shouldCommitEmptyBulkDateClear } from "../data/bulk-edit";
 import { SerialTaskQueue } from "../data/serial-task-queue";
 import type { TableCellNavigationIntent } from "../data/table-keyboard-navigation";
 import { markNoteHoverLink } from "./hover-link-preview";
-import { isTouchDevice } from "../data/touch-environment";
 import { resolveCellTapAction, trackCellGesture } from "./table-cell-gesture";
 import { openExternalUrl } from "./open-external";
+import {
+  CellEditCommitIntent,
+  CellEditorContext,
+  CellEditSession,
+  CellOptionTransaction,
+  clearTransientClass,
+  normalizeCellValueForSave,
+  showValidationError,
+} from "./record-surface/cell-editor-shared";
+import { openOptionEditor } from "./record-surface/cell-editor-option";
+import { openRelationEditor } from "./record-surface/cell-editor-relation";
+import { openDateEditor } from "./record-surface/cell-editor-date";
+import { openSingleLineEditor, openTextEditor, openTextPopoverEditor, type EditorSaveResult } from "./record-surface/cell-editor-text";
+import { openNumberEditor } from "./record-surface/cell-editor-number";
+
+export type { CellEditCommitIntent, CellEditSession, CellOptionTransaction };
 
 // ───────────────────────────────────────────────────────────────────
-// 2. TYPES
-// ───────────────────────────────────────────────────────────────────
-
-let nextRelationListId = 0;
-
-export interface CellOptionTransaction {
-  previousOptions?: StatusOptionDef[];
-  nextOptions?: StatusOptionDef[];
-  cleanupRemovedValues?: string[];
-  renameValues?: Array<{ from: string; to: string }>;
-  setValue?: boolean;
-  value?: unknown;
-}
-
-export type CellEditCommitIntent = "replace" | "clear";
-type EditorSaveResult = void | boolean | "validation" | { validationMessage: string };
-
-export interface CellEditSession {
-  mixed?: boolean;
-  placeholder?: string;
-  anchorEl?: () => HTMLElement | null;
-  commitValue(value: unknown, intent?: CellEditCommitIntent): Promise<void>;
-  commitOptionTransaction?(transaction: CellOptionTransaction): Promise<void>;
-  onClose?(): void;
-}
-
-interface OptionDragPreview {
-  preview: HTMLElement;
-  offsetX: number;
-  offsetY: number;
-}
-
-interface MetadataCacheWithTags {
-  getTags?(): Record<string, number>;
-}
-
-// ───────────────────────────────────────────────────────────────────
-// 3. PUBLIC API
+// 2. PUBLIC API
 // ───────────────────────────────────────────────────────────────────
 
 export function renderDelayedExternalLink(
@@ -177,7 +135,7 @@ export function renderDelayedExternalLink(
 }
 
 // ───────────────────────────────────────────────────────────────────
-// 4. RENDERER
+// 3. RENDERER
 // ───────────────────────────────────────────────────────────────────
 
 export class CellRenderer {
@@ -215,6 +173,32 @@ export class CellRenderer {
     intent: TableCellNavigationIntent,
   ): void {
     if (!session) this.finishTableCellEdit?.(row, col, intent);
+  }
+
+  // Built fresh per editor open rather than cached: the closures below read `this`'s current
+  // private fields at call time, which is what every consumer of this context expects — the same
+  // way the un-extracted methods read `this.activeOptionPopoverClose` fresh on every access rather
+  // than a value captured once at construction.
+  private buildCellEditorContext(): CellEditorContext {
+    return {
+      app: this.app,
+      dataSource: this.dataSource,
+      commitEditedValue: (row, col, value, session, intent) => this.commitEditedValue(row, col, value, session, intent),
+      refreshAfterSave: () => this.refreshAfterSave(),
+      finishInlineEdit: (row, col, session, intent) => this.finishInlineEdit(row, col, session, intent),
+      commitCellOptionTransaction: this.commitCellOptionTransaction
+        ? (row, col, transaction) => this.commitCellOptionTransaction!(row, col, transaction)
+        : undefined,
+      enqueueOptionCommit: (task) => this.optionCommitQueue.enqueue(task),
+      getActiveOptionPopoverClose: () => this.activeOptionPopoverClose,
+      setActiveOptionPopoverClose: (close) => { this.activeOptionPopoverClose = close; },
+      getActiveInlineEditorCancel: () => this.activeInlineEditorCancel,
+      setActiveInlineEditorCancel: (cancel) => { this.activeInlineEditorCancel = cancel; },
+      getActiveTextEditClose: () => this.activeTextEditClose,
+      setActiveTextEditClose: (close) => { this.activeTextEditClose = close; },
+      closeActiveOptionPopover: () => this.closeActiveOptionPopover(),
+      renderNumberValue: (td, row, col, value) => this.renderNumberValue(td, row, col, value),
+    };
   }
 
   renderCell(td: HTMLElement, row: RowData, col: ColumnDef): void {
@@ -720,9 +704,10 @@ export class CellRenderer {
       const initial = session.mixed ? "" : safeString(currentValue);
       const placeholder = session.mixed ? (session.placeholder ?? "") : undefined;
       if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-        this.editTextPopover(target, row, col, initial, session, placeholder);
+        openTextPopoverEditor(this.buildCellEditorContext(), target, row, col, initial, session, placeholder);
       } else {
-        this.editSingleLinePopover(
+        openSingleLineEditor(
+          this.buildCellEditorContext(),
           target,
           row,
           col,
@@ -898,6 +883,8 @@ export class CellRenderer {
     return row.frontmatter[col.key];
   }
 
+  /** Body moved to `record-surface/cell-editor-relation.ts`'s `openRelationEditor`, unchanged, so
+   *  the record sheet and board cards keep this one entry point without constructing the class. */
   private editRelationPopover(
     target: HTMLElement,
     row: RowData,
@@ -906,210 +893,15 @@ export class CellRenderer {
     session?: CellEditSession,
     initialSearch = "",
   ): void {
-    this.closeActiveOptionPopover();
-    const targetDatabaseId = col.relationConfig?.targetDatabaseId;
-    const database = this.dataSource.getViewDefFiles()
-      .map((entry) => entry.config)
-      .find((candidate) => candidate.id === targetDatabaseId);
-    if (!database) {
-      new Notice(t("relation.targetDatabaseRequired"));
-      return;
-    }
-    const records = this.dataSource.getRecordsForDatabase(database);
-    const recordIconField = database.recordIconField &&
-      database.schema.columns.some((candidate) =>
-        candidate.key === database.recordIconField && candidate.type === "text"
-      )
-      ? database.recordIconField
-      : undefined;
-    const selectedPaths = new Set<string>();
-    const selectedOrder: string[] = [];
-    const existingRawByPath = new Map<string, string>();
-    const unresolved: string[] = [];
-    for (const link of parseRelationValues(currentValue)) {
-      const resolved = this.app?.metadataCache.getFirstLinkpathDest(link.target, row.file.path);
-      if (resolved && records.some((record) => record.file.path === resolved.path)) {
-        if (!selectedPaths.has(resolved.path)) selectedOrder.push(resolved.path);
-        selectedPaths.add(resolved.path);
-        existingRawByPath.set(resolved.path, link.raw);
-      }
-      else unresolved.push(link.raw);
-    }
-
-    const host = window.activeDocument.body;
-    const popover = host.createDiv({ cls: "db-cell-option-popover db-relation-popover" });
-    popover.setAttr("role", "dialog");
-    popover.setAttr("aria-label", col.label || col.key);
-    let closed = false;
-    let removeAutoClose: (() => void) | undefined;
-    const close = () => {
-      if (closed) return;
-      closed = true;
-      removeAutoClose?.();
-      popover.remove();
-      if (this.activeOptionPopoverClose === close) this.activeOptionPopoverClose = undefined;
-      session?.onClose?.();
-    };
-    const phoneSheet = isMobileBottomSheet(host.ownerDocument);
-    if (phoneSheet) buildShellHeader(popover, { title: col.label || col.key, onClose: close });
-    const header = popover.createDiv({ cls: "db-relation-popover-header" });
-    if (!phoneSheet) header.createDiv({ cls: "db-relation-popover-title", text: col.label || col.key });
-    const search = header.createEl("input", {
-      cls: "db-cell-option-search",
-      attr: { type: "search", placeholder: t("relation.search"), "aria-label": t("relation.search"), "aria-autocomplete": "list" },
-    });
-    search.value = initialSearch;
-    const list = popover.createDiv({ cls: "db-cell-option-list db-relation-option-list", attr: { role: "listbox", "aria-multiselectable": "true", "aria-label": col.label || col.key } });
-    const listId = `db-relation-list-${++nextRelationListId}`;
-    list.setAttr("id", listId);
-    search.setAttr("aria-controls", listId);
-    const footer = popover.createDiv({ cls: "db-relation-popover-footer" });
-    const count = footer.createSpan({ cls: "db-relation-selected-count" });
-    const clear = footer.createEl("button", { text: t("common.clear"), cls: "db-relation-clear", attr: { type: "button" } });
-    const actions = footer.createDiv({ cls: "db-relation-footer-actions" });
-    const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta db-relation-footer-button", attr: { type: "button" } });
-    let activeIndex = 0;
-    const rowHeight = 34;
-    const windowSize = 80;
-    let scrollFrame: number | undefined;
-    const getFilteredRecords = () => {
-      const query = search.value.trim().toLowerCase();
-      return records.filter((record) => {
-        if (!query) return true;
-        const title = record.file.basename || record.file.name.replace(/\.md$/i, "");
-        return `${title} ${record.file.path}`.toLowerCase().includes(query);
-      });
-    };
-    const renderList = (preserveScroll = true) => {
-      const scrollTop = preserveScroll ? list.scrollTop : 0;
-      const filtered = getFilteredRecords();
-      if (activeIndex >= filtered.length) activeIndex = Math.max(0, filtered.length - 1);
-      list.empty();
-      const empty = list.createDiv({ cls: "db-dropdown-empty db-relation-empty", text: t("relation.noResults"), attr: { role: "status", hidden: filtered.length > 0 ? "true" : "false" } });
-      if (!filtered.length) {
-        empty.removeAttribute("hidden");
-        count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
-        return;
-      }
-      const start = Math.max(0, Math.min(Math.max(0, filtered.length - windowSize), Math.floor(scrollTop / rowHeight) - 8));
-      const end = Math.min(filtered.length, start + windowSize);
-      if (start > 0) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${start * rowHeight}px` } });
-      // Built by hand rather than through the shared row builder: this list is a virtualised
-      // `listbox`, and its rows carry `role="option"`/`aria-selected` — the semantics the keyboard
-      // handler below selects on (`[role=option]`) — where the row builder's rows are
-      // `menuitem`/`menuitemcheckbox` for a `menu`. The trailing check icon here needs no change:
-      // it already sits after the label rather than before it.
-      for (let filteredIndex = start; filteredIndex < end; filteredIndex++) {
-        const record = filtered[filteredIndex];
-        const title = record.file.basename || record.file.name.replace(/\.md$/i, "");
-        const option = list.createEl("button", {
-          cls: `db-cell-option-item db-menu-item db-relation-option-item${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
-          attr: { type: "button", role: "option", "aria-selected": selectedPaths.has(record.file.path) ? "true" : "false", tabindex: filteredIndex === activeIndex ? "0" : "-1", "data-index": String(filteredIndex) },
-        });
-        renderRecordIcon(option, recordIconField ? record.frontmatter[recordIconField] : undefined, {
-          compact: true,
-          defaultIcon: "file-text",
-        }).addClass("db-relation-option-icon");
-        option.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: title });
-        const check = option.createSpan({ cls: "db-option-check db-menu-item-check db-relation-option-check" });
-        if (selectedPaths.has(record.file.path)) setIcon(check, "check");
-        option.onclick = () => {
-          if (selectedPaths.has(record.file.path)) {
-            selectedPaths.delete(record.file.path);
-            const index = selectedOrder.indexOf(record.file.path);
-            if (index >= 0) selectedOrder.splice(index, 1);
-          } else {
-            selectedPaths.add(record.file.path);
-            selectedOrder.push(record.file.path);
-          }
-          activeIndex = filteredIndex;
-          renderList();
-        };
-      }
-      if (end < filtered.length) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${(filtered.length - end) * rowHeight}px` } });
-      if (preserveScroll) list.scrollTop = scrollTop;
-      count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
-    };
-    const focusActive = () => {
-      const active = list.querySelector<HTMLButtonElement>(`[data-index="${activeIndex}"]`);
-      active?.focus({ preventScroll: true });
-    };
-    const moveActive = (delta: number) => {
-      const filtered = getFilteredRecords();
-      if (!filtered.length) return;
-      activeIndex = Math.max(0, Math.min(filtered.length - 1, activeIndex + delta));
-      const currentScroll = list.scrollTop;
-      const nextTop = activeIndex * rowHeight;
-      if (nextTop < currentScroll) list.scrollTop = nextTop;
-      else if (nextTop + rowHeight > currentScroll + list.clientHeight) list.scrollTop = nextTop - list.clientHeight + rowHeight;
-      renderList();
-      window.requestAnimationFrame(focusActive);
-    };
-    search.oninput = () => { activeIndex = 0; renderList(false); };
-    search.onkeydown = (event) => {
-      if (isImeComposing(event)) return;
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        list.focus();
-        moveActive(0);
-        return;
-      }
-      if (event.key === "Enter") {
-        event.preventDefault();
-        list.querySelector<HTMLButtonElement>("[data-index=\"0\"]")?.click();
-        return;
-      }
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      close();
-    };
-    list.onkeydown = (event) => {
-      if (isImeComposing(event)) return;
-      const option = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[role=option]");
-      if (!option) return;
-      const index = Number(option.getAttribute("data-index"));
-      if (Number.isFinite(index)) activeIndex = index;
-      if (event.key === "ArrowDown") { event.preventDefault(); moveActive(1); }
-      else if (event.key === "ArrowUp") { event.preventDefault(); moveActive(-1); }
-      else if (event.key === "Home") { event.preventDefault(); activeIndex = 0; renderList(false); window.requestAnimationFrame(focusActive); }
-      else if (event.key === "End") { event.preventDefault(); activeIndex = Math.max(0, getFilteredRecords().length - 1); renderList(); window.requestAnimationFrame(focusActive); }
-      else if (event.key === "Enter" || event.key === " ") { event.preventDefault(); option.click(); }
-    };
-    list.onscroll = () => {
-      if (getFilteredRecords().length <= windowSize || scrollFrame !== undefined) return;
-      scrollFrame = window.requestAnimationFrame(() => {
-        scrollFrame = undefined;
-        renderList();
-      });
-    };
-    clear.onclick = () => {
-      selectedPaths.clear();
-      selectedOrder.splice(0, selectedOrder.length);
-      unresolved.splice(0, unresolved.length);
-      renderList();
-    };
-    apply.onclick = () => {
-      const values = [
-        ...unresolved,
-        ...selectedOrder.map((path) => existingRawByPath.get(path) || `[[${path.replace(/\.md$/i, "")}]]`),
-      ];
-      void this.commitEditedValue(row, col, values, session, values.length ? "replace" : "clear")
-        .then(() => {
-          close();
-          this.finishInlineEdit(row, col, session, "down");
-        });
-    };
-    renderList(false);
-    positionToolbarPopover(popover, target, { ...RELATION_PICKER_POPOVER, gap: 4 });
-    this.activeOptionPopoverClose = close;
-    removeAutoClose = installPopoverAutoClose({ panel: popover, anchorEl: target, close });
-    window.setTimeout(() => search.focus(), 0);
+    openRelationEditor(this.buildCellEditorContext(), target, row, col, currentValue, session, initialSearch);
   }
 
   private selectCell(td: HTMLElement): void {
     td.focus();
   }
 
+  /** Body moved to `record-surface/cell-editor-option.ts`'s `openOptionEditor`, unchanged, so
+   *  the record sheet and board cards keep this one entry point without constructing the class. */
   private editOptionPopover(
     td: HTMLElement,
     row: RowData,
@@ -1120,515 +912,11 @@ export class CellRenderer {
     session?: CellEditSession,
     initialSearch?: string,
   ): void {
-    this.closeActiveOptionPopover();
-    const rawContainer = td.closest(".note-database-container");
-    const container = isHTMLElement(rawContainer) ? rawContainer : null;
-    const host = container || window.activeDocument.body;
-    host.querySelectorAll(".db-cell-option-popover").forEach((el) => el.remove());
-    const isFileTags = col.key === "file.tags";
-    const optionKey = isFileTags ? "tags" : col.key;
-    const originalValues = multiple
-      ? (isFileTags ? toValidObsidianTagValues(currentValue) : toMultiSelectValuesForKey(optionKey, currentValue))
-      : [normalizeOptionValueForKey(optionKey, currentValue)].filter(Boolean);
-    const selected = new Set(originalValues);
-    const popover = host.createDiv({ cls: "db-cell-option-popover" });
-    let activeOptionIndex = 0;
-    let closed = false;
-    let sessionClose: (() => void) | undefined;
-    let removeAutoClose: (() => void) | undefined;
-
-    const close = (intent?: TableCellNavigationIntent) => {
-      if (closed) return;
-      // Esc ("stay"): if the option color picker is open, only close it (via the
-      // shared closer that also cleans its listeners) and keep this option popover
-      // open. This is the funnel point for BOTH Esc paths — the scope-registered
-      // Esc (handleInlineEditorEscape → cancelActiveInlineEditor) and the document
-      // keydown Esc — so guarding here covers both.
-      if (intent === "stay" && closeActiveOptionColorPicker(window.activeDocument)) {
-        return;
-      }
-      closed = true;
-      if (this.activeOptionPopoverClose === closeFromKeyboard) this.activeOptionPopoverClose = undefined;
-      if (this.activeInlineEditorCancel === closeFromKeyboard) this.activeInlineEditorCancel = undefined;
-      if (sessionClose && this.activeTextEditClose === sessionClose) this.activeTextEditClose = undefined;
-      removeAutoClose?.();
-      popover.remove();
-      // Clean up any leaked color picker popups on window.activeDocument.body
-      window.activeDocument.body.querySelectorAll(".db-color-picker-popup").forEach(el => el.remove());
-      window.activeDocument.removeEventListener("keydown", onKeydown, true);
-      session?.onClose?.();
-      if (intent) this.finishInlineEdit(row, col, session, intent);
-    };
-    const closeFromKeyboard = () => close("stay");
-    this.activeOptionPopoverClose = closeFromKeyboard;
-    this.activeInlineEditorCancel = closeFromKeyboard;
-    if (session) {
-      sessionClose = () => close();
-      this.activeTextEditClose = sessionClose;
-    }
-    const onKeydown = (event: KeyboardEvent) => {
-      if (isImeComposing(event)) return;
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        close("stay");
-        return;
-      }
-      if (event.key === "Tab") {
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        close(event.shiftKey ? "previous" : "next");
-        return;
-      }
-      if (isHTMLElement(event.target) && event.target.closest("input, textarea, select")) return;
-      if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") return;
-      const items = Array.from(popover.querySelectorAll<HTMLButtonElement>(".db-cell-option-item"));
-      if (!items.length) return;
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      if (event.key === "ArrowDown") activeOptionIndex = Math.min(items.length - 1, activeOptionIndex + 1);
-      if (event.key === "ArrowUp") activeOptionIndex = Math.max(0, activeOptionIndex - 1);
-      const item = items[activeOptionIndex];
-      if (event.key === "Enter") {
-        item.click();
-        if (!multiple) {
-          void this.optionCommitQueue.enqueue(async () => undefined)
-            .then(() => close("down"));
-        }
-      }
-      else item.focus();
-    };
-    // Build option objects from column config (mutable copies)
-    const optionDefs: StatusOptionDef[] = [];
-    const registeredOptionValues = new Set<string>();
-    if (isFileTags) {
-      optionDefs.push(...this.getFileTagDraftOptions(col, originalValues));
-    } else {
-      const seenOptions = new Set<string>();
-      for (const option of getColumnOptions(col)) {
-        const value = normalizeOptionValueForKey(optionKey, option.value);
-        if (!value || seenOptions.has(value)) continue;
-        seenOptions.add(value);
-        registeredOptionValues.add(value);
-        optionDefs.push({ ...option, value });
-      }
-      for (const v of originalValues) {
-        if (v && !optionDefs.find(o => o.value === v)) {
-          optionDefs.push({ value: v, color: "gray" });
-        }
-      }
-    }
-
-    const cloneOptions = (options: StatusOptionDef[]) => options.map((option) => ({ ...option }));
-    const getCommittedOptions = () => cloneOptions(col.statusOptions || []);
-    const getDraftOptions = () => isFileTags
-      ? this.persistFileTagColorOptions(optionDefs)
-      : cloneOptions(optionDefs.filter((option) => registeredOptionValues.has(option.value)));
-    const commitOptionTransaction = async (transaction: CellOptionTransaction) => {
-      try {
-        if (session?.commitOptionTransaction) {
-          await session.commitOptionTransaction(transaction);
-          return;
-        }
-        if (this.commitCellOptionTransaction) {
-          await this.commitCellOptionTransaction(row, col, transaction);
-          return;
-        }
-        if (transaction.nextOptions) {
-          col.statusOptions = cloneOptions(transaction.nextOptions);
-          col.statusPresetId = undefined;
-        }
-        if (transaction.setValue) await this.commitEditedValue(row, col, transaction.value, session);
-        else await this.refreshAfterSave();
-      } catch (err) {
-        console.error("Note Database: failed to commit option edit", err);
-        new Notice(t("errors.updateFailed", { error: String(err) }));
-      }
-    };
-    const commitValue = (value: unknown) => {
-      void this.optionCommitQueue.enqueue(() => commitOptionTransaction({
-        setValue: true,
-        value: this.normalizeCellValueForSave(col, value),
-      }));
-    };
-    const commitOptions = (transaction: Omit<CellOptionTransaction, "previousOptions" | "nextOptions"> = {}) => {
-      const nextOptions = getDraftOptions();
-      void this.optionCommitQueue.enqueue(() => commitOptionTransaction({
-        previousOptions: getCommittedOptions(),
-        nextOptions,
-        ...transaction,
-      }));
-    };
-
-    const renderOptionList = () => {
-      // Rebuild transient option rows and empty state from the current local selection set.
-      popover.querySelectorAll(".db-cell-option-item, .db-panel-empty, .db-option-drop-line").forEach(el => el.remove());
-      activeOptionIndex = 0;
-      if (optionDefs.length === 0) {
-        const empty = popover.createDiv({ cls: "db-panel-empty", text: t("cell.noOptions") });
-        popover.insertBefore(empty, popover.querySelector(".db-cell-option-add"));
-      }
-      optionDefs.forEach((opt, idx) => {
-        const isTransient = !isFileTags && !registeredOptionValues.has(opt.value);
-        if (selected.has(opt.value)) activeOptionIndex = idx;
-        // The row shell, its label and its checkable semantics come from the shared row builder —
-        // `role="menuitemcheckbox"`/`aria-checked` rather than a bare button, so the check this row
-        // carries is the same accessible affordance every other menu-shaped row in the family uses.
-        // The drag handle, reorder controls, colour dot and delete button have no home in that
-        // builder's fixed slots and are spliced in around the label exactly where they sat before.
-        const rowHandle = createMenuRow(popover, {
-          cls: "db-cell-option-item",
-          label: opt.value,
-          selected: selected.has(opt.value),
-        });
-        const item = rowHandle.row;
-        const label = rowHandle.labelEl;
-        label.addClass("db-option-label");
-        popover.insertBefore(item, popover.querySelector(".db-cell-option-add"));
-
-        // Drag handle for reorder
-        const handle = item.createSpan({ cls: "db-option-drag-handle", text: "⠿" });
-        if (isFileTags || isTransient) handle.addClass("is-hidden");
-        handle.onmousedown = (e) => {
-          if (isFileTags || isTransient) return;
-          e.stopPropagation();
-          e.preventDefault();
-
-          item.addClass("is-dragging");
-          const dragPreview = this.createOptionDragPreview(item, e);
-          let dropLine: HTMLElement | null = null;
-          let lastTarget = idx;
-
-          const removeDropLine = () => { dropLine?.remove(); dropLine = null; };
-
-          const onMove = (ev: MouseEvent) => {
-            this.updateOptionDragPreview(dragPreview, ev);
-            // Find insert-before position in DOM
-            const items = Array.from(popover.querySelectorAll<HTMLButtonElement>(".db-cell-option-item"));
-            let insertBefore = items.length;
-            for (let i = 0; i < items.length; i++) {
-              const ir = items[i].getBoundingClientRect();
-              if (ev.clientY < ir.top + ir.height / 2) {
-                insertBefore = i;
-                break;
-              }
-            }
-
-            // Convert to target array index after removing dragged item
-            const target = insertBefore <= idx ? insertBefore : insertBefore - 1;
-
-            if (target !== idx) {
-              removeDropLine();
-              dropLine = popover.createDiv({ cls: "db-option-drop-line" });
-              const ref = items[insertBefore];
-              if (ref) popover.insertBefore(dropLine, ref);
-              else popover.insertBefore(dropLine, popover.querySelector(".db-cell-option-add"));
-              lastTarget = target;
-            } else {
-              removeDropLine();
-              lastTarget = idx;
-            }
-          };
-
-          const onUp = () => {
-            removeDropLine();
-            item.removeClass("is-dragging");
-            this.removeOptionDragPreview(dragPreview);
-            if (lastTarget !== idx && lastTarget >= 0 && lastTarget < optionDefs.length) {
-              const [moved] = optionDefs.splice(idx, 1);
-              optionDefs.splice(lastTarget, 0, moved);
-              commitOptions();
-              renderOptionList();
-            }
-            window.activeDocument.removeEventListener("mousemove", onMove);
-            window.activeDocument.removeEventListener("mouseup", onUp);
-          };
-
-          window.activeDocument.addEventListener("mousemove", onMove);
-          window.activeDocument.addEventListener("mouseup", onUp);
-        };
-
-        const moveControls = item.createSpan({ cls: "db-mobile-reorder-controls" });
-        if (isFileTags || isTransient) moveControls.addClass("is-hidden");
-        const upBtn = moveControls.createEl("button", {
-          attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
-        });
-        setIcon(upBtn, "arrow-up");
-        upBtn.disabled = idx === 0;
-        upBtn.onclick = (event) => {
-          if (isFileTags) return;
-          event.preventDefault();
-          event.stopPropagation();
-          const [moved] = optionDefs.splice(idx, 1);
-          optionDefs.splice(idx - 1, 0, moved);
-          commitOptions();
-          renderOptionList();
-        };
-        const downBtn = moveControls.createEl("button", {
-          attr: { type: "button", title: t("menu.moveDown"), "aria-label": t("menu.moveDown") },
-        });
-        setIcon(downBtn, "arrow-down");
-        downBtn.disabled = idx >= optionDefs.length - 1;
-        downBtn.onclick = (event) => {
-          if (isFileTags) return;
-          event.preventDefault();
-          event.stopPropagation();
-          const [moved] = optionDefs.splice(idx, 1);
-          optionDefs.splice(idx + 1, 0, moved);
-          commitOptions();
-          renderOptionList();
-        };
-
-        // Color dot — opens color picker
-        const dot = item.createSpan({ cls: "db-option-color-dot" });
-        const updateDot = () => {
-          dot.className = `db-option-color-dot db-option-color-${opt.color}`;
-        };
-        updateDot();
-        dot.onclick = (e) => {
-          if (isTransient) return;
-          e.stopPropagation();
-          e.preventDefault();
-          showColorPicker(dot, opt, () => { commitOptions(); updateDot(); });
-        };
-        // Each was appended after the label the row builder already created; move the three leading
-        // pieces back in front of it, in the same relative order they were built.
-        label.before(handle, moveControls, dot);
-
-        // Label — double-click to rename
-        label.ondblclick = (e) => {
-          if (isFileTags || isTransient) return;
-          e.stopPropagation();
-          e.preventDefault();
-          const input = window.activeDocument.createElement("input");
-          input.type = "text";
-          input.value = opt.value;
-          input.className = "db-option-rename-input";
-          label.replaceWith(input);
-          input.focus();
-          input.select();
-          let finished = false;
-          const finish = () => {
-            if (finished) return;
-            finished = true;
-            const name = input.value.trim();
-            if (name && name !== opt.value && !optionDefs.some(o => o !== opt && o.value === name)) {
-              const oldValue = opt.value;
-              opt.value = name;
-              registeredOptionValues.delete(oldValue);
-              registeredOptionValues.add(name);
-              if (selected.has(oldValue)) {
-                selected.delete(oldValue);
-                selected.add(name);
-              }
-              commitOptions({ renameValues: [{ from: oldValue, to: name }] });
-            }
-            input.replaceWith(label);
-            label.textContent = opt.value;
-          };
-          input.onblur = finish;
-          input.onkeydown = (ev) => {
-            if (isImeComposing(ev)) return;
-            if (ev.key === "Enter") finish();
-            if (ev.key === "Escape") { finished = true; input.replaceWith(label); }
-          };
-        };
-
-        // Check mark — an icon carrying the row's own `menuitemcheckbox` semantics rather than a
-        // bare "✓" glyph, which a screen reader reads as a character, not a state.
-        const mark = item.createSpan({ cls: "db-option-check" });
-        const updateMark = () => {
-          mark.empty();
-          if (selected.has(opt.value)) setIcon(mark, "check");
-        };
-        updateMark();
-        const deleteButton = item.createEl("button", {
-          cls: "db-option-delete",
-          attr: {
-            title: isTransient ? t("cell.addOption") : t("common.delete"),
-            "aria-label": isTransient ? t("cell.addOption") : t("common.delete"),
-          },
-        });
-        if (isFileTags) deleteButton.addClass("is-hidden");
-        setIcon(deleteButton, isTransient ? "plus" : "trash");
-        deleteButton.onmousedown = (event) => event.preventDefault();
-        deleteButton.onclick = async (event) => {
-          if (isFileTags) return;
-          event.preventDefault();
-          event.stopPropagation();
-          if (isTransient) {
-            registeredOptionValues.add(opt.value);
-            opt.color = OPTION_COLORS[(registeredOptionValues.size - 1) % OPTION_COLORS.length];
-            commitOptions();
-            renderOptionList();
-            return;
-          }
-          if (!this.app || !await confirmWithModal(this.app, {
-            title: t("common.delete"),
-            message: t("modal.confirmDeleteOption", { name: opt.value }),
-            confirmText: t("common.delete"),
-            danger: true,
-          })) return;
-          const removed = opt.value;
-          optionDefs.splice(idx, 1);
-          registeredOptionValues.delete(removed);
-          const wasSelected = selected.delete(removed);
-          commitOptions({
-            cleanupRemovedValues: [removed],
-            setValue: wasSelected,
-            value: multiple ? this.normalizeCellValueForSave(col, Array.from(selected)) : null,
-          });
-          renderOptionList();
-        };
-        deleteButton.onkeydown = (event) => {
-          if (event.key !== "Enter" && event.key !== " ") return;
-          event.preventDefault();
-          deleteButton.click();
-        };
-
-        item.onmousedown = (event) => event.preventDefault();
-        item.onkeydown = (event) => {
-          if (event.key !== "Enter" && event.key !== " ") return;
-          event.stopPropagation();
-          event.preventDefault();
-        };
-        item.onclick = () => {
-          if (!multiple) {
-            selected.clear();
-            selected.add(opt.value);
-            commitValue(opt.value);
-            // Clear every row's mark and checked state before setting this one.
-            clearAllChecks();
-            updateMark();
-            rowHandle.setSelected(true);
-            return;
-          }
-          if (selected.has(opt.value)) selected.delete(opt.value);
-          else selected.add(opt.value);
-          updateMark();
-          rowHandle.setSelected(selected.has(opt.value));
-          commitValue(Array.from(selected));
-        };
-      });
-    };
-
-    // Color picker popup — shared with board group creation and mounted on body.
-    const showColorPicker = (anchor: HTMLElement, opt: StatusOptionDef, onUpdate: () => void) => {
-      openOptionColorPicker(anchor, opt.color || "gray", (color) => {
-        const oldColor = opt.color;
-        opt.color = color;
-        onUpdate();
-        // Update visible cells in the table immediately
-        if (container) {
-          container.querySelectorAll(`.status-color-${oldColor}`).forEach((badge: Element) => {
-            if (badge.textContent === opt.value) {
-              badge.removeClass(`status-color-${oldColor}`);
-              badge.addClass(`status-color-${color}`);
-            }
-          });
-        }
-      }, opt.value);
-    };
-
-    // New option input
-    const addRow = popover.createDiv({ cls: "db-cell-option-add" });
-    const addInput = addRow.createEl("input", {
-      attr: { placeholder: t("cell.addOption"), type: "text" },
-    });
-    addInput.onkeydown = (e) => {
-      if (isImeComposing(e)) return;
-      if (e.key !== "Enter") return;
-      e.preventDefault();
-      if (isFileTags) {
-        const invalidTags = getInvalidObsidianTagValues([addInput.value]);
-        if (invalidTags.length > 0) {
-          new Notice(t("fileField.invalidTag", { tag: invalidTags[0] }));
-          return;
-        }
-      }
-      const name = isFileTags ? normalizeValidObsidianTagValue(addInput.value) : normalizeOptionValueForKey(optionKey, addInput.value);
-      if (!name) return;
-      const existing = optionDefs.find((option) => option.value === name);
-      if (existing && !isFileTags && !registeredOptionValues.has(name)) {
-        registeredOptionValues.add(name);
-        existing.color = OPTION_COLORS[(registeredOptionValues.size - 1) % OPTION_COLORS.length];
-        addInput.value = "";
-        commitOptions({ setValue: true, value: multiple ? Array.from(selected.add(name)) : name });
-        renderOptionList();
-        return;
-      }
-      if (existing) {
-        if (multiple) selected.add(name);
-        else {
-          selected.clear();
-          selected.add(name);
-        }
-        commitValue(multiple ? Array.from(selected) : name);
-        addInput.value = "";
-        renderOptionList();
-        if (!multiple) {
-          void this.optionCommitQueue.enqueue(async () => undefined)
-            .then(() => close("down"));
-        }
-        return;
-      }
-      optionDefs.push({ value: name, color: isFileTags ? "gray" : OPTION_COLORS[optionDefs.length % OPTION_COLORS.length] });
-      if (!isFileTags) registeredOptionValues.add(name);
-      addInput.value = "";
-      if (!multiple) {
-        selected.clear();
-        selected.add(name);
-        popover.querySelectorAll<HTMLElement>(".db-option-check").forEach((el) => el.empty());
-        if (isFileTags) commitValue(name);
-        else commitOptions({ setValue: true, value: name });
-      } else {
-        selected.add(name);
-        if (isFileTags) commitValue(Array.from(selected));
-        else commitOptions({ setValue: true, value: Array.from(selected) });
-      }
-      renderOptionList();
-    };
-
-    // Clear button (at bottom)
-    const actions = popover.createDiv({ cls: "db-panel-header-actions" });
-    const clearBtn = actions.createEl("button", { cls: "db-panel-button", text: t("cell.clear") });
-    clearBtn.onmousedown = (event) => event.preventDefault();
-    const clearAllChecks = () => {
-      popover.querySelectorAll<HTMLElement>(".db-option-check").forEach((el) => el.empty());
-      popover.querySelectorAll<HTMLElement>(".db-cell-option-item").forEach((el) => {
-        el.toggleClass("is-selected", false);
-        el.setAttr("aria-checked", "false");
-      });
-    };
-    clearBtn.onclick = () => {
-      if (multiple) {
-        selected.clear();
-        commitValue([]);
-        clearAllChecks();
-      } else {
-        selected.clear();
-        commitValue(null);
-        clearAllChecks();
-      }
-    };
-
-    renderOptionList();
-    this.positionOptionPopover(popover, td, container, anchorPoint, session);
-    window.requestAnimationFrame(() => this.positionOptionPopover(popover, td, container, anchorPoint, session));
-    if (initialSearch) {
-      addInput.value = initialSearch;
-      window.requestAnimationFrame(() => {
-        addInput.focus();
-        addInput.setSelectionRange(addInput.value.length, addInput.value.length);
-      });
-    }
-    window.activeDocument.addEventListener("keydown", onKeydown, true);
-    removeAutoClose = installPopoverAutoClose({ panel: popover, anchorEl: td, close: () => close(), closeOnEscape: false });
+    openOptionEditor(this.buildCellEditorContext(), td, row, col, currentValue, multiple, anchorPoint, session, initialSearch);
   }
 
+  /** Body moved to `record-surface/cell-editor-number.ts`'s `openNumberEditor`, unchanged, so
+   *  the record sheet and board cards keep this one entry point without constructing the class. */
   private editNumber(
     td: HTMLElement,
     row: RowData,
@@ -1637,26 +925,7 @@ export class CellRenderer {
     session?: CellEditSession,
     initialDraft?: string,
   ): void {
-    const placeholder = session?.mixed ? (session?.placeholder ?? "") : undefined;
-    const initial = initialDraft ?? (session?.mixed ? "" : safeString(currentValue));
-    this.editSingleLinePopover(td, row, col, initial, "number", async (inputValue) => {
-      const raw = inputValue;
-      const newVal = raw ? parseFloat(raw) : "";
-      if (raw && (typeof newVal !== "number" || !Number.isFinite(newVal))) {
-        this.showValidationError(td, t("validation.invalidNumber"));
-        return "validation";
-      }
-      if (String(newVal) !== String(currentValue) || session?.mixed) {
-        const success = await this.commitEditedValue(row, col, newVal, session, raw ? "replace" : "clear");
-        if (!success) return false;
-      } else {
-        this.renderNumberValue(td, undefined, col, currentValue);
-      }
-      this.clearTransientClass(td, "db-cell-editing");
-    }, () => {
-      this.renderNumberValue(td, undefined, col, currentValue);
-      this.clearTransientClass(td, "db-cell-editing");
-    }, session, placeholder, initialDraft === undefined);
+    openNumberEditor(this.buildCellEditorContext(), td, row, col, currentValue, session, initialDraft);
   }
 
   private editDate(
@@ -1694,7 +963,7 @@ export class CellRenderer {
     };
     const keepDateEditorOpen = (message: string, focus: HTMLInputElement = yearInp): void => {
       committed = false;
-      this.showValidationError(focus, message);
+      showValidationError(focus, message);
       focus.focus();
       focus.select();
     };
@@ -1715,7 +984,7 @@ export class CellRenderer {
         } else {
           restore();
         }
-        this.clearTransientClass(td, "db-cell-editing");
+        clearTransientClass(td, "db-cell-editing");
         return;
       }
       if (!y || !rawM || !rawD) {
@@ -1740,11 +1009,11 @@ export class CellRenderer {
       } else {
         restore();
       }
-      this.clearTransientClass(td, "db-cell-editing");
+      clearTransientClass(td, "db-cell-editing");
     };
 
     const restore = () => {
-      this.clearTransientClass(td, "db-cell-editing");
+      clearTransientClass(td, "db-cell-editing");
       td.textContent = origText;
     };
 
@@ -1820,6 +1089,8 @@ export class CellRenderer {
     yearInp.select();
   }
 
+  /** Body moved to `record-surface/cell-editor-date.ts`'s `openDateEditor`, unchanged, so
+   *  the record sheet and board cards keep this one entry point without constructing the class. */
   private editDatePopover(
     td: HTMLElement,
     row: RowData,
@@ -1829,504 +1100,11 @@ export class CellRenderer {
     session?: CellEditSession,
     initialDraft?: string,
   ): void {
-    const rawContainer = td.closest(".note-database-container");
-    const container = isHTMLElement(rawContainer) ? rawContainer : null;
-    const isMobile = isTouchDevice(container || td);
-    const host = isMobile ? null : (container || window.activeDocument.body);
-
-    this.activeTextEditClose?.();
-    td.addClass("db-cell-editing");
-
-    const isMixed = !!session?.mixed;
-    const dateParts = isMixed ? null : parseDateTimeParts(currentValue);
-    const fallbackParts = isMixed ? [] : safeString(currentValue).substring(0, 10).split("-");
-    const initYear = initialDraft ?? (dateParts ? String(dateParts.year) : fallbackParts[0] || "");
-    const initMonth = initialDraft ? "" : dateParts?.month || fallbackParts[1] || "";
-    const initDay = initialDraft ? "" : dateParts?.day || fallbackParts[2] || "";
-    const initTime = initialDraft ? "" : dateParts?.time || "";
-    const initHour = initTime.slice(0, 2);
-    const initMinute = initTime.slice(3, 5);
-    const rawInitialDateKey = dateParts?.dateKey || safeString(currentValue).substring(0, 10);
-    const initialDateKey = parseDateKeyToUtc(rawInitialDateKey) ? rawInitialDateKey : getLocalDateKey();
-    let pickerMonthKey = initialDateKey.slice(0, 7);
-    let pickerMode: MiniCalendarMode = "day";
-
-    let popover: HTMLElement;
-    let closeBtn: HTMLButtonElement | undefined;
-    let editScrollContainer: HTMLElement | null = null;
-    let removeMobileViewportListeners = () => undefined;
-
-    if (isMobile) {
-      editScrollContainer = td.closest(".note-database-container")
-        || td.closest(".markdown-preview-view")
-        || window.activeDocument.body;
-
-      popover = editScrollContainer.createDiv({ cls: "db-cell-edit-popover is-mobile is-inline-overlay db-date-edit-popover" });
-
-      const containerRect = editScrollContainer.getBoundingClientRect();
-      const tdRect = this.bulkAnchorRect(session) ?? td.getBoundingClientRect();
-      const scrollTop = editScrollContainer.scrollTop || 0;
-      const relativeTop = tdRect.top - containerRect.top + scrollTop;
-
-      popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, "z-index": "var(--db-layer-popover, 100)" });
-
-      closeBtn = popover.createEl("button", {
-        cls: "db-cell-edit-close",
-        attr: { type: "button", title: t("common.cancel"), "aria-label": t("common.cancel") },
-      });
-      setIcon(closeBtn, "x");
-    } else {
-      popover = (host as HTMLElement).createDiv({ cls: "db-cell-edit-popover db-date-edit-popover" });
-    }
-    if (includeTime) popover.addClass("is-datetime");
-    popover.dataset.noteDatabaseRowPath = row.file.path;
-    popover.dataset.noteDatabaseColumnKey = col.key;
-    popover.dataset.noteDatabaseEditorKind = "date";
-
-    const segments = popover.createDiv({ cls: "db-date-segments" });
-    const yearInp = segments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
-    segments.createSpan({ cls: "db-date-sep", text: "-" });
-    const monthInp = segments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
-    segments.createSpan({ cls: "db-date-sep", text: "-" });
-    const dayInp = segments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
-    let hourInp: HTMLInputElement | undefined;
-    let minuteInp: HTMLInputElement | undefined;
-    if (includeTime) {
-      segments.createSpan({ cls: "db-date-sep db-time-sep", text: " " });
-      hourInp = segments.createEl("input", { cls: "db-date-seg db-time-seg db-hour-seg", attr: { maxlength: "2", placeholder: "HH" } });
-      segments.createSpan({ cls: "db-date-sep db-time-colon", text: ":" });
-      const minutePlaceholder = "m" + "m";
-      minuteInp = segments.createEl("input", { cls: "db-date-seg db-time-seg db-minute-seg", attr: { maxlength: "2", placeholder: minutePlaceholder } });
-    }
-
-    const inputs = [yearInp, monthInp, dayInp, hourInp, minuteInp].filter((input): input is HTMLInputElement => Boolean(input));
-    let committed = false;
-
-    const pad2 = (v: string) => v.length === 1 ? `0${v}` : v;
-    const isLeapYear = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
-    const daysInMonth = (y: number, m: number) => {
-      if (m === 2) return isLeapYear(y) ? 29 : 28;
-      if ([4, 6, 9, 11].includes(m)) return 30;
-      return 31;
-    };
-
-    let closed = false;
-    const close = () => {
-      if (closed) return;
-      closed = true;
-      removeMobileViewportListeners();
-      popover.remove();
-      td.removeClass("db-cell-editing");
-      window.activeDocument.removeEventListener("mousedown", onOutside, true);
-      window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
-      if (this.activeTextEditClose === close) this.activeTextEditClose = undefined;
-      if (this.activeInlineEditorCancel === cancel) this.activeInlineEditorCancel = undefined;
-      session?.onClose?.();
-    };
-    this.activeTextEditClose = close;
-
-    const commit = async (intent?: TableCellNavigationIntent) => {
-      if (committed) return;
-      committed = true;
-      const finish = () => {
-        close();
-        if (intent) this.finishInlineEdit(row, col, session, intent);
-      };
-      const y = yearInp.value;
-      const rawM = monthInp.value;
-      const rawD = dayInp.value;
-      const allEmpty = !y && !rawM && !rawD;
-      if (allEmpty) {
-        if (shouldCommitEmptyBulkDateClear(Boolean(session?.mixed), currentValue)) {
-          await this.commitEditedValue(row, col, null, session, "clear");
-        }
-        finish();
-        return;
-      }
-      if (!y || !rawM || !rawD) {
-        committed = false;
-        const focus = inputs.find((input) => !input.value) || yearInp;
-        this.showValidationError(focus, t("validation.invalidDate"));
-        focus.focus();
-        return;
-      }
-      const m = parseInt(rawM, 10);
-      const d = parseInt(rawD, 10);
-      const yr = parseInt(y, 10);
-      if (isNaN(yr) || isNaN(m) || isNaN(d)) {
-        committed = false;
-        this.showValidationError(yearInp, t("validation.invalidDate"));
-        yearInp.focus();
-        return;
-      }
-      const clampedM = Math.min(Math.max(m, 1), 12);
-      const maxD = daysInMonth(yr, clampedM);
-      const clampedD = Math.min(Math.max(d, 1), maxD);
-      if (m !== clampedM || d !== clampedD) {
-        new Notice(t("cell.invalidDate"));
-      }
-      const dateKey = `${y}-${pad2(String(clampedM))}-${pad2(String(clampedD))}`;
-      const newVal = includeTime ? `${dateKey}T${normalizeTimeForSave(hourInp?.value || "", minuteInp?.value || "")}` : dateKey;
-      const currentNormalized = dateParts
-        ? (includeTime ? `${dateParts.dateKey}T${dateParts.time || "00:00"}` : dateParts.dateKey)
-        : safeString(currentValue).substring(0, includeTime ? 16 : 10).replace(" ", "T");
-      if (newVal !== currentNormalized) {
-        popover.addClass("db-editor-saving");
-        const success = await this.commitEditedValue(row, col, newVal, session, "replace");
-        popover.removeClass("db-editor-saving");
-        if (!success) {
-          committed = false;
-          this.renderDraftFailure(popover, yearInp, () => { void commit(intent); }, () => cancel(intent));
-          yearInp.focus();
-          return;
-        }
-      }
-      finish();
-    };
-
-    const cancel = (intent: TableCellNavigationIntent = "stay") => {
-      if (committed) return;
-      committed = true;
-      close();
-      this.finishInlineEdit(row, col, session, intent);
-    };
-    this.activeInlineEditorCancel = cancel;
-
-    if (isMobile) {
-      const actions = popover.createDiv({ cls: "db-cell-edit-mobile-actions" });
-      const done = actions.createEl("button", { cls: "db-cell-edit-mobile-done", text: t("common.save"), attr: { type: "button" } });
-      const cancelButton = actions.createEl("button", { cls: "db-cell-edit-mobile-cancel", text: t("common.cancel"), attr: { type: "button" } });
-      done.onmousedown = (event) => event.preventDefault();
-      cancelButton.onmousedown = (event) => event.preventDefault();
-      done.onclick = () => { void commit(); };
-      cancelButton.onclick = () => cancel("stay");
-      popover.prepend(actions);
-    }
-
-    const onOutside = (event: MouseEvent) => {
-      const target = event.target as Node | null;
-      if (target && (popover.contains(target) || td.contains(target))) return;
-      void commit();
-    };
-
-    const onDocumentKeydown = (event: KeyboardEvent) => {
-      if (isImeComposing(event)) return;
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      cancel();
-    };
-
-    if (isMobile && editScrollContainer) {
-      const view = editScrollContainer.ownerDocument.defaultView || window;
-      const positionMobileEditor = () => {
-        if (!popover.isConnected || !editScrollContainer) return;
-        const viewport = view.visualViewport;
-        const viewportTop = viewport?.offsetTop ?? 0;
-        const viewportBottom = viewportTop + (viewport?.height ?? view.innerHeight);
-        const editorRect = popover.getBoundingClientRect();
-        if (editorRect.bottom > viewportBottom - 20 || editorRect.top < viewportTop + 20) {
-          td.scrollIntoView({ block: "center", behavior: "smooth" });
-        }
-        const containerRect = editScrollContainer.getBoundingClientRect();
-        const tdRect = this.bulkAnchorRect(session) ?? td.getBoundingClientRect();
-        const top = tdRect.bottom - containerRect.top + (editScrollContainer.scrollTop || 0) + 2;
-        popover.style.top = `${top}px`;
-      };
-      const onViewportChange = () => positionMobileEditor();
-      view.visualViewport?.addEventListener("resize", onViewportChange);
-      view.visualViewport?.addEventListener("scroll", onViewportChange);
-      removeMobileViewportListeners = () => {
-        view.visualViewport?.removeEventListener("resize", onViewportChange);
-        view.visualViewport?.removeEventListener("scroll", onViewportChange);
-      };
-      positionMobileEditor();
-    }
-
-    const isMovingWithinDatePopover = (e: FocusEvent) => {
-      const next = e.relatedTarget as Node | null;
-      return Boolean(next && (inputs.includes(next as HTMLInputElement) || popover.contains(next)));
-    };
-
-    const handleSegmentKey = (
-      event: KeyboardEvent,
-      input: HTMLInputElement,
-      prev?: HTMLInputElement,
-    ) => {
-      if (isImeComposing(event)) return;
-      if (event.key === "Tab") {
-        const isFirst = input === inputs[0];
-        const isLast = input === inputs[inputs.length - 1];
-        if ((!event.shiftKey && isLast) || (event.shiftKey && isFirst)) {
-          event.preventDefault();
-          event.stopPropagation();
-          void commit(event.shiftKey ? "previous" : "next");
-        }
-        return;
-      }
-      if (["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
-        if (event.key === "Backspace" && input.value === "" && prev) {
-          event.preventDefault();
-          prev.focus();
-        }
-        return;
-      }
-      if (event.key === "Enter") {
-        event.preventDefault();
-        event.stopPropagation();
-        void commit(event.shiftKey ? "up" : "down");
-        return;
-      }
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        cancel("stay");
-        return;
-      }
-      if (!/^\d$/.test(event.key)) { event.preventDefault(); return; }
-    };
-
-    const normalizeTimeForSave = (hourValue: string, minuteValue: string) => {
-      const hour = Number(hourValue.trim() || "0");
-      const minute = Number(minuteValue.trim() || "0");
-      if (!Number.isFinite(hour) || !Number.isFinite(minute)) return "00:00";
-      const clampedHour = Math.min(Math.max(Math.trunc(hour), 0), 23);
-      const clampedMinute = Math.min(Math.max(Math.trunc(minute), 0), 59);
-      if (clampedHour !== hour || clampedMinute !== minute) new Notice(t("cell.invalidDate"));
-      return `${pad2(String(clampedHour))}:${pad2(String(clampedMinute))}`;
-    };
-
-    const setDateInputs = (dateKey: string) => {
-      const [year, month, day] = dateKey.split("-");
-      yearInp.value = year || "";
-      monthInp.value = month || "";
-      dayInp.value = day || "";
-    };
-
-    const setCurrentTimeInputs = () => {
-      if (!hourInp || !minuteInp) return;
-      const now = new Date();
-      hourInp.value = pad2(String(now.getHours()));
-      minuteInp.value = pad2(String(now.getMinutes()));
-    };
-
-    const getDraftDateKey = (): string => {
-      const year = yearInp.value;
-      const month = monthInp.value;
-      const day = dayInp.value;
-      return /^\d{4}$/.test(year) && /^\d{2}$/.test(month) && /^\d{2}$/.test(day)
-        ? `${year}-${month}-${day}`
-        : initialDateKey;
-    };
-
-    const pickerEventIndex: MiniCalendarEventIndex = {
-      dateKeys: new Set(),
-      monthKeys: new Set(),
-      yearKeys: new Set(),
-    };
-
-    const datePicker = popover.createDiv({ cls: "db-calendar-mini-popover db-cell-date-picker" });
-    datePicker.addEventListener("mousedown", (event) => {
-      event.preventDefault();
-    });
-    const renderDatePicker = () => {
-      const [ys, ms] = pickerMonthKey.split("-");
-      const year = Number(ys);
-      const monthIndex = Number(ms) - 1;
-      const weekStartsOn = getLocaleWeekStartsOn();
-      renderMiniCalendar({
-        popover: datePicker,
-        mode: pickerMode,
-        monthKey: pickerMonthKey,
-        monthTitle: formatDatePickerMonthTitle(year, monthIndex, getEffectiveLocale()),
-        visibleYear: year,
-        yearRangeStart: getDatePickerYearRangeStart(year),
-        weeks: buildDatePickerWeeks(year, monthIndex, weekStartsOn),
-        weekdays: getWeekdayLabels(getEffectiveLocale(), weekStartsOn),
-        todayKey: getLocalDateKey(),
-        selectedKeys: new Set([getDraftDateKey()]),
-        eventIndex: pickerEventIndex,
-        onPrevious: () => {
-          pickerMonthKey = shiftDatePickerMonth(pickerMonthKey, pickerMode === "day" ? -1 : pickerMode === "month" ? -12 : -144);
-          renderDatePicker();
-        },
-        onNext: () => {
-          pickerMonthKey = shiftDatePickerMonth(pickerMonthKey, pickerMode === "day" ? 1 : pickerMode === "month" ? 12 : 144);
-          renderDatePicker();
-        },
-        onTitleClick: () => {
-          if (pickerMode === "day") pickerMode = "month";
-          else if (pickerMode === "month") pickerMode = "year";
-          renderDatePicker();
-        },
-        onSelectDate: (dateKey) => {
-          setDateInputs(dateKey);
-          pickerMonthKey = dateKey.slice(0, 7);
-          pickerMode = "day";
-          renderDatePicker();
-          (hourInp || dayInp).focus();
-        },
-        onSelectMonth: (monthKey) => {
-          pickerMonthKey = monthKey;
-          pickerMode = "day";
-          renderDatePicker();
-        },
-        onSelectYear: (selectedYear) => {
-          pickerMonthKey = `${String(selectedYear).padStart(4, "0")}-01`;
-          pickerMode = "month";
-          renderDatePicker();
-        },
-        onSelectToday: (dateKey) => {
-          pickerMonthKey = dateKey.slice(0, 7);
-          pickerMode = "day";
-          setDateInputs(dateKey);
-          setCurrentTimeInputs();
-          renderDatePicker();
-          (hourInp || dayInp).focus();
-        },
-      });
-    };
-
-    yearInp.value = initYear;
-    yearInp.onkeydown = (e) => handleSegmentKey(e, yearInp, undefined);
-    yearInp.oninput = () => {
-      yearInp.value = yearInp.value.replace(/\D/g, "");
-      if (yearInp.value.length === 4) { monthInp.focus(); monthInp.select(); }
-    };
-    yearInp.onblur = (e) => { if (!committed && !isMovingWithinDatePopover(e)) void commit(); };
-
-    monthInp.value = initMonth;
-    monthInp.onkeydown = (e) => handleSegmentKey(e, monthInp, yearInp);
-    monthInp.oninput = () => {
-      monthInp.value = monthInp.value.replace(/\D/g, "");
-      const v = monthInp.value;
-      if (v.length === 1 && /^[2-9]$/.test(v)) {
-        monthInp.value = `0${v}`;
-        dayInp.focus();
-        dayInp.select();
-      } else if (v.length === 2) {
-        dayInp.focus();
-        dayInp.select();
-      }
-    };
-    monthInp.onblur = (e) => { if (!committed && !isMovingWithinDatePopover(e)) void commit(); };
-
-    dayInp.value = initDay;
-    dayInp.onkeydown = (e) => handleSegmentKey(e, dayInp, monthInp);
-    dayInp.oninput = () => {
-      dayInp.value = dayInp.value.replace(/\D/g, "");
-      const v = dayInp.value;
-      if (v.length === 1 && /^[4-9]$/.test(v)) {
-        dayInp.value = `0${v}`;
-        if (hourInp) {
-          hourInp.focus();
-          hourInp.select();
-        } else {
-          void commit();
-        }
-      } else if (v.length === 2) {
-        if (hourInp) {
-          hourInp.focus();
-          hourInp.select();
-        } else {
-          void commit();
-        }
-      }
-    };
-    dayInp.onblur = (e) => { if (!committed && !isMovingWithinDatePopover(e)) void commit(); };
-
-    if (hourInp && minuteInp) {
-      hourInp.value = initHour;
-      hourInp.onkeydown = (e) => handleSegmentKey(e, hourInp, dayInp);
-      hourInp.oninput = () => {
-        hourInp.value = hourInp.value.replace(/\D/g, "");
-        const v = hourInp.value;
-        if (v.length === 1 && /^[3-9]$/.test(v)) {
-          hourInp.value = `0${v}`;
-          minuteInp.focus();
-          minuteInp.select();
-        } else if (v.length === 2) {
-          minuteInp.focus();
-          minuteInp.select();
-        }
-      };
-      hourInp.onblur = (e) => { if (!committed && !isMovingWithinDatePopover(e)) void commit(); };
-
-      minuteInp.value = initMinute;
-      minuteInp.onkeydown = (e) => handleSegmentKey(e, minuteInp, hourInp);
-      minuteInp.oninput = () => {
-        minuteInp.value = minuteInp.value.replace(/\D/g, "");
-        const v = minuteInp.value;
-        if (v.length === 1 && /^[6-9]$/.test(v)) {
-          minuteInp.value = `0${v}`;
-          void commit();
-        } else if (v.length === 2) {
-          void commit();
-        }
-      };
-      minuteInp.onblur = (e) => { if (!committed && !isMovingWithinDatePopover(e)) void commit(); };
-    }
-
-    renderDatePicker();
-
-    if (closeBtn) {
-      closeBtn.onmousedown = (event) => event.preventDefault();
-      closeBtn.onclick = () => cancel("stay");
-    }
-
-    const focusYearInput = () => {
-      yearInp.focus();
-      if (initialDraft) yearInp.setSelectionRange(yearInp.value.length, yearInp.value.length);
-      else yearInp.select();
-    };
-
-    if (!isMobile) {
-      window.requestAnimationFrame(() => {
-        this.positionDateEditPopover(popover, td, container, session);
-        focusYearInput();
-      });
-    } else {
-      window.setTimeout(() => {
-        focusYearInput();
-      }, 50);
-    }
-
-    window.setTimeout(() => {
-      window.activeDocument.addEventListener("mousedown", onOutside, true);
-      window.activeDocument.addEventListener("keydown", onDocumentKeydown, true);
-    }, 0);
+    openDateEditor(this.buildCellEditorContext(), td, row, col, currentValue, includeTime, session, initialDraft);
   }
 
-  private positionDateEditPopover(popover: HTMLElement, td: HTMLElement, container: HTMLElement | null, session?: CellEditSession): void {
-    const margin = 8;
-    const popoverRect = popover.getBoundingClientRect();
-    const bounds = getVisiblePopoverBounds(container);
-    const width = Math.max(popoverRect.width || 170, 170);
-    const height = popoverRect.height || 36;
-    const a = this.bulkAnchorRect(session);
-    const rect = a ?? td.getBoundingClientRect();
-    const left = clamp(rect.left, bounds.left + margin, bounds.right - width - margin);
-    let top: number;
-    if (a) {
-      top = resolveAnchoredPopoverTop(a, bounds, height, 4, margin).top;
-    } else {
-      const below = bounds.bottom - rect.top - margin;
-      const above = rect.bottom - bounds.top - margin;
-      const useAbove = above > below && below < height;
-      top = useAbove ? rect.bottom - height : rect.top;
-      top = clamp(top, bounds.top + margin, bounds.bottom - height - margin);
-    }
-
-    popover.setCssProps({ width: `${width}px` });
-    setPosition(
-      popover,
-      left,
-      top,
-      container?.getBoundingClientRect(),
-      container?.scrollLeft || 0,
-      container?.scrollTop || 0
-    );
-  }
-
+  /** Body moved to `record-surface/cell-editor-text.ts`'s `openTextEditor`, unchanged, so
+   *  the record sheet and board cards keep this one entry point without constructing the class. */
   private editText(
     td: HTMLElement,
     row: RowData,
@@ -2336,593 +1114,7 @@ export class CellRenderer {
     session?: CellEditSession,
     initialDraft?: string,
   ): void {
-    const valueText = safeString(currentValue);
-    if (this.shouldUsePopoverEditor(td, col, valueText)) {
-      this.editTextPopover(td, row, col, valueText, session, undefined, initialDraft);
-      return;
-    }
-    const inp = window.activeDocument.createElement("input");
-    inp.className = "db-cell-input";
-    inp.type = "text";
-    inp.value = initialDraft ?? valueText;
-    this.mountInput(td, inp);
-
-    let committed = false;
-
-    const finish = (intent?: TableCellNavigationIntent) => {
-      this.clearTransientClass(td, "db-cell-editing");
-      if (this.activeInlineEditorCancel === cancel) this.activeInlineEditorCancel = undefined;
-      if (intent) this.finishInlineEdit(row, col, session, intent);
-    };
-
-    const save = async (intent?: TableCellNavigationIntent) => {
-      if (committed) return;
-      committed = true;
-      const newVal = inp.value;
-      if (newVal !== safeString(currentValue)) {
-        td.addClass("db-editor-saving");
-        const success = await this.commitEditedValue(row, col, newVal, session, newVal ? "replace" : "clear");
-        td.removeClass("db-editor-saving");
-        if (!success) {
-          committed = false;
-          this.renderDraftFailure(td, inp, () => { void save(intent); }, () => cancel(intent));
-          inp.focus();
-          return;
-        }
-      } else {
-        this.restoreTextDisplay(td, currentValue, origText);
-      }
-      finish(intent);
-    };
-
-    const cancel = (intent: TableCellNavigationIntent = "stay") => {
-      if (committed) return;
-      committed = true;
-      this.restoreTextDisplay(td, currentValue, origText);
-      finish(intent);
-    };
-    this.activeInlineEditorCancel = cancel;
-    inp.onblur = () => { void save(); };
-    inp.onkeydown = (event) => this.handleEditKey(event, save, cancel);
-  }
-
-  private editTextPopover(
-    td: HTMLElement,
-    row: RowData,
-    col: ColumnDef,
-    currentValue: string,
-    session?: CellEditSession,
-    placeholder?: string,
-    initialDraft?: string,
-  ): void {
-    const rawContainer = td.closest(".note-database-container");
-    const container = isHTMLElement(rawContainer) ? rawContainer : null;
-    const isMobile = isTouchDevice(container || td);
-    const host = isMobile ? null : (container || window.activeDocument.body);
-
-    // 清理之前的编辑器
-    this.activeTextEditClose?.();
-    td.addClass("db-cell-editing");
-
-    let popover: HTMLElement;
-    let textarea: HTMLTextAreaElement;
-    let closeBtn: HTMLButtonElement | undefined;
-    let editScrollContainer: HTMLElement | null = null;
-    let removeMobileViewportListeners = () => undefined;
-
-    if (isMobile) {
-      // ========== 移动端：Inline Overlay 方案 ==========
-      // 在单元格所在的滚动容器内直接插入编辑器，不脱离文档流
-
-      editScrollContainer = td.closest(".note-database-container")
-        || td.closest(".markdown-preview-view")
-        || window.activeDocument.body;
-      
-      // 创建内联编辑器包装器
-      popover = editScrollContainer.createDiv({ cls: "db-cell-edit-popover is-mobile is-inline-overlay" });
-      
-      // 计算相对于滚动容器的位置
-      const containerRect = editScrollContainer.getBoundingClientRect();
-      const tdRect = this.bulkAnchorRect(session) ?? td.getBoundingClientRect();
-      const scrollTop = editScrollContainer.scrollTop || 0;
-      
-      // 相对位置 = 单元格顶部 - 容器顶部 + 容器滚动偏移
-      const relativeTop = tdRect.top - containerRect.top + scrollTop;
-      
-      // 定位在单元格正下方
-      popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, "z-index": "var(--db-layer-popover, 100)" });
-      
-      // 关闭按钮
-      closeBtn = popover.createEl("button", {
-        cls: "db-cell-edit-close",
-        attr: { type: "button", title: t("common.cancel"), "aria-label": t("common.cancel") },
-      });
-      setIcon(closeBtn, "x");
-      
-      // 文本输入区
-      textarea = window.activeDocument.createElement("textarea");
-      textarea.className = "db-cell-textarea db-mobile-textarea";
-      textarea.value = initialDraft ?? currentValue;
-      if (placeholder) textarea.setAttr("placeholder", placeholder);
-      popover.appendChild(textarea);
-      
-    } else {
-      // ========== 桌面端：原有 Fixed Popover 方案 ==========
-      popover = (host as HTMLElement).createDiv({ cls: "db-cell-edit-popover" });
-      
-      textarea = window.activeDocument.createElement("textarea");
-      textarea.className = "db-cell-textarea";
-      textarea.value = initialDraft ?? currentValue;
-      if (placeholder) textarea.setAttr("placeholder", placeholder);
-      textarea.rows = 1;
-      popover.appendChild(textarea);
-    }
-    popover.dataset.noteDatabaseRowPath = row.file.path;
-    popover.dataset.noteDatabaseColumnKey = col.key;
-    popover.dataset.noteDatabaseEditorKind = "text";
-
-    let committed = false;
-    // Markdown-mode columns get a format toolbar above the textarea, plus
-    // paste-URL-over-selection (wraps the selection into a [text](url) link).
-    if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-      this.buildMarkdownToolbar(popover, textarea);
-      this.attachPasteUrlAsLink(textarea);
-    }
-
-    let closed = false;
-    const close = () => {
-      if (closed) return;
-      closed = true;
-      removeMobileViewportListeners();
-      popover.remove();
-      td.removeClass("db-cell-editing");
-      window.activeDocument.removeEventListener("mousedown", onOutside, true);
-      window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
-      if (this.activeTextEditClose === close) this.activeTextEditClose = undefined;
-      if (this.activeInlineEditorCancel === cancel) this.activeInlineEditorCancel = undefined;
-      session?.onClose?.();
-    };
-    this.activeTextEditClose = close;
-
-    const save = async (intent?: TableCellNavigationIntent) => {
-      if (committed) return;
-      committed = true;
-      const newVal = textarea.value;
-      if (newVal !== currentValue || session?.mixed) {
-        popover.addClass("db-editor-saving");
-        const success = await this.commitEditedValue(row, col, newVal, session, newVal ? "replace" : "clear");
-        popover.removeClass("db-editor-saving");
-        if (!success) {
-          committed = false;
-          this.renderDraftFailure(popover, textarea, () => { void save(intent); }, () => cancel(intent));
-          textarea.focus();
-          return;
-        }
-      }
-      close();
-      if (intent) this.finishInlineEdit(row, col, session, intent);
-    };
-
-    const cancel = (intent: TableCellNavigationIntent = "stay") => {
-      if (committed) return;
-      committed = true;
-      close();
-      this.finishInlineEdit(row, col, session, intent);
-    };
-    this.activeInlineEditorCancel = cancel;
-
-    if (isMobile) {
-      const actions = popover.createDiv({ cls: "db-cell-edit-mobile-actions" });
-      const done = actions.createEl("button", { cls: "db-cell-edit-mobile-done", text: t("common.save"), attr: { type: "button" } });
-      const cancelButton = actions.createEl("button", { cls: "db-cell-edit-mobile-cancel", text: t("common.cancel"), attr: { type: "button" } });
-      done.onmousedown = (event) => event.preventDefault();
-      cancelButton.onmousedown = (event) => event.preventDefault();
-      done.onclick = () => { void save(); };
-      cancelButton.onclick = () => cancel("stay");
-      popover.prepend(actions);
-    }
-
-    const onOutside = (event: MouseEvent) => {
-      const target = event.target as Node | null;
-      if (target && (popover.contains(target) || td.contains(target))) return;
-      void save();
-    };
-    
-    const onDocumentKeydown = (event: KeyboardEvent) => {
-      if (isImeComposing(event)) return;
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      cancel();
-    };
-
-    if (isMobile && editScrollContainer) {
-      const view = editScrollContainer.ownerDocument.defaultView || window;
-      const positionMobileEditor = () => {
-        if (!popover.isConnected || !editScrollContainer) return;
-        const viewport = view.visualViewport;
-        const viewportTop = viewport?.offsetTop ?? 0;
-        const viewportBottom = viewportTop + (viewport?.height ?? view.innerHeight);
-        const editorRect = popover.getBoundingClientRect();
-        if (editorRect.bottom > viewportBottom - 20 || editorRect.top < viewportTop + 20) {
-          td.scrollIntoView({ block: "center", behavior: "smooth" });
-        }
-        const containerRect = editScrollContainer.getBoundingClientRect();
-        const tdRect = this.bulkAnchorRect(session) ?? td.getBoundingClientRect();
-        const top = tdRect.bottom - containerRect.top + (editScrollContainer.scrollTop || 0) + 2;
-        popover.style.top = `${top}px`;
-      };
-      const onViewportChange = () => positionMobileEditor();
-      view.visualViewport?.addEventListener("resize", onViewportChange);
-      view.visualViewport?.addEventListener("scroll", onViewportChange);
-      removeMobileViewportListeners = () => {
-        view.visualViewport?.removeEventListener("resize", onViewportChange);
-        view.visualViewport?.removeEventListener("scroll", onViewportChange);
-      };
-      positionMobileEditor();
-    }
-    
-    const resize = () => {
-      this.autoGrowTextarea(textarea, isMobile ? 320 : 260);
-      if (!isMobile) {
-        this.positionTextEditPopover(popover, td, container, false, session);
-      }
-    };
-
-    if (closeBtn) {
-      closeBtn.onmousedown = (event) => event.preventDefault();
-      closeBtn.onclick = () => cancel("stay");
-    }
-    
-    textarea.addEventListener("input", resize);
-    textarea.addEventListener("keydown", (event) => {
-      if (isImeComposing(event)) return;
-      if (event.key === "Enter" && !event.shiftKey && !event.altKey) {
-        event.preventDefault();
-        event.stopPropagation();
-        void save("down");
-      }
-      if (event.key === "Tab") {
-        event.preventDefault();
-        event.stopPropagation();
-        void save(event.shiftKey ? "previous" : "next");
-      }
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        cancel("stay");
-      }
-    });
-
-    if (isMobile) {
-      this.autoGrowTextarea(textarea, 320);
-      window.setTimeout(() => {
-        textarea.focus();
-        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-      }, 50);
-    } else {
-      // 桌面端原有逻辑
-      resize();
-      window.requestAnimationFrame(resize);
-      window.requestAnimationFrame(() => {
-        textarea.focus();
-        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-      });
-    }
-
-    // 绑定全局关闭事件
-    window.setTimeout(() => {
-      window.activeDocument.addEventListener("mousedown", onOutside, true);
-      window.activeDocument.addEventListener("keydown", onDocumentKeydown, true);
-    }, 0);
-  }
-
-  private restoreTextDisplay(td: HTMLElement, currentValue: unknown, origText: string): void {
-    td.textContent = origText || safeString(currentValue);
-  }
-
-  private shouldUsePopoverEditor(_target: HTMLElement, col: ColumnDef, _value: string): boolean {
-    return col.type === "text" || col.type === "files";
-  }
-
-  /** Build a format toolbar above the textarea for markdown-mode text columns.
-   *  Each button wraps/inserts the matching marker around the current selection,
-   *  then keeps focus in the textarea. */
-  private buildMarkdownToolbar(popover: HTMLElement, textarea: HTMLTextAreaElement): void {
-    const bar = createDiv({ cls: "db-md-toolbar" });
-    // Insert before the textarea so the toolbar sits on top.
-    textarea.parentElement?.insertBefore(bar, textarea);
-
-    const buttons: { icon: string; title: string; run: () => void }[] = [
-      { icon: "bold", title: t("mdToolbar.bold"), run: () => this.wrapSelection(textarea, "**", "**", t("mdToolbar.bold")) },
-      { icon: "italic", title: t("mdToolbar.italic"), run: () => this.wrapSelection(textarea, "*", "*", t("mdToolbar.italic")) },
-      { icon: "strikethrough", title: t("mdToolbar.strike"), run: () => this.wrapSelection(textarea, "~~", "~~", t("mdToolbar.strike")) },
-      { icon: "highlighter", title: t("mdToolbar.highlight"), run: () => this.wrapSelection(textarea, "==", "==", t("mdToolbar.highlight")) },
-      { icon: "code", title: t("mdToolbar.code"), run: () => this.wrapSelection(textarea, "`", "`", t("mdToolbar.code")) },
-      { icon: "sigma", title: t("mdToolbar.math"), run: () => this.wrapSelection(textarea, "$", "$", "x^2") },
-      { icon: "link", title: t("mdToolbar.link"), run: () => this.wrapSelection(textarea, "[", "](url)", t("mdToolbar.linkText")) },
-      { icon: "file-symlink", title: t("mdToolbar.wikilink"), run: () => this.wrapSelection(textarea, "[[", "]]", t("mdToolbar.wikilinkText")) },
-    ];
-
-    for (const def of buttons) {
-      const btn = bar.createEl("button", { cls: "db-md-toolbar-btn", attr: { type: "button" } });
-      setIcon(btn, def.icon);
-      setTooltip(btn, def.title, { delay: 100 });
-      // mousedown would blur the textarea and lose the selection; prevent it.
-      btn.addEventListener("mousedown", (event) => event.preventDefault());
-      btn.addEventListener("click", (event) => { event.preventDefault(); def.run(); });
-    }
-  }
-
-  /** Wrap the textarea's current selection with prefix/suffix. When nothing is
-   *  selected, insert `placeholder` between the markers and select it. */
-  private wrapSelection(textarea: HTMLTextAreaElement, prefix: string, suffix: string, placeholder: string): void {
-    const value = textarea.value;
-    const start = textarea.selectionStart ?? value.length;
-    const end = textarea.selectionEnd ?? value.length;
-    const selected = value.slice(start, end);
-    const inner = selected || placeholder;
-    textarea.value = value.slice(0, start) + prefix + inner + suffix + value.slice(end);
-    // Select the inner text so the user can keep typing / re-wrap.
-    const innerStart = start + prefix.length;
-    textarea.focus();
-    textarea.setSelectionRange(innerStart, innerStart + inner.length);
-    textarea.dispatchEvent(new Event("input"));
-  }
-
-  /** When text is selected and a web URL is pasted, wrap the selection into
-   *  a normalized `[selection](url)` markdown link (Notion/editor-like behavior).
-   *  Plain pastes, or pastes without a selection, fall through to default handling. */
-  private attachPasteUrlAsLink(textarea: HTMLTextAreaElement): void {
-    textarea.addEventListener("paste", (event: ClipboardEvent) => {
-      const pasted = event.clipboardData?.getData("text/plain")?.trim();
-      const normalizedUrl = pasted ? normalizeExternalUrlTarget(pasted) : null;
-      if (!normalizedUrl) return;
-      const start = textarea.selectionStart ?? 0;
-      const end = textarea.selectionEnd ?? 0;
-      if (start === end) return; // no selection → let the URL paste normally
-      event.preventDefault();
-      const value = textarea.value;
-      const label = value.slice(start, end);
-      textarea.value = `${value.slice(0, start)}[${label}](${normalizedUrl})${value.slice(end)}`;
-      const caret = start + `[${label}](${normalizedUrl})`.length;
-      textarea.focus();
-      textarea.setSelectionRange(caret, caret);
-      textarea.dispatchEvent(new Event("input"));
-    });
-  }
-
-  private editSingleLinePopover(
-    td: HTMLElement,
-    row: RowData,
-    col: ColumnDef,
-    currentValue: string,
-    inputType: "text" | "number",
-    saveValue: (value: string) => Promise<EditorSaveResult>,
-    restore: () => void,
-    session?: CellEditSession,
-    placeholder?: string,
-    selectInitial = true,
-  ): void {
-    const rawContainer = td.closest(".note-database-container");
-    const container = isHTMLElement(rawContainer) ? rawContainer : null;
-    const host = container || window.activeDocument.body;
-    this.activeTextEditClose?.();
-    td.addClass("db-cell-popover-editing");
-    // The editor is the active task, so it takes the bottom edge from the selection status bar for
-    // as long as it is open. Without this the bar stays docked in the band the editor is placed in
-    // and the two land on each other — the editor on top, with the bar's count chip clipped behind
-    // it and two rows of actions stacked over the keyboard.
-    claimBottomDock(td.ownerDocument, "cell-editor", true);
-
-    const popover = host.createDiv({ cls: "db-cell-edit-popover db-cell-line-edit-popover" });
-    popover.dataset.noteDatabaseRowPath = row.file.path;
-    popover.dataset.noteDatabaseColumnKey = col.key;
-    popover.dataset.noteDatabaseEditorKind = inputType === "number" ? "number" : "text";
-    const input = popover.createEl("input", {
-      cls: "db-cell-line-input",
-      attr: { type: inputType },
-    });
-    if (inputType === "number") input.setAttr("step", "any");
-    input.value = currentValue;
-    if (placeholder) input.setAttr("placeholder", placeholder);
-
-    let committed = false;
-    let closed = false;
-    const close = () => {
-      if (closed) return;
-      closed = true;
-      popover.remove();
-      td.removeClass("db-cell-popover-editing");
-      claimBottomDock(td.ownerDocument, "cell-editor", false);
-      window.activeDocument.removeEventListener("mousedown", onOutside, true);
-      window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
-      if (this.activeTextEditClose === close) this.activeTextEditClose = undefined;
-      if (this.activeInlineEditorCancel === cancel) this.activeInlineEditorCancel = undefined;
-      session?.onClose?.();
-    };
-    this.activeTextEditClose = close;
-
-    const save = async (intent?: TableCellNavigationIntent) => {
-      if (committed) return;
-      committed = true;
-      popover.addClass("db-editor-saving");
-      const result = await saveValue(input.value);
-      popover.removeClass("db-editor-saving");
-      if (result === "validation") {
-        committed = false;
-        this.showValidationError(input, inputType === "number" ? t("validation.invalidNumber") : t("editor.saveFailed"));
-        input.focus();
-        return;
-      }
-      if (result && typeof result === "object") {
-        committed = false;
-        this.showValidationError(input, result.validationMessage);
-        this.renderDraftFailure(popover, input, () => { void save(intent); }, () => cancel(intent));
-        input.focus();
-        return;
-      }
-      if (result === false) {
-        committed = false;
-        this.showValidationError(input, t("editor.saveFailed"));
-        this.renderDraftFailure(popover, input, () => { void save(intent); }, () => cancel(intent));
-        input.focus();
-        return;
-      }
-      close();
-      if (intent) this.finishInlineEdit(row, col, session, intent);
-    };
-    const cancel = (intent: TableCellNavigationIntent = "stay") => {
-      if (committed) return;
-      committed = true;
-      restore();
-      close();
-      this.finishInlineEdit(row, col, session, intent);
-    };
-    this.activeInlineEditorCancel = cancel;
-    const onOutside = (event: MouseEvent) => {
-      const target = event.target as Node | null;
-      if (target && (popover.contains(target) || td.contains(target))) return;
-      void save();
-    };
-    const onDocumentKeydown = (event: KeyboardEvent) => {
-      if (isImeComposing(event)) return;
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      cancel();
-    };
-
-    input.onkeydown = (event) => {
-      if (isImeComposing(event)) return;
-      if (event.key === "Enter") {
-        event.preventDefault();
-        event.stopPropagation();
-        void save(event.shiftKey ? "up" : "down");
-      }
-      if (event.key === "Tab") {
-        event.preventDefault();
-        event.stopPropagation();
-        void save(event.shiftKey ? "previous" : "next");
-      }
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        cancel("stay");
-      }
-    };
-    this.positionTextEditPopover(popover, td, container, false, session);
-    window.requestAnimationFrame(() => {
-      this.positionTextEditPopover(popover, td, container, false, session);
-      input.focus();
-      if (selectInitial) input.select();
-      else input.setSelectionRange(input.value.length, input.value.length);
-    });
-    window.setTimeout(() => {
-      window.activeDocument.addEventListener("mousedown", onOutside, true);
-      window.activeDocument.addEventListener("keydown", onDocumentKeydown, true);
-    }, 0);
-  }
-
-  private mountInput(td: HTMLElement, input: HTMLInputElement): void {
-    td.addClass("db-cell-editing");
-    input.setCssProps({ width: "100%" });
-    td.textContent = "";
-    td.appendChild(input);
-    input.focus();
-    input.select();
-  }
-
-  private autoGrowTextarea(textarea: HTMLTextAreaElement, maxHeight: number): void {
-    textarea.setCssProps({ height: "auto" });
-    const nextHeight = Math.min(textarea.scrollHeight, maxHeight);
-    textarea.setCssProps({ height: `${nextHeight}px`, "overflow-y": textarea.scrollHeight > maxHeight ? "auto" : "hidden" });
-  }
-
-  private positionTextEditPopover(popover: HTMLElement, td: HTMLElement, container: HTMLElement | null, isMobile = false, session?: CellEditSession): void {
-    if (isMobile) {
-      popover.setCssProps({ left: "10px", right: "10px", bottom: "calc(10px + env(safe-area-inset-bottom, 0px))", top: "", width: "auto" });
-      return;
-    }
-    const margin = 8;
-    const a = this.bulkAnchorRect(session);
-    const rect = a ?? td.getBoundingClientRect();
-    const popoverRect = popover.getBoundingClientRect();
-    const bounds = getVisiblePopoverBounds(container);
-    const width = Math.min(Math.max(rect.width, popoverRect.width || 0, 220), Math.min(520, bounds.width - margin * 2));
-    const left = clamp(rect.left, bounds.left + margin, bounds.right - width - margin);
-    const height = Math.min(popover.scrollHeight || popoverRect.height || 0, bounds.height - margin * 2);
-    let top: number;
-    if (a) {
-      top = resolveAnchoredPopoverTop(a, bounds, height, 4, margin).top;
-    } else {
-      const below = bounds.bottom - rect.top - margin;
-      const above = rect.bottom - bounds.top - margin;
-      const useAbove = above > below && below < height;
-      top = useAbove ? rect.bottom - height : rect.top;
-      top = clamp(top, bounds.top + margin, bounds.bottom - height - margin);
-    }
-
-    popover.setCssProps({ width: `${width}px` });
-    setPosition(
-      popover,
-      left,
-      top,
-      container?.getBoundingClientRect(),
-      container?.scrollLeft || 0,
-      container?.scrollTop || 0
-    );
-  }
-
-  private handleEditKey(
-    event: KeyboardEvent,
-    save: (intent?: TableCellNavigationIntent) => Promise<void>,
-    cancel: (intent?: TableCellNavigationIntent) => void
-  ): void {
-    if (isImeComposing(event)) return;
-    let intent: TableCellNavigationIntent | undefined;
-    if (event.key === "Enter") intent = event.shiftKey ? "up" : "down";
-    else if (event.key === "Tab") intent = event.shiftKey ? "previous" : "next";
-    else if (event.key === "Escape") intent = "stay";
-    if (!intent) return;
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.key === "Escape") cancel(intent);
-    else void save(intent);
-  }
-
-  private clearTransientClass(el: HTMLElement, className: string): void {
-    el.removeClass(className);
-  }
-
-  private showValidationError(element: HTMLElement, message: string): void {
-    element.setAttribute("aria-invalid", "true");
-    element.title = message;
-    element.removeClass("db-validation-error");
-    void element.offsetWidth;
-    element.addClass("db-validation-error");
-    element.addEventListener("animationend", () => element.removeClass("db-validation-error"), { once: true });
-  }
-
-  private renderDraftFailure(
-    host: HTMLElement,
-    input: HTMLInputElement | HTMLTextAreaElement,
-    retry: () => void,
-    discard: () => void,
-  ): void {
-    host.querySelector<HTMLElement>(".db-draft-failure")?.remove();
-    const failure = host.createDiv({ cls: "db-draft-failure", attr: { role: "alert" } });
-    failure.createSpan({ cls: "db-draft-failure-text", text: t("editor.saveFailed") });
-    const retryButton = failure.createEl("button", { cls: "db-draft-action", text: t("editor.retry"), attr: { type: "button" } });
-    retryButton.onclick = (event) => {
-      event.preventDefault();
-      retry();
-    };
-    const discardButton = failure.createEl("button", { cls: "db-draft-action", text: t("editor.discard"), attr: { type: "button" } });
-    discardButton.onclick = (event) => {
-      event.preventDefault();
-      discard();
-    };
-    input.setAttribute("aria-invalid", "true");
-    input.title = t("editor.saveFailed");
+    openTextEditor(this.buildCellEditorContext(), td, row, col, currentValue, origText, session, initialDraft);
   }
 
   private async commitEditedValue(
@@ -2952,7 +1144,7 @@ export class CellRenderer {
 
   private async saveValue(row: RowData, col: ColumnDef, value: unknown): Promise<boolean> {
     try {
-      const normalizedValue = this.normalizeCellValueForSave(col, value);
+      const normalizedValue = normalizeCellValueForSave(col, value);
       if (this.saveCellValue) {
         return (await this.saveCellValue(row, col, normalizedValue)) !== false;
       }
@@ -2967,62 +1159,6 @@ export class CellRenderer {
       new Notice(t("errors.updateFailed", { error: String(err) }));
       return false;
     }
-  }
-
-  private normalizeCellValueForSave(col: ColumnDef, value: unknown): unknown {
-    if (value == null) return value;
-    if (col.type === "files") return FilesColumn.normalize(FilesColumn.parseEdit(value));
-    if (col.key === "file.tags") return toValidObsidianTagValues(value);
-    if (col.type === "multi-select") return toMultiSelectValuesForKey(col.key, value);
-    if (col.type === "select" || col.type === "status") return normalizeOptionValueForKey(col.key, value);
-    return value;
-  }
-
-  private getVaultTagOptionValues(): string[] {
-    const metadataCache = this.app?.metadataCache as unknown as MetadataCacheWithTags | undefined;
-    const tags = metadataCache?.getTags?.();
-    if (!tags) return [];
-    return Object.keys(tags)
-      .map((tag) => normalizeValidObsidianTagValue(tag))
-      .filter((tag): tag is string => Boolean(tag))
-      .sort((a, b) => a.localeCompare(b));
-  }
-
-  private getFileTagDraftOptions(col: ColumnDef, currentValues: string[]): StatusOptionDef[] {
-    const colorsByValue = new Map<string, StatusOptionDef["color"]>();
-    for (const option of col.statusOptions || []) {
-      const value = normalizeValidObsidianTagValue(option.value);
-      if (!value) continue;
-      colorsByValue.set(value, option.color || "gray");
-    }
-
-    const options: StatusOptionDef[] = [];
-    const seen = new Set<string>();
-    const add = (value: string) => {
-      const normalized = normalizeValidObsidianTagValue(value);
-      if (!normalized || seen.has(normalized)) return;
-      seen.add(normalized);
-      options.push({ value: normalized, color: colorsByValue.get(normalized) || "gray" });
-    };
-
-    for (const value of this.getVaultTagOptionValues()) add(value);
-    for (const value of currentValues) add(value);
-    for (const value of colorsByValue.keys()) add(value);
-    return options;
-  }
-
-  private persistFileTagColorOptions(options: StatusOptionDef[]): StatusOptionDef[] {
-    const persisted: StatusOptionDef[] = [];
-    const seen = new Set<string>();
-    for (const option of options) {
-      const value = normalizeValidObsidianTagValue(option.value);
-      if (!value || seen.has(value)) continue;
-      const color = option.color || "gray";
-      if (color === "gray") continue;
-      seen.add(value);
-      persisted.push({ value, color });
-    }
-    return persisted;
   }
 
   editFileName(td: HTMLElement, row: RowData, currentName: string, initialDraft = currentName): void {
@@ -3060,7 +1196,8 @@ export class CellRenderer {
     };
     // Popover editor does not touch the title DOM, so cancel needs no restore.
     const fileNameColumn: ColumnDef = { key: "file.name", label: "file.name", type: "text" };
-    this.editSingleLinePopover(
+    openSingleLineEditor(
+      this.buildCellEditorContext(),
       td,
       row,
       fileNameColumn,
@@ -3076,113 +1213,5 @@ export class CellRenderer {
 
   private formatNumber(value: number): string {
     return formatReportsNumber(value);
-  }
-
-  private createOptionDragPreview(item: HTMLElement, event: MouseEvent): OptionDragPreview {
-    const rect = item.getBoundingClientRect();
-    const preview = item.cloneNode(true) as HTMLElement;
-    preview.addClass("db-cell-option-drag-preview");
-    preview.addClass("db-cell-option-item");
-    preview.removeClass("is-dragging");
-    preview.setAttribute("aria-hidden", "true");
-    preview.querySelectorAll(".db-mobile-reorder-controls").forEach((el) => el.remove());
-    preview.setCssProps({
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
-    });
-    window.activeDocument.body.appendChild(preview);
-    const state: OptionDragPreview = {
-      preview,
-      offsetX: event.clientX - rect.left,
-      offsetY: event.clientY - rect.top,
-    };
-    this.updateOptionDragPreview(state, event);
-    return state;
-  }
-
-  private updateOptionDragPreview(state: OptionDragPreview, event: MouseEvent): void {
-    state.preview.setCssProps({
-      transform: `translate3d(${Math.round(event.clientX - state.offsetX)}px, ${Math.round(event.clientY - state.offsetY)}px, 0)`,
-    });
-  }
-
-  private removeOptionDragPreview(state: OptionDragPreview): void {
-    state.preview.remove();
-  }
-
-  private bulkAnchorRect(session: CellEditSession | undefined): DOMRect | null {
-    const el = session?.anchorEl?.();
-    return el?.isConnected ? el.getBoundingClientRect() : null;
-  }
-
-  // Coordinates are container-relative, matching the CSS. The popover mounts inside
-  // `.note-database-container` (`position: relative`), and the stylesheet positions it `absolute`
-  // there, so the numbers written here must be measured from that container — which is what
-  // passing its rect and scroll offsets to `setPosition` does. This is the same convention the
-  // date and text edit popovers use for the same host.
-  //
-  // The earlier version computed viewport coordinates and forced `position: fixed` inline to make
-  // them land. That only worked because an inline declaration outranks the stylesheet rule, an
-  // unstated coupling in a file that already re-declares these very selectors in an `!important`
-  // tail. It also meant any ancestor gaining a containing block — including from Obsidian's own
-  // CSS, which is not visible from this repo — would silently reinterpret those coordinates as
-  // container-relative and shift the popover by the container's offset, which on a scrolled note
-  // is hundreds of pixels. Agreeing with the CSS removes both failure modes.
-  private positionOptionPopover(
-    popover: HTMLElement,
-    td: HTMLElement,
-    container: HTMLElement | null,
-    anchorPoint?: { x: number; y: number },
-    session?: CellEditSession,
-  ): void {
-    const margin = 8;
-    const gap = 4;
-    const anchorRect = this.bulkAnchorRect(session);
-    const rect = anchorRect ?? td.getBoundingClientRect();
-    const popoverRect = popover.getBoundingClientRect();
-    const bounds = getVisiblePopoverBounds(container);
-
-    const relationPopover = popover.hasClass("db-relation-popover");
-    const minWidth = relationPopover ? 360 : 160;
-    const maxWidth = relationPopover ? 520 : 260;
-    const width = Math.min(
-      Math.max(popoverRect.width || rect.width, rect.width, minWidth),
-      maxWidth,
-      Math.max(160, bounds.width - margin * 2)
-    );
-    const anchorX = anchorRect ? anchorRect.left : (anchorPoint?.x ?? rect.left);
-    const anchorY = anchorRect ? anchorRect.bottom : (anchorPoint?.y ?? rect.bottom);
-    const horizontalAnchor = {
-      left: anchorX,
-      right: anchorX + rect.width,
-      width: rect.width,
-    };
-    const left = resolvePopoverHorizontalLeft(horizontalAnchor, bounds, width, gap, margin, "left");
-
-    const below = bounds.bottom - anchorY - gap - margin;
-    const above = anchorY - gap - margin;
-    const useAbove = above > below && below < Math.min(popover.scrollHeight, 180);
-    const availableHeight = Math.max(120, useAbove ? above : below);
-    const maxHeight = Math.max(120, bounds.height - margin * 2);
-    const height = Math.min(popover.scrollHeight || popoverRect.height || 0, availableHeight, maxHeight);
-
-    const globalTop = useAbove ? anchorY - gap - height : anchorY + gap;
-    const globalClampedTop = clamp(globalTop, bounds.top + margin, bounds.bottom - height - margin);
-
-    // Without a container there is no positioned ancestor to measure from, so the viewport is the
-    // only frame left and the coordinates below are already global.
-    popover.setCssProps({
-      width: `${width}px`,
-      "max-height": `${Math.min(availableHeight, maxHeight)}px`,
-      ...(container ? {} : { position: "fixed" as const }),
-    });
-    setPosition(
-      popover,
-      left,
-      globalClampedTop,
-      container?.getBoundingClientRect(),
-      container?.scrollLeft || 0,
-      container?.scrollTop || 0
-    );
   }
 }
