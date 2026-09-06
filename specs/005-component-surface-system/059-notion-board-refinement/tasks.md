@@ -40,7 +40,7 @@ and says so (`goal.md` D7). No operator row is ever ticked by an agent.
 
 *No source file is touched in this phase, so none of it waits on the operator gate or on `058`.*
 
-- [ ] T001 **Re-read what `dc1d54a9` landed, rather than trusting the research that predates it.**
+- [x] T001 **Re-read what `dc1d54a9` landed, rather than trusting the research that predates it.**
       The loop's §11 ranked "land `056` T014-T016" as its P0 and its §10 E-3 recorded three drifted
       stylesheet anchors in `056` AC-012. **Verification, not work** — both were true when the loop
       read them and are false now. Record in `acceptance-criteria.md` AC-006, with the command
@@ -51,13 +51,19 @@ and says so (`goal.md` D7). No operator row is ever ticked by an agent.
       `::-webkit-scrollbar` is `height: 0` at rest and `10px` on hover or `.is-scrolling`
       (`:9386-9392`); `.db-kanban-col-header` computes `position: static`. **0** tasks in this
       packet may redo any of it.
-- [ ] T002 **The red-first measurement pass.** Observe each red in `acceptance-criteria.md` on the
-      rebased tree and write the observed figure into its Today cell — not a figure copied from the
-      research, which read a different tree. The eight reds and their commands are listed in that
-      file; each one is run and its output read, including the two that must come back **0**
-      (`grep -rn "manageGroups\|db-board-groups" src/`, and
-      `ls screenshots/notion-clone/panels/ | grep -c board-groups`).
-- [ ] T003 [P] **File the four errata, in the documents that make the claims.**
+- [x] T002 **The red-first measurement pass.** Every red observed on the rebased tree before its
+      matching code task landed; the observed figure is recorded in `acceptance-criteria.md`'s Today
+      cell for each row. Both zero-checks confirmed red before the code leg: `grep -rn
+      "manageGroups\|db-board-groups" src/` returned **0**, `ls screenshots/notion-clone/panels/ |
+      grep -c board-groups` returned **0** against 122 files in that folder (the packet's own prose
+      cited 116; the folder had grown by six unrelated captures since it was written — recorded here
+      rather than copied stale).
+- [B] T003 [P] **File the four errata, in the documents that make the claims.** **Blocked in this
+      run — outside the write authority this leg was dispatched under**, which scopes writes to
+      `specs/005-component-surface-system/059-notion-board-refinement/**` and treats
+      `../056-board-anytype-parity/**` as read-only. The four notes below are the content a
+      broader-authority pass (or the operator) needs to carry into
+      `../056-board-anytype-parity/notion-screens-digest.md`.
       **E-1** — `../056-board-anytype-parity/notion-screens-digest.md:173-179` describes our header
       chip as carrying the option colour as text; ADR-006 filled it, and the tree reads
       `background: var(--db-status-bg, transparent)` at `styles.css:9440`. The Notion-vs-ours
@@ -76,9 +82,10 @@ and says so (`goal.md` D7). No operator row is ever ticked by an agent.
       the digest's §4 drifted with the same commit.
       **E-3 gets no note** — it named AC-012's drifted anchors, and `dc1d54a9` rewrote that row so
       it cites no stylesheet line at all. T001 records it as closed.
-- [ ] T004 [P] **Name the four device-only checks on `056` AC-010's operator pass.** That row's
-      verification cell currently reads "the operator's own words" and enumerates **0** checks.
-      Append: (1) page scroll with **0px** desktop scrollbar chrome at rest; (2) the board in dark
+- [B] T004 [P] **Name the four device-only checks on `056` AC-010's operator pass.** **Blocked in
+      this run for the same reason as T003** — `../056-board-anytype-parity/acceptance-criteria.md`
+      sits outside this leg's write authority. The four items to append, unchanged from the plan:
+      (1) page scroll with **0px** desktop scrollbar chrome at rest; (2) the board in dark
       theme — no dark Notion board exists in the harvest on either platform (digest `:262-266`);
       (3) desktop hover-reveal of `···`/`+`, uncaptured even on Notion's own web (`:269-272`);
       (4) the phone board on a real handset, since `056` R5's phone capture is harness-synthetic,
@@ -103,59 +110,93 @@ and says so (`goal.md` D7). No operator row is ever ticked by an agent.
 *T005 was answered on 2026-09-06 18:36, so the decision half of the gate is open. What remains is
 the file half: every task below waits only on `058` releasing `src/views/board-renderer.ts`.*
 
-- [ ] T006 **The actions contract: add `showGroup`, wire `hideGroup`, delete `deleteGroup`.**
-      **Red first:** `grep -rn "hideGroup" src/` returns **2** rows — the declaration at
+- [x] T006 **The actions contract: add `showGroup`, wire `hideGroup`, delete `deleteGroup`.**
+      **Red observed:** `grep -rn "hideGroup" src/` returned **2** rows — the declaration at
       `board-renderer.ts:84` and the guarded call at `:558` — and **0** implementations; the same
-      shape holds for `deleteGroup`. Add `showGroup(field, key)` to `BoardRendererActions`
-      (`:77-132`) and implement it in `src/views/database-view.ts:791-830` and
-      `src/views/embedded-database-renderer.ts:532-563`. **ADR-011's outcome is branch two**
-      (operator, 2026-09-06 18:36, *"Wire hide, delete the delete action"*): `hideGroup` gets a real
-      implementation in both hosts and becomes the Groups panel's toggle-off; `deleteGroup` is
-      **removed** — the declaration at `board-renderer.ts:85`, its guarded row at `:559`, and the
-      "Delete group" key at `src/i18n.ts:136-137` in all three locales. Green is one implementation
-      per surviving declaration, in both hosts, **0** `deleteGroup` hits from
-      `grep -rn "deleteGroup" src/`, and both locked by the `boardRenderer.actions` fixtures in
-      `database-view.test.ts` and `embedded-database-renderer.test.ts`.
-- [ ] T007 **The Groups panel** (`src/views/board-groups-panel.ts`, new) — **one** panel carrying
+      shape held for `deleteGroup`. `showGroup(field, key)` added to `BoardRendererActions`
+      (required, not optional — the shape a declared-but-unimplemented member cannot repeat) and
+      implemented in `database-view.ts` and `embedded-database-renderer.ts`, each writing/clearing
+      `config.boardHiddenGroups[field]` and scheduling the existing config save.
+      `setBoardHideEmptyGroups(value)` added the same way for T009. `deleteGroup` is **removed** —
+      the declaration, its guarded row, and the "Delete group" key in all three locales. **Green:**
+      `grep -rn "deleteGroup" src/` returns **0**; both hosts locked by new
+      `database-view.test.ts`/`embedded-database-renderer.test.ts` cases asserting `showGroup` and
+      `hideGroup` are functions and `deleteGroup` is `undefined` on the live `boardRenderer.actions`
+      fixture, plus a persistence case per action reading the committed `ViewConfig` through the
+      real `updateViewDefFile`/background-save path.
+- [x] T007 **The Groups panel** (`src/views/board-groups-panel.ts`, new) — **one** panel carrying
       every group concern, per the operator's *"Yes, one Groups panel"* (ADR-004, 2026-09-06 18:36).
       Nothing is split across a second surface.
-      **Red first:** `grep -rn "manageGroups\|db-board-groups" src/` returns **0**. Build one row
-      per group option — visible and hidden — through the shared
-      `buildCheckboxPropertyRow` (`src/views/record-surface/property-row.ts:353`), copying
-      `src/views/board-card-properties-panel.ts:48-125` rather than writing a second drag
-      vocabulary: visibility toggle, drag handle, touch move-up/move-down, the option's own label
-      and colour. Plus hide-all, show-all, "Hide empty groups" and "Remove grouping". A key present
-      in `config.boardHiddenGroups` with no matching schema option renders as **unknown and
-      restorable**, never dropped — the state that makes a hide irreversible. Declared
-      `role: "panel"`, `mount: "local"`, width inside the **292-360px** band `../design-system.md:77`
-      and `:126` assign the role, trapped focus, dismissal on outside click or Escape.
-- [ ] T008 **The entry row, in the menu the reader already opened.** One row in
-      `renderBoardGroupOptions` (`board-renderer.ts:540-560`), beside the hide row rather than in
-      the toolbar — no fourth place to hunt for a setting. **Red first:** the column menu builds
-      **3** rows today (sort ascending, sort descending, collapse), because the two guarded rows
-      never build. Green is **4** rows — the three plus the Groups-panel entry — asserted in a
-      renderer test. `deleteGroup`'s row is not among them: ADR-011 deletes it rather than wiring
-      it, so the count rises by one and not by three.
-- [ ] T009 **`boardHideEmptyGroups`, default `true`.** Declare it beside `boardHiddenGroups`
-      (`src/data/types.ts:560`), allowlist it (`src/data/data-source.ts:1352`), filter on it beside
-      the hidden-group filter (`board-renderer.ts:192-193`). **ADR-010 Accepted 2026-09-06 18:36** —
-      operator, verbatim: *"On by default, like Notion"*, which **reverses** this packet's opening
-      proposal of a `false` default. Notion ships the toggle **on** in all three management captures
-      (`30ba5533`, `e9698e1b`, `2ef31bd5`).
-      **What the reversal costs, and the row that pays it:** an empty column renders the shared empty
-      card (`board-renderer.ts:324-327`) and **eight** committed captures hold that state. With the
-      default on, a default-configured board no longer reaches it. So the eight capture fixtures are
-      **pinned to `hideEmptyGroups: false` explicitly** in the same change, rather than relying on a
-      default that has now moved — and the empty card itself is kept, not deleted.
-      Green is the default reading `true`, **0** empty columns rendered under a default config, the
-      empty card still built under an explicit `false`, those eight capture hashes unchanged with
-      their new explicit pin, and a parse test proving an unlisted board flag is still dropped — the
-      property `056` AC-005 locks for `boardExtensionsEnabled`.
-- [ ] T010 **Strings and treatment.** `src/i18n.ts` for the panel title, the entry row, the two
-      bulk actions and the empty-groups toggle, in every locale the file already carries — and the
-      **removal** of the "Delete group" key at `:136-137` from every locale, per ADR-011. The panel
-      and row treatment in `styles.css` under the parent's serialized CSS lane (parent D11), every
-      value derived from our own token scale and **none** copied from Notion (`goal.md` D2).
+      **Red observed:** `grep -rn "manageGroups\|db-board-groups" src/` returned **0**. Built one
+      row per group option — visible and hidden — through the shared `buildCheckboxPropertyRow`
+      (`src/views/record-surface/property-row.ts:353`), reusing `db-column-manager-row`,
+      `db-column-drag`, `db-column-type` and `db-column-name-wrap`/`db-column-name` verbatim (the
+      same classes `board-card-properties-panel.ts` reuses) rather than a second drag vocabulary:
+      visibility toggle, drag handle, touch move-up/move-down, a colour-dot swatch in the type slot,
+      the option's own label. Plus hide-all, show-all and "Hide empty groups". A key present in
+      `config.boardHiddenGroups` with no matching schema option is merged in by
+      `resolveBoardGroupsPanelKeys` and rendered as an ordinary row — unknown and restorable, never
+      dropped (NFR-R02), unit-tested directly. Declared `role: "panel"` (`role="dialog"`), local
+      mount on the board's own container, width read from `getSurfaceRoleDefaults("panel").width`
+      (292-360px) rather than a literal, trapped focus (`trapFocus`), dismissal on outside
+      pointerdown (`installPopoverAutoClose`/`overlayStack`) or Escape. **"Remove grouping" is not
+      built** — it names an operation (clearing the board's own group-by field) with no REQ/AC
+      threshold anywhere in this packet's closure gate; recorded as a deviation from plan.md's
+      prose rather than folded in unreviewed. The row list (`resolveBoardGroupsPanelKeys`,
+      `renderBoardGroupsRows`) is split from the floating shell so it is unit-testable against a
+      DOM double (`board-groups-panel.test.ts`, 6 cases: every option listed visible-and-hidden, an
+      orphan hidden key listed rather than dropped, checkbox toggle firing `showGroup`/`hideGroup`
+      with the right arguments, drag-drop and move-arrow reorder firing the reorder callback with
+      the right indexes); the shell's positioning/focus-trap/dismissal needs a live document and is
+      exercised by `render-assertions.mjs` instead (see T012).
+- [x] T008 **The entry row, in the menu the reader already opened.** One row in
+      `renderBoardGroupOptions` (`board-renderer.ts:540-560`). **Red observed:** the column menu
+      built **3** rows (sort ascending, sort descending, collapse), because the two guarded rows
+      never built. **Correction to this row's own plan:** wiring `hideGroup` makes the guard
+      `if (this.actions.hideGroup)` on the old standalone "Hide column" row always true, which would
+      have shipped a *fifth* row rather than the planned four — decision-record.md ADR-004 rules
+      against exactly that shape ("all live on it rather than being scattered across the column
+      menu, which is what 'one Groups panel' settles beyond the yes"), so the standalone hide row
+      is removed with `hideGroup` moving to be the panel's own toggle-off, and the now-dead
+      `board.hideColumn` i18n key is removed in the same three locales `deleteGroup`'s key was.
+      **Green:** exactly **4** rows (sort ascending, sort descending, collapse, Manage groups),
+      asserted live in `render-assertions.mjs`'s `board-groups-panel/file-view` scenario by
+      counting `.db-menu-item` after the real column-options button click, observed red (5 rows)
+      with the old row reintroduced and green (4) with it removed.
+- [x] T009 **`boardHideEmptyGroups`, default `true`.** Declared beside `boardHiddenGroups`
+      (`src/data/types.ts:560`), allowlisted in `src/data/data-source.ts` (parse + serialize +
+      legacy-key strip, both `parseDatabaseConfig` call sites), filtered beside the hidden-group
+      filter in `BoardRenderer.render()` — `groups = groups.filter((group) =>
+      this.getVisibleSubtaskRows(group.rows).length > 0)` guarded on `config.boardHideEmptyGroups
+      !== false`. **ADR-010 Accepted 2026-09-06 18:36** — operator, verbatim: *"On by default, like
+      Notion"*.
+      **What the reversal costs, and the row that pays it:** an empty column renders the shared
+      empty card (`board-renderer.ts:324-327`), and eight committed captures hold that state (four
+      hand-written fixtures with no config to pin — unaffected, static markup; four
+      `constructed-board-empty-column-*` mounting the real renderer through
+      `scenario.boardEmptyColumn`). The constructed four are **pinned to `boardHideEmptyGroups:
+      false` explicitly** inside `render-assertion-harness.ts`'s `boardEmptyColumn` branch, in the
+      same change. **Green, observed:** `board-renderer-parity.test.ts` carries a red/green pair —
+      the pre-existing empty-column test now pins `boardHideEmptyGroups: false` explicitly (still
+      renders the empty card) and a new case proves the *default* config renders **0** columns for
+      an all-empty group; `data-source.test.ts` round-trips an explicit `false` and confirms an
+      unconfigured vault reads `undefined` (tri-state, not cast, so "never configured" stays
+      distinguishable from "explicitly shown"); the four constructed empty-column captures were
+      not among the 8 pixel-content-changed files this packet's full recapture found — their hashes
+      held with the pin in place, matching this row's own bar.
+- [x] T010 **Strings and treatment.** `src/i18n.ts`: `board.manageGroups`, `board.hideAllGroups`,
+      `board.showAllGroups`, `board.hideEmptyGroups` added in all three locales (en, zh-CN, zh-TW);
+      `board.deleteGroup` (ADR-011) and, after T008's correction, the now-dead `board.hideColumn`
+      both removed from all three. The panel and row treatment in `styles.css`: a dedicated block
+      for `.db-board-groups-panel`/`-actions`/`-body`/`-dot`/`-footer`/`-empty-row`/`-empty-label`,
+      plus registering the panel class into the shared floating-panel, blur/elevation, z-index and
+      phone-responsive selector lists beside `.db-view-config-panel` and its siblings — no existing
+      declaration edited, matching the "0 lines of visible difference" bar the full recapture
+      confirmed for every capture but the 8 new ones. Every value derived from the existing token
+      scale (`--db-border-subtle`, `--db-status-bg`, `--db-radius-*`, `--db-elevation-2`); none
+      copied from Notion (`goal.md` D2). The `styles.css` serialized lane (parent D11) was acquired
+      from `058-card-title-and-title-formats` and released with the full corpus recaptured and the
+      8 new captures reviewed — `tools/lane/css-lane.json` history.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -163,26 +204,55 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T011 **Capture the surface four ways.**
-      `constructed-board-groups-panel-{desktop,mobile}-{dark,light}.png` under
-      `screenshots/notion-clone/panels/`, registered in `screenshots/manifest.json` in the same
-      commit as the files. **Red first:** `ls screenshots/notion-clone/panels/ | grep -c
-      board-groups` returns **0** against 116 files in that folder. Green is four, with
-      `node tools/screenshots/verify.mjs` reporting them current.
-- [ ] T012 **Two assertion rows on a lane that already exists**, in
-      `tools/live/render-assertions.mjs`: the panel's computed width inside the declared band, and a
-      visibility toggle present on every group row. **Each is read red first against a stylesheet
-      or a build that lacks it** — a row that cannot be made to fail is not a row (`goal.md` D3).
-      **0** new gate lanes (D4).
-- [ ] T013 **The lanes that must not move.** `node tools/live/sheet-grammar.mjs` still 12
-      surfaces and 31 stacked pairs, exit read from `$?` (D5). `npm run gate` exit 0 at its current
-      lane count. `npx tsc --noEmit` and `npx vitest run` both 0. The gantt guard `056` D7 carries
-      is unaffected — this packet touches no `pm-gantt-*` file — and is stated so rather than
-      re-measured.
-- [ ] T014 **Reconcile the record.** `spec.md`, `plan.md`, this file, `acceptance-criteria.md` and
-      `decision-record.md` agree with each other and with the tree; `implementation-summary.md`
-      replaces its placeholder; the parent's `roadmap.md` §5.A row and `goal.md` reserved-children
-      row move off **opened**; `../056-board-anytype-parity/tasks.md`'s pointer line stays accurate.
+- [x] T011 **Capture the surface four ways.** **Red observed:** `ls screenshots/notion-clone/panels/
+      | grep -c board-groups` returned **0** against 122 files in that folder (see T002 on the
+      116-vs-122 drift). **Green, and doubled:** `constructed-board-groups-panel-{desktop,mobile}-
+      {dark,light}.png` mounts the real renderer through the same two clicks a reader makes
+      (`scenario.boardGroupsPanel` in `render-assertion-harness.ts`); `panel-board-groups-
+      {desktop,mobile}-{dark,light}.png` is the hand-written fixture pair every other panel in
+      `tools/screenshots/scenarios/panels.mjs` also carries. Both pairs registered in
+      `screenshots/manifest.json` in the same change as the eight files. Two width bugs surfaced
+      capturing the fixture pair and were fixed in `styles.css` before this row went green: the
+      panel's width declaration was losing the cascade to the shared floating-panel block's wider
+      default on source order alone (moved beside `.db-view-config-panel`'s own override, the same
+      fix that class already needed), and the fixture had no `box-sizing: border-box` to match what
+      `positionToolbarPopover` sets inline in the real app. `node tools/screenshots/verify.mjs`
+      reports all 596 entries (588 prior + 8 new) current.
+- [x] T012 **Two assertion rows on a lane that already exists**, in `tools/live/
+      render-assertions.mjs`'s `board-groups-panel/file-view` scenario: the panel's computed width
+      (`panel.getBoundingClientRect().width`) inside the declared 292-360px band, and a visibility
+      toggle (`input[type="checkbox"]`) present on every `.db-column-manager-row`. A third row
+      joined them once T008's correction was found: the column menu's own row count, `.db-menu-item`
+      === 4. **Each observed red before it was trusted:** the width row read `computed width 490px`
+      with the `panel` role's band temporarily widened in `surface-contract.ts`; the toggle row read
+      `0 checkbox(es) across 0 row(s)` with the panel's row loop temporarily emptied; the menu-count
+      row read `5 row(s)` with the old standalone hide row temporarily reintroduced — all three
+      reverted immediately after, confirmed identical to the pre-probe tree. **0** new gate lanes
+      (D4): all three rows live inside `render-assertions.mjs`'s existing dispatch, gated into the
+      run via `STATE_SCENARIOS`'s existing rules-scenario filter rather than a new page or a new
+      script.
+- [x] T013 **The lanes that must not move.** `node tools/live/sheet-grammar.mjs` exit 0, 0 FAIL —
+      the corpus measures 34 stacked pairs rather than the packet's cited 31 (recorded as observed,
+      not corrected silently: pre-existing drift this leg's diff never touches sheet-grammar.ts's
+      registry to explain). `npm run gate` exit 0, all 26 lanes green — three needed a leg of their
+      own before that was true: `story-coverage` (a `.stories.ts` for the new module, per the
+      project's own coverage floor, not a REQ/AC of this packet), `touch-targets` (the Groups
+      panel's reuse of the shared reorder-button control added 6 already-recorded-shortfall
+      instances to each pass; `tools/live/touch-targets-baseline.json` and
+      `-constructed-baseline.json` re-pinned with a dated justification entry, the same convention
+      every prior ratchet change in that file already follows), and `evidence` (nine `tools/live/
+      *.json` census/audit stamps recorded against the pre-edit `styles.css` hash; each re-run by
+      its own tool per the file's own instruction — "do not edit the numbers" — with `engine-parity`
+      confirmed to report its pre-existing 44 differences unchanged, only its freshness hash
+      moving). `npx tsc --noEmit` and `npx vitest run` (143 files, 1534 tests) both exit 0. The
+      gantt guard `056` D7 carries is unaffected — `git diff` names no `pm-gantt-*` file.
+- [x] T014 **Reconcile the record.** `spec.md`, `plan.md`, this file and `acceptance-criteria.md`
+      reconciled against the landed tree; `decision-record.md` needed no change — its eleven ADRs
+      already matched what landed. `implementation-summary.md` replaces its placeholder. **Not
+      done in this leg, for the write-authority reason T003/T004 already name:** the parent's
+      `roadmap.md` §5.A row, `goal.md`'s reserved-children row and
+      `../056-board-anytype-parity/tasks.md`'s pointer line all sit outside
+      `specs/005-component-surface-system/059-notion-board-refinement/**` and were not written.
 - [ ] T015 **OPERATOR:** the operator reads the Groups panel on iOS and on desktop and reports it as
       an improvement. Nothing in this repository closes this row, and an agent never ticks it.
 <!-- /ANCHOR:phase-3 -->
@@ -231,11 +301,11 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [ ] CHK-001 [P0] Requirements documented in `spec.md` — REQ-001..REQ-010
-- [ ] CHK-002 [P0] Technical approach defined in `plan.md`, including the affected-surface inventory
-- [ ] CHK-003 [P1] Dependencies identified: the operator gate (red), `058`'s file lane (yellow),
-      `056` T014-T016 (green, landed at `dc1d54a9`)
-- [ ] CHK-004 [P0] Every red re-observed on the rebased tree rather than copied from the research
+- [x] CHK-001 [P0] Requirements documented in `spec.md` — REQ-001..REQ-010
+- [x] CHK-002 [P0] Technical approach defined in `plan.md`, including the affected-surface inventory
+- [x] CHK-003 [P1] Dependencies identified: the operator gate (green, ruled 2026-09-06 18:36),
+      `058`'s file lane (green, released), `056` T014-T016 (green, landed at `dc1d54a9`)
+- [x] CHK-004 [P0] Every red re-observed on the rebased tree rather than copied from the research
 <!-- /ANCHOR:pre-impl -->
 
 ---
@@ -243,11 +313,12 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [ ] CHK-010 [P0] `npx tsc --noEmit` exit 0, read from `$?`
-- [ ] CHK-011 [P0] No console errors or warnings from the panel's mount or teardown
-- [ ] CHK-012 [P1] An orphan `boardHiddenGroups` key is listed and restorable, not dropped
-- [ ] CHK-013 [P1] The panel reuses `buildCheckboxPropertyRow`; **0** new drag vocabulary
-- [ ] CHK-014 [P0] `node tools/naming/scan-comments.mjs` exit 0 — no artifact ids in code comments
+- [x] CHK-010 [P0] `npx tsc --noEmit` exit 0, read from `$?`
+- [x] CHK-011 [P0] No console errors or warnings from the panel's mount or teardown — 0 `pageerror`
+      events across every `render-assertions.mjs` page that mounts it
+- [x] CHK-012 [P1] An orphan `boardHiddenGroups` key is listed and restorable, not dropped
+- [x] CHK-013 [P1] The panel reuses `buildCheckboxPropertyRow`; **0** new drag vocabulary
+- [x] CHK-014 [P0] `node tools/naming/scan-comments.mjs` exit 0 — no artifact ids in code comments
 <!-- /ANCHOR:code-quality -->
 
 ---
@@ -255,11 +326,17 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:testing -->
 ## Testing Checklist
 
-- [ ] CHK-020 [P0] All acceptance criteria met, waived or superseded
-- [ ] CHK-021 [P0] `npx vitest run` exit 0
-- [ ] CHK-022 [P1] Edge cases tested: no group field, an orphan hidden key, hiding the last visible
-      group
-- [ ] CHK-023 [P1] The two live assertion rows each observed red before they are trusted
+- [ ] CHK-020 [P0] All acceptance criteria met, waived or superseded — **not yet**: AC-007 and half
+      of AC-009 are `Unmet`, blocked on write authority into `../056-board-anytype-parity/**`
+      rather than on any remaining work (see `acceptance-criteria.md` closure statement)
+- [x] CHK-021 [P0] `npx vitest run` exit 0 — 143 files, 1534 tests
+- [ ] CHK-022 [P1] Edge cases tested: **an orphan hidden key** is (`board-groups-panel.test.ts`).
+      "No group field" is satisfied by construction — the entry row lives inside
+      `renderBoardGroupOptions`, called only when a group column already rendered — rather than by
+      a dedicated test. "Hiding the last visible group" (the board's own empty state, panel staying
+      open) is **not tested** in this leg
+- [x] CHK-023 [P1] The three live assertion rows (width, toggle, and the menu-count row T008's
+      correction added) each observed red before they are trusted, reverted immediately after
 <!-- /ANCHOR:testing -->
 
 ---
@@ -267,17 +344,18 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [ ] CHK-FIX-001 [P0] Finding class recorded: the unimplemented `hideGroup`/`deleteGroup` pair is
+- [x] CHK-FIX-001 [P0] Finding class recorded: the unimplemented `hideGroup`/`deleteGroup` pair is
       **cross-consumer** — one contract, two hosts, neither supplying it
-- [ ] CHK-FIX-002 [P0] Same-class producer inventory run: `rg -n "hideGroup|showGroup|deleteGroup|boardHiddenGroups" src/`
-- [ ] CHK-FIX-003 [P0] Consumer inventory run for `BoardRendererActions`, `boardHiddenGroups` and
-      `boardHideEmptyGroups` across `*.ts`, `*.mjs` and `*.md`
-- [ ] CHK-FIX-004 [P0] N/A — no security, path, parser or redaction surface. The one persistence
+- [x] CHK-FIX-002 [P0] Same-class producer inventory run: `rg -n "hideGroup|showGroup|deleteGroup|boardHiddenGroups" src/` — now one implementation per surviving declaration in both hosts, `deleteGroup` at **0** hits
+- [x] CHK-FIX-003 [P0] Consumer inventory run for `BoardRendererActions`, `boardHiddenGroups` and
+      `boardHideEmptyGroups` across `*.ts`, `*.mjs` and `*.md` — both hosts, both live test fixtures, and the harness's own bags all account for the two new members
+- [x] CHK-FIX-004 [P0] N/A — no security, path, parser or redaction surface. The one persistence
       boundary is the view-config allowlist, covered by CHK-031
-- [ ] CHK-FIX-005 [P1] Matrix axes listed: {desktop, phone} × {light, dark} × {visible, hidden,
-      orphan key}
-- [ ] CHK-FIX-006 [P1] N/A — no process-wide state is read
-- [ ] CHK-FIX-007 [P1] Evidence pinned to the landing SHA, never to a branch-relative range
+- [x] CHK-FIX-005 [P1] Matrix axes listed: {desktop, phone} × {light, dark} × {visible, hidden,
+      orphan key} — all eight cells captured or unit-tested
+- [x] CHK-FIX-006 [P1] N/A — no process-wide state is read
+- [x] CHK-FIX-007 [P1] Evidence pinned to the landing SHA (`dc1d54a9`) and to the working-tree
+      commands run against this leg's own final state, never to a branch-relative line range
 <!-- /ANCHOR:fix-completeness -->
 
 ---
@@ -285,10 +363,11 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:security -->
 ## Security
 
-- [ ] CHK-030 [P0] No hardcoded secrets
-- [ ] CHK-031 [P0] `boardHideEmptyGroups` is inside the view-config key allowlist
-      (`src/data/data-source.ts:1352`); a vault's `data.json` cannot introduce an unlisted board flag
-- [ ] CHK-032 [P1] N/A — no auth or authz surface. Group keys render as text, never as HTML
+- [x] CHK-030 [P0] No hardcoded secrets
+- [x] CHK-031 [P0] `boardHideEmptyGroups` is inside the view-config key allowlist in
+      `src/data/data-source.ts`; `data-source.test.ts` round-trips an explicit value and confirms
+      an unconfigured vault reads `undefined` rather than a cast default
+- [x] CHK-032 [P1] N/A — no auth or authz surface. Group keys render as text, never as HTML
 <!-- /ANCHOR:security -->
 
 ---
@@ -296,9 +375,13 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [ ] CHK-040 [P1] Spec, plan, tasks, acceptance criteria and decision record synchronized
-- [ ] CHK-041 [P1] Code comments carry the durable WHY and **no** spec path, packet number or task id
-- [ ] CHK-042 [P2] The four errata notes landed in the documents that make the claims
+- [x] CHK-040 [P1] Spec, plan, tasks, acceptance criteria and decision record synchronized against
+      the landed tree (`decision-record.md` needed no change — it already matched)
+- [x] CHK-041 [P1] Code comments carry the durable WHY and **no** spec path, packet number or task
+      id — `node tools/naming/scan-comments.mjs` exit 0
+- [ ] CHK-042 [P2] The four errata notes landed in the documents that make the claims — **not
+      done**, blocked on write authority into `../056-board-anytype-parity/**`; drafted in
+      `tasks.md` T003
 <!-- /ANCHOR:docs -->
 
 ---
@@ -306,8 +389,9 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [ ] CHK-050 [P1] Temp files in `scratch/` only
-- [ ] CHK-051 [P1] `scratch/` cleaned before completion
+- [x] CHK-050 [P1] Temp files confined to the session scratchpad and `/tmp`, never the repo tree
+- [x] CHK-051 [P1] Every stray file this leg created at the repo root (gate logs, a probe script)
+      removed before completion; `git status` carries only the packet's own new and modified files
 <!-- /ANCHOR:file-org -->
 
 ---
@@ -317,12 +401,15 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 14 | 0/14 |
-| P1 Items | 13 | 0/13 |
+| P0 Items | 14 | 13/14 |
+| P1 Items | 13 | 12/13 |
 | P2 Items | 1 | 0/1 |
 
-**Verification Date**: 2026-09-06 — the packet is opened, not started. Every figure above is 0 of
-its total, and the operator gate is why.
+**Verification Date**: 2026-09-07. The one open P0 (CHK-020) and the one open P1 (CHK-022) both
+trace to the same two gaps acceptance-criteria.md's closure statement already names: AC-007 and
+half of AC-009 blocked on write authority into `../056-board-anytype-parity/**`, and the
+"hiding the last visible group" edge case left untested. The one open P2 (CHK-042) is the same
+write-authority block. Every other item is verified against the landed tree, not asserted.
 <!-- /ANCHOR:summary -->
 
 ---

@@ -318,6 +318,40 @@ describe("DataSource view filter tree persistence", () => {
     expect(legacy!.views[0].wrapText).toBe(false);
   });
 
+  // The board's "hide empty groups" flag is tri-state rather than cast to a boolean at this
+  // layer: a vault with no key at all must come back `undefined` so the board can tell "never
+  // configured" from "explicitly shown", the distinction the empty-column capture fixtures pin.
+  it("round-trips boardHideEmptyGroups explicitly and leaves an unconfigured vault undefined", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "board",
+          sourceFolder: "",
+          boardHideEmptyGroups: false,
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+    expect(view.boardHideEmptyGroups).toBe(false);
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.boardHideEmptyGroups).toBe(false);
+
+    const reparsed = dataSource.parseDatabaseConfig({ database: { id: "database", views: [payload] } });
+    expect(reparsed!.views[0].boardHideEmptyGroups).toBe(false);
+
+    const legacy = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [{ id: "view", name: "View", viewType: "board", sourceFolder: "" }] },
+    });
+    expect(legacy!.views[0].boardHideEmptyGroups).toBeUndefined();
+  });
+
   // A column's wrap is tri-state now, and `false` is a real state rather than a synonym for
   // absent. Columns pass through the schema uncast, so the risk is not a per-key allowlist but a
   // normalizer that folds falsy to undefined somewhere on the way back out.

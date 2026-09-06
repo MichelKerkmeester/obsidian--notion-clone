@@ -753,6 +753,16 @@ ViewConfigPanelRenderer's own render for a board view, so renderBoardSettings mo
 
 Sources: `src/views/board-card-properties-panel.ts`, `src/views/view-config-panel-renderer.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-card-fields.ts`, `src/views/checkbox.ts`, `src/views/property-type-icon.ts`
 
+### Board Groups panel (constructed)
+
+The reference board's own column-options button, then the "Manage groups" row it opens — the same two clicks a reader makes, not a hand-built panel.
+
+| dark | light |
+|---|---|
+| ![constructed-board-groups-panel dark](notion-clone/panels/constructed-board-groups-panel-mobile-dark.png) | ![constructed-board-groups-panel light](notion-clone/panels/constructed-board-groups-panel-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-groups-panel.ts`, `src/views/record-surface/property-row.ts`, `src/views/checkbox.ts`
+
 ### Column manager (constructed)
 
 ColumnManagerRenderer's own render over the table bench's sixteen columns with one hidden, so the select-all checkbox sits in its real indeterminate state.
@@ -952,6 +962,16 @@ The Properties section of a board view's settings panel: fixed readonly Cover an
 | ![panel-board-card-properties dark](notion-clone/panels/panel-board-card-properties-mobile-dark.png) | ![panel-board-card-properties light](notion-clone/panels/panel-board-card-properties-mobile-light.png) |
 
 Sources: `src/views/board-card-properties-panel.ts`, `src/views/view-config-panel-renderer.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
+### Board Groups panel
+
+Reached from the board column menu's own "Manage groups" row: every group option, visible or hidden, on the row markup the column manager already uses (drag handle, checkbox, a colour swatch in the type slot instead of a type icon, name), plus hide-all/show-all above the list and "Hide empty groups" below it. Done is hidden here — its toggle sits unchecked rather than removed, so it stays reachable from the same surface that hid it.
+
+| dark | light |
+|---|---|
+| ![panel-board-groups dark](notion-clone/panels/panel-board-groups-mobile-dark.png) | ![panel-board-groups light](notion-clone/panels/panel-board-groups-mobile-light.png) |
+
+Sources: `src/views/board-groups-panel.ts`, `src/views/record-surface/property-row.ts`, `src/views/checkbox.ts`
 
 ### Column manager
 

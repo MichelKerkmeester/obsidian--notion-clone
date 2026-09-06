@@ -558,6 +558,10 @@ export interface ViewConfig {
   boardCardOrders?: Record<string, Record<string, string[]>>;
   /** Board groups hidden from this view without changing their source values. */
   boardHiddenGroups?: Record<string, string[]>;
+  /** Whether a board group with no visible rows renders no column at all. Undefined defaults to
+   *  `true` — the board's own default, independent of `showEmptyGroups`' per-field default for
+   *  every other grouped layout. */
+  boardHideEmptyGroups?: boolean;
   /** Manual row ordering. Key = file.path, value = base62 rank string. */
   manualOrder?: { ranks?: Record<string, string> };
   /** Per-view subtask expand/collapse override, keyed by file.path. Layers over a note's own

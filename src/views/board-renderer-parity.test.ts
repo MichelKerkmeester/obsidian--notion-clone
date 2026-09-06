@@ -428,6 +428,8 @@ function createActions(overrides: Partial<BoardRendererActions> = {}) {
     createEntry: vi.fn(),
     updateGroup: vi.fn(),
     updateGroupOrder: vi.fn(),
+    showGroup: vi.fn(),
+    setBoardHideEmptyGroups: vi.fn(),
     updateCardOrder: vi.fn(),
     moveRowToPosition: vi.fn(),
     moveRowWithGroupUpdatesAndPosition: vi.fn<(row: RowData, updates: Array<{ field: string; fromGroupKey: string; toGroupKey: string }>, beforePath?: string, afterPath?: string, movedPaths?: string[]) => void | Promise<void>>(),
@@ -553,19 +555,35 @@ describe("kanban view and column shell parity", () => {
     expect(cards[0].parentElement?.className).toBe("db-kanban-col");
   });
 
-  it("renders an empty column with the shared empty-group card, no crash", () => {
+  it("renders an empty column with the shared empty-group card when hideEmptyGroups is off, no crash", () => {
     const emptyGroups: BoardGroup[] = [
       { key: "Done", rows: [], count: 0 },
     ];
     const renderer = new BoardRenderer({} as unknown as App, createActions());
     const container = new MockElement("div");
-    renderer.render(container as unknown as HTMLElement, CONFIG, emptyGroups, "status");
+    // The board's own default now hides an empty group, so the fixture that wants the empty card
+    // pins the setting off explicitly rather than relying on an unstated default.
+    renderer.render(container as unknown as HTMLElement, { ...CONFIG, boardHideEmptyGroups: false }, emptyGroups, "status");
 
     const column = container.querySelector<MockElement>(".db-kanban-col")!;
     expect(column.querySelectorAll(".db-kanban-card")).toHaveLength(0);
     // A11: not seen in any of the 62 captures. Design inferred: the same empty-group card every
     // other grouped renderer already shows.
     expect(column.querySelector(".db-kanban-empty-slot")).not.toBeNull();
+  });
+
+  it("renders no column at all for an empty group under the default config", () => {
+    const emptyGroups: BoardGroup[] = [
+      { key: "To Do", rows: [{ file: { path: "a.md", basename: "a" }, frontmatter: {}, computed: {} } as unknown as RowData], count: 1 },
+      { key: "Done", rows: [], count: 0 },
+    ];
+    const renderer = new BoardRenderer({} as unknown as App, createActions());
+    const container = new MockElement("div");
+    renderer.render(container as unknown as HTMLElement, CONFIG, emptyGroups, "status");
+
+    const columns = container.querySelectorAll<MockElement>(".db-kanban-col");
+    expect(columns).toHaveLength(1);
+    expect(columns[0].getAttribute("data-status")).toBe("To Do");
   });
 });
 

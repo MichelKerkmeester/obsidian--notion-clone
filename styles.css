@@ -843,7 +843,8 @@
 .note-database-container .db-filter-panel,
 .note-database-container .db-sort-panel,
 .note-database-container .db-view-config-panel,
-.note-database-container .db-column-manager {
+.note-database-container .db-column-manager,
+.note-database-container .db-board-groups-panel {
   z-index: var(--db-layer-panel, 50);
 }
 
@@ -9859,6 +9860,58 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   border-width: 0.7px;
 }
 
+/* The board's Groups panel: per-group visibility, bulk hide/show, drag reorder and the
+   "hide empty groups" setting on one surface. Its own width lives beside `.db-view-config-panel`'s
+   in § FLOATING PANELS below — same reason: an equal-specificity `width` declared here would lose
+   to that block's wider default on source order alone. */
+.note-database-container .db-board-groups-panel {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.note-database-container .db-board-groups-panel .db-column-manager-row {
+  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
+}
+
+.note-database-container .db-board-groups-actions {
+  display: flex;
+  gap: 6px;
+  padding: 4px 4px 8px;
+  border-bottom: 1px solid var(--db-border-subtle);
+}
+
+.note-database-container .db-board-groups-body {
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.note-database-container .db-board-groups-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--db-status-bg, var(--text-faint));
+}
+
+.note-database-container .db-board-groups-footer {
+  padding: 8px 4px 2px;
+  border-top: 1px solid var(--db-border-subtle);
+}
+
+.note-database-container .db-board-groups-empty-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.note-database-container .db-board-groups-empty-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
 /* The ten-colour option palette, tint plus a same-hue darkened/lightened text pair that clears
    4.5:1 against both the tint and the page background in both themes. This plugin's own
    sixteen-name colour vocabulary buckets into Anytype's ten hues; only amber's card-chip pair
@@ -11106,6 +11159,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-export-popover,
 .note-database-container .db-chart-options-popover,
 .note-database-container .db-view-tab-popover,
+.note-database-container .db-board-groups-panel,
 .db-filter-panel.db-surface,
 .db-sort-panel.db-surface,
 .db-view-config-panel.db-surface,
@@ -11114,7 +11168,8 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .db-group-popover.db-surface,
 .db-export-popover.db-surface,
 .db-chart-options-popover.db-surface,
-.db-view-tab-popover.db-surface {
+.db-view-tab-popover.db-surface,
+.db-board-groups-panel.db-surface {
   max-width: min(760px, calc(100vw - 72px));
   position: absolute;
   /* 顶部位置 = 工具栏高度（JS 动态测量） */
@@ -11135,6 +11190,15 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-view-config-panel {
   width: min(360px, calc(100vw - 72px));
   min-height: 315px;
+}
+
+.note-database-container .db-board-groups-panel {
+  width: min(360px, calc(100vw - 72px));
+  /* The shared block above adds its own padding and border to a declared width rather than
+     inside it; `positionToolbarPopover` corrects that with an inline `box-sizing: border-box` at
+     open time in the real app, and this class needs the same correction to hold on its own for a
+     capture that never runs that positioning code. */
+  box-sizing: border-box;
 }
 
 /* SETTINGS SIDE SHEET (desktop) --------------------------------------------------------------
@@ -20343,7 +20407,8 @@ body.pm-resize-active * {
   .note-database-container .db-group-popover,
   .note-database-container .db-export-popover,
   .note-database-container .db-chart-options-popover,
-  .note-database-container .db-view-tab-popover {
+  .note-database-container .db-view-tab-popover,
+  .note-database-container .db-board-groups-panel {
     left: 12px;
     right: 12px;
     top: var(--db-table-header-top);
@@ -20764,7 +20829,8 @@ body.pm-resize-active * {
 .is-phone .note-database-container .db-group-popover,
 .is-phone .note-database-container .db-export-popover,
 .is-phone .note-database-container .db-chart-options-popover,
-.is-phone .note-database-container .db-view-tab-popover {
+.is-phone .note-database-container .db-view-tab-popover,
+.is-phone .note-database-container .db-board-groups-panel {
   max-height: min(380px, calc(100vh - 240px));
 }
 
@@ -22131,6 +22197,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .note-database-container .db-cell-edit-popover,
 .note-database-container .db-cell-line-edit-popover,
 .note-database-container .db-date-value-popover,
+.note-database-container .db-board-groups-panel,
 .db-filter-panel,
 .db-sort-panel,
 .db-dropdown-popover,
@@ -22155,7 +22222,8 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .db-cell-option-popover.db-surface,
 .db-cell-edit-popover.db-surface,
 .db-cell-line-edit-popover.db-surface,
-.db-date-value-popover.db-surface {
+.db-date-value-popover.db-surface,
+.db-board-groups-panel.db-surface {
   background: var(--db-surface-overlay);
   box-shadow: var(--db-elevation-2);
   backdrop-filter: blur(var(--db-overlay-blur, 12px));
@@ -22307,7 +22375,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
   background-color: var(--db-active-bg);
 }
 
-.note-database-container :is(.db-filter-panel, .db-sort-panel, .db-view-config-panel, .db-column-manager, .db-database-popover, .db-group-popover, .db-export-popover, .db-view-tab-popover) {
+.note-database-container :is(.db-filter-panel, .db-sort-panel, .db-view-config-panel, .db-column-manager, .db-database-popover, .db-group-popover, .db-export-popover, .db-view-tab-popover, .db-board-groups-panel) {
   z-index: var(--db-layer-panel, 50) !important;
 }
 

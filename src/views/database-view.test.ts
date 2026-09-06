@@ -389,3 +389,46 @@ describe("DatabaseView subtask host bindings", () => {
     expect(harness.historyStack).toHaveLength(0);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 4. BOARD GROUP VISIBILITY HOST BINDINGS
+// ───────────────────────────────────────────────────────────────────
+//
+// `hideGroup` and `deleteGroup` were declared on `BoardRendererActions` with neither host
+// ever supplying them, so the two column-menu rows guarded on them never built. This host now
+// wires `hideGroup`/`showGroup` for real and carries no `deleteGroup` at all — the fixture below
+// is what locks that shape so it cannot silently regress to "declared, unimplemented" again.
+
+describe("DatabaseView board group visibility host bindings", () => {
+  it("supplies showGroup and hideGroup, and carries no deleteGroup", () => {
+    const { harness } = createView();
+
+    expect(typeof harness.boardRenderer.actions.showGroup).toBe("function");
+    expect(typeof harness.boardRenderer.actions.hideGroup).toBe("function");
+    expect((harness.boardRenderer.actions as unknown as Record<string, unknown>).deleteGroup).toBeUndefined();
+  });
+
+  it("hideGroup persists the key and showGroup removes it, through the view-def writer", async () => {
+    const { harness, dataSource, viewConfig } = createView();
+
+    harness.boardRenderer.actions.hideGroup?.("status", "Done");
+    expect(viewConfig.boardHiddenGroups).toEqual({ status: ["Done"] });
+    await flushConfigWrite();
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHiddenGroups).toEqual({ status: ["Done"] });
+
+    harness.boardRenderer.actions.showGroup("status", "Done");
+    expect(viewConfig.boardHiddenGroups).toEqual({});
+  });
+
+  it("setBoardHideEmptyGroups persists the flag through the view-def writer", async () => {
+    const { harness, dataSource, viewConfig } = createView();
+
+    harness.boardRenderer.actions.setBoardHideEmptyGroups(false);
+
+    expect(viewConfig.boardHideEmptyGroups).toBe(false);
+    await flushConfigWrite();
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHideEmptyGroups).toBe(false);
+  });
+});

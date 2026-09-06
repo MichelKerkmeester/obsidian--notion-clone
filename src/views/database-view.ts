@@ -799,6 +799,9 @@ export class DatabaseView extends FileView {
       createGroup: (field, name, color) => this.createBoardGroup(field, name, color),
       updateGroup: (row, field, value, fromValue) => this.updateBoardGroup(row, field, value, fromValue),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
+      hideGroup: (field, key) => this.setBoardGroupHidden(this.getConfig(), field, key, true),
+      showGroup: (field, key) => this.setBoardGroupHidden(this.getConfig(), field, key, false),
+      setBoardHideEmptyGroups: (value) => this.setBoardHideEmptyGroups(this.getConfig(), value),
       updateCardOrder: (field, groupKey, paths) => this.updateBoardCardOrder(field, groupKey, paths),
       moveRowToPosition: (movedPath, beforePath, afterPath, subtaskMove) =>
         void this.moveRowToPosition(movedPath, beforePath, afterPath, subtaskMove),
@@ -10819,6 +10822,28 @@ export class DatabaseView extends FileView {
     const config = this.getConfig();
     if (!config) return;
     config.groupOrders = { ...(config.groupOrders || {}), [field]: order };
+    this.pendingUndoLabel = t("undo.groupConfig");
+    this.scheduleConfigSave();
+    this.refresh();
+  }
+
+  private setBoardGroupHidden(config: ViewConfig | undefined, field: string, key: string, hidden: boolean): void {
+    if (!config) return;
+    const current = new Set(config.boardHiddenGroups?.[field] || []);
+    if (hidden) current.add(key);
+    else current.delete(key);
+    const next = { ...(config.boardHiddenGroups || {}) };
+    if (current.size > 0) next[field] = Array.from(current);
+    else delete next[field];
+    config.boardHiddenGroups = next;
+    this.pendingUndoLabel = t("undo.groupConfig");
+    this.scheduleConfigSave();
+    this.refresh();
+  }
+
+  private setBoardHideEmptyGroups(config: ViewConfig | undefined, value: boolean): void {
+    if (!config) return;
+    config.boardHideEmptyGroups = value;
     this.pendingUndoLabel = t("undo.groupConfig");
     this.scheduleConfigSave();
     this.refresh();

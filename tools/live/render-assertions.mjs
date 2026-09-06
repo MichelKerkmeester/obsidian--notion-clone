@@ -261,19 +261,19 @@ const BAGS = {
   "board/file-view": [
     "applyConditionalFormat", "areAllRowsSelected", "createEntry", "createGroup", "editCell",
     "editFileName", "editFormula", "expandGroup", "getColumns", "getSelectedRows",
-    "hideCreateEntry", "isGroupCollapsed", "isRowSelected", "moveRowToPosition",
+    "hideCreateEntry", "hideGroup", "isGroupCollapsed", "isRowSelected", "moveRowToPosition",
     "moveRowWithGroupUpdatesAndPosition", "moveRowsToPosition", "openRecordDetail", "openRow",
-    "renderGroupSummaries", "renderRecordIcon", "saveCellValue", "showColumnMenu", "showRowMenu",
-    "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected", "updateCardOrder",
-    "updateColumnWidth", "updateGroup", "updateGroupOrder",
+    "renderGroupSummaries", "renderRecordIcon", "saveCellValue", "setBoardHideEmptyGroups",
+    "showColumnMenu", "showGroup", "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected",
+    "toggleRowsSelected", "updateCardOrder", "updateColumnWidth", "updateGroup", "updateGroupOrder",
   ],
   "board/embed": [
     "applyConditionalFormat", "areAllRowsSelected", "canReorderGroups", "createEntry",
-    "editCell", "expandGroup", "getColumns", "hideCreateEntry", "isGroupCollapsed", "isReadOnly",
-    "isRowSelected", "moveRowToPosition", "openRow", "renderGroupSummaries", "renderRecordIcon",
-    "showColumnMenu", "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected",
-    "toggleRowsSelected", "updateCardOrder", "updateColumnWidth", "updateGroup",
-    "updateGroupOrder",
+    "editCell", "expandGroup", "getColumns", "hideCreateEntry", "hideGroup", "isGroupCollapsed",
+    "isReadOnly", "isRowSelected", "moveRowToPosition", "openRow", "renderGroupSummaries",
+    "renderRecordIcon", "setBoardHideEmptyGroups", "showColumnMenu", "showGroup", "showRowMenu",
+    "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected", "updateCardOrder",
+    "updateColumnWidth", "updateGroup", "updateGroupOrder",
   ],
   "calendar/file-view": [
     "applyConditionalFormat", "createEntryForDate", "getCalendarInvalidEventCount", "getColumns",
@@ -596,7 +596,7 @@ try {
   // own predicate, not a hand-supplied reason string.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
     scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty"
-    || scenario.emptyReason != null);
+    || scenario.emptyReason != null || scenario.boardGroupsPanel === true);
   const rulesOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     rulesScenarios,

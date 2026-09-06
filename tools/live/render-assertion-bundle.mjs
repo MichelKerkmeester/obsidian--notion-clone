@@ -142,6 +142,7 @@ export const STATE_SCENARIOS = [
   // The board state variants.
   { name: "board-empty-column/file-view", renderer: "board", bag: "file-view", captureData: true, boardEmptyColumn: true },
   { name: "board-covers/file-view", renderer: "board", bag: "file-view", captureData: true, boardImageField: true },
+  { name: "board-groups-panel/file-view", renderer: "board", bag: "file-view", captureData: true, boardGroupsPanel: true },
 ];
 
 // touch-targets.mjs and unstyled-links.mjs's own constructed pass: every scenario SCENARIOS

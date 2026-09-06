@@ -195,7 +195,7 @@ function reorderControls(isFirst, isLast) {
    rule keyed to a toolbar height the capture has no toolbar to supply. Restoring flow is
    the whole job; the height cap is lifted so a panel taller than the viewport is
    photographed whole instead of scrolled. */
-const ANCHORED_PANEL_CSS = `.note-database-container :is(.db-filter-panel, .db-sort-panel, .db-view-config-panel, .db-column-manager) {
+const ANCHORED_PANEL_CSS = `.note-database-container :is(.db-filter-panel, .db-sort-panel, .db-view-config-panel, .db-column-manager, .db-board-groups-panel) {
   position: static !important; top: auto !important; right: auto !important;
   max-height: none !important;
 }`;
@@ -608,6 +608,66 @@ export const PANEL_SCENARIOS = [
             <div class="db-view-config-field"><div class="db-view-config-readonly-value">Use file name</div></div>
           </div>
           ${fields.map(row).join("")}
+          </div>
+        </div>
+      </div>`;
+    },
+  },
+  {
+    id: "panel-board-groups",
+    title: "Board Groups panel",
+    group: "panels",
+    // Framing, not content: the panel itself is CSS-declared at 360px (the `panel` role's own
+    // band), and `#shot`'s 16px padding on each side needs room beyond that or the crop clips the
+    // right edge — the same gap `panel-board-card-properties` leaves around the same 360px panel.
+    width: 520,
+    fixtureOf: "constructed-board-groups-panel",
+    sources: [
+      "src/views/board-groups-panel.ts",
+      "src/views/record-surface/property-row.ts",
+      "src/views/checkbox.ts",
+    ],
+    note: "Reached from the board column menu's own \"Manage groups\" row: every group option, "
+      + "visible or hidden, on the row markup the column manager already uses (drag handle, "
+      + "checkbox, a colour swatch in the type slot instead of a type icon, name), plus hide-all/"
+      + "show-all above the list and \"Hide empty groups\" below it. Done is hidden here — its "
+      + "toggle sits unchecked rather than removed, so it stays reachable from the same surface "
+      + "that hid it.",
+    captureCss: ANCHORED_PANEL_CSS,
+    html: () => {
+      const groups = [
+        { key: "To Do", color: "gray", visible: true },
+        { key: "In Progress", color: "blue", visible: true },
+        { key: "Done", color: "green", visible: false },
+      ];
+      const row = (group, i) => `
+        <div class="db-column-manager-row" draggable="true" data-note-database-column-key="${group.key}">
+          <span class="db-column-drag" title="Drag to reorder">⋮⋮</span>
+          ${reorderControls(i === 0, i === groups.length - 1)}
+          <input type="checkbox" class="db-checkbox db-checkbox-field"${group.visible ? " checked" : ""}>
+          <span class="db-column-type">
+            <span class="db-board-groups-dot status-color-${group.color}"></span>
+          </span>
+          <div class="db-column-name-wrap">
+            <span class="db-column-name">${group.key}</span>
+          </div>
+        </div>`;
+      return `
+      <div class="note-database-container">
+        <div class="db-board-groups-panel" role="dialog" aria-label="Manage groups">
+          <div class="db-panel-header"><span class="db-panel-title">Manage groups</span></div>
+          <div class="db-board-groups-actions">
+            <button type="button" class="db-panel-button">Hide all</button>
+            <button type="button" class="db-panel-button">Show all</button>
+          </div>
+          <div class="db-board-groups-body">
+            ${groups.map(row).join("")}
+          </div>
+          <div class="db-board-groups-footer">
+            <div class="db-board-groups-empty-row">
+              <input type="checkbox" class="db-checkbox db-checkbox-field" checked>
+              <span class="db-board-groups-empty-label">Hide empty groups</span>
+            </div>
           </div>
         </div>
       </div>`;

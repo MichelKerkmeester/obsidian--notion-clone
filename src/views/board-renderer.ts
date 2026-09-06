@@ -45,6 +45,7 @@ import { openExternalUrl } from "./open-external";
 import { buildSubtaskRelation } from "../data/subtask-relation";
 import { planSubtaskMove } from "../data/subtask-serialize";
 import type { SubtaskMovePlan, SubtaskMoveRequest, SubtaskRelation } from "../data/types";
+import { openBoardGroupsPanel } from "./board-groups-panel";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -87,7 +88,8 @@ export interface BoardRendererActions {
   updateGroup(row: RowData, field: string, value: string, fromValue?: string): Promise<void>;
   updateGroupOrder(field: string, order: string[]): void;
   hideGroup?(field: string, key: string): void;
-  deleteGroup?(field: string, key: string): void;
+  showGroup(field: string, key: string): void;
+  setBoardHideEmptyGroups(value: boolean): void;
   updateCardOrder(field: string, groupKey: string, paths: string[]): void;
   moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string, subtaskMove?: BoardSubtaskMove): void;
   moveRowWithGroupUpdatesAndPosition?(
@@ -183,6 +185,9 @@ export class BoardRenderer {
   /** The view's visible card fields in the order the properties panel shows them,
    *  resolved once per render and shared by every card. */
   private referenceCardFields: ColumnDef[] = [];
+  /** Every group key this render saw before the hidden/empty filters ran, so the Groups panel can
+   *  list an option that the board itself no longer renders a column for. */
+  private allGroupKeysForPanel: string[] = [];
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
@@ -194,8 +199,14 @@ export class BoardRenderer {
       isCollapsed: (row) => this.actions.isSubtaskCollapsed?.(row),
     });
     this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
+    // Captured before either filter below narrows the list: the Groups panel lists every group
+    // option, visible or hidden, and a key filtered out here would otherwise vanish from it too.
+    this.allGroupKeysForPanel = groups.map((group) => group.key);
     const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
     groups = groups.filter((group) => !hiddenGroups.has(group.key));
+    if (config.boardHideEmptyGroups !== false) {
+      groups = groups.filter((group) => this.getVisibleSubtaskRows(group.rows).length > 0);
+    }
     this.legacyVisibleColumnKeys = config.boardCardFields === undefined
       ? new Set(this.actions.getColumns(config).map((col) => col.key))
       : undefined;
@@ -585,10 +596,32 @@ export class BoardRenderer {
       } });
       menu.addSeparator();
       menu.addRow({ icon: "fold-vertical", label: t("board.collapseGroup"), onClick: () => this.actions.toggleGroupCollapsed?.(field, group.key) });
-      if (this.actions.hideGroup) menu.addRow({ icon: "eye-off", label: t("board.hideColumn"), onClick: () => this.actions.hideGroup?.(field, group.key) });
-      if (this.actions.deleteGroup) menu.addRow({ icon: "trash-2", label: t("board.deleteGroup"), onClick: () => this.actions.deleteGroup?.(field, group.key) });
+      menu.addRow({
+        cls: "db-board-groups-entry",
+        icon: "settings-2",
+        label: t("board.manageGroups"),
+        onClick: () => this.openGroupsPanel(button, config, field),
+      });
       menu.showAt({ x: event.clientX, y: event.clientY });
     };
+  }
+
+  private openGroupsPanel(anchorEl: HTMLElement, config: ViewConfig, field: string): void {
+    const containerEl = this.referenceRenderArgs?.container;
+    if (!containerEl) return;
+    openBoardGroupsPanel({
+      anchorEl,
+      containerEl,
+      config,
+      groupField: field,
+      groupKeys: this.allGroupKeysForPanel,
+      actions: {
+        hideGroup: (groupField, key) => this.actions.hideGroup?.(groupField, key),
+        showGroup: (groupField, key) => this.actions.showGroup(groupField, key),
+        updateGroupOrder: (groupField, order) => this.actions.updateGroupOrder(groupField, order),
+        setBoardHideEmptyGroups: (value) => this.actions.setBoardHideEmptyGroups(value),
+      },
+    });
   }
 
 

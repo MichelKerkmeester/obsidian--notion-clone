@@ -513,6 +513,48 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
   });
 });
 
+// ───────────────────────────────────────────────────────────────────
+// 3b. BOARD GROUP VISIBILITY HOST BINDINGS
+// ───────────────────────────────────────────────────────────────────
+//
+// The same cross-consumer gap `database-view.test.ts` locks: `hideGroup`/`deleteGroup` were
+// declared with neither host implementing them. This embed now wires `hideGroup`/`showGroup`
+// for real and carries no `deleteGroup`.
+
+describe("EmbeddedDatabaseRenderer board group visibility host bindings", () => {
+  it("supplies showGroup and hideGroup, and carries no deleteGroup", () => {
+    const { harness } = createRenderer();
+
+    expect(typeof harness.boardRenderer.actions.showGroup).toBe("function");
+    expect(typeof harness.boardRenderer.actions.hideGroup).toBe("function");
+    expect((harness.boardRenderer.actions as unknown as Record<string, unknown>).deleteGroup).toBeUndefined();
+  });
+
+  it("hideGroup persists the key and showGroup removes it, through the view-def writer", async () => {
+    const { harness, dataSource, viewConfig } = createRenderer();
+
+    harness.boardRenderer.actions.hideGroup?.("status", "Done");
+    expect(viewConfig.boardHiddenGroups).toEqual({ status: ["Done"] });
+    await flushBackgroundSave();
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHiddenGroups).toEqual({ status: ["Done"] });
+
+    harness.boardRenderer.actions.showGroup("status", "Done");
+    expect(viewConfig.boardHiddenGroups).toEqual({});
+  });
+
+  it("setBoardHideEmptyGroups persists the flag through the view-def writer", async () => {
+    const { harness, dataSource, viewConfig } = createRenderer();
+
+    harness.boardRenderer.actions.setBoardHideEmptyGroups(false);
+
+    expect(viewConfig.boardHideEmptyGroups).toBe(false);
+    await flushBackgroundSave();
+    expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
+    expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHideEmptyGroups).toBe(false);
+  });
+});
+
 describe("linked embed chrome", () => {
   it("asks the toolbar for a headerless embed and offers the move action", () => {
     const { harness, viewConfig } = createRenderer();

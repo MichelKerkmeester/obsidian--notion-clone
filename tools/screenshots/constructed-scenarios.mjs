@@ -529,7 +529,7 @@ const SPEC_OPTIONS = [
   "subtaskTree", "sparseFields", "emptyState", "chartVariant",
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
   "recordBodyVariant", "editorKind", "includeTime", "boardImageField",
-  "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
+  "boardEmptyColumn", "boardGroupsPanel", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "calendarRecordIcon", "calendarUnscheduled", "calendarMultiDay", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement", "dropdownSearch",
 ];
@@ -1330,6 +1330,18 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/data/group-visibility.ts"]),
     note: "The reference board with one configured select option no row carries, backfilled as a "
       + "zero-row column through the same withEmptyOptionGroups call the hosts make.",
+  }),
+  constructedScenario("board-groups-panel", {
+    renderer: "board",
+    boardGroupsPanel: true,
+    group: "panels",
+    capture: "viewport",
+    title: "Board Groups panel (constructed)",
+    fixtureOf: "panel-board-groups",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/board-groups-panel.ts", "src/views/record-surface/property-row.ts", "src/views/checkbox.ts"]),
+    note: "The reference board's own column-options button, then the \"Manage groups\" row it "
+      + "opens — the same two clicks a reader makes, not a hand-built panel.",
   }),
   constructedScenario("board-card-properties-hidden", {
     renderer: "board",

@@ -537,6 +537,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       clearSort: () => this.clearSortForManualReorder(),
       updateGroup: (row, field, value) => this.updateBoardGroup(row, field, value),
       updateGroupOrder: (field, order) => this.updateBoardGroupOrder(field, order),
+      hideGroup: (field, key) => this.setBoardGroupHidden(this.config, field, key, true),
+      showGroup: (field, key) => this.setBoardGroupHidden(this.config, field, key, false),
+      setBoardHideEmptyGroups: (value) => this.setBoardHideEmptyGroups(this.config, value),
       updateCardOrder: (field, groupKey, paths) => this.updateBoardCardOrder(field, groupKey, paths),
       moveRowToPosition: (movedPath, beforePath, afterPath, subtaskMove) =>
         void this.moveRowToPosition(movedPath, beforePath, afterPath, subtaskMove),
@@ -2842,6 +2845,28 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const config = this.config;
     if (!config) return;
     config.groupOrders = { ...(config.groupOrders || {}), [field]: order };
+    this.persistEmbeddedConfigLocally(config);
+    this.renderResults(config);
+    this.saveEmbeddedConfigInBackground();
+  }
+
+  private setBoardGroupHidden(config: ViewConfig | undefined, field: string, key: string, hidden: boolean): void {
+    if (!config) return;
+    const current = new Set(config.boardHiddenGroups?.[field] || []);
+    if (hidden) current.add(key);
+    else current.delete(key);
+    const next = { ...(config.boardHiddenGroups || {}) };
+    if (current.size > 0) next[field] = Array.from(current);
+    else delete next[field];
+    config.boardHiddenGroups = next;
+    this.persistEmbeddedConfigLocally(config);
+    this.renderResults(config);
+    this.saveEmbeddedConfigInBackground();
+  }
+
+  private setBoardHideEmptyGroups(config: ViewConfig | undefined, value: boolean): void {
+    if (!config) return;
+    config.boardHideEmptyGroups = value;
     this.persistEmbeddedConfigLocally(config);
     this.renderResults(config);
     this.saveEmbeddedConfigInBackground();

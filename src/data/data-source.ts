@@ -792,6 +792,7 @@ export class DataSource {
           boardSubgroupField: safeString(source["boardSubgroupField"]) || undefined,
           boardColumnWidth: typeof source["boardColumnWidth"] === "number" ? source["boardColumnWidth"] : undefined,
           boardHiddenGroups: this.parseStringArrayMap(source["boardHiddenGroups"]),
+          boardHideEmptyGroups: typeof source["boardHideEmptyGroups"] === "boolean" ? source["boardHideEmptyGroups"] : undefined,
           defaultColumnWidth: typeof source["defaultColumnWidth"] === "number" ? source["defaultColumnWidth"] : undefined,
           rowDensity: source["rowDensity"] === "compact" || source["rowDensity"] === "comfortable" ? source["rowDensity"] : undefined,
           wrapText: source["wrapText"] === true,
@@ -973,6 +974,7 @@ export class DataSource {
       boardSubgroupField: safeString(v["boardSubgroupField"]) || undefined,
       boardColumnWidth: typeof v["boardColumnWidth"] === "number" ? v["boardColumnWidth"] : undefined,
       boardHiddenGroups: this.parseStringArrayMap(v["boardHiddenGroups"]),
+      boardHideEmptyGroups: typeof v["boardHideEmptyGroups"] === "boolean" ? v["boardHideEmptyGroups"] : undefined,
       defaultColumnWidth: typeof v["defaultColumnWidth"] === "number" ? v["defaultColumnWidth"] : undefined,
       rowDensity: v["rowDensity"] === "compact" || v["rowDensity"] === "comfortable" ? v["rowDensity"] : undefined,
       wrapText: v["wrapText"] === true,
@@ -1228,6 +1230,7 @@ export class DataSource {
       titleField: view.titleField || "",
       boardCardOrders: view.boardCardOrders || {},
       boardHiddenGroups: view.boardHiddenGroups || {},
+      boardHideEmptyGroups: view.boardHideEmptyGroups,
       manualOrder: view.manualOrder && view.manualOrder.ranks && Object.keys(view.manualOrder.ranks).length > 0
         ? view.manualOrder
         : undefined,
@@ -1350,6 +1353,7 @@ export class DataSource {
       "boardSubgroupField",
       "boardColumnWidth",
       "boardHiddenGroups",
+      "boardHideEmptyGroups",
       "defaultColumnWidth",
       "rowDensity",
       "wrapText",

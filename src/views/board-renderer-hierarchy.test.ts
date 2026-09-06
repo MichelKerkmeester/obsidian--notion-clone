@@ -467,6 +467,8 @@ function createActions(overrides: Partial<BoardRendererActions> = {}): BoardRend
     createEntry: vi.fn(),
     updateGroup: vi.fn(),
     updateGroupOrder: vi.fn(),
+    showGroup: vi.fn(),
+    setBoardHideEmptyGroups: vi.fn(),
     updateCardOrder: vi.fn(),
     moveRowToPosition: vi.fn(),
     moveRowWithGroupUpdatesAndPosition: vi.fn(),

@@ -406,6 +406,13 @@ export interface ScenarioSpec {
    */
   boardCardFieldsHidden?: boolean;
   /**
+   * Opt-in, renderer "board" only: after the board mounts, clicks the first column's own
+   * column-options button and then the "Manage groups" row it opens — the same two clicks a
+   * reader makes, not a hand-built panel. Proves the Groups panel is reachable from the board's
+   * own menu rather than only constructible in isolation.
+   */
+  boardGroupsPanel?: boolean;
+  /**
    * Opt-in, renderer "table" only: renders the grouped table instead of the flat one — the
    * `renderGroupedTable` public entry the host calls when a group field is configured, with a
    * two-level group tree and per-group summary rules so the divider rows carry their badges and
@@ -806,6 +813,9 @@ function fileViewBoardBag(columns: ColumnDef[]): BoardRendererActions {
     createGroup: async () => true,
     updateGroup: async () => undefined,
     updateGroupOrder: () => undefined,
+    hideGroup: () => undefined,
+    showGroup: () => undefined,
+    setBoardHideEmptyGroups: () => undefined,
     updateCardOrder: () => undefined,
     moveRowToPosition: () => undefined,
     moveRowWithGroupUpdatesAndPosition: () => undefined,
@@ -839,6 +849,9 @@ function embedBoardBag(columns: ColumnDef[]): BoardRendererActions {
     createEntry: () => undefined,
     updateGroup: async () => undefined,
     updateGroupOrder: () => undefined,
+    hideGroup: () => undefined,
+    showGroup: () => undefined,
+    setBoardHideEmptyGroups: () => undefined,
     updateCardOrder: () => undefined,
     moveRowToPosition: () => undefined,
     updateColumnWidth: () => undefined,
@@ -2555,6 +2568,10 @@ export function runRenderAssertions(
     }
     if (scenario.boardImageField) applyEmptyMetadataCache(rows);
     if (scenario.boardEmptyColumn) {
+      // The board's own default now hides an empty group, so this scenario — built specifically
+      // to prove one still renders beside its populated lanes — pins the setting off explicitly
+      // rather than depending on a default that has since moved.
+      config.boardHideEmptyGroups = false;
       // The empty lane comes from the same data call the hosts make: a configured select option
       // no row carries is backfilled as a zero-row group. The group column's options are the
       // values the rows actually hold plus one that none of them do.
@@ -2606,6 +2623,37 @@ export function runRenderAssertions(
           "the board cards drew their empty covers"));
       }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
+      if (scenario.boardGroupsPanel) {
+        // The same two clicks a reader makes: the first column's own column-options button, then
+        // the "Manage groups" row it opens. The row's own click handler opens the panel before the
+        // menu that carried it closes, so the panel is already in the DOM by the time this reads it.
+        const optionsButton = container.querySelector<HTMLButtonElement>(".db-board-column-options");
+        optionsButton?.click();
+        const menuRows = document.querySelectorAll(".db-menu-item").length;
+        results.push({
+          name: "the column menu carries sort ascending, sort descending, collapse and Manage groups — no standalone hide row",
+          pass: menuRows === 4,
+          detail: `${menuRows} row(s)`,
+        });
+        const entryRow = document.querySelector<HTMLButtonElement>(".db-board-groups-entry");
+        entryRow?.click();
+        const panel = container.querySelector<HTMLElement>(".db-board-groups-panel");
+        const width = panel ? panel.getBoundingClientRect().width : null;
+        const rowEls = panel ? Array.from(panel.querySelectorAll(".db-column-manager-row")) : [];
+        const toggleCount = rowEls.filter((row) => row.querySelector('input[type="checkbox"]')).length;
+        results.push({
+          name: "the Groups panel opens from the column menu at a width inside the panel role's 292-360px band",
+          pass: width !== null && width >= 292 && width <= 360,
+          detail: panel
+            ? `computed width ${width}px`
+            : "the column-options button or its \"Manage groups\" row did not open a panel",
+        });
+        results.push({
+          name: "every group row in the Groups panel carries a live visibility toggle",
+          pass: rowEls.length > 0 && toggleCount === rowEls.length,
+          detail: `${toggleCount} checkbox(es) across ${rowEls.length} row(s)`,
+        });
+      }
       if (scenario.boardCardFieldsHidden) {
         const stillPresent = hiddenCardColumn
           ? container.querySelector(`.db-board-card-field[data-note-database-column-key="${hiddenCardColumn.key}"]`)
