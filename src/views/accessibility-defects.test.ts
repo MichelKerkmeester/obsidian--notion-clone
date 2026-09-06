@@ -78,16 +78,12 @@ describe("Accessibility Defect Fixes", () => {
     expect(detailContent).toContain('panel.setAttribute("aria-label", title.text || r.file.basename)');
   });
 
-  it("Item 6: selection checkboxes in the Board renderer have descriptive aria-labels", () => {
+  it("Item 6: retired — the whole-group and whole-card selection checkboxes this item covered belonged to the board's local extensions layout, which the default board no longer constructs", () => {
     const boardPath = resolve(__dirname, "board-renderer.ts");
-
     const boardContent = readFileSync(boardPath, "utf-8");
 
-    // Board checkboxes
-    expect(boardContent).toContain('cls: "db-board-column-checkbox",');
-    expect(boardContent).toContain('"aria-label": group.key || t("common.noGroup")');
-    expect(boardContent).toContain('"aria-label": subgroup.key || t("common.noGroup")');
-    expect(boardContent).toContain('"aria-label": row.file.basename || row.file.path');
+    expect(boardContent).not.toContain("db-board-column-checkbox");
+    expect(boardContent).not.toContain("db-board-card-checkbox");
   });
 
   it("Item 7: urgency classes supply non-colour visual glyphs for deuteranope clarity", () => {
@@ -151,7 +147,7 @@ describe("Accessibility Defect Fixes", () => {
     expect(toolbarContent).not.toMatch(/setPopoverTriggerState\(button: HTMLElement[\s\S]{0,160}aria-pressed/);
   });
 
-  it("Item 10 & 11: the board renderer uses row role on cards and provides explicit aria-labels on controls", () => {
+  it("Item 10 & 11: the board renderer uses row role on cards; the dedicated open button this item also covered retired with the extensions layout, since the default board's whole card is the open target", () => {
     const boardPath = resolve(__dirname, "board-renderer.ts");
 
     const boardContent = readFileSync(boardPath, "utf-8");
@@ -161,8 +157,5 @@ describe("Accessibility Defect Fixes", () => {
 
     // Cards should have role="row"
     expect(boardContent).toContain('role: "row"');
-
-    // Open buttons have aria-label
-    expect(boardContent).toContain('attr: { type: "button", "aria-label": t("menu.openNote") }');
   });
 });

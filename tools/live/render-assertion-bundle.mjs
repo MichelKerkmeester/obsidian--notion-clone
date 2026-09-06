@@ -116,7 +116,6 @@ export const STATE_SCENARIOS = [
   { name: "chrome-table-grouped/file-view", renderer: "table", bag: "file-view", captureData: true, tableGroups: true },
   { name: "chrome-summary/file-view", renderer: "summary", bag: "file-view", captureData: true },
   { name: "chrome-owned-menu/file-view", renderer: "owned-menu", bag: "file-view" },
-  { name: "chrome-group-selection-controls/file-view", renderer: "group-selection-controls", bag: "file-view", captureData: true },
   { name: "chrome-card-covers/file-view", renderer: "card-covers", bag: "file-view", captureData: true },
   // The field editors, pickers and value renderers.
   { name: "field-cell-editors-text/file-view", renderer: "cell-editors", bag: "file-view", captureData: true },
@@ -142,8 +141,7 @@ export const STATE_SCENARIOS = [
   { name: "table-column-headers/file-view", renderer: "table", bag: "file-view", captureData: true, columnHeaderController: true, longHeaderLabel: true },
   // The board state variants.
   { name: "board-empty-column/file-view", renderer: "board", bag: "file-view", captureData: true, boardEmptyColumn: true },
-  { name: "board-extensions-selection/file-view", renderer: "board", bag: "file-view", captureData: true, boardExtensions: true },
-  { name: "board-covers/file-view", renderer: "board", bag: "file-view", captureData: true, boardExtensions: true, boardImageField: true },
+  { name: "board-covers/file-view", renderer: "board", bag: "file-view", captureData: true, boardImageField: true },
 ];
 
 // touch-targets.mjs and unstyled-links.mjs's own constructed pass: every scenario SCENARIOS

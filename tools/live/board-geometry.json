@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-06T04:41:20.634Z",
+  "measuredAt": "2026-09-06T05:57:00.068Z",
   "inputs": {
-    "tools/live/board-geometry.mjs": "2af1a45cceae",
-    "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
-    "tools/live/render-assertion-harness.ts": "d20f62e3d4bb",
-    "src/views/board-renderer.ts": "47533fbf16b0",
+    "tools/live/board-geometry.mjs": "afe891f45338",
+    "tools/live/render-assertion-bundle.mjs": "736b90f149c9",
+    "tools/live/render-assertion-harness.ts": "471b756ac82d",
+    "src/views/board-renderer.ts": "abb0737b8133",
     "styles.css": "1b6acd4ddf7a"
   },
   "chipHeight": 24,

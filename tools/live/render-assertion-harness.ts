@@ -208,7 +208,7 @@ export interface ScenarioSpec {
     | "column-width-adjuster"
     | "summary" | "owned-menu" | "cell-editors" | "date-picker" | "icon-picker" | "color-picker"
     | "relation-values" | "file-fields" | "number-display" | "record-icon" | "dropdown"
-    | "empty-state" | "column-header" | "group-selection-controls" | "card-covers";
+    | "empty-state" | "column-header" | "card-covers";
   bag: "file-view" | "embed";
   /** Opt-in table shape for a width comparison that fits on desktop and overflows on a phone. */
   tableColumnCount?: number;
@@ -365,16 +365,9 @@ export interface ScenarioSpec {
    */
   includeTime?: boolean;
   /**
-   * Opt-in, renderer "board" only: `boardExtensionsEnabled` — the real config flag that switches
-   * the board from the reference kanban vocabulary to the plugin's own extension classes
-   * (`db-board`, `db-board-column-checkbox`, `db-board-card-checkbox`, the card tree with
-   * covers). Off by default, matching the board every existing consumer constructs.
-   */
-  boardExtensions?: boolean;
-  /**
-   * Opt-in, renderer "board" only, read with `boardExtensions`: sets `boardImageField` to a real
-   * schema column the rows resolve no image for, so `renderCover` draws its placeholder cover on
-   * every card — the empty-cover state, which is the only one a capture without a vault can show.
+   * Opt-in, renderer "board" only: sets `boardImageField` to a real schema column the rows
+   * resolve no image for, so `renderCover` draws its placeholder cover on every card — the
+   * empty-cover state, which is the only one a capture without a vault can show.
    */
   boardImageField?: boolean;
   /**
@@ -2412,7 +2405,6 @@ export function runRenderAssertions(
     let groups = makeBoardGroups(rows, BOARD_GROUPS);
     const config = {
       ...makeBoardConfig(columns),
-      ...(scenario.boardExtensions ? { boardExtensionsEnabled: true } : {}),
       ...(scenario.boardImageField ? { boardImageField: columnOfType(columns, "text")?.key } : {}),
     } as ViewConfig;
     const hiddenCardColumn = scenario.boardCardFieldsHidden ? columnOfType(columns, "currency") : undefined;
@@ -2460,16 +2452,7 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "board-renderer"));
     if (results[0].pass) {
-      if (scenario.boardExtensions) {
-        results.push(multiMarkerAssertion(container,
-          [".db-board", ".db-board-column", ".db-board-card"],
-          "the extensions board drew its columns and cards"));
-        if (scenario.boardImageField) {
-          results.push(multiMarkerAssertion(container,
-            [".db-board-card-cover.is-empty", ".db-board-card-cover-placeholder"],
-            "the board cards drew their empty covers"));
-        }
-      } else if (scenario.boardEmptyColumn) {
+      if (scenario.boardEmptyColumn) {
         const columnsEls = Array.from(container.querySelectorAll<HTMLElement>(".db-kanban-col"));
         const empties = columnsEls.filter((col) => col.querySelectorAll(".db-kanban-card").length === 0);
         results.push({
@@ -2479,6 +2462,11 @@ export function runRenderAssertions(
         });
       } else {
         results.push(...boardAssertions(container, rows, groups));
+      }
+      if (scenario.boardImageField) {
+        results.push(multiMarkerAssertion(container,
+          [".db-board-card-cover.is-empty", ".db-board-card-cover-placeholder"],
+          "the board cards drew their empty covers"));
       }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
       if (scenario.boardCardFieldsHidden) {
@@ -2495,7 +2483,7 @@ export function runRenderAssertions(
               : `"${hiddenCardColumn.key}" absent from every card`,
         });
       }
-      if (!scenario.boardExtensions) results.push({
+      results.push({
         name: "no forced layout inside the card loop",
         pass: layoutReads <= MAX_LAYOUT_READS,
         detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
@@ -3516,42 +3504,12 @@ export function runRenderAssertions(
         [".db-column-menu-trigger", ".db-resize-handle", ".db-th-content .db-th-label", ".db-th-content .db-property-icon"],
         "the column headers carry their menu triggers, resize handles and property-type icons"));
     }
-  } else if (scenario.renderer === "group-selection-controls") {
-    // The extensions board's whole-group selection box, through its renderer's own grouped
-    // entry. This used to mount the gallery's own group box alongside it, comparing the two roles
-    // in one render; the gallery is retired, so only the board's is constructed here now.
-    const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
-    const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
-    applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
-    applyCaptureGroupPalette(columns, rows, BOARD_GROUP_FIELD);
-    const groups = makeBoardGroups(rows, BOARD_GROUPS);
-    const boardHost = container.createDiv({ cls: "db-group-selection-host" });
-    const boardRenderer = new BoardRenderer(undefined as unknown as App, fileViewBoardBag(columns));
-    boardRenderer.render(boardHost, {
-      ...makeBoardConfig(columns),
-      viewType: "board",
-      boardExtensionsEnabled: true,
-    } as ViewConfig, groups, BOARD_GROUP_FIELD);
-    bagKeys = [];
-
-    const markers = [
-      ["board", boardHost.getAttribute(PROVENANCE_ATTR)],
-    ];
-    results.push({
-      name: "the grouped render mounted through its production entry",
-      pass: markers.every(([, marker]) => marker !== null),
-      detail: markers.map(([name, marker]) => `${name}:${marker ?? "none"}`).join(", "),
-    });
-    if (results[0].pass) {
-      results.push(multiMarkerAssertion(container,
-        [".db-board-column-checkbox"],
-        "the whole-group selection box rendered in board"));
-    }
   } else if (scenario.renderer === "card-covers") {
-    // The empty card cover in the board card view: extensions vocabulary and an image field the
-    // rows resolve nothing for, which is the only cover state a capture without a vault can show.
-    // This used to mount the gallery's own empty cover alongside it; the gallery is retired, so
-    // only the board host is constructed here now.
+    // The empty card cover in the board card view: an image field the rows resolve nothing for,
+    // which is the only cover state a capture without a vault can show. renderCover is shared by
+    // the default board, so this needs no extensions opt-in to reach it. This used to mount the
+    // gallery's own empty cover alongside it; the gallery is retired, so only the board host is
+    // constructed here now.
     const columns = makeBoardColumns(BOARD_COLUMNS, "mixed");
     const rows = makeBoardRows(CAPTURE_ROWS, columns, CAPTURE_FILL, BOARD_GROUPS);
     applyCaptureOptions(columns, rows, BOARD_GROUP_FIELD);
@@ -3564,7 +3522,6 @@ export function runRenderAssertions(
     boardRenderer.render(boardHost, {
       ...makeBoardConfig(columns),
       viewType: "board",
-      boardExtensionsEnabled: true,
       boardImageField: imageKey,
     } as ViewConfig, groups, BOARD_GROUP_FIELD);
     bagKeys = [];

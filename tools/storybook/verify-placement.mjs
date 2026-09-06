@@ -31,6 +31,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
+import { rowCheckbox } from "../screenshots/scenarios/shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -4338,8 +4339,16 @@ const SELECT_CONTROL_CSS = {
     + ' .db-select-inner input[type="checkbox"].db-checkbox { position: static; right: auto; }',
 }[SELECT_CONTROL] || "";
 
-const SELECT_FIXTURE = ["table-view", "chrome-board-extensions-selection"]
-  .map((id) => SCENARIOS.find((s) => s.id === id).html()).join("");
+// The role-mate needs to be unchecked, row-role and outside any `.db-select-col` — a
+// checked box (the selection-status-bar's clear control) compares its filled accent
+// background against the select column's own unchecked white, which fails on state alone
+// rather than on appearance ownership. A bare instance of the shared factory's own markup
+// is the plugin's own contract for what "unchecked, row role" looks like, so it is built
+// directly here rather than borrowed from a registered scenario.
+const SELECT_FIXTURE = [
+  SCENARIOS.find((s) => s.id === "table-view").html(),
+  `<div class="note-database-container">${rowCheckbox("db-placement-role-mate")}</div>`,
+].join("");
 
 const selectStyles = (extra) => readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS + extra;
 

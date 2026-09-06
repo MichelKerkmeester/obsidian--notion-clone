@@ -77,3 +77,14 @@ green. C7's sheet grammar is unmoved at 12/31. C8 applies a local, board-scoped 
 C9's gantt count and capture hashes are byte-identical to the pre-leg baseline. `npx tsc --noEmit`,
 `npx vitest run` (1323 tests, 127 files) and `npm run build` all exit 0, and `npm run gate` reports
 26 green. C10 is the operator's and stays open — nothing in this repository closes it.
+
+**2026-09-06, a fresh read-back reopened C2 narrowly and closed it again.** The migration table's
+filled cells did not all reach the rendered surface: `tasks.md` T012 named ten residuals against
+`design-trueup.md`'s own measurements. Eight are fixed and re-measured at DPR 2 (`tasks.md` T012's
+red/green table); R6 and R7 stay open, named for the operator rather than folded into a green row.
+T013's dead `boardExtensionsEnabled` branch is removed. `node tools/live/board-geometry.mjs`, a new
+lane added by this same leg, now locks card radius, column width, column gap, chip height, property
+pitch and checkbox shape against computed styles — proven non-vacuous by a negative control on the
+card radius. `npx tsc --noEmit`, `npx vitest run` (134 files, 1402 tests) and `npm run build` all
+exit 0; the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate` reports **27 green**, the
+new lane counted in.

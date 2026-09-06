@@ -10,25 +10,28 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-06T04:55:00Z"
+    last_updated_at: "2026-09-06T05:42:29Z"
     last_updated_by: "verification-leaf"
-    recent_action: "re-verified t003-t011 on the rebased tree and opened t012 and t013"
-    next_safe_action: "Fix T012 R1 and R2, then recapture the 32 board scenarios"
+    recent_action: "landed T012's eight fixable rows and T013's dead-branch removal; gate 27 green"
+    next_safe_action: "Nothing owed here; AC-010 is the operator's own device confirmation"
     blockers:
-      - "T012's ten residuals and T013's dead-branch cleanup are open; both move captures"
+      - "AC-010 is operator-owned and nothing in this repository can close it"
     key_files:
       - "src/views/board-renderer.ts"
+      - "tools/live/board-geometry.mjs"
       - "specs/005-component-surface-system/056-board-anytype-parity/checklist.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-tasks"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 95
     open_questions: []
     answered_questions:
       - "T001 requires an image-capable leaf; a text-only leaf records pixel read owed rather than substituting a DOM reading (054 ADR-005)"
       - "T001 landed; no row needed the pixel-read-owed label, every value came off a PNG"
       - "T002 landed; C3-C5 reconfirmed unchanged at cc5a7ff2 and C6-C9 turned from mechanism to measured figure, none written after a fix"
+      - "T012 R1-R5 and R8-R10 fixed and re-measured; R6/R7 stay for the operator by instruction"
+      - "T013's dead branch had no shipped or data.json path in; removing it needed retiring two harness-only surfaces it alone reached, not just its config flag"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Board Anytype Parity
@@ -207,7 +210,7 @@ _memory:
       captures and every non-board view came back pixelHash-identical. `npm run screenshots:verify`
       exit **0**. `implementation-summary.md` written with the before/after numbers and the judgment
       calls this file's own T004-T009 notes carry.
-- [ ] T012 **The residuals a fresh read of the landed board found against `design-trueup.md`.**
+- [x] T012 **The residuals a fresh read of the landed board found against `design-trueup.md`.**
       T004-T011 were verified again on the rebased tree by a leg that did not write them: the class
       counts, the 045 zero-diff, the gantt, the lane history, the page limit and the seven
       dispositions all reconfirmed. Ten values did not. Each row below is a measurement or a code
@@ -229,7 +232,32 @@ _memory:
 
       **R1, R2, R6, R7 and R9 are the ones a device read will notice.** R1 and R2 have the same
       one-line cause and the same one-line fix, and both would move all 32 board captures.
-- [ ] T013 **Delete the `boardExtensionsEnabled` branch, or record why it stays.** The flag and the
+
+      **Landed 2026-09-06, by a leg that read the residuals rather than wrote them.** R6 and R7 are
+      untouched, as instructed — both are the operator's. Every other row fixed and re-measured at
+      DPR 2 on the rebased tree:
+
+      | # | Fix | Red (device px, DPR 2) | Green (device px, DPR 2) |
+      |---|---|---|---|
+      | R1 | `.db-kanban-col-chip` gets `box-sizing: border-box` so the 1px border sits inside the declared height instead of adding to it | 52px painted (26 CSS × 2) | **48px painted (24 CSS × 2)** — confirmed both by `board-geometry.mjs` reading `getBoundingClientRect().height` inside the mount hook and by the recaptured `constructed-board-*` PNGs |
+      | R2 | `.db-kanban-card-meta .db-board-card-field` sets `padding: 0`, overriding the shared field's own 2px | 47–63px across row types (23.5–31.5 CSS × 2) | **50px uniform (25 CSS × 2)** — `board-geometry.mjs` read all 17 property rows on the first constructed card and found one value, 25px, repeated 17 times |
+      | R3 | `renderRecordIcon` gains a `force` parameter; the kanban title row passes it so the slot renders regardless of `showRecordIcon`, and `.db-kanban-card-title-row .db-record-icon.is-compact` is resized to 16px (was the shared 18px) | slot absent by default; 36px (18 × 2) when present | **32px (16 × 2) when present, on every card** — verified by a new hierarchy test asserting `renderRecordIcon` is called with `force: true`; the fixture bag used by the screenshot harness does not wire an icon renderer (a declared stand-in gap, not a plugin defect), so the size fix is confirmed by the stylesheet rule and the unit test rather than by a capture |
+      | R4 | `.is-phone .note-database-container .db-kanban-col`/`.db-kanban-board`/`.db-kanban-card` set the phone's own width/gap/border-width | desktop values (246/24px) on phone | **254.7pt column, 23.3pt gap confirmed via `getComputedStyle` under a real `is-phone` mount (colWidth 254.688px, boardGap 23.3px)**. The 0.7pt hairline border is declared (`border-width: 0.7px`) and does paint thinner, but Chromium's `getComputedStyle` rounds any sub-1px `border-width` to a whole device pixel for every value tested (0.5px, 0.7px, 0.75px all reported "1px" in an isolated repro) — a CSSOM reporting limit, not a rule that failed to apply; the rule matches (`element.matches(...)` confirmed) and the border-style resolves solid, not none |
+      | R5 | `constructed-scenarios.mjs`'s board mount forces `matchMedia("(pointer: coarse)")` to `true` directly, rather than trusting Playwright's per-context `hasTouch` flag — the same reliability gap `touch-targets.mjs` already documented and worked around at the browser-engine level | `constructed-board-mobile-*.png` showed the desktop resting state | **the phone capture shows the permanent count and the permanent `···`/`+` — confirmed visually on `constructed-board-card-properties-hidden-mobile-dark.png`, which shows "4" beside "backlog" with no hover needed** |
+      | R8 | `.db-kanban-card-meta input.db-checkbox.db-checkbox-field` sets `border-radius: 50%` at the base rule's own specificity, and repeats `flex: 0 0 14px` — the base rule's own flex-basis otherwise wins the checkbox's main-axis size over a bare `width` | rounded square, 28px (14 × 2) | **circle, 28px (14 × 2)** — `board-geometry.mjs` reads `borderRadius: 50%` directly, and every recaptured board PNG shows a round glyph |
+      | R9 | `.db-kanban-empty-slot` gets `box-sizing: border-box` (the shared empty-card sized its content box to 100% and added padding/border on top, overflowing the column) plus `overflow-wrap: anywhere` on the title and message | title clipped mid-word at the column's right edge | **"No records in this group" wraps onto two lines and stays inside the card — confirmed on the recaptured `board-empty-column-desktop-dark.png` and `constructed-board-empty-column-*.png`** |
+      | R10 | `tools/live/board-geometry.mjs`, a new gate lane, mounts the shipped board through the same bundle the render-assertion lanes use and reads computed styles directly: card radius, column width, column gap, header chip height, property row pitch, checkbox shape | no check locked any of these values | **`board-geometry: PASS`** on every value; a negative control reverting the card radius to 2px reproduced the original failure (`FAIL — card radius: .db-kanban-card read "2px", expected "8px"`), then was reverted, proving the lane is non-vacuous the same way the original finding proved `pixelHash` was blind to it |
+
+      Verified: `npx tsc --noEmit` exit 0; `npx vitest run` 134 files / 1402 tests exit 0; `npm run
+      build` exit 0; the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate`, `$?` read
+      directly: **0**, 27 green (26 plus the new `board-geometry` lane). `npm run screenshots`: 542
+      entries, 44 moved pixelHash — 32 the board scenarios already reviewed by the prior leg on this
+      phase (still uncommitted, now also carrying R1/R2's geometry) plus 12 more R3/R9 touch (card
+      covers and the hidden-field scenarios, which share card layout with the fixed rows); 3 more
+      moved bytes only and were restored to committed bytes. `npm run screenshots:verify` exit 0.
+      Every `screenshots/project-manager/*` capture stayed pixelHash-identical. `touch-targets.mjs`
+      ratchet not raised (fixture 208 against a baseline of 209; constructed 1304 against 1304).
+- [x] T013 **Delete the `boardExtensionsEnabled` branch, or record why it stays.** The flag and the
       `renderSwimlaneBoard` / extensions-mode `renderColumn` / `renderSubgroup` / `renderCard` path
       behind it are still in `src/views/board-renderer.ts`. T007 named this a deferred cleanup and
       it is still open. Confirmed on the landed tree, and stronger than the leg claimed: the flag is
@@ -239,6 +267,46 @@ _memory:
       `src/data/data-source.test.ts` with its own negative control. Deleting the branch touches
       `BoardRendererActions` and its two implementers, **`src/views/database-view.ts`** and
       **`src/views/embedded-database-renderer.ts`**, which is why it was left. (REQ-005)
+
+      **Done 2026-09-06.** The dead branch — `renderSwimlaneBoard`, the extensions-mode
+      `renderColumn`/`renderSubgroup`/`renderCard`, and roughly twenty private helpers and fields
+      reachable only from them — is removed from `src/views/board-renderer.ts`; `render()`
+      unconditionally calls `renderReferenceBoard`. `ViewConfig.boardExtensionsEnabled` stays
+      declared in `src/data/types.ts`: `board-card-properties-panel.test.ts` constructs a literal
+      `ViewConfig` carrying it, that file is under AC-006's zero-lines-changed guard, and the field
+      is otherwise inert now that nothing reads it. `git diff --stat` on that test, on
+      `board-card-fields.ts` and on `board-card-properties-panel.ts` all read nothing; both suites
+      stay green, 19 of 19. `src/data/data-source.test.ts`'s negative control (the key is dropped
+      from a parsed view and from its re-serialized payload) is unchanged and still passes.
+
+      Two harness-only surfaces the removed branch alone reached needed the same disposition as the
+      branch itself, not just its config flag: a whole-group selection checkbox (tested via a
+      dedicated `group-selection-controls` renderer branch, its own `SCENARIOS` entry and its own
+      `chrome-group-selection-controls` fixture) and a stored-card-field-list demonstration that
+      only worked through the extensions card. Removed rather than left pointing at deleted markup:
+      the harness branch, the `SCENARIOS`/`STATE_SCENARIOS` entries, the `chrome.mjs` fixture, the
+      `manifest-schema.mjs` allowlist entry and the hardcoded id lists in
+      `constructed-capture.test.mjs`. `checkbox-family-coverage.test.ts` (which scans every fixture's
+      checkbox classes against the real `createCheckbox` call sites) confirmed the retirement was
+      complete — it failed first, naming the two fixtures whose classes no longer matched any call
+      site, then passed once they were gone. `verify-placement.mjs`'s own select-column check, which
+      borrowed the same retired fixture for an unrelated role-mate comparison, was repointed to a
+      bare instance of the shared row-checkbox factory built inline rather than through a registered
+      scenario.
+
+      Also fixed, found while re-reading `accessibility-defects.test.ts`,
+      `column-header-menu-affordance.test.ts` and `shared.test.mjs`'s subtask parity check against
+      the same deletion: each asserted a literal source string or CSS class the extensions branch
+      alone produced (selection-checkbox aria-labels, the two extensions-path
+      `renderBoardGroupOptions` call sites, `db-subtask-toggle`/`db-subtask-progress-*`/
+      `db-subtask-add-input`). Rewritten to check what the kanban path actually does instead of what
+      the retired branch used to. One small accessibility restoration alongside: the kanban card
+      gained `role: "row"` back, matching what the retired card already had and what
+      `accessibility-defects.test.ts` Item 10 checks for.
+
+      Verified: `npx tsc --noEmit` exit 0; `npx vitest run` 134/134 files, 1402/1402 tests, exit 0;
+      `npm run lint` 255 problems against a 262-problem baseline (net improvement, no new class of
+      finding); `npm run build` exit 0; the isolated gate exit 0, 27 green.
 <!-- /ANCHOR:phase-3 -->
 
 ---

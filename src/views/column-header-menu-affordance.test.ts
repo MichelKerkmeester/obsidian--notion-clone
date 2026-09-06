@@ -152,19 +152,15 @@ describe("board column header options button mirrors the table trigger", () => {
     }
   });
 
-  it("mounts the options button in the name row instead of the header edge", () => {
-    expect(boardSource).toContain("this.renderBoardGroupOptions(title, config, groupField, group)");
-    expect(boardSource).toContain("this.renderBoardGroupOptions(headerText, config, groupField, group)");
+  it("mounts the options button in the header's controls row, not a floating header edge", () => {
+    expect(boardSource).toContain('this.renderBoardGroupOptions(controls, config, groupField, group, "more-horizontal")');
     expect(boardSource).not.toMatch(/renderBoardGroupOptions\(header,/);
   });
 
-  it("uses the vertical ellipsis icon by default, and the two extensions-path call sites take it", () => {
+  it("defaults to the vertical ellipsis, and the kanban header overrides it to horizontal", () => {
     // The kanban header's own hover-revealed "..." takes the horizontal glyph explicitly; the
-    // extensions-path column/subgroup options mounts below take no override, so they keep the
-    // vertical ellipsis the default parameter still supplies.
+    // default parameter stays "more-vertical" for any caller that does not override it.
     expect(boardSource).toMatch(/renderBoardGroupOptions\([^)]*icon = "more-vertical"/);
-    expect(boardSource).toContain("this.renderBoardGroupOptions(title, config, groupField, group)");
-    expect(boardSource).toContain("this.renderBoardGroupOptions(headerText, config, groupField, group)");
     expect(boardSource).toContain('this.renderBoardGroupOptions(controls, config, groupField, group, "more-horizontal")');
   });
 });

@@ -858,19 +858,6 @@ export const CONSTRUCTED_SCENARIOS = [
       + "module's own showAt placement. Supersedes the desktop menu and the phone sheet fixtures "
       + "together.",
   }),
-  constructedScenario("group-selection-controls", {
-    renderer: "group-selection-controls",
-    group: "components",
-    title: "Group selection controls (constructed)",
-    fixtureOf: "chrome-group-selection-controls",
-    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
-      .concat(["src/views/group-label-renderer.ts"]),
-    note: "The extensions board's column-header selection box, through the renderer's own grouped "
-      + "entry. The fixture's board-subgroup box no longer exists on the shipped board — the "
-      + "subgroup surface is the swimlane lane header, which carries no box. This used to mount the "
-      + "gallery's own group box alongside it; the gallery is retired, so only the board's box is "
-      + "asserted here now.",
-  }),
   constructedScenario("card-covers", {
     renderer: "card-covers",
     group: "components",
@@ -1057,38 +1044,17 @@ export const CONSTRUCTED_SCENARIOS = [
     note: "The reference board with one configured select option no row carries, backfilled as a "
       + "zero-row column through the same withEmptyOptionGroups call the hosts make.",
   }),
-  constructedScenario("board-extensions", {
-    renderer: "board",
-    boardExtensions: true,
-    group: "components",
-    title: "Board extensions selection controls (constructed)",
-    fixtureOf: "chrome-board-extensions-selection",
-    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts"),
-    note: "The extensions board (boardExtensionsEnabled), which is the only surface that draws "
-      + "the column-header and card selection boxes; the default board reproduces the reference "
-      + "kanban card, which has none.",
-  }),
   constructedScenario("board-card-properties-hidden", {
     renderer: "board",
-    // Proven the hard way while building this scenario: with extensions off (the default
-    // `constructed-board` uses), the board renders through renderReferenceCard's fixed
-    // five-slot map, which resolveBoardCardFields never touches — a stored list would sit on
-    // the config and change nothing, which proves the reference path stays untouched rather
-    // than proving anything about this scenario. The local extension card (renderCard) is the
-    // one call site that reads the resolver, so this scenario has to opt into it to demonstrate
-    // a stored list doing anything at all.
-    boardExtensions: true,
     boardCardFieldsHidden: true,
     group: "components",
     title: "Board view — a stored field list hides a column (constructed)",
     sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
       .concat(["src/views/board-card-fields.ts"]),
-    note: "The extensions board (boardExtensionsEnabled, the only path resolveBoardCardFields "
-      + "reaches — see AC-004 for why constructed-board itself cannot show this), with an "
-      + "explicit boardCardFields list that reproduces today's derived order verbatim except for "
-      + "hiding the schema's first currency column — the card-level half of the "
-      + "board-card-properties pair: the panel shows the field unchecked, this shows the same "
-      + "list already applied to a real card.",
+    note: "The default board, with an explicit boardCardFields list that reproduces today's "
+      + "derived order verbatim except for hiding the schema's first currency column — the "
+      + "card-level half of the board-card-properties pair: the panel shows the field unchecked, "
+      + "this shows the same list already applied to a real card.",
   }),
   constructedScenario("timeline-day", {
     renderer: "timeline",

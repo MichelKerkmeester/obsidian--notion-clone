@@ -79,16 +79,6 @@ The rail lives in the header below the toolbar. Sort chips come first and carry 
 
 Sources: `src/views/active-view-controls-renderer.ts`
 
-### Board extensions selection controls
-
-The row-role select box the extensions board draws on a column header (select-all) and on a card, stacked.
-
-| dark | light |
-|---|---|
-| ![chrome-board-extensions-selection dark](notion-clone/components/chrome-board-extensions-selection-mobile-dark.png) | ![chrome-board-extensions-selection light](notion-clone/components/chrome-board-extensions-selection-mobile-light.png) |
-
-Sources: `src/views/board-renderer.ts`
-
 ### Chart view — empty state
 
 Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .db-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired db-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.
@@ -128,16 +118,6 @@ Every group field here is option-typed, so every divider title is a colored stat
 | ![chrome-group-header-row dark](notion-clone/components/chrome-group-header-row-mobile-dark.png) | ![chrome-group-header-row light](notion-clone/components/chrome-group-header-row-mobile-light.png) |
 
 Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `src/views/summary-renderer.ts`
-
-### Group selection controls
-
-The whole-group selection box from a board subgroup.
-
-| dark | light |
-|---|---|
-| ![chrome-group-selection-controls dark](notion-clone/components/chrome-group-selection-controls-mobile-dark.png) | ![chrome-group-selection-controls light](notion-clone/components/chrome-group-selection-controls-mobile-light.png) |
-
-Sources: `src/views/board-renderer.ts`
 
 ### Owned menu — the shell every context menu uses
 
@@ -301,7 +281,7 @@ Sources: `src/views/active-view-controls-renderer.ts`, `tools/bench/table-render
 
 ### Board view — a stored field list hides a column (constructed)
 
-The extensions board (boardExtensionsEnabled, the only path resolveBoardCardFields reaches — see AC-004 for why constructed-board itself cannot show this), with an explicit boardCardFields list that reproduces today's derived order verbatim except for hiding the schema's first currency column — the card-level half of the board-card-properties pair: the panel shows the field unchecked, this shows the same list already applied to a real card.
+The default board, with an explicit boardCardFields list that reproduces today's derived order verbatim except for hiding the schema's first currency column — the card-level half of the board-card-properties pair: the panel shows the field unchecked, this shows the same list already applied to a real card.
 
 | dark | light |
 |---|---|
@@ -318,16 +298,6 @@ The reference board with one configured select option no row carries, backfilled
 | ![constructed-board-empty-column dark](notion-clone/components/constructed-board-empty-column-mobile-dark.png) | ![constructed-board-empty-column light](notion-clone/components/constructed-board-empty-column-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/data/group-visibility.ts`
-
-### Board extensions selection controls (constructed)
-
-The extensions board (boardExtensionsEnabled), which is the only surface that draws the column-header and card selection boxes; the default board reproduces the reference kanban card, which has none.
-
-| dark | light |
-|---|---|
-| ![constructed-board-extensions dark](notion-clone/components/constructed-board-extensions-mobile-dark.png) | ![constructed-board-extensions light](notion-clone/components/constructed-board-extensions-mobile-light.png) |
-
-Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### Calendar settings popover (constructed)
 
@@ -378,16 +348,6 @@ openDropdownMenu's own entry with a selected option, a plain one and a disabled 
 | ![constructed-dropdown dark](notion-clone/components/constructed-dropdown-mobile-dark.png) | ![constructed-dropdown light](notion-clone/components/constructed-dropdown-mobile-light.png) |
 
 Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Group selection controls (constructed)
-
-The extensions board's column-header selection box, through the renderer's own grouped entry. The fixture's board-subgroup box no longer exists on the shipped board — the subgroup surface is the swimlane lane header, which carries no box. This used to mount the gallery's own group box alongside it; the gallery is retired, so only the board's box is asserted here now.
-
-| dark | light |
-|---|---|
-| ![constructed-group-selection-controls dark](notion-clone/components/constructed-group-selection-controls-mobile-dark.png) | ![constructed-group-selection-controls light](notion-clone/components/constructed-group-selection-controls-mobile-light.png) |
-
-Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/group-label-renderer.ts`
 
 ### A migrated list view (constructed)
 

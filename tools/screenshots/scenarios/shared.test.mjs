@@ -165,10 +165,6 @@ describe("subtask screenshot fixture parity", () => {
     const childMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name });
     expect(childMarkup).toContain("db-kanban-card-type");
     expect(childMarkup).not.toMatch(/class="db-board-card"/);
-    expect(boardRenderer).toContain("db-subtask-toggle");
-    expect(boardRenderer).toContain("db-subtask-progress-derived");
-    expect(boardRenderer).toContain("db-subtask-progress-explicit");
-    expect(boardRenderer).toContain("db-subtask-add-input");
   });
 
   it("gates the type-name slot on an actual child depth, not on the card being the subtask helper's output", () => {
@@ -215,10 +211,6 @@ describe("subtask screenshot fixture parity", () => {
       expect(source, `${className} is emitted by its renderer`).toContain(className);
       expect(styles, `${className} has a stylesheet rule`).toContain(`.${className}`);
     }
-    expect(boardRenderer).toContain("db-subtask-toggle");
-    expect(boardRenderer).toContain("db-subtask-progress-derived");
-    expect(boardRenderer).toContain("db-subtask-progress-explicit");
-    expect(boardRenderer).toContain("db-subtask-add-input");
   });
 
   it("scopes the view-level flex/overflow height chain to the compound container+view selector", () => {
