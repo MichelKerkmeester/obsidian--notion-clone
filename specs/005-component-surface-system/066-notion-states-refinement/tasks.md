@@ -39,17 +39,17 @@ creates no new lane file and never ticks an operator device row.
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup — record the decisions before the code reads them
 
-- [ ] T001 [P0] **Record ADR-003, the action-toast dwell.** The 5000ms figure is an inference: no
+- [x] T001 [P0] **Record ADR-003, the action-toast dwell.** The 5000ms figure is an inference: no
       capture can show a Notion duration, and the 2200ms it splits from is an unmeasured inheritance
       from the operation-result rail (`../055-states-feedback-and-motion/design-trueup.md:350`;
       ADR-005's toast row at `decision-record.md:452-460` measures only the 0.2s Anytype transition).
       The ADR states the inference, names D-2 as the check that would move it, and fixes the
-      matrix the tests assert. (`decision-record.md`)
-- [ ] T002 [P] [P0] **Record ADR-004, the fast-band curve.** Either an explicit `--db-motion-fast-out:
-      120ms ease-out` joins the token block (`styles.css:142-146`) and the four literals alias it, or
-      they migrate to `var(--db-motion-fast)` and `ease` becomes the one fast-band curve. The ADR
-      picks one and says why; absorbing the choice silently is what left four `ease-out` declarations
-      outside a token that is `ease`. (`decision-record.md`)
+      matrix the tests assert. Already fully recorded as `Proposed` (correct, pending the device
+      pass); T004's matrix matches it exactly. (`decision-record.md`)
+- [x] T002 [P] [P0] **Record ADR-004, the fast-band curve.** Decided: **option 1** — a dedicated
+      `--db-motion-fast-out: 120ms ease-out` token (`styles.css:146`) joins the block and the four
+      literals alias it, so the migration changes no surface's curve. Status moved to Accepted with
+      the reasoning. (`decision-record.md`)
 - [x] T003 [P] [P1] **Record ADR-001 and ADR-002.** Both were ruled by the operator on
       **2026-09-06 18:50**: *"Keep one weight"* (ADR-001 — the single `danger` boolean holds, zero
       code) and *"Centre on phone, keep corner on desktop"* (ADR-002 — the phone half is T017, the
@@ -62,75 +62,108 @@ creates no new lane file and never ticks an operator device row.
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [P0] **Split the toast's dismissal budget.** Add a second constant beside
-      `AUTO_DISMISS_MS = 2200` (`src/views/toast.ts:62`) and select on `options.action` at the single
-      `setTimeout` (`:137`). The `error` branch is untouched and must be asserted untouched.
-      **Red-first proof:** a Vitest with fake timers mounts a `success` toast carrying an action and
-      asserts it is still connected at 3000ms — **fails today**, because `:137` reads one constant
-      for every success; and mounts a plain `success` and asserts it is gone by 2500ms — passes
-      today and must keep passing, which makes it the negative control for the split.
-      (`src/views/toast.ts`, `src/views/toast.test.ts`)
-- [ ] T005 [P0] **Route `deleteRow`'s failure through the toast.** Replace the bare
+- [x] T004 [P0] **Split the toast's dismissal budget.** Added `ACTION_DISMISS_MS = 5000` beside
+      `AUTO_DISMISS_MS = 2200` (`src/views/toast.ts:62-68`) and selected on `options.action` at the
+      single `setTimeout` (now `:143-145`). The `error` branch is untouched, asserted so by a
+      negative-match source test.
+      **Red-first proof (observed):** stashed the fix and reran `toast.test.ts` — 2 of 15 failed:
+      the source-text assertion for the two constants, and the dwell-matrix test asserting a
+      success-with-action toast is still connected at 3000ms (it read 0 children, removed at
+      2200ms). **Green:** restored the fix, same run — 15/15 pass, including a plain success still
+      clearing at 2500ms (the negative control) and an error toast never auto-dismissing with or
+      without an action. (`src/views/toast.ts`, `src/views/toast.test.ts`)
+- [x] T005 [P0] **Route `deleteRow`'s failure through the toast.** Replaced the bare
       `new Notice(t("errors.deleteFailed", …))` at `src/views/database-view.ts:8378` with a
-      `showToast` carrying `severity: "error"`, following `showOperationResult` (`:11316-11334`).
-      **Red-first proof:** force a delete failure and assert `.db-toast.is-error` is in the container
-      — **fails today**, the catch renders a host `Notice` with no severity, no action and no wait.
+      `showToast` carrying `severity: "error"`, guarded by the same `if (this.containerEl_)` the
+      success branch already uses.
+      **Red-first proof (observed):** added an integration test to `deletion-undo.test.ts` (the
+      existing `Object.create(DatabaseView.prototype)` harness with `showToast` mocked) that forces
+      `trashNote` to reject; stashed the fix and ran it — failed, `raisedToasts` held nothing
+      (severity read `undefined`). **Green:** restored the fix — the same test asserts
+      `severity: "error"`, no action, and zero bare `Notice` calls; full file 18/18 pass.
+      (`src/views/database-view.ts`, `src/views/deletion-undo.test.ts`)
+- [x] T006 [P0] **Route the two remaining owned `errors.deleteFailed` catches.** `duplicateRow`'s
+      catch (`src/views/database-view.ts:8468`) and the third site (now `:3684`, the whole-database
+      delete) route through the same `showToast` pattern as T005's, each behind its own
+      `containerEl_` guard.
+      **Red-first proof (observed):** `rg -n "new Notice\(" src --glob '!*.test.ts' | wc -l` read
+      **242** before this pass. **Green:** the same command now reads **239** — three owned sites
+      moved, and each renders `.db-toast.is-error` per T005's proof (the same `showToast` call
+      shape). The remaining 239 are the open lane D5 leaves for a future pass.
       (`src/views/database-view.ts`)
-- [ ] T006 [P0] **Route the two remaining owned `errors.deleteFailed` catches.** `duplicateRow`'s
-      catch (`src/views/database-view.ts:8468`) and the third site at `:3681` report owned operations
-      through the same bare notice as T005's. **Red-first proof:** the owned-operation notice census
-      reads **242** today (`rg -n "new Notice\(" src --glob '!*.test.ts' | wc -l`); the lane row
-      records the new figure and requires it to fall, and asserts the toast renders rather than only
-      that the count moved — a census met by deleting notices is a worse surface with a greener lane.
-      (`src/views/database-view.ts`)
-- [ ] T007 [P1] **Add `renderInlineChip` beside `renderCard`.** A warning icon, a label, a chevron
-      action, `aria-live="polite"`, no dismiss control. It renders `source-missing` and
-      `group-relation-deleted` — both already members of the fourteen-strong `EmptyStateReason` union
-      (`src/views/empty-state-renderer.ts:25-39`) — in compact contexts, where `renderCard`
-      (`:295-330`) is the only shape today. **Red-first proof:** a board group whose relation was
-      deleted renders no chip today; `grep -c "db-inline-chip" styles.css` reads **0**.
+- [x] T007 [P1] **Add `renderInlineChip` beside `renderCard`.** A warning icon (`alert-triangle`,
+      fixed regardless of reason), a label, a chevron action, `role="status"` +
+      `aria-live="polite"`, no dismiss control. Additive: the fourteen-member `EmptyStateReason`
+      union (`empty-state-renderer.ts:25-39`) is unchanged, and no existing call site was rewired to
+      call it — it is a second presentation callers may adopt, exercised directly by its own tests.
+      **Red-first proof (observed):** stashed the method and reran `empty-state-renderer.test.ts` —
+      4 new tests failed with `renderInlineChip is not a function`. **Green:** restored — 35/35 pass,
+      covering both `source-missing` and `group-relation-deleted`, the wired chevron action, and the
+      no-action/no-button case.
       (`src/views/empty-state-renderer.ts`, `src/views/empty-state-renderer.test.ts`)
-- [ ] T008 [P1] **Add the `.db-inline-chip` block.** Beside the `.db-empty-card` family: background
-      composed from a host token with `color-mix`, icon on `var(--text-error)`, **zero hex literals**,
-      tap target at the host's interactive floor. The §6A 44px ruling governs table rows, not chips;
-      the chip matches the row-menu and empty-action floor instead. **Red-first proof:** the block
-      does not exist, so every assertion about it fails. Serialized behind the parent's CSS lane.
-      (`styles.css`)
-- [ ] T009 [P1] **Take the fast band to zero literals, per ADR-004.** The four declarations are
-      `styles.css:200`, `:473`, `:7431` and `:22745`; the definition at `:122` and the comment at
-      `:430` are not targets. The five residual `var(--db-transition-fast)` uses (`:2037`, `:5461`,
-      `:5678`, `:20214`, `:21854`) move to `--db-motion-fast` (`:142`) in the same pass.
-      **Red-first proof:** the comment-excluded declaration census reads **4** today and must read
-      **0**; the raw grep reads 7, which is why the lane row counts declarations. Serialized behind
-      the parent's CSS lane. (`styles.css`)
-- [ ] T017 [P1] **Centre the shared placement on phone; keep the desktop corner, per ADR-002.**
-      The toast stack (`styles.css:2724-2736`) and the operation-result rail host (`:2714-2719`) are
-      one placement; within the phone band (`@media (pointer: coarse), (max-width: 760px)`,
-      `:20945`) the card centres horizontally with symmetric margins, and outside the band neither
-      anchor moves. **Red-first proof:** at 390px the stack's computed left margin is **−6px**
-      (384px wide, `right: 12px` — it overflows the left edge outright), and at 430px the rail reads
-      left **30px** against right **16px**, its `calc(100vw - 32px)` clamp being symmetric at 390px
-      only by accident. Serialized behind the parent's CSS lane. (`styles.css`)
-- [ ] T010 [P1] **Reconcile `055`'s five stale rows and two lagging checkboxes.** In
-      `../055-states-feedback-and-motion/goal.md`: the toast row (`:118-121`, *0 of 247* → the census
-      is 242, and `notice.galleryMigrated` at `src/i18n.ts:1473` is delivered by `showToast` with an
-      Undo at `database-view.ts:2718-2723`); the item-9 row (`:105-117`, *12 reasons at `:24-36`* →
-      **14** at `empty-state-renderer.ts:25-39`, `group-relation-deleted` and `source-missing`
-      included); the E4 row (`:172-179`, *RED, `row-menu.ts:166-176` calls `confirmWithModal` and
-      `deleteRow`* → the confirm is gone and the landed comment sits at `src/views/row-menu.ts:163-171`);
-      the motion row (`:157-165`, *42 declarations hand-type `120ms`*, token cited at `styles.css:113`
-      → **4** declarations, token at `:122`). In `../055-states-feedback-and-motion/tasks.md`: T003
-      (`:102`) and the T019 amendment (`:652`) tick with their landed evidence.
-      **Red-first proof:** each old claim is reproduced as false against the tree before its
-      replacement lands — the stale claim is its own negative control. Every restatement carries a
-      same-day `file:line`; nothing is copied from this packet or the digest without re-checking.
+- [x] T008 [P1] **Add the `.db-inline-chip` block.** Beside `.db-empty-card.is-compact`: background
+      `color-mix(in srgb, var(--text-error) 10%, var(--background-primary))`, icon on
+      `var(--text-error)`, **zero hex literals**, action tap target `30px` matching `.db-menu-item`'s
+      established floor (the §6A 44px rule governs table rows, not this chip).
+      **Red-first proof (observed):** `grep -c "db-inline-chip" styles.css` read **0** before this
+      task. **Green:** now reads **8** (container, icon, icon-svg, label, action, action-hover,
+      action-svg, plus the comment). (`styles.css`)
+- [x] T009 [P1] **Take the fast band to zero literals, per ADR-004 option 1.** The four
+      declarations were re-located by grep at their current lines (`styles.css:204`, `:477`,
+      `:7435`, `:22853` — drifted from the packet's `:200`/`:473`/`:7431`/`:22745` by commits landed
+      since this packet opened; the token definition at `:122` and the comment at `:434` were
+      confirmed not targets) and now read `var(--db-motion-fast-out)`, the token added at `:146`.
+      The five residual `var(--db-transition-fast)` uses (re-located at `:2041`, `:5465`, `:5682`,
+      `:20322`, `:21962`) now read `var(--db-motion-fast)`.
+      **Red-first proof (observed):** `grep -c "120ms ease-out" styles.css` read **4** and
+      `grep -c "var(--db-transition-fast)" styles.css` read **6** (5 call sites + 1 alias
+      definition) before this task; a pre-existing permanent guard, `motion-tokens.test.ts`,
+      pinned exactly those two counts and had to be updated in the same pass — its own two
+      assertions are this task's second red/green pair (stashed `styles.css`, both failed; restored,
+      both pass). **Green:** `grep -c "120ms ease-out"` now reads **1** (the new token's own
+      definition, not a declaration) and `grep -c "var(--db-transition-fast)"` reads **1** (the
+      `--db-motion-fast` alias only); `motion-tokens.test.ts` 7/7 pass. (`styles.css`,
+      `src/views/motion-tokens.test.ts`)
+- [x] T017 [P1] **Centre the shared placement on phone; keep the desktop corner, per ADR-002.**
+      The toast stack (`styles.css:2724-2736`, unmoved) and the operation-result rail host
+      (`:2714-2719`, unmoved) are unchanged outside the band; inside it (`@media (pointer: coarse),
+      (max-width: 760px)`, re-located at `:21053`, drifted from `:20945`) both now carry
+      `left`/`right: var(--db-space-6)` with `width: auto`, and `.db-toast.is-inline` fills its
+      now-symmetric parent at `width: 100%`.
+      **Red-first proof (by CSS arithmetic against the cited constants, not a browser
+      measurement):** at 390px the stack's unclamped 384px at `right: 12px` computes a left margin
+      of `390 - 384 - 12 = -6px`; at 430px the rail's `min(384px, calc(100vw - 32px))` clamp
+      resolves to 384px, giving a left margin of `430 - 16 - 384 = 30px` against a right margin of
+      16px. **Green (by the same arithmetic on the new rule):** both anchors now read
+      `left = right = var(--db-space-6)` (16px) at both viewports, symmetric by construction rather
+      than by accident. **Residual:** the browser-measured lane row AC-009 asks for (computed
+      margins read from a live render at 390px and 430px) was not built — see T012's own residual
+      note; this task's proof is arithmetic on the values the existing CSS and the new rule both
+      state literally, not an independent measurement. (`styles.css`)
+- [x] T010 [P1] **Reconcile `055`'s stale rows and lagging checkboxes.** In
+      `../055-states-feedback-and-motion/goal.md`: the toast row now reads **239** (re-derived
+      2026-09-07, after T006 landed — not the 242 this packet opened with) with
+      `notice.galleryMigrated` (`src/i18n.ts:1473`) confirmed delivered by `showToast` with an Undo
+      (`database-view.ts:2718-2723`); the item-9 row now reads **14** reasons
+      (`empty-state-renderer.ts:25-39`), `group-relation-deleted` and `source-missing` both
+      included — ticked; the E4 row confirmed GREEN — `row-menu.ts:163-171` calls `deleteRow`
+      directly with no `confirmWithModal`, `deleteRow` (`database-view.ts:8349-8390`) confirms only
+      its own unreadable-snapshot case — ticked; the motion row now reads **0** raw fast-band
+      declarations (down from the 42 it claimed, via an interim 4 this same packet's T009 just
+      closed), tokens at `styles.css:122` and `:146`. In `../055-states-feedback-and-motion/tasks.md`:
+      T019's amendment ticked with the same row-menu.ts evidence; T020 ticked, since this row is
+      exactly what it names as closed by this task. **T003 stays `[ ]`, on purpose** — its own
+      unclosed gap (the `nothingToUndo` branch needs a live `App`/vault/metadata cache) is untouched
+      by anything in this packet's scope, so reconciling it means confirming it correctly stays
+      open, not ticking it on a sibling packet's unrelated fixes.
+      **Red-first proof:** each old claim (0 of 247, 12 reasons, RED, 42 declarations) was
+      independently re-confirmed false against the current tree before its replacement was written,
+      per the file:line citations in the row itself.
       (`../055-states-feedback-and-motion/goal.md`, `../055-states-feedback-and-motion/tasks.md`)
-- [ ] T011 [P2] **Record R6 and R7 as future and conditional, and do not build them.** The in-trash
-      persistent banner (`screen:15f3126a`, `screen:4e2f2124`) belongs to a trash/restore phase and
-      inherits a Bin-shaped design question from E4's own logic; two-tier loading
-      (`screen:a483c1af`, `screen:a36c0cce`) is conditional on a multi-step async surface with ≥2
-      named steps and >2s expected duration, which does not exist. Each keeps its threshold and its
-      red-first check so the phase that opens it does not re-derive them. (`decision-record.md`)
+- [x] T011 [P2] **Record R6 and R7 as future and conditional, and do not build them.** Already
+      fully recorded in `decision-record.md`'s "Recorded, not built" table (both patterns, their
+      dispositions and their red-first checks) as part of this packet's opening — confirmed present
+      and unbuilt; no code changes made. (`decision-record.md`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -138,21 +171,37 @@ creates no new lane file and never ticks an operator device row.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T012 [P0] **Extend the existing lanes with the computed rows.** Five assertions, each on an
-      existing `tools/live/` lane, each reading a computed value and each with its own negative
-      control watched red first: the two dwell budgets read apart; `.db-toast.is-error` rendering on
-      a forced owned-operation failure, with the notice census figure recorded; the chip's background
-      resolving from a host token with no hex literal; the comment-excluded fast-band declaration
-      census; and the phone-band placement margins reading symmetric at 390px and 430px with the
-      desktop anchors unchanged (AC-009, per ADR-002's 18:50 ruling). **No new lane file**, and no
-      operator device row is ticked by this packet.
-      (`tools/live/*.json`)
-- [ ] T013 [P0] **Run the three gates and read each exit status.** `npx tsc --noEmit`,
-      `npm run build`, `npx vitest run`. A green run that exercised nothing is recorded as such
-      rather than quoted as coverage.
-- [ ] T014 [P1] **Re-derive the captures for the chip.** The chip is a rendering change, so the
-      screenshot gate applies: a current capture of a compact context carrying the chip, looked at
-      rather than assumed. (`screenshots/`)
+- [B] T012 [P0] **Extend the existing lanes with the computed rows.** BLOCKED — not built this
+      pass. All five thresholds are proven at the level below the browser-driven `tools/live/`
+      lanes instead: the two dwell budgets and the notice-routing shape are proven by Vitest against
+      the production `showToast` (T004, T005); the notice census, the chip's hex-free background and
+      the fast-band declaration census are proven by direct `grep`/`rg` reads against the shipped
+      `styles.css` and source (T006, T008, T009); the phone-band placement is proven by CSS
+      arithmetic against the same constants a lane row would read (T017). What is missing is the
+      *permanent, browser-measured* form: none of the fourteen `tools/live/*.mjs` scripts currently
+      builds a scenario that mounts `toast.ts`, forces a `database-view.ts` failure, or resizes a
+      viewport against `.db-toast-stack`/`.db-operation-result-rail` — the closest infrastructure
+      (`render-assertion-bundle.mjs`'s `RENDERER_SOURCES`) bundles only the five view renderers, not
+      the toast or empty-state modules, so wiring these five rows in means building new scenario
+      plumbing across `render-assertion-bundle.mjs`, `render-assertions.mjs` and `touch-targets.mjs`
+      (for the chip's tap target) rather than appending a row to a file that already does this
+      measurement. That is real, scoped follow-on work this pass did not have the room to do safely
+      against a 26-lane gate with no live Obsidian to rehearse against. **No new lane file was
+      created and no operator device row was touched** — the constraint holds even though the
+      deliverable does not yet. (`tools/live/*.json`)
+- [x] T013 [P0] **Run the three gates and read each exit status.** `npx tsc --noEmit` → exit 0,
+      no output. `npm run build` → exit 0. `npx vitest run` → exit 0, 1530/1530 across 142 files
+      (up from 1520 before this packet's new tests: +6 in `toast.test.ts`, +3 in
+      `empty-state-renderer.test.ts`, +1 in `deletion-undo.test.ts`). None is a run that exercised
+      nothing: the
+      dwell matrix and the chip tests are new production-module coverage this same task pair added.
+- [B] T014 [P1] **Re-derive the captures for the chip.** BLOCKED — nothing to capture yet.
+      `renderInlineChip` (T007) is additive and, per its own frozen file scope, not wired into any
+      board/table/embed call site in this pass — no context in the shipped product renders it, so a
+      screenshot of "a compact context carrying the chip" does not exist to re-derive; the chip's
+      shape is proven instead by the direct render tests in `empty-state-renderer.test.ts`. Wiring a
+      real caller onto it is follow-on work outside `spec.md`'s Files to Change table.
+      (`screenshots/`)
 - [ ] T015 [B] [P1] **The operator device read, D-1, D-2 and the centred placement.** D-1: iOS
       `Reduce Motion` stops the skeleton shimmer and snaps entrances inside the plugin's WKWebView —
       unverifiable from source or captures, because media-query behaviour in a webview is exactly the
