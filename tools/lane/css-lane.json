@@ -1,8 +1,8 @@
 {
-  "holder": "051-modal-and-sheet-componentization",
-  "acquiredAt": "2026-09-07T00:40:00Z",
-  "baselineHash": "10658011477a",
-  "baselineCommit": "396bcae7",
+  "holder": "048-stacked-sheets",
+  "acquiredAt": "2026-09-07T01:10:00Z",
+  "baselineHash": "c332f3d6cfa3",
+  "baselineCommit": "772b24d2",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4273,6 +4273,21 @@
         "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-light.png"
       ],
       "note": "One block added, `.db-view-config-panel.db-shell-side-sheet` and its four sub-rules: the desktop Settings panel docks `position: absolute` against `.note-database-container` at `inset: 0 0 0 auto`, 420px wide, full height, one hairline left border, no radius, `overflow: hidden` with `.db-view-config-body` taking `overflow-y: auto` so the header stays put, plus an 84px `min-height` on the description textarea and the reduced-motion entry for the slide. Measured on the shipped renderer in headless Chrome with the token sheets attached \u2014 red, the same mount with the marker class removed: 360x560px, the panel itself scrolling 1776px inside a 576px client box, textarea 58px in a 236px column; green: 420x844, body scrolling 1672px inside 776px, textarea 84px in 279px, no inline top/left written. Phone is untouched: `isMobileBottomSheet` still selects the bottom sheet and `positionToolbarPopover` still runs for it. The rail's own change is the permanent `db-toolbar-settings-btn` gear before `\u00b7\u00b7\u00b7`, with the `\u00b7\u00b7\u00b7` settings row and its i18n key deleted; the hand-written fixture's `settings` glyph was corrected from the retired slider stand-in to the real cog so it photographs the icon the product draws. Captures re-derived by a full `npm run screenshots` on this base, 556 entries, `verify.mjs` exit 0. The 30 listed here moved pixelHash or are new, and every one was opened; 14 further PNGs moved bytes at a matching pixelHash \u2014 none of them a toolbar, panel or settings surface, all of them mobile-dark rendering jitter of at most 14 channel units in one 20px band \u2014 and are restored to their committed bytes with the manifest's `bytes` reconciled to disk."
+    },
+    {
+      "event": "acquire",
+      "phase": "048-stacked-sheets",
+      "at": "2026-09-07T01:10:00Z",
+      "hash": "10658011477a",
+      "note": "The iOS stacked-sheet report: a host modal presented as a phone sheet drew Obsidian own chrome on top of the shell own."
+    },
+    {
+      "event": "release",
+      "phase": "048-stacked-sheets",
+      "at": "2026-09-07T01:30:00Z",
+      "hash": "c332f3d6cfa3",
+      "reviewed": [],
+      "note": "Two rules only, both scoped to a host modal presented as a phone sheet. `.db-mobile-bottom-sheet > .note-database-modal` turns off the desktop dialog frame `contentEl` declares (background, border, shadow, blur), which painted rgb(57, 57, 57) over the sheet root's own rgb(46, 46, 46) and is the body-lighter-than-its-header the operator photographed; and the selector-only hide of `.modal-close-button` is retired in favour of finding that element by reference in `attachSheetChromeToModal`, so a close control nested anywhere inside `modalEl` is caught rather than only a direct child. No rule declares a fill on the sheet root: `.db-mobile-bottom-sheet.db-mobile-bottom-sheet` already paints every sheet one, verified by deleting a candidate declaration and re-reading the root on both engines, which stayed rgb(46, 46, 46) either way. Captures re-derived by a full `npm run screenshots` on this base, 556 entries, `verify.mjs` exit 0. ZERO captures moved pixelHash or layoutHash, which is why `reviewed` is empty rather than short: the corpus has three modal fixtures and all three render as desktop-style floating cards even at the mobile device size, so no capture in the set models a modal presented AS a sheet and none can move when that presentation changes. Registering one is a gap named, not closed here. Thirteen PNGs moved bytes at an unchanged pixelHash (encoder jitter) and are restored to their committed bytes; their manifest `bytes` already matched disk. Six phone PNGs were opened and read anyway against the three properties this landing is about \u2014 one close control, one surface fill, no dead space above the title: `panel-column-width-sheet` and `chrome-owned-menu-sheet` are the conforming sheet shape and show exactly that; `panel-base-import-modal` and `panel-computed-cleanup-modal` are the floating-card modal fixtures; `panel-column-manager` and `panel-board-card-properties` are the operator's own parent surface and its board sibling. None blank, none unstyled. The live evidence for the fix is `tools/live/sheet-grammar.mjs` instead, where the real module mounts in a real browser on both engines."
     }
   ],
   "outstanding": [
