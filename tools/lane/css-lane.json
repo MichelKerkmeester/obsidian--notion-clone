@@ -3664,6 +3664,25 @@
         "screenshots/notion-clone/views/constructed-linked-view-host-mobile-dark.png",
         "screenshots/notion-clone/views/constructed-linked-view-host-mobile-light.png"
       ]
+    },
+    {
+      "event": "release",
+      "phase": "038-board-kanban-port",
+      "at": "2026-09-06T03:00:00Z",
+      "hash": "ef54a53db80f",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
+      ],
+      "note": "No stylesheet edit \u2014 styles.css is untouched at ef54a53db80f, same as the prior release. Every board/gallery/list card field is read-only in place (the card's own click opens the record, never the control inside it), and that readOnly flag reached checkbox.disabled. input[type=\"checkbox\"].db-checkbox:disabled halves opacity and drops the border to --background-modifier-border, so a checked card checkbox measured a ~#EEEEEE border on a ~#EEEEEE glyph in the default light theme and read as the same picture as unchecked. Fixed at the producer, renderPropertyValue in src/views/record-surface/property-row.ts: no native disabled for a read-only card field, the checkbox is taken out of the tab order (tabIndex=-1) and marked aria-disabled=\"true\", and the click handler preventDefault()s the toggle. The fix was written against card-field-renderer.ts, which owned that body when it was authored; main moved the body verbatim into property-row.ts mid-flight, so it was re-derived onto main's side rather than replayed, and the producer test still drives it through renderCardField, the path the board takes. Red first, reproduced on this tree: the producer test fails (expected true to be false on checkbox.disabled) against the pre-fix producer, and checkbox-appearance.mjs pixel-measures pre-fix light 1.16:1 border / 1.04:1 glyph / 0.3 checked-vs-unchecked diff and dark 1.19:1 / 1.39:1 / 6.3, exit 1. Post-fix: light 3.62:1 / 3.41:1 / 93.3, dark 4.61:1 / 5.59:1 / 105.1, exit 0 \u2014 both themes clear the 3:1 non-text minimum. Those light figures are tools/screenshots/theme.css stand-ins for Obsidian's default light theme, not a device reading. npm run screenshots regenerated all 550 captures; check-lane reads 7 as byte-only re-encode noise on pixelHash-identical pictures (restored to committed bytes) and 10 as real content, listed below. All 10 are constructed board captures, which render the real renderers rather than hand-written fixture markup, so they photograph this producer directly. Each was opened and read in both themes and both device modes: checked boxes are solid accent-filled with a legible white checkmark and unchecked boxes carry a clearly visible border, in place of the uniformly faint box where checked and unchecked looked the same \u2014 in the pre-fix light capture row-0 done (checked) and row-1 done (unchecked) are the same pale ghost, which is the operator's report exactly. Reverting the producer and recapturing reproduces the pre-fix picture, and restoring it returns the same pixelHash, so these are attributed rather than assumed. The PM 1:1 card structure is otherwise unchanged. One currency gap the fix exposed was closed in the same change: the three constructed board scenarios declared only board-renderer.ts among their sources, so a change to the shared property renderer moved all ten of these captures without screenshots:verify calling one of them stale \u2014 the gate went quiet exactly where it should have spoken. card-field-renderer.ts and record-surface/property-row.ts are now declared on all three, and touching the producer afterwards makes verify name the board captures, which it demonstrably did not do before. Gallery and list scenarios did not move and were not audited for the same omission. GATE: npx tsc --noEmit 0, npm test 1340/1340, npm run build 0, verify.mjs 550 current, npm run gate 26 green."
     }
   ],
   "outstanding": [

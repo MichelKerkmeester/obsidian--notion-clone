@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-05T23:53:49.141Z",
+  "measuredAt": "2026-09-06T00:13:41.714Z",
   "inputs": {
     "styles.css": "ef54a53db80f",
-    "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
+    "tools/live/checkbox-appearance.mjs": "ad706bb20d4a",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
@@ -24,8 +24,23 @@
     "boxesUnderHostProfiles": 149,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
-    "belowNonTextMinimum": 0
+    "belowNonTextMinimum": 0,
+    "boardCardCheckboxFailures": 0
   },
+  "boardCardCheckbox": [
+    {
+      "themeClass": "theme-light",
+      "borderContrastUnchecked": 3.6173509272817643,
+      "glyphContrast": 3.4115190495760706,
+      "diff": 93.33333333333333
+    },
+    {
+      "themeClass": "theme-dark",
+      "borderContrastUnchecked": 4.608664464535481,
+      "glyphContrast": 5.590506100181575,
+      "diff": 105.14197530864197
+    }
+  ],
   "shapes": {
     "16x16 r=4px": 100,
     "18x18 r=4px": 26,

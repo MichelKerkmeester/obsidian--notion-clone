@@ -287,7 +287,7 @@ The reference board with one configured select option no row carries, backfilled
 |---|---|
 | ![constructed-board-empty-column dark](notion-clone/components/constructed-board-empty-column-mobile-dark.png) | ![constructed-board-empty-column light](notion-clone/components/constructed-board-empty-column-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/group-visibility.ts`
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/data/group-visibility.ts`
 
 ### Board extensions selection controls (constructed)
 
@@ -1153,7 +1153,7 @@ The shipped board renderer at the bench shape: 1600 rows into five status column
 |---|---|
 | ![constructed-board dark](notion-clone/views/constructed-board-mobile-dark.png) | ![constructed-board light](notion-clone/views/constructed-board-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
 ### Board view — subtask tree (constructed)
 
@@ -1163,7 +1163,7 @@ The shipped board renderer with the first capture-sized row wired into a parent 
 |---|---|
 | ![constructed-board-subtask dark](notion-clone/views/constructed-board-subtask-mobile-dark.png) | ![constructed-board-subtask light](notion-clone/views/constructed-board-subtask-mobile-light.png) |
 
-Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
 ### Calendar day view (constructed)
 
