@@ -178,4 +178,28 @@ exit read from `$?`; a full `npm run screenshots` moved 0 of 558 entries' pixels
 `sourceHashes` and two unrelated pre-existing `layoutHash` entries changed) — the strongest evidence
 yet that a componentization pass changed structure without changing a single rendered pixel.
 
+**2026-09-06 — T011/T023's census gap closed as a source census (ADR-007), T070 closed on it, T071
+landed as an amendment.** `tools/live/surface-census.mjs` gained a source-level census (§6b) rather
+than a new lane file: it counts calls to the shared header/row builder functions
+(`buildDesktopRecordHeader`, `buildPhoneRecordHeader`, `buildPropertyRow`, `buildCheckboxPropertyRow`,
+`renderCardField`) against direct hand-built construction of the primitives' own default header/row
+classes, scoped to the three surfaces this leg names: `record-detail-panel.ts` (header builder
+calls 1, row builder calls 1), `table-record-peek.ts` (1, 1), `board-card-properties-panel.ts` (0
+header calls — no header on this surface by design, 1 row call). **Observed red first**: a
+hand-built `.db-column-manager-row` `createDiv` temporarily added to
+`board-card-properties-panel.ts` (bypassing `buildCheckboxPropertyRow`) read `node tools/live/
+surface-census.mjs` → 1 hand-built header/row, exit 1; reverted, the same command reads **0**, exit
+0. `checklist.md` C15 carries the counts. This closes T011/T023's own proof clause and, with it,
+T070's — the "census lane reads 1/1/1" clause T070 was blocked on now has an observable to read
+against, and reads 0 hand-built across the three named surfaces (T070's four named retirements were
+already complete from source, confirmed again here). **T071 landed rather than staying reverted**:
+the operator ruled to amend the predicate (`decision-record.md` ADR-006) — `hasPaddedRows`
+(`sheet-grammar.ts:99`) now accepts `.db-column-manager-row`, `column-manager` is registered into
+`sheet-grammar.mjs`'s full eight-column check, and `node tools/live/sheet-grammar.mjs` reads
+`column-manager` 8/8 green with `settings` and `board-card-properties` still 8/8 green (measured,
+not skipped) and the whole lane at exit 0. **AC-001, AC-002, AC-005 and AC-007 are unaffected by
+this landing** — their own family-wide counts stay hand counts over four/five consumers, a broader
+scope than this census's three named surfaces; C15 does not supersede C1/C2/C14, it is the
+narrower, real infrastructure ADR-007 amends D3's observable to.
+
 <!-- /ANCHOR:closure -->

@@ -404,3 +404,74 @@ surface regressed.
 | **What contract must not break?** | The predicate still requires every matched row to clear `ROW_PADDING_FLOOR_PX` — the amendment adds a selector branch, not a lowered floor |
 
 <!-- /ANCHOR:adr-006 -->
+
+---
+
+<!-- ANCHOR:adr-007 -->
+## ADR-007: Goal D3's census observable is amended from a DOM census to a source census
+
+**Status: DECIDED — 2026-09-06 (T011/T023, re-read and closed).**
+
+### Context
+
+Goal D3 says the componentization census "must read 1/1/1 ... by the census lane," without naming
+what the lane reads off. T011 and T023 tried to build that lane against the rendered DOM — "one
+page rendering the same column through every consumer," the shape D3's own prose and `spec.md`
+§5A's SC-001 both describe — and found the observable cannot answer the question it is asked.
+`buildPropertyRow` (`record-surface/property-row.ts:229`) takes `rowClass` and `labelClass` from
+its caller by design (T021's own choice, so a switching consumer keeps its existing CSS and moves
+no capture). Four consumers therefore emit four different class names from the one builder, and a
+DOM census counting class tokens reads **4** for a convergence that is real. The same is true of
+the header builder: `buildDesktopRecordHeader` accepts a caller-supplied `headerClass`/`titleClass`
+for the same reason (the peek's rail, the properties panel's title-only header). Measuring "one
+builder" from the rendered markup is not possible without the primitive abandoning the very
+caller-owned-class design that let each consumer switch onto it without moving a pixel — which
+would be componentizing by breaking screenshot currency, the opposite of this packet's goal.
+
+### Decision
+
+D3's observable is a **source census**: which function built the header or the row, read from each
+consumer's own source text (an AST walk over call expressions), not which class the result carries
+in the DOM. `tools/live/surface-census.mjs` gained this census (§6b) rather than a new lane file,
+scoped to the three consumer surfaces named for this leg
+(`record-detail-panel.ts`/`table-record-peek.ts`/`board-card-properties-panel.ts`): it counts calls
+to the registered shared-builder function names and separately flags any of those files writing one
+of the primitives' own default header/row class literals directly onto a `createDiv`/`createSpan`/
+`createEl` call — the one shape a hand-built header or row bypassing the shared builder can take,
+since the primitive itself never hardcodes that literal (it always reads it from the caller). The
+threshold is zero hand-built headers/rows; a DOM class count is no longer part of what closes D3.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| Force every consumer onto one shared class name so a DOM census can read it | Keeps the census as originally imagined | Reopens the exact defect T021 avoided: a shared class forces a shared stylesheet rule across surfaces with different geometry (a rail, a title-only panel header, a settings-sheet row), and moving any of them would move a capture this leg does not own |
+| Leave D3 unmeasured and record it as a permanent gap | No new code | D3 is one of goal.md's own completion criteria; leaving it permanently unmeasurable is worse than amending what it measures |
+| Amend to a source census (chosen) | Answers the question D3 is actually asking — "does one function build this" — without touching any consumer's CSS or capture | Trades a mechanical DOM count for an AST-based one; scoped narrowly (three named files, five named builder identifiers) rather than generically, so a future primitive needs its own builder names added rather than being auto-discovered |
+
+### Consequences
+
+- Positive: T011/T023 close on real infrastructure rather than staying named gaps; T070's own proof
+  clause ("the census lane reads 1/1/1 on headers/rows") now has an observable it can read against —
+  the source census reads **0 hand-built headers/rows** across the three named consumers, which is
+  T070's threshold restated for the observable this ADR adopts.
+- Positive: the negative control is real and was observed both ways — a hand-built row temporarily
+  reintroduced into `board-card-properties-panel.ts` reads red (`1`, exit 1); reverted, it reads
+  green (`0`, exit 0).
+- Neutral: this ADR narrows what "the census lane" in goal D3 and `checklist.md` C14 means for the
+  three surfaces this leg's source census covers. C14's own family-wide 4-consumer figure (the
+  peek, the record sheet, the properties panel via `column-manager-renderer.ts`, and the board-card
+  properties panel) is unaffected and stays a hand count, named in its own row, because
+  `column-manager-renderer.ts` was outside the three surfaces this leg's task named.
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — D3 is a frozen completion criterion with no observable that could ever read green under the DOM-census reading, which is a permanently-failing gate rather than a measured one |
+| **Is there a simpler existing thing?** | Considered: grep for class names, the exact method D3's own prose warns against ("never by grep" per `acceptance-criteria.md` §2's own protocol note) — grep and a DOM census share the same blind spot here |
+| **What does it touch?** | `goal.md` D3 (one amendment note), `tools/live/surface-census.mjs` (the new census), `checklist.md` (a new row), `tasks.md` T011/T023/T070 |
+| **What is the real caller that must not break?** | Every existing `surface-census.mjs` consumer (`design-conformance.mjs` reads its stamp) — the new section adds a field, it does not remove or rename an existing one |
+| **What contract must not break?** | The primitives' own caller-supplied-class design (T021) — this ADR measures around it rather than asking it to change |
+
+<!-- /ANCHOR:adr-007 -->

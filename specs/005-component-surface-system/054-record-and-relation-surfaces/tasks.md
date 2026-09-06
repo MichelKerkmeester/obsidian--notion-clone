@@ -150,7 +150,7 @@ in the parent program's escalation format rather than retrying. A task blocked o
       pass-through to `createSheetHeader`. Both registered in `index.ts`'s `RECORD_SURFACE_PRIMITIVES`
       table. No consumer switched onto it yet, so no capture moved — confirmed by
       `npm run screenshots:verify` staying green.
-- [ ] T011 [P1] Write the census lane row for header builders across the three surfaces, observed
+- [x] T011 [P1] Write the census lane row for header builders across the three surfaces, observed
       red (4) from T002's number. **Proof:** lane row exists and reports 4 today.
       **Not done.** No existing lane under `tools/live/` measures "which function builds a header" —
       `surface-census.mjs` inventories DOM-mounted floating/docked surfaces by class name, a
@@ -174,6 +174,16 @@ in the parent program's escalation format rather than retrying. A task blocked o
       Third: the red-first window is closed regardless. T030-T042 already switched the consumers, so a
       lane built now observes the converged count, and the 4/3/3 red this row asks to see could only
       be re-observed by running the lane against a pre-switch commit.
+      **Landed 2026-09-06, as a source census rather than a DOM census (`decision-record.md`
+      ADR-007 amends goal D3's observable).** `tools/live/surface-census.mjs` §6b counts calls to
+      `buildDesktopRecordHeader`/`buildPhoneRecordHeader` in `record-detail-panel.ts` and
+      `table-record-peek.ts` (1 each; `board-card-properties-panel.ts` has no header call, correct —
+      it draws no header by design) against direct hand-built construction of the primitive's own
+      default header class in those files. Headers and rows share one threshold in this census
+      (zero hand-built of either), so T023's negative control below — a hand-built
+      `.db-column-manager-row` reading 1 hand-built and exit 1, reverted to 0 and exit 0 on the same
+      command — is this row's own red-then-green proof too. `checklist.md` C15 carries the counts
+      and the command.
 
 ### L2 — P2/P3/P5 display primitives
 
@@ -218,7 +228,7 @@ in the parent program's escalation format rather than retrying. A task blocked o
       narrows and calls `onCreateNew(query)` when nothing matches — the caller wires that to
       `CreatePropertyModal` when a consumer switches onto this primitive. Not done this pass: no
       consumer calls it yet.
-- [ ] T023 [P1] Census lane row for property-row vocabularies, observed red (3). **Proof:** lane row
+- [x] T023 [P1] Census lane row for property-row vocabularies, observed red (3). **Proof:** lane row
       reports 3 today.
       **Not done**, same reason as T011: no existing `tools/live/` lane answers "which function
       builds this row" without new source-level census infrastructure this pass did not size for.
@@ -227,6 +237,19 @@ in the parent program's escalation format rather than retrying. A task blocked o
       still name (`db-record-detail-field`, `db-record-peek-field`, `db-column-manager-row` and the
       board card's), all four produced by the single `buildPropertyRow`. The count and the
       convergence disagree because the observable is wrong, not because the convergence is absent.
+      **Landed 2026-09-06, as a source census (`decision-record.md` ADR-007 amends goal D3's
+      observable from a DOM census to a source census).** `tools/live/surface-census.mjs` §6b counts
+      calls to `buildPropertyRow`/`buildCheckboxPropertyRow`/`renderCardField` in
+      `record-detail-panel.ts`, `table-record-peek.ts` and `board-card-properties-panel.ts` (1 call
+      each) against direct hand-built construction of the primitives' own default row classes
+      (`db-record-detail-field`, `db-record-peek-field`, `db-column-manager-row`) in those same
+      files. **Observed red first**: a `panel.createDiv({ cls: "db-column-manager-row" })` line
+      temporarily added to `board-card-properties-panel.ts`, bypassing `buildCheckboxPropertyRow`,
+      made `node tools/live/surface-census.mjs` report "hand-built headers/rows across the three
+      surfaces: 1", exit 1. Reverted: the same command reports **0**, exit 0. `checklist.md` C15
+      carries the counts and the command. This is scoped to the three surfaces this leg's own task
+      names, not the full four-consumer family C2/C14 measure (`column-manager-renderer.ts` is
+      outside this row's named scope) — C2/C14 stay their own hand counts, unsuperseded.
 
 ## Phase 3 — Consumers
 
@@ -521,7 +544,7 @@ in the parent program's escalation format rather than retrying. A task blocked o
 
 ### L7 — Retirement, registry, gate
 
-- [ ] T070 [P0] Retire the per-surface duplicates: the peek's `renderProperty` body, the hand-built
+- [x] T070 [P0] Retire the per-surface duplicates: the peek's `renderProperty` body, the hand-built
       headers, `PROPERTY_TYPES` and `getTypeOptions`, the duplicated `shouldIgnoreDrag` helpers —
       and sweep `styles.css` for the rules only those builders referenced. **Proof:** the census
       lane reads 1/1/1 on headers/rows/type-lists; the retired class names have no live rule
@@ -546,6 +569,16 @@ in the parent program's escalation format rather than retrying. A task blocked o
       property row off the DOM while `buildPropertyRow` takes its classes from the caller. So this
       row closes on one of two operator decisions, not on more implementation: amend D3's observable
       to a source-level census, or accept the source read as the proof. Neither is a leg's to take.
+      **Closed 2026-09-06 — the operator's decision was the first option.** `decision-record.md`
+      ADR-007 amends goal D3's observable to a source census; `tools/live/surface-census.mjs` §6b
+      now reads it for headers and rows: **0 hand-built** across the three surfaces this leg's
+      builder-census scope names (`record-detail-panel.ts`, `table-record-peek.ts`,
+      `board-card-properties-panel.ts`), red-then-green proved (T023's negative control). The
+      type-list third of this row's own "headers/rows/type-lists" phrasing stays the same source
+      check it always was — `rg` for a `PROPERTY_TYPES`/`getTypeOptions` declaration outside
+      `record-surface/type-picker.ts` returns nothing, unchanged from the prior re-reads — no new
+      lane was built for it because no gap was ever named there, only for headers/rows. The four
+      named retirements re-confirmed once more against the current tree: unchanged.
 - [x] T071 [P0] Register the phone surfaces this phase changed in `sheet-grammar.mjs`'s registry
       where not already registered; run the whole gate.
       **Proof:** `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, every negative control observed

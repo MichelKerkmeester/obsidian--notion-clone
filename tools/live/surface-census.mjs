@@ -251,6 +251,81 @@ if (untokened.length) {
   console.log("");
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 6b. RECORD-SURFACE BUILDER CENSUS — source-level, not DOM
+// ───────────────────────────────────────────────────────────────────
+//
+// The header/property-row census `054-record-and-relation-surfaces` goal D3 asks for reads "one
+// page rendering the same column through every consumer" — a DOM census. `buildPropertyRow`
+// (`src/views/record-surface/property-row.ts`) takes its row and label classes from its caller by
+// design, so a switching consumer keeps its own stylesheet rules and moves no capture; the side
+// effect is that four consumers render four different class names off the one builder, and
+// counting classes in the rendered DOM reads 4 for a convergence that already happened. This
+// section counts the thing that actually converged instead: which function built the header or
+// the row, read from each consumer's own source text, never from what class the result carries.
+const RECORD_SURFACE_CONSUMERS = [
+  "src/views/record-detail-panel.ts",
+  "src/views/table-record-peek.ts",
+  "src/views/board-card-properties-panel.ts",
+];
+const HEADER_BUILDER_NAMES = new Set(["buildDesktopRecordHeader", "buildPhoneRecordHeader"]);
+const ROW_BUILDER_NAMES = new Set(["buildPropertyRow", "buildCheckboxPropertyRow", "renderCardField"]);
+// The class name a primitive assigns its own header or row root when a caller does not override
+// it. That string belongs in the primitive's own file; a consumer that writes it onto its own
+// `createDiv`/`createSpan`/`createEl` call has built that header or row by hand instead of calling
+// the function above for it.
+const HAND_BUILT_HEADER_CLASSES = new Set(["db-record-detail-header", "db-record-peek-header", "db-panel-header"]);
+const HAND_BUILT_ROW_CLASSES = new Set(["db-record-detail-field", "db-record-peek-field", "db-column-manager-row"]);
+const DOM_CREATE_METHODS = new Set(["createDiv", "createSpan", "createEl"]);
+
+function clsLiteralOf(node, source) {
+  if (!node || !ts.isObjectLiteralExpression(node)) return undefined;
+  for (const prop of node.properties) {
+    if (!ts.isPropertyAssignment(prop) || !ts.isStringLiteral(prop.initializer)) continue;
+    if (prop.name.getText(source) === "cls") return prop.initializer.text;
+  }
+  return undefined;
+}
+
+function censusRecordSurfaceFile(file) {
+  const text = readFileSync(join(REPO, file), "utf8");
+  const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
+  const result = { file, headerBuilderCalls: 0, rowBuilderCalls: 0, handBuiltHeaders: [], handBuiltRows: [] };
+  const visit = (node) => {
+    if (ts.isCallExpression(node)) {
+      const callee = node.expression;
+      if (ts.isIdentifier(callee)) {
+        if (HEADER_BUILDER_NAMES.has(callee.text)) result.headerBuilderCalls += 1;
+        if (ROW_BUILDER_NAMES.has(callee.text)) result.rowBuilderCalls += 1;
+      } else if (ts.isPropertyAccessExpression(callee) && DOM_CREATE_METHODS.has(callee.name.text)) {
+        const cls = clsLiteralOf(node.arguments[0], source);
+        for (const token of (cls || "").split(/\s+/)) {
+          if (HAND_BUILT_HEADER_CLASSES.has(token)) result.handBuiltHeaders.push(token);
+          if (HAND_BUILT_ROW_CLASSES.has(token)) result.handBuiltRows.push(token);
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return result;
+}
+
+const recordSurfaceCensus = RECORD_SURFACE_CONSUMERS.map(censusRecordSurfaceFile);
+const handBuiltTotal = recordSurfaceCensus.reduce(
+  (sum, r) => sum + r.handBuiltHeaders.length + r.handBuiltRows.length, 0,
+);
+
+console.log("record-surface builder census: source-level, not DOM\n");
+for (const r of recordSurfaceCensus) {
+  console.log(`  ${r.file}`);
+  console.log(`    header builder calls   ${r.headerBuilderCalls}`);
+  console.log(`    row builder calls      ${r.rowBuilderCalls}`);
+  if (r.handBuiltHeaders.length) console.log(`    HAND-BUILT HEADER       ${r.handBuiltHeaders.join(", ")}`);
+  if (r.handBuiltRows.length) console.log(`    HAND-BUILT ROW          ${r.handBuiltRows.join(", ")}`);
+}
+console.log(`\n  hand-built headers/rows across the three surfaces: ${handBuiltTotal} (threshold: 0)\n`);
+
 stamp("tools/live/surface-census.json", {
   totals: {
     rendered: rendered.size,
@@ -260,11 +335,13 @@ stamp("tools/live/surface-census.json", {
     buildableNotRendered: buildableNotRendered.length,
     untokened: untokened.length,
     unroled: unroled.length,
+    recordSurfaceHandBuilt: handBuiltTotal,
   },
   rendered: Object.fromEntries(rendered),
   buildableNotRendered,
   declared: [...declared],
-}, ["styles.css", "tools/live/surface-census.mjs", "src/views/surface-contract.ts"]);
+  recordSurfaceCensus,
+}, ["styles.css", "tools/live/surface-census.mjs", "src/views/surface-contract.ts", ...RECORD_SURFACE_CONSUMERS]);
 
 // ───────────────────────────────────────────────────────────────────
 // 7. THE EQUALITY, ASSERTED
@@ -288,7 +365,15 @@ if (renderedOnly.length > 0) {
     + " it named on 2026-09-01 were built from template literals it could not read.");
   process.exit(1);
 }
+if (handBuiltTotal > 0) {
+  console.error(`surface-census: FAIL — ${handBuiltTotal} hand-built record-surface header(s)/row(s)`
+    + " found across record-detail-panel.ts, table-record-peek.ts and board-card-properties-panel.ts."
+    + " A consumer is constructing a header or row's own root element directly instead of calling"
+    + " the shared record-surface builder for it — see the census above for which file and class.");
+  process.exit(1);
+}
 console.log(`surface-census: PASS — every class a fixture renders can be built from the source `
-  + `(${rendered.size} rendered, ${buildable.size} buildable, ${buildableNotRendered.length} awaiting a fixture)`);
+  + `(${rendered.size} rendered, ${buildable.size} buildable, ${buildableNotRendered.length} awaiting a fixture);`
+  + ` zero hand-built record-surface headers/rows across the three named consumers`);
 console.log("  what this does not prove: a class that can be built is not a class that IS built on");
 console.log("  any path a reader reaches, and 132 of them have no fixture at all.");
