@@ -1094,6 +1094,15 @@ export interface AddRowProbe {
   sheets: number;
   scrims: number;
   panelTop: number | null;
+  /**
+   * The sheet's own bottom edge, in viewport coordinates.
+   *
+   * A bottom sheet rests against the bottom of the screen — flush with it, or the frame shape's
+   * own inset above it. A sheet whose bottom edge is still BELOW the viewport is mid-entrance or
+   * mid-placement however still its top edge happens to read on two consecutive frames, and a
+   * control measured on it is measured at a coordinate the sheet is about to leave.
+   */
+  panelBottom: number | null;
   /** Whether the panel is still presenting as a sheet, and whether it can still be seen. */
   isSheet: boolean;
   visibility: string | null;
@@ -1148,6 +1157,7 @@ export function readAddRowProbe(doc: Document): AddRowProbe {
     sheets: doc.body.querySelectorAll(".db-mobile-bottom-sheet").length,
     scrims: doc.body.querySelectorAll(".db-mobile-sheet-scrim").length,
     panelTop: panel ? panel.getBoundingClientRect().top : null,
+    panelBottom: panel ? panel.getBoundingClientRect().bottom : null,
     panelIdentity: panel?.getAttribute("data-probe-panel") ?? null,
     isSheet: Boolean(panel?.classList.contains("db-mobile-bottom-sheet")),
     visibility: panel && doc.defaultView

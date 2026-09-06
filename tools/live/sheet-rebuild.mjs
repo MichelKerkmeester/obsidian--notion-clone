@@ -223,6 +223,14 @@ async function settledAddButton(page) {
     window.__paritySettleTop = probe.panelTop;
     return probe.panelTop !== null
       && probe.panelTop < window.innerHeight - 1
+      // Resting, not merely still. A sheet whose bottom edge is below the viewport has not
+      // finished being placed, and its top edge can read identical on two consecutive frames
+      // while it is down there — measured on WebKit's filter sheet, whose "+ Add" was read at
+      // y=703 on a 660px screen and had moved to y=622 by the time the tap landed, so the tap
+      // reached the scrim and dismissed the surface. Only the frame shape's own inset is
+      // allowed below the bottom edge, which is what the sheet is supposed to rest at.
+      && probe.panelBottom !== null
+      && probe.panelBottom <= window.innerHeight + 1
       && last !== undefined
       && Math.abs(last - probe.panelTop) < 0.5;
   }, null, { timeout: 4000, polling: "raf" });

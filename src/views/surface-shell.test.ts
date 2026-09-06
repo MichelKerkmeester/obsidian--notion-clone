@@ -313,8 +313,9 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
 // direct call, and the host itself is asserted to reach `buildShellHeader`; what the whole section
 // protects is unchanged, that no surface builds the engine's two-slot header for itself.
 //
-// `calendar-toolbar-renderer.ts` and `calendar-timeline-toolbar-renderer.ts` are the two raw sites
-// deliberately absent here: a concurrent calendar leg owns those files.
+// The two calendar toolbars were the last raw sites; the calendar leg that owned those files
+// migrated them itself, so they are pinned here with the rest. Nothing outside
+// `mobile-bottom-sheet.ts` builds a `db-panel-header`/`db-panel-title` pair by hand any more.
 
 const SHELL_HEADER_CONSUMER_FILES = [
   // The relation editor's phone header — editRelationPopover's body moved here from CellRenderer.
@@ -330,6 +331,8 @@ const SHELL_HEADER_CONSUMER_FILES = [
   "chart-toolbar-renderer.ts",
   "toolbar-renderer.ts",
   "record-surface/record-header.ts",
+  "calendar-toolbar-renderer.ts",
+  "calendar-timeline-toolbar-renderer.ts",
 ];
 
 const PICKER_HOST_HEADER_FILES = [
