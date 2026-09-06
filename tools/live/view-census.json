@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T02:32:13.884Z",
+  "measuredAt": "2026-09-06T03:13:10.327Z",
   "inputs": {
-    "styles.css": "41c974032f7f",
+    "styles.css": "009892516d8e",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -361,12 +361,12 @@
   ],
   "totals": {
     "fixtures": 73,
-    "escaping": 626,
+    "escaping": 621,
     "growing": 247,
-    "scrolling": 379,
+    "scrolling": 374,
     "rhythmGroups": 8,
     "ragged": 0,
-    "probeBlind": 40
+    "probeBlind": 24
   },
   "rows": [
     {
@@ -440,8 +440,8 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -451,9 +451,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 32,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 268,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -462,9 +462,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 326,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 538,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -473,20 +473,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 620,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "board-view",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 914,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 808,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -495,8 +484,8 @@
       "fixture": "board-subtask-tree",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -506,20 +495,9 @@
       "fixture": "board-subtask-tree",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 32,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "board-subtask-tree",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 326,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 268,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -528,8 +506,8 @@
       "fixture": "board-empty-column",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -539,20 +517,9 @@
       "fixture": "board-empty-column",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 32,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "board-empty-column",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 326,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 268,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -561,21 +528,10 @@
       "fixture": "board-drop-language",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "board-drop-language",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 32,
-      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -726,8 +682,8 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -737,9 +693,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 32,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 268,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -748,9 +704,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 326,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 538,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -759,20 +715,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 620,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "board-mobile",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 914,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 808,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3573,8 +3518,8 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -3584,9 +3529,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 244,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 186,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3595,9 +3540,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 538,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 456,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3606,9 +3551,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 832,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 726,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3617,8 +3562,8 @@
       "fixture": "board-subtask-tree",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -3628,9 +3573,9 @@
       "fixture": "board-subtask-tree",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 244,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 186,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3639,8 +3584,8 @@
       "fixture": "board-empty-column",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -3650,9 +3595,9 @@
       "fixture": "board-empty-column",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 244,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 186,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3661,8 +3606,8 @@
       "fixture": "board-drop-language",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -3815,8 +3760,8 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
@@ -3826,9 +3771,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 244,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 186,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3837,9 +3782,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 538,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 456,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3848,9 +3793,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 832,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 726,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -5584,8 +5529,8 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -5595,9 +5540,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 172,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 90,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -5606,9 +5551,9 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 466,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 360,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -5617,8 +5562,8 @@
       "fixture": "board-subtask-tree",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -5628,8 +5573,8 @@
       "fixture": "board-empty-column",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -5639,8 +5584,8 @@
       "fixture": "board-drop-language",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -5782,8 +5727,8 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -5793,9 +5738,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 172,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 90,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -5804,9 +5749,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 466,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 360,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -6484,8 +6429,8 @@
       "fixture": "board-view",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -6495,8 +6440,8 @@
       "fixture": "board-subtask-tree",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -6506,8 +6451,8 @@
       "fixture": "board-empty-column",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -6517,8 +6462,8 @@
       "fixture": "board-drop-language",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -6660,8 +6605,8 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-board",
-      "parentCls": "note-database-container.pm-kanban-view",
+      "cls": "db-kanban-board",
+      "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
       "scrolls": false,
       "pastHeader": 0
@@ -6671,9 +6616,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 100,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 18,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -6682,9 +6627,9 @@
       "fixture": "board-mobile",
       "kind": "escaping",
       "tag": "div",
-      "cls": "pm-kanban-col",
-      "parentCls": "pm-kanban-board",
-      "by": 394,
+      "cls": "db-kanban-col",
+      "parentCls": "db-kanban-board",
+      "by": 288,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -7350,22 +7295,22 @@
     {
       "width": 320,
       "fixture": "board-view",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 320,
       "fixture": "board-subtask-tree",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 320,
       "fixture": "board-empty-column",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 320,
       "fixture": "board-drop-language",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 320,
@@ -7715,22 +7660,22 @@
     {
       "width": 402,
       "fixture": "board-view",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 402,
       "fixture": "board-subtask-tree",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 402,
       "fixture": "board-empty-column",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 402,
       "fixture": "board-drop-language",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 402,
@@ -8080,22 +8025,22 @@
     {
       "width": 768,
       "fixture": "board-view",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 768,
       "fixture": "board-subtask-tree",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 768,
       "fixture": "board-empty-column",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 768,
       "fixture": "board-drop-language",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 768,
@@ -8445,22 +8390,22 @@
     {
       "width": 1440,
       "fixture": "board-view",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 1440,
       "fixture": "board-subtask-tree",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 1440,
       "fixture": "board-empty-column",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 1440,
       "fixture": "board-drop-language",
-      "probe": ""
+      "probe": "4px"
     },
     {
       "width": 1440,
