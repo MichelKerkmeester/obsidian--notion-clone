@@ -1,8 +1,8 @@
 {
-  "holder": "055-states-feedback-and-motion",
-  "acquiredAt": "2026-09-06T15:30:00Z",
-  "baselineHash": "41c974032f7f",
-  "baselineCommit": "793ab9b4",
+  "holder": "056-board-anytype-parity",
+  "acquiredAt": "2026-09-06T03:11:48.076Z",
+  "baselineHash": "009892516d8e",
+  "baselineCommit": "012b360f",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3877,6 +3877,54 @@
         "screenshots/notion-clone/views/constructed-chart-empty-desktop-light.png",
         "screenshots/notion-clone/views/constructed-chart-empty-mobile-dark.png",
         "screenshots/notion-clone/views/constructed-chart-empty-mobile-light.png"
+      ]
+    },
+    {
+      "event": "acquire",
+      "phase": "056-board-anytype-parity",
+      "at": "2026-09-06T03:11:48.076Z",
+      "hash": "41c974032f7f",
+      "note": "Taken over from 055-states-feedback-and-motion, whose own last history entry is a release at this hash with its captures signed off and nothing outstanding against it. This phase rebuilt the board against the Anytype kanban captures; its worktree branched from 772bf57a and was rebased onto origin/main three times as other phases landed, most recently at 012b360f, so the baseline here is main's own released stylesheet rather than the pre-rebase one."
+    },
+    {
+      "event": "release",
+      "phase": "056-board-anytype-parity",
+      "at": "2026-09-06T03:11:48.076Z",
+      "hash": "009892516d8e",
+      "note": "The board's Project Manager class vocabulary is retired and replaced by db-kanban-*: 246px columns on a 270px pitch with a 24px gap and no column background panel, a bordered unfilled option chip for a header with hover-revealed ellipsis/plus controls (permanent on touch), 8px-radius 1px-bordered cards with 16px padding and no shadow at rest, values-only property rows, 20px 6px-radius tag chips on a ten-bucket tint-plus-darkened-text palette, a bordered 42px-tall new-record control below the last card, and a 10px horizontal board scrollbar sitting 8px above the view's bottom on this plugin's own scrollbar tokens rather than the reference's fixed light-theme hex. One further rule pair: the ten-record page limit puts the shared group-expand control at the foot of every over-limit column, twenty controls newly under this project's 28px coarse-pointer floor on the constructed pass, so the board's own instances get a min-height and the constructed baseline stays at 1304 rather than being raised. Full node tools/screenshots/capture.mjs run on the rebased tree, 558 entries: 32 moved pixelHash, all of them board scenarios and listed below; two field captures came back byte-only re-encodes on identical pixels and were restored to main's committed bytes with the manifest byte counts re-synced to disk; every screenshots/project-manager reference capture, gantt and kanban alike, came back pixelHash-identical. node tools/screenshots/verify.mjs exit 0. Each of the 32 was opened and read. Four measured values did not land and are recorded as open rows in the phase's tasks.md rather than signed off here: the header chip paints 26px against a measured 24 and the property rows a roughly 28.3px pitch against a measured 25, both because the elements are content-box and the height or min-height sits beside padding and a border; the card title icon slot renders only when the view opts into record icons; and the phone board takes the desktop column geometry rather than its own measured values. A negative control on the card radius (8px to 2px, recapture, restore) moved 8640 channel bytes at the card corners and moved no check to red, so the board geometry carries no regression lock either - also recorded as an open row.",
+      "reviewed": [
+        "screenshots/notion-clone/components/board-drop-language-desktop-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-desktop-light.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-light.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-mobile-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-mobile-dark.png",
+        "screenshots/notion-clone/views/board-mobile-mobile-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-light.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-light.png",
+        "screenshots/notion-clone/views/board-view-mobile-dark.png",
+        "screenshots/notion-clone/views/board-view-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
       ]
     }
   ],
