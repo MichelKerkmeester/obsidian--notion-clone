@@ -81,13 +81,13 @@
   --db-radius-sm: 4px;
   --db-radius-md: 6px;
   --db-radius-lg: 8px;
-  /* The floating phone sheet's own corner radius (design-trueup.md §6 C10, ≈16pt measured on 22
-     files) — larger than any other radius token this stylesheet declares, so it gets its own name
+  /* The floating phone sheet's own corner radius (≈16pt, measured across 22 reference captures)
+     — larger than any other radius token this stylesheet declares, so it gets its own name
      rather than overloading `--db-radius-lg` (8px) for two different measured shapes. */
   --db-radius-xl: 16px;
   --db-radius-full: 9999px;
-  /* The floating phone sheet's inset from the viewport edge on all three free sides (design-
-     trueup.md §6 C5/C10, 8.0-8.3pt measured on 22 files) — the flush shape below needs none. */
+  /* The floating phone sheet's inset from the viewport edge on all three free sides (8.0-8.3pt,
+     measured across 22 reference captures) — the flush shape below needs none. */
   --db-sheet-float-inset: 8px;
   /* The sheet header's close button and the shell's own back control, so a second edge slot
      added later reads the size the first one already declared instead of repeating "44px". */

@@ -186,8 +186,13 @@ export async function buildRenderAssertionBundle(entryBody) {
   writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
 import { runRenderAssertions } from "${resolve(HERE, "render-assertion-harness")}";
+import { readSheetFrameShapeActivity } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
+// The phone sheet's frame-shape classifier answers a resize on a debounce of its own, so it can
+// still be mid-answer when a caller measures or photographs the surface. Every consumer of this
+// bundle gets its settle signal from the shipped module rather than a wait each one guesses at.
+window.__sheetFrameShapeActivity = () => readSheetFrameShapeActivity();
 ${entryBody}
 `);
 

@@ -131,6 +131,19 @@ async function waitForConstructedLayout(page) {
     };
     requestAnimationFrame(tick);
   }), READY_ANIMATION_FRAMES);
+  // A phone sheet classifies its own frame shape — floating or flush — off its rendered height,
+  // on a debounce longer than the two frames above. Whether that answer had landed by the time
+  // the shutter opened was therefore decided by how long the fonts took on the day, and the same
+  // scenario came back with two different shapes on two runs. This waits for the classifier to
+  // stop instead: nothing queued, and no new classification across two consecutive frames.
+  await page.waitForFunction(() => {
+    if (!window.__sheetFrameShapeActivity) return true;
+    const now = window.__sheetFrameShapeActivity();
+    const previous = window.__frameShapeMark;
+    window.__frameShapeMark = now.classifications;
+    return now.queued === 0 && previous === now.classifications;
+  }, null, { timeout: 5000, polling: "raf" });
+  await page.evaluate(() => { delete window.__frameShapeMark; });
 }
 
 /* A full view is documented inside a device frame; a component is documented on its own,

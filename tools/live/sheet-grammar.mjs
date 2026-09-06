@@ -113,22 +113,25 @@ const REGISTERED_SURFACES = [
 // 2c. TITLE CENTRING
 // ───────────────────────────────────────────────────────────────────
 
-// Every registered header-bearing surface, minus the two whose header is not `buildShellHeader`'s
+// Every registered header-bearing surface, minus the three whose header is not `buildShellHeader`'s
 // at all — `record-detail` and `record-peek` draw `.db-record-detail-header` by hand in
 // `record-detail-panel.ts`, a third header shape this leg does not touch (`record-header.ts`'s own
-// phone builder now calls `buildShellHeader` too, but no production caller has reached it yet) —
-// plus the one this defect was actually found on: `column-manager` pairs a fixed-width leading
+// phone builder now calls `buildShellHeader` too, but no production caller has reached it yet),
+// and `confirm` draws the host modal's own title, has no `renderer` case to mount through, and is
+// the one surface still waiting on the shared confirm primitive (the overflow sweep below excludes
+// it for the same reason, through its own stand-in instead) — plus the one this defect was
+// actually found on: `column-manager` pairs a fixed-width leading
 // slot with a wider trailing one (the "All" toggle beside the close), so it is the one member of
 // this list guaranteed to expose an unmirrored slot if the centring rule regresses —
 // constructed-column-manager's "Properties" measured off centre before buildShellHeader grouped
 // its trailing children into one box the grid could mirror.
 const TITLE_CENTERED_SURFACES = [
-  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek"),
+  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek" && s.name !== "confirm"),
   { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
 ];
 
 // A 1px allowance for sub-pixel rounding on the two measured rects, never for an actual asymmetry —
-// `design-trueup.md` §6 C6 asks for the frame's own centre, not agreement between two slots.
+// The reference asks for the frame's own centre, not for agreement between two slots.
 const TITLE_CENTER_TOLERANCE_PX = 1;
 
 // ───────────────────────────────────────────────────────────────────

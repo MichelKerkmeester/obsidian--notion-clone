@@ -301,15 +301,36 @@ const FLOATING_HEIGHT_RATIO_MAX = ((1 - 299 / 874) + (1 - 198 / 874)) / 2;
 // the sheet's CURRENT shape alone inside that gap is a legitimate third answer a plain `<=` never
 // had. The gap is 3% of viewport height (≈25px on an 874pt screen) — wider than the wrap this
 // leg measured (≈20px, one condition row's line-height) and narrower than the unobserved span
-// between the two captured shapes (§6 C10 above), so it absorbs the feedback without blurring the
+// between the two captured shapes described above, so it absorbs the feedback without blurring the
 // boundary the captures actually drew.
 const FLOATING_HYSTERESIS_RATIO = 0.03;
+
+// How long the observer waits for its own wakes to stop before classifying.
+const FRAME_SHAPE_DEBOUNCE_MS = 80;
 const FLUSH_HEIGHT_RATIO_MIN = FLOATING_HEIGHT_RATIO_MAX + FLOATING_HYSTERESIS_RATIO;
 
 const frameShapeObservers = new WeakMap<HTMLElement, { disconnect(): void }>();
 
+// How many classifications are queued behind a debounce right now, and how many have run since
+// this module loaded. Together they are the classifier's own settle signal: a reader that sees no
+// queued work AND an unchanged classification count across two consecutive frames is looking at a
+// sheet whose shape has stopped moving. A reader outside this module cannot derive that — the
+// class it would watch is toggled in the MIDDLE of the sequence, not at the end of it, and the
+// wake that the toggle itself provokes has not been delivered yet at that moment. Published
+// rather than left private because the alternative every caller reaches for otherwise is a fixed
+// sleep long enough to cover the worst host, which is a timing guess that goes quiet exactly when
+// the machine is slow enough to need it.
+let frameShapeQueued = 0;
+let frameShapeClassifications = 0;
+
+/** The classifier's settle signal: queued work outstanding, and classifications run so far. */
+export function readSheetFrameShapeActivity(): { queued: number; classifications: number } {
+  return { queued: frameShapeQueued, classifications: frameShapeClassifications };
+}
+
 /** Read the sheet's own rendered height against the viewport and toggle the floating class. */
 function classifySheetFrameShape(panel: HTMLElement): void {
+  frameShapeClassifications += 1;
   const view = panel.ownerDocument.defaultView;
   const viewportHeight = view?.visualViewport?.height ?? view?.innerHeight;
   const height = panel.getBoundingClientRect().height;
@@ -342,7 +363,7 @@ function watchSheetFrameShape(panel: HTMLElement): void {
   // rebuild.mjs`'s own toolbar-rebuild section), so a probe reading the panel between the first
   // and second classification measured a shape already mid-reclassification rather than settled —
   // and a control whose on-screen position just moved under a thumb already resting on it is
-  // exactly the defect `044`'s grab band and this leg's own C10 geometry both exist to prevent.
+  // exactly the defect the shared grab band and this frame geometry both exist to prevent.
   // Debouncing collapses however many of these self-answering wakes a given layout produces into
   // the one classification taken after they stop, rather than acting on each in turn.
   let debounce: number | undefined;
@@ -353,10 +374,12 @@ function watchSheetFrameShape(panel: HTMLElement): void {
       return;
     }
     if (debounce !== undefined) view.clearTimeout(debounce);
+    else frameShapeQueued += 1;
     debounce = view.setTimeout(() => {
       debounce = undefined;
+      frameShapeQueued -= 1;
       classifySheetFrameShape(panel);
-    }, 80);
+    }, FRAME_SHAPE_DEBOUNCE_MS);
   });
   observer.observe(panel);
   frameShapeObservers.set(panel, {
@@ -366,7 +389,11 @@ function watchSheetFrameShape(panel: HTMLElement): void {
       // observer, so stopping observation does not stop it, and it would still fire the
       // classifier on a panel this module has already stopped tracking as a sheet.
       const view = panel.ownerDocument.defaultView;
-      if (debounce !== undefined) view?.clearTimeout(debounce);
+      if (debounce !== undefined) {
+        view?.clearTimeout(debounce);
+        debounce = undefined;
+        frameShapeQueued -= 1;
+      }
     },
   });
 }
