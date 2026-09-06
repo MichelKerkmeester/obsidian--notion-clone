@@ -190,4 +190,30 @@ untouched; these four apps are references for `058`'s own-property-as-title ques
 `058/goal.md`) and for future design work across the program, not a new fidelity-comparison target
 of this packet's own. See `roadmap.md` §4 for the dated row and §6A for the operator's ruling this
 amendment executes.
+### 2026-09-06 ~16:35 amendment: two harvests landed, two in flight
+
+**Notion landed at `bab72104`** — 1,315 iOS and 2,332 web captures, 78 MB, under
+`screenshots/notion/{ios,web}/<group>/` with its own README index and no `screenshots/manifest.json`
+entry, per D5. **One caveat travels with it and is not smoothed over:** the non-flow groups are
+**query-derived**, so a file sits in the folder the search query named rather than in the folder its
+pixels depict, and 5 of 9 web spot checks landed in a group they do not show. The README says so.
+A **content-based reclassification leg** is running in `worktrees/170` — a Sonnet agent reading the
+images in batches of ~50, moving files and rewriting the index — and the same pass is owed to every
+later app before its captures are cited as evidence for anything.
+
+**Evernote landed at `28e680fc`** — 555 iOS and 1,002 web captures, 30 MB, and **content-grouped**
+rather than query-derived, because its search index exposed only 105 screens per platform and a
+single query returned all of them. No reclassification pass is owed there.
+
+**Fibery (web only) has been running since ~16:04** in `worktrees/150`, and **ClickUp is queued**
+under Opus xhigh in `worktrees/151`. The one-at-a-time discipline is unchanged: each app is landed
+and verified by a fresh verifier before the next opens (D4).
+
+**What the Notion landing unblocks elsewhere.** It is the evidence base for the eight
+Notion-refinement children `059`-`066` the operator ordered at ~16:10 (parent `goal.md` D15,
+`../roadmap.md` §5.A and §7.15) — each of those loops reads a Sonnet digest of these captures, never
+the images themselves, because GLM cannot read PNGs. It also moves `058`'s D6 Notion reference row
+off `Pending`. Neither use is a fidelity-comparison target of this packet's own; T032 and T033 stay
+open, and T034 stays open until all four apps are checked against the manifest.
+
 <!-- /ANCHOR:log -->

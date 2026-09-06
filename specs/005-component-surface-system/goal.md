@@ -10,16 +10,16 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T11:05:00Z"
+    last_updated_at: "2026-09-06T16:35:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "recorded §4 rows 59-63; 057 reopened on gestalt; stagger at 45px supersedes 80px"
-    next_safe_action: "Land 156/159/160/161; 057 T019 rebuilds to G1-G15 with the 45px stagger"
+    recent_action: "Reserved 059-066 for the Notion refinement; recorded its additive-only rule as D15"
+    next_safe_action: "Land 165/167/170/171/173 then cut 0.0.30; wave-1 syntheses open 059-062"
     blockers:
-      - "057 is REOPENED; its threshold is G1-G15, 0 of 15 green, and G7 waits on a ruling"
-      - "Row 59: the sheet family's deep-research loop starts only after 044/048/051 verify"
-      - "Row 60's producer is unnamed; the wrap-off leg must measure before it fixes"
+      - "059-066 are reserved, not created; each is opened by its own Opus synthesis, never by hand"
+      - "057 is REOPENED; its threshold is G1-G15, 12 of 15 green on the rebuild leg (worktree 165)"
+      - "Row 59: the sheet family's research is running early on the operator's ruling (worktree 172)"
       - "057 ADR-002 is the operator's: do the calendar week and day scales survive"
-      - "058 D6/ADR-002: Notion's Mobbin harvest (047) has not landed yet"
+      - "Fibery and ClickUp harvests are unlanded; the Notion group index is query-derived, not content-derived"
       - "Earlier blockers are in the LOG and roadmap.md rather than here"
     key_files:
       - "roadmap.md"
@@ -81,6 +81,7 @@ production renderer**. One now does (`026`).
 | D12 | Prefer **parity**: a harness cannot fake one without giving two independent producers the same wrong answer. |
 | D13 | One completion figure per phase, **derived** from its `goal.md` criteria checklist — never judged, never two. Status carries shipped/verified/confirmed; a percentage cannot. `roadmap.md` §3.1-3.2. |
 | D14 | ~~**External delegation, decided 2026-09-02.** Implement, debug and review through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, `service_tier=fast`, `--sandbox workspace-write`; cli-opencode only when the task itself needs the browser; fallback cli-devin on `deepseek-v4-flash-max` (that exact id, its effort baked in), read-only audits first. Every external result is verified by a fresh in-runtime Opus agent that runs `npm run gate` and `validate.sh --strict` itself — a delegate's report is a claim, not a result (D4). **No browser number from a sandboxed or cloud lane is evidence**, the lesson the queued-lane note in §4 already paid for. Model ids are passed exactly as each transport spells them — codex `gpt-5.6-luna`, devin `deepseek-v4-flash-max`, which do not share a spelling — never a near-miss. The orchestrator never runs a sub-agent on Fable.~~ **2026-09-02, revised.** The order is now: (a) an initial pass through cli-devin on `deepseek-v4-flash-max` under `--permission-mode dangerous`, which the operator approved for this repo's worktree; (b) then `gpt-5.6-luna` at `model_reasoning_effort=xhigh` or `max`, `service_tier=fast`, through cli-codex or cli-opencode; (c) in-runtime verification is unchanged — a fresh agent runs the browser gate and `validate.sh` itself, because sandboxed and cloud lanes cannot reach Chrome. In-runtime delegates default to Sonnet 5 (xhigh may be used more freely than before); Opus is used only where it is genuinely better. Never Fable, never fork. **2026-09-02, the worktree named in (a) now exists:** `036`'s 20-iteration research loop runs in `.worktrees/003-obsidian-pm-harvest` on branch `worktrees/003-obsidian-pm-harvest` (`9642e43`), and the untracked `research/` in the main checkout is residue from a rejected launch rather than evidence. A devin lane's harness change for the board and gallery reds was verified in-runtime and committed as `c5566db`, which is the (c) leg working as written: the delegate's report was a claim until a fresh agent ran it here. |
+| D15 | **Notion refinement is additive, decided 2026-09-06 ~16:10.** The operator's instruction, verbatim: *"Based on notion screenshots add phases to all ui improvement phases to further refine based on notion ui screenshots. But do 5 iters of deep research with glm 5.3 flash max on those screens per relevant phase."* Every UI phase gets one reserved child (`059`-`066`) opened by its own Opus synthesis, never by hand, and each child is fed by a Sonnet digest of the relevant Notion captures plus a five-iteration `/deep:research:auto` loop on GLM 5.3 flash max — GLM cannot read images, so the digest is how the screens reach it. **A Notion finding never silently overrides a landed Anytype ruling.** Anytype parity stays the default for the board and the calendar (§7.12) and every value an operator ruling already settled stays settled; where a Notion finding contradicts one, the child records a **Proposed** ADR naming both readings and stops there. Additive means the child may add a criterion, a task or an ADR; it may not un-tick a measured row or rewrite a ruling. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -805,6 +806,31 @@ and this row is a defect.**
 | `057-calendar-anytype-parity` | [`057-calendar-anytype-parity/goal.md`](057-calendar-anytype-parity/goal.md) | The calendar rebuilt to Anytype's calendar layout, each of nine elements trued against a named capture — month grid, day cells, event chips, the unscheduled area, navigation as the captures show it (month and year selects, arrows, a Today button, the today-scroll), the scale switch as Anytype has it or does not, the today marker, the date-property picker and the day menu — with `044`'s grammar and `048`'s stacking held green, the gantt provably unmoved, and both keyboard-navigation and search-placement tests green at zero lines changed; then the operator reading it on iOS and on desktop, knowing the phone half was inferred. **Opened 2026-09-05 ~22:45 from the same ruling, *"Same for calendar etc."* Two findings shape what it can promise. The calendar carries zero `pm-*` classes — `039` ported behaviour, not markup — so `056`'s headline class-count threshold has no analogue here and would have read green on an untouched tree; ADR-003 records the absence deliberately. And iOS Anytype ships no calendar layout at all, so the phone half has no reference and every phone value carries the label "design inferred from desktop", counted by AC-007 rather than left as a caveat. One row is operator-owned and open: ADR-002, whether the week and day scales survive parity with a product that ships one calendar layout.** | 7/10 (**corrected 2026-09-06**, the 058/refresh leg: `057/goal.md`'s own completion criteria carry 7 of 10 ticked today; the 0/10 figure here was not carried forward) |
 | `058-card-title-and-title-formats` | [`058-card-title-and-title-formats/goal.md`](058-card-title-and-title-formats/goal.md) | A number or currency column set as a view's title field renders through that column's own formatter — not a raw stringified value — on the board card, the record sheet header and the phone record sheet; the board's Title fixed slot opens the existing `titleField` picker instead of only reporting it; and the choice already reaching every surface but calendar/timeline is locked by a regression test. **Opened 2026-09-06 from the operator's phone-board report. The per-view title picker is not new work — `ViewConfig.titleField` already ships; the gap is the format routing and the picker's reach from the board's own Properties sheet. Four ADRs record the findings (default title and precedence; where the picker lives; format applied to the title vs. the chosen property; reach to the record surface). No code changed yet.** | 0/5 |
 
+
+**Reserved 2026-09-06 ~16:10: eight Notion-refinement children, `059`-`066`.** They are **planned,
+not created.** Each one is opened by its own Opus synthesis at the end of the pipeline D15 defines —
+a Sonnet digest of the relevant Notion captures written to `<phase>/notion-screens-digest.md`, then
+`/deep:research:auto` at five iterations under `--stop-policy=max-iterations` on GLM 5.3 flash max,
+then the synthesis. **Do not create these folders by hand**: a folder without the loop behind it is
+a placeholder claiming evidence it does not have. Each inherits its owner phase's directive and adds
+to it; under D15 none of them may un-tick a measured row or overturn a landed Anytype ruling.
+
+| Reserved child | Owner surface | State | Opened by |
+|---|---|---|---|
+| `059-notion-board-refinement` | the board — owner `056-board-anytype-parity` | **Planned; wave 1 running since 16:14** in `worktrees/174` | the Notion research synthesis |
+| `060-notion-calendar-refinement` | the calendar — owner `057-calendar-anytype-parity` | **Planned; wave 1 running since 16:14** in `worktrees/175` | the Notion research synthesis |
+| `061-notion-sheet-refinement` | the sheet family — owners `051`, `044`, `048` | **Planned; wave 1 running since 16:14** in `worktrees/176` | the Notion research synthesis |
+| `062-notion-table-refinement` | the table view — **no packet of its own yet**; owned by `053` and `052` until one exists | **Planned; wave 1 running since 16:14** in `worktrees/177` | the Notion research synthesis |
+| `063-notion-dropdown-refinement` | dropdowns, menus and pickers — owner `052-dropdown-menu-and-picker-componentization` | **Planned; wave 2 queued** | the Notion research synthesis |
+| `064-notion-toolbar-refinement` | the toolbar and view controls — owner `053-toolbar-and-view-controls` | **Planned; wave 2 queued** | the Notion research synthesis |
+| `065-notion-record-refinement` | the record and relation surfaces — owners `054`, `058` | **Planned; wave 2 queued** | the Notion research synthesis |
+| `066-notion-states-refinement` | states, feedback and motion — owner `055-states-feedback-and-motion` | **Planned; wave 2 queued** | the Notion research synthesis |
+
+**Why the table view has a row and no owner packet.** Every other surface in this program has a
+phase that holds its files; the table does not, and `053` and `052` between them hold the toolbar,
+the wrap switch, the column menu and the cell editors it is made of. `062` is reserved against
+that pair rather than against a packet that does not exist, and if the synthesis finds enough to
+justify one, opening a table packet is its recommendation to make and the operator's to take.
 
 | **`006-list-view-deprecation`** — a **sibling packet**, not a phase here | [`../006-list-view-deprecation/goal.md`](../006-list-view-deprecation/goal.md) | No surface offering list, a list-configured vault opening as a table with the same columns once with a notice, `list-renderer.ts` gone, the `list-window` lane **removed not skipped** with `npm run gate` at 0, the coverage floor lowered with its reason beside the number, `033-list-virtualisation` and `024-list-view-freeze` closed against the retirement, and the operator reporting a migrated vault. Its four live children each carry their own goal; see [`../006-list-view-deprecation/roadmap.md`](../006-list-view-deprecation/roadmap.md). **Children `005` through `007` are done; `008`'s release row is satisfied by 0.0.23 (`d3979cf5`), leaving only its and `006`'s own operator rows open.** | 7/9 |
 

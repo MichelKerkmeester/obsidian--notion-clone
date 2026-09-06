@@ -234,4 +234,11 @@ are the ADR-007 E4 text's own carve-out.
 (`showOperationResult`/`showToast`) the confirm's removal now leans on entirely. `051`'s own
 `decision-record.md` records the ADR-007 E4 closure and points here for the implementation.
 Recorded in `roadmap.md` §6A.
+### 2026-09-06 amendment: a reserved Notion-refinement child, `066-notion-states-refinement`
+
+The operator, ~16:10, verbatim: *"Based on notion screenshots add phases to all ui improvement phases
+to further refine based on notion ui screenshots. But do 5 iters of deep research with glm 5.3 flash
+max on those screens per relevant phase."* This packet's surface is **states, feedback and motion**, and its reserved
+child is **`066-notion-states-refinement`** — reserved, not created. **Wave 2: queued behind wave 1.** Empty, loading, error, success, destructive confirm and undo are the least captured surfaces in any reference set, so the digest's honest job here is as much to name which states Notion's captures do **not** show as to describe the ones they do — D6 applies: a pass on an empty set proves nothing. The pipeline is three stages and the first exists for one reason: a **Sonnet digest** of the relevant Notion captures is written to ``055-states-feedback-and-motion/notion-screens-digest.md``, because **GLM 5.3 flash cannot read images** and a capture reaches the loop as measured prose or not at all. Then `/deep:research:auto`, **5 iterations**, `--stop-policy=max-iterations`, on **GLM 5.3 flash max** — `openrouter/z-ai/glm-5.3-flash` first and `llmgateway` (DevPass) as the fallback, on the operator's ~16:25 ruling *"use openrouter untill usage is 0 then devpass"*. Then an **Opus synthesis** opens the child; a fresh Opus verifier lands it (D4). **Do not create the child by hand** — a folder without the loop behind it claims evidence it does not have. **The refinement is additive.** The child may add a criterion, a task, an ADR or a measurement. It may not un-tick a measured row here, rewrite a landed ruling, or change this packet's parity target. Where a Notion finding contradicts a landed Anytype ruling, the child writes a **Proposed** ADR carrying both readings and stops; only the operator moves it to Accepted. Parent `goal.md` **D15** and `../roadmap.md` **§7.15** carry the rule, §5.A the reservation, §6A the instruction verbatim.
+
 <!-- /ANCHOR:log -->

@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: this pass recorded five fresh operator reports as roadmap §4 rows 59-63 — the 10:04 iOS stacked-sheet bug and the standing deep-research instruction attached to it, the ~10:25 wrap-off row height, the ~10:30 board page-scroll and scrollbar ruling, the ~10:33 calendar unscheduled ask, and the ~10:40 gestalt judgement that REOPENS 057 — and amended 044, 047, 048, 051, 053, 056 and 057 with dated sections, new criteria, task rows and acceptance rows. The ~10:47 'Stagger overlaps at 45px' ruling supersedes the 80px minimum column landed at 396bcae7. §5.A was re-derived from every goal.md (055, 056 and 057 were carrying figures from the wrong scale), §6A gained four rulings and §7 two conflicts. No src/, styles.css, tools/ or main.js file was touched; documentation only."
+description: "Resume point: orchestrate-handover-23, 2026-09-06 ~16:35. Eleven legs landed since 11:05 (calendar unscheduled chip, wrap precedence, the stacked-sheet fix, board palette, modal-sheet scenarios, the Wrap-row hint, icon-picker drift, the sheet-family reconciliation, no-confirm delete, the dropdown combobox, failing-values wording). Two operator programmes now run at once: Anytype parity, and a new Notion refinement that reserves children 059-066 across the eight UI surfaces, wave 1 (059-062) researching since 16:14 and wave 2 queued. Three fresh rulings are recorded verbatim: run the sheet-family research now, the Notion refinement instruction, and the OpenRouter-then-DevPass GLM route. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,16 +10,16 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T11:05:00Z"
-    last_updated_by: "orchestrate-handover-22"
-    recent_action: "Recorded §4 rows 59-63; 057 reopened on gestalt; 45px stagger supersedes the 80px landing"
-    next_safe_action: "Land 156/159/160/161; 057 T019 rebuilds to G1-G15 carrying the 45px stagger"
+    last_updated_at: "2026-09-06T16:35:00Z"
+    last_updated_by: "orchestrate-handover-23"
+    recent_action: "Reserved 059-066 for the Notion refinement; recorded its additive-only rule as D15"
+    next_safe_action: "Land 165/167/170/171/173 then cut 0.0.30; wave-1 syntheses open 059-062"
     blockers:
+      - "059-066 are reserved, not created; only an Opus synthesis opens one, never a hand-made folder"
       - "058 T003 onward pending: the format-routing and Title-slot-affordance code has not landed"
-      - "047's four Mobbin harvests (Notion, Evernote, Fibery, ClickUp) are queued, none dispatched"
+      - "047: Fibery is running (worktree 150), ClickUp queued (151), Notion grouping query-derived (170)"
       - "051 T013/T014 (the operator device pass and confirm-timing follow-ups) stay open"
-      - "052/053/055's new criteria (combobox, gear button, footer, delete confirm) are documentation only"
-      - "056's ten T012 residuals: R6/R7 now have a ruling to implement against; R1-R5, R8-R10 still open"
+      - "056's ten T012 residuals: R6/R7 have a ruling to implement against; R1-R5, R8-R10 still open"
     key_files:
       - "specs/005-component-surface-system/roadmap.md"
       - "specs/005-component-surface-system/goal.md"
@@ -27,11 +27,11 @@ _memory:
       - "specs/005-component-surface-system/051-modal-and-sheet-componentization/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-handover-22"
+      session_id: "surface-system-handover-23"
       parent_session_id: null
     completion_pct: 76
     open_questions:
-      - "058 ADR-002 (picker location): does 047's queued Notion harvest change the call once it lands"
+      - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
       - "058's per-view title picker is not new work: ViewConfig.titleField already ships"
       - "The real title gap is format routing (stringifyValue vs. the column's own formatter)"
@@ -41,6 +41,8 @@ _memory:
       - "056 R6 reaffirms ADR-004 E1 as written; R7 is a fresh finding ADR-004 never addressed"
       - "054's and 057's roadmap-derived ratios were stale (3/7, 0/10); corrected to 2/7 and 7/10"
       - "a7db5035, previously cited as the wrap-toggle landing sha, is a post-rebase gate rebuild only"
+      - "The sheet-family research does not wait for 044/048/051 to verify; the operator lifted that gate"
+      - "GLM cannot read images, which is why every loop is fed a Sonnet digest instead of captures"
 ---
 # Session Handover: Component Surface System
 
@@ -49,6 +51,61 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-06 ~16:35, `orchestrate-handover-23`, read from `.worktrees/178-docs-refresh-1630`
+
+**This is a documentation-only leg.** No `src/`, `styles.css`, `tools/` or `main.js` file was
+touched. Main moved under it while it ran, as it has every session this week — **confirm branch tips
+and worktrees yourself; treat every sha below as a record of what was true at 16:35, not as a
+pointer.**
+
+**Eleven legs landed since 11:05.** The calendar's unscheduled chip (`071041b7`), the wrap
+precedence reversal and the phone wrap fix (`2c3c499a`), the stacked-sheet fix (`e632a1e1`), the
+board palette (`dd71114f`), the modal-as-sheet screenshot scenarios (`5aeb7087`), the Wrap-row
+wording hint (`5167eb8f`), the icon-picker drift (`4294770d` — resolved as a pointing-device
+scrollbar mode, with the capture inputs widened rather than the baseline quietly re-pinned), the
+sheet-family reconciliation (`6b16b87a`, taking `044` to 6/7, `048` to 7/8 and `051` to 2/9),
+no-confirm single delete (`32411403`), the desktop dropdown combobox (`a952e5e7`) and the
+failing-values wording (`0d36b377`).
+
+**Two operator programmes now bind the same surfaces at once.** Anytype parity is unchanged for the
+board and the calendar. On top of it, at ~16:10, the operator ordered a **Notion refinement** across
+every UI phase. Eight children are **reserved and not created** — `059` board, `060` calendar, `061`
+sheets, `062` table, `063` dropdowns, `064` toolbar, `065` record, `066` states. `goal.md` **D15**
+and `roadmap.md` **§7.15** carry the rule that keeps them from fighting: **the refinement is
+additive and never silently overrides a landed Anytype ruling**; a contradiction becomes a
+**Proposed** ADR in the child and stops there.
+
+**The pipeline, because its mechanics are what a resuming session gets wrong.** Per surface: (1) a
+**Sonnet digest** of the relevant Notion captures at `<phase>/notion-screens-digest.md` — this stage
+exists because **GLM 5.3 flash cannot read images**, so a capture reaches the loop as measured prose
+or not at all; (2) `/deep:research:auto`, **5 iterations**, `--stop-policy=max-iterations`, on **GLM
+5.3 flash max**; (3) an **Opus synthesis** that opens the child, landed by a fresh Opus verifier.
+Wave 1 (`059`-`062`) has been running since **16:14** in `worktrees/174`-`177`; wave 2
+(`063`-`066`) is queued.
+
+**Two mechanics of the runner that will otherwise cost an hour each.** The research runner's print
+session **ends when the fan-out detaches** — it looks like the loop died and it has not — so
+`finish-research.sh` waits for the lineage and resumes the synthesis; run it rather than
+re-dispatching. And **the gate must be run with stdin from `/dev/null`**, or `verify.mjs` hangs at
+0% CPU looking like a slow run rather than a blocked one.
+
+**The GLM route is a transport rule, not a model rule.** The operator at ~16:25:
+*"use openrouter untill usage is 0 then devpass"*. `openrouter/z-ai/glm-5.3-flash` is tried first,
+`llmgateway` (DevPass) is the fallback; OpenRouter credit read **$1.65 of $30 at 16:25**, so the
+fallback is exercised rather than theoretical. Model ids pass exactly as each transport spells them,
+never a near-miss (D14).
+
+**In flight at 16:35, by worktree.** `150` Fibery harvest (web only, since ~16:04) · `151` ClickUp
+harvest (queued, Opus xhigh) · `165` calendar rebuild (**12 of 15 gestalt rows green**, unlanded) ·
+`167` board page-scroll · `170` Notion content reclassification (the harvest's non-flow groups are
+query-derived; 5 of 9 web spot checks were in a group they do not depict) · `171` shell lane rows
+and depth-3 captures · `172` the 10-iteration sheet-family research on DevPass, started ~15:50 on
+the operator's *"Run it now on the current state"* · `173` comment-hygiene enforcement (the comments
+lane was not checking artifact ids) · `174`-`177` the Notion wave-1 research.
+
+**Order of work is `goal-prompt.md`'s**, and it starts with landing `165`, `167`, `170`, `171` and
+`173`, then cutting **0.0.30**. Do not tick an operator row, and do not open `059`-`066` by hand.
 
 ### 2026-09-06, read from this worktree (`.worktrees/152-docs-058-and-refresh`) — main is a moving target, do not trust a pinned sha
 

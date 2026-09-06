@@ -238,12 +238,21 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       Mobbin tool returns one and the app pages 403 without a browser session
 - [ ] T032 [B] Harvest Fibery (web only) via Mobbin, same orchestration, into
       `screenshots/fibery/web/<group>/`; landed by a fresh verifier before T033 opens.
-      **Queued, not dispatched** — `worktrees/150-harvest-fibery` exists and is idle
+      **Running since 2026-09-06 ~16:04** in `worktrees/150-harvest-fibery`. Unmerged and
+      unverified, which under D3 is shipped-at-most: no count from it is quotable as landed
 - [ ] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
       `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier.
-      **Queued, not dispatched** — `worktrees/151-harvest-clickup` exists and is idle
+      **Queued under Opus xhigh** in `worktrees/151-harvest-clickup`, opening when T032 lands —
+      one app at a time, unchanged
 - [ ] T034 Confirm none of the four apps' captures entered `screenshots/manifest.json` — a Mobbin
       screenshot has no in-repo source to hash, matching D5's rule for an Anytype capture
+- [ ] T035 [B] Content-based reclassification of the Notion web and iOS captures: a Sonnet agent
+      reads the images in batches of ~50, moves each file into the group its pixels depict and
+      rewrites the README index. Opened 2026-09-06 because the harvest's grouping is
+      **query-derived** — 5 of 9 web spot checks sat in a group they do not show, and the README
+      says so. **Running in `worktrees/170`.** The same pass is owed to Evernote only if a spot
+      check finds it needed (its grouping was content-derived at harvest time), and to Fibery and
+      ClickUp once they land
 <!-- /ANCHOR:phase-mobbin -->
 
 ---

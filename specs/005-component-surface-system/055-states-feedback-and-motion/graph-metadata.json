@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Every surface has states; nothing owns them",
     "created_at": "2026-09-05T11:08:14Z",
-    "last_save_at": "2026-09-06T07:54:05.779Z",
+    "last_save_at": "2026-09-06T14:40:11.552Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,7 +222,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5fad1bc8dd26c15771bfffe3360e73ce8c34d060b69db83f259c430cc81419ca",
+    "source_fingerprint": "sha256:c050ad7beb768279958c626a4292a96ca17b1d6b2b2dcc169c316755671d0cc0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "34440444221b62c83fb89dc9a7d3a321e9bacfe5fd9982ca72def658dfbd3437",
