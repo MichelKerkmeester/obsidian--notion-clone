@@ -58,6 +58,7 @@ Expected result: each prints its counts and exits `0` when the tree is clean, `1
 
 ## 4. RELATED
 
+- [`scan-comments.test.mjs`](./scan-comments.test.mjs) — coverage for the comment-grammar checks and the artifact-id hard block above, driven through the scanner's exported `scanText()`.
 - [`CODE.md`](./CODE.md) — the code map for this folder.
 - [`../README.md`](../README.md) — the tooling root.
 </content>

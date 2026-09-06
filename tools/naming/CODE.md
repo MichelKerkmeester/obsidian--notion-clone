@@ -56,7 +56,7 @@ owes `README.md` only, and a `CODE.md` sitting there anyway is a stray-doc viola
 | Boundary | Rule |
 |---|---|
 | Imports | `node:fs`, `node:path`, `node:url` only |
-| Exports | None. Each is a CLI entry point run with `node` |
+| Exports | None, except `scan-comments.mjs`'s `scanText(text, filename)` — the per-file decision, exported so its test can drive it over a fixture without a CLI process |
 | Ownership | Convention gates over `src/` and `tools/`. No plugin runtime code |
 
 ---
