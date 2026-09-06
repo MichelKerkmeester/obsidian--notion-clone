@@ -302,19 +302,28 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
 // Eleven independent call sites migrate onto `buildShellHeader`; the engine's own default
 // builder inside `mobile-bottom-sheet.ts` is the twelfth and the expected survivor — it is
 // what `buildShellHeader` itself calls, so it must keep calling `createSheetHeader` directly.
+//
+// Three of the eleven — the date, colour and icon pickers — since reached the same builder through
+// the picker host's `mountPickerSheetHeader`, which is the one place the family's phone-sheet
+// header is now built. They are asserted against that route instead of against a direct call, and
+// the host itself is asserted to reach `buildShellHeader`; what the whole section protects is
+// unchanged, that no surface builds the engine's two-slot header for itself.
 
 const SHELL_HEADER_CONSUMER_FILES = [
   "cell-renderer.ts",
   "toolbar-primitives.ts",
   "owned-menu.ts",
-  "date-value-picker.ts",
   "sort-panel-renderer.ts",
-  "icon-picker-popover.ts",
   "dropdown-field.ts",
-  "option-color-picker.ts",
   "filter-panel-renderer.ts",
   "view-config-panel-renderer.ts",
   "column-manager-renderer.ts",
+];
+
+const PICKER_HOST_HEADER_FILES = [
+  "date-value-picker.ts",
+  "icon-picker-popover.ts",
+  "option-color-picker.ts",
 ];
 
 describe("the independent createSheetHeader sites route through the shell's three-slot header", () => {
@@ -322,6 +331,18 @@ describe("the independent createSheetHeader sites route through the shell's thre
     const source = readFileSync(resolve(__dirname, relativePath), "utf8");
     expect(source).toContain("buildShellHeader(");
     expect(source).not.toContain("createSheetHeader(");
+  });
+
+  it.each(PICKER_HOST_HEADER_FILES)("%s reaches the shell header through the picker host", (relativePath) => {
+    const source = readFileSync(resolve(__dirname, relativePath), "utf8");
+    expect(source).toContain("mountPickerSheetHeader(");
+    expect(source).not.toContain("createSheetHeader(");
+  });
+
+  it("builds the picker host's phone-sheet header with the shell's three-slot builder", () => {
+    const hostSource = readFileSync(resolve(__dirname, "popover-host.ts"), "utf8");
+    expect(hostSource).toContain("buildShellHeader(");
+    expect(hostSource).not.toContain("createSheetHeader(");
   });
 
   it("leaves the engine's own default header builder calling createSheetHeader directly", () => {
