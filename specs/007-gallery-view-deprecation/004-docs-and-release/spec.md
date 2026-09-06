@@ -47,7 +47,7 @@ _memory:
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Not started |
+| **Status** | Doc half done — `implementation-summary.md`. Only the operator's device confirmation is left |
 | **Created** | 2026-09-05 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

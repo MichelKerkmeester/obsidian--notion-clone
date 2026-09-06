@@ -9,12 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/030-gallery-view-deprecation"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Goal audit: gallery migration verified implemented on disk"
-    next_safe_action: "Operator opens a migrated gallery on device and tries the undo"
+    last_updated_at: "2026-09-06T00:00:00Z"
+    last_updated_by: "gallery-007-004-docs-and-release"
+    recent_action: "Closed against retirement: coverage/gate rows resolved by 007 child 003 (fb27ba5b)"
+    next_safe_action: "None here — the remaining row is tracked at specs/007-gallery-view-deprecation/goal.md"
     blockers:
-      - "No migrated gallery has been opened on the operator's device"
+      - "No migrated gallery has been opened on the operator's device — now tracked at 007's own goal.md"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-030-goal"
       parent_session_id: null
-    completion_pct: 67
+    completion_pct: 83
     open_questions: []
     answered_questions:
       - "The board is the control: it is the gallery's structural twin and must render unchanged"
@@ -93,7 +93,12 @@ outcome this packet exists to prevent.
       against an existing `boardImageField` could only ever re-write the same value the plan had
       already chosen, so the guard was doing no work and is gone.
 - [ ] A database previously configured as a gallery opens on the operator's device. **Only the
-      operator closes this row.**
+      operator closes this row.** *2026-09-06:* the renderer this row depended on is deleted
+      (`specs/007-gallery-view-deprecation`'s child `003`, `fb27ba5b`) — an undone migration can no
+      longer restore a rendered gallery, only a board. The row is now tracked at
+      `specs/007-gallery-view-deprecation/goal.md`'s own completion criteria, which ask the same
+      operator confirmation in its current, permanent form. Left unticked here rather than deleted,
+      since it is history of what this phase actually shipped.
 - [x] No surface offers gallery as a choice, **and no path produces one.** Withdrawn from the
       add-view menu, the view-type change menu and the view-config picker. A database that already
       IS a gallery still sees the option in its own picker, or that control would display a value it
@@ -103,17 +108,18 @@ outcome this packet exists to prevent.
 - [x] The board renders unchanged — captures byte-identical, or every difference explained. **Met** —
       no renderer was touched. The only capture that changed is the add-view menu, which no longer
       draws a Gallery row.
-- [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. **Not applicable
-      while the renderer ships** — it still exists and is still covered, and the migration's undo
-      depends on it continuing to. This row belongs to the deletion, which is now gated on evidence
-      rather than on a question: once no view migrates on open for a while, nothing is producing
-      galleries and the renderer has no callers left. It is left unticked rather than marked
-      not-applicable, because the figure is ticked over total and inventing an exemption would
-      inflate it.
+- [x] Renderer coverage publishes its new floor, and the ratchet passes at it. **Closed 2026-09-06 by
+      `specs/007-gallery-view-deprecation`'s child `003-remove-renderer-and-harness`
+      (`fb27ba5b`, re-stamped `932fa3a9`).** `tools/live/renderer-coverage.json` reads
+      `"constructed": 5, "total": 20, "note": "was 6/21; gallery renderer retired"` on the tree today —
+      the deletion this row was gated on, done.
 - [x] `npm run gate` exits 0, read from `$?` and not through a pipe. **20 green, re-run 2026-09-01.**
       *2026-09-02 audit:* the lane count on disk is now **25** (`tools/gate.mjs`). The row is about
       the exit status, which the 2026-09-01 run read from `$?`; the figure beside it describes that
       run's tree and not this one, and is left as the record of it.
+      *2026-09-06:* re-verified against `007`'s child `003` landing — **26/26 green**, `$?` read
+      directly (`003/implementation-summary.md`), on the tree that shipped as release **0.0.28**
+      (`d3433d81`).
 <!-- /ANCHOR:completion -->
 
 ---
@@ -158,4 +164,15 @@ and that ratchet **fails closed on a decrease** — it exits 1 before stamping.
 
 That is the check working, not an obstacle. The floor has to come down as a deliberate act with a
 recorded reason, which is exactly what a ratchet is for.
+
+*2026-09-06: closed against the retirement.* `specs/007-gallery-view-deprecation` — opened
+2026-09-05 on the operator's ruling that the gallery *"should have been deprecated"* — finished what
+this phase started rather than reopening it (D7 of `007`'s own `goal.md`). Its child `002` closed the
+two surfaces this phase's own log recorded as still open; its child `003` deleted
+`gallery-renderer.ts` and lowered the coverage ratchet this phase's T8 left gated, landing on `main`
+at `fb27ba5b` (renderer removal) and `932fa3a9` (the landing rebase's evidence re-stamp), both
+ancestors of the **0.0.28** release commit `d3433d81`. Two of this phase's six completion-criteria
+rows move as a direct result — renderer coverage and the re-verified gate — and one stays exactly
+where it was: the operator's device confirmation, now asked in its permanent form by `007`'s own
+`goal.md` rather than by this one.
 <!-- /ANCHOR:log -->

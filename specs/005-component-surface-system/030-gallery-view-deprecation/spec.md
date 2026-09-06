@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: Deprecate the Gallery View"
-description: "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it."
+description: "SUPERSEDED 2026-09-06. The gallery view was retired by specs/007-gallery-view-deprecation; the withdrawal this phase performed has no remaining surface to finish."
 trigger_phrases:
   - "gallery deprecation"
   - "remove gallery view"
@@ -50,9 +50,20 @@ _memory:
 |---|---|
 | **Spec Folder** | 030-gallery-view-deprecation |
 | **Level** | 3 |
-| **Status** | **In progress — withdrawn, not deleted.** The gallery is gone from the add-view menu, the view-type change menu and the view-config picker; the renderer is untouched so a database already configured as one still opens. Open: the deletion itself, and the operator confirming an existing gallery view on device |
+| **Status** | **Superseded.** The gallery view was retired by `specs/007-gallery-view-deprecation`: the settings sanitizer and the `.base` importer this phase left open are both closed (`007`'s child `002`), the renderer this phase kept shipping is deleted (`007`'s child `003`, `fb27ba5b`), and the removal shipped in release **0.0.28** (`d3433d81`). Historical evidence kept: the migration and importer change this phase carried, the withdrawal from every picker, and the 4/6 measured before the retirement started |
 | **Complexity** | 81/100, confidence 94% — 900 LOC, 41 files, architectural + API change |
 <!-- /ANCHOR:metadata -->
+
+*2026-09-06: superseded.* The gallery view was retired. `007`'s child `002-settings-redirect-and-migrate`
+closed the two surfaces this phase's own goal log recorded as still open (the settings-load sanitizer
+and the `.base` importer's cosmetic residue) and wired the migration into the embedded host this phase
+never reached; `007`'s child `003-remove-renderer-and-harness` deleted `gallery-renderer.ts` (787
+lines, `fb27ba5b`) and lowered the coverage floor this phase's own T8 left ungated (`renderer-coverage.json`
+now `5/20`, `"note": "was 6/21; gallery renderer retired"`). The removal shipped in **release 0.0.28**
+(`d3433d81`, with `932fa3a9` — this phase's own landing rebase re-stamp — as an ancestor). The one
+criterion that stays open is the operator's: `specs/007-gallery-view-deprecation/goal.md`'s own
+completion criteria carry the same row now — an operator opening a migrated vault and reporting it as
+migrated rather than broken — and no artefact in this tree closes it from either packet.
 
 ---
 

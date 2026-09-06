@@ -11,28 +11,27 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "007-gallery-view-deprecation"
-    last_updated_at: "2026-09-05T06:45:00Z"
-    last_updated_by: "decisions-and-phases-pass"
-    recent_action: "Authored the durable directive from the operator's retire-the-gallery ruling"
-    next_safe_action: "Run child 001-usage-and-migration-audit; remove nothing before it reports"
+    last_updated_at: "2026-09-06T00:30:00Z"
+    last_updated_by: "gallery-007-004-docs-and-release"
+    recent_action: "004 closed the doc half: README/CHANGELOG rewritten, 030 closed; 0.0.28 recorded"
+    next_safe_action: "None here — only the operator's own device confirmation remains"
     blockers:
-      - "Nothing is removable until 001's audit says what a live vault holds"
-      - "003 must not start until 002's migration has SHIPPED, not merely merged"
+      - "The operator has not yet opened a migrated vault and reported it"
     key_files:
       - "spec.md"
       - "roadmap.md"
-      - "001-usage-and-migration-audit/goal.md"
+      - "004-docs-and-release/implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "gallery-view-deprecation-goal"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Does gallery leave DatabaseViewType, or stay accepted-but-redirected as list did?"
-      - "Does the embedded codeblock host migrate, or inherit 030's partial state?"
+    completion_pct: 90
+    open_questions: []
     answered_questions:
       - "The operator retired the gallery: 'should have been deprecated'"
       - "The migration target is board: it is the other cover-drawing surface"
+      - "gallery stays on DatabaseViewType, accepted-but-redirected and migrated permanently — 003's ADR-001, the same shape 006 chose for list"
+      - "The embedded codeblock host migrates too — 002's ADR-001, copying 006's migrateListViewOnOpen shape"
 ---
 # Goal: Gallery View Deprecation
 
@@ -89,25 +88,40 @@ Frozen choices. Changing one is an amendment.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] No surface offers gallery as a choice **and no surface mints one**. The two pickers are
+- [x] No surface offers gallery as a choice **and no surface mints one**. The two pickers were
       already filtered by `030`, and the `.base` importer was fixed upstream — `main.ts:1577` now
-      lands a `cards` view on `board`. **The settings-load sanitizer (`main.ts:146`, `:182`) still
-      exempts `gallery` from the unknown-type coercion and must not.**
-- [ ] A vault carrying a gallery-configured view opens it as a board with the same cover, once,
-      with a notice — in **both** hosts. `applyGalleryMigration` is called only from
-      `database-view.ts:11678` today; `embedded-database-renderer.ts` has no equivalent call.
-- [ ] `src/views/gallery-renderer.ts` is gone. It is 787 lines today.
-- [ ] The gallery's gate surface is **removed, not skipped**, and `npm run gate` exits 0 read from
+      lands a `cards` view on `board`. **Closed by child `002`:** the settings-load sanitizer
+      (`main.ts:146`, `:182`) now routes a loaded gallery through `planGalleryMigration`/
+      `applyGalleryMigration` instead of exempting it, converting it to `board` in place
+      (`decision-record.md` ADR-002).
+- [x] A vault carrying a gallery-configured view opens it as a board with the same cover, once,
+      with a notice — in **both** hosts. **Closed by child `002`:** `embedded-database-renderer.ts`
+      gained the `migrateGalleryViewOnOpen(config)` call it never had (`decision-record.md` ADR-001),
+      copying `migrateListViewOnOpen`'s shape; `database-view.ts`'s own call was upgraded from a
+      session-only guard to the same persisted, database-keyed one.
+- [x] `src/views/gallery-renderer.ts` is gone. **Closed by child `003`** (`fb27ba5b`) — it was 787
+      lines.
+- [x] The gallery's gate surface is **removed, not skipped**, and `npm run gate` exits 0 read from
       `$?`: the bench and its driver, the two `renderer-coverage.json` `inputs` pins, the
       `constructed-gallery` scenario, the gallery-only capture entries, and the unit specs.
-- [ ] `renderer-coverage.json` carries the new floor with the reason beside the number, in the same
-      idiom `006` used (`"note": "was 7/22; list renderer retired"`).
-- [ ] `styles.css` carries no `db-gallery-*` rule. 81 selectors today, and this is not deferred.
-- [ ] `030-gallery-view-deprecation`'s open rows read as closed against this retirement rather than
-      open against a view that no longer exists.
-- [ ] README and CHANGELOG tell a user whose gallery became a board what happened, what it cost, and
+      **Closed by child `003`** — 26/26 green on the landing rebase's re-verification
+      (`003/implementation-summary.md`).
+- [x] `renderer-coverage.json` carries the new floor with the reason beside the number, in the same
+      idiom `006` used (`"note": "was 7/22; list renderer retired"`). **Closed by child `003`:**
+      `"constructed": 5, "total": 20, "note": "was 6/21; gallery renderer retired"` on the tree today.
+- [x] `styles.css` carries no `db-gallery-*` rule. It was 81 selectors. **Closed by child `003`:**
+      `rg -c 'db-gallery' styles.css` returns 0.
+- [x] `030-gallery-view-deprecation`'s open rows read as closed against this retirement rather than
+      open against a view that no longer exists. **Closed by child `004`** — `030/spec.md` reads
+      Superseded, its `goal.md` renderer-coverage and gate rows moved to `5/6`, and its own
+      measurements are kept as evidence.
+- [x] README and CHANGELOG tell a user whose gallery became a board what happened, what it cost, and
       what a rollback does not undo. Every declared loss named individually, not as "some settings".
-- [ ] The release ships, carrying the removal.
+      **Closed by child `004`:** `CHANGELOG.md`'s `## 0.0.28` entry names all six `gallery*` fields
+      individually — three carried, one softened to a number, two genuine losses — and states that a
+      plugin-version rollback does not undo an already-migrated view.
+- [x] The release ships, carrying the removal. **Closed:** release **0.0.28** (`d3433d81`), with
+      child `003`'s landing (`fb27ba5b`, re-stamped `932fa3a9`) as an ancestor.
 - [ ] **The operator opens a vault that had a gallery view and reports it as migrated rather than
       broken.** Only the operator closes this row.
 <!-- /ANCHOR:completion -->
@@ -129,10 +143,10 @@ into the objective, and it is expected to grow.
 | Four children opened | Done | `001`-`004`, scaffolded from the contract-backed templates |
 | Inventory taken | Done | `spec.md` §4 — 42 `src/` files, 31 `tools/` files, 85 `styles.css` lines, 24 of 546 capture entries, a 787-line renderer. Counted against the tree at `3a8df24c`, not estimated |
 | Inventory re-derived after a rebase | Done | The packet was first drafted against `2a7db8cf`. Two upstream landings arrived underneath it before it was pushed — `046`'s linked-view work, then `031`'s sheet-inside-tap fix — leaving it at `3a8df24c`. Every `file:line` in this packet was re-checked against the new tree after each — line numbers moved in `main.ts`, `database-view.ts`, `toolbar-renderer.ts`, `i18n.ts` and `manifest-schema.mjs`, the `src/` file count went 41 to 42, `styles.css` went 84 to 85, **and one claim turned out to be false**: the `.base` importer no longer mints a gallery |
-| Audit | Not started | `001-usage-and-migration-audit` |
-| Settings redirect and migrate | Not started | `002-settings-redirect-and-migrate` |
-| Remove renderer and harness | Not started | `003-remove-renderer-and-harness` |
-| Docs and release | Not started | `004-docs-and-release` |
+| Audit | Done | `001-usage-and-migration-audit/implementation-summary.md` |
+| Settings redirect and migrate | Done | `002-settings-redirect-and-migrate/implementation-summary.md` |
+| Remove renderer and harness | Done | `003-remove-renderer-and-harness/implementation-summary.md`, landed `fb27ba5b` |
+| Docs and release | Done for the doc half | `004-docs-and-release/implementation-summary.md` — README, CHANGELOG, `030` closed against the retirement. Release **0.0.28** (`d3433d81`) already carries the removal; only the operator row is left |
 
 ### Deviations and findings
 

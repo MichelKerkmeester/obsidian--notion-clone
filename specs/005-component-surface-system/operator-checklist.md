@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-05: **58 phases**, **6 with nothing left**, **174 rows** waiting on a device.
+Derived 2026-09-06: **58 phases**, **6 with nothing left**, **173 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -142,10 +142,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator sees a hand-authored numeric field read as written, on device.
 
-## 030-gallery-view-deprecation — 4/6
+## 030-gallery-view-deprecation — 5/6
 
-- [ ] A database previously configured as a gallery opens on the operator's device. Only the operator closes this row.
-- [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. Not applicable while the renderer ships — it still exists and is still covered, and the migration's undo depends on it continuing to. This row belongs to the deletion, which is now gated on evidence rather than on a question: once no view migrates on open for a while, nothing is producing galleries and the renderer has no callers left. It is left unticked rather than marked not-applicable, because the figure is ticked over total and inventing an exemption would inflate it.
+- [ ] A database previously configured as a gallery opens on the operator's device. Only the operator closes this row. *2026-09-06:* the renderer this row depended on is deleted (`specs/007-gallery-view-deprecation`'s child `003`, `fb27ba5b`) — an undone migration can no longer restore a rendered gallery, only a board. The row is now tracked at `specs/007-gallery-view-deprecation/goal.md`'s own completion criteria, which ask the same operator confirmation in its current, permanent form. Left unticked here rather than deleted, since it is history of what this phase actually shipped.
 
 ## 031-sheet-lifecycle-ownership — 7/10
 

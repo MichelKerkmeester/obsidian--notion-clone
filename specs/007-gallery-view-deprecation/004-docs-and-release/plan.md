@@ -263,12 +263,16 @@ Follow the ordered tasks in `tasks.md`. It owns the Setup, Implementation and Ve
 
 ### ADR-001: The in-app "What's new" surface
 
-**Status**: Proposed
+**Status**: Accepted — out of scope, 2026-09-06
 
 **Context**: a user who never reads a CHANGELOG meets the migration inside the app. `006`'s `008`
 faced the same question and put the in-app modal out of scope for itself.
 
-**Decision**: to be taken in this phase.
+**Decision**: out of scope for this phase, matching `006`. README plus `CHANGELOG.md`'s `## 0.0.28`
+entry plus the already-shipped per-view `notice.galleryMigrated` toast carry the retirement to a
+reader and to a user opening an affected view. A dedicated in-app "What's new" modal is a separate
+feature surface with its own design and its own release-cut curation across everything a version
+ships, not a documentation task.
 
 **Consequences**:
 - In scope: the people most affected are told where they are. It is a separate surface with its own

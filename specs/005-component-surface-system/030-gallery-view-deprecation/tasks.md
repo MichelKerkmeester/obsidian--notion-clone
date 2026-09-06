@@ -9,12 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/030-gallery-view-deprecation"
-    last_updated_at: "2026-08-31T14:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Importer stops minting galleries; existing ones migrate to board on open with an undo"
-    next_safe_action: "Operator opens a migrated gallery on device and tries the undo"
+    last_updated_at: "2026-09-06T00:00:00Z"
+    last_updated_by: "gallery-007-004-docs-and-release"
+    recent_action: "T6-T8 closed against 007's child 003 removal; T11 superseded by 007's own operator row"
+    next_safe_action: "None here — T11 is tracked at specs/007-gallery-view-deprecation/goal.md"
     blockers:
-      - "T1 is blocking and belongs to the operator"
+      - "T11 belongs to the operator, and is now asked by 007's own goal.md"
     key_files:
       - "plan.md"
       - "spec.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-030-tasks"
       parent_session_id: null
-    completion_pct: 67
+    completion_pct: 91
     open_questions:
       - "T1: the migration target"
     answered_questions:
@@ -80,23 +80,25 @@ _memory:
 
 ## PHASE 4: REMOVE THE INSTRUMENTS AND THE RENDERER
 
-> **T6, T7 and T8 are gated, not pending.** The accepted decision keeps the renderer shipped so an
-> undone migration still draws, which means the bench, the captures, the renderer and the coverage
-> floor all stay until the deletion. The deletion is gated on evidence rather than on a date: once no
-> view migrates on open for a while, nothing is producing galleries and the renderer has no callers
-> left. They are left unticked rather than marked not-applicable, because the phase's figure is
-> ticked over total and inventing an exemption would inflate it.
+> **T6, T7 and T8 were gated, not pending, and the gate has since resolved.** The accepted decision
+> kept the renderer shipped so an undone migration still drew, which meant the bench, the captures,
+> the renderer and the coverage floor all stayed until the deletion. `specs/007-gallery-view-deprecation`
+> performed that deletion — see the evidence beneath each task below.
 
-- [ ] **T6** Remove the bench, runner, captures, story entries and both assertion scenarios in one
+- [x] **T6** Remove the bench, runner, captures, story entries and both assertion scenarios in one
       change — REQ-003, D2.
-      *Evidence to close:* `npm run screenshots:verify` green with the scenarios gone rather than
-      stale; story coverage green; the assertion harness runs without the gallery scenarios.
-- [ ] **T7** Delete `gallery-renderer.ts` and its action bag — REQ-003.
-      *Evidence to close:* `npx tsc --noEmit` exit 0 with no unreferenced-symbol fallout.
-- [ ] **T8** Lower the coverage ratchet to its new floor with its reason beside the number —
+      *Closed 2026-09-06 by `specs/007-gallery-view-deprecation`'s child `003-remove-renderer-and-harness`
+      (`fb27ba5b`).* `npm run screenshots:verify` green with the scenarios gone; the constructed-render
+      assertion harness carries no gallery construction, bag or tag function; `003/implementation-summary.md`
+      itemises each removal.
+- [x] **T7** Delete `gallery-renderer.ts` and its action bag — REQ-003.
+      *Closed 2026-09-06 (`fb27ba5b`).* `src/views/gallery-renderer.ts` (787 lines) is gone;
+      `npx tsc --noEmit` exit 0 with no unreferenced-symbol fallout (`003/implementation-summary.md`).
+- [x] **T8** Lower the coverage ratchet to its new floor with its reason beside the number —
       REQ-004, D3.
-      *Evidence to close:* `renderer-coverage.json` publishes the new floor; the check passes at
-      it; the reason is recorded in `../026`'s log, not only in a commit message.
+      *Closed 2026-09-06 (`fb27ba5b`, re-stamped `932fa3a9`).* `tools/live/renderer-coverage.json`
+      reads `"constructed": 5, "total": 20, "note": "was 6/21; gallery renderer retired"` on the tree
+      today, shipped in release **0.0.28** (`d3433d81`).
 
 ## PHASE 5: VERIFICATION
 
@@ -108,7 +110,11 @@ _memory:
       in count.
 - [ ] **T11** The operator opens a previously-gallery database on device.
       *Evidence to close:* the operator says it opens and shows something coherent. Nothing else
-      closes this.
+      closes this. **2026-09-06:** the renderer T7 deleted means this can no longer show a rendered
+      gallery even via undo — only a board. The row is superseded by
+      `specs/007-gallery-view-deprecation/goal.md`'s own operator-confirmation criterion, which asks
+      for the same device check in its current, permanent form. Left unticked here as the record of
+      what this phase itself never reached.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->
