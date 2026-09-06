@@ -11,21 +11,20 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-057-unscheduled-chip"
-    recent_action: "ADR-006 landed: unscheduled band to header chip; the gestalt read's P0-2 stays Proposed"
-    next_safe_action: "Ask the operator to rule P0-2, the Monday-start default with the setting as override"
-    blockers:
-      - "P0-2 needs the operator: a Monday-start default overturns AC-002's locale-driven call"
+    last_updated_by: "land-057-rebuild-leg"
+    recent_action: "ADR-007 ruled Monday default; ADR-005's stagger amendment landed"
+    next_safe_action: "Recapture calendar screenshots on HEAD, re-measure G1-G15 against them"
+    blockers: []
     key_files:
       - "src/views/calendar-renderer.ts"
+      - "src/data/calendar-date-time.ts"
       - "specs/005-component-surface-system/039-calendar-parity-port/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 70
-    open_questions:
-      - "Does the calendar default to Monday regardless of locale, keeping the setting as an override?"
+    completion_pct: 80
+    open_questions: []
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
@@ -35,7 +34,9 @@ _memory:
       - "T017 landed: the week/day timed block reads the month chip's flat ink, no separator rule needed since the slot lines show through"
       - "The 2026-09-06 gestalt read changes no ADR: ADR-001 through ADR-005 stand unaltered"
       - "ADR-006 ruled: the unscheduled surface is a header chip + shared owned-menu popover/sheet, not a band; A4's disposition (kept, reachable) is unchanged, only its shape moved"
-      - "The multi-day range-text defect was a title flex-grow with nothing bounding it on a wide spanning segment, not a text-align/justify-content bug — fixed with :has(), and superseded by T019's per-day span rebuild"
+      - "The multi-day range-text defect was a title flex-grow with nothing bounding it on a wide spanning segment, not a text-align/justify-content bug — fixed with :has(), superseded for the month grid's own chips by the per-day rebuild, still live for the day popover and the drag ghost"
+      - "ADR-007 ruled: the week defaults to Monday regardless of locale, the setting stays an override, landed alongside the rebuild leg"
+      - "ADR-005's amendment (stagger overlaps, revert to a 45px minimum column) is landed, not only ruled"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -489,4 +490,61 @@ a real multi-day event in the operator's own vault would show. Fixed by zeroing 
 whenever a trailing date range exists: `.db-calendar-month-segment:has(> .db-calendar-month-dates)
 > .db-calendar-month-title { flex-grow: 0; }` — re-measured at an 8px gap (the segment's own
 `gap` value) between the title's right edge and the range's left edge, for any span width.
+
+### 2026-09-06 landing note: ADR-005's amendment lands on T019's rebuild leg
+
+**The stagger is implemented.** `renderWeekTimedEvent` now insets each overlapping week/day timed
+block by a fixed per-lane step (`CALENDAR_TIMED_STAGGER_STEP`, 10px — chosen to match this file's
+other 10px chip insets; no exact figure was named for the step itself, only for the restored
+minimum column, so this is an implementation choice rather than a quoted operator number) and
+keeps the column's own remaining width to the right, instead of splitting the column N ways.
+`--db-calendar-phone-week-col-min` reverts to 45px; its three consuming selectors keep the same
+fallback. `calendar-pinned-values.test.ts` pins the reverted token and the stagger constant, with a
+negative control asserting the old equal-split formula does not survive. Not yet done: a live
+device-pixel re-measurement of the staggered pair's title paint box (the sweep T018 ran to justify
+80px) — the pins above are a text-level guard, not a re-run of that sweep on the current tree.
+
+**One residual, unchanged**: `.db-calendar-month-segment:has(> .db-calendar-month-dates) >
+.db-calendar-month-title { flex-grow: 0; }`, this ADR's own T021-carried fix, does **not** go dead
+the way the note above the fold expected — `.db-calendar-month-dates` is no longer emitted as a
+direct child of a real month-grid chip (the per-day rebuild below removes it there), but it is
+still emitted as a direct child of `.db-calendar-month-segment` in the day popover's expanded list
+and in the drag-preview ghost, both of which are still a `display: flex` row exactly as wide as the
+old bug needed to strand a date range. Verified by reading the rule's `>` combinator against both
+call sites rather than assumed: the rule stays, live, for those two surfaces.
+
+## ADR-007: The week starts Monday by default, regardless of locale
+
+**Status**: **Accepted** — 2026-09-06, operator ruling relayed alongside T019's rebuild leg,
+verbatim option: *"Monday default, setting stays as override."*
+
+**Context.** `decision-record.md`'s 2026-09-06 note above proposed this outcome without ruling it:
+`review-ui-calendar-2026-09-06.md`'s P0-2 measured that all twenty Anytype captures start their
+week on Monday, against `getLocaleWeekStartsOn`'s previous fallback to the host's own `Intl` locale
+(`en-US` → Sunday) when `calendarFirstDayOfWeek` was not set. `acceptance-criteria.md`'s AC-002 had
+called which day starts the week "not a measured value" — a call this ADR's proposal named as
+overturned by twenty independent measurements, and which only the operator could reverse.
+
+**Decision.** `getLocaleWeekStartsOn` now returns Monday (`1`) whenever `calendarFirstDayOfWeek` is
+not one of the three explicit override values (`0`, `1`, `6`) — for every view, new or already
+saved, since the field itself was never populated by the locale fallback it replaces. The `Intl`
+locale lookup this function used to fall back to is removed outright, not merely deprioritized:
+nothing about a host's locale is measured in any of the twenty captures this packet's review reads,
+so there is no longer a reason to consult it. The setting stays exactly what it already was — an
+explicit per-view override — and its three valid values (`0`/`1`/`6`) are unchanged.
+
+**Consequences.** The weekend tint, already computed generically from `weekStartsOn` and a column
+index (`isWeekendWeekday`), moves from columns 1/7 to columns 6/7 with no further code change — it
+was never coupled to a hardcoded Sunday-first assumption. `calendar-pinned-values.test.ts` pins the
+new default with a negative control (the removed locale fallback's own value, Sunday, must not
+reappear for an unset config). The toolbar's "First day of week" control's own "auto" label changes
+from "follow the system locale" to naming the new default plainly, in every shipped locale string.
+
+**Alternatives rejected.** Leaving the fallback locale-driven, as AC-002 originally called it: this
+is the status quo the operator's ruling replaces, given the review's own count (twenty out of
+twenty captures) is the strongest measured signal available anywhere in this packet's evidence.
+Defaulting Monday only for new views and leaving existing ones on their old locale-derived value:
+rejected as an inconsistency an operator would have to re-discover per view, and nothing in the
+ruling's wording ("setting stays as override") asks for that carve-out — an existing view with no
+explicit override was never reading a value the operator had chosen, only one `Intl` supplied.
 <!-- /ANCHOR:decisions -->

@@ -11,24 +11,25 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-057-unscheduled-chip"
-    recent_action: "T021 landed: the unscheduled band is now a header chip (ADR-006)"
-    next_safe_action: "T019 leg L1 (one sheet, one rule); P0-2's Monday default waits on the operator"
+    last_updated_by: "land-057-rebuild-leg"
+    recent_action: "T020 landed; T019's P0 rows and the icon/dot/token pieces code-landed"
+    next_safe_action: "Recapture calendar screenshots on HEAD, re-measure G1-G15 against them"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
-      - "P0-2's Monday-start default is Proposed: the operator rules it, and G12 needs a second theme"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
       - "AC-004's layout-tile panel has no measured value in design-trueup.md and is named out of scope"
+      - "G1-G15 need a screenshot recapture and a live device-pixel re-measurement before any can tick; only the code and its own unit/CSS pins have been verified so far"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
       - "src/views/calendar-timeline-toolbar-renderer.ts"
+      - "src/data/calendar-date-time.ts"
       - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 70
+    completion_pct: 78
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
@@ -657,33 +658,50 @@ title and 44x44 close on phone.
       corpus at every leg, because the committed captures already drifted: they show
       three-letter weekday labels where the build ships two.
 
-      **Blocked in part on the operator.** P0-2's Monday-start default is **Proposed**, not
-      taken — `decision-record.md`'s 2026-09-06 note carries it, and it overturns AC-002's
-      *"which day starts the week stays locale-driven and is not a measured value"*, which
-      is why it is the operator's and not this task's. AC-010 stays the operator's throughout:
-      a leg that ticks G1-G15 has earned a second look, never the row.
+      **P0-2 ruled and landed.** `decision-record.md`'s ADR-007 takes the Monday-start default
+      with the setting kept as an override; `getLocaleWeekStartsOn` no longer consults the host
+      locale at all. G7 no longer waits on the operator.
 
-      **One landed rule is this task's to delete, not to keep.** T021 bounded a spanning
+      **Code-landed 2026-09-06, all six P0 rows.** `--db-calendar-rule`/`--db-calendar-weekend-bg`
+      derive from `--background-primary` via `color-mix` toward `--text-normal` (P0-1); the week
+      defaults Monday (P0-2, ADR-007); the month grid draws one chip per covered day, ranked by a
+      new per-day local-lane compaction rather than the week-global lane, with no date-range string
+      in the grid (P0-3); `+N more` resets Obsidian's button chrome on both the month grid's and the
+      week all-day strip's overflow buttons (P0-4); the month scale no longer reads
+      `--db-calendar-col-width` at all (P0-5); every chip defaults its icon on, the coloured dot is
+      removed, and a timed chip's time reads as a muted suffix after the title (P0-6).
+      `calendar-pinned-values.test.ts` pins every value above with a negative control against its
+      prior behaviour; `npx tsc --noEmit`, `npm test` and `npm run build` are all green on the
+      landing. **Not yet done, and this is what keeps the row open**: the corpus has not been
+      recaptured on HEAD, no second-theme capture exists (G12), and none of G1-G15 has been
+      re-measured per pixel against a live render — the pins above guard the CSS/TS source text,
+      which is necessary but is not the same evidence the row's own "Green when" clause asks for.
+
+      **One landed rule turned out not to be this task's to delete.** T021 bounded a spanning
       segment's title with `.db-calendar-month-segment:has(> .db-calendar-month-dates) >
       .db-calendar-month-title { flex-grow: 0; }` so the date range stopped being stranded at the
-      segment's far edge. That is an interim legibility fix inside today's one-chip-per-span
-      shape. P0-3's rebuild replaces the shape outright — one chip per covered day, no date
-      string — so `.db-calendar-month-dates` stops being emitted and the `:has()` rule goes with
-      it. Verified as compatible rather than assumed: the rule matches only a segment that still
-      has a `.db-calendar-month-dates` child, so it is inert the moment that child is gone. G3 and
-      G5 stay Unmet on it; nothing about it closes either row.
-- [ ] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
+      segment's far edge. The rebuild's per-day chips do stop emitting `.db-calendar-month-dates`
+      as a direct child of a real month-grid chip, so the rule is inert there — but it is still a
+      live fix for the day popover's expanded list and the drag-preview ghost, both still a flex
+      row exactly as wide as the original bug needed. Verified by reading the rule's `>` combinator
+      against both remaining call sites rather than assumed. G3 and G5 stay Unmet on the row until
+      the corpus recapture confirms the per-day chips read as intended.
+- [x] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
       column back to 45px.** Operator ruling, verbatim *"Stagger overlaps at 45px"* — this
-      **supersedes T018's landed 80px minimum** (`396bcae7`). Each later overlapping block is inset
+      **supersedes T018's landed 80px minimum**. Each later overlapping block is inset
       a fixed step and keeps the column's remaining width, so a split block regains a readable
-      title at the month cell's own width. **Red first**: at 45px under today's halving layout the
-      split block's title paint box measures 4.5px and 0.5px — zero glyphs, confirmed by T018's own
-      45px recapture at 8 and 2 device px of ink. Green is three glyphs plus the ellipsis at 45px,
-      the readable floor the 80px landing bought by panning instead, with `scrollWidth` back to
-      about 315 against a 286-294 `clientWidth` rather than 560. Negative control: remove the
-      stagger and the 45px case goes red again. Folded into T019's rebuild, which holds the same
-      renderer. `decision-record.md`'s ADR-005 carries the ruling; T018 stays closed as the record
-      of what landed
+      title at the month cell's own width. **Red first**: at 45px under the pre-fix halving layout
+      the split block's title paint box measured 4.5px and 0.5px — zero glyphs, confirmed by T018's
+      own 45px recapture at 8 and 2 device px of ink. **Landed 2026-09-06**:
+      `renderWeekTimedEvent` insets each overlapping block by a fixed
+      `CALENDAR_TIMED_STAGGER_STEP` (10px) and keeps the column's own remaining width to the right,
+      rather than splitting the column N ways; `--db-calendar-phone-week-col-min` is back to 45px.
+      `calendar-pinned-values.test.ts` pins the reverted token and the stagger constant, with a
+      negative control against the removed equal-split formula. **Not yet re-run**: the live
+      device-pixel sweep of the staggered pair's title paint box (T018's own method) — the pin above
+      is a text-level guard on the source, not a re-measurement of the rendered pixels. Folded into
+      T019's rebuild, which holds the same renderer. `decision-record.md`'s ADR-005 amendment
+      carries the ruling and its landing note; T018 stays closed as the record of what landed first
 - [x] T021 (2026-09-06 ~10:33 amendment) **Make the unscheduled affordance subtle and integrated.**
       Operator, verbatim: *"For calendar the unscheduled pinned stuff needs to be done better. Like
       more subtlely integrated, check how anytype or other would do that."* (`../roadmap.md` §4 row
