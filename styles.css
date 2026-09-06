@@ -286,6 +286,35 @@
   border-radius: var(--db-radius-xl) !important;
 }
 
+/* The confirm's declared third frame shape: a small, margined, centred card rather
+   than a shape inferred from height. Centred by the translate trick rather than by
+   `inset` + `margin: auto`: the latter sizes correctly on paper, but a fixed box with all four
+   insets set and a `height: fit-content` this specific engine does not treat as a definite value
+   for the over-constrained/auto-margin resolution stretches to fill the inset box instead of
+   sizing to content — measured on this tree, a 16/16 top/bottom inset that turned out to mean
+   "full height minus 32px," not "small card." A fixed width rather than `fit-content` for the
+   identical reason on the other axis: the header inside is a CSS grid with `1fr` tracks, and a
+   shrink-to-fit ancestor resolves a grid's own intrinsic width from each track's CONTENT
+   contribution rather than its max-content preference — measured as the confirm's own title
+   wrapping one letter per line, at a different width per theme, because the grid's computed
+   preferred width came out narrower than the title's natural one. 320px is a comfortable reading
+   width for a two-line question and two stacked buttons, not a parity figure — the reference
+   this shape is drawn from carries no sampled pixel value to copy instead. `max-height` holds
+   the vertical floor the same way on a phone tall enough to need it. `db-sheet-card` is declared
+   by `classifySheetFrameShape` bailing out for it (`mobile-bottom-sheet.ts`), never inferred, so
+   it cannot participate in that split's own hysteresis. */
+.db-mobile-bottom-sheet.db-sheet-card {
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(320px, calc(100vw - 32px)) !important;
+  height: fit-content !important;
+  max-height: calc(100svh - 32px) !important;
+  border-radius: var(--db-radius-xl) !important;
+}
+
 /* A child sheet sits above the surface that opened it. The root panel keeps its own box so the
    parent does not jump when the child arrives; only its content is visually pulled back, which is
    the compact depth cue used by iOS and Notion. The scrim remains the single boundary between the
@@ -2503,6 +2532,22 @@ input[type="checkbox"].db-toggle-switch:disabled {
   color: var(--text-normal);
 }
 
+/* The overflow trigger's icon-only shape, on the desktop bar and the phone pill alike — the
+   `min-width`/`min-height` floor for the pill's own copy of this class is declared beside the
+   pill's own anchored `···`). */
+.note-database-container .db-selection-status-bar .db-selection-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  padding: 0;
+}
+
+.note-database-container .db-selection-status-bar .db-selection-more svg {
+  width: 14px;
+  height: 14px;
+}
+
 .note-database-container .db-selection-chip {
   display: inline-flex;
   align-items: center;
@@ -2663,6 +2708,13 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   display: none;
 }
 
+/* The pill yields to an open cell editor for the identical reason the bar above does — the same
+   dock claim, read here rather than duplicated, so a phone's cell-selection chrome and its
+   bottom-docked sibling cannot disagree about whose turn it is to be drawn. */
+body.db-bottom-dock-taken .note-database-container .db-cell-selection-pill {
+  display: none;
+}
+
 /* --db-keyboard-inset, not --keyboard-height: the host variable is written only by Obsidian, so on
    any host that does not publish one this rule would resolve to its fallback forever and the bar
    would never move off the floor — silently, because a var() that misses does not fail. The plugin
@@ -2692,6 +2744,54 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .note-database-container .db-selection-status-bar.is-summary-overlay {
   margin-bottom: 0;
+}
+
+/* A phone's cell selection wears this instead of the bar above: a three-control pill
+   anchored to the selection range rather than docked to the frame's bottom edge — the shape zero
+   of four reference products contradict and Notion's own selected cell uses directly. Position
+   (`top`/`left`) is set per selection by `positionCellSelectionPill`; only the shape is declared
+   here. Row selection is untouched and keeps the bar above on every platform. */
+.note-database-container .db-cell-selection-pill {
+  position: fixed;
+  display: flex;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: var(--db-space-2);
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0 var(--db-space-3);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-full);
+  background: var(--background-primary);
+  color: var(--text-muted);
+  box-shadow: var(--db-elevation-3);
+  z-index: var(--db-layer-sticky, 40);
+  animation: db-selection-dock-in 160ms ease-out;
+}
+
+/* Every child's hit box clears the 44px floor, count badge included — the pill has exactly three
+   children and the acceptance threshold is written over all three, not only the two that are
+   buttons. */
+.note-database-container .db-cell-selection-pill .db-selection-count-badge,
+.note-database-container .db-cell-selection-pill .db-selection-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  height: auto;
+  padding: 0 var(--db-space-2);
+}
+
+.note-database-container .db-cell-selection-pill .db-selection-more {
+  flex: 0 0 auto;
+  width: 44px;
+  padding: 0;
+}
+
+.note-database-container .db-cell-selection-pill .db-selection-more svg {
+  width: 18px;
+  height: 18px;
 }
 
 @keyframes db-selection-dock-in {
@@ -8782,6 +8882,27 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   margin-top: var(--db-space-6);
 }
 
+/* The confirm's footer only: stacked, full width, on both platforms — every other
+   modal's footer keeps the side-by-side row above. Notion's own desktop confirm stacks too while
+   its non-confirm editors stay side-by-side, so the split follows the surface family rather than
+   the platform. */
+.note-database-modal .db-modal-actions.db-confirm-stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.note-database-modal .db-modal-actions.db-confirm-stacked button {
+  width: 100%;
+  min-height: 44px;
+}
+
+/* The primary action keeps the taller, 50pt phone-row target every other primary action in the
+   shell already declares (`SHELL_PRIMARY_ACTION_HEIGHT_PT`, `surface-shell.ts`). */
+.note-database-modal .db-modal-actions.db-confirm-stacked button.mod-cta,
+.note-database-modal .db-modal-actions.db-confirm-stacked button.mod-warning {
+  min-height: 50px;
+}
+
 .modal.property-conflict-modal-host {
   width: min(860px, calc(100vw - 32px));
   max-width: calc(100vw - 32px);
@@ -12829,6 +12950,15 @@ body.is-phone .note-database-container .db-shell-header-leading {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  /* The `1fr` mirroring above needs a DEFINITE grid width to divide leftover space against —
+     which is what every sheet had until the confirm's own declared card frame sized itself to
+     its content instead. A shrink-to-fit grid resolves each `1fr` track by its own content for
+     the purpose of computing that shrink-to-fit width, so an empty leading slot contributed 0px
+     to the total while the trailing close button contributed --db-shell-edge-control-size,
+     and the title landed off-centre by half that difference. Reserving the same floor here,
+     matching the control it mirrors, restores the symmetry a definite-width sheet got for free
+     and costs nothing there: `1fr` still divides real leftover space once the container has one. */
+  min-width: var(--db-shell-edge-control-size);
 }
 
 body.is-phone .note-database-container .db-shell-header-trailing {

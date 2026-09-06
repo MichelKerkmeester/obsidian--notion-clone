@@ -116,6 +116,15 @@ export class DbModal extends Modal {
     return undefined;
   }
 
+  /**
+   * A declared phone frame shape beside the floating/flush split, for a surface that wants the
+   * card shape rather than the shell's own height inference. The default answers with
+   * nothing, which keeps every existing modal on the inferred split.
+   */
+  protected getFrameRole(): "card" | undefined {
+    return undefined;
+  }
+
   /** Re-apply after a layout change, such as rotation moving the surface across the touch boundary. */
   protected applyPresentation(): void {
     if (!this.shell) {
@@ -125,6 +134,7 @@ export class DbModal extends Modal {
         close: () => this.close(),
         title: this.getDeclaredTitle(),
         role: this.getShellRole(),
+        frameRole: this.getFrameRole(),
         getFallbackTitle: () => this.getSheetTitle(),
       });
     }

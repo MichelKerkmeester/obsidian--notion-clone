@@ -210,6 +210,19 @@ export function isRowSelectionCheckbox(target: EventTarget | null): boolean {
 }
 
 /**
+ * True when a press landed inside a database table cell rather than on the row's other chrome.
+ *
+ * A cell now answers its own long press — entering selection, per `resolveCellTapAction`'s sibling
+ * decision below — so the row's own long-press-for-menu gesture has to stop treating a press inside
+ * one as unclaimed territory. Named here rather than inlined at each of the row menu's two call
+ * sites (the table view and the embedded renderer), for the same reason `isRowSelectionCheckbox`
+ * is: two copies of the same target test is how this file's own history of drift started.
+ */
+export function isTableCellTarget(target: EventTarget | null): boolean {
+  return isHTMLElement(target) && Boolean(target.closest("td[data-note-database-row-path][data-note-database-column-key]"));
+}
+
+/**
  * Give a row's checkbox the held-press gesture that extends the selection.
  *
  * Built on `attachLongPress` rather than beside it, so the threshold, the movement tolerance, the

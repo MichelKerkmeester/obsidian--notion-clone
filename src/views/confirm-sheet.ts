@@ -29,6 +29,12 @@ export interface ConfirmSheetBodyOptions {
   danger?: boolean;
   /** An optional third button between cancel and confirm. */
   secondaryButton?: ConfirmSheetSecondaryAction;
+  /**
+   * Stacks the actions row full width instead of the side-by-side, right-aligned row every other
+   * modal footer keeps. Scoped to the confirm rather than to a platform: Notion's own
+   * desktop confirm stacks too, while its non-confirm editors stay side-by-side.
+   */
+  stackedActions?: boolean;
   onCancel(): void;
   onConfirm(): void;
   onSecondary?(value: string): void;
@@ -51,7 +57,9 @@ export function buildConfirmSheetBody(host: HTMLElement, options: ConfirmSheetBo
   // rather than as bare, unpadded text.
   host.createDiv({ cls: "db-modal-help db-panel-row", text: options.message });
 
-  const actions = host.createDiv({ cls: "db-modal-actions" });
+  const actions = host.createDiv({
+    cls: options.stackedActions ? "db-modal-actions db-confirm-stacked" : "db-modal-actions",
+  });
   actions.createEl("button", {
     text: options.cancelText,
     attr: { type: "button" },

@@ -157,6 +157,9 @@ export type SurfaceShellFrameShape = "floating" | "flush";
 
 export const SHELL_PHONE_FLOATING_INSET_PT = 8;
 export const SHELL_PHONE_FLOATING_RADIUS_PT = 16;
+/** The confirm's declared card frame: a floor, not a parity figure, since Notion's own
+ *  thumbnails carry no sampled value to measure this against. */
+export const SHELL_CARD_INSET_PT = 16;
 export const SHELL_PHONE_HANDLE_WIDTH_PT = 34;
 export const SHELL_PHONE_HANDLE_HEIGHT_PT = 5;
 export const SHELL_PHONE_ROW_HEIGHT_PT = 50;
@@ -330,6 +333,8 @@ export interface SurfaceShellOptions {
   getFallbackTitle?(): string | undefined;
   /** What kind of surface this is. Omit while a surface has not declared one yet. */
   role?: SurfaceShellRole;
+  /** A declared phone frame shape beside floating/flush. Omit for the inferred split. */
+  frameRole?: "card";
   close(): void;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
@@ -411,6 +416,7 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
         getTitle: currentTitle,
         closeOnOutsidePointerDown: options.closeOnOutsidePointerDown,
         closeOnEscape: options.closeOnEscape,
+        frameRole: options.frameRole,
         buildHeader: (panel, title, onClose) => {
           headerHandle = buildShellHeader(panel, { title, onClose });
           return headerHandle;

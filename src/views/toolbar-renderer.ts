@@ -259,6 +259,11 @@ export class ToolbarRenderer {
     const showGroupButton = viewType !== "chart" && viewType !== "calendar";
     const showColumnButton = viewType !== "chart";
 
+    // Published unconditionally on a phone rather than only inside the New button's own render:
+    // the cell-selection pill reads this same value to clear Obsidian's navigation bar, and a
+    // read-only view or a chart — neither of which draws a New button — still needs the figure.
+    if (phoneLayout) this.reserveMobileFabInset();
+
     if (actions.hideHeaderChrome) return;
 
     const header = containerEl.createDiv({ cls: "db-header" });
@@ -2357,7 +2362,6 @@ export class ToolbarRenderer {
       cls: `db-new-button db-new-button-primary${isTouchDevice(this.toolbarRoot) ? " is-mobile-fab" : ""}`,
       attr: { type: "button", "aria-label": hasTemplate ? tooltip : label },
     });
-    if (isTouchDevice(this.toolbarRoot)) this.reserveMobileFabInset();
     setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
     // Touch surfaces get the icon alone: the button is a floating action button there, and a
     // text label makes it wide enough to cover the rows it floats over. The accessible name
@@ -2399,13 +2403,17 @@ export class ToolbarRenderer {
   }
 
   /**
-   * Lift the floating New button clear of Obsidian's phone footer nav bar.
+   * Publish Obsidian's phone footer nav bar height for whatever chrome needs to clear it.
    *
    * On a phone Obsidian overlays a fixed navigation bar across the viewport bottom, so a
-   * fixed FAB anchored to the safe-area inset alone lands beneath it and cannot be tapped.
-   * Publish the bar's measured height — its default 50px when it cannot be measured, 0 off
-   * the phone where the bar does not exist — as a custom property the FAB's bottom offset
-   * adds on top of the safe-area inset.
+   * fixed element anchored to the safe-area inset alone lands beneath it and cannot be
+   * tapped. Publish the bar's measured height — its default 50px when it cannot be
+   * measured, 0 off the phone where the bar does not exist — as a custom property on the
+   * view container, so every descendant that needs it (the floating New button's own
+   * bottom offset, and the cell-selection pill's clamp) reads one published value rather
+   * than each measuring the bar itself. Called unconditionally on a phone rather than only
+   * when the New button renders, because a read-only view draws no New button and still
+   * has a selection pill to clamp.
    */
   private reserveMobileFabInset(): void {
     const container = this.toolbarRoot;

@@ -154,6 +154,13 @@ const FRAME_RADIUS_FLOATING_PX = 16;
 const FRAME_RADIUS_FLUSH_PX = 8;
 const FRAME_GEOMETRY_TOLERANCE_PX = 0.5;
 
+// The confirm's declared card frame: a floor rather than a parity figure (Notion's own
+// thumbnails carry no sampled value), so the inset check is >= rather than ==. The radius reuses
+// the same --db-radius-xl the floating shape above already asserts at FRAME_RADIUS_FLOATING_PX.
+const CARD_INSET_MIN_PX = 16;
+const CARD_RADIUS_PX = 16;
+const CARD_GEOMETRY_TOLERANCE_PX = 0.5;
+
 // ───────────────────────────────────────────────────────────────────
 // 2e. THE EDGE-CONTROL TOKEN
 // ───────────────────────────────────────────────────────────────────
@@ -389,6 +396,7 @@ const mountConfirmStandIn = () => {
     cancelText: "Cancel",
     confirmText: "Delete",
     danger: true,
+    stackedActions: true,
     onCancel: () => {},
     onConfirm: () => {},
   });
@@ -404,11 +412,59 @@ const mountConfirmStandIn = () => {
     if (panel.isConnected) panel.remove();
   };
   const releaseChrome = attachSheetChromeToModal(panel, true, close, {
+    frameRole: "card",
     buildHeader: (headerPanel, title, onClose) => buildShellHeader(headerPanel, { title, onClose }),
   });
   placeSheet(panel);
   releasePlacement = keepSheetPlaced(panel);
   return { panel, close };
+};
+
+// The card frame's own three measured clauses: the inset on all four edges, the radius on all
+// four corners, and the action row's layout — read off the shipped \`db-sheet-card\`/
+// \`db-confirm-stacked\` classes rather than re-derived, so a regression in either class is what
+// this reads, not a second copy of the geometry.
+const measureConfirmCardShape = (panel) => {
+  const rect = panel.getBoundingClientRect();
+  const style = getComputedStyle(panel);
+  const actions = panel.querySelector(".db-modal-actions");
+  const actionStyle = actions ? getComputedStyle(actions) : null;
+  const buttons = actions ? Array.from(actions.querySelectorAll("button")) : [];
+  return {
+    inset: {
+      top: rect.top,
+      left: rect.left,
+      right: window.innerWidth - rect.right,
+      bottom: window.innerHeight - rect.bottom,
+    },
+    radius: {
+      topLeft: parseFloat(style.borderTopLeftRadius) || 0,
+      topRight: parseFloat(style.borderTopRightRadius) || 0,
+      bottomLeft: parseFloat(style.borderBottomLeftRadius) || 0,
+      bottomRight: parseFloat(style.borderBottomRightRadius) || 0,
+    },
+    actionFlexDirection: actionStyle ? actionStyle.flexDirection : null,
+    buttonHeights: buttons.map((button) => button.getBoundingClientRect().height),
+  };
+};
+
+window.__confirmCardShape = () => {
+  const { panel, close } = mountConfirmStandIn();
+  const shape = measureConfirmCardShape(panel);
+  close();
+  return shape;
+};
+
+// The negative control strips both declared classes the card depends on — the same pattern
+// every other row in this lane uses — rather than mounting a second, hand-built confirm.
+window.__confirmCardShapeNegativeControl = () => {
+  const { panel, close } = mountConfirmStandIn();
+  panel.classList.remove("db-sheet-card");
+  const actions = panel.querySelector(".db-modal-actions");
+  actions?.classList.remove("db-confirm-stacked");
+  const broken = measureConfirmCardShape(panel);
+  close();
+  return broken;
 };
 
 window.__sheetGrammar = (scenario) => {
@@ -1798,6 +1854,33 @@ try {
     if (!cleanAfter) failures.push("frame shape negative control: the real rule did not restore the floating geometry");
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  neutralised CSS goes flush despite the floating classification (left ${frameShapeControl.broken.left}px, radius ${frameShapeControl.broken.topLeftRadius}px)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  the real rule restores the floating geometry (left ${frameShapeControl.fixed.left}px, radius ${frameShapeControl.fixed.topLeftRadius}px)`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: confirm card — inset, radius and stacked action layout\n");
+  const cardShape = await page.evaluate(() => window.__confirmCardShape());
+  {
+    const insetOk = Object.entries(cardShape.inset).every(([, value]) => value >= CARD_INSET_MIN_PX - CARD_GEOMETRY_TOLERANCE_PX);
+    const radiusOk = Object.values(cardShape.radius).every((value) => Math.abs(value - CARD_RADIUS_PX) <= CARD_GEOMETRY_TOLERANCE_PX);
+    const stackedOk = cardShape.actionFlexDirection === "column";
+    const heightsOk = cardShape.buttonHeights.length > 0 && cardShape.buttonHeights.every((h) => h >= 44 - CARD_GEOMETRY_TOLERANCE_PX);
+    if (!insetOk) failures.push(`confirm card: an edge inset fell under ${CARD_INSET_MIN_PX}px (${JSON.stringify(cardShape.inset)})`);
+    if (!radiusOk) failures.push(`confirm card: a corner radius was not ${CARD_RADIUS_PX}px (${JSON.stringify(cardShape.radius)})`);
+    if (!stackedOk) failures.push(`confirm card: actions row computed flex-direction "${cardShape.actionFlexDirection}", wanted "column"`);
+    if (!heightsOk) failures.push(`confirm card: an action button fell under the 44px floor (${JSON.stringify(cardShape.buttonHeights)})`);
+    console.log(`  ${insetOk ? "PASS" : "FAIL"}  inset >= ${CARD_INSET_MIN_PX}px on all four edges (${JSON.stringify(cardShape.inset)})`);
+    console.log(`  ${radiusOk ? "PASS" : "FAIL"}  radius ${CARD_RADIUS_PX}px on all four corners (${JSON.stringify(cardShape.radius)})`);
+    console.log(`  ${stackedOk ? "PASS" : "FAIL"}  actions stacked full width (flex-direction: ${cardShape.actionFlexDirection})`);
+    console.log(`  ${heightsOk ? "PASS" : "FAIL"}  every action >= 44px tall (${JSON.stringify(cardShape.buttonHeights)})`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: confirm card negative control — the card and stacked classes stripped\n");
+  const cardShapeControl = await page.evaluate(() => window.__confirmCardShapeNegativeControl());
+  {
+    const wentRed = cardShapeControl.inset.left === 0 && cardShapeControl.actionFlexDirection !== "column";
+    if (!wentRed) failures.push("confirm card negative control: stripping db-sheet-card/db-confirm-stacked did not go red");
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  flush left and side-by-side actions once both classes are stripped (inset.left=${cardShapeControl.inset.left}px, flex-direction=${cardShapeControl.actionFlexDirection})`);
   }
   console.log("");
 

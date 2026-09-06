@@ -401,6 +401,8 @@ const en: Dictionary = {
   "selection.fillPrompt": "Fill selected cells with:",
   "selection.clearEsc": "✕ Esc",
   "selection.clearSelection": "Clear selection",
+  "selection.bulkEditColumn": "Bulk edit {column}",
+  "selection.moreActions": "More",
   "operation.moved": "Moved {count} record(s)",
   "operation.pasted": "Pasted {count} cell(s)",
   "operation.failed": "Could not complete the move",

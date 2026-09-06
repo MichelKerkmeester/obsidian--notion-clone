@@ -858,6 +858,13 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
 
   // Render both bars through the shipped view methods. The embed must keep its own presentation
   // because it has no viewport-level keyboard to clear and its host note owns the scroll context.
+  //
+  // The standalone fixture below drives a ROW selection rather than a cell one: a phone no longer
+  // builds a bottom-docked bar for a cell selection at all (its own pill-shape section runs
+  // further down), and the bar mechanism this whole span measures — the keyboard dock, the
+  // `--db-keyboard-inset` fallback trap, the safe-area floor — is the row bar's own, unchanged by
+  // that leg. Keeping this fixture on the surface that still produces the bar is what lets every
+  // check below keep asserting the same mechanism rather than a fixture built to please it.
   const selectedAddresses = [
     { rowPath: "record.md", colKey: "amount" },
     { rowPath: "record.md", colKey: "name" },
@@ -872,13 +879,13 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     const host = document.body.createDiv({ cls: "note-database-container" });
     const view = Object.create(DatabaseView.prototype);
     view.containerEl_ = host;
-    view.selectedRows = new Set();
-    view.cellSelection = { anchor: selectedAddresses[0], focus: selectedAddresses[1] };
+    view.selectedRows = new Set(["record.md"]);
+    view.cellSelection = null;
     view.selectionStatusBar = undefined;
     view.pendingCellFillDraft = null;
     view.showCellFillInput = false;
     view.historyStack = [];
-    view.getSelectedCellAddresses = () => selectedAddresses;
+    view.getSelectedCellAddresses = () => [];
     view.getConfig = () => ({ schema: { columns: [] } });
     DatabaseView.prototype.renderSelectionStatusBar.call(view);
     return { host, view, bar: host.querySelector(".db-selection-status-bar") };
@@ -944,6 +951,168 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     pass: Math.abs(embeddedFloor - selectionFloor) <= 1,
     detail: `standalone bottom=${selectionFloor.toFixed(0)}px embedded bottom=${embeddedFloor.toFixed(0)}px`,
   });
+
+  // ── the phone cell-selection pill ──
+  //
+  // A cell selection on a phone wears no bar at all — the same `renderSelectionStatusBar` entry
+  // point, driven with a cell range instead of a row set, plus two real marker elements carrying
+  // the class the positioner reads, so the anchor and clamp math below run against actual rects
+  // rather than a stand-in the check would have to trust.
+  const pillHost = document.body.createDiv({ cls: "note-database-container" });
+  pillHost.setCssProps({ position: "fixed", top: "0", left: "0", width: "390px", height: "844px" });
+  pillHost.style.setProperty("--db-mobile-navbar-height", "80px");
+  const pillView = Object.create(DatabaseView.prototype);
+  pillView.containerEl_ = pillHost;
+  pillView.selectedRows = new Set();
+  pillView.cellSelection = { anchor: selectedAddresses[0], focus: selectedAddresses[1] };
+  pillView.selectionStatusBar = undefined;
+  pillView.cellSelectionPill = undefined;
+  pillView.pendingCellFillDraft = null;
+  pillView.showCellFillInput = false;
+  pillView.historyStack = [];
+  pillView.getSelectedCellAddresses = () => selectedAddresses;
+  pillView.getConfig = () => ({
+    schema: { columns: [
+      { key: "amount", label: "Amount", type: "number" },
+      { key: "name", label: "Name", type: "text" },
+    ] },
+  });
+  const rangeMarkerA = pillHost.createDiv({ cls: "db-cell-range-selected" });
+  rangeMarkerA.setCssProps({ position: "fixed", top: "300px", left: "40px", width: "100px", height: "36px" });
+  const rangeMarkerB = pillHost.createDiv({ cls: "db-cell-range-selected" });
+  rangeMarkerB.setCssProps({ position: "fixed", top: "300px", left: "140px", width: "100px", height: "36px" });
+
+  DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
+  const pillBarCount = pillHost.querySelectorAll(":scope > .db-selection-status-bar").length;
+  let pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+  const pillCount = pillHost.querySelectorAll(":scope > .db-cell-selection-pill").length;
+
+  out.push({
+    name: "a phone cell selection builds no bottom-docked bar",
+    pass: pillBarCount === 0,
+    detail: `.db-selection-status-bar count=${pillBarCount} (want 0)`,
+  });
+  out.push({
+    name: "a phone cell selection builds exactly one anchored pill",
+    pass: pillCount === 1,
+    detail: `.db-cell-selection-pill count=${pillCount} (want 1)`,
+  });
+
+  if (pill) {
+    const pillChildren = Array.from(pill.children);
+    const pillStyle = getComputedStyle(pill);
+    const pillRect = pill.getBoundingClientRect();
+    const childBoxes = pillChildren.map((el) => el.getBoundingClientRect());
+    const minChildBox = Math.min(...childBoxes.map((r) => Math.min(r.width, r.height)));
+    out.push({
+      name: "the pill holds exactly three children — the count, one Copy, one more",
+      pass: pillChildren.length === 3,
+      detail: `children=${pillChildren.length} (${pillChildren.map((el) => el.className).join(" | ")})`,
+    });
+    out.push({
+      name: "the pill never wraps",
+      pass: pillStyle.flexWrap === "nowrap",
+      detail: `flex-wrap=${pillStyle.flexWrap}`,
+    });
+    out.push({
+      name: "the pill is 44px tall",
+      pass: Math.abs(pillRect.height - 44) <= 1,
+      detail: `height=${pillRect.height.toFixed(1)}px`,
+    });
+    out.push({
+      name: "every one of the pill's children clears the 44x44 hit-box floor",
+      pass: minChildBox >= 44 - 0.5,
+      detail: `min child box=${minChildBox.toFixed(1)}px`,
+    });
+
+    const rangeUnion = {
+      top: Math.min(rangeMarkerA.getBoundingClientRect().top, rangeMarkerB.getBoundingClientRect().top),
+    };
+    out.push({
+      name: "the pill anchors 8px above the selection range",
+      pass: Math.abs((rangeUnion.top - pillRect.bottom) - 8) <= 1,
+      detail: `range top=${rangeUnion.top.toFixed(1)} pill bottom=${pillRect.bottom.toFixed(1)} `
+        + `gap=${(rangeUnion.top - pillRect.bottom).toFixed(1)}px (want 8px)`,
+    });
+    const viewportRect = pillHost.getBoundingClientRect();
+    out.push({
+      name: "the pill stays inside the grid's scroll viewport with an 8px margin",
+      pass: pillRect.left >= viewportRect.left + 8 - 1 && pillRect.right <= viewportRect.right - 8 + 1,
+      detail: `pill ${pillRect.left.toFixed(1)}-${pillRect.right.toFixed(1)} `
+        + `viewport ${viewportRect.left.toFixed(1)}-${viewportRect.right.toFixed(1)}`,
+    });
+    const navClearance = 80 + 8;
+    out.push({
+      name: "the pill's bottom edge clears the published navigation-bar height",
+      pass: window.innerHeight - pillRect.bottom >= navClearance - 1,
+      detail: `pill bottom=${pillRect.bottom.toFixed(1)} viewport=${window.innerHeight} `
+        + `clearance wanted>=${navClearance}px`,
+    });
+
+    // Negative control: a range near the viewport floor, where the clamp is the binding
+    // constraint rather than merely available — the range 8px above the earlier check leaves the
+    // whole screen's worth of headroom, so the clamp never engages and the term could be dropped
+    // without this suite noticing. Dropping the published navbar term and requiring the clearance
+    // to close up, then restoring it and requiring the clearance to return.
+    rangeMarkerA.setCssProps({ top: "810px", left: "40px", width: "100px", height: "20px" });
+    rangeMarkerB.setCssProps({ top: "810px", left: "140px", width: "100px", height: "20px" });
+    DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
+    pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+    const beforeGap = window.innerHeight - pill.getBoundingClientRect().bottom;
+    pillHost.style.setProperty("--db-mobile-navbar-height", "0px");
+    DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
+    pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+    const droppedGap = window.innerHeight - pill.getBoundingClientRect().bottom;
+    pillHost.style.setProperty("--db-mobile-navbar-height", "80px");
+    DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
+    pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+    const restoredGap = window.innerHeight - pill.getBoundingClientRect().bottom;
+    out.push({
+      name: "navbar clearance negative control — dropping the published height closes the gap",
+      pass: droppedGap < beforeGap - 1 && Math.abs(restoredGap - beforeGap) <= 1,
+      detail: `with navbar=${beforeGap.toFixed(1)}px without=${droppedGap.toFixed(1)}px restored=${restoredGap.toFixed(1)}px`,
+    });
+
+    // The overflow: every reachable action within one tap of `···`, for a mixed-column range —
+    // the single-editable-column "Bulk edit <Column>" branch is not exercised by this fixture.
+    const moreBtn = pill.querySelector(".db-selection-more");
+    DatabaseView.prototype.openCellSelectionActionsMenu.call(pillView, moreBtn);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const overflowRows = Array.from(document.querySelectorAll(".db-menu-item")).filter((el) => el.textContent?.trim().length);
+    const overflowLabels = overflowRows.map((el) => el.querySelector(".db-menu-item-label")?.textContent?.trim() || el.textContent.trim());
+    out.push({
+      name: "the overflow reaches Copy TSV, Copy Markdown, Copy CSV, Paste, Fill and Clear",
+      pass: ["Copy TSV", "Copy Markdown", "Copy CSV", "Paste", "Fill", "Clear"].every(
+        (label) => overflowLabels.some((l) => l.toLowerCase().includes(label.toLowerCase())),
+      ),
+      detail: `rows: ${overflowLabels.join(" | ")}`,
+    });
+    const overflowRowCountBefore = overflowRows.length;
+    overflowRows[0]?.remove();
+    const overflowRowCountAfter = document.querySelectorAll(".db-menu-item").length;
+    out.push({
+      name: "overflow reachability negative control — dropping a row lowers the count",
+      pass: overflowRowCountAfter === overflowRowCountBefore - 1,
+      detail: `before=${overflowRowCountBefore} after=${overflowRowCountAfter}`,
+    });
+    // Closed the way a person closes it, not by removing the node: the menu registered its own
+    // outside-press and Escape listeners on `document` when it opened, and only its own `close()`
+    // — which Escape reaches — tears those down and releases the dock claim it took as a sheet.
+    // Removing the DOM node by hand would leave both dangling for the rest of this page's life.
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
+  // The dock claim: any open cell editor hides the pill, the same rule that already hides the bar.
+  document.body.addClass("db-bottom-dock-taken");
+  const dockedPill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+  out.push({
+    name: "an open cell editor hides the pill the way it already hides the bar",
+    pass: dockedPill !== null && getComputedStyle(dockedPill).display === "none",
+    detail: `pill display=${dockedPill ? getComputedStyle(dockedPill).display : "(no pill)"}`,
+  });
+  document.body.removeClass("db-bottom-dock-taken");
+  pillHost.remove();
 
   // ── the keyboard ──
   //
@@ -10606,16 +10775,21 @@ await section("one thing owns the phone's bottom edge", async () => {
 
     // The bar through the shipped view method. `Object.create` gives a real view without the
     // constructor's Obsidian leaf, so every field the method reads is written here.
-    const addresses = [{ rowPath: "record.md", colKey: "amount" }];
+    //
+    // A row selection rather than a cell one: a phone no longer docks a bar for a cell selection
+    // at all (it wears the anchored pill instead, covered on its own page), and the arbitration
+    // this section measures — the bar yielding to an open sheet, an open editor and the floating
+    // add control — is the bar's own mechanism, unchanged by that leg and still reachable through
+    // the row-selection path.
     const view = Object.create(DatabaseView.prototype);
     view.containerEl_ = host;
-    view.selectedRows = new Set();
-    view.cellSelection = { anchor: addresses[0], focus: addresses[0] };
+    view.selectedRows = new Set(["record.md"]);
+    view.cellSelection = null;
     view.selectionStatusBar = undefined;
     view.pendingCellFillDraft = null;
     view.showCellFillInput = false;
     view.historyStack = [];
-    view.getSelectedCellAddresses = () => addresses;
+    view.getSelectedCellAddresses = () => [];
     view.getConfig = () => ({ schema: { columns: [] } });
     DatabaseView.prototype.renderSelectionStatusBar.call(view);
     await settle();

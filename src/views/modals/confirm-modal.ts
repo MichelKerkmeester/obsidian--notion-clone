@@ -52,6 +52,10 @@ export class ConfirmModal extends DbModal {
     return "dialog";
   }
 
+  protected getFrameRole(): "card" {
+    return "card";
+  }
+
   openAndWait(): Promise<boolean | string> {
     return new Promise((resolve) => {
       this.resolve = resolve;
@@ -73,6 +77,7 @@ export class ConfirmModal extends DbModal {
       confirmText: this.options.confirmText || t("common.delete"),
       danger: this.options.danger,
       secondaryButton: this.options.secondaryButton,
+      stackedActions: true,
       onCancel: () => this.finish(false),
       onConfirm: () => this.finish(true),
       onSecondary: (value) => this.finish(value),

@@ -42,6 +42,13 @@ export interface SheetChromeOptions {
   closeOnOutsidePointerDown?: boolean;
   /** Whether the shared stack may route Escape to this sheet. */
   closeOnEscape?: boolean;
+  /**
+   * A third, DECLARED frame shape beside the floating/flush split `classifySheetFrameShape`
+   * infers from height: a small, margined, centred card. Never derived from a
+   * measurement — a surface that wants the card says so up front, and keeps it regardless of
+   * how its own content resizes.
+   */
+  frameRole?: "card";
 }
 
 /**
@@ -198,6 +205,8 @@ export interface SheetModalChromeOptions {
   getTitle?(): string | undefined;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
+  /** Forwarded to `applySheetChrome` — see `SheetChromeOptions.frameRole`. */
+  frameRole?: "card";
   /**
    * Build the header instead of this module's own two-slot builder, for a caller that owns a
    * richer header shape. Omit this and nothing changes: every existing caller gets exactly
@@ -249,6 +258,7 @@ export function attachSheetChromeToModal(
     close: isSheet ? () => close() : undefined,
     closeOnOutsidePointerDown: isSheet ? options.closeOnOutsidePointerDown ?? true : false,
     closeOnEscape: isSheet ? options.closeOnEscape ?? true : false,
+    frameRole: isSheet ? options.frameRole : undefined,
   });
   if (isSheet) {
     // Hidden, not removed: `applyPresentation` re-runs on a layout change (a rotation moving the
@@ -363,6 +373,10 @@ export function readSheetFrameShapeActivity(): { queued: number; classifications
 /** Read the sheet's own rendered height against the viewport and toggle the floating class. */
 function classifySheetFrameShape(panel: HTMLElement): void {
   frameShapeClassifications += 1;
+  // The card is declared, never inferred: a surface that asked for it keeps it
+  // regardless of its own rendered height, the same way the hysteresis gap below leaves a
+  // sheet's CURRENT shape alone rather than answering from a height that shape itself produced.
+  if (panel.hasClass("db-sheet-card")) return;
   const view = panel.ownerDocument.defaultView;
   const viewportHeight = view?.visualViewport?.height ?? view?.innerHeight;
   const height = panel.getBoundingClientRect().height;
@@ -537,6 +551,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // A generation begins when a surface mounts, so a device trace reads as one sheet's whole life
     // rather than as a stream to be correlated by timestamp afterwards.
     if (isSheetTraceEnabled()) beginSheetGeneration(panel.className);
+    panel.toggleClass("db-sheet-card", options.frameRole === "card");
     claimBottomDock(doc, "sheet", true);
     watchForSheetRemoval(doc);
     watchSheetFrameShape(panel);
@@ -595,6 +610,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
   panel.style.removeProperty("--db-sheet-depth");
   panel.style.removeProperty("--db-sheet-z-index");
   panel.removeClass("is-stack-parent");
+  panel.removeClass("db-sheet-card");
   syncSheetStack(doc);
   // After the stack has been resynchronized, a document that still holds another sheet keeps the claim.
   claimBottomDock(doc, "sheet", sheetsFor(doc).size > 0);

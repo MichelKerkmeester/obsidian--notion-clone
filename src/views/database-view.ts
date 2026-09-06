@@ -176,7 +176,7 @@ import { createRenderedTextWidthMeasurer } from "./inline-markdown-renderer";
 import { isHTMLElement } from "./dom-guards";
 import { attachLongPress, isTouchDevice, observeTouchEnvironment } from "../data/touch-environment";
 import {
-  applyRowSelectionPress, attachRowRangeGesture, isMainItemColumn, nextCellRange,
+  applyRowSelectionPress, attachRowRangeGesture, isMainItemColumn, isTableCellTarget, nextCellRange,
   resolveCellTapAction, trackCellGesture,
 } from "./table-cell-gesture";
 import type { RowRangeInput } from "./table-cell-gesture";
@@ -213,7 +213,7 @@ import {
   type TableGridPosition,
 } from "../data/table-keyboard-navigation";
 import { getTablePasteValue, planTablePasteLayout, TablePasteLayout } from "../data/table-paste-plan";
-import { createOwnedMenuForEvent } from "./owned-menu";
+import { createOwnedMenu, createOwnedMenuForEvent, type OwnedMenuHandle } from "./owned-menu";
 import { showToast, ToastAction, ToastHandle } from "./toast";
 import {
   FileRenameChange,
@@ -543,6 +543,9 @@ export class DatabaseView extends FileView {
   // So the region is held here, outside the bar, and only its text is rewritten.
   private selectionLiveRegion?: HTMLElement;
   private releaseKeyboardInset?: () => void;
+  /** The phone's anchored cell-selection pill — never built alongside the bar above. */
+  private cellSelectionPill?: HTMLElement;
+  private releaseCellSelectionPillWatch?: () => void;
   private operationResultRail?: HTMLElement;
   private operationResultToast?: ToastHandle;
   private interactionScopes = new InteractionScopeRegistry();
@@ -1463,6 +1466,8 @@ export class DatabaseView extends FileView {
     this.removeHeaderPopoverAutoClose = undefined;
     this.releaseKeyboardInset?.();
     this.releaseKeyboardInset = undefined;
+    this.releaseCellSelectionPillWatch?.();
+    this.releaseCellSelectionPillWatch = undefined;
     this.closeMobileColumnWidthPanel();
     this.closeGroupOrderPopover();
     window.activeDocument.removeEventListener("mousedown", this.handleOutsideClickBound, true);
@@ -4802,18 +4807,19 @@ export class DatabaseView extends FileView {
         isEditable: this.isColumnEditable(col),
       });
       if (tapAction === "open-record") return;
+      // A phone's ordinary tap never enters selection. The resolver's other touch answer,
+      // edit-cell, is left to the cell renderer's own click listener (`cell-renderer.ts`), which
+      // opens that column's editor on the same press; selecting is a mode reached only by the
+      // long press this same cell also answers, below.
+      if (gesture === "touch") return;
+      // Reachable only by a mouse from here on — the block above already returned for touch.
       const current = this.cellSelection;
-      const extending = gesture === "mouse" && event.shiftKey && Boolean(current);
+      const extending = event.shiftKey && Boolean(current);
       if (!extending) this.clearSelection();
       this.cellSelection = nextCellRange(current, address, { gesture, shiftKey: event.shiftKey });
-      // A finger never leaves a drag armed. Drag-to-extend needs a range grammar to be worth
-      // anything — shift, a fill handle, a status bar wide enough to act on the block — and none of
-      // it is reachable with a thumb, so a press that armed it would only paint a state the user
-      // could neither see the extent of nor clear.
-      this.isSelectingCells = gesture !== "touch";
+      this.isSelectingCells = true;
       this.renderCellSelectionClasses();
       this.renderSelectionStatusBar();
-      if (gesture === "touch") return;
       td.focus({ preventScroll: true });
       const onMouseUp = () => {
         this.isSelectingCells = false;
@@ -4830,6 +4836,25 @@ export class DatabaseView extends FileView {
       };
       this.renderCellSelectionClasses();
       this.renderSelectionStatusBar();
+    });
+    // Selection on a phone is an explicit mode, reached only by holding a cell rather than by the
+    // ordinary tap the block above now always defers. The long-pressed cell becomes the anchor of
+    // a fresh selection, or — with one already open — a second long press extends the existing
+    // anchor to this cell, the range gesture `attachRowRangeGesture` already binds to the row
+    // checkbox for the identical reason: touch has no shift to hold, so extending needs a second
+    // named gesture rather than a second meaning for the first one.
+    attachLongPress(td, {
+      ignoreTarget: (event) => this.isInteractiveCellTarget(event.target),
+      onLongPress: () => {
+        this.invalidateActiveBulkEditor();
+        const current = this.cellSelection;
+        this.cellSelection = current
+          ? { anchor: current.anchor, focus: address, active: address }
+          : { anchor: address, focus: address, active: address };
+        this.isSelectingCells = false;
+        this.renderCellSelectionClasses();
+        this.renderSelectionStatusBar();
+      },
     });
   }
 
@@ -7649,12 +7674,25 @@ export class DatabaseView extends FileView {
     if (!hasSelection) {
       this.selectionStatusBar?.remove();
       this.selectionStatusBar = undefined;
+      this.teardownCellSelectionPill();
       this.selectionLiveRegion?.remove();
       this.selectionLiveRegion = undefined;
       this.releaseKeyboardInset?.();
       this.releaseKeyboardInset = undefined;
       return;
     }
+    // A phone's cell selection wears the anchored pill, never the bottom-docked bar —
+    // row selection (the bulk checkbox path below) is untouched and keeps the bar on every
+    // platform, since neither the operator's report nor the four-product read was about it.
+    if (cellCount > 0 && isTouchDevice(this.containerEl_)) {
+      this.selectionStatusBar?.remove();
+      this.selectionStatusBar = undefined;
+      this.releaseKeyboardInset?.();
+      this.releaseKeyboardInset = undefined;
+      this.renderCellSelectionPill(addresses);
+      return;
+    }
+    this.teardownCellSelectionPill();
     const bar = this.selectionStatusBar || this.containerEl_.createDiv({ cls: "db-selection-status-bar" });
     this.selectionStatusBar = bar;
     // The bar docks above the software keyboard, and only this container can tell it how far. The
@@ -7670,20 +7708,11 @@ export class DatabaseView extends FileView {
       });
     }
     bar.empty();
-    const clearSelectionButton = bar.createEl("button", {
-      cls: "db-selection-clear-pill",
-      text: t("selection.clearEsc"),
-      attr: {
-        type: "button",
-        title: t("selection.clearSelection"),
-        "aria-label": t("selection.clearSelection"),
-      },
-    });
-    clearSelectionButton.onclick = () => {
-      this.clearSelection();
-      this.clearCellSelection();
-    };
     if (cellCount > 0) {
+      // Desktop's collapsed bar: the count, one Copy, Paste, Clear and
+      // an anchored `···` menu — the three copy formats and Fill move behind it, the same menu
+      // the phone pill opens as a sheet, so the two platforms read one shape at two sizes rather
+      // than as two hand-maintained lists.
       bar.createSpan({
         cls: "db-selection-count-badge",
         text: tSelectedCells(cellCount),
@@ -7691,57 +7720,44 @@ export class DatabaseView extends FileView {
       if (this.selectionLiveRegion) {
         this.selectionLiveRegion.setText(tSelectedCells(cellCount));
       }
-      const copyTsvBtn = bar.createEl("button", {
+      const copyBtn = bar.createEl("button", {
         cls: "db-selection-action",
-        text: t("selection.copyTsv"),
+        text: t("selection.copyCells"),
         attr: { type: "button" },
       });
-      copyTsvBtn.onclick = () => { void this.copySelectedCells("tsv"); };
-      const copyMarkdownBtn = bar.createEl("button", {
-        cls: "db-selection-action",
-        text: t("selection.copyMarkdown"),
-        attr: { type: "button" },
-      });
-      copyMarkdownBtn.onclick = () => { void this.copySelectedCells("markdown"); };
-      const copyCsvBtn = bar.createEl("button", {
-        cls: "db-selection-action",
-        text: t("selection.copyCsv"),
-        attr: { type: "button" },
-      });
-      copyCsvBtn.onclick = () => { void this.copySelectedCells("csv"); };
+      copyBtn.onclick = () => { void this.copySelectedCells("tsv"); };
       const pasteBtn = bar.createEl("button", {
         cls: "db-selection-action",
         text: t("selection.pasteCells"),
         attr: { type: "button" },
       });
       pasteBtn.onclick = () => { void this.pasteCellsFromClipboard(); };
-      const columnKeys = new Set(addresses.map((address) => address.colKey));
-      let chipRendered = false;
-      if (this.pendingCellFillDraft == null && columnKeys.size === 1) {
-        const col = config?.schema.columns.find((candidate) => candidate.key === [...columnKeys][0]);
-        if (col && getBulkEditableColumns([col]).length) {
-          this.renderBulkEditingChip(bar, col, () => this.openBulkEditForSelectedCells(this.getStatusBarAnchor() ?? this.containerEl_!, col.key));
-          chipRendered = true;
-        }
-      }
-      if (!chipRendered) {
-        const fillBtn = bar.createEl("button", {
-          cls: "db-selection-action",
-          text: t("selection.fillValue"),
-          attr: { type: "button" },
-        });
-        fillBtn.onclick = () => {
-          this.openBulkEditOrFillForSelection(fillBtn);
-        };
-        if (this.showCellFillInput) this.renderCellFillInput(bar);
-      }
       const clearBtn = bar.createEl("button", {
         cls: "db-selection-delete",
         text: t("selection.clearCells"),
         attr: { type: "button" },
       });
       clearBtn.onclick = () => { void this.clearSelectedCells(); };
+      const moreBtn = bar.createEl("button", {
+        cls: "db-selection-action db-selection-more",
+        attr: { type: "button", "aria-label": t("selection.moreActions") },
+      });
+      setIcon(moreBtn, "more-horizontal");
+      moreBtn.onclick = () => this.openCellSelectionActionsMenu(moreBtn);
     } else {
+      const clearSelectionButton = bar.createEl("button", {
+        cls: "db-selection-clear-pill",
+        text: t("selection.clearEsc"),
+        attr: {
+          type: "button",
+          title: t("selection.clearSelection"),
+          "aria-label": t("selection.clearSelection"),
+        },
+      });
+      clearSelectionButton.onclick = () => {
+        this.clearSelection();
+        this.clearCellSelection();
+      };
       bar.createSpan({
         cls: "db-selection-count-badge",
         text: t("toolbar.selectedCount", { count: rowCount }),
@@ -7769,18 +7785,218 @@ export class DatabaseView extends FileView {
       setIcon(deleteBtn.createSpan({ cls: "db-selection-action-icon" }), "trash-2");
       deleteBtn.createSpan({ text: t("common.delete") });
       deleteBtn.onclick = () => { void this.deleteSelectedRows(); };
-    }
-    if (this.historyStack.length > 0) {
-      const undoBtn = bar.createEl("button", {
-        cls: "db-selection-action db-selection-undo",
-        attr: { type: "button" },
-      });
-      setIcon(undoBtn.createSpan({ cls: "db-selection-action-icon" }), "undo-2");
-      undoBtn.createSpan({ text: t("toolbar.undo") });
-      undoBtn.onclick = () => { void this.undoLastEdit(); };
+      if (this.historyStack.length > 0) {
+        const undoBtn = bar.createEl("button", {
+          cls: "db-selection-action db-selection-undo",
+          attr: { type: "button" },
+        });
+        setIcon(undoBtn.createSpan({ cls: "db-selection-action-icon" }), "undo-2");
+        undoBtn.createSpan({ text: t("toolbar.undo") });
+        undoBtn.onclick = () => { void this.undoLastEdit(); };
+      }
     }
     bar.removeClass("is-summary-overlay");
     if (!bar.isConnected) this.containerEl_.appendChild(bar);
+  }
+
+  /**
+   * The phone's cell-selection chrome: a three-control pill anchored to the range rather than a
+   * bar docked to the frame's bottom edge. One row — the live count, one `Copy`, one
+   * `···` — everything past `Copy` lives behind the overflow menu `openCellSelectionActionsMenu`
+   * opens as this same shell's titled sheet.
+   */
+  private renderCellSelectionPill(addresses: CellAddress[]): void {
+    if (!this.containerEl_) return;
+    if (!this.cellSelectionPill?.isConnected) {
+      this.cellSelectionPill = this.containerEl_.querySelector<HTMLElement>(":scope > .db-cell-selection-pill") || undefined;
+    }
+    const pill = this.cellSelectionPill || this.containerEl_.createDiv({ cls: "db-cell-selection-pill" });
+    this.cellSelectionPill = pill;
+    if (!this.selectionLiveRegion?.isConnected) {
+      this.selectionLiveRegion = this.containerEl_.createDiv({
+        cls: "db-selection-live-region",
+        attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
+      });
+    }
+    pill.empty();
+    const cellCount = addresses.length;
+    pill.createSpan({ cls: "db-selection-count-badge", text: tSelectedCells(cellCount) });
+    this.selectionLiveRegion.setText(tSelectedCells(cellCount));
+    const copyBtn = pill.createEl("button", {
+      cls: "db-selection-action",
+      text: t("selection.copyCells"),
+      attr: { type: "button" },
+    });
+    copyBtn.onclick = () => { void this.copySelectedCells("tsv"); };
+    const moreBtn = pill.createEl("button", {
+      cls: "db-selection-action db-selection-more",
+      attr: { type: "button", "aria-label": t("selection.moreActions") },
+    });
+    setIcon(moreBtn, "more-horizontal");
+    moreBtn.onclick = () => this.openCellSelectionActionsMenu(moreBtn);
+    if (!pill.isConnected) this.containerEl_.appendChild(pill);
+    this.positionCellSelectionPill();
+    if (!this.releaseCellSelectionPillWatch) {
+      const reposition = () => this.positionCellSelectionPill();
+      const viewport = this.containerEl_.querySelector<HTMLElement>(".db-table-wrap");
+      const win = this.containerEl_.ownerDocument.defaultView;
+      viewport?.addEventListener("scroll", reposition, { passive: true });
+      win?.addEventListener("resize", reposition);
+      this.releaseCellSelectionPillWatch = () => {
+        viewport?.removeEventListener("scroll", reposition);
+        win?.removeEventListener("resize", reposition);
+      };
+    }
+  }
+
+  private teardownCellSelectionPill(): void {
+    this.cellSelectionPill?.remove();
+    this.cellSelectionPill = undefined;
+    this.releaseCellSelectionPillWatch?.();
+    this.releaseCellSelectionPillWatch = undefined;
+  }
+
+  /**
+   * Anchor the pill to the live selection's own rect: 8px above it, or 8px below when there is no
+   * room above, clamped inside the grid's scroll viewport with an 8px margin, and clamped clear of
+   * both the safe area and Obsidian's phone navigation bar — the same published value the mobile
+   * FAB already reads.
+   */
+  private positionCellSelectionPill(): void {
+    const pill = this.cellSelectionPill;
+    if (!pill?.isConnected || !this.containerEl_) return;
+    const viewport = this.containerEl_.querySelector<HTMLElement>(".db-table-wrap") || this.containerEl_;
+    const rangeRect = this.getCellSelectionRangeRect();
+    if (!rangeRect) return;
+    const margin = 8;
+    const viewportRect = viewport.getBoundingClientRect();
+    const pillRect = pill.getBoundingClientRect();
+    const pillHeight = pillRect.height || 44;
+    const pillWidth = pillRect.width || 0;
+    const navClearance = this.getMobileNavClearancePx();
+    const win = this.containerEl_.ownerDocument.defaultView || window;
+    const viewportBottom = Math.min(viewportRect.bottom, win.innerHeight);
+    const maxBottom = viewportBottom - navClearance - margin;
+
+    let top = rangeRect.top - margin - pillHeight;
+    if (top < viewportRect.top + margin) top = rangeRect.bottom + margin;
+    top = Math.min(top, maxBottom - pillHeight);
+    top = Math.max(top, viewportRect.top + margin);
+
+    const minLeft = viewportRect.left + margin;
+    const maxLeft = Math.max(minLeft, viewportRect.right - margin - pillWidth);
+    const left = Math.min(Math.max(rangeRect.left, minLeft), maxLeft);
+
+    pill.setCssProps({ position: "fixed", top: `${top}px`, left: `${left}px` });
+  }
+
+  /** The union rect of every `td` the live cell selection covers, in viewport coordinates. */
+  private getCellSelectionRangeRect(): DOMRect | null {
+    if (!this.containerEl_ || !this.cellSelection) return null;
+    const cells = this.containerEl_.querySelectorAll<HTMLElement>(".db-cell-range-selected");
+    if (cells.length === 0) return null;
+    let top = Infinity;
+    let left = Infinity;
+    let right = -Infinity;
+    let bottom = -Infinity;
+    cells.forEach((cell) => {
+      const rect = cell.getBoundingClientRect();
+      top = Math.min(top, rect.top);
+      left = Math.min(left, rect.left);
+      right = Math.max(right, rect.right);
+      bottom = Math.max(bottom, rect.bottom);
+    });
+    return new DOMRect(left, top, right - left, bottom - top);
+  }
+
+  /**
+   * `max(env(safe-area-inset-bottom), var(--db-mobile-navbar-height, 0px)) + 8px`, read in
+   * viewport pixels rather than left as a CSS formula, because the pill's own top offset is
+   * computed in script and a fixed element positioned from script cannot also lean on a CSS
+   * `bottom` clamp the way the mobile FAB does.
+   */
+  private getMobileNavClearancePx(): number {
+    if (!this.containerEl_) return 0;
+    const win = this.containerEl_.ownerDocument.defaultView;
+    const navbarHeight = Number.parseFloat(win?.getComputedStyle(this.containerEl_).getPropertyValue("--db-mobile-navbar-height") || "0") || 0;
+    const safeAreaProbe = this.containerEl_.ownerDocument.createElement("div");
+    safeAreaProbe.style.cssText = "position:fixed;bottom:0;height:0;padding-bottom:env(safe-area-inset-bottom);visibility:hidden;";
+    this.containerEl_.ownerDocument.body.appendChild(safeAreaProbe);
+    const safeArea = Number.parseFloat(win?.getComputedStyle(safeAreaProbe).paddingBottom || "0") || 0;
+    safeAreaProbe.remove();
+    return Math.max(safeArea, navbarHeight) + 8;
+  }
+
+  /**
+   * `···`, on the pill and on the desktop bar alike: one owned menu that presents as the shell's
+   * titled bottom sheet on a phone and an anchored menu on desktop (`createOwnedMenu` already
+   * decides which), carrying every action past the quick `Copy` in three labelled groups — the
+   * three copy formats, then Paste and Fill/Bulk edit, then Clear last and alone as the only
+   * destructive row.
+   */
+  private openCellSelectionActionsMenu(anchor: HTMLElement): void {
+    if (!this.containerEl_) return;
+    const addresses = this.getSelectedCellAddresses();
+    if (addresses.length === 0) return;
+    const config = this.getConfig();
+    const columnKeys = new Set(addresses.map((address) => address.colKey));
+    const singleColumn = columnKeys.size === 1
+      ? config?.schema.columns.find((candidate) => candidate.key === [...columnKeys][0])
+      : undefined;
+    const bulkEditableColumn = singleColumn && getBulkEditableColumns([singleColumn]).length ? singleColumn : undefined;
+
+    const menu = createOwnedMenu(this.containerEl_.ownerDocument, {
+      returnFocus: anchor,
+      title: tSelectedCells(addresses.length),
+    });
+    menu.addRow({ icon: "clipboard-copy", label: t("selection.copyTsv"), onClick: () => { void this.copySelectedCells("tsv"); } });
+    menu.addRow({ icon: "clipboard-copy", label: t("selection.copyMarkdown"), onClick: () => { void this.copySelectedCells("markdown"); } });
+    menu.addRow({ icon: "clipboard-copy", label: t("selection.copyCsv"), onClick: () => { void this.copySelectedCells("csv"); } });
+    menu.addSeparator();
+    menu.addRow({ icon: "clipboard-paste", label: t("selection.pasteCells"), onClick: () => { void this.pasteCellsFromClipboard(); } });
+    if (bulkEditableColumn) {
+      menu.addRow({
+        icon: "sliders-horizontal",
+        label: t("selection.bulkEditColumn", { column: bulkEditableColumn.label || bulkEditableColumn.key }),
+        onClick: () => this.openBulkEditForSelectedCells(anchor, bulkEditableColumn.key),
+      });
+    } else {
+      menu.addRow({
+        icon: "pencil",
+        label: t("selection.fillValue"),
+        submenu: true,
+        buildSubmenu: (child) => this.buildCellSelectionFillSubmenu(child),
+      });
+    }
+    menu.addSeparator();
+    menu.addRow({ icon: "trash-2", label: t("selection.clearCells"), warning: true, onClick: () => { void this.clearSelectedCells(); } });
+    menu.showAt({ anchor });
+  }
+
+  /** The plain-text fill form for a mixed-column selection, opened as the actions menu's child. */
+  private buildCellSelectionFillSubmenu(child: OwnedMenuHandle): void {
+    const form = child.el.createEl("form", { cls: "db-selection-fill-form" });
+    const input = form.createEl("input", {
+      cls: "db-selection-fill-input",
+      attr: {
+        type: "text",
+        placeholder: t("selection.fillPlaceholder"),
+        "aria-label": t("selection.fillPlaceholder"),
+      },
+    });
+    input.value = this.pendingCellFillDraft ?? "";
+    form.createEl("button", {
+      cls: "db-selection-action",
+      text: t("common.save"),
+      attr: { type: "submit" },
+    });
+    form.onsubmit = (event) => {
+      event.preventDefault();
+      void this.fillSelectedCells(input.value);
+      child.close();
+    };
+    input.oninput = () => { this.pendingCellFillDraft = input.value; };
+    window.requestAnimationFrame(() => input.focus());
   }
 
   private renderCellFillInput(bar: HTMLElement): void {
@@ -8363,7 +8579,10 @@ export class DatabaseView extends FileView {
   private setupRowInteractions(tr: HTMLElement, row: RowData, context?: RowCreateContext): void {
     this.rowMenu.attachToRow(tr, row, context);
     attachLongPress(tr, {
-      ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
+      // A cell answers its own long press now — entering selection (see the per-cell gesture set up
+      // in `setupTableCellPress`) — so the row's context-menu hold has to leave a press inside one
+      // alone, the same way it already leaves an input, a select or a link alone.
+      ignoreTarget: (event) => (isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a"))) || isTableCellTarget(event.target),
       onLongPress: (event) => this.rowMenu.show(event as unknown as MouseEvent, row, context, tr),
     });
     attachRowRangeGesture(tr, {

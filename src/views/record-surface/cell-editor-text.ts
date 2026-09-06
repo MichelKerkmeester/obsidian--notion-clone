@@ -345,6 +345,10 @@ export function openTextPopoverEditor(
 
   ctx.getActiveTextEditClose()?.();
   td.addClass("db-cell-editing");
+  // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair below:
+  // without it a phone's selection chrome stays docked in the band this popover occupies, and the
+  // two are drawn on top of each other.
+  claimBottomDock(td.ownerDocument, "cell-editor", true);
 
   let popover: HTMLElement;
   let textarea: HTMLTextAreaElement;
@@ -411,6 +415,7 @@ export function openTextPopoverEditor(
     removeMobileViewportListeners();
     popover.remove();
     td.removeClass("db-cell-editing");
+    claimBottomDock(td.ownerDocument, "cell-editor", false);
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
     if (ctx.getActiveTextEditClose() === close) ctx.setActiveTextEditClose(undefined);

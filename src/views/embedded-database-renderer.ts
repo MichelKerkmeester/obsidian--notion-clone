@@ -115,7 +115,7 @@ import { getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../da
 import { installNoteHoverPreview } from "./hover-link-preview";
 import { attachLongPress, observeTouchEnvironment } from "../data/touch-environment";
 import {
-  applyRowSelectionPress, attachRowRangeGesture, isMainItemColumn, nextCellRange,
+  applyRowSelectionPress, attachRowRangeGesture, isMainItemColumn, isTableCellTarget, nextCellRange,
   resolveCellTapAction, trackCellGesture,
 } from "./table-cell-gesture";
 import type { RowRangeInput } from "./table-cell-gesture";
@@ -493,8 +493,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         // control still buzzed and still swallowed the press, then declined to open anything —
         // and once the checkbox has a hold gesture of its own, that is a second buzz for it.
         attachLongPress(tr, {
-          ignoreTarget: (event) => isHTMLElement(event.target)
-            && Boolean(event.target.closest("button, input, a, select, textarea, [contenteditable='true']")),
+          // A cell answers its own long press now — entering selection (see `handleMouseDown`'s
+          // sibling gesture below) — so this hold has to leave a press inside one alone, matching
+          // the host table view's identical exclusion.
+          ignoreTarget: (event) => (isHTMLElement(event.target)
+            && Boolean(event.target.closest("button, input, a, select, textarea, [contenteditable='true']")))
+            || isTableCellTarget(event.target),
           onLongPress: (event) => this.rowMenu.show(event as unknown as MouseEvent, row, context, tr),
         });
         attachRowRangeGesture(tr, {
@@ -4413,9 +4417,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         isEditable: this.isColumnEditable(col),
       });
       if (tapAction === "open-record") return;
+      // A phone's ordinary tap never enters selection. The resolver's other touch answer,
+      // edit-cell, is left to the cell renderer's own click listener, which opens that column's
+      // editor on the same press; selecting is a mode reached only by the long press below.
+      if (gesture === "touch") return;
+      // Reachable only by a mouse from here on — the block above already returned for touch.
       const next = nextCellRange(this.cellSelection, addr, { gesture, shiftKey: event.shiftKey });
       this.cellSelection = { anchor: next.anchor, focus: next.focus };
-      this.isSelectingCells = gesture !== "touch";
+      this.isSelectingCells = true;
       this.renderEmbedSelectionStatusBar();
       this.renderEmbedCellSelectionClasses();
       this.focusEmbedCell(addr);
@@ -4431,6 +4440,23 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
     td.addEventListener("mousedown", handleMouseDown);
     td.addEventListener("mouseenter", handleMouseEnter);
+    // Selection on a phone is an explicit mode, reached only by holding a cell — the host table
+    // view's identical gesture, moved here rather than restated, so the two renderers cannot drift
+    // back apart the way the tap grammar above already did once.
+    attachLongPress(td, {
+      ignoreTarget: (event) => isHTMLElement(event.target)
+        && Boolean(event.target.closest("input, textarea, select, button, a, .db-cell-fill-handle, .db-cell-editing")),
+      onLongPress: () => {
+        const addr: CellAddress = { rowPath: row.file.path, colKey: col.key };
+        const current = this.cellSelection;
+        this.cellSelection = current
+          ? { anchor: current.anchor, focus: addr }
+          : { anchor: addr, focus: addr };
+        this.isSelectingCells = false;
+        this.renderEmbedSelectionStatusBar();
+        this.renderEmbedCellSelectionClasses();
+      },
+    });
   }
 
   private getSelectedEmbedCellAddresses(): CellAddress[] {
