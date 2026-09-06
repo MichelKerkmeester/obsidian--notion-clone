@@ -10,12 +10,12 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-06T00:00:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "measured t002s red-first pass into checklist.md at cc5a7ff2"
-    next_safe_action: "Run T003, dispositioning the seven local extensions, against T001s output"
+    last_updated_at: "2026-09-06T04:55:00Z"
+    last_updated_by: "verification-leaf"
+    recent_action: "re-verified t003-t011 on the rebased tree and opened t012 and t013"
+    next_safe_action: "Fix T012 R1 and R2, then recapture the 32 board scenarios"
     blockers:
-      - "T004 onward are blocked on T003"
+      - "T012's ten residuals and T013's dead-branch cleanup are open; both move captures"
     key_files:
       - "src/views/board-renderer.ts"
       - "specs/005-component-surface-system/056-board-anytype-parity/checklist.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-tasks"
       parent_session_id: null
-    completion_pct: 18
+    completion_pct: 85
     open_questions: []
     answered_questions:
       - "T001 requires an image-capable leaf; a text-only leaf records pixel read owed rather than substituting a DOM reading (054 ADR-005)"
@@ -207,6 +207,38 @@ _memory:
       captures and every non-board view came back pixelHash-identical. `npm run screenshots:verify`
       exit **0**. `implementation-summary.md` written with the before/after numbers and the judgment
       calls this file's own T004-T009 notes carry.
+- [ ] T012 **The residuals a fresh read of the landed board found against `design-trueup.md`.**
+      T004-T011 were verified again on the rebased tree by a leg that did not write them: the class
+      counts, the 045 zero-diff, the gantt, the lane history, the page limit and the seven
+      dispositions all reconfirmed. Ten values did not. Each row below is a measurement or a code
+      read on the landed tree, not a judgment, and none of them is accepted here — they are the
+      open work this task carries. (REQ-002, REQ-003)
+
+      | # | What `design-trueup.md` measured | What the landed board does | Evidence |
+      |---|---|---|---|
+      | R1 | Header chip **24px** tall (§2a, §3 A1) | **26px**. `styles.css` sets `height: 24px` beside `border: 1px` on a content-box element, so the border adds 2px | Chip border rows at device y 66..68 and y 115..118 of `constructed-board-desktop-dark.png` (DPR 2) = 33.0..59.0 CSS |
+      | R2 | Property rows on a **uniform 25px** pitch (§2a, §3 A4) | **~28.3px average, 23.5 to 31.5 across row types.** The kanban block sets `min-height: 25px` but leaves the shared `.db-board-card-field { padding: 2px }` in place, and the element is content-box, so a plain text row is 29px | Ink-band scan of card 1, `constructed-board-desktop-dark.png`: eleven bands from CSS y 94 to y 377, ten gaps over 283px. The reference's own seven bands span 150px over six |
+      | R3 | A **16 × 16px** title icon slot, text starting **27px** in (§3 A2) | The slot renders **only when the view sets `showRecordIcon`**, so the default card's title starts at the 16px padding edge; when it does render it is the shared **18 × 18** compact icon, not 16 | `embedded-database-renderer.ts` `renderEmbeddedRecordIcon` returns `null` unless `config.showRecordIcon === true`; `.db-record-icon.is-compact` is 18px. No board scenario contributes a `db-record-icon` to the constructed touch-target pass |
+      | R4 | Phone columns **254.7pt** at a **278pt** pitch, **23.3pt** gap, **0.7pt** hairline border, **transparent** card fill (§2b) | The phone takes the desktop **246 / 270 / 24** and the desktop's filled card. No phone-specific column geometry exists in the stylesheet | `grep is-touch styles.css` inside the kanban block matches only the controls' visibility split and the `+ New` row; no width, gap or border rule |
+      | R5 | The phone anatomy: permanent count, permanent `···`, labelled `+ New` (§2b, §5 C1) | Built and correct in code, but **never photographed**: `isTouchDevice()` is false in the capture harness, so every `-mobile-` board capture shows the desktop resting state at a narrow width | `board-view-mobile-light.png` shows the chip alone with no count and no `···` |
+      | R6 | E1's replacement is Anytype's own card-chip treatment — **tint fill plus darkened text** — because the *unfilled* light-theme chip is what was declined (`decision-record.md` ADR-004 E1) | The header chip stayed **unfilled** (`background: transparent`) and only the text was darkened. The result clears 4.5:1 (amber `#915608` on white = 5.93:1) but it is not the replacement the ADR names | `styles.css` `.db-kanban-col-chip` |
+      | R7 | The grey option pair is neutral — tint `#E3E3E3`, text `#888888` light / `#A8A8A8` dark (§3 A9) | The derived pair is a **red-tinted grey**: `#7E5D5D` light, `#BAABAB` dark, hue 0 against the reference's neutral. It clears 4.5:1 (5.82:1 on white) but it is a different hue, and it is also the ungrouped column's own colour | `styles.css` `.db-kanban-view .status-color-gray`; visible as a warm chip on `constructed-board-empty-column-desktop-light.png` |
+      | R8 | The checkbox is a **circle** glyph (§3 A4) | A rounded square, at the correct 14px | `.db-kanban-card-meta .db-checkbox-field`; `constructed-board-empty-column-desktop-light.png` |
+      | R9 | — | The shared empty-group card's **title overflows** the 246px column and clips mid-word. It fit the retired 280px column | `constructed-board-empty-column-desktop-light.png`, card fill runs CSS x 33.0..278.0 with the title cut at the edge |
+      | R10 | — | **No check locks any of these values.** Reverting the card radius from 8px to 2px, recapturing and restoring moved 8,640 channel bytes at the card corners, and `pixelHash` was identical either way (`bc72a8696d0e`) because the hash is a coarse 16 x 16 bucketed grid. `screenshots:verify` goes red on the stylesheet's own hash, which any edit moves. No test, lane or census asserts a board geometry value | Negative control run on the rebased tree |
+
+      **R1, R2, R6, R7 and R9 are the ones a device read will notice.** R1 and R2 have the same
+      one-line cause and the same one-line fix, and both would move all 32 board captures.
+- [ ] T013 **Delete the `boardExtensionsEnabled` branch, or record why it stays.** The flag and the
+      `renderSwimlaneBoard` / extensions-mode `renderColumn` / `renderSubgroup` / `renderCard` path
+      behind it are still in `src/views/board-renderer.ts`. T007 named this a deferred cleanup and
+      it is still open. Confirmed on the landed tree, and stronger than the leg claimed: the flag is
+      not only absent from every settings surface, it is **not in the view-config reader's key
+      allowlist at all** (`src/data/data-source.ts`), so a vault's `data.json` cannot switch it on
+      either — a stored view carrying it parses cleanly and drops it, now locked by a test in
+      `src/data/data-source.test.ts` with its own negative control. Deleting the branch touches
+      `BoardRendererActions` and its two implementers, **`src/views/database-view.ts`** and
+      **`src/views/embedded-database-renderer.ts`**, which is why it was left. (REQ-005)
 <!-- /ANCHOR:phase-3 -->
 
 ---

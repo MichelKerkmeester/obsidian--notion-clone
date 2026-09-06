@@ -10,12 +10,13 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-06T03:45:00Z"
-    last_updated_by: "code-leaf"
-    recent_action: "rebuilt the board onto db-kanban-*, dispositioned the extensions, gates green"
-    next_safe_action: "Await the operator's device confirmation for AC-010"
+    last_updated_at: "2026-09-06T04:55:00Z"
+    last_updated_by: "verification-leaf"
+    recent_action: "rebased onto main, re-verified every criterion and opened t012 and t013 on the residuals"
+    next_safe_action: "Land T012 R1 and R2, then recapture the 32 board scenarios"
     blockers:
       - "AC-010 is operator-owned and open by design"
+      - "AC-011 is Unmet: ten measured values did not reach the rendered surface (tasks.md T012)"
       - "boardExtensionsEnabled and its now-fully-unreachable-from-default-board render branch (renderSwimlaneBoard and the rest) are a named, deferred code deletion — not claimed done here"
     key_files:
       - "src/views/board-renderer.ts"
@@ -26,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-impl"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 85
     open_questions: []
     answered_questions:
       - "045's card-property mechanism needed zero code changes; the values-only row shape is CSS-scoped under .db-kanban-card-meta"
@@ -47,7 +48,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 056-board-anytype-parity |
-| **Completed** | T001 through T011 done. AC-010 (operator confirmation) is the one row nothing here closes |
+| **Completed** | T001 through T011 done and re-verified on the rebased tree. T012 (ten unmatched measured values) and T013 (the dead extensions branch) are open; AC-010 is the operator's |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -63,18 +64,22 @@ any `pm-kanban-*` rule (was 23) — both counts are **0**, confirmed by the same
 
 - **Column**: 246px wide, 24px gap (270px pitch), no background panel — the page shows through
   between cards, matching all twenty captures.
-- **Header**: a 24px, fully-rounded, unfilled option chip 8px in from the column's left edge, text
+- **Header**: a fully-rounded, unfilled option chip 8px in from the column's left edge — authored
+  at `height: 24px` but painting **26px**, because the element is content-box and its 1px border
+  sits outside that height (`tasks.md` T012 R1) — text
   coloured through the same `status-color-*` class every option value already uses, retinted for
   this view (a ten-colour bucket, tint plus a same-hue darkened/lightened text pair, derived by the
   same WCAG-clearing rule design-trueup.md only pixel-measured for amber). A hover-revealed
   "···"/"+" pair sits at the chip's right; on touch both are permanent, and a plain-text record
   count appears beside the chip — the phone's own anatomy, not the desktop's.
 - **Card**: 8px radius, 1px border, no shadow at rest (a shadow on hover is kept as design
-  inferred — no capture holds a pointer), 16px padding, a 16×16px title icon slot, and — where the
+  inferred — no capture holds a pointer), 16px padding, an 18px title icon slot that renders only
+  when the view opts into record icons (T012 R3), and — where the
   row has one — a type-name slot that keeps the schema's nearest content, a subtask's parent title,
   since no Objects/Types model exists to fill it literally (goal D8).
-- **Property rows**: every one of 045's configured fields renders as a value-only row on a 25px
-  pitch through the unchanged `card-field-renderer.ts` primitive, its label hidden by CSS except on
+- **Property rows**: every one of 045's configured fields renders as a value-only row through the
+  unchanged `card-field-renderer.ts` primitive, authored at a 25px `min-height` but measuring a
+  **~28.3px pitch** for the same content-box reason as the chip (T012 R2), its label hidden by CSS except on
   a checkbox row. Select/multi-select values render as 20px, 6px-radius tint-fill chips through the
   same retinted palette. The checkbox glyph is 14px.
 - **New-record control**: a 246×42px bordered box below the last card on desktop (a bare "+"), a
@@ -193,6 +198,49 @@ live, and named for the operator to reconcile against their own record.
    is outside this packet's scope.
 4. **AC-010 is the operator's.** The rebuilt board has not yet been read by the operator on iOS and
    desktop beside Anytype. Nothing in this repository can close that row.
+5. **Ten measured values did not reach the rendered surface**, found on a read-back after the
+   rebase and open as `tasks.md` T012 R1-R10 and `acceptance-criteria.md` AC-011. The header chip
+   paints 26px against a measured 24 and the property rows a ~28.3px pitch against a measured
+   uniform 25 — one cause, a content-box element whose `height`/`min-height` sits beside padding
+   and a border. The card title icon slot renders only when the view opts into record icons. The
+   phone board takes the desktop column geometry rather than its own measured values, and no
+   `-mobile-` capture photographs the phone anatomy because `isTouchDevice()` is false in the
+   harness. ADR-004 E1's stated replacement — a tint fill on the light-theme header chip — is not
+   what shipped; the chip stayed unfilled with only its text darkened. And nothing in the
+   repository locks any board geometry value: reverting the card radius to 2px moves 8,640 channel
+   bytes and no check.
 <!-- /ANCHOR:limitations -->
+
+---
+
+<!-- ANCHOR:reverification -->
+## Re-Verification After the Rebase
+
+Rebased from `772bf57a` onto `origin/main` at `793ab9b4`, which had landed `050`'s table load-more,
+`052`, `054`, `055` and `057`'s calendar month-grid retarget. `board-renderer.ts` was untouched by
+main; `styles.css` and `i18n.ts` auto-merged and both sides' rules survive. Generated evidence,
+`screenshots/manifest.json`, the captures, `tools/live/*.json` and `tools/lane/css-lane.json` were
+resolved to main's side and re-derived from the rebased tree rather than replayed.
+
+| Check | Result on the rebased tree |
+|-------|----------------------------|
+| `npx tsc --noEmit` | Exit 0 |
+| `npm run gate` (isolated log, `$?` read directly) | Exit 0 — **26 green, 0 red** |
+| `node tools/screenshots/verify.mjs` | Exit 0 — **558 entries** current |
+| Full `npm run screenshots` | **32** moved pixelHash, all board scenarios; every `screenshots/project-manager/*` capture pixelHash-identical; 5 byte-only re-encodes restored and the manifest byte counts re-synced |
+| `node tools/live/sheet-grammar.mjs` | Exit 0 — 12 surfaces, 31 stacked pairs |
+| Card-property suites | 19 of 19; `board-card-fields.ts` and `board-card-properties-panel.ts` **0 lines changed against `origin/main`** |
+| `pm-*` in `board-renderer.ts` / `pm-kanban-*` in `styles.css` / `pm-gantt-*` | **0 / 0 / 119** |
+| `git diff --stat origin/main -- src/views/calendar-timeline-*` | Empty; gantt guard suites 34 of 34 |
+| `node tools/lane/check-lane.mjs` | Green — main's 297 history entries preserved, this phase's acquire and release appended |
+
+Two things changed during the re-verification rather than being recorded as findings. A code comment
+in `tools/live/render-assertion-harness.ts` carried a packet number and an acceptance-criterion id,
+which this repository's comment-hygiene rule forbids; it was rewritten to keep the durable reason.
+And the ten-record page limit put the shared group-expand control at the foot of every over-limit
+column, twenty controls newly under the project's 28px coarse-pointer floor — given a board-scoped
+`min-height` it clears the floor, so `touch-targets-constructed-baseline.json` stays at **1304**
+rather than being raised. No capture moved for it.
+<!-- /ANCHOR:reverification -->
 
 ---
