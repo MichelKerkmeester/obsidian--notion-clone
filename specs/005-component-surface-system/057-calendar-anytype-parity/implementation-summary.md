@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Calendar Anytype Parity"
-description: "No code is implemented. T001, the capture true-up, has run and landed design-trueup.md; the operator has ruled ADR-002; three closure criteria are Met and the render legs have not started."
+description: "T015's seven residuals, T016's icon verification, T008's phone chip floor, T009's date-property submenu geometry and the two blocked-on-057 toolbar headers all landed; the gate is 26 green; AC-010 stays the operator's."
 trigger_phrases:
   - "057 implementation summary"
   - "calendar anytype parity status"
@@ -10,25 +10,32 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T23:40:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "recorded t001 landing and the adr-002 ruling"
-    next_safe_action: "Run T002's red-first pass, then leg A against design-trueup.md"
+    last_updated_at: "2026-09-06T16:30:00Z"
+    last_updated_by: "code-implementer"
+    recent_action: "landed T015 R1-R7, T016, T008, T009, the 051 toolbar migration and a pinned-values test; released the css lane; gate 26 green"
+    next_safe_action: "Operator device read of AC-010; a later leg re-reads AC-002/003/004's 'pixel read owed' rows if a capture ever supplies them"
     blockers:
-      - "No code has changed; the seven remaining criteria assert the retargeted render"
-      - "T002's red-first figures are owed before leg A"
-      - "Six-week rows, overflow and chip hover are pixel read owed"
+      - "AC-010 is the operator's own device read and nothing in this repository can close it"
+      - "Five AC-002 sub-rows and CHK-FIX class-of-bug review stay 'pixel read owed' — a static capture cannot answer hover/focus/press/drag/overflow"
+      - "The timed-block per-event colour question (decision-record.md ADR-002's open question) is unanswered and deliberately untouched"
     key_files:
       - "src/views/calendar-renderer.ts"
+      - "src/views/calendar-toolbar-renderer.ts"
+      - "src/views/calendar-timeline-toolbar-renderer.ts"
+      - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-impl"
       parent_session_id: null
-    completion_pct: 20
-    open_questions: []
+    completion_pct: 90
+    open_questions:
+      - "Does 'styled to the month grid' strip the week/day timed blocks' per-event colour too? (decision-record.md ADR-002, put to the operator, not decided here)"
     answered_questions:
       - "ADR-002 ruled: keep week and day, styled to the month grid"
-      - "A4 and A6 are absences, established across all twenty set captures"
+      - "T015's seven residuals are closed: the grid inset, the weekday pitch, the week/day rule colour and today marker geometry, the header grammar, the day-number offset, the weekday label form, and the empty-drawer placement"
+      - "T016: the chip's leading icon is confirmed rendering, not just wired — no calendar capture ever exercised the real renderRecordIcon path before this leg"
+      - "T008: the phone chip takes the 44px touch floor, both in CSS and in the JS-computed grid-row pitch"
+      - "T009: the date-property submenu's measured 224px/28px geometry is scoped to the date-field dropdowns only, not the shared component every other dropdown in the app uses"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -44,7 +51,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 057-calendar-anytype-parity |
-| **Completed** | Not complete — T001 landed 2026-09-05, no code has changed |
+| **Completed** | Code landed and gated. AC-010 (the operator's device read) is the only row left open, by design — an agent never ticks it |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -53,60 +60,104 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Documents, and nothing else.** The packet was authored on 2026-09-05 ~22:45 from the operator's
-calendar ruling; **T001, the capture true-up, ran the same day** and produced `design-trueup.md`.
-No code has changed. `src/views/calendar-renderer.ts` still constructs the same 91 `db-calendar-*`
-classes it constructed on `3407dab0`, still offers three scales, and still opens its unscheduled
-backlog drawer.
+T001 (capture true-up) and T004-T007 (the month-grid retarget) landed before this leg, and are
+recorded in their own prior commits. This leg picked up where an independent post-landing capture
+read had reopened AC-002: seven measured residuals (`T015 R1`-`R7`), plus three further named gaps
+(`T008`, `T009`, `T016`) and an ancillary cleanup the `051` header-componentization packet could not
+reach while this packet held the two files it lives in.
 
-### What T001 established
+### T015 — the seven residuals
 
-Nine of nine anatomy elements are trued against a named capture: 28 sub-rows carry a measurement,
-9 carry **pixel read owed** with the reason a static capture cannot answer them, and 2 stay labelled
-`047`-sourced rather than measured. Both absences the packet demanded be *established* rather than
-assumed now are, across all 10 light and all 10 dark set captures: **no unscheduled region** and
-**no month/week/day scale switch**.
+- **R1/R2 — the month grid's one-sided inset.** `.db-calendar-month-grid` carried both the shared
+  `db-calendar-grid` class (`width: 100%`, content-box) and its own `padding: 0 16px`, with no
+  `box-sizing` override — the padding stacked on top of an already-100%-wide content box, landing
+  the inset on the left edge only and overrunning the container by 16px on the right. One line,
+  `box-sizing: border-box`, fixed both sides of the same defect: the grid's 8 vertical rules now sit
+  at device x 112/489/865/1243/1619/1997/2373/2751, a 16px CSS inset on both edges, matching the
+  weekday row's own (always-correct) box, at a 377.0 device px column pitch (was 386.2).
+- **R3 — week/day rule colour and today marker, geometry only.** The week body's slot lines and the
+  current-time marker read `--background-modifier-border`/`--db-current-time-color` instead of the
+  month grid's measured `#EBEBEB`/`#292929`/`#216DFA`. Fixed by mixing off the literal hex values
+  and by splitting the selectors that grouped a `.db-timeline-*` declaration with a `.db-calendar-*`
+  one, so `--db-current-time-color` and the gantt's own rules are untouched. The week/day timed
+  block's own per-event colour is deliberately left alone — that is the open operator question, not
+  this fix's.
+- **R4 — the header grammar.** Week and day still built a static one-string title while month alone
+  used two select buttons. `renderCalendarTitle` is replaced by `renderScaleTitleSelects`, the same
+  two-button component month uses, with a new `navigateCalendarTitleTo` that clamps the existing
+  day-of-month to the target month's last day.
+- **R5 — the day number's ink offset.** `align-items: center` let the `+` add button's own height
+  push the number past its own top padding. Switched to `flex-start` plus `line-height: 1`; padding
+  tuned by measurement to `9px 3px 2px`. Ink top offset now measures 12px CSS exactly (was 18px),
+  right inset 5px CSS exactly (was 6-7px).
+- **R6 — the weekday label form.** `getWeekdayLabels` read the locale's own "short" width (3 letters
+  for English); the reference is a constant 2 letters. `.slice(0, 2)` closes it, a no-op for any
+  locale already at or under that width. Week-start configurability is untouched.
+- **R7 — the empty drawer's placement.** `renderUnscheduledBacklog` now returns before creating any
+  element when nothing is unscheduled, instead of rendering a header and an empty line at 85 CSS px
+  of height. The now-unreachable `.db-calendar-backlog-empty` rule is removed.
 
-Six premises in this packet's own documents were overturned by the images and are corrected in
-place, not only in the true-up. The two that would have done the most damage: the desktop captures
-are **1:1, not 2x**, so any leg that halves them builds a calendar at half scale; and the 24 menu
-files are **five distinct menus, not six**, because the day-menu and item-menu captures are
-byte-identical. Five accessibility values are declined with their measured ratios, chief among them
-the today marker's white numeral on `#3C7FFB` at **3.74:1**, replaced by `#216DFA` at 4.53:1.
+### T016 — the chip's leading icon, verified rather than merely wired
 
-**The operator ruled ADR-002 at ~23:20**: *"Keep week and day, styled to the month grid."* The month
-view goes Anytype 1:1; the two extra scales survive as ours, restyled to the month grid's measured
-values, and are labelled that way rather than as an inference from a product that has no week view.
+Every calendar capture's harness bag stubbed `renderRecordIcon: () => null`, so the `Show icon`
+toggle's effect had never actually rendered in any of the 28 recaptured images. A new opt-in
+`calendarRecordIcon` scenario option wires a real icon renderer and gives one bench row an icon
+token; `constructed-calendar-month` now sets it, and every chip in that capture carries a leading
+icon (one the real emoji variant, the rest the default file-icon fallback).
 
-### Two findings the authoring pass produced
+### T008 — the phone chip's 44px touch floor
 
-Both change what this packet can honestly promise, so they are recorded here rather than left to be
-rediscovered.
+The flat chip's mobile override was still `height: 18px; padding: 0 4px; font-size: 11px`, under the
+44px floor the nav buttons already had. `.is-phone .db-calendar-month-segment` now sets `height:
+44px` only, keeping the desktop's 12px label and 8px gap. That needed a matching JS-side fix: the
+20px lane pitch was hardcoded as a literal in four places (three in the month grid's row sizing, one
+in the week/day all-day row); a new `isPhoneLayout()`/`getMonthChipPitch()` pair reads the same
+20/44 value everywhere. The day/chip context menu is built on the already-registered shared
+`owned-menu` primitive and does not add a thirteenth `sheet-grammar.mjs` surface.
 
-**The calendar carries zero `pm-*` classes.** `039` ported Project Manager's calendar *behaviour*,
-not its markup. So `056`'s headline threshold — a Project Manager class count driven to zero — has
-no analogue here, and writing one would have produced a criterion that reads green on an untouched
-tree. `decision-record.md` ADR-003 records why the mirrored criterion is absent, because a
-threshold missing for a good reason and one that was forgotten look identical six weeks later.
+### T009 — the date-property submenu's measured geometry
 
-**iOS Anytype ships no calendar layout.** `screenshots/anytype/mobile/` holds no calendar capture of
-any kind: the iOS view-layout sheets are picker, gallery and kanban, and none of the 104
-`mobile/sheets/` captures is a calendar surface. The phone half of this retarget has no reference
-and will not get one, so every phone value it writes must say it was inferred from the desktop —
-that is REQ-007, and AC-007 counts it.
+Per-option icons and the selected checkmark already existed, unmodified, in the shared dropdown-menu
+component. What was missing was the measured 224px/28px geometry. Resizing the shared component for
+every consumer in the app is not this packet's to do — the same boundary `design-trueup.md` already
+draws for the layout-tile panel. A new class, `db-calendar-date-field-dropdown`, scopes the geometry
+to the start/end date-field dropdowns only.
+
+### Ancillary — the two toolbar headers `051` could not reach
+
+`calendar-toolbar-renderer.ts:89` and `calendar-timeline-toolbar-renderer.ts:69`'s hand-built
+`db-panel-header`/`db-panel-title` pairs are replaced with `buildShellHeader`, the same call every
+other migrated site in `051` uses. `calendar-timeline-renderer.ts` — the gantt itself, a different
+file from its own toolbar — is untouched. Recorded with file:line in `051`'s own `tasks.md`.
+
+### A pinned-values test
+
+`calendar-pinned-values.test.ts` reads styles.css directly and asserts five measured values by
+literal text: the month row's 136px height, the day-cell rule colour pair, the chip's 20px desktop
+pitch and square corners, the phone chip's 44px override, and the today marker's 26x24px size and
+`#216DFA` fill — so a future edit that quietly moves one of these fails at `npm test` speed, before
+a lane merely reports that styles.css moved.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/005-component-surface-system/057-calendar-anytype-parity/spec.md` | Created | The nine-element calendar anatomy, the phone gap, ten requirements |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/goal.md` | Created | The durable directive and the nine frozen decisions |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/plan.md` | Created | Five legs, gated on T001 and on the operator's ADR-002 ruling |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/tasks.md` | Created | T001 through T014 |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/checklist.md` | Created | Ten thresholds, four already measured red |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/acceptance-criteria.md` | Created | Ten closure criteria, all Unmet |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/decision-record.md` | Created, then updated | ADR-001 the retarget, ADR-002 **Accepted** on the operator's scale ruling, ADR-003 why one threshold is absent, ADR-004 parity by default |
-| `specs/005-component-surface-system/057-calendar-anytype-parity/design-trueup.md` | Created | T001's output: the measured Anytype system, the two established absences, the nine-element migration table, six contradictions and five refusals |
+| `src/views/calendar-renderer.ts` | Edited | T015 R1 (via styles.css)/R3/R4/R5/R6/R7, T008's phone chip pitch |
+| `src/data/calendar-date-time.ts` | Edited | R6, the two-letter weekday label |
+| `src/views/calendar-renderer.test.ts` | Edited | R7's rewritten backlog tests |
+| `src/views/calendar-toolbar-renderer.ts` | Edited | T009's scoped submenu geometry; the `buildShellHeader` migration |
+| `src/views/calendar-toolbar-renderer.test.ts` | Created | Pins the date-field submenu class scoping |
+| `src/views/calendar-timeline-toolbar-renderer.ts` | Edited | The `buildShellHeader` migration (gantt's own renderer untouched) |
+| `src/views/calendar-pinned-values.test.ts` | Created | Five pinned calendar values, read-first from styles.css |
+| `styles.css` | Edited | R1/R2 (`box-sizing`), R3 (rule colour/today marker), R5 (day-number padding/align), R7 (dead rule removed), T008 (phone chip height), T009 (submenu geometry) |
+| `tools/live/render-assertion-harness.ts` | Edited | T016's `calendarRecordIcon` option |
+| `tools/screenshots/constructed-scenarios.mjs` | Edited | T016's option wired to `constructed-calendar-month`; its note corrected |
+| `tools/screenshots/scenarios/temporal.mjs` | Edited | R7's fixture notes corrected; `calendarBacklogEmptyMarkup` removed |
+| `tools/screenshots/scenarios/temporal-tick-parity.test.mjs` | Edited | Dropped assertions against the removed helper |
+| `tools/live/replay.mjs` | Edited | `039`'s calm-empty-marker claim superseded in place, recorded as such |
+| `tools/lane/css-lane.json` | Edited | Nine held edits, then released at `4f88f8ebfee6` naming 37 reviewed captures |
+| `specs/005-component-surface-system/051-modal-and-sheet-componentization/tasks.md` | Edited | Addendum recording the two migrated files, file:line |
+| 37 `screenshots/notion-clone/**/*.png` | Recaptured | Every content-changed capture this leg's fixes moved |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -114,18 +165,14 @@ that is REQ-007, and AC-007 counts it.
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Authored in-runtime in the worktree `.worktrees/117-phases-056-057`, scaffolded by
-`runtime/cli/spec/create.sh --phase --parent specs/005-component-surface-system --phases 2`. The
-figures in `checklist.md` C2, C5, C6 and C7 were read off the working tree at `3407dab0` and off
-the capture folder with `grep -o`, `sed` and `ls`, not estimated. Validation runs from the primary
-checkout against the worktree path.
-
-T001 ran in `.worktrees/123-trueup-057`. Each capture was opened as an image *and* measured
-numerically: grid lines found by scanning for uniform rows and columns rather than by eye, text
-sizes derived from cap height at 50% alpha coverage, colours sampled per pixel from glyph cores, and
-contrast ratios computed from the sampled hex. Absences were established by counting non-background
-pixels in a named region across all twenty captures, which is why they are measurements and not
-impressions.
+Each residual and task landed red-first, in its own commit, with the measured before/after value
+written into `tasks.md`/`checklist.md` at landing time rather than after the fact. Every styles.css
+edit was recaptured with `node tools/screenshots/capture.mjs --only <scenario>` and read pixel-by-
+pixel using a small ad hoc PNG decoder (`tools/screenshots/pixel-hash.mjs`'s exported `decodePng`)
+rather than by eye alone, so the "before" and "after" numbers in this document and in `tasks.md` are
+measurements, not descriptions. The gantt was re-checked after every capture run: all eight
+`reference-gantt-*.png` MD5s and a `git diff --stat` on `calendar-timeline-renderer.ts` (empty
+across the whole leg).
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -135,13 +182,11 @@ impressions.
 
 | Decision | Why |
 |----------|-----|
-| Level 3, against `recommend-level.sh`'s Level 2 | The script returns 63/100 at 92% confidence, under its own Level 3 line. The go-higher rule and consistency with every peer family packet (`050`-`055`) settle it upward. The script's figure is recorded rather than hidden |
-| The scale question was asked, not answered — and the operator answered it | Removing two shipped scales to match a product that never had them is large, irreversible and operator-visible. Goal D6 and ADR-002 put it to the operator with T001's absence finding attached; the ruling came back *"keep week and day, styled to the month grid"* |
-| Week and day values are labelled *ours, restyled to the month grid's measured values* | Not *inferred from Anytype*. Twenty captures contain nothing to infer a week scale from, and an inference label claiming a source that does not exist is the failure AC-007 was written to prevent on the phone |
-| Contradictions are corrected where they were written, not only in the true-up | A true-up nobody re-reads leaves the wrong number in `spec.md` for the leg that acts on it. The 2x premise and the six-menu count are both fixed in place |
-| The mirrored class-count threshold is not written, and its absence is stated | It would have read green on an untouched tree. ADR-003 records the reasoning so the gap reads as deliberate |
-| The phone gap is a counted criterion, not a caveat | A caveat gets dropped once the work looks right. AC-007 counts unlabelled phone values and requires zero |
-| `039` is annotated, not rewritten | Superseded work keeps its record; a note that points forward is honest, a silent edit is not |
+| R3's colour fix stops at rule/marker geometry, not the timed block's own colour | ADR-002's open question (does "styled to the month grid" strip the per-event colour too) is the operator's, not inferable from a reference that ships no time grid |
+| The date-property submenu's 224px/28px geometry is scoped to a new class, not applied to the shared dropdown-menu component | The same boundary `design-trueup.md` already draws for the layout-tile panel: `053` owns the view switcher, and the shared dropdown is a cross-cutting component this packet does not own either |
+| The layout-tile panel and `+ Add Property` stay declined/out of scope | Recorded, not silently dropped: frontmatter keys are not a property registry, and the tile panel is a different packet's surface |
+| Five byte-only capture re-encodes are left at their freshly-captured bytes rather than restored to origin bytes | Restoring them would reintroduce stale manifest `sourceHashes` against the tree's actual final file hashes and fail the `screenshots-fresh` gate lane — the gate's mechanical pass is weighted over a marginally smaller diff |
+| `039`'s calm-empty-marker claim in `tools/live/replay.mjs` is superseded in place rather than left to go silently red | A reversal of a held claim is either a regression or a recorded supersession; this one is the latter, and the file's own philosophy is to say which |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -151,15 +196,15 @@ impressions.
 
 | Check | Result |
 |-------|--------|
-| `orchestrator.js <folder> --strict` | See the packet's landing commit; the first `RESULT:` line is the folder's own verdict |
-| `npm run gate` | Not run — no code changed |
-| `npx tsc --noEmit` / `npm run build` / `npx vitest run` | Not run — documentation-only change, no code and nothing that renders. `repo-rules/verification-gates.md` §2: a gate that exercised nothing is not evidence |
-| Acceptance criteria | **3 of 10 Met** — AC-001, AC-005, AC-006. The other seven assert the retargeted render or are the operator's |
-| A4 and A6 absence scan, 20 captures | **0** non-background px below the grid rule; **0** ink in the header band between the title and the `‹ Today ›` cluster |
-| Day-menu vs item-menu capture identity | MD5 `28d38b3a11620d04ef06e7e86c65b5c5` for both light `-full` files; two more pairs match |
-| `grep -o 'db-calendar[a-z-]*' src/views/calendar-renderer.ts \| sort -u \| wc -l` | **91** on `3407dab0` |
-| `grep -o "pm-[a-z-]*" src/views/calendar-renderer.ts \| sort -u \| wc -l` | **0** on `3407dab0` — the finding behind ADR-003 |
-| `ls screenshots/anytype/mobile/**/*calendar*` | No match — the finding behind AC-007 |
+| `npx tsc --noEmit` | Exit 0, read at every landing commit |
+| `npm test` | 1425/1425, final count (started this leg at 1418/1418 before T015 R7's two rewritten tests and T009/pinned-values' three new ones) |
+| `npm run build` | Exit 0; the regenerated `main.js` is restored to `HEAD` rather than committed, per this repository's own rule |
+| `npm run gate` (foreground, exit read from a file, no pipe) | **26 green, 0 red** |
+| `node tools/live/sheet-grammar.mjs` | Exit 0, 12 surfaces, 31 stacked pairs, unchanged throughout |
+| `node tools/screenshots/verify.mjs` | Exit 0, 558 fresh |
+| Gantt unmoved | All eight `reference-gantt-*.png` MD5-identical to `T002`'s recorded values; `git diff --stat 793ab9b4..HEAD -- src/views/calendar-timeline-renderer.ts` empty |
+| Guard tests unedited | `git diff --stat 793ab9b4..HEAD -- calendar-keyboard-navigation.test.ts calendar-search-placement.test.ts` empty; both 16/16 |
+| Acceptance criteria | AC-001, AC-003, AC-005, AC-006 Met; AC-002/004 measurably narrower (T015/T009 closed what they could) but still carry "pixel read owed" rows a static capture cannot answer; AC-007/008/009 hold after this leg; AC-010 is the operator's |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -167,22 +212,21 @@ impressions.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. ~~Every geometry value in `spec.md` section 4 is owed to T001.~~ **Closed.** All nine elements
-   carry a measurement, a **pixel read owed** marker, or an `047`-sourced label.
-2. ~~ADR-002 is Proposed and gates the first implementation leg.~~ **Closed.** Accepted, keep.
-3. ~~Two absences are asserted from the capture folder's contents, not from the images.~~ **Closed.**
-   Both established across all twenty set captures by pixel count.
-4. **The phone calendar will ship on inference.** There is no Anytype iOS calendar to read. The
-   mitigation is labelling, not measurement, and labelling is weaker — it makes the inference
-   visible without making it right. Two constraints outrank the inference there and are named in
-   `design-trueup.md` §8: `044`'s 44px touch floor, which a 20px chip pitch cannot meet, and `048`'s
-   stacking model, which the new day menu may register a twelfth surface against.
-5. **Nine sub-rows are pixel read owed and no capture will supply them.** Hover, focus, press, drag,
-   the overflow affordance, chip truncation, multi-day spans, a two-digit today, and what a six-week
-   month does to the row height. A static capture cannot show any of them. Each keeps our current
-   behaviour and says so, rather than taking a plausible number.
-6. **No code has changed.** Every criterion that asserts the retargeted render is still Unmet, and
-   the three code gates were not run because nothing they test moved.
+1. **Five `AC-002` sub-rows stay pixel read owed.** Hover, focus, press, drag, the overflow
+   affordance, chip truncation, multi-day spans, a two-digit today, and a six-week month's row
+   height cannot be answered from a static capture. Unchanged by this leg.
+2. **The timed-block per-event colour is an open operator question.** `decision-record.md` ADR-002
+   names it explicitly; this leg's R3 fix deliberately stops at rule/marker geometry and does not
+   touch it.
+3. **`AC-004`'s layout-tile panel and `+ Add Property` stay unbuilt.** Named as out of scope
+   (`053` owns the view switcher) and declined on product grounds (frontmatter keys are not a
+   property registry), respectively — recorded, not silently missing.
+4. **The phone calendar's every value carries "design inferred from desktop."** `T013` counted
+   zero unlabelled ones; the two phone-specific calendar values this packet owns (the nav-button
+   and chip 44px floors) are both labelled with their measured desktop source and their
+   accessibility ground.
+5. **`AC-010` is the operator's own device read**, on iOS and desktop, knowing the phone half was
+   inferred. Nothing in this repository closes this row, and it is not ticked here.
 <!-- /ANCHOR:limitations -->
 
 ---
