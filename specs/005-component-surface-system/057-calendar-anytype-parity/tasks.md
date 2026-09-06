@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T19:00:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "verified and landed T017; opened T018 for the phone overlap-column block"
-    next_safe_action: "Put T018's phone overlap-column remedy to the operator; then the AC-010 device read"
+    recent_action: "Landed T017; T018 opened, then ruled: phone week scrolls at a minimum column width"
+    next_safe_action: "Implement T018's minimum column width, then the AC-010 device read"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
@@ -38,7 +38,7 @@ _memory:
       - "T015 R1-R7, T016, T008, T009 all landed: gate 26 green, gantt confirmed unmoved throughout"
       - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink"
       - "T017 landed: 0 device px of the former per-event fills and accent bar across the four recaptured files"
-      - "T017's flatten costs the phone an overlap-column block: carried as T018, the remedy is the operator's"
+      - "T018 ruled 2026-09-06: the phone week scrolls horizontally at a minimum column width"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -552,6 +552,14 @@ title and 44x44 close on phone.
       changes a value the ruling settled or a geometry the ADR froze. Nothing else about
       T017 is affected: desktop reads correctly at both themes, and the block's
       duration-proportional height is untouched.
+      **Ruled 2026-09-06 (~08:55), operator verbatim: *"Phone week scrolls horizontally with a
+      minimum column width"*.** The first candidate is taken, and horizontal scrolling of the
+      phone week grid is the accepted consequence rather than a defect to design around. The
+      other two remedies are not taken: the phone title stays clipped rather than wrapped, and
+      ADR-002's declined hairline stays declined. The row stays open until the remedy lands —
+      it is in flight in `worktrees/155-impl-057-phone-week` — and its green condition is
+      unchanged: an overlap-column block at the phone's minimum column width is distinguishable
+      from empty grid in the decoded capture, without reintroducing a per-event fill.
 <!-- /ANCHOR:phase-3 -->
 
 ---

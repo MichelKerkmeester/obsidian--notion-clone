@@ -14,11 +14,10 @@ _memory:
     last_updated_at: "2026-09-06T08:15:00Z"
     last_updated_by: "implementer-session-fourth-landing"
     recent_action: "Landed T013/T014/T019; E4 closed by the operator; census receipt corrected"
-    next_safe_action: "T015's remaining geometry/motion lane rows, then the sub-page producer once one exists"
+    next_safe_action: "Build ADR-008's side sheet role (T021-T023), then T015's remaining lane rows"
     blockers:
       - "styles.css edits are serialized by the parent's CSS lane"
       - "T010 stays blocked on the operator (spec.md §11's second open question, unanswerable from any capture)"
-      - "AC-012's E4 row (whether a destructive confirm is shown at all) needs the operator's ruling"
     key_files:
       - "src/views/modals/db-modal.ts"
       - "src/views/mobile-bottom-sheet.ts"
@@ -208,7 +207,7 @@ Everything below is VOLATILE.
 
 ### 2026-09-06 amendment: the desktop Settings side sheet, and ADR-007 E4 closes
 
-**Operator report, desktop, ~08:15 (screenshots in `scratchpad/`):** *"btw this dropdown on desktop
+**Operator report, desktop, ~08:15 (screenshots supplied with the report; the operator's own captures, not committed to this repository):** *"btw this dropdown on desktop
 is horrible … should probably become a sheet, on desktop at least, and get dedicated button."* The
 database Settings panel opens today as a tall anchored dropdown (`view-config-panel-renderer.ts`
 through `positionToolbarPopover`'s general preset), which is none of `design-system.md` §3's roles —

@@ -16,7 +16,7 @@ _memory:
     last_updated_at: "2026-09-06T09:10:00Z"
     last_updated_by: "phase-author"
     recent_action: "Opened the phase from the operator's phone-board report; read the existing titleField mechanism"
-    next_safe_action: "T002: measure the raw-stringified-title red on a currency-titled view"
+    next_safe_action: "T003: measure the raw-stringified-title red on a currency-titled view"
     blockers:
       - "Owners 045 (card fields), 054 (record surface) and 056 (card anatomy) must not be edited by this packet directly — it edits the one shared resolver they all call through"
     key_files:
@@ -112,7 +112,7 @@ into the objective, and it is expected to grow.
 
 | Item | State | Evidence |
 |------|-------|----------|
-| Phase opened | Done | Operator report, phone, 2026-09-06 ~07:36, verbatim: "You see these cards? The name is a number. We should be able to change that number displayed to different number formats like euro. But also that main name is a number but it should have shown the month as the main name so ideally we can change which value becomes the card name." Screenshot `scratchpad/operator-board-card-title-20260906.png` — a phone board view whose cards' main name line reads a bare numeral (the source column holds a month/period number) with no currency or date formatting applied, described here rather than copied into the repository. |
+| Phase opened | Done | Operator report, phone, 2026-09-06 ~07:36, verbatim: "You see these cards? The name is a number. We should be able to change that number displayed to different number formats like euro. But also that main name is a number but it should have shown the month as the main name so ideally we can change which value becomes the card name." Screenshot `operator-board-card-title-20260906.png`, supplied with the report and not committed to this repository — a phone board view whose cards' main name line reads a bare numeral (the source column holds a month/period number) with no currency or date formatting applied, described here rather than copied into the repository. |
 | Existing mechanism read | Done | `ViewConfig.titleField` (`types.ts:570`), `NO_TITLE_FIELD` (`:354`), the picker in `view-config-panel-renderer.ts:1902-1920`, `resolveTitleFieldDisplay` (`title-field-display.ts:36-61`), and its callers in `board-renderer.ts` (`:567-568`, `:1314/:1327`, `:1716-1717`) and `record-detail-panel.ts` (`:355-361`, `:485-488`) |
 | Anytype reference checked | Done | `screenshots/anytype/README.md:293` — "Anytype has no separate title relation; the record title is the object name." Nothing to adopt for the picker; recorded as D6 |
 | Notion reference checked | Pending | `047`'s Mobbin harvest (Notion iOS+web) has not landed; no `screenshots/notion/` directory exists in this tree as of this writing. `screenshots/notion-clone/` is this plugin's own constructed capture set, not a competitor reference, and is not evidence of Notion's behavior |

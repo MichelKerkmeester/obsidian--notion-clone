@@ -68,7 +68,7 @@ contextType: "general"
 - [x] T013 Read the CHANGELOG entry as a user who lost a gallery would, and check every loss is findable — all six `gallery*` fields have their own bullet, each named in the words a user sees; `galleryImageField` is the one carried as an identifier, the other five being described by what they did
 - [x] T014 Cut the release, or hand the cut to the orchestrator WITH the target version recorded in `implementation-summary.md` — release **0.0.28** (`d3433d81`) already carries `001`-`003`; recorded rather than re-cut
 - [ ] T015 Leave the operator row open. An agent never ticks it
-- [ ] T016 [P2] Remove the orphaned `assets/screenshots/gallery-view.png` (1.3MB, unreferenced since T004/T005 dropped the README's gallery screenshot row). Found 2026-09-06 during the 058/refresh leg; recorded rather than deleted, because that leg does not touch binaries. Code owner: the next lander touching `assets/screenshots/`
+**Note, 2026-09-06 (the 058/refresh leg), not a task.** `assets/screenshots/gallery-view.png` (1.3MB) is no longer referenced by the README after T004/T005, but it is **deliberately retained as history** — `spec.md`'s own out-of-scope note and `implementation-summary.md`'s answered question both record that call. Recorded here so a later reader does not mistake it for an oversight; no work is owed unless the operator reverses the decision, which would need its own row.
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -76,7 +76,7 @@ contextType: "general"
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [x] All tasks marked `[x]` — except T015 (the operator's own row, never ticked by an agent) and T017 (a post-completion follow-up recorded 2026-09-06)
+- [x] All tasks marked `[x]` — except T015, which names the operator's own row and is never ticked by an agent
 - [x] No `[B]` blocked tasks remaining
 - [x] Every acceptance criterion in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded` — except AC-007, which is operator-only
 <!-- /ANCHOR:completion -->

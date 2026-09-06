@@ -165,8 +165,9 @@ red-first measurement pass. No code has been written and no criterion is met.
 ### 2026-09-06 amendment: R6/R7 rulings recorded, and a pointer to 058
 
 **R6 ("Anytype tint fill") and R7 ("Neutral, match Anytype")** are the operator's rulings on two of
-`tasks.md` T012's ten measured residuals — recorded in full in `decision-record.md`'s ADR-004
-addendum, and referenced in place on T012's own R6/R7 rows rather than restated here. R6 reaffirms
+`tasks.md` T012's ten measured residuals — recorded in full as `decision-record.md`'s **ADR-006**
+(R6) and **ADR-007** (R7), and referenced in place on T012's own R6/R7 rows rather than restated
+here. R6 reaffirms
 ADR-004 E1 as written (the shipped chip's unfilled treatment was the *declined* one, not the
 replacement); R7 settles a defect ADR-004 never addressed (a red-tinted grey where Anytype's own is
 neutral). Neither reopens ADR-002's parity-by-default posture.

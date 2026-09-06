@@ -12,12 +12,11 @@ _memory:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "implementer-session"
-    recent_action: "Verified centring and C10 in the pixels, fixed two harness races; gate 26 green"
-    next_safe_action: "T013 waits on the operator's ADR-007 E4 ruling before the confirm primitive is exported"
+    recent_action: "Added AC-013 for ADR-008's side sheet role; E4 closed by the operator"
+    next_safe_action: "Prove AC-013 red on the anchored dropdown before building the side sheet role"
     blockers:
       - "AC-009 no longer gates on 050: T001 read the captures first-hand and 10 of 35 rows carry the not-seen label"
       - "AC-010 is operator-owned and nothing here can close it"
-      - "AC-012's E4 row needs the operator's ruling on whether holding the confirm is permitted under a parity-by-default target"
     key_files:
       - "src/views/surface-shell.ts"
       - "src/views/modals/db-modal.ts"

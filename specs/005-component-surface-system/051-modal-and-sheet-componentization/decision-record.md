@@ -481,20 +481,15 @@ than absorbed silently. Two readings are open and only the operator can choose:
 
 Reading 1 was applied until the operator ruled.
 
-**CLOSED, 2026-09-06 (~07:50), operator: *"No confirm for single delete, Undo toast."*** A third
-reading, not either of the two above: single-row delete becomes immediate, with Undo carried on the
-toast, and the confirm stays for bulk delete and for anything not undoable. This does not require
-`TrashManagerModal` (reading 2) and does not leave the confirm on single-row delete (reading 1) — it
-reuses the toast/undo primitive `055` already owns rather than either of E4's original two paths.
-The confirm primitive this ADR builds still exists and is still the only one; it is simply no longer
-the path a single-row delete takes. Owner of the `deleteRow` call-site changes: `055`; this packet's
-scope is unchanged — the confirm primitive `055` calls into for bulk/non-undoable cases.
-
 **E4 is closed, 2026-09-06 (~07:50). The operator ruled, verbatim: "No confirm for single delete,
 Undo toast."** The confirm is kept for bulk delete and for anything not undoable. This is neither of
 the two readings above: it takes Anytype's pattern without the data-model change reading 2 required,
 by making the single delete reversible at the interaction layer — an undo toast — rather than at the
-storage layer. The hold this ADR flagged is discharged; the row stops waiting on the operator.
+storage layer. The hold this ADR flagged is discharged; the row stops waiting on the operator. It
+reuses the toast/undo primitive `055` already owns rather than either of E4's original two paths.
+The confirm primitive this ADR builds still exists and is still the only one; it is simply no longer
+the path a single-row delete takes. **Owner of the `deleteRow` call-site changes: `055`**; this
+packet's scope is unchanged — the confirm primitive `055` calls into for bulk and non-undoable cases.
 
 **Not implemented here.** This leg exported the confirm primitive and closed the census; removing
 the single-delete confirm and adding the undo toast is a separate leg's work, and nothing in the
@@ -563,7 +558,7 @@ been wrong on thirteen of thirty-five census surfaces.
 
 ### Context
 
-Operator report, desktop, ~08:15 (screenshots in `scratchpad/`): *"btw this dropdown on desktop is
+Operator report, desktop, ~08:15 (screenshots supplied with the report; the operator's own captures, not committed to this repository): *"btw this dropdown on desktop is
 horrible … should probably become a sheet, on desktop at least, and get dedicated button."* The
 database Settings panel opens today as a tall anchored dropdown through
 `positionToolbarPopover`'s general preset (`view-config-panel-renderer.ts`), sized by

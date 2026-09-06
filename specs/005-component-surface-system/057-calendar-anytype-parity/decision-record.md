@@ -223,6 +223,13 @@ the ruling is implemented exactly as given, and the remedy — a minimum column 
 phone title, or the 1px hairline declined above — changes either a value this ruling settled or a
 geometry this ADR froze, so it is the operator's and is carried as `tasks.md` T018.
 
+**The operator ruled, 2026-09-06 (~08:55), verbatim: *"Phone week scrolls horizontally with a
+minimum column width"*.** The geometry disposition this ADR named is exercised rather than
+reopened: the phone week grid takes a minimum column width and scrolls horizontally past it. The
+flatten stays exactly as ruled, the declined 1px hairline stays declined, and the phone title stays
+clipped rather than wrapped. Implementation is `tasks.md` T018's, and the row stays open until it
+lands.
+
 ---
 
 ## ADR-003: The calendar's thresholds are per-element, not a class count

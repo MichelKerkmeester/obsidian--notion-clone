@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-09-06T09:10:00Z"
     last_updated_by: "orchestrate-handover-21"
-    recent_action: "Opened 058; amended 047/051/052/053/055/056; refreshed roadmap.md and goal-prompt.md"
-    next_safe_action: "Land 056's residuals and 057's flatten-to-chip-ink leg, then cut 0.0.29"
+    recent_action: "Opened 058; amended 047/051/052/053/055/056; rebased onto 578991e8, reconciled shared docs"
+    next_safe_action: "Land the six in-flight impl worktrees, then dispatch 047's harvests one at a time"
     blockers:
       - "058 T003 onward pending: the format-routing and Title-slot-affordance code has not landed"
       - "047's four Mobbin harvests (Notion, Evernote, Fibery, ClickUp) are queued, none dispatched"
@@ -85,26 +85,36 @@ In particular: `056`'s R6/R7 addendum in this branch's `decision-record.md` will
 be read alongside `06c6425a`'s independent record of the same two rulings and reconciled rather than
 both kept. Do not assume either side is the complete picture; read both.
 
-**Live worktrees relevant to tonight**, confirmed by `git worktree list` at the time of writing (not
-carried from an earlier session): `148-harvest-notion`, `149-harvest-evernote`, `150-harvest-fibery`,
-`151-harvest-clickup` (the four Mobbin harvest legs `047`'s amendment names, each still at the shared
-base `3b3ac633`, none dispatched yet); `146-impl-053-table-footer` (tip `20389105`, one uncommitted
-file) and `147-impl-052-searchable-dropdowns` (tip `4b3adca0`, clean) — both already carry real
-behaviour commits for two of this session's own new criteria, ahead of what this leg's own docs
-describe as "not started"; `153-impl-051-settings-side-sheet`, `154-impl-055-no-confirm-delete`,
-`155-impl-057-phone-week` (all three at `6c718f63`, dirty with uncommitted work); `156-impl-056-palette`
-and `157-release-0-0-29` (both at main's tip as of their last sync, `0e8185b6` — itself now behind
-main's current `03aa151d`). **None of these was opened or read for content by this leg** — this
-paragraph names them from `git worktree list` and their own `git log -1`/`git status --porcelain`
-only, so a later reader knows they exist without this session claiming to have verified their content.
+**Live worktrees relevant to tonight**, re-read from `git worktree list` plus each one's own
+`git log -1` and `git status --porcelain` at the time of this rebase — not carried from the earlier
+read, which is already stale:
 
-**Corrected against the operator's own dictation.** The SHA list this session was asked to verify
-resolved for every entry but one: `057`'s pair was given as `793b9b4 / 6b5d0ea2`; `793b9b4` is not a
-valid revision in this repository (`git log -1 793b9b4` fails outright). Reading main's log around
-`6b5d0ea2` (the docs commit) finds its paired behaviour commit immediately before it: `9f30fc31`,
-`fix(calendar): flatten the week/day timed block to the month chip's ink` — almost certainly what was
-meant. Recorded here rather than silently substituted, per this program's own rule against guessing
-a citation.
+| Worktree | Tip | Working tree | What it carries |
+|---|---|---|---|
+| `146-impl-053-table-footer` | `38dde17a` | clean | The footer rule landed and recorded (`20389105` is its earlier docs commit); ahead of what `053`'s own docs describe |
+| `147-impl-052-searchable-dropdowns` | `4b3adca0` | 11 files dirty | The Operator-dropdown anchoring fix; the combobox behaviour itself is still ahead of it |
+| `153-impl-051-settings-side-sheet` | `6c718f63` | 58 files dirty | ADR-008's side sheet role, mid-flight |
+| `154-impl-055-no-confirm-delete` | `c68e0347` | clean | `fix(delete): skip the confirm for a single-row delete, keep the toast's Undo` — E4's ruling implemented, not yet on main |
+| `155-impl-057-phone-week` | `6c718f63` | 32 files dirty | T018's minimum column width and horizontal phone-week scroll |
+| `156-impl-056-palette` | `0e8185b6` | 10 files dirty | R6/R7's tint fill and neutral grey |
+| `148-harvest-notion`, `149-harvest-evernote`, `150-harvest-fibery`, `151-harvest-clickup` | all `3b3ac633` | `148` 1 file dirty, rest clean | `047`'s four Mobbin harvests, none dispatched. **Dispatch them one at a time** — four concurrent capture legs contend for the same manifest and lane artefacts |
+
+**There is no `157-release-0-0-29` worktree.** The earlier read of this document named one; `git
+worktree list` has no such entry, and `0.0.29` was cut on main directly at `03aa151d`. **None of the
+worktrees above was opened for content by this leg** — the table reports their git state only.
+
+**Corrected against the operator's own dictation, and the earlier correction was itself wrong.**
+The earlier read reported `793b9b4` as "not a valid revision"; that string is a mistyped
+abbreviation. **`793ab9b4` resolves**, and it is `chore(gate): re-stamp evidence timestamps from the
+closing gate run` (2026-09-06 04:11) — the *closing* commit of the month-grid landing sequence, not
+the landing. The true chain, read from `git log --oneline | grep -i calendar` on main:
+**`d2fe6bea`** `feat(calendar): retarget month grid to Anytype's measured layout (T005-T007)` is the
+landing; **`9ccb8d80`** `docs(specs): close AC-002 and AC-003 on the month-grid retarget` records
+it; `4beec550` recaptured, `3ade4cae`/`2f5cf1e7` took the CSS lane, and `793ab9b4` re-stamped the
+evidence. Separately, **`9f30fc31`** `fix(calendar): flatten the week/day timed block to the month
+chip's ink` is the *flatten* landing and **`6b5d0ea2`** is its docs commit — a different leg from the
+month grid, and the pair the earlier read had conflated with it. Cite the landing, not the
+re-stamp: an evidence re-stamp names the run, not the change.
 
 **Harness traps learned tonight, from the ledger this session read rather than from firsthand
 reproduction — recorded as reported, not re-verified by this leg:** `git config rerere.enabled` is
@@ -116,11 +126,25 @@ print-mode gate leg must not be backgrounded — the pattern this program alread
 stream to a foreground terminal will hang or truncate if it is not run to completion in the
 foreground. When restoring a bytes-only re-encoded capture, restore the **named file paths**, never
 the whole directory — a directory-level restore can revert a sibling capture that changed for a real
-reason in the same pass.
+reason in the same pass. **`gh` resolves to the upstream repository from the primary checkout**, so
+every `gh` call that must act on this fork passes `-R MichelKerkmeester/obsidian--notion-clone`
+explicitly; without it a release or issue command silently addresses the wrong repository.
 
 ---
 
-**Main carries `0.0.26`** (cut `8c7b65aa`). It ships `006-record-open-target`'s docking fix
+**Main carries `0.0.29`** (cut `03aa151d`, 2026-09-06 09:01; the cadence row landed after it at
+`578991e8`). Tonight's later landings on main, in order and each read from `git log`:
+`6c718f63` (08:23, the calendar leg's post-rebase re-derive), `4224b092` (08:41, the confirm
+primitive's evidence rebuild), `0e8185b6` (08:54, the board residuals' third-rebase re-derive),
+`03aa151d` (09:01, the `0.0.29` cut) and `578991e8` (09:09, the cadence row). **This branch is
+rebased onto `578991e8`**, and the shared-doc reconciliation the paragraph above asked for has been
+done rather than deferred: `051`'s E4 closure, `056`'s R6/R7 and the roadmap's §5.A rows and §6A
+entries each survive **once**, taking main's landed record where the two disagreed and folding in
+only what this branch carried that main did not.
+
+The paragraph below is retained as the state at `0.0.26` and is history, not current:
+
+**`0.0.26`** (cut `8c7b65aa`). It ships `006-record-open-target`'s docking fix
 (`ae46da94`) — the generalisation of §4 row 48 to **every** caller that opens a record with no
 element to point at, which is §4 **row 52**, now reading *shipped in 0.0.26, awaiting operator*.
 `0.0.25` under it carries the five desktop fixes (rows **47-51**) and `0.0.24` the stacked sheets,

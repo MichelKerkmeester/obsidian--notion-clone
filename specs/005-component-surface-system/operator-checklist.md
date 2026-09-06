@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **59 phases**, **6 with nothing left**, **175 rows** waiting on a device.
+Derived 2026-09-06: **59 phases**, **6 with nothing left**, **174 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -273,7 +273,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` exits 0 with one permanent lane row per item, each observed red before green, and `npm run replay` holds with reversed 0.
 - [ ] The operator opens the board and a table on iOS and on desktop and reads the adopted surfaces as the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
-## 051-modal-and-sheet-componentization — 0/8
+## 051-modal-and-sheet-componentization — 1/8
 
 - [ ] One shell primitive produces every modal and every sheet, and the replaced vocabularies are gone. Today: four. `DbModal.applyPresentation` (`modals/db-modal.ts:92-113`) decides one; `attachSheetChromeToModal` is called directly by three non-`DbModal` surfaces (`src/main.ts:3047`, `image-file-suggest-modal.ts:40`, `markdown-file-suggest-modal.ts:34`); `createSheetHeader` is called independently at twelve sites; and `getSheetTitle` (`db-modal.ts:83-88`) recovers a title by scraping the first `h1`/`h2`/`h3` in the content because no surface declares one. Done is one constructor, one declared title per surface, and the three direct `attachSheetChromeToModal` callers routed through it or dispositioned in `modal-surface-inventory.md` with a written reason.
 - [ ] Every modal surface in the family is dispositioned in `modal-surface-inventory.md`: surface → shell role → presentation → changes → Anytype pattern with its capture or its named gap → stays ours. Today: no such table exists. The census it is built from is real and counted from source at HEAD: 20 `extends DbModal` subclasses, of which 13 declare `sheet`, 4 declare `fullscreen` and 3 inherit the `sheet` default; 3 `FuzzySuggestModal` subclasses outside `DbModal` entirely; 12 `createSheetHeader` call sites; and `mobile-bottom-sheet.ts` at 840 lines with 19 exports.

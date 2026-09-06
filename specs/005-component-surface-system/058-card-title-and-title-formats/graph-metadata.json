@@ -201,7 +201,7 @@
     ],
     "causal_summary": "A view's card and record title can already be set to any column (`ViewConfig.titleField`), but the",
     "created_at": "2026-09-06T06:27:07Z",
-    "last_save_at": "2026-09-06T06:38:09.391Z",
+    "last_save_at": "2026-09-06T07:23:47.554Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,7 +213,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2db6eeb197001351ccc4c67594a161d56eece87f0295f84a6d1a627bf41ff84b",
+    "source_fingerprint": "sha256:0b9f5845beb74e657686e613b65b060cdc4ab9e64846ffaac084f684f8a6956d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "96f72cf84244e9af071768a1d444251219e2a396f4ce2006e3e1ba53005cb79d",
