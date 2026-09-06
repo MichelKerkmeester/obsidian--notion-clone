@@ -108,8 +108,11 @@ vi.mock("../i18n", () => ({
 
 const raisedToasts = vi.hoisted(() => [] as ToastOptions[]);
 
+const toastRaiseFails = vi.hoisted(() => ({ value: false }));
+
 vi.mock("./toast", () => ({
   showToast: (_doc: unknown, options: ToastOptions) => {
+    if (toastRaiseFails.value) throw new Error("the toast could not be raised");
     raisedToasts.push(options);
     return { close: () => {} };
   },
@@ -117,19 +120,16 @@ vi.mock("./toast", () => ({
 
 const confirmCalls = vi.hoisted(() => [] as unknown[]);
 
-vi.mock("./modals/confirm-modal", () => ({
+// Only the modal is stubbed. canUndoDeletion stays the shipped one: it is the predicate that
+// decides whether a delete may skip the confirm, so a copy of it here would let the real one
+// change to never return false — trashing an unreadable row with neither confirm nor Undo —
+// while every case below stayed green. The fake vault's throw-on-missing cachedRead is what
+// drives the real predicate into its unreadable branch.
+vi.mock("./modals/confirm-modal", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./modals/confirm-modal")>()),
   confirmWithModal: (...args: unknown[]) => {
     confirmCalls.push(args);
     return Promise.resolve(true);
-  },
-  // Mirrors the real predicate exactly (read-or-fail): the fake vault's own throw-on-missing
-  // cachedRead is what a test drives to produce the unreadable-file branch.
-  canUndoDeletion: async (app: { vault: { cachedRead(file: TFile): Promise<string> } }, file: TFile) => {
-    try {
-      return await app.vault.cachedRead(file);
-    } catch {
-      return false;
-    }
   },
 }));
 
@@ -263,6 +263,7 @@ beforeEach(() => {
   notices.length = 0;
   raisedToasts.length = 0;
   confirmCalls.length = 0;
+  toastRaiseFails.value = false;
 });
 
 // ───────────────────────────────────────────────────────────────────
@@ -299,6 +300,26 @@ describe("database-view row deletion", () => {
     expect(trashed).toEqual(["Tasks/ghost.md"]);
     expect(history).toHaveLength(0);
     expect(raisedToasts[raisedToasts.length - 1]?.action).toBeUndefined();
+  });
+
+  /** Skipping the confirm makes the history entry the only thing standing between a mis-tap and a
+   *  lost note, so it has to be recorded before anything that can throw after the trash. Here the
+   *  toolbar refresh inside pushHistory is what fails; the deletion must still be on the stack for
+   *  Ctrl+Z even though the toast that would have offered Undo never went up. */
+  it("records the deletion before the toolbar refresh that can fail after the trash", async () => {
+    const { self, vault, trashed, history } = makeStandalone();
+    vault.seed("Tasks/alpha.md", "alpha");
+    self.updateUndoAction = () => { throw new Error("toolbar is gone"); };
+
+    await invoke(self, "deleteRow", rowFor(vault, "Tasks/alpha.md"));
+    expect(confirmCalls).toHaveLength(0);
+    expect(trashed).toEqual(["Tasks/alpha.md"]);
+    expect(history[0]).toMatchObject({ type: "deleted", file: { path: "Tasks/alpha.md", content: "alpha" } });
+    expect(raisedToasts).toHaveLength(0);
+
+    self.updateUndoAction = () => {};
+    await invoke(self, "undoLastEdit");
+    expect(vault.files.get("Tasks/alpha.md")).toBe("alpha");
   });
 
   it("offers Undo only alongside the entry it replays", async () => {
@@ -415,6 +436,23 @@ describe("embedded-database-renderer row deletion", () => {
     expect(trashed).toEqual(["Tasks/ghost.md"]);
     expect(history).toHaveLength(0);
     expect(raisedToasts[raisedToasts.length - 1]?.action).toBeUndefined();
+  });
+
+  /** The same ordering guarantee on the seam this class actually has after the trash: a toast that
+   *  fails to raise costs the Undo button, never the note. */
+  it("records the deletion before the toast that can fail after the trash", async () => {
+    const { self, vault, trashed, history } = makeEmbed();
+    vault.seed("Tasks/alpha.md", "alpha body");
+    toastRaiseFails.value = true;
+
+    await invoke(self, "deleteRow", rowFor(vault, "Tasks/alpha.md"));
+    expect(confirmCalls).toHaveLength(0);
+    expect(trashed).toEqual(["Tasks/alpha.md"]);
+    expect(history[0]).toMatchObject({ type: "deleted", file: { path: "Tasks/alpha.md", content: "alpha body" } });
+    expect(raisedToasts).toHaveLength(0);
+
+    await invoke(self, "undoLastEdit");
+    expect(vault.files.get("Tasks/alpha.md")).toBe("alpha body");
   });
 
   it("refuses to overwrite a new file that has taken the original path", async () => {
