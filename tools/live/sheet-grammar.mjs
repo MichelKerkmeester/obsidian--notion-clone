@@ -310,6 +310,19 @@ setLocale("en");
 // unstyled default, so it is set directly rather than by pulling in the whole stand-in sheet.
 document.documentElement.style.setProperty("--background-primary", "#1e1e1e");
 
+// One engine serialises a colour as rgb()/rgba(), the other as color(srgb ...), with or without a
+// trailing alpha. Only the alpha decides whether a surface is painted, so it is the only part read.
+const isOpaqueColor = (value) => {
+  if (!value || value === "transparent") return false;
+  if (!value.includes("(")) return true;
+  const inner = value.slice(value.indexOf("(") + 1, value.lastIndexOf(")"));
+  const alpha = value.includes("/")
+    ? inner.slice(inner.lastIndexOf("/") + 1)
+    : (value.startsWith("rgba") ? inner.split(",")[3] : null);
+  if (alpha === null || alpha === undefined || alpha.trim() === "") return true;
+  return Number.parseFloat(alpha) === 1;
+};
+
 const mountedSheet = () => document.body.querySelector(".db-mobile-bottom-sheet");
 const stackedPairRegistry = ${JSON.stringify(REGISTERED_STACKED_PAIRS)};
 
@@ -930,10 +943,16 @@ const measureStackedPair = async (pair) => {
   // The header carries no background of its own — every sheet's surface paints one shared token
   // behind both the header and the row directly beneath it, so the two read as one surface rather
   // than two backgrounds meeting at the header's own bottom edge.
+  //
+  // Equality alone is satisfied by two transparent boxes, which is a sheet with no fill at all —
+  // the very shape this row exists to catch. So the root's own fill is read beside them and
+  // required to be opaque: the pair of checks together say "one surface, and it is painted".
   const bodyHost = header?.nextElementSibling ?? null;
   const headerBackground = header ? getComputedStyle(header).backgroundColor : null;
   const bodyBackground = bodyHost ? getComputedStyle(bodyHost).backgroundColor : null;
   const headerBodyBackgroundMatch = Boolean(headerBackground && bodyBackground && headerBackground === bodyBackground);
+  const rootBackground = getComputedStyle(top).backgroundColor;
+  const rootOpaque = isOpaqueColor(rootBackground);
   // Read every stack-derived fact before the gesture below. A drag past the flick threshold is
   // meant to dismiss the child, so a depth or inset sampled afterwards describes a stack that has
   // already come apart rather than the one under test.
@@ -991,6 +1010,8 @@ const measureStackedPair = async (pair) => {
     headerBodyBackgroundMatch,
     headerBackground,
     bodyBackground,
+    rootBackground,
+    rootOpaque,
     handleToTitleGap,
     childKeyboard: childBottom === 336,
     parentKeyboard: parentBottom === 0,
@@ -1099,6 +1120,15 @@ window.__stackedSheetChromeNegativeControl = async () => {
   if (bodyHost) bodyHost.style.backgroundColor = previousBodyBackground;
   const backgroundAfter = backgroundsMatch();
 
+  // A sheet root with no fill of its own: the shape the header/body comparison alone reads as
+  // clean, because two transparent boxes are equal.
+  const rootFillBefore = isOpaqueColor(getComputedStyle(top).backgroundColor);
+  const previousRootBackground = top.style.backgroundColor;
+  top.style.backgroundColor = "transparent";
+  const rootFillDuring = isOpaqueColor(getComputedStyle(top).backgroundColor);
+  top.style.backgroundColor = previousRootBackground;
+  const rootFillAfter = isOpaqueColor(getComputedStyle(top).backgroundColor);
+
   // Unclaimed space between the handle and the title, past the grammar's own budget.
   const gapBefore = gap();
   const previousHeaderMargin = header ? header.style.marginTop : "";
@@ -1112,6 +1142,7 @@ window.__stackedSheetChromeNegativeControl = async () => {
   return {
     closeControl: { before: closeControlBefore, during: closeControlDuring, after: closeControlAfter },
     background: { before: backgroundBefore, during: backgroundDuring, after: backgroundAfter },
+    rootFill: { before: rootFillBefore, during: rootFillDuring, after: rootFillAfter },
     gap: { before: gapBefore, during: gapDuring, after: gapAfter },
   };
 };
@@ -1388,6 +1419,7 @@ async function runHostModalChromeCheck(engineName, engine, launchOptions) {
       const checks = [
         [`exactly one visible close control (found ${report.closeControlCount})`, report.singleCloseControl],
         [`header and body share one background (${report.headerBackground} vs ${report.bodyBackground})`, report.headerBodyBackgroundMatch],
+        [`sheet root paints an opaque fill (${report.rootBackground})`, report.rootOpaque],
         [`handle-to-title gap ≤${HANDLE_TO_TITLE_GAP_MAX_PX}px (measured ${report.handleToTitleGap == null ? "n/a" : report.handleToTitleGap.toFixed(1) + "px"})`, report.handleToTitleGap != null && report.handleToTitleGap <= HANDLE_TO_TITLE_GAP_MAX_PX],
         ["parent dims and scales back", report.parentTreatment],
         [`parent bounding box Δ≤1px (max ${report.parentDelta.toFixed(2)}px)`, report.parentBox],
@@ -1407,12 +1439,15 @@ async function runHostModalChromeCheck(engineName, engine, launchOptions) {
     } else {
       const closeWentRed = control.closeControl.during > 1;
       const backgroundWentRed = control.background.during === false;
+      const rootFillWentRed = control.rootFill.during === false;
       const gapWentRed = control.gap.during != null && control.gap.during > HANDLE_TO_TITLE_GAP_MAX_PX;
       if (!closeWentRed) failures.push(`host-modal chrome negative control ${engineName}: a second close control did not register`);
       if (!backgroundWentRed) failures.push(`host-modal chrome negative control ${engineName}: a mismatched background did not register`);
+      if (!rootFillWentRed) failures.push(`host-modal chrome negative control ${engineName}: an unpainted sheet root did not register`);
       if (!gapWentRed) failures.push(`host-modal chrome negative control ${engineName}: an oversized gap did not register`);
       console.log(`  ${closeWentRed ? "PASS" : "FAIL"}  a second close control registers red (${engineName})`);
       console.log(`  ${backgroundWentRed ? "PASS" : "FAIL"}  a mismatched background registers red (${engineName})`);
+      console.log(`  ${rootFillWentRed ? "PASS" : "FAIL"}  an unpainted sheet root registers red (${engineName})`);
       console.log(`  ${gapWentRed ? "PASS" : "FAIL"}  an oversized gap registers red (${engineName})`);
     }
     console.log("");
@@ -1529,6 +1564,7 @@ try {
       ["child title ≥16px", report.titleSize],
       [`exactly one visible close control (found ${report.closeControlCount})`, report.singleCloseControl],
       [`header and body share one background (${report.headerBackground} vs ${report.bodyBackground})`, report.headerBodyBackgroundMatch],
+      [`sheet root paints an opaque fill (${report.rootBackground})`, report.rootOpaque],
       [`handle-to-title gap ≤${HANDLE_TO_TITLE_GAP_MAX_PX}px (measured ${report.handleToTitleGap == null ? "n/a" : report.handleToTitleGap.toFixed(1) + "px"})`, report.handleToTitleGap != null && report.handleToTitleGap <= HANDLE_TO_TITLE_GAP_MAX_PX],
       ["keyboard inset belongs to child", report.childKeyboard && report.parentKeyboard],
       [`child depth ${report.depth} (want ${report.expectedDepth})`, report.depth === report.expectedDepth],
@@ -1573,7 +1609,7 @@ try {
     failures.push(`host-modal chrome negative control: ${chromeControl.error}`);
     console.log(`  FAIL  host-modal chrome negative control — ${chromeControl.error}`);
   } else {
-    const { closeControl, background, gap } = chromeControl;
+    const { closeControl, background, rootFill, gap } = chromeControl;
     const closeCleanBefore = closeControl.before === 1;
     const closeWentRed = closeControl.during > 1;
     const closeCleanAfter = closeControl.after === 1;
@@ -1593,6 +1629,16 @@ try {
     console.log(`  ${backgroundCleanBefore ? "PASS" : "FAIL"}  header and body share one background before the injection`);
     console.log(`  ${backgroundWentRed ? "PASS" : "FAIL"}  a mismatched body background registers red`);
     console.log(`  ${backgroundCleanAfter ? "PASS" : "FAIL"}  header and body share one background again after restoration`);
+
+    const rootFillCleanBefore = rootFill.before === true;
+    const rootFillWentRed = rootFill.during === false;
+    const rootFillCleanAfter = rootFill.after === true;
+    if (!rootFillCleanBefore) failures.push("host-modal chrome negative control: the sheet root was unpainted before the injection");
+    if (!rootFillWentRed) failures.push("host-modal chrome negative control: an unpainted sheet root did not register");
+    if (!rootFillCleanAfter) failures.push("host-modal chrome negative control: the sheet root was unpainted again after restoration");
+    console.log(`  ${rootFillCleanBefore ? "PASS" : "FAIL"}  the sheet root paints an opaque fill before the injection`);
+    console.log(`  ${rootFillWentRed ? "PASS" : "FAIL"}  an unpainted sheet root registers red`);
+    console.log(`  ${rootFillCleanAfter ? "PASS" : "FAIL"}  the sheet root paints an opaque fill again after restoration`);
 
     const gapCleanBefore = gap.before != null && gap.before <= HANDLE_TO_TITLE_GAP_MAX_PX;
     const gapWentRed = gap.during != null && gap.during > HANDLE_TO_TITLE_GAP_MAX_PX;
