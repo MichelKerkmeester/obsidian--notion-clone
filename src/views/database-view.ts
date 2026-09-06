@@ -8210,12 +8210,25 @@ export class DatabaseView extends FileView {
       .filter((element) => !element.matches("col"));
   }
 
+  /**
+   * Does the source this view queries still exist? A folder the user deleted or moved away leaves
+   * the query legal and its result permanently empty, which is a different thing to tell them than
+   * a folder that is there and holds nothing yet. Whole-vault sources (no folder configured) can
+   * never go missing, so they answer no rather than resolving an empty path.
+   */
+  private isSourceFolderMissing(config: ViewConfig): boolean {
+    const db = this.getActiveDb();
+    const folder = this.normalizeVaultFolder(db?.sourceFolder || config.sourceFolder || "");
+    if (!folder) return false;
+    return !this.dataSource.fileExists(folder);
+  }
+
   private getEmptyStateOptions(config: ViewConfig): EmptyStateOptions | undefined {
     const diagnostics = this.pipelineDiagnostics;
     const hasActiveQuery = diagnostics.hasActiveSearch || diagnostics.hasActiveFilters || diagnostics.hasActiveLimit;
     if (diagnostics.visibleCount !== 0 && !hasActiveQuery) return undefined;
     const state = this.vs();
-    const reason = getEmptyStateReason(diagnostics);
+    const reason = getEmptyStateReason(diagnostics, this.isSourceFolderMissing(config));
     const clearSearch = () => {
       state.searchText = "";
       this.refresh({ viewport: "reset-top" });

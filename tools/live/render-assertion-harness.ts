@@ -462,11 +462,11 @@ export interface ScenarioSpec {
   wrapText?: boolean;
   /**
    * Opt-in, renderer "table" only: forces zero rows and drives the real `getEmptyStateReason`
-   * predicate over a hand-built `RowPipelineDiagnostics` matching the named condition —
-   * `"source-missing"` is `sourceCount: 0` (the view's source no longer resolves), `"no-matching-data"`
-   * is a positive `sourceCount` with no active search, filter or limit (a source that resolves and
-   * still has nothing to show). The predicate decides the reason, not the scenario, so a collapse of
-   * `getEmptyStateReason`'s branch order is exactly what turns this row red.
+   * predicate over one hand-built `RowPipelineDiagnostics`, varying only the source signal the
+   * caller supplies — `"source-missing"` is a configured source that no longer resolves in the
+   * vault, `"no-matching-data"` the same empty result from a source that is still there. The
+   * predicate decides the reason, not the scenario, so a rule that reads the row count alone is
+   * exactly what turns one of these rows red.
    */
   emptyReason?: "source-missing" | "no-matching-data";
 }
@@ -1367,22 +1367,17 @@ function tableAssertions(
   return results;
 }
 
-// The two `RowPipelineDiagnostics` shapes `getEmptyStateReason` actually distinguishes: a source
-// that no longer resolves (sourceCount 0) against one that resolves and simply has nothing to show
-// under no active search, filter or limit. Both fall through the predicate's early-return chain
-// rather than being asserted by name, so this is the real function deciding the reason, not a
-// scenario restating it.
+// The pair `getEmptyStateReason` has to keep apart, held one variable apart: identical zero-row
+// diagnostics, differing only in whether the caller found the configured source still in the vault.
+// The predicate decides which reason comes back, so a rule that reads the row count alone — the
+// shape that reports a brand-new empty database as a source the user lost — fails whichever of the
+// two rows it collapses into the other.
 function buildEmptyReasonOptions(kind: "source-missing" | "no-matching-data"): EmptyStateOptions {
-  const diagnostics: RowPipelineDiagnostics = kind === "source-missing"
-    ? {
-      sourceCount: 0, postSearchCount: 0, postFilterCount: 0, postLimitCount: 0, visibleCount: 0,
-      hasActiveSearch: false, hasActiveFilters: false, hasActiveLimit: false,
-    }
-    : {
-      sourceCount: 12, postSearchCount: 12, postFilterCount: 12, postLimitCount: 12, visibleCount: 0,
-      hasActiveSearch: false, hasActiveFilters: false, hasActiveLimit: false,
-    };
-  const reason = getEmptyStateReason(diagnostics);
+  const diagnostics: RowPipelineDiagnostics = {
+    sourceCount: 0, postSearchCount: 0, postFilterCount: 0, postLimitCount: 0, visibleCount: 0,
+    hasActiveSearch: false, hasActiveFilters: false, hasActiveLimit: false,
+  };
+  const reason = getEmptyStateReason(diagnostics, kind === "source-missing");
   const copy = EMPTY_STATE_COPY[reason];
   return {
     reason,
@@ -1394,10 +1389,9 @@ function buildEmptyReasonOptions(kind: "source-missing" | "no-matching-data"): E
   };
 }
 
-// Collapsing `getEmptyStateReason`'s branch order (routing `sourceCount === 0` back to
-// "no-matching-data") is exactly what turns this red: the two scenarios that read this assertion
-// share one predicate, so a regression there fails whichever scenario's expectation the collapse
-// no longer matches.
+// Reading a zero-row source as one cause regardless of whether it still resolves is exactly what
+// turns this red: the two scenarios that read this assertion share one predicate and one set of
+// diagnostics, so a collapse in either direction fails the row whose expectation it broke.
 function emptyReasonAssertion(container: HTMLElement, expected: "source-missing" | "no-matching-data"): AssertionResult {
   const el = container.querySelector<HTMLElement>("[data-empty-reason]");
   const actual = el?.getAttribute("data-empty-reason") ?? null;

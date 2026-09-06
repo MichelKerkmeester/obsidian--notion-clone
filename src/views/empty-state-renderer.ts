@@ -219,12 +219,18 @@ export const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: s
 // 5. DIAGNOSIS HELPERS
 // ───────────────────────────────────────────────────────────────────
 
-export function getEmptyStateReason(diagnostics: RowPipelineDiagnostics): EmptyStateReason {
-  // A source that resolves to zero files is a missing/deleted source, not a view whose search or
-  // filters matched nothing — that is `no-matching-data`, below, which needs a positive source
-  // count to mean anything. Checked first and unconditionally: an active search or filter over a
-  // vanished source still names the source, not the query, as what to fix.
-  if (diagnostics.sourceCount === 0) return "source-missing";
+export function getEmptyStateReason(
+  diagnostics: RowPipelineDiagnostics,
+  sourceMissing = false,
+): EmptyStateReason {
+  // Zero source rows has two causes that need different copy, and the diagnostics cannot tell them
+  // apart: the pipeline counts the records it was handed and never sees the vault, so a folder that
+  // was deleted and a folder that exists and holds nothing both arrive as sourceCount 0. Only the
+  // caller knows whether the configured source still resolves, so it says. When it does resolve —
+  // or nobody checked — a zero-row source keeps the reason it has always had, which is what stops a
+  // brand-new empty database from being reported as a source the user lost. When it does not, the
+  // source is named ahead of any search or filter: a query over a vanished source is not what to fix.
+  if (diagnostics.sourceCount === 0) return sourceMissing ? "source-missing" : "no-matching-data";
   if (diagnostics.hasActiveSearch && diagnostics.hasActiveFilters) return "filter-and-search-empty";
   if (diagnostics.hasActiveSearch) return "search-empty";
   if (diagnostics.hasActiveFilters) return "filter-empty";

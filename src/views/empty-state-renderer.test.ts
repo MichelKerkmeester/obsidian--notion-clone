@@ -232,23 +232,31 @@ describe("empty state diagnosis", () => {
     [diagnostics({ hasActiveFilters: true, postFilterCount: 0 }), "filter-empty"],
     [diagnostics({ hasActiveSearch: true, hasActiveFilters: true }), "filter-and-search-empty"],
     [diagnostics({ hasActiveLimit: true, postLimitCount: 2 }), "limit-empty"],
-    [diagnostics({ sourceCount: 0 }), "source-missing"],
-    // A source that vanished still names the source, not the query, as what to fix — an active
-    // search or filter over a zero-row source does not fall through to their own branches.
-    [diagnostics({ sourceCount: 0, hasActiveSearch: true }), "source-missing"],
-    [diagnostics({ sourceCount: 0, hasActiveFilters: true }), "source-missing"],
+    [diagnostics({ sourceCount: 0, hasActiveSearch: true }), "no-matching-data"],
   ] as const)("dispatches to %s", (input, expected) => {
     expect(getEmptyStateReason(input)).toBe(expected);
   });
 
-  it("distinguishes a missing source from a source that matched nothing", () => {
-    // Same shape (zero rows to show), different cause: sourceCount tells the two apart, and
-    // `no-database` is a third, unreachable-from-here condition — decided by a separate rendering
-    // path (the hero) before any diagnostics exist, never by this predicate.
-    expect(getEmptyStateReason(diagnostics({ sourceCount: 0 }))).toBe("source-missing");
-    expect(getEmptyStateReason(diagnostics({ sourceCount: 12 }))).toBe("no-matching-data");
+  it("separates a source that is gone from one that is there and empty", () => {
+    // The three zero-row cases the copy has to keep apart. Row count alone cannot: a deleted folder
+    // and a folder holding no notes yet both count zero, so the caller supplies what it found in
+    // the vault. `no-database` is a fourth condition unreachable from here — the hero decides it
+    // before any diagnostics exist.
+    const empty = diagnostics({ sourceCount: 0 });
+    expect(getEmptyStateReason(empty, true)).toBe("source-missing");
+    expect(getEmptyStateReason(empty, false)).toBe("no-matching-data");
+    expect(getEmptyStateReason(diagnostics({ sourceCount: 12 }), false)).toBe("no-matching-data");
     expect(EMPTY_STATE_COPY["source-missing"].title).not.toBe(EMPTY_STATE_COPY["no-matching-data"].title);
     expect(EMPTY_STATE_COPY["source-missing"].title).not.toBe(EMPTY_STATE_COPY["no-database"].title);
+  });
+
+  it("names the source ahead of the query only when the source is the thing that is gone", () => {
+    // A search over a vanished folder is not the user's problem to fix, so the missing source wins
+    // the whole precedence chain. The same search over a source still in the vault keeps its own
+    // former reason rather than being re-labelled by the new state.
+    const searched = diagnostics({ sourceCount: 0, hasActiveSearch: true, hasActiveFilters: true });
+    expect(getEmptyStateReason(searched, true)).toBe("source-missing");
+    expect(getEmptyStateReason(searched, false)).toBe("no-matching-data");
   });
 
   it("formats a stage count without changing the diagnostics object", () => {
@@ -291,7 +299,7 @@ describe("empty state diagnosis", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 3. THIRTEEN DISTINCT REASONS
+// 3. FOURTEEN DISTINCT REASONS
 // ───────────────────────────────────────────────────────────────────
 
 describe("empty state reason catalog", () => {

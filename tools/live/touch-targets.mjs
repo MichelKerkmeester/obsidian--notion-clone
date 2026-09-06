@@ -305,7 +305,17 @@ if (!(await assertPremise(page, "constructed-renderer bundle"))) {
   process.exit(1);
 }
 
-for (const scenario of RENDERER_SCENARIOS) {
+// The empty-reason probes are read past rather than measured. They mount an existing table with
+// its rows dropped purely to read one attribute off the empty-state card, and every control they
+// put on the page is a second copy of one this corpus already measures at that same table's own
+// scenarios — `db-table-footer-trigger`, one per column, the footer row a table renders whether or
+// not it has rows. Counting them again would move this ratchet upward by the size of the corpus
+// rather than by anything that got worse, and a ratchet that rises when a scenario is added stops
+// meaning what it says. Nothing here exempts the control: its shortfall is recorded against the
+// scenarios that own it, and the count they contribute is unchanged.
+const MEASURED_SCENARIOS = RENDERER_SCENARIOS.filter((scenario) => scenario.emptyReason == null);
+
+for (const scenario of MEASURED_SCENARIOS) {
   const label = scenarioLabel(scenario);
   const { measurement, provenance } = await page.evaluate(
     ({ scenario, opts }) => window.__measureConstructedTouch(scenario, opts),

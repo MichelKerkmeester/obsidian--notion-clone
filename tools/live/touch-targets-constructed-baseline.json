@@ -1,17 +1,21 @@
 {
-  "under": 1360,
+  "under": 1304,
   "floor": 28,
   "recorded": "2026-09-06",
-  "emptyReasonScenariosRaise": {
+  "emptyReasonScenariosNotRaised": {
     "recorded": "2026-09-06",
-    "what": "1304 -> 1360, from two new STATE_SCENARIOS entries proving the source-missing/no-matching-data empty-state distinction (`table-empty-source-missing/file-view`, `table-empty-no-matching-data/file-view` in render-assertion-bundle.mjs), both a table renderer over the home-inventory catalogue's columns with zero rows. Not a new defect class: `TableRenderer.renderTable` always renders the summary footer row regardless of row count, and `db-table-footer-trigger` (the per-column \"+ Calculate\" button, 26px tall) is already this file's own largest tracked shortfall (raiseHistory's perClass: 32 -> 173 on 2026-09-04). Two more table mounts over the same six-column catalogue simply repeat it twelve more times each.",
+    "what": "1304 holds, and the two new STATE_SCENARIOS entries that would have moved it are read past instead. `table-empty-source-missing/file-view` and `table-empty-no-matching-data/file-view` (render-assertion-bundle.mjs) mount a table over the home-inventory catalogue's columns with its rows dropped, purely to read one attribute off the empty-state card. `TableRenderer.renderTable` draws the summary footer row whether or not there are rows, so each mount adds 28 more `db-table-footer-trigger` buttons (the per-column \"+ Calculate\" control, 26px tall) -- 56 in total, every one a second copy of a control this corpus already counts at that same table's own scenarios. That is the corpus growing, not the tree getting worse, and a ratchet that rises whenever a scenario is added stops meaning what it says. touch-targets.mjs now filters scenarios carrying `emptyReason` out of the constructed sweep (MEASURED_SCENARIOS) and measures 75 scenarios as before. The control is not exempted anywhere: its 173 instances stay counted against the scenarios that own it, and resizing it remains the operator-scale decision this file's own `why` describes.",
     "perClass": [
-      { "class": "db-table-footer-trigger", "before": 173, "after": 229 }
+      {
+        "class": "db-table-footer-trigger",
+        "measuredWithProbes": 229,
+        "measuredWithoutProbes": 173
+      }
     ],
-    "totalBefore": 1304,
-    "totalAfter": 1360,
-    "verification": "Isolated by commenting out the two new entries in render-assertion-bundle.mjs and running `node tools/live/touch-targets.mjs --json` before (1304, matching this file's own prior baseline exactly) and after restoring them (1360), both reproduced on a second run. The per-scenario attribution in the raw dump reads both new instances against `table/file-view` rather than their own names — the same `scenarioLabel()` collision for scenarios sharing a renderer/bag pair this file's own `raiseHistory.verification` already names — so the diff was read by `tag|classes|width x height` signature instead: every added row is `button|db-table-footer-trigger|<width>x26`, and no other class or scenario's count moved.",
-    "productFindings": "Not a new finding. `db-table-footer-trigger` is the same shortfall this file's raiseHistory already records (32 -> 173 on 2026-09-04); this entry only accounts for twelve more instances per new scenario. Resizing it is the same operator-scale decision this file's own `why` describes, not a repair this leg makes silently."
+    "totalWithProbes": 1360,
+    "under": 1304,
+    "verification": "`node tools/live/touch-targets.mjs --json` on this tree with the probes measured: 17852 elements across 77 constructed scenarios, 1360 under the floor, `db-table-footer-trigger` at 229. The same command after the filter: 17789 elements across 75 scenarios, 1304 under the floor, `db-table-footer-trigger` back to 173 -- both numbers identical to the evidence main already carries for this pass (tools/live/touch-targets.json before this leg: measured 17789, scenarios 75, under 1304). The per-class diff between the two runs names `db-table-footer-trigger` and nothing else; no other class moved by one instance, and the fixture pass reads 208 in both. So the 56 are entirely the probes' own footer row, and excluding them returns this pass to exactly what it measured before the probes existed.",
+    "productFindings": "Not a new finding, and none is hidden. `db-table-footer-trigger` at 26px is the same shortfall this file's raiseHistory already records (32 -> 173 on 2026-09-04) and it stays recorded at 173. An empty table does still draw a footer of undersized \"+ Calculate\" buttons on a phone -- worth an operator decision, unchanged by this leg either way."
   },
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
   "smallest": "db-file-tag-remove at 10x14",
