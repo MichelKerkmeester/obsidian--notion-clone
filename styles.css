@@ -2699,51 +2699,15 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   white-space: nowrap;
 }
 
+/* The host, not the card: the rail keeps only the fixed placement it always had, and the shared
+   .db-toast (below) renders inside it as an .is-inline placement — one component, one CSS shape,
+   in place of this rule's own former border/padding/background/animation, retired along with the
+   .is-error variant and the action's own button rules they used to size and colour by hand. */
 .note-database-container .db-operation-result-rail {
   position: fixed;
   right: 16px;
   bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 101;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid color-mix(in srgb, var(--text-success, var(--interactive-accent)) 55%, var(--background-modifier-border));
-  border-radius: 999px;
-  padding: var(--db-space-3) var(--db-space-5);
-  background: var(--background-primary);
-  color: var(--text-normal);
-  box-shadow: var(--db-elevation-2);
-  animation: db-operation-rail-in 160ms ease-out;
-}
-
-.note-database-container .db-operation-result-rail.is-error {
-  border-color: var(--text-error);
-  color: var(--text-error);
-}
-
-.note-database-container .db-operation-result-icon svg {
-  width: 14px;
-  height: 14px;
-}
-
-.note-database-container .db-operation-result-action {
-  border: 0;
-  padding: 2px 4px;
-  background: transparent;
-  color: inherit;
-  font-size: var(--db-font-xs);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.note-database-container .db-operation-result-action:hover,
-.note-database-container .db-operation-result-action:focus-visible {
-  text-decoration: underline;
-}
-
-@keyframes db-operation-rail-in {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 /* The toast stack. Anchored bottom-right at a measured 12px, 384px wide, read off
@@ -2778,6 +2742,15 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   color: var(--db-text-primary);
   pointer-events: auto;
   animation: db-toast-in var(--db-motion-surface);
+}
+
+/* A caller-positioned single-slot host (the operation-result rail) is not the collapsed stack
+   this component otherwise anchors against: it carries its own fixed placement already, so the
+   card lays out in normal flow at that placement's own width rather than absolutely, against a
+   stack it was never mounted into. */
+.db-toast.is-inline {
+  position: static;
+  width: 384px;
 }
 
 /* Only the frontmost card renders — the same idiom the measured source uses so a second
@@ -20136,15 +20109,12 @@ body.pm-resize-active * {
   width: 100%;
   min-height: 200px;
   height: clamp(200px, 45vh, 400px);
-  gap: var(--db-space-4);
-  padding: 20px;
-  border: 1px dashed var(--background-modifier-border);
-  border-radius: var(--db-radius-md);
-  color: var(--text-muted);
-  text-align: center;
 }
 
 .note-database-container .db-chart-number {
+  gap: var(--db-space-4);
+  color: var(--text-muted);
+  text-align: center;
   padding: 8px 12px;
   border: 0;
   border-radius: 0;
@@ -20165,36 +20135,6 @@ body.pm-resize-active * {
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-}
-
-.note-database-container .db-chart-empty-icon {
-  width: 40px;
-  height: 40px;
-  color: var(--text-faint);
-}
-
-.note-database-container .db-chart-empty-text {
-  max-width: 320px;
-  font-size: var(--db-font-md);
-  line-height: 1.5;
-}
-
-.note-database-container .db-chart-empty-action {
-  margin-top: 2px;
-  padding: 6px 12px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-sm);
-  background: var(--background-primary);
-  color: var(--text-normal);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.note-database-container .db-chart-empty-action:hover,
-.note-database-container .db-chart-empty-action:focus-visible {
-  border-color: var(--interactive-accent);
-  background: var(--background-modifier-hover);
 }
 
 .note-database-container.db-view-chart .db-group-toggle {

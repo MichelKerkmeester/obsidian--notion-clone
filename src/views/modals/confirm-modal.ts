@@ -59,11 +59,21 @@ class ConfirmModal extends DbModal {
   }
 
   onOpen(): void {
-    super.onOpen();
+    // Content is built BEFORE the base class presents the shell, not after: on a phone,
+    // DbModal's shell (createSurfaceShell) scrapes the first heading in contentEl to title
+    // the header it builds inside super.onOpen() itself — 044's grammar, carried through the
+    // shared createSheetHeader machinery every phone sheet already reads rather than a second,
+    // parallel header this modal would otherwise have to build and deduplicate against it.
+    // Building afterward left the scrape empty on its first pass and the correct title arriving
+    // only on the next microtask, a visible flash this ordering removes.
     this.contentEl.empty();
     this.contentEl.addClass("note-database-modal");
     this.contentEl.createEl("h3", { text: this.options.title });
-    this.contentEl.createDiv({ cls: "db-modal-help", text: this.options.message });
+    // db-panel-row is the sheet grammar's shared row shape (044): on a phone, the shell marks
+    // this modal's own root as the .note-database-container the row's padding rule is scoped
+    // under, so the confirm's body reads as a padded row like every other phone sheet's content
+    // rather than as bare, unpadded text.
+    this.contentEl.createDiv({ cls: "db-modal-help db-panel-row", text: this.options.message });
 
     const actions = this.contentEl.createDiv({ cls: "db-modal-actions" });
     actions.createEl("button", {
@@ -83,6 +93,8 @@ class ConfirmModal extends DbModal {
       text: this.options.confirmText || t("common.delete"),
       attr: { type: "button" },
     }).onclick = () => this.finish(true);
+
+    super.onOpen();
   }
 
   onClose(): void {

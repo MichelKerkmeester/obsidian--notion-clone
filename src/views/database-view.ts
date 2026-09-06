@@ -212,7 +212,7 @@ import {
 } from "../data/table-keyboard-navigation";
 import { getTablePasteValue, planTablePasteLayout, TablePasteLayout } from "../data/table-paste-plan";
 import { createOwnedMenuForEvent } from "./owned-menu";
-import { showToast } from "./toast";
+import { showToast, ToastHandle } from "./toast";
 import {
   FileRenameChange,
   FileRenameRequest,
@@ -342,13 +342,22 @@ interface CreatedHistoryEntry {
   file: CreatedFileSnapshot;
 }
 
+// The mirror of CreatedHistoryEntry: a created entry undoes by trashing what redo re-creates,
+// this one undoes by re-creating what redo re-trashes. content is read before trashNote runs,
+// the same order removeCreatedFile already reads a file it is about to remove.
+interface DeletedHistoryEntry {
+  type: "deleted";
+  label: string;
+  file: CreatedFileSnapshot;
+}
+
 interface PendingCellCut {
   addressKeys: Set<string>;
   clearChanges: CellEditChange[];
   clipboardText: string;
 }
 
-type HistoryEntry = CellHistoryEntry | ConfigHistoryEntry | CreatedHistoryEntry;
+type HistoryEntry = CellHistoryEntry | ConfigHistoryEntry | CreatedHistoryEntry | DeletedHistoryEntry;
 
 interface ViewEntry {
   config: DatabaseConfig;
@@ -533,11 +542,11 @@ export class DatabaseView extends FileView {
   private selectionLiveRegion?: HTMLElement;
   private releaseKeyboardInset?: () => void;
   private operationResultRail?: HTMLElement;
+  private operationResultToast?: ToastHandle;
   private interactionScopes = new InteractionScopeRegistry();
   private readonly interactionScopeId = `database-view-${generateId()}`;
   private removeTouchEnvironmentObserver?: () => void;
   private touchLayoutState: boolean | undefined;
-  private operationResultTimer: number | null = null;
   private fillAutoScroller?: EdgeAutoScroller;
   private lastPointerPosition?: { x: number; y: number };
   private skeletonLoader?: HTMLElement;
@@ -1454,10 +1463,8 @@ export class DatabaseView extends FileView {
       window.clearTimeout(this.scrollbarIdleTimer);
       this.scrollbarIdleTimer = null;
     }
-    if (this.operationResultTimer !== null) {
-      window.clearTimeout(this.operationResultTimer);
-      this.operationResultTimer = null;
-    }
+    this.operationResultToast?.close();
+    this.operationResultToast = undefined;
     this.operationResultRail?.remove();
     this.operationResultRail = undefined;
     this.hideSkeletonLoader();
@@ -8316,15 +8323,16 @@ export class DatabaseView extends FileView {
   private async deleteRow(row: RowData): Promise<void> {
     const displayName = row.file.name.replace(/\.md$/, "");
     try {
+      // Read before trashNote, the way removeCreatedFile already does for an undone create: the
+      // snapshot has to exist before the file that would supply it stops existing.
+      const content = await this.app.vault.cachedRead(row.file);
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      // No Undo here, deliberately. A deletion pushes nothing onto the history stack — the entry
-      // union has no kind for it — so `undoLastEdit` would replay whatever unrelated edit sits on
-      // top, and a `created` entry on top undoes by trashing that file, which turns an Undo press
-      // into a second deletion. The toast reports; it does not offer what the stack cannot do.
+      this.pushHistory({ type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } });
       if (this.containerEl_) {
         showToast(this.containerEl_.ownerDocument, {
           severity: "success",
           message: t("notice.deletedRow", { name: displayName }),
+          action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
         });
       }
       await this.refreshAfterSave();
@@ -10308,6 +10316,10 @@ export class DatabaseView extends FileView {
       await this.applyCreatedHistoryEntry(entry, direction);
       return;
     }
+    if (entry.type === "deleted") {
+      await this.applyDeletedHistoryEntry(entry, direction);
+      return;
+    }
     await this.applyCellHistoryEntry(entry, direction);
   }
 
@@ -10350,6 +10362,14 @@ export class DatabaseView extends FileView {
   private async applyCreatedHistoryEntry(entry: CreatedHistoryEntry, direction: "undo" | "redo"): Promise<void> {
     if (direction === "undo") await this.removeCreatedFile(entry.file);
     else await this.restoreCreatedFile(entry.file);
+    await this.refreshAfterSave();
+    this.rerenderToolbar();
+  }
+
+  // The exact inverse of applyCreatedHistoryEntry's two calls: undo restores what redo re-trashes.
+  private async applyDeletedHistoryEntry(entry: DeletedHistoryEntry, direction: "undo" | "redo"): Promise<void> {
+    if (direction === "undo") await this.restoreCreatedFile(entry.file);
+    else await this.removeCreatedFile(entry.file);
     await this.refreshAfterSave();
     this.rerenderToolbar();
   }
@@ -11228,37 +11248,36 @@ export class DatabaseView extends FileView {
     }
   }
 
+  // Renders through the shared toast component, at the rail's own fixed placement — one
+  // component, one timer contract, one reduced-motion story, in place of the rail's former
+  // bespoke pill and the separate CSS it carried (styles.css's retired db-operation-result-*
+  // rules). A prior call's toast is closed before the next one opens, matching the rail's own
+  // former "replace what's showing" behaviour; unlike that former behaviour, an error no longer
+  // times out on its own — the toast component's own contract, not a per-caller exception.
   private showOperationResult(
     kind: "success" | "error",
     message: string,
     retry?: () => void | Promise<void>,
   ): void {
     if (!this.containerEl_) return;
-    if (this.operationResultTimer !== null) window.clearTimeout(this.operationResultTimer);
-    const rail = this.operationResultRail || this.containerEl_.createDiv({ cls: "db-operation-result-rail" });
+    this.operationResultToast?.close();
+    // db-surface: the rail is not the shared body-portalled stack, so it needs its own marker
+    // for the reduced-motion reset to reach the toast card mounted inside it.
+    const rail = this.operationResultRail || this.containerEl_.createDiv({ cls: "db-operation-result-rail db-surface" });
     this.operationResultRail = rail;
-    rail.empty();
-    rail.toggleClass("is-error", kind === "error");
-    rail.toggleClass("is-success", kind === "success");
-    rail.setAttr("role", "status");
-    setIcon(rail.createSpan({ cls: "db-operation-result-icon" }), kind === "success" ? "check" : "alert-triangle");
-    rail.createSpan({ cls: "db-operation-result-text", text: message });
-    const action = rail.createEl("button", {
-      cls: "db-operation-result-action",
-      text: kind === "success" ? t("toolbar.undo") : t("editor.retry"),
-      attr: { type: "button" },
+    this.operationResultToast = showToast(rail.ownerDocument, {
+      severity: kind,
+      message,
+      container: rail,
+      action: {
+        label: kind === "success" ? t("toolbar.undo") : t("editor.retry"),
+        onClick: () => {
+          if (kind === "success") void this.undoLastEdit();
+          else if (retry) void retry();
+          else this.refresh();
+        },
+      },
     });
-    action.onclick = () => {
-      if (kind === "success") void this.undoLastEdit();
-      else if (retry) void retry();
-      else this.refresh();
-      rail.remove();
-    };
-    this.operationResultTimer = window.setTimeout(() => {
-      rail.remove();
-      if (this.operationResultRail === rail) this.operationResultRail = undefined;
-      this.operationResultTimer = null;
-    }, 2200);
   }
 
   private getRowsForGroupMove(row: RowData): RowData[] {

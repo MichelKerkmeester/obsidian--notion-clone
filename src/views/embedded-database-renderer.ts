@@ -150,7 +150,11 @@ type HeaderPopoverKind = "filter" | "sort" | "columns" | "view";
 type EmbedHistoryEntry =
   | { type: "created"; label: string; file: { path: string } }
   | { type: "cell"; label: string; file: TFile; key: string; oldValue: unknown; newValue: unknown }
-  | { type: "moved"; label: string; sourcePath: string; destPath: string; snapshot: LinkedViewMoveResult };
+  | { type: "moved"; label: string; sourcePath: string; destPath: string; snapshot: LinkedViewMoveResult }
+  // The mirror of "created": undo restores the file this class's own deleteRow trashed, from the
+  // content read before trashNote ran. This class has no redo mechanism for any entry type, "created"
+  // and "cell" included, so there is nothing for a deletion's own redo to hook into either.
+  | { type: "deleted"; label: string; file: { path: string; content: string } };
 
 const liveLinkedViewEmbeds = new Set<EmbeddedDatabaseRenderer>();
 
@@ -3250,14 +3254,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       return;
     }
     try {
+      const content = await this.app.vault.cachedRead(row.file);
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      // No Undo here, deliberately, and for the same reason the standalone view's deleteRow gives:
-      // nothing is pushed for a deletion, so `undoLastEdit` would replay an unrelated entry, and a
-      // `created` one on top undoes by trashing that file — an Undo press that deletes a second
-      // note. The toast reports; it does not offer what the stack cannot do.
+      this.pushHistory({ type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } });
       showToast(this.containerEl.ownerDocument, {
         severity: "success",
         message: t("notice.deletedRow", { name: row.file.basename }),
+        action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
       });
       if (this.config) this.renderResults(this.config);
     } catch (err) {
@@ -3314,6 +3317,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
           if (file instanceof TFile) await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
         } else if (entry.type === "cell") {
           await this.dataSource.updateFrontmatter(entry.file, { [entry.key]: entry.oldValue }, { sourceInstanceId: this.instanceId });
+        } else if (entry.type === "deleted") {
+          if (this.app.vault.getAbstractFileByPath(entry.file.path)) {
+            throw new Error(`Cannot undo delete because the path already exists: ${entry.file.path}`);
+          }
+          this.dataSource.markPluginWrite(entry.file.path, this.instanceId);
+          await this.app.vault.create(entry.file.path, entry.file.content);
         } else {
           await undoLinkedViewMove(vaultFilesAdapter(this.app), {
             sourcePath: entry.sourcePath,

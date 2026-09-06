@@ -40,6 +40,13 @@ export interface ToastOptions {
   message: string;
   /** Omit for a plain notice with no inline action. */
   action?: ToastAction;
+  /**
+   * Mount the card here instead of the shared body-anchored stack, as a single-slot host the
+   * caller positions itself — the per-view operation-result rail's own fixed corner, kept where
+   * it always sat rather than moved to the shared stack's. Omit for the floating stack every
+   * other owned site uses.
+   */
+  container?: HTMLElement;
 }
 
 export interface ToastHandle {
@@ -76,13 +83,17 @@ function getStack(doc: Document): HTMLElement {
 
 /** Raise a severity toast on `doc`'s stack, with an optional clickable action. */
 export function showToast(doc: Document, options: ToastOptions): ToastHandle {
-  const stack = getStack(doc);
+  const stack = options.container ?? getStack(doc);
+  // A caller-supplied container is a single-slot placement, not a stack: clear whatever it held
+  // before, rather than layer a second card the collapsed-stack trick below was never meant for.
+  if (options.container) stack.empty();
   const card = stack.createDiv({
-    cls: `db-toast is-${options.severity}`,
+    cls: `db-toast is-${options.severity}${options.container ? " is-inline" : ""}`,
     attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
   });
   // Prepended, not appended: the stack renders only its first child, so the newest toast has to
-  // become that first child rather than queue behind whatever is already showing.
+  // become that first child rather than queue behind whatever is already showing. Harmless on a
+  // single-slot container, which was just emptied above and so has only this one child anyway.
   stack.prepend(card);
 
   const header = card.createDiv({ cls: "db-toast-header" });

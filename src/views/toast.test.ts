@@ -30,7 +30,7 @@ describe("toast", () => {
 
   it("pairs each severity with its own icon rather than colour alone", () => {
     expect(toastSource).toContain('options.severity === "success" ? "check" : "alert-triangle"');
-    expect(toastSource).toContain('cls: `db-toast is-${options.severity}`');
+    expect(toastSource).toContain("cls: `db-toast is-${options.severity}${options.container ? \" is-inline\" : \"\"}`");
   });
 
   it("auto-dismisses a success toast on the existing 2200ms budget and never times out an error one", () => {
@@ -56,6 +56,11 @@ describe("toast", () => {
 
   it("mounts on a db-surface stack so the token scale and reduced-motion reset both reach it", () => {
     expect(toastSource).toContain('cls: "db-surface db-toast-stack"');
+  });
+
+  it("mounts into a caller-supplied container as a single-slot placement instead of the shared stack", () => {
+    expect(toastSource).toContain("const stack = options.container ?? getStack(doc);");
+    expect(toastSource).toContain("if (options.container) stack.empty();");
   });
 
   it("stacks the newest toast in front rather than queuing it behind the visible one", () => {

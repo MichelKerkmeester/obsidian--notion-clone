@@ -685,13 +685,20 @@ export const CHROME_SCENARIOS = [
     width: 900,
     sources: ["src/views/chart-renderer.ts"],
     fixtureOf: "constructed-chart-empty",
-    note: "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
+    note: "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .db-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired db-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.",
     html: () => `
       <div class="note-database-container">
         <div class="db-chart-empty db-chart-height-medium">
-          <div class="db-chart-empty-icon">${I.barChart}</div>
-          <div class="db-chart-empty-text">All chart groups are hidden. Show at least one group in Chart options.</div>
-          <button type="button" class="db-chart-empty-action">Show all groups</button>
+          <div class="db-empty db-empty-card" data-empty-reason="limit-empty">
+            <div class="db-empty-card-icon" aria-hidden="true">${I.barChart}</div>
+            <div class="db-empty-card-content">
+              <h3 class="db-empty-card-title">No records are visible</h3>
+              <p class="db-empty-card-message">All chart groups are hidden. Show at least one group in Chart options.</p>
+              <div class="db-empty-action-group">
+                <button type="button" class="db-empty-action" aria-label="Show all groups"><span>Show all groups</span></button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>`,
   },

@@ -13,7 +13,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Notice, setIcon } from "obsidian";
+import { App, Notice } from "obsidian";
 import type { ChartDataset, ChartType as ChartJsType, Plugin } from "chart.js";
 import { Chart } from "../data/chart-js-setup";
 import {
@@ -40,6 +40,7 @@ import { STATUS_COLORS } from "../data/status-colors";
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
 import { DbModal } from "./modals/db-modal";
+import { EmptyStateAction, EmptyStateReason, EmptyStateRenderer } from "./empty-state-renderer";
 import type { SurfaceShellRole } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -149,6 +150,27 @@ function getEmptyMessage(reason: ChartEmptyReason): string {
       return t("chart.allGroupsHidden");
     case "invalidAxisRange":
       return t("chart.invalidAxisRange");
+  }
+}
+
+// Chart's six reasons are configuration states, not one of the shared
+// EmptyStateReason's twelve data-availability states — there is no exact
+// member for "a grouping field needs to be chosen". Each maps onto the
+// closest existing reason for its default title only; the actual copy
+// below always comes from getEmptyMessage, so the mapping only decides
+// which title (and the reason's own data-empty-reason bookkeeping) shows.
+function mapChartEmptyReason(reason: ChartEmptyReason): EmptyStateReason {
+  switch (reason) {
+    case "noFields":
+    case "noFieldSelected":
+    case "noValueFieldSelected":
+      return "no-columns";
+    case "noRecords":
+      return "filter-empty";
+    case "allGroupsHidden":
+      return "limit-empty";
+    case "invalidAxisRange":
+      return "no-matching-data";
   }
 }
 
@@ -271,6 +293,7 @@ export class ChartRenderer {
   private lastRender: ChartRenderSnapshot | null = null;
   private currentResult: ChartRenderResult | null = null;
   private structuralSignature = "";
+  private emptyStateRenderer = new EmptyStateRenderer();
 
   render(container: HTMLElement, config: ViewConfig, rows: RowData[], columns: ColumnDef[], actions?: ChartRendererActions): void {
     this.lastRender = { container, config, rows, columns, actions };
@@ -598,60 +621,75 @@ export class ChartRenderer {
     });
   }
 
+  // The outer .db-chart-empty root is kept as the chart view's structural
+  // marker — rendered-view-roots.ts's teardown, summary-renderer.ts's
+  // after-chart anchor and embedded-database-renderer.ts's stale-view
+  // selector all key off it, and none of those files is this leg's to
+  // change. Only the inner card retires the private db-chart-empty-*
+  // vocabulary in favour of the shared EmptyStateRenderer markup.
   private renderEmptyState(container: HTMLElement, reason: ChartEmptyReason): void {
     const empty = this.createChartRoot(container, "db-chart-empty");
-    const icon = empty.createDiv({ cls: "db-chart-empty-icon" });
-    setIcon(icon, "bar-chart");
-    empty.createDiv({ cls: "db-chart-empty-text", text: getEmptyMessage(reason) });
-    this.renderEmptyAction(empty, reason);
+    const actions = this.buildEmptyActions(reason);
+    this.emptyStateRenderer.renderCard(empty, {
+      reason: mapChartEmptyReason(reason),
+      icon: "bar-chart",
+      message: getEmptyMessage(reason),
+      actions: actions.length > 0 ? actions : undefined,
+    });
   }
 
-  private renderEmptyAction(empty: HTMLElement, reason: ChartEmptyReason): void {
+  private buildEmptyActions(reason: ChartEmptyReason): EmptyStateAction[] {
     const config = this.lastRender?.config;
     const actions = this.lastRender?.actions;
-    if (!config || !actions?.onConfigChange) return;
+    if (!config || !actions?.onConfigChange) return [];
     if (reason === "allGroupsHidden") {
-      const button = empty.createEl("button", { cls: "db-chart-empty-action", text: t("chart.showAllGroups"), attr: { type: "button" } });
-      button.onclick = () => {
-        config.chartHiddenGroups = undefined;
-        actions.onConfigChange?.(t("undo.chartVisibleGroupsConfig"));
-      };
-      return;
+      return [{
+        label: t("chart.showAllGroups"),
+        onClick: () => {
+          config.chartHiddenGroups = undefined;
+          actions.onConfigChange?.(t("undo.chartVisibleGroupsConfig"));
+        },
+      }];
     }
     if (reason === "noFieldSelected") {
       const defaultField = getDefaultChartField(config.schema.columns, config.schema.computedFields);
-      if (!defaultField) return;
-      const button = empty.createEl("button", { cls: "db-chart-empty-action", text: t("chart.chooseDefaultGroup"), attr: { type: "button" } });
-      button.onclick = () => {
-        config.chartGroupField = defaultField;
-        config.chartDateBucket = getDefaultChartDateBucket(config.schema.columns, defaultField, config.schema.computedFields);
-        config.chartNumberBucket = getDefaultChartNumberBucket(config.schema.columns, defaultField, config.schema.computedFields);
-        if (!config.chartNumberBucket) config.chartNumberBucketSize = undefined;
-        config.chartHiddenGroups = undefined;
-        actions.onConfigChange?.(t("undo.chartGroupConfig"));
-      };
-      return;
+      if (!defaultField) return [];
+      return [{
+        label: t("chart.chooseDefaultGroup"),
+        onClick: () => {
+          config.chartGroupField = defaultField;
+          config.chartDateBucket = getDefaultChartDateBucket(config.schema.columns, defaultField, config.schema.computedFields);
+          config.chartNumberBucket = getDefaultChartNumberBucket(config.schema.columns, defaultField, config.schema.computedFields);
+          if (!config.chartNumberBucket) config.chartNumberBucketSize = undefined;
+          config.chartHiddenGroups = undefined;
+          actions.onConfigChange?.(t("undo.chartGroupConfig"));
+        },
+      }];
     }
     if (reason === "noValueFieldSelected") {
       const defaultField = getDefaultChartValueField(config.schema.columns, config.schema.computedFields, config.chartAggregation || "sum");
-      if (!defaultField) return;
-      const button = empty.createEl("button", { cls: "db-chart-empty-action", text: t("chart.chooseDefaultValue"), attr: { type: "button" } });
-      button.onclick = () => {
-        config.chartValueField = defaultField;
-        normalizeChartAggregationForValueField(config, defaultField);
-        actions.onConfigChange?.(t("undo.chartValueFieldConfig"));
-      };
-      return;
+      if (!defaultField) return [];
+      return [{
+        label: t("chart.chooseDefaultValue"),
+        onClick: () => {
+          config.chartValueField = defaultField;
+          normalizeChartAggregationForValueField(config, defaultField);
+          actions.onConfigChange?.(t("undo.chartValueFieldConfig"));
+        },
+      }];
     }
     if (reason === "invalidAxisRange") {
-      const button = empty.createEl("button", { cls: "db-chart-empty-action", text: t("chart.resetAxisRange"), attr: { type: "button" } });
-      button.onclick = () => {
-        config.chartValueAxisRange = "auto";
-        config.chartValueAxisMin = undefined;
-        config.chartValueAxisMax = undefined;
-        actions.onConfigChange?.(t("undo.chartAxisRangeConfig"));
-      };
+      return [{
+        label: t("chart.resetAxisRange"),
+        onClick: () => {
+          config.chartValueAxisRange = "auto";
+          config.chartValueAxisMin = undefined;
+          config.chartValueAxisMax = undefined;
+          actions.onConfigChange?.(t("undo.chartAxisRangeConfig"));
+        },
+      }];
     }
+    return [];
   }
 
   private handleChartClick(elements: unknown): void {

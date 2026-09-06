@@ -92,6 +92,16 @@ const REGISTERED_SURFACES = [
   { name: "date-picker", spec: { renderer: "date-picker", bag: "file-view" } },
   { name: "icon-picker", spec: { renderer: "icon-picker", bag: "file-view" } },
   { name: "option-color-picker", spec: { renderer: "color-picker", bag: "file-view" } },
+  // ConfirmModal itself can never mount here: it extends Obsidian's Modal, which the bundle's
+  // stub throws on rather than fakes (obsidian-stub.mjs's own module comment — out of scope for
+  // a vault-less bundle, same reason no lane anywhere mounts a real Modal subclass). The
+  // "confirm" case in __sheetGrammar below is the same stand-in the stacked-pair registry's
+  // openHostModalChild already uses for a modal child, kept in sync with confirm-modal.ts's own
+  // markup by hand rather than by import: title, then the message as a .db-panel-row, then the
+  // action row, wired through the real attachSheetChromeToModal/placeSheet/keepSheetPlaced so the
+  // header, keyboard and safe-area columns measure the shared production mechanism rather than a
+  // second, parallel one.
+  { name: "confirm", spec: { renderer: "confirm" } },
 ];
 
 // Each entry names a real parent shape from the render harness and the production opener family
@@ -174,7 +184,13 @@ const OVERFLOW_ONLY_SURFACES = [
 ];
 
 // Every surface a phone can present, measured for overflow whether or not it owns a header.
-const OVERFLOW_SWEEP_SURFACES = [...REGISTERED_SURFACES, ...OVERFLOW_ONLY_SURFACES];
+// "confirm" is excluded: it has no `renderer` case in render-assertion-harness.ts (its stand-in
+// bypasses that dispatcher entirely, in __sheetGrammar above), so running it through this sweep's
+// generic runRenderAssertions call would silently fall through to the harness's own default
+// (table) rather than measuring confirm's markup. Its overflow is already covered by the two
+// "confirm over a sheet" / "import confirm dropdown chain" stacked-pair rows below, which mount it
+// through the same real stand-in via openHostModalChild.
+const OVERFLOW_SWEEP_SURFACES = [...REGISTERED_SURFACES.filter((surface) => surface.spec.renderer !== "confirm"), ...OVERFLOW_ONLY_SURFACES];
 
 // The sweep measures each surface twice. The first pass is the surface as the fixtures build it.
 // The second replaces every vault-derived string with one unbreakable word, because a property
@@ -213,33 +229,101 @@ setLocale("en");
 const mountedSheet = () => document.body.querySelector(".db-mobile-bottom-sheet");
 const stackedPairRegistry = ${JSON.stringify(REGISTERED_STACKED_PAIRS)};
 
+// Shared by the runRenderAssertions path below and the confirm stand-in, so the two ways this
+// lane can end up with a mounted sheet in hand read it identically.
+const measureMountedSheet = (sheet) => {
+  let closeBox = null;
+  let rightOverflow = null;
+  if (sheet) {
+    // The 44px floor: hasSheetHeader only proves a close node exists, never that it clears the
+    // touch-target size every other close control on the phone is held to.
+    const close = sheet.querySelector(".db-sheet-close, .db-cell-edit-close");
+    if (close) {
+      const rect = close.getBoundingClientRect();
+      closeBox = { width: rect.width, height: rect.height };
+    }
+    // No structural predicate can see a group's content running past the surface's own edge —
+    // that is a measured fact, and it is exactly report 41's "Automati/cally" mid-word break.
+    const surfaceRight = sheet.getBoundingClientRect().right;
+    const offenders = [];
+    for (const el of sheet.querySelectorAll("*")) {
+      const style = window.getComputedStyle(el);
+      if (style.display === "none" || style.visibility === "hidden") continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 && rect.height === 0) continue;
+      if (rect.right > surfaceRight + 0.5) offenders.push(el.className || el.tagName);
+    }
+    rightOverflow = offenders;
+  }
+  return { closeBox, rightOverflow };
+};
+
+// ConfirmModal extends Obsidian's Modal, which this bundle's stub deliberately cannot fake (see
+// the "confirm" registry entry's comment). This mirrors confirm-modal.ts's own onOpen markup by
+// hand — title, then the message as a .db-panel-row, then the action row — and wires it through
+// the real chrome/placement functions so every column but the markup mirror itself measures the
+// production mechanism. Kept in sync with confirm-modal.ts by the same discipline the stacked-
+// pair registry's openHostModalChild already carries for a modal child.
+const mountConfirmStandIn = () => {
+  const panel = document.createElement("div");
+  panel.className = "modal-container";
+  const content = document.createElement("div");
+  content.className = "modal-content note-database-modal";
+  const heading = document.createElement("h3");
+  heading.textContent = "Delete this row?";
+  content.appendChild(heading);
+  const message = document.createElement("div");
+  message.className = "db-modal-help db-panel-row";
+  message.textContent = "This action cannot be undone.";
+  content.appendChild(message);
+  const actionsRow = document.createElement("div");
+  actionsRow.className = "db-modal-actions";
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.textContent = "Cancel";
+  actionsRow.appendChild(cancelBtn);
+  const confirmBtn = document.createElement("button");
+  confirmBtn.type = "button";
+  confirmBtn.className = "mod-warning";
+  confirmBtn.textContent = "Delete";
+  actionsRow.appendChild(confirmBtn);
+  content.appendChild(actionsRow);
+  panel.appendChild(content);
+  document.body.appendChild(panel);
+  let closed = false;
+  let releasePlacement;
+  const close = () => {
+    if (closed) return;
+    closed = true;
+    releasePlacement?.();
+    releaseChrome?.();
+    if (panel.isConnected) panel.remove();
+  };
+  const releaseChrome = attachSheetChromeToModal(panel, true, close);
+  placeSheet(panel);
+  releasePlacement = keepSheetPlaced(panel);
+  return { panel, close };
+};
+
 window.__sheetGrammar = (scenario) => {
+  if (scenario.renderer === "confirm") {
+    const { panel, close } = mountConfirmStandIn();
+    const { closeBox, rightOverflow } = measureMountedSheet(panel);
+    const report = {
+      mounted: true,
+      sheetFound: panel.classList.contains("db-mobile-bottom-sheet"),
+      grammar: describeSheetGrammar(panel),
+      listViewRow: null,
+      closeBox,
+      rightOverflow,
+    };
+    close();
+    return report;
+  }
   let report = { mounted: false, sheetFound: false, grammar: null, listViewRow: null, closeBox: null, rightOverflow: null };
   runRenderAssertions(document.body, scenario, "", () => {
     const sheet = mountedSheet();
-    let closeBox = null;
-    let rightOverflow = null;
-    if (sheet) {
-      // The 44px floor: hasSheetHeader only proves a close node exists, never that it clears the
-      // touch-target size every other close control on the phone is held to.
-      const close = sheet.querySelector(".db-sheet-close, .db-cell-edit-close");
-      if (close) {
-        const rect = close.getBoundingClientRect();
-        closeBox = { width: rect.width, height: rect.height };
-      }
-      // No structural predicate can see a group's content running past the surface's own edge —
-      // that is a measured fact, and it is exactly report 41's "Automati/cally" mid-word break.
-      const surfaceRight = sheet.getBoundingClientRect().right;
-      const offenders = [];
-      for (const el of sheet.querySelectorAll("*")) {
-        const style = window.getComputedStyle(el);
-        if (style.display === "none" || style.visibility === "hidden") continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.width === 0 && rect.height === 0) continue;
-        if (rect.right > surfaceRight + 0.5) offenders.push(el.className || el.tagName);
-      }
-      rightOverflow = offenders;
-    }
+    const { closeBox, rightOverflow } = measureMountedSheet(sheet);
     report = {
       mounted: true,
       sheetFound: Boolean(sheet),
