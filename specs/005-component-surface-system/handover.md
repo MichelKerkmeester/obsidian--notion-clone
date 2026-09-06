@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: main carries 0.0.26 (8c7b65aa), which ships 006's record-open docking for every anchorless caller (ae46da94) on top of 0.0.25's five desktop fixes. All six capture true-ups are done — 050's plus 051-055's, landed 2026-09-05 in worktrees 087-092 — and this pass reconciled them against each other. 053's true-up overturned four of 050's own claims and 052's overturned a fifth; three of the four are the same error, an absence asserted from a surface never examined. Four cross-family number conflicts are settled in roadmap.md §7.10, which also names one owner per shared primitive. 053's implementation leg is running on codex in worktree 094; 052, 054, 051 and 055 follow by inventory rank. No criterion was ticked: a true-up designs, T002 measures."
+description: "Resume point: this pass opened 058-card-title-and-title-formats from the operator's phone-board report and amended six sibling goals (047, 051, 052, 053, 055, 056) against tonight's rulings — the desktop Settings side sheet and its dedicated gear button, the combobox ruling for every desktop dropdown, the table footer rule, the ADR-007 E4 confirm/undo-toast closure, and 056's R6/R7 board-colour rulings. roadmap.md gained three new §4 report rows, a refreshed §5.A (with two stale derived ratios corrected — 054 and 057 — found while reading each packet's own goal.md rather than trusting roadmap prose), and five new §6A ruling entries. No src/, styles.css, tools/ or main.js file was touched; this is a documentation-only leg."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,43 +10,37 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-05T16:40:00Z"
-    last_updated_by: "reconcile-trueups"
-    recent_action: "Reconciled the six true-ups against each other and corrected 050"
-    next_safe_action: "Run 052 T002 while codex holds 053; both measure their reds before code"
+    last_updated_at: "2026-09-06T09:10:00Z"
+    last_updated_by: "orchestrate-handover-21"
+    recent_action: "Opened 058; amended 047/051/052/053/055/056; refreshed roadmap.md and goal-prompt.md"
+    next_safe_action: "Land 056's residuals and 057's flatten-to-chip-ink leg, then cut 0.0.29"
     blockers:
-      - "Rows 47-52 shipped in 0.0.25 and 0.0.26; operator confirmation owed on all six"
-      - "Rows 29-33, 39-41, 43 re-asked against 0.0.26, unanswered"
-      - "050-055: all past T001, none past T002; no implementation has landed"
-      - "046 T002/T016 and 044/045 AC-006 stay open"
-      - "052 design-trueup still cites ~70 bare menus/ paths after the d486eab9 regrouping"
+      - "058 T003 onward pending: the format-routing and Title-slot-affordance code has not landed"
+      - "047's four Mobbin harvests (Notion, Evernote, Fibery, ClickUp) are queued, none dispatched"
+      - "051 T013/T014 (the operator device pass and confirm-timing follow-ups) stay open"
+      - "052/053/055's new criteria (combobox, gear button, footer, delete confirm) are documentation only"
+      - "056's ten T012 residuals: R6/R7 now have a ruling to implement against; R1-R5, R8-R10 still open"
     key_files:
       - "specs/005-component-surface-system/roadmap.md"
       - "specs/005-component-surface-system/goal.md"
-      - "specs/005-component-surface-system/050-anytype-adoption/design-trueup.md"
-      - "specs/005-component-surface-system/053-toolbar-and-view-controls/design-trueup.md"
+      - "specs/005-component-surface-system/058-card-title-and-title-formats/goal.md"
+      - "specs/005-component-surface-system/051-modal-and-sheet-componentization/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-handover"
+      session_id: "surface-system-handover-21"
       parent_session_id: null
     completion_pct: 76
-    open_questions: []
+    open_questions:
+      - "058 ADR-002 (picker location): does 047's queued Notion harvest change the call once it lands"
     answered_questions:
-      - "All six T001 true-ups are done; 050's own read was wrong in five places"
-      - "Chip rail: captured eleven times and conditional; 050 C2 withdrawn"
-      - "Per-view default: in the New menu, not the settings panel; 050 C7 narrowed"
-      - "Page limit is per-layout (Gallery 60, Kanban 10), not a flat 60"
-      - "Hover was captured 37 times; the README caveat five documents inherited was false"
-      - "Secondary text is 7.11:1 and the #232323 fill 1.14:1, across every packet"
-      - "The confirm primitive is 051's; 053 and 055 consume it"
-      - "Anytype dual-mode trigger icons rejected: 120 captures, WCAG 1.4.11"
-      - "Selection caps not adopted: no multi-select referent"
-      - "055 was renamed from 051-states-feedback-and-motion"
-      - "053 ADR-001: extend the existing chip rail; no new chip-row component"
-      - "053 ADR-002: delete the seven dead methods, keep their classes"
-      - "053 ADR-003: the confirm fires on drop, not on gesture start"
-      - "051: fullscreen survives only for the formula workbench (new ADR-004)"
-      - "051: a registered stacked pair may become an in-place sub-page, per pair where the capture shows it (ADR-002)"
+      - "058's per-view title picker is not new work: ViewConfig.titleField already ships"
+      - "The real title gap is format routing (stringifyValue vs. the column's own formatter)"
+      - "051 ADR-007 E4 closes: single-row delete drops its confirm, keeps the existing Undo toast"
+      - "051 ADR-008: a new `side sheet` role, not a widened `panel` or a reused phone `sheet`"
+      - "052's combobox ruling is distinct from dropdown-field.ts's existing gated (>8) search box"
+      - "056 R6 reaffirms ADR-004 E1 as written; R7 is a fresh finding ADR-004 never addressed"
+      - "054's and 057's roadmap-derived ratios were stale (3/7, 0/10); corrected to 2/7 and 7/10"
+      - "a7db5035, previously cited as the wrap-toggle landing sha, is a post-rebase gate rebuild only"
 ---
 # Session Handover: Component Surface System
 
@@ -55,6 +49,76 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-06, read from this worktree (`.worktrees/152-docs-058-and-refresh`) — main is a moving target, do not trust a pinned sha
+
+**This session's own work is a documentation-only leg**, run per an explicit hard rule: no `src/`,
+`styles.css`, `tools/` or `main.js` file was touched, nothing was pushed, and a fresh verifier lands
+it. It opened `058-card-title-and-title-formats` from the operator's phone-board report and amended
+six sibling goals — `047` (Mobbin reference harvests), `051` (the desktop Settings side sheet, ADR-008,
+and ADR-007 E4's closure), `052` (the combobox ruling, the Operator-dropdown anchoring defect), `053`
+(the toolbar gear button, the table footer rule, row 53 confirmed shipped), `055` (the single-row
+delete confirm removed, closing E4), `056` (R6/R7 board-colour rulings, a pointer to `058`) — plus a
+refreshed `roadmap.md` (§4, §5.A, §6A) and this document. Every touched packet's `validate.sh
+--strict` first `RESULT:` line reads `PASSED`; the 005 parent's own recursive-free packet check does
+too.
+
+**Main is advancing concurrently, in real time, while this leg ran.** Checked twice in one sitting:
+main's `HEAD` moved from `0e8185b6` to `03aa151d` between two `git rev-parse` calls a few minutes
+apart, and `manifest.json` on main already reads **`0.0.29`** — a version this session was told to
+expect only *after* `056`'s residuals and `057`'s flatten-to-chip-ink leg landed. Reading main's log
+directly (not from memory) shows both have: `9f30fc31` (`fix(calendar): flatten the week/day timed
+block to the month chip's ink`) and a confirm-primitive/E4 sequence (`1a72ed9e`, `e2e2416e`,
+`66d92b4f`) plus board-geometry work (`0fe620fd`, `eebbb29f`, `e97524fb`, `1a4b30e6`) and a doc
+commit, `06c6425a`, that **already records `056`'s R6/R7 rulings** independently of this session's
+own `056` amendment. `git diff --stat` between this branch's merge-base (`3b3ac633`) and main's tip
+shows real, substantive, **independent** edits to `055/056/057`'s own tasks/acceptance/decision
+files — this branch and main diverged on the same shared program docs.
+
+**What this means for the next session, stated plainly rather than smoothed over.** This branch's
+`051`/`052`/`053`/`055`/`056` amendments were written and validated against this branch's own base
+(`3b3ac633`), which is now behind main. They are not wrong — every finding in them was read from
+source and is still true of the code as of this branch's base — but landing them onto current main
+needs a real rebase and a truth reconciliation pass, the same discipline this program has applied to
+every prior concurrent-edit collision (`roadmap.md` §7's own worked examples), **not** a blind merge.
+In particular: `056`'s R6/R7 addendum in this branch's `decision-record.md` will very likely need to
+be read alongside `06c6425a`'s independent record of the same two rulings and reconciled rather than
+both kept. Do not assume either side is the complete picture; read both.
+
+**Live worktrees relevant to tonight**, confirmed by `git worktree list` at the time of writing (not
+carried from an earlier session): `148-harvest-notion`, `149-harvest-evernote`, `150-harvest-fibery`,
+`151-harvest-clickup` (the four Mobbin harvest legs `047`'s amendment names, each still at the shared
+base `3b3ac633`, none dispatched yet); `146-impl-053-table-footer` (tip `20389105`, one uncommitted
+file) and `147-impl-052-searchable-dropdowns` (tip `4b3adca0`, clean) — both already carry real
+behaviour commits for two of this session's own new criteria, ahead of what this leg's own docs
+describe as "not started"; `153-impl-051-settings-side-sheet`, `154-impl-055-no-confirm-delete`,
+`155-impl-057-phone-week` (all three at `6c718f63`, dirty with uncommitted work); `156-impl-056-palette`
+and `157-release-0-0-29` (both at main's tip as of their last sync, `0e8185b6` — itself now behind
+main's current `03aa151d`). **None of these was opened or read for content by this leg** — this
+paragraph names them from `git worktree list` and their own `git log -1`/`git status --porcelain`
+only, so a later reader knows they exist without this session claiming to have verified their content.
+
+**Corrected against the operator's own dictation.** The SHA list this session was asked to verify
+resolved for every entry but one: `057`'s pair was given as `793b9b4 / 6b5d0ea2`; `793b9b4` is not a
+valid revision in this repository (`git log -1 793b9b4` fails outright). Reading main's log around
+`6b5d0ea2` (the docs commit) finds its paired behaviour commit immediately before it: `9f30fc31`,
+`fix(calendar): flatten the week/day timed block to the month chip's ink` — almost certainly what was
+meant. Recorded here rather than silently substituted, per this program's own rule against guessing
+a citation.
+
+**Harness traps learned tonight, from the ledger this session read rather than from firsthand
+reproduction — recorded as reported, not re-verified by this leg:** `git config rerere.enabled` is
+`false` in this repository (confirmed directly) — do not expect rerere to resolve a rebase conflict
+automatically. Capture **bytes** jitter run to run while `pixelHash` stays deterministic — a byte-diff
+on a PNG is not evidence of a visual change; read the hash, and if it moved, look at the image. A
+print-mode gate leg must not be backgrounded — the pattern this program already carries
+(`npm run gate` needs `</dev/null`) generalises: anything that reads stdin or writes a progress
+stream to a foreground terminal will hang or truncate if it is not run to completion in the
+foreground. When restoring a bytes-only re-encoded capture, restore the **named file paths**, never
+the whole directory — a directory-level restore can revert a sibling capture that changed for a real
+reason in the same pass.
+
+---
 
 **Main carries `0.0.26`** (cut `8c7b65aa`). It ships `006-record-open-target`'s docking fix
 (`ae46da94`) — the generalisation of §4 row 48 to **every** caller that opens a record with no
@@ -364,6 +428,39 @@ ticks an operator row.**
 ---
 
 ## 5. CONTINUITY LOG
+
+- **2026-09-06, `orchestrate-handover-21`: `058` opened, six goals amended, roadmap and this
+  document refreshed — documentation-only, nothing pushed.** Ran in an isolated worktree
+  (`.worktrees/152-docs-058-and-refresh`) under an explicit hard rule: no `src/`, `styles.css`,
+  `tools/` or `main.js` edit, foreground only, a fresh verifier lands it. `058-card-title-and-title-
+  formats` opened Level 2 from the operator's phone-board report; reading the tree first found the
+  per-view title picker already shipped (`ViewConfig.titleField`) and reaching the board card and
+  record header for every view but calendar/timeline — the real gap is `resolveTitleFieldDisplay`
+  routing every title through `stringifyValue()` instead of the chosen column's own number/currency
+  format, and the board's own Properties sheet showing the title choice as inert text. Four ADRs
+  record it; no code changed. Six sibling goals amended with dated sections, new completion
+  criteria, task rows and acceptance rows (never rewriting history): `047` (four queued Mobbin
+  harvests — Notion, Evernote, Fibery, ClickUp — one landed and verified before the next opens),
+  `051` (ADR-008, a new `side sheet` shell role for the desktop database Settings surface; ADR-007's
+  flagged E4 hold closed on the operator's "No confirm for single delete, Undo toast" ruling), `052`
+  (every desktop dropdown becomes a combobox; the filter/sort Operator dropdown's anchoring defect),
+  `053` (a toolbar-rail gear button before `···`; the table-footer hide-at-zero-rows rule; row 53's
+  wrap toggle reconfirmed shipped with its real commits, correcting an earlier session's mis-cited
+  landing sha), `055` (the `deleteRow` call-site change `051`'s E4 closure requires), `056` (R6/R7
+  board-colour rulings — "Anytype tint fill", "Neutral, match Anytype" — recorded as a `decision-
+  record.md` ADR-004 addendum, and a pointer to `058`). `roadmap.md` gained three §4 rows (56, 57,
+  58), a refreshed §5.A (058 added; 047/050-057 read against their own docs rather than the prior
+  roadmap prose, which surfaced and corrected two stale derived ratios — `054` 3/7 → 2/7, `057`
+  0/10 → 7/10), and five new §6A ruling entries. The parent `goal.md`'s phase-subgoals table gained
+  058 and carried the same two ratio corrections; its continuity frontmatter was refreshed.
+  **The one finding that outranks the rest of this entry**: main advanced concurrently and in real
+  time while this leg ran (`HEAD` moved from `0e8185b6` to `03aa151d` between two checks minutes
+  apart; `manifest.json` already reads `0.0.29`), landing real, independent edits to `055`/`056`/
+  `057`'s own doc files — including a `06c6425a` commit that separately records `056`'s R6/R7
+  rulings. This branch and main have diverged on shared program docs and need a rebase plus a truth
+  reconciliation before landing, not a blind merge; see §1's dated subsection for the full reading
+  and the live-worktree inventory. Every touched packet here validated `RESULT: PASSED` against
+  this branch's own base; that has not been re-checked against main's current tip.
 
 - **2026-09-05, `orchestrate-handover-20`: all six true-ups reconciled, and `050` corrected.**
   `051`-`055` each ran T001 in its own worktree (`087`-`092`) and landed as `8e0149af`, `a58bbcd5`,
