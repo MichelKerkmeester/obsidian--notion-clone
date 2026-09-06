@@ -20222,6 +20222,7 @@ body.pm-resize-active * {
   width: 100%;
   min-height: 200px;
   height: clamp(200px, 45vh, 400px);
+
 }
 
 .note-database-container .db-chart-number {
