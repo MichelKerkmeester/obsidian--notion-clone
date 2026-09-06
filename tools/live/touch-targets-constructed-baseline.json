@@ -1,10 +1,30 @@
 {
-  "under": 1213,
+  "under": 1320,
   "floor": 28,
-  "recorded": "2026-09-05",
+  "recorded": "2026-09-06",
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
   "smallest": "db-file-tag-remove at 10x14",
   "settingsBodyGrammarLowering": "1215 -> 1209 on 2026-09-05, found stale rather than lowered by 052-card-properties-capture: worktrees/050-settings-body-grammar's own landing (`4f090d2e`, `9ab96581`, `07be64fe`) converted the settings sheet's native `input[type=\"radio\"]` group and `.db-toggle-switch` checkboxes onto the shared row/segmented grammar so `sheet-grammar.mjs` could register `settings` as a seventh conforming surface, and that same conversion narrowed this ratchet without anyone re-measuring the constructed pass or writing the new number back here. `node tools/live/touch-targets.mjs` on the landed tree measures 1209 under the floor against this file's own prior baseline of 1215, three consecutive runs, still comfortably PASSing at the stale 1215 (1209 < 1215) — which is exactly why it went unnoticed rather than failing loudly. This entry only corrects the stale number to what every measurement agrees on; 052 raises nothing in the constructed pass and claims no credit for a conversion `050` made.",
+  "monthGridRetargetRaise": {
+    "recorded": "2026-09-06",
+    "what": "1213 -> 1320, a calendar month-grid retarget that removed the week grid's 2px row-gap so the event lanes carry their own 20px pitch instead of a 22px one (row-gap plus the segment's own height). The tighter pitch lets more lanes fit inside the same cell height before the \"+N\" overflow collapse takes over, so more `db-calendar-month-segment` buttons render instead of being hidden — the button's own height (20px, under the 28px floor) was already a shortfall before this change; this raise is more of the same shortfall becoming visible, not a new one. No other class moved.",
+    "perClass": [
+      {
+        "class": "db-calendar-month-segment is-all-day is-start is-end is-draggable",
+        "before": 93,
+        "after": 149
+      },
+      {
+        "class": "db-calendar-month-segment is-all-day is-start is-end",
+        "before": 84,
+        "after": 140
+      }
+    ],
+    "totalBefore": 1208,
+    "totalAfter": 1320,
+    "verification": "Isolated by measuring `node tools/live/touch-targets.mjs --json` against `styles.css`/`calendar-renderer.ts`/`calendar-toolbar-renderer.ts` checked out at the commit before this phase's edits (932fa3a9) and again against the landed tree, both from the same working copy so nothing else in the repository could move between the two reads: 1208 before, 1320 after, reproduced twice more on the landed tree (1320, 1320). The per-class diff names exactly the two `db-calendar-month-segment` class combinations above (+56 each, +112 total) and no other class in either dump changed by so much as one instance. `db-calendar-week-allday-segment`'s three variants (the week/day all-day strip, a different lane pitch this phase did not touch) hold their exact prior counts.",
+    "productFindings": "Not a new control type: `db-calendar-month-segment` was already 218 of the pre-existing 1213 (raiseHistory's own perClass table), already under the floor at its shipped 20px height. Anytype's own chip is measured at this same 20px pitch (design-trueup's own reference), so raising the button's height to clear 28px on desktop would be declining the one value this phase was asked to match rather than an accessibility ground ADR-004 recognises — the phone-specific enlargement this same design source calls for is a later leg's (not this file's) to land, and will lower this count again when it does."
+  },
   "raiseHistory": {
     "recorded": "2026-09-04",
     "what": "422 -> 1278, the third raise recorded here (the first two, 335 -> 367 and 367 -> 422 on the same date, are preserved in this file's git history rather than restated). SCENARIOS_WITH_STATES grew from 31 to 73 constructed scenarios: the toolbar and its four popovers, the six anchored panels, the record detail panel and its note-body region, the table's record peek, the in-cell editors, the date/icon/colour pickers, the dropdown and owned-menu shells, the table chrome variants (footer, grouped, record-icon gutter, full status palette, column headers), the board and gallery cover states, the group-selection controls and the four remaining timeline scales. Two corrections ride the same measurement and are described under `measurementCorrections`: the pre-existing 31 scenarios now measure 407 rather than a flaky 419-429, so the raise is 407 + 871 rather than 422 + 904.",
