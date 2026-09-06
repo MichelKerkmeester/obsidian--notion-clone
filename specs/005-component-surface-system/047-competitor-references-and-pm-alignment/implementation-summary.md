@@ -82,6 +82,10 @@ _memory:
 
 No file under `src/` and no rule in `styles.css` was touched. The gantt comparison below is the
 reason: it found nothing in either file to change.
+
+### Notion reference captures (2026-09-06)
+
+`screenshots/notion/` now holds 3647 Notion screens harvested from Mobbin (iOS 1315 files, 801 unique; web 2332 files, 1540 unique; 472 flows), each cited by `mobbin_url` in `screenshots/notion/README.md`, untracked by the manifest like `anytype/` — T030. The group folders name the query that returned a screen, not a verified property of the image, so read a file's folder as a search term and the image as the evidence.
 <!-- /ANCHOR:what-built -->
 
 ---

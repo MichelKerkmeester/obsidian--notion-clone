@@ -189,14 +189,29 @@ status.
 
 One app landed and verified before the next opens. Never a parallel fan-out across apps.
 
-- [ ] T030 [B] Harvest Notion (iOS + web) via Mobbin, Fable 5.1 medium through the second login,
+- [x] T030 [B] Harvest Notion (iOS + web) via Mobbin, Fable 5.1 medium through the second login,
       into `screenshots/notion/{ios,web}/<group>/` with a `README.md` index; landed by a fresh
       verifier before T031 opens.
-      **In flight since ~10:00 on 2026-09-06**, `worktrees/148-harvest-notion`, by the **scripted
-      loop** method rather than per-image dispatch: one Code Mode execution per batch, both platform
-      lanes driven together, held to 40 requests a minute. Leg reported 1,510+ images by 10:27; an
-      independent count of that worktree at 10:50 reads **1,679** `.webp` files under
-      `screenshots/notion/`. Neither is a landing — unmerged, unverified, in no manifest
+      **Done and landed 2026-09-06** from `worktrees/148-harvest-notion`, on the operator's words
+      "let fresh fable (medium) orchestrator through claude2 use sonnet agents to harvest all
+      screenshots from Notion that can be harvested from Mobbin". **3647 `webp` files — iOS 1315
+      files (801 unique screens, 149 flows), web 2332 files (1540 unique screens, 323 flows)** —
+      pulled by the **scripted loop** method (one Code Mode execution per batch, both platform lanes
+      together, under 40 requests a minute) through the Mobbin MCP: `search_screens` deep mode with
+      an accumulating `exclude_screen_ids`, plus `search_flows`. 583 requests counted, no 401 and no
+      429, two 30 s timeouts whose queries succeeded on a later call. Grouped by platform and by the
+      query that returned each screen (`navigation/`, `views/`, `database/`, `editors/`, `menus/`,
+      `sheets/`, `settings/`, `collaboration/`, `onboarding/`, `states/`, `extra/`, `flows/<flow>/`);
+      `screenshots/notion/README.md` holds the layout, provenance, query sets and a per-file
+      `mobbin_url` row for every image, with `ios/harvest.json` and `web/harvest.json` as the
+      machine-readable ledgers. Verified before landing: README index and disk agree 1:1 on all 3647
+      paths, every file is a valid RIFF/WebP with no truncation and none under 1 KB, no screen id
+      repeats inside a folder, 14 images opened and read (iOS phone chrome, web desktop chrome, all
+      Notion, all carrying the Mobbin footer). The in-flight counts this row used to carry (1,510 at
+      10:27, 1,679 at 10:50) are superseded by the landed total. Two claim corrections made in the
+      README before landing: the folder groups are query-derived, not content-verified (5 of 9 web
+      spot-checks sit in a group they do not depict), and the request-ledger breakdown itemizes 168
+      of the 278 iOS and 136 of the 297 web requests
 - [ ] T031 [B] Harvest Evernote (iOS + web) via Mobbin, same orchestration, into
       `screenshots/evernote/{ios,web}/<group>/`; landed by a fresh verifier before T032 opens.
       **Queued, not dispatched** — `worktrees/149-harvest-evernote` exists and is idle. Same scripted
