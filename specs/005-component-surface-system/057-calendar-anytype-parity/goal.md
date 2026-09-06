@@ -151,6 +151,11 @@ never resolve them silently.
       **0** non-background px below the grid rule in any of the twenty set captures, so there was
       no counterpart to match. Kept as ours with the argument written, and an empty drawer now
       renders nothing.
+      **Re-closed 2026-09-06 ~11:40 on the operator's follow-on report** (ADR-005): the populated
+      drawer (N >= 1) still read as an ~80 CSS px band with one centred row. `db-calendar-backlog*`
+      is retired entirely — the surface is now a `db-calendar-unscheduled-chip` beside the
+      month/year title, absent at N = 0, opening the shared owned-menu popover/sheet. The
+      disposition (kept, reachable) is unchanged; only its shape moved.
 - [x] **The phone calendar's every value is labelled "design inferred from desktop".** **Today: no
       phone reference exists and none is coming** — iOS Anytype has no calendar layout. Done is
       zero phone values presented as measured.
@@ -170,7 +175,7 @@ never resolve them silently.
       zero-line diff on `calendar-timeline-renderer.ts` and on both guard tests.
 - [ ] **OPERATOR:** the operator reads the rebuilt calendar on iOS and on desktop and reports it as
       Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
-- [ ] **The unscheduled affordance is subtle and integrated, not a band above the grid.**
+- [x] **The unscheduled affordance is subtle and integrated, not a band above the grid.**
       **Added 2026-09-06** from the operator's ~10:33 desktop report on 0.0.29 (`../roadmap.md` §4
       row 62; capture `operator-calendar-unscheduled-20260906.png`, the operator's own, not
       committed here), verbatim: *"For calendar the unscheduled pinned stuff needs to be done
@@ -183,6 +188,14 @@ never resolve them silently.
       (it does not, 0 non-background px below the grid rule in twenty set captures) and the answer
       stands. This row is the different question the operator has now asked — what ours should be
       instead. Leg `worktrees/161-impl-057-unscheduled`.
+      **Done 2026-09-06.** ADR-006 was written first and compares four integrations; the chip
+      then shipped. **0** px of band — no `.db-calendar-backlog` rule survives in `styles.css`
+      and the renderer creates no such element at any N. The affordance is a header-row chip,
+      `"Unscheduled · N"`, created only when N >= 1, opening the shared owned-menu popover on
+      desktop and its already-registered phone sheet, drag-onto-a-day kept. Captures:
+      `constructed-calendar-month-unscheduled-{desktop,mobile}-{dark,light}.png` at N = 1 and the
+      four recaptured `calendar-month-view-*` files at N = 0. **The operator's own device read is
+      the row below and stays open.**
 - [ ] **OPERATOR/GESTALT: the calendar reads as Anytype's, judged whole rather than value by
       value.** **Added 2026-09-06** from the operator's ~10:40 report, verbatim: *"in general our
       calendar looks nothing like anytype yet"*. **This reopens the packet.** Every Met row above

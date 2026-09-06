@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T21:30:00Z"
+    last_updated_at: "2026-09-06T11:40:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "verified T017 independently and landed it; T018 opens the phone overlap-column gap"
-    next_safe_action: "put T018's phone overlap-column remedy to the operator; then the AC-010 device read"
+    recent_action: "landed T019: unscheduled band to header chip, multi-day flex-grow fix"
+    next_safe_action: "T018 is on worktrees/155-impl-057-phone-week; then AC-010's device read"
     blockers:
       - "AC-010 is the operator's device read, unclosable here"
       - "Five AC-002 sub-rows stay pixel read owed"
@@ -37,6 +37,7 @@ _memory:
       - "T009: submenu geometry scoped to date-field dropdowns only"
       - "T017: the week/day timed block flattens to the month chip's ink, measured at 0 fill/bar px"
       - "T017 re-verified by an independent PNG decoder; T018 records the phone cost the flatten created"
+      - "T019: ADR-005 picks a header chip over three other integrations; the multi-day range's own detachment was a title flex-grow bug, not a text-align one"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -195,6 +196,15 @@ reports that styles.css moved.
 | `src/views/calendar-pinned-values.test.ts` | Edited | T017's sixth pin: the timed block's flat background/border-left/radius/colour, with a negative-control check |
 | 37 `screenshots/notion-clone/**/*.png` | Recaptured | Every content-changed capture this leg's fixes moved |
 | 4 `screenshots/notion-clone/views/calendar-week-time-grid-*.png` | Recaptured | T017's flattened timed block |
+| `src/views/calendar-renderer.ts` | Edited | T019: `renderUnscheduledBacklog` retired for `renderUnscheduledChip`/`openUnscheduledMenu`; the three title-select methods now return their `title` element |
+| `styles.css` | Edited | T019: `.db-calendar-backlog*` removed; `.db-calendar-unscheduled-chip` and the `:has()`-scoped title `flex-grow: 0` added |
+| `src/views/calendar-renderer.test.ts` | Edited | T019: the backlog tests rewritten for the chip; the completed-row test reworked to call `isRowCompleted` directly (the popover needs a real document this file's `MockElement` does not provide) |
+| `src/views/calendar-pinned-values.test.ts` | Edited | T019: two new pins — no `.db-calendar-backlog` selector survives, and the multi-day title/range flex-grow fix |
+| `tools/live/render-assertion-harness.ts` | Edited | T019: `calendarUnscheduled`/`calendarMultiDay` scenario options; `calendarAssertions` gains the band/chip/range-gap checks |
+| `tools/screenshots/constructed-scenarios.mjs` | Edited | T019: the two new options added to `SPEC_OPTIONS`; `constructed-calendar-month-unscheduled` registered |
+| `tools/screenshots/constructed-capture.test.mjs` | Edited | T019: the new scenario id added to the registry-coverage list |
+| `tools/lane/css-lane.json` | Edited | T019: lane taken over from `052`, released at `95cab2d8a169` naming 8 reviewed captures |
+| 8 `screenshots/notion-clone/views/{calendar-month-view,constructed-calendar-month-unscheduled}-*.png` | Recaptured | T019's two fixes, both pixelHash-moved and opened in both themes/devices |
 <!-- /ANCHOR:what-built -->
 
 ---

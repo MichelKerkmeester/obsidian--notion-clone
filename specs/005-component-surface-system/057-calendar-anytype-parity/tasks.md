@@ -11,8 +11,8 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-calendar-ui-review"
-    recent_action: "T019 opened: rebuild to the UI review's P0/P1 rows, G1-G15 carried as acceptance rows"
+    last_updated_by: "land-057-unscheduled-chip"
+    recent_action: "T021 landed: the unscheduled band is now a header chip (ADR-006)"
     next_safe_action: "T019 leg L1 (one sheet, one rule); P0-2's Monday default waits on the operator"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
@@ -32,7 +32,6 @@ _memory:
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
-      - "An absence is established across all twenty set captures, never from one"
       - "T002 landed: C3, C8 and C9 turned into figures on cc5a7ff2, 2026-09-06"
       - "T004-T007 landed: the month grid retargeted, AC-003 Met, the gantt confirmed unmoved"
       - "AC-002 was claimed Met and is reopened: seven measured residuals are carried as T015 and T016"
@@ -42,6 +41,7 @@ _memory:
       - "T017's flatten costs the phone an overlap-column block: carried as T018, the remedy is the operator's"
       - "T018 landed: ADR-005 records the 80px minimum and why the month cell was not enough"
       - "The operator read 0.0.29 beside Anytype and reopened the phase on a gestalt judgement"
+      - "T021 landed: the unscheduled band is a header chip (ADR-006); a multi-day title's flex-grow is bounded as an interim, superseded by T019's per-day span rebuild"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -662,6 +662,16 @@ title and 44x44 close on phone.
       *"which day starts the week stays locale-driven and is not a measured value"*, which
       is why it is the operator's and not this task's. AC-010 stays the operator's throughout:
       a leg that ticks G1-G15 has earned a second look, never the row.
+
+      **One landed rule is this task's to delete, not to keep.** T021 bounded a spanning
+      segment's title with `.db-calendar-month-segment:has(> .db-calendar-month-dates) >
+      .db-calendar-month-title { flex-grow: 0; }` so the date range stopped being stranded at the
+      segment's far edge. That is an interim legibility fix inside today's one-chip-per-span
+      shape. P0-3's rebuild replaces the shape outright — one chip per covered day, no date
+      string — so `.db-calendar-month-dates` stops being emitted and the `:has()` rule goes with
+      it. Verified as compatible rather than assumed: the rule matches only a segment that still
+      has a `.db-calendar-month-dates` child, so it is inert the moment that child is gone. G3 and
+      G5 stay Unmet on it; nothing about it closes either row.
 - [ ] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
       column back to 45px.** Operator ruling, verbatim *"Stagger overlaps at 45px"* — this
       **supersedes T018's landed 80px minimum** (`396bcae7`). Each later overlapping block is inset
@@ -674,7 +684,7 @@ title and 44x44 close on phone.
       stagger and the 45px case goes red again. Folded into T019's rebuild, which holds the same
       renderer. `decision-record.md`'s ADR-005 carries the ruling; T018 stays closed as the record
       of what landed
-- [ ] T021 (2026-09-06 ~10:33 amendment) **Make the unscheduled affordance subtle and integrated.**
+- [x] T021 (2026-09-06 ~10:33 amendment) **Make the unscheduled affordance subtle and integrated.**
       Operator, verbatim: *"For calendar the unscheduled pinned stuff needs to be done better. Like
       more subtlely integrated, check how anytype or other would do that."* (`../roadmap.md` §4 row
       62; capture `operator-calendar-unscheduled-20260906.png`, the operator's own). **Red first**:
@@ -688,6 +698,34 @@ title and 44x44 close on phone.
       above the grid with the items still reachable and still droppable onto a day. Leg
       `worktrees/161-impl-057-unscheduled`. The same capture's centred multi-day range text and
       per-column chip drift are **not** carried here: G5 and G3 already own them
+
+      **Closed 2026-09-06 on leg `worktrees/161-impl-057-unscheduled`.** `decision-record.md`'s
+      **ADR-006** compares four integrations — keep the band restyled, drop the surface, a
+      persistent sidebar list, and the header chip — and takes the chip.
+      `renderUnscheduledBacklog` is retired for `renderUnscheduledChip`, which appends
+      `"Unscheduled · N"` into the title element that `renderMonthHeader` /
+      `renderWeekHeader` / `renderDayHeader` now return, and returns before creating anything at
+      N = 0; `openUnscheduledMenu` builds the list through `createOwnedMenuForEvent`, the same
+      owned-menu primitive `showDayEntryMenu` already uses, so `sheet-grammar.mjs` gains no
+      surface (its `owned-menu` row already covers the phone sheet). Each listed record keeps
+      `draggable = true` and the same `UNSCHEDULED_MIME` + `text/plain` `dragstart` payload the
+      drawer item carried. Pinned three ways rather than one: `calendar-pinned-values.test.ts`
+      greps the raw stylesheet for any surviving `.db-calendar-backlog` rule,
+      `calendar-renderer.test.ts` asserts the chip's presence and absence against the row data,
+      and `render-assertion-harness.ts` adds two `calendarAssertions` rows that measure the
+      shipped renderer's own output on every calendar scenario. New capture
+      `constructed-calendar-month-unscheduled` (both themes, both device profiles) carries the
+      only two states the bench shape never drew — one undated row and one 5-day span.
+      **The multi-day range fix carried alongside it is interim, and is T019's to supersede.**
+      `.db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title {
+      flex-grow: 0; }` stops a spanning segment's title box from filling the whole span and
+      stranding its date range at the far edge (measured at 784px of separation inside a 977px
+      five-column segment before, an 8px gap after). It does **not** conflict with T019: the
+      review's P0-3 rebuild draws a span as one chip per covered day with **no date string at
+      all**, at which point `.db-calendar-month-dates` stops being emitted and this rule becomes
+      dead code to delete with it. Until then the range is legible where it was not, and G3 and
+      G5 — which own the span's real shape — stay Unmet
+
 <!-- /ANCHOR:phase-3 -->
 
 ---

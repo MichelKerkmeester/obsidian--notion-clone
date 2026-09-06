@@ -11,8 +11,8 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-calendar-ui-review"
-    recent_action: "The operator's gestalt read reopened the phase; P0-2's Monday default is Proposed"
+    last_updated_by: "land-057-unscheduled-chip"
+    recent_action: "ADR-006 landed: unscheduled band to header chip; the gestalt read's P0-2 stays Proposed"
     next_safe_action: "Ask the operator to rule P0-2, the Monday-start default with the setting as override"
     blockers:
       - "P0-2 needs the operator: a Monday-start default overturns AC-002's locale-driven call"
@@ -34,6 +34,8 @@ _memory:
       - "ADR-002's colour question is answered: the timed blocks flatten to chip ink, carried as T017"
       - "T017 landed: the week/day timed block reads the month chip's flat ink, no separator rule needed since the slot lines show through"
       - "The 2026-09-06 gestalt read changes no ADR: ADR-001 through ADR-005 stand unaltered"
+      - "ADR-006 ruled: the unscheduled surface is a header chip + shared owned-menu popover/sheet, not a band; A4's disposition (kept, reachable) is unchanged, only its shape moved"
+      - "The multi-day range-text defect was a title flex-grow with nothing bounding it on a wide spanning segment, not a text-align/justify-content bug — fixed with :has(), and superseded by T019's per-day span rebuild"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -418,4 +420,73 @@ value"* — twenty of twenty Anytype captures start on Monday, so it is measured
 closed row's reasoning is the operator's call under goal D6, not an in-repo one. G7 stays Unmet
 until that ruling lands.
 
+---
+
+## ADR-006: The unscheduled surface moves from a band to a header chip
+
+**Status**: **Accepted** — 2026-09-06, on the operator's follow-on report.
+
+**Trigger.** Operator, 2026-09-06 ~10:33, verbatim: *"For calendar the unscheduled pinned stuff
+needs to be done better. Like more subtlely integrated, check how anytype or other would do
+that."* Attached: `.operator-calendar-report.png`, the desktop month view on 0.0.29 — an
+"Unscheduled (1)" band above the grid holding one centred item in roughly 80 CSS px of empty
+space. AC-006 and A4's disposition (*"kept as ours, restyled"*) are not reversed by this ADR — the
+operator is not asking to remove the surface, only to integrate it more subtly. What moves is the
+**shape** of the disposition, not the disposition itself.
+
+**At least three integrations were compared, against what the references in `design-trueup.md`
+actually show:**
+
+1. **Keep the band, restyled further.** Anytype has no counterpart to restyle toward (§3 of
+   `design-trueup.md`: 0 non-background px below the grid rule in all twenty set captures), so
+   there is no captured value left to adopt — the band's *presence* is the defect the operator is
+   naming, not a leftover styling detail on it. Rejected: restyling a surface the operator just
+   called insufficiently subtle does not answer the report.
+2. **Remove the surface entirely**, matching Anytype's own absence exactly. Rejected for the same
+   reason A4 already gives: a set's calendar layout omits an undated object because that object
+   stays reachable in the set's Grid/List/Gallery layout; this plugin's calendar is a view of a
+   folder of notes, and a note with unparseable or missing date frontmatter has no other surface
+   here that flags it as "needs a date." Deleting the drawer would remove the only place those
+   notes are reachable from the calendar.
+3. **A persistent sidebar list**, the shape `047`'s Project Manager vendored reference
+   (`specs/context/obsidian-pm-main`) uses for its own backlog. Rejected: this plugin's calendar
+   is one view among several inside a single leaf, with no sidebar role in `design-system.md` §3
+   for a view to open one into, and Anytype's own six layouts (§2c) carry no such role either — an
+   Anytype-shaped calendar has nowhere to dock a persistent panel that is not itself a deviation.
+4. **A compact "Unscheduled · N" chip in the header row, beside the month/year title** (`053`'s
+   control geometry — `.db-calendar-nav-button.is-text`, 20px height, 52px min-width), absent when
+   N = 0, opening a popover on desktop and a `044` phone sheet on touch — through the shared
+   `createOwnedMenu`/`createOwnedMenuForEvent` primitive every other calendar menu in this file
+   already opens through (A9's day/item menu, the month/year selects' listbox), so it registers no
+   new `sheet-grammar.mjs` surface. **Chosen.**
+
+**Why 4 over 1-3.** It keeps the disposition A4 already argued for (reachability for an undated
+note) while answering the actual complaint: no chrome renders at all when nothing is unscheduled,
+and when something is, it is one small control at the header's own density rather than a
+full-width band with 80 CSS px of mostly-empty space beneath it. It costs nothing D5 protects —
+the popover/sheet is the same shared primitive `044`'s grammar and `048`'s stacking model already
+cover, so no new registration is owed.
+
+**Consequence.** Drag-to-date is kept: a row in the popover/sheet list is `draggable`, sets the
+same `UNSCHEDULED_MIME` payload the drawer's item did, and every day cell's own
+`setupBacklogDropTarget` is unchanged — the drop target moved with the surface, not away from it.
+
+**A second, unrelated defect surfaced while reading the operator's capture and is recorded under
+this same ADR because the same report named it.** The screenshot's multi-day range chips read as
+detached text near the segment's far edge rather than beside their own title. Root cause: the
+month segment's title (`.db-calendar-month-title`) carries `flex-grow: 1` with nothing bounding
+it, so on a segment whose CSS grid-column spans several days (a multi-day all-day event), the
+title's flex box grows to fill the segment's **entire** width before its `.db-calendar-month-dates`
+sibling is laid out — stranding the date range at the grown box's trailing edge. Measured in a real
+Chromium render before the fix: a title box 776px wide inside a 977px five-column segment, its date
+range starting at x 1233 (near the segment's own right edge) rather than beside the 53px-wide title
+text. This is not the alignment the operator's "Su left, Mo/Tu centred, Fr right" description
+literally names — every day and range chip's own `text-align`/`justify-content` was already `left`
+/`flex-start` on this tree, confirmed both by reading `styles.css` and by a real-browser
+reproduction of the exact backlog-item markup, which rendered left-aligned as authored — but it is
+the same class of defect (content landing away from where its box's left edge sits) and it is what
+a real multi-day event in the operator's own vault would show. Fixed by zeroing the title's grow
+whenever a trailing date range exists: `.db-calendar-month-segment:has(> .db-calendar-month-dates)
+> .db-calendar-month-title { flex-grow: 0; }` — re-measured at an 8px gap (the segment's own
+`gap` value) between the title's right edge and the range's left edge, for any span width.
 <!-- /ANCHOR:decisions -->
