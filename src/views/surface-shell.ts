@@ -189,7 +189,7 @@ export const SHELL_SIDE_SHEET_CLASS = "db-shell-side-sheet";
  * dark-full.png`, border column at device x 1832 of a 2168px window, 336px to the edge. Widened
  * here rather than copied: our settings body carries a multi-line description field and a
  * template picker Anytype's plain label/value list does not, the same reasoning the sort/filter
- * condition panel's own width already carries against its measured 288px (`roadmap.md` §7.11).
+ * condition panel's own width already carries against its own 288px reference.
  */
 export const SHELL_SIDE_SHEET_WIDTH_PX = 420;
 

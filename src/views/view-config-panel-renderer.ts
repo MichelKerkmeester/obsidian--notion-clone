@@ -472,7 +472,7 @@ export class ViewConfigPanelRenderer {
   }
 
   /**
-   * Place the panel: the anchored popover on a phone (unchanged — `044`'s bottom sheet), the
+   * Place the panel: the anchored popover on a phone (unchanged — the bottom sheet), the
    * full-height side sheet on desktop.
    *
    * The desktop branch never calls `positionToolbarPopover`. That function's anchored math needs

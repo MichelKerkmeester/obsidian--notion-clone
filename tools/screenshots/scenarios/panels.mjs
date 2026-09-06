@@ -496,7 +496,7 @@ export const PANEL_SCENARIOS = [
     group: "panels",
     width: 700,
     // Desktop-only, the same reasoning every phone-only sheet fixture in this file carries in
-    // reverse: a phone never presents this class — `asSheet` takes the `044` bottom-sheet branch
+    // reverse: a phone never presents this class — `asSheet` takes the bottom-sheet branch
     // instead — so a "mobile" capture of it would photograph a shape the plugin never renders.
     devices: ["desktop"],
     // Shares its constructed sibling with `panel-view-config` and `panel-view-config-sheet`
