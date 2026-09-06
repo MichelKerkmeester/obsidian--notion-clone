@@ -246,7 +246,17 @@ _memory:
       unmoved by MD5 and a zero-line diff. **R6**: the weekday labels read `Sun`
       `Mon` on a Sunday-start week against the reference's two-letter Monday-start `Mo` `Tu`; the
       design read trued the *week start* as configurable and ours a superset, and never trued the
-      **label form**, so this is an unmeasured element rather than a declined one. **R7**: the
+      **label form**, so this is an unmeasured element rather than a declined one.
+      **R6 done 2026-09-06, label form only — week-start configurability is untouched.**
+      `getWeekdayLabels` (`src/data/calendar-date-time.ts`) now slices its `Intl.DateTimeFormat`
+      `weekday: "short"` result to two characters — a no-op for any locale whose own short form is
+      already two characters or fewer — matching the reference's `Su` `Mo` `Tu` `We` `Th` `Fr` `Sa`
+      form. Which day starts the week is unchanged (still locale/`calendarFirstDayOfWeek`-driven);
+      only the label's character count moved. `getWeekdayLabels` is shared with the date-field
+      picker's own mini calendar, so its captures moved too — read back
+      (`constructed-date-picker-desktop-light.png`), the picker already renders its weekday row
+      upper-cased by its own CSS, so the two-letter form reads as `SU MO TU WE TH FR SA`, unchanged
+      in kind. `npm test` 1418/1418, all eight `reference-gantt-*.png` MD5-unchanged. **R7**: the
       unscheduled drawer renders its header and its `Nothing unscheduled.` empty line at full
       height above the grid even at zero items — 85 CSS px on desktop, more on the phone — above a
       surface the reference does not have at all; the drawer was kept as ours with an argument,

@@ -189,7 +189,11 @@ export function getLocaleWeekStartsOn(config?: Pick<ViewConfig, "calendarFirstDa
 export function getWeekdayLabels(locale: string, weekStartsOn: number): string[] {
   const formatter = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" });
   const sundayUtc = Date.UTC(2026, 5, 7);
-  return Array.from({ length: 7 }, (_, index) => formatter.format(new Date(sundayUtc + ((weekStartsOn + index) % 7) * MS_PER_DAY)));
+  // Two letters, matching the measured reference label form (`Mo`, `Tu`, ...)
+  // rather than Intl's own locale-dependent "short" width, which for English
+  // is three ("Sun", "Mon"). slice(0, 2) is a no-op for any locale whose own
+  // short form is already two characters or fewer.
+  return Array.from({ length: 7 }, (_, index) => formatter.format(new Date(sundayUtc + ((weekStartsOn + index) % 7) * MS_PER_DAY)).slice(0, 2));
 }
 
 function clampInteger(value: unknown, min: number, max: number, fallback: number): number {
