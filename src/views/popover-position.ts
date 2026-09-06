@@ -56,6 +56,13 @@ export interface ToolbarPopoverPositionOptions {
    * than asking an element where there is room beside it.
    */
   dockTo?: HTMLElement;
+  /**
+   * Present as a sheet regardless of `isMobileBottomSheet` — the escalation a desktop dropdown
+   * takes when the anchored popover would be cramped. Reuses the exact sheet
+   * chrome and placement a phone gets (`applySheetChrome`, `placeSheet`, drag-to-dismiss, the
+   * overlay stack) rather than inventing a second sheet host for the desktop case.
+   */
+  forceSheet?: boolean;
 }
 
 /**
@@ -156,7 +163,7 @@ export function positionToolbarPopover(
   // happen to pass a live container, so the refusal above would not fire — which is exactly what
   // made the sheet's version of this survive so long. A branch gated on something it never
   // measures is a trap whether or not it has sprung yet.
-  if (!isMobileBottomSheet(panel.ownerDocument) && !options.dockTo && !anchorEl?.isConnected) return;
+  if (!isMobileBottomSheet(panel.ownerDocument) && !options.forceSheet && !options.dockTo && !anchorEl?.isConnected) return;
 
   const margin = options.margin ?? 12;
   const gap = options.gap ?? 6;
@@ -171,7 +178,7 @@ export function positionToolbarPopover(
   const maxPreferredWidth = options.maxWidth ?? preferredWidth;
   const ownerDocument = panel.ownerDocument;
   const view = ownerDocument.defaultView || window;
-  const mobileSheet = isMobileBottomSheet(ownerDocument);
+  const mobileSheet = options.forceSheet === true || isMobileBottomSheet(ownerDocument);
   positionCleanups.get(panel)?.();
 
   panel.addClass("db-anchored-popover");
@@ -697,6 +704,30 @@ export function resolveAnchoredPopoverBox(
     maxHeight: availableHeight,
     height: renderedHeight,
   };
+}
+
+/**
+ * Whether an anchored desktop popover would be cramped — the measured condition
+ * escalates on, computed from the same numbers `positionToolbarPopover`'s own anchored branch
+ * derives (`resolveAnchoredPopoverBox` above and the width clamp in `place`), so a reader can
+ * re-derive the answer without opening a browser.
+ *
+ * Cramped either way: the anchored placement cannot honour `preferredWidth` and falls toward
+ * `minWidth` because the viewport has no room for it, OR the panel's own natural height exceeds
+ * what `resolveAnchoredPopoverBox` can give it, so the list would have to scroll inside a capped
+ * box rather than rendering at its full height.
+ */
+export function resolveDesktopDropdownFit(
+  anchorRect: { top: number; bottom: number },
+  bounds: { top: number; bottom: number; height: number; width: number },
+  naturalHeight: number,
+  options: { minWidth: number; preferredWidth: number; maxWidth: number; gap: number; margin: number },
+): { width: number; maxHeight: number; cramped: boolean } {
+  const maxAllowedWidth = Math.max(options.minWidth, Math.min(options.maxWidth, bounds.width - options.margin * 2));
+  const width = Math.min(options.preferredWidth, maxAllowedWidth);
+  const box = resolveAnchoredPopoverBox(anchorRect, bounds, naturalHeight, options.gap, options.margin);
+  const cramped = width < options.preferredWidth || box.maxHeight < naturalHeight;
+  return { width, maxHeight: box.maxHeight, cramped };
 }
 
 export function resolvePopoverHorizontalLeft(

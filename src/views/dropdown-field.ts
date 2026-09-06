@@ -18,7 +18,7 @@ import { isImeComposing } from "../data/keyboard-utils";
 import { t } from "../i18n";
 import { buildShellHeader } from "./surface-shell";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
+import { getVisiblePopoverBounds, isMobileBottomSheet, positionToolbarPopover, resolveDesktopDropdownFit } from "./popover-position";
 import { filterPickerRows, moveCreateOptionsFirst } from "./popover-host";
 
 // ───────────────────────────────────────────────────────────────────
@@ -100,6 +100,43 @@ interface DropdownPopoverOptions extends DropdownFieldOptions {
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 3b. DESKTOP SHEET ESCALATION
+// ───────────────────────────────────────────────────────────────────
+
+// The family's own tokens for a natural-height estimate, not a rounder guess: the option row's
+// 30px floor (`styles.css` `.db-dropdown-option`), the search row's ~44px (its 28px input plus
+// wrap padding), and a section title's ~28px (`.db-dropdown-section-title`). Estimated rather than
+// measured because the answer is needed before `createDropdownField`'s own click handler decides
+// whether to turn the trigger into the query field — measuring the built panel would mean building
+// the anchored shape first and unwinding that conversion after the fact, for a caller that runs
+// once and never re-measures.
+const DESKTOP_DROPDOWN_ROW_HEIGHT = 30;
+const DESKTOP_DROPDOWN_SEARCH_ROW_HEIGHT = 44;
+const DESKTOP_DROPDOWN_SECTION_HEIGHT = 28;
+const DESKTOP_DROPDOWN_PLACEMENT = { minWidth: 180, preferredWidth: 280, maxWidth: 360, gap: 6, margin: 12 };
+// Same numbers, plus the anchored branch's own left alignment — kept separate from the fit check
+// above because `resolveDesktopDropdownFit` takes no `align`, and folding it in there would read
+// as though alignment affected crampedness, which it does not.
+const DESKTOP_DROPDOWN_PLACEMENT_ANCHORED = { ...DESKTOP_DROPDOWN_PLACEMENT, align: "left" as const };
+
+/**
+ * Whether a desktop dropdown anchored at `anchor` would be cramped — the measured condition
+ * a cramped anchored dropdown escalates on. Called twice for the same open (once by `createDropdownField`'s
+ * click handler, before it decides whether to convert the trigger, and once inside
+ * `openDropdownPopover` itself, which owns the escalation for every caller including
+ * `openDropdownMenu`) with the same anchor and option list, so both calls agree.
+ */
+function isDesktopDropdownCramped(anchor: HTMLElement, options: DropdownOption[]): boolean {
+  const sectionCount = new Set(options.map((option) => option.section).filter((section): section is string => Boolean(section))).size;
+  const naturalHeight = DESKTOP_DROPDOWN_SEARCH_ROW_HEIGHT
+    + options.length * DESKTOP_DROPDOWN_ROW_HEIGHT
+    + sectionCount * DESKTOP_DROPDOWN_SECTION_HEIGHT;
+  const anchorRect = anchor.getBoundingClientRect();
+  const bounds = getVisiblePopoverBounds(null);
+  return resolveDesktopDropdownFit(anchorRect, bounds, naturalHeight, DESKTOP_DROPDOWN_PLACEMENT).cramped;
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 4. DROPDOWN FIELD
 // ───────────────────────────────────────────────────────────────────
 
@@ -161,8 +198,13 @@ export function createDropdownField(options: DropdownFieldOptions): DropdownFiel
     }
     // On a desktop the trigger itself becomes the query field: one click opens the list and arms
     // the caret, with no second control to reach for. The phone sheet keeps its own header-and-
-    // search grammar, where the list is a sheet rather than a panel hanging off a trigger.
-    if (!isMobileBottomSheet(button.ownerDocument)) {
+    // search grammar, where the list is a sheet rather than a panel hanging off a trigger. A
+    // cramped anchored placement takes a third shape instead — a sheet opened by
+    // this same button — and that sheet carries its own search row rather than the trigger, so the
+    // conversion is skipped whenever the escalation is going to fire.
+    const phoneSheet = isMobileBottomSheet(button.ownerDocument);
+    const cramped = !phoneSheet && isDesktopDropdownCramped(button, options.options);
+    if (!phoneSheet && !cramped) {
       combobox = openTriggerInput(options, button, currentValue);
     }
     cleanup = openDropdownPopover(combobox ?? button, {
@@ -222,20 +264,28 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
   const contextClass = getDropdownPopoverContextClass(anchor);
   const host = getDropdownPopoverHost(anchor);
   const phoneSheet = isMobileBottomSheet(anchor.ownerDocument);
+  // A cramped anchored placement escalates to a sheet opened by the same trigger.
+  // Only reachable when the trigger has not already become the query field — `comboboxInput`'s
+  // caller (`createDropdownField`) makes that same call itself, before converting, so the two
+  // never disagree; `openDropdownMenu` never sets `comboboxInput` at all, so its own anchors reach
+  // this on the same terms.
+  const desktopSheet = !phoneSheet && !options.comboboxInput && isDesktopDropdownCramped(anchor, options.options);
   // Every desktop dropdown is a combobox: the list filters as you type, whatever its length. The
   // count gate that used to decide this ("long lists only") is the phone sheet's alone now, where
   // a search row is a row in a sheet rather than the trigger the finger already touched.
   const searchable = phoneSheet ? options.searchable === true && options.options.length > 8 : true;
   // A field-shaped trigger brings its own query field; a menu opened from a cell, a tab or an icon
-  // has no field to type into, so the panel carries the search row first, above the list.
+  // has no field to type into, so the panel carries the search row first, above the list. An
+  // escalated sheet is never comboboxInput-backed (see `desktopSheet` above), so it always lands
+  // in this branch and gets the same in-panel search row the phone sheet gets.
   const panelSearch = searchable && !options.comboboxInput;
-  const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${panelSearch ? " is-searchable" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
+  const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${panelSearch ? " is-searchable" : ""}${desktopSheet ? " db-dropdown-popover-desktop-sheet" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
   const popupId = `db-dropdown-${++nextDropdownId}`;
   panel.setAttr("id", popupId);
   panel.setAttr("role", "listbox");
   panel.setAttr("aria-label", options.label);
   anchor.setAttr("aria-controls", popupId);
-  if (phoneSheet) buildShellHeader(panel, { title: options.label, onClose: close });
+  if (phoneSheet || desktopSheet) buildShellHeader(panel, { title: options.label, onClose: close });
   let searchInput = options.comboboxInput;
   if (panelSearch) {
     const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
@@ -346,8 +396,6 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
       row.setAttr("title", option.disabledReason);
       row.setAttr("aria-label", `${option.text}: ${option.disabledReason}`);
     }
-    const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
-    if (option.value === options.value) setIcon(check, "check");
     if (option.icon) {
       const iconEl = row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" });
       if (options.renderIcon) options.renderIcon(iconEl, option.icon);
@@ -361,6 +409,10 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
         swatches.createSpan({ cls: "db-dropdown-option-swatch", attr: { style: `background-color: ${color}` } });
       }
     }
+    // Trailing, as the last element child: the selection state reads as the row's own outcome
+    // rather than a leading marker competing with the icon for the same slot.
+    const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+    if (option.value === options.value) setIcon(check, "check");
     const rowData = { section: currentSectionEl, row, value: option.value, option };
     row.onclick = () => selectRow(rowData);
     sectionRows.push(rowData);
@@ -406,23 +458,29 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
     window.setTimeout(() => searchInput?.focus(), 0);
   }
   const updateScrollAffordance = (): void => {
-    if (!phoneSheet) return;
+    if (!phoneSheet && !desktopSheet) return;
     const canScroll = optionsHost.scrollHeight > optionsHost.clientHeight + 1;
     const atEnd = optionsHost.scrollTop + optionsHost.clientHeight >= optionsHost.scrollHeight - 1;
     panel.toggleClass("has-scroll-overflow", canScroll && !atEnd);
   };
-  if (phoneSheet) optionsHost.addEventListener("scroll", updateScrollAffordance, { passive: true });
-  // Left-aligned, like a native <select>: the panel's left edge sits under the trigger's left
-  // edge rather than its right edge. `positionToolbarPopover` defaults to `align: "right"` for
-  // callers that hang a small popover off an icon-only trigger (the "..." overflow button, where
-  // a right edge is the only shared coordinate); a labelled dropdown field has a left edge worth
-  // keeping level with, and `resolvePopoverHorizontalLeft`'s own fallback already clamps into the
-  // viewport when a left-aligned panel would run past the right edge.
-  positionToolbarPopover(panel, anchor, { preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6, align: "left" });
+  if (phoneSheet || desktopSheet) optionsHost.addEventListener("scroll", updateScrollAffordance, { passive: true });
+  if (desktopSheet) {
+    // Cramped: reuses the phone sheet's own chrome and placement — same drag-to-
+    // dismiss, same backdrop, same `044` grammar — rather than a second sheet host for desktop.
+    positionToolbarPopover(panel, anchor, { forceSheet: true });
+  } else {
+    // Left-aligned, like a native <select>: the panel's left edge sits under the trigger's left
+    // edge rather than its right edge. `positionToolbarPopover` defaults to `align: "right"` for
+    // callers that hang a small popover off an icon-only trigger (the "..." overflow button, where
+    // a right edge is the only shared coordinate); a labelled dropdown field has a left edge worth
+    // keeping level with, and `resolvePopoverHorizontalLeft`'s own fallback already clamps into the
+    // viewport when a left-aligned panel would run past the right edge.
+    positionToolbarPopover(panel, anchor, DESKTOP_DROPDOWN_PLACEMENT_ANCHORED);
+  }
   if (!searchInput) {
     syncActiveOption(true);
   }
-  if (phoneSheet) window.setTimeout(updateScrollAffordance, 0);
+  if (phoneSheet || desktopSheet) window.setTimeout(updateScrollAffordance, 0);
 
   const onKeydown = (event: KeyboardEvent) => {
     if (isImeComposing(event) || event.target === searchInput) return;
@@ -466,7 +524,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
   const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: anchor, close });
   return () => {
     panel.removeEventListener("keydown", onKeydown);
-    if (phoneSheet) optionsHost.removeEventListener("scroll", updateScrollAffordance);
+    if (phoneSheet || desktopSheet) optionsHost.removeEventListener("scroll", updateScrollAffordance);
     if (typeaheadTimer !== undefined) window.clearTimeout(typeaheadTimer);
     removeAutoClose();
     anchor.removeAttribute("aria-controls");

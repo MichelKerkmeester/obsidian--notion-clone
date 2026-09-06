@@ -22,6 +22,7 @@ import {
   parseDateKeyToUtc,
 } from "../data/calendar-date-time";
 import { getEffectiveLocale, t } from "../i18n";
+import { formatDateValueDisplay } from "../data/date-time-format";
 import { isImeComposing } from "../data/keyboard-utils";
 import { MiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./calendar-mini-calendar-renderer";
 import {
@@ -155,17 +156,27 @@ function openDateValuePicker(
     bodyCls: "db-date-picker-body db-panel-row",
   });
   const presets = content.createDiv({ cls: "db-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
-  const createPreset = (label: string, onSelect: () => void) => {
-    const button = presets.createEl("button", { cls: "db-date-preset", text: label, attr: { type: "button" } });
+  // A relative label ("Tomorrow") reads as a choice with no literal to check it against until the
+  // resolved date sits beside it — Notion pairs every relative preset with the date it resolves to
+  // (`cfca14fb`). The resolved dateKey is optional so "Clear" — which resolves to nothing — keeps
+  // a bare label rather than growing an empty subline.
+  const createPreset = (label: string, onSelect: () => void, resolvedDateKey?: string) => {
+    const button = presets.createEl("button", { cls: "db-date-preset", attr: { type: "button" } });
+    button.createSpan({ cls: "db-date-preset-label", text: label });
+    if (resolvedDateKey) {
+      button.createSpan({ cls: "db-date-preset-subline", text: formatDateValueDisplay(resolvedDateKey) });
+    }
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
       onSelect();
     };
   };
-  createPreset(t("datePicker.today"), () => chooseToday(todayKey));
-  createPreset(t("datePicker.tomorrow"), () => chooseDate(addDateKeyDays(todayKey, 1)));
-  createPreset(t("datePicker.nextWeek"), () => chooseDate(addDateKeyDays(todayKey, 7)));
+  const tomorrowKey = addDateKeyDays(todayKey, 1);
+  const nextWeekKey = addDateKeyDays(todayKey, 7);
+  createPreset(t("datePicker.today"), () => chooseToday(todayKey), todayKey);
+  createPreset(t("datePicker.tomorrow"), () => chooseDate(tomorrowKey), tomorrowKey);
+  createPreset(t("datePicker.nextWeek"), () => chooseDate(nextWeekKey), nextWeekKey);
   createPreset(t("datePicker.clear"), () => {
     setInputs("");
     close(true);

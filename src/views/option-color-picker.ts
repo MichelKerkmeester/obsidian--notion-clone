@@ -1,13 +1,14 @@
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    option-color-picker
-// COMPONENT: floating swatch grid for picking a select/status option color
+// COMPONENT: labelled list for picking a select/status option color
 // ───────────────────────────────────────────────────────────────────
 //
-// Registry, phone header and arrow-key grid navigation are the picker host's — only the swatch
-// catalogue and its trailing tick are this file's own. A labelled list of named colours would read
-// more clearly than a hue-only grid, but this grid already ships with a registered stacking pair
-// and a phone counterpart depending on its shape, so it stays a grid and gains a tick and each
-// swatch's own accessible name instead of a redesign nothing here asked for.
+// Registry and the phone header are the picker host's — the row catalogue and its trailing tick
+// are this file's own. A one-column labelled list, built from the family's own `.db-dropdown-
+// option` row, replaces the unlabelled swatch grid this file used to build: the palette is
+// sixteen colours, several pairs of which sit under a CIE76 ΔE of 10 in at least one theme, so a
+// grid asked the user to tell two near-identical hues apart with no other signal. The
+// name is that signal, and it is why this is a list rather than a wider grid.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -23,7 +24,6 @@ import { positionToolbarPopover } from "./popover-position";
 import {
   clearActivePickerIfCurrent,
   closeActivePicker,
-  getGridNavigationTarget,
   mountPickerSheetHeader,
   setActivePicker,
   SWATCH_PICKER_POPOVER,
@@ -46,7 +46,7 @@ export function openOptionColorPicker(
   closeActivePicker(doc);
 
   const picker = doc.body.createDiv({ cls: "db-color-picker-popup" });
-  picker.setAttr("role", "grid");
+  picker.setAttr("role", "listbox");
   picker.setAttr("aria-label", t("menu.numberDisplayColorCustom"));
   picker.style.setProperty("color-scheme", "light dark");
   let closed = false;
@@ -62,86 +62,99 @@ export function openOptionColorPicker(
   entry = { anchor, close };
 
   // The padded-row grammar needs somewhere structural to measure on a phone sheet; the desktop
-  // popover keeps building swatches straight into the picker, exactly as before.
+  // popover keeps building rows straight into the picker, exactly as before.
   const content = mountPickerSheetHeader(picker, doc, {
     title: title || t("conditionalFormat.color"),
     onClose: close,
     bodyCls: "db-color-picker-body db-panel-row",
   });
 
+  const rows: HTMLButtonElement[] = [];
+  let activeIndex = Math.max(0, OPTION_COLORS.indexOf(current));
+
   OPTION_COLORS.forEach((color, index) => {
-    const swatch = content.createEl("button", {
-      cls: `db-color-picker-swatch db-option-color-${color}${color === current ? " is-selected" : ""}`,
+    const row = content.createEl("button", {
+      cls: `db-dropdown-option db-menu-item${color === current ? " is-selected" : ""}`,
       attr: {
         type: "button",
-        role: "gridcell",
-        tabindex: index === Math.max(0, OPTION_COLORS.indexOf(current)) ? "0" : "-1",
-        title: color,
-        // The colour's own name, not just its hue, so the current swatch reads correctly to a
-        // screen reader and the choice is never colour-only.
-        "aria-label": color,
-        "aria-pressed": color === current ? "true" : "false",
+        role: "option",
+        "aria-selected": color === current ? "true" : "false",
+        tabindex: index === activeIndex ? "0" : "-1",
       },
     });
-    // A ring around the selected swatch is still one hue standing in for another, which a viewer
-    // who cannot distinguish the two colours cannot use. The icon gives the same state a shape.
-    if (color === current) setIcon(swatch, "check");
-    swatch.onclick = (event) => {
+    row.createSpan({ cls: `db-color-picker-row-dot db-option-color-${color}`, attr: { "aria-hidden": "true" } });
+    // The visible name IS the accessible name here — nothing duplicates it into a `title` or a
+    // raw `aria-label`, which is what let the old grid ship the enum value itself as text.
+    row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: t(`optionColor.${color}`) });
+    const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+    if (color === current) setIcon(check, "check");
+    row.onclick = (event) => {
       event.stopPropagation();
       onSelect(color);
       close();
     };
+    rows.push(row);
   });
+
+  // A one-column list needs no geometric grid navigation — `getGridNavigationTarget` measured
+  // on-screen position for a grid whose column count could change with its width. Every row here
+  // is the same shape, so Up/Down/Home/End move by index, the family's own list model.
+  const focusRow = (index: number): void => {
+    activeIndex = index;
+    for (const [rowIndex, row] of rows.entries()) row.setAttr("tabindex", rowIndex === index ? "0" : "-1");
+    rows[index]?.focus({ preventScroll: true });
+    rows[index]?.scrollIntoView?.({ block: "nearest" });
+  };
+
   picker.onkeydown = (event) => {
     if (isImeComposing(event)) return;
     const target = event.target as HTMLElement | null;
-    const currentSwatch = target?.closest<HTMLButtonElement>(".db-color-picker-swatch");
-    if (!currentSwatch) return;
+    const currentRow = target?.closest<HTMLButtonElement>(".db-dropdown-option");
+    if (!currentRow) return;
+    const index = rows.indexOf(currentRow);
+    if (index < 0) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      currentSwatch.click();
+      currentRow.click();
       return;
     }
-    const items = Array.from(picker.querySelectorAll<HTMLButtonElement>(".db-color-picker-swatch"));
-    const index = items.indexOf(currentSwatch);
-    if (index < 0) return;
     if (event.key === "Home") {
       event.preventDefault();
-      focusSwatch(items, 0);
+      focusRow(0);
       return;
     }
     if (event.key === "End") {
       event.preventDefault();
-      focusSwatch(items, items.length - 1);
+      focusRow(rows.length - 1);
       return;
     }
-    const next = getGridNavigationTarget(items, index, event.key);
-    if (next == null) return;
-    event.preventDefault();
-    focusSwatch(items, next);
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      focusRow(Math.min(rows.length - 1, index + 1));
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      focusRow(Math.max(0, index - 1));
+    }
   };
 
   positionToolbarPopover(picker, anchor, { ...SWATCH_PICKER_POPOVER, gap: 4 });
   setActivePicker(doc, entry);
   removeAutoClose = installPopoverAutoClose({ panel: picker, anchorEl: anchor, close });
   view.requestAnimationFrame(() => {
-    const selected = picker.querySelector<HTMLButtonElement>(".db-color-picker-swatch.is-selected");
-    (selected || picker.querySelector<HTMLButtonElement>(".db-color-picker-swatch"))?.focus({ preventScroll: true });
+    const selected = rows[activeIndex] ?? rows[0];
+    selected?.focus({ preventScroll: true });
+    // The panel can open scrolled to its top on a long phone sheet — sixteen 44px rows against a
+    // capped viewport — so the current colour has to be brought into view rather than assumed
+    // visible.
+    selected?.scrollIntoView?.({ block: "nearest" });
   });
   return close;
 }
 
 // ───────────────────────────────────────────────────────────────────
-// 3. KEYBOARD NAVIGATION HELPER
-// ───────────────────────────────────────────────────────────────────
-
-function focusSwatch(items: HTMLButtonElement[], index: number): void {
-  items.forEach((item, itemIndex) => item.setAttr("tabindex", itemIndex === index ? "0" : "-1"));
-  items[index]?.focus({ preventScroll: true });
-}
-
-// ───────────────────────────────────────────────────────────────────
-// 4. CLOSE
+// 3. CLOSE
 // ───────────────────────────────────────────────────────────────────
 
 /** Close whichever picker family member is open on `doc`, if any — the colour picker included,

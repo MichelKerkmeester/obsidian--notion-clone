@@ -41,6 +41,25 @@ vi.mock("./popover-auto-close", () => ({
   installPopoverAutoClose: () => () => {},
 }));
 
+// The escalated desktop sheet reuses the phone sheet's own chrome, z-index
+// stacking and overlay-stack registration, none of which this lightweight mock document
+// implements (`getComputedStyle`, node siblings, a ResizeObserver-shaped frame watcher) — the
+// same reason a plain desktop dropdown test here never needed a `.db-mobile-bottom-sheet` class
+// to exist for real. `044`'s live sheet-grammar lane and the `constructed-dropdown` gate row are
+// what prove the chrome itself; this suite proves the escalation DECISION — the marker class
+// `openDropdownPopover` sets directly, the header, and the search row — so only the chrome/
+// animation entry points are stubbed. `createSheetHeader` (what `buildShellHeader` calls to build
+// the escalated sheet's title and close button) stays real.
+vi.mock("./mobile-bottom-sheet", async () => {
+  const actual = await vi.importActual<typeof import("./mobile-bottom-sheet")>("./mobile-bottom-sheet");
+  return {
+    ...actual,
+    applySheetChrome: () => {},
+    attachSheetDragToDismiss: () => () => {},
+    playSheetEntrance: () => {},
+  };
+});
+
 type Rect = { left: number; top: number; right: number; bottom: number; width: number; height: number };
 const ZERO_RECT: Rect = { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 };
 
@@ -75,12 +94,15 @@ class MockElement {
   ownerDocument: unknown;
   private rect: Rect = ZERO_RECT;
   private listeners = new Map<string, Set<Listener>>();
-  style: Record<string, unknown> & { removeProperty: (name: string) => void };
+  style: Record<string, unknown> & { removeProperty: (name: string) => void; setProperty: (name: string, value: string) => void };
 
   constructor(tagName = "div", cls = "") {
     this.tagName = tagName.toUpperCase();
     if (cls) for (const part of cls.split(/\s+/).filter(Boolean)) this.classes.add(part);
-    this.style = { removeProperty: (name: string) => { delete this.style[name]; } };
+    this.style = {
+      removeProperty: (name: string) => { delete this.style[name]; },
+      setProperty: (name: string, value: string) => { this.style[name] = value; },
+    };
   }
 
   createDiv(options: { cls?: string } = {}): MockElement {
@@ -104,12 +126,24 @@ class MockElement {
     this.attributes.set(name, value);
   }
 
+  // Standard-DOM alias — the escalated sheet's chrome (`applySheetChrome`) calls this directly
+  // rather than through Obsidian's own `setAttr` helper.
+  setAttribute(name: string, value: string): void {
+    this.attributes.set(name, value);
+  }
+
   getAttribute(name: string): string | null {
     return this.attributes.get(name) ?? null;
   }
 
   hasAttribute(name: string): boolean {
     return this.attributes.has(name);
+  }
+
+  // Read by vitest's own failure-diff formatter when an assertion on a DOM-shaped mock fails —
+  // otherwise the diff itself throws and hides the real assertion failure underneath it.
+  getAttributeNames(): string[] {
+    return Array.from(this.attributes.keys());
   }
 
   removeAttribute(name: string): void {
@@ -204,6 +238,19 @@ class MockElement {
     const index = before ? this.children.indexOf(before) : -1;
     if (index >= 0) this.children.splice(index, 0, node);
     else this.children.push(node);
+    return node;
+  }
+
+  // `buildShellHeader` (the escalated sheet's own header) moves its trailing children with this —
+  // unexercised until the desktop-sheet escalation gave this suite a reason to build one.
+  appendChild(node: MockElement): MockElement {
+    if (node.parentElement) {
+      const index = node.parentElement.children.indexOf(node);
+      if (index >= 0) node.parentElement.children.splice(index, 1);
+    }
+    node.parentElement = this;
+    node.ownerDocument = this.ownerDocument;
+    this.children.push(node);
     return node;
   }
 
@@ -663,5 +710,84 @@ describe("dropdown field — the trigger becomes the query field", () => {
 
     expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
     expect(button.hasClass("is-editing")).toBe(false);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 6. TESTS — THE DESKTOP SHEET ESCALATION
+// ───────────────────────────────────────────────────────────────────
+
+/** Opens a labelled field at a given anchor rect, so a case can choose how much room it leaves. */
+async function openFieldAt(
+  rect: { left: number; top: number; right: number; bottom: number; width: number; height: number },
+  optionCount: number,
+) {
+  const { doc, container } = createMockDoc();
+  const { createDropdownField } = await import("./dropdown-field");
+  const row = container.createDiv({ cls: "db-panel-row" });
+  const handle = createDropdownField({
+    parent: row as unknown as HTMLElement,
+    label: "Operator",
+    options: makeOptions(optionCount),
+    value: "v0",
+    onChange: () => {},
+  });
+  const button = handle.button as unknown as MockElement;
+  button.setRect(rect);
+  button.dispatch("click");
+  const panel = container.querySelector<MockElement>(".db-dropdown-popover")!;
+  return { doc, container, row, handle, button, panel };
+}
+
+// Anchor near the bottom of the 800px test viewport: 70px below it, 682px above — plenty for a
+// short list, not enough for a long one. The same anchor proves both sides of the condition.
+const CRAMPING_RECT = { left: 400, top: 700, right: 600, bottom: 730, width: 200, height: 30 };
+
+describe("dropdown field — desktop sheet escalation", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  it("stays an anchored popover with the trigger as the query field when there is room", async () => {
+    const { row, button, panel } = await openFieldAt(CRAMPING_RECT, 3);
+
+    expect(panel.hasClass("db-dropdown-popover-desktop-sheet")).toBe(false);
+    // The negative control for the case below: the same anchor, a short enough list, and the
+    // ordinary combobox conversion still happens — escalation is not simply "always on".
+    expect(row.querySelector(".db-dropdown-field-input")).not.toBeNull();
+    expect(button.hasClass("is-editing")).toBe(true);
+  });
+
+  it("escalates to a sheet, leaving the trigger a button, when the list cannot fit beside it", async () => {
+    const { row, button, panel } = await openFieldAt(CRAMPING_RECT, 30);
+
+    // `applySheetChrome` itself — the `.db-mobile-bottom-sheet` class, drag-to-dismiss, z-index
+    // stacking — is stubbed above; its correctness is `044`'s live sheet-grammar lane's job. This
+    // marker is `openDropdownPopover`'s own, set unconditionally on the escalation decision.
+    expect(panel.hasClass("db-dropdown-popover-desktop-sheet")).toBe(true);
+    // The trigger never became the query field — the escalated sheet carries its own search row.
+    expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
+    expect(button.hasClass("is-editing")).toBe(false);
+    expect(button.getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("carries the family's own sheet header — a title slot and the shared close affordance", async () => {
+    const { panel } = await openFieldAt(CRAMPING_RECT, 30);
+
+    expect(panel.querySelector(".db-panel-title")).not.toBeNull();
+    expect(panel.querySelector(".db-sheet-close")).not.toBeNull();
+  });
+
+  it("still opens with a focused, unconditional search input that survives the escalation", async () => {
+    const { doc, panel } = await openFieldAt(CRAMPING_RECT, 30);
+
+    const searchWrap = panel.querySelector<MockElement>(".db-dropdown-search");
+    expect(searchWrap).not.toBeNull();
+    const search = searchWrap!.children.find((child) => child.tagName === "INPUT");
+    expect(search).toBeDefined();
+    // The focus is deferred a tick (`window.setTimeout(() => searchInput?.focus(), 0)`), the same
+    // way the phone sheet's own search row focuses — flush it rather than reading synchronously.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(doc.activeElement).toBe(search as unknown as Element);
   });
 });

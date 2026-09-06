@@ -270,14 +270,14 @@ export class ColumnMenu {
           cls: `db-dropdown-option db-menu-item has-icon${type === col.type ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": type === col.type ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
-        if (type === col.type) setIcon(check, "check");
         renderPropertyTypeIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon db-column-type-option-icon" }), {
           key: type,
           label: labels[type],
           type,
         });
         row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: labels[type] });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        if (type === col.type) setIcon(check, "check");
         row.onclick = () => {
           cleanup();
           menu.close();
@@ -318,10 +318,10 @@ export class ColumnMenu {
           cls: `db-dropdown-option db-menu-item has-icon${value === currentStyle ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": value === currentStyle ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
-        if (value === currentStyle) setIcon(check, "check");
         this.renderNumberStyleMenuIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon db-number-style-menu-icon" }), value);
         row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: t(key) });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        if (value === currentStyle) setIcon(check, "check");
         row.onclick = () => { this.actions.setNumberDisplayStyle(col, value); render(); };
       }
 
@@ -434,10 +434,10 @@ export class ColumnMenu {
           cls: `db-dropdown-option db-menu-item has-icon${value === current ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": value === current ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
-        if (value === current) setIcon(check, "check");
         setIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), icon);
         row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label" , text: t(key) });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        if (value === current) setIcon(check, "check");
         row.onclick = () => { this.actions.setTextRenderMode(col, value); render(); };
       }
 
@@ -449,10 +449,10 @@ export class ColumnMenu {
           cls: `db-dropdown-option db-menu-item has-icon${selected ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": selected ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
-        if (selected) setIcon(check, "check");
         setIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), option.icon);
         row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label" , text: t(option.labelKey) });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        if (selected) setIcon(check, "check");
         row.onclick = () => { this.actions.setTextLinkScheme(col, option.value); render(); };
       }
       if (anchorEl?.isConnected) {

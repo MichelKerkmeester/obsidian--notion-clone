@@ -232,12 +232,12 @@ export const DATE_PICKER_POPOVER: ToolbarPopoverPositionOptions = {
   maxWidth: 252,
 };
 
-/** The colour picker's swatch grid, sized from its own swatches rather than picked — see the
- * grid's own module comment for the arithmetic. */
+/** The colour picker's labelled list, at Anytype's own measured panel width (`052`'s
+ * `anytype-menu-grammar.md` G15) — not the 124 a 4x4 swatch grid used to need. */
 export const SWATCH_PICKER_POPOVER: ToolbarPopoverPositionOptions = {
-  minWidth: 124,
-  preferredWidth: 124,
-  maxWidth: 124,
+  minWidth: 224,
+  preferredWidth: 224,
+  maxWidth: 224,
 };
 
 /** The icon/emoji grid picker — the content floor of its own tab/category/search chrome plus grid. */

@@ -18,6 +18,7 @@ import {
   clamp,
   resolveAnchoredPopoverBox,
   resolveContainerDockPlacement,
+  resolveDesktopDropdownFit,
   resolvePopoverHorizontalLeft,
 } from "./popover-position";
 
@@ -217,5 +218,43 @@ describe("a cell editor's popover near the viewport's right edge", () => {
 
     const clamped = clamp(nearEdgeAnchor, editorBounds.left + editorMargin, editorBounds.right - editorWidth - editorMargin);
     expect(clamped + editorWidth).toBeLessThanOrEqual(editorBounds.right - editorMargin + 0.001);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 8. THE DESKTOP DROPDOWN'S CRAMPED CONDITION
+// ───────────────────────────────────────────────────────────────────
+
+describe("resolveDesktopDropdownFit", () => {
+  const desktopBounds = { top: 0, bottom: 800, height: 800, left: 0, right: 1200, width: 1200 };
+  const placement = { minWidth: 180, preferredWidth: 280, maxWidth: 360, gap: 6, margin: 12 };
+
+  it("is not cramped for an ordinary anchor with room on every side", () => {
+    const anchor = { top: 100, bottom: 130 };
+    const fit = resolveDesktopDropdownFit(anchor, desktopBounds, 194, placement);
+
+    expect(fit.width).toBe(280);
+    expect(fit.cramped).toBe(false);
+  });
+
+  it("is cramped by width when the viewport cannot honour preferredWidth", () => {
+    // `bounds.width` is read directly, matching `positionToolbarPopover`'s own
+    // `bounds.width - margin * 2` — a 260px-wide bounds leaves only 236px after the 12px margins
+    // on each side, short of the 280px preference.
+    const narrowBounds = { ...desktopBounds, right: 260, width: 260 };
+    const fit = resolveDesktopDropdownFit({ top: 100, bottom: 130 }, narrowBounds, 194, placement);
+
+    expect(fit.width).toBeLessThan(280);
+    expect(fit.cramped).toBe(true);
+  });
+
+  it("is cramped by height when the list's natural height exceeds what either side of the anchor can give it", () => {
+    // Same anchor as the uncramped case above; only the option count (via naturalHeight) changes.
+    const anchor = { top: 700, bottom: 730 };
+    const shortList = resolveDesktopDropdownFit(anchor, desktopBounds, 134, placement); // ~3 rows
+    const longList = resolveDesktopDropdownFit(anchor, desktopBounds, 944, placement); // ~30 rows
+
+    expect(shortList.cramped).toBe(false);
+    expect(longList.cramped).toBe(true);
   });
 });
