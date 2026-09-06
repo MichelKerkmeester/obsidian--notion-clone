@@ -963,6 +963,16 @@ Docks against the right edge of the table it was opened from. Values are display
 
 Sources: `src/views/table-record-peek.ts`, `src/views/table-renderer.ts`
 
+### Settings — desktop side sheet
+
+The database Settings panel on desktop, docked full-height to the pane's right edge instead of the old 360x560px anchored dropdown that scrolled its own 1461px of content inside that box. Width 420px, measured wider than Anytype's own right-hand object panel (336px) because this body carries a multi-line description field its plain label/value list does not. The header stays fixed; the body below it is the only region that scrolls, independently of the database visible at the left edge of the pane.
+
+| dark | light |
+|---|---|
+| ![panel-settings-side-sheet dark](notion-clone/panels/panel-settings-side-sheet-desktop-dark.png) | ![panel-settings-side-sheet light](notion-clone/panels/panel-settings-side-sheet-desktop-light.png) |
+
+Sources: `src/views/surface-shell.ts`, `src/views/view-config-panel-renderer.ts`, `styles.css`
+
 ### Sort panel with no rules, calendar hint
 
 Calendar views add a hint above the empty state because layout order wins over user sort.
