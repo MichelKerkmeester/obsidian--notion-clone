@@ -1,7 +1,7 @@
 {
-  "holder": "053-toolbar-and-view-controls",
-  "acquiredAt": "2026-09-06T22:10:00Z",
-  "baselineHash": "274311fff7f4",
+  "holder": "052-dropdown-menu-and-picker-componentization",
+  "acquiredAt": "2026-09-06T23:05:00Z",
+  "baselineHash": "894436af439b",
   "baselineCommit": "03aa151d",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4181,6 +4181,32 @@
         "screenshots/notion-clone/views/constructed-table-mobile-light.png"
       ],
       "note": "Two rules added, both scoped to `.is-phone .note-database-container`: `.db-table tfoot.db-table-footer td` takes `height: 44px` and `.db-table-footer-trigger` takes `min-height: 44px`, the same thumb floor `.is-phone .db-menu-item` and the load-more row's own `.is-phone` rule already hold every other phone row to; the unscoped desktop pair (`calc(var(--db-row-height) - 8px)`, 26px) is untouched. `table-renderer.ts`'s private `renderFooter` now returns before drawing anything when `rows.length === 0`, on the one method all three render paths call, so the file view and the codeblock embed both lose the footer at zero rows; `config.summaryRules` is never touched, and `table-renderer-footer-visibility.test.ts` drives one renderer from zero rows to one and asserts the COUNT comes back. No capture in this corpus mounts a zero-row table, so that half has no picture to move; the render-assertion bundle's own two empty-table probes were mounted and read instead, and both come back with no `tfoot.db-table-footer` and the empty-state card in its place. Captures re-derived by a full `node tools/screenshots/capture.mjs` run on this base, 550 entries; `node tools/screenshots/verify.mjs` exit 0. 26 files moved bytes; 12 moved pixelHash and are listed here, every one a table's footer row growing on phone from a 26px '+ Calculate' hint to the 44px floor, opened in both themes across components/fields/views and read as correctly taller with no clipping and no column misalignment. The other 14 moved bytes without moving pixelHash -- 10 of them mobile tables whose footer sits below the fold (layoutHash moved, pixels did not) and 4 unrelated encoder/rasteriser noise, two of which 056's own release already recorded as jitter -- and all 14 are restored to their committed bytes with the manifest's `bytes` reconciled to the files on disk. `screenshots/project-manager/`: 0 files changed, and no desktop capture moved pixelHash, matching the `.is-phone` scope. A `tools/live/touch-targets.mjs` `RAISED` entry holds `db-table-footer-trigger` to 44px outright on phone -- observed red first at a forced 26px (176 constructed + 5 fixture raisedMisses), green again at 44px. Both ratchet baselines re-pinned downward to the measured tree, never upward: fixture 209 -> 196 (the pristine tree measures 197, so the fix itself drops one and the 209 pin was already stale) and constructed 974 -> 801 (the pristine tree measures 974, 173 of them this class). The trigger was measured at 44 CSS px / 88 device px at DPR 2 in the chrome-table-footer fixture and in both the file-view and embed constructed scenarios; its `tfoot` cell measures 53 CSS px."
+    },
+    {
+      "event": "acquire",
+      "phase": "052-dropdown-menu-and-picker-componentization",
+      "at": "2026-09-06T23:05:00Z",
+      "hash": "274311fff7f4",
+      "note": "Taken over from 053-toolbar-and-view-controls, which released at this hash at 22:40 with its footer captures signed off. This leg lands the operator's combobox ruling on every desktop dropdown, which needs three rules for one control: the query input that replaces a field's trigger, its focus ring, and the hidden trigger itself. Nothing else in the sheet is touched."
+    },
+    {
+      "event": "release",
+      "phase": "052-dropdown-menu-and-picker-componentization",
+      "at": "2026-09-06T23:40:00Z",
+      "hash": "894436af439b",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-dropdown-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-dropdown-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-dropdown-search-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-dropdown-search-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-dropdown-search-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-dropdown-search-mobile-light.png",
+        "screenshots/notion-clone/components/dropdown-field-desktop-dark.png",
+        "screenshots/notion-clone/components/dropdown-field-desktop-light.png",
+        "screenshots/notion-clone/components/dropdown-field-mobile-dark.png",
+        "screenshots/notion-clone/components/dropdown-field-mobile-light.png"
+      ],
+      "note": "Operator instruction (2026-09-06 ~08:15, verbatim: \"every dropdown on desktop should support search. So you click on it, the dropdown opens and input becomes input active state allowing you to also search for the item\"): every desktop dropdown built through the shared primitive is now a combobox. A field's own trigger is replaced in place by the query input (`.db-dropdown-field-input`, the button hidden by `.db-dropdown-field.is-editing`); a menu whose anchor the caller owns keeps its query field first in the panel and now renders it for every list. The `> 8` count gate is the phone sheet's alone, so 044's grammar is untouched. Three rules added, nothing existing changed. The stylesheet hash moved, which invalidates every capture's recorded source hash: full sweep, 554 captured, and the ten named above are the ones whose picture actually moved against origin/main. All ten were opened and read in both themes and both device profiles: `constructed-dropdown` (three options) now carries the panel search row a short list gets; `constructed-dropdown-search` is rebuilt on `createDropdownField`, so its desktop profile shows the trigger mid-search (\"ri\" narrowing nine properties to Priority and Risk burn) and its phone profile the sheet's own search row under its header, with the trigger still a button; the `dropdown-field` fixture's markup was brought back into line with the panel the code now builds. Sixteen captures moved bytes with identical pixelHash and layoutHash across two sweeps of the same tree and were restored to their committed bytes rather than committed as churn. `screenshots:verify`, `check-lane` and the 26-lane gate all exit 0 on this tree."
     }
   ],
   "outstanding": [

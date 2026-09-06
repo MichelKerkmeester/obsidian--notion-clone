@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T07:14:03.223Z",
+  "measuredAt": "2026-09-06T07:45:28.714Z",
   "inputs": {
-    "styles.css": "274311fff7f4",
+    "styles.css": "894436af439b",
     "tools/live/surface-census.mjs": "ea52a1e1e8f5",
     "src/views/surface-contract.ts": "ca203fa23a84",
     "src/views/record-detail-panel.ts": "c150d55fdd79",
@@ -9,13 +9,13 @@
     "src/views/board-card-properties-panel.ts": "36ee3fa444cc"
   },
   "totals": {
-    "rendered": 83,
-    "buildable": 225,
+    "rendered": 85,
+    "buildable": 226,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 142,
+    "buildableNotRendered": 141,
     "untokened": 0,
-    "unroled": 83,
+    "unroled": 85,
     "recordSurfaceHandBuilt": 0
   },
   "rendered": {
@@ -672,14 +672,34 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "1352x140",
+      "rect": "1352x172",
+      "scenarios": [
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-search": {
+      "cls": "db-dropdown-search",
+      "mountParent": "db-dropdown-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "1334x28",
+      "scenarios": [
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-options": {
+      "cls": "db-dropdown-options",
+      "mountParent": "db-dropdown-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "1334x119",
       "scenarios": [
         "dropdown-field"
       ]
     },
     "db-dropdown-section-title": {
       "cls": "db-dropdown-section-title",
-      "mountParent": "db-dropdown-popover",
+      "mountParent": "db-dropdown-options",
       "tokens": true,
       "role": null,
       "rect": "1334x29",
@@ -689,7 +709,7 @@
     },
     "db-dropdown-option": {
       "cls": "db-dropdown-option",
-      "mountParent": "db-dropdown-popover",
+      "mountParent": "db-dropdown-options",
       "tokens": true,
       "role": null,
       "rect": "1334x30",
@@ -1548,11 +1568,10 @@
     "db-date-picker-body",
     "db-cell-date-picker",
     "db-dropdown-field-disabled-reason",
-    "db-dropdown-search",
-    "db-dropdown-options",
     "db-dropdown-empty",
     "db-dropdown-option-swatches",
     "db-dropdown-option-swatch",
+    "db-dropdown-field-input",
     "db-dropdown-popover-context-settings",
     "db-dropdown-popover-context-modal",
     "db-dropdown-popover-context-container",

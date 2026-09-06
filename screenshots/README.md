@@ -341,13 +341,23 @@ Sources: `src/views/column-header-controller.ts`, `tools/bench/table-render-benc
 
 ### Dropdown with disabled option (constructed)
 
-openDropdownMenu's own entry with a selected option, a plain one and a disabled one carrying the reason its tooltip exists to surface.
+openDropdownMenu's own entry with a selected option, a plain one and a disabled one carrying the reason its tooltip exists to surface. Three options, and the desktop panel still carries a search row: a menu with no field-shaped trigger to type into gets its query field first in the panel, whatever the list's length.
 
 | dark | light |
 |---|---|
 | ![constructed-dropdown dark](notion-clone/components/constructed-dropdown-mobile-dark.png) | ![constructed-dropdown light](notion-clone/components/constructed-dropdown-mobile-light.png) |
 
 Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
+### Searchable dropdown with a typed filter (constructed)
+
+createDropdownField's own combobox entry: a labelled field clicked open, its trigger replaced in place by the query input, and "ri" typed into it so the list narrows live. The phone profile of the same scenario shows the sheet's own search row instead, the grammar the desktop change leaves alone.
+
+| dark | light |
+|---|---|
+| ![constructed-dropdown-search dark](notion-clone/components/constructed-dropdown-search-mobile-dark.png) | ![constructed-dropdown-search light](notion-clone/components/constructed-dropdown-search-mobile-light.png) |
+
+Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/popover-position.ts`
 
 ### A migrated list view (constructed)
 

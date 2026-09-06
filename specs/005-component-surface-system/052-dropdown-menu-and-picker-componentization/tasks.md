@@ -462,14 +462,23 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       dispositions reconciled against what landed; `checklist.md` and `acceptance-criteria.md`
       statuses updated with evidence. **Proof**: every AC row's Status cell names its evidence;
       `validate.sh --strict` passes.
-- [ ] T016 [P] Make every desktop dropdown a combobox: on open, the trigger becomes an active text
+- [x] T016 [P] Make every desktop dropdown a combobox: on open, the trigger becomes an active text
       input (not a separate search field), typing filters the list, arrow keys roving-select,
       Enter commits, Escape restores the trigger's prior value. Remove `dropdown-field.ts:193`'s
-      `options.length > 8` gate — the behavior applies regardless of list length
-- [ ] T017 Fix the Operator dropdown's anchoring defect (`filter-panel-renderer.ts:520`,
+      `options.length > 8` gate — the behavior applies regardless of list length.
+      **Done 2026-09-06.** The gate is now the phone sheet's alone; `openTriggerInput` puts the
+      query input in the trigger's own layout slot and hides the button; arrows move the highlight
+      through `aria-activedescendant` without taking the caret out of the field; Enter picks the
+      highlighted row, Tab commits it, Escape closes and restores the trigger. A menu whose anchor
+      the caller owns keeps its query field first in the panel instead — a named deviation, ADR-006.
+      **Proof**: `dropdown-field.test.ts` 12/12, two negative controls observed red; gate 26 green
+      exit 0; `constructed-dropdown-search-desktop-*` shows the trigger mid-search
+- [x] T017 Fix the Operator dropdown's anchoring defect (`filter-panel-renderer.ts:520`,
       `db-filter-operator-dropdown`): popover renders at x 123-489 under a trigger at x 290-480,
       left edge 167px left of the trigger's own left edge. Red-first: assert the popover's left
-      edge against the trigger's, observed failing before the fix
+      edge against the trigger's, observed failing before the fix.
+      **Done 2026-09-06** — `align: "left"` on the shared placement call; measured 290px against
+      the pre-fix 200px, with the viewport clamp asserted alongside it
 <!-- /ANCHOR:phase-4 -->
 
 ---
