@@ -82,7 +82,14 @@ const ICON = {
     '<path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14c.55 0 1.05-.22 1.41-.59"/>' +
     '<path d="m2 2 20 20"/>',
   settings2: '<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>',
+  // The chip's own default document glyph: every chip carries one when Show icon
+  // is on, whether or not the record has an icon of its own.
+  fileText: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
 };
+
+/* renderRecordIcon's own default-glyph shape, at the compact size every calendar chip
+   passes (renderRecordIcon(el, row, config, true)). */
+const recordIcon = () => `<span class="db-record-icon is-compact is-default">${glyph(ICON.fileText)}</span>`;
 
 /* Mirrors applyEventColor()/applyCalendarEventColor(): both write the accent and the tint
    as the two status-colour variables onto the event element itself. */
@@ -183,9 +190,6 @@ const calendarHeader = (main, year, activeScale, prev, next) => `
       ${navButton(ICON.chevronLeft, prev)}
       ${navButton(null, "Today")}
       ${navButton(ICON.chevronRight, next)}
-      <button type="button" class="db-calendar-nav-button is-icon" title="Pick a date" aria-label="Pick a date">
-        <span class="db-calendar-nav-icon">${glyph(ICON.calendarDays)}</span>
-      </button>
     </div>
   </div>`;
 
@@ -193,7 +197,9 @@ const calendarHeader = (main, year, activeScale, prev, next) => `
 // 5. MONTH GRID
 // ───────────────────────────────────────────────────────────────────
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// The week defaults to Monday regardless of locale, so
+// the weekend tint falls on the two rightmost columns (Sat, Sun), not the two outer edges.
+const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export const calendarIsWeekendDateKey = (dateKey) => {
   const [year, month, day] = dateKey.split("-").map(Number);
@@ -202,7 +208,7 @@ export const calendarIsWeekendDateKey = (dateKey) => {
 };
 
 export const calendarWeekdayMarkup = (name, index) => `
-  <div class="db-calendar-weekday ${index === 0 || index === 6 ? "is-weekend" : ""}" role="columnheader"><span>${name}</span>
+  <div class="db-calendar-weekday ${index === 5 || index === 6 ? "is-weekend" : ""}" role="columnheader"><span>${name}</span>
     <div class="db-calendar-col-resize-handle"></div></div>`;
 
 /* Mirrors EmptyStateRenderer.renderCard() (empty-state-renderer.ts:262-295) class-for-class, for
@@ -249,22 +255,25 @@ export const monthDayCell = (day, column) => `
   </div>`;
 
 /**
- * One month segment. `lane` is the zero-based event lane; the renderer offsets it by two —
- * one for the heading row, one because grid lines are 1-based — before writing the variable.
+ * One month chip, one calendar day: a spanning event is one independent chip per
+ * day it covers rather than one element spanning grid columns, so `seg` never carries a
+ * `span` or a date-range string — a multi-day event repeats the same title across the
+ * `seg` entries for each day it touches, exactly as `renderMonthSegments` emits one
+ * `db-calendar-month-segment` per (segment, day) pair. `lane` is the zero-based *local*
+ * rank among the segments that actually touch this one day (`computeMonthDayLocalLanes`);
+ * the renderer offsets it by two — one for the heading row, one because grid lines are
+ * 1-based — before writing the variable.
  */
 export const monthSegment = (seg) => {
-  const edges = `${seg.start ? "is-start" : "is-continuation"} ${seg.end ? "is-end" : "continues-after"}`;
-  const geometry =
-    `--db-calendar-segment-start: ${seg.column}; --db-calendar-segment-span: ${seg.span};` +
-    ` --db-calendar-segment-lane: ${seg.lane + 2}; ${eventColor(seg.tone)}`;
+  const geometry = `--db-calendar-segment-start: ${seg.column}; --db-calendar-segment-lane: ${seg.lane + 2}; ${eventColor(seg.tone)}`;
   // No coloured dot — every chip is icon + title, with a timed event's
   // time as a muted suffix after the title rather than a coloured prefix.
   return `
-    <button type="button" class="db-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"} ${edges}${seg.completed ? " is-completed" : ""}"
+    <button type="button" class="db-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"}${seg.completed ? " is-completed" : ""}"
       title="${seg.title}" data-note-database-row-path="Subscriptions/${seg.title}.md" style="${geometry}">
+      ${recordIcon()}
       <span class="db-calendar-month-title">${seg.title}</span>
       ${seg.timed ? `<span class="db-calendar-month-time">${seg.time}</span>` : ""}
-      ${seg.dates ? `<span class="db-calendar-month-dates">${seg.dates}</span>` : ""}
     </button>`;
 };
 
@@ -289,57 +298,87 @@ const monthWeek = (week) => {
     </div>`;
 };
 
-/** March 2026 laid out Sunday-first: five rows, the last spilling into April. */
+/** March 2026 laid out Monday-first: March 1 is a Sunday, so the first row
+ *  is mostly February's tail and a sixth row is needed for March's own tail into April —
+ *  one row more than the Sunday-first layout this replaces. A multi-day event ("Figma",
+ *  "Notion", "Adobe CC audit", "Q1 renewals sweep") is one `segments` entry per day it
+ *  covers: same title repeated, `lane` the per-day local rank, no `span` and no
+ *  date-range string — the range lives in the chip's title tooltip only, exactly as
+ *  `getSegmentTitle`/`renderMonthSegments` build it. */
 const MARCH_WEEKS = [
   {
     index: 0,
-    lanes: 2,
-    days: [1, 2, 3, 4, 5, 6, 7].map((n) => ({ n, key: `2026-03-0${n}` })),
-    segments: [
-      { column: 2, span: 1, lane: 0, timed: true, time: "09:00", title: "iCloud", tone: "green", start: true, end: true },
-      { column: 3, span: 3, lane: 0, title: "Figma", tone: "blue", dates: "Mar 3 – 5", start: true, end: true },
-      { column: 4, span: 1, lane: 1, timed: true, time: "14:00", title: "Notion sync", tone: "blue", start: true, end: true },
-    ],
+    lanes: 0,
+    days: ["2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-02-28"]
+      .map((key, i) => ({ n: 23 + i, key, outside: true }))
+      .concat([{ n: 1, key: "2026-03-01" }]),
+    segments: [],
   },
   {
     index: 1,
     lanes: 2,
-    overflow: { column: 4, label: "+2 more" },
-    days: [8, 9, 10, 11, 12, 13, 14].map((n) => ({ n, key: `2026-03-${String(n).padStart(2, "0")}` })),
+    days: [2, 3, 4, 5, 6, 7, 8].map((n) => ({ n, key: `2026-03-0${n}` })),
     segments: [
-      { column: 2, span: 5, lane: 0, title: "Notion", tone: "blue", dates: "Mar 9 – 13", start: true, end: true },
-      { column: 4, span: 1, lane: 1, timed: true, time: "11:30", title: "Adobe CC", tone: "blue", start: true, end: true },
-      { column: 5, span: 1, lane: 1, timed: true, time: "16:00", title: "Spotify", tone: "green", start: true, end: true },
+      { column: 1, lane: 0, timed: true, time: "09:00", title: "iCloud", tone: "green" },
+      { column: 2, lane: 0, title: "Figma", tone: "blue" },
+      { column: 3, lane: 0, title: "Figma", tone: "blue" },
+      { column: 3, lane: 1, timed: true, time: "14:00", title: "Notion sync", tone: "blue" },
+      { column: 4, lane: 0, title: "Figma", tone: "blue" },
     ],
   },
   {
     index: 2,
     lanes: 2,
-    days: [15, 16, 17, 18, 19, 20, 21].map((n) => ({ n, key: `2026-03-${n}` })),
+    overflow: { column: 3, label: "+2 more" },
+    days: [9, 10, 11, 12, 13, 14, 15].map((n) => ({ n, key: `2026-03-${n}` })),
     segments: [
-      { column: 2, span: 5, lane: 0, title: "Adobe CC audit", tone: "blue", dates: "Mar 16 – 20", start: true, end: true },
-      { column: 4, span: 1, lane: 1, timed: true, time: "10:15", title: "Spotify family", tone: "green", start: true, end: true },
+      { column: 1, lane: 0, title: "Notion", tone: "blue" },
+      { column: 2, lane: 0, title: "Notion", tone: "blue" },
+      { column: 3, lane: 0, title: "Notion", tone: "blue" },
+      { column: 3, lane: 1, timed: true, time: "11:30", title: "Adobe CC", tone: "blue" },
+      { column: 4, lane: 0, title: "Notion", tone: "blue" },
+      { column: 4, lane: 1, timed: true, time: "16:00", title: "Spotify", tone: "green" },
+      { column: 5, lane: 0, title: "Notion", tone: "blue" },
     ],
   },
   {
     index: 3,
-    lanes: 1,
-    days: [22, 23, 24, 25, 26, 27, 28].map((n) => ({ n, key: `2026-03-${n}`, today: n === 25 })),
+    lanes: 2,
+    days: [16, 17, 18, 19, 20, 21, 22].map((n) => ({ n, key: `2026-03-${n}` })),
     segments: [
-      { column: 3, span: 1, lane: 0, timed: true, time: "08:45", title: "iCloud", tone: "green", start: true, end: true },
-      { column: 5, span: 3, lane: 0, title: "Q1 renewals sweep", tone: "orange", dates: "Mar 26 – Apr 1", completed: true, start: true, end: false },
+      { column: 1, lane: 0, title: "Adobe CC audit", tone: "blue" },
+      { column: 2, lane: 0, title: "Adobe CC audit", tone: "blue" },
+      { column: 3, lane: 0, title: "Adobe CC audit", tone: "blue" },
+      { column: 3, lane: 1, timed: true, time: "10:15", title: "Spotify family", tone: "green" },
+      { column: 4, lane: 0, title: "Adobe CC audit", tone: "blue" },
+      { column: 5, lane: 0, title: "Adobe CC audit", tone: "blue" },
     ],
   },
   {
     index: 4,
     lanes: 1,
+    days: [23, 24, 25, 26, 27, 28, 29].map((n) => ({ n, key: `2026-03-${n}`, today: n === 25 })),
+    segments: [
+      { column: 2, lane: 0, timed: true, time: "08:45", title: "iCloud", tone: "green" },
+      { column: 4, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
+      { column: 5, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
+      { column: 6, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
+      { column: 7, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
+    ],
+  },
+  {
+    index: 5,
+    lanes: 1,
     days: [
-      { n: 29, key: "2026-03-29" }, { n: 30, key: "2026-03-30" }, { n: 31, key: "2026-03-31" },
+      { n: 30, key: "2026-03-30" }, { n: 31, key: "2026-03-31" },
       { n: 1, key: "2026-04-01", outside: true }, { n: 2, key: "2026-04-02", outside: true },
       { n: 3, key: "2026-04-03", outside: true }, { n: 4, key: "2026-04-04", outside: true },
+      { n: 5, key: "2026-04-05", outside: true },
     ],
     segments: [
-      { column: 1, span: 4, lane: 0, title: "Q1 renewals sweep", tone: "orange", dates: "Mar 26 – Apr 1", completed: true, start: false, end: true },
+      { column: 1, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
+      { column: 2, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
+      { column: 3, lane: 0, title: "Q1 renewals sweep", tone: "orange", completed: true },
     ],
   },
 ];
@@ -354,7 +393,9 @@ const HOUR_HEIGHT = 56; // HOUR_HEIGHT_MIN from CalendarLayoutModel
 const GRID_HEIGHT = (WEEK_END_HOUR - WEEK_START_HOUR) * HOUR_HEIGHT;
 const offsetOf = (minutes) => ((minutes - WEEK_START_HOUR * 60) / 60) * HOUR_HEIGHT;
 
-const WEEK_DAYS = [22, 23, 24, 25, 26, 27, 28].map((n, i) => ({
+// The week defaults to Monday: the week holding the fixed "today" (Mar 25, a Wednesday)
+// runs Mar 23 (Mon) – Mar 29 (Sun), not the Sunday-first Mar 22–28 this replaces.
+const WEEK_DAYS = [23, 24, 25, 26, 27, 28, 29].map((n, i) => ({
   n,
   key: `2026-03-${n}`,
   name: WEEKDAYS[i],
@@ -362,22 +403,28 @@ const WEEK_DAYS = [22, 23, 24, 25, 26, 27, 28].map((n, i) => ({
   weekend: calendarIsWeekendDateKey(`2026-03-${n}`),
 }));
 
+// The overlap stagger, the same fixed pixel step CALENDAR_TIMED_STAGGER_STEP names in
+// calendar-renderer.ts (pinned at 10px in calendar-pinned-values.test.ts): each later
+// overlapping block insets by one more step and keeps the column's own remaining width,
+// rather than splitting the column N ways.
+const TIMED_STAGGER_STEP = 10;
+
 /** A timed card. Under 42px the renderer drops the time range and keeps the title. */
 export const timedEvent = (event) => {
   const top = offsetOf(event.from);
   const height = Math.max(14, ((event.to - event.from) / 60) * HOUR_HEIGHT);
   const compact = height < 42;
-  const columns = event.columns || 1;
-  const left = ((event.column || 0) / columns) * 100;
-  const width = 100 / columns;
+  const left = 4 + (event.columnIndex || 0) * TIMED_STAGGER_STEP;
   const range = `${String(Math.floor(event.from / 60)).padStart(2, "0")}:${String(event.from % 60).padStart(2, "0")}`
     + ` - ${String(Math.floor(event.to / 60)).padStart(2, "0")}:${String(event.to % 60).padStart(2, "0")}`;
   return `
     <button type="button" class="db-calendar-week-timed-event ${compact ? "is-compact" : ""}${event.completed ? " is-completed" : ""}"
       title="${range} ${event.title}" aria-label="${range} ${event.title}"
       data-note-database-row-path="Subscriptions/${event.title}.md"
-      style="top: ${top}px; height: ${height}px; left: calc(${left}% + 4px); width: calc(${width}% - 8px); ${eventColor(event.tone)}">
+      style="top: ${top}px; height: ${height}px; left: ${left}px; width: calc(100% - ${left + 4}px);
+        z-index: ${3 + (event.columnIndex || 0)}; ${eventColor(event.tone)}">
       <div class="db-calendar-week-event-content">
+        ${recordIcon()}
         <div class="db-calendar-week-event-title">${event.title}</div>
         ${compact ? "" : `<div class="db-calendar-week-event-time">${range}</div>`}
       </div>
@@ -393,8 +440,8 @@ const WEEK_EVENTS = {
   ],
   "2026-03-26": [{ title: "Adobe CC renewal", from: 600, to: 750, tone: "blue" }],
   "2026-03-27": [
-    { title: "Design review", from: 840, to: 930, tone: "orange", column: 0, columns: 2 },
-    { title: "1:1", from: 870, to: 900, tone: "blue", column: 1, columns: 2 },
+    { title: "Design review", from: 840, to: 930, tone: "orange", columnIndex: 0 },
+    { title: "1:1", from: 870, to: 900, tone: "blue", columnIndex: 1 },
   ],
 };
 
@@ -421,30 +468,42 @@ const slotLines = () => {
 // 7. MINI CALENDAR
 // ───────────────────────────────────────────────────────────────────
 
+// The week defaults to Monday: March 2026 opens on a Sunday, so the Monday-first grid's
+// first row is mostly the tail of February and a sixth row is needed for the tail of March.
+const marchDay = (n) => ({ n, key: `2026-03-${String(n).padStart(2, "0")}` });
 const MINI_WEEKS = [
-  [1, 2, 3, 4, 5, 6, 7],
-  [8, 9, 10, 11, 12, 13, 14],
-  [15, 16, 17, 18, 19, 20, 21],
-  [22, 23, 24, 25, 26, 27, 28],
-  [29, 30, 31, 1, 2, 3, 4],
+  ["2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-02-28"]
+    .map((key, i) => ({ n: 23 + i, key, outside: true }))
+    .concat([marchDay(1)]),
+  [2, 3, 4, 5, 6, 7, 8].map(marchDay),
+  [9, 10, 11, 12, 13, 14, 15].map(marchDay),
+  [16, 17, 18, 19, 20, 21, 22].map(marchDay),
+  [23, 24, 25, 26, 27, 28, 29].map(marchDay),
+  [marchDay(30), marchDay(31)].concat(
+    ["2026-04-01", "2026-04-02", "2026-04-03", "2026-04-04", "2026-04-05"]
+      .map((key, i) => ({ n: 1 + i, key, outside: true })),
+  ),
 ];
-const MINI_EVENT_DAYS = new Set([2, 3, 4, 5, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20, 24, 26, 27, 28]);
-const MINI_SELECTED = new Set([22, 23, 24, 25, 26, 27, 28]);
+const MINI_EVENT_DAYS = new Set(["2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-09",
+  "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18",
+  "2026-03-19", "2026-03-20", "2026-03-24", "2026-03-26", "2026-03-27", "2026-03-28"]);
+// The current week under Monday-first is Mar 23–29 (contains the fixed "today", Mar 25).
+const MINI_SELECTED = new Set(["2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-28", "2026-03-29"]);
 
-const miniDay = (n, weekIndex) => {
-  const outside = weekIndex === 4 && n < 10;
-  const today = !outside && n === 25;
-  const key = outside ? `2026-04-0${n}` : `2026-03-${String(n).padStart(2, "0")}`;
+const miniDay = (day) => {
+  const today = !day.outside && day.key === "2026-03-25";
+  const selected = MINI_SELECTED.has(day.key);
+  const hasEvents = MINI_EVENT_DAYS.has(day.key);
   const mods = [
-    outside ? "is-outside" : "",
+    day.outside ? "is-outside" : "",
     today ? "is-today" : "",
-    !outside && MINI_SELECTED.has(n) ? "is-selected" : "",
-    !outside && MINI_EVENT_DAYS.has(n) ? "has-events" : "",
+    selected ? "is-selected" : "",
+    hasEvents ? "has-events" : "",
   ].filter(Boolean).join(" ");
   return `
-    <button type="button" class="db-calendar-mini-day ${mods}" role="gridcell" data-date-key="${key}"
-      title="${key}" aria-selected="${!outside && MINI_SELECTED.has(n) ? "true" : "false"}" tabindex="-1">
-      <span class="db-calendar-mini-day-num">${n}</span>
+    <button type="button" class="db-calendar-mini-day ${mods}" role="gridcell" data-date-key="${day.key}"
+      title="${day.key}" aria-selected="${selected ? "true" : "false"}" tabindex="-1">
+      <span class="db-calendar-mini-day-num">${day.n}</span>
       <span class="db-calendar-mini-day-dot"></span>
     </button>`;
 };
@@ -1421,7 +1480,7 @@ export const TEMPORAL_SCENARIOS = [
     html: () => `
       <div class="note-database-container">
         <div class="db-calendar db-calendar-week">
-          ${calendarHeader("Mar 22 – 28", "2026", "Week", "Previous week", "Next week")}
+          ${calendarHeader("Mar 23 – 29", "2026", "Week", "Previous week", "Next week")}
           <div class="db-calendar-week-sticky">
             <div class="db-calendar-time-header-row" role="row">
               <div class="db-calendar-time-header-gutter"></div>
@@ -1446,7 +1505,7 @@ export const TEMPORAL_SCENARIOS = [
                     title="${day.key}" aria-label="${day.key}" style="grid-column: ${i + 1}">${day.n}</button>`).join("")}
                 <button type="button" class="db-calendar-month-segment db-calendar-week-allday-segment is-all-day is-start is-end is-completed"
                   title="Q1 renewals sweep" data-note-database-row-path="Subscriptions/Q1.md"
-                  style="--db-calendar-segment-start: 3; --db-calendar-segment-span: 3; --db-calendar-segment-lane: 2; ${eventColor("orange")}">
+                  style="--db-calendar-segment-start: 2; --db-calendar-segment-span: 3; --db-calendar-segment-lane: 2; ${eventColor("orange")}">
                   <span class="db-calendar-week-allday-content">
                     <span class="db-calendar-month-title">Q1 renewals sweep</span>
                     <span class="db-calendar-month-dates">Mar 24 – 26</span>
@@ -1481,7 +1540,7 @@ export const TEMPORAL_SCENARIOS = [
     width: 340,
     sources: ["src/views/calendar-mini-calendar-renderer.ts", "src/views/date-value-picker.ts"],
     note: "Days with events carry a short accent underline; the visible week reads as the selected pill run. "
-      + "The calendar view's own header trigger for this popover is gone (P1-1); the date-value-picker field "
+      + "The calendar view's own header trigger for this popover is gone; the date-value-picker field "
       + "editor is the shipped surface that still opens it, so this hand-built fixture documents the popover's "
       + "own markup rather than a constructed capture of a button that no longer exists.",
     // Anchored absolutely under the calendar header, so with no header to hang from it leaves
@@ -1501,9 +1560,9 @@ export const TEMPORAL_SCENARIOS = [
             ${WEEKDAYS.map((d) => `<div class="db-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
           </div>
           <div class="db-calendar-mini-grid" role="grid" aria-label="March 2026">
-            ${MINI_WEEKS.map((week, weekIndex) => `
+            ${MINI_WEEKS.map((week) => `
               <div class="db-calendar-mini-week" role="row">
-                ${week.map((n) => miniDay(n, weekIndex)).join("")}
+                ${week.map((day) => miniDay(day)).join("")}
               </div>`).join("")}
           </div>
           <div class="db-calendar-mini-footer">

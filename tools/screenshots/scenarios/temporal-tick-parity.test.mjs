@@ -612,8 +612,11 @@ describe("calendar fixture markup mirrors the renderer states", () => {
   it("keeps weekend labels and day cells aligned", () => {
     expect(calendarIsWeekendDateKey("2026-03-22")).toBe(true);
     expect(calendarIsWeekendDateKey("2026-03-23")).toBe(false);
-    expect(calendarWeekdayMarkup("Sun", 0)).toContain("db-calendar-weekday is-weekend");
-    expect(calendarWeekdayMarkup("Mon", 1)).toContain("class=\"db-calendar-weekday \"");
+    // The week defaults to Monday regardless of locale, so the weekend pair is columns 6/7 (Sat, Sun), the two
+    // rightmost, not the two outer edges a Sunday-first week used to split it to.
+    expect(calendarWeekdayMarkup("Sun", 6)).toContain("db-calendar-weekday is-weekend");
+    expect(calendarWeekdayMarkup("Sat", 5)).toContain("db-calendar-weekday is-weekend");
+    expect(calendarWeekdayMarkup("Mon", 0)).toContain("class=\"db-calendar-weekday \"");
     expect(monthDayCell({ n: 22, key: "2026-03-22" }, 1)).toContain("is-weekend");
     expect(monthDayCell({ n: 23, key: "2026-03-23" }, 2)).not.toContain("is-weekend");
   });
