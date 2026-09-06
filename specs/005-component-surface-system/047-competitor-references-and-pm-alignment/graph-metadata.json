@@ -53,14 +53,14 @@
       "screenshots/manifest.json",
       "src/views/board-renderer.ts",
       "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts",
+      "tools/screenshots/manifest-schema.test.mjs",
+      "scratch/gantt-comparison.md",
+      "tools/bench/reference-fixture.ts",
+      "src/views/calendar-timeline-renderer.ts",
+      "tools/screenshots/theme.css",
       "screenshots/README.md",
       "tools/screenshots/verify.mjs",
-      "src/views/calendar-timeline-renderer.ts",
-      "screenshots/anytype/sources.md",
-      "scratch/baseline.md",
-      "tools/gate.mjs",
-      "tools/screenshots/manifest-schema.test.mjs",
-      "tools/mock-data/catalogue.json"
+      "screenshots/anytype/sources.md"
     ],
     "entities": [
       {
@@ -136,6 +136,36 @@
         "source": "derived"
       },
       {
+        "name": "manifest-schema.test.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/manifest-schema.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gantt-comparison.md",
+        "kind": "doc",
+        "path": "scratch/gantt-comparison.md",
+        "source": "derived"
+      },
+      {
+        "name": "reference-fixture.ts",
+        "kind": "code",
+        "path": "tools/bench/reference-fixture.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
+        "source": "derived"
+      },
+      {
         "name": "README.md",
         "kind": "doc",
         "path": "screenshots/README.md",
@@ -148,39 +178,9 @@
         "source": "derived"
       },
       {
-        "name": "calendar-timeline-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-timeline-renderer.ts",
-        "source": "derived"
-      },
-      {
         "name": "sources.md",
         "kind": "doc",
         "path": "screenshots/anytype/sources.md",
-        "source": "derived"
-      },
-      {
-        "name": "baseline.md",
-        "kind": "doc",
-        "path": "scratch/baseline.md",
-        "source": "derived"
-      },
-      {
-        "name": "gate.mjs",
-        "kind": "file",
-        "path": "tools/gate.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "manifest-schema.test.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/manifest-schema.test.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "catalogue.json",
-        "kind": "config",
-        "path": "tools/mock-data/catalogue.json",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Rows 37 and 38 have been open since 2026-09-04 waiting for one thing no in-repo session can do: the",
     "created_at": "2026-09-05T03:47:54Z",
-    "last_save_at": "2026-09-06T02:36:36.273Z",
+    "last_save_at": "2026-09-06T03:01:49.207Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,14 +223,14 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:bd0f98c0f31d9f1ae0b34a9a4de3e9ddb1cabc4ea7a840b14c59c1aafe0ba6f8",
+    "source_fingerprint": "sha256:ed4ca0bd03cc3a62402497249bede6bcee94255507cebd9ff8c35d751873aae5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "cdc7080d8126fc4bcfb48304be9ccb62571513b814bd258abd89371251c07152",
       "plan.md": "09a3e40515d5b94978ae526e8d386ce75199f12a6818e46796c65570a17cf56c",
-      "tasks.md": "86f650775b698e4bad46921bdd0b2c7f01722510da22edab4a5f06b29a7964b6",
+      "tasks.md": "6c2ce42286c93684b5ce8b1ed4f0a89dbcdc18825df8bdd07745cb74cdbebbe8",
       "decision-record.md": "ee48918f4172860e4b57184fef91f27d39c93ddc3f2941555f9bb670b8e2c8e3",
-      "implementation-summary.md": "7603ff4c994af94e14d3701558d2987b12435b453a535d87583031f06e3de44a",
+      "implementation-summary.md": "f7e0e9b79ebd32b4db0ad5dc3446658e7ae78ecd1f9c10a60fabb8b269a0cc59",
       "research/research.md": "6b98388e4ad4135334b8285709b760ee5c6429ea6464e4c4b66db9827fe3d4ae"
     },
     "last_active_child_id": null,
