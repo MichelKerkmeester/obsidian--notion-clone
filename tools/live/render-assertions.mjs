@@ -100,6 +100,27 @@ const RHYTHM_SCENARIOS = [
 // for a second line of anything.
 const ROW_HEIGHT_CEILING = 49;
 
+// ───────────────────────────────────────────────────────────────────
+// 2b. WRAP TOGGLE
+// ───────────────────────────────────────────────────────────────────
+//
+// A data row that clips its cells to one line has to fall back to the row floor, or "no wrapping"
+// means nothing. This proves the toggle side of that on the same catalogue mount RHYTHM_SCENARIOS
+// measures — clipped stays at the floor, and forcing the view's own wrap default on re-opens the
+// exact row-height defect that fix closed, because every column without its own wrap override now
+// carries `.db-cell-wrap` and the four value containers wrap again. That second scenario is the
+// negative control: a check that cannot go red when wrap is actually on proves nothing about the
+// toggle actually reaching the renderer.
+const WRAP_TOGGLE_SCENARIOS = [
+  { name: "table-catalogue-home-inventory-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory" },
+  { name: "table-catalogue-home-inventory-wrap-on/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory", wrapText: true },
+];
+
+// The measured floor at the shipped default density, tokens attached (see RHYTHM_SCENARIOS above,
+// which holds this table to the same number). One pixel of headroom for sub-pixel rounding, not
+// for a second line of anything.
+const ROW_FLOOR = 36;
+
 // SCENARIOS and RENDERER_SOURCES are shared with touch-targets.mjs and unstyled-links.mjs via
 // render-assertion-bundle.mjs, so "every scenario the harness knows" means the same list in all
 // three checks rather than three lists that could silently diverge.
@@ -282,6 +303,7 @@ const failures = [];
 let browser;
 let outcomes = null;
 let rhythmOutcomes = null;
+let wrapToggleOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
@@ -341,6 +363,10 @@ try {
     rhythmOutcomes = await rhythmPage.evaluate(
       (scenarios) => scenarios.map((scenario) => window.__rowRhythm(scenario)),
       RHYTHM_SCENARIOS,
+    );
+    wrapToggleOutcomes = await rhythmPage.evaluate(
+      (scenarios) => scenarios.map((scenario) => window.__rowRhythm(scenario)),
+      WRAP_TOGGLE_SCENARIOS,
     );
   }
   await rhythmPage.close();
@@ -432,6 +458,42 @@ for (let i = 0; i < RHYTHM_SCENARIOS.length; i += 1) {
     failures.push(`${scenario.name}: a table row's height is not the table's — `
       + `${heights.length} distinct height(s) ${heights.join("/")}, tallest ${measured.worst.height}px `
       + `set by ${measured.worst.child} in ${measured.worst.cell} at ${measured.worst.width}px`);
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4b. WRAP TOGGLE
+// ───────────────────────────────────────────────────────────────────
+
+console.log("\nrender-assertions: wrap toggle over the mock-data catalogue");
+{
+  const clippedName = WRAP_TOGGLE_SCENARIOS[0].name;
+  const wrappedName = WRAP_TOGGLE_SCENARIOS[1].name;
+  const clipped = wrapToggleOutcomes ? wrapToggleOutcomes[0] : null;
+  const wrapped = wrapToggleOutcomes ? wrapToggleOutcomes[1] : null;
+  if (!clipped || clipped.count === 0 || !wrapped || wrapped.count === 0) {
+    failures.push("wrap toggle: measured no rows");
+    console.log("  FAIL  wrap toggle — no rows measured");
+  } else {
+    const clippedTallest = Math.max(...clipped.heights);
+    const wrappedTallest = Math.max(...wrapped.heights);
+    const clippedOk = clippedTallest <= ROW_FLOOR + 1;
+    console.log(`  ${clippedOk ? "PASS" : "FAIL"}  ${clippedName.padEnd(52)} `
+      + `tallest ${clippedTallest}px, floor ${ROW_FLOOR}px`);
+    if (!clippedOk) {
+      failures.push(`${clippedName}: view default off did not clip — tallest ${clippedTallest}px `
+        + `exceeds the row floor (${ROW_FLOOR}px + 1) set by ${clipped.worst.child} in ${clipped.worst.cell}`);
+    }
+    // The negative control: forcing the view's wrapText default on must measure MORE than the
+    // floor, or the toggle is not reaching the renderer at all — a check that cannot go red here
+    // proves nothing about the wrap half of the pair.
+    const wrappedOk = wrappedTallest > ROW_FLOOR + 1;
+    console.log(`  ${wrappedOk ? "PASS" : "FAIL"}  ${wrappedName.padEnd(52)} `
+      + `tallest ${wrappedTallest}px, floor ${ROW_FLOOR}px (must exceed it)`);
+    if (!wrappedOk) {
+      failures.push(`${wrappedName}: forcing wrapText on did not grow any row past the floor `
+        + `(${ROW_FLOOR}px + 1) — tallest ${wrappedTallest}px; the view-level default is not reaching the cell renderer`);
+    }
   }
 }
 

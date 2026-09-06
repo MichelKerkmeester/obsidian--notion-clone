@@ -440,6 +440,12 @@ export interface ScenarioSpec {
    * the catalogue varies per record, which is the population a row-rhythm measurement needs.
    */
   catalogueUseCase?: string;
+  /**
+   * Opt-in, renderer "table" only: sets the view's own `wrapText` default, read by every column
+   * that carries no wrap override of its own. Used to prove the per-view toggle actually changes
+   * what a cell renders, on the same catalogue mount `catalogueUseCase` builds.
+   */
+  wrapText?: boolean;
 }
 
 export interface AssertionResult {
@@ -641,7 +647,7 @@ function makeCaptureCellRenderer(): CellRenderer {
 // — whether that is intended belongs to the embed's owner; this check asserts
 // that the difference exists and that the renderer acts on it.
 
-function fileViewTableBag(columns: ColumnDef[], captureData?: boolean): TableRendererActions {
+function fileViewTableBag(columns: ColumnDef[], captureData?: boolean, wrapText?: boolean): TableRendererActions {
   // Only built when a scenario actually reads it — the 2000-row structural path never pays for a
   // CellRenderer it never calls.
   const cellRenderer = captureData ? makeCaptureCellRenderer() : undefined;
@@ -654,7 +660,7 @@ function fileViewTableBag(columns: ColumnDef[], captureData?: boolean): TableRen
     setupColumnHeader: (th, col) => { th.setText(col.label); },
     setupRow: () => undefined,
     renderCell: cellRenderer
-      ? (td, row, col) => cellRenderer.renderCell(td, row, col)
+      ? (td, row, col) => cellRenderer.renderCell(td, row, col, wrapText)
       : (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
     captureInteractionSnapshot: () => undefined,
     restoreInteractionSnapshot: () => undefined,
@@ -676,7 +682,7 @@ function fileViewTableBag(columns: ColumnDef[], captureData?: boolean): TableRen
   };
 }
 
-function embedTableBag(columns: ColumnDef[], captureData?: boolean): TableRendererActions {
+function embedTableBag(columns: ColumnDef[], captureData?: boolean, wrapText?: boolean): TableRendererActions {
   const cellRenderer = captureData ? makeCaptureCellRenderer() : undefined;
   return {
     getVisibleColumns: () => columns,
@@ -687,7 +693,7 @@ function embedTableBag(columns: ColumnDef[], captureData?: boolean): TableRender
     setupColumnHeader: (th, col) => { th.setText(col.label); },
     setupRow: () => undefined,
     renderCell: cellRenderer
-      ? (td, row, col) => cellRenderer.renderCell(td, row, col)
+      ? (td, row, col) => cellRenderer.renderCell(td, row, col, wrapText)
       : (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
     renderRecordIcon: () => null,
     renderGroupSummaries: () => undefined,
@@ -3609,14 +3615,15 @@ export function runRenderAssertions(
         recordIconFieldOverrideEnabled: true,
         recordIconField: textCol?.key,
       } : {}),
+      ...(scenario.wrapText ? { wrapText: true } : {}),
     } as ViewConfig;
     // The catalogue path always takes the production CellRenderer, never the text stub: a row
     // height measured against `td.setText` is the height of a string, not of the cell the plugin
     // builds, and the whole reason to mount real records is that their cells differ in shape.
     const realCells = scenario.captureData || !!catalogueData;
     const bag = scenario.bag === "file-view"
-      ? fileViewTableBag(columns, realCells)
-      : embedTableBag(columns, realCells);
+      ? fileViewTableBag(columns, realCells, config.wrapText)
+      : embedTableBag(columns, realCells, config.wrapText);
     if (scenario.columnHeaderController) {
       const controller = new ColumnHeaderController({
         getConfig: () => config,
