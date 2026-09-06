@@ -2,6 +2,10 @@
 
 Obnotion adds database views to [Obsidian](https://obsidian.md). Each database is an ordinary Markdown file with `db_view: true` in its frontmatter; its records are notes in your vault, and their property values live in frontmatter. Table, board, chart, calendar, and timeline views read and write those same files, and each view's configuration is saved in the database file beside the data. Records, properties, and relations stay in the vault as plain Markdown.
 
+## Project status
+
+This plugin is in early alpha. It is currently built and verified by AI agents, with no human designer in the loop yet. Expect rough edges and breaking changes between releases. Once the plugin is stabilised and stress-tested, a human designer will create custom designs so it feels like a native Notion-like experience inside Obsidian.
+
 Obnotion is a fork of pangy9's [Note Database](https://github.com/pangy9/obsidian-note-database).
 
 Source: [MichelKerkmeester/obsidian--notion-clone](https://github.com/MichelKerkmeester/obsidian--notion-clone)
