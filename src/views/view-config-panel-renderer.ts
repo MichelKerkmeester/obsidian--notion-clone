@@ -423,6 +423,13 @@ export class ViewConfigPanelRenderer {
           config.rowDensity = value === "compact" || value === "comfortable" ? value : undefined;
           actions.onChange(t("undo.rowDensityConfig"));
         });
+        // Default off, matching the pre-existing clip behavior — an upgraded vault's tables
+        // render unchanged until the reader opts in. A column's own Wrap/Clip choice (the column
+        // menu) always overrides this per-view default.
+        this.renderSwitch(body, t("viewConfig.wrapText"), config.wrapText === true, (value) => {
+          config.wrapText = value || undefined;
+          actions.onChange(t("undo.wrapTextConfig"));
+        });
       }
       this.renderSelect(body, t("viewConfig.yearDisplayMode"), [
         { value: "always", text: t("viewConfig.yearDisplayMode.always") },
