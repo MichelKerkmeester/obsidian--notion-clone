@@ -245,7 +245,9 @@ export class ColumnOperations {
       this.removeDuplicateSchemaColumns(db, targetCol, oldKey);
       targetCol.key = newKey;
       targetCol.label = newLabel;
-      targetCol.wrap = result.wrap || undefined;
+      // Not `|| undefined`: that would turn an explicit "clip" (false) from the modal's checkbox
+      // into "follow view", silently changing the column's own choice into the view's default.
+      targetCol.wrap = result.wrap;
       if (newIsFileField) {
         targetCol.type = getFileFieldFixedType(newKey);
         targetCol.statusOptions = undefined;

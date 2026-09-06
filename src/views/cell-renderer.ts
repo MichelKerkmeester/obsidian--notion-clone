@@ -201,9 +201,11 @@ export class CellRenderer {
     };
   }
 
-  renderCell(td: HTMLElement, row: RowData, col: ColumnDef): void {
+  /** `viewWrapDefault` is the view's own `wrapText` setting, read only when the column carries no
+   *  wrap override of its own (`col.wrap === undefined`) — a column's explicit choice always wins. */
+  renderCell(td: HTMLElement, row: RowData, col: ColumnDef, viewWrapDefault?: boolean): void {
     td.addClass("db-cell");
-    if (col.wrap) td.addClass("db-cell-wrap");
+    if (col.wrap ?? viewWrapDefault) td.addClass("db-cell-wrap");
     let value: unknown;
 
     if (col.type === "computed" || col.type === "rollup") {

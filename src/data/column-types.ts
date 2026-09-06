@@ -388,3 +388,22 @@ export function createOptionsFromValues(values: unknown[]): StatusOptionDef[] {
   }
   return options;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 8. COLUMN WRAP MODE
+// ───────────────────────────────────────────────────────────────────
+//
+// `ColumnDef.wrap` carries three meanings in one optional boolean: true forces wrap, false forces
+// clip, and undefined follows the view's own `wrapText` default. These two helpers are the single
+// place that mapping lives, so the column menu, the column manager's quick toggle and the rename
+// modal read and write it the same way.
+
+export type ColumnWrapMode = "wrap" | "clip" | "follow";
+
+export function getColumnWrapMode(wrap: boolean | undefined): ColumnWrapMode {
+  return wrap === true ? "wrap" : wrap === false ? "clip" : "follow";
+}
+
+export function columnWrapModeValue(mode: ColumnWrapMode): boolean | undefined {
+  return mode === "wrap" ? true : mode === "clip" ? false : undefined;
+}

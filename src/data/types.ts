@@ -87,6 +87,8 @@ export interface ColumnDef {
   /** Explicit status preset selected for this column. Undefined means custom/no preset. */
   statusPresetId?: string;
   statusOptions?: StatusOptionDef[];
+  /** true = wrap regardless of the view default; false = clip regardless of it;
+   *  undefined = follow the view's own wrapText setting. */
   wrap?: boolean;
   /** Per-column text render mode. "link" renders text values as note/URL links;
    *  "markdown" renders inline markdown (bold/italic/strike/highlight/code/links);
@@ -519,6 +521,10 @@ export interface ViewConfig {
   defaultColumnWidth?: number;
   /** Vertical table density. Undefined uses the default 34px row token. */
   rowDensity?: RowDensity;
+  /** Table-only default wrap state for a column that carries no wrap override of its own.
+   *  Undefined/false clips to one line, matching the pre-existing behavior so an upgraded
+   *  vault's tables render unchanged; true wraps. A column's own `wrap` always wins. */
+  wrapText?: boolean;
   /** Explicit column key order. When absent, schema.columns array order is used. */
   columnOrder?: string[];
   /** Per-view property widths imported from Obsidian Bases columnSize. Falls back to shared column widths. */
