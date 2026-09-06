@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# ───────────────────────────────────────────────────────────────────
+# MODULE:    pre-commit
+# COMPONENT: blocking comment-hygiene gate this repo owns and installs itself
+# ───────────────────────────────────────────────────────────────────
+#
+# Runs tools/naming/scan-comments.mjs — the same script tools/gate.mjs's
+# "comments" lane runs — before every commit, so an ephemeral artifact id
+# planted in a comment or a test name is rejected before it lands rather
+# than caught the next time someone happens to run the gate.
+#
+# Full-tree, not staged-files-only: the scan runs in well under a second
+# across roughly 500 files, so scoping it to the staged diff would add
+# complexity for no real saving, and a full-tree run also catches a
+# violation an earlier, unrelated commit already carries.
+#
+# Install: see tools/git-hooks/README.md.
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+if ! node tools/naming/scan-comments.mjs; then
+  echo ""
+  echo "BLOCKED [pre-commit:comments]: scan-comments.mjs found a violation (see above)."
+  echo "Fix: replace the ephemeral artifact id, or the comment-grammar gap, with the durable WHY,"
+  echo "then re-stage and commit again."
+  exit 1
+fi
+
+exit 0
