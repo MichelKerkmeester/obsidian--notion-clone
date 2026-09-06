@@ -10,7 +10,7 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/046-linked-views-notion-parity"
-    last_updated_at: "2026-09-06T00:05:00Z"
+    last_updated_at: "2026-09-06T02:05:00Z"
     last_updated_by: "implementation-verifier"
     recent_action: "Rebased, re-derived evidence, corrected the row-0 mechanism and pitch claim"
     next_safe_action: "Operator reads the released build on device to close AC-007"
@@ -196,9 +196,9 @@ reaches the move path while a toolbar-button press/drag does not.
 | `node tools/screenshots/capture.mjs --only constructed-linked-view-host` | exit 0 — 4 captures, both device widths and themes, each measurement `ok:true` |
 | `node tools/screenshots/verify.mjs` | exit 0 — 550 entries match their sources after a full recapture |
 | `validate.sh 046-linked-views-notion-parity --strict` | exit 0 — first `RESULT:` line was `PASSED` after metadata backfill |
-| 16-row block round trip + 3 adversarial | Green (`embedded-database-renderer.test.ts:653`) |
-| Create flow's fence read by the rendering path's parser | Green (`:630`) |
-| Interrupted move leaves a duplicate, never a loss | Green (`:592`) |
+| 16-row block round trip + 3 adversarial | Green (`embedded-database-renderer.test.ts:704`) |
+| Create flow's fence read by the rendering path's parser | Green (`:681`) |
+| Interrupted move leaves a duplicate, never a loss | Green (`:643`) |
 | Two-file move re-read | Green — both vault-shaped pages re-read; same database path, view id, option and one block |
 | Capability gate count | `persistMode === "codeblock"` 10 → 3, all presentation |
 | Constructed embed scenario | Captured and read: embed content box 900/900 desktop and 402/402 phone against prose, delta 0px; card furniture 0 for border, radius and padding |
@@ -235,14 +235,14 @@ reaches the move path while a toolbar-button press/drag does not.
    first recorded. Measured live in the same host, the linked view's `thead` computes
    `top: 20px` and covers exactly 20px of row 0, identically before and after this fix. The
    producer is the embed's own sticky rule, `.note-database-embed.note-database-container
-   .db-table thead { top: calc(var(--db-table-header-top) - 2px) }` (`styles.css:16274`), which
+   .db-table thead { top: calc(var(--db-table-header-top) - 2px) }` (`styles.css:15907`), which
    resolves to 22 - 2 against `runtime-vars.css`'s 22px stand-in where the standalone rule
-   (`styles.css:5415`) subtracts a full 22px and lands on 0. The stand-in itself is therefore
+   (`styles.css:5408`) subtracts a full 22px and lands on 0. The stand-in itself is therefore
    correct; what the harness omits is the `note-database-embed-headerless` class that zeroes that
-   rule (`styles.css:16278`), because this scenario mounts `TableRenderer` directly with no
+   rule (`styles.css:15911`), because this scenario mounts `TableRenderer` directly with no
    `EmbeddedDatabaseRenderer` and so runs neither the class toggle
-   (`embedded-database-renderer.ts:696`) nor `updateStickyOffsets()` (`:1842`), which writes the
-   measured header height into `--db-table-header-top` (`:1847`). Recorded as device-only; not
+   (`embedded-database-renderer.ts:672`) nor `updateStickyOffsets()` (`:1803`), which writes the
+   measured header height into `--db-table-header-top` (`:1808`). Recorded as device-only; not
    chased in this pass.
 
 3. **Device confirmation remains open.** The source and stylesheet tests prove the handle binding,
@@ -292,14 +292,14 @@ embed.
 
 **Row 0 under the header:** does not reproduce as a shipped defect, and is unchanged by this fix
 (measured live: `thead` `top: 20px`, 20px of row 0 covered, before and after). The producer is the
-embed's own `.db-table thead { top: calc(var(--db-table-header-top) - 2px) }` (`styles.css:16274`)
+embed's own `.db-table thead { top: calc(var(--db-table-header-top) - 2px) }` (`styles.css:15907`)
 against the 22px capture stand-in; the harness never applies `note-database-embed-headerless`
-(`styles.css:16278`), which zeroes it, because it mounts `TableRenderer` directly and so runs
-neither that class toggle (`embedded-database-renderer.ts:696`) nor `updateStickyOffsets()`
-(`:1842`). Recorded as device-only, not fixed here.
+(`styles.css:15911`), which zeroes it, because it mounts `TableRenderer` directly and so runs
+neither that class toggle (`embedded-database-renderer.ts:672`) nor `updateStickyOffsets()`
+(`:1803`). Recorded as device-only, not fixed here.
 
 **Evidence:** red first in `tools/live/unstyled-links.mjs`'s constructed pass — a new
 `insertLineRows` reading in `chrome-geometry-measure.mjs` (own 4-case unit test) — 1999 findings
 at 34px against a 1px ceiling; 0 after. `checklist.md` C8, `acceptance-criteria.md` AC-002.
-`npx tsc --noEmit` 0, `npm test` 1341/1341, `npm run build` 0, `npm run gate` 26/26 green (rebased onto `origin/main` cc5a7ff2; the pre-rebase run measured 25 lanes and 1271 tests).
+`npx tsc --noEmit` 0, `npm test` 1339/1339, `npm run build` 0, `npm run gate` 26/26 green, read from the final state after rebasing onto `origin/main` 932fa3a9.
 <!-- /ANCHOR:roadmap-row-42-fix-note -->

@@ -33,7 +33,7 @@ a real reading view, not on a harness mount, because the ancestor chain is the m
 | C3 | Independent read-only gates keyed on `persistMode === "codeblock"` | 6 reads across 4 decisions (`:421`, `:433`, `:463`, `:1575`, `:1592`, `:1593`), none with a recorded intent | 1 resolved capability value | [x] one `isViewReadOnly()`; the whole-file count fell 10 → 3 and the survivors are presentation |
 | C4 | Clipboard steps to place a linked view | 1, and it is the only path | 0 | [x] the create flow inserts the fence at the cursor, or appends to the active file when no editor holds the caret |
 | C5 | Ways to move a placed linked view | 0 (cut and paste in the editor is not one of ours) | 2: desktop drag, phone action | [x] both built — dedicated six-dot handle drag and a **Move to page…** row; neither driven on a device yet |
-| C6 | Block shapes covered by a round-trip test | 0 — no such test exists | 16 plus 3 adversarial | [x] green at `embedded-database-renderer.test.ts:653`, plus a cross-check against the rendering path's own parser at `:630` |
+| C6 | Block shapes covered by a round-trip test | 0 — no such test exists | 16 plus 3 adversarial | [x] green at `embedded-database-renderer.test.ts:704`, plus a cross-check against the rendering path's own parser at `:681` |
 | C7 | Embeds with a photographed constructed scenario | 0 committed captures | at least 1 at both widths and themes | [x] 4 committed — both device widths, both themes, each read by hand |
 | C8 | Row-insertion seams painting as a visible empty row inside a linked-view embed (`review-ui-2026-09-05.md` P0 #1) | 1999 (one per insertion row in the 2000-row `table/embed` scenario), each 34px against a 1px ceiling — `tools/live/unstyled-links.mjs`'s constructed pass, `chrome-geometry-measure.mjs`'s `insertLineRows` reading | 0 | [x] measured 0 — a same-specificity `.note-database-embed.note-database-container table.db-table tr.db-row-insert-line > td { height: 0; border: 0 }` rule added after the embed's `th, td` height rule; `constructed-linked-view-host-*.png` (4) recaptured and read; linked row pitch measured live 68px -> 34px against the standalone table's 35px, the residual 1px being the embed cell rule's `box-sizing: border-box` rather than the seam |
 | C9 | The SUM/AVERAGE/EARLIEST/UNIQUE summary footer on the codeblock (linked-view) render path (`review-ui-2026-09-05.md` P1 #10) | Reported missing against the standalone view | Present, same as standalone | [x] does not reproduce on this tree — `EmbeddedDatabaseRenderer.renderResults()`'s `summaryRenderer.render()` call is unconditional on `persistMode`, gated only on `viewType !== "chart"`. A new regression test (`embedded-database-renderer.test.ts`, "linked-view summary footer") is green on the codeblock instance and was confirmed red when the call was artificially persistMode-gated, then reverted — no code change needed |
@@ -83,10 +83,10 @@ is exactly the difference this program keeps being caught by.
 
 - [ ] CHK-020 [P0] Every `acceptance-criteria.md` row that is not operator-only is `Met` with
       observed evidence
-- [x] CHK-021 [P0] `npm run gate` exits 0, read without a pipe — `gate: PASS — 25 green, 0 red for a declared reason`
+- [x] CHK-021 [P0] `npm run gate` exits 0, read without a pipe — `gate: PASS — 26 green, 0 red for a declared reason`
 - [x] CHK-022 [P0] The 16-row round trip plus the three adversarial rows is green
 - [x] CHK-023 [P1] An interrupted move leaves the destination written and the source intact, never
-      the reverse — `embedded-database-renderer.test.ts:592`
+      the reverse — `embedded-database-renderer.test.ts:643`
 - [ ] CHK-024 [P1] A page with several embeds still renders them lazily after the width change
 <!-- /ANCHOR:testing -->
 
