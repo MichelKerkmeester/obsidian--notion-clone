@@ -251,10 +251,13 @@ retired lane's.
 **Alternatives rejected.**
 - *Keep the new lane and record the 27 count.* Rejected: the constraint was explicit, and the reason
   the existing lane could not host it turned out not to exist.
-- *Pin the values in a vitest suite beside the stylesheet-reading tests.* Rejected on the finding
-  that opened R10 in the first place: the defect was `height: 24px` painting 26 under content-box
-  sizing, which a test reading the declaration in `styles.css` cannot see. These pins have to be
-  read from a laid-out document or they check the wrong thing.
+- *Pin the values in a vitest suite the way `src/views/calendar-pinned-values.test.ts` pins the
+  calendar's.* Rejected on the finding that opened R10 in the first place. That file locates a named
+  selector's own block in `styles.css` by string search and asserts one declaration literally — it
+  reads what the stylesheet SAYS. The board defect was `height: 24px` **saying** the right thing and
+  **painting** 26, because a 1px border sits outside a content-box height, and the property-row
+  defect was the same shape. A declaration-reading test asserts the value that was already correct.
+  These pins have to be read from a laid-out document or they check the wrong thing.
 
 ---
 

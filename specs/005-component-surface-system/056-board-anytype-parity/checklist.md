@@ -89,7 +89,7 @@ an existing lane rather than a new one (`decision-record.md` ADR-005), so the ga
 unchanged.
 
 **Re-verified 2026-09-06 on the rebased tree by a leg that wrote none of the fixes**, against
-`origin/main` `3b3ac633`. Read back in device pixels off the recaptured PNGs rather than taken from
+`origin/main` `6c718f63`. Read back in device pixels off the recaptured PNGs rather than taken from
 the report: chip band **48 device px** (24 CSS) against 52 (26) before; property rows a flat **50
 device px** (25 CSS) across three seven-row repeats against 406 over seven (58 / 29 CSS) before;
 checkbox a **28x28 device-px** disc with a symmetric taper, so a circle at 14 CSS px; phone card
@@ -99,7 +99,7 @@ identical to the desktop 1px border, so nothing in a capture can tell them apart
 show the 16px title icon slot at all, because every board harness stubs `renderRecordIcon` to null.
 The T013 retirement was also incomplete — `constructed-state-assertions.mjs` exited 1 with five
 failures on the landed tree and 16 orphaned PNGs were still tracked; both are closed here.
-`npx tsc --noEmit`, `npx vitest run` (**137 files, 1425 tests**) and `npm run build` all exit 0;
+`npx tsc --noEmit`, `npx vitest run` (**137 files, 1426 tests**) and `npm run build` all exit 0;
 `node tools/screenshots/verify.mjs` reports 550 current; `node tools/lane/check-lane.mjs` exits 0;
 the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate </dev/null` reports **26 green**,
 `$?` read from a file.

@@ -121,7 +121,7 @@ stacked pairs**, exit 0; the page limit **10** applied through a local `boardCon
 extensions each `retire` or `fold` with none reachable from a stored view; the CSS lane's history
 **appended, never rewritten** — 297 entries from `origin/main` plus this phase's acquire and
 release; every `screenshots/project-manager/*` capture pixelHash-identical to `origin/main`, and
-exactly 32 board captures moved. `npm run gate` **26 green, exit 0**, read from `$?`. Re-run in full on the rebased tree at `origin/main` `3b3ac633` plus this phase: **26 green, exit 0**, 1425 tests over 137 files, 550 captures current, 44 board captures moved against `origin/main` and no other capture family did.
+exactly 32 board captures moved. `npm run gate` **26 green, exit 0**, read from `$?`. Re-run in full on the rebased tree at `origin/main` `6c718f63` plus this phase: **26 green, exit 0**, 1426 tests over 137 files, 550 captures current, 44 board captures moved against `origin/main` and no other capture family did.
 
 **Two criteria were written against a target the captures disproved**, and their thresholds moved
 rather than their status: AC-002's table no longer expects a record-count row for the desktop

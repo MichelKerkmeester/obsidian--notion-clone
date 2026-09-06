@@ -249,7 +249,7 @@ _memory:
       | R10 | The six pins live in `tools/live/render-assertions.mjs` as its own **board geometry** pass — no new lane. It mounts the same board scenario on its own page at `deviceScaleFactor: 2` with the token sheets attached, exactly the way that lane's row-rhythm pass already measures computed geometry, and reads card radius, column width, column gap, painted chip height, property row pitch and checkbox shape | no check locked any of these values | **7 PASS rows inside `render-assertions`**, and the gate stays at **26 lanes**. Negative control: reverting the card radius to 2px turns the whole lane red at exit 1 with `board geometry card radius: .db-kanban-card read "2px", expected "8px"`, then reverted. The first landing added a 27th lane, `tools/live/board-geometry.mjs`; that was against the brief's existing-lanes-only constraint and the file is deleted — see `decision-record.md` ADR-005 for why an existing lane could host it |
 
       **Re-verified 2026-09-06 by the landing leg, on the rebased tree, and three of the leg's own
-      claims were corrected rather than repeated.** Rebased onto `origin/main` `3b3ac633` (59 commits,
+      claims were corrected rather than repeated.** Rebased onto `origin/main` `6c718f63` (61 commits,
       `055`, `053`, `054`, `057` and `051` landed in between); the only code conflict was one import
       line in `tools/screenshots/scenarios/chrome.mjs`, where upstream's added `tableHeader` and this
       lane's dropped `boardSubgroupHeader` were merged rather than either side taken whole. Every
@@ -266,7 +266,7 @@ _memory:
       **28x28 device-px** glyph whose scanline profile tapers symmetrically at both ends — a circle at
       14 CSS px. Phone: card 1 spans **510 device px** and the gutter **46**, i.e. 255 and 23 CSS px.
 
-      Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137 files / 1425
+      Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137 files / 1426
       tests** exit 0; `npm run build` exit 0; `node tools/screenshots/verify.mjs` **550 entries
       current**, exit 0; `node tools/lane/check-lane.mjs` exit 0; the isolated
       `SURFACE_PHASE=056-board-anytype-parity npm run gate </dev/null`, `$?` read from a file:
@@ -375,7 +375,7 @@ _memory:
       and not this one's.
 
       Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137/137 files,
-      1425/1425 tests**, exit 0; `npm run build` exit 0; `node tools/live/constructed-state-assertions.mjs`
+      1426/1426 tests**, exit 0; `npm run build` exit 0; `node tools/live/constructed-state-assertions.mjs`
       exit 0 (was 1); the isolated gate exit **0, 26 green**.
 <!-- /ANCHOR:phase-3 -->
 
