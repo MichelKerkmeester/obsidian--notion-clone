@@ -302,4 +302,42 @@ must be re-measured after the move rather than assumed: `#888888` on white is 3.
 of the five ratios ADR-004 E1 declined, so the neutral hue and the contrast floor have to be
 reconciled in the same leg — most likely by taking the neutral hue with a darkened text step, the
 same shape ADR-006 takes for the fill. **Nothing is changed by this leg.**
+
+## ADR-008: The board scrolls as a page and hides desktop scrollbar chrome — an operator ground for declining a measured value
+
+**Status**: **Accepted** — operator ruling, 2026-09-06 ~10:30, desktop, 0.0.29.
+
+**The words.** *"Also for boards... Currently on mobile and desktop you scroll only a column. But I
+want to just have page scrolling so you scroll down the page and not within a column only. also for
+desktop hide or make the scrollbar invisible."*
+
+**Context, with the numbers.** The landed board makes every column its own vertical scroller
+(`.db-kanban-cards { overflow-y: auto }`, `styles.css:9569-9573`) inside a view that cannot scroll
+(`.db-kanban-view { overflow: hidden; height: 100% }`, `:9447-9451`), and paints a **10px**
+horizontal scrollbar on `.db-kanban-board` (`:9472-9474`) in an 8px reserved lane. That bar is not
+an accident: `design-trueup.md` A10 measures Anytype's own sticky scrollbar at **10px tall, y
+1199..1208 of a 1217px viewport, 8px above the bottom**, independently confirming `050` REQ-003,
+and this packet's REQ-004/AC-004 and its third completion criterion ask for it to exist.
+
+**The conflict, stated plainly.** ADR-002 says the board adopts every captured value and that the
+**only** permitted grounds for declining are WCAG 1.4.11, WCAG 1.4.3 and the 44px touch floor —
+*"taste is not a ground, and neither is 'ours is fine'"*. The operator's instruction is none of
+those three. Two things that must both be true are not both true.
+
+**Decision.** The instruction wins, and ADR-002's decline list gains a **third ground: an explicit
+operator ruling**. This is recorded as its own ADR rather than as an edit to ADR-002's wording,
+because *"the operator overruled the parity rule once, here, for the scrollbar"* and *"the parity
+rule always allowed taste"* are different claims and the second one is false.
+
+**Consequences.**
+- AC-012 supersedes AC-004's visible sticky bar. AC-004 is not deleted and its measurement is not
+  withdrawn — hiding a bar is not unmeasuring it, and the trueup's geometry stays exactly where it
+  is so a later reinstatement has a number to return to.
+- The per-column scrollers go; the page scrolls in their place on both platforms. Drag-and-drop
+  between columns, the sticky column header and the load-more row all sit on the assumption that a
+  column is its own scroll box, so each is re-measured in the same leg rather than assumed.
+- `render-assertions.mjs`'s scrollbar pin is re-expressed at the ruling's threshold (T016), not
+  deleted, for the same reason.
+- Named in `../roadmap.md` §7 as a conflict on record, per §7's rule that a phase's disagreements
+  are reported rather than tidied.
 <!-- /ANCHOR:decisions -->

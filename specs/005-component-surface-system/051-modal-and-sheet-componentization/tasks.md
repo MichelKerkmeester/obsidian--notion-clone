@@ -670,6 +670,17 @@ excluded on its own recorded terms.
       the negative control as written asserts the interactivity clause T021 records as still open.
       Revisit when a second surface takes this shape — the row stays open rather than being ticked
       or waived, because nothing about it was proven
+- [ ] **T024 (2026-09-06 amendment) — Land the stacked-sheet fix leg on this packet's files.**
+      `048` T024 owns the four defects the operator's 10:04 iOS report names; the edits land in
+      `surface-shell.ts` and `mobile-bottom-sheet.ts`, which are this packet's, so the leg is
+      sequenced **after** T021-T023 rather than beside them. Red first: pre-fix the depth-2 stack
+      draws 2 close controls and 2 background values on one sheet
+- [ ] **T025 (2026-09-06 amendment) — Run the sheet family's deep-research loop**, to the executor
+      spec in `goal.md` §4's amendment: `/deep:research:auto`, 10 iterations,
+      `--stop-policy=max-iterations`, `cli-pi` on GLM 5.3 flash max (OpenRouter, DevPass fallback),
+      bounded prompts with an explicit file list and no image reads, a fresh worktree, then an Opus
+      synthesis that updates or adds phases. **Starts only once `044`, `048` and `051` are done and
+      verified** — an operator-set precondition, not a scheduling preference
 <!-- /ANCHOR:phase-4 -->
 
 ---

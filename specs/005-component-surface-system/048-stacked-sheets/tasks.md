@@ -105,6 +105,17 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
       — **open. Ships in 0.0.24; nothing in this repository can close it**
 - [x] T023 Update `checklist.md` "today" cells with the measured before-numbers and mark each row
       with its evidence
+- [ ] T024 (2026-09-06 amendment) Fix the four defects the operator's 10:04 iOS report names on a
+      depth-2 stack (Edit property → Month over Properties): the duplicate close control, the
+      header/body background split, the ~200px dead space above the title, and the parent bleed.
+      **Red first**, on the operator's own capture and on a constructed depth-2 recapture:
+      pre-fix **2** close controls in frame, **2** background values across one sheet, ~**200** CSS
+      px above the title's ink, and parent ink above the child's top edge. Green is 1, 1, the
+      header's own padding box, and 0. Leg `worktrees/159-fix-048-ios-stacked-sheet`; lands after
+      `051`'s side-sheet leg frees `surface-shell.ts` and `mobile-bottom-sheet.ts`
+- [ ] T025 (2026-09-06 amendment) Recapture the depth-2 and depth-3 stacked scenarios after T024 and
+      read them by eye across both themes, then re-run `node tools/live/sheet-grammar.mjs` and
+      require the registry to still read 13 surfaces and 31 pairs at exit 0 from `$?`
 <!-- /ANCHOR:phase-3 -->
 
 ---

@@ -302,4 +302,13 @@ and stay unticked — an agent never ticks them.
       the summary config is untouched, so the footer reappears the moment a row exists. The floor is
       `.is-phone .note-database-container .db-table-footer-trigger { min-height: 44px }`
       (`styles.css:8553-8555`); the desktop 26px pair is unchanged. Recorded as ADR-005 (Accepted)
+- [ ] **T016 (2026-09-06 amendment) — Make wrap-off clip a long-text column.** Reproduce the
+      operator's ~10:25 desktop report first: a table with the view's Wrap text switch off and no
+      column override, holding a long-text column with a multi-line value. **Red first** — pre-fix
+      the Journal column lays out over 6 lines while its neighbours clip to one, so the row stands
+      about six times `--db-row-height`. Name the element that escapes the base `td` clip
+      (`styles.css:5723-5731`) before changing anything; fix at that producer, not at the cell.
+      Green is every row equal to `--db-row-height` for its density with the long-text column
+      ellipsised, plus a negative control that goes red when the clip is removed. Leg
+      `worktrees/160-fix-053-wrap-off-rows`
 <!-- /ANCHOR:phase-7 -->

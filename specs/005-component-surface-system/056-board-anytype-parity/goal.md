@@ -140,6 +140,26 @@ never resolve them silently.
       unchanged against their pre-leg baseline, or any move explained by a named gap.
 - [ ] **OPERATOR:** the operator reads the rebuilt board on iOS and on desktop and reports it as
       Anytype-shaped. Nothing in this repository can close this row.
+- [ ] **The board scrolls as a page, not as a set of columns, and desktop shows no scrollbar
+      chrome.** **Added 2026-09-06** from the operator's ~10:30 desktop report on 0.0.29
+      (`../roadmap.md` §4 row 61; capture `operator-board-column-scroll-20260906.png`, the
+      operator's own, not committed here). **Today: red, and the numbers are in the stylesheet** —
+      `.db-kanban-cards` carries `overflow-y: auto` (`styles.css:9569-9573`), so each column is its
+      own vertical scroller; `.note-database-container.db-kanban-view` carries `overflow: hidden`
+      and `height: 100%` (`:9447-9451`), so the page cannot scroll instead; and
+      `.db-kanban-board::-webkit-scrollbar` paints a **10px** horizontal bar (`:9472-9474`) with
+      the `padding-bottom: 8px` that reserves its lane. Done is: **0** elements inside the board
+      with a vertical `overflow` that scrolls, the page scrolling in their place, and **0** px of
+      scrollbar chrome painted on desktop at rest. **This declines a measured parity value on the
+      operator's own instruction**, which ADR-002 does not itself permit — the conflict is named in
+      `decision-record.md` ADR-008 and in `../roadmap.md` §7, not resolved silently.
+- [ ] **A card's text values read left-aligned, and a single-token value ellipsises rather than
+      breaking mid-word.** **Added 2026-09-06** from the same report. **Today: red on the
+      operator's own screen** — a card text value renders right-aligned
+      (*"Procurement asked for a security questionnaire."*) and a URL breaks mid-word
+      (*"northwin d-logistics"*). Done is every card text value at `text-align: left` and a
+      single-token value ellipsised at the card's content edge, measured on a recaptured board in
+      both themes.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -179,3 +199,37 @@ format routing; this packet's own card rendering is a consumer, not a duplicate 
 packet's D4/ADR-002 (one picker, reached from the surface the operator was looking at). No card
 rendering was changed here to accommodate it — `058` edits `title-field-display.ts` and
 `board-card-properties-panel.ts`'s Title row, neither of which this packet owns.
+
+
+### 2026-09-06 amendment: page scrolling, invisible desktop scrollbars, and two card-text defects
+
+**Operator, ~10:30, desktop board, 0.0.29**, verbatim: *"Also for boards... Currently on mobile and
+desktop you scroll only a column. But I want to just have page scrolling so you scroll down the
+page and not within a column only. also for desktop hide or make the scrollbar invisible."*
+
+**The ruling, and what it costs.** Columns stop being vertical scroll containers; the page scrolls
+instead, on phone and on desktop. Desktop scrollbar chrome is hidden — the per-column bars go with
+the containers, and the sticky horizontal bar becomes invisible-until-hover rather than a painted
+10px lane.
+
+**This conflicts with a measured parity value, and the conflict is named rather than absorbed.**
+`design-trueup.md` A10 and its geometry table record Anytype's sticky horizontal scrollbar at
+**10px tall, y 1199..1208 of a 1217px viewport, 8px above the bottom**, independently re-measured
+against `050` REQ-003; this packet's own third completion criterion still asks for that bar to
+exist, and ADR-002 says parity is the default with accessibility as the *only* ground for
+declining, taste explicitly not among them. The operator's instruction is neither parity nor
+accessibility. Under the program's precedence an in-the-moment operator instruction outranks a
+rule file and a measured reference alike, so **the instruction wins and ADR-002's decline list
+gains a third ground — operator ruling — recorded as ADR-008 rather than by quietly widening
+ADR-002's wording.** The geometry stays measured and stays in the trueup: hiding a bar is not
+unmeasuring it, and if the ruling is ever revisited the number is still there.
+
+**Two card-text defects in the same screenshot**, and they are ordinary bugs rather than parity
+questions: a text value renders right-aligned (*"Procurement asked for a security questionnaire."*)
+where the card grammar is left-aligned throughout, and a URL breaks mid-word
+(*"northwin d-logistics"*) where a single-token value should ellipsise at the content edge. Both
+land in the same leg.
+
+**Sequencing.** After the `056c` palette leg (`worktrees/156-impl-056-palette`) lands, because that
+leg holds `board-renderer.ts`; before `058` opens against the same file. Recorded in
+`../roadmap.md` §4 row 61, §6A and §7.

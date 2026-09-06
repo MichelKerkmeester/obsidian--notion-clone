@@ -10,15 +10,16 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T09:10:00Z"
+    last_updated_at: "2026-09-06T10:50:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "opened 058 (card title/format); amended 047/051/052/053/055/056 on tonight's rulings"
-    next_safe_action: "Run 058 T002 (measure the red); dispatch 047's Mobbin harvests one at a time"
+    recent_action: "recorded §4 rows 59-63; 057 reopened on gestalt; stagger at 45px supersedes 80px"
+    next_safe_action: "Land 153/156/159/160/161, then read the 057 calendar review and plan the rebuild"
     blockers:
-      - "Rows 44-46: stacked sheets, owned by 048; its D1 is operator-owned"
+      - "057 is REOPENED on the operator's gestalt read; AC-013's threshold waits on the review"
+      - "Row 59: the sheet family's deep-research loop starts only after 044/048/051 verify"
+      - "Row 60's producer is unnamed; the wrap-off leg must measure before it fixes"
       - "057 ADR-002 is the operator's: do the calendar week and day scales survive"
       - "058 D6/ADR-002: Notion's Mobbin harvest (047) has not landed yet"
-      - "051 T013/T014 wait on the operator's E4-adjacent confirm-timing questions, if any remain"
       - "Earlier blockers are in the LOG and roadmap.md rather than here"
     key_files:
       - "roadmap.md"
@@ -32,6 +33,8 @@ _memory:
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
+      - "A value-level Met does not answer a gestalt ask; the operator's read outranks it (7.14)"
+      - "An operator ruling is a third ground for declining a captured value (056 ADR-008)"
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
       - "Every phase 000-058 carries its own goal.md; the DONE table cites each open one"
       - "058's per-view title picker is not new work; ViewConfig.titleField already ships"

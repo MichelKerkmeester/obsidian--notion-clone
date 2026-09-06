@@ -377,6 +377,23 @@ _memory:
       Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137/137 files,
       1426/1426 tests**, exit 0; `npm run build` exit 0; `node tools/live/constructed-state-assertions.mjs`
       exit 0 (was 1); the isolated gate exit **0, 26 green**.
+- [ ] T014 (2026-09-06 amendment) **Make the page scroll, not the column, and hide desktop
+      scrollbar chrome.** Operator ruling, ~10:30 desktop (ADR-008). **Red first, from the landed
+      stylesheet**: `.db-kanban-cards` has `overflow-y: auto` (`styles.css:9569-9573`) so each
+      column scrolls itself; `.db-kanban-view` has `overflow: hidden; height: 100%`
+      (`:9447-9451`) so the page cannot; `.db-kanban-board::-webkit-scrollbar` paints a 10px bar
+      (`:9472-9474`) with an 8px reserved lane. Green: 0 vertically scrolling elements inside the
+      board, the page scrolling in their place on phone and desktop, and 0 px of scrollbar chrome
+      painted on desktop at rest, with the sticky horizontal bar invisible-until-hover. A negative
+      control that goes red when `overflow-y: auto` is put back
+- [ ] T015 (2026-09-06 amendment) **Left-align card text values and ellipsise a single token.**
+      Same report. **Red first**: a card text value renders right-aligned
+      (*"Procurement asked for a security questionnaire."*) and a URL breaks mid-word
+      (*"northwin d-logistics"*). Green is `text-align: left` on every card text value and a
+      single-token value ellipsised at the content edge, read off a recaptured board in both themes
+- [ ] T016 (2026-09-06 amendment) **Re-run the geometry pins after T014.** The scrollbar row in
+      `render-assertions.mjs` asserts a bar this ruling hides; re-express it as the ruling's own
+      threshold rather than deleting it, so a later reinstatement still has a check
 <!-- /ANCHOR:phase-3 -->
 
 ---

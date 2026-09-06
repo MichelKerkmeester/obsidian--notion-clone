@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **59 phases**, **6 with nothing left**, **172 rows** waiting on a device.
+Derived 2026-09-06: **59 phases**, **6 with nothing left**, **181 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -254,9 +254,10 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The board and the gantt are compared against Project Manager with named elements and measured values, and every gap is closed with a before/after number or dispositioned with a reason.
 - [ ] The operator reads the board and the timeline on a released build and no longer says "align closer". Only the operator closes this row.
 
-## 048-stacked-sheets — 6/7
+## 048-stacked-sheets — 6/8
 
 - [ ] The operator opens the Properties sheet, the filter sheet's operator dropdown and its property picker on iOS and reports each as one stack rather than two sheets. Only the operator closes this row; nothing in this repository can.
+- [ ] The stacked pair on iOS draws one close control, one continuous surface, no dead space above the title, and no parent bleed. Added 2026-09-06 from the operator's 10:04 report on 0.0.29 (`../roadmap.md` §4 row 59; capture `operator-ios-stacked-sheet-bug-20260906.png`, the operator's own, not committed to this repository). Four defects observed red on device, pre-fix, on Edit property → Month stacked over Properties: a second oversized circular close control floating above the child's header beside the header's own `×`; the child's body painting a lighter surface than its own header, so one sheet reads as two; roughly 200 CSS px of blank sheet above the title; and the parent Properties sheet bleeding through with its rows and a "14" count badge over the toolbar, its own header offset. Done is a device-pixel read of a recaptured depth-2 pair: 1 close control in the child's header, one background value across header and body, the title's ink inside the header's own padding box, and 0 parent ink above the child's top edge. Fix leg `worktrees/159-fix-048-ios-stacked-sheet`; the grammar half is `044`'s, the shell half `051`'s, and both are cross-referenced rather than restated here.
 
 ## 049-test-environments-and-mock-data — 6/8
 
@@ -273,7 +274,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` exits 0 with one permanent lane row per item, each observed red before green, and `npm run replay` holds with reversed 0.
 - [ ] The operator opens the board and a table on iOS and on desktop and reads the adopted surfaces as the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
-## 051-modal-and-sheet-componentization — 1/8
+## 051-modal-and-sheet-componentization — 1/9
 
 - [ ] One shell primitive produces every modal and every sheet, and the replaced vocabularies are gone. Today: four. `DbModal.applyPresentation` (`modals/db-modal.ts:92-113`) decides one; `attachSheetChromeToModal` is called directly by three non-`DbModal` surfaces (`src/main.ts:3047`, `image-file-suggest-modal.ts:40`, `markdown-file-suggest-modal.ts:34`); `createSheetHeader` is called independently at twelve sites; and `getSheetTitle` (`db-modal.ts:83-88`) recovers a title by scraping the first `h1`/`h2`/`h3` in the content because no surface declares one. Done is one constructor, one declared title per surface, and the three direct `attachSheetChromeToModal` callers routed through it or dispositioned in `modal-surface-inventory.md` with a written reason.
 - [ ] Every modal surface in the family is dispositioned in `modal-surface-inventory.md`: surface → shell role → presentation → changes → Anytype pattern with its capture or its named gap → stays ours. Today: no such table exists. The census it is built from is real and counted from source at HEAD: 20 `extends DbModal` subclasses, of which 13 declare `sheet`, 4 declare `fullscreen` and 3 inherit the `sheet` default; 3 `FuzzySuggestModal` subclasses outside `DbModal` entirely; 12 `createSheetHeader` call sites; and `mobile-bottom-sheet.ts` at 840 lines with 19 exports.
@@ -281,7 +282,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The shell's geometry and motion read from the values `050` measured, not from per-surface literals. Today: per-surface literals, and the shell has no geometry of its own. The adopted values are `design-trueup.md` §2 and §4: 8px popover radius, 16px horizontal and 8px vertical padding, 8px divider clearance, 28px rows (adopted as the measured Anytype value *and* our own `design-system.md` §9 coarse-pointer floor — the named deviation from the 4/8/12/16/24/32 scale, recorded rather than absorbed), 360px for the `panel` role, and motion enter 200ms `ease-out` / exit 150ms `ease-in`. On the phone the floor is `044`'s 44px close, unchanged.
 - [ ] `npm run gate` exits 0 read from `$?`, with one permanent lane row per shell deliverable, each negative control observed red before green; `npm run replay` holds with reversed 0; the
 - [ ] The operator opens a modal, a sheet, a sub-page and a destructive confirm on iOS and on desktop and reads them as one surface family, debugged, refined, perfected. Only the operator closes this row; nothing in this repository can.
-- [ ] The desktop database Settings surface opens as a right side sheet: a full-height panel docked to the right edge, the database stays visible and interactive to its left, and the panel scrolls independently of it. Added 2026-09-06 from the operator's report and ruling (`goal.md` §4 amendment below). Today: three of the four clauses are green and one is not. Red, measured on the shipped renderer before the change: a 360x560px anchored dropdown scrolling itself, header included, over 1776px of content in a 576px client box.
+- [ ] The desktop database Settings surface opens as a right side sheet: a full-height panel docked to the right edge, the database stays visible and interactive to its left, and the panel scrolls independently of it. Added 2026-09-06 from the operator's report and ruling (`goal.md` §4 amendment below). Today: the Settings surface is a tall anchored dropdown (`positionToolbarPopover`'s `PANEL_POPOVER`/general preset, `view-config-panel- renderer.ts`), a new shell shape distinct from every role in `design-system.md` §3.
+- [ ] The sheet family's device pass runs an extra deep-research loop before this family is called done. Added 2026-09-06 from the operator's 10:04 standing instruction (`../roadmap.md` §4 row 59, §6A). It is not a code criterion and it is not a substitute for any row above: it starts only once `044`, `048` and `051` are each done and verified as planned, and it closes when the Opus synthesis has landed its phase updates. Executor spec in §4's amendment below. Today: no such loop has run — `deep-research-state.jsonl` at the program root is 0 bytes.
 
 ## 052-dropdown-menu-and-picker-componentization — 0/9
 
@@ -295,7 +297,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Every desktop dropdown behaves as a combobox: clicking it opens the list and the trigger itself becomes an active text input, letting the operator type to filter. Added 2026-09-06 from the operator's report (`goal.md` §4 amendment below). Today: `dropdown- field.ts`'s search is a separate input inside the popover (`:201-214`), shown only when `searchable === true` and the option count exceeds 8 (`:193`) — the trigger itself never becomes an input, and most dropdowns carry no search field at all.
 - [ ] The filter/sort condition row's Operator dropdown anchors under its own trigger. Added 2026-09-06. Today: RED, measured on the operator's screenshot — the popover renders at x 123-489 under a trigger at x 290-480, a left-edge miscalculation, not a width one (the popover is wider than the trigger, but its left edge sits 167px further left than the trigger's own left edge).
 
-## 053-toolbar-and-view-controls — 2/10
+## 053-toolbar-and-view-controls — 1/11
 
 - [ ] The toolbar renders from composed primitives, and the replaced vocabularies are gone.
 - [ ] The filter and sort state is legible where the reader configures the view, and the leading sort chip is direction-coloured. Restated 2026-09-05 against `design-trueup.md` REQ-001, because the threshold this criterion used to carry could not be observed red. What was false: "0 chips and one fixed icon state" — our chip rail ships (`active-view-controls-renderer.ts`, auto-hiding at `:97`, on both the full-page and embedded renderers) and both triggers already carry a numeric count badge (`toolbar-renderer.ts:2575-2579`). What is rejected: Anytype's dual-mode icons. Scanning the four toolbar icons across all 120 catalogue captures returns one result 120 times, and the filter funnel measures `ink=52, blue=0` on a filtered view and on an unfiltered one — identical to the pixel. The sort glyph's blue is a static two-tone glyph, not a state.
@@ -305,6 +307,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] An embedded view's toolbar collapses by measurement. Today: the embed's only chrome control is a boolean — `shouldHideHeaderChrome()` reads three codeblock options and hides everything or nothing (`embedded-database-renderer.ts:2410-2416`); the tab strip's ResizeObserver overflow collapse (`toolbar-renderer.ts:895-917`) is the only measured behaviour, and it covers tabs only. `050` item 12's threshold, kept: no control overflows at any width in the sweep, collapse driven by measured natural width, read once per resize.
 - [ ] `npm run gate` exits 0 with one permanent lane row per criterion, each observed red before green, and `npm run replay` holds with reversed 0. `050` item thresholds ride the same lane rows.
 - [ ] The operator reads the rebuilt toolbar on device and names it the improvement they asked for. Only the operator closes this row; nothing in this repository can.
+- [ ] A gear icon opens the database Settings surface (`051`'s side sheet), in the toolbar rail, before the `···` overflow button. Added 2026-09-06 from the operator's ruling (`goal.md` §4 amendment below). Today: no such button exists — Settings opens only through `renderUtilitiesOverflowButton`'s (`toolbar-renderer.ts:420-426`) `···` menu, one level deep, in the `db-toolbar-utilities-cluster`.
+- [ ] With wrap off, no column makes a table row taller than the row rhythm. Added 2026-09-06 from the operator's ~10:25 desktop report on 0.0.29 (`../roadmap.md` §4 row 60).
 
 ## 054-record-and-relation-surfaces — 2/7
 
@@ -326,7 +330,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The operator opens a filtered view, deletes a row, deletes a board group field and drags a card under a sort, and reads the states as debugged, refined, perfected. Only the operator closes this row; nothing in this repository can.
 - [ ] A single-row delete has no confirm and shows an Undo toast; bulk delete and anything not undoable keep the confirm. Added 2026-09-06 from the operator's E4 ruling on `051` ADR-007 (`goal.md` §4 amendment below). Today: RED, and belt-and-suspenders rather than missing — `row-menu.ts:166-176`'s single-row delete calls `confirmWithModal` and `deleteRow` (`database-view.ts:8354-8371`) already shows a `showToast` with an `Undo` action after it deletes. Both exist; the confirm is the one to remove.
 
-## 056-board-anytype-parity — 0/8
+## 056-board-anytype-parity — 0/10
 
 - [ ] The board's element vocabulary is Anytype's, and the Project Manager one is gone or dispositioned. Today: 39 distinct `pm-*` classes constructed by `src/views/board-renderer.ts` (`grep -o "pm-[a-z-]*" src/views/board-renderer.ts | sort -u | wc -l`), of which 23 `pm-kanban-*` rules in `styles.css`. Done is 0 undispositioned survivors: each class either replaced by its Anytype-shaped equivalent or named in the migration table with a written reason for staying.
 - [ ] Every element in `spec.md` section 4's anatomy is trued against a named capture file, measured, and matched. Today: no such table exists. Done is the per-element migration table complete — PM element, Anytype element, capture filename, our file — with no cell reading `unknown` and every geometry value carrying either a measurement or the design inferred label with its reason.
@@ -336,12 +340,17 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Every local extension with no Anytype counterpart is retired or folded, none left default-off. Done is a count of board affordances shipped behind a default-off flag → 0, each row in the migration table carrying `retire` or `fold`.
 - [ ] The gantt did not move. Done is the `pm-gantt-*` class count and the gantt capture hashes unchanged against their pre-leg baseline, or any move explained by a named gap.
 - [ ] OPERATOR: the operator reads the rebuilt board on iOS and on desktop and reports it as Anytype-shaped. Nothing in this repository can close this row.
+- [ ] The board scrolls as a page, not as a set of columns, and desktop shows no scrollbar chrome. Added 2026-09-06 from the operator's ~10:30 desktop report on 0.0.29 (`../roadmap.md` §4 row 61; capture `operator-board-column-scroll-20260906.png`, the operator's own, not committed here). Today: red, and the numbers are in the stylesheet — `.db-kanban-cards` carries `overflow-y: auto` (`styles.css:9569-9573`), so each column is its own vertical scroller; `.note-database-container.db-kanban-view` carries `overflow: hidden` and `height: 100%` (`:9447-9451`), so the page cannot scroll instead; and `.db-kanban-board::-webkit-scrollbar` paints a 10px horizontal bar (`:9472-9474`) with the `padding-bottom: 8px` that reserves its lane. Done is: 0 elements inside the board with a vertical `overflow` that scrolls, the page scrolling in their place, and 0 px of scrollbar chrome painted on desktop at rest. This declines a measured parity value on the operator's own instruction, which ADR-002 does not itself permit — the conflict is named in `decision-record.md` ADR-008 and in `../roadmap.md` §7, not resolved silently.
+- [ ] A card's text values read left-aligned, and a single-token value ellipsises rather than breaking mid-word. Added 2026-09-06 from the same report. Today: red on the operator's own screen — a card text value renders right-aligned (*"Procurement asked for a security questionnaire."*) and a URL breaks mid-word (*"northwin d-logistics"*). Done is every card text value at `text-align: left` and a single-token value ellipsised at the card's content edge, measured on a recaptured board in both themes.
 
-## 057-calendar-anytype-parity — 7/10
+## 057-calendar-anytype-parity — 7/13
 
 - [ ] The date-property picker matches the captured calendar settings menu. `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` is the reference.
 - [ ] The scale switch question is answered by the operator, not inferred. Today: three scales — `updateCalendarScale?(scale: "month" | "week" | "day", ...)` (`calendar-renderer.ts:82`) with a scale control, menu, popover and segment class family.
 - [ ] OPERATOR: the operator reads the rebuilt calendar on iOS and on desktop and reports it as Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
+- [ ] The unscheduled affordance is subtle and integrated, not a band above the grid.
+- [ ] A multi-day range chip and every chip in a column share one alignment. Added 2026-09-06 from the same capture. Today: red — multi-day ranges render as centred date-range text inside the cell, and chip alignment differs per column (Su left, Mo/Tu centred, Fr right). Done is every chip on the chip grammar's left alignment at its 10px inset, measured across all seven columns of a recaptured month.
+- [ ] OPERATOR/GESTALT: the calendar reads as Anytype's, judged whole rather than value by value. Added 2026-09-06 from the operator's ~10:40 report, verbatim: *"in general our calendar looks nothing like anytype yet"*. This reopens the packet. Every Met row above was measured at the value level — a pitch, an ink pair, a class count — and every one of them can hold while the surface still reads as a different product. The operator's gestalt judgement outranks a value-level Met, so none of those rows is withdrawn and none of them closes this one. Threshold: TO BE FILLED from the side-by-side review now running (`worktrees/162-review-057-calendar`, output `review-ui-calendar-2026-09-06.md`), which produces a ranked gap list; the threshold becomes *every P0 and P1 gap on that list closed or declined with a named ground*, and the count is written in here the moment the review lands.
 
 ## 058-card-title-and-title-formats — 0/5
 

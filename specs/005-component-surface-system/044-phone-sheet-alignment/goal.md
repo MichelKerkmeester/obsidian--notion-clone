@@ -118,4 +118,22 @@ into the objective, and it is expected to grow.
 | Two legs started before this packet was written | The operator reported 40 and 41 before the phase existed, and both were dispatched immediately. The packet was opened around them rather than restarting them; the shared chrome (T004) is what they must both consume, and that is the risk this row records. |
 | The inventory is a dependency written by another agent | T002 and T009 are `[B]` on it. The three reported sheets are named tasks now so the phase is not idle while it lands. |
 | Report 43's sheet is `013-add-view-sheet`'s | `013` is marked Shipped + verified. That it shipped and still reads as "bad design" is itself evidence for D2: `013` satisfied its own criteria, which never included conformance to a grammar that had not been written down. |
+
+### 2026-09-06 amendment: the grammar half of the 10:04 iOS stacked-sheet report
+
+**Operator, 2026-09-06 10:04, iOS 0.0.29** (`../roadmap.md` §4 row 59): *"This sheet is really bad
+bugged on current ios …"*. Two of the four defects that capture shows are this packet's grammar,
+not `048`'s stacking geometry: **a duplicate close control** — an oversized circular `×` floating
+above the child's header beside the header's own, so a stacked child draws two where the grammar
+allows one — and **a header/body ink split**, the child's body painting a lighter surface than its
+own header, so a single sheet reads as two stacked surfaces before any stacking is involved. The
+other two, roughly 200 CSS px of dead space above the title and the parent Properties sheet
+bleeding through with a "14" count badge, are `048`'s.
+
+**Recorded here, fixed there.** The criterion and the numbers live in `048/goal.md` and
+`048/tasks.md` T024, because the leg is one leg and splitting a capture across three task lists
+would make each half unverifiable. This entry exists so a later reader looking for why the header
+grammar failed on device finds the pointer instead of nothing. The shell both defects render
+through is `051`'s `surface-shell.ts`, which is why the leg is sequenced after `051`'s side-sheet
+work.
 <!-- /ANCHOR:log -->

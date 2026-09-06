@@ -170,6 +170,35 @@ never resolve them silently.
       zero-line diff on `calendar-timeline-renderer.ts` and on both guard tests.
 - [ ] **OPERATOR:** the operator reads the rebuilt calendar on iOS and on desktop and reports it as
       Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
+- [ ] **The unscheduled affordance is subtle and integrated, not a band above the grid.**
+      **Added 2026-09-06** from the operator's ~10:33 desktop report on 0.0.29 (`../roadmap.md` §4
+      row 62; capture `operator-calendar-unscheduled-20260906.png`, the operator's own, not
+      committed here), verbatim: *"For calendar the unscheduled pinned stuff needs to be done
+      better. Like more subtlely integrated, check how anytype or other would do that."* **Today:
+      red on the operator's own screen** — a lone centred item sits in an *"Unscheduled (1)"* band
+      of roughly **80** CSS px above the grid. Done is **0** px of dedicated band above the grid,
+      the unscheduled items reachable from a compact affordance in the header row, and the
+      alternatives written as an ADR before anything is built. **This does not withdraw the ticked
+      disposition row above**: that row closed the question *does the reference have a counterpart*
+      (it does not, 0 non-background px below the grid rule in twenty set captures) and the answer
+      stands. This row is the different question the operator has now asked — what ours should be
+      instead. Leg `worktrees/161-impl-057-unscheduled`.
+- [ ] **OPERATOR/GESTALT: the calendar reads as Anytype's, judged whole rather than value by
+      value.** **Added 2026-09-06** from the operator's ~10:40 report, verbatim: *"in general our
+      calendar looks nothing like anytype yet"*. **This reopens the packet.** Every Met row above
+      was measured at the value level — a pitch, an ink pair, a class count — and every one of them
+      can hold while the surface still reads as a different product. The operator's gestalt
+      judgement outranks a value-level Met, so none of those rows is withdrawn and none of them
+      closes this one. **Threshold, now that the side-by-side review has landed**: every one of
+      `acceptance-criteria.md`'s **G1-G15** rows Met, each re-measured per pixel on a corpus
+      recaptured on HEAD **and** on a second-theme capture whose `--background-primary` is neither
+      `#1E1E1E` nor `#FFFFFF` (G12) — no row closes on the theme it was written against. **Today:
+      red on all fifteen**, the six P0s among them measured on the operator's own 2000x967 dark
+      capture: a `#282828` rule two levels off a `#262626` page, a Sunday-start week against Monday
+      in all twenty captures, a first chip at ~98 CSS px below the cell top against 32, a 288x26
+      filled `+N more` band, a 2031px grid in a 2000px screen, and 0 of 40 chips carrying an icon.
+      `tasks.md` T019 is the leg; G7 additionally waits on the operator's ruling on the review's
+      P0-2, which `decision-record.md`'s 2026-09-06 note carries as Proposed.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -197,3 +226,49 @@ honest form.
 
 Nothing else is measured. T001 is the true-up and it is owed to an image-capable leaf; T002 is the
 red-first pass. No code has been written and no criterion is met.
+
+
+### 2026-09-06 amendment: state is REOPENED — PENDING REVIEW
+
+**Three operator inputs the same hour, and they do not all say the same thing.**
+
+**~10:33, the unscheduled affordance** (`../roadmap.md` §4 row 62): *"For calendar the unscheduled
+pinned stuff needs to be done better. Like more subtlely integrated, check how anytype or other
+would do that."* This is a design ask against a row this packet already ticked, and the two are
+compatible: the ticked row answered *does Anytype have a counterpart* — it does not, **0**
+non-background px below the grid rule across twenty set captures — and kept ours with the argument
+written. The operator is not disputing that finding; they are asking that ours be better. Research
+Anytype's own captures, the Notion harvest once it lands, and Project Manager's sidebar; the
+proposal on the table is a compact *"Unscheduled · N"* chip in the header row beside the month/year
+title, opening a popover on desktop and a sheet on phone, with drag-onto-a-day kept and **zero**
+band above the grid. Write the alternatives as an ADR before building. The same capture also shows
+multi-day ranges rendering as centred date-range text and per-column chip alignment drifting (Su
+left, Mo/Tu centred, Fr right); both are ordinary defects and are owned by the review's **G3** and **G5** rows rather than restated here; the unscheduled affordance itself is `tasks.md` T021, leg `worktrees/161-impl-057-unscheduled`.
+
+**~10:40, and this one reopens the packet**: *"in general our calendar looks nothing like anytype
+yet"*. **State: REOPENED.** The packet stood at 7/10 goal criteria with eight of ten acceptance rows
+Met, and every one of those was measured value by value: the grid's 188.57px column pitch, the
+chip's flat ink pair, the 44px phone chip, 119 unmoved `pm-gantt-*` tokens. None of that is
+withdrawn and none of it is wrong. What it does not establish is the thing the operator just judged
+— whether the surface, seen whole, reads as Anytype. A value-level Met cannot answer a gestalt
+question, and when the two disagree the operator's reading wins (parent D3: only the operator's
+confirmation closes). **The side-by-side review has since landed**: `review-ui-calendar-2026-09-06.md`
+measures why both readings are true at once — parity was read per element, on the harness's default
+theme, never as a whole surface on the operator's `#262626` page — and its fifteen gestalt rows are
+now `acceptance-criteria.md` **G1-G15**, each with an observed red, with `tasks.md` T019 the leg
+that closes them. The new completion criterion above takes G1-G15 as its threshold rather than a
+number invented here. One item is the operator's rather than the rebuild's: the review's **P0-2**,
+a Monday-start default, is **Proposed** in `decision-record.md`'s 2026-09-06 note because it
+overturns AC-002's written call that the week's start stays locale-driven.
+
+**~10:47, the stagger ruling**, verbatim: *"Stagger overlaps at 45px"*. This **supersedes the 80px
+minimum column width landed at `396bcae7`**. ADR-005 named the stagger as the alternative it did
+not take — each later overlapping block inset a fixed step, keeping the column's remaining width —
+and the operator has now chosen it: overlapping blocks cascade, and the phone week's minimum column
+goes back to **45px**, the month grid's own cell. ADR-005 is amended in place with the ruling,
+dated, rather than rewritten; T018 stays closed as the record of what landed and **T020** carries
+the supersession, folded into T019's rebuild because both touch the same renderer.
+
+**What is not reopened.** The gantt guard (119 tokens, eight identical MD5s), the sheet-grammar
+registry (13 surfaces, 31 pairs, exit 0) and the flatten ruling (ADR-002) are untouched by any of
+the three. Recorded in `../roadmap.md` §4 rows 62 and 63, §5.A, §6A and §7.

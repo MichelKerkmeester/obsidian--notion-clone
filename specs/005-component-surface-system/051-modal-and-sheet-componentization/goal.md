@@ -175,6 +175,13 @@ never resolve them silently.
       scrollable to its left. **Still open, which is why this row is not ticked**: *interactive* —
       a pointer-down on the database dismisses the sheet through the shared `overlayStack`
       outside-pointerdown contract (a wheel scroll does not). Recorded on AC-013 and ADR-008.
+- [ ] **The sheet family's device pass runs an extra deep-research loop before this family is
+      called done.** **Added 2026-09-06** from the operator's 10:04 standing instruction
+      (`../roadmap.md` §4 row 59, §6A). It is not a code criterion and it is not a substitute for
+      any row above: it starts only once `044`, `048` and `051` are each done **and verified as
+      planned**, and it closes when the Opus synthesis has landed its phase updates. Executor spec
+      in §4's amendment below. **Today: no such loop has run** — `deep-research-state.jsonl` at the
+      program root is 0 bytes.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -238,4 +245,38 @@ already has a primitive for (`055`'s toast/undo vocabulary, D5's cross-reference
 `decision-record.md`'s ADR-007 is amended in place with the ruling, dated, rather than rewritten.
 Owner of the call-site changes: `055` (`deleteRow` callers); this packet's own scope is only the
 confirm primitive `055` calls into for the cases that still need one.
+
+### 2026-09-06 amendment: the iOS stacked-sheet report, and the planned deep-research loop
+
+**Operator, 2026-09-06 10:04, on iOS running 0.0.29**, verbatim: *"This sheet is really bad bugged
+on current ios make sure the sheet phase gets an extra deep research loop once done and verified as
+planned like 10 iters with glm 5.3 flash max, properly prompt them so they dont get stuck use
+openrouter or devpass than let a opus synthesize and update / add phases to remediate as needed"*.
+
+**The shell half of the defect.** Four defects on one depth-2 stack (Edit property → Month over
+Properties): a duplicate close control, a header/body background split, roughly 200 CSS px of dead
+space above the title, and the parent Properties sheet bleeding through with its rows and a "14"
+count badge over the toolbar. `048/goal.md` carries the criterion and `048/tasks.md` T024 the fix
+leg (`worktrees/159-fix-048-ios-stacked-sheet`); this packet owns `surface-shell.ts` and
+`mobile-bottom-sheet.ts`, which is why that leg lands **after** T021-T023's side-sheet work frees
+both files rather than racing it. `044` owns the header grammar the duplicate control and the ink
+split belong to. Three owners, one capture, named rather than merged.
+
+**The standing instruction, recorded here as a planned leg with its executor spec.** It is the
+parent-level check on this whole family, so it lives with the family's shell owner rather than
+inside one defect's packet.
+
+| Field | Value |
+|---|---|
+| **Starts when** | `044`, `048` and `051` are each done **and verified as planned** — not shipped, not landed. Under D3 that is the second state, and the operator's words are *"once done and verified"* |
+| **Command** | `/deep:research:auto`, **10 iterations**, `--stop-policy=max-iterations` (the operator asked for a fixed count, not convergence) |
+| **Executors** | `cli-pi` on GLM 5.3 flash max — `openrouter/z-ai/glm-5.3-flash` first, `llmgateway` (DevPass) as the fallback transport. Read `.opencode/skills/cli-external-orchestration/cli-pi/SKILL.md` before composing any prompt (AGENTS.md §10 CLI dispatch) |
+| **Prompt discipline** | Bounded, because the operator's own words are *"properly prompt them so they dont get stuck"*: an explicit file list per iteration, no exploration budget, and **no image reads** — GLM cannot read PNGs, so every defect reaches it as the measured list (numbers and `file:line`), never as a capture |
+| **Containment** | A fresh worktree per run. Deep-loop containment scans the whole tree, and a dirty parent checkout is what makes a run stall |
+| **Synthesis** | An **Opus** pass reads the loop's findings and updates or adds phases to remediate. The loop itself writes findings; only the synthesis touches a phase document |
+| **Closes** | When the synthesis has landed its phase updates and this packet's criterion above is ticked with the run's own artefacts cited |
+
+**What this is not.** It is not a replacement for the operator's own device row (AC-010), and it is
+not a gate on any leg currently in flight. Nothing waits on it; it waits on everything.
+Recorded in `../roadmap.md` §4 row 59 and §6A.
 <!-- /ANCHOR:log -->

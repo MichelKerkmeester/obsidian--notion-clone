@@ -372,6 +372,30 @@ under the same reasoning ADR-002 gave its own open question — the geometry a f
 one this packet already closed once (T015's chip pitch, the phone touch floor), and re-closing it
 silently is the class of decision goal D6 exists to route to the operator instead.
 
+### 2026-09-06 ~10:47 amendment to ADR-005: the operator takes the stagger, at 45px
+
+**Status of ADR-005 changes from Accepted-as-landed to Accepted-as-superseded-in-part.** The
+ruling's *readable minimum* half stands; its *80px* implementation does not.
+
+**The words.** *"Stagger overlaps at 45px"*.
+
+**What it settles.** The "Named, not taken" note above put the stagger to the operator as the
+alternative this landing did not fold in — each later overlapping block inset a fixed step, keeping
+the column's remaining width, giving every block a readable title at the month cell's own 45px with
+no extra panning. The operator has chosen it. The minimum column goes back to **45px** and the
+overlap layout changes in `calendar-renderer.ts`, which is the different mechanism the note named.
+
+**What is superseded, precisely.** The landed **80px** value at `396bcae7`, and the panning it
+bought: seven 80px columns needing 560px against a phone's ~286px. Not the ruling that a phone week
+needs a readable minimum, not T018's sweep (its numbers are the evidence the stagger is needed —
+4.5px and 0.5px title paint boxes at 45px under the halving layout), and not the flatten ruling
+ADR-002 took.
+
+**Where it binds.** `tasks.md` T020; `styles.css`'s `--db-calendar-phone-week-col-min`;
+`src/views/calendar-renderer.ts`'s overlap layout and `syncPhoneWeekHorizontalScroll`;
+`../roadmap.md` §6A. Folded into the calendar rebuild leg rather than run on its own, because the
+rebuild touches the same renderer. T019's rebuild leg carries it.
+
 ---
 
 ## Note, 2026-09-06 ~10:40: the operator's gestalt read reopens the phase, and P0-2 is proposed

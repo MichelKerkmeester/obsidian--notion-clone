@@ -662,6 +662,32 @@ title and 44x44 close on phone.
       *"which day starts the week stays locale-driven and is not a measured value"*, which
       is why it is the operator's and not this task's. AC-010 stays the operator's throughout:
       a leg that ticks G1-G15 has earned a second look, never the row.
+- [ ] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
+      column back to 45px.** Operator ruling, verbatim *"Stagger overlaps at 45px"* — this
+      **supersedes T018's landed 80px minimum** (`396bcae7`). Each later overlapping block is inset
+      a fixed step and keeps the column's remaining width, so a split block regains a readable
+      title at the month cell's own width. **Red first**: at 45px under today's halving layout the
+      split block's title paint box measures 4.5px and 0.5px — zero glyphs, confirmed by T018's own
+      45px recapture at 8 and 2 device px of ink. Green is three glyphs plus the ellipsis at 45px,
+      the readable floor the 80px landing bought by panning instead, with `scrollWidth` back to
+      about 315 against a 286-294 `clientWidth` rather than 560. Negative control: remove the
+      stagger and the 45px case goes red again. Folded into T019's rebuild, which holds the same
+      renderer. `decision-record.md`'s ADR-005 carries the ruling; T018 stays closed as the record
+      of what landed
+- [ ] T021 (2026-09-06 ~10:33 amendment) **Make the unscheduled affordance subtle and integrated.**
+      Operator, verbatim: *"For calendar the unscheduled pinned stuff needs to be done better. Like
+      more subtlely integrated, check how anytype or other would do that."* (`../roadmap.md` §4 row
+      62; capture `operator-calendar-unscheduled-20260906.png`, the operator's own). **Red first**:
+      an *"Unscheduled (1)"* band of roughly 80 CSS px sits above the grid holding one centred item.
+      **This is not T004's question re-asked** — T004 established that the reference has no
+      counterpart (0 non-background px below the grid rule in twenty set captures) and kept ours
+      with the argument written; the operator is asking what ours should be instead. Write the
+      alternatives as an ADR first — a header-row *"Unscheduled · N"* chip opening a popover on
+      desktop and a sheet on phone is the proposal, with Anytype's captures, the Notion harvest and
+      Project Manager's sidebar as references — then build it. Green is 0 px of dedicated band
+      above the grid with the items still reachable and still droppable onto a day. Leg
+      `worktrees/161-impl-057-unscheduled`. The same capture's centred multi-day range text and
+      per-column chip drift are **not** carried here: G5 and G3 already own them
 <!-- /ANCHOR:phase-3 -->
 
 ---

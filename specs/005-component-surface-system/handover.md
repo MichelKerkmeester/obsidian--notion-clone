@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: this pass opened 058-card-title-and-title-formats from the operator's phone-board report and amended six sibling goals (047, 051, 052, 053, 055, 056) against tonight's rulings — the desktop Settings side sheet and its dedicated gear button, the combobox ruling for every desktop dropdown, the table footer rule, the ADR-007 E4 confirm/undo-toast closure, and 056's R6/R7 board-colour rulings. roadmap.md gained three new §4 report rows, a refreshed §5.A (with two stale derived ratios corrected — 054 and 057 — found while reading each packet's own goal.md rather than trusting roadmap prose), and five new §6A ruling entries. No src/, styles.css, tools/ or main.js file was touched; this is a documentation-only leg."
+description: "Resume point: this pass recorded five fresh operator reports as roadmap §4 rows 59-63 — the 10:04 iOS stacked-sheet bug and the standing deep-research instruction attached to it, the ~10:25 wrap-off row height, the ~10:30 board page-scroll and scrollbar ruling, the ~10:33 calendar unscheduled ask, and the ~10:40 gestalt judgement that REOPENS 057 — and amended 044, 047, 048, 051, 053, 056 and 057 with dated sections, new criteria, task rows and acceptance rows. The ~10:47 'Stagger overlaps at 45px' ruling supersedes the 80px minimum column landed at 396bcae7. §5.A was re-derived from every goal.md (055, 056 and 057 were carrying figures from the wrong scale), §6A gained four rulings and §7 two conflicts. No src/, styles.css, tools/ or main.js file was touched; documentation only."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T09:10:00Z"
-    last_updated_by: "orchestrate-handover-21"
-    recent_action: "Opened 058; amended 047/051/052/053/055/056; rebased onto 578991e8, reconciled shared docs"
-    next_safe_action: "Land the six in-flight impl worktrees, then dispatch 047's harvests one at a time"
+    last_updated_at: "2026-09-06T10:50:00Z"
+    last_updated_by: "orchestrate-handover-22"
+    recent_action: "Recorded §4 rows 59-63; 057 reopened on gestalt; 45px stagger supersedes the 80px landing"
+    next_safe_action: "Land 153/156/159/160/161, then read the 057 review and plan the calendar rebuild"
     blockers:
       - "058 T003 onward pending: the format-routing and Title-slot-affordance code has not landed"
       - "047's four Mobbin harvests (Notion, Evernote, Fibery, ClickUp) are queued, none dispatched"
@@ -27,7 +27,7 @@ _memory:
       - "specs/005-component-surface-system/051-modal-and-sheet-componentization/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-handover-21"
+      session_id: "surface-system-handover-22"
       parent_session_id: null
     completion_pct: 76
     open_questions:
@@ -452,6 +452,64 @@ ticks an operator row.**
 ---
 
 ## 5. CONTINUITY LOG
+
+- **2026-09-06 ~10:50, `orchestrate-handover-22`: five new operator reports recorded, `057`
+  reopened, the phone-week ruling superseded — documentation-only.** Ran in
+  `.worktrees/163-docs-refresh-1045` under the same hard rule as handover-21: nothing outside
+  `specs/`, no sub-agents, foreground only.
+
+  **Landed on main since the 09:30 refresh**, all read from `origin/main` rather than from a
+  report: `0d36b377` (the two footer and board red values reworded so the failing-values scan reads
+  them), `32411403` (the no-confirm single delete recorded), `f962d626`/`7c7617c4` (that delete and
+  its test), `537bbb61` (the shared popover left-aligned under its trigger), `0c3f6410` (every
+  desktop dropdown a combobox, the trigger becoming the input), `a952e5e7` (the combobox ruling
+  recorded and the tree re-derived), and `396bcae7` (the phone week/day grid's 80px minimum
+  column — **superseded within the hour**, see below).
+
+  **Five operator inputs inside forty minutes, now §4 rows 59-63.** Row 59, 10:04 on iOS 0.0.29:
+  the stacked sheet is *"really bad bugged"* — four defects on one capture (a duplicate close
+  control, a header/body ink split, ~200px of dead space above the title, parent bleed with a "14"
+  badge over the toolbar), owners `048`/`051`/`044`, fix leg `worktrees/159`. The same report
+  carries a **standing instruction** rather than a defect: once `044`, `048` and `051` are done and
+  verified, an extra `/deep:research:auto` of 10 iterations at `--stop-policy=max-iterations` on
+  GLM 5.3 flash max via `cli-pi` (OpenRouter first, DevPass fallback), bounded prompts with an
+  explicit file list and **no image reads** (GLM cannot read PNGs), in a fresh worktree, then an
+  Opus synthesis that updates or adds phases — recorded as a planned leg with its executor spec in
+  `051/goal.md` §4, `051/tasks.md` T025 and `051` AC-014. Row 60, ~10:25 desktop: wrap off still
+  draws six-line rows in a long-text column; owner `053`, leg `worktrees/160`, **the producer is
+  not named and the criterion says so**. Row 61, ~10:30 board: the page must scroll rather than a
+  column and desktop scrollbar chrome is hidden; owner `056`, and it **declines a measured parity
+  value**, so ADR-008 records an operator ruling as a third ground beside ADR-002's two WCAG
+  grounds, with §7.13 carrying the conflict against `design-trueup.md` A10's 10px sticky bar. Row
+  62, ~10:33 calendar: the unscheduled band becomes a subtle affordance; owner `057`, leg
+  `worktrees/161`. Row 63, ~10:40: *"in general our calendar looks nothing like anytype yet"* —
+  **`057` is REOPENED**.
+
+  **`057` is the substantive change.** Its Met rows were measured value by value and every number
+  still holds; a gestalt judgement is a different question and outranks them (D3). **Nothing is
+  un-ticked.** A new OPERATOR/GESTALT criterion and AC-013 open with the **threshold deliberately
+  empty**, to be filled from the side-by-side review running in `worktrees/162` into
+  `review-ui-calendar-2026-09-06.md`; §7.14 records the conflict. The ~10:47 ruling *"Stagger
+  overlaps at 45px"* **supersedes `396bcae7`'s 80px minimum column**: ADR-005 is amended in place
+  and dated, T018 stays closed as the record of what landed, T019 carries the supersession.
+
+  **In flight at handover:** `148`-`151` (047's Mobbin harvests — Notion running since ~10:00 by
+  the **scripted-loop** method, one Code Mode execution per batch, two platform lanes, 40 req/min,
+  1,679 `.webp` counted in its worktree at 10:50 against the leg's reported 1,510+ at 10:27;
+  Evernote, Fibery and ClickUp queued and idle), `153` (051 side sheet), `156` (056 palette), `159`
+  (048 stacked-sheet fix), `160` (053 wrap-off rows), `161` (057 unscheduled), `162` (057 calendar
+  review).
+
+  **§5.A was re-derived from each `goal.md` rather than carried forward, and two figures were
+  wrong.** `055` read 25% — 2/8; its `goal.md` has never held a ticked criterion, so the honest
+  figure is 0% — 0/9. `056` read 91% — 10/11 and `057` read 80% — 8/10; both were the
+  acceptance-criteria scale rather than §3.2's `goal.md` rule, and re-derive to 0% — 0/8 and
+  70% — 7/10. The AC counts are kept alongside, named as the other scale, rather than deleted.
+
+  **A trap worth carrying:** a gate run started without `</dev/null` hangs at 0% CPU inside
+  `verify.mjs` waiting on stdin. It looks like a slow capture sweep and is not one. Redirect stdin
+  from `/dev/null` on every gate invocation.
+
 
 - **2026-09-06, `orchestrate-handover-21`: `058` opened, six goals amended, roadmap and this
   document refreshed — documentation-only, nothing pushed.** Ran in an isolated worktree

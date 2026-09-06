@@ -168,6 +168,19 @@ screenshot has no in-repo source to hash, and forcing an entry into the freshnes
 would be the "capture with no in-repo source" problem AC-003/AC-004 already name, multiplied by four
 apps.
 
+**2026-09-06 ~10:50 status and method correction, from the Notion leg in flight.** The
+orchestration paragraph above described a browsing-and-saving task. What the Notion leg actually
+runs is a **scripted loop**: one Code Mode execution per batch rather than one per image, two
+platform lanes (iOS and web) driven together, held to **40 requests a minute**. That is the method
+for all four apps from here on — the one-at-a-time discipline is unchanged, the per-image dispatch
+is replaced. **Notion has been running since ~10:00** in `worktrees/148-harvest-notion` and reported
+**1,510+** images by 10:27; an independent count of that worktree at 10:50 reads **1,679** `.webp`
+files under `screenshots/notion/`, across `ios/` and `web/` group directories. Neither number is a
+landing: the harvest is unmerged, unverified and untracked by any manifest, and under D3 that is
+shipped-at-most. **Evernote, Fibery and ClickUp stay queued**, one at a time, in
+`worktrees/149-harvest-evernote`, `worktrees/150-harvest-fibery` and
+`worktrees/151-harvest-clickup`, none dispatched.
+
 **Verification.** Each app's harvest is landed by a fresh verifier before the next app opens —
 matching D4/D5 above: no fidelity or design claim from an unverified harvest, and an image that
 could not be captured is recorded as such rather than silently absent.

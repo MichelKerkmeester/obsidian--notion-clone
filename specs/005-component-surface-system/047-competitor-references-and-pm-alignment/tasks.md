@@ -191,13 +191,22 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
 
 - [ ] T030 [B] Harvest Notion (iOS + web) via Mobbin, Fable 5.1 medium through the second login,
       into `screenshots/notion/{ios,web}/<group>/` with a `README.md` index; landed by a fresh
-      verifier before T031 opens
+      verifier before T031 opens.
+      **In flight since ~10:00 on 2026-09-06**, `worktrees/148-harvest-notion`, by the **scripted
+      loop** method rather than per-image dispatch: one Code Mode execution per batch, both platform
+      lanes driven together, held to 40 requests a minute. Leg reported 1,510+ images by 10:27; an
+      independent count of that worktree at 10:50 reads **1,679** `.webp` files under
+      `screenshots/notion/`. Neither is a landing — unmerged, unverified, in no manifest
 - [ ] T031 [B] Harvest Evernote (iOS + web) via Mobbin, same orchestration, into
-      `screenshots/evernote/{ios,web}/<group>/`; landed by a fresh verifier before T032 opens
+      `screenshots/evernote/{ios,web}/<group>/`; landed by a fresh verifier before T032 opens.
+      **Queued, not dispatched** — `worktrees/149-harvest-evernote` exists and is idle. Same scripted
+      loop as T030
 - [ ] T032 [B] Harvest Fibery (web only) via Mobbin, same orchestration, into
-      `screenshots/fibery/web/<group>/`; landed by a fresh verifier before T033 opens
+      `screenshots/fibery/web/<group>/`; landed by a fresh verifier before T033 opens.
+      **Queued, not dispatched** — `worktrees/150-harvest-fibery` exists and is idle
 - [ ] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
-      `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier
+      `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier.
+      **Queued, not dispatched** — `worktrees/151-harvest-clickup` exists and is idle
 - [ ] T034 Confirm none of the four apps' captures entered `screenshots/manifest.json` — a Mobbin
       screenshot has no in-repo source to hash, matching D5's rule for an Anytype capture
 <!-- /ANCHOR:phase-mobbin -->

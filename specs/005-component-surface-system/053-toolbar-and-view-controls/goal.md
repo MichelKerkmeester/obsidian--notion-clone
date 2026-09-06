@@ -199,6 +199,20 @@ never resolve them silently.
       private `renderFooter` (`:801-804`), not `table-footer-renderer.ts`, and the floor is
       `.is-phone .note-database-container .db-table-footer-trigger { min-height: 44px }`
       (`styles.css:8553-8555`). ADR-005 Accepted.
+- [ ] **With wrap off, no column makes a table row taller than the row rhythm.** **Added
+      2026-09-06** from the operator's ~10:25 desktop report on 0.0.29 (`../roadmap.md` §4 row 60).
+      **Today: red on the operator's own screen** — with the view's Wrap text switch off and no
+      column override set, the long-text Journal column still lays out over **6** lines while every
+      other column in the same row clips to one, so the row stands about six times the rhythm. The
+      wrap toggle this packet shipped (row 53, ADR-004) is therefore not the whole control: it
+      writes `db-cell-wrap` on and off correctly, and something inside a long-text cell escapes the
+      `white-space: nowrap` / `overflow: hidden` / `text-overflow: ellipsis` the base `td` rule
+      carries (`styles.css:5723-5731`), taking the row with it because a `td`'s `height` is a
+      minimum (`styles.css:5466-5471`). **The producer is not yet named** — that is the fix leg's
+      first job, not a claim made here. Done is a measured read of a table with wrap off in which
+      every row's height equals `--db-row-height` for its density, with the long-text column
+      ellipsised, and a negative control that goes red when the clip is removed. Leg
+      `worktrees/160-fix-053-wrap-off-rows`.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -267,4 +281,25 @@ it.
 **Owner:** both are this packet's — the gear button is a toolbar-rail addition consuming `051`'s
 side-sheet role, and the footer rule is this packet's own `TableFooterRenderer`. Recorded in
 `roadmap.md` §4 (new rows) and §6A.
+
+### 2026-09-06 amendment: wrap off still draws huge rows
+
+**Operator, ~10:25, desktop, 0.0.29**, verbatim: *"with wrap disabled you still have these huge
+table rows with too large height"*. The screenshot shows the Journal column — a long-text column —
+laid out over six lines with the view's Wrap text switch off, while every other column in the same
+row clips to a single line.
+
+**This does not withdraw row 53's landing.** The switch works: `renderCell` adds `db-cell-wrap`
+only when `col.wrap ?? viewWrapDefault` is truthy (`cell-renderer.ts:206-208`), and
+`cell-renderer-wrap.test.ts` pins the resolution rule ADR-004 records. What the report shows is a
+**second** path to a tall row that the toggle never governed — the same class of defect the
+2026-09-05 `flex-wrap` finding already named for option chips, where the cause was never the cell
+being looked at. There the producer was four flex containers opting back out of the row's clip;
+here it is a long-text cell, and which element escapes is **UNKNOWN until the leg measures it**.
+Writing a guess into the criterion would be the mistake that finding was written to prevent.
+
+**Scope.** This packet owns the wrap control and its default, so it owns the report. `052` owns the
+cell editor and is cited rather than co-assigned: if the escape turns out to be an editor-owned
+element, ownership moves and this amendment says so. `005-content-row-rhythm` holds the row-height
+contract both must satisfy. Recorded in `../roadmap.md` §4 row 60.
 <!-- /ANCHOR:log -->

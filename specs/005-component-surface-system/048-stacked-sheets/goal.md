@@ -105,6 +105,20 @@ Frozen choices. Changing one is an amendment.
 - [ ] **The operator opens the Properties sheet, the filter sheet's operator dropdown and its
       property picker on iOS and reports each as one stack rather than two sheets.** Only the
       operator closes this row; nothing in this repository can.
+- [ ] **The stacked pair on iOS draws one close control, one continuous surface, no dead space
+      above the title, and no parent bleed.** **Added 2026-09-06** from the operator's 10:04 report
+      on 0.0.29 (`../roadmap.md` §4 row 59; capture `operator-ios-stacked-sheet-bug-20260906.png`,
+      the operator's own, not committed to this repository). Four defects observed red on device,
+      pre-fix, on Edit property → Month stacked over Properties: a second oversized circular close
+      control floating above the child's header beside the header's own `×`; the child's body
+      painting a lighter surface than its own header, so one sheet reads as two; roughly 200 CSS px
+      of blank sheet above the title; and the parent Properties sheet bleeding through with its
+      rows and a "14" count badge over the toolbar, its own header offset. Done is a device-pixel
+      read of a recaptured depth-2 pair: **1** close control in the child's header, **one**
+      background value across header and body, the title's ink inside the header's own padding
+      box, and **0** parent ink above the child's top edge. Fix leg
+      `worktrees/159-fix-048-ios-stacked-sheet`; the grammar half is `044`'s, the shell half
+      `051`'s, and both are cross-referenced rather than restated here.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -139,4 +153,32 @@ into the objective, and it is expected to grow.
 | The inventory is not written into `003`'s document | This packet's write authority is its own folder. `003/sheet-and-dropdown-inventory.md` is cited as the per-surface census and extended along the stacking axis here rather than edited in place, so neither document restates the other. |
 | `044`'s three named `applySheetChrome` bypasses read differently now | `icon-picker-popover.ts:229` and `option-color-picker.ts:104` both reach `positionToolbarPopover` in the current tree, which applies the chrome. Recorded, not re-adjudicated: the count is `044`'s to close. |
 | The native `<select>` in the Add view sheet is gone | `003`'s inventory §8 records one at `toolbar-renderer.ts:1371`. `rg 'createEl\("select"' src` returns nothing today, so `044` T008's dropdown swap landed. One fewer stacked child of a native kind. |
+
+### 2026-09-06 amendment: the 10:04 iOS stacked-sheet report
+
+**Operator, 2026-09-06 10:04, on iOS running 0.0.29**, verbatim: *"This sheet is really bad bugged
+on current ios make sure the sheet phase gets an extra deep research loop once done and verified as
+planned like 10 iters with glm 5.3 flash max, properly prompt them so they dont get stuck use
+openrouter or devpass than let a opus synthesize and update / add phases to remediate as needed"*.
+
+**Two things, and they are separated on purpose.** The first is a defect report against a shipped
+build; the second is a standing instruction about how this family is checked once it is done. This
+packet carries the first as a completion criterion above and a task below. The second is not this
+packet's to run — it spans `044`, `048` and `051` and starts only when all three are done and
+verified — so it is recorded as a planned leg in `051/goal.md`'s own amendment, with its executor
+spec, and cited from here rather than duplicated.
+
+**What the screenshot shows**, read as four separate defects rather than one: a duplicate close
+control (an oversized circular `×` floating above the child's header, beside the header's own);
+split backgrounds (the child's body paints lighter than its header, so the surface reads as two);
+roughly 200 CSS px of blank sheet above the title; and parent bleed (the Properties sheet's rows and
+its "14" count badge showing over the toolbar, with the parent header offset). **Ownership is
+three-way and none of it is contested**: the close control and the header/body ink are `044`'s
+grammar, the stacking geometry and the parent treatment are this packet's, and the shell that draws
+both is `051`'s `surface-shell.ts`. The fix leg runs in `worktrees/159-fix-048-ios-stacked-sheet`
+and lands after `051`'s side-sheet leg frees `surface-shell.ts` and `mobile-bottom-sheet.ts`.
+
+**What this does not do.** It does not reopen T005-T009's stacking model or any of the six ticked
+criteria above — those were measured on a depth-2 pair in the harness and their numbers stand. The
+device shows a shape the harness does not construct, which is the gap, not a withdrawal.
 <!-- /ANCHOR:log -->
