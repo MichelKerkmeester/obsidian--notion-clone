@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **59 phases**, **6 with nothing left**, **179 rows** waiting on a device.
+Derived 2026-09-06: **59 phases**, **6 with nothing left**, **178 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -342,12 +342,11 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The board scrolls as a page, not as a set of columns, and desktop shows no scrollbar chrome. Added 2026-09-06 from the operator's ~10:30 desktop report on 0.0.29 (`../roadmap.md` §4 row 61; capture `operator-board-column-scroll-20260906.png`, the operator's own, not committed here). Today: red, and the numbers are in the stylesheet — `.db-kanban-cards` carries `overflow-y: auto` (`styles.css:9569-9573`), so each column is its own vertical scroller; `.note-database-container.db-kanban-view` carries `overflow: hidden` and `height: 100%` (`:9447-9451`), so the page cannot scroll instead; and `.db-kanban-board::-webkit-scrollbar` paints a 10px horizontal bar (`:9472-9474`) with the `padding-bottom: 8px` that reserves its lane. Done is: 0 elements inside the board with a vertical `overflow` that scrolls, the page scrolling in their place, and 0 px of scrollbar chrome painted on desktop at rest. This declines a measured parity value on the operator's own instruction, which ADR-002 does not itself permit — the conflict is named in `decision-record.md` ADR-008 and in `../roadmap.md` §7, not resolved silently.
 - [ ] A card's text values read left-aligned, and a single-token value ellipsises rather than breaking mid-word. Added 2026-09-06 from the same report. Today: red on the operator's own screen — a card text value renders right-aligned (*"Procurement asked for a security questionnaire."*) and a URL breaks mid-word (*"northwin d-logistics"*). Done is every card text value at `text-align: left` and a single-token value ellipsised at the card's content edge, measured on a recaptured board in both themes.
 
-## 057-calendar-anytype-parity — 7/12
+## 057-calendar-anytype-parity — 8/12
 
 - [ ] The date-property picker matches the captured calendar settings menu. `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` is the reference.
 - [ ] The scale switch question is answered by the operator, not inferred. Today: three scales — `updateCalendarScale?(scale: "month" | "week" | "day", ...)` (`calendar-renderer.ts:82`) with a scale control, menu, popover and segment class family.
 - [ ] OPERATOR: the operator reads the rebuilt calendar on iOS and on desktop and reports it as Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
-- [ ] The unscheduled affordance is subtle and integrated, not a band above the grid.
 - [ ] OPERATOR/GESTALT: the calendar reads as Anytype's, judged whole rather than value by value. Added 2026-09-06 from the operator's ~10:40 report, verbatim: *"in general our calendar looks nothing like anytype yet"*. This reopens the packet. Every Met row above was measured at the value level — a pitch, an ink pair, a class count — and every one of them can hold while the surface still reads as a different product. The operator's gestalt judgement outranks a value-level Met, so none of those rows is withdrawn and none of them closes this one. Threshold, now that the side-by-side review has landed: every one of `acceptance-criteria.md`'s G1-G15 rows Met, each re-measured per pixel on a corpus recaptured on HEAD and on a second-theme capture whose `--background-primary` is neither `#1E1E1E` nor `#FFFFFF` (G12) — no row closes on the theme it was written against. Today: red on all fifteen, the six P0s among them measured on the operator's own 2000x967 dark capture: a `#282828` rule two levels off a `#262626` page, a Sunday-start week against Monday in all twenty captures, a first chip at ~98 CSS px below the cell top against 32, a 288x26 filled `+N more` band, a 2031px grid in a 2000px screen, and 0 of 40 chips carrying an icon.
 
 ## 058-card-title-and-title-formats — 0/5
