@@ -1,8 +1,8 @@
 {
-  "holder": "057-calendar-anytype-parity",
-  "acquiredAt": "2026-09-06T18:00:00Z",
-  "baselineHash": "a849b979b394",
-  "baselineCommit": "4495914b",
+  "holder": "051-modal-and-sheet-componentization",
+  "acquiredAt": "2026-09-06T20:00:00Z",
+  "baselineHash": "c6c1ce7e15f4",
+  "baselineCommit": "pending",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4010,6 +4010,65 @@
         "screenshots/notion-clone/views/constructed-calendar-week-mobile-light.png"
       ],
       "note": "The calendar retarget's nine legs in one hold: the month grid's 16px inset on both edges (box-sizing: border-box on .db-calendar-month-grid), the week/day slot-line and today-marker colours taken to the month grid's own measured #EBEBEB/#292929 and #216DFA, the two-select week/day header, the day number's 12px ink offset, the two-letter weekday label form, the unscheduled drawer omitted entirely when empty, the phone chip's 44px touch floor, the date-property submenu's 224x28 geometry, and the two toolbar popover headers migrated to buildShellHeader. Every capture named above was read against the change that moved it, by decoded pixel content rather than by byte; the per-residual device-pixel reasoning is in the packet's tasks.md, not duplicated here. Two captures moved bytes without moving a decoded pixel, and one (constructed-cell-editor-select-mobile-light) proved outright nondeterministic across two runs of the identical page: none is reachable from this stylesheet edit, so all three are left at the bytes already committed, with the manifest's own byte and content fingerprints reconciled to the files on disk. All eight reference-gantt-*.png stayed MD5-identical and git diff --stat -- src/views/calendar-timeline-renderer.ts is empty."
+    },
+    {
+      "event": "acquire",
+      "phase": "051-modal-and-sheet-componentization",
+      "at": "2026-09-06T20:00:00Z",
+      "hash": "a849b979b394"
+    },
+    {
+      "event": "release",
+      "phase": "051-modal-and-sheet-componentization",
+      "at": "2026-09-06T20:30:00Z",
+      "hash": "c6c1ce7e15f4",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-active-rule-sort-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-sort-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-chart-toolbar-options-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-chart-toolbar-options-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-chart-toolbar-options-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-chart-toolbar-options-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-dropdown-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-dropdown-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-owned-menu-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-owned-menu-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-timeline-toolbar-options-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-timeline-toolbar-options-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-option-color-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-option-color-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-column-width-adjuster-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-column-width-adjuster-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-width-adjuster-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-column-width-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-column-width-sheet-mobile-light.png"
+      ],
+      "note": "The phone sheet takes two frame shapes rather than one: a short sheet floats clear of all three free edges at an 8pt inset with a 16pt radius all round, a tall one runs flush with only its top corners rounded, classified live off the sheet's own rendered height with a hysteresis band so a height the class itself produces cannot flip it back. The shell header becomes a phone-only three-column grid so its title is centred in the frame itself rather than mirrored between two slots that only happened to match, and nine hand-built headers moved onto the shared builder — which is why seven desktop popovers gain the close control that builder already draws on the filter, sort and add-view popovers. Every capture was regenerated against a settled frame shape: the shutter now waits for the classifier instead of racing its 80ms debounce, which is what had one scenario coming back with two different shapes on two runs of the identical page. 44 captures moved pixelHash and are listed here; 0 of the 16 Project Manager references moved. The floating and flush pairs were opened and measured in device pixels at DPR 2 — 16 device px off left, right and bottom with the scrim visible around them and a 32 device-px radius on four corners for the floating shape; 0 inset and a 16 device-px radius on the top corners only for the flush one — and the title's ink centre measured within 2 device px of the frame centre on column-manager, filter, sort and the option colour picker, against 52.5 device px off centre on column-manager before the fix."
     }
   ],
   "outstanding": [
