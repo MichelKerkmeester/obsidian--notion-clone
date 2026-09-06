@@ -1015,4 +1015,17 @@ describe("default board card properties", () => {
     expect(card.querySelector<MockElement>(".db-kanban-card-title")?.textContent).toBe("To Do Note");
     expect(card.querySelectorAll(".db-kanban-card-meta .db-board-card-field")).toHaveLength(0);
   });
+
+  // The reference reserves the title icon slot on every card, not only when a record-icon field
+  // is mapped — the host's own gate lives in renderRowRecordIcon/renderEmbeddedRecordIcon, so the
+  // renderer's own contract is that it always asks with force, and always ahead of the title.
+  it("asks the host to render the title icon unconditionally, forcing past the host's own showRecordIcon gate", () => {
+    const renderRecordIcon = vi.fn();
+    const container = new MockElement("div");
+    new BoardRenderer({} as unknown as App, createActions({ renderRecordIcon }))
+      .render(container as unknown as HTMLElement, REFERENCE_CONFIG, GROUPS, "status");
+    const card = todoCard(container);
+    const titleRow = card.querySelector<MockElement>(".db-kanban-card-title-row");
+    expect(renderRecordIcon).toHaveBeenCalledWith(titleRow, expect.anything(), REFERENCE_CONFIG, true, true);
+  });
 });

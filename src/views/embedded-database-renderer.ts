@@ -554,7 +554,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
       showRowMenu: (event, row) => this.rowMenu.show(event, row),
       showColumnMenu: (event, col, anchorEl) => this.showColumnContextMenu(event, col, anchorEl, false),
-      renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
+      renderRecordIcon: (parent, row, config, compact, force) => this.renderEmbeddedRecordIcon(parent, row, config, compact, force),
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
       get isReadOnly() { return embed.isViewReadOnly(); },
@@ -594,8 +594,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private readonly handleEmbedKeydownBound = (event: KeyboardEvent) => this.handleEmbedKeydown(event);
   private readonly handleMouseUpBound = () => { this.isSelectingCells = false; };
 
-  private renderEmbeddedRecordIcon(parent: HTMLElement, row: RowData, config: ViewConfig, compact = false): HTMLElement | null {
-    if (config.showRecordIcon !== true || !this.currentDbConfig) return null;
+  private renderEmbeddedRecordIcon(parent: HTMLElement, row: RowData, config: ViewConfig, compact = false, force = false): HTMLElement | null {
+    if ((!force && config.showRecordIcon !== true) || !this.currentDbConfig) return null;
     const field = resolveRecordIconField(this.currentDbConfig, config);
     return renderRecordIcon(parent, field ? row.frontmatter[field] : undefined, { compact, editable: false });
   }

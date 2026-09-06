@@ -139,7 +139,7 @@ export interface BoardRendererActions {
   showRowMenu?(event: MouseEvent, row: RowData, context?: RowCreateContext): void;
   showColumnMenu?(event: MouseEvent, col: ColumnDef, anchorEl?: HTMLElement): void;
   editFormula?(col: ColumnDef): void;
-  renderRecordIcon?(parent: HTMLElement, row: RowData, config: ViewConfig, compact?: boolean): HTMLElement | null;
+  renderRecordIcon?(parent: HTMLElement, row: RowData, config: ViewConfig, compact?: boolean, force?: boolean): HTMLElement | null;
   renderGroupSummaries?(parent: HTMLElement, rows: RowData[], config: ViewConfig): void;
   applyConditionalFormat?(element: HTMLElement, row: RowData, config: ViewConfig, targetField?: string): void;
   readonly isReadOnly?: boolean;
@@ -527,7 +527,10 @@ export class BoardRenderer {
       : undefined;
 
     const titleRow = body.createDiv({ cls: "db-kanban-card-title-row" });
-    this.actions.renderRecordIcon?.(titleRow, row, config, true);
+    // The reference reserves the icon slot on every card, not only when a record-icon field is
+    // mapped — `force` skips that gate here, so an unmapped card still gets the default glyph
+    // renderRecordIcon already falls back to, rather than starting the title flush left.
+    this.actions.renderRecordIcon?.(titleRow, row, config, true, true);
     titleRow.createSpan({ cls: "db-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
 
     if (parentTitle) body.createDiv({ cls: "db-kanban-card-type", text: parentTitle });

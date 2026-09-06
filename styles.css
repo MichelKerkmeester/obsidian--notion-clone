@@ -9452,10 +9452,12 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 
 /* At rest the header is the chip alone: 24px tall, fully rounded, no fill, the option colour on
-   its text. */
+   its text. Border-box keeps the 1px border inside the declared height rather than adding to it —
+   a content-box chip painted 26px. */
 .note-database-container .db-kanban-col-chip {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
   height: 24px;
   padding: 0 10px;
   border-radius: 12px;
@@ -9528,6 +9530,15 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 .note-database-container .db-kanban-empty-slot {
   flex-shrink: 0;
+  /* The shared empty-state card sizes its content box to 100% and adds its own padding and
+     border on top, which overflowed the retired 280px column and clips further at 246px.
+     Border-box keeps the whole card, padding and border included, inside the column. */
+  box-sizing: border-box;
+  width: 100%;
+}
+.note-database-container .db-kanban-empty-slot .db-empty-card-title,
+.note-database-container .db-kanban-empty-slot .db-empty-card-message {
+  overflow-wrap: anywhere;
 }
 
 .note-database-container .db-kanban-card {
@@ -9571,6 +9582,14 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   gap: 8px;
   min-height: 25px;
 }
+/* The reference reserves a 16px icon slot before every title, not the shared 18px compact
+   size other views use — scoped here rather than changed at the shared size, since table,
+   gallery and list keep their own. */
+.note-database-container .db-kanban-card-title-row .db-record-icon.is-compact {
+  flex-basis: 16px;
+  width: 16px;
+  height: 16px;
+}
 .note-database-container .db-kanban-card-title {
   flex: 1;
   font-size: 15px;
@@ -9608,6 +9627,9 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   align-items: center;
   min-height: 25px;
   gap: 8px;
+  /* The shared field's own 2px padding survives under min-height and pushes a content-box row
+     to ~29px — dropped here so the kanban row pitch is the measured, uniform 25px. */
+  padding: 0;
   font-size: 13px;
   color: var(--text-muted);
 }
@@ -9620,9 +9642,17 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-kanban-card-meta .db-board-card-field.is-checkbox-field > .db-board-card-value {
   order: 1;
 }
-.note-database-container .db-kanban-card-meta .db-checkbox-field {
+/* The reference's checkbox glyph is a circle, not this project's usual rounded square —
+   scoped to the kanban card only, since every other checkbox family keeps the app-wide shape.
+   Matches `input[type="checkbox"].db-checkbox.db-checkbox-field`'s own specificity so the 18px
+   base size does not win on the type selector alone, and repeats the `flex` shorthand: the base
+   rule's own `flex: 0 0 18px` sets a flex-basis that wins the checkbox's main-axis size over a
+   bare `width` inside the row's flex layout. */
+.note-database-container .db-kanban-card-meta input.db-checkbox.db-checkbox-field {
   width: 14px;
   height: 14px;
+  flex: 0 0 14px;
+  border-radius: 50%;
 }
 /* Tag/select chips: 20px tall (the shared `.status-badge` already opens at that height),
    6px radius rather than the app-wide pill, tint fill plus darkened text — the pattern
@@ -9684,6 +9714,20 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
    already-sized one — so the floor applies to the board's instances directly. */
 .note-database-container .db-kanban-cards .db-group-expand-btn {
   min-height: 28px;
+}
+
+/* The phone board's own measured geometry — column, gap and pitch are proportionally close to
+   the desktop's 246/24/270 but not the same numbers, and the card border is a hairline rather
+   than the desktop's full 1px. Scoped to `.is-phone` so the desktop numbers are untouched. */
+.is-phone .note-database-container .db-kanban-col {
+  width: 254.7px;
+  min-width: 254.7px;
+}
+.is-phone .note-database-container .db-kanban-board {
+  gap: 23.3px;
+}
+.is-phone .note-database-container .db-kanban-card {
+  border-width: 0.7px;
 }
 
 /* The ten-colour option palette, tint plus a same-hue darkened/lightened text pair that clears

@@ -1,0 +1,49 @@
+{
+  "measuredAt": "2026-09-06T04:41:20.634Z",
+  "inputs": {
+    "tools/live/board-geometry.mjs": "2af1a45cceae",
+    "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
+    "tools/live/render-assertion-harness.ts": "d20f62e3d4bb",
+    "src/views/board-renderer.ts": "47533fbf16b0",
+    "styles.css": "1b6acd4ddf7a"
+  },
+  "chipHeight": 24,
+  "rowHeights": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+  ],
+  "checkboxRadius": "50%",
+  "pins": [
+    {
+      "label": "card radius",
+      "value": "8px"
+    },
+    {
+      "label": "column width",
+      "value": "246px"
+    },
+    {
+      "label": "column gap",
+      "value": "24px"
+    },
+    {
+      "label": "checkbox size",
+      "value": 14
+    }
+  ]
+}

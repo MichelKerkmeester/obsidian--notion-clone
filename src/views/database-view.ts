@@ -824,7 +824,7 @@ export class DatabaseView extends FileView {
         includeWidthActions: false,
       }),
       editFormula: (col) => this.showFormulaModal(col),
-      renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
+      renderRecordIcon: (parent, row, config, compact, force) => this.renderRowRecordIcon(parent, row, config, compact, false, force),
       renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.getActiveDb()),
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.getActiveDb(), targetField),
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
@@ -5272,15 +5272,18 @@ export class DatabaseView extends FileView {
     config: ViewConfig,
     compact = false,
     readOnly = false,
+    force = false,
   ): HTMLElement | null {
-    if (config.showRecordIcon !== true) return null;
+    if (!force && config.showRecordIcon !== true) return null;
     const database = this.getActiveDb();
     if (!database) return null;
     const field = resolveRecordIconField(database, config);
     const token = field ? row.frontmatter[field] : undefined;
     const icon = renderRecordIcon(parent, token, {
       compact,
-      editable: !readOnly,
+      // The forced slot (no mapped field) shows the default glyph read-only: there is nothing
+      // configured for the picker to write into.
+      editable: !readOnly && config.showRecordIcon === true,
       tooltip: t("recordIcon.icons"),
       onClick: (anchor) => this.openRecordIconPicker(anchor, row, config),
     });

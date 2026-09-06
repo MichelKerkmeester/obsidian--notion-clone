@@ -42,6 +42,19 @@ const HERE = fileURLToPath(new URL(".", import.meta.url));
 // body's job is to put it back where the capture measures it.
 const CONSTRUCTED_ENTRY_BODY = `
 window.__mountConstructed = (spec) => {
+  // The board's own isTouchDevice() reads Platform.isMobile (permanently false in the stub),
+  // (pointer: coarse) and the container width, any one sufficient. Playwright's context-level
+  // hasTouch does make the page report a coarse pointer, but not reliably for a whole run —
+  // touch-targets.mjs found the same page answering "false" mid-run and had to force the signal
+  // at the browser engine instead of trusting the context flag. The board's phone captures were
+  // going unphotographed in touch mode for the identical reason, so the signal is forced here
+  // too, deterministically, scoped to the one renderer and device it actually affects.
+  if (spec.renderer === "board" && document.body.classList.contains("is-phone")) {
+    const realMatchMedia = window.matchMedia.bind(window);
+    window.matchMedia = (query) => (/pointer:\\s*coarse/.test(query)
+      ? { matches: true, media: query, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => true }
+      : realMatchMedia(query));
+  }
   // #shot carries theme.css's fixture-path sizing (height: 100%, resolved against the
   // viewport) so a fixture painted straight into it fills the pane the way the real app
   // does. Mounting a renderer as #shot's sibling-after inherits that as a phantom full
