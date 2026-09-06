@@ -426,6 +426,27 @@ export interface ScenarioSpec {
    */
   tableFooter?: boolean;
   /**
+   * Opt-in, renderer "table" only, read together with `tableFooter`: forces zero rows through the
+   * normal (non-`emptyReason`) body path, so the footer's own zero-row skip is exercised rather
+   * than the empty-state card's separate branch. `emptyReason` alone cannot stand in for this —
+   * it switches the result branch to `emptyReasonAssertion`, which asserts nothing about the
+   * footer.
+   */
+  tableFooterEmpty?: boolean;
+  /**
+   * Opt-in, renderer "table" only: configures two sort rules over the constructed columns, so the
+   * header's own multi-sort ordinal and `aria-sort` render on a real sorted pair rather than only
+   * on the unsorted default every other table scenario mounts.
+   */
+  tableSortRules?: boolean;
+  /**
+   * Opt-in, renderer "table" only: replaces the bag's default `setupColumnHeader` stub (which
+   * overwrites the header content `renderHeader` just built) with a true no-op, so a header
+   * composition assertion reads the icon/label/sort-ordinal structure the renderer itself
+   * produced rather than the stub's overwrite.
+   */
+  tableHeaderNoop?: boolean;
+  /**
    * Opt-in, renderer "table" only: points the table's select/status/multi-select columns at a
    * sixteen-colour option palette and gives one multi-select row every value, so a single capture
    * shows the whole `status-color-*` vocabulary as the renderer paints it.
@@ -1398,6 +1419,155 @@ function countRowAppendsToConnectedNodes(): () => number {
 // 6. ASSERTION SUITE
 // ───────────────────────────────────────────────────────────────────
 
+// A permanent guard on the header row's composition — Notion's own header carries a type icon, a
+// label and a menu target on every column, and ours adds an in-header multi-sort ordinal on top.
+// Reading the DOM the header actually built rather than only counting columns: dropping the icon
+// call is what this guard exists to catch, and a bare column count would not go red for it.
+function headerCompositionAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const headerCells = Array.from(container.querySelectorAll<HTMLElement>(
+    "thead th[data-note-database-column-key]",
+  ));
+  if (headerCells.length === 0) return results;
+  const missingIcon = headerCells.filter((th) => !th.querySelector(".db-property-icon"));
+  results.push({
+    name: "every column header carries a type icon",
+    pass: missingIcon.length === 0,
+    detail: missingIcon.length === 0
+      ? `${headerCells.length} header(s), each with a .db-property-icon`
+      : `${missingIcon.length} of ${headerCells.length} header(s) missing .db-property-icon: `
+        + missingIcon.map((th) => th.getAttribute("data-note-database-column-key")).join(", "),
+  });
+  const missingLabel = headerCells.filter((th) => !(th.querySelector(".db-th-label")?.textContent || "").trim());
+  results.push({
+    name: "every column header carries a non-empty label",
+    pass: missingLabel.length === 0,
+    detail: missingLabel.length === 0
+      ? `${headerCells.length} header(s), each with a non-empty .db-th-label`
+      : `${missingLabel.length} of ${headerCells.length} header(s) with an empty or missing .db-th-label`,
+  });
+  const missingAriaSort = headerCells.filter((th) => !th.hasAttribute("aria-sort"));
+  results.push({
+    name: "every column header declares aria-sort (\"none\" when unsorted)",
+    pass: missingAriaSort.length === 0,
+    detail: missingAriaSort.length === 0
+      ? `${headerCells.length} header(s), each carrying aria-sort`
+      : `${missingAriaSort.length} of ${headerCells.length} header(s) missing aria-sort entirely`,
+  });
+  // The multi-sort ordinal only exists on a scenario that actually configured more than one sort
+  // rule (tableSortRules) — vacuously true otherwise, the same shape the calendar/timeline guards
+  // above use for a state a given mount may not have put on the page at all.
+  const sorted = headerCells.filter((th) => th.getAttribute("aria-sort") !== "none");
+  const missingOrdinal = sorted.filter((th) => !th.querySelector(".sort-indicator"));
+  results.push({
+    name: "a sorted column header carries its ordinal, matching aria-sort",
+    pass: sorted.length === 0 || missingOrdinal.length === 0,
+    detail: sorted.length === 0
+      ? "no sorted column in this scenario, so this asserts nothing"
+      : missingOrdinal.length === 0
+        ? `${sorted.length} sorted header(s), each with a .sort-indicator ordinal`
+        : `${missingOrdinal.length} of ${sorted.length} sorted header(s) missing a .sort-indicator ordinal`,
+  });
+  return results;
+}
+
+// Multi-select chips stack inline in a flex row with a fixed gap between them — the negative
+// control this guard exists for is a chip container that has regressed to a block/column stack,
+// which a count-only assertion ("N chips exist") would never catch. A clipped table cell forces
+// this same container to `flex-wrap: nowrap` on purpose (the wrap-off row-height fix), so this
+// checks `display`/`gap` only — the wrap value itself is the view's wrap switch's own question,
+// not this guard's. Vacuously true on a scenario with no multi-select values on the page at all.
+function chipLayoutAssertions(container: HTMLElement): AssertionResult[] {
+  const wrap = Array.from(container.querySelectorAll<HTMLElement>(".db-multi-select-values"))
+    .find((el) => el.querySelectorAll(".db-multi-select-badge").length >= 2);
+  if (!wrap) {
+    return [{
+      name: "inline chips stack in a flex row with a 4px gap",
+      pass: true,
+      detail: "no multi-select cell with two or more values in this scenario, so this asserts nothing",
+    }];
+  }
+  const style = win.getComputedStyle(wrap);
+  const pass = style.display === "flex" && style.columnGap === "4px";
+  return [{
+    name: "inline chips stack in a flex row with a 4px gap",
+    pass,
+    detail: `display="${style.display}" columnGap="${style.columnGap}" (want flex/4px)`,
+  }];
+}
+
+// Two rows carrying two different configured option values must paint two different badge
+// colours — grouped by the option's own text rather than by the rendered data-status-color
+// attribute, because the exact regression this guard exists for (every option resolving to one
+// forced colour) collapses that attribute right along with the paint, which a grouping keyed on
+// the attribute would silently read as "nothing to compare" instead of a failure. Vacuously true
+// when the scenario has fewer than two distinct option values on the page at all.
+function pillColorAssertions(container: HTMLElement): AssertionResult[] {
+  const badges = Array.from(container.querySelectorAll<HTMLElement>(
+    "td[data-note-database-column-key] .status-badge[data-status-color]",
+  ));
+  const byValue = new Map<string, HTMLElement>();
+  for (const badge of badges) {
+    const value = (badge.textContent || "").trim();
+    if (value && !byValue.has(value)) byValue.set(value, badge);
+  }
+  const distinct = Array.from(byValue.entries());
+  if (distinct.length < 2) {
+    return [{
+      name: "two rows with different option values compute different badge colours",
+      pass: true,
+      detail: `${distinct.length} distinct option value(s) on the page, so this asserts nothing`,
+    }];
+  }
+  const [[firstValue, first], [secondValue, second]] = distinct;
+  const firstBg = win.getComputedStyle(first).backgroundColor;
+  const secondBg = win.getComputedStyle(second).backgroundColor;
+  return [{
+    name: "two rows with different option values compute different badge colours",
+    pass: firstBg !== secondBg,
+    detail: `"${firstValue}" resolved ${firstBg}, "${secondValue}" resolved ${secondBg}`,
+  }];
+}
+
+// The conditional-format tint is a CSS variable set on the row, painted through a td selector —
+// setting the variable on a tr and reading nothing on its own td is the exact failure a digest
+// once misread as "the feature does not exist". Applied directly (not through the harness's own
+// no-op applyConditionalFormat bag member, which only proves the renderer calls the action at the
+// right time) so this reads the shipped stylesheet's own paint rule rather than the call site.
+function conditionalTintAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
+  const dataRows = Array.from(container.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]"));
+  if (dataRows.length < 2) {
+    return [{
+      name: "a row's conditional-format tint paints on its td backgrounds, not only the tr",
+      pass: true,
+      detail: `${dataRows.length} data row(s) in this scenario, need at least two to compare`,
+    }];
+  }
+  const [tinted, plain] = dataRows;
+  const probeColor = "rgb(1, 2, 3)";
+  const tintedTd = tinted.querySelector<HTMLElement>("td[data-note-database-column-key]");
+  const plainTd = plain.querySelector<HTMLElement>("td[data-note-database-column-key]");
+  // `.db-table td` transitions its own background-color, so a read taken in the same tick as the
+  // class/variable change would report the pre-change value — the transition has not advanced a
+  // single frame yet. Suspending the transition on the one cell being probed makes the change
+  // land synchronously, which is what this assertion actually needs to measure.
+  tintedTd?.style.setProperty("transition", "none");
+  tinted.addClass("db-conditional-format");
+  tinted.style.setProperty("--db-conditional-format-bg", probeColor);
+  const tintedBg = tintedTd ? win.getComputedStyle(tintedTd).backgroundColor : "";
+  const plainBg = plainTd ? win.getComputedStyle(plainTd).backgroundColor : "";
+  tinted.removeClass("db-conditional-format");
+  tinted.style.removeProperty("--db-conditional-format-bg");
+  tintedTd?.style.removeProperty("transition");
+  return [{
+    name: "a row's conditional-format tint paints on its td backgrounds, not only the tr",
+    pass: Boolean(tintedTd) && Boolean(plainTd) && tintedBg === probeColor && plainBg !== probeColor,
+    detail: `tinted row's td resolved ${tintedBg || "(no cell found)"}, an untinted row's td resolved `
+      + `${plainBg || "(no cell found)"}, want ${probeColor} on the first and anything else on the second `
+      + `(${rows.length} row(s) total)`,
+  }];
+}
+
 function tableAssertions(
   container: HTMLElement,
   rows: RowData[],
@@ -1428,6 +1598,9 @@ function tableAssertions(
     pass: cellIndexes.length > 0 && cellIndexes.every((index) => index === cellIndexes[0] && index >= 0),
     detail: `cellIndex ${Math.min(...cellIndexes)}..${Math.max(...cellIndexes)} across ${rowEls.length} rows`,
   });
+  results.push(...chipLayoutAssertions(container));
+  results.push(...pillColorAssertions(container));
+  results.push(...conditionalTintAssertions(container, rows));
   results.push({
     name: "selection checkbox affordance is one per row",
     pass: container.querySelectorAll("td.db-select-col").length === rows.length,
@@ -3850,7 +4023,7 @@ export function runRenderAssertions(
     const captureRowCount = scenario.tableFooter ? FOOTER_CAPTURE_ROWS : CAPTURE_ROWS;
     // The catalogue's own columns stand — mounting the state on the catalogue, not a fixture — but
     // its rows are dropped, the real condition an empty table renders under.
-    const rows = scenario.emptyReason
+    const rows = scenario.emptyReason || scenario.tableFooterEmpty
       ? []
       : catalogueData
         ? catalogueData.rows
@@ -3918,6 +4091,12 @@ export function runRenderAssertions(
         recordIconField: textCol?.key,
       } : {}),
       ...(scenario.wrapText ? { wrapText: true } : {}),
+      ...(scenario.tableSortRules && textCol && selectCols[0] ? {
+        sortRules: [
+          { field: textCol.key, direction: "asc" },
+          { field: selectCols[0].key, direction: "desc" },
+        ],
+      } : {}),
     } as ViewConfig;
     // The catalogue path always takes the production CellRenderer, never the text stub: a row
     // height measured against `td.setText` is the height of a string, not of the cell the plugin
@@ -3937,6 +4116,15 @@ export function runRenderAssertions(
         refresh: () => undefined,
       } satisfies ColumnHeaderActions);
       bag.setupColumnHeader = (th, col) => controller.setup(th, col);
+    }
+    if (scenario.tableHeaderNoop) {
+      // The default bag's own setupColumnHeader (`th.setText(col.label)`) is a bench shortcut
+      // that overwrites whatever renderHeader already built — harmless for the row-cost benches
+      // it was written for, but it erases the icon/label/sort-ordinal structure a header
+      // composition assertion needs to read. A true no-op leaves that structure intact without
+      // pulling in the real ColumnHeaderController's own per-column layout reads, which this
+      // check's row-cost bound was never calibrated against.
+      bag.setupColumnHeader = () => undefined;
     }
     if (scenario.recordIconColumn) {
       const iconKey = textCol?.key;
@@ -4010,13 +4198,32 @@ export function runRenderAssertions(
       if (results[0].pass) {
         if (scenario.emptyReason) {
           results.push(emptyReasonAssertion(container, scenario.emptyReason));
-        } else {
+        } else if (!scenario.tableFooterEmpty) {
+          // Zero rows through the plain (non-emptyReason) branch is a real, if narrow, condition
+          // this suite's own tableAssertions was never shaped for — several of its checks assume
+          // at least one row exists — so a scenario that deliberately mounts zero rows here skips
+          // it rather than reading a false failure that has nothing to do with the footer.
           results.push(...tableAssertions(container, rows, columns));
         }
         if (scenario.tableFooter) {
-          results.push(multiMarkerAssertion(container,
-            ["tfoot.db-table-footer", ".db-table-footer-trigger.has-calculation", ".db-table-footer-kind"],
-            "the footer rendered its calculated aggregates"));
+          if (rows.length === 0) {
+            const tfoot = container.querySelector("tfoot.db-table-footer");
+            results.push({
+              name: "a zero-row table renders no footer",
+              pass: !tfoot,
+              detail: tfoot ? "tfoot.db-table-footer is present over zero rows" : "no tfoot.db-table-footer, as expected",
+            });
+          } else {
+            results.push(multiMarkerAssertion(container,
+              ["tfoot.db-table-footer", ".db-table-footer-trigger.has-calculation", ".db-table-footer-kind"],
+              "the footer rendered its calculated aggregates"));
+            const triggers = container.querySelectorAll(".db-table-footer-trigger").length;
+            results.push({
+              name: "one footer trigger per column",
+              pass: triggers === columns.length,
+              detail: `${triggers} .db-table-footer-trigger element(s) for ${columns.length} column(s)`,
+            });
+          }
         }
         if (scenario.fullStatusPalette) {
           const badgeColors = new Set(Array.from(container.querySelectorAll<HTMLElement>(
@@ -4027,6 +4234,13 @@ export function runRenderAssertions(
             pass: badgeColors.size >= 16,
             detail: `${badgeColors.size} distinct status-color-* class(es) painted`,
           });
+        }
+        // Only meaningful once the destructive default stub is out of the way (tableHeaderNoop) —
+        // the plain bag's own setupColumnHeader calls th.setText(col.label), which — accurately
+        // for the benches that stub exists for, wrongly for this guard — wipes the icon/label
+        // structure renderHeader just built.
+        if (scenario.tableHeaderNoop) {
+          results.push(...headerCompositionAssertions(container));
         }
         if (scenario.recordIconColumn) {
           results.push(multiMarkerAssertion(container,

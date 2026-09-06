@@ -234,6 +234,32 @@ const PHONE_OVERLAP_SCENARIO = {
 // reads as red here.
 const PHONE_OVERLAP_INK_FLOOR = 16;
 
+// Measured on the same phone-profile rhythm page (is-phone class, real token sheets attached) the
+// two passes above share, since the floor this checks is a `.is-phone`-scoped rule and nowhere
+// else resolves it correctly.
+const FOOTER_PHONE_SCENARIO = {
+  name: "table-footer-phone/file-view",
+  renderer: "table",
+  bag: "file-view",
+  captureData: true,
+  tableFooter: true,
+};
+
+// styles.css's own floor: 44px on phone, so a trigger a reader taps is never smaller than the
+// touch-target minimum this repository holds every tappable control to elsewhere.
+const FOOTER_PHONE_FLOOR = 44;
+
+// The five permanent guards on behaviours already at or ahead of Notion parity: the footer's
+// zero-row skip and phone floor, the header's icon/label/sort-ordinal composition, the inline
+// chip layout, per-option pill colour, and the conditional-format tint's td paint. Kept local
+// rather than added to the shared SCENARIOS/STATE_SCENARIOS lists in render-assertion-bundle.mjs
+// — those feed touch-targets.mjs and unstyled-links.mjs too, and a scenario built for this file's
+// own assertions has no reason to also become a fixture those two lanes iterate.
+const TABLE_GUARD_SCENARIOS = [
+  { name: "table-guards/file-view", renderer: "table", bag: "file-view", captureData: true, tableFooter: true, tableSortRules: true, tableHeaderNoop: true },
+  { name: "table-guards-empty-footer/file-view", renderer: "table", bag: "file-view", tableFooter: true, tableFooterEmpty: true },
+];
+
 // SCENARIOS and RENDERER_SOURCES are shared with touch-targets.mjs and unstyled-links.mjs via
 // render-assertion-bundle.mjs, so "every scenario the harness knows" means the same list in all
 // three checks rather than three lists that could silently diverge.
@@ -539,6 +565,17 @@ window.__phoneOverlapInk = (scenario) => {
   });
   return out;
 };
+window.__footerFloor = (scenario) => {
+  let out = null;
+  runRenderAssertions(document.body, scenario, "", (container) => {
+    const triggers = [...container.querySelectorAll(".db-table-footer-trigger")];
+    out = {
+      count: triggers.length,
+      minHeights: triggers.map((trigger) => parseFloat(getComputedStyle(trigger).minHeight) || 0),
+    };
+  });
+  return out;
+};
 `);
 
 if (missingSources.length > 0) {
@@ -576,6 +613,7 @@ let rhythmOutcomes = null;
 let geometryOutcome = null;
 let wrapToggleOutcomes = null;
 let phoneOverlapInk = null;
+let footerFloorOutcome = null;
 let wrapDesktopOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
@@ -600,6 +638,10 @@ try {
   const rulesOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     rulesScenarios,
+  );
+  const guardOutcomes = await page.evaluate(
+    (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
+    TABLE_GUARD_SCENARIOS,
   );
   await page.close();
 
@@ -654,6 +696,10 @@ try {
     phoneOverlapInk = await rhythmPage.evaluate(
       (scenario) => window.__phoneOverlapInk(scenario),
       PHONE_OVERLAP_SCENARIO,
+    );
+    footerFloorOutcome = await rhythmPage.evaluate(
+      (scenario) => window.__footerFloor(scenario),
+      FOOTER_PHONE_SCENARIO,
     );
     // Same document, same token sheets, the phone profile dropped: the class the host sets and the
     // viewport the phone rules are written against. Last of the three passes, because it is the
@@ -738,6 +784,18 @@ try {
       if (!result.pass) console.log(`       ${result.detail}`);
     }
   }
+
+  console.log(`\nrender-assertions: guards on the already-haves, ${TABLE_GUARD_SCENARIOS.length} scenario(s) `
+    + `x ${guardOutcomes[0]?.results.length ?? 0} assertions\n`);
+  for (const outcome of guardOutcomes) {
+    const label = outcome.scenario.name;
+    for (const result of outcome.results) {
+      const mark = result.pass ? "PASS" : "FAIL";
+      if (!result.pass) failures.push(`${label}: ${result.name} — ${result.detail}`);
+      console.log(`  ${mark}  ${label.padEnd(38)} ${result.name}`);
+      if (!result.pass) console.log(`       ${result.detail}`);
+    }
+  }
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
 } finally {
@@ -777,6 +835,29 @@ for (let i = 0; i < RHYTHM_SCENARIOS.length; i += 1) {
     failures.push(`${scenario.name}: a table row's height is not the table's — `
       + `${heights.length} distinct height(s) ${heights.join("/")}, tallest ${measured.worst.height}px `
       + `set by ${measured.worst.child} in ${measured.worst.cell} at ${measured.worst.width}px`);
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4a2. FOOTER PHONE FLOOR
+// ───────────────────────────────────────────────────────────────────
+
+console.log("\nrender-assertions: table footer trigger phone floor");
+{
+  const measured = footerFloorOutcome;
+  if (!measured || measured.count === 0) {
+    failures.push(`${FOOTER_PHONE_SCENARIO.name}: no .db-table-footer-trigger measured`);
+    console.log(`  FAIL  ${FOOTER_PHONE_SCENARIO.name} — no footer trigger measured`);
+  } else {
+    const shortfall = measured.minHeights.filter((h) => h < FOOTER_PHONE_FLOOR);
+    const ok = shortfall.length === 0;
+    console.log(`  ${ok ? "PASS" : "FAIL"}  ${FOOTER_PHONE_SCENARIO.name.padEnd(46)} `
+      + `${measured.count} trigger(s), min-height ${Math.min(...measured.minHeights)}..${Math.max(...measured.minHeights)}px, `
+      + `floor ${FOOTER_PHONE_FLOOR}px`);
+    if (!ok) {
+      failures.push(`${FOOTER_PHONE_SCENARIO.name}: ${shortfall.length} of ${measured.count} footer trigger(s) `
+        + `computed a min-height under the ${FOOTER_PHONE_FLOOR}px phone floor — ${shortfall.join(", ")}px`);
+    }
   }
 }
 
